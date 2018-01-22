@@ -22,4 +22,9 @@
 # Connect to couchDB
 1. Open url in browser http://localhost:5984/_utils/
 
+#ANGULAR SETUP
+
+1. npm install -g @angular/cli
+2. npm install
+
 
