@@ -28,8 +28,8 @@ asset Task identified by taskId {
   o String taskId
   o String description
   o TaskStatus taskStatus
-  o Volunteer[] reservedVolunteers
-  --> Organisation taskCreator
+  o Volunteer[] reservedVolunteers optional
+  --> Organisation creator
   --> Volunteer[] taskPerformer optional
 }
 

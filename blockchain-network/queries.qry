@@ -11,5 +11,5 @@ query selectAllTasksCreated {
   description: "Select all Tasks with Status 'CREATED'"
   statement:
       SELECT at.jku.cis.Task
-          WHERE (taskStatus==_$CREATED)
+          WHERE (taskStatus == "CREATED")
 }
