@@ -4,16 +4,44 @@
 
 namespace at.jku.cis
 
-participant User identified by email {
+abstract participant Person identified by email {
   o String email
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  o String value
+participant Organisation extends Person {
+  o String name
 }
 
-transaction ChangeAssetValue {
-  o String newValue
-  --> Asset relatedAsset
+participant Volunteer extends Person {
+  o String firstName
+  o String lastName
 }
+
+enum TaskStatus {
+  o CREATED
+  o RESERVED
+  o ASSIGNED
+  o FINISHED
+}
+
+asset Task identified by taskId {
+  o String taskId
+  o String description
+  o TaskStatus status
+  --> Organisation creator
+  --> Volunteer[] volunteers optional
+}
+
+asset Reservation identified by reservationId {
+  o String reservationId
+  --> Task task
+  --> Volunteer volunteer
+} 
+
+/*transaction CreateTask {
+  o taskId
+  o description
+  --> Organisation creator
+}*/
+
+
