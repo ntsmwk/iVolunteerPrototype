@@ -9,7 +9,7 @@ abstract participant Person identified by email {
 }
 
 participant Organisation extends Person {
-  o String name
+  o String orgName
 }
 
 participant Volunteer extends Person {
@@ -27,21 +27,43 @@ enum TaskStatus {
 asset Task identified by taskId {
   o String taskId
   o String description
-  o TaskStatus status
-  --> Organisation creator
-  --> Volunteer[] volunteers optional
+  o TaskStatus taskStatus
+  o Volunteer[] reservedVolunteers
+  --> Organisation taskCreator
+  --> Volunteer[] taskPerformer optional
 }
 
-asset Reservation identified by reservationId {
+/**
+asset TaskReservation identified by reservationId {
   o String reservationId
   --> Task task
   --> Volunteer volunteer
 } 
+*/
 
-/*transaction CreateTask {
-  o taskId
-  o description
+/**
+ * Transaction to create a task
+ */
+transaction CreateTask {
+  o String taskId
+  o String description
   --> Organisation creator
-}*/
+}
 
+event CreateTaskEvent {
+  o String taskId
+  o String description
+}
 
+/**
+ * Transaction to update the status of a task
+ */
+transaction UpdateTaskStatus{
+  o TaskStatus taskStatus
+  --> Task task
+}
+
+event UpdateTaskStatusEvent {
+  o TaskStatus taskStatus
+  o Task task
+}
