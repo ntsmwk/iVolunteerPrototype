@@ -14,8 +14,10 @@
 0. cd iVolunteer/blockchain-network
 1. composer archive create -t dir -n .
 2. composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName blockchain-network
-3. composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile blockchain-network@0.0.1.bna --file networkadmin.card
-4. composer card import --file networkadmin.card
+3. composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile blockchain-network@0.0.1.bna --file blockchainadmin.card
+4. composer card delete --name admin@blockchain-network
+   composer card list
+   composer card import --file blockchainadmin.card
 5. composer network ping --card admin@blockchain-network
 6. composer-rest-server -c admin@blockchain-network -n never -w true
 

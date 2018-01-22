@@ -8,7 +8,6 @@ import {FormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {AppRoutingModule} from './app-routing.module';
-
 // NG Translate
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -17,6 +16,8 @@ import {ElectronService} from './providers/electron.service';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './components/home/home.component';
+import {DataService} from './providers/data.service';
+import {TaskService} from './providers/task.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -41,7 +42,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService],
+  providers: [
+    DataService,
+    TaskService,
+    ElectronService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
