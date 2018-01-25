@@ -6,6 +6,12 @@ query selectAllCarsByColour {
           WHERE (vehicleDetails.colour==_$colour)
 }
 */
+query selectAllTasksByStatus {
+  description: "Select all Tasks by status"
+  statement:
+      SELECT at.jku.cis.Task
+          WHERE (taskStatus == _$taskStatus)
+}
 
 query selectAllTasksCreated {
   description: "Select all Tasks with Status 'CREATED'"
@@ -13,3 +19,37 @@ query selectAllTasksCreated {
       SELECT at.jku.cis.Task
           WHERE (taskStatus == "CREATED")
 }
+
+query selectAllTasksReserved {
+  description: "Select all Tasks with Status 'RESERVED'"
+  statement:
+      SELECT at.jku.cis.Task
+          WHERE (taskStatus == "RESERVED")
+}
+
+query selectAllTasksAssigned {
+  description: "Select all Tasks with Status 'ASSIGNED'"
+  statement:
+      SELECT at.jku.cis.Task
+          WHERE (taskStatus == "ASSIGNED")
+}
+
+query selectAllTasksFinished {
+  description: "Select all Tasks with Status 'FINISHED'"
+  statement:
+      SELECT at.jku.cis.Task
+          WHERE (taskStatus == "FINISHED")
+}
+
+query selectAllVolunteers {
+  description: "Select all volunteers"
+  statement:
+      SELECT at.jku.cis.Volunteer
+}
+
+query selectAllOrganisations {
+  description: "Select all organisations"
+  statement:
+      SELECT at.jku.cis.Organisation
+}
+

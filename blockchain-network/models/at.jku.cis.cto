@@ -34,36 +34,51 @@ asset Task identified by taskId {
 }
 
 /**
-asset TaskReservation identified by reservationId {
-  o String reservationId
-  --> Task task
-  --> Volunteer volunteer
-} 
-*/
-
-/**
  * Transaction to create a task
  */
-transaction CreateTask {
+transaction createTask {
   o String taskId
   o String description
   --> Organisation creator
 }
 
-event CreateTaskEvent {
-  o String taskId
-  o String description
+event createTaskEvent {
+  o Task task
 }
 
 /**
- * Transaction to update the status of a task
+ * Transaction to reserve volunteer for a task
  */
-transaction UpdateTaskStatus{
-  o TaskStatus taskStatus
+transaction reserveTask {
+  --> Task task
+  --> Volunteer volunteer
+}
+
+event reserveTaskEvent {
+  o Task task
+  o Volunteer volunteer
+}
+
+/**
+ * Transaction to assign task reservations to volunteer(s)
+ */
+transaction assignTask {
+  --> Task task
+  --> Volunteer[] taskPerformer
+}
+
+event assignTaskEvent {
+  o Task task
+  o Volunteer[] taskPerformer
+}
+
+/**
+ * Transaction to finish a task
+ */
+transaction finishTask {
   --> Task task
 }
 
-event UpdateTaskStatusEvent {
-  o TaskStatus taskStatus
+event finishTaskEvent {
   o Task task
 }
