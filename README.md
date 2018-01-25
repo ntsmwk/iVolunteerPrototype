@@ -9,7 +9,7 @@
 4. ./createPeerAdminCard.sh
 # 
 
-# Startint the Fabric:
+# Starting the Fabric:
 0. cd fabric-tools/
 1. ./downloadFabric.sh
 2. ./startFabric.sh
