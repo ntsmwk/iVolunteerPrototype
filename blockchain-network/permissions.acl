@@ -11,7 +11,7 @@ rule Default {
 }
 */
 rule SystemACL {
-    description:  "System ACL to permit all access"
+    description: "System ACL to permit all access"
     participant: "ANY"
     operation: ALL
     resource: "org.hyperledger.composer.system.**"
@@ -26,48 +26,106 @@ rule NetworkAdminUser {
     action: ALLOW
 }
 
-// bestimmte funktionen dürfen nur von bestimmten Participants aufgerufen 
-
-rule AllowAllParticipantsRead {
-    description: "Allow all Participants to read everything"
+rule AllowAllPartisipantsRead{
+    description: "Allow all Participants to read all resources"
     participant: "at.jku.cis.*"
     operation: READ
     resource: "at.jku.cis.*"
     action: ALLOW
 }
 
-rule AllowOrganisationCreateTask {
-    description: "Organisations are allowed to create tasks"
+rule AllowOrganisationCreateTask1 {
+    description: "Allow all Organisations to create a new task"
     participant: "at.jku.cis.Organisation"
-    operation: CREATE, READ, UPDATE
+    operation: CREATE
+    resource: "at.jku.cis.createTask"
+    action: ALLOW
+}
+
+rule AllowVolunteerReserveTask1 {
+    description: "Allow all Volunteers to register for a task"
+    participant: "at.jku.cis.Volunteer"
+    operation: CREATE
+    resource: "at.jku.cis.reserveTask"
+    action: ALLOW
+}
+
+rule AllowOrganisationCreateTask2 {
+    description: "Allow all Organisation access to Task only in createTask transaction"
+    participant: "at.jku.cis.Organisation"
+    operation: ALL
     resource: "at.jku.cis.Task"
     transaction: "at.jku.cis.createTask"
     action: ALLOW
 }
 
-rule AllowOrganisationAssignTask {
-    description: "Organisations are allowed to assign volunteers to tasks"
-    participant: "at.jku.cis.Organisation"
-    operation: CREATE, READ, UPDATE
-    resource: "at.jku.cis.Task"
-    transaction: "at.jku.cis.assignTask"
-    action: ALLOW
-}
-
-rule AllowVolunteerReserveTask {
-    description: "Volunteers are allowed to access reserveTask transaction"
+rule AllowVolunteerReserveTask2 {
+    description: "Allow all Volunteers access to Task only in reserveTask transaction"
     participant: "at.jku.cis.Volunteer"
-    operation: CREATE, READ, UPDATE
+    operation: ALL
     resource: "at.jku.cis.Task"
     transaction: "at.jku.cis.reserveTask"
     action: ALLOW
 }
 
-rule AllowVolunteerFinishTask {
-    description: "Volunteers are allowed to access reserveTask transaction"
-    participant: "at.jku.cis.Volunteer"
-    operation: CREATE, READ, UPDATE
-    resource: "at.jku.cis.Task"
-    transaction: "at.jku.cis.finishTask"
+/*
+rule r4 {
+    description: "abc"
+    participant: "at.jku.cis.*"
+    operation: READ
+    resource: "at.jku.cis.Organisation"
     action: ALLOW
+}
+
+rule r5 {
+    description: "abc"
+    participant: "at.jku.cis.*"
+    operation: READ
+    resource: "at.jku.cis.Volunteer"
+    action: ALLOW
+}
+*/
+
+/*
+rule r2 {
+    description: "abc"
+    participant: "at.jku.cis.Volunteer"
+    operation: CREATE
+    resource: "at.jku.cis.reserveTask"
+    action: ALLOW
+}
+*/
+/*
+rule r0 {
+    description: "abc"
+    participant (m): "at.jku.cis.Organisation"
+    operation: CREATE
+    resource (v): "at.jku.cis.Task"
+    condition: (v.creator.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule r1 {
+    description: "abc"
+    participant: "at.jku.cis.Organisation"
+    operation: CREATE
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.createTask"
+    action: ALLOW
+}
+*/
+
+
+
+/**
+* Make sure all resources are locked down by default.
+* If permissions need to be granted to certain resources, that should happen
+* above this rule. Anything not explicitly specified gets locked down.
+*/
+rule Default {
+  description: "Deny all participants access to all resources"
+  participant: "ANY"
+  operation: ALL
+  resource: "at.jku.cis.*"
+  action: DENY
 }
