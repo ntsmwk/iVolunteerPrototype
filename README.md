@@ -38,8 +38,9 @@ composer card list
 # 
 
 # Creating and importing business network cards
-* omposer identity issue --card admin@blockchain-network --file volunteer1.card --newUserId volunteer1 --participantId 'resource:at.jku.cis.Volunteer#philstar@gmail.com'
-* composer card import --file volunteer1.card 
+* composer identity issue --card admin@blockchain-network --file organisation1.card --newUserId organisation1 --participantId 'resource:at.jku.cis.Organisation#org1@gmail.com'
+
+* composer card import --file organisation1.card 
 
 # Connecting to couchDB
 1. Open url in browser: http://localhost:5984/_utils/
