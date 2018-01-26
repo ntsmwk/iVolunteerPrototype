@@ -1,14 +1,5 @@
 # iVolunteerPrototype
 
-# Start Fabric (OLD)
-1. docker ps -aq | xargs docker rm -f
-2. docker images -aq | xargs docker rmi -f
-
-3. curl -sSL https://hyperledger.github.io/composer/install-hlfv1.sh | bash
-4. ./startFabric.sh
-4. ./createPeerAdminCard.sh
-# 
-
 # Starting the Fabric:
 0. cd fabric-tools/
 1. ./downloadFabric.sh
