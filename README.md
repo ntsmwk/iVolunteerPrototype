@@ -1,14 +1,5 @@
 # iVolunteerPrototype
 
-# Start Fabric (OLD)
-1. docker ps -aq | xargs docker rm -f
-2. docker images -aq | xargs docker rmi -f
-
-3. curl -sSL https://hyperledger.github.io/composer/install-hlfv1.sh | bash
-4. ./startFabric.sh
-4. ./createPeerAdminCard.sh
-# 
-
 # Starting the Fabric:
 0. cd fabric-tools/
 1. ./downloadFabric.sh
@@ -26,7 +17,7 @@ composer card list
 1. composer archive create -t dir -n .
 2. composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName blockchain-network
 3. composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile blockchain-network@0.0.1.bna --file blockchainadmin.card
-4. composer card import --file networkadmin.card
+4. composer card import --file blockchainadmin.card
 5. composer network ping --card admin@blockchain-network
 6. composer-rest-server -c admin@blockchain-network -n never -w true
 # 
@@ -37,6 +28,10 @@ composer card list
 2. composer network update --archiveFile blockchain-network@0.0.1.bna --card admin@blockchain-network
 # 
 
+# Creating and importing business network cards
+* composer identity issue --card admin@blockchain-network --file organisation1.card --newUserId organisation1 --participantId 'resource:at.jku.cis.Organisation#org1@gmail.com'
+
+* composer card import --file organisation1.card 
 
 # Creating and importing business network cards
 * composer identity issue --card admin@blockchain-network --file volunteer1.card --newUserId volunteer1 --participantId 'resource:at.jku.cis.Volunteer#philstar@gmail.com'
