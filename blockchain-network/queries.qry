@@ -1,11 +1,3 @@
-/**
-query selectAllCarsByColour {
-  description: "Select all cars based on their colour"
-  statement:
-      SELECT org.vda.Vehicle
-          WHERE (vehicleDetails.colour==_$colour)
-}
-*/
 query selectAllTasksByStatus {
   description: "Select all Tasks by status"
   statement:

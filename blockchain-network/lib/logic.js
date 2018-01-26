@@ -43,24 +43,30 @@ function reserveTask(reserveTask) {
     var factory = getFactory();
 
     var task = reserveTask.task;
-    task.taskStatus = 'RESERVED';
 
-    if (!task.reservedVolunteers) {
-        task.reservedVolunteers = [];
-    }
-    task.reservedVolunteers.push(reserveTask.volunteer);
+    if(task.taskStatus == 'CREATED') {
+        task.taskStatus = 'RESERVED';
 
-    return getAssetRegistry(NS + '.Task')
-        .then(function (registry) {
-            return registry.update(task);
+        if (!task.reservedVolunteers) {
+            task.reservedVolunteers = [];
+        }
+        task.reservedVolunteers.push(reserveTask.volunteer);
+
+        return getAssetRegistry(NS + '.Task')
+            .then(function (registry) {
+                return registry.update(task);
+            })
+            .then(function(){
+                var reserveTaskEvent = factory.newEvent(NS, 'reserveTaskEvent');
+                reserveTaskEvent.task = task;
+                reserveTaskEvent.volunteer = reserveTask.volunteer;
+                emit(reserveTaskEvent);
         })
-        .then(function(){
-    		var reserveTaskEvent = factory.newEvent(NS, 'reserveTaskEvent');
-            reserveTaskEvent.task = task;
-            reserveTaskEvent.volunteer = reserveTask.volunteer;
-    		emit(reserveTaskEvent);
-    	});
 
+    } else {
+        throw new Error('Task not in right status!');
+        // inform invoker
+    };
     
 }
 
@@ -74,37 +80,45 @@ function assignTask(assignTask) {
     var factory = getFactory();
 
     var task = assignTask.task;
-    task.taskStatus = 'ASSIGNED';
 
-    // make taskPerformer to an array if it isn't
-    if (!task.taskPerformer) {
-        task.taskPerformer = [];
-    }
+    if(task.taskStatus == 'RESERVED') {
+        task.taskStatus = 'ASSIGNED';
 
-    // TODO: error handling überprüfen!
-             
-    // check if volunteer from assignTask.taskPerformer is also in task.reservedVolunteers
-    while(assignTask.taskPerformer.length > 0) {
-        var volunteer = assignTask.taskPerformer.pop();
-
-        // if(task.reservedVolunteers.contains(volunteer))
-        if(task.reservedVolunteers.indexOf(volunteer) != -1) {
-            task.taskPerformer.push(volunteer);
-        }else {
-            throw new Error('Volunteer not in reservedVolunteers array');
+        // make taskPerformer to an array if it isn't
+        if (!task.taskPerformer) {
+            task.taskPerformer = [];
         }
+
+        // TODO: error handling überprüfen!
+                
+        // check if volunteer from assignTask.taskPerformer is also in task.reservedVolunteers
+        while(assignTask.taskPerformer.length > 0) {
+            var volunteer = assignTask.taskPerformer.pop();
+
+            // if(task.reservedVolunteers.contains(volunteer))
+            if(task.reservedVolunteers.indexOf(volunteer) != -1) {
+                task.taskPerformer.push(volunteer);
+            }else {
+                throw new Error('Volunteer not in reservedVolunteers array');
+                // inform invoker
+                // via event? but no update
+            }
+        }
+        
+        return getAssetRegistry(NS + '.Task')
+            .then(function (registry) {
+                return registry.update(task);
+            })
+            .then(function(){
+                var assignTaskEvent = factory.newEvent(NS, 'assignTaskEvent');
+                assignTaskEvent.task = task;
+                assignTaskEvent.taskPerformer = task.taskPerformer;
+                emit(assignTaskEvent);
+        });
+
+    } else {
+        throw new Error('Task not in right status!');
     }
-    
-    return getAssetRegistry(NS + '.Task')
-        .then(function (registry) {
-            return registry.update(task);
-        })
-        .then(function(){
-    		var assignTaskEvent = factory.newEvent(NS, 'assignTaskEvent');
-            assignTaskEvent.task = task;
-            assignTaskEvent.taskPerformer = task.taskPerformer;
-    		emit(assignTaskEvent);
-    	});
 }
 
 /**
@@ -117,15 +131,22 @@ function finishTask(finishTask) {
     var factory = getFactory();
 
     var task = finishTask.task;
-    task.taskStatus = 'FINISHED';
 
-    return getAssetRegistry(NS + '.Task')
-        .then(function (registry) {
-            return registry.update(task);
-        })
-        .then(function(){
-    		var finishTaskEvent = factory.newEvent(NS, 'finishTaskEvent');
-            finishTaskEvent.task = task;
-    		emit(finishTaskEvent);
-    	});
+    if(task.taskStatus == 'RESERVED') {
+        task.taskStatus = 'FINISHED';
+
+        return getAssetRegistry(NS + '.Task')
+            .then(function (registry) {
+                return registry.update(task);
+            })
+            .then(function(){
+                var finishTaskEvent = factory.newEvent(NS, 'finishTaskEvent');
+                finishTaskEvent.task = task;
+                emit(finishTaskEvent);
+        });
+
+    } else {
+        throw new Error('Task not in right status!');
+    }
+    
 }
