@@ -1,10 +1,3 @@
-query selectAllTasksByStatus {
-  description: "Select all Tasks by status"
-  statement:
-      SELECT at.jku.cis.Task
-          WHERE (taskStatus == _$taskStatus)
-}
-
 query selectAllTasksCreated {
   description: "Select all Tasks with Status 'CREATED'"
   statement:
@@ -12,42 +5,25 @@ query selectAllTasksCreated {
           WHERE (taskStatus == "CREATED")
 }
 
-query selectAllTasksReserved {
-  description: "Select all Tasks with Status 'RESERVED'"
+query selectTasksReservedByVolunteer {
+  description: "Select all Tasks which _$volunteer has reserved for"
   statement:
       SELECT at.jku.cis.Task
-          WHERE (taskStatus == "RESERVED")
+          WHERE ((taskStatus == "RESERVED") AND (reservedVolunteers CONTAINS _$volunteer))
 }
 
-query selectAllTasksAssigned {
-  description: "Select all Tasks with Status 'ASSIGNED'"
+query selectTasksVolunteerAssignedTo {
+  description: "Select all Tasks which _$volunteer is assigned to"
   statement:
       SELECT at.jku.cis.Task
-          WHERE (taskStatus == "ASSIGNED")
+          WHERE ((taskStatus == "ASSIGNED") AND (taskPerformer CONTAINS _$volunteer))
 }
 
-query selectAllTasksFinished {
-  description: "Select all Tasks with Status 'FINISHED'"
+query selectTasksFinishedByUser {
+  description: "Select all Tasks which _$volunteer has finished"
   statement:
       SELECT at.jku.cis.Task
-          WHERE (taskStatus == "FINISHED")
+          WHERE ((taskStatus == "FINISHED") AND (taskPerformer CONTAINS _$volunteer))
 }
 
-query selectAllVolunteers {
-  description: "Select all volunteers"
-  statement:
-      SELECT at.jku.cis.Volunteer
-}
-
-query selectAllOrganisations {
-  description: "Select all organisations"
-  statement:
-      SELECT at.jku.cis.Organisation
-}
-
-query selectAllTasks {
-  description: "Select all organisations"
-  statement:
-      SELECT at.jku.cis.Task
-}
 

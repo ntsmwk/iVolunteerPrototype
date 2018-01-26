@@ -42,6 +42,15 @@ rule AllowOrganisationCreateTask1 {
     action: ALLOW
 }
 
+rule AllowOrganisationCreateTask2 {
+    description: "Allow all Organisation access to Task, but only via createTask transaction"
+    participant: "at.jku.cis.Organisation"
+    operation: ALL
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.createTask"
+    action: ALLOW
+}
+
 rule AllowVolunteerReserveTask1 {
     description: "Allow all Volunteers to register for a task"
     participant: "at.jku.cis.Volunteer"
@@ -50,17 +59,8 @@ rule AllowVolunteerReserveTask1 {
     action: ALLOW
 }
 
-rule AllowOrganisationCreateTask2 {
-    description: "Allow all Organisation access to Task only in createTask transaction"
-    participant: "at.jku.cis.Organisation"
-    operation: ALL
-    resource: "at.jku.cis.Task"
-    transaction: "at.jku.cis.createTask"
-    action: ALLOW
-}
-
 rule AllowVolunteerReserveTask2 {
-    description: "Allow all Volunteers access to Task only in reserveTask transaction"
+    description: "Allow all Volunteers access to task, but only via reserveTask transaction"
     participant: "at.jku.cis.Volunteer"
     operation: ALL
     resource: "at.jku.cis.Task"
@@ -68,54 +68,39 @@ rule AllowVolunteerReserveTask2 {
     action: ALLOW
 }
 
-/*
-rule r4 {
-    description: "abc"
-    participant: "at.jku.cis.*"
-    operation: READ
-    resource: "at.jku.cis.Organisation"
-    action: ALLOW
-}
-
-rule r5 {
-    description: "abc"
-    participant: "at.jku.cis.*"
-    operation: READ
-    resource: "at.jku.cis.Volunteer"
-    action: ALLOW
-}
-*/
-
-/*
-rule r2 {
-    description: "abc"
-    participant: "at.jku.cis.Volunteer"
-    operation: CREATE
-    resource: "at.jku.cis.reserveTask"
-    action: ALLOW
-}
-*/
-/*
-rule r0 {
-    description: "abc"
-    participant (m): "at.jku.cis.Organisation"
-    operation: CREATE
-    resource (v): "at.jku.cis.Task"
-    condition: (v.creator.getIdentifier() == m.getIdentifier())
-    action: ALLOW
-}
-
-rule r1 {
-    description: "abc"
+rule AllowOrganisationAssignTask1 {
+    description: "Allow all Organisations to assign volunteers to a task"
     participant: "at.jku.cis.Organisation"
     operation: CREATE
-    resource: "at.jku.cis.Task"
-    transaction: "at.jku.cis.createTask"
+    resource: "at.jku.cis.assignTask"
     action: ALLOW
 }
-*/
 
+rule AllowOrganisationAssignTask2 {
+    description: "Allow all Organisations accessto to Task, but only via assingTask transaction"
+    participant: "at.jku.cis.Organisation"
+    operation: ALL
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.assignTask"
+    action: ALLOW
+}
 
+rule AllowVolunteerFinishTask1 {
+    description: "Allow all Volunteers to finish a task"
+    participant: "at.jku.cis.Volunteer"
+    operation: CREATE
+    resource: "at.jku.cis.finishTask"
+    action: ALLOW
+}
+
+rule AllowVolunteerFinishTask2 {
+    description: "Allow all Volunteers access to Task, but only via finishTask transaction"
+    participant: "at.jku.cis.Volunteer"
+    operation: ALL
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.finishTask"
+    action: ALLOW
+}
 
 /**
 * Make sure all resources are locked down by default.

@@ -44,7 +44,7 @@ function reserveTask(reserveTask) {
 
     var task = reserveTask.task;
 
-    if(task.taskStatus == 'CREATED') {
+    if(task.taskStatus == 'CREATED' || task.taskStatus == 'RESERVED') {
         task.taskStatus = 'RESERVED';
 
         if (!task.reservedVolunteers) {
