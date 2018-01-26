@@ -27,34 +27,34 @@ export class Task extends Asset {
   creator: Organisation;
   taskPerformer: Volunteer[];
 }
-export class createTask extends Transaction {
+export class CreateTask extends Transaction {
   taskId: string;
   description: string;
   creator: Organisation;
 }
-export class createTaskEvent extends Event {
+export class CreateTaskEvent extends Event {
   task: Task;
 }
-export class reserveTask extends Transaction {
-  task: Task;
-  volunteer: Volunteer;
-}
-export class reserveTaskEvent extends Event {
+export class ReserveTask extends Transaction {
   task: Task;
   volunteer: Volunteer;
 }
-export class assignTask extends Transaction {
+export class ReserveTaskEvent extends Event {
+  task: Task;
+  volunteer: Volunteer;
+}
+export class AssignTask extends Transaction {
   task: Task;
   taskPerformer: Volunteer[];
 }
-export class assignTaskEvent extends Event {
+export class AssignTaskEvent extends Event {
   task: Task;
   taskPerformer: Volunteer[];
 }
-export class finishTask extends Transaction {
+export class FinishTask extends Transaction {
   task: Task;
 }
-export class finishTaskEvent extends Event {
+export class FinishTaskEvent extends Event {
   task: Task;
 }
 // }

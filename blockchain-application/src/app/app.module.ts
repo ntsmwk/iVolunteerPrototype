@@ -21,6 +21,9 @@ import {TaskService} from './providers/task.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppMaterialModule} from './app-material.module';
 import {Configuration} from './providers/configuration';
+import {CreateTaskService} from './providers/create-task.service';
+import {AssignTaskService} from './providers/assign-task.service';
+import {FinishTaskService} from './providers/finish-task.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -51,6 +54,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     Configuration,
     DataService,
     TaskService,
+    CreateTaskService,
+    AssignTaskService,
+    FinishTaskService,
     ElectronService
   ],
   bootstrap: [AppComponent]
