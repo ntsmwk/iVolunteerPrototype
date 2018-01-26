@@ -14,10 +14,13 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {ElectronService} from './providers/electron.service';
 
-import {AppComponent} from './app.component';
+import {AppComponent} from './components/app/app.component';
 import {HomeComponent} from './components/home/home.component';
 import {DataService} from './providers/data.service';
 import {TaskService} from './providers/task.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AppMaterialModule} from './app-material.module';
+import {Configuration} from './providers/configuration';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -30,10 +33,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent
   ],
   imports: [
+    AppRoutingModule,
+    AppMaterialModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -43,6 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [
+    Configuration,
     DataService,
     TaskService,
     ElectronService

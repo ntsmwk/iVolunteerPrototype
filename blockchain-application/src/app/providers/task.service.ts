@@ -6,7 +6,6 @@ import {Task} from 'app/model/at.jku.cis';
 @Injectable()
 export class TaskService {
 
-
 	private NAMESPACE = 'Task';
 
 	constructor(private dataService: DataService<Task>) {

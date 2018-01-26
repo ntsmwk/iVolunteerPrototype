@@ -1,7 +1,12 @@
 {
+  "TASK": {
+    "ID": "Id",
+    "DESCRIPTION": "Description",
+    "STATUS": "Status"
+  },
   "PAGES": {
-      "HOME": {
-          "TITLE": "App works !"
-      }
+    "HOME": {
+      "TITLE": "Home Page!"
+    }
   }
 }
