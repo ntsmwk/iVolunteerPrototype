@@ -132,7 +132,7 @@ function finishTask(finishTask) {
 
     var task = finishTask.task;
 
-    if(task.taskStatus == 'RESERVED') {
+    if(task.taskStatus == 'ASSIGNED') {
         task.taskStatus = 'FINISHED';
 
         return getAssetRegistry(NS + '.Task')

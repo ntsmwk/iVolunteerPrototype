@@ -45,3 +45,9 @@ query selectAllOrganisations {
       SELECT at.jku.cis.Organisation
 }
 
+query selectAllTasks {
+  description: "Select all organisations"
+  statement:
+      SELECT at.jku.cis.Task
+}
+

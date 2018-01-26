@@ -1,6 +1,7 @@
 /**
  * Access control rules for tutorial-network
  */
+ /*
 rule Default {
     description: "Allow all participants access to all resources"
     participant: "ANY"
@@ -8,12 +9,65 @@ rule Default {
     resource: "at.jku.cis.*"
     action: ALLOW
 }
-
+*/
 rule SystemACL {
-  description:  "System ACL to permit all access"
-  participant: "ANY"
-  operation: ALL
-  resource: "org.hyperledger.composer.system.**"
-  action: ALLOW
+    description:  "System ACL to permit all access"
+    participant: "ANY"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
 }
 
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+// bestimmte funktionen dürfen nur von bestimmten Participants aufgerufen 
+
+rule AllowAllParticipantsRead {
+    description: "Allow all Participants to read everything"
+    participant: "at.jku.cis.*"
+    operation: READ
+    resource: "at.jku.cis.*"
+    action: ALLOW
+}
+
+rule AllowOrganisationCreateTask {
+    description: "Organisations are allowed to create tasks"
+    participant: "at.jku.cis.Organisation"
+    operation: CREATE, READ, UPDATE
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.createTask"
+    action: ALLOW
+}
+
+rule AllowOrganisationAssignTask {
+    description: "Organisations are allowed to assign volunteers to tasks"
+    participant: "at.jku.cis.Organisation"
+    operation: CREATE, READ, UPDATE
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.assignTask"
+    action: ALLOW
+}
+
+rule AllowVolunteerReserveTask {
+    description: "Volunteers are allowed to access reserveTask transaction"
+    participant: "at.jku.cis.Volunteer"
+    operation: CREATE, READ, UPDATE
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.reserveTask"
+    action: ALLOW
+}
+
+rule AllowVolunteerFinishTask {
+    description: "Volunteers are allowed to access reserveTask transaction"
+    participant: "at.jku.cis.Volunteer"
+    operation: CREATE, READ, UPDATE
+    resource: "at.jku.cis.Task"
+    transaction: "at.jku.cis.finishTask"
+    action: ALLOW
+}
