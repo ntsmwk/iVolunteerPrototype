@@ -12,7 +12,7 @@ query selectTasksReservedByVolunteer {
           WHERE ((taskStatus == "RESERVED") AND (reservedVolunteers CONTAINS _$volunteer))
 }
 
-query selectTasksVolunteerAssignedTo {
+query selectTasksVolunteerAssigned {
   description: "Select all Tasks which _$volunteer is assigned to"
   statement:
       SELECT at.jku.cis.Task
