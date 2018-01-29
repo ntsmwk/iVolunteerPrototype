@@ -6,29 +6,36 @@ import {Task} from 'app/model/at.jku.cis';
 @Injectable()
 export class TaskService {
 
-	private NAMESPACE = 'Task';
+  private NAMESPACE = 'Task';
 
-	constructor(private dataService: DataService<Task>) {
-	};
+  constructor(private dataService: DataService<Task>) {
+  };
 
-	public getAll(): Observable<Task[]> {
-		return this.dataService.getAll(this.NAMESPACE);
-	}
+  public getAll(): Observable<Task[]> {
+    return this.dataService.getAll(this.NAMESPACE);
+  }
 
-	public getAsset(id: any): Observable<Task> {
-		return this.dataService.getSingle(this.NAMESPACE, id);
-	}
+  public getAsset(id: any): Observable<Task> {
+    return this.dataService.getSingle(this.NAMESPACE, id);
+  }
 
-	public addAsset(itemToAdd: any): Observable<Task> {
-		return this.dataService.add(this.NAMESPACE, itemToAdd);
-	}
+  public getAllCreated(): Observable<Task[]> {
+    return this.dataService.getAll(this.NAMESPACE + '/findCreatedTasks');
+  }
 
-	public updateAsset(id: any, itemToUpdate: any): Observable<Task> {
-		return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
-	}
+  public getAllByOrganisation(organisationId: any): Observable<Task[]> {
+    return this.dataService.getAll('queries/findTasksByOrganisation?organisation=resource:at.jku.cis.Organisation#' + organisationId);
+  }
 
-	public deleteAsset(id: any): Observable<Task> {
-		return this.dataService.delete(this.NAMESPACE, id);
-	}
+  public getAllReservedByVolunteer(volunteerId: any): Observable<Task[]> {
+    return this.dataService.getAll('queries/findReservedTasksByVolunteer?volunteer=resource:at.jku.cis.Volunteer#' + volunteerId);
+  }
 
+  public getAllAssignedByVolunteer(volunteerId: any): Observable<Task[]> {
+    return this.dataService.getAll('queries/findAssignedTasksByVolunteer?volunteer=resource:at.jku.cis.Volunteer#' + volunteerId);
+  }
+
+  public getAllFinishedByVolunteer(volunteerId: any): Observable<Task[]> {
+    return this.dataService.getAll('queries/findFinishedTasksByVolunteer?volunteer=resource:at.jku.cis.Volunteer#' + volunteerId);
+  }
 }

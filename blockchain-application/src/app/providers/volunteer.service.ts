@@ -4,7 +4,7 @@ import {DataService} from './data.service';
 import {Task, Volunteer} from 'app/model/at.jku.cis';
 
 @Injectable()
-export class TaskService {
+export class VolunteerService {
 
   private NAMESPACE = 'Volunteer';
 
@@ -19,16 +19,7 @@ export class TaskService {
     return this.dataService.getSingle(this.NAMESPACE, id);
   }
 
-  public addAsset(itemToAdd: any): Observable<Volunteer> {
-    return this.dataService.add(this.NAMESPACE, itemToAdd);
-  }
-
-  public updateAsset(id: any, itemToUpdate: any): Observable<Volunteer> {
+  public updateAsset(id: any, itemToUpdate: Volunteer): Observable<Volunteer> {
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
   }
-
-  public deleteAsset(id: any): Observable<Volunteer> {
-    return Observable.throw(new Error('Not implemented'));
-  }
-
 }

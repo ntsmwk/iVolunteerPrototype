@@ -1,29 +1,28 @@
-query selectAllTasksCreated {
+query findCreatedTasks {
   description: "Select all Tasks with Status 'CREATED'"
   statement:
       SELECT at.jku.cis.Task
           WHERE (taskStatus == "CREATED")
 }
 
-query selectTasksReservedByVolunteer {
+query findReservedTasksByVolunteer {
   description: "Select all Tasks which _$volunteer has reserved for"
   statement:
-      SELECT at.jku.cis.Task
-          WHERE ((taskStatus == "RESERVED") AND (reservedVolunteers CONTAINS _$volunteer))
+      SELECT at.jku.cis.Task 
+	  WHERE ((taskStatus == "RESERVED") AND (reservedVolunteers CONTAINS _$volunteer))
 }
 
-query selectTasksVolunteerAssigned {
+query findAssignedTasksByVolunteer {
   description: "Select all Tasks which _$volunteer is assigned to"
   statement:
       SELECT at.jku.cis.Task
           WHERE ((taskStatus == "ASSIGNED") AND (taskPerformer CONTAINS _$volunteer))
 }
 
-query selectTasksFinishedByUser {
+query findFinishedTasksByVolunteer {
   description: "Select all Tasks which _$volunteer has finished"
   statement:
       SELECT at.jku.cis.Task
           WHERE ((taskStatus == "FINISHED") AND (taskPerformer CONTAINS _$volunteer))
 }
-
 

@@ -6,4 +6,9 @@ html, body {
   height: 100%;
 }
 
+@import "~bootstrap/dist/css/bootstrap.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.mat-divider {
+  margin: 20px 0 20px 0 !important;
+}

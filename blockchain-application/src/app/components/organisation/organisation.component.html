@@ -1,0 +1,11 @@
+<div class="container">
+  <h1 class="title">
+    {{ 'PAGES.ORGANISATION.TITLE' | translate }}
+  </h1>
+</div>
+
+<div class="container">
+  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST'" [dataSource]="dataSource"></app-task-list>
+  <mat-divider></mat-divider>
+  <app-task-create [titleKey]="'PAGES.ORGANISATION.TASK.CREATE'" [personId]="organisationId" (onSave)="appendTask($event)"></app-task-create>
+</div>

@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -22,7 +21,8 @@ export class DataService<Type> {
   public getAll(ns: string): Observable<Type[]> {
     console.log('GetAll ' + ns + ' to ' + this.actionUrl + ns);
 
-    return this.http.get(`${this.actionUrl}${ns}`, {'headers': this.headers})
+    const uri = `${this.actionUrl}${ns}`;
+    return this.http.get(this.encode(uri), {'headers': this.headers})
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -30,7 +30,8 @@ export class DataService<Type> {
   public getSingle(ns: string, id: string): Observable<Type> {
     console.log('GetSingle ' + ns);
 
-    return this.http.get(this.actionUrl + ns + '/' + id + this.resolveSuffix)
+    const uri = this.actionUrl + ns + '/' + id + this.resolveSuffix
+    return this.http.get(this.encode(uri))
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -40,7 +41,8 @@ export class DataService<Type> {
     console.log('Add ' + ns);
     console.log('asset', asset);
 
-    return this.http.post(this.actionUrl + ns, asset)
+    const uri = this.actionUrl + ns;
+    return this.http.post(this.encode(uri), asset)
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -50,7 +52,9 @@ export class DataService<Type> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
     console.log('what is the updated item?', JSON.stringify(itemToUpdate));
-    return this.http.put(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
+
+    const uri = `${this.actionUrl}${ns}/${id}`;
+    return this.http.put(this.encode(uri), itemToUpdate)
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -58,7 +62,8 @@ export class DataService<Type> {
   public delete(ns: string, id: string): Observable<Type> {
     console.log('Delete ' + ns);
 
-    return this.http.delete(this.actionUrl + ns + '/' + id)
+    const uri = this.actionUrl + ns + '/' + id;
+    return this.http.delete(this.encode(uri))
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -73,6 +78,10 @@ export class DataService<Type> {
 
   private extractData(result: Type): any {
     return result;
+  }
+
+  private encode(url: string): string {
+    return url.replace('#', '%23');
   }
 
 }
