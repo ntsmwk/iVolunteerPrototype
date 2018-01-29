@@ -36,18 +36,9 @@ export class CreateTask extends Transaction {
   creator: string;
 }
 
-export class CreateTaskEvent extends Event {
-  task: Task;
-}
-
 export class ReserveTask extends Transaction {
   task: string;
   volunteer: string;
-}
-
-export class ReserveTaskEvent extends Event {
-  task: Task;
-  volunteer: Volunteer;
 }
 
 export class AssignTask extends Transaction {
@@ -55,17 +46,8 @@ export class AssignTask extends Transaction {
   taskPerformer: Volunteer[];
 }
 
-export class AssignTaskEvent extends Event {
-  task: Task;
-  taskPerformer: Volunteer[];
-}
-
 export class FinishTask extends Transaction {
-  task: Task;
-}
-
-export class FinishTaskEvent extends Event {
-  task: Task;
+  task: string;
 }
 
 // }

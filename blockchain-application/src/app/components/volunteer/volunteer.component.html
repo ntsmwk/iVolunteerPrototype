@@ -4,7 +4,7 @@
   </h1>
 </div>
 
-<div class="container" [style]="margin-bottom: 5px">
+<div class="container">
   <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">Volunteer</h5>
@@ -21,7 +21,10 @@
   <mat-divider></mat-divider>
   <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.RESERVED'" [dataSource]="reservedDataSource"></app-task-list>
   <mat-divider></mat-divider>
-  <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.ASSIGNED'" [dataSource]="assignedDataSource"></app-task-list>
+  <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.ASSIGNED'" [dataSource]="assignedDataSource"
+                 [displayedColumns]="['taskId', 'description', 'taskStatus', 'creator', 'finish']"
+                 (onFinish)="finish($event)"></app-task-list>
   <mat-divider></mat-divider>
-  <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.FINISHED'" [dataSource]="finishedDataSource"></app-task-list>
+  <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.FINISHED'" [dataSource]="finishedDataSource"
+  ></app-task-list>
 </div>

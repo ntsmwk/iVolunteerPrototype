@@ -19,17 +19,21 @@ export class TaskListComponent {
 
   @Output()
   onReserve = new EventEmitter<string>();
-
-  constructor() {
-
-  }
+  @Output()
+  onAssign = new EventEmitter<string[]>();
+  @Output()
+  onFinish = new EventEmitter<string>();
 
   reserve(taskId: string) {
     this.onReserve.emit(taskId);
   }
 
   assign(taskId: string) {
-    console.log(taskId);
+    this.onAssign.emit([taskId]);
+  }
+
+  finish(taskId: string) {
+    this.onFinish.emit(taskId);
   }
 
 }

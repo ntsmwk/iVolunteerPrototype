@@ -6,7 +6,8 @@
     "CREATOR": "Creator",
     "ACTION": {
       "RESERVE": "Reserve",
-      "ASSIGN": "Assign"
+      "ASSIGN": "Assign",
+      "FINISH": "Finish"
     }
   },
   "PAGES": {

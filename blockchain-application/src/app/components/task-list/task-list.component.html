@@ -23,16 +23,26 @@
   </ng-container>
 
   <ng-container matColumnDef="reserve">
-    <mat-header-cell *matHeaderCellDef>{{'TASK.ACTION.RESERVE' | translate}}</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>{{'TASK.ACTION' | translate}}</mat-header-cell>
     <mat-cell *matCellDef="let task">
-      <button mat-raised-button color="primary" (click)="reserve(task.taskId)">RESERVE</button>
+      <button mat-raised-button color="primary" (click)="reserve(task.taskId)">{{'TASK.ACTION.RESERVE' | translate}}
+      </button>
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="assign">
-    <mat-header-cell *matHeaderCellDef>{{'TASK.ACTION.ASSIGN' | translate}}</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
     <mat-cell *matCellDef="let task">
-      <button mat-raised-button color="primary" (click)="assign(task.taskId)">ASSIGN</button>
+      <button mat-raised-button color="primary" (click)="assign(task.taskId)">{{'TASK.ACTION.ASSIGN' | translate}}
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="finish">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let task">
+      <button mat-raised-button color="primary" (click)="finish(task.taskId)">{{'TASK.ACTION.FINISH' | translate}}
+      </button>
     </mat-cell>
   </ng-container>
 
