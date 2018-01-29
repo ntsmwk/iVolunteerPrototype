@@ -20,6 +20,9 @@ function createTask(createTask) {
     task.description = createTask.description;
     task.creator = createTask.creator;
 
+    // var currentParticipant = getCurrentParticipant();
+    // task.creator = currentParticipant;
+
     // save the task
     return getAssetRegistry(task.getFullyQualifiedType())
         .then(function (registry) {
@@ -127,6 +130,11 @@ function assignTask(assignTask) {
  * @transaction
  */
 function finishTask(finishTask) {
+    // TODO:
+    // add check, that only taskPerformer can finish task
+    // and that all taskPerformer have to finish task, before task gets to state "FINISHED"
+
+
     console.log('finishTask');
     var factory = getFactory();
 
