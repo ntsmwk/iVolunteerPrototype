@@ -12,7 +12,10 @@
     },
     "ORGANISATION": {
       "TITLE": "Organisation",
-      "TASKS": "Tasks"
+      "TASK": {
+        "LIST": "List Tasks",
+        "CREATE": "Create Task"
+      }
     },
     "VOLUNTEER": {
       "TITLE": "Volunteer",

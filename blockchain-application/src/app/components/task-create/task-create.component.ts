@@ -13,6 +13,8 @@ import {TaskService} from '../../providers/task.service';
 export class TaskCreateComponent {
   @Input()
   personId: string;
+  @Input()
+  titleKey: string;
   @Output()
   onSave = new EventEmitter<Task>();
 
