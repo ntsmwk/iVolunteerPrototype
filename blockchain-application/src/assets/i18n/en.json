@@ -5,8 +5,18 @@
     "STATUS": "Status"
   },
   "PAGES": {
-    "HOME": {
-      "TITLE": "Home Page!"
+    "LOGIN": {
+      "TITLE": "Login",
+      "VOLUNTEER": "Volunteer",
+      "ORGANISATION": "Organisation"
+    },
+    "ORGANISATION": {
+      "TITLE": "Organisation",
+      "TASKS": "Tasks"
+    },
+    "VOLUNTEER": {
+      "TITLE": "Volunteer",
+      "TASKS": "Tasks"
     }
   }
 }

@@ -4,7 +4,7 @@ import {DataService} from './data.service';
 import {Organisation, Volunteer} from 'app/model/at.jku.cis';
 
 @Injectable()
-export class TaskService {
+export class OrganisationService {
 
   private NAMESPACE = 'Organisation';
 

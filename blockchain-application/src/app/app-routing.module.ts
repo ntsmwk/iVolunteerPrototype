@@ -1,16 +1,18 @@
-import {HomeComponent} from './components/home/home.component';
+import {OrganisationComponent} from './components/organisation/organisation.component';
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from './components/login/login.component';
+import {VolunteerComponent} from './components/volunteer/volunteer.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent
-  }
+  {path: 'login', component: LoginComponent},
+  {path: 'organisation/tasks', component: OrganisationComponent},
+  {path: 'volunteer/tasks', component: VolunteerComponent},
+  {path: '', redirectTo: '/login', pathMatch: 'full'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true})],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

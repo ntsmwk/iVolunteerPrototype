@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import 'polyfills';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
@@ -15,7 +15,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ElectronService} from './providers/electron.service';
 
 import {AppComponent} from './components/app/app.component';
-import {HomeComponent} from './components/home/home.component';
+import {OrganisationComponent} from './components/organisation/organisation.component';
 import {DataService} from './providers/data.service';
 import {TaskService} from './providers/task.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -24,6 +24,12 @@ import {Configuration} from './providers/configuration';
 import {CreateTaskService} from './providers/create-task.service';
 import {AssignTaskService} from './providers/assign-task.service';
 import {FinishTaskService} from './providers/finish-task.service';
+import {LoginComponent} from './components/login/login.component';
+import {VolunteerService} from './providers/volunteer.service';
+import {OrganisationService} from './providers/organisation.service';
+import {VolunteerComponent} from './components/volunteer/volunteer.component';
+import {TaskListComponent} from './components/task-list/task-list.component';
+import {TaskCreateComponent} from './components/task-create/task-create.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,7 +39,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    LoginComponent,
+    TaskListComponent,
+    TaskCreateComponent,
+    OrganisationComponent,
+    VolunteerComponent
   ],
   imports: [
     AppRoutingModule,
@@ -41,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -57,6 +68,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateTaskService,
     AssignTaskService,
     FinishTaskService,
+    VolunteerService,
+    OrganisationService,
     ElectronService
   ],
   bootstrap: [AppComponent]

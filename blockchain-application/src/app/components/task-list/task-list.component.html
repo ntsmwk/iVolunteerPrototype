@@ -1,0 +1,22 @@
+<h2>{{titleKey | translate}}</h2>
+
+<mat-table #table [dataSource]="dataSource">
+
+  <ng-container matColumnDef="taskId">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.ID' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.taskId}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.DESCRIPTION' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="taskStatus">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.STATUS' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.taskStatus}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

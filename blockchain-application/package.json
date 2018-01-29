@@ -24,28 +24,29 @@
     "e2e": "protractor ./protractor.conf.js"
   },
   "dependencies": {
-    "@angular/animations": "^5.2.2",
-    "@angular/cdk": "^5.1.0",
-    "@angular/material": "^5.1.0"
-  },
-  "devDependencies": {
+    "@angular/animations": "5.2.0",
+    "@angular/cdk": "5.1.0",
     "@angular/common": "5.2.0",
     "@angular/compiler": "5.2.0",
     "@angular/core": "5.2.0",
     "@angular/forms": "5.2.0",
     "@angular/http": "5.2.0",
+    "@angular/language-service": "5.2.0",
+    "@angular/material": "5.1.0",
     "@angular/platform-browser": "5.2.0",
     "@angular/platform-browser-dynamic": "5.2.0",
     "@angular/router": "5.2.0",
     "@ngx-translate/core": "9.0.1",
     "@ngx-translate/http-loader": "2.0.0",
+    "bootstrap": "^4.0.0",
     "core-js": "2.4.1",
-    "enhanced-resolve": "3.3.0",
     "rxjs": "5.5.2",
-    "zone.js": "0.8.17",
+    "zone.js": "0.8.17"
+  },
+  "devDependencies": {
+    "enhanced-resolve": "3.3.0",
     "@angular/cli": "1.6.4",
     "@angular/compiler-cli": "5.2.0",
-    "@angular/language-service": "5.2.0",
     "@types/core-js": "0.9.36",
     "@types/jasmine": "2.5.54",
     "@types/jasminewd2": "2.0.2",

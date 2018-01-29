@@ -4,18 +4,16 @@ import {Task} from 'app/model/at.jku.cis';
 import {MatTableDataSource} from '@angular/material';
 
 @Component({
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './volunteer.component.html'
 })
-export class HomeComponent implements AfterViewInit {
-  displayedColumns = ['taskId', 'description', 'taskStatus'];
-
+export class VolunteerComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Task>();
 
   constructor(private taskService: TaskService) {
   }
 
   ngAfterViewInit() {
+    const organisationId = localStorage.getItem('person.id');
     this.taskService.getAll().subscribe((data: Task[]) => this.dataSource.data = data);
   }
 
