@@ -5,6 +5,16 @@
 </div>
 
 <div class="container">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Volunteer</h5>
+      <p class="card-text">{{volunteer.firstName}} {{volunteer.lastName}}</p>
+      <p class="card-text">{{volunteer.email}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
   <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.CREATED'" [dataSource]="createdDataSource"></app-task-list>
   <mat-divider></mat-divider>
   <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.RESERVED'" [dataSource]="reservedDataSource"></app-task-list>

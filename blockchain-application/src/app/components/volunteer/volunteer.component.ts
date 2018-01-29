@@ -1,18 +1,28 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {TaskService} from '../../providers/task.service';
-import {Task} from 'app/model/at.jku.cis';
+import {Task, Volunteer} from 'app/model/at.jku.cis';
 import {MatTableDataSource} from '@angular/material';
+import {VolunteerService} from '../../providers/volunteer.service';
 
 @Component({
   templateUrl: './volunteer.component.html'
 })
-export class VolunteerComponent implements AfterViewInit {
+export class VolunteerComponent implements OnInit, AfterViewInit {
+
+  volunteer: Volunteer;
+
   createdDataSource = new MatTableDataSource<Task>();
   reservedDataSource = new MatTableDataSource<Task>();
   assignedDataSource = new MatTableDataSource<Task>();
   finishedDataSource = new MatTableDataSource<Task>();
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService,
+              private volunteerService: VolunteerService) {
+  }
+
+  ngOnInit() {
+    const volunteerId = localStorage.getItem('person.id');
+    this.volunteerService.getAsset(volunteerId).subscribe((volunteer: Volunteer) => this.volunteer = volunteer);
   }
 
   ngAfterViewInit() {
