@@ -41,8 +41,8 @@ export class CreateTaskEvent extends Event {
 }
 
 export class ReserveTask extends Transaction {
-  task: Task;
-  volunteer: Volunteer;
+  task: string;
+  volunteer: string;
 }
 
 export class ReserveTaskEvent extends Event {

@@ -33,3 +33,10 @@ query findFinishedTasksByVolunteer {
           WHERE ((taskStatus == "FINISHED") AND (taskPerformer CONTAINS _$volunteer))
 }
 
+query findAllHistorianRecords {
+  description: "getTradeRelatedHistorianRecords"
+  statement: 
+    SELECT org.hyperledger.composer.system.HistorianRecord
+      WHERE (transactionTimestamp > '0000-01-01T00:00:00.000Z')
+} 
+
