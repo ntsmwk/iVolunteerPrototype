@@ -134,7 +134,6 @@ function finishTask(finishTask) {
     // add check, that only taskPerformer can finish task
     // and that all taskPerformer have to finish task, before task gets to state "FINISHED"
 
-
     console.log('finishTask');
     var factory = getFactory();
 
