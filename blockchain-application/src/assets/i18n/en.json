@@ -19,7 +19,14 @@
     },
     "VOLUNTEER": {
       "TITLE": "Volunteer",
-      "TASKS": "Tasks"
+      "TASK": {
+        "LIST": {
+          "CREATED": "Available Tasks",
+          "RESERVED": "Reserved Tasks",
+          "ASSIGNED": "Assigned Tasks",
+          "FINISHED": "Finished Tasks"
+        }
+      }
     }
   }
 }

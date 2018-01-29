@@ -20,7 +20,7 @@ export class TaskService {
   }
 
   public getAllCreated(): Observable<Task[]> {
-    return this.dataService.getAll(this.NAMESPACE + '/findCreatedTasks');
+    return this.dataService.getAll('queries/findCreatedTasks');
   }
 
   public getAllByOrganisation(organisationId: any): Observable<Task[]> {
