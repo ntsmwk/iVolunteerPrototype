@@ -17,6 +17,25 @@
     <mat-cell *matCellDef="let task"> {{task.taskStatus}}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="creator">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.CREATOR' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task"> {{task.creator}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="reserve">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.ACTION.RESERVE' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task">
+      <button mat-raised-button color="primary" (click)="reserve(task.taskId)">RESERVE</button>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="assign">
+    <mat-header-cell *matHeaderCellDef>{{'TASK.ACTION.ASSIGN' | translate}}</mat-header-cell>
+    <mat-cell *matCellDef="let task">
+      <button mat-raised-button color="primary" (click)="assign(task.taskId)">ASSIGN</button>
+    </mat-cell>
+  </ng-container>
+
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>

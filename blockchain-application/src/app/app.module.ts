@@ -30,6 +30,7 @@ import {OrganisationService} from './providers/organisation.service';
 import {VolunteerComponent} from './components/volunteer/volunteer.component';
 import {TaskListComponent} from './components/task-list/task-list.component';
 import {TaskCreateComponent} from './components/task-create/task-create.component';
+import {ReserveTaskService} from './providers/reserve-task.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -66,6 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataService,
     TaskService,
     CreateTaskService,
+    ReserveTaskService,
     AssignTaskService,
     FinishTaskService,
     VolunteerService,

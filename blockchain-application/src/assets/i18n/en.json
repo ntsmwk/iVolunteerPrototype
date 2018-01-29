@@ -2,7 +2,12 @@
   "TASK": {
     "ID": "Id",
     "DESCRIPTION": "Description",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "CREATOR": "Creator",
+    "ACTION": {
+      "RESERVE": "Reserve",
+      "ASSIGN": "Assign"
+    }
   },
   "PAGES": {
     "LOGIN": {
