@@ -20,7 +20,6 @@ export class OrganisationComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log(this.organisationId);
     this.taskService.getAllByOrganisation(this.organisationId).subscribe((data: Task[]) => this.dataSource.data = data);
   }
 }
