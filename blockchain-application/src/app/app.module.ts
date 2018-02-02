@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import 'polyfills';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
@@ -11,8 +11,6 @@ import {AppRoutingModule} from './app-routing.module';
 // NG Translate
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-
-import {ElectronService} from './providers/electron.service';
 
 import {AppComponent} from './components/app/app.component';
 import {OrganisationComponent} from './components/organisation/organisation.component';
@@ -33,8 +31,8 @@ import {TaskCreateComponent} from './components/task-create/task-create.componen
 import {ReserveTaskService} from './providers/reserve-task.service';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -51,7 +49,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppMaterialModule,
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
@@ -71,8 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AssignTaskService,
     FinishTaskService,
     VolunteerService,
-    OrganisationService,
-    ElectronService
+    OrganisationService
   ],
   bootstrap: [AppComponent]
 })

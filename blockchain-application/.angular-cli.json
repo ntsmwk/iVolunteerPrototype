@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "blockchain-application",
-    "ejected": true
+    "name": "blockchain-application"
   },
   "apps": [
     {

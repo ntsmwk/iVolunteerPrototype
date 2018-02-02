@@ -43,6 +43,7 @@ composer card list
 
 # Angular setup
 1. npm install -g @angular/cli
-2. npm install
+2. npm install electron-packager -g
+3. npm install
 
 
