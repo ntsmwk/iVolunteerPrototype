@@ -14,20 +14,13 @@ export class Volunteer extends Person {
   lastName: string;
 }
 
-export enum TaskStatus {
-  CREATED,
-  RESERVED,
-  ASSIGNED,
-  FINISHED,
-}
-
 export class Task extends Asset {
   taskId: string;
   description: string;
-  taskStatus: TaskStatus;
-  reservedVolunteers: Volunteer[];
-  creator: Organisation;
-  taskPerformer: Volunteer[];
+  taskStatus: string;
+  reservedVolunteers: string[];
+  creator: string;
+  taskPerformer: string[];
 }
 
 export class CreateTask extends Transaction {
@@ -42,8 +35,8 @@ export class ReserveTask extends Transaction {
 }
 
 export class AssignTask extends Transaction {
-  task: Task;
-  taskPerformer: Volunteer[];
+  task: string;
+  taskPerformer: string[];
 }
 
 export class FinishTask extends Transaction {

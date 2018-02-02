@@ -5,7 +5,27 @@
 </div>
 
 <div class="container">
-  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST'" [dataSource]="dataSource"></app-task-list>
+  <app-task-create [titleKey]="'PAGES.ORGANISATION.TASK.CREATE'" [personId]="organisationId"
+                   (onSave)="appendTask($event)"></app-task-create>
+
   <mat-divider></mat-divider>
-  <app-task-create [titleKey]="'PAGES.ORGANISATION.TASK.CREATE'" [personId]="organisationId" (onSave)="appendTask($event)"></app-task-create>
+
+  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST.CREATED'" [dataSource]="createdDataSource"
+                 [displayedColumns]="['taskId', 'description', 'taskStatus']"></app-task-list>
+
+  <mat-divider></mat-divider>
+
+  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST.RESERVED'" [dataSource]="reservedDataSource"
+                 [displayedColumns]="['taskId', 'description', 'taskStatus', 'assign']"
+                 (onAssign)="assignTask($event)"></app-task-list>
+
+  <mat-divider></mat-divider>
+
+  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST.ASSIGNED'" [dataSource]="assignedDataSource"
+                 [displayedColumns]="['taskId', 'description', 'taskStatus']"></app-task-list>
+
+  <mat-divider></mat-divider>
+
+  <app-task-list [titleKey]="'PAGES.ORGANISATION.TASK.LIST.FINISHED'" [dataSource]="finishedDataSource"
+                 [displayedColumns]="['taskId', 'description', 'taskStatus']"></app-task-list>
 </div>

@@ -20,7 +20,7 @@ export class TaskListComponent {
   @Output()
   onReserve = new EventEmitter<string>();
   @Output()
-  onAssign = new EventEmitter<string[]>();
+  onAssign = new EventEmitter<string>();
   @Output()
   onFinish = new EventEmitter<string>();
 
@@ -29,7 +29,7 @@ export class TaskListComponent {
   }
 
   assign(taskId: string) {
-    this.onAssign.emit([taskId]);
+    this.onAssign.emit(taskId);
   }
 
   finish(taskId: string) {

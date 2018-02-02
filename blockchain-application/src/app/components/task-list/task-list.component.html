@@ -19,7 +19,7 @@
 
   <ng-container matColumnDef="creator">
     <mat-header-cell *matHeaderCellDef>{{'TASK.CREATOR' | translate}}</mat-header-cell>
-    <mat-cell *matCellDef="let task"> {{task.creator}}</mat-cell>
+    <mat-cell *matCellDef="let task"> {{task.creator.split('#')[1]}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="reserve">

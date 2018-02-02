@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {CreateTask, Organisation, Task} from 'app/model/at.jku.cis';
+import {CreateTask, Task} from 'app/model/at.jku.cis';
 import {CreateTaskService} from '../../providers/create-task.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {OrganisationService} from '../../providers/organisation.service';
 import {TaskService} from '../../providers/task.service';
 
 @Component({
