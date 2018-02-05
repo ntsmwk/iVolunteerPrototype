@@ -28,14 +28,10 @@ composer card list
 2. composer network update --archiveFile blockchain-network@0.0.1.bna --card admin@blockchain-network
 # 
 
-# Creating and importing business network cards
-* composer identity issue --card admin@blockchain-network --file organisation1.card --newUserId organisation1 --participantId 'resource:at.jku.cis.Organisation#org1@gmail.com'
-
-* composer card import --file organisation1.card 
-
-# Creating and importing business network cards
-* composer identity issue --card admin@blockchain-network --file volunteer1.card --newUserId volunteer1 --participantId 'resource:at.jku.cis.Volunteer#philstar@gmail.com'
-* composer card import --file volunteer1.card 
+# Creating participant, creating and importing business network cards
+* composer participant add --card admin@blockchain-network --data '{"$class":"at.jku.cis.Organisation","orgName":"org1","email":"org1@mail.com"}'
+* composer identity issue --card admin@blockchain-network --file organisation1.card --newUserId organisation1 --participantId 'resource:at.jku.cis.Organisation#org1@mail.com'
+* composer card import --file organisation1.card
 
 
 # Connecting to couchDB
@@ -45,5 +41,3 @@ composer card list
 1. npm install -g @angular/cli
 2. npm install electron-packager -g
 3. npm install
-
-

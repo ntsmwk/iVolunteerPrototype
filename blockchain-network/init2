@@ -1,0 +1,44 @@
+#!/bin/bash
+# init script for initializing blockchain-network with data
+
+echo "INIT2 START"
+../../fabric-tools/stopFabric.sh
+../../fabric-tools/teardownFabric.sh
+
+rm -rf $HOME/.composer
+
+rm *.card
+rm *.bna
+
+# Starting the Fabric
+../../fabric-tools/downloadFabric.sh
+../../fabric-tools/startFabric.sh
+../../fabric-tools/createPeerAdminCard.sh
+
+# Deploying the business network
+composer archive create -t dir -n .
+composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName blockchain-network
+composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile blockchain-network@0.0.1.bna --file blockchainadmin.card
+composer card import --file blockchainadmin.card
+
+
+
+echo "INIT2 END"
+
+# composer-rest-server -c admin@blockchain-network -n never -w true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
