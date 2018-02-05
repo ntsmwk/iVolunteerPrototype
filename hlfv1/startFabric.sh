@@ -5,6 +5,7 @@ set -ev
 
 #Detect architecture
 ARCH=`uname -m`
+FABRIC_START_TIMEOUT=10
 
 # Grab the current directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

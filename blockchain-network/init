@@ -2,8 +2,8 @@
 # init script for initializing blockchain-network with data
 
 echo "INIT START"
-../../fabric-tools/stopFabric.sh
-../../fabric-tools/teardownFabric.sh
+~/fabric-tools/stopFabric.sh
+~/fabric-tools/teardownFabric.sh
 
 rm -rf $HOME/.composer
 
@@ -11,9 +11,9 @@ rm *.card
 rm *.bna
 
 # Starting the Fabric
-../../fabric-tools/downloadFabric.sh
-../../fabric-tools/startFabric.sh
-../../fabric-tools/createPeerAdminCard.sh
+~/fabric-tools/downloadFabric.sh
+~/fabric-tools/startFabric.sh
+~/fabric-tools/createPeerAdminCard.sh
 
 # Deploying the business network
 composer archive create -t dir -n .

@@ -1,0 +1,23 @@
+export COMPOSER_CARD=admin@blockchain-network
+export COMPOSER_NAMESPACES=never
+export COMPOSER_AUTHENTICATION=true
+export COMPOSER_MULTIUSER=true
+export COMPOSER_PROVIDERS='{
+    	"github": {
+        "provider": "github",
+        "module": "passport-github",
+        "clientID": "9e96642182047b169c01",
+        "clientSecret": "b698d344286a76ce4233b4f81e201139df11c55e",
+        "authPath": "/auth/github",
+        "callbackURL": "/auth/github/callback",
+        "successRedirect": "/",
+        "failureRedirect": "/"
+    }
+}'
+export COMPOSER_DATASOURCES='{
+    	"db": {
+        "name": "db",
+        "connector": "mongodb",
+        "host": "mongodb"
+    }
+}'
