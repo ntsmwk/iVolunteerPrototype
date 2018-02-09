@@ -1,3 +1,4 @@
+///<reference path="../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {TaskService} from '../../providers/task.service';
 import {FinishTask, ReserveTask, Task, Volunteer} from 'app/model/at.jku.cis';

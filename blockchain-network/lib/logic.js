@@ -18,7 +18,11 @@ function createTask(createTask) {
     var task = factory.newResource(NS, 'Task', createTask.taskId);
     task.taskStatus = 'CREATED';
     task.description = createTask.description;
+
     task.creator = createTask.creator;
+    // TODO: change relationship declaration to following:
+    //var relCreator = factory.newRelationship(NS, 'Organisation', createTask.creator);
+    //task.creator = relCreator;
 
     // var currentParticipant = getCurrentParticipant();
     // task.creator = currentParticipant;
@@ -157,3 +161,58 @@ function finishTask(finishTask) {
     }
     
 }
+
+/*
+function setupDemo(setupDemo) {
+    var factory = getFactory();
+
+     // create some volunteers
+     var volunteer1 = factory.newResource(NS, 'Volunteer', 'vol1@mail.com');
+     volunteer1.firstName = "Philipp";
+     volunteer1.lastName = "Starzer";
+
+     var volunteer2 = factory.newResource(NS, 'Volunteer', 'vol2@mail.com');
+     volunteer2.firstName = "Berthold";
+     volunteer2.lastName = "Roiser";
+
+     var volunteer3 = factory.newResource(NS, 'Volunteer', 'vol3@mail.com');
+     volunteer3.firstName = "Max";
+     volunteer3.lastName = "Mustermann";
+
+     var volunteer4 = factory.newResource(NS, 'Volunteer', 'vol4@mail.com');
+     volunteer4.firstName = "Franz";
+     volunteer4.lastName = "Mayr";
+    
+     // create some organisations
+    var organisation1 = factory.newResource(NS, 'Organisation', 'org1@mail.com');
+    organisation1.orgName = "Organisation 1";
+
+    var organisation2 = factory.newResource(NS, 'Organisation', 'org2@mail.com');
+    organisation1.orgName = "Organisation 2";
+
+    // create some tasks
+    var taskA = factory.newResource(NS, 'Task', 'A');
+    taskA.taskStatus = 'CREATED';
+    taskA.description = 'Description of Task A';
+    taskA.creator = factory.newRelationship(NS, 'Organisation', 'org1@mail.com');
+
+    var taskB = factory.newResource(NS, 'Task', 'B');
+    taskB.taskStatus = 'CREATED';
+    taskB.description = 'Description of Task B';
+    taskB.creator = factory.newRelationship(NS, 'Organisation', 'org2@mail.com');
+
+    var taskB = factory.newResource(NS, 'Task', 'C');
+    taskB.taskStatus = 'RESERVED';
+    taskB.description = 'Description of Task B';
+    taskB.creator = factory.newRelationship(NS, 'Organisation', 'org2@mail.com');
+
+    if (!taskB.reservedVolunteers) {
+        taskB.reservedVolunteers = [];
+    }
+    taskB.reservedVolunteers.push(reserveTask.volunteer);
+    
+    
+}
+
+
+*/

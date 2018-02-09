@@ -28,8 +28,8 @@ asset Task identified by taskId {
   o String taskId
   o String description
   o TaskStatus taskStatus
-  --> Volunteer[] reservedVolunteers optional
   --> Organisation creator
+  --> Volunteer[] reservedVolunteers optional
   --> Volunteer[] taskPerformer optional
 }
 
@@ -81,4 +81,11 @@ transaction finishTask {
 
 event finishTaskEvent {
   o Task task
+}
+
+
+/**
+ * JUST FOR INITIALIZING A DEMO
+ */
+transaction SetupDemo {
 }

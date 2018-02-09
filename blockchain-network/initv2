@@ -35,8 +35,6 @@ composer identity issue --card admin@blockchain-network --file organisation1.car
 
 echo "INITv2 END"
 
-# npm install -g loopback-connector-mongodb
-
 # cd ~/iVolunteerPrototype/docker-rest-server
 
 # docker build -t composer-rest-server .
