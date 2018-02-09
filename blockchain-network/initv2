@@ -3,7 +3,7 @@
 
 echo "INITv2 START"
 docker rm -f mongodb
-docker rm -f rest
+docker rm -f rest-server
 
 ~/fabric-tools/stopFabric.sh
 ~/fabric-tools/teardownFabric.sh
