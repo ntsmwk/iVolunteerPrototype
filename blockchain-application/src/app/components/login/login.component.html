@@ -6,19 +6,14 @@
 
 <div class="container">
   <div>
-    <button mat-raised-button (click)="showOrganisations()">{{ 'PAGES.LOGIN.ORGANISATION' | translate }}</button>
-    <button mat-raised-button (click)="showVolunteers()">{{ 'PAGES.LOGIN.VOLUNTEER' | translate }}</button>
-  </div>
-  <mat-divider></mat-divider>
-  <div *ngIf="type !== undefined" class="container">
-    <form class="login-form" (submit)="onSelectPerson()" [formGroup]="loginForm">
+    <form class="login-form" (submit)="onSubmit()" [formGroup]="loginForm">
       <mat-form-field class="full-width">
-        <input matInput placeholder="Person" [matAutocomplete]="auto" [formControl]="loginForm.controls['email']">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let person of filteredPersons | async" [value]="person.email">
-            <span>{{ person.email }}</span>
-          </mat-option>
-        </mat-autocomplete>
+        <input matInput placeholder="{{ 'PAGES.LOGIN.USERNAME' | translate }}"
+               [formControl]="loginForm.controls['username']">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input type="password" matInput placeholder="{{ 'PAGES.LOGIN.PASSWORD' | translate }}"
+               [formControl]="loginForm.controls['password']">
       </mat-form-field>
 
       <button type="submit" mat-raised-button color="primary"> Login</button>

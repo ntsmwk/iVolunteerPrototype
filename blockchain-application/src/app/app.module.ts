@@ -5,7 +5,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {AppRoutingModule} from './app-routing.module';
 // NG Translate
@@ -29,6 +29,11 @@ import {VolunteerComponent} from './components/volunteer/volunteer.component';
 import {TaskListComponent} from './components/task-list/task-list.component';
 import {TaskCreateComponent} from './components/task-create/task-create.component';
 import {ReserveTaskService} from './providers/reserve-task.service';
+import {CookieService} from 'ngx-cookie-service';
+import {HomeComponent} from './components/home/home.component';
+import {AuthenticationGuard} from './guard/authenticationGuard';
+import {TokenInterceptor} from './interceptor/TokenInterceptor';
+import {SystemPingService} from './providers/system-ping.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -42,7 +47,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     TaskListComponent,
     TaskCreateComponent,
     OrganisationComponent,
-    VolunteerComponent
+    VolunteerComponent,
+    HomeComponent
   ],
   imports: [
     AppRoutingModule,
@@ -68,7 +74,12 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AssignTaskService,
     FinishTaskService,
     VolunteerService,
-    OrganisationService
+    OrganisationService,
+
+    CookieService,
+    SystemPingService,
+    AuthenticationGuard,
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

@@ -14,7 +14,9 @@
     "LOGIN": {
       "TITLE": "Login",
       "VOLUNTEER": "Volunteer",
-      "ORGANISATION": "Organisation"
+      "ORGANISATION": "Organisation",
+      "USERNAME": "Username",
+      "PASSWORD": "Password"
     },
     "ORGANISATION": {
       "TITLE": "Organisation",
