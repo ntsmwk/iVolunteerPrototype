@@ -1,3 +1,3 @@
-# Build image
+# Start
 
-docker build -t composer-rest-server .
+docker-compose up -d
