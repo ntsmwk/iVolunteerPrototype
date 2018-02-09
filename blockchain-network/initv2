@@ -1,0 +1,87 @@
+#!/bin/bash
+# init script for initializing blockchain-network
+
+echo "INITv2 START"
+docker rm -f mongodb
+docker rm -f rest-server
+
+~/fabric-tools/stopFabric.sh
+~/fabric-tools/teardownFabric.sh
+
+rm -rf $HOME/.composer
+
+rm *.card
+rm *.bna
+
+# Starting the Fabric
+~/fabric-tools/downloadFabric.sh
+~/fabric-tools/startFabric.sh
+~/fabric-tools/createPeerAdminCard.sh
+
+# Deploying the business network
+composer archive create -t dir -n .
+composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName blockchain-network
+composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile blockchain-network@0.0.1.bna --file blockchainadmin.card
+composer card import --file blockchainadmin.card
+
+# create volunteer and issue id card
+composer participant add --card admin@blockchain-network --data '{"$class":"at.jku.cis.Volunteer","firstName":"Philipp","lastName":"Starzer","email":"ps@mail.com"}'
+composer identity issue --card admin@blockchain-network --file volunteer1.card --newUserId volunteer1 --participantId 'resource:at.jku.cis.Volunteer#ps@mail.com'
+
+
+# create organisation and issue id card
+composer participant add --card admin@blockchain-network --data '{"$class":"at.jku.cis.Organisation","orgName":"org1","email":"org1@mail.com"}'
+composer identity issue --card admin@blockchain-network --file organisation1.card --newUserId organisation1 --participantId 'resource:at.jku.cis.Organisation#org1@mail.com'
+
+echo "INITv2 END"
+
+# cd ~/iVolunteerPrototype/docker-rest-server
+
+# docker build -t composer-rest-server .
+
+# cd ~/.composer/cards/admin@blockchain-network
+# in connection.json replace localhost with 172.17.0.1
+
+# cd ~/iVolunteerPrototype/blockchain-network
+
+# source envvars.txt
+
+# docker run -d --name mongodb --network composer_default -p 27017:27017 mongo
+
+# block comment
+: <<'END'
+ docker run \
+    -d \
+    -e COMPOSER_CARD=${COMPOSER_CARD} \
+    -e COMPOSER_NAMESPACES=${COMPOSER_NAMESPACES} \
+    -e COMPOSER_AUTHENTICATION=${COMPOSER_AUTHENTICATION} \
+    -e COMPOSER_MULTIUSER=${COMPOSER_MULTIUSER} \
+    -e COMPOSER_PROVIDERS="${COMPOSER_PROVIDERS}" \
+    -e COMPOSER_DATASOURCES="${COMPOSER_DATASOURCES}" \
+    -v ~/.composer:/home/composer/.composer \
+    --name rest \
+    --network composer_default \
+    -p 3000:3000 \
+    myorg/my-composer-rest-server
+END
+
+# import card via rest api (/wallet/import)
+# test system/ping
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
