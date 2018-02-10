@@ -11,11 +11,11 @@ export class LoginComponent {
 
   private actionUrl: string;
 
-  constructor(private router: Router, _configuration: Configuration) {
+  constructor(_configuration: Configuration) {
     this.actionUrl = _configuration.Server + '/auth/github';
   }
 
   loginWithGithub() {
-    this.router.navigateByUrl(this.actionUrl);
+    window.location.href = this.actionUrl;
   }
 }
