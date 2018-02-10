@@ -9,8 +9,6 @@ import {AuthenticationGuard} from './guard/authenticationGuard';
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'home', component: HomeComponent, canActivate: [AuthenticationGuard]},
-  {path: 'organisation/tasks', component: OrganisationComponent},
-  {path: 'volunteer/tasks', component: VolunteerComponent},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 

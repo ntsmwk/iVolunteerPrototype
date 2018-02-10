@@ -5,18 +5,5 @@
 </div>
 
 <div class="container">
-  <div>
-    <form class="login-form" (submit)="onSubmit()" [formGroup]="loginForm">
-      <mat-form-field class="full-width">
-        <input matInput placeholder="{{ 'PAGES.LOGIN.USERNAME' | translate }}"
-               [formControl]="loginForm.controls['username']">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input type="password" matInput placeholder="{{ 'PAGES.LOGIN.PASSWORD' | translate }}"
-               [formControl]="loginForm.controls['password']">
-      </mat-form-field>
-
-      <button type="submit" mat-raised-button color="primary"> Login</button>
-    </form>
-  </div>
+  <button mat-raised-button color="primary" (click)="loginWithGithub()">{{'PAGES.LOGIN.GITHUB'|translate}}</button>
 </div>
