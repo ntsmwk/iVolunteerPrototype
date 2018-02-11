@@ -11,7 +11,7 @@ export class DataService<Type> {
   private actionUrl: string;
   private headers: HttpHeaders;
 
-  constructor(private http: HttpClient, private _configuration: Configuration) {
+  constructor(private http: HttpClient, _configuration: Configuration) {
     this.actionUrl = _configuration.ServerWithApiUrl;
     this.headers = new HttpHeaders();
     this.headers.append('Accept', 'application/json');

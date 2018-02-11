@@ -5,23 +5,5 @@
 </div>
 
 <div class="container">
-  <div>
-    <button mat-raised-button (click)="showOrganisations()">{{ 'PAGES.LOGIN.ORGANISATION' | translate }}</button>
-    <button mat-raised-button (click)="showVolunteers()">{{ 'PAGES.LOGIN.VOLUNTEER' | translate }}</button>
-  </div>
-  <mat-divider></mat-divider>
-  <div *ngIf="type !== undefined" class="container">
-    <form class="login-form" (submit)="onSelectPerson()" [formGroup]="loginForm">
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Person" [matAutocomplete]="auto" [formControl]="loginForm.controls['email']">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let person of filteredPersons | async" [value]="person.email">
-            <span>{{ person.email }}</span>
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-
-      <button type="submit" mat-raised-button color="primary"> Login</button>
-    </form>
-  </div>
+  <button mat-raised-button color="primary" (click)="loginWithGithub()">{{'PAGES.LOGIN.GITHUB'|translate}}</button>
 </div>

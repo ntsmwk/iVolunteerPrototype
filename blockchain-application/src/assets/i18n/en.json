@@ -13,8 +13,7 @@
   "PAGES": {
     "LOGIN": {
       "TITLE": "Login",
-      "VOLUNTEER": "Volunteer",
-      "ORGANISATION": "Organisation"
+      "GITHUB": "Login with Github"
     },
     "ORGANISATION": {
       "TITLE": "Organisation",

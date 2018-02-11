@@ -1,14 +1,17 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, Input} from '@angular/core';
 import {TaskService} from '../../providers/task.service';
 import {AssignTask, Task} from 'app/model/at.jku.cis';
 import {MatTableDataSource} from '@angular/material';
 import {AssignTaskService} from '../../providers/assign-task.service';
 
 @Component({
+  selector: 'app-organisation',
   templateUrl: './organisation.component.html'
 })
 export class OrganisationComponent implements AfterViewInit {
-  organisationId: string | null;
+
+  @Input('personId')
+  private organisationId: string | null;
 
   createdDataSource = new MatTableDataSource<Task>();
   reservedDataSource = new MatTableDataSource<Task>();
@@ -17,7 +20,6 @@ export class OrganisationComponent implements AfterViewInit {
 
   constructor(private taskService: TaskService,
               private assignTaskService: AssignTaskService) {
-    this.organisationId = localStorage.getItem('person.id');
   }
 
 
@@ -40,7 +42,6 @@ export class OrganisationComponent implements AfterViewInit {
         task.reservedVolunteers.forEach((resource: string) => {
           assignTask.taskPerformer = assignTask.taskPerformer.concat([resource.split('#')[1]]);
         });
-        console.dirxml(assignTask);
         this.assignTaskService.addAsset(assignTask).subscribe(() => this.ngAfterViewInit());
       }
     );

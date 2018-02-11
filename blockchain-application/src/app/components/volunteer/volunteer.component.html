@@ -5,16 +5,6 @@
 </div>
 
 <div class="container">
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">Volunteer</h5>
-      <p class="card-text">{{volunteer.firstName}} {{volunteer.lastName}}</p>
-      <p class="card-text">{{volunteer.email}}</p>
-    </div>
-  </div>
-</div>
-
-<div class="container">
   <app-task-list [titleKey]="'PAGES.VOLUNTEER.TASK.LIST.CREATED'" [dataSource]="createdDataSource"
                  [displayedColumns]="['taskId', 'description', 'taskStatus', 'creator', 'reserve']"
                  (onReserve)="reserve($event)"></app-task-list>
