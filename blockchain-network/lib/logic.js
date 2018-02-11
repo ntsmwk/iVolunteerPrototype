@@ -20,6 +20,13 @@ function createTask(createTask) {
     task.description = createTask.description;
     task.creator = createTask.creator;
 
+    // TODO
+    // Eigentlich sollte task.creator eine Relationship sein:
+    // task.creator = factory.newRelationship(NS, 'Organisation', createTask.creator);
+
+
+    // TODO
+    // creater mit uebergeben, oder auslesen?? best practice??
     // var currentParticipant = getCurrentParticipant();
     // task.creator = currentParticipant;
 
