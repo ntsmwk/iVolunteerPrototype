@@ -5,13 +5,6 @@ networks:
     external: true
 
 services:
-  mongodb:
-    container_name: mongodb
-    image: mongo
-    networks:
-      - composer_default
-    ports:
-      - 27017:27017
   rest-server:
     container_name: rest-server
     build: ./
@@ -22,11 +15,7 @@ services:
     environment:
       - COMPOSER_CARD=admin@blockchain-network
       - COMPOSER_NAMESPACES=never
-      - COMPOSER_AUTHENTICATION=true
-      - COMPOSER_MULTIUSER=true
-      - 'COMPOSER_PROVIDERS={ "github": { "provider": "github", "module": "passport-github", "clientID": "9e96642182047b169c01", "clientSecret": "b698d344286a76ce4233b4f81e201139df11c55e", "authPath": "/auth/github", "callbackURL": "/auth/github/callback", "successRedirect": "http://localhost:4200/home", "failureRedirect": "http://localhost:4200/login" } }'
-      - 'COMPOSER_DATASOURCES={ "db": { "name": "db", "connector": "mongodb", "host": "mongodb" } }'
+      - COMPOSER_AUTHENTICATION=false
+      - COMPOSER_MULTIUSER=fals
     volumes:
         - ~/.composer:/home/composer/.composer
-    depends_on:
-      - mongodb
