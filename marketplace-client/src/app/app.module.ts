@@ -12,12 +12,14 @@ import {CreateTaskTypeComponent} from './create-task-type/create-task-type.compo
 
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
+import {CreateTaskComponent} from './create-task/create-task.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TaskComponent,
-    CreateTaskTypeComponent
+    CreateTaskTypeComponent,
+    CreateTaskComponent
   ],
   imports: [
     AppMaterialModule,

@@ -1,0 +1,25 @@
+<form class="task-form" (submit)="save()" [formGroup]="taskForm">
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="name" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="description"
+              formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button color="primary">Save</button>
+</form>
