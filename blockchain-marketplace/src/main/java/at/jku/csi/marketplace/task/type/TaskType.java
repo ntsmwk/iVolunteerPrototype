@@ -1,4 +1,4 @@
-package at.jku.csi.marketplace.task;
+package at.jku.csi.marketplace.task.type;
 
 import java.util.List;
 

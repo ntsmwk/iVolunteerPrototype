@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.csi.marketplace.participant.Employee;
+import at.jku.csi.marketplace.task.type.TaskType;
 
 @Document
 public class Task {

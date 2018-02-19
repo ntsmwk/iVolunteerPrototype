@@ -1,0 +1,13 @@
+<form class="task-form" (submit)="save()" [formGroup]="taskTypeForm">
+  
+  <mat-form-field class="full-width">
+    <input matInput placeholder="name" [formControl]="taskTypeForm.controls['name']">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="description"
+              [formControl]="taskTypeForm.controls['description']"></textarea>
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button color="primary">Save</button>
+</form>
