@@ -1,0 +1,32 @@
+/**
+ * Write your model definitions here
+ */
+
+namespace at.jku.cis
+
+participant Marketplace identified by id {
+  o String name
+  o String id
+}
+
+asset simpleHash identified by id {
+  o String id
+  o String hash
+}
+
+asset globalHash identified by id {
+  o String id
+  o String userId
+  o String hash
+}
+
+transaction postSimpleHash {
+  o String id
+  o String hash
+}
+
+transaction postGlobalHash {
+  o String id
+  o String userId
+  o String hash
+}

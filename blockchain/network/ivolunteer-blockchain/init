@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo "INIT START"
+docker rm -f mongodb
+docker rm -f rest-server
+
+~/fabric-tools/stopFabric.sh
+~/fabric-tools/teardownFabric.sh
+
+rm -rf $HOME/.composer
+
+rm *.card
+rm *.bna
+
+# Starting the Fabric
+~/fabric-tools/downloadFabric.sh
+~/fabric-tools/startFabric.sh
+~/fabric-tools/createPeerAdminCard.sh
+
+# Deploying the business network
+composer archive create -t dir -n .
+composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName ivolunteer-blockchain
+composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile ivolunteer-blockchain@0.0.1.bna --file blockchainadmin.card
+composer card import --file blockchainadmin.card
+
+
+
+# create new marketplace and issue id card
+#composer participant add --card admin@ivolunteer-blockchain --data '{"$class":"at.jku.cis.Marketplace","name":"Marketplace 1","id":"marketplace1"}'
+#composer identity issue --card admin@ivolunteer-blockchain --file marketplace1.card --newUserId marketplace1 --participantId 'resource:at.jku.cis.Marketplace#marketplace1'
+
+# update network
+# composer archive create -t dir -n .
+# composer network update --archiveFile ivolunteer-blockchain@0.0.1.bna --card admin@ivolunteer-blockchain
+
+# start rest server
+# composer-rest-server --card "admin@ivolunteer-blockchain"
+
