@@ -23,7 +23,8 @@ public class Task {
 	private TaskType type;
 	@DBRef
 	private Employee taskManager;
-
+	private TaskStatus taskStatus;
+	
 	public String getId() {
 		return id;
 	}
@@ -78,6 +79,14 @@ public class Task {
 
 	public void setTaskManager(Employee taskManager) {
 		this.taskManager = taskManager;
+	}
+
+	public TaskStatus getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(TaskStatus taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 
 }

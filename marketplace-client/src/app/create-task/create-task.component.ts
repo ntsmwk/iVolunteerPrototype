@@ -20,7 +20,6 @@ export class CreateTaskComponent {
   constructor(formBuilder: FormBuilder, private taskService: TaskService, private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl(''),
       'type': new FormControl('', Validators.required)
@@ -33,9 +32,12 @@ export class CreateTaskComponent {
   }
 
   save() {
+    console.log('asdf');
     if (!this.taskForm.valid) {
       return;
     }
+    console.log('after');
+
     this.taskService.save(<Task> this.taskForm.value)
       .toPromise()
       .then((task: Task) => this.onSaved.emit(task));
