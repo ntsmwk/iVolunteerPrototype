@@ -13,13 +13,20 @@ import {CreateTaskTypeComponent} from './create-task-type/create-task-type.compo
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
 import {CreateTaskComponent} from './create-task/create-task.component';
+import { TaskListComponent } from './task-list/task-list.component';
+import {TaskTypeComponent} from './task-type/task-type.component';
+import { TaskTypeListComponent } from './task-type-list/task-type-list.component';
+import {MatTableModule} from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
     TaskComponent,
     CreateTaskTypeComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    TaskListComponent,
+    TaskTypeComponent,
+    TaskTypeListComponent
   ],
   imports: [
     AppMaterialModule,

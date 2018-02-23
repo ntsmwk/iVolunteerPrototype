@@ -1,2 +1,8 @@
-<app-create-task-type (onSaved)="onTaskTypeSaved($event)"></app-create-task-type>
+<nav>
+  <a routerLink="/task">Tasks</a>
+  <a routerLink="/taskType">Task Types</a>
+</nav>
+
 <app-create-task (onSaved)="onTaskSaved($event)"></app-create-task>
+<mat-divider></mat-divider>
+<app-task-list></app-task-list>
