@@ -2,8 +2,14 @@ package at.jku.csi.marketplace.competence;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Competence {
 
+	@Id
+	private String id;
 	private String name;
 	private Date timestamp;
 
