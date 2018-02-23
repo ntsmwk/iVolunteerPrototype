@@ -7,7 +7,7 @@ import {Task} from './task';
 })
 export class TaskComponent {
 
-  onTaskSaved(task: Task){
+  onTaskSaved(task: Task) {
     console.dirxml(task);
   }
 

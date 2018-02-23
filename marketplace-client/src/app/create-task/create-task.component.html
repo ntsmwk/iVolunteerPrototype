@@ -1,12 +1,17 @@
 <form class="task-form" (submit)="save()" [formGroup]="taskForm">
 
+  <h3><br/> CREATE TASK</h3>
+
   <mat-form-field class="full-width">
-    <input matInput placeholder="name" formControlName="name">
+    <input matInput placeholder="Name" formControlName="name">
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <textarea matInput placeholder="description"
-              formControlName="description"></textarea>
+    <mat-select placeholder="Task type">
+      <mat-option *ngFor="let taskType of taskTypes" [value]="taskType.id">
+        {{ taskType.name }}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
 
   <mat-form-field class="full-width">
@@ -20,6 +25,8 @@
     <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #endDatePicker></mat-datepicker>
   </mat-form-field>
+
+
 
   <button type="submit" mat-raised-button color="primary">Save</button>
 </form>

@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Output, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskService} from '../task/task.service';
 import {Task} from '../task/task';
+import {TaskTypeService} from '../task-type/task-type.service';
+import {TaskType} from '../task-type/task-type';
 
 @Component({
   selector: 'app-create-task',
@@ -13,8 +15,9 @@ export class CreateTaskComponent {
   onSaved = new EventEmitter<Task>();
 
   taskForm: FormGroup;
+  taskTypes: TaskType[];
 
-  constructor(formBuilder: FormBuilder, private taskService: TaskService) {
+  constructor(formBuilder: FormBuilder, private taskService: TaskService, private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required),
@@ -23,6 +26,10 @@ export class CreateTaskComponent {
       'type': new FormControl('', Validators.required)
 
     });
+  }
+
+  ngOnInit() {
+    this.taskTypeService.findAll().subscribe((taskTypes: TaskType[]) => this.taskTypes = taskTypes);
   }
 
   save() {

@@ -6,7 +6,6 @@ export class Task {
   description: string;
   startDate: Date;
   endDate: Date;
-
   type: TaskType;
 }
 
