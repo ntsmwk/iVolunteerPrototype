@@ -1,0 +1,6 @@
+query findGlobalHashByUserId {
+  description: "Select all global hashes with certain userId"
+  statement:
+      SELECT at.jku.cis.globalHash
+         WHERE (userId == _$userId)
+}
