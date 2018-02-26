@@ -1,4 +1,4 @@
-package at.jku.csi.blockchain;
+package at.jku.csi.crypto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
