@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.csi.crypto.GlobalHash;
+import at.jku.csi.crypto.SimpleHash;
+
 public class BlockchainRestClient {
 	private String url;
 
