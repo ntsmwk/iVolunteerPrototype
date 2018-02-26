@@ -1,2 +1,4 @@
 composer-logs/
+*.bna
+*.card
 
