@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,8 +40,8 @@ public class TaskTransactionController {
 		return taskTransactionRepository.insert(taskTransaction);
 	}
 
-	@DeleteMapping("/taskTransaction/{id}")
-	public void deleteTaskTransaction(@PathVariable("id") String id) {
-		taskTransactionRepository.delete(id);
+	@InitBinder
+	public void initBinder(final WebDataBinder webdataBinder) {
+		webdataBinder.registerCustomEditor(TransactionType.class, new TransactionTypeConverter());
 	}
 }

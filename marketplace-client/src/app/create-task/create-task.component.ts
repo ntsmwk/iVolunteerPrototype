@@ -32,11 +32,9 @@ export class CreateTaskComponent {
   }
 
   save() {
-    console.log('asdf');
     if (!this.taskForm.valid) {
       return;
     }
-    console.log('after');
 
     this.taskService.save(<Task> this.taskForm.value)
       .toPromise()

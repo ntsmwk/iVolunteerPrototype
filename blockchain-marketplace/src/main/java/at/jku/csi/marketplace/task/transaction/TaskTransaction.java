@@ -19,6 +19,8 @@ public class TaskTransaction {
 	private Volunteer volunteer;
 	private Date timestamp;
 
+	public TaskTransaction(){}
+	
 	public TaskTransaction(Task task, TransactionType transactionType, Date timestamp) {
 		this.task = task;
 		this.transactionType = transactionType;

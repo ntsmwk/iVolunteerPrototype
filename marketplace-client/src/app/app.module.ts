@@ -13,13 +13,17 @@ import {CreateTaskTypeComponent} from './create-task-type/create-task-type.compo
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
 import {CreateTaskComponent} from './create-task/create-task.component';
+import { ReserveTaskComponent } from './reserve-task/reserve-task.component';
+import {TaskTransactionService} from './task-transaction/task-transaction.service';
+import {VolunteerService} from './participant/volunteer.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     TaskComponent,
     CreateTaskTypeComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    ReserveTaskComponent
   ],
   imports: [
     AppMaterialModule,
@@ -31,7 +35,9 @@ import {CreateTaskComponent} from './create-task/create-task.component';
   ],
   providers: [
     TaskService,
-    TaskTypeService
+    TaskTypeService,
+    TaskTransactionService,
+    VolunteerService
   ],
   bootstrap: [AppComponent]
 })
