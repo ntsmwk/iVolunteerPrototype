@@ -9,24 +9,20 @@ participant Marketplace identified by id {
   o String id
 }
 
-asset simpleHash identified by id {
-  o String id
+asset simpleHash identified by hash {
   o String hash
 }
 
-asset globalHash identified by id {
-  o String id
+asset globalHash identified by hash {
   o String userId
   o String hash
 }
 
 transaction postSimpleHash {
-  o String id
   o String hash
 }
 
 transaction postGlobalHash {
-  o String id
   o String userId
   o String hash
 }

@@ -20,9 +20,10 @@ export class CreateTaskComponent {
   constructor(formBuilder: FormBuilder, private taskService: TaskService, private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
+      'description': new FormControl(''),
+      'type': new FormControl('', Validators.required),
       'startDate': new FormControl('', Validators.required),
-      'endDate': new FormControl(''),
-      'type': new FormControl('', Validators.required)
+      'endDate': new FormControl('')
 
     });
   }
