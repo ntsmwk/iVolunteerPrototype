@@ -14,9 +14,7 @@ function postSimpleHash(postSimpleHash) {
     console.log('postSimpleHash');
 
     var factory = getFactory();
-
-    var simpleHash = factory.newResource(NS, 'simpleHash', postSimpleHash.id);
-    simpleHash.hash = postSimpleHash.hash;
+    var simpleHash = factory.newResource(NS, 'simpleHash', postSimpleHash.hash);
 
     // save the hash
     return getAssetRegistry(simpleHash.getFullyQualifiedType())
@@ -36,9 +34,8 @@ function postGlobalHash(postGlobalHash) {
 
     var factory = getFactory();
 
-    var globalHash = factory.newResource(NS, 'globalHash', postGlobalHash.id);
+    var globalHash = factory.newResource(NS, 'globalHash', postGlobalHash.hash);
     globalHash.userId = postGlobalHash.userId;
-    globalHash.hash = postGlobalHash.hash;
 
     // save the hash
     return getAssetRegistry(globalHash.getFullyQualifiedType())
