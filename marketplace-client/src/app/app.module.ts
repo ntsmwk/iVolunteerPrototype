@@ -18,8 +18,8 @@ import {TaskListComponent} from './task/list/task-list.component';
 import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { NavbarComponent } from './navbar/navbar.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {TaskDetailsComponent} from './task/details/task-details.component';
 
 
 @NgModule({
@@ -29,6 +29,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     NavbarComponent,
     TaskListComponent,
     TaskCreateComponent,
+    TaskDetailsComponent,
     TaskTypeListComponent,
     TaskTypeCreateComponent
   ],
@@ -38,8 +39,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    NgbModule.forRoot()
+    ReactiveFormsModule
   ],
   providers: [
     TaskService,
