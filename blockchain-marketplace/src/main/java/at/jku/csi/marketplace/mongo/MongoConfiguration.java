@@ -1,4 +1,4 @@
-package at.jku.csi.mongo;
+package at.jku.csi.marketplace.mongo;
 
 import java.net.URI;
 import java.util.ArrayList;
