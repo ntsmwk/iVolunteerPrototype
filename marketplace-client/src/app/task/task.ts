@@ -7,7 +7,7 @@ export class Task {
   startDate: Date;
   endDate: Date;
   type: TaskType;
-  taskStatus: string;
+  status: string;
 }
 
 

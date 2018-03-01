@@ -19,11 +19,11 @@ public class Task {
 
 	private Date startDate;
 	private Date endDate;
+	private TaskStatus status;
 	@DBRef
 	private TaskType type;
 	@DBRef
-	private Employee taskManager;
-	private TaskStatus taskStatus;
+	private Employee manager;
 	
 	public String getId() {
 		return id;
@@ -73,20 +73,20 @@ public class Task {
 		this.type = type;
 	}
 
-	public Employee getTaskManager() {
-		return taskManager;
+	public TaskStatus getStatus() {
+		return status;
 	}
 
-	public void setTaskManager(Employee taskManager) {
-		this.taskManager = taskManager;
+	public void setStatus(TaskStatus status) {
+		this.status = status;
 	}
 
-	public TaskStatus getTaskStatus() {
-		return taskStatus;
+	public Employee getManager() {
+		return manager;
 	}
 
-	public void setTaskStatus(TaskStatus taskStatus) {
-		this.taskStatus = taskStatus;
+	public void setManager(Employee manager) {
+		this.manager = manager;
 	}
 
 }

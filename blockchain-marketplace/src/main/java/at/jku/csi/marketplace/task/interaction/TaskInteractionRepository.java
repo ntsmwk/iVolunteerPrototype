@@ -11,6 +11,9 @@ import at.jku.csi.marketplace.task.Task;
 public interface TaskInteractionRepository extends MongoRepository<TaskInteraction, String> {
 
 	@Query(value = "{ 'task' : ?0 }")
+	List<TaskInteraction> findByTask(Task task);
+	
+	@Query(value = "{ 'task' : ?0 }")
 	List<TaskInteraction> findByTask(Task task, Pageable pageable);
 
 }
