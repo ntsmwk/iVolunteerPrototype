@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {TaskTypeService} from '../task-type/task-type.service';
-import {TaskType} from '../task-type/task-type';
+import {TaskTypeService} from '../task-type.service';
+import {TaskType} from '../task-type';
 
 @Component({
-  selector: 'app-create-task-type',
-  templateUrl: './create-task-type.component.html',
-  styleUrls: ['./create-task-type.component.css']
+  selector: 'app-task-type-create',
+  templateUrl: './task-type-create.component.html',
+  styleUrls: ['./task-type-create.component.css']
 })
-export class CreateTaskTypeComponent {
+export class TaskTypeCreateComponent {
   @Output()
   onSaved = new EventEmitter<TaskType>();
 

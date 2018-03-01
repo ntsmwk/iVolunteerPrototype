@@ -1,0 +1,16 @@
+<h3><br/> LIST TASK TYPE</h3>
+
+<mat-table #table [dataSource]="dataSource">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-cell *matCellDef="let taskType">{{taskType.name}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+    <mat-cell *matCellDef="let taskType">{{taskType.description}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

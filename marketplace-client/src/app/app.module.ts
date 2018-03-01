@@ -8,7 +8,6 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {AppComponent} from './app.component';
 import {TaskComponent} from './task/task.component';
-import {CreateTaskTypeComponent} from './create-task-type/create-task-type.component';
 
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
@@ -17,19 +16,18 @@ import {ReserveTaskComponent} from './reserve-task/reserve-task.component';
 import {TaskTransactionService} from './task-transaction/task-transaction.service';
 import {VolunteerService} from './participant/volunteer.service';
 import {TaskListComponent} from './task-list/task-list.component';
-import {TaskTypeComponent} from './task-type/task-type.component';
-import {TaskTypeListComponent} from './task-type-list/task-type-list.component';
+import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
+import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TaskComponent,
-    CreateTaskTypeComponent,
     CreateTaskComponent,
     ReserveTaskComponent,
     TaskListComponent,
-    TaskTypeComponent,
-    TaskTypeListComponent
+    TaskTypeListComponent,
+    TaskTypeCreateComponent
   ],
   imports: [
     AppMaterialModule,
