@@ -21,11 +21,10 @@ export class TaskCreateComponent {
               private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
-      'description': new FormControl(''),
+      'description': new FormControl('', Validators.required),
       'type': new FormControl('', Validators.required),
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('')
-
     });
   }
 
