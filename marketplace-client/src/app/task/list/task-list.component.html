@@ -11,21 +11,26 @@
     <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+    <mat-cell *matCellDef="let task">{{task.taskStatus}}</mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="type.name">
     <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
     <mat-cell *matCellDef="let task">{{task.type.name}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="startDate">
-    <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
     <mat-cell *matCellDef="let task">{{task.startDate | date: 'MM/dd/yyyy'}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="endDate">
-    <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
     <mat-cell *matCellDef="let task">{{task.endDate | date: 'MM/dd/yyyy'}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
 </mat-table>
