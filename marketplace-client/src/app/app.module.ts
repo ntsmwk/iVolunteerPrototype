@@ -7,25 +7,23 @@ import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import {AppComponent} from './app.component';
-import {TaskComponent} from './task/task.component';
 
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
-import {CreateTaskComponent} from './create-task/create-task.component';
+import {TaskCreateComponent} from './task/create/task-create.component';
 import {ReserveTaskComponent} from './reserve-task/reserve-task.component';
 import {TaskTransactionService} from './task-transaction/task-transaction.service';
 import {VolunteerService} from './participant/volunteer.service';
-import {TaskListComponent} from './task-list/task-list.component';
+import {TaskListComponent} from './task/list/task-list.component';
 import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TaskComponent,
-    CreateTaskComponent,
     ReserveTaskComponent,
     TaskListComponent,
+    TaskCreateComponent,
     TaskTypeListComponent,
     TaskTypeCreateComponent
   ],

@@ -4,7 +4,6 @@ import {TaskType} from '../task-type';
 import {TaskTypeService} from '../task-type.service';
 
 @Component({
-  selector: 'app-task-type-list',
   templateUrl: './task-type-list.component.html'
 })
 export class TaskTypeListComponent implements OnInit {

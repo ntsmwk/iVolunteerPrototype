@@ -5,7 +5,6 @@ import {TaskType} from '../task-type';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-task-type-create',
   templateUrl: './task-type-create.component.html',
   styleUrls: ['./task-type-create.component.css']
 })
