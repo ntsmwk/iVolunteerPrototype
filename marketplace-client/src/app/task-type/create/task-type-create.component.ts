@@ -1,20 +1,19 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {TaskTypeService} from '../task-type/task-type.service';
-import {TaskType} from '../task-type/task-type';
+import {TaskTypeService} from '../task-type.service';
+import {TaskType} from '../task-type';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-create-task-type',
-  templateUrl: './create-task-type.component.html',
-  styleUrls: ['./create-task-type.component.css']
+  templateUrl: './task-type-create.component.html',
+  styleUrls: ['./task-type-create.component.css']
 })
-export class CreateTaskTypeComponent {
-  @Output()
-  onSaved = new EventEmitter<TaskType>();
-
+export class TaskTypeCreateComponent {
   taskTypeForm: FormGroup;
 
-  constructor(formBuilder: FormBuilder, private taskTypeService: TaskTypeService) {
+  constructor(formBuilder: FormBuilder,
+              private router: Router,
+              private taskTypeService: TaskTypeService) {
     this.taskTypeForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required)
@@ -27,6 +26,6 @@ export class CreateTaskTypeComponent {
     }
     this.taskTypeService.save(<TaskType> this.taskTypeForm.value)
       .toPromise()
-      .then((taskType: TaskType) => this.onSaved.emit(taskType));
+      .then((taskType: TaskType) => this.router.navigate(['/taskTypes']));
   }
 }
