@@ -9,11 +9,11 @@ participant Marketplace identified by id {
   o String id
 }
 
-asset simpleHash identified by hash {
+asset SimpleHash identified by hash {
   o String hash
 }
 
-asset globalHash identified by hash {
+asset GlobalHash identified by hash {
   o String userId
   o String hash
 }

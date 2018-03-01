@@ -9,7 +9,6 @@ import {MatTableDataSource} from '@angular/material';
 export class TaskListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Task>();
-
   displayedColumns = ['name', 'description', 'type.name', 'startDate', 'endDate'];
 
   constructor(private taskService: TaskService) {
@@ -19,6 +18,12 @@ export class TaskListComponent implements OnInit {
     this.taskService.findAll()
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
 }

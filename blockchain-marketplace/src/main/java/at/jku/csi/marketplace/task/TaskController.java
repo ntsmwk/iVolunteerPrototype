@@ -1,5 +1,6 @@
 package at.jku.csi.marketplace.task;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.NotAcceptableException;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.csi.marketplace.task.interaction.TaskInteraction;
+import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.csi.marketplace.task.transaction.TaskTransactionRepository;
 
 @RestController
@@ -26,6 +29,9 @@ public class TaskController {
 
 	@Autowired
 	private TaskTransactionRepository taskTransactionRepository;
+
+	@Autowired
+	private TaskInteractionRepository taskInteractionRepository;
 
 	@GetMapping("/task")
 	public List<Task> findAll() {
@@ -45,7 +51,10 @@ public class TaskController {
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setTaskStatus(TaskStatus.CREATED);
-		return taskRepository.insert(task);
+		Task createdTask = taskRepository.insert(task);
+
+		taskInteractionRepository.insert(new TaskInteraction(createdTask, TaskStatus.CREATED, new Date()));
+		return createdTask;
 	}
 
 	@PutMapping("/task/{id}")
