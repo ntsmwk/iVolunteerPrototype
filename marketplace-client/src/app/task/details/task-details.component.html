@@ -1,1 +1,13 @@
 <h3>Task Details</h3>
+
+<pre>{{task | json}}</pre>
+
+<button (click)="start()">Start</button>
+<button (click)="finish()">Finish</button>
+<button (click)="cancel()">Cancel</button>
+
+<div>
+
+  <pre *ngFor="let taskInteraction of taskInteractions">{{taskInteraction | json}}</pre>
+
+</div>

@@ -29,4 +29,17 @@ export class TaskService {
   remove(task: Task) {
     return this.http.delete([this.apiUrl, task.id].join('/'));
   }
+
+  start(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'start'].join('/'), {});
+  }
+
+  finish(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'finish'].join('/'), {});
+  }
+
+  cancel(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
+  }
+
 }

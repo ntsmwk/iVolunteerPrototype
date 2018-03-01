@@ -6,14 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import at.jku.csi.marketplace.task.Task;
-
 public interface TaskInteractionRepository extends MongoRepository<TaskInteraction, String> {
 
-	@Query(value = "{ 'task' : ?0 }")
-	List<TaskInteraction> findByTask(Task task);
-	
-	@Query(value = "{ 'task' : ?0 }")
-	List<TaskInteraction> findByTask(Task task, Pageable pageable);
+	@Query("{ 'task': {'$ref': 'task', '$id': ?0 } }")
+	List<TaskInteraction> findByTask(String taskId);
+
+	@Query("{ 'task': {'$ref': 'task', '$id': ?0 } }")
+	List<TaskInteraction> findByTask(String taskId, Pageable pageable);
 
 }

@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ReserveTaskComponent} from './reserve-task/reserve-task.component';
 import {TaskListComponent} from './task/list/task-list.component';
 import {TaskCreateComponent} from './task/create/task-create.component';
 import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
@@ -8,7 +7,6 @@ import {TaskTypeCreateComponent} from './task-type/create/task-type-create.compo
 import {TaskDetailsComponent} from './task/details/task-details.component';
 
 const routes: Routes = [
-  {path: 'reserve', component: ReserveTaskComponent},
   {path: 'task', component: TaskCreateComponent},
   {path: 'task/:id/details', component: TaskDetailsComponent},
   {path: 'tasks', component: TaskListComponent},
