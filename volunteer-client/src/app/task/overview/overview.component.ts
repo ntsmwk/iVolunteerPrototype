@@ -26,7 +26,7 @@ export class TaskOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.taskService.findAll()
+    this.taskService.findByVolunteerId('5a996b761f3e97210788e1d1')
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }

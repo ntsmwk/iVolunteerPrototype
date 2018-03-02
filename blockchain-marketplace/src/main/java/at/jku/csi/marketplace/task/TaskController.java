@@ -1,7 +1,10 @@
 package at.jku.csi.marketplace.task;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
+import at.jku.csi.marketplace.participant.Volunteer;
+import at.jku.csi.marketplace.participant.VolunteerRepository;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 
@@ -25,6 +30,9 @@ public class TaskController {
 
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
+	
+	@Autowired
+	private VolunteerRepository volunteerRepository;
 
 	@GetMapping("/task")
 	public List<Task> findAll() {
@@ -35,12 +43,27 @@ public class TaskController {
 	public Task findById(@PathVariable("id") String id) {
 		return taskRepository.findOne(id);
 	}
-	
+
 	@GetMapping("/task/created")
 	public List<Task> findCreated() {
 		return taskRepository.findCreated();
 	}
+
+	// TODO TEST
+	@GetMapping("/task/volunteer/{id}")
+	public List<Task> findByVolunteer(@PathVariable("id") String id) {
+
+		Set<Task> tasks = new HashSet<>();
+
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByVolunteer(id);
+		for (TaskInteraction ti : taskInteractions) {
+			tasks.add(ti.getTask());
+		}
+
+		return new ArrayList<>(tasks);
+	}
 	
+
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);

@@ -20,4 +20,8 @@ export class TaskService {
   findCreated() {
     return this.http.get([this.apiUrl].join('/created'));
   }
+
+  findByVolunteerId(id: string) {
+    return this.http.get([this.apiUrl, id].join('/volunteer/'));
+  }
 }

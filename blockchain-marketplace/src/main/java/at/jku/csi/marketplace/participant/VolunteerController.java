@@ -25,14 +25,6 @@ public class VolunteerController {
 	
 	@GetMapping("/volunteer")
 	public List<Volunteer> findAll() {
-		Volunteer v = new Volunteer();
-		v.setId("asdfjklajheflöiawfnawui");
-		v.setUsername("volunteer1");
-		ParticipantProfile p = new ParticipantProfile();
-		p.setFirstName("volun");
-		p.setLastName("teer");
-		v.setProfile(p);
-		volunteerRepository.save(v);
 		return volunteerRepository.findAll();
 	}
 

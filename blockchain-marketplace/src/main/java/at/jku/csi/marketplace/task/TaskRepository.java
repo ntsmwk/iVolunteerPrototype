@@ -12,4 +12,5 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 	@Query("{'status':'CREATED'}")
 	List<Task> findCreated();
 
+	
 }
