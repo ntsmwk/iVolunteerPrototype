@@ -42,7 +42,7 @@ public class VolunteerController {
 	}
 
 	@PostMapping("/volunteer")
-	public Volunteer createEmployee(@RequestBody Volunteer volunteer) {
+	public Volunteer createVolunteer(@RequestBody Volunteer volunteer) {
 		return volunteerRepository.insert(volunteer);
 	}
 
