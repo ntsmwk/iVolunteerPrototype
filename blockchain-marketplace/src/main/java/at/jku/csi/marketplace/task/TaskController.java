@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
-import at.jku.csi.marketplace.participant.Volunteer;
-import at.jku.csi.marketplace.participant.VolunteerRepository;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 
@@ -30,9 +30,6 @@ public class TaskController {
 
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
-	
-	@Autowired
-	private VolunteerRepository volunteerRepository;
 
 	@GetMapping("/task")
 	public List<Task> findAll() {
@@ -49,7 +46,6 @@ public class TaskController {
 		return taskRepository.findCreated();
 	}
 
-	// TODO TEST
 	@GetMapping("/task/volunteer/{id}")
 	public List<Task> findByVolunteer(@PathVariable("id") String id) {
 
@@ -62,7 +58,6 @@ public class TaskController {
 
 		return new ArrayList<>(tasks);
 	}
-	
 
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
@@ -75,7 +70,7 @@ public class TaskController {
 
 	@PutMapping("/task/{id}")
 	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
-		if (taskRepository.exists(id)) {
+		if (!taskRepository.exists(id)) {
 			throw new NotAcceptableException();
 		}
 		return taskRepository.save(task);
