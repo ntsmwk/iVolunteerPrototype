@@ -42,7 +42,6 @@ public class TaskController {
 	public List<Task> findCreated() {
 		return taskRepository.findCreated();
 	}
-
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);

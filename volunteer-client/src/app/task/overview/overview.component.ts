@@ -5,17 +5,16 @@ import {TaskService} from '../task.service';
 import {MatTableDataSource} from '@angular/material';
 
 @Component({
-  templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.css']
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.css']
 })
-export class TaskListComponent implements OnInit {
+export class TaskOverviewComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Task>();
   displayedColumns = ['name', 'type.name', 'status', 'startDate', 'endDate'];
 
   status = [
     {value: '', ViewValue: 'ALL'},
-    {value: 'CREATED', ViewValue: 'CREATED'},
     {value: 'STARTED', ViewValue: 'STARTED'},
     {value: 'FINISHED', ViewValue: 'FINISHED'},
     {value: 'CANCELED', ViewValue: 'CANCELED'}
