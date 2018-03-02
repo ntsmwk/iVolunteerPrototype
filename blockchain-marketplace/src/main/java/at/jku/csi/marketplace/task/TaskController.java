@@ -35,7 +35,12 @@ public class TaskController {
 	public Task findById(@PathVariable("id") String id) {
 		return taskRepository.findOne(id);
 	}
-
+	
+	@GetMapping("/task/created")
+	public List<Task> findCreated() {
+		return taskRepository.findCreated();
+	}
+	
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);

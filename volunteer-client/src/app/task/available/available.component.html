@@ -1,19 +1,4 @@
-<h3>Task overview</h3>
-
-<div class="example-header">
- <mat-form-field>
-    <mat-select placeholder="Filter" [(value)]="selectedValue">
-      <mat-option *ngFor="let s of status" [value]="s.value">
-        {{ s.ViewValue }}
-        {{applyFilter(selectedValue)}}
-      </mat-option>
-
-    </mat-select>
-  </mat-form-field>
-
-
-
-</div>
+<h3>Available Tasks</h3>
 
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="name">
