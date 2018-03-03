@@ -1,13 +1,67 @@
-<h3>Task Details</h3>
+<div *ngIf="task">
+  <h3>Task Details</h3>
+  <form class="task-form" (submit)="save()" [formGroup]="taskDetailsForm">
 
-<pre>{{task | json}}</pre>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
 
-<button (click)="start()">Start</button>
-<button (click)="finish()">Finish</button>
-<button (click)="cancel()">Cancel</button>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Status" formControlName="status">
+    </mat-form-field>
 
-<div>
 
-  <pre *ngFor="let taskInteraction of taskInteractions">{{taskInteraction | json}}</pre>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
 
-</div>
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+
+
+    <button type="submit" mat-raised-button color="primary">Update</button>
+  </form>
+
+  <div *ngIf="this.task.status !== 'FINISHED'">
+    <mat-divider></mat-divider>
+  </div>
+  <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" (click)="start()" mat-raised-button>
+    Start
+  </button>
+  <button *ngIf="this.task.status === 'STARTED'" (click)="finish()" mat-raised-button>Finish</button>
+  <button *ngIf="this.task.status === 'STARTED'" (click)="cancel()" mat-raised-button>Cancel</button>
+
+  <mat-divider></mat-divider>
+
+  <h3>Task-Interaction History</h3>
+
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="operation">
+      <mat-header-cell *matHeaderCellDef>Operation</mat-header-cell>
+      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.operation}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef>Timestamp</mat-header-cell>
+      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.timestamp | date: 'MM/dd/yyyy'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+      <mat-header-cell *matHeaderCellDef>Comment</mat-header-cell>
+      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.comment}}</mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <div>

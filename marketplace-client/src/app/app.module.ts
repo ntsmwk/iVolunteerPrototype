@@ -47,5 +47,5 @@ import {TaskInteractionService} from './task-interaction/task-interaction.servic
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
+

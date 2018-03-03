@@ -1,11 +1,16 @@
 package at.jku.csi.marketplace.task;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +41,24 @@ public class TaskController {
 		return taskRepository.findOne(id);
 	}
 
+	@GetMapping("/task/created")
+	public List<Task> findCreated() {
+		return taskRepository.findCreated();
+	}
+
+	@GetMapping("/task/volunteer/{id}")
+	public List<Task> findByVolunteer(@PathVariable("id") String id) {
+
+		Set<Task> tasks = new HashSet<>();
+
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByVolunteer(id);
+		for (TaskInteraction ti : taskInteractions) {
+			tasks.add(ti.getTask());
+		}
+
+		return new ArrayList<>(tasks);
+	}
+
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);
@@ -47,7 +70,7 @@ public class TaskController {
 
 	@PutMapping("/task/{id}")
 	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
-		if (taskRepository.exists(id)) {
+		if (!taskRepository.exists(id)) {
 			throw new NotAcceptableException();
 		}
 		return taskRepository.save(task);

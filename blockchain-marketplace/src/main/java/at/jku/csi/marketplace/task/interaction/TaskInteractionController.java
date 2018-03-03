@@ -14,7 +14,12 @@ public class TaskInteractionController {
 	private TaskInteractionRepository taskInteractionRepository;
 
 	@GetMapping("/task/{id}/interaction")
-	public List<TaskInteraction> findnByTaskId(@PathVariable("id") String id) {
+	public List<TaskInteraction> findByTaskId(@PathVariable("id") String id) {
 		return taskInteractionRepository.findByTask(id);
+	}
+
+	@GetMapping("/volunteer/{id}/interaction")
+	public List<TaskInteraction> findnByVolunteerId(@PathVariable("id") String id) {
+		return taskInteractionRepository.findByVolunteer(id);
 	}
 }

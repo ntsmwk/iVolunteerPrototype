@@ -14,4 +14,7 @@ public interface TaskInteractionRepository extends MongoRepository<TaskInteracti
 	@Query("{ 'task': {'$ref': 'task', '$id': ?0 } }")
 	List<TaskInteraction> findByTask(String taskId, Pageable pageable);
 
+	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0 } }")
+	List<TaskInteraction> findByVolunteer(String volunteertId);
+
 }

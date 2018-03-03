@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ws.rs.NotAcceptableException;
 
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,25 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.csi.marketplace.competence.Competence;
-import at.jku.csi.marketplace.task.Task;
-
 @RestController
 public class VolunteerController {
 
 	@Autowired
 	private VolunteerRepository volunteerRepository;
-	
+
 	@GetMapping("/volunteer")
 	public List<Volunteer> findAll() {
-		Volunteer v = new Volunteer();
-		v.setId("asdfjklajheflöiawfnawui");
-		v.setUsername("volunteer1");
-		ParticipantProfile p = new ParticipantProfile();
-		p.setFirstName("volun");
-		p.setLastName("teer");
-		v.setProfile(p);
-		volunteerRepository.save(v);
 		return volunteerRepository.findAll();
 	}
 
@@ -42,7 +30,7 @@ public class VolunteerController {
 	}
 
 	@PostMapping("/volunteer")
-	public Volunteer createEmployee(@RequestBody Volunteer volunteer) {
+	public Volunteer createVolunteer(@RequestBody Volunteer volunteer) {
 		return volunteerRepository.insert(volunteer);
 	}
 

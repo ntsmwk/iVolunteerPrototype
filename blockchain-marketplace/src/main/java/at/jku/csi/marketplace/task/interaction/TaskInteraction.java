@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.csi.marketplace.participant.Participant;
+import at.jku.csi.marketplace.participant.Volunteer;
 import at.jku.csi.marketplace.task.Task;
 
 @Document

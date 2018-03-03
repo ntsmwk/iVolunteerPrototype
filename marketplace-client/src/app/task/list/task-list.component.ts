@@ -11,7 +11,16 @@ import {MatTableDataSource} from '@angular/material';
 export class TaskListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'description', 'status', 'type.name', 'startDate', 'endDate'];
+  displayedColumns = ['name', 'type.name', 'status', 'startDate', 'endDate'];
+
+  status = [
+    {value: '', ViewValue: 'ALL'},
+    {value: 'CREATED', ViewValue: 'CREATED'},
+    {value: 'STARTED', ViewValue: 'STARTED'},
+    {value: 'FINISHED', ViewValue: 'FINISHED'},
+    {value: 'CANCELED', ViewValue: 'CANCELED'}
+  ];
+  selectedValue: string = this.status[0].value;
 
   constructor(private router: Router,
               private taskService: TaskService) {
