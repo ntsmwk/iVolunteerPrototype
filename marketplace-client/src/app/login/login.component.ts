@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {LoginService} from './login.service';
 import {HttpResponse} from '@angular/common/http';
+import {MessageService} from '../_service/message.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -14,7 +15,8 @@ export class LoginComponent {
 
   constructor(formBuilder: FormBuilder,
               private router: Router,
-              private loginService: LoginService) {
+              private loginService: LoginService,
+              private messageService: MessageService) {
     this.loginForm = formBuilder.group({
       'username': new FormControl('', Validators.required),
       'password': new FormControl('', Validators.required)
@@ -30,6 +32,7 @@ export class LoginComponent {
       .toPromise()
       .then((response: HttpResponse<any>) => {
         localStorage.setItem('token', response.headers.get('Authorization'));
+        this.messageService.broadcast('login', {});
         this.router.navigate(['/tasks']);
       });
   }

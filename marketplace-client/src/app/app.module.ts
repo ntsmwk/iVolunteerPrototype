@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 
-import {AppComponent} from './app.component';
+import {AppComponent} from './app/app.component';
 
 import {TaskService} from './task/task.service';
 import {TaskTypeService} from './task-type/task-type.service';
@@ -18,11 +18,12 @@ import {TaskTypeCreateComponent} from './task-type/create/task-type-create.compo
 import {NavbarComponent} from './navbar/navbar.component';
 import {TaskDetailsComponent} from './task/details/task-details.component';
 import {TaskInteractionService} from './task-interaction/task-interaction.service';
-import {TokenInterceptor} from './interceptor/token.interceptor';
-import {Http401Interceptor} from './interceptor/http-401.interceptor';
+import {TokenInterceptor} from './_interceptor/token.interceptor';
+import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {LoginService} from './login/login.service';
 import {LoginComponent} from './login/login.component';
 import {LoginGuard} from './login/login.guard';
+import {MessageService} from './_service/message.service';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import {LoginGuard} from './login/login.guard';
     ReactiveFormsModule
   ],
   providers: [
+    MessageService,
     LoginGuard,
     LoginService,
     TaskService,
