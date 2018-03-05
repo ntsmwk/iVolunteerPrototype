@@ -27,10 +27,10 @@ public class LoginService {
 	public ParticipantRole getLoggedInParticipantRole() {
 		Participant participant = getLoggedInParticipant();
 		if (participant instanceof Employee) {
-			return ParticipantRole.VOLUNTEER;
+			return ParticipantRole.EMPLOYEE;
 		}
 		if (participant instanceof Volunteer) {
-			return ParticipantRole.EMPLOYEE;
+			return ParticipantRole.VOLUNTEER;
 		}
 		return null;
 	}

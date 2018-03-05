@@ -37,6 +37,7 @@ export class TaskDetailsComponent implements OnInit {
 
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => {
       this.participantRole = role;
+      console.log(this.participantRole);
     });
   }
 
@@ -72,7 +73,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   reserve() {
-    this.taskInteractionService.reserve(this.task);
+    this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
   start() {

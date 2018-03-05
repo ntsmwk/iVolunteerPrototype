@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.participant.Participant;
@@ -35,8 +36,8 @@ public class TaskInteractionController {
 		return taskInteractionRepository.findByVolunteer(id);
 	}
 
-	@PostMapping("/volunteer/reserve/{id}")
-	public void reserveForTask(@PathVariable("id") String id) {
+	@PostMapping("/volunteer/reserve")
+	public void reserveForTask(@RequestBody String id) {
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
 			Participant participant = loginService.getLoggedInParticipant();
 			TaskInteraction reservation = new TaskInteraction();
