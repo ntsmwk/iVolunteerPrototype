@@ -24,7 +24,7 @@ public class Task {
 	private TaskType type;
 	@DBRef
 	private Employee manager;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -88,5 +88,17 @@ public class Task {
 	public void setManager(Employee manager) {
 		this.manager = manager;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Task) {
+			return this.id.equals(((Task) obj).getId());
+		}
+		return false;
+	}
 
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
 }

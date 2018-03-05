@@ -7,17 +7,21 @@ import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 import {TaskDetailsComponent} from './task/details/task-details.component';
 import {LoginComponent} from './login/login.component';
-import {LoginGuard} from './login/login.guard';
+import {TokenGuard} from './login/token.guard';
+import {EmployeeGuard} from './participant/employee.guard';
+import {VolunteerGuard} from './participant/volunteer.guard';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'task', component: TaskCreateComponent, canActivate: [LoginGuard]},
-  {path: 'task/:id/details', component: TaskDetailsComponent, canActivate: [LoginGuard]},
-  {path: 'tasks', component: TaskListComponent, canActivate: [LoginGuard]},
-  {path: 'available', component: TaskAvailableComponent, canActivate: [LoginGuard]},
-  {path: 'taskType', component: TaskTypeCreateComponent, canActivate: [LoginGuard]},
-  {path: 'taskTypes', component: TaskTypeListComponent, canActivate: [LoginGuard]},
-  {path: '', redirectTo: '/tasks', pathMatch: 'full'}
+  {path: 'task', component: TaskCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
+  {path: 'task/:id/details', component: TaskDetailsComponent, canActivate: [TokenGuard]},
+  {path: 'tasks', component: TaskListComponent, canActivate: [TokenGuard]},
+  {path: 'available', component: TaskAvailableComponent, canActivate: [TokenGuard, VolunteerGuard]},
+  {path: 'taskType', component: TaskTypeCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
+  {path: 'taskTypes', component: TaskTypeListComponent, canActivate: [TokenGuard, EmployeeGuard]},
+  {path: '', redirectTo: '/tasks', pathMatch: 'full'},
+  {path: '**', redirectTo: '/tasks'}
+
 ];
 
 @NgModule({

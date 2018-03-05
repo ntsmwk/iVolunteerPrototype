@@ -1,10 +1,12 @@
 package at.jku.csi.marketplace.task;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -47,12 +49,10 @@ public class TaskController {
 		return taskRepository.findOne(id);
 	}
 
-	@Deprecated
 	@GetMapping("/task/volunteer/{id}")
 	public List<Task> findByVolunteer(@PathVariable("id") String id) {
 
-		Set<Task> tasks = new HashSet<>();
-
+		Set<Task> tasks = new HashSet<Task>();
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByVolunteer(id);
 		for (TaskInteraction ti : taskInteractions) {
 			tasks.add(ti.getTask());

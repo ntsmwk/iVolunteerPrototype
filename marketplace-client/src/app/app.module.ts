@@ -22,7 +22,7 @@ import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {LoginService} from './login/login.service';
 import {LoginComponent} from './login/login.component';
-import {LoginGuard} from './login/login.guard';
+import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
 import {RepositoryService} from './_service/repository.service';
@@ -50,7 +50,9 @@ import {RepositoryService} from './_service/repository.service';
   ],
   providers: [
     MessageService,
-    LoginGuard,
+    TokenGuard,
+    EmployeeGuard,
+    VolunteerGuard,
     LoginService,
     TaskService,
     TaskTypeService,

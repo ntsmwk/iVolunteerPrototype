@@ -22,6 +22,7 @@ export class TaskDetailsComponent implements OnInit {
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
   role;
+  isAlreadyReserved;
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -54,6 +55,10 @@ export class TaskDetailsComponent implements OnInit {
           status: task.status,
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate)
+        });
+        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved) => {
+          this.isAlreadyReserved = isReserved;
+          console.log(this.isAlreadyReserved);
         });
       });
     this.taskInteractionService.findByTask(<Task>{id: id})
@@ -95,6 +100,4 @@ export class TaskDetailsComponent implements OnInit {
   cancel() {
     this.taskService.cancel(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
-
-
 }
