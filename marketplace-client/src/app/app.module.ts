@@ -22,10 +22,12 @@ import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {LoginService} from './login/login.service';
 import {LoginComponent} from './login/login.component';
-import {LoginGuard} from './login/login.guard';
+import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
+import {EmployeeGuard} from './participant/employee.guard';
+import {VolunteerGuard} from './participant/volunteer.guard';
 
 
 @NgModule({
@@ -51,7 +53,9 @@ import {TaskAssignComponent} from './task/assign/task-assign.component';
   ],
   providers: [
     MessageService,
-    LoginGuard,
+    TokenGuard,
+    EmployeeGuard,
+    VolunteerGuard,
     LoginService,
     TaskService,
     TaskTypeService,

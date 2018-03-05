@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoginGuard} from '../login/login.guard';
 import {LoginService} from '../login/login.service';
 import {Participant} from '../participant/participant';
 import {isNullOrUndefined} from 'util';
@@ -17,13 +16,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private logoutSubscription: Subscription;
   participantRole;
 
-  constructor(private loginGuard: LoginGuard,
-              private loginService: LoginService,
+  constructor(private loginService: LoginService,
               private messageService: MessageService) {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
 
     this.getLoggedIn();
     this.loginSubscription = this.messageService.subscribe('login', this.getLoggedIn.bind(this));
@@ -43,5 +40,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.loginService.getLoggedIn()
       .toPromise()
       .then((participant: Participant) => this.participant = participant);
+
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
+
   }
 }

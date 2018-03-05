@@ -17,20 +17,15 @@ export class TaskListComponent implements OnInit {
   participantRole;
   participant;
 
-  statusEmp = [
+  status = [
     {value: '', ViewValue: 'ALL'},
     {value: 'CREATED', ViewValue: 'CREATED'},
     {value: 'STARTED', ViewValue: 'STARTED'},
     {value: 'FINISHED', ViewValue: 'FINISHED'},
     {value: 'CANCELED', ViewValue: 'CANCELED'}
   ];
-  statusVol = [
-    {value: '', ViewValue: 'ALL'},
-    {value: 'STARTED', ViewValue: 'STARTED'},
-    {value: 'FINISHED', ViewValue: 'FINISHED'},
-    {value: 'CANCELED', ViewValue: 'CANCELED'}
-  ];
-  selectedValue: string = this.statusEmp[0].value;
+
+  selectedValue: string = this.status[0].value;
 
   constructor(private router: Router,
               private loginService: LoginService,

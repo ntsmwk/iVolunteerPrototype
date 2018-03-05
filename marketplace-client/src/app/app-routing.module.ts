@@ -7,7 +7,6 @@ import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 import {TaskDetailsComponent} from './task/details/task-details.component';
 import {LoginComponent} from './login/login.component';
-import {LoginGuard} from './login/login.guard';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 
 const routes: Routes = [
@@ -20,6 +19,7 @@ const routes: Routes = [
   {path: 'taskType', component: TaskTypeCreateComponent, canActivate: [LoginGuard]},
   {path: 'taskTypes', component: TaskTypeListComponent, canActivate: [LoginGuard]},
   {path: '', redirectTo: '/tasks', pathMatch: 'full'}
+
 ];
 
 @NgModule({
