@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class Http403Interceptor implements HttpInterceptor {
+export class Http401Interceptor implements HttpInterceptor {
 
   constructor(private router: Router) {
   }
@@ -13,7 +13,7 @@ export class Http403Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).do((event: HttpEvent<any>) => {}, (error: any) => {
         if (error instanceof HttpErrorResponse) {
-          if (error.status === 403) {
+          if (error.status === 401) {
             localStorage.removeItem('token');
             this.router.navigate(['login']);
           }

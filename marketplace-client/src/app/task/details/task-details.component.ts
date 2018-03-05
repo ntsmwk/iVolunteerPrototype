@@ -21,6 +21,7 @@ export class TaskDetailsComponent implements OnInit {
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
   participantRole;
+  isAlreadyReserved;
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -39,10 +40,14 @@ export class TaskDetailsComponent implements OnInit {
       this.participantRole = role;
       console.log(this.participantRole);
     });
+
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadData(params['id']));
+    this.route.params.subscribe(params => {
+      this.loadData(params['id']);
+
+    });
   }
 
   private loadData(id: string) {
@@ -56,6 +61,10 @@ export class TaskDetailsComponent implements OnInit {
           status: task.status,
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate)
+        });
+        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved) => {
+          this.isAlreadyReserved = isReserved;
+          console.log(this.isAlreadyReserved);
         });
       });
     this.taskInteractionService.findById(<Task>{id: id})

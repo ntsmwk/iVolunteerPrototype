@@ -14,7 +14,6 @@ import at.jku.csi.marketplace.participant.Participant;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.security.ParticipantRole;
 import at.jku.csi.marketplace.task.TaskRepository;
-import at.jku.csi.marketplace.task.TaskStatus;
 
 @RestController
 public class TaskInteractionController {
@@ -37,22 +36,43 @@ public class TaskInteractionController {
 		return taskInteractionRepository.findByVolunteer(id);
 	}
 
+	@GetMapping("/volunteer/isReserved/{id}")
+	public boolean isTaskAlreadyReserved(@PathVariable("id") String id) {
+		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
+			Participant participant = loginService.getLoggedInParticipant();
+			List<TaskInteraction> taskInteractions = taskInteractionRepository
+					.findByVolunteerAndTask(participant.getId(), id);
+			return alreadyReserved(taskInteractions);
+		}
+		return false;
+	}
+
 	@PostMapping("/volunteer/reserve")
 	public void reserveForTask(@RequestBody String id) {
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
 			Participant participant = loginService.getLoggedInParticipant();
-			
-			List<TaskInteraction> interaction = taskInteractionRepository.findByVolunteerAndTask(participant.getId(), id);
-			
-			
-			TaskInteraction reservation = new TaskInteraction();
-			reservation.setOperation(TaskVolunteerOperation.RESERVED);
-			reservation.setParticipant(participant);
-			reservation.setTask(taskRepository.findOne(id));
-			reservation.setTimestamp(new Date());
+			List<TaskInteraction> taskInteractions = taskInteractionRepository
+					.findByVolunteerAndTask(participant.getId(), id);
 
-			taskInteractionRepository.insert(reservation);
+			if (!alreadyReserved(taskInteractions)) {
+				TaskInteraction reservation = new TaskInteraction();
+				reservation.setOperation(TaskVolunteerOperation.RESERVED);
+				reservation.setParticipant(participant);
+				reservation.setTask(taskRepository.findOne(id));
+				reservation.setTimestamp(new Date());
+
+				taskInteractionRepository.insert(reservation);
+			}
 		}
+	}
+
+	private boolean alreadyReserved(List<TaskInteraction> taskInteractions) {
+		for (TaskInteraction taskInteraction : taskInteractions) {
+			if (taskInteraction.getOperation().equals(TaskVolunteerOperation.RESERVED)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
