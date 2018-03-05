@@ -52,13 +52,17 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 
 		@Override
 		public TaskOperation convert(String value) {
-			TaskStatus taskStatus = TaskStatus.valueOf(value);
-			if (taskStatus != null) {
-				return taskStatus;
+			try {
+				if (TaskStatus.valueOf(value) != null) {
+					return TaskStatus.valueOf(value);
+				}
+			} catch (IllegalArgumentException e) {
 			}
-			TaskVolunteerOperation taskVolunteerOperation = TaskVolunteerOperation.valueOf(value);
-			if (taskVolunteerOperation != null) {
-				return taskVolunteerOperation;
+			try {
+				if (TaskVolunteerOperation.valueOf(value) != null) {
+					return TaskVolunteerOperation.valueOf(value);
+				}
+			} catch (IllegalArgumentException e) {
 			}
 			return null;
 		}

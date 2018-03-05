@@ -45,4 +45,8 @@ export class TaskService {
   cancel(task: Task) {
     return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
   }
+
+  findByVolunteerId(id: string) {
+    return this.http.get([this.apiUrl, id].join('/volunteer/'));
+  }
 }
