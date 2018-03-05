@@ -20,6 +20,7 @@ export class LoginComponent {
     this.loginForm = formBuilder.group({
       'username': new FormControl('', Validators.required),
       'password': new FormControl('', Validators.required)
+
     });
   }
 

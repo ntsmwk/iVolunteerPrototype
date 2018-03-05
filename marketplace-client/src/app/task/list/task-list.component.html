@@ -3,16 +3,23 @@
 <div class="example-header">
  <mat-form-field>
     <mat-select placeholder="Filter" [(value)]="selectedValue">
-      <mat-option *ngFor="let s of status" [value]="s.value">
-        {{ s.ViewValue }}
-        {{applyFilter(selectedValue)}}
-      </mat-option>
+      <div *ngIf="participantRole === 'VOLUNTEER'">
+        <mat-option *ngFor="let s of statusVol" [value]="s.value">
+          {{ s.ViewValue }}
+          {{applyFilter(selectedValue)}}
+        </mat-option>
+      </div>
+      <div *ngIf="participantRole === 'EMPLOYEE'">
+        <mat-option *ngFor="let s of statusEmp" [value]="s.value">
+          {{ s.ViewValue }}
+          {{applyFilter(selectedValue)}}
+        </mat-option>
+      </div>
+
+
 
     </mat-select>
   </mat-form-field>
-
-
-
 </div>
 
 <mat-table #table [dataSource]="dataSource">
