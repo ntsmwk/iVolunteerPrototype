@@ -7,6 +7,7 @@ import {TaskInteraction} from '../../task-interaction/task-interaction';
 import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskType} from '../../task-type/task-type';
+import {LoginService} from '../../login/login.service';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -17,14 +18,14 @@ export class TaskDetailsComponent implements OnInit {
   task: Task;
   dataSource = new MatTableDataSource<TaskInteraction>();
   displayedColumns = ['operation', 'timestamp', 'comment'];
-
   taskDetailsForm: FormGroup;
-
   taskTypes: TaskType[];
+  participantRole;
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private taskService: TaskService,
+              private loginService: LoginService,
               private taskInteractionService: TaskInteractionService) {
     this.taskDetailsForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
@@ -33,6 +34,8 @@ export class TaskDetailsComponent implements OnInit {
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('', Validators.required)
     });
+
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
   }
 
   ngOnInit() {
@@ -64,6 +67,9 @@ export class TaskDetailsComponent implements OnInit {
     this.task.endDate = new Date((<Task> (this.taskDetailsForm.value)).endDate);
 
     this.taskService.save(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  register() {
   }
 
   start() {

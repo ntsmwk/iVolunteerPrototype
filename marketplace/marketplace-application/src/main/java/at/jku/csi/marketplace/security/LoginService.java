@@ -5,8 +5,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import at.jku.csi.marketplace.participant.Employee;
 import at.jku.csi.marketplace.participant.EmployeeRepository;
 import at.jku.csi.marketplace.participant.Participant;
+import at.jku.csi.marketplace.participant.Volunteer;
 import at.jku.csi.marketplace.participant.VolunteerRepository;
 
 @Service
@@ -19,10 +21,19 @@ public class LoginService {
 
 	public Participant getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
+		String username = (String) authentication.getPrincipal();
 		if (authentication.getAuthorities().contains(ParticipantRole.EMPLOYEE)) {
-			return employeeRepository.findByUsername(authentication.getName());
+			return employeeRepository.findByUsername(username);
 		}
-		return volunteerRepository.findByUsername(authentication.getName());
+		return volunteerRepository.findByUsername(username);
+	}
+	
+	public ParticipantRole getLoggedInParticipantRole() {
+		Participant participant = getLoggedInParticipant();
+		if(participant instanceof Employee) {
+			return ParticipantRole.EMPLOYEE;
+		}
+		return ParticipantRole.VOLUNTEER;
 	}
 
 	private Authentication determineAuthentication() {
