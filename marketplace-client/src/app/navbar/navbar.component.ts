@@ -20,12 +20,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private loginGuard: LoginGuard,
               private loginService: LoginService,
               private messageService: MessageService) {
-
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
-
   }
 
   ngOnInit() {
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
+
     this.getLoggedIn();
     this.loginSubscription = this.messageService.subscribe('login', this.getLoggedIn.bind(this));
     this.logoutSubscription = this.messageService.subscribe('logout', () => this.participant = undefined);
