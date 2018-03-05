@@ -14,6 +14,7 @@ import at.jku.csi.marketplace.participant.Participant;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.security.ParticipantRole;
 import at.jku.csi.marketplace.task.TaskRepository;
+import at.jku.csi.marketplace.task.TaskStatus;
 
 @RestController
 public class TaskInteractionController {
@@ -40,6 +41,10 @@ public class TaskInteractionController {
 	public void reserveForTask(@RequestBody String id) {
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
 			Participant participant = loginService.getLoggedInParticipant();
+			
+			List<TaskInteraction> interaction = taskInteractionRepository.findByVolunteerAndTask(participant.getId(), id);
+			
+			
 			TaskInteraction reservation = new TaskInteraction();
 			reservation.setOperation(TaskVolunteerOperation.RESERVED);
 			reservation.setParticipant(participant);
