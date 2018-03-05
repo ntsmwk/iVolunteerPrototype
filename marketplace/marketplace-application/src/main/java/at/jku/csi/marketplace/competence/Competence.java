@@ -1,9 +1,7 @@
 package at.jku.csi.marketplace.competence;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class Competence {
 
 	@Id

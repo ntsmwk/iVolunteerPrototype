@@ -25,6 +25,7 @@ import {LoginComponent} from './login/login.component';
 import {LoginGuard} from './login/login.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
+import {RepositoryService} from './_service/repository.service';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
     TaskService,
     TaskTypeService,
     TaskInteractionService,
+    RepositoryService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
   ],

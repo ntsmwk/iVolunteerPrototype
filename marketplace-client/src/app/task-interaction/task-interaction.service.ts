@@ -10,8 +10,12 @@ export class TaskInteractionService {
   constructor(private http: HttpClient) {
   }
 
-  findById(task: Task) {
-    return this.http.get([this.apiUrl, 'task', task.id, 'interaction'].join('/'));
+  findByTask(task: Task) {
+    return this.http.get('/rest/task/interaction');
+  }
+
+  findFinishedByTask(task: Task) {
+    return this.http.get('/rest/task/interaction?operation=FINISHED');
   }
 
   reserve(task: Task) {
