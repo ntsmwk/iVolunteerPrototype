@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @Qualifier
-@PreAuthorize("hasRole('VOLUNTEER')")
+@PreAuthorize("hasRole('EMPLOYEE')")
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasRoleEmployee {
