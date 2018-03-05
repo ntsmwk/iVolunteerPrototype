@@ -19,10 +19,11 @@ public class LoginService {
 
 	public Participant getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
+		String username = (String) authentication.getPrincipal();
 		if (authentication.getAuthorities().contains(ParticipantRole.EMPLOYEE)) {
-			return employeeRepository.findByUsername(authentication.getName());
+			return employeeRepository.findByUsername(username);
 		}
-		return volunteerRepository.findByUsername(authentication.getName());
+		return volunteerRepository.findByUsername(username);
 	}
 
 	private Authentication determineAuthentication() {

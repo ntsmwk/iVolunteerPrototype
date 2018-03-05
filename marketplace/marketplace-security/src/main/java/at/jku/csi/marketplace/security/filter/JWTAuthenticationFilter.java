@@ -46,16 +46,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		}
 	}
 
-	private UsernamePasswordAuthenticationToken buildAuthenticationToken(Credentials applicationUser) {
-		String username = applicationUser.getUsername();
-		String password = applicationUser.getPassword();
+	private UsernamePasswordAuthenticationToken buildAuthenticationToken(Credentials credentials) {
+		String username = credentials.getUsername();
+		String password = credentials.getPassword();
 		return new UsernamePasswordAuthenticationToken(username, password, emptyList());
 	}
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
-		String token = Jwts.builder().setSubject(((User) auth.getPrincipal()).getUsername())
+		String username = ((User) auth.getPrincipal()).getUsername();
+		String token = Jwts.builder()
+				.setSubject(username)
+				.claim("username", username)
+				.claim("authorities", auth.getAuthorities())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
 		res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
