@@ -21,19 +21,26 @@ public class LoginService {
 
 	public Participant getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
-		String username = (String) authentication.getPrincipal();
-		if (authentication.getAuthorities().contains(ParticipantRole.EMPLOYEE)) {
-			return employeeRepository.findByUsername(username);
-		}
-		return volunteerRepository.findByUsername(username);
+		return findByUsername((String) authentication.getPrincipal());
 	}
 
 	public ParticipantRole getLoggedInParticipantRole() {
 		Participant participant = getLoggedInParticipant();
-		if (participant instanceof Volunteer) {
+		if (participant instanceof Employee) {
 			return ParticipantRole.VOLUNTEER;
 		}
-		return ParticipantRole.EMPLOYEE;
+		if (participant instanceof Volunteer) {
+			return ParticipantRole.EMPLOYEE;
+		}
+		return null;
+	}
+
+	private Participant findByUsername(String username) {
+		Employee employee = employeeRepository.findByUsername(username);
+		if (employee != null) {
+			return employee;
+		}
+		return volunteerRepository.findByUsername(username);
 	}
 
 	private Authentication determineAuthentication() {
