@@ -4,6 +4,7 @@ import {Participant} from '../participant/participant';
 import {isNullOrUndefined} from 'util';
 import {MessageService} from '../_service/message.service';
 import {Subscription} from 'rxjs/Subscription';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +18,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   participantRole;
 
   constructor(private loginService: LoginService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -44,4 +46,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
 
   }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['login']);
+
+  }
+
 }
