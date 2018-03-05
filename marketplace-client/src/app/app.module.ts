@@ -19,7 +19,7 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {TaskDetailsComponent} from './task/details/task-details.component';
 import {TaskInteractionService} from './task-interaction/task-interaction.service';
 import {TokenInterceptor} from './_interceptor/token.interceptor';
-import {Http401Interceptor} from './_interceptor/http-401.interceptor';
+import {Http403Interceptor} from './_interceptor/http-403.interceptor';
 import {LoginService} from './login/login.service';
 import {LoginComponent} from './login/login.component';
 import {LoginGuard} from './login/login.guard';
@@ -53,7 +53,7 @@ import {MessageService} from './_service/message.service';
     TaskTypeService,
     TaskInteractionService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: Http403Interceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
+import at.jku.csi.marketplace.security.HasRoleEmployee;
+import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 
@@ -24,8 +26,9 @@ import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 public class TaskController {
 
 	@Autowired
+	private LoginService loginService;
+	@Autowired
 	private TaskRepository taskRepository;
-
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
 
@@ -39,11 +42,13 @@ public class TaskController {
 		return taskRepository.findOne(id);
 	}
 
+	@Deprecated
 	@GetMapping("/task/created")
 	public List<Task> findCreated() {
 		return taskRepository.findCreated();
 	}
 
+	@Deprecated
 	@GetMapping("/task/volunteer/{id}")
 	public List<Task> findByVolunteer(@PathVariable("id") String id) {
 
@@ -57,15 +62,17 @@ public class TaskController {
 		return new ArrayList<>(tasks);
 	}
 
+	@HasRoleEmployee
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);
 		Task createdTask = taskRepository.insert(task);
 
-		taskInteractionRepository.insert(new TaskInteraction(createdTask, TaskStatus.CREATED, new Date()));
+		insertTaskInteraction(createdTask);
 		return createdTask;
 	}
 
+	@HasRoleEmployee
 	@PutMapping("/task/{id}")
 	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
 		if (!taskRepository.exists(id)) {
@@ -74,51 +81,48 @@ public class TaskController {
 		return taskRepository.save(task);
 	}
 
+	@HasRoleEmployee
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || !isCreatedOrCanceledTask(task)) {
 			throw new BadRequestException();
 		}
-		task.setStatus(TaskStatus.STARTED);
-		Task updatedTask = taskRepository.save(task);
-
-		TaskInteraction taskInteraction = new TaskInteraction();
-		taskInteraction.setTask(updatedTask);
-		taskInteraction.setTimestamp(new Date());
-		taskInteraction.setOperation(TaskStatus.STARTED);
-		taskInteractionRepository.insert(taskInteraction);
+		updateTaskStatus(task, TaskStatus.STARTED);
 	}
 
+	@HasRoleEmployee
 	@PostMapping("/task/{id}/finish")
 	public void finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || !isStartedTask(task)) {
 			throw new BadRequestException();
 		}
-		task.setStatus(TaskStatus.FINISHED);
-		Task updatedTask = taskRepository.save(task);
-
-		TaskInteraction taskInteraction = new TaskInteraction();
-		taskInteraction.setTask(updatedTask);
-		taskInteraction.setTimestamp(new Date());
-		taskInteraction.setOperation(TaskStatus.FINISHED);
-		taskInteractionRepository.insert(taskInteraction);
+		updateTaskStatus(task, TaskStatus.FINISHED);
 	}
 
+	@HasRoleEmployee
 	@PostMapping("/task/{id}/cancel")
 	public void cancelTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || !isStartedTask(task)) {
 			throw new BadRequestException();
 		}
-		task.setStatus(TaskStatus.CANCELED);
-		Task updatedTask = taskRepository.save(task);
+		updateTaskStatus(task, TaskStatus.CANCELED);
+	}
 
+	private void updateTaskStatus(Task task, TaskStatus taskStatus) {
+		task.setStatus(taskStatus);
+		Task updatedTask = taskRepository.save(task);
+		insertTaskInteraction(updatedTask);
+	}
+
+	private void insertTaskInteraction(Task task) {
 		TaskInteraction taskInteraction = new TaskInteraction();
-		taskInteraction.setTask(updatedTask);
+		taskInteraction.setTask(task);
+		taskInteraction.setParticipant(loginService.getLoggedInParticipant());
 		taskInteraction.setTimestamp(new Date());
-		taskInteraction.setOperation(TaskStatus.CANCELED);
+		taskInteraction.setOperation(task.getStatus());
 		taskInteractionRepository.insert(taskInteraction);
 	}
 
