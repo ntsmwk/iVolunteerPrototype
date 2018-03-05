@@ -24,6 +24,7 @@ import {LoginService} from './login/login.service';
 import {LoginComponent} from './login/login.component';
 import {LoginGuard} from './login/login.guard';
 import {MessageService} from './_service/message.service';
+import {TaskAvailableComponent} from './task/available/task-available.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {MessageService} from './_service/message.service';
     NavbarComponent,
     LoginComponent,
     TaskListComponent,
+    TaskAvailableComponent,
     TaskCreateComponent,
     TaskDetailsComponent,
     TaskTypeListComponent,
