@@ -1,8 +1,10 @@
 package at.jku.csi.marketplace.security.filter;
 
+import static at.jku.csi.marketplace.security.SecurityConstants.JWT_AUTHORITIES;
 import static at.jku.csi.marketplace.security.SecurityConstants.HEADER_STRING;
 import static at.jku.csi.marketplace.security.SecurityConstants.SECRET;
 import static at.jku.csi.marketplace.security.SecurityConstants.TOKEN_PREFIX;
+import static at.jku.csi.marketplace.security.SecurityConstants.JWT_USERNAME;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -25,6 +28,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
+	
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);
@@ -62,24 +67,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private String parseUsernameFromJWTToken(String token) {
-		return (String) Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token).getBody().get("username");
+		return (String) parseClaimsJws(token).getBody().get(JWT_USERNAME);
 	}
 
 	@SuppressWarnings("unchecked")
 	private Collection<? extends GrantedAuthority> parseAuthoritiesFromJWTToken(String token) {
-		Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token);
-		Collection<String> authorities = (List<String>) claimsJws.getBody().get("authorities");
-		return authorities.stream().map(name -> buildAuthority(name)).collect(Collectors.toList());
+		Collection<String> authorities = (List<String>) parseClaimsJws(token).getBody().get(JWT_AUTHORITIES);
+		return authorities.stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet());
 	}
 
-	@SuppressWarnings("serial")
-	private GrantedAuthority buildAuthority(String name) {
-		return new GrantedAuthority() {
-
-			@Override
-			public String getAuthority() {
-				return name;
-			}
-		};
+	private Jws<Claims> parseClaimsJws(String token) {
+		return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token);
 	}
 }

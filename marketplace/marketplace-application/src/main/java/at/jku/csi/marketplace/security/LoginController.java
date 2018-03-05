@@ -16,4 +16,9 @@ public class LoginController {
 	public Participant getLoggedInParticipant() {
 		return loginService.getLoggedInParticipant();
 	}
+	
+	@GetMapping("/login/role")
+	public ParticipantRole getLoggedInRole() {
+		return loginService.getLoggedInParticipantRole();
+	}
 }

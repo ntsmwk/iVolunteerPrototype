@@ -11,7 +11,12 @@ export class LoginService {
     return this.http.get('/rest/login');
   }
 
+  getLoggedInParticipantRole() {
+    return this.http.get('/rest/login/role');
+  }
+
   login(username: string, password: string) {
     return this.http.post('/rest/login', {username: username, password: password}, {observe: 'response'});
   }
+
 }
