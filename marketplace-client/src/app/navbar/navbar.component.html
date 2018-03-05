@@ -10,19 +10,25 @@
         <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
            aria-expanded="false">Task</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" routerLink="/task">Create</a>
+          <div *ngIf="participantRole === 'EMPLOYEE'">
+            <a class="dropdown-item" routerLink="/task">Create</a>
+          </div>
+          <div *ngIf="participantRole === 'VOLUNTEER'">
+            <a class="dropdown-item" routerLink="/available">Available</a>
+          </div>
           <a class="dropdown-item" routerLink="/tasks">Overview</a>
-          <a class="dropdown-item" routerLink="/available">Available</a>
         </div>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="dropdown02" data-toggle="dropdown" aria-haspopup="true"
-           aria-expanded="false">Task-Type</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown02">
-          <a class="dropdown-item" routerLink="/taskType">Create</a>
-          <a class="dropdown-item" routerLink="/taskTypes">Overview</a>
-        </div>
-      </li>
+      <div *ngIf="participantRole === 'EMPLOYEE'">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdown02" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false">Task-Type</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown02">
+            <a class="dropdown-item" routerLink="/taskType">Create</a>
+            <a class="dropdown-item" routerLink="/taskTypes">Overview</a>
+          </div>
+        </li>
+      </div>
     </ul>
     <ul class="navbar-nav ml-auto" *ngIf="participant">
       <li class="nav-item">

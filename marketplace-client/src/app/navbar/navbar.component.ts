@@ -15,10 +15,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public participant: Participant;
   private loginSubscription: Subscription;
   private logoutSubscription: Subscription;
+  participantRole;
 
   constructor(private loginGuard: LoginGuard,
               private loginService: LoginService,
               private messageService: MessageService) {
+
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
+
   }
 
   ngOnInit() {
