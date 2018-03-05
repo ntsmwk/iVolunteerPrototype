@@ -35,7 +35,9 @@ export class TaskDetailsComponent implements OnInit {
       'endDate': new FormControl('', Validators.required)
     });
 
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => {
+      this.participantRole = role;
+    });
   }
 
   ngOnInit() {

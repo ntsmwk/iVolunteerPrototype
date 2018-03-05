@@ -27,13 +27,13 @@ public class LoginService {
 		}
 		return volunteerRepository.findByUsername(username);
 	}
-	
+
 	public ParticipantRole getLoggedInParticipantRole() {
 		Participant participant = getLoggedInParticipant();
-		if(participant instanceof Employee) {
-			return ParticipantRole.EMPLOYEE;
+		if (participant instanceof Volunteer) {
+			return ParticipantRole.VOLUNTEER;
 		}
-		return ParticipantRole.VOLUNTEER;
+		return ParticipantRole.EMPLOYEE;
 	}
 
 	private Authentication determineAuthentication() {

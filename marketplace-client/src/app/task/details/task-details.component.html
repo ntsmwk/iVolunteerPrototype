@@ -3,32 +3,32 @@
   <form class="task-form" (submit)="save()" [formGroup]="taskDetailsForm">
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Name" formControlName="name">
+      <input matInput placeholder="Name" [readonly]="participantRole === 'VOLUNTEER'" formControlName="name">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Status" formControlName="status">
+      <input matInput placeholder="Status" [readonly]="participantRole === 'VOLUNTEER'" formControlName="status">
     </mat-form-field>
 
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Description" formControlName="description">
+      <input matInput placeholder="Description" [readonly]="participantRole === 'VOLUNTEER'" formControlName="description">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
-      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker></mat-datepicker>
+      <input matInput [matDatepicker]="startDatePicker" [readonly]="participantRole === 'VOLUNTEER'" placeholder="Start Date" formControlName="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker" [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
+      <input matInput [matDatepicker]="endDatePicker" [readonly]="participantRole === 'VOLUNTEER'" placeholder="End Date" formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker" [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker>
     </mat-form-field>
 
 
-    <button type="submit" mat-raised-button color="primary">Update</button>
+    <button type="submit" [hidden]="participantRole === 'VOLUNTEER'" mat-raised-button color="primary">Update</button>
   </form>
 
   <div *ngIf="participantRole === 'EMPLOYEE'">
@@ -41,7 +41,7 @@
     </button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="finish()" mat-raised-button>Finish</button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="cancel()" mat-raised-button>Cancel</button>
-  <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
   </div>
 
   <div *ngIf="participantRole === 'VOLUNTEER'">
