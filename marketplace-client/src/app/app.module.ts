@@ -25,6 +25,7 @@ import {LoginComponent} from './login/login.component';
 import {LoginGuard} from './login/login.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
+import {TaskAssignComponent} from './task/assign/task-assign.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
     TaskCreateComponent,
     TaskDetailsComponent,
     TaskTypeListComponent,
-    TaskTypeCreateComponent
+    TaskTypeCreateComponent,
+    TaskAssignComponent
   ],
   imports: [
     AppMaterialModule,
@@ -59,5 +61,6 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
 

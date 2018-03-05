@@ -14,6 +14,10 @@ export class TaskInteractionService {
     return this.http.get([this.apiUrl, 'task', task.id, 'interaction'].join('/'));
   }
 
+  findReservedVolunteersByTaskId(task: Task) {
+    return this.http.get([this.apiUrl, 'task', task.id, 'reserved'].join('/'));
+  }
+
   isTaskAlreadyReserved(task: Task) {
     return this.http.get([this.apiUrl, 'volunteer/isReserved', task.id].join('/'));
   }

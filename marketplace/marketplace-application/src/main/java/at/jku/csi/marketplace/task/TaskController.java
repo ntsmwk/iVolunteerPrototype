@@ -79,7 +79,6 @@ public class TaskController {
 		return taskRepository.save(task);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
@@ -89,7 +88,6 @@ public class TaskController {
 		updateTaskStatus(task, TaskStatus.STARTED);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task/{id}/finish")
 	public void finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
@@ -99,7 +97,6 @@ public class TaskController {
 		updateTaskStatus(task, TaskStatus.FINISHED);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task/{id}/cancel")
 	public void cancelTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);

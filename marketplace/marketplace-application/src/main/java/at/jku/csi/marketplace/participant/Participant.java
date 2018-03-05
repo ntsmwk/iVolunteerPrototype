@@ -45,5 +45,18 @@ public abstract class Participant {
 	public void setProfile(ParticipantProfile profile) {
 		this.profile = profile;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Participant && this.getId().equals(((Participant)obj).getId())) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.id.hashCode();
+	}
 
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Task} from '../task';
 import {TaskService} from '../task.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
 import {MatTableDataSource} from '@angular/material';
@@ -26,6 +26,7 @@ export class TaskDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private taskService: TaskService,
+              private router: Router,
               private loginService: LoginService,
               private taskInteractionService: TaskInteractionService) {
     this.taskDetailsForm = formBuilder.group({
@@ -38,7 +39,6 @@ export class TaskDetailsComponent implements OnInit {
 
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => {
       this.participantRole = role;
-      console.log(this.participantRole);
     });
 
   }
@@ -64,7 +64,6 @@ export class TaskDetailsComponent implements OnInit {
         });
         this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved) => {
           this.isAlreadyReserved = isReserved;
-          console.log(this.isAlreadyReserved);
         });
       });
     this.taskInteractionService.findById(<Task>{id: id})
@@ -84,6 +83,11 @@ export class TaskDetailsComponent implements OnInit {
   reserve() {
     this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
+
+  assign() {
+    this.router.navigate(['/task/reservations/' + this.task.id ]);
+  }
+
 
   start() {
     this.taskService.start(this.task).toPromise().then(() => this.loadData(this.task.id));
