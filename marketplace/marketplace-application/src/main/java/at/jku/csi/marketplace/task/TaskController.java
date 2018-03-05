@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.exception.BadRequestException;
@@ -33,19 +34,16 @@ public class TaskController {
 	private TaskInteractionRepository taskInteractionRepository;
 
 	@GetMapping("/task")
-	public List<Task> findAll() {
-		return taskRepository.findAll();
+	public List<Task> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
+		if (status == null) {
+			return taskRepository.findAll();
+		}
+		return taskRepository.findByStatus(status);
 	}
 
 	@GetMapping("/task/{id}")
 	public Task findById(@PathVariable("id") String id) {
 		return taskRepository.findOne(id);
-	}
-
-	@Deprecated
-	@GetMapping("/task/created")
-	public List<Task> findCreated() {
-		return taskRepository.findCreated();
 	}
 
 	@Deprecated

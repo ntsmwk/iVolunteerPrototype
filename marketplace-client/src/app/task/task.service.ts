@@ -15,6 +15,10 @@ export class TaskService {
     return this.http.get(this.apiUrl);
   }
 
+  findAllCreated() {
+    return this.http.get(this.apiUrl + '?status=CREATED');
+  }
+
   findById(id: string) {
     return this.http.get([this.apiUrl, id].join('/'));
   }
@@ -41,5 +45,4 @@ export class TaskService {
   cancel(task: Task) {
     return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
   }
-
 }
