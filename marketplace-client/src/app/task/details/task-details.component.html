@@ -45,8 +45,9 @@
   </div>
 
   <div *ngIf="participantRole === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED'" (click)="register()" mat-raised-button>Register</button>
+    <button *ngIf="this.task.status === 'CREATED'" (click)="reserve()" mat-raised-button>Reserve</button>
   </div>
+
 
   <h3>Task-Interaction History</h3>
 

@@ -71,7 +71,8 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.save(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
-  register() {
+  reserve() {
+    this.taskInteractionService.reserve(this.task);
   }
 
   start() {

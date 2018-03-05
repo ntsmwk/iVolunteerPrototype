@@ -13,4 +13,8 @@ export class TaskInteractionService {
   findById(task: Task) {
     return this.http.get([this.apiUrl, task.id, 'interaction'].join('/'));
   }
+
+  reserve(task: Task) {
+    return this.http.get([this.apiUrl, 'reserve', task.id].join('/'));
+  }
 }
