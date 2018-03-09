@@ -49,4 +49,8 @@ export class TaskService {
   cancel(task: Task) {
     return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
   }
+
+  sync(task: Task) {
+    return this.http.get([this.apiUrl, task.id, 'sync'].join('/'), {});
+  }
 }

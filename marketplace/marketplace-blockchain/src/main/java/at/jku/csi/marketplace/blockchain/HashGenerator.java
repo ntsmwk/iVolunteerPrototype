@@ -3,14 +3,18 @@ package at.jku.csi.marketplace.blockchain;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class HashGenerator {
 
-	public String sha256(String data) {
+	public String sha256(IHashObject object) {
 		MessageDigest md = null;
 
 		try {
 			md = MessageDigest.getInstance("SHA-256");
-			md.update(data.getBytes());
+			md.update(object.toHashString().getBytes());
 
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();

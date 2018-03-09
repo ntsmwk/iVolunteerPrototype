@@ -109,4 +109,11 @@ export class TaskDetailsComponent implements OnInit {
   cancel() {
     this.taskService.cancel(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
+
+  sync() {
+    this.taskService.sync(this.task).toPromise()
+      .then((value) => {
+        console.dirxml(value);
+      });
+  }
 }
