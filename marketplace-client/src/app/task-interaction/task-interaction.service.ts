@@ -11,11 +11,11 @@ export class TaskInteractionService {
   }
 
   findByTask(task: Task) {
-    return this.http.get('/rest/task/interaction');
+    return this.http.get('/rest/task/' + task.id + 'interaction');
   }
 
   findFinishedByTask(task: Task) {
-    return this.http.get('/rest/task/interaction?operation=FINISHED');
+    return this.http.get('/rest/task/' + task.id + 'interaction?operation=FINISHED');
   }
 
   findReservedVolunteersByTaskId(task: Task) {
