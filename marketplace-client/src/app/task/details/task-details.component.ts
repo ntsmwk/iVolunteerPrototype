@@ -6,6 +6,8 @@ import {TaskInteractionService} from '../../task-interaction/task-interaction.se
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskType} from '../../task-type/task-type';
 import {LoginService} from '../../login/login.service';
+import {RepositoryService} from '../../_service/repository.service';
+import {TaskInteraction} from '../../task-interaction/task-interaction';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -16,7 +18,7 @@ export class TaskDetailsComponent implements OnInit {
   task: Task;
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
-  participantRole;
+  role;
   isAlreadyReserved;
 
   constructor(private route: ActivatedRoute,
@@ -24,6 +26,7 @@ export class TaskDetailsComponent implements OnInit {
               private taskService: TaskService,
               private router: Router,
               private loginService: LoginService,
+              private repositoryService: RepositoryService,
               private taskInteractionService: TaskInteractionService) {
     this.taskDetailsForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
@@ -32,18 +35,11 @@ export class TaskDetailsComponent implements OnInit {
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('', Validators.required)
     });
-
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => {
-      this.participantRole = role;
-    });
-
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.loadData(params['id']);
-
-    });
+    this.route.params.subscribe(params => this.loadData(params['id']));
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.role = role);
   }
 
   private loadData(id: string) {
@@ -64,6 +60,7 @@ export class TaskDetailsComponent implements OnInit {
       });
      }
 
+
   save() {
     this.task.name = (<Task> (this.taskDetailsForm.value)).name;
     this.task.description = (<Task> (this.taskDetailsForm.value)).description;
@@ -71,6 +68,16 @@ export class TaskDetailsComponent implements OnInit {
     this.task.endDate = new Date((<Task> (this.taskDetailsForm.value)).endDate);
 
     this.taskService.save(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  import() {
+    this.taskInteractionService.findFinishedByTask(this.task)
+      .toPromise()
+      .then((taskInteractions: TaskInteraction[]) => {
+        this.repositoryService.importTask(taskInteractions[0])
+          .toPromise()
+          .then(() => alert('Task is imported'));
+      });
   }
 
   reserve() {

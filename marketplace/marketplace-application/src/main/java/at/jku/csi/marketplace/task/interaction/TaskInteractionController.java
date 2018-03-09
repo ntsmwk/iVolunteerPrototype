@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.participant.Participant;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.security.ParticipantRole;
+import at.jku.csi.marketplace.task.Task;
 import at.jku.csi.marketplace.task.TaskRepository;
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -30,15 +32,21 @@ public class TaskInteractionController {
 	@Autowired
 	private LoginService loginService;
 
-	@GetMapping("/task/{id}/interaction")
-	public List<TaskInteraction> findByTaskId(@PathVariable("id") String id) {
-		return taskInteractionRepository.findByTask(id);
+	@GetMapping("/task/{taskId}/interaction")
+	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
+			@RequestParam(value = "operation", required = false) TaskOperation operation) {
+		Task task = taskRepository.findOne(taskId);
+		if (operation == null) {
+			return taskInteractionRepository.findByTask(task);
+		}
+		return taskInteractionRepository.findByTaskAndOperation(task, operation);
 	}
 
 	@GetMapping("/task/{id}/reserved")
 	public ArrayList<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String id) {
+	Task task = taskRepository.findOne(id);
 		Set<Participant> volunteers = new HashSet<Participant>();
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(id);
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		for (TaskInteraction taskInteraction : taskInteractions) {
 			if (taskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
 				volunteers.add(taskInteraction.getParticipant());

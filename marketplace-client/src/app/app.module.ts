@@ -25,6 +25,7 @@ import {LoginComponent} from './login/login.component';
 import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
+import {RepositoryService} from './_service/repository.service';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
 import {VolunteerGuard} from './participant/volunteer.guard';
@@ -62,6 +63,7 @@ import { TaskInteractionHistoryComponent } from './task-interaction/task-interac
     TaskService,
     TaskTypeService,
     TaskInteractionService,
+    RepositoryService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
   ],

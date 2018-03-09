@@ -1,61 +1,59 @@
 <div *ngIf="task">
-  <h3>Task Details</h3>
+  <h3 (click)="import()">Task Details</h3>
   <form class="task-form" (submit)="save()" [formGroup]="taskDetailsForm">
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Name" [readonly]="participantRole === 'VOLUNTEER'" formControlName="name">
+      <input matInput placeholder="Name" [readonly]="role === 'VOLUNTEER'" formControlName="name">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Status" [readonly]="participantRole === 'VOLUNTEER'" formControlName="status">
+      <input matInput placeholder="Status" [readonly]="role === 'VOLUNTEER'" formControlName="status">
     </mat-form-field>
 
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Description" [readonly]="participantRole === 'VOLUNTEER'"
-             formControlName="description">
+      <input matInput placeholder="Description" [readonly]="role === 'VOLUNTEER'" formControlName="description">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput [matDatepicker]="startDatePicker" [readonly]="participantRole === 'VOLUNTEER'"
-             placeholder="Start Date" formControlName="startDate">
-      <mat-datepicker-toggle matSuffix [for]="startDatePicker"
-                             [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker>
+      <input matInput [matDatepicker]="startDatePicker" [readonly]="role === 'VOLUNTEER'" placeholder="Start Date"
+             formControlName="startDate">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker" [hidden]="role === 'VOLUNTEER'"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker [hidden]="role === 'VOLUNTEER'"></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput [matDatepicker]="endDatePicker" [readonly]="participantRole === 'VOLUNTEER'"
-             placeholder="End Date" formControlName="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"
-                             [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker [hidden]="participantRole === 'VOLUNTEER'"></mat-datepicker>
+      <input matInput [matDatepicker]="endDatePicker" [readonly]="role === 'VOLUNTEER'" placeholder="End Date"
+             formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker" [hidden]="role === 'VOLUNTEER'"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker [hidden]="role === 'VOLUNTEER'"></mat-datepicker>
     </mat-form-field>
 
 
-    <button type="submit" [hidden]="participantRole === 'VOLUNTEER'" mat-raised-button color="primary">Update</button>
+    <button type="submit" [hidden]="role === 'VOLUNTEER'" mat-raised-button color="primary">Update</button>
   </form>
 
-  <div *ngIf="participantRole === 'EMPLOYEE'">
+  <div *ngIf="role === 'EMPLOYEE'">
     <div *ngIf="this.task.status !== 'FINISHED'">
       <mat-divider></mat-divider>
     </div>
-    <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" routerLink="/task/assign/{{this.task.id}}"
+    <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'"
+            routerLink="/task/assign/{{this.task.id}}"
             ngModule="this.task.id" mat-raised-button>
       Assign Volunteers
     </button>
     <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" (click)="start()"
-            mat-raised-button>
-      Start
+            mat-raised-button> Start
     </button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="finish()" mat-raised-button>Finish</button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="cancel()" mat-raised-button>Cancel</button>
     <mat-divider></mat-divider>
   </div>
 
-  <div *ngIf="participantRole === 'VOLUNTEER'">
+  <div *ngIf="role === 'VOLUNTEER'">
     <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve
     </button>
+    <button *ngIf="this.task.status === 'FINISHED'" (click)="import()" mat-raised-button>Import</button>
   </div>
 
   <app-task-interaction-history [id]="task.id"></app-task-interaction-history>

@@ -19,6 +19,10 @@ export class TaskService {
     return this.http.get(this.apiUrl + '?status=CREATED');
   }
 
+  findAllByParticipant(id: string) {
+    return this.http.get([this.apiUrl, id].join('/volunteer/'));
+  }
+
   findById(id: string) {
     return this.http.get([this.apiUrl, id].join('/'));
   }
@@ -44,9 +48,5 @@ export class TaskService {
 
   cancel(task: Task) {
     return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
-  }
-
-  findByVolunteerId(id: string) {
-    return this.http.get([this.apiUrl, id].join('/volunteer/'));
   }
 }
