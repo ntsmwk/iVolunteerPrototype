@@ -18,8 +18,10 @@ export class TaskDetailsComponent implements OnInit {
   task: Task;
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
+
   role;
-  isAlreadyReserved;
+  isAlreadyReserved: boolean;
+  isAlreadyImported: boolean;
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -54,11 +56,16 @@ export class TaskDetailsComponent implements OnInit {
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate)
         });
-        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved) => {
+
+        this.repositoryService.isTaskAlreadyImported(this.task).toPromise().then((isImported: boolean) => {
+          this.isAlreadyImported = isImported;
+        });
+
+        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved: boolean) => {
           this.isAlreadyReserved = isReserved;
         });
       });
-     }
+  }
 
 
   save() {
@@ -76,18 +83,16 @@ export class TaskDetailsComponent implements OnInit {
       .then((taskInteractions: TaskInteraction[]) => {
         this.repositoryService.importTask(taskInteractions[0])
           .toPromise()
-          .then(() => alert('Task is imported'));
+          .then(() => {
+            alert('Task is imported');
+            this.isAlreadyImported = true;
+          });
       });
   }
 
   reserve() {
     this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
-
-  assign() {
-    this.router.navigate(['/task/reservations/' + this.task.id]);
-  }
-
 
   start() {
     this.taskService.start(this.task).toPromise().then(() => this.loadData(this.task.id));
