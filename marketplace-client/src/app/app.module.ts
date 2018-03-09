@@ -28,6 +28,7 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
 import {VolunteerGuard} from './participant/volunteer.guard';
+import { TaskInteractionHistoryComponent } from './task-interaction/task-interaction-history/task-interaction-history.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import {VolunteerGuard} from './participant/volunteer.guard';
     TaskDetailsComponent,
     TaskTypeListComponent,
     TaskTypeCreateComponent,
-    TaskAssignComponent
+    TaskAssignComponent,
+    TaskInteractionHistoryComponent
   ],
   imports: [
     AppMaterialModule,

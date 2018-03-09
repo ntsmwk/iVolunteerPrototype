@@ -58,33 +58,6 @@
     </button>
   </div>
 
+  <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h3>Task-Interaction History</h3>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    <mat-table #table [dataSource]="dataSource">
-      <ng-container matColumnDef="operation">
-        <mat-header-cell *matHeaderCellDef>Operation</mat-header-cell>
-        <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.operation}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="timestamp">
-        <mat-header-cell *matHeaderCellDef>Timestamp</mat-header-cell>
-        <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.timestamp | date: 'MM/dd/yyyy'}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="comment">
-        <mat-header-cell *matHeaderCellDef>Comment</mat-header-cell>
-        <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.comment}}</mat-cell>
-      </ng-container>
-
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </mat-expansion-panel>
   <div>
