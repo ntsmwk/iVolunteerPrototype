@@ -34,28 +34,26 @@
   </form>
 
   <div *ngIf="role === 'EMPLOYEE'">
-    <div *ngIf="this.task.status !== 'FINISHED'">
-      <mat-divider></mat-divider>
-    </div>
     <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'"
             routerLink="/task/assign/{{this.task.id}}"
             ngModule="this.task.id" mat-raised-button>
       Assign Volunteers
     </button>
     <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" (click)="start()"
-            mat-raised-button> Start
+            mat-raised-button>Start
     </button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="finish()" mat-raised-button>Finish</button>
     <button *ngIf="this.task.status === 'STARTED'" (click)="cancel()" mat-raised-button>Cancel</button>
-    <mat-divider></mat-divider>
   </div>
 
   <div *ngIf="role === 'VOLUNTEER'">
     <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve
     </button>
-    <button *ngIf="this.task.status === 'FINISHED'" (click)="import()" mat-raised-button>Import</button>
+    <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
+    </button>
   </div>
 
-  <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
+  <mat-divider></mat-divider>
 
-  <div>
+  <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
+</div>
