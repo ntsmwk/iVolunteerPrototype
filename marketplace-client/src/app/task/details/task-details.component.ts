@@ -8,6 +8,7 @@ import {TaskType} from '../../task-type/task-type';
 import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
+import {DateAdapter, NativeDateAdapter} from '@angular/material';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -27,7 +28,8 @@ export class TaskDetailsComponent implements OnInit {
               private router: Router,
               private loginService: LoginService,
               private repositoryService: RepositoryService,
-              private taskInteractionService: TaskInteractionService) {
+              private taskInteractionService: TaskInteractionService,
+              private dateAdapter: DateAdapter<Date>) {
     this.taskDetailsForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required),
@@ -35,6 +37,8 @@ export class TaskDetailsComponent implements OnInit {
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('', Validators.required)
     });
+
+    this.dateAdapter.setLocale('de');
   }
 
   ngOnInit() {
@@ -58,7 +62,7 @@ export class TaskDetailsComponent implements OnInit {
           this.isAlreadyReserved = isReserved;
         });
       });
-     }
+  }
 
 
   save() {

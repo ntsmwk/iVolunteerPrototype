@@ -30,6 +30,8 @@ import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
 import {VolunteerGuard} from './participant/volunteer.guard';
 import { TaskInteractionHistoryComponent } from './task-interaction/task-interaction-history/task-interaction-history.component';
+import {GermanDateAdapter} from './_adapter/german-date-adapter';
+import {DateAdapter} from '@angular/material';
 
 
 @NgModule({
@@ -65,7 +67,8 @@ import { TaskInteractionHistoryComponent } from './task-interaction/task-interac
     TaskInteractionService,
     RepositoryService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
+    {provide: DateAdapter, useClass: GermanDateAdapter}
   ],
   bootstrap: [AppComponent]
 })

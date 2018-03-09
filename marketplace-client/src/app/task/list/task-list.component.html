@@ -34,12 +34,12 @@
 
   <ng-container matColumnDef="startDate">
     <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.startDate | date: 'MM/dd/yyyy'}}</mat-cell>
+    <mat-cell *matCellDef="let task">{{task.startDate | date: 'dd.MM.yyyy'}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="endDate">
     <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.endDate | date: 'MM/dd/yyyy'}}</mat-cell>
+    <mat-cell *matCellDef="let task">{{task.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

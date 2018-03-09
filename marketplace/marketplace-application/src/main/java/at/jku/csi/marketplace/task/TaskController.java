@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
-import at.jku.csi.marketplace.security.HasRoleEmployee;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
@@ -58,7 +57,6 @@ public class TaskController {
 		return new ArrayList<>(tasks);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);
@@ -68,7 +66,6 @@ public class TaskController {
 		return createdTask;
 	}
 
-	@HasRoleEmployee
 	@PutMapping("/task/{id}")
 	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
 		if (!taskRepository.exists(id)) {

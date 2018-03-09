@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {TaskInteraction} from '../task-interaction/task-interaction';
-import {Observable} from '../../../../../../prototype/marketplace-client/node_modules/rxjs/Observable';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class RepositoryService {

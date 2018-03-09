@@ -13,7 +13,7 @@
 
     <ng-container matColumnDef="timestamp">
       <mat-header-cell *matHeaderCellDef>Timestamp</mat-header-cell>
-      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.timestamp | date: 'MM/dd/yyyy'}}</mat-cell>
+      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.timestamp | date: 'dd.MM.yyyy HH:mm:ss'}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="comment">
