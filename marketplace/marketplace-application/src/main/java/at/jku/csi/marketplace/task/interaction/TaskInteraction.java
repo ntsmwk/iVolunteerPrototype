@@ -2,6 +2,7 @@ package at.jku.csi.marketplace.task.interaction;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +11,9 @@ import at.jku.csi.marketplace.task.Task;
 
 @Document
 public class TaskInteraction {
+
+	@Id
+	private String id;
 	@DBRef
 	private Task task;
 	@DBRef
@@ -20,11 +24,19 @@ public class TaskInteraction {
 
 	public TaskInteraction() {
 	}
-	
+
 	public TaskInteraction(Task task, TaskOperation operation, Date timestamp) {
 		this.task = task;
 		this.operation = operation;
 		this.timestamp = timestamp;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Task getTask() {

@@ -90,7 +90,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   assign() {
-    this.router.navigate(['/task/reservations/' + this.task.id ]);
+    this.router.navigate(['/task/reservations/' + this.task.id]);
   }
 
 
