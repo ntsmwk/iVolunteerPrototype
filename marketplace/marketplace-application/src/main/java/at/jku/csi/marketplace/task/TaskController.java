@@ -1,15 +1,12 @@
 package at.jku.csi.marketplace.task;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +77,6 @@ public class TaskController {
 		return taskRepository.save(task);
 	}
 
-	@Secured("EMPLOYEE")
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
@@ -90,7 +86,6 @@ public class TaskController {
 		updateTaskStatus(task, TaskStatus.STARTED);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task/{id}/finish")
 	public void finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
@@ -100,7 +95,6 @@ public class TaskController {
 		updateTaskStatus(task, TaskStatus.FINISHED);
 	}
 
-	@HasRoleEmployee
 	@PostMapping("/task/{id}/cancel")
 	public void cancelTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);

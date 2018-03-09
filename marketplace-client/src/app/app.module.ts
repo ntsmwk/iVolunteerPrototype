@@ -26,6 +26,9 @@ import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
 import {RepositoryService} from './_service/repository.service';
+import {TaskAssignComponent} from './task/assign/task-assign.component';
+import {EmployeeGuard} from './participant/employee.guard';
+import {VolunteerGuard} from './participant/volunteer.guard';
 
 
 @NgModule({
@@ -38,7 +41,8 @@ import {RepositoryService} from './_service/repository.service';
     TaskCreateComponent,
     TaskDetailsComponent,
     TaskTypeListComponent,
-    TaskTypeCreateComponent
+    TaskTypeCreateComponent,
+    TaskAssignComponent
   ],
   imports: [
     AppMaterialModule,
@@ -63,5 +67,6 @@ import {RepositoryService} from './_service/repository.service';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
 

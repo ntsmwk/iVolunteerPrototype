@@ -18,6 +18,10 @@ export class TaskInteractionService {
     return this.http.get('/rest/task/interaction?operation=FINISHED');
   }
 
+  findReservedVolunteersByTaskId(task: Task) {
+    return this.http.get([this.apiUrl, 'task', task.id, 'reserved'].join('/'));
+  }
+
   isTaskAlreadyReserved(task: Task) {
     return this.http.get([this.apiUrl, 'volunteer/isReserved', task.id].join('/'));
   }

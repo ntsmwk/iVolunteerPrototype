@@ -1,7 +1,10 @@
 package at.jku.csi.marketplace.task.interaction;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,7 @@ import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.security.ParticipantRole;
 import at.jku.csi.marketplace.task.Task;
 import at.jku.csi.marketplace.task.TaskRepository;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @RestController
 public class TaskInteractionController {
@@ -36,6 +40,19 @@ public class TaskInteractionController {
 			return taskInteractionRepository.findByTask(task);
 		}
 		return taskInteractionRepository.findByTaskAndOperation(task, operation);
+	}
+
+	@GetMapping("/task/{id}/reserved")
+	public ArrayList<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String id) {
+	Task task = taskRepository.findOne(id);
+		Set<Participant> volunteers = new HashSet<Participant>();
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
+		for (TaskInteraction taskInteraction : taskInteractions) {
+			if (taskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
+				volunteers.add(taskInteraction.getParticipant());
+			}
+		}
+		return Lists.newArrayList(volunteers);
 	}
 
 	@GetMapping("/volunteer/{id}/interaction")
