@@ -3,12 +3,11 @@ import {Task} from '../task';
 import {TaskService} from '../task.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
-import {TaskInteraction} from '../../task-interaction/task-interaction';
-import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskType} from '../../task-type/task-type';
 import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
+import {TaskInteraction} from '../../task-interaction/task-interaction';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -17,8 +16,6 @@ import {RepositoryService} from '../../_service/repository.service';
 export class TaskDetailsComponent implements OnInit {
 
   task: Task;
-  dataSource = new MatTableDataSource<TaskInteraction>();
-  displayedColumns = ['operation', 'timestamp', 'comment'];
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
   role;
@@ -61,10 +58,8 @@ export class TaskDetailsComponent implements OnInit {
           this.isAlreadyReserved = isReserved;
         });
       });
-    this.taskInteractionService.findByTask(<Task>{id: id})
-      .toPromise()
-      .then((taskInteractions: TaskInteraction[]) => this.dataSource.data = taskInteractions);
-  }
+     }
+
 
   save() {
     this.task.name = (<Task> (this.taskDetailsForm.value)).name;
