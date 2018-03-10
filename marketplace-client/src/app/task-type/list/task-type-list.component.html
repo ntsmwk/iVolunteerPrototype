@@ -11,6 +11,24 @@
     <mat-cell *matCellDef="let taskType">{{taskType.description}}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="requiredCompetences">
+    <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
+    <mat-cell *matCellDef="let taskType">
+      <span *ngFor="let requiredCompetence of taskType.requiredCompetences; let last = last">
+        {{requiredCompetence.name}}<span *ngIf="!last">, </span>
+      </span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="acquirableCompetences">
+    <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
+    <mat-cell *matCellDef="let taskType">
+      <span *ngFor="let acquirableCompetence of taskType.acquirableCompetences; let last = last">
+        {{acquirableCompetence.name}}<span *ngIf="!last">, </span>
+      </span>
+    </mat-cell>
+  </ng-container>
+
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
