@@ -1,7 +1,11 @@
 
 package at.jku.csi.marketplace.blockchain;
 
+import static java.text.MessageFormat.format;
+
+import java.text.MessageFormat;
 import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +21,12 @@ public class BlockchainRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
-	private HashGenerator hashGenerator;
+	private HashObjectGenerator hashGenerator;
 
-	public boolean isSimpleHashInBc(IHashObject hash) {
-		ResponseEntity<SimpleHash[]> responseEntity = restTemplate.getForEntity(
-				url + "/api/queries/findSimpleHash?hash=" + hashGenerator.sha256(hash), SimpleHash[].class);
+	public boolean isSimpleHashInBc(IHashObject hashObject) {
+		String hash = hashGenerator.sha256(hashObject);
+		String requestUrl = format("{0}/api/queries/findSimpleHash?hash={1}", url, hash);
+		ResponseEntity<SimpleHash[]> responseEntity = restTemplate.getForEntity(requestUrl, SimpleHash[].class);
 
 		SimpleHash[] objects = responseEntity.getBody();
 		if (Arrays.asList(objects).isEmpty()) {
@@ -33,11 +38,12 @@ public class BlockchainRestClient {
 	}
 
 	public void postSimpleHash(IHashObject hash) {
-		SimpleHash s = new SimpleHash(hashGenerator.sha256(hash));
+		SimpleHash simpleHash = new SimpleHash(hashGenerator.sha256(hash));
 
 		try {
 			System.out.println(hashGenerator.sha256(hash));
-			restTemplate.postForObject(url + "/api/at.jku.cis.simpleHash", s, SimpleHash.class);
+			String requestUrl = MessageFormat.format("{0}/api/at.jku.cis.simpleHash", url);
+			restTemplate.postForObject(requestUrl, simpleHash, SimpleHash.class);
 
 		} catch (Exception e) {
 			System.out.println("Hash not posted, might already exist!");

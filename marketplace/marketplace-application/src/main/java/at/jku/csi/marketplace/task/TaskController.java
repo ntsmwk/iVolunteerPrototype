@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.ws.rs.ForbiddenException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import at.jku.csi.marketplace.blockchain.BlockchainRestClient;
-import at.jku.csi.marketplace.exception.BadRequestException;
+import at.jku.csi.marketplace.exception.ForbiddenException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
@@ -61,22 +62,25 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/{id}/sync")
-	public CompletedTask syncTask(@PathVariable("id") String id) {
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTaskAndOperation(findById(id),
+	public CompletedTask syncTask(@PathVariable("id") String taskId) {
+		Task task = taskRepository.findOne(taskId);
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTaskAndOperation(task,
 				TaskStatus.FINISHED);
 
-		if (!taskInteractions.isEmpty()) {
-			TaskInteraction ti = taskInteractions.get(0);
-
-			CompletedTask json = new CompletedTask(ti.getId(), ti.getTask().getId(), ti.getParticipant().getId(),
-					ti.getTimestamp());
-
-			blockchainRestClient.postSimpleHash(json);
-			return json;
-
+		if (taskInteractions.size() != 1) {
+			throw new ForbiddenException();
 		}
+		TaskInteraction taskInteraction = taskInteractions.get(0);
 
-		throw new ForbiddenException();
+		CompletedTask completedTask = new CompletedTask();
+		completedTask.setInteractionId(taskInteraction.getId());
+		completedTask.setTaskId(taskInteraction.getTask().getId());
+		completedTask.setParticipantId(taskInteraction.getParticipant().getId());
+		completedTask.setTimestamp(taskInteraction.getTimestamp());
+		
+		blockchainRestClient.postSimpleHash(completedTask);
+		
+		return completedTask;
 	}
 
 	@PostMapping("/task")
@@ -88,47 +92,6 @@ public class TaskController {
 		return createdTask;
 	}
 
-	@PutMapping("/task/{id}")
-	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
-		if (!taskRepository.exists(id)) {
-			throw new NotAcceptableException();
-		}
-		return taskRepository.save(task);
-	}
-
-	@PostMapping("/task/{id}/start")
-	public void startTask(@PathVariable("id") String id) {
-		Task task = taskRepository.findOne(id);
-		if (task == null || !isCreatedOrCanceledTask(task)) {
-			throw new BadRequestException();
-		}
-		updateTaskStatus(task, TaskStatus.STARTED);
-	}
-
-	@PostMapping("/task/{id}/finish")
-	public void finishTask(@PathVariable("id") String id) {
-		Task task = taskRepository.findOne(id);
-		if (task == null || !isStartedTask(task)) {
-			throw new BadRequestException();
-		}
-		updateTaskStatus(task, TaskStatus.FINISHED);
-	}
-
-	@PostMapping("/task/{id}/cancel")
-	public void cancelTask(@PathVariable("id") String id) {
-		Task task = taskRepository.findOne(id);
-		if (task == null || !isStartedTask(task)) {
-			throw new BadRequestException();
-		}
-		updateTaskStatus(task, TaskStatus.CANCELED);
-	}
-
-	private void updateTaskStatus(Task task, TaskStatus taskStatus) {
-		task.setStatus(taskStatus);
-		Task updatedTask = taskRepository.save(task);
-		insertTaskInteraction(updatedTask);
-	}
-
 	private void insertTaskInteraction(Task task) {
 		TaskInteraction taskInteraction = new TaskInteraction();
 		taskInteraction.setTask(task);
@@ -138,17 +101,16 @@ public class TaskController {
 		taskInteractionRepository.insert(taskInteraction);
 	}
 
-	private boolean isStartedTask(Task task) {
-		return TaskStatus.STARTED == task.getStatus();
-	}
-
-	private boolean isCreatedOrCanceledTask(Task task) {
-		return TaskStatus.CREATED == task.getStatus() || TaskStatus.CANCELED == task.getStatus();
+	@PutMapping("/task/{id}")
+	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
+		if (!taskRepository.exists(id)) {
+			throw new NotAcceptableException();
+		}
+		return taskRepository.save(task);
 	}
 
 	@DeleteMapping("/task/{id}")
 	public void deleteTask(@PathVariable("id") String id) {
 		taskRepository.delete(id);
 	}
-
 }

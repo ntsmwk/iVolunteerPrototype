@@ -10,11 +10,7 @@ public class CompletedTask implements IHashObject {
 	private String participantId;
 	private Date timestamp;
 
-	public CompletedTask(String interactionId, String taskId, String participantId, Date timestamp) {
-		this.interactionId = interactionId;
-		this.taskId = taskId;
-		this.participantId = participantId;
-		this.timestamp = timestamp;
+	public CompletedTask() {
 	}
 
 	public String getInteractionId() {
@@ -56,9 +52,7 @@ public class CompletedTask implements IHashObject {
 		sb.append(taskId);
 		sb.append(participantId);
 		sb.append(timestamp);
-
 		return sb.toString();
-
 	}
 
 }

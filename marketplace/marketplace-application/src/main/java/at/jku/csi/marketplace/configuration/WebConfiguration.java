@@ -1,4 +1,4 @@
-package at.jku.csi.marketplace;
+package at.jku.csi.marketplace.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

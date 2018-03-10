@@ -1,4 +1,4 @@
-package at.jku.csi.marketplace.mongo;
+package at.jku.csi.marketplace.configuration;
 
 import java.net.URI;
 import java.util.Arrays;

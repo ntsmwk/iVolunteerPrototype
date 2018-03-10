@@ -5,29 +5,30 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.stereotype.Service;
 
-
 @Service
-public class HashGenerator {
+public class HashObjectGenerator {
+
+	private static final String ALGORITHM = "SHA-256";
 
 	public String sha256(IHashObject object) {
-		MessageDigest md = null;
+		MessageDigest messageDigest = null;
 
 		try {
-			md = MessageDigest.getInstance("SHA-256");
-			md.update(object.toHashString().getBytes());
-
+			messageDigest = MessageDigest.getInstance(ALGORITHM);
+			messageDigest.update(object.toHashString().getBytes());
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
-		return bytesToHex(md.digest());
+		return bytesToHex(messageDigest.digest());
 
 	}
 
 	private String bytesToHex(byte[] bytes) {
 		StringBuffer result = new StringBuffer();
-		for (byte b : bytes)
+		for (byte b : bytes) {
 			result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+		}
 		return result.toString();
 	}
 

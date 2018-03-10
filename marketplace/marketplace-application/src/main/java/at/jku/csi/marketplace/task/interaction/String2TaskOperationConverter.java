@@ -1,5 +1,8 @@
 package at.jku.csi.marketplace.task.interaction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 
@@ -8,20 +11,23 @@ import at.jku.csi.marketplace.task.TaskStatus;
 @ReadingConverter
 public class String2TaskOperationConverter implements Converter<String, TaskOperation> {
 
+	private final Map<String, TaskOperation> string2TaskOperation = new HashMap<>();
+
+	public String2TaskOperationConverter() {
+		initalize();
+	}
+
+	private void initalize() {
+		for (TaskStatus status : TaskStatus.values()) {
+			string2TaskOperation.put(status.name(), status);
+		}
+		for (TaskVolunteerOperation volunteerOperation : TaskVolunteerOperation.values()) {
+			string2TaskOperation.put(volunteerOperation.name(), volunteerOperation);
+		}
+	}
+
 	@Override
 	public TaskOperation convert(String value) {
-		try {
-			if (TaskStatus.valueOf(value) != null) {
-				return TaskStatus.valueOf(value);
-			}
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			if (TaskVolunteerOperation.valueOf(value) != null) {
-				return TaskVolunteerOperation.valueOf(value);
-			}
-		} catch (IllegalArgumentException e) {
-		}
-		return null;
+		return string2TaskOperation.get(value);
 	}
 }
