@@ -84,20 +84,27 @@ export class TaskDetailsComponent implements OnInit {
     this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
-  assign() {
-    this.router.navigate(['/task/reservations/' + this.task.id ]);
+  unreserve() {
+    this.taskInteractionService.unreserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
-
 
   start() {
     this.taskService.start(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  suspend() {
+    this.taskService.suspend(this.task).toPromise().then(()=> this.loadData(this.task.id));
+  }
+
+  resume() {
+    this.taskService.resume(this.task).toPromise().then(()=> this.loadData(this.task.id));
   }
 
   finish() {
     this.taskService.finish(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
-  cancel() {
-    this.taskService.cancel(this.task).toPromise().then(() => this.loadData(this.task.id));
+  abort() {
+    this.taskService.abort(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 }

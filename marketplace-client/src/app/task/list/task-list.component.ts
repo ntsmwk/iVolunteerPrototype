@@ -20,9 +20,10 @@ export class TaskListComponent implements OnInit {
   status = [
     {value: '', ViewValue: 'ALL'},
     {value: 'CREATED', ViewValue: 'CREATED'},
-    {value: 'STARTED', ViewValue: 'STARTED'},
+    {value: 'RUNNING', ViewValue: 'RUNNING'},
+    {value: 'SUSPENDED', ViewValue: 'SUSPENDED'},
     {value: 'FINISHED', ViewValue: 'FINISHED'},
-    {value: 'CANCELED', ViewValue: 'CANCELED'}
+    {value: 'ABORTED', ViewValue: 'ABORTED'}
   ];
 
   selectedValue: string = this.status[0].value;

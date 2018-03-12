@@ -37,25 +37,33 @@
   </form>
 
   <div *ngIf="participantRole === 'EMPLOYEE'">
-    <div *ngIf="this.task.status !== 'FINISHED'">
+    <div *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'">
       <mat-divider></mat-divider>
     </div>
-    <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" routerLink="/task/assign/{{this.task.id}}"
-            ngModule="this.task.id" mat-raised-button>
-      Assign Volunteers
+    <button *ngIf="this.task.status === 'CREATED'" routerLink="/task/assign/{{this.task.id}}" ngModule="this.task.id" mat-raised-button>
+      Manage Assignments
     </button>
-    <button *ngIf="this.task.status === 'CREATED' || this.task.status === 'CANCELED'" (click)="start()"
-            mat-raised-button>
+
+    <button *ngIf="this.task.status === 'CREATED'" (click)="start()" mat-raised-button>
       Start
     </button>
-    <button *ngIf="this.task.status === 'STARTED'" (click)="finish()" mat-raised-button>Finish</button>
-    <button *ngIf="this.task.status === 'STARTED'" (click)="cancel()" mat-raised-button>Cancel</button>
+
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="suspend()" mat-raised-button>
+      Suspend
+    </button>
+
+    <button *ngIf="this.task.status === 'SUSPENDED'" (click)="resume()" mat-raised-button>
+      Resume
+    </button>
+
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="finish()" mat-raised-button>Finish</button>
+    <button *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'" (click)="abort()" mat-raised-button>Abort</button>
     <mat-divider></mat-divider>
   </div>
 
   <div *ngIf="participantRole === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve
-    </button>
+    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve</button>
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved" (click)="unreserve()" mat-raised-button>Cancel Reservation</button>
   </div>
 
 
@@ -81,7 +89,6 @@
         <mat-header-cell *matHeaderCellDef>Comment</mat-header-cell>
         <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.comment}}</mat-cell>
       </ng-container>
-
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

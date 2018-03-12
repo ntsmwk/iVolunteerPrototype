@@ -28,6 +28,7 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
 import {VolunteerGuard} from './participant/volunteer.guard';
+import {ParticipantService} from './participant/participant.service';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import {VolunteerGuard} from './participant/volunteer.guard';
     TaskService,
     TaskTypeService,
     TaskInteractionService,
+    ParticipantService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
   ],
