@@ -25,28 +25,46 @@ public class TaskOperationController {
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
-		if (task == null || !isCreatedOrCanceledTask(task)) {
+		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
-		updateTaskStatus(task, TaskStatus.STARTED);
+		updateTaskStatus(task, TaskStatus.RUNNING);
+	}
+	
+	@PostMapping("/task/{id}/suspend")
+	public void suspendTask(@PathVariable("id") String id) {
+		Task task = taskRepository.findOne(id);
+		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
+			throw new BadRequestException();
+		}
+		updateTaskStatus(task, TaskStatus.SUSPENDED);
+	}
+	
+	@PostMapping("/task/{id}/resume")
+	public void resumeTask(@PathVariable("id") String id) {
+		Task task = taskRepository.findOne(id);
+		if (task == null || task.getStatus() != TaskStatus.SUSPENDED) {
+			throw new BadRequestException();
+		}
+		updateTaskStatus(task, TaskStatus.RUNNING);
 	}
 
 	@PostMapping("/task/{id}/finish")
 	public void finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
-		if (task == null || !isStartedTask(task)) {
+		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
 		}
 		updateTaskStatus(task, TaskStatus.FINISHED);
 	}
 
-	@PostMapping("/task/{id}/cancel")
-	public void cancelTask(@PathVariable("id") String id) {
+	@PostMapping("/task/{id}/abort")
+	public void abortTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
-		if (task == null || !isStartedTask(task)) {
+		if (task == null || task.getStatus() == TaskStatus.FINISHED) {
 			throw new BadRequestException();
 		}
-		updateTaskStatus(task, TaskStatus.CANCELED);
+		updateTaskStatus(task, TaskStatus.ABORTED);
 	}
 
 	private void updateTaskStatus(Task task, TaskStatus taskStatus) {
@@ -63,13 +81,4 @@ public class TaskOperationController {
 		taskInteraction.setOperation(task.getStatus());
 		taskInteractionRepository.insert(taskInteraction);
 	}
-
-	private boolean isStartedTask(Task task) {
-		return TaskStatus.STARTED == task.getStatus();
-	}
-
-	private boolean isCreatedOrCanceledTask(Task task) {
-		return TaskStatus.CREATED == task.getStatus() || TaskStatus.CANCELED == task.getStatus();
-	}
-
 }

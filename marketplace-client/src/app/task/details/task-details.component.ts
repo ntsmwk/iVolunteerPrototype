@@ -8,7 +8,7 @@ import {TaskType} from '../../task-type/task-type';
 import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
-import {DateAdapter, NativeDateAdapter} from '@angular/material';
+import {DateAdapter} from '@angular/material';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -61,9 +61,9 @@ export class TaskDetailsComponent implements OnInit {
           endDate: new Date(task.endDate)
         });
 
-        this.repositoryService.isTaskAlreadyImported(this.task).toPromise().then((isImported: boolean) => {
-          this.isAlreadyImported = isImported;
-        });
+        //this.repositoryService.isTaskAlreadyImported(this.task).toPromise().then((isImported: boolean) => {
+        //  this.isAlreadyImported = isImported;
+        //});
 
         this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved: boolean) => {
           this.isAlreadyReserved = isReserved;
@@ -94,6 +94,10 @@ export class TaskDetailsComponent implements OnInit {
       });
   }
 
+  unreserve() {
+    this.taskInteractionService.unreserve(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
   reserve() {
     this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
@@ -102,12 +106,20 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.start(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
+  suspend() {
+    this.taskService.suspend(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  resume() {
+    this.taskService.resume(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
   finish() {
     this.taskService.finish(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
-  cancel() {
-    this.taskService.cancel(this.task).toPromise().then(() => this.loadData(this.task.id));
+  abort() {
+    this.taskService.abort(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
   sync() {

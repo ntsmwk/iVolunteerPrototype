@@ -42,12 +42,20 @@ export class TaskService {
     return this.http.post([this.apiUrl, task.id, 'start'].join('/'), {});
   }
 
+  suspend(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'suspend'].join('/'), {});
+  }
+
+  resume(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'resume'].join('/'), {});
+  }
+
   finish(task: Task) {
     return this.http.post([this.apiUrl, task.id, 'finish'].join('/'), {});
   }
 
-  cancel(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'cancel'].join('/'), {});
+  abort(task: Task) {
+    return this.http.post([this.apiUrl, task.id, 'abort'].join('/'), {});
   }
 
   sync(task: Task) {

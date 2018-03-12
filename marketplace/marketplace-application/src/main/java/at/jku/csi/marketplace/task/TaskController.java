@@ -91,7 +91,7 @@ public class TaskController {
 		insertTaskInteraction(createdTask);
 		return createdTask;
 	}
-
+	
 	private void insertTaskInteraction(Task task) {
 		TaskInteraction taskInteraction = new TaskInteraction();
 		taskInteraction.setTask(task);
