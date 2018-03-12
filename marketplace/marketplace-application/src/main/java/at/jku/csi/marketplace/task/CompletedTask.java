@@ -2,6 +2,9 @@ package at.jku.csi.marketplace.task;
 
 import java.util.Date;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import at.jku.csi.marketplace.blockchain.IHashObject;
 
 public class CompletedTask implements IHashObject {
@@ -47,12 +50,13 @@ public class CompletedTask implements IHashObject {
 
 	@Override
 	public String toHashString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(interactionId);
-		sb.append(taskId);
-		sb.append(participantId);
-		sb.append(timestamp);
-		return sb.toString();
+		JsonObject json = new JsonObject();
+		json.addProperty("interactionId", interactionId);
+		json.addProperty("taskId", taskId);
+		json.addProperty("participantId", participantId);
+		json.addProperty("timestamp", timestamp.toString());
+
+		return json.toString();
 	}
 
 }

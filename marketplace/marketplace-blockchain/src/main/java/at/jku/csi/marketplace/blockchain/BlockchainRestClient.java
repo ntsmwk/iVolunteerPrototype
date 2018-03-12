@@ -50,15 +50,18 @@ public class BlockchainRestClient {
 		}
 	}
 
-	/*
-	 * public List<GlobalHash> getGlobalHash(String userId) {
-	 * ResponseEntity<GlobalHash[]> responseEntity = restTemplate .getForEntity(url
-	 * + "/api/queries/findGlobalHashByUserId?userId=" + userId,
-	 * GlobalHash[].class); return Arrays.asList(responseEntity.getBody());
-	 * 
-	 * }
-	 * 
-	 */
+	public boolean isGlobalHashInBc(String userId) {
+		ResponseEntity<GlobalHash[]> responseEntity = restTemplate
+				.getForEntity(url + "/api/queries/findGlobalHashByUserId?userId=" + userId, GlobalHash[].class);
+
+		GlobalHash[] objects = responseEntity.getBody();
+		if (Arrays.asList(objects).isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	/*
 	 * public void postGlobalHash(GlobalHash h) { try {
 	 * restTemplate.postForEntity(url + "/api/at.jku.cis.globalHash", h,
