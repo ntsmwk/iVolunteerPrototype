@@ -1,5 +1,7 @@
 package at.jku.csi.marketplace.security;
 
+import static at.jku.csi.marketplace.security.ParticipantRole.EMPLOYEE;
+import static at.jku.csi.marketplace.security.ParticipantRole.VOLUNTEER;
 import static java.util.Arrays.asList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Employee employee = employeeRepository.findByUsername(username);
 		if (employee != null) {
-			return new User(employee.getUsername(), employee.getPassword(), asList(ParticipantRole.EMPLOYEE));
+			return new User(employee.getUsername(), employee.getPassword(), asList(EMPLOYEE));
 		}
 
 		Volunteer volunteer = volunteerRepository.findByUsername(username);
 		if (volunteer != null) {
-			return new User(volunteer.getUsername(), volunteer.getPassword(), asList(ParticipantRole.VOLUNTEER));
+			return new User(volunteer.getUsername(), volunteer.getPassword(), asList(VOLUNTEER));
 		}
 		
 		throw new UsernameNotFoundException(username);

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.csi.marketplace.participant.Participant;
@@ -34,13 +35,18 @@ public class TaskInteractionController {
 
 	@Autowired
 	private LoginService loginService;
-
+	
 	@Autowired
 	private VolunteerRepository volunteerRepository;
 
-	@GetMapping("/task/{id}/interaction")
-	public List<TaskInteraction> findByTaskId(@PathVariable("id") String id) {
-		return taskInteractionRepository.findByTask(id);
+	@GetMapping("/task/{taskId}/interaction")
+	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
+			@RequestParam(value = "operation", required = false) TaskOperation operation) {
+		Task task = taskRepository.findOne(taskId);
+		if (operation == null) {
+			return taskInteractionRepository.findByTask(task);
+		}
+		return taskInteractionRepository.findByTaskAndOperation(task, operation);
 	}
 
 	@GetMapping("/volunteer/{id}/interaction")
@@ -50,30 +56,18 @@ public class TaskInteractionController {
 
 	@GetMapping("/task/{id}/reserved")
 	public ArrayList<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String id) {
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(id);
-		return findReservedVolunteers(taskInteractions);
-	}
 
-	private ArrayList<Participant> findReservedVolunteers(List<TaskInteraction> taskInteractions) {
+		Task task = taskRepository.findOne(id);
 		Set<Participant> volunteers = new HashSet<Participant>();
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		for (TaskInteraction taskInteraction : taskInteractions) {
 			if (isReserved(taskInteraction)) {
 				volunteers.add(taskInteraction.getParticipant());
-			} else if (isUnreserved(taskInteraction)) {
+			} else if (isUnreserved(taskInteraction) || taskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
 				volunteers.remove(taskInteraction.getParticipant());
 			}
 		}
 		return Lists.newArrayList(volunteers);
-	}
-
-	private boolean isReserved(TaskInteraction taskInteraction) {
-		return taskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
-				|| taskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED;
-	}
-
-	private boolean isUnreserved(TaskInteraction taskInteraction) {
-		return taskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED
-				|| taskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED;
 	}
 
 	@GetMapping("/volunteer/isReserved/{id}")
@@ -126,7 +120,7 @@ public class TaskInteractionController {
 
 	@GetMapping("/task/{id}/assigned")
 	public ArrayList<Participant> findAssignedVolunteersByTaskId(@PathVariable("id") String id) {
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(id);
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(taskRepository.findOne(id));
 		return findAssignedVolunteers(taskInteractions);
 	}
 
@@ -148,9 +142,10 @@ public class TaskInteractionController {
 		createTaskInteraction(taskRepository.findOne(taskId), volunteerRepository.findOne(volunteerId),
 				TaskVolunteerOperation.ASSIGNED);
 	}
-	
+
 	@PostMapping("/task/{taskId}/unassign/{volunteerId}")
-	public void unassignForTask(@PathVariable("taskId") String taskId, @PathVariable("volunteerId") String volunteerId) {
+	public void unassignForTask(@PathVariable("taskId") String taskId,
+			@PathVariable("volunteerId") String volunteerId) {
 		createTaskInteraction(taskRepository.findOne(taskId), volunteerRepository.findOne(volunteerId),
 				TaskVolunteerOperation.UNASSIGNED);
 	}
@@ -167,14 +162,23 @@ public class TaskInteractionController {
 		}
 		return isReserved;
 	}
+	
+	private boolean isReserved(TaskInteraction taskInteraction) {
+		return taskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+				|| taskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED;
+	}
+
+	private boolean isUnreserved(TaskInteraction taskInteraction) {
+		return taskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED;
+	}
 
 	private boolean alreadyAssigned(List<TaskInteraction> taskVolunteerInteractions) {
 		boolean isAssigned = false;
 		for (TaskInteraction taskInteraction : taskVolunteerInteractions) {
-			if (taskInteraction.getOperation().equals(TaskVolunteerOperation.ASSIGNED)) {
+			if (taskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
 				isAssigned = true;
 			}
-			if (taskInteraction.getOperation().equals(TaskVolunteerOperation.UNASSIGNED)) {
+			if (taskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
 				isAssigned = false;
 			}
 		}

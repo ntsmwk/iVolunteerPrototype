@@ -3,11 +3,12 @@ import {Task} from '../task';
 import {TaskService} from '../task.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
-import {TaskInteraction} from '../../task-interaction/task-interaction';
-import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskType} from '../../task-type/task-type';
 import {LoginService} from '../../login/login.service';
+import {RepositoryService} from '../../_service/repository.service';
+import {TaskInteraction} from '../../task-interaction/task-interaction';
+import {DateAdapter} from '@angular/material';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -16,19 +17,21 @@ import {LoginService} from '../../login/login.service';
 export class TaskDetailsComponent implements OnInit {
 
   task: Task;
-  dataSource = new MatTableDataSource<TaskInteraction>();
-  displayedColumns = ['operation', 'timestamp', 'comment'];
   taskDetailsForm: FormGroup;
   taskTypes: TaskType[];
-  participantRole;
-  isAlreadyReserved;
+
+  role;
+  isAlreadyReserved: boolean;
+  isAlreadyImported: boolean;
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private taskService: TaskService,
               private router: Router,
               private loginService: LoginService,
-              private taskInteractionService: TaskInteractionService) {
+              private repositoryService: RepositoryService,
+              private taskInteractionService: TaskInteractionService,
+              private dateAdapter: DateAdapter<Date>) {
     this.taskDetailsForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required),
@@ -37,17 +40,12 @@ export class TaskDetailsComponent implements OnInit {
       'endDate': new FormControl('', Validators.required)
     });
 
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => {
-      this.participantRole = role;
-    });
-
+    this.dateAdapter.setLocale('de');
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.loadData(params['id']);
-
-    });
+    this.route.params.subscribe(params => this.loadData(params['id']));
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.role = role);
   }
 
   private loadData(id: string) {
@@ -62,14 +60,17 @@ export class TaskDetailsComponent implements OnInit {
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate)
         });
-        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved) => {
+
+        //this.repositoryService.isTaskAlreadyImported(this.task).toPromise().then((isImported: boolean) => {
+        //  this.isAlreadyImported = isImported;
+        //});
+
+        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved: boolean) => {
           this.isAlreadyReserved = isReserved;
         });
       });
-    this.taskInteractionService.findById(<Task>{id: id})
-      .toPromise()
-      .then((taskInteractions: TaskInteraction[]) => this.dataSource.data = taskInteractions);
   }
+
 
   save() {
     this.task.name = (<Task> (this.taskDetailsForm.value)).name;
@@ -80,12 +81,25 @@ export class TaskDetailsComponent implements OnInit {
     this.taskService.save(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
-  reserve() {
-    this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
+  import() {
+    this.taskInteractionService.findFinishedByTask(this.task)
+      .toPromise()
+      .then((taskInteractions: TaskInteraction[]) => {
+        this.repositoryService.importTask(taskInteractions[0])
+          .toPromise()
+          .then(() => {
+            alert('Task is imported');
+            this.isAlreadyImported = true;
+          });
+      });
   }
 
   unreserve() {
     this.taskInteractionService.unreserve(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  reserve() {
+    this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
   start() {
@@ -93,11 +107,11 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   suspend() {
-    this.taskService.suspend(this.task).toPromise().then(()=> this.loadData(this.task.id));
+    this.taskService.suspend(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
   resume() {
-    this.taskService.resume(this.task).toPromise().then(()=> this.loadData(this.task.id));
+    this.taskService.resume(this.task).toPromise().then(() => this.loadData(this.task.id));
   }
 
   finish() {
@@ -106,5 +120,12 @@ export class TaskDetailsComponent implements OnInit {
 
   abort() {
     this.taskService.abort(this.task).toPromise().then(() => this.loadData(this.task.id));
+  }
+
+  sync() {
+    this.taskService.sync(this.task).toPromise()
+      .then((value) => {
+        console.dirxml(value);
+      });
   }
 }

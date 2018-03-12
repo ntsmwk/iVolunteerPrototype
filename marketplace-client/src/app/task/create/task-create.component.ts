@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Task} from '../task';
 import {TaskService} from '../task.service';
@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
   templateUrl: './task-create.component.html',
   styleUrls: ['./task-create.component.css']
 })
-export class TaskCreateComponent {
+export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
 
   taskTypes: TaskType[];
@@ -29,9 +29,7 @@ export class TaskCreateComponent {
   }
 
   ngOnInit() {
-    this.taskTypeService.findAll()
-      .toPromise()
-      .then((taskTypes: TaskType[]) => this.taskTypes = taskTypes);
+    this.taskTypeService.findAll().toPromise().then((taskTypes: TaskType[]) => this.taskTypes = taskTypes);
   }
 
   save() {

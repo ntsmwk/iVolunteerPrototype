@@ -49,7 +49,6 @@ export class TaskAssignComponent implements OnInit {
       });
   }
 
-
   handleChange(volunteer: AssignmentVolunteer, x) {
     this.participantService.findVolunteerById(volunteer.id).toPromise().then((participant: Participant) => {
       switch (volunteer.isAssigned) {

@@ -25,10 +25,15 @@ import {LoginComponent} from './login/login.component';
 import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
+import {RepositoryService} from './_service/repository.service';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
 import {VolunteerGuard} from './participant/volunteer.guard';
 import {ParticipantService} from './participant/participant.service';
+import {TaskInteractionHistoryComponent} from './task-interaction/task-interaction-history/task-interaction-history.component';
+import {GermanDateAdapter} from './_adapter/german-date-adapter';
+import {DateAdapter} from '@angular/material';
+import {CompetenceService} from './competence/competence.service';
 
 
 @NgModule({
@@ -42,7 +47,8 @@ import {ParticipantService} from './participant/participant.service';
     TaskDetailsComponent,
     TaskTypeListComponent,
     TaskTypeCreateComponent,
-    TaskAssignComponent
+    TaskAssignComponent,
+    TaskInteractionHistoryComponent
   ],
   imports: [
     AppMaterialModule,
@@ -57,13 +63,16 @@ import {ParticipantService} from './participant/participant.service';
     TokenGuard,
     EmployeeGuard,
     VolunteerGuard,
+    CompetenceService,
     LoginService,
     TaskService,
     TaskTypeService,
     TaskInteractionService,
     ParticipantService,
+    RepositoryService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
+    {provide: DateAdapter, useClass: GermanDateAdapter}
   ],
   bootstrap: [AppComponent]
 })

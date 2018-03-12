@@ -34,20 +34,21 @@ export class TaskListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.participant = participant;
-      this.writeDataSource();
-    });
+    Promise.all([
+      this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role),
+      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+        this.participant = participant;
+      })
+    ]).then(() => this.loadTasks());
   }
 
-  writeDataSource() {
+  loadTasks() {
     if (this.participantRole === 'EMPLOYEE') {
       this.taskService.findAll()
         .toPromise()
         .then((tasks: Task[]) => this.dataSource.data = tasks);
     } else {
-      this.taskService.findByVolunteerId(this.participant.id)
+      this.taskService.findAllByParticipant(this.participant.id)
         .toPromise()
         .then((tasks: Task[]) => this.dataSource.data = tasks);
     }

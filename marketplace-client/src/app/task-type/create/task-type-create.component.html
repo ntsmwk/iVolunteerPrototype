@@ -3,12 +3,24 @@
   <h3> Create Task-Type</h3>
 
   <mat-form-field class="full-width">
-    <input matInput placeholder="Name" [formControl]="taskTypeForm.controls['name']">
+    <input matInput placeholder="Name" formControlName="name">
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <textarea matInput placeholder="Description"
-              [formControl]="taskTypeForm.controls['description']"></textarea>
+              formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Required Competences" formControlName="requiredCompetences" multiple>
+      <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Acquirable Competences" formControlName="acquirableCompetences" multiple>
+      <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <button type="submit" mat-raised-button color="primary">Save</button>
