@@ -1,5 +1,6 @@
 <div *ngIf="task">
   <h3 (click)="import()">Task Details</h3>
+
   <form class="task-form" (submit)="save()" [formGroup]="taskDetailsForm">
 
     <mat-form-field class="full-width">
@@ -29,7 +30,6 @@
       <mat-datepicker #endDatePicker [hidden]="role === 'VOLUNTEER'"></mat-datepicker>
     </mat-form-field>
 
-
     <button type="submit" [hidden]="role === 'VOLUNTEER'" mat-raised-button color="primary">Update</button>
   </form>
 
@@ -56,7 +56,5 @@
   <mat-divider></mat-divider>
 
   <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
-
-
 
 </div>
