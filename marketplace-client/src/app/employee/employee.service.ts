@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable()
-export class VolunteerService {
+export class EmployeeService {
 
-  private apiUrl = '/rest/volunteer';
+  private apiUrl = '/rest/employee';
 
   constructor(private http: HttpClient) {
   }

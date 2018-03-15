@@ -17,11 +17,11 @@ export class RepositoryService {
     return this.http.get([this.apiUrl, 'profile'].join('/'));
   }
 
-  getTasks() {
+  findAllTasks() {
     return this.http.get([this.apiUrl, 'tasks'].join('/'));
   }
 
-  isTaskAlreadyImported(task: Task) {
+  isTaskImported(task: Task) {
     const observable = new Observable(subscriber => {
       const successFunction = (value: boolean) => {
         subscriber.next(value);
@@ -46,11 +46,11 @@ export class RepositoryService {
     return observable;
   }
 
-  importTask(taskInteraction: TaskInteraction) {
+  saveTask(taskInteraction: TaskInteraction) {
     const localTask = {
       'id': taskInteraction.id,
-      'taskId': taskInteraction.task.id,
-      'participantId': taskInteraction.participant.id,
+      'task': {'id': taskInteraction.task.id},
+      'participant': {'id': taskInteraction.participant.id},
       'timestamp': taskInteraction.timestamp
     };
 

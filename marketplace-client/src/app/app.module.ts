@@ -27,13 +27,15 @@ import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
 import {RepositoryService} from './_service/repository.service';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
-import {EmployeeGuard} from './participant/employee.guard';
+import {EmployeeGuard} from './employee/employee.guard';
 import {VolunteerGuard} from './volunteer/volunteer.guard';
 import {TaskInteractionHistoryComponent} from './task-interaction/history/task-interaction-history.component';
 import {GermanDateAdapter} from './_adapter/german-date-adapter';
 import {DateAdapter} from '@angular/material';
 import {CompetenceService} from './competence/competence.service';
 import {VolunteerService} from './volunteer/volunteer.service';
+import {VolunteerRepositoryComponent} from './volunteer/repository/volunteer-repository.component';
+import {EmployeeService} from './employee/employee.service';
 
 
 @NgModule({
@@ -48,7 +50,8 @@ import {VolunteerService} from './volunteer/volunteer.service';
     TaskTypeListComponent,
     TaskTypeCreateComponent,
     TaskAssignComponent,
-    TaskInteractionHistoryComponent
+    TaskInteractionHistoryComponent,
+    VolunteerRepositoryComponent
   ],
   imports: [
     AppMaterialModule,
@@ -69,6 +72,7 @@ import {VolunteerService} from './volunteer/volunteer.service';
     TaskTypeService,
     TaskInteractionService,
     RepositoryService,
+    EmployeeService,
     VolunteerService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},

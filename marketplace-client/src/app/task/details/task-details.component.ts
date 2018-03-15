@@ -61,12 +61,12 @@ export class TaskDetailsComponent implements OnInit {
           endDate: new Date(task.endDate)
         });
 
-        //this.repositoryService.isTaskAlreadyImported(this.task).toPromise().then((isImported: boolean) => {
-        //  this.isAlreadyImported = isImported;
-        //});
+        this.repositoryService.isTaskImported(this.task).toPromise().then((isAlreadyImported: boolean) => {
+          this.isAlreadyImported = isAlreadyImported;
+        });
 
-        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isReserved: boolean) => {
-          this.isAlreadyReserved = isReserved;
+        this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isAlreadyReserved: boolean) => {
+          this.isAlreadyReserved = isAlreadyReserved;
         });
       });
   }
@@ -85,7 +85,7 @@ export class TaskDetailsComponent implements OnInit {
     this.taskInteractionService.findFinishedByTask(this.task)
       .toPromise()
       .then((taskInteractions: TaskInteraction[]) => {
-        this.repositoryService.importTask(taskInteractions[0])
+        this.repositoryService.saveTask(taskInteractions[0])
           .toPromise()
           .then(() => {
             alert('Task is imported');

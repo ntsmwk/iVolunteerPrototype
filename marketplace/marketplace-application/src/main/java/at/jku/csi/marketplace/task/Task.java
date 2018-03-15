@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.csi.marketplace.participant.Employee;
 import at.jku.csi.marketplace.task.type.TaskType;
 
 @Document
@@ -22,8 +21,6 @@ public class Task {
 	private TaskStatus status;
 	@DBRef
 	private TaskType type;
-	@DBRef
-	private Employee manager;
 
 	public String getId() {
 		return id;
@@ -81,24 +78,16 @@ public class Task {
 		this.status = status;
 	}
 
-	public Employee getManager() {
-		return manager;
-	}
-
-	public void setManager(Employee manager) {
-		this.manager = manager;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Task) {
-			return this.id.equals(((Task) obj).getId());
+		if (!(obj instanceof Task)) {
+			return false;
 		}
-		return false;
+		return id == ((Task) obj).id;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.id.hashCode();
+		return id.hashCode();
 	}
 }
