@@ -16,6 +16,11 @@
       <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.timestamp | date: 'dd.MM.yyyy HH:mm:ss'}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="participant">
+      <mat-header-cell *matHeaderCellDef>Participant</mat-header-cell>
+      <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.participant.username}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="comment">
       <mat-header-cell *matHeaderCellDef>Comment</mat-header-cell>
       <mat-cell *matCellDef="let taskInteraction">{{taskInteraction.comment}}</mat-cell>

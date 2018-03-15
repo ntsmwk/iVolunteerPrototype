@@ -30,14 +30,12 @@ export class TaskTypeCreateComponent implements OnInit {
 
   ngOnInit() {
     this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences);
-
   }
 
   save() {
     if (!this.taskTypeForm.valid) {
       return;
     }
-    console.dirxml(this.taskTypeForm.value);
     this.taskTypeService.save(<TaskType> this.taskTypeForm.value)
       .toPromise()
       .then((taskType: TaskType) => this.router.navigate(['/taskTypes']));

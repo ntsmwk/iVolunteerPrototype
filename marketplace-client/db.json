@@ -5,6 +5,11 @@
   },
   "competencies": [],
   "tasks": [
-
+    {
+      "id": "5aaa6ac7cb7dce14b4edf315",
+      "taskId": "5aaa6a40cb7dce14b4edf30e",
+      "participantId": "5aaa699dcb7dce14b4edf309",
+      "timestamp": 1521117895604
+    }
   ]
 }

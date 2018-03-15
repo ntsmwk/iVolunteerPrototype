@@ -23,7 +23,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.getLoggedIn();
     this.loginSubscription = this.messageService.subscribe('login', this.getLoggedIn.bind(this));
     this.logoutSubscription = this.messageService.subscribe('logout', () => this.participant = undefined);
@@ -35,22 +34,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   isMenuVisible() {
-    return !isNullOrUndefined(localStorage.getItem('token'));
+    return !isNullOrUndefined(this.participant) && !isNullOrUndefined(this.participantRole);
   }
 
   private getLoggedIn() {
-    this.loginService.getLoggedIn()
-      .toPromise()
-      .then((participant: Participant) => this.participant = participant);
-
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.participantRole = role);
-
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant);
+    this.loginService.getLoggedInParticipantRole().toPromise().then((participantRole) => this.participantRole = participantRole);
   }
 
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['login']);
-
   }
 
 }

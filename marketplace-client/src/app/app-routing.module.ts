@@ -9,7 +9,7 @@ import {LoginComponent} from './login/login.component';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {TokenGuard} from './login/token.guard';
 import {EmployeeGuard} from './participant/employee.guard';
-import {VolunteerGuard} from './participant/volunteer.guard';
+import {VolunteerGuard} from './volunteer/volunteer.guard';
 import {NgModule} from '@angular/core';
 
 

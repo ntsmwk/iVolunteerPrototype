@@ -28,12 +28,12 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
 import {RepositoryService} from './_service/repository.service';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './participant/employee.guard';
-import {VolunteerGuard} from './participant/volunteer.guard';
-import {ParticipantService} from './participant/participant.service';
-import {TaskInteractionHistoryComponent} from './task-interaction/task-interaction-history/task-interaction-history.component';
+import {VolunteerGuard} from './volunteer/volunteer.guard';
+import {TaskInteractionHistoryComponent} from './task-interaction/history/task-interaction-history.component';
 import {GermanDateAdapter} from './_adapter/german-date-adapter';
 import {DateAdapter} from '@angular/material';
 import {CompetenceService} from './competence/competence.service';
+import {VolunteerService} from './volunteer/volunteer.service';
 
 
 @NgModule({
@@ -68,8 +68,8 @@ import {CompetenceService} from './competence/competence.service';
     TaskService,
     TaskTypeService,
     TaskInteractionService,
-    ParticipantService,
     RepositoryService,
+    VolunteerService,
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
     {provide: DateAdapter, useClass: GermanDateAdapter}

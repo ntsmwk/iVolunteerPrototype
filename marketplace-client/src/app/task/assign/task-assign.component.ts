@@ -5,8 +5,7 @@ import {Task} from '../task';
 import {Participant} from '../../participant/participant';
 import {ActivatedRoute} from '@angular/router';
 import {TaskService} from '../task.service';
-import {AssignmentVolunteer} from '../../participant/assignmentVolunteer';
-import {ParticipantService} from '../../participant/participant.service';
+import {VolunteerService} from '../../volunteer/volunteer.service';
 
 @Component({
   selector: 'app-task-assign',
@@ -15,16 +14,17 @@ import {ParticipantService} from '../../participant/participant.service';
 })
 export class TaskAssignComponent implements OnInit {
 
+  task: Task;
   reservedVolunteers: Participant[];
   assignedVolunteers: Participant[];
+
   dataSource = new MatTableDataSource<AssignmentVolunteer>();
   displayedColumns = ['isAssigned', 'username'];
-  task: Task;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private taskInteractionService: TaskInteractionService,
-              private participantService: ParticipantService) {
+              private volunteerService: VolunteerService) {
   }
 
   ngOnInit() {
@@ -43,14 +43,14 @@ export class TaskAssignComponent implements OnInit {
           this.taskInteractionService.findAssignedVolunteersByTaskId(this.task).toPromise().then(
             (volunteers: Participant[]) => {
               this.assignedVolunteers = volunteers;
-              this.setDataSource();
+              this.updateDataSource();
             });
         });
       });
   }
 
-  handleChange(volunteer: AssignmentVolunteer, x) {
-    this.participantService.findVolunteerById(volunteer.id).toPromise().then((participant: Participant) => {
+  handleChange(volunteer: AssignmentVolunteer) {
+    this.volunteerService.findById(volunteer.id).toPromise().then((participant: Participant) => {
       switch (volunteer.isAssigned) {
         case true:
           this.taskInteractionService.unassign(this.task, participant).toPromise().then(() => this.loadData(this.task.id));
@@ -62,7 +62,7 @@ export class TaskAssignComponent implements OnInit {
     });
   }
 
-  setDataSource() {
+  updateDataSource() {
     const assignmentVolunteers: AssignmentVolunteer[] = [];
     this.reservedVolunteers.forEach((volunteer: Participant) => {
       assignmentVolunteers.splice(0, 0, new AssignmentVolunteer(volunteer.id, volunteer.username, false));
@@ -71,5 +71,17 @@ export class TaskAssignComponent implements OnInit {
       assignmentVolunteers.splice(0, 0, new AssignmentVolunteer(volunteer.id, volunteer.username, true));
     });
     this.dataSource.data = assignmentVolunteers;
+  }
+}
+
+export class AssignmentVolunteer {
+  id: string
+  username: string;
+  isAssigned: boolean;
+
+  constructor(id: string, username: string, isAssigned: boolean) {
+    this.id = id;
+    this.username = username;
+    this.isAssigned = isAssigned;
   }
 }

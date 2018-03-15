@@ -2,7 +2,6 @@ package at.jku.csi.marketplace.task;
 
 import java.util.Date;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import at.jku.csi.marketplace.blockchain.IHashObject;
