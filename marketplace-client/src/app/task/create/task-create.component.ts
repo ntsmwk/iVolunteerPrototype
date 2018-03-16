@@ -13,7 +13,6 @@ import {isNullOrUndefined} from 'util';
 })
 export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
-
   taskTypes: TaskType[];
 
   constructor(formBuilder: FormBuilder,
@@ -23,8 +22,6 @@ export class TaskCreateComponent implements OnInit {
               private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(''),
-      'name': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
       'type': new FormControl('', Validators.required),
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('')
@@ -32,8 +29,12 @@ export class TaskCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.findTask(params['id']));
-    this.taskTypeService.findAll().toPromise().then((taskTypes: TaskType[]) => this.taskTypes = taskTypes);
+    this.taskTypeService.findAll()
+      .toPromise()
+      .then((taskTypes: TaskType[]) => {
+        this.taskTypes = taskTypes;
+        this.route.params.subscribe(params => this.findTask(params['id']));
+      });
   }
 
   private findTask(id: string) {
@@ -44,9 +45,7 @@ export class TaskCreateComponent implements OnInit {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.taskForm.setValue({
         id: task.id,
-        name: task.name,
-        description: task.description,
-        type: task.type,
+        type: this.taskTypes.find((value: TaskType) => task.type.id === value.id),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate)
       });

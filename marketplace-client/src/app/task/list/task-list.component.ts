@@ -13,7 +13,7 @@ import {Participant} from '../../participant/participant';
 export class TaskListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'type.name', 'status', 'startDate', 'endDate'];
+  displayedColumns = ['name', 'status', 'startDate', 'endDate'];
   participantRole;
   participant;
 

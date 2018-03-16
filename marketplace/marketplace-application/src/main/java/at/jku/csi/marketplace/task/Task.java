@@ -13,9 +13,6 @@ public class Task {
 
 	@Id
 	private String id;
-	private String name;
-	private String description;
-
 	private Date startDate;
 	private Date endDate;
 	private TaskStatus status;
@@ -28,22 +25,6 @@ public class Task {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Date getStartDate() {

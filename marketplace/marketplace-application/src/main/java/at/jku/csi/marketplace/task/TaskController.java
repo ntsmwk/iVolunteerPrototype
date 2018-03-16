@@ -77,9 +77,9 @@ public class TaskController {
 		completedTask.setTaskId(taskInteraction.getTask().getId());
 		completedTask.setParticipantId(taskInteraction.getParticipant().getId());
 		completedTask.setTimestamp(taskInteraction.getTimestamp());
-		
+
 		blockchainRestClient.postSimpleHash(completedTask);
-		
+
 		return completedTask;
 	}
 
@@ -91,7 +91,7 @@ public class TaskController {
 		insertTaskInteraction(createdTask);
 		return createdTask;
 	}
-	
+
 	private void insertTaskInteraction(Task task) {
 		TaskInteraction taskInteraction = new TaskInteraction();
 		taskInteraction.setTask(task);
@@ -107,8 +107,6 @@ public class TaskController {
 		if (orginalTask == null) {
 			throw new NotAcceptableException();
 		}
-		orginalTask.setName(task.getName());
-		orginalTask.setDescription(task.getDescription());
 		orginalTask.setType(task.getType());
 		orginalTask.setStartDate(task.getStartDate());
 		orginalTask.setEndDate(task.getEndDate());

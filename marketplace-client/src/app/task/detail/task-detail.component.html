@@ -7,11 +7,11 @@
 
   <form class="task-form" [formGroup]="">
     <mat-form-field class="full-width">
-      <input matInput placeholder="Name" [readonly]="true" [value]="task.name">
+      <input matInput placeholder="Name" [readonly]="true" [value]="task.type.name">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Description" [readonly]="true" [value]="task.description">
+      <input matInput placeholder="Description" [readonly]="true" [value]="task.type.description">
     </mat-form-field>
 
     <mat-form-field class="full-width">
@@ -56,18 +56,15 @@
   </div>
 
   <div *ngIf="role === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve
-    </button>
-    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved" (click)="unreserve()" mat-raised-button>Cancel
-      Reservation
-    </button>
-
+    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()" mat-raised-button>Reserve</button>
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button>Cancel Reservation</button>
     <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
     </button>
   </div>
 
   <mat-divider></mat-divider>
 
+  <div *ngIf="role === 'EMPLOYEE'">
   <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
-
+  </div>
 </div>

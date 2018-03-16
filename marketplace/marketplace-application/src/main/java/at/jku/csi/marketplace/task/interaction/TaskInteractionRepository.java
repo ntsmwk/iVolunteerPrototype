@@ -2,6 +2,8 @@ package at.jku.csi.marketplace.task.interaction;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -18,4 +20,9 @@ public interface TaskInteractionRepository extends MongoRepository<TaskInteracti
 
 	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0}, 'task': {'$ref': 'task', '$id': ?1} }")
 	List<TaskInteraction> findByVolunteerAndTask(String volunteerId, String taskId);
+	
+	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0}, 'task': {'$ref': 'task', '$id': ?1} }")
+	List<TaskInteraction> findSortedByVolunteerAndTask(String volunteerId, String taskId, Sort sort);
+	
+	
 }
