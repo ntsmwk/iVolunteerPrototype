@@ -60,8 +60,8 @@
   </div>
 
   <div *ngIf="role === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve</button>
-    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved" (click)="unreserve()" mat-raised-button>Cancel Reservation</button>
+    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()" mat-raised-button>Reserve</button>
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button>Cancel Reservation</button>
 
     <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
     </button>

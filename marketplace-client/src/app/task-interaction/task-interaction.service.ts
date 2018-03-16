@@ -27,6 +27,10 @@ export class TaskInteractionService {
     return this.http.get([this.apiUrl, 'volunteer/isReserved', task.id].join('/'));
   }
 
+  isTaskAlreadyAssigned(task: Task) {
+    return this.http.get([this.apiUrl, 'volunteer/isAssigned', task.id].join('/'));
+  }
+
   reserve(task: Task) {
     return this.http.post([this.apiUrl, 'volunteer/reserve'].join('/'), task.id);
   }
