@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  composer_default:
+    external: true
+
+services:
+  rest-server:
+    container_name: composer-rest-server
+    image: hyperledger/composer-rest-server
+    networks:
+      - composer_default
+    ports:
+      - 3000:3000
+    environment:
+      - COMPOSER_CARD=admin@ivolunteer-blockchain
+      - COMPOSER_NAMESPACES=never
+      - COMPOSER_AUTHENTICATION=false
+      - COMPOSER_MULTIUSER=false
+      - COMPOSER_TLS=false
+    volumes:
+        - ~/.composer:/home/composer/.composer
