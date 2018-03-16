@@ -74,6 +74,7 @@
 
   <mat-divider></mat-divider>
 
+  <div *ngIf="role === 'EMPLOYEE'">
   <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
-
+  </div>
 </div>

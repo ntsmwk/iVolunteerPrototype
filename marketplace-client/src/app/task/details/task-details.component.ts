@@ -9,6 +9,7 @@ import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
 import {DateAdapter} from '@angular/material';
+import {MessageService} from '../../_service/message.service';
 
 @Component({
   templateUrl: './task-details.component.html',
@@ -31,7 +32,8 @@ export class TaskDetailsComponent implements OnInit {
               private loginService: LoginService,
               private repositoryService: RepositoryService,
               private taskInteractionService: TaskInteractionService,
-              private dateAdapter: DateAdapter<Date>) {
+              private dateAdapter: DateAdapter<Date>,
+              private messageService: MessageService) {
     this.taskDetailsForm = formBuilder.group({
       'name': new FormControl('', Validators.required),
       'description': new FormControl('', Validators.required),
@@ -101,23 +103,38 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   start() {
-    this.taskService.start(this.task).toPromise().then(() => this.loadData(this.task.id));
+    this.taskService.start(this.task).toPromise().then(() => {
+      this.loadData(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   suspend() {
-    this.taskService.suspend(this.task).toPromise().then(() => this.loadData(this.task.id));
+    this.taskService.suspend(this.task).toPromise().then(() => {
+      this.loadData(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   resume() {
-    this.taskService.resume(this.task).toPromise().then(() => this.loadData(this.task.id));
+    this.taskService.resume(this.task).toPromise().then(() => {
+      this.loadData(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   finish() {
-    this.taskService.finish(this.task).toPromise().then(() => this.loadData(this.task.id));
+    this.taskService.finish(this.task).toPromise().then(() => {
+      this.loadData(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   abort() {
-    this.taskService.abort(this.task).toPromise().then(() => this.loadData(this.task.id));
+    this.taskService.abort(this.task).toPromise().then(() => {
+      this.loadData(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   sync() {
