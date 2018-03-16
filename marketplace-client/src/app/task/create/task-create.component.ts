@@ -12,7 +12,6 @@ import {Router} from '@angular/router';
 })
 export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
-
   taskTypes: TaskType[];
 
   constructor(formBuilder: FormBuilder,
@@ -20,8 +19,6 @@ export class TaskCreateComponent implements OnInit {
               private taskService: TaskService,
               private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
-      'name': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
       'type': new FormControl('', Validators.required),
       'startDate': new FormControl('', Validators.required),
       'endDate': new FormControl('')
