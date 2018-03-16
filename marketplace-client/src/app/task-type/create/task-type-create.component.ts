@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {OnInit} from '@angular/core/src/metadata/lifecycle_hooks';
 import {CompetenceService} from '../../competence/competence.service';
 import {Competence} from '../../competence/competence';
+import {TaskTypeValidator} from '../task-type.validator';
 
 @Component({
   templateUrl: './task-type-create.component.html',
@@ -21,12 +22,13 @@ export class TaskTypeCreateComponent implements OnInit {
               private taskTypeService: TaskTypeService,
               private competenceService: CompetenceService) {
     this.taskTypeForm = formBuilder.group({
-      'name': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
-      'requiredCompetences': new FormControl(''),
-      'acquirableCompetences': new FormControl('')
-    });
+      'name': new FormControl(undefined, Validators.required),
+      'description': new FormControl(undefined, Validators.required),
+      'requiredCompetences': new FormControl([]),
+      'acquirableCompetences': new FormControl([])
+    }, {validator: TaskTypeValidator});
   }
+
 
   ngOnInit() {
     this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences);

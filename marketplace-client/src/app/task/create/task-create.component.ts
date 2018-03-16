@@ -21,10 +21,10 @@ export class TaskCreateComponent implements OnInit {
               private taskService: TaskService,
               private taskTypeService: TaskTypeService) {
     this.taskForm = formBuilder.group({
-      'id': new FormControl(''),
-      'type': new FormControl('', Validators.required),
-      'startDate': new FormControl('', Validators.required),
-      'endDate': new FormControl('')
+      'id': new FormControl(undefined),
+      'type': new FormControl(undefined, Validators.required),
+      'startDate': new FormControl(undefined, Validators.required),
+      'endDate': new FormControl(undefined)
     });
   }
 
@@ -39,7 +39,6 @@ export class TaskCreateComponent implements OnInit {
 
   private findTask(id: string) {
     if (isNullOrUndefined(id) || id.length === 0) {
-      this.taskForm.value.id = undefined;
       return;
     }
     this.taskService.findById(id).toPromise().then((task: Task) => {
@@ -58,7 +57,6 @@ export class TaskCreateComponent implements OnInit {
     }
 
     const task = <Task> this.taskForm.value;
-    task.id = task.id.length === 0 ? undefined : task.id;
     this.taskService.save(task).toPromise().then(() => this.router.navigate(['/tasks']));
   }
 }
