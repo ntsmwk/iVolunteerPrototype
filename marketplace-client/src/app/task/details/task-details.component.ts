@@ -55,8 +55,8 @@ export class TaskDetailsComponent implements OnInit {
       .then((task: Task) => {
         this.task = task;
         this.taskDetailsForm.setValue({
-          name: task.name,
-          description: task.description,
+          name: task.type.name,
+          description: task.type.description,
           status: task.status,
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate)
@@ -79,8 +79,6 @@ export class TaskDetailsComponent implements OnInit {
 
 
   save() {
-    this.task.name = (<Task> (this.taskDetailsForm.value)).name;
-    this.task.description = (<Task> (this.taskDetailsForm.value)).description;
     this.task.startDate = new Date((<Task> (this.taskDetailsForm.value)).startDate);
     this.task.endDate = new Date((<Task> (this.taskDetailsForm.value)).endDate);
 

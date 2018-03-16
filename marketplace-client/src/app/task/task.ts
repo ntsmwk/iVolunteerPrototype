@@ -2,11 +2,9 @@ import {TaskType} from '../task-type/task-type';
 
 export class Task {
   id: string;
-  name: string;
-  description: string;
+  type: TaskType;
   startDate: Date;
   endDate: Date;
-  type: TaskType;
   status: string;
 }
 
