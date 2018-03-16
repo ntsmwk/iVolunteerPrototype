@@ -16,7 +16,7 @@ import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
 
 import {NavbarComponent} from './navbar/navbar.component';
-import {TaskDetailsComponent} from './task/details/task-details.component';
+import {TaskDetailComponent} from './task/detail/task-detail.component';
 import {TaskInteractionService} from './task-interaction/task-interaction.service';
 import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
@@ -46,7 +46,7 @@ import {EmployeeService} from './employee/employee.service';
     TaskListComponent,
     TaskAvailableComponent,
     TaskCreateComponent,
-    TaskDetailsComponent,
+    TaskDetailComponent,
     TaskTypeListComponent,
     TaskTypeCreateComponent,
     TaskAssignComponent,

@@ -5,7 +5,7 @@ import {TaskAvailableComponent} from './task/available/task-available.component'
 import {TaskCreateComponent} from './task/create/task-create.component';
 import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
 import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
-import {TaskDetailsComponent} from './task/details/task-details.component';
+import {TaskDetailComponent} from './task/detail/task-detail.component';
 import {LoginComponent} from './login/login.component';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {TokenGuard} from './login/token.guard';
@@ -17,7 +17,8 @@ import {VolunteerRepositoryComponent} from './volunteer/repository/volunteer-rep
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'task', component: TaskCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
-  {path: 'task/:id/details', component: TaskDetailsComponent, canActivate: [TokenGuard]},
+  {path: 'task/:id', component: TaskCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
+  {path: 'task/:id/detail', component: TaskDetailComponent, canActivate: [TokenGuard]},
   {path: 'task/assign/:id', component: TaskAssignComponent, canActivate: [TokenGuard, EmployeeGuard]},
   {path: 'tasks', component: TaskListComponent, canActivate: [TokenGuard]},
   {path: 'available', component: TaskAvailableComponent, canActivate: [TokenGuard, VolunteerGuard]},

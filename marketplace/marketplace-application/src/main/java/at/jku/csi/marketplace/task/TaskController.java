@@ -102,11 +102,17 @@ public class TaskController {
 	}
 
 	@PutMapping("/task/{id}")
-	public Task updateTask(@PathVariable("id") String id, @RequestBody Task task) {
-		if (!taskRepository.exists(id)) {
+	public Task updateTask(@PathVariable("id") String taskId, @RequestBody Task task) {
+		Task orginalTask = taskRepository.findOne(taskId);
+		if (orginalTask == null) {
 			throw new NotAcceptableException();
 		}
-		return taskRepository.save(task);
+		orginalTask.setName(task.getName());
+		orginalTask.setDescription(task.getDescription());
+		orginalTask.setType(task.getType());
+		orginalTask.setStartDate(task.getStartDate());
+		orginalTask.setEndDate(task.getEndDate());
+		return taskRepository.save(orginalTask);
 	}
 
 	@DeleteMapping("/task/{id}")

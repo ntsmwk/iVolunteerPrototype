@@ -24,7 +24,7 @@ export class TaskAvailableComponent implements OnInit {
   }
 
   onRowSelect(task: Task) {
-    this.router.navigate(['/task/' + task.id + '/details']);
+    this.router.navigate(['/task/' + task.id + '/detail']);
   }
 
 }

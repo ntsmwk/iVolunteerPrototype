@@ -1,0 +1,73 @@
+<div *ngIf="task">
+
+  <h3>Task Detail</h3>
+  <div class="edit-link">
+    <img src="assets/edit.svg" routerLink="/task/{{task.id}}">
+  </div>
+
+  <form class="task-form" [formGroup]="">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name" [readonly]="true" [value]="task.name">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Description" [readonly]="true" [value]="task.description">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Status" [readonly]="true" [value]="task.status">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [readonly]="true" placeholder="Start Date" [value]="task.startDate">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [readonly]="true" placeholder="End Date" [value]="task.endDate">
+    </mat-form-field>
+  </form>
+
+  <div *ngIf="role === 'EMPLOYEE'">
+    <div *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'">
+      <mat-divider></mat-divider>
+    </div>
+    <button *ngIf="this.task.status === 'CREATED'" routerLink="/task/assign/{{this.task.id}}" ngModule="this.task.id"
+            mat-raised-button>
+      Manage Assignments
+    </button>
+
+    <button *ngIf="this.task.status === 'CREATED'" (click)="start()" mat-raised-button>
+      Start
+    </button>
+
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="suspend()" mat-raised-button>
+      Suspend
+    </button>
+
+    <button *ngIf="this.task.status === 'SUSPENDED'" (click)="resume()" mat-raised-button>
+      Resume
+    </button>
+
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="finish()" mat-raised-button>Finish</button>
+    <button *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'" (click)="abort()"
+            mat-raised-button>Abort
+    </button>
+    <mat-divider></mat-divider>
+  </div>
+
+  <div *ngIf="role === 'VOLUNTEER'">
+    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved" (click)="reserve()" mat-raised-button>Reserve
+    </button>
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved" (click)="unreserve()" mat-raised-button>Cancel
+      Reservation
+    </button>
+
+    <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
+
+</div>

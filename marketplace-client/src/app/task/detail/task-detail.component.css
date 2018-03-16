@@ -7,3 +7,12 @@
 .task-form .full-width {
   width: 100%;
 }
+
+.edit-link {
+  float: right;
+}
+
+.edit-link img {
+  cursor: pointer;
+  margin-top: -75px;
+}
