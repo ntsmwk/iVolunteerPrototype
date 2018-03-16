@@ -23,6 +23,7 @@ export class TaskDetailsComponent implements OnInit {
 
   role;
   isAlreadyReserved: boolean;
+  isAlreadyAssigned: boolean;
   isAlreadyImported: boolean;
 
   constructor(private route: ActivatedRoute,
@@ -70,6 +71,11 @@ export class TaskDetailsComponent implements OnInit {
         this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isAlreadyReserved: boolean) => {
           this.isAlreadyReserved = isAlreadyReserved;
         });
+
+        this.taskInteractionService.isTaskAlreadyAssigned(this.task).toPromise().then((isAlreadyAssigned: boolean) => {
+          this.isAlreadyAssigned = isAlreadyAssigned;
+        });
+
       });
   }
 
