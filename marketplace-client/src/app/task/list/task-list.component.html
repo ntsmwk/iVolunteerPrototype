@@ -37,6 +37,24 @@
     <mat-cell *matCellDef="let task">{{task.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="requiredCompetences">
+    <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
+    <mat-cell *matCellDef="let task">
+       <span *ngFor="let requiredCompetence of task.type.requiredCompetences; let last = last">
+        {{requiredCompetence.name}}<span *ngIf="!last">, </span>
+      </span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="acquirableCompetences">
+    <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
+    <mat-cell *matCellDef="let task">
+      <span *ngFor="let requiredCompetence of task.type.acquirableCompetences; let last = last">
+        {{requiredCompetence.name}}<span *ngIf="!last">, </span>
+      </span>
+    </mat-cell>
+  </ng-container>
+
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
 </mat-table>

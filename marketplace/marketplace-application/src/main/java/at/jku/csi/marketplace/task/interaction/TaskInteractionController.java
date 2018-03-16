@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.ws.rs.BadRequestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,7 +61,8 @@ public class TaskInteractionController {
 		Set<Participant> volunteers = new HashSet<Participant>();
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		for (TaskInteraction taskInteraction : taskInteractions) {
-			if (taskInteraction.getParticipant() instanceof Volunteer && !volunteers.contains(taskInteraction.getParticipant())) {
+			if (taskInteraction.getParticipant() instanceof Volunteer
+					&& !volunteers.contains(taskInteraction.getParticipant())) {
 				TaskInteraction latestTaskInteraction = getLatestTaskInteractions(
 						taskInteraction.getParticipant().getId(), taskId).get(0);
 
@@ -86,7 +86,6 @@ public class TaskInteractionController {
 		}
 		return false;
 	}
-	
 
 	@GetMapping("/volunteer/isAssigned/{id}")
 	public boolean isLoggedInVolunteerAlreadyAssigned(@PathVariable("id") String taskId) {
@@ -148,7 +147,8 @@ public class TaskInteractionController {
 		Set<Participant> volunteers = new HashSet<Participant>();
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		for (TaskInteraction taskInteraction : taskInteractions) {
-			if (taskInteraction.getParticipant() instanceof Volunteer && !volunteers.contains(taskInteraction.getParticipant())) {
+			if (taskInteraction.getParticipant() instanceof Volunteer
+					&& !volunteers.contains(taskInteraction.getParticipant())) {
 				TaskInteraction latestTaskInteraction = getLatestTaskInteractions(
 						taskInteraction.getParticipant().getId(), taskId).get(0);
 				if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
