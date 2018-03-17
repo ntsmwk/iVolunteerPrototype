@@ -6,6 +6,7 @@ import {TaskInteractionService} from '../../task-interaction/task-interaction.se
 import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
+import {MessageService} from '../../_service/message.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -24,7 +25,8 @@ export class TaskDetailComponent implements OnInit {
               private taskService: TaskService,
               private loginService: LoginService,
               private repositoryService: RepositoryService,
-              private taskInteractionService: TaskInteractionService) {
+              private taskInteractionService: TaskInteractionService,
+              private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -68,22 +70,37 @@ export class TaskDetailComponent implements OnInit {
   }
 
   start() {
-    this.taskService.start(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.taskService.start(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   suspend() {
-    this.taskService.suspend(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.taskService.suspend(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   resume() {
-    this.taskService.resume(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.taskService.resume(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   finish() {
-    this.taskService.finish(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.taskService.finish(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 
   abort() {
-    this.taskService.abort(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.taskService.abort(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
   }
 }
