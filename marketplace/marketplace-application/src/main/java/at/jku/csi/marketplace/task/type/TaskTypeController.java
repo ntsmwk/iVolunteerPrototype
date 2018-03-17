@@ -36,7 +36,7 @@ public class TaskTypeController {
 
 	@PutMapping("/taskType/{id}")
 	public TaskType update(@PathVariable("id") String id, @RequestBody TaskType taskType) {
-		if (taskTypeRepository.exists(id)) {
+		if (!taskTypeRepository.exists(id)) {
 			throw new NotAcceptableException();
 		}
 		return taskTypeRepository.save(taskType);

@@ -9,7 +9,7 @@ import {TaskTypeService} from '../task-type.service';
 export class TaskTypeListComponent implements OnInit {
   dataSource = new MatTableDataSource<TaskType>();
 
-  displayedColumns = ['name', 'description', 'requiredCompetences', 'acquirableCompetences'];
+  displayedColumns = ['name', 'description', 'requiredCompetences', 'acquirableCompetences', 'actions'];
 
   constructor(private taskTypeService: TaskTypeService) {
   }
