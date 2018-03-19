@@ -31,7 +31,7 @@ public class TaskOperationController {
 
 	@Autowired
 	private BlockchainRestClient blockchainRestClient;
-	
+
 	@Autowired
 	private TaskInteractionController taskInteractionController;
 
@@ -62,16 +62,11 @@ public class TaskOperationController {
 		updateTaskStatus(task, TaskStatus.RUNNING);
 	}
 
-	
-	// {hash: 'sadfasdfasdf'}
-	// 'asdfasdfasdf'
-	
-	
 	@PostMapping("/task/{id}/finish")
 	public void finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
-			throw new BadRequestException(); 
+			throw new BadRequestException();
 		}
 		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.FINISHED);
 		recordAcquiredCompetencies(task);
@@ -105,7 +100,7 @@ public class TaskOperationController {
 		taskInteraction.setTimestamp(new Date());
 		taskInteraction.setOperation(task.getStatus());
 		taskInteractionRepository.insert(taskInteraction);
-		
+
 		return taskInteraction;
 	}
 
@@ -116,7 +111,7 @@ public class TaskOperationController {
 
 	private void recordAcquiredCompetencies(Task task, Volunteer volunteer) {
 		task.getType().getAcquirableCompetences().stream()
-				.forEach(competence ->  volunteer.getCompetenceList().add(competence));
+				.forEach(competence -> volunteer.getCompetenceList().add(competence));
 		volunteerRepository.save(volunteer);
 	}
 }

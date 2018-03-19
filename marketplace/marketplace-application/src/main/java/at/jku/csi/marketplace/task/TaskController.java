@@ -30,9 +30,6 @@ import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 public class TaskController {
 
 	@Autowired
-	private BlockchainRestClient blockchainRestClient;
-
-	@Autowired
 	private LoginService loginService;
 	@Autowired
 	private TaskRepository taskRepository;

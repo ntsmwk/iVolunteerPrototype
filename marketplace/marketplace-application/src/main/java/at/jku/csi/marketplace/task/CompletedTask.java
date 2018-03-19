@@ -17,6 +17,15 @@ public class CompletedTask implements IHashObject {
 	private List<String> acquirableComptences = new ArrayList<>();
 	private String participantId;
 	private Date timestamp;
+	private JsonObject json;
+
+	public JsonObject getJson() {
+		return json;
+	}
+
+	public void setJson(JsonObject json) {
+		this.json = json;
+	}
 
 	public CompletedTask() {
 	}
@@ -87,12 +96,7 @@ public class CompletedTask implements IHashObject {
 
 	@Override
 	public String toHashString() {
-		JsonObject json = new JsonObject();
-		json.addProperty("interactionId", interactionId);
-		json.addProperty("taskId", taskId);
-		json.addProperty("participantId", participantId);
-		json.addProperty("timestamp", timestamp.toString());
-
+		// TODO: re-think (CompletedTaskBuilder)
 		return json.toString();
 	}
 
