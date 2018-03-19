@@ -25,6 +25,20 @@
     <mat-form-field class="full-width">
       <input matInput [readonly]="true" placeholder="End Date" [value]="task.endDate">
     </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <p>Required Competences</p><b></b>
+      <mat-chip-list>
+        <mat-chip disabled *ngFor="let competence of task.type.requiredCompetences">{{ competence.name }}</mat-chip>
+      </mat-chip-list>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <p>Acquirable Competences</p><b></b>
+      <mat-chip-list>
+        <mat-chip disabled *ngFor="let competence of task.type.acquirableCompetences">{{ competence.name }}</mat-chip>
+      </mat-chip-list>
+    </mat-form-field>
   </form>
 
   <div *ngIf="role === 'EMPLOYEE'">
@@ -57,7 +71,9 @@
 
   <div *ngIf="role === 'VOLUNTEER'">
     <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()" mat-raised-button>Reserve</button>
-    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button>Cancel Reservation</button>
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button>Cancel
+      Reservation
+    </button>
     <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
     </button>
   </div>
@@ -65,6 +81,6 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="role === 'EMPLOYEE'">
-  <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
+    <app-task-interaction-history [id]="task.id"></app-task-interaction-history>
   </div>
 </div>
