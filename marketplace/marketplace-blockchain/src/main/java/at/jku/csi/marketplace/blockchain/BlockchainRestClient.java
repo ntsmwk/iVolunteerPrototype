@@ -37,42 +37,30 @@ public class BlockchainRestClient {
 
 	}
 
-	public void postSimpleHash(IHashObject hash) {
-		SimpleHash simpleHash = new SimpleHash(hashGenerator.sha256(hash));
+	public void postSimpleHash(IHashObject hashObject) {
+		SimpleHash simpleHash = new SimpleHash(hashGenerator.sha256(hashObject));
 
 		try {
-			System.out.println(hashGenerator.sha256(hash));
-			String requestUrl = MessageFormat.format("{0}/api/at.jku.cis.simpleHash", url);
+			String requestUrl = MessageFormat.format("{0}/api/simpleHash", url);
 			restTemplate.postForObject(requestUrl, simpleHash, SimpleHash.class);
 
 		} catch (Exception e) {
 			System.out.println("Hash not posted, might already exist!");
-			// TODO: correct exception handling
+			e.printStackTrace();
+			// TODO: better exception handling
 		}
 	}
 
-	public boolean isGlobalHashInBc(String userId) {
-		ResponseEntity<GlobalHash[]> responseEntity = restTemplate
-				.getForEntity(url + "/api/queries/findGlobalHashByUserId?userId=" + userId, GlobalHash[].class);
+	public void deleteSimpleHash(IHashObject hashObject) {
+		String hash = hashGenerator.sha256(hashObject);
 
-		GlobalHash[] objects = responseEntity.getBody();
-		if (Arrays.asList(objects).isEmpty()) {
-			return false;
-		} else {
-			return true;
+		try {
+			String requestUrl = MessageFormat.format("{0}/api/simpleHash/{1}", url, hash);
+			restTemplate.delete(requestUrl);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: better exception handling
 		}
 	}
-
-	/*
-	 * public void postGlobalHash(GlobalHash h) { try {
-	 * restTemplate.postForEntity(url + "/api/at.jku.cis.globalHash", h,
-	 * SimpleHash.class); System.out.println(h + " posted");
-	 * 
-	 * } catch (Exception e) { System.out.println(h +
-	 * " not posted, might already exist!");
-	 * 
-	 * } }
-	 * 
-	 */
-
 }

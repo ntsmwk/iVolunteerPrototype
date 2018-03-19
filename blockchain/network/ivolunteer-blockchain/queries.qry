@@ -1,10 +1,3 @@
-query findGlobalHashByUserId {
-  description: "Select all global hashes with certain userId"
-  statement:
-      SELECT at.jku.cis.GlobalHash
-         WHERE (userId == _$userId)
-}
-
 query findSimpleHash {
   description: "Check if a given simple hash is in blockchain or not"
   statement:

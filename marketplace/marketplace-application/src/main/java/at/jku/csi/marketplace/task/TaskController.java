@@ -1,5 +1,8 @@
 package at.jku.csi.marketplace.task;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,6 +44,7 @@ public class TaskController {
 		if (status == null) {
 			return taskRepository.findAll();
 		}
+
 		return taskRepository.findByStatus(status);
 	}
 
