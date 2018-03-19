@@ -74,16 +74,8 @@ public class TaskController {
 		if (taskInteractions.size() != 1) {
 			throw new ForbiddenException();
 		}
-		TaskInteraction taskInteraction = taskInteractions.get(0);
-
-		CompletedTask completedTask = new CompletedTask();
-		completedTask.setInteractionId(taskInteraction.getId());
-		completedTask.setTaskId(taskInteraction.getTask().getId());
-		completedTask.setParticipantId(taskInteraction.getParticipant().getId());
-		completedTask.setTimestamp(taskInteraction.getTimestamp());
-
-		blockchainRestClient.postSimpleHash(completedTask);
-
+		
+		CompletedTask completedTask = CompletedTaskBuilder.build(taskInteractions.get(0));
 		return completedTask;
 	}
 

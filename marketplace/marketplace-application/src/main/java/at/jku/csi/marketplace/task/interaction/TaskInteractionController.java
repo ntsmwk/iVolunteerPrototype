@@ -1,10 +1,8 @@
 package at.jku.csi.marketplace.task.interaction;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.BadRequestException;
 
@@ -24,7 +22,6 @@ import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.security.ParticipantRole;
 import at.jku.csi.marketplace.task.Task;
 import at.jku.csi.marketplace.task.TaskRepository;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 @RestController
 public class TaskInteractionController {
@@ -56,23 +53,18 @@ public class TaskInteractionController {
 	}
 
 	@GetMapping("/task/{id}/reserved")
-	public ArrayList<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String taskId) {
+	public List<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String taskId) {
 		Task task = taskRepository.findOne(taskId);
-		Set<Participant> volunteers = new HashSet<Participant>();
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
-		for (TaskInteraction taskInteraction : taskInteractions) {
-			if (taskInteraction.getParticipant() instanceof Volunteer
-					&& !volunteers.contains(taskInteraction.getParticipant())) {
-				TaskInteraction latestTaskInteraction = getLatestTaskInteractions(
-						taskInteraction.getParticipant().getId(), taskId).get(0);
 
-				if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
-						|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
-					volunteers.add(latestTaskInteraction.getParticipant());
-				}
-			}
-		}
-		return Lists.newArrayList(volunteers);
+		return taskInteractionRepository.findByTask(task).stream()
+				.filter(ti -> ti.getParticipant() instanceof Volunteer)
+				.filter(ti -> {
+					TaskOperation latestOperation = getLatestTaskInteractions(ti.getParticipant().getId(), taskId)
+							.get(0).getOperation();
+					return latestOperation == TaskVolunteerOperation.RESERVED
+							|| latestOperation == TaskVolunteerOperation.UNASSIGNED;
+				}).map(ti -> ti.getParticipant()).collect(Collectors.toList());
+
 	}
 
 	@GetMapping("/volunteer/isReserved/{id}")
@@ -142,21 +134,12 @@ public class TaskInteractionController {
 	}
 
 	@GetMapping("/task/{id}/assigned")
-	public ArrayList<Participant> findAssignedVolunteersByTaskId(@PathVariable("id") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		Set<Participant> volunteers = new HashSet<Participant>();
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
-		for (TaskInteraction taskInteraction : taskInteractions) {
-			if (taskInteraction.getParticipant() instanceof Volunteer
-					&& !volunteers.contains(taskInteraction.getParticipant())) {
-				TaskInteraction latestTaskInteraction = getLatestTaskInteractions(
-						taskInteraction.getParticipant().getId(), taskId).get(0);
-				if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
-					volunteers.add(latestTaskInteraction.getParticipant());
-				}
-			}
-		}
-		return Lists.newArrayList(volunteers);
+	public List<Participant> findAssignedVolunteersByTaskId(@PathVariable("id") String taskId) {
+		return taskInteractionRepository.findByTask(taskRepository.findOne(taskId)).stream()
+				.filter(ti -> ti.getOperation() == TaskVolunteerOperation.ASSIGNED)
+				.filter(ti -> getLatestTaskInteractions(ti.getParticipant().getId(), taskId).get(0)
+						.getOperation() == TaskVolunteerOperation.ASSIGNED)
+				.map(ti -> ti.getParticipant()).collect(Collectors.toList());
 	}
 
 	@PostMapping("/task/{taskId}/assign/{volunteerId}")
