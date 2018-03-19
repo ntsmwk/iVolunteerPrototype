@@ -40,8 +40,6 @@ export class TaskInteractionHistoryComponent implements OnInit, OnDestroy {
       .toPromise()
       .then((taskInteractions: TaskInteraction[]) => {
         this.dataSource.data = taskInteractions;
-        console.dirxml(taskInteractions);
-
       });
 
   }

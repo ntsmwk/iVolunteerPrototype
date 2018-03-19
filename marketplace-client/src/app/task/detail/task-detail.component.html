@@ -46,35 +46,37 @@
       <mat-divider></mat-divider>
     </div>
     <button *ngIf="this.task.status === 'CREATED'" routerLink="/task/assign/{{this.task.id}}" ngModule="this.task.id"
-            mat-raised-button>
+            mat-raised-button color="primary">
       Manage Assignments
     </button>
 
-    <button *ngIf="this.task.status === 'CREATED'" (click)="start()" mat-raised-button>
+    <button *ngIf="this.task.status === 'CREATED'" (click)="start()" mat-raised-button color="primary">
       Start
     </button>
 
-    <button *ngIf="this.task.status === 'RUNNING'" (click)="suspend()" mat-raised-button>
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="suspend()" mat-raised-button color="primary">
       Suspend
     </button>
 
-    <button *ngIf="this.task.status === 'SUSPENDED'" (click)="resume()" mat-raised-button>
+    <button *ngIf="this.task.status === 'SUSPENDED'" (click)="resume()" mat-raised-button color="primary">
       Resume
     </button>
 
-    <button *ngIf="this.task.status === 'RUNNING'" (click)="finish()" mat-raised-button>Finish</button>
+    <button *ngIf="this.task.status === 'RUNNING'" (click)="finish()" mat-raised-button color="primary">Finish</button>
     <button *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'" (click)="abort()"
-            mat-raised-button>Abort
+            mat-raised-button color="primary">Abort
     </button>
     <mat-divider></mat-divider>
   </div>
 
   <div *ngIf="role === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()" mat-raised-button>Reserve</button>
-    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button>Cancel
-      Reservation
+    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()" mat-raised-button color="primary">
+      Reserve
     </button>
-    <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button>Import
+    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button color="primary">
+      Cancel Reservation
+    </button>
+    <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button color="primary">Import
     </button>
   </div>
 
