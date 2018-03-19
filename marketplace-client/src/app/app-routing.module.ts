@@ -23,6 +23,7 @@ const routes: Routes = [
   {path: 'tasks', component: TaskListComponent, canActivate: [TokenGuard]},
   {path: 'available', component: TaskAvailableComponent, canActivate: [TokenGuard, VolunteerGuard]},
   {path: 'taskType', component: TaskTypeCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
+  {path: 'taskType/:id', component: TaskTypeCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
   {path: 'taskTypes', component: TaskTypeListComponent, canActivate: [TokenGuard, EmployeeGuard]},
   {path: 'repository', component: VolunteerRepositoryComponent, canActivate: [TokenGuard, VolunteerGuard]},
   {path: '', redirectTo: '/tasks', pathMatch: 'full'}

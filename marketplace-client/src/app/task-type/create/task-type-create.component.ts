@@ -1,11 +1,12 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskTypeService} from '../task-type.service';
 import {TaskType} from '../task-type';
-import {Router} from '@angular/router';
-import {OnInit} from '@angular/core/src/metadata/lifecycle_hooks';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CompetenceService} from '../../competence/competence.service';
 import {Competence} from '../../competence/competence';
+import {TaskTypeValidator} from '../task-type.validator';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   templateUrl: './task-type-create.component.html',
@@ -17,19 +18,44 @@ export class TaskTypeCreateComponent implements OnInit {
   taskTypeForm: FormGroup;
 
   constructor(formBuilder: FormBuilder,
+              private route: ActivatedRoute,
               private router: Router,
               private taskTypeService: TaskTypeService,
               private competenceService: CompetenceService) {
     this.taskTypeForm = formBuilder.group({
-      'name': new FormControl('', Validators.required),
-      'description': new FormControl('', Validators.required),
-      'requiredCompetences': new FormControl(''),
-      'acquirableCompetences': new FormControl('')
+      'id': new FormControl(undefined),
+      'name': new FormControl(undefined, Validators.required),
+      'description': new FormControl(undefined, Validators.required),
+      'requiredCompetences': new FormControl([]),
+      'acquirableCompetences': new FormControl([])
+    }, {validator: TaskTypeValidator});
+  }
+
+
+  ngOnInit() {
+    this.competenceService.findAll().toPromise().then((competences: Competence[]) => {
+      this.competences = competences;
+      this.route.params.subscribe(params => this.findTaskType(params['id']));
     });
   }
 
-  ngOnInit() {
-    this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences);
+  private findTaskType(id: string) {
+    if (isNullOrUndefined(id) || id.length === 0) {
+      return;
+    }
+    this.taskTypeService.findById(id).toPromise().then((taskType: TaskType) => {
+      this.taskTypeForm.setValue({
+        id: taskType.id,
+        name: taskType.name,
+        description: taskType.description,
+        requiredCompetences: this.competences.filter((competence: Competence) => {
+          return taskType.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.name === competence.name);
+        }),
+        acquirableCompetences: this.competences.filter((competence: Competence) => {
+          return taskType.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
+        })
+      });
+    });
   }
 
   save() {
