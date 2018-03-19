@@ -47,6 +47,7 @@ public class BlockchainRestClient {
 
 		} catch (Exception e) {
 			System.out.println("Hash not posted, might already exist!");
+			// TODO: correct exception handling
 		}
 	}
 

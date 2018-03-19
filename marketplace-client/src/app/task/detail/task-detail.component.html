@@ -15,15 +15,15 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
+      <input matInput [readonly]="true" placeholder="Start Date" [value]="task.startDate | date: 'dd.MM.yyyy'">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [readonly]="true" placeholder="End Date" [value]="task.endDate | date: 'dd.MM.yyyy'">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
       <input matInput placeholder="Status" [readonly]="true" [value]="task.status">
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput [readonly]="true" placeholder="Start Date" [value]="task.startDate">
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput [readonly]="true" placeholder="End Date" [value]="task.endDate">
     </mat-form-field>
 
     <mat-form-field class="full-width">
