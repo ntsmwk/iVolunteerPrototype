@@ -2,27 +2,24 @@ package at.jku.csi.marketplace.task.interaction;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import at.jku.csi.marketplace.participant.Participant;
 import at.jku.csi.marketplace.task.Task;
 
+@Repository
 public interface TaskInteractionRepository extends MongoRepository<TaskInteraction, String> {
 
 	List<TaskInteraction> findByTask(Task task);
 
 	List<TaskInteraction> findByTaskAndOperation(Task task, TaskOperation operation);
 
-	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0 } }")
-	List<TaskInteraction> findByVolunteer(String volunteertId);
+	List<TaskInteraction> findByParticipant(Participant participant);
 
-	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0}, 'task': {'$ref': 'task', '$id': ?1} }")
-	List<TaskInteraction> findByVolunteerAndTask(String volunteerId, String taskId);
+	List<TaskInteraction> findByTaskAndParticipant(Task task, Participant participant);
 	
-	@Query("{ 'participant': {'$ref': 'volunteer', '$id': ?0}, 'task': {'$ref': 'task', '$id': ?1} }")
-	List<TaskInteraction> findSortedByVolunteerAndTask(String volunteerId, String taskId, Sort sort);
-	
+	List<TaskInteraction> findSortedByTaskAndParticipant(Task task, Participant participant, Sort sort);
 	
 }

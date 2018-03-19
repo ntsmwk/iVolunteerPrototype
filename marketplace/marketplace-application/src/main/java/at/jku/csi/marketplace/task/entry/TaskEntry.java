@@ -1,18 +1,23 @@
-package at.jku.csi.marketplace.task;
+package at.jku.csi.marketplace.task.entry;
 
 import java.util.Date;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
 
 import at.jku.csi.marketplace.blockchain.IHashObject;
 
-public class CompletedTask implements IHashObject {
+@Document
+public class TaskEntry implements IHashObject {
+
 	private String interactionId;
 	private String taskId;
-	private String participantId;
+	private String taskName;
+	private String taskDescription;
 	private Date timestamp;
 
-	public CompletedTask() {
+	public TaskEntry() {
 	}
 
 	public String getInteractionId() {
@@ -31,12 +36,20 @@ public class CompletedTask implements IHashObject {
 		this.taskId = taskId;
 	}
 
-	public String getParticipantId() {
-		return participantId;
+	public String getTaskName() {
+		return taskName;
 	}
 
-	public void setParticipantId(String participantId) {
-		this.participantId = participantId;
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getTaskDescription() {
+		return taskDescription;
+	}
+
+	public void setTaskDescription(String taskDescription) {
+		this.taskDescription = taskDescription;
 	}
 
 	public Date getTimestamp() {
@@ -52,9 +65,7 @@ public class CompletedTask implements IHashObject {
 		JsonObject json = new JsonObject();
 		json.addProperty("interactionId", interactionId);
 		json.addProperty("taskId", taskId);
-		json.addProperty("participantId", participantId);
 		json.addProperty("timestamp", timestamp.toString());
-
 		return json.toString();
 	}
 

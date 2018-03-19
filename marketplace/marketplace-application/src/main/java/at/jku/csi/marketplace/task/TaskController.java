@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.csi.marketplace.blockchain.BlockchainRestClient;
-import at.jku.csi.marketplace.exception.ForbiddenException;
 import at.jku.csi.marketplace.exception.NotAcceptableException;
+import at.jku.csi.marketplace.participant.Volunteer;
+import at.jku.csi.marketplace.participant.VolunteerRepository;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
@@ -27,14 +27,14 @@ import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 public class TaskController {
 
 	@Autowired
-	private BlockchainRestClient blockchainRestClient;
-
-	@Autowired
 	private LoginService loginService;
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
+	@Autowired
+	private VolunteerRepository volunteerRepository;
+	
 
 	@GetMapping("/task")
 	public List<Task> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
@@ -52,35 +52,15 @@ public class TaskController {
 	@GetMapping("/task/volunteer/{id}")
 	public List<Task> findByVolunteer(@PathVariable("id") String id) {
 
+		Volunteer volunteer = volunteerRepository.findOne(id);
+		
 		Set<Task> tasks = new HashSet<Task>();
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByVolunteer(id);
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
 		for (TaskInteraction ti : taskInteractions) {
 			tasks.add(ti.getTask());
 		}
 
 		return new ArrayList<>(tasks);
-	}
-
-	@GetMapping("/task/{id}/sync")
-	public CompletedTask syncTask(@PathVariable("id") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTaskAndOperation(task,
-				TaskStatus.FINISHED);
-
-		if (taskInteractions.size() != 1) {
-			throw new ForbiddenException();
-		}
-		TaskInteraction taskInteraction = taskInteractions.get(0);
-
-		CompletedTask completedTask = new CompletedTask();
-		completedTask.setInteractionId(taskInteraction.getId());
-		completedTask.setTaskId(taskInteraction.getTask().getId());
-		completedTask.setParticipantId(taskInteraction.getParticipant().getId());
-		completedTask.setTimestamp(taskInteraction.getTimestamp());
-
-		blockchainRestClient.postSimpleHash(completedTask);
-
-		return completedTask;
 	}
 
 	@PostMapping("/task")
