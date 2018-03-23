@@ -7,6 +7,8 @@ import {LoginService} from '../../login/login.service';
 import {RepositoryService} from '../../_service/repository.service';
 import {TaskInteraction} from '../../task-interaction/task-interaction';
 import {MessageService} from '../../_service/message.service';
+import {TaskEntryService} from '../../task-entry/task-entry.service';
+import {TaskEntry} from '../../task-entry/task-entry';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -24,6 +26,7 @@ export class TaskDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private taskService: TaskService,
+              private taskEntryService: TaskEntryService,
               private loginService: LoginService,
               private repositoryService: RepositoryService,
               private taskInteractionService: TaskInteractionService,
@@ -54,10 +57,10 @@ export class TaskDetailComponent implements OnInit {
   }
 
   import() {
-    this.taskInteractionService.findFinishedByTask(this.task)
+    this.taskEntryService.findById(this.task.id)
       .toPromise()
-      .then((taskInteractions: TaskInteraction[]) => {
-        this.repositoryService.saveTask(taskInteractions[0])
+      .then((taskEntry: TaskEntry) => {
+        this.repositoryService.saveTask(taskEntry)
           .toPromise()
           .then(() => {
             alert('Task is imported');

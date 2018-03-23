@@ -36,6 +36,7 @@ import {CompetenceService} from './competence/competence.service';
 import {VolunteerService} from './volunteer/volunteer.service';
 import {VolunteerRepositoryComponent} from './volunteer/repository/volunteer-repository.component';
 import {EmployeeService} from './employee/employee.service';
+import {TaskEntryService} from './task-entry/task-entry.service';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import {EmployeeService} from './employee/employee.service';
     LoginService,
     TaskService,
     TaskTypeService,
+    TaskEntryService,
     TaskInteractionService,
     RepositoryService,
     EmployeeService,

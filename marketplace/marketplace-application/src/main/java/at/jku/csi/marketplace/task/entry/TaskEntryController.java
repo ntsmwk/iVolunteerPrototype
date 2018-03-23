@@ -29,7 +29,7 @@ public class TaskEntryController {
 	@Autowired
 	private TaskInteractionToTaskEntryMapper taskInteractionToTaskEntryMapper;
 
-	@GetMapping("/task/{id}/sync")
+	@GetMapping("/taskEntry/{id}")
 	public TaskEntry syncTask(@PathVariable("id") String taskId) {
 		Task task = taskRepository.findOne(taskId);
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTaskAndOperation(task,
@@ -38,10 +38,8 @@ public class TaskEntryController {
 		if (taskInteractions.size() != 1) {
 			throw new ForbiddenException();
 		}
-		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.map(taskInteractions.get(0));
-		taskEntryRepository.save(taskEntry);
-		blockchainRestClient.postSimpleHash(taskEntry);
-		return taskEntry;
+		return taskEntryRepository.save(taskInteractionToTaskEntryMapper.map(taskInteractions.get(0)));
+		//blockchainRestClient.postSimpleHash(taskEntry);
 	}
 
 }

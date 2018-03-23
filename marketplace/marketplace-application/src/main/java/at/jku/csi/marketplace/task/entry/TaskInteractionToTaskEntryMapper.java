@@ -10,7 +10,7 @@ import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 public interface TaskInteractionToTaskEntryMapper {
 
 	@Mappings({ 
-		@Mapping(target = "interactionId", source = "id"), 
+		@Mapping(target = "id", source = "id"), 
 		@Mapping(target = "taskId", source = "task.id"),
 		@Mapping(target = "taskName", source = "task.type.name"),
 		@Mapping(target = "taskDescription", source = "task.type.description"),

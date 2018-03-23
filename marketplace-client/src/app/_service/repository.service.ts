@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Task} from '../task/task';
-import {TaskInteraction} from '../task-interaction/task-interaction';
 import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
+import {TaskEntry} from '../task-entry/task-entry';
 
 @Injectable()
 export class RepositoryService {
@@ -46,26 +46,19 @@ export class RepositoryService {
     return observable;
   }
 
-  saveTask(taskInteraction: TaskInteraction) {
-    const localTask = {
-      'id': taskInteraction.id,
-      'task': {'id': taskInteraction.task.id},
-      'participant': {'id': taskInteraction.participant.id},
-      'timestamp': taskInteraction.timestamp
+  saveTask(taskEntry: TaskEntry) {
+    const saveFunction = () => {
+      this.http.post([this.apiUrl, 'tasks'].join('/'), taskEntry)
+        .toPromise()
+        .then(() => subscriber.complete())
+        .catch((reason: any) => {
+          subscriber.error(reason);
+          subscriber.complete();
+        });
     };
 
     const observable = new Observable(subscriber => {
-      const saveFunction = () => {
-        this.http.post([this.apiUrl, 'tasks'].join('/'), localTask)
-          .toPromise()
-          .then(() => subscriber.complete())
-          .catch((reason: any) => {
-            subscriber.error(reason);
-            subscriber.complete();
-          });
-      };
-
-      this.http.delete([this.apiUrl, 'tasks', localTask.id].join('/'))
+      this.http.delete([this.apiUrl, 'tasks', taskEntry.id].join('/'))
         .toPromise()
         .then(() => saveFunction())
         .catch(() => saveFunction());

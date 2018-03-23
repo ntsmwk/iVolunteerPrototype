@@ -11,7 +11,7 @@ import at.jku.csi.marketplace.blockchain.IHashObject;
 @Document
 public class TaskEntry implements IHashObject {
 
-	private String interactionId;
+	private String id;
 	private String taskId;
 	private String taskName;
 	private String taskDescription;
@@ -20,12 +20,12 @@ public class TaskEntry implements IHashObject {
 	public TaskEntry() {
 	}
 
-	public String getInteractionId() {
-		return interactionId;
+	public String getId() {
+		return id;
 	}
 
-	public void setInteractionId(String interactionId) {
-		this.interactionId = interactionId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getTaskId() {
@@ -63,7 +63,7 @@ public class TaskEntry implements IHashObject {
 	@Override
 	public String toHashString() {
 		JsonObject json = new JsonObject();
-		json.addProperty("interactionId", interactionId);
+		json.addProperty("interactionId", id);
 		json.addProperty("taskId", taskId);
 		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();
