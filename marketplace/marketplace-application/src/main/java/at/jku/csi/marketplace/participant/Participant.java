@@ -8,11 +8,9 @@ public abstract class Participant {
 
 	@Id
 	private String id;
-
 	private String username;
 	@JsonIgnore
 	private String password;
-	private ParticipantProfile profile;
 
 	public String getId() {
 		return id;
@@ -29,34 +27,26 @@ public abstract class Participant {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public ParticipantProfile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(ParticipantProfile profile) {
-		this.profile = profile;
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Participant && this.getId().equals(((Participant)obj).getId())) {
-			return true;
+		if (!(obj instanceof Participant)) {
+			return false;
 		}
-		return false;
+		return ((Participant) obj).id == id;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return this.id.hashCode();
+		return id.hashCode();
 	}
 
 }

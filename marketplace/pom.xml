@@ -27,7 +27,6 @@
 		<module>marketplace-application</module>
 		<module>marketplace-blockchain</module>
 		<module>marketplace-security</module>
-		<module>marketplace-verifier</module>
 	</modules>
 
 	<dependencies>
@@ -55,6 +54,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-jdk8</artifactId>
 			<version>1.2.0.Final</version>
@@ -66,7 +71,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.2</version>
+				<version>3.6.2</version><!--$NO-MVN-MAN-VER$ -->
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

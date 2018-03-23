@@ -1,14 +1,11 @@
-package at.jku.csi.marketplace.task.entry;
+package at.jku.csi.marketplace.participant.profile;
 
 import java.util.Date;
-
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
 
 import at.jku.csi.marketplace.blockchain.IHashObject;
 
-@Document
 public class TaskEntry implements IHashObject {
 
 	private String id;
@@ -59,11 +56,24 @@ public class TaskEntry implements IHashObject {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TaskEntry)) {
+			return false;
+		}
+		return ((TaskEntry) obj).id == id;
+	}
+	
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 
 	@Override
 	public String toHashString() {
 		JsonObject json = new JsonObject();
-		json.addProperty("interactionId", id);
+		json.addProperty("id", id);
 		json.addProperty("taskId", taskId);
 		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();

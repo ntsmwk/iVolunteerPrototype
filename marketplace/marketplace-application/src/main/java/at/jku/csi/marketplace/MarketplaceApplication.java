@@ -10,6 +10,8 @@ import at.jku.csi.marketplace.participant.Employee;
 import at.jku.csi.marketplace.participant.EmployeeRepository;
 import at.jku.csi.marketplace.participant.Volunteer;
 import at.jku.csi.marketplace.participant.VolunteerRepository;
+import at.jku.csi.marketplace.participant.profile.VolunteerProfile;
+import at.jku.csi.marketplace.participant.profile.VolunteerProfileRepository;
 
 @SpringBootApplication
 public class MarketplaceApplication implements CommandLineRunner {
@@ -20,11 +22,13 @@ public class MarketplaceApplication implements CommandLineRunner {
 	private static final String BROISER = "broiser";
 
 	private static final String RAW_PASSWORD = "passme";
-	
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
+	@Autowired
+	private VolunteerProfileRepository volunteerProfileRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,30 +46,27 @@ public class MarketplaceApplication implements CommandLineRunner {
 			employee = employeeRepository.insert(employee);
 		}
 
-		Volunteer volunteer1 = volunteerRepository.findByUsername(BROISER);
-		if (volunteer1 == null) {
-			volunteer1 = new Volunteer();
-			volunteer1.setUsername(BROISER);
-			volunteer1.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
-			volunteer1 = volunteerRepository.insert(volunteer1);
+		createVolunteer(BROISER, RAW_PASSWORD);
+		createVolunteer(PSTARZER, RAW_PASSWORD);
+		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+	}
+
+	private Volunteer createVolunteer(String username, String password) {
+		Volunteer volunteer = volunteerRepository.findByUsername(username);
+		if (volunteer == null) {
+			volunteer = new Volunteer();
+			volunteer.setUsername(username);
+			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
+			volunteer = volunteerRepository.insert(volunteer);
 		}
 
-		Volunteer volunteer2 = volunteerRepository.findByUsername(PSTARZER);
-		if (volunteer2 == null) {
-			volunteer2 = new Volunteer();
-			volunteer2.setUsername(PSTARZER);
-			volunteer2.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
-			volunteer2 = volunteerRepository.insert(volunteer2);
+		VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
+		if (volunteerProfile == null) {
+			volunteerProfile = new VolunteerProfile();
+			volunteerProfile.setVolunteer(volunteer);
+			volunteerProfile = volunteerProfileRepository.insert(volunteerProfile);
 		}
-		
-		Volunteer volunteer3 = volunteerRepository.findByUsername(MWEISSENBEK);
-		if (volunteer3 == null) {
-			volunteer3 = new Volunteer();
-			volunteer3.setUsername(MWEISSENBEK);
-			volunteer3.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
-			volunteer3 = volunteerRepository.insert(volunteer3);
-		}
-
+		return volunteer;
 	}
 
 }

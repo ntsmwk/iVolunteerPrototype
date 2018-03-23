@@ -1,18 +1,22 @@
 package at.jku.csi.marketplace.task;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.csi.marketplace.blockchain.BlockchainRestClient;
 import at.jku.csi.marketplace.exception.BadRequestException;
+import at.jku.csi.marketplace.participant.Volunteer;
+import at.jku.csi.marketplace.participant.profile.CompetenceEntry;
+import at.jku.csi.marketplace.participant.profile.TaskEntry;
+import at.jku.csi.marketplace.participant.profile.TaskInteractionToCompetenceEntryMapper;
+import at.jku.csi.marketplace.participant.profile.TaskInteractionToTaskEntryMapper;
+import at.jku.csi.marketplace.participant.profile.VolunteerProfile;
+import at.jku.csi.marketplace.participant.profile.VolunteerProfileRepository;
 import at.jku.csi.marketplace.security.LoginService;
-import at.jku.csi.marketplace.task.entry.TaskEntry;
-import at.jku.csi.marketplace.task.entry.TaskEntryRepository;
-import at.jku.csi.marketplace.task.entry.TaskInteractionToTaskEntryMapper;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 
@@ -21,18 +25,19 @@ public class TaskOperationController {
 
 	@Autowired
 	private LoginService loginService;
-	
+	// @Autowired
+	// private BlockchainRestClient blockchainRestClient;
+
 	@Autowired
 	private TaskRepository taskRepository;
-	@Autowired
-	private TaskEntryRepository taskEntryRepository;
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private TaskInteractionToTaskEntryMapper taskInteractionToTaskEntryMapper;
-
 	@Autowired
-	private BlockchainRestClient blockchainRestClient;
+	private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
+	@Autowired
+	private VolunteerProfileRepository volunteerProfileRepository;
 
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
@@ -68,10 +73,20 @@ public class TaskOperationController {
 			throw new BadRequestException();
 		}
 		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.FINISHED);
-		TaskEntry taskEntry = taskEntryRepository.save(taskInteractionToTaskEntryMapper.map(taskInteraction));
-		blockchainRestClient.postSimpleHash(taskEntry);
-	}
+		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
+		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 
+		// TODO write blockchain entry;
+		Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
+		VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
+		if (volunteerProfile == null) {
+			volunteerProfile = new VolunteerProfile();
+			volunteerProfile.setVolunteer(volunteer);
+		}
+		volunteerProfile.getTaskList().add(taskEntry);
+		volunteerProfile.getCompetenceList().addAll(competenceEntries);
+		volunteerProfileRepository.save(volunteerProfile);
+	}
 
 	@PostMapping("/task/{id}/abort")
 	public void abortTask(@PathVariable("id") String id) {
@@ -94,8 +109,6 @@ public class TaskOperationController {
 		taskInteraction.setParticipant(loginService.getLoggedInParticipant());
 		taskInteraction.setTimestamp(new Date());
 		taskInteraction.setOperation(task.getStatus());
-		taskInteractionRepository.insert(taskInteraction);
-
-		return taskInteraction;
+		return taskInteractionRepository.insert(taskInteraction);
 	}
 }
