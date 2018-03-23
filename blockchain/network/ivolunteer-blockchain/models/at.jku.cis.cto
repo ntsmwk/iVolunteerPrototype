@@ -13,16 +13,10 @@ asset SimpleHash identified by hash {
   o String hash
 }
 
-asset GlobalHash identified by hash {
-  o String userId
-  o String hash
-}
-
 transaction postSimpleHash {
   o String hash
 }
 
-transaction postGlobalHash {
-  o String userId
+transaction removeSimpleHash {
   o String hash
 }

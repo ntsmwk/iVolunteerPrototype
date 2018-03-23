@@ -5,6 +5,8 @@
 
 var NS = 'at.jku.cis';
 
+// could be removed and replaces with simple predefined rest call 
+
 /**
  * postSimpleHash
  * @param {at.jku.cis.postSimpleHash} postSimpleHash
@@ -20,26 +22,5 @@ function postSimpleHash(postSimpleHash) {
     return getAssetRegistry(simpleHash.getFullyQualifiedType())
         .then(function (registry) {
             return registry.add(simpleHash);
-    	});
-}
-
-
-/**
- * postGlobalHash
- * @param {at.jku.cis.postGlobalHash} postGlobalHash
- * @transaction
- */
-function postGlobalHash(postGlobalHash) {
-    console.log('postGlobalHash');
-
-    var factory = getFactory();
-
-    var globalHash = factory.newResource(NS, 'globalHash', postGlobalHash.hash);
-    globalHash.userId = postGlobalHash.userId;
-
-    // save the hash
-    return getAssetRegistry(globalHash.getFullyQualifiedType())
-        .then(function (registry) {
-            return registry.add(globalHash);
     	});
 }

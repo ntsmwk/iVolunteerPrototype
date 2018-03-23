@@ -19,8 +19,6 @@ import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
 public class TaskEntryController {
 
 	@Autowired
-	private BlockchainRestClient blockchainRestClient;
-	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskEntryRepository taskEntryRepository;
@@ -39,7 +37,6 @@ public class TaskEntryController {
 			throw new ForbiddenException();
 		}
 		return taskEntryRepository.save(taskInteractionToTaskEntryMapper.map(taskInteractions.get(0)));
-		//blockchainRestClient.postSimpleHash(taskEntry);
 	}
 
 }

@@ -41,6 +41,7 @@ public class TaskController {
 		if (status == null) {
 			return taskRepository.findAll();
 		}
+
 		return taskRepository.findByStatus(status);
 	}
 
