@@ -102,23 +102,23 @@ public class TaskInteractionController {
 			Participant participant = loginService.getLoggedInParticipant();
 			TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, participant);
 
-			if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
-				createTaskInteraction(taskRepository.findOne(taskId), participant, TaskVolunteerOperation.RESERVED);
+			if (latestTaskInteraction == null
+					|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
+				createTaskInteraction(task, participant, TaskVolunteerOperation.RESERVED);
 			}
 		}
 	}
 
 	@PostMapping("/volunteer/unreserve")
 	public void unreserveForTask(@RequestBody String id) {
+		Task task = taskRepository.findOne(id);
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
-			Task task = taskRepository.findOne(id);
 			Participant participant = loginService.getLoggedInParticipant();
-			List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTaskAndParticipant(task,
-					participant);
-			if (!taskInteractions.isEmpty()
-					&& (taskInteractions.get(0).getOperation() == TaskVolunteerOperation.RESERVED
-							|| taskInteractions.get(0).getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
-				createTaskInteraction(taskRepository.findOne(id), participant, TaskVolunteerOperation.UNRESERVED);
+			TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, participant);
+			if (lastedTaskInteraction == null 
+					|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+					|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
+				createTaskInteraction(task, participant, TaskVolunteerOperation.UNRESERVED);
 			}
 		}
 	}

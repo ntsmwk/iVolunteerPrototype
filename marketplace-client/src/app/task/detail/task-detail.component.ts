@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Task} from '../task';
 import {TaskService} from '../task.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
+
 import {LoginService} from '../../login/login.service';
-import {RepositoryService} from '../../_service/repository.service';
-import {TaskInteraction} from '../../task-interaction/task-interaction';
+import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
+
+import {VolunteerRepositoryService} from '../../volunteer/volunteer-repository.service';
 import {MessageService} from '../../_service/message.service';
-import {TaskEntryService} from '../../task-entry/task-entry.service';
-import {TaskEntry} from '../../task-entry/task-entry';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -23,16 +22,6 @@ export class TaskDetailComponent implements OnInit {
   isAlreadyAssigned: boolean;
   isAlreadyImported: boolean;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private taskService: TaskService,
-              private taskEntryService: TaskEntryService,
-              private loginService: LoginService,
-              private repositoryService: RepositoryService,
-              private taskInteractionService: TaskInteractionService,
-              private messageService: MessageService) {
-  }
-
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.role = role);
@@ -42,7 +31,7 @@ export class TaskDetailComponent implements OnInit {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
 
-      this.repositoryService.isTaskImported(this.task).toPromise().then((isAlreadyImported: boolean) => {
+      this.volunteerRepositoryService.isTaskImported(this.task).toPromise().then((isAlreadyImported: boolean) => {
         this.isAlreadyImported = isAlreadyImported;
       });
 
@@ -56,17 +45,13 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  import() {
-    this.taskEntryService.findById(this.task.id)
-      .toPromise()
-      .then((taskEntry: TaskEntry) => {
-        this.repositoryService.saveTask(taskEntry)
-          .toPromise()
-          .then(() => {
-            alert('Task is imported');
-            this.isAlreadyImported = true;
-          });
-      });
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private loginService: LoginService,
+              private messageService: MessageService,
+              private taskService: TaskService,
+              private taskInteractionService: TaskInteractionService,
+              private volunteerRepositoryService: VolunteerRepositoryService) {
   }
 
   unreserve() {

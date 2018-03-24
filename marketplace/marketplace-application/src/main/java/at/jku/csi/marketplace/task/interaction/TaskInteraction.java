@@ -79,4 +79,17 @@ public class TaskInteraction {
 		this.comment = comment;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TaskInteraction)) {
+			return false;
+		}
+		return ((TaskInteraction) obj).id.equals(id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 }

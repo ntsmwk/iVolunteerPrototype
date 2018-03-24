@@ -41,7 +41,7 @@ public abstract class Participant {
 		if (!(obj instanceof Participant)) {
 			return false;
 		}
-		return ((Participant) obj).id == id;
+		return ((Participant) obj).id.equals(id);
 	}
 
 	@Override

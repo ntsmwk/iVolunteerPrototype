@@ -2,6 +2,7 @@ package at.jku.csi.marketplace.task;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import at.jku.csi.marketplace.participant.profile.VolunteerProfileRepository;
 import at.jku.csi.marketplace.security.LoginService;
 import at.jku.csi.marketplace.task.interaction.TaskInteraction;
 import at.jku.csi.marketplace.task.interaction.TaskInteractionRepository;
+import at.jku.csi.marketplace.task.interaction.TaskInteractionService;
 
 @RestController
 public class TaskOperationController {
@@ -30,6 +32,8 @@ public class TaskOperationController {
 
 	@Autowired
 	private TaskRepository taskRepository;
+	@Autowired
+	private TaskInteractionService taskInteractionService;
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
@@ -77,15 +81,21 @@ public class TaskOperationController {
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 
 		// TODO write blockchain entry;
-		Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
-		VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
-		if (volunteerProfile == null) {
-			volunteerProfile = new VolunteerProfile();
-			volunteerProfile.setVolunteer(volunteer);
-		}
-		volunteerProfile.getTaskList().add(taskEntry);
-		volunteerProfile.getCompetenceList().addAll(competenceEntries);
-		volunteerProfileRepository.save(volunteerProfile);
+
+		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
+
+			@Override
+			public void accept(Volunteer volunteer) {
+				VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
+				if (volunteerProfile == null) {
+					volunteerProfile = new VolunteerProfile();
+					volunteerProfile.setVolunteer(volunteer);
+				}
+				volunteerProfile.getTaskList().add(taskEntry);
+				volunteerProfile.getCompetenceList().addAll(competenceEntries);
+				volunteerProfileRepository.save(volunteerProfile);
+ 			}
+		});
 	}
 
 	@PostMapping("/task/{id}/abort")

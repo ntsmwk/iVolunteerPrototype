@@ -64,7 +64,7 @@ public class Task {
 		if (!(obj instanceof Task)) {
 			return false;
 		}
-		return id == ((Task) obj).id;
+		return ((Task) obj).id.equals(id);
 	}
 
 	@Override

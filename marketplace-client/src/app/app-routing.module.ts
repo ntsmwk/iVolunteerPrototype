@@ -11,7 +11,7 @@ import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {TokenGuard} from './login/token.guard';
 import {EmployeeGuard} from './employee/employee.guard';
 import {VolunteerGuard} from './volunteer/volunteer.guard';
-import {VolunteerRepositoryComponent} from './volunteer/repository/volunteer-repository.component';
+import {VolunteerProfileComponent} from './volunteer/profile/volunteer-profile.component';
 
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: 'taskType', component: TaskTypeCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
   {path: 'taskType/:id', component: TaskTypeCreateComponent, canActivate: [TokenGuard, EmployeeGuard]},
   {path: 'taskTypes', component: TaskTypeListComponent, canActivate: [TokenGuard, EmployeeGuard]},
-  {path: 'repository', component: VolunteerRepositoryComponent, canActivate: [TokenGuard, VolunteerGuard]},
+  {path: 'profile', component: VolunteerProfileComponent, canActivate: [TokenGuard, VolunteerGuard]},
   {path: '', redirectTo: '/tasks', pathMatch: 'full'}
 ];
 

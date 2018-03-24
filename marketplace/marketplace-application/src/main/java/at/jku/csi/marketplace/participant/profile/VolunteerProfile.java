@@ -51,4 +51,17 @@ public class VolunteerProfile {
 	public void setTaskList(Set<TaskEntry> taskList) {
 		this.taskList = taskList;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof VolunteerProfile)) {
+			return false;
+		}
+		return ((VolunteerProfile) obj).id.equals(id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 }

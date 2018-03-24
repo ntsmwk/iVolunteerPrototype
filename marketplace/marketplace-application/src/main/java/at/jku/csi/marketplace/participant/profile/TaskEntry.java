@@ -62,7 +62,7 @@ public class TaskEntry implements IHashObject {
 		if (!(obj instanceof TaskEntry)) {
 			return false;
 		}
-		return ((TaskEntry) obj).id == id;
+		return ((TaskEntry) obj).id.equals(id);
 	}
 	
 	@Override

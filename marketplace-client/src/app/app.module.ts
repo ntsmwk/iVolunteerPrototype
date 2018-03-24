@@ -25,7 +25,7 @@ import {LoginComponent} from './login/login.component';
 import {TokenGuard} from './login/token.guard';
 import {MessageService} from './_service/message.service';
 import {TaskAvailableComponent} from './task/available/task-available.component';
-import {RepositoryService} from './_service/repository.service';
+import {VolunteerRepositoryService} from './volunteer/volunteer-repository.service';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {EmployeeGuard} from './employee/employee.guard';
 import {VolunteerGuard} from './volunteer/volunteer.guard';
@@ -34,9 +34,9 @@ import {GermanDateAdapter} from './_adapter/german-date-adapter';
 import {DateAdapter} from '@angular/material';
 import {CompetenceService} from './competence/competence.service';
 import {VolunteerService} from './volunteer/volunteer.service';
-import {VolunteerRepositoryComponent} from './volunteer/repository/volunteer-repository.component';
+import {VolunteerProfileComponent} from './volunteer/profile/volunteer-profile.component';
 import {EmployeeService} from './employee/employee.service';
-import {TaskEntryService} from './task-entry/task-entry.service';
+import {VolunteerProfileService} from './volunteer/volunteer-profile.service';
 
 
 @NgModule({
@@ -52,7 +52,7 @@ import {TaskEntryService} from './task-entry/task-entry.service';
     TaskTypeCreateComponent,
     TaskAssignComponent,
     TaskInteractionHistoryComponent,
-    VolunteerRepositoryComponent
+    VolunteerProfileComponent
   ],
   imports: [
     AppMaterialModule,
@@ -63,22 +63,22 @@ import {TaskEntryService} from './task-entry/task-entry.service';
     ReactiveFormsModule
   ],
   providers: [
-    MessageService,
     TokenGuard,
-    EmployeeGuard,
-    VolunteerGuard,
-    CompetenceService,
     LoginService,
+    MessageService,
+    CompetenceService,
     TaskService,
     TaskTypeService,
-    TaskEntryService,
     TaskInteractionService,
-    RepositoryService,
+    EmployeeGuard,
     EmployeeService,
+    VolunteerGuard,
     VolunteerService,
+    VolunteerProfileService,
+    VolunteerRepositoryService,
+    {provide: DateAdapter, useClass: GermanDateAdapter},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
-    {provide: DateAdapter, useClass: GermanDateAdapter}
+    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

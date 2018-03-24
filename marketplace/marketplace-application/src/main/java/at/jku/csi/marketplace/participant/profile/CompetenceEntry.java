@@ -52,7 +52,7 @@ public class CompetenceEntry implements IHashObject {
 		if (!(obj instanceof CompetenceEntry)) {
 			return false;
 		}
-		return ((CompetenceEntry) obj).id == id;
+		return ((CompetenceEntry) obj).id.equals(id);
 	}
 	
 	@Override

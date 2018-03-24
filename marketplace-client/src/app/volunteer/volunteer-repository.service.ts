@@ -3,10 +3,10 @@ import {HttpClient} from '@angular/common/http';
 import {Task} from '../task/task';
 import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
-import {TaskEntry} from '../task-entry/task-entry';
+import {TaskEntry} from './task-entry';
 
 @Injectable()
-export class RepositoryService {
+export class VolunteerRepositoryService {
 
   private apiUrl = 'http://localhost:3000';
 

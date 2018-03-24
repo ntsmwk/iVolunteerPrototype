@@ -58,4 +58,17 @@ public class TaskType {
 		this.requiredCompetences = requiredCompetences;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TaskType)) {
+			return false;
+		}
+		return ((TaskType) obj).id.equals(id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 }
