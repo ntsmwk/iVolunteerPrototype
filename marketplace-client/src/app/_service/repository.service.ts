@@ -47,17 +47,17 @@ export class RepositoryService {
   }
 
   saveTask(taskEntry: TaskEntry) {
-    const saveFunction = () => {
-      this.http.post([this.apiUrl, 'tasks'].join('/'), taskEntry)
-        .toPromise()
-        .then(() => subscriber.complete())
-        .catch((reason: any) => {
-          subscriber.error(reason);
-          subscriber.complete();
-        });
-    };
-
     const observable = new Observable(subscriber => {
+      const saveFunction = () => {
+        this.http.post([this.apiUrl, 'tasks'].join('/'), taskEntry)
+          .toPromise()
+          .then(() => subscriber.complete())
+          .catch((reason: any) => {
+            subscriber.error(reason);
+            subscriber.complete();
+          });
+      };
+
       this.http.delete([this.apiUrl, 'tasks', taskEntry.id].join('/'))
         .toPromise()
         .then(() => saveFunction())

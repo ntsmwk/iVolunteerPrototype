@@ -9,5 +9,5 @@ export const TaskTypeValidator = (control: AbstractControl): { [key: string]: bo
   });
   requiredCompetences.setErrors(commonCompetences.length === 0 ? null : {duplactedCompetence: true});
   acquirableCompetences.setErrors(commonCompetences.length === 0 ? null : {duplactedCompetence: true});
-  return null;
+  return commonCompetences.length === 0 ? null : {duplactedCompetence: true};
 };

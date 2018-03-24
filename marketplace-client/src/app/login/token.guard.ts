@@ -10,7 +10,7 @@ export class TokenGuard implements CanActivate {
 
   canActivate(): boolean {
     const token = localStorage.getItem('token');
-    if (isNullOrUndefined(token)) {
+    if (isNullOrUndefined(token) || token.length === 0) {
       this.router.navigate(['login']);
       return false;
     }
