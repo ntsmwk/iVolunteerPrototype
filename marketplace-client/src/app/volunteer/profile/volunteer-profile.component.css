@@ -1,0 +1,8 @@
+.mat-list-item {
+  border: 1px dashed;
+  margin-bottom: 10px;
+}
+
+.mat-list-item:last-child {
+  margin-bottom: 0;
+}

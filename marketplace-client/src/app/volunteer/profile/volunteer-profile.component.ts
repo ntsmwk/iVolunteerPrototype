@@ -6,7 +6,8 @@ import {Volunteer} from '../volunteer';
 import {VolunteerProfile} from '../volunteer-profile';
 
 @Component({
-  templateUrl: './volunteer-profile.component.html'
+  templateUrl: './volunteer-profile.component.html',
+  styleUrls: ['./volunteer-profile.component.css']
 })
 export class VolunteerProfileComponent implements OnInit {
   volunteer: Volunteer;

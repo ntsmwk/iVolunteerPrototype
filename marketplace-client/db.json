@@ -1,19 +1,19 @@
 {
-  "profile": {
-    "firstName": "Berthold",
-    "lastName": "Roiser"
-  },
-  "competencies": [],
-  "tasks": [
+  "volunteerRepository": [
     {
-      "id": "5aaa6ac7cb7dce14b4edf315",
-      "task": {
-        "id": "5aaa6a40cb7dce14b4edf30e"
+      "volunteer": {
+        "username": "broiser"
       },
-      "participant": {
-        "id": "5aaa699dcb7dce14b4edf309"
-      },
-      "timestamp": 1521117895604
+      "taskList": [
+        {
+          "id": "5ab66ddd405a2e4c0fd46569",
+          "taskId": "5ab64640405a2e346ca55be2",
+          "taskName": "Sandburg bauen",
+          "taskDescription": "Beschreibung vom Sandburg bauen",
+          "timestamp": 1521905117574
+        }
+      ],
+      "competenceList": []
     }
   ]
 }
