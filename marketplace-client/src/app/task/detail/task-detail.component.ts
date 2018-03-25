@@ -5,8 +5,6 @@ import {TaskService} from '../task.service';
 
 import {LoginService} from '../../login/login.service';
 import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
-
-import {VolunteerRepositoryService} from '../../volunteer/volunteer-repository.service';
 import {MessageService} from '../../_service/message.service';
 
 @Component({
@@ -20,7 +18,6 @@ export class TaskDetailComponent implements OnInit {
   role;
   isAlreadyReserved: boolean;
   isAlreadyAssigned: boolean;
-  isAlreadyImported: boolean;
 
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
@@ -30,10 +27,6 @@ export class TaskDetailComponent implements OnInit {
   private loadTask(id: string) {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
-
-      this.volunteerRepositoryService.isTaskImported(this.task).toPromise().then((isAlreadyImported: boolean) => {
-        this.isAlreadyImported = isAlreadyImported;
-      });
 
       this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isAlreadyReserved: boolean) => {
         this.isAlreadyReserved = isAlreadyReserved;
@@ -50,8 +43,7 @@ export class TaskDetailComponent implements OnInit {
               private loginService: LoginService,
               private messageService: MessageService,
               private taskService: TaskService,
-              private taskInteractionService: TaskInteractionService,
-              private volunteerRepositoryService: VolunteerRepositoryService) {
+              private taskInteractionService: TaskInteractionService) {
   }
 
   unreserve() {

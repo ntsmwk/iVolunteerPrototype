@@ -1,36 +1,37 @@
 <h3>Volunteer Repository</h3>
-
-<pre>{{volunteer | json}}</pre>
-
-<mat-divider></mat-divider>
-
 <div>
-  <h4>Competence List</h4>
-  <mat-list role="list" *ngIf="volunteerProfile">
-    <mat-list-item role="listitem" *ngFor="let competenceEntry of volunteerProfile.competenceList">
-      <h5 mat-line>
-        <strong>{{competenceEntry.competenceName}}</strong>
-        <span>reached at {{competenceEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
-      </h5>
-      <img src="assets/thumb.svg" height="24">
-    </mat-list-item>
-  </mat-list>
+  <mat-divider></mat-divider>
 </div>
 
-<mat-divider></mat-divider>
+<div *ngIf="commonProfile">
+  <div>
+    <h4>Competence List</h4>
+    <mat-list role="list">
+      <mat-list-item role="listitem" [ngClass]="calculateCompetenceClass(competenceEntry)"
+                     *ngFor="let competenceEntry of commonProfile.competenceList">
+        <h5 mat-line>
+          <strong>{{competenceEntry.competenceName}}</strong>
+          <span>reached at {{competenceEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
+        </h5>
+        <img src="assets/thumb.svg" height="24">
+      </mat-list-item>
+    </mat-list>
+  </div>
 
-<div>
-  <h4>Task List</h4>
-  <mat-list role="list" *ngIf="volunteerProfile">
-    <mat-list-item role="listitem" *ngFor="let taskEntry of volunteerProfile.taskList">
-      <h5 mat-line>
-        <strong>{{taskEntry.taskName}}</strong>
-        <span>finished at {{taskEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
-      </h5>
-      <p mat-line> {{taskEntry.taskDescription}} </p>
-      <img src="assets/assignment.svg" height="36">
-    </mat-list-item>
-  </mat-list>
+  <mat-divider></mat-divider>
+
+  <div>
+    <h4>Task List</h4>
+    <mat-list role="list">
+      <mat-list-item role="listitem" [ngClass]="calculateTaskClass(taskEntry)"
+                     *ngFor="let taskEntry of commonProfile.taskList">
+        <h5 mat-line>
+          <strong>{{taskEntry.taskName}}</strong>
+          <span>finished at {{taskEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
+        </h5>
+        <p mat-line> {{taskEntry.taskDescription}} </p>
+        <img src="assets/assignment.svg" height="36">
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>
-
-

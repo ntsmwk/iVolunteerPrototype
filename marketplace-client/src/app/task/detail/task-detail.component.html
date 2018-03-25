@@ -76,8 +76,6 @@
     <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()" mat-raised-button color="primary">
       Cancel Reservation
     </button>
-    <button *ngIf="this.task.status === 'FINISHED' && !isAlreadyImported" (click)="import()" mat-raised-button color="primary">Import
-    </button>
   </div>
 
   <mat-divider></mat-divider>

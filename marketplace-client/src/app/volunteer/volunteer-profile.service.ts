@@ -14,5 +14,4 @@ export class VolunteerProfileService {
     return this.http.get(`/rest/volunteer/${volunteer.id}/profile/`);
   }
 
-
 }

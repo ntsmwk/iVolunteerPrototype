@@ -1,6 +1,16 @@
 .mat-list-item {
-  border: 1px dashed;
+  border: 2px dashed;
   margin-bottom: 10px;
+}
+
+.mat-list-item.public {
+  border-color: orange;
+  border-style: solid;
+}
+
+.mat-list-item.private {
+  border-color: green;
+  border-style: solid;
 }
 
 .mat-list-item:last-child {

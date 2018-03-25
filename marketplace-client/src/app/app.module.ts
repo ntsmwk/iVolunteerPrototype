@@ -37,6 +37,7 @@ import {VolunteerService} from './volunteer/volunteer.service';
 import {VolunteerProfileComponent} from './volunteer/profile/volunteer-profile.component';
 import {EmployeeService} from './employee/employee.service';
 import {VolunteerProfileService} from './volunteer/volunteer-profile.service';
+import {ArrayService} from './_service/array.service';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import {VolunteerProfileService} from './volunteer/volunteer-profile.service';
   ],
   providers: [
     TokenGuard,
+    ArrayService,
     LoginService,
     MessageService,
     CompetenceService,

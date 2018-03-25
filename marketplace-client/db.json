@@ -1,5 +1,5 @@
 {
-  "volunteerRepository": [
+  "repository": [
     {
       "volunteer": {
         "username": "broiser"
@@ -11,6 +11,13 @@
           "taskName": "Sandburg bauen",
           "taskDescription": "Beschreibung vom Sandburg bauen",
           "timestamp": 1521905117574
+        },
+        {
+          "id": "5ab66ddd405a2e4c0fd46570",
+          "taskId": "5ab64640405a2e346ca55bc2",
+          "taskName": "Sandburg bauen #2",
+          "taskDescription": "Beschreibung vom Sandburg bauen",
+          "timestamp": 1522005117852
         }
       ],
       "competenceList": []
