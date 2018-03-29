@@ -20,31 +20,23 @@ export class TaskInteractionService {
   }
 
   findReservedVolunteersByTaskId(task: Task) {
-    return this.http.get([this.apiUrl, 'task', task.id, 'reserved'].join('/'));
+    return this.http.get(`${this.apiUrl}/task/${task.id}/participant?operation=RESERVED`);
   }
 
-  isTaskAlreadyReserved(task: Task) {
-    return this.http.get([this.apiUrl, 'volunteer/isReserved', task.id].join('/'));
-  }
-
-  isTaskAlreadyAssigned(task: Task) {
-    return this.http.get([this.apiUrl, 'volunteer/isAssigned', task.id].join('/'));
+  getLatestTaskOperation(task: Task, participant: Participant) {
+    return this.http.get(`${this.apiUrl}/task/${task.id}/participant/${participant.id}`);
   }
 
   reserve(task: Task) {
-    return this.http.post([this.apiUrl, 'volunteer/reserve'].join('/'), task.id);
+    return this.http.post([this.apiUrl, 'task', task.id, 'reserve'].join('/'), {});
   }
 
   unreserve(task: Task) {
-    return this.http.post([this.apiUrl, 'volunteer/unreserve'].join('/'), task.id);
+    return this.http.post([this.apiUrl, 'task', task.id, 'unreserve'].join('/'), {});
   }
 
   findAssignedVolunteersByTaskId(task: Task) {
-    return this.http.get([this.apiUrl, 'task', task.id, 'assigned'].join('/'));
-  }
-
-  isVolunteerAlreadyAssigned(task: Task, participant: Participant) {
-    return this.http.get([this.apiUrl, 'volunteer/isAssigned', participant.id, 'task', task.id].join('/'));
+    return this.http.get(`${this.apiUrl}/task/${task.id}/participant?operation=ASSIGNED`);
   }
 
   assign(task: Task, participant: Participant) {
