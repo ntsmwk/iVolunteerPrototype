@@ -5,5 +5,5 @@
     <artifactId>marketplace</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>marketplace-blockchain</artifactId>
+  <artifactId>marketplace-verifier</artifactId>
 </project>

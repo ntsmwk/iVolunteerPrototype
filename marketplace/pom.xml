@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>at.jku.csi</groupId>
+	<groupId>at.jku.cis</groupId>
 	<artifactId>marketplace</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -27,6 +27,7 @@
 		<module>marketplace-application</module>
 		<module>marketplace-blockchain</module>
 		<module>marketplace-security</module>
+		<module>marketplace-verifier</module>
 	</modules>
 
 	<dependencies>
