@@ -96,10 +96,10 @@ public class TaskOperationController {
 			}
 		});
 
-		blockchainRestClient.postSimpleHash(taskEntry);
-		for (CompetenceEntry competenceEntry : competenceEntries) {
-			blockchainRestClient.postSimpleHash(competenceEntry);
-		}
+	//	blockchainRestClient.postSimpleHash(taskEntry);
+	//	for (CompetenceEntry competenceEntry : competenceEntries) {
+	//		blockchainRestClient.postSimpleHash(competenceEntry);
+	//	}
 
 	}
 

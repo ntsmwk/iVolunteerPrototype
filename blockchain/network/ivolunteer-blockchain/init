@@ -1,8 +1,7 @@
 #!/bin/bash
 
 echo "INIT START"
-docker rm -f mongodb
-docker rm -f rest-server
+docker rm -f composer-rest-server
 
 ~/fabric-tools/stopFabric.sh
 ~/fabric-tools/teardownFabric.sh
@@ -22,5 +21,6 @@ composer archive create -t dir -n .
 composer runtime install --card PeerAdmin@hlfv1 --businessNetworkName ivolunteer-blockchain
 composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile ivolunteer-blockchain@0.0.1.bna --file blockchainadmin.card
 composer card import --file blockchainadmin.card
+
 
 
