@@ -1,7 +1,7 @@
 <div *ngIf="task">
 
   <h3>Task Detail</h3>
-  <div class="edit-link">
+  <div class="edit-link" *ngIf="role === 'EMPLOYEE'">
     <img src="assets/edit.svg" routerLink="/task/{{task.id}}">
   </div>
 
