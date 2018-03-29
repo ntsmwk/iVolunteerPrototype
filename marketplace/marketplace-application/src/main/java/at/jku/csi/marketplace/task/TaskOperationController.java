@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.csi.marketplace.blockchain.BlockchainRestClient;
 import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.participant.Volunteer;
 import at.jku.csi.marketplace.participant.profile.CompetenceEntry;
@@ -27,8 +28,9 @@ public class TaskOperationController {
 
 	@Autowired
 	private LoginService loginService;
-	// @Autowired
-	// private BlockchainRestClient blockchainRestClient;
+
+	@Autowired
+	private BlockchainRestClient blockchainRestClient;
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -80,10 +82,7 @@ public class TaskOperationController {
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 
-		// TODO write blockchain entry;
-
 		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
-
 			@Override
 			public void accept(Volunteer volunteer) {
 				VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
@@ -94,8 +93,14 @@ public class TaskOperationController {
 				volunteerProfile.getTaskList().add(taskEntry);
 				volunteerProfile.getCompetenceList().addAll(competenceEntries);
 				volunteerProfileRepository.save(volunteerProfile);
- 			}
+			}
 		});
+
+		blockchainRestClient.postSimpleHash(taskEntry);
+		for (CompetenceEntry competenceEntry : competenceEntries) {
+			blockchainRestClient.postSimpleHash(competenceEntry);
+		}
+
 	}
 
 	@PostMapping("/task/{id}/abort")
