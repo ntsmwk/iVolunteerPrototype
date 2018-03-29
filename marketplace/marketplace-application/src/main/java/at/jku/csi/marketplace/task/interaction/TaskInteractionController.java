@@ -2,6 +2,7 @@ package at.jku.csi.marketplace.task.interaction;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,10 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.csi.marketplace.exception.BadRequestException;
 import at.jku.csi.marketplace.participant.Participant;
 import at.jku.csi.marketplace.participant.Volunteer;
 import at.jku.csi.marketplace.participant.VolunteerRepository;
@@ -50,53 +51,40 @@ public class TaskInteractionController {
 		return taskInteractionRepository.findByTask(task);
 	}
 
-	@GetMapping("/task/{id}/reserved")
-	public List<Participant> findReservedVolunteersByTaskId(@PathVariable("id") String taskId) {
+	@GetMapping("/task/{id}/participant")
+	public List<Participant> findParticipantsByTaskOperation(@PathVariable("id") String taskId,
+			@RequestParam("operation") TaskOperation taskOperation) {
+
 		Task task = taskRepository.findOne(taskId);
-		return taskInteractionRepository.findByTask(task).stream()
-				.filter(ti -> ti.getParticipant() instanceof Volunteer).filter(ti -> {
-					TaskOperation latestOperation = getLatestTaskInteraction(task, ti.getParticipant()).getOperation();
-					return latestOperation == TaskVolunteerOperation.RESERVED
-							|| latestOperation == TaskVolunteerOperation.UNASSIGNED;
-				}).map(ti -> ti.getParticipant()).collect(Collectors.toList());
+		Set<Participant> participants = taskInteractionRepository.findByTask(task).stream()
+				.map((ti) -> ti.getParticipant()).collect(Collectors.toSet());
+
+		return participants.stream().filter((participant) -> {
+			TaskOperation latestOperation = getLatestTaskInteraction(task, participant).getOperation();
+			if (TaskVolunteerOperation.RESERVED == taskOperation) {
+				return latestOperation == TaskVolunteerOperation.RESERVED
+						|| latestOperation == TaskVolunteerOperation.UNASSIGNED;
+			} else if (TaskVolunteerOperation.ASSIGNED == taskOperation) {
+				return latestOperation == TaskVolunteerOperation.ASSIGNED;
+			} else {
+				throw new BadRequestException();
+			}
+		}).collect(Collectors.toList());
 	}
 
-	@GetMapping("/volunteer/isReserved/{id}")
-	public boolean isLoggedInVolunteerAlreadyReserved(@PathVariable("id") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
-			Participant participant = loginService.getLoggedInParticipant();
-			TaskInteraction lastTaskInteraction = getLatestTaskInteraction(task, participant);
-			return lastTaskInteraction != null
-					&& lastTaskInteraction.getOperation() != TaskVolunteerOperation.UNRESERVED;
+	@GetMapping("/task/{taskId}/participant/{participantId}")
+	public TaskOperation getLatestTaskOperation(@PathVariable("taskId") String taskId,
+			@PathVariable("participantId") String participantId) {
+		Volunteer volunteer = volunteerRepository.findOne(participantId);
+		if (volunteer != null) {
+			TaskInteraction taskInteraction = getLatestTaskInteraction(taskRepository.findOne(taskId), volunteer);
+			return taskInteraction != null ? taskInteraction.getOperation() : null;
 		}
-		return false;
+		return null;
 	}
 
-	@GetMapping("/volunteer/isAssigned/{id}")
-	public boolean isLoggedInVolunteerAlreadyAssigned(@PathVariable("id") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
-			Participant participant = loginService.getLoggedInParticipant();
-			TaskInteraction lastTaskInteraction = getLatestTaskInteraction(task, participant);
-			return lastTaskInteraction != null && lastTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED;
-
-		}
-		return false;
-
-	}
-
-	@GetMapping("/volunteer/{volunteerId}/isAssigned/{taskId}")
-	public boolean isVolunteerAlreadyAssigned(@PathVariable("volunteerId") String volunteerId,
-			@PathVariable("taskId") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
-		return latestTaskInteraction != null && latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED;
-	}
-
-	@PostMapping("/volunteer/reserve")
-	public void reserveForTask(@RequestBody String taskId) {
+	@PostMapping("/task/{taskId}/reserve")
+	public void reserveForTask(@PathVariable("taskId") String taskId) {
 		Task task = taskRepository.findOne(taskId);
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
 			Participant participant = loginService.getLoggedInParticipant();
@@ -109,27 +97,17 @@ public class TaskInteractionController {
 		}
 	}
 
-	@PostMapping("/volunteer/unreserve")
-	public void unreserveForTask(@RequestBody String id) {
+	@PostMapping("/task/{taskId}/unreserve")
+	public void unreserveForTask(@PathVariable("taskId") String id) {
 		Task task = taskRepository.findOne(id);
 		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
 			Participant participant = loginService.getLoggedInParticipant();
 			TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, participant);
-			if (lastedTaskInteraction == null 
-					|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+			if (lastedTaskInteraction == null || lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
 					|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
 				createTaskInteraction(task, participant, TaskVolunteerOperation.UNRESERVED);
 			}
 		}
-	}
-
-	@GetMapping("/task/{id}/assigned")
-	public List<Participant> findAssignedVolunteersByTaskId(@PathVariable("id") String taskId) {
-		return taskInteractionRepository.findByTask(taskRepository.findOne(taskId)).stream()
-				.filter(ti -> ti.getOperation() == TaskVolunteerOperation.ASSIGNED)
-				.filter(ti -> getLatestTaskInteraction(ti.getTask(), ti.getParticipant())
-						.getOperation() == TaskVolunteerOperation.ASSIGNED)
-				.map(ti -> ti.getParticipant()).collect(Collectors.toList());
 	}
 
 	@PostMapping("/task/{taskId}/assign/{volunteerId}")

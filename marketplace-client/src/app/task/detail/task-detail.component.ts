@@ -6,6 +6,7 @@ import {TaskService} from '../task.service';
 import {LoginService} from '../../login/login.service';
 import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
 import {MessageService} from '../../_service/message.service';
+import {Participant} from '../../participant/participant';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -14,10 +15,10 @@ import {MessageService} from '../../_service/message.service';
 export class TaskDetailComponent implements OnInit {
 
   task: Task;
-
+  participant: Participant;
   role;
-  isAlreadyReserved: boolean;
-  isAlreadyAssigned: boolean;
+  isAlreadyReserved = false;
+  isAlreadyAssigned = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
@@ -27,13 +28,19 @@ export class TaskDetailComponent implements OnInit {
   private loadTask(id: string) {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
-
-      this.taskInteractionService.isTaskAlreadyReserved(this.task).toPromise().then((isAlreadyReserved: boolean) => {
-        this.isAlreadyReserved = isAlreadyReserved;
-      });
-
-      this.taskInteractionService.isTaskAlreadyAssigned(this.task).toPromise().then((isAlreadyAssigned: boolean) => {
-        this.isAlreadyAssigned = isAlreadyAssigned;
+      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant).then(() => {
+        this.taskInteractionService.getLatestTaskOperation(this.task, (this.participant)).toPromise().then((taskOperation) => {
+          if (taskOperation === 'ASSIGNED') {
+            this.isAlreadyReserved = false;
+            this.isAlreadyAssigned = true;
+          } else if (taskOperation === 'RESERVED' || taskOperation === 'UNASSIGNED') {
+            this.isAlreadyReserved = true;
+            this.isAlreadyAssigned = false;
+          } else {
+            this.isAlreadyReserved = false;
+            this.isAlreadyAssigned = false;
+          }
+        });
       });
     });
   }
