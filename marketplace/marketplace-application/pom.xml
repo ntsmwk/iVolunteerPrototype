@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>at.jku.csi</groupId>
+		<groupId>at.jku.cis</groupId>
 		<artifactId>marketplace</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -13,12 +13,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>at.jku.csi</groupId>
+			<groupId>at.jku.cis</groupId>
 			<artifactId>marketplace-blockchain</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>at.jku.csi</groupId>
+			<groupId>at.jku.cis</groupId>
 			<artifactId>marketplace-security</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
