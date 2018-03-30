@@ -1,6 +1,19 @@
 .mat-list-item {
+  height: auto !important;
   border: 2px dashed;
   margin-bottom: 10px;
+}
+
+.mat-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.mat-list-item .mat-line:first-child {
+  padding-top: 10px !important;
+}
+
+.mat-list-item .mat-line:last-child {
+  padding-bottom: 10px !important;
 }
 
 .mat-list-item.public {
@@ -13,6 +26,6 @@
   border-style: solid;
 }
 
-.mat-list-item:last-child {
-  margin-bottom: 0;
+.mat-list-item .actions .action-button {
+  float: right;
 }
