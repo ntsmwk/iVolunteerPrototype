@@ -25,7 +25,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getLoggedIn();
     this.loginSubscription = this.messageService.subscribe('login', this.getLoggedIn.bind(this));
-    this.logoutSubscription = this.messageService.subscribe('logout', () => this.participant = undefined);
+    this.logoutSubscription = this.messageService.subscribe('logout', () => {
+      this.participant = undefined;
+      this.participantRole = undefined;
+    });
   }
 
   ngOnDestroy() {
@@ -44,6 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     localStorage.removeItem('token');
+    this.messageService.broadcast('logout', {});
     this.router.navigate(['login']);
   }
 
