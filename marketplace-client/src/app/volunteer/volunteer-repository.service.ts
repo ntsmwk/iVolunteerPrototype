@@ -74,7 +74,11 @@ export class VolunteerRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((volunteerProfile: VolunteerProfile) => {
-
+          volunteerProfile.taskList.push(taskEntry);
+          this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
+            .toPromise()
+            .then(() => subscriber.complete())
+            .catch((error: any) => failureFunction(error));
         })
         .catch((error: any) => failureFunction(error));
     });
