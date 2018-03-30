@@ -58,7 +58,7 @@ public class VolunteerProfileController {
 		return taskEntry -> taskEntry.getId().equals(taskEntryId);
 	}
 
-	@PostMapping("/{volunteeId}/profile/task")
+	@PostMapping("/{volunteerId}/profile/task")
 	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
 		if (verifierRestController.verify(taskEntry)) {
@@ -69,7 +69,7 @@ public class VolunteerProfileController {
 		}
 	}
 
-	@DeleteMapping("/{volunteeId}/profile/task/{taskEntryId}")
+	@DeleteMapping("/{volunteerId}/profile/task/{taskEntryId}")
 	public void deleteTaskEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("taskEntryId") String taskEntryId) {
 		TaskEntry taskEntry = getTaskEntry(volunteerId, taskEntryId);
@@ -86,7 +86,7 @@ public class VolunteerProfileController {
 		return getProfile(volunteerId).getCompetenceList();
 	}
 
-	@GetMapping("/{volunteeId}/profile/competence/{competenceEntryId}")
+	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
 	public CompetenceEntry getCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("competenceEntryId") String competenceEntryId) {
 		Stream<CompetenceEntry> competenceEntries = getCompetenceList(volunteerId).stream();
@@ -97,7 +97,7 @@ public class VolunteerProfileController {
 		return competenceEntry -> competenceEntry.getId().equals(competenceEntryId);
 	}
 
-	@PostMapping("/{volunteeId}/profile/competence")
+	@PostMapping("/{volunteerId}/profile/competence")
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@RequestBody CompetenceEntry competenceEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
@@ -109,7 +109,7 @@ public class VolunteerProfileController {
 		}
 	}
 
-	@DeleteMapping("/{volunteeId}/profile/competence/{competenceEntryId}")
+	@DeleteMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
 	public void deleteCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("competenceEntryId") String competenceEntryId) {
 		CompetenceEntry competenceEntry = getCompetenceEntry(volunteerId, competenceEntryId);

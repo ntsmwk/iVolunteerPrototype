@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ArrayService} from '../../_service/array.service';
 import {LoginService} from '../../login/login.service';
 import {TaskEntry} from '../task-entry';
@@ -21,7 +21,8 @@ export class VolunteerProfileComponent implements OnInit {
 
   public commonProfile: VolunteerProfile;
 
-  constructor(private arrayService: ArrayService,
+  constructor(private ref: ChangeDetectorRef,
+              private arrayService: ArrayService,
               private loginService: LoginService,
               private volunteerProfileService: VolunteerProfileService,
               private volunteerRepositoryService: VolunteerRepositoryService) {
@@ -35,16 +36,12 @@ export class VolunteerProfileComponent implements OnInit {
     });
   }
 
-  calculateTaskClass(taskEntry: TaskEntry) {
-    const containsInPublic = this.arrayService.contains(this.publicProfile.taskList, taskEntry);
-    const containsInPrivate = !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
-    if (containsInPublic && containsInPrivate) {
-      return {};
-    }
-    return {
-      public: containsInPublic,
-      private: containsInPrivate
-    };
+  containsTaskEntryInPublic(taskEntry: TaskEntry) {
+    return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.taskList, taskEntry);
+  }
+
+  containsTaskEntryInPrivate(taskEntry: TaskEntry) {
+    return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
   }
 
   calculateCompetenceClass(competenceEntry: CompetenceEntry) {
@@ -89,5 +86,26 @@ export class VolunteerProfileComponent implements OnInit {
       this.commonProfile.taskList = this.arrayService.concat(this.publicProfile.taskList, this.privateProfile.taskList);
       this.commonProfile.competenceList = this.arrayService.concat(this.publicProfile.competenceList, this.privateProfile.competenceList);
     }
+  }
+
+  shareTask(taskEntry: TaskEntry) {
+    this.volunteerProfileService.shareTaskByVolunteer(this.volunteer, taskEntry).toPromise().then(() => {
+      alert('Task is shared.');
+      this.publicProfile.taskList.push(taskEntry);
+    });
+  }
+
+  revokeTask(taskEntry: TaskEntry) {
+    this.volunteerProfileService.revokeTaskByVolunteer(this.volunteer, taskEntry).toPromise().then(() => {
+      alert('Task is revoked.');
+      this.publicProfile.taskList = this.publicProfile.taskList.filter((task: TaskEntry) => task.id !== taskEntry.id);
+    });
+  }
+
+  synchronizeTask(taskEntry: TaskEntry) {
+    this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => {
+      alert('Task is synchronized.');
+      this.privateProfile.taskList.push(taskEntry);
+    });
   }
 }
