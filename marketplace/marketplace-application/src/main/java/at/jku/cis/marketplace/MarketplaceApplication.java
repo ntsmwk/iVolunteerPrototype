@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import at.jku.cis.marketplace.competence.Competence;
+import at.jku.cis.marketplace.competence.CompetenceRepository;
 import at.jku.cis.marketplace.participant.Employee;
 import at.jku.cis.marketplace.participant.EmployeeRepository;
 import at.jku.cis.marketplace.participant.Volunteer;
@@ -32,6 +34,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	@Autowired
+	private CompetenceRepository competenceRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
 	}
@@ -49,6 +54,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+		
+		createCompetence("Planning");
+		createCompetence("Leading");
+		createCompetence("Doing");
 	}
 
 	private Volunteer createVolunteer(String username, String password) {
@@ -68,5 +77,14 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 		return volunteer;
 	}
-
+	
+	private Competence createCompetence(String competenceName) {
+		Competence competence = competenceRepository.findByName(competenceName);
+		if(competence == null) {
+			competence = new Competence();
+			competence.setName(competenceName);
+			competence = competenceRepository.insert(competence);
+		}
+		return competence;
+	}
 }

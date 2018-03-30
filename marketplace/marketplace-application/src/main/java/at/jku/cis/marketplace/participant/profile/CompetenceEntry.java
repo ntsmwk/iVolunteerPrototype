@@ -11,7 +11,7 @@ public class CompetenceEntry implements IHashObject {
 	private String id;
 
 	private String competenceId;
-	private String cometenceName;
+	private String competenceName;
 
 	private Date timestamp;
 
@@ -30,13 +30,13 @@ public class CompetenceEntry implements IHashObject {
 	public void setCompetenceId(String competenceId) {
 		this.competenceId = competenceId;
 	}
-
-	public String getCometenceName() {
-		return cometenceName;
+	
+	public String getCompetenceName() {
+		return competenceName;
 	}
 
-	public void setCometenceName(String cometenceName) {
-		this.cometenceName = cometenceName;
+	public void setCompetenceName(String competenceName) {
+		this.competenceName = competenceName;
 	}
 
 	public Date getTimestamp() {
