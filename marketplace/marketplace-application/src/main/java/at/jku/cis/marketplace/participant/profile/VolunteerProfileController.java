@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.marketplace.exception.ForbiddenException;
+import at.jku.cis.marketplace.exception.VerificationFailureException;
 import at.jku.cis.marketplace.participant.Participant;
 import at.jku.cis.marketplace.participant.VolunteerRepository;
 import at.jku.cis.marketplace.security.LoginService;
+import at.jku.cis.verifier.VerifierRestController;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -29,6 +31,8 @@ public class VolunteerProfileController {
 	private VolunteerRepository volunteerRepository;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
+	@Autowired
+	private VerifierRestController verifierRestController;
 
 	@GetMapping("/{volunteerId}/profile")
 	public VolunteerProfile getProfile(@PathVariable("volunteerId") String volunteerId) {
@@ -54,15 +58,18 @@ public class VolunteerProfileController {
 		return taskEntry -> taskEntry.getId().equals(taskEntryId);
 	}
 
-	@PostMapping("/{volunteeId}/profile/task")
+	@PostMapping("/{volunteerId}/profile/task")
 	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
-		// TODO call verifier
-		volunteerProfile.getTaskList().add(taskEntry);
-		volunteerProfileRepository.save(volunteerProfile);
+		if (verifierRestController.verify(taskEntry)) {
+			volunteerProfile.getTaskList().add(taskEntry);
+			volunteerProfileRepository.save(volunteerProfile);
+		} else {
+			throw new VerificationFailureException();
+		}
 	}
 
-	@DeleteMapping("/{volunteeId}/profile/task/{taskEntryId}")
+	@DeleteMapping("/{volunteerId}/profile/task/{taskEntryId}")
 	public void deleteTaskEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("taskEntryId") String taskEntryId) {
 		TaskEntry taskEntry = getTaskEntry(volunteerId, taskEntryId);
@@ -79,7 +86,7 @@ public class VolunteerProfileController {
 		return getProfile(volunteerId).getCompetenceList();
 	}
 
-	@GetMapping("/{volunteeId}/profile/competence/{competenceEntryId}")
+	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
 	public CompetenceEntry getCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("competenceEntryId") String competenceEntryId) {
 		Stream<CompetenceEntry> competenceEntries = getCompetenceList(volunteerId).stream();
@@ -90,16 +97,19 @@ public class VolunteerProfileController {
 		return competenceEntry -> competenceEntry.getId().equals(competenceEntryId);
 	}
 
-	@PostMapping("/{volunteeId}/profile/competence")
+	@PostMapping("/{volunteerId}/profile/competence")
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@RequestBody CompetenceEntry competenceEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
-		// TODO call verifier
-		volunteerProfile.getCompetenceList().add(competenceEntry);
-		volunteerProfileRepository.save(volunteerProfile);
+		if (verifierRestController.verify(competenceEntry)) {
+			volunteerProfile.getCompetenceList().add(competenceEntry);
+			volunteerProfileRepository.save(volunteerProfile);
+		} else {
+			throw new VerificationFailureException();
+		}
 	}
 
-	@DeleteMapping("/{volunteeId}/profile/competence/{competenceEntryId}")
+	@DeleteMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
 	public void deleteCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("competenceEntryId") String competenceEntryId) {
 		CompetenceEntry competenceEntry = getCompetenceEntry(volunteerId, competenceEntryId);

@@ -3,6 +3,9 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Volunteer} from './volunteer';
 import {VolunteerProfile} from './volunteer-profile';
+import {TaskEntry} from './task-entry';
+import {CompetenceEntry} from './competence-entry';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class VolunteerRepositoryService {
@@ -37,4 +40,97 @@ export class VolunteerRepositoryService {
     return observable;
   }
 
+  findTasksByVolunteer(volunteer: Volunteer) {
+    const observable = new Observable(subscriber => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      const successFunction = (volunteerProfile: VolunteerProfile) => {
+        if (isNullOrUndefined(volunteerProfile)) {
+          subscriber.next([]);
+        } else {
+          subscriber.next(volunteerProfile.taskList);
+        }
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((volunteerProfile: VolunteerProfile) => successFunction(volunteerProfile))
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
+
+  synchronizeTask(volunteer: Volunteer, taskEntry: TaskEntry) {
+    const observable = new Observable(subscriber => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((volunteerProfile: VolunteerProfile) => {
+          volunteerProfile.taskList.push(taskEntry);
+          this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
+            .toPromise()
+            .then(() => subscriber.complete())
+            .catch((error: any) => failureFunction(error));
+        })
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
+
+  findCompetencesByVolunteer(volunteer: Volunteer) {
+    const observable = new Observable(subscriber => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      const successFunction = (volunteerProfile: VolunteerProfile) => {
+        if (isNullOrUndefined(volunteerProfile)) {
+          subscriber.next([]);
+        } else {
+          subscriber.next(volunteerProfile.competenceList);
+        }
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((volunteerProfile: VolunteerProfile) => successFunction(volunteerProfile))
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
+
+  synchronizeCompetence(volunteer: Volunteer, competenceEntry: CompetenceEntry) {
+    const observable = new Observable(subscriber => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((volunteerProfile: VolunteerProfile) => {
+          volunteerProfile.competenceList.push(competenceEntry);
+          this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
+            .toPromise()
+            .then(() => subscriber.complete())
+            .catch((error: any) => failureFunction(error));
+        })
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
 }
