@@ -37,7 +37,7 @@ export class VolunteerProfileService {
   }
 
   revokeCompetenceByVolunteer(volunteer: Volunteer, competenceEntry: CompetenceEntry) {
-    return this.http.delete(`${this.apiUrl}/${volunteer.id}/profile/compentence/${competenceEntry.id}`);
+    return this.http.delete(`${this.apiUrl}/${volunteer.id}/profile/competence/${competenceEntry.id}`);
   }
 
 }
