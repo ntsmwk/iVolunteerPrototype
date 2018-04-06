@@ -13,7 +13,7 @@ services:
     ports:
       - 3001:3001
     environment:
-      - COMPOSER_CARD=admin@ivolunteer-blockchain
+      - COMPOSER_CARD=restadmin@ivolunteer-blockchain
       - COMPOSER_NAMESPACES=never
       - COMPOSER_AUTHENTICATION=false
       - COMPOSER_MULTIUSER=false

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ArrayService} from '../../_service/array.service';
 import {LoginService} from '../../login/login.service';
 import {TaskEntry} from '../task-entry';
@@ -15,14 +15,12 @@ import {isNullOrUndefined} from 'util';
 })
 export class VolunteerProfileComponent implements OnInit {
   private volunteer: Volunteer;
-
   private publicProfile: VolunteerProfile;
   private privateProfile: VolunteerProfile;
 
   public commonProfile: VolunteerProfile;
 
-  constructor(private ref: ChangeDetectorRef,
-              private arrayService: ArrayService,
+  constructor(private arrayService: ArrayService,
               private loginService: LoginService,
               private volunteerProfileService: VolunteerProfileService,
               private volunteerRepositoryService: VolunteerRepositoryService) {
@@ -34,26 +32,6 @@ export class VolunteerProfileComponent implements OnInit {
       this.loadPublicVolunteerProfile(this.volunteer);
       this.loadPrivateVolunteerProfile(this.volunteer);
     });
-  }
-
-  containsTaskEntryInPublic(taskEntry: TaskEntry) {
-    return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.taskList, taskEntry);
-  }
-
-  containsTaskEntryInPrivate(taskEntry: TaskEntry) {
-    return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
-  }
-
-  calculateCompetenceClass(competenceEntry: CompetenceEntry) {
-    const containsInPublic = this.arrayService.contains(this.publicProfile.competenceList, competenceEntry);
-    const containsInPrivate = !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.competenceList, competenceEntry);
-    if (containsInPublic && containsInPrivate) {
-      return {};
-    }
-    return {
-      public: containsInPublic,
-      private: containsInPrivate
-    };
   }
 
   private loadPublicVolunteerProfile(volunteer: Volunteer) {
@@ -88,6 +66,22 @@ export class VolunteerProfileComponent implements OnInit {
     }
   }
 
+  containsTaskInPublic(taskEntry: TaskEntry) {
+    return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.taskList, taskEntry);
+  }
+
+  containsTaskInPrivate(taskEntry: TaskEntry) {
+    return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
+  }
+
+  containsComptenceInPublic(competenceEntry: CompetenceEntry) {
+    return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.competenceList, competenceEntry);
+  }
+
+  containsComptenceInPrivate(competenceEntry: CompetenceEntry) {
+    return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.competenceList, competenceEntry);
+  }
+
   shareTask(taskEntry: TaskEntry) {
     this.volunteerProfileService.shareTaskByVolunteer(this.volunteer, taskEntry).toPromise().then(() => {
       alert('Task is shared.');
@@ -106,6 +100,28 @@ export class VolunteerProfileComponent implements OnInit {
     this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => {
       alert('Task is synchronized.');
       this.privateProfile.taskList.push(taskEntry);
+    });
+  }
+
+  shareCompetence(competenceEntry: CompetenceEntry) {
+    this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry).toPromise().then(() => {
+      alert('Competence is shared.');
+      this.publicProfile.competenceList.push(competenceEntry);
+    });
+  }
+
+  revokeCompetence(competenceEntry: CompetenceEntry) {
+    this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry).toPromise().then(() => {
+      alert('Competence is revoked.');
+      this.publicProfile.competenceList = this.publicProfile.competenceList
+        .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
+    });
+  }
+
+  synchronizeCompetence(competenceEntry: CompetenceEntry) {
+    this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
+      alert('Competence is synchronized.');
+      this.privateProfile.competenceList.push(competenceEntry);
     });
   }
 }

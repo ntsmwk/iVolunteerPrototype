@@ -3,8 +3,9 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Volunteer} from './volunteer';
 import {VolunteerProfile} from './volunteer-profile';
-import {isNullOrUndefined} from 'util';
 import {TaskEntry} from './task-entry';
+import {CompetenceEntry} from './competence-entry';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class VolunteerRepositoryService {
@@ -105,6 +106,28 @@ export class VolunteerRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((volunteerProfile: VolunteerProfile) => successFunction(volunteerProfile))
+        .catch((error: any) => failureFunction(error));
+    });
+
+    return observable;
+  }
+
+  synchronizeCompetence(volunteer: Volunteer, competenceEntry: CompetenceEntry) {
+    const observable = new Observable(subscriber => {
+      const failureFunction = (error: any) => {
+        subscriber.error(error);
+        subscriber.complete();
+      };
+
+      this.findByVolunteer(volunteer)
+        .toPromise()
+        .then((volunteerProfile: VolunteerProfile) => {
+          volunteerProfile.competenceList.push(competenceEntry);
+          this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
+            .toPromise()
+            .then(() => subscriber.complete())
+            .catch((error: any) => failureFunction(error));
+        })
         .catch((error: any) => failureFunction(error));
     });
 
