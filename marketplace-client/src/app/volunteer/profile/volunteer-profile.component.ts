@@ -74,11 +74,11 @@ export class VolunteerProfileComponent implements OnInit {
     return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
   }
 
-  containsComptenceInPublic(competenceEntry: CompetenceEntry) {
+  containsCompetenceInPublic(competenceEntry: CompetenceEntry) {
     return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.competenceList, competenceEntry);
   }
 
-  containsComptenceInPrivate(competenceEntry: CompetenceEntry) {
+  containsCompetenceInPrivate(competenceEntry: CompetenceEntry) {
     return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.competenceList, competenceEntry);
   }
 
