@@ -17,7 +17,7 @@
         <div mat-line class="actions">
           <button class="action-button"
                   *ngIf="containsCompetenceInPrivate(competenceEntry) && !containsCompetenceInPublic(competenceEntry)"
-                  (click)="shareCompetence(competenceEntry)" mat-raised-button color="primary">Share
+                  (click)="shareCompetence(competenceEntry)" mat-raised-button color="primary">Publish
           </button>
           <button class="action-button"
                   *ngIf="containsCompetenceInPrivate(competenceEntry) && containsCompetenceInPublic(competenceEntry)"
