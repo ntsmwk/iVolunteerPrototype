@@ -31,6 +31,7 @@ public class VolunteerProfileController {
 	private VolunteerRepository volunteerRepository;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
+	
 	@Autowired
 	private VerifierRestController verifierRestController;
 
