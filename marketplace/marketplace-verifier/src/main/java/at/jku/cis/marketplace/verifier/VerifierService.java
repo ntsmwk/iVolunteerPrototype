@@ -1,4 +1,4 @@
-package at.jku.cis.verifier;
+package at.jku.cis.marketplace.verifier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import at.jku.cis.marketplace.blockchain.BlockchainRestClient;
 import at.jku.cis.marketplace.blockchain.IHashObject;
 
 @Service
-public class VerifierRestController {
+public class VerifierService {
 
 	@Autowired
 	private BlockchainRestClient blockchainRestClient;
