@@ -59,6 +59,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createCompetence("Leadership");
 		createCompetence("Creativity");
 		createCompetence("Flexability");
+		createCompetence("Motivation");
+
 
 	}
 

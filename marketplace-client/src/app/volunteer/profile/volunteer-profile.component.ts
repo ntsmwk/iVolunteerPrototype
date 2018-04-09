@@ -84,35 +84,35 @@ export class VolunteerProfileComponent implements OnInit {
 
   shareTask(taskEntry: TaskEntry) {
     this.volunteerProfileService.shareTaskByVolunteer(this.volunteer, taskEntry).toPromise().then(() => {
-      alert('Task is shared.');
+      alert('Task is published to marketplace.');
       this.publicProfile.taskList.push(taskEntry);
     });
   }
 
   revokeTask(taskEntry: TaskEntry) {
     this.volunteerProfileService.revokeTaskByVolunteer(this.volunteer, taskEntry).toPromise().then(() => {
-      alert('Task is revoked.');
+      alert('Task is revoked from marketplace.');
       this.publicProfile.taskList = this.publicProfile.taskList.filter((task: TaskEntry) => task.id !== taskEntry.id);
     });
   }
 
   synchronizeTask(taskEntry: TaskEntry) {
     this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => {
-      alert('Task is synchronized.');
+      alert('Task is synchronized to local repository.');
       this.privateProfile.taskList.push(taskEntry);
     });
   }
 
   shareCompetence(competenceEntry: CompetenceEntry) {
     this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry).toPromise().then(() => {
-      alert('Competence is shared.');
+      alert('Competence is published to marketplace.');
       this.publicProfile.competenceList.push(competenceEntry);
     });
   }
 
   revokeCompetence(competenceEntry: CompetenceEntry) {
     this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry).toPromise().then(() => {
-      alert('Competence is revoked.');
+      alert('Competence is revoked from marketplace.');
       this.publicProfile.competenceList = this.publicProfile.competenceList
         .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
     });
@@ -120,7 +120,7 @@ export class VolunteerProfileComponent implements OnInit {
 
   synchronizeCompetence(competenceEntry: CompetenceEntry) {
     this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
-      alert('Competence is synchronized.');
+      alert('Competence is synchronized to local repository.');
       this.privateProfile.competenceList.push(competenceEntry);
     });
   }
