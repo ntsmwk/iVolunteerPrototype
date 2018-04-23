@@ -58,14 +58,5 @@
           "timestamp": 1523280425825
         }
       ]
-    },
-    {
-      "id": "3",
-      "volunteer": {
-        "username": "broiser"
-      },
-      "taskList": [],
-      "competenceList": []
     }
-  ]
 }
