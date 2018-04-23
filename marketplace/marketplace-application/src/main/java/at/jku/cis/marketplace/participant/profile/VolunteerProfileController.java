@@ -19,7 +19,6 @@ import at.jku.cis.marketplace.exception.VerificationFailureException;
 import at.jku.cis.marketplace.participant.Participant;
 import at.jku.cis.marketplace.participant.VolunteerRepository;
 import at.jku.cis.marketplace.security.LoginService;
-import at.jku.cis.marketplace.verifier.VerifierService;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -27,8 +26,6 @@ public class VolunteerProfileController {
 
 	@Autowired
 	private LoginService loginService;
-	@Autowired
-	private VerifierService verifierService;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
 	@Autowired
@@ -61,12 +58,14 @@ public class VolunteerProfileController {
 	@PostMapping("/{volunteerId}/profile/task")
 	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
-		if (verifierService.verify(taskEntry)) {
-			volunteerProfile.getTaskList().add(taskEntry);
-			volunteerProfileRepository.save(volunteerProfile);
-		} else {
-			throw new VerificationFailureException();
-		}
+		
+		//TODO verifier call
+//		if (verifierService.verify(taskEntry)) {
+//			volunteerProfile.getTaskList().add(taskEntry);
+//			volunteerProfileRepository.save(volunteerProfile);
+//		} else {
+//			throw new VerificationFailureException();
+//		}
 	}
 
 	@DeleteMapping("/{volunteerId}/profile/task/{taskEntryId}")
@@ -101,12 +100,14 @@ public class VolunteerProfileController {
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@RequestBody CompetenceEntry competenceEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
-		if (verifierService.verify(competenceEntry)) {
-			volunteerProfile.getCompetenceList().add(competenceEntry);
-			volunteerProfileRepository.save(volunteerProfile);
-		} else {
-			throw new VerificationFailureException();
-		}
+		
+		//TODO verifier call
+//		if (verifierService.verify(competenceEntry)) {
+//			volunteerProfile.getCompetenceList().add(competenceEntry);
+//			volunteerProfileRepository.save(volunteerProfile);
+//		} else {
+//			throw new VerificationFailureException();
+//		}
 	}
 
 	@DeleteMapping("/{volunteerId}/profile/competence/{competenceEntryId}")

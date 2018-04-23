@@ -4,9 +4,7 @@ import java.util.Date;
 
 import com.google.gson.JsonObject;
 
-import at.jku.cis.marketplace.blockchain.IHashObject;
-
-public class TaskEntry implements IHashObject {
+public class TaskEntry {
 
 	private String id;
 	private String taskId;
@@ -56,7 +54,7 @@ public class TaskEntry implements IHashObject {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TaskEntry)) {
@@ -64,19 +62,10 @@ public class TaskEntry implements IHashObject {
 		}
 		return ((TaskEntry) obj).id.equals(id);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
-	}
-
-	@Override
-	public String toHashString() {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
-		json.addProperty("taskId", taskId);
-		json.addProperty("timestamp", timestamp.toString());
-		return json.toString();
 	}
 
 }

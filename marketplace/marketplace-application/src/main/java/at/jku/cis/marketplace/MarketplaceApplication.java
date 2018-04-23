@@ -56,8 +56,12 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 		
 		createCompetence("Planning");
-		createCompetence("Leading");
-		createCompetence("Doing");
+		createCompetence("Leadership");
+		createCompetence("Creativity");
+		createCompetence("Flexability");
+		createCompetence("Motivation");
+
+
 	}
 
 	private Volunteer createVolunteer(String username, String password) {

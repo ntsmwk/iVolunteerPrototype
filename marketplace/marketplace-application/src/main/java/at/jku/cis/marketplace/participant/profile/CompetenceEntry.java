@@ -2,11 +2,7 @@ package at.jku.cis.marketplace.participant.profile;
 
 import java.util.Date;
 
-import com.google.gson.JsonObject;
-
-import at.jku.cis.marketplace.blockchain.IHashObject;
-
-public class CompetenceEntry implements IHashObject {
+public class CompetenceEntry {
 
 	private String id;
 
@@ -30,7 +26,7 @@ public class CompetenceEntry implements IHashObject {
 	public void setCompetenceId(String competenceId) {
 		this.competenceId = competenceId;
 	}
-	
+
 	public String getCompetenceName() {
 		return competenceName;
 	}
@@ -54,18 +50,9 @@ public class CompetenceEntry implements IHashObject {
 		}
 		return ((CompetenceEntry) obj).id.equals(id);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
-	}
-
-	@Override
-	public String toHashString() {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
-		json.addProperty("competenceId", competenceId);
-		json.addProperty("timestamp", timestamp.toString());
-		return json.toString();
 	}
 }

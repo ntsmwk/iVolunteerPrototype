@@ -12,12 +12,12 @@
         <img mat-list-icon src="assets/thumb.svg">
         <h5 mat-line>
           <strong>{{competenceEntry.competenceName}}</strong>
-          <span>reached at {{competenceEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
+          <span>gained at {{competenceEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
         </h5>
         <div mat-line class="actions">
           <button class="action-button"
                   *ngIf="containsCompetenceInPrivate(competenceEntry) && !containsCompetenceInPublic(competenceEntry)"
-                  (click)="shareCompetence(competenceEntry)" mat-raised-button color="primary">Share
+                  (click)="shareCompetence(competenceEntry)" mat-raised-button color="primary">Publish
           </button>
           <button class="action-button"
                   *ngIf="containsCompetenceInPrivate(competenceEntry) && containsCompetenceInPublic(competenceEntry)"
@@ -48,7 +48,7 @@
         <div mat-line class="actions">
           <button class="action-button"
                   *ngIf="containsTaskInPrivate(taskEntry) && !containsTaskInPublic(taskEntry)"
-                  (click)="shareTask(taskEntry)" mat-raised-button color="primary">Share
+                  (click)="shareTask(taskEntry)" mat-raised-button color="primary">Publish
           </button>
           <button class="action-button"
                   *ngIf="containsTaskInPrivate(taskEntry) && containsTaskInPublic(taskEntry)"

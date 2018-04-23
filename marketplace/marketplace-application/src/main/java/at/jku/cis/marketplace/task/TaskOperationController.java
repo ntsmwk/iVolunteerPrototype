@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.marketplace.blockchain.BlockchainRestClient;
 import at.jku.cis.marketplace.exception.BadRequestException;
 import at.jku.cis.marketplace.participant.Volunteer;
 import at.jku.cis.marketplace.participant.profile.CompetenceEntry;
@@ -28,9 +27,6 @@ public class TaskOperationController {
 
 	@Autowired
 	private LoginService loginService;
-
-	@Autowired
-	private BlockchainRestClient blockchainRestClient;
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -96,10 +92,12 @@ public class TaskOperationController {
 			}
 		});
 
-		blockchainRestClient.postSimpleHash(taskEntry);
-		for (CompetenceEntry competenceEntry : competenceEntries) {
-			blockchainRestClient.postSimpleHash(competenceEntry);
-		}
+		
+		//TODO contractor call
+//		blockchainRestClient.postSimpleHash(taskEntry);
+//		for (CompetenceEntry competenceEntry : competenceEntries) {
+//			blockchainRestClient.postSimpleHash(competenceEntry);
+//		}
 
 	}
 
