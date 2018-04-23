@@ -5,58 +5,46 @@
       "volunteer": {
         "username": "pstarzer"
       },
-      "taskList": [
-        {
-          "id": "5ac7366c69cb2438b7f5c912",
-          "taskId": "5ac72df269cb2438b7f5c907",
-          "taskName": "Sandburg zerstören",
-          "taskDescription": "Zerstören einer Sandburg",
-          "timestamp": 1523005036177
-        }
-      ],
-      "competenceList": [
-        {
-          "id": "003bb4d0-281b-401d-8541-d424a09d83ac",
-          "competenceId": "5ac72d1f69cb2438b7f5c902",
-          "competenceName": "Doing",
-          "timestamp": 1523006044336
-        }
-      ]
+      "taskList": [],
+      "competenceList": []
     },
     {
       "id": "2",
       "volunteer": {
         "username": "mweissenbek"
       },
+      "taskList": [],
+      "competenceList": []
+    },
+    {
+      "id": "3",
+      "volunteer": {
+        "username": "broiser"
+      },
       "taskList": [
         {
-          "id": "5acb4a79834c483d60730798",
-          "taskId": "5acb486e834c483d60730785",
-          "taskName": "Carry sandbags",
-          "taskDescription": "Carry sandbags in case of a flood",
-          "timestamp": 1523272313804
+          "id": "5ab66ddd405a2e4c0fd46570",
+          "taskId": "5ab64640405a2e346ca55bc2",
+          "taskName": "Sandburg bauen #2",
+          "taskDescription": "Beschreibung vom Sandburg bauen",
+          "timestamp": 1522005117852
         },
         {
-          "id": "5acb6a29834c483d607307ac",
-          "taskId": "5acb5ce1834c483d60730799",
-          "taskName": "Carry sandbags",
-          "taskDescription": "Carry sandbags in case of a flood",
-          "timestamp": 1523280425825
+          "id": "5ab66ddd405a2e4c0fd46569",
+          "taskId": "5ab64640405a2e346ca55be2",
+          "taskName": "Sandburg bauen",
+          "taskDescription": "Beschreibung vom Sandburg bauen",
+          "timestamp": 1521905117574
         }
       ],
       "competenceList": [
         {
-          "id": "d4f1cf99-801d-4636-b1b1-4484d92dbe20",
-          "competenceId": "5acb4441834c483aef1c7481",
-          "competenceName": "Flexability",
-          "timestamp": 1523272313804
-        },
-        {
-          "id": "99f28397-b92b-4e87-9b8b-7cf1aa097d20",
-          "competenceId": "5acb4441834c483aef1c7481",
-          "competenceName": "Flexability",
-          "timestamp": 1523280425825
+          "id": "43e0984e-0c23-449e-94c6-95d33c6083fa",
+          "competenceId": "5ac72d1f69cb2438b7f5c902",
+          "competenceName": "Doing",
+          "timestamp": 1523002974879
         }
       ]
     }
+  ]
 }
