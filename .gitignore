@@ -2,3 +2,4 @@ composer-logs/
 **/*.bna
 **/*.card
 
+/target/

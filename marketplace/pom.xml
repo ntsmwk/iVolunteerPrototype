@@ -25,9 +25,7 @@
 
 	<modules>
 		<module>marketplace-application</module>
-		<module>marketplace-blockchain</module>
 		<module>marketplace-security</module>
-		<module>marketplace-verifier</module>
 	</modules>
 
 	<dependencies>

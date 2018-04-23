@@ -34,7 +34,6 @@ public class TaskController {
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
-	
 
 	@GetMapping("/task")
 	public List<Task> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
@@ -54,7 +53,7 @@ public class TaskController {
 	public List<Task> findByVolunteer(@PathVariable("id") String id) {
 
 		Volunteer volunteer = volunteerRepository.findOne(id);
-		
+
 		Set<Task> tasks = new HashSet<Task>();
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
 		for (TaskInteraction ti : taskInteractions) {

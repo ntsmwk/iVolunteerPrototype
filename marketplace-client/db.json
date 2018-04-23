@@ -28,8 +28,36 @@
       "volunteer": {
         "username": "mweissenbek"
       },
-      "taskList": [],
-      "competenceList": []
+      "taskList": [
+        {
+          "id": "5acb4a79834c483d60730798",
+          "taskId": "5acb486e834c483d60730785",
+          "taskName": "Carry sandbags",
+          "taskDescription": "Carry sandbags in case of a flood",
+          "timestamp": 1523272313804
+        },
+        {
+          "id": "5acb6a29834c483d607307ac",
+          "taskId": "5acb5ce1834c483d60730799",
+          "taskName": "Carry sandbags",
+          "taskDescription": "Carry sandbags in case of a flood",
+          "timestamp": 1523280425825
+        }
+      ],
+      "competenceList": [
+        {
+          "id": "d4f1cf99-801d-4636-b1b1-4484d92dbe20",
+          "competenceId": "5acb4441834c483aef1c7481",
+          "competenceName": "Flexability",
+          "timestamp": 1523272313804
+        },
+        {
+          "id": "99f28397-b92b-4e87-9b8b-7cf1aa097d20",
+          "competenceId": "5acb4441834c483aef1c7481",
+          "competenceName": "Flexability",
+          "timestamp": 1523280425825
+        }
+      ]
     },
     {
       "id": "3",
