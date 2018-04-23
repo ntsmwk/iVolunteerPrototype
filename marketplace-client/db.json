@@ -37,7 +37,14 @@
           "timestamp": 1521905117574
         }
       ],
-      "competenceList": []
+      "competenceList": [
+        {
+          "id": "43e0984e-0c23-449e-94c6-95d33c6083fa",
+          "competenceId": "5ac72d1f69cb2438b7f5c902",
+          "competenceName": "Doing",
+          "timestamp": 1523002974879
+        }
+      ]
     }
   ]
 }
