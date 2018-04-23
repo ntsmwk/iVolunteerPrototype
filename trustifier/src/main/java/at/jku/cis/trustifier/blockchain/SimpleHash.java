@@ -1,4 +1,4 @@
-package at.jku.cis.marketplace.blockchain;
+package at.jku.cis.trustifier.blockchain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

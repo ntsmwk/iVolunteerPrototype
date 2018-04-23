@@ -1,4 +1,4 @@
-package at.jku.cis.marketplace.blockchain;
+package at.jku.cis.trustifier.blockchain;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

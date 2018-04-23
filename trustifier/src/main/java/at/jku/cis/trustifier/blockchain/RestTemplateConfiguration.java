@@ -1,4 +1,4 @@
-package at.jku.cis.marketplace.blockchain;
+package at.jku.cis.trustifier.blockchain;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

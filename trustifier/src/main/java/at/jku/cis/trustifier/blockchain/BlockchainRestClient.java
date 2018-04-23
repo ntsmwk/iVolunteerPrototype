@@ -1,5 +1,5 @@
 
-package at.jku.cis.marketplace.blockchain;
+package at.jku.cis.trustifier.blockchain;
 
 import static java.text.MessageFormat.format;
 
