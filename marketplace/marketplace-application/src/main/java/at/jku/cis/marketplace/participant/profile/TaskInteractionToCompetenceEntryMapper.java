@@ -7,12 +7,16 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.collections4.Transformer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.marketplace.task.interaction.TaskInteraction;
 
 @Component
 public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskInteraction, Set<CompetenceEntry>> {
+
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
 
 	@Override
 	public Set<CompetenceEntry> transform(TaskInteraction taskInteraction) {
@@ -28,6 +32,7 @@ public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskI
 			competenceEntry.setId(UUID.randomUUID().toString());
 			competenceEntry.setCompetenceId(competence.getId());
 			competenceEntry.setCompetenceName(competence.getName());
+			competenceEntry.setMarketplaceId(marketplaceId);
 			competenceEntry.setTimestamp(timestamp);
 			competenceEntries.add(competenceEntry);
 		});

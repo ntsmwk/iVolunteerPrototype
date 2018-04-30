@@ -5,10 +5,9 @@ import java.util.Date;
 public class CompetenceEntry {
 
 	private String id;
-
 	private String competenceId;
 	private String competenceName;
-
+	private String marketplaceId;
 	private Date timestamp;
 
 	public String getId() {
@@ -33,6 +32,14 @@ public class CompetenceEntry {
 
 	public void setCompetenceName(String competenceName) {
 		this.competenceName = competenceName;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public Date getTimestamp() {

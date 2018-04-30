@@ -60,12 +60,12 @@ public class VolunteerProfileController {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
 		
 		//TODO verifier call
-//		if (verifierService.verify(taskEntry)) {
-//			volunteerProfile.getTaskList().add(taskEntry);
-//			volunteerProfileRepository.save(volunteerProfile);
-//		} else {
-//			throw new VerificationFailureException();
-//		}
+		//if (verifierService.verify(taskEntry)) {
+		//	volunteerProfile.getTaskList().add(taskEntry);
+		//	volunteerProfileRepository.save(volunteerProfile);
+		//} else {
+		//	throw new VerificationFailureException();
+		//}
 	}
 
 	@DeleteMapping("/{volunteerId}/profile/task/{taskEntryId}")

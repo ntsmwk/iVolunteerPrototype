@@ -1,6 +1,7 @@
 package at.jku.cis.marketplace.participant.profile;
 
 import org.apache.commons.collections4.Transformer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.marketplace.task.Task;
@@ -8,6 +9,9 @@ import at.jku.cis.marketplace.task.interaction.TaskInteraction;
 
 @Component
 public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInteraction, TaskEntry> {
+
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
 
 	@Override
 	public TaskEntry transform(TaskInteraction taskInteraction) {
@@ -21,6 +25,7 @@ public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInterac
 		taskEntry.setTaskId(extractTaskId(taskInteraction));
 		taskEntry.setTaskName(extractTaskTypeName(taskInteraction));
 		taskEntry.setTaskDescription(extractTaskTypeDescription(taskInteraction));
+		taskEntry.setMarketplaceId(marketplaceId);
 		return taskEntry;
 	}
 
@@ -33,7 +38,7 @@ public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInterac
 		Task task = taskInteraction.getTask();
 		return task == null || task.getType() == null ? null : task.getType().getName();
 	}
-	
+
 	private String extractTaskTypeDescription(TaskInteraction taskInteraction) {
 		Task task = taskInteraction.getTask();
 		return task == null || task.getType() == null ? null : task.getType().getDescription();

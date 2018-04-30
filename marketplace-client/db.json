@@ -21,30 +21,8 @@
       "volunteer": {
         "username": "broiser"
       },
-      "taskList": [
-        {
-          "id": "5ab66ddd405a2e4c0fd46570",
-          "taskId": "5ab64640405a2e346ca55bc2",
-          "taskName": "Sandburg bauen #2",
-          "taskDescription": "Beschreibung vom Sandburg bauen",
-          "timestamp": 1522005117852
-        },
-        {
-          "id": "5ab66ddd405a2e4c0fd46569",
-          "taskId": "5ab64640405a2e346ca55be2",
-          "taskName": "Sandburg bauen",
-          "taskDescription": "Beschreibung vom Sandburg bauen",
-          "timestamp": 1521905117574
-        }
-      ],
-      "competenceList": [
-        {
-          "id": "43e0984e-0c23-449e-94c6-95d33c6083fa",
-          "competenceId": "5ac72d1f69cb2438b7f5c902",
-          "competenceName": "Doing",
-          "timestamp": 1523002974879
-        }
-      ]
+      "taskList": [],
+      "competenceList": []
     }
   ]
 }

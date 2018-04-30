@@ -2,14 +2,13 @@ package at.jku.cis.marketplace.participant.profile;
 
 import java.util.Date;
 
-import com.google.gson.JsonObject;
-
 public class TaskEntry {
 
 	private String id;
 	private String taskId;
 	private String taskName;
 	private String taskDescription;
+	private String marketplaceId;
 	private Date timestamp;
 
 	public TaskEntry() {
@@ -45,6 +44,14 @@ public class TaskEntry {
 
 	public void setTaskDescription(String taskDescription) {
 		this.taskDescription = taskDescription;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public Date getTimestamp() {
