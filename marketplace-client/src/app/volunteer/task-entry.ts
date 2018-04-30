@@ -3,6 +3,7 @@ export class TaskEntry {
   taskId: string;
   taskName: string;
   taskDescription: string;
+  marketplaceId: string;
   timestamp: Date;
 }
 

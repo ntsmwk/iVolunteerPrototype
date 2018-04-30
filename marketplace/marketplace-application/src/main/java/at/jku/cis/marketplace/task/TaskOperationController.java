@@ -41,6 +41,15 @@ public class TaskOperationController {
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
 
+	@PostMapping("/task/{id}/publish")
+	public void publishTask(@PathVariable("id") String id) {
+		Task task = taskRepository.findOne(id);
+		if (task == null || task.getStatus() != TaskStatus.CREATED) {
+			throw new BadRequestException();
+		}
+		updateTaskStatus(task, TaskStatus.PUBLISHED);
+	}
+
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
@@ -92,12 +101,11 @@ public class TaskOperationController {
 			}
 		});
 
-		
-		//TODO contractor call
-//		blockchainRestClient.postSimpleHash(taskEntry);
-//		for (CompetenceEntry competenceEntry : competenceEntries) {
-//			blockchainRestClient.postSimpleHash(competenceEntry);
-//		}
+		// TODO contractor call
+		// blockchainRestClient.postSimpleHash(taskEntry);
+		// for (CompetenceEntry competenceEntry : competenceEntries) {
+		// blockchainRestClient.postSimpleHash(competenceEntry);
+		// }
 
 	}
 

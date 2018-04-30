@@ -15,8 +15,8 @@ export class TaskService {
     return this.http.get(this.apiUrl);
   }
 
-  findAllCreated() {
-    return this.http.get(this.apiUrl + '?status=CREATED');
+  findAllPublished() {
+    return this.http.get(this.apiUrl + '?status=PUBLISHED');
   }
 
   findAllByParticipant(id: string) {
@@ -38,27 +38,33 @@ export class TaskService {
     return this.http.delete([this.apiUrl, task.id].join('/'));
   }
 
+  publish(task: Task) {
+    return this.http.post(`${this.apiUrl}/${task.id}/publish`, {});
+  }
+
   start(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'start'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/start`, {});
   }
 
   suspend(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'suspend'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/suspend`, {});
   }
 
   resume(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'resume'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/resume`, {});
   }
 
   finish(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'finish'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/finish`, {});
   }
 
   abort(task: Task) {
-    return this.http.post([this.apiUrl, task.id, 'abort'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/abort`, {});
   }
 
   sync(task: Task) {
-    return this.http.get([this.apiUrl, task.id, 'sync'].join('/'), {});
+    return this.http.post(`${this.apiUrl}/${task.id}/sync`, {});
   }
+
+
 }

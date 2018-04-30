@@ -12,21 +12,14 @@ import {Participant} from '../../participant/participant';
 })
 export class TaskListComponent implements OnInit {
 
+  participant;
+  participantRole;
+
   dataSource = new MatTableDataSource<Task>();
   displayedColumns = ['name', 'status', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
-  participantRole;
-  participant;
 
-  status = [
-    {value: '', ViewValue: 'ALL'},
-    {value: 'CREATED', ViewValue: 'CREATED'},
-    {value: 'RUNNING', ViewValue: 'RUNNING'},
-    {value: 'SUSPENDED', ViewValue: 'SUSPENDED'},
-    {value: 'FINISHED', ViewValue: 'FINISHED'},
-    {value: 'ABORTED', ViewValue: 'ABORTED'}
-  ];
-
-  selectedValue: string = this.status[0].value;
+  status: { value: string; viewValue: string }[];
+  selectedValue: string;
 
   constructor(private router: Router,
               private loginService: LoginService,
@@ -44,20 +37,35 @@ export class TaskListComponent implements OnInit {
 
   loadTasks() {
     if (this.participantRole === 'EMPLOYEE') {
-      this.taskService.findAll()
-        .toPromise()
-        .then((tasks: Task[]) => this.dataSource.data = tasks);
+      this.status = [
+        {value: '', viewValue: 'ALL'},
+        {value: 'CREATED', viewValue: 'CREATED'},
+        {value: 'PUBLISED', viewValue: 'PUBLISHED'},
+        {value: 'RUNNING', viewValue: 'RUNNING'},
+        {value: 'SUSPENDED', viewValue: 'SUSPENDED'},
+        {value: 'FINISHED', viewValue: 'FINISHED'},
+        {value: 'ABORTED', viewValue: 'ABORTED'}
+      ];
+      this.selectedValue = this.status[0].value;
+
+      this.taskService.findAll().toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
     } else {
-      this.taskService.findAllByParticipant(this.participant.id)
-        .toPromise()
-        .then((tasks: Task[]) => this.dataSource.data = tasks);
+      this.status = [
+        {value: '', viewValue: 'ALL'},
+        {value: 'PUBLISHED', viewValue: 'PUBLISHED'},
+        {value: 'RUNNING', viewValue: 'RUNNING'},
+        {value: 'SUSPENDED', viewValue: 'SUSPENDED'},
+        {value: 'FINISHED', viewValue: 'FINISHED'},
+        {value: 'ABORTED', viewValue: 'ABORTED'}
+      ];
+      this.selectedValue = this.status[0].value;
+      this.taskService.findAllByParticipant(this.participant.id).toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
+
     }
   }
 
   applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   onRowSelect(task: Task) {

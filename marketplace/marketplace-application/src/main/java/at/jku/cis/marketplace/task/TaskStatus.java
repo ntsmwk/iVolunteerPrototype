@@ -3,6 +3,6 @@ package at.jku.cis.marketplace.task;
 import at.jku.cis.marketplace.task.interaction.TaskOperation;
 
 public enum TaskStatus implements TaskOperation {
-	CREATED, RUNNING, FINISHED, SUSPENDED, ABORTED;
+	CREATED, PUBLISHED, RUNNING, FINISHED, SUSPENDED, ABORTED;
 
 }

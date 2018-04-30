@@ -18,7 +18,7 @@ export class TaskAvailableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.taskService.findAllCreated()
+    this.taskService.findAllPublished()
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }

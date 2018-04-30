@@ -61,6 +61,13 @@ export class TaskDetailComponent implements OnInit {
     this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadTask(this.task.id));
   }
 
+  publish(){
+    this.taskService.publish(this.task).toPromise().then(() => {
+      this.loadTask(this.task.id);
+      this.messageService.broadcast('historyChanged', {});
+    });
+  }
+
   start() {
     this.taskService.start(this.task).toPromise().then(() => {
       this.loadTask(this.task.id);

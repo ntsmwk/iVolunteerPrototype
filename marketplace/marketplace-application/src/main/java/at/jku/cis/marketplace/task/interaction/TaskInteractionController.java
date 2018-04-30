@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.marketplace.exception.BadRequestException;
+import at.jku.cis.marketplace.exception.ForbiddenException;
 import at.jku.cis.marketplace.participant.Participant;
 import at.jku.cis.marketplace.participant.Volunteer;
 import at.jku.cis.marketplace.participant.VolunteerRepository;
@@ -22,6 +23,7 @@ import at.jku.cis.marketplace.security.LoginService;
 import at.jku.cis.marketplace.security.ParticipantRole;
 import at.jku.cis.marketplace.task.Task;
 import at.jku.cis.marketplace.task.TaskRepository;
+import at.jku.cis.marketplace.task.TaskStatus;
 
 @RestController
 public class TaskInteractionController {
@@ -84,29 +86,44 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/reserve")
-	public void reserveForTask(@PathVariable("taskId") String taskId) {
-		Task task = taskRepository.findOne(taskId);
-		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
-			Participant participant = loginService.getLoggedInParticipant();
-			TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, participant);
+	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId) {
+		if (ParticipantRole.VOLUNTEER != loginService.getLoggedInParticipantRole()) {
+			throw new ForbiddenException();
+		}
 
-			if (latestTaskInteraction == null
-					|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
-				createTaskInteraction(task, participant, TaskVolunteerOperation.RESERVED);
-			}
+		Task task = taskRepository.findOne(taskId);
+		if (task == null || TaskStatus.PUBLISHED != task.getStatus()) {
+			throw new BadRequestException();
+		}
+
+		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
+
+		if (latestTaskInteraction == null
+				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
+			return createTaskInteraction(task, loginService.getLoggedInParticipant(), TaskVolunteerOperation.RESERVED);
+		} else {
+			throw new BadRequestException();
 		}
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
-	public void unreserveForTask(@PathVariable("taskId") String id) {
+	public TaskInteraction unreserveForTask(@PathVariable("taskId") String id) {
+		if (ParticipantRole.VOLUNTEER != loginService.getLoggedInParticipantRole()) {
+			throw new ForbiddenException();
+		}
+
 		Task task = taskRepository.findOne(id);
-		if (loginService.getLoggedInParticipantRole().equals(ParticipantRole.VOLUNTEER)) {
-			Participant participant = loginService.getLoggedInParticipant();
-			TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, participant);
-			if (lastedTaskInteraction == null || lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
-					|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
-				createTaskInteraction(task, participant, TaskVolunteerOperation.UNRESERVED);
-			}
+		if (task == null || TaskStatus.PUBLISHED != task.getStatus()) {
+			throw new BadRequestException();
+		}
+
+		Participant participant = loginService.getLoggedInParticipant();
+		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, participant);
+		if (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
+			return createTaskInteraction(task, participant, TaskVolunteerOperation.UNRESERVED);
+		} else {
+			throw new BadRequestException();
 		}
 	}
 
@@ -130,12 +147,12 @@ public class TaskInteractionController {
 		return taskInteractions.isEmpty() ? null : taskInteractions.get(0);
 	}
 
-	private void createTaskInteraction(Task task, Participant participant, TaskOperation taskOperation) {
+	private TaskInteraction createTaskInteraction(Task task, Participant participant, TaskOperation taskOperation) {
 		TaskInteraction taskInteraction = new TaskInteraction();
 		taskInteraction.setOperation(taskOperation);
 		taskInteraction.setParticipant(participant);
 		taskInteraction.setTask(task);
 		taskInteraction.setTimestamp(new Date());
-		taskInteractionRepository.insert(taskInteraction);
+		return taskInteractionRepository.insert(taskInteraction);
 	}
 }
