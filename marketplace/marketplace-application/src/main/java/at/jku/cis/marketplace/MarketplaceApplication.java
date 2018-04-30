@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.marketplace.competence.Competence;
 import at.jku.cis.marketplace.competence.CompetenceRepository;
@@ -36,7 +38,12 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	@Autowired
 	private CompetenceRepository competenceRepository;
-	
+
+	@Bean
+	public RestTemplate prodduceRestTemplate() {
+		return new RestTemplate();
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
 	}
@@ -54,13 +61,12 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
-		
+
 		createCompetence("Planning");
 		createCompetence("Leadership");
 		createCompetence("Creativity");
 		createCompetence("Flexability");
 		createCompetence("Motivation");
-
 
 	}
 
@@ -81,10 +87,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 		return volunteer;
 	}
-	
+
 	private Competence createCompetence(String competenceName) {
 		Competence competence = competenceRepository.findByName(competenceName);
-		if(competence == null) {
+		if (competence == null) {
 			competence = new Competence();
 			competence.setName(competenceName);
 			competence = competenceRepository.insert(competence);

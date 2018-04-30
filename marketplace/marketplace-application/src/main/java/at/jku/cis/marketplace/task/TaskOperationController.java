@@ -21,12 +21,16 @@ import at.jku.cis.marketplace.security.LoginService;
 import at.jku.cis.marketplace.task.interaction.TaskInteraction;
 import at.jku.cis.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.marketplace.task.interaction.TaskInteractionService;
+import at.jku.cis.marketplace.trustifier.TrustifierRestClient;
 
 @RestController
 public class TaskOperationController {
 
 	@Autowired
 	private LoginService loginService;
+	
+	@Autowired
+	private TrustifierRestClient trustifierRestClient;
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -47,6 +51,8 @@ public class TaskOperationController {
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
+		
+		trustifierRestClient.publishTask(task);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 

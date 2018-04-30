@@ -1,4 +1,4 @@
-package at.jku.cis.trustifier.blockchain;
+package at.jku.cis.trustifier.hash;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -6,22 +6,19 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HashObjectGenerator {
+public class HashGenerator {
 
 	private static final String ALGORITHM = "SHA-256";
 
 	public String sha256(IHashObject object) {
 		MessageDigest messageDigest = null;
-
 		try {
 			messageDigest = MessageDigest.getInstance(ALGORITHM);
-			messageDigest.update(object.toHashString().getBytes());
+			messageDigest.update(object.toHashObject().getBytes());
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
-
 		return bytesToHex(messageDigest.digest());
-
 	}
 
 	private String bytesToHex(byte[] bytes) {

@@ -2,9 +2,10 @@ package at.jku.cis.trustifier.model.task;
 
 import java.util.Date;
 
+import at.jku.cis.trustifier.hash.IHashObject;
 import at.jku.cis.trustifier.model.task.type.TaskType;
 
-public class Task {
+public class Task implements IHashObject {
 
 	private String id;
 	private Date startDate;
@@ -53,15 +54,7 @@ public class Task {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Task)) {
-			return false;
-		}
-		return ((Task) obj).id.equals(id);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
+	public String toHashObject() {
+		return "test";
 	}
 }
