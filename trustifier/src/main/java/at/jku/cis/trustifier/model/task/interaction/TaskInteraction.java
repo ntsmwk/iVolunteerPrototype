@@ -2,10 +2,11 @@ package at.jku.cis.trustifier.model.task.interaction;
 
 import java.util.Date;
 
+import at.jku.cis.trustifier.hash.IHashObject;
 import at.jku.cis.trustifier.model.participant.Participant;
 import at.jku.cis.trustifier.model.task.Task;
 
-public class TaskInteraction {
+public class TaskInteraction implements IHashObject {
 
 	private String id;
 	private Task task;
@@ -82,6 +83,12 @@ public class TaskInteraction {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	@Override
+	public String toHashObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

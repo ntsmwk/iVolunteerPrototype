@@ -128,16 +128,16 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/assign/{volunteerId}")
-	public void assignForTask(@PathVariable("taskId") String taskId, @PathVariable("volunteerId") String volunteerId) {
+	public TaskInteraction assignForTask(@PathVariable("taskId") String taskId, @PathVariable("volunteerId") String volunteerId) {
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.ASSIGNED);
+		return createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.ASSIGNED);
 	}
 
 	@PostMapping("/task/{taskId}/unassign/{volunteerId}")
-	public void unassignForTask(@PathVariable("taskId") String taskId,
+	public TaskInteraction unassignForTask(@PathVariable("taskId") String taskId,
 			@PathVariable("volunteerId") String volunteerId) {
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.UNASSIGNED);
+		return createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.UNASSIGNED);
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {
