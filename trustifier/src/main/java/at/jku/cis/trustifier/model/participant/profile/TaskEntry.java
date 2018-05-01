@@ -4,7 +4,8 @@ import java.util.Date;
 
 import com.google.gson.JsonObject;
 
-import at.jku.cis.trustifier.blockchain.IHashObject;
+import at.jku.cis.trustifier.hash.IHashObject;
+
 
 public class TaskEntry implements IHashObject {
 
@@ -71,7 +72,7 @@ public class TaskEntry implements IHashObject {
 	}
 
 	@Override
-	public String toHashString() {
+	public String toHashObject() {
 		JsonObject json = new JsonObject();
 		json.addProperty("id", id);
 		json.addProperty("taskId", taskId);

@@ -4,7 +4,8 @@ import java.util.Date;
 
 import com.google.gson.JsonObject;
 
-import at.jku.cis.trustifier.blockchain.IHashObject;
+import at.jku.cis.trustifier.hash.IHashObject;
+
 
 public class CompetenceEntry implements IHashObject {
 
@@ -61,7 +62,7 @@ public class CompetenceEntry implements IHashObject {
 	}
 
 	@Override
-	public String toHashString() {
+	public String toHashObject() {
 		JsonObject json = new JsonObject();
 		json.addProperty("id", id);
 		json.addProperty("competenceId", competenceId);
@@ -69,4 +70,5 @@ public class CompetenceEntry implements IHashObject {
 		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();
 	}
+
 }
