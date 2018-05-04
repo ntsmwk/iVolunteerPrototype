@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 @Injectable()
 export class VolunteerService {
 
-  private apiUrl = '/rest/volunteer';
+  private apiUrl = '/marketplace/volunteer';
 
   constructor(private http: HttpClient) {
   }

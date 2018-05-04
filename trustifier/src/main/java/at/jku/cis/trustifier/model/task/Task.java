@@ -10,7 +10,6 @@ public class Task implements IHashObject {
 	private String id;
 	private Date startDate;
 	private Date endDate;
-	private TaskStatus status;
 	private TaskType type;
 
 	public String getId() {
@@ -43,14 +42,6 @@ public class Task implements IHashObject {
 
 	public void setType(TaskType type) {
 		this.type = type;
-	}
-
-	public TaskStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(TaskStatus status) {
-		this.status = status;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-import {Competence} from '../competence/competence';
+import {Competence} from './competence';
 
 export class TaskType {
   id: string;

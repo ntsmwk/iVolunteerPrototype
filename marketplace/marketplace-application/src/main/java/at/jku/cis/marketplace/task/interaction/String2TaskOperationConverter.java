@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.stereotype.Service;
 
 import at.jku.cis.marketplace.task.TaskStatus;
 
-@ReadingConverter
+@Service
 public class String2TaskOperationConverter implements Converter<String, TaskOperation> {
 
 	private final Map<String, TaskOperation> string2TaskOperation = new HashMap<>();

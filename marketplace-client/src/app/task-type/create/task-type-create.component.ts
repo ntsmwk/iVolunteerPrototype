@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {TaskTypeService} from '../task-type.service';
-import {TaskType} from '../task-type';
+import {TaskTypeService} from '../../_service/task-type.service';
+import {TaskType} from '../../_model/task-type';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CompetenceService} from '../../competence/competence.service';
-import {Competence} from '../../competence/competence';
 import {TaskTypeValidator} from '../task-type.validator';
 import {isNullOrUndefined} from 'util';
+import {CompetenceService} from '../../_service/competence.service';
+import {Competence} from '../../_model/competence';
 
 @Component({
   templateUrl: './task-type-create.component.html',

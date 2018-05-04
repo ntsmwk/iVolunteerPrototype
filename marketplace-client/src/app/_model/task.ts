@@ -1,4 +1,4 @@
-import {TaskType} from '../task-type/task-type';
+import {TaskType} from './task-type';
 
 export class Task {
   id: string;

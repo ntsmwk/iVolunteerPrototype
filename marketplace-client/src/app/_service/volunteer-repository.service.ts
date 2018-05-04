@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {Volunteer} from './volunteer';
-import {VolunteerProfile} from './volunteer-profile';
-import {TaskEntry} from './task-entry';
-import {CompetenceEntry} from './competence-entry';
+import {Volunteer} from '../_model/volunteer';
+import {VolunteerProfile} from '../_model/volunteer-profile';
+import {TaskEntry} from '../_model/task-entry';
+import {CompetenceEntry} from '../_model/competence-entry';
 import {isNullOrUndefined} from 'util';
 
 @Injectable()

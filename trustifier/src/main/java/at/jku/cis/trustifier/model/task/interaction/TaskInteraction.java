@@ -2,25 +2,18 @@ package at.jku.cis.trustifier.model.task.interaction;
 
 import java.util.Date;
 
-import at.jku.cis.trustifier.model.participant.Participant;
+import at.jku.cis.trustifier.hash.IHashObject;
 import at.jku.cis.trustifier.model.task.Task;
 
-public class TaskInteraction {
+public class TaskInteraction implements IHashObject {
 
 	private String id;
 	private Task task;
-	private Participant participant;
-	private TaskOperation operation;
+	private String operation;
 	private Date timestamp;
 	private String comment;
 
 	public TaskInteraction() {
-	}
-
-	public TaskInteraction(Task task, TaskOperation operation, Date timestamp) {
-		this.task = task;
-		this.operation = operation;
-		this.timestamp = timestamp;
 	}
 
 	public String getId() {
@@ -39,19 +32,11 @@ public class TaskInteraction {
 		this.task = task;
 	}
 
-	public Participant getParticipant() {
-		return participant;
-	}
-
-	public void setParticipant(Participant participant) {
-		this.participant = participant;
-	}
-
-	public TaskOperation getOperation() {
+	public String getOperation() {
 		return operation;
 	}
 
-	public void setOperation(TaskOperation operation) {
+	public void setOperation(String operation) {
 		this.operation = operation;
 	}
 
@@ -72,16 +57,8 @@ public class TaskInteraction {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TaskInteraction)) {
-			return false;
-		}
-		return ((TaskInteraction) obj).id.equals(id);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
+	public String toHashObject() {
+		return "ABCD";
 	}
 
 }

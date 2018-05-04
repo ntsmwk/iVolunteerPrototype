@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {TaskType} from '../task-type';
-import {TaskTypeService} from '../task-type.service';
+import {TaskType} from '../../_model/task-type';
+import {TaskTypeService} from '../../_service/task-type.service';
 
 @Component({
   templateUrl: './task-type-list.component.html'

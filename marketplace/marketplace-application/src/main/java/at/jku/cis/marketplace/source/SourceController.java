@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SourceController {
 
+	@Value("${server.port}")
+	private String serverPort;
+
 	@Value("${marketplace.identifier}")
 	private String identifier;
 
@@ -21,9 +24,7 @@ public class SourceController {
 	}
 
 	private String determineRemoteAddress(HttpServletRequest httpServletRequest) {
-		String requestURL = httpServletRequest.getRequestURL().toString();
-		String requestPath = httpServletRequest.getRequestURI().toString();
-		return requestURL.substring(0, requestURL.length() - requestPath.length());
+		return "http://" + httpServletRequest.getRemoteAddr() + ":" + serverPort;
 	}
 
 }

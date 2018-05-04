@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ArrayService} from '../../_service/array.service';
-import {LoginService} from '../../login/login.service';
-import {TaskEntry} from '../task-entry';
-import {CompetenceEntry} from '../competence-entry';
-import {Volunteer} from '../volunteer';
-import {VolunteerProfile} from '../volunteer-profile';
-import {VolunteerProfileService} from '../volunteer-profile.service';
-import {VolunteerRepositoryService} from '../volunteer-repository.service';
+import {LoginService} from '../../_service/login.service';
+import {TaskEntry} from '../../_model/task-entry';
+import {CompetenceEntry} from '../../_model/competence-entry';
+import {Volunteer} from '../../_model/volunteer';
+import {VolunteerProfile} from '../../_model/volunteer-profile';
+import {VolunteerProfileService} from '../../_service/volunteer-profile.service';
+import {VolunteerRepositoryService} from '../../_service/volunteer-repository.service';
 import {isNullOrUndefined} from 'util';
 
 @Component({

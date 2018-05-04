@@ -1,9 +1,13 @@
 {
-  "/rest": {
+  "/trustifier": {
+    "target": "http://localhost:8090",
+    "secure": false
+  },
+  "/marketplace": {
     "target": "http://localhost:8080",
     "secure": false,
     "pathRewrite": {
-      "^/rest": ""
+      "^/marketplace": ""
     }
   }
 }

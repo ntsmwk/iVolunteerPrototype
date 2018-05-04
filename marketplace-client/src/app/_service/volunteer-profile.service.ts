@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Volunteer} from './volunteer';
-import {TaskEntry} from './task-entry';
-import {CompetenceEntry} from './competence-entry';
+import {Volunteer} from '../_model/volunteer';
+import {TaskEntry} from '../_model/task-entry';
+import {CompetenceEntry} from '../_model/competence-entry';
 
 @Injectable()
 export class VolunteerProfileService {
 
-  private apiUrl = '/rest/volunteer';
+  private apiUrl = '/marketplace/volunteer';
 
   constructor(private http: HttpClient) {
   }

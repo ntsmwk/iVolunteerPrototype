@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Task} from '../task';
-import {TaskService} from '../task.service';
-import {TaskType} from '../../task-type/task-type';
-import {TaskTypeService} from '../../task-type/task-type.service';
+import {Task} from '../../_model/task';
+import {TaskService} from '../../_service/task.service';
+import {TaskType} from '../../_model/task-type';
+import {TaskTypeService} from '../../_service/task-type.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 

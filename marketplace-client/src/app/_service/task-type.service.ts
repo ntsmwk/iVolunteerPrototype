@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {TaskType} from '../_model/task-type';
 import {isNullOrUndefined} from 'util';
-import {TaskType} from './task-type';
 
 @Injectable()
 export class TaskTypeService {
 
-  private apiUrl = '/rest/taskType';
+  private apiUrl = '/marketplace/taskType';
 
   constructor(private http: HttpClient) {
   }

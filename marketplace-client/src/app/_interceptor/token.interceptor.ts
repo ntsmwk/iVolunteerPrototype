@@ -9,7 +9,7 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.endsWith('rest/login') && request.method === 'POST') {
+    if (request.url.endsWith('/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             marketplace/login') && request.method === 'POST') {
       return next.handle(request);
     }
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanActivate} from '@angular/router';
-import {LoginService} from '../login/login.service';
+import {LoginService} from '../_service/login.service';
 
 @Injectable()
 export class VolunteerGuard implements CanActivate {

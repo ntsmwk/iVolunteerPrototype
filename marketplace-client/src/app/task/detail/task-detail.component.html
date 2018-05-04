@@ -73,7 +73,7 @@
   </div>
 
   <div *ngIf="role === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'CREATED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()"
+    <button *ngIf="this.task.status === 'PUBLISHED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()"
             mat-raised-button color="primary">
       Reserve
     </button>

@@ -8,9 +8,9 @@ import {TaskTypeCreateComponent} from './task-type/create/task-type-create.compo
 import {TaskDetailComponent} from './task/detail/task-detail.component';
 import {LoginComponent} from './login/login.component';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
-import {TokenGuard} from './login/token.guard';
-import {EmployeeGuard} from './employee/employee.guard';
-import {VolunteerGuard} from './volunteer/volunteer.guard';
+import {TokenGuard} from './_guard/token.guard';
+import {EmployeeGuard} from './_guard/employee.guard';
+import {VolunteerGuard} from './_guard/volunteer.guard';
 import {VolunteerProfileComponent} from './volunteer/profile/volunteer-profile.component';
 
 

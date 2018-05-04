@@ -2,14 +2,15 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable()
-export class EmployeeService {
+export class CompetenceService {
 
-  private apiUrl = '/rest/employee';
+  private apiUrl = '/marketplace/competence';
 
   constructor(private http: HttpClient) {
   }
 
-  findById(id: string) {
-    return this.http.get([this.apiUrl, id].join('/'));
+  findAll() {
+    return this.http.get(this.apiUrl);
   }
+
 }

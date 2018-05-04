@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoginService} from '../login/login.service';
-import {Participant} from '../participant/participant';
+import {LoginService} from '../_service/login.service';
+import {Participant} from '../_model/participant';
 import {isNullOrUndefined} from 'util';
 import {MessageService} from '../_service/message.service';
 import {Subscription} from 'rxjs/Subscription';

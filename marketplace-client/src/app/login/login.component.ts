@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {LoginService} from './login.service';
+import {LoginService} from '../_service/login.service';
 import {HttpResponse} from '@angular/common/http';
 import {MessageService} from '../_service/message.service';
 

@@ -1,12 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Task} from '../task';
-import {TaskService} from '../task.service';
+import {Task} from '../../_model/task';
+import {TaskService} from '../../_service/task.service';
 
-import {LoginService} from '../../login/login.service';
-import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
+import {LoginService} from '../../_service/login.service';
+import {TaskInteractionService} from '../../_service/task-interaction.service';
 import {MessageService} from '../../_service/message.service';
-import {Participant} from '../../participant/participant';
+import {Participant} from '../../_model/participant';
+import {SourceService} from '../../_service/source.service';
+import {Source} from '../../_model/source';
+import {ContractorService} from '../../_service/contractor.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -49,6 +52,8 @@ export class TaskDetailComponent implements OnInit {
               private router: Router,
               private loginService: LoginService,
               private messageService: MessageService,
+              private sourceService: SourceService,
+              private contractorService: ContractorService,
               private taskService: TaskService,
               private taskInteractionService: TaskInteractionService) {
   }
@@ -58,10 +63,12 @@ export class TaskDetailComponent implements OnInit {
   }
 
   reserve() {
-    this.taskInteractionService.reserve(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.sourceService.find().toPromise().then((source: Source) => {
+      this.contractorService.reserve(source, this.task).toPromise().then(() => this.loadTask(this.task.id));
+    });
   }
 
-  publish(){
+  publish() {
     this.taskService.publish(this.task).toPromise().then(() => {
       this.loadTask(this.task.id);
       this.messageService.broadcast('historyChanged', {});

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Task} from '../task';
-import {TaskService} from '../task.service';
+import {Task} from '../../_model/task';
+import {TaskService} from '../../_service/task.service';
 import {MatTableDataSource} from '@angular/material';
 
 @Component({

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {TaskInteractionService} from '../../task-interaction/task-interaction.service';
-import {Task} from '../task';
-import {Participant} from '../../participant/participant';
+import {TaskInteractionService} from '../../_service/task-interaction.service';
+import {Task} from '../../_model/task';
+import {Participant} from '../../_model/participant';
 import {ActivatedRoute} from '@angular/router';
-import {TaskService} from '../task.service';
-import {VolunteerService} from '../../volunteer/volunteer.service';
+import {TaskService} from '../../_service/task.service';
+import {VolunteerService} from '../../_service/volunteer.service';
 
 @Component({
   selector: 'app-task-assign',

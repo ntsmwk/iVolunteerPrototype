@@ -1,5 +1,5 @@
-import {Task} from '../task/task';
-import {Participant} from '../participant/participant';
+import {Task} from './task';
+import {Participant} from './participant';
 
 export class TaskInteraction {
   id: string;

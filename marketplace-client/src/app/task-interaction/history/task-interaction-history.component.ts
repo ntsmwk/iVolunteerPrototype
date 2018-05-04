@@ -1,10 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {Task} from '../../task/task';
-import {TaskInteraction} from '../task-interaction';
-import {TaskInteractionService} from '../task-interaction.service';
 import {Subscription} from 'rxjs/Subscription';
+import {TaskInteractionService} from '../../_service/task-interaction.service';
 import {MessageService} from '../../_service/message.service';
+import {Task} from '../../_model/task';
+import {TaskInteraction} from '../../_model/task-interaction';
 
 @Component({
   selector: 'app-task-interaction-history',
