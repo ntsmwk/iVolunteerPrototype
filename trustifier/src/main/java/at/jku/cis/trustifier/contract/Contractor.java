@@ -39,23 +39,24 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/assign")
-	public String assignTask() {
-		// if (!verifier.verify(reservation.getTask())) {
-		throw new BadRequestException();
-		// }
+	public String assignTask(@RequestBody TaskAssignment assignment, @RequestHeader("Authorization") String authorization) {
+		if (!verifier.verify(assignment.getTask())) {
+			throw new BadRequestException();
+		}
 
-		// try {
-		// TaskInteraction taskInteraction =
-		// marketplaceRestClient.assign(taskInteraction);
-		// return
-		// blockchainService.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
-		// } catch (RestClientException ex) {
-		// throw new BadRequestException(ex);
-		// }
+		try {
+			String address = assignment.getSource().getAddress();
+			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
+					assignment.getVolunteer());
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
 	}
 
 	@PostMapping("/task/reserve")
-	public String reserveTask(@RequestBody TaskReservation reservation, @RequestHeader("Authorization") String authorization) {
+	public String reserveTask(@RequestBody TaskReservation reservation,
+			@RequestHeader("Authorization") String authorization) {
 		if (!verifier.verify(reservation.getTask())) {
 			throw new BadRequestException();
 		}

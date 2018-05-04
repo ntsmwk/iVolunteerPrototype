@@ -8,8 +8,8 @@ import {TaskInteractionService} from '../../_service/task-interaction.service';
 import {MessageService} from '../../_service/message.service';
 import {Participant} from '../../_model/participant';
 import {SourceService} from '../../_service/source.service';
-import {Source} from '../../_model/source';
 import {ContractorService} from '../../_service/contractor.service';
+import {Source} from '../../_model/source';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -17,6 +17,7 @@ import {ContractorService} from '../../_service/contractor.service';
 })
 export class TaskDetailComponent implements OnInit {
 
+  source: Source;
   task: Task;
   participant: Participant;
   role;
@@ -25,6 +26,7 @@ export class TaskDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
+    this.sourceService.find().toPromise().then((source: Source) => this.source = source);
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.role = role);
   }
 
@@ -63,9 +65,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   reserve() {
-    this.sourceService.find().toPromise().then((source: Source) => {
-      this.contractorService.reserve(source, this.task).toPromise().then(() => this.loadTask(this.task.id));
-    });
+    this.contractorService.reserve(this.source, this.task).toPromise().then(() => this.loadTask(this.task.id));
   }
 
   publish() {
