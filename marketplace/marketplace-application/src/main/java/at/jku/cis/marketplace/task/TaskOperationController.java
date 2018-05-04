@@ -28,7 +28,7 @@ public class TaskOperationController {
 
 	@Autowired
 	private LoginService loginService;
-	
+
 	@Autowired
 	private TrustifierRestClient trustifierRestClient;
 
@@ -51,7 +51,7 @@ public class TaskOperationController {
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
-		
+
 		trustifierRestClient.publishTask(task);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}

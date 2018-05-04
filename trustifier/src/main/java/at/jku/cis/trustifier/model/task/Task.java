@@ -46,6 +46,7 @@ public class Task implements IHashObject {
 
 	@Override
 	public String toHashObject() {
+		//TODO
 		return "test";
 	}
 }

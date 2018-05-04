@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.marketplace.participant.Volunteer;
 import at.jku.cis.marketplace.task.Task;
 
 @Service
@@ -26,5 +27,4 @@ public class TrustifierRestClient {
 		String requestURI = format(TRUSTIFIER_CONTRACTOR_TASK, trustifierURI);
 		return restTemplate.postForObject(requestURI, task, String.class);
 	}
-
 }
