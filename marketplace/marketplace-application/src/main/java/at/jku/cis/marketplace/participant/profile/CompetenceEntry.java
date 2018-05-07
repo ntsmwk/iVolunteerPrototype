@@ -51,6 +51,11 @@ public class CompetenceEntry {
 	}
 
 	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof CompetenceEntry)) {
 			return false;
@@ -59,7 +64,9 @@ public class CompetenceEntry {
 	}
 
 	@Override
-	public int hashCode() {
-		return id.hashCode();
+	public String toString() {
+		return "CompetenceEntry [id=" + id + ", competenceId=" + competenceId + ", competenceName=" + competenceName
+				+ ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp + "]";
 	}
+
 }

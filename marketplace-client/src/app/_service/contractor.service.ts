@@ -17,4 +17,8 @@ export class ContractorService {
   assign(source: Source, task: Task, participant: Participant) {
     return this.http.post('/trustifier/contractor/task/assign', {source: source, task: task, volunteer: participant});
   }
+
+  finish(source: Source, task: Task) {
+    return this.http.post('/trustifier/contractor/task/finish', {source: source, task: task});
+  }
 }

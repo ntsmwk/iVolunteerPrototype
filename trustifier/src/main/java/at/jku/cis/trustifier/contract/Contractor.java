@@ -38,22 +38,6 @@ public class Contractor {
 		}
 	}
 
-	@PostMapping("/task/assign")
-	public String assignTask(@RequestBody TaskAssignment assignment, @RequestHeader("Authorization") String authorization) {
-		if (!verifier.verify(assignment.getTask())) {
-			throw new BadRequestException();
-		}
-
-		try {
-			String address = assignment.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
-					assignment.getVolunteer());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
-		} catch (RestClientException ex) {
-			throw new BadRequestException(ex);
-		}
-	}
-
 	@PostMapping("/task/reserve")
 	public String reserveTask(@RequestBody TaskReservation reservation,
 			@RequestHeader("Authorization") String authorization) {
@@ -70,4 +54,39 @@ public class Contractor {
 			throw new BadRequestException(ex);
 		}
 	}
+
+	@PostMapping("/task/assign")
+	public String assignTask(@RequestBody TaskAssignment assignment,
+			@RequestHeader("Authorization") String authorization) {
+		if (!verifier.verify(assignment.getTask())) {
+			throw new BadRequestException();
+		}
+
+		try {
+			String address = assignment.getSource().getAddress();
+			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
+					assignment.getVolunteer());
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+	}
+
+	@PostMapping("/task/finish")
+	public String finishTask(@RequestBody TaskCompletation completation,
+			@RequestHeader("Authorization") String authorization) {
+		if (!verifier.verify(completation.getTask())) {
+			throw new BadRequestException();
+		}
+
+		try {
+			String address = completation.getSource().getAddress();
+			TaskInteraction taskInteraction = marketplaceRestClient.finish(address, authorization, completation.getTask());
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+
+	}
+
 }

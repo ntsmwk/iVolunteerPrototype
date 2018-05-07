@@ -63,6 +63,11 @@ public class TaskEntry {
 	}
 
 	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TaskEntry)) {
 			return false;
@@ -71,8 +76,9 @@ public class TaskEntry {
 	}
 
 	@Override
-	public int hashCode() {
-		return id.hashCode();
+	public String toString() {
+		return "TaskEntry [id=" + id + ", taskId=" + taskId + ", taskName=" + taskName + ", taskDescription="
+				+ taskDescription + ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp + "]";
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
 import at.jku.cis.marketplace.exception.BadRequestException;
 import at.jku.cis.marketplace.participant.Volunteer;
@@ -21,7 +22,7 @@ import at.jku.cis.marketplace.security.LoginService;
 import at.jku.cis.marketplace.task.interaction.TaskInteraction;
 import at.jku.cis.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.marketplace.task.interaction.TaskInteractionService;
-import at.jku.cis.marketplace.trustifier.TrustifierRestClient;
+import at.jku.cis.marketplace.trustifier.ContractorRestClient;
 
 @RestController
 public class TaskOperationController {
@@ -30,7 +31,7 @@ public class TaskOperationController {
 	private LoginService loginService;
 
 	@Autowired
-	private TrustifierRestClient trustifierRestClient;
+	private ContractorRestClient contractorRestClient;
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -52,7 +53,7 @@ public class TaskOperationController {
 			throw new BadRequestException();
 		}
 
-		trustifierRestClient.publishTask(task);
+		contractorRestClient.publishTask(task);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
@@ -84,14 +85,22 @@ public class TaskOperationController {
 	}
 
 	@PostMapping("/task/{id}/finish")
-	public void finishTask(@PathVariable("id") String id) {
+	public TaskInteraction finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
 		}
 		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.FINISHED);
+
+
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
+		try {
+			contractorRestClient.publishTaskEntry(taskEntry);
+			competenceEntries.forEach(competenceEntry -> contractorRestClient.publishCompetenceEntry(competenceEntry));
+		} catch (RestClientException ex) {
+			throw new BadRequestException();
+		}
 
 		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
 			@Override
@@ -107,12 +116,7 @@ public class TaskOperationController {
 			}
 		});
 
-		// TODO contractor call
-		// blockchainRestClient.postSimpleHash(taskEntry);
-		// for (CompetenceEntry competenceEntry : competenceEntries) {
-		// blockchainRestClient.postSimpleHash(competenceEntry);
-		// }
-
+		return taskInteraction;
 	}
 
 	@PostMapping("/task/{id}/abort")
