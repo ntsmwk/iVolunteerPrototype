@@ -11,14 +11,17 @@ export class ContractorService {
   }
 
   reserve(source: Source, task: Task) {
-    return this.http.post('/trustifier/contractor/task/reserve', {source: source, task: task});
+    const body = {source: source, task: task};
+    return this.http.post('/trustifier/contractor/task/reserve', body, {responseType: 'text'});
   }
 
   assign(source: Source, task: Task, participant: Participant) {
-    return this.http.post('/trustifier/contractor/task/assign', {source: source, task: task, volunteer: participant});
+    const body = {source: source, task: task, volunteer: participant};
+    return this.http.post('/trustifier/contractor/task/assign', body, {responseType: 'text'});
   }
 
   finish(source: Source, task: Task) {
-    return this.http.post('/trustifier/contractor/task/finish', {source: source, task: task});
+    const body = {source: source, task: task};
+    return this.http.post('/trustifier/contractor/task/finish', body, {responseType: 'text'});
   }
 }

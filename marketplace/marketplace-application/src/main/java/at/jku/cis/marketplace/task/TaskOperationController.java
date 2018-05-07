@@ -60,7 +60,7 @@ public class TaskOperationController {
 	@PostMapping("/task/{id}/start")
 	public void startTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
-		if (task == null || task.getStatus() != TaskStatus.CREATED) {
+		if (task == null || task.getStatus() != TaskStatus.PUBLISHED) {
 			throw new BadRequestException();
 		}
 		updateTaskStatus(task, TaskStatus.RUNNING);

@@ -97,7 +97,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   finish() {
-    this.contractorService.finishTask(this.source, this.task).toPromise().then(() => {
+    this.contractorService.finish(this.source, this.task).toPromise().then(() => {
       this.loadTask(this.task.id);
       this.messageService.broadcast('historyChanged', {});
     });

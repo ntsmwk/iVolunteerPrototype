@@ -12,6 +12,8 @@ import at.jku.cis.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.trustifier.exception.BadRequestException;
 import at.jku.cis.trustifier.hash.Hasher;
 import at.jku.cis.trustifier.marketplace.MarketplaceRestClient;
+import at.jku.cis.trustifier.model.participant.profile.CompetenceEntry;
+import at.jku.cis.trustifier.model.participant.profile.TaskEntry;
 import at.jku.cis.trustifier.model.task.Task;
 import at.jku.cis.trustifier.model.task.interaction.TaskInteraction;
 import at.jku.cis.trustifier.verification.Verifier;
@@ -81,7 +83,8 @@ public class Contractor {
 
 		try {
 			String address = completation.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.finish(address, authorization, completation.getTask());
+			TaskInteraction taskInteraction = marketplaceRestClient.finish(address, authorization,
+					completation.getTask());
 			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -89,4 +92,22 @@ public class Contractor {
 
 	}
 
+	@PostMapping("/competenceEntry")
+	public String publishCompetenceEntry(@RequestBody CompetenceEntry competenceEntry) {
+		try {
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(competenceEntry)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+
+	}
+
+	@PostMapping("/taskEntry")
+	public String publishTaskEntry(@RequestBody TaskEntry taskEntry) {
+		try {
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskEntry)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+	}
 }
