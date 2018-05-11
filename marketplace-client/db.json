@@ -21,8 +21,39 @@
       "volunteer": {
         "username": "broiser"
       },
-      "taskList": [],
-      "competenceList": []
+      "taskList": [
+        {
+          "id": "5af553d01046082598f116ce",
+          "taskId": "5af54c8510460823c3af2e2a",
+          "taskName": "A",
+          "taskDescription": "A",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526027216040
+        }
+      ],
+      "competenceList": [
+        {
+          "id": "78cb0180-4f86-41ef-9493-4a76204e71f7",
+          "competenceId": "5af54c5210460823c3af2e28",
+          "competenceName": "Motivation",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526027216040
+        },
+        {
+          "id": "1a021796-2ae4-42f6-96af-0051cca6f4ff",
+          "competenceId": "5af54c5210460823c3af2e26",
+          "competenceName": "Creativity",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526027216040
+        },
+        {
+          "id": "e61a3104-1808-4945-b0bc-bd90aa52bc08",
+          "competenceId": "5af54c5210460823c3af2e27",
+          "competenceName": "Flexability",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526027216040
+        }
+      ]
     }
   ]
 }
