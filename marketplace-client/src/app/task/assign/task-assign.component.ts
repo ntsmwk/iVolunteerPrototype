@@ -50,7 +50,6 @@ export class TaskAssignComponent implements OnInit {
         (<Participant[]> values[1]).forEach((volunteer: Participant) => {
           assignmentVolunteers.splice(0, 0, new AssignmentVolunteer(volunteer.id, volunteer.username, true));
         });
-
         this.dataSource.data = assignmentVolunteers;
       });
 
@@ -61,7 +60,7 @@ export class TaskAssignComponent implements OnInit {
     this.volunteerService.findById(volunteer.id).toPromise().then((participant: Participant) => {
       switch (volunteer.isAssigned) {
         case true:
-          this.taskInteractionService.unassign(this.task, participant).toPromise().then(() => this.loadData(this.task.id));
+          this.contractorService.unassign(this.source, this.task, participant).toPromise().then(() => this.loadData(this.task.id));
           break;
         case false:
           this.contractorService.assign(this.source, this.task, participant).toPromise().then(() => this.loadData(this.task.id));

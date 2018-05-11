@@ -19,16 +19,28 @@ public class TaskInteractionService {
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
 
+	public Set<Volunteer> findReservedVolunteersByTask(Task task) {
+		Set<Volunteer> volunteers = new HashSet<>();
+
+		findByTaskGroupedByParticipant(task).entrySet().forEach(entry -> {
+			List<TaskInteraction> interactions = entry.getValue();
+			if (TaskVolunteerOperation.RESERVED == interactions.get(interactions.size() - 1).getOperation()
+					|| TaskVolunteerOperation.UNASSIGNED == interactions.get(interactions.size() - 1).getOperation()) {
+				volunteers.add((Volunteer) entry.getKey());
+			}
+		});
+
+		return volunteers;
+	}
+
 	public Set<Volunteer> findAssignedVolunteersByTask(Task task) {
 		Set<Volunteer> volunteers = new HashSet<>();
-		Map<Participant, List<TaskInteraction>> participant2TaskInteractions = findByTaskGroupedByParticipant(task);
 
-		participant2TaskInteractions.entrySet().forEach(entry -> {
+		findByTaskGroupedByParticipant(task).entrySet().forEach(entry -> {
 			List<TaskInteraction> interactions = entry.getValue();
 			if (TaskVolunteerOperation.ASSIGNED == interactions.get(interactions.size() - 1).getOperation()) {
 				volunteers.add((Volunteer) entry.getKey());
 			}
-
 		});
 
 		return volunteers;
@@ -38,4 +50,5 @@ public class TaskInteractionService {
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		return taskInteractions.stream().collect(Collectors.groupingBy(t -> t.getParticipant()));
 	}
+
 }

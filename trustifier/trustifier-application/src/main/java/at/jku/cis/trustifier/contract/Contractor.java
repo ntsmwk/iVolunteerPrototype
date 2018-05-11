@@ -49,8 +49,23 @@ public class Contractor {
 
 		try {
 			String address = reservation.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.reserve(address, authorization,
-					reservation.getTask());
+			TaskInteraction taskInteraction = marketplaceRestClient.reserve(address, authorization, reservation.getTask());
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+	}
+	
+	@PostMapping("/task/unreserve")
+	public String unreserveTask(@RequestBody TaskReservation reservation,
+			@RequestHeader("Authorization") String authorization) {
+		if (!verifier.verify(reservation.getTask())) {
+			throw new BadRequestException();
+		}
+
+		try {
+			String address = reservation.getSource().getAddress();
+			TaskInteraction taskInteraction = marketplaceRestClient.unreserve(address, authorization, reservation.getTask());
 			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -67,6 +82,23 @@ public class Contractor {
 		try {
 			String address = assignment.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
+					assignment.getVolunteer());
+			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+	}
+	
+	@PostMapping("/task/unassign")
+	public String unassignTask(@RequestBody TaskAssignment assignment,
+			@RequestHeader("Authorization") String authorization) {
+		if (!verifier.verify(assignment.getTask())) {
+			throw new BadRequestException();
+		}
+
+		try {
+			String address = assignment.getSource().getAddress();
+			TaskInteraction taskInteraction = marketplaceRestClient.unassign(address, authorization, assignment.getTask(),
 					assignment.getVolunteer());
 			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {

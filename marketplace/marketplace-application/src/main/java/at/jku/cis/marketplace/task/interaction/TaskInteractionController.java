@@ -1,9 +1,10 @@
 package at.jku.cis.marketplace.task.interaction;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.marketplace.exception.BadRequestException;
-import at.jku.cis.marketplace.exception.ForbiddenException;
 import at.jku.cis.marketplace.participant.Participant;
 import at.jku.cis.marketplace.participant.Volunteer;
 import at.jku.cis.marketplace.participant.VolunteerRepository;
 import at.jku.cis.marketplace.security.LoginService;
-import at.jku.cis.marketplace.security.ParticipantRole;
 import at.jku.cis.marketplace.task.Task;
 import at.jku.cis.marketplace.task.TaskRepository;
-import at.jku.cis.marketplace.task.TaskStatus;
 
 @RestController
 public class TaskInteractionController {
@@ -33,6 +31,8 @@ public class TaskInteractionController {
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
+	private TaskInteractionService taskInteractionService;
+	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
@@ -41,13 +41,14 @@ public class TaskInteractionController {
 	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
 			@RequestParam(value = "volunteerId", required = false) String volunteerId,
 			@RequestParam(value = "operation", required = false) TaskOperation operation) {
-		Task task = taskRepository.findOne(taskId);
+
+		Task task = findAndVerifyTaskById(taskId);
 
 		if (operation != null) {
 			return taskInteractionRepository.findByTaskAndOperation(task, operation);
 		}
 		if (StringUtils.isNotBlank(volunteerId)) {
-			Volunteer volunteer = volunteerRepository.findOne(volunteerId);
+			Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
 			return taskInteractionRepository.findByTaskAndParticipant(task, volunteer);
 		}
 		return taskInteractionRepository.findByTask(task);
@@ -55,23 +56,21 @@ public class TaskInteractionController {
 
 	@GetMapping("/task/{id}/participant")
 	public List<Participant> findParticipantsByTaskOperation(@PathVariable("id") String taskId,
-			@RequestParam("operation") TaskOperation taskOperation) {
+			@RequestParam(name = "operation", required = false) TaskVolunteerOperation taskOperation) {
+		Task task = findAndVerifyTaskById(taskId);
 
-		Task task = taskRepository.findOne(taskId);
-		Set<Participant> participants = taskInteractionRepository.findByTask(task).stream()
-				.map((ti) -> ti.getParticipant()).collect(Collectors.toSet());
-
-		return participants.stream().filter((participant) -> {
-			TaskOperation latestOperation = getLatestTaskInteraction(task, participant).getOperation();
-			if (TaskVolunteerOperation.RESERVED == taskOperation) {
-				return latestOperation == TaskVolunteerOperation.RESERVED
-						|| latestOperation == TaskVolunteerOperation.UNASSIGNED;
-			} else if (TaskVolunteerOperation.ASSIGNED == taskOperation) {
-				return latestOperation == TaskVolunteerOperation.ASSIGNED;
-			} else {
-				throw new BadRequestException();
-			}
-		}).collect(Collectors.toList());
+		Set<Volunteer> volunteers = new HashSet<>();
+		if (taskOperation == null) {
+			volunteers.addAll(taskInteractionService.findReservedVolunteersByTask(task));
+			volunteers.addAll(taskInteractionService.findAssignedVolunteersByTask(task));
+		} else if (TaskVolunteerOperation.RESERVED == taskOperation) {
+			volunteers.addAll(taskInteractionService.findReservedVolunteersByTask(task));
+		} else if (TaskVolunteerOperation.ASSIGNED == taskOperation) {
+			volunteers.addAll(taskInteractionService.findAssignedVolunteersByTask(task));
+		} else {
+			throw new BadRequestException();
+		}
+		return new ArrayList<>(volunteers);
 	}
 
 	@GetMapping("/task/{taskId}/participant/{participantId}")
@@ -87,15 +86,7 @@ public class TaskInteractionController {
 
 	@PostMapping("/task/{taskId}/reserve")
 	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId) {
-		if (ParticipantRole.VOLUNTEER != loginService.getLoggedInParticipantRole()) {
-			throw new ForbiddenException();
-		}
-
-		Task task = taskRepository.findOne(taskId);
-		if (task == null || TaskStatus.PUBLISHED != task.getStatus()) {
-			throw new BadRequestException();
-		}
-
+		Task task = findAndVerifyTaskById(taskId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (latestTaskInteraction == null
@@ -107,37 +98,33 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
-	public TaskInteraction unreserveForTask(@PathVariable("taskId") String id) {
-		if (ParticipantRole.VOLUNTEER != loginService.getLoggedInParticipantRole()) {
-			throw new ForbiddenException();
-		}
+	public TaskInteraction unreserveForTask(@PathVariable("taskId") String taskId) {
+		Task task = findAndVerifyTaskById(taskId);
+		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
-		Task task = taskRepository.findOne(id);
-		if (task == null || TaskStatus.PUBLISHED != task.getStatus()) {
-			throw new BadRequestException();
-		}
-
-		Participant participant = loginService.getLoggedInParticipant();
-		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, participant);
 		if (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
 				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
-			return createTaskInteraction(task, participant, TaskVolunteerOperation.UNRESERVED);
+			return createTaskInteraction(task, loginService.getLoggedInParticipant(),
+					TaskVolunteerOperation.UNRESERVED);
 		} else {
 			throw new BadRequestException();
 		}
 	}
 
-	@PostMapping("/task/{taskId}/assign/{volunteerId}")
-	public TaskInteraction assignForTask(@PathVariable("taskId") String taskId, @PathVariable("volunteerId") String volunteerId) {
-		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		return createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.ASSIGNED);
+	@PostMapping("/task/{taskId}/assign")
+	public TaskInteraction assignForTask(@PathVariable("taskId") String taskId,
+			@RequestParam("volunteerId") String volunteerId) {
+		Task task = findAndVerifyTaskById(taskId);
+		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
+		return createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED);
 	}
 
-	@PostMapping("/task/{taskId}/unassign/{volunteerId}")
+	@PostMapping("/task/{taskId}/unassign")
 	public TaskInteraction unassignForTask(@PathVariable("taskId") String taskId,
-			@PathVariable("volunteerId") String volunteerId) {
-		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		return createTaskInteraction(taskRepository.findOne(taskId), volunteer, TaskVolunteerOperation.UNASSIGNED);
+			@RequestParam("volunteerId") String volunteerId) {
+		Task task = findAndVerifyTaskById(taskId);
+		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
+		return createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED);
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {
@@ -154,5 +141,21 @@ public class TaskInteractionController {
 		taskInteraction.setTask(task);
 		taskInteraction.setTimestamp(new Date());
 		return taskInteractionRepository.insert(taskInteraction);
+	}
+
+	private Task findAndVerifyTaskById(String taskId) {
+		Task task = taskRepository.findOne(taskId);
+		if (task == null) {
+			throw new BadRequestException();
+		}
+		return task;
+	}
+
+	private Volunteer findAndVerifyVolunteerById(String volunteerId) {
+		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
+		if (volunteer == null) {
+			throw new BadRequestException();
+		}
+		return volunteer;
 	}
 }

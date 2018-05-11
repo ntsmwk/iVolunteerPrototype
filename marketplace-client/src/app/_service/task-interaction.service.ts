@@ -28,18 +28,4 @@ export class TaskInteractionService {
   getLatestTaskOperation(task: Task, participant: Participant) {
     return this.http.get(`/marketplace/task/${task.id}/participant/${participant.id}`);
   }
-
-
-
-  unreserve(task: Task) {
-    return this.http.post(`/marketplace/task/${task.id}/unreserve`, {});
-  }
-
-  assign(task: Task, participant: Participant) {
-    return this.http.post(`/marketplace/task/${task.id}/asssign`, []);
-  }
-
-  unassign(task: Task, participant: Participant) {
-    return this.http.post(`/marketplace/task/${task.id}/unasssign`, []);
-  }
 }
