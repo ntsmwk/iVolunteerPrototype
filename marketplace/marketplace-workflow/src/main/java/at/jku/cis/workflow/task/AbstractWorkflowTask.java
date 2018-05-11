@@ -1,4 +1,4 @@
-package at.jku.cis.workflow.components;
+package at.jku.cis.workflow.task;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
