@@ -77,7 +77,7 @@
             mat-raised-button color="primary">
       Reserve
     </button>
-    <button *ngIf="this.task.status === 'CREATED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()"
+    <button *ngIf="this.task.status === 'PUBLISHED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()"
             mat-raised-button color="primary">
       Cancel Reservation
     </button>

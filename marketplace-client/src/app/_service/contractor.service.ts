@@ -15,9 +15,19 @@ export class ContractorService {
     return this.http.post('/trustifier/contractor/task/reserve', body, {responseType: 'text'});
   }
 
+  unreserve(source: Source, task: Task) {
+    const body = {source: source, task: task};
+    return this.http.post('/trustifier/contractor/task/unreserve', body, {responseType: 'text'});
+  }
+
   assign(source: Source, task: Task, participant: Participant) {
     const body = {source: source, task: task, volunteer: participant};
     return this.http.post('/trustifier/contractor/task/assign', body, {responseType: 'text'});
+  }
+
+  unassign(source: Source, task: Task, participant: Participant) {
+    const body = {source: source, task: task, volunteer: participant};
+    return this.http.post('/trustifier/contractor/task/unassign', body, {responseType: 'text'});
   }
 
   finish(source: Source, task: Task) {

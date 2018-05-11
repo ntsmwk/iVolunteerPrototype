@@ -24,6 +24,16 @@ export class TaskDetailComponent implements OnInit {
   isAlreadyReserved = false;
   isAlreadyAssigned = false;
 
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private loginService: LoginService,
+              private messageService: MessageService,
+              private sourceService: SourceService,
+              private contractorService: ContractorService,
+              private taskService: TaskService,
+              private taskInteractionService: TaskInteractionService) {
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
     this.sourceService.find().toPromise().then((source: Source) => this.source = source);
@@ -50,18 +60,8 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private loginService: LoginService,
-              private messageService: MessageService,
-              private sourceService: SourceService,
-              private contractorService: ContractorService,
-              private taskService: TaskService,
-              private taskInteractionService: TaskInteractionService) {
-  }
-
   unreserve() {
-    this.taskInteractionService.unreserve(this.task).toPromise().then(() => this.loadTask(this.task.id));
+    this.contractorService.unreserve(this.source, this.task).toPromise().then(() => this.loadTask(this.task.id));
   }
 
   reserve() {

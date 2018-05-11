@@ -16,8 +16,13 @@ import at.jku.cis.trustifier.model.volunteer.Volunteer;
 public class MarketplaceRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
+	
 	private static final String MARKETPLACE_RESERVE_URL = "{0}/task/{1}/reserve";
-	private static final String MARKETPLACE_ASSIGN_URL = "{0}/task/{1}/assign/{2}";
+	private static final String MARKETPLACE_UNRESERVE_URL = "{0}/task/{1}/unreserve";
+	
+	private static final String MARKETPLACE_ASSIGN_URL = "{0}/task/{1}/assign?volunteerId={2}";
+	private static final String MARKETPLACE_UNASSIGN_URL = "{0}/task/{1}/unassign?volunteerId={2}";
+	
 	private static final String MARKETPLACE_FINISH_URL = "{0}/task/{1}/finish";
 
 	@Autowired
@@ -28,8 +33,18 @@ public class MarketplaceRestClient {
 		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
 	}
 
+	public TaskInteraction unreserve(String marketplaceURL, String authorization, Task task) {
+		String url = format(MARKETPLACE_UNRESERVE_URL, marketplaceURL, task.getId());
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+	}
+
 	public TaskInteraction assign(String marketplaceURL, String authorization, Task task, Volunteer volunteer) {
 		String url = format(MARKETPLACE_ASSIGN_URL, marketplaceURL, task.getId(), volunteer.getId());
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+	}
+
+	public TaskInteraction unassign(String marketplaceURL, String authorization, Task task, Volunteer volunteer) {
+		String url = format(MARKETPLACE_UNASSIGN_URL, marketplaceURL, task.getId(), volunteer.getId());
 		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
 	}
 
@@ -47,5 +62,4 @@ public class MarketplaceRestClient {
 		headers.set(AUTHORIZATION, authorization);
 		return headers;
 	}
-
 }
