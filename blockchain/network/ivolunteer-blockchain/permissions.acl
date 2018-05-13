@@ -12,25 +12,18 @@
  * limitations under the License.
  */
 
-/**
- * Write your model definitions here
- */
-
-namespace at.jku.cis
-
-participant Marketplace identified by id {
-  o String id
-  o String name
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
 }
 
-asset CompetenceEntryHash identified by hash {
-  o String hash
-}
-
-asset TaskEntryHash identified by hash {
-  o String hash
-}
-
-asset TaskInteractionHash identified by hash {
-  o String hash
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
 }

@@ -2,6 +2,8 @@ package at.jku.cis.trustifier.model.task.interaction;
 
 import java.util.Date;
 
+import com.google.gson.JsonObject;
+
 import at.jku.cis.trustifier.hash.IHashObject;
 import at.jku.cis.trustifier.model.task.Task;
 
@@ -58,7 +60,15 @@ public class TaskInteraction implements IHashObject {
 
 	@Override
 	public String toHashObject() {
-		return "ABCD";
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("task", task.toString());
+		json.addProperty("operation", operation);
+		json.addProperty("timestamp", timestamp.toString());
+		json.addProperty("comment", comment);
+		return json.toString();
 	}
+	
+	
 
 }

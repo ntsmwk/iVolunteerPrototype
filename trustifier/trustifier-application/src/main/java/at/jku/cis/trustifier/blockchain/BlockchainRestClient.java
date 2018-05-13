@@ -1,9 +1,7 @@
 
 package at.jku.cis.trustifier.blockchain;
 
-import java.net.URI;
 import java.text.MessageFormat;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,31 +11,104 @@ import org.springframework.web.client.RestTemplate;
 public class BlockchainRestClient {
 
 	@Value("${spring.data.blockchain.uri}")
-	private URI uri;
+	private String url;
 
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public boolean isSimpleHashInBc(String hash) {
-//		String requestUrl = format("{0}/api/queries/findSimpleHash?hash={1}", uri, hash);
-//		ResponseEntity<SimpleHash[]> responseEntity = restTemplate.getForEntity(requestUrl, SimpleHash[].class);
-//
-//		SimpleHash[] objects = responseEntity.getBody();
-//		if (Arrays.asList(objects).isEmpty()) {
-//			return false;
-//		} else {
-//			return true;
-//		}
+	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BlockchainRestClient.class);
+
+	public boolean isCompetenceEntryHashInBc(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/CompetenceEntryHashInBc/{1}", url, hash);
+		try {
+			restTemplate.getForObject(requestUrl, String.class);
+		} catch (Exception e) {
+			return false;
+		}
 		return true;
 	}
 
-	public SimpleHash postSimpleHash(String hash) {
-		//String requestUrl = MessageFormat.format("{0}/api/simpleHash", uri);
-		//return restTemplate.postForObject(requestUrl, hash, SimpleHash.class);
-		return new SimpleHash("ABC");
+	public Hash postCompetenceEntryHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/CompetenceEntryHash", url);
+		Hash h = new Hash(hash);
+
+		try {
+			restTemplate.postForObject(requestUrl, h, Hash.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return h;
 	}
 
-	public void deleteSimpleHash(String hash) {
-		restTemplate.delete(MessageFormat.format("{0}/api/simpleHash/{1}", uri, hash));
+	public void deletCeompetenceEntryHash(String hash) {
+		try {
+			restTemplate.delete(MessageFormat.format("{0}/api/CompetenceEntryHash/{1}", url, hash));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	public boolean isTaskEntryHashInBc(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/TaskEntryHash/{1}", url, hash);
+		try {
+			restTemplate.getForObject(requestUrl, String.class);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	public Hash postTaskEntryHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/TaskEntryHash", url);
+		Hash h = new Hash(hash);
+
+		try {
+			restTemplate.postForObject(requestUrl, h, Hash.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return h;
+	}
+
+	public void deleteTaskEntryHash(String hash) {
+		try {
+			restTemplate.delete(MessageFormat.format("{0}/api/TaskEntryHash/{1}", url, hash));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	public boolean isTaskInteractionHashInBc(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/TaskInteractionHash/{1}", url, hash);
+		try {
+			restTemplate.getForObject(requestUrl, String.class);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	public Hash postTaskInteractionHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/TaskInteractionHash", url);
+
+		Hash h = new Hash(hash);
+
+		try {
+			restTemplate.postForObject(requestUrl, h, Hash.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return h;
+	}
+
+	public void deleteTaskInteractionHash(String hash) {
+		try {
+			restTemplate.delete(MessageFormat.format("{0}/api/TaskInteractionHash/{1}", url, hash));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 	}
 }
