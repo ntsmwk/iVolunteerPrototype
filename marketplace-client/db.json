@@ -5,8 +5,25 @@
       "volunteer": {
         "username": "pstarzer"
       },
-      "taskList": [],
-      "competenceList": []
+      "taskList": [
+        {
+          "id": "5af7e2ee379bb3593ceb041b",
+          "taskId": "5af7e28a379bb3593ceb0415",
+          "taskName": "TaskType1",
+          "taskDescription": "a",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526194926350
+        }
+      ],
+      "competenceList": [
+        {
+          "id": "939c6ca3-1375-424e-816a-369e04465384",
+          "competenceId": "5af7e227379bb3593ceb0412",
+          "competenceName": "Flexability",
+          "marketplaceId": "ABCD",
+          "timestamp": 1526194926350
+        }
+      ]
     },
     {
       "id": "2",

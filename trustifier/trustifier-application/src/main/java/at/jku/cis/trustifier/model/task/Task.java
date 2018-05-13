@@ -2,11 +2,12 @@ package at.jku.cis.trustifier.model.task;
 
 import java.util.Date;
 
+import com.google.gson.JsonObject;
+
 import at.jku.cis.trustifier.hash.IHashObject;
 import at.jku.cis.trustifier.model.task.type.TaskType;
 
 public class Task implements IHashObject {
-
 	private String id;
 	private Date startDate;
 	private Date endDate;
@@ -46,7 +47,11 @@ public class Task implements IHashObject {
 
 	@Override
 	public String toHashObject() {
-		//TODO
-		return "test";
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("startDate", startDate.toString());
+		json.addProperty("endDate", endDate.toString());
+		json.addProperty("type", type.toString());
+		return json.toString();
 	}
 }

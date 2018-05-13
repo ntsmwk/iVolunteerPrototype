@@ -13,7 +13,6 @@ import at.jku.cis.trustifier.model.task.Task;
 @RequestMapping("/trustifier/verifier")
 public class Verifier {
 
-	
 	@Autowired
 	private Hasher hasher;
 	@Autowired
@@ -22,7 +21,8 @@ public class Verifier {
 	@GetMapping("verfiy")
 	public boolean verify(Task task) {
 		String hash = hasher.generateHash(task);
-		return blockchainRestClient.isSimpleHashInBc(hash);
+		return blockchainRestClient.isCompetenceEntryHashInBc(hash) || blockchainRestClient.isTaskEntryHashInBc(hash)
+				|| blockchainRestClient.isTaskInteractionHashInBc(hash);
 	}
 
 }
