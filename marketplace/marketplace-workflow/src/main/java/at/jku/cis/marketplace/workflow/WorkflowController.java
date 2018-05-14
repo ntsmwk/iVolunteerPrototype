@@ -1,14 +1,17 @@
 package at.jku.cis.marketplace.workflow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.task.Task;
-import org.apache.commons.lang3.StringUtils;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.runtime.Execution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,44 +25,62 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkflowController {
 
 	@Autowired
-	private TaskService taskService;
-	@Autowired
-	private RuntimeService runtimeService;
+	private ProcessEngine processEngine;
 
-	// curl -H "Content-Type: application/json" -d ''
-	// http://localhost:8080/workflow/myProcess?taskId=abcdedfg
+	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcess?taskId=abcdedfg
 	@PostMapping("/{processKey}")
 	public String startWorkflow(@PathVariable("processKey") String processKey, @RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("taskId", taskId);
-		return runtimeService.startProcessInstanceByKey(processKey, params).getProcessInstanceId();
+		return processEngine.getRuntimeService().startProcessInstanceByKey(processKey, params).getProcessInstanceId();
 	}
 
-	// curl -H "Content-Type: application/json"
-	// http://localhost:8080/workflow/myProcess/5/task
-	@GetMapping("/{processKey}/{instanceId}/task")
+	// curl -H "Content-Type: application/json" http://localhost:8080/workflow/myProcess/5/task
+	@GetMapping("/{processKey}/{instanceId}/event")
 	public List<String> getTasksByInstanceId(@PathVariable("processKey") String processKey,
 			@PathVariable("instanceId") String instanceId) {
-		List<Task> activeTasks = retrieveActiveTasksByProcessKeyAndInstanceId(processKey, instanceId);
-		return activeTasks.stream().map(activeTask -> activeTask.getId() + " " + activeTask.getName())
-				.collect(Collectors.toList());
+		return retrieveEventsByProcessKeyAndInstanceId(processKey, instanceId);
 	}
 
-	// curl -H "Content-Type: application/json" -d ''
-	// http://localhost:8080/workflow/myProcess/17/task/21
-	@PostMapping("/{processKey}/{instanceId}/task/{taskId}")
+	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcess/17/task/21
+	@PostMapping("/{processKey}/{instanceId}/event/{eventName}")
 	public void completeTask(@PathVariable("processKey") String processKey,
-			@PathVariable("instanceId") String instanceId, @PathVariable("taskId") String taskId) {
-		List<Task> activeTasks = retrieveActiveTasksByProcessKeyAndInstanceId(processKey, instanceId);
-		if (activeTasks.stream().noneMatch(task -> StringUtils.equals(task.getId(), taskId))) {
+			@PathVariable("instanceId") String instanceId, @PathVariable("eventName") String eventName) {
+		List<Execution> executions = processEngine.getRuntimeService().createExecutionQuery()
+				.processInstanceId(instanceId).signalEventSubscriptionName(eventName).list();
+		if (executions.isEmpty()) {
 			throw new UnsupportedOperationException();
 		}
 
-		taskService.complete(taskId);
+		for (Execution execution : executions) {
+			processEngine.getRuntimeService().signalEventReceived(eventName, execution.getId());
+		}
 	}
 
-	private List<Task> retrieveActiveTasksByProcessKeyAndInstanceId(String processKey, String instanceId) {
-		return taskService.createTaskQuery().processInstanceId(instanceId).list();
+	private List<String> retrieveEventsByProcessKeyAndInstanceId(String processKey, String instanceId) {
+		List<String> events = new ArrayList<>();
+		List<Execution> executions = findExectutionsByProcessInstanceId(instanceId);
+		executions.forEach(execution -> events.addAll(extractEventsOfExecution(execution)));
+		return events.stream().distinct().collect(Collectors.toList());
+	}
+
+	private List<Execution> findExectutionsByProcessInstanceId(String instanceId) {
+		return processEngine.getRuntimeService().createExecutionQuery().processInstanceId(instanceId).list().stream()
+				.filter(t -> t.getParentId() != null).collect(Collectors.toList());
+	}
+
+	private List<String> extractEventsOfExecution(Execution execution) {
+		List<EventSubscriptionDeclaration> eventDefinitions = extractEventDefinitions(execution);
+		return eventDefinitions.stream().map(event -> event.getEventName()).collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<EventSubscriptionDeclaration> extractEventDefinitions(Execution execution) {
+		ExecutionEntity executionEntity = (ExecutionEntity) execution;
+		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) processEngine.getRepositoryService()
+				.getProcessDefinition(executionEntity.getProcessDefinitionId());
+		ActivityImpl activity = processDefinition.findActivity(execution.getActivityId());
+		return (List<EventSubscriptionDeclaration>) activity.getProperties().get("eventDefinitions");
 	}
 
 }
