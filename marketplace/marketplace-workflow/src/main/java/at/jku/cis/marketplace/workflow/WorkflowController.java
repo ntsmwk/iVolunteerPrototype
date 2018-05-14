@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowController {
-	
+
 	@Autowired
 	private TaskService taskService;
 	@Autowired
 	private RuntimeService runtimeService;
 
-	//curl  -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcess?taskId=abcdedfg
+	// curl -H "Content-Type: application/json" -d ''
+	// http://localhost:8080/workflow/myProcess?taskId=abcdedfg
 	@PostMapping("/{processKey}")
 	public String startWorkflow(@PathVariable("processKey") String processKey, @RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
@@ -34,18 +35,21 @@ public class WorkflowController {
 		return runtimeService.startProcessInstanceByKey(processKey, params).getProcessInstanceId();
 	}
 
-	//curl  -H "Content-Type: application/json"  http://localhost:8080/workflow/myProcess/17/task
+	// curl -H "Content-Type: application/json"
+	// http://localhost:8080/workflow/myProcess/5/task
 	@GetMapping("/{processKey}/{instanceId}/task")
 	public List<String> getTasksByInstanceId(@PathVariable("processKey") String processKey,
 			@PathVariable("instanceId") String instanceId) {
 		List<Task> activeTasks = retrieveActiveTasksByProcessKeyAndInstanceId(processKey, instanceId);
-		return activeTasks.stream().map(activeTask -> activeTask.getName()).collect(Collectors.toList());
+		return activeTasks.stream().map(activeTask -> activeTask.getId() + " " + activeTask.getName())
+				.collect(Collectors.toList());
 	}
 
-	//curl  -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcess/17/task/21
+	// curl -H "Content-Type: application/json" -d ''
+	// http://localhost:8080/workflow/myProcess/17/task/21
 	@PostMapping("/{processKey}/{instanceId}/task/{taskId}")
-	public void completeTask(@PathVariable("processKey") String processKey, @PathVariable("instanceId") String instanceId,
-			@PathVariable("taskId") String taskId) {
+	public void completeTask(@PathVariable("processKey") String processKey,
+			@PathVariable("instanceId") String instanceId, @PathVariable("taskId") String taskId) {
 		List<Task> activeTasks = retrieveActiveTasksByProcessKeyAndInstanceId(processKey, instanceId);
 		if (activeTasks.stream().noneMatch(task -> StringUtils.equals(task.getId(), taskId))) {
 			throw new UnsupportedOperationException();
@@ -55,7 +59,7 @@ public class WorkflowController {
 	}
 
 	private List<Task> retrieveActiveTasksByProcessKeyAndInstanceId(String processKey, String instanceId) {
-		return taskService.createTaskQuery().processInstanceId(instanceId).active().list();
+		return taskService.createTaskQuery().processInstanceId(instanceId).list();
 	}
 
 }
