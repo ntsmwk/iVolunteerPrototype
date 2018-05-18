@@ -19,6 +19,8 @@ public class Task {
 	@DBRef
 	private TaskType type;
 
+	private String ProcessInstanceId;
+
 	public String getId() {
 		return id;
 	}
@@ -59,6 +61,14 @@ public class Task {
 		this.status = status;
 	}
 
+	public String getProcessInstanceId() {
+		return ProcessInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		ProcessInstanceId = processInstanceId;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Task)) {
@@ -71,4 +81,5 @@ public class Task {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
 }

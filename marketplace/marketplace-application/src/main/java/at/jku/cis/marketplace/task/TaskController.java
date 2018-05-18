@@ -66,6 +66,7 @@ public class TaskController {
 	@PostMapping("/task")
 	public Task createTask(@RequestBody Task task) {
 		task.setStatus(TaskStatus.CREATED);
+
 		Task createdTask = taskRepository.insert(task);
 
 		insertTaskInteraction(createdTask);

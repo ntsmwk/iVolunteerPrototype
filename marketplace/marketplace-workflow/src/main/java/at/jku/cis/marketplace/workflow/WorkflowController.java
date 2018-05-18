@@ -38,13 +38,14 @@ public class WorkflowController {
 	@Autowired
 	private WorkflowStepService workflowStepService;
 
-	@GetMapping()
-	public List<String> getWorkflowProcesses() {
+	@GetMapping("/types")
+	public List<String> getWorkflowTypes() {
 		return repositoryService.createProcessDefinitionQuery().list().stream()
 				.map(processDefinition -> processDefinition.getKey()).collect(Collectors.toList());
 	}
 
-	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcessMwe?taskId=abcdedfg
+	// curl -H "Content-Type: application/json" -d ''
+	// http://localhost:8080/workflow/myProcessMwe?taskId=abcdedfg
 	@PostMapping("/{processKey}")
 	public String startWorkflow(@PathVariable("processKey") String processKey, @RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
@@ -52,15 +53,17 @@ public class WorkflowController {
 		return runtimeService.startProcessInstanceByKey(processKey, params).getProcessInstanceId();
 	}
 
-	// curl -H "Content-Type: application/json" http://localhost:8080/workflow/myProcessMwe/8/task
+	// curl -H "Content-Type: application/json"
+	// http://localhost:8080/workflow/myProcessMwe/8/task
 	@GetMapping("/{processKey}/{instanceId}/task")
-	public List<WorkflowStep> getTasksByInstanceId(@PathVariable("processKey") String processKey,
+	public List<WorkflowStep> getNextTasksByInstanceId(@PathVariable("processKey") String processKey,
 			@PathVariable("instanceId") String instanceId) {
 		return workflowStepService
 				.getNextWorkflowSteps(retrieveActiveTaskByProcessKeyAndInstanceId(processKey, instanceId));
 	}
 
-	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/myProcessMwe/8/task
+	// curl -H "Content-Type: application/json" -d ''
+	// http://localhost:8080/workflow/myProcessMwe/8/task
 	@PostMapping("/{processKey}/{instanceId}/task")
 	public void completeTask(@PathVariable("processKey") String processKey,
 			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep) {

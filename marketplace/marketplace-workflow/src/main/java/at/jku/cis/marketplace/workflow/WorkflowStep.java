@@ -6,7 +6,6 @@ public class WorkflowStep {
 	private String label;
 
 	public WorkflowStep() {
-
 	}
 
 	public WorkflowStep(String taskId, String label) {

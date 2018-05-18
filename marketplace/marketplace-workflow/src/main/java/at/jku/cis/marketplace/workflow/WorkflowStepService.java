@@ -22,6 +22,7 @@ public class WorkflowStepService {
 
 	private static final String SERVICE_TASK = "serviceTask";
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
+	
 	@Autowired
 	private RepositoryService repositoryService;
 	@Autowired
