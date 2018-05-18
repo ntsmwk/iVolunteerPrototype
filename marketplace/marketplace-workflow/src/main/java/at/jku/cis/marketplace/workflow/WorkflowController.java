@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/workflow")
 public class WorkflowController {
 
+	private static final String WORKFLOW_ACTIVITY_LABEL = "label";
+
 	@Autowired
 	private TaskService taskService;
 
@@ -69,7 +71,7 @@ public class WorkflowController {
 		}
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("label", workflowStep.getLabel());
+		params.put(WORKFLOW_ACTIVITY_LABEL, workflowStep.getLabel());
 		taskService.complete(workflowStep.getTaskId(), params);
 	}
 
