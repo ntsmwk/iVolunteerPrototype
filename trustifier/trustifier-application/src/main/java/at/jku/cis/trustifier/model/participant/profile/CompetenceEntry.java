@@ -6,14 +6,11 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.trustifier.hash.IHashObject;
 
-
 public class CompetenceEntry implements IHashObject {
 
 	private String id;
-
 	private String competenceId;
 	private String competenceName;
-
 	private Date timestamp;
 
 	public String getId() {

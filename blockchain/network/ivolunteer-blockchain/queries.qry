@@ -1,6 +1,0 @@
-query findSimpleHash {
-  description: "Check if a given simple hash is in blockchain or not"
-  statement:
-      SELECT at.jku.cis.SimpleHash
-         WHERE (hash == _$hash)
-}

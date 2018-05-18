@@ -21,19 +21,20 @@ public class Verifier {
 	@Autowired
 	private BlockchainRestClient blockchainRestClient;
 
-	@PostMapping("task")
-	public boolean verifyTask(@RequestBody Task task) {
-		return blockchainRestClient.isSimpleHashInBc(hasher.generateHash(task));
+
+	@PostMapping("taskInteraction")
+	public boolean verifyTaskInteraction(@RequestBody Task task) {
+		return blockchainRestClient.isTaskInteractionHashInBc(hasher.generateHash(task));
 	}
 
 	@PostMapping("taskEntry")
 	public boolean verifyTaskEntry(@RequestBody TaskEntry taskEntry) {
-		return blockchainRestClient.isSimpleHashInBc(hasher.generateHash(taskEntry));
+		return blockchainRestClient.isTaskEntryHashInBc(hasher.generateHash(taskEntry));
 	}
 
 	@PostMapping("competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntry competenceEntry) {
-		return blockchainRestClient.isSimpleHashInBc(hasher.generateHash(competenceEntry));
+		return blockchainRestClient.isCompetenceEntryHashInBc(hasher.generateHash(competenceEntry));
 	}
 
 }

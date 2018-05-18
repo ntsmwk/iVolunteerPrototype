@@ -34,41 +34,23 @@ public class Contractor {
 	@PostMapping("/task")
 	public String publishTask(@RequestBody Task task) {
 		try {
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(task)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(task)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
-	}
-
-	@PostMapping("/taskEntry")
-	public String publishTaskEntry(@RequestBody TaskEntry taskEntry) {
-		try {
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskEntry)).getHash();
-		} catch (RestClientException ex) {
-			throw new BadRequestException(ex);
-		}
-	}
-
-	@PostMapping("/competenceEntry")
-	public String publishCompetenceEntry(@RequestBody CompetenceEntry competenceEntry) {
-		try {
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(competenceEntry)).getHash();
-		} catch (RestClientException ex) {
-			throw new BadRequestException(ex);
-		}
-
 	}
 
 	@PostMapping("/task/reserve")
 	public String reserveTask(@RequestBody TaskReservation reservation,
 			@RequestHeader("Authorization") String authorization) {
-		verifyTask(reservation.getTask());
+		verifier.verifyTaskInteraction(reservation.getTask());
 
 		try {
 			String address = reservation.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.reserve(address, authorization,
 					reservation.getTask());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
+
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
@@ -77,13 +59,14 @@ public class Contractor {
 	@PostMapping("/task/unreserve")
 	public String unreserveTask(@RequestBody TaskReservation reservation,
 			@RequestHeader("Authorization") String authorization) {
-		verifyTask(reservation.getTask());
+		verifier.verifyTaskInteraction(reservation.getTask());
 
 		try {
 			String address = reservation.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.unreserve(address, authorization,
 					reservation.getTask());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
+
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
@@ -92,13 +75,13 @@ public class Contractor {
 	@PostMapping("/task/assign")
 	public String assignTask(@RequestBody TaskAssignment assignment,
 			@RequestHeader("Authorization") String authorization) {
-		verifyTask(assignment.getTask());
+		verifier.verifyTaskInteraction(assignment.getTask());
 
 		try {
 			String address = assignment.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
 					assignment.getVolunteer());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
@@ -107,13 +90,14 @@ public class Contractor {
 	@PostMapping("/task/unassign")
 	public String unassignTask(@RequestBody TaskAssignment assignment,
 			@RequestHeader("Authorization") String authorization) {
-		verifyTask(assignment.getTask());
+		verifier.verifyTaskInteraction(assignment.getTask());
 
 		try {
 			String address = assignment.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.unassign(address, authorization,
 					assignment.getTask(), assignment.getVolunteer());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
+
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
@@ -122,21 +106,35 @@ public class Contractor {
 	@PostMapping("/task/finish")
 	public String finishTask(@RequestBody TaskCompletation completation,
 			@RequestHeader("Authorization") String authorization) {
-		verifyTask(completation.getTask());
+		verifier.verifyTaskInteraction(completation.getTask());
 
 		try {
 			String address = completation.getSource().getAddress();
 			TaskInteraction taskInteraction = marketplaceRestClient.finish(address, authorization,
 					completation.getTask());
-			return blockchainRestClient.postSimpleHash(hasher.generateHash(taskInteraction)).getHash();
+			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
 	}
 
-	private void verifyTask(Task task) {
-		if (!verifier.verifyTask(task)) {
-			throw new BadRequestException();
+	@PostMapping("/competenceEntry")
+	public String publishCompetenceEntry(@RequestBody CompetenceEntry competenceEntry) {
+		try {
+			return blockchainRestClient.postCompetenceEntryHash(hasher.generateHash(competenceEntry)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+		}
+
+	}
+
+	@PostMapping("/taskEntry")
+	public String publishTaskEntry(@RequestBody TaskEntry taskEntry) {
+		try {
+			return blockchainRestClient.postTaskEntryHash(hasher.generateHash(taskEntry)).getHash();
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+
 		}
 	}
 }

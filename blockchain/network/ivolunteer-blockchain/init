@@ -6,7 +6,7 @@ docker rm -f composer-rest-server
 ~/fabric-tools/stopFabric.sh
 ~/fabric-tools/teardownFabric.sh
 
-rm -rf $HOME/.composer
+rm -fr $HOME/.composer
 
 rm *.card
 rm *.bna
@@ -18,8 +18,8 @@ rm *.bna
 
 # Deploying the business network
 composer archive create -t dir -n .
-composer network install --card PeerAdmin@hlfv1 --archiveFile ivolunteer-blockchain@0.0.1.bna
-composer network start --networkName ivolunteer-blockchain --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+composer network install --card PeerAdmin@hlfv1 --archiveFile ivolunteer-blockchain@0.0.3.bna
+composer network start --networkName ivolunteer-blockchain --networkVersion 0.0.3 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 composer card import --file networkadmin.card
 
 # Creating seperate user for REST server
@@ -27,7 +27,7 @@ composer participant add -c admin@ivolunteer-blockchain -d '{"$class":"org.hyper
 composer identity issue -c admin@ivolunteer-blockchain -f restadmin.card -u restadmin -a "resource:org.hyperledger.composer.system.NetworkAdmin#restadmin"
 composer card import -f restadmin.card
 
-# Updating connection.json of restadmin, because REST server is running in docker container
+# Updating restadmin's connection.json, since REST server is running in docker container
 sed -e 's/localhost:/orderer.example.com:/' -e 's/localhost:/peer0.org1.example.com:/' -e 's/localhost:/peer0.org1.example.com:/' -e 's/localhost:/ca.org1.example.com:/'  < $HOME/.composer/cards/restadmin@ivolunteer-blockchain/connection.json  > /tmp/connection.json && cp -p /tmp/connection.json $HOME/.composer/cards/restadmin@ivolunteer-blockchain/
 
 
