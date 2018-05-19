@@ -15,7 +15,12 @@
 		<dependency>
 			<groupId>at.jku.cis</groupId>
 			<artifactId>marketplace-security</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.jku.cis</groupId>
+			<artifactId>marketplace-workflow</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

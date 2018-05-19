@@ -21,7 +21,8 @@ public class Task {
 	private Date endDate;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
-	
+	private String ProcessInstanceId;
+
 	public String getId() {
 		return id;
 	}
@@ -110,6 +111,14 @@ public class Task {
 		this.requiredCompetences = requiredCompetences;
 	}
 
+	public String getProcessInstanceId() {
+		return ProcessInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		ProcessInstanceId = processInstanceId;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Task)) {
@@ -122,4 +131,5 @@ public class Task {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
 }
