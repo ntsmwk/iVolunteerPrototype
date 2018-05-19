@@ -1,19 +1,18 @@
 package at.jku.cis.trustifier.model.participant.profile;
 
 import java.util.Date;
-
 import com.google.gson.JsonObject;
 
 import at.jku.cis.trustifier.hash.IHashObject;
 
-
 public class TaskEntry implements IHashObject {
 
 	private String id;
+	private Date timestamp;
+
 	private String taskId;
 	private String taskName;
 	private String taskDescription;
-	private Date timestamp;
 
 	public TaskEntry() {
 	}

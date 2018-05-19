@@ -27,7 +27,7 @@ public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskI
 		}
 
 		Set<CompetenceEntry> competenceEntries = new HashSet<>();
-		taskInteraction.getTask().getType().getAcquirableCompetences().forEach(competence -> {
+		taskInteraction.getTask().getAcquirableCompetences().forEach(competence -> {
 			CompetenceEntry competenceEntry = new CompetenceEntry();
 			competenceEntry.setId(UUID.randomUUID().toString());
 			competenceEntry.setCompetenceId(competence.getId());
@@ -40,7 +40,6 @@ public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskI
 	}
 
 	private boolean isValidateTaskInteraction(TaskInteraction taskInteraction) {
-		return taskInteraction != null && taskInteraction.getTask() != null
-				&& taskInteraction.getTask().getType() != null;
+		return taskInteraction != null && taskInteraction.getTask() != null;
 	}
 }

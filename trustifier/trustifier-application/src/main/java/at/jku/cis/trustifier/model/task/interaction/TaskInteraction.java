@@ -5,12 +5,11 @@ import java.util.Date;
 import com.google.gson.JsonObject;
 
 import at.jku.cis.trustifier.hash.IHashObject;
-import at.jku.cis.trustifier.model.task.Task;
 
 public class TaskInteraction implements IHashObject {
 
 	private String id;
-	private Task task;
+	private TaskInteraction task;
 	private String operation;
 	private Date timestamp;
 	private String comment;
@@ -26,11 +25,11 @@ public class TaskInteraction implements IHashObject {
 		this.id = id;
 	}
 
-	public Task getTask() {
+	public TaskInteraction getTask() {
 		return task;
 	}
 
-	public void setTask(Task task) {
+	public void setTask(TaskInteraction task) {
 		this.task = task;
 	}
 

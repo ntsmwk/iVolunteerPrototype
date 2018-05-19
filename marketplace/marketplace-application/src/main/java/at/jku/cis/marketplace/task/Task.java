@@ -1,30 +1,81 @@
 package at.jku.cis.marketplace.task;
 
 import java.util.Date;
-
+import java.util.List;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import at.jku.cis.marketplace.task.type.TaskType;
+import at.jku.cis.marketplace.competence.Competence;
 
 @Document
 public class Task {
 
 	@Id
 	private String id;
+	private String name;
+	private String description;
+	private Address address;
+	private Material material;
+	private TaskStatus status;
+	private Task parent;
 	private Date startDate;
 	private Date endDate;
-	private TaskStatus status;
-	@DBRef
-	private TaskType type;
-
+	private List<Competence> acquirableCompetences;
+	private List<Competence> requiredCompetences;
+	
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+
+	public TaskStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TaskStatus status) {
+		this.status = status;
+	}
+
+	public Task getParent() {
+		return parent;
+	}
+
+	public void setParent(Task parent) {
+		this.parent = parent;
 	}
 
 	public Date getStartDate() {
@@ -43,20 +94,20 @@ public class Task {
 		this.endDate = endDate;
 	}
 
-	public TaskType getType() {
-		return type;
+	public List<Competence> getAcquirableCompetences() {
+		return acquirableCompetences;
 	}
 
-	public void setType(TaskType type) {
-		this.type = type;
+	public void setAcquirableCompetences(List<Competence> acquirableCompetences) {
+		this.acquirableCompetences = acquirableCompetences;
 	}
 
-	public TaskStatus getStatus() {
-		return status;
+	public List<Competence> getRequiredCompetences() {
+		return requiredCompetences;
 	}
 
-	public void setStatus(TaskStatus status) {
-		this.status = status;
+	public void setRequiredCompetences(List<Competence> requiredCompetences) {
+		this.requiredCompetences = requiredCompetences;
 	}
 
 	@Override

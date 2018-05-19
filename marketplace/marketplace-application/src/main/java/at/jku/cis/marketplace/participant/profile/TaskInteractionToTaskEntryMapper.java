@@ -23,8 +23,8 @@ public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInterac
 		taskEntry.setId(taskInteraction.getId());
 		taskEntry.setTimestamp(taskInteraction.getTimestamp());
 		taskEntry.setTaskId(extractTaskId(taskInteraction));
-		taskEntry.setTaskName(extractTaskTypeName(taskInteraction));
-		taskEntry.setTaskDescription(extractTaskTypeDescription(taskInteraction));
+		taskEntry.setTaskName(extractTaskName(taskInteraction));
+		taskEntry.setTaskDescription(extractTaskDescription(taskInteraction));
 		taskEntry.setMarketplaceId(marketplaceId);
 		return taskEntry;
 	}
@@ -34,13 +34,13 @@ public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInterac
 		return task == null ? null : task.getId();
 	}
 
-	private String extractTaskTypeName(TaskInteraction taskInteraction) {
+	private String extractTaskName(TaskInteraction taskInteraction) {
 		Task task = taskInteraction.getTask();
-		return task == null || task.getType() == null ? null : task.getType().getName();
+		return task == null ? null : task.getName();
 	}
 
-	private String extractTaskTypeDescription(TaskInteraction taskInteraction) {
+	private String extractTaskDescription(TaskInteraction taskInteraction) {
 		Task task = taskInteraction.getTask();
-		return task == null || task.getType() == null ? null : task.getType().getDescription();
+		return task == null ? null : task.getDescription();
 	}
 }

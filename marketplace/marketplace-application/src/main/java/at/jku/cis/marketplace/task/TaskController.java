@@ -87,7 +87,6 @@ public class TaskController {
 		if (orginalTask == null) {
 			throw new NotAcceptableException();
 		}
-		orginalTask.setType(task.getType());
 		orginalTask.setStartDate(task.getStartDate());
 		orginalTask.setEndDate(task.getEndDate());
 		return taskRepository.save(orginalTask);
