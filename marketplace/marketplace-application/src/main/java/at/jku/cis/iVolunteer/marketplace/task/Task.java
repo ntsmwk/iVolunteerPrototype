@@ -22,6 +22,7 @@ public class Task {
 	private Date endDate;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
+
 	private String ProcessInstanceId;
 
 	public String getId() {

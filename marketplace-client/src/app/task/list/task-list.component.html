@@ -14,12 +14,12 @@
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.type.name}}</mat-cell>
+    <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="description">
     <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.type.description}}</mat-cell>
+    <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="status">
@@ -40,7 +40,7 @@
   <ng-container matColumnDef="requiredCompetences">
     <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
     <mat-cell *matCellDef="let task">
-       <span *ngFor="let requiredCompetence of task.type.requiredCompetences; let last = last">
+       <span *ngFor="let requiredCompetence of task.requiredCompetences; let last = last">
         {{requiredCompetence.name}}<span *ngIf="!last">, </span>
       </span>
     </mat-cell>
@@ -49,7 +49,7 @@
   <ng-container matColumnDef="acquirableCompetences">
     <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
     <mat-cell *matCellDef="let task">
-      <span *ngFor="let requiredCompetence of task.type.acquirableCompetences; let last = last">
+      <span *ngFor="let requiredCompetence of task.acquirableCompetences; let last = last">
         {{requiredCompetence.name}}<span *ngIf="!last">, </span>
       </span>
     </mat-cell>

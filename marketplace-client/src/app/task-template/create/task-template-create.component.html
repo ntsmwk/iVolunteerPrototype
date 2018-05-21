@@ -1,6 +1,6 @@
-<form class="task-form" (submit)="save()" [formGroup]="taskTypeForm">
+<form class="task-form" (submit)="save()" [formGroup]="taskTemplateForm">
 
-  <h3>Create Task-Type</h3>
+  <h3>Create Task-Template</h3>
 
   <mat-form-field class="full-width">
     <input matInput placeholder="Name" formControlName="name">
@@ -23,8 +23,8 @@
     </mat-select>
   </mat-form-field>
 
-  <div class="error-message full-width" *ngIf="taskTypeForm.getError('duplactedCompetence')">
-    <div class="error-text">Required and acquirable competences couldn't contain the same competence</div>
+  <div class="error-message full-width" *ngIf="taskTemplateForm.getError('duplactedCompetence')">
+    <div class="error-text">Required and acquirable competences can't contain the same competence!</div>
   </div>
 
   <button type="submit" mat-raised-button color="primary">Save</button>
