@@ -12,10 +12,11 @@ import org.springframework.web.client.RestTemplate;
 
 public class WorkflowRestClient {
 
-	private static final String VERIFIER_URI = "{0}/workflow/{1}";
-
-	private static final String VERIFIER_URI_2 = "{0}/workflow/{1}/{2}/task";
-	private static final String VERIFIER_URI_3 = "{0}/workflow/{1}/{2}";
+	private static final String VERIFIER_GET_WORKFLOW_TYPES_URI = "{0}/workflow/{1}";
+	private static final String VERIFIER_CREATE_WORKFLOW_URI = "{0}/workflow/{1}";
+	private static final String VERIFIER_GET_NEXT_WORKFLOW_TASKS_URI = "{0}/workflow/{1}/{2}/task";
+	private static final String VERIFIER_COMPLETE_WORKFLOW_TASK_URI = "{0}/workflow/{1}/{2}/task";
+	private static final String VERIFIER_DELETE_URI = "{0}/workflow/{1}/{2}";
 
 	private static final String TYPES = "types";
 
@@ -26,27 +27,27 @@ public class WorkflowRestClient {
 	private URI workflowURI;
 
 	public List<String> getWorkflowTypes() {
-		String requestURI = buildWorkflowRequestURI(VERIFIER_URI, TYPES);
+		String requestURI = buildWorkflowRequestURI(VERIFIER_GET_WORKFLOW_TYPES_URI, TYPES);
 		return restTemplate.getForObject(requestURI, List.class);
 	}
 
 	public String createWorkFlow(String workflowTypeId) {
-		String requestURI = buildWorkflowRequestURI(VERIFIER_URI, workflowTypeId);
+		String requestURI = buildWorkflowRequestURI(VERIFIER_CREATE_WORKFLOW_URI, workflowTypeId);
 		return restTemplate.postForObject(requestURI, null, String.class);
 	}
 
 	public List<WorkflowStep> getNextTasksByInstanceId(String workflowTypeId, String workflowInstanceId) {
-		String requestURI = buildWorkflowRequestURI(VERIFIER_URI_2, workflowTypeId, workflowInstanceId);
+		String requestURI = buildWorkflowRequestURI(VERIFIER_GET_NEXT_WORKFLOW_TASKS_URI, workflowTypeId, workflowInstanceId);
 		return restTemplate.getForObject(requestURI, List.class);
 	}
 
 	public void completeTask(String workflowTypeId, String workflowInstanceId, WorkflowStep workflowStep) {
-		String requestURI = buildWorkflowRequestURI(VERIFIER_URI_2, workflowTypeId, workflowInstanceId);
+		String requestURI = buildWorkflowRequestURI(VERIFIER_COMPLETE_WORKFLOW_TASK_URI, workflowTypeId, workflowInstanceId);
 		restTemplate.postForObject(requestURI, workflowStep, Void.class);
 	}
 
 	public void cancelWorkflow(String workflowTypeId, String workflowInstanceId) {
-		String requestURI = buildWorkflowRequestURI(VERIFIER_URI_3, workflowTypeId, workflowInstanceId);
+		String requestURI = buildWorkflowRequestURI(VERIFIER_DELETE_URI, workflowTypeId, workflowInstanceId);
 		restTemplate.delete(requestURI);
 	}
 
