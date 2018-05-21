@@ -6,6 +6,8 @@ import {TaskType} from '../../_model/task-type';
 import {TaskTypeService} from '../../_service/task-type.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
+import {WorkflowService} from '../../_service/workflow.service';
+import {WorkflowType} from '../../_model/workflow-type';
 
 @Component({
   templateUrl: './task-create.component.html',
@@ -13,28 +15,29 @@ import {isNullOrUndefined} from 'util';
 })
 export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
-  taskTypes: TaskType[];
+  taskTypes: Array<TaskType>;
+  workflowTypes: Array<WorkflowType>;
 
   constructor(formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private taskService: TaskService,
-              private taskTypeService: TaskTypeService) {
+              private taskTypeService: TaskTypeService,
+              private workflowService: WorkflowService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
-      'type': new FormControl(undefined, Validators.required),
+      'taksType': new FormControl(undefined, Validators.required),
+      'workflowKey': new FormControl(undefined, Validators.required),
       'startDate': new FormControl(undefined, Validators.required),
       'endDate': new FormControl(undefined)
     });
   }
 
   ngOnInit() {
-    this.taskTypeService.findAll()
-      .toPromise()
-      .then((taskTypes: TaskType[]) => {
-        this.taskTypes = taskTypes;
-        this.route.params.subscribe(params => this.findTask(params['id']));
-      });
+    Promise.all([
+      this.taskTypeService.findAll().toPromise().then((taskTypes: Array<TaskType>) => this.taskTypes = taskTypes),
+      this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
+    ]).then(() => this.route.params.subscribe(params => this.findTask(params['id'])));
   }
 
   private findTask(id: string) {
@@ -44,7 +47,8 @@ export class TaskCreateComponent implements OnInit {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.taskForm.setValue({
         id: task.id,
-        type: this.taskTypes.find((value: TaskType) => task.type.id === value.id),
+        taskType: this.taskTypes.find((value: TaskType) => task.taskType.id === value.id),
+        workflowKey: this.workflowTypes.find((value: WorkflowType) => task.workflowKey == value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate)
       });
@@ -56,7 +60,12 @@ export class TaskCreateComponent implements OnInit {
       return;
     }
 
-    const task = <Task> this.taskForm.value;
-    this.taskService.save(task).toPromise().then(() => this.router.navigate(['/tasks']));
+    const task = this.taskForm.value;
+    task.workflowKey = task.workflowKey.key;
+    this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']));
+  }
+
+  isEditMode() {
+    return !isNullOrUndefined(this.taskForm.value.id);
   }
 }

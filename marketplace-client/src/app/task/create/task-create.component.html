@@ -3,7 +3,7 @@
 <form class="task-form" (submit)="save()" [formGroup]="taskForm">
 
   <mat-form-field class="full-width">
-    <mat-select placeholder="Task type" formControlName="type">
+    <mat-select pla ceholder="Task type" formControlName="taskType">
       <mat-option *ngFor="let taskType of taskTypes" [value]="taskType">
         {{ taskType.name }}
       </mat-option>
@@ -13,9 +13,16 @@
   <div *ngIf="taskForm.value.type">
     <mat-form-field class="full-width">
       <textarea matInput placeholder="Description" [readonly]="true"
-                [(value)]="taskForm.value.type.description"> </textarea>
+                [(value)]="taskForm.value.type.description"></textarea>
     </mat-form-field>
   </div>
+
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Workflow Key" formControlName="workflowKey" [disabled]="isEditMode()">
+      <mat-option *ngFor="let workflowType of workflowTypes" [value]="workflowType">{{workflowType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <mat-form-field class="full-width">
     <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">

@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.marketplace.task;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.marketplace.competence.Competence;
@@ -17,6 +18,7 @@ public class Task {
 	private Address address;
 	private Material material;
 	private TaskStatus status;
+	@DBRef
 	private Task parent;
 	private Date startDate;
 	private Date endDate;

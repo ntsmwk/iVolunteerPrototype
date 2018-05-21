@@ -2,7 +2,8 @@ import {TaskType} from './task-type';
 
 export class Task {
   id: string;
-  type: TaskType;
+  taskType: TaskType;
+  workflowKey: string;
   startDate: Date;
   endDate: Date;
   status: string;
