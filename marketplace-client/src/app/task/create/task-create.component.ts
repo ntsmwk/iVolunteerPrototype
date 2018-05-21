@@ -9,6 +9,8 @@ import {isNullOrUndefined} from 'util';
 import {Competence} from '../../_model/competence';
 import {CompetenceService} from '../../_service/competence.service';
 import {TaskTemplateValidator} from '../../task-template/task-template.validator';
+import {WorkflowService} from '../../_service/workflow.service';
+import {WorkflowType} from '../../_model/workflow-type';
 
 @Component({
   templateUrl: './task-create.component.html',
@@ -18,17 +20,20 @@ export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
   competences: Competence[];
   taskTemplates: TaskTemplate[];
+  workflowTypes: Array<WorkflowType>;
 
   constructor(formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private taskService: TaskService,
               private competenceService: CompetenceService,
-              private taskTemplateService: TaskTemplateService) {
+              private taskTemplateService: TaskTemplateService,
+              private workflowService: WorkflowService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
       'description': new FormControl(undefined),
+      'workflowKey': new FormControl(undefined, Validators.required),
       'startDate': new FormControl(undefined, Validators.required),
       'endDate': new FormControl(undefined),
       'requiredCompetences': new FormControl([]),
@@ -41,12 +46,14 @@ export class TaskCreateComponent implements OnInit {
       .toPromise()
       .then((taskTemplates: TaskTemplate[]) => {
         this.taskTemplates = taskTemplates;
+        this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes);
         this.route.params.subscribe(params => this.findTask(params['id']));
       });
 
     this.competenceService.findAll().toPromise().then((competences: Competence[]) => {
       this.competences = competences;
     });
+
   }
 
   private findTask(id: string) {
@@ -58,6 +65,7 @@ export class TaskCreateComponent implements OnInit {
         id: task.id,
         name: task.name,
         description: task.description,
+        workflowKey: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate),
         acquirableCompetences: task.acquirableCompetences,
@@ -71,8 +79,13 @@ export class TaskCreateComponent implements OnInit {
       return;
     }
 
-    const task = <Task> this.taskForm.value;
-    this.taskService.save(task).toPromise().then(() => this.router.navigate(['/tasks']));
+    const task = this.taskForm.value;
+    task.workflowKey = task.workflowKey.key;
+    this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']));
+  }
+
+  isEditMode() {
+    return !isNullOrUndefined(this.taskForm.value.id);
   }
 
 

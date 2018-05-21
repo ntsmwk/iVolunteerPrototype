@@ -3,9 +3,7 @@ package at.jku.cis.iVolunteer.workflow.rest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowController {
@@ -33,15 +32,14 @@ public class WorkflowController {
 	private RuntimeService runtimeService;
 
 	@Autowired
-	private RepositoryService repositoryService;
-
-	@Autowired
 	private WorkflowStepService workflowStepService;
 
-	@GetMapping("/types")
-	public List<String> getWorkflowTypes() {
-		return repositoryService.createProcessDefinitionQuery().list().stream()
-				.map(processDefinition -> processDefinition.getKey()).collect(Collectors.toList());
+	@Autowired
+	private WorkflowTypeService workfowTypeService;
+
+	@GetMapping("/type")
+	public List<WorkflowType> getWorkflowTypes() {
+		return workfowTypeService.getWorkflowTypes();
 	}
 
 	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/standard?taskId=abcdedfg

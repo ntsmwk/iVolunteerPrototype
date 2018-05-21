@@ -37,6 +37,7 @@ import {GermanDateAdapter} from './_adapter/german-date-adapter';
 import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {DateAdapter} from '@angular/material/core';
+import {WorkflowService} from './_service/workflow.service';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import {DateAdapter} from '@angular/material/core';
     VolunteerService,
     VolunteerProfileService,
     VolunteerRepositoryService,
+    WorkflowService,
     {provide: DateAdapter, useClass: GermanDateAdapter},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
