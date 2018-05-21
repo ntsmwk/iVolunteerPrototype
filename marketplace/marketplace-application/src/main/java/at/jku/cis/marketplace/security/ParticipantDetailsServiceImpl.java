@@ -7,7 +7,6 @@ import static java.util.Arrays.asList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +14,10 @@ import at.jku.cis.marketplace.participant.Employee;
 import at.jku.cis.marketplace.participant.EmployeeRepository;
 import at.jku.cis.marketplace.participant.Volunteer;
 import at.jku.cis.marketplace.participant.VolunteerRepository;
+import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class ParticipantDetailsServiceImpl implements ParticipantDetailsService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
