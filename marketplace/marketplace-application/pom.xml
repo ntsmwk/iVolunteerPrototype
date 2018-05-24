@@ -17,11 +17,6 @@
 			<artifactId>marketplace-security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>at.jku.cis</groupId>
-			<artifactId>marketplace-workflow</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 
 	<build>

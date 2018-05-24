@@ -25,5 +25,10 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>at.jku.cis</groupId>
+			<artifactId>marketplace-application</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
