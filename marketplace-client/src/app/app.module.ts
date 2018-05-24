@@ -12,8 +12,8 @@ import {TaskListComponent} from './task/list/task-list.component';
 import {TaskAvailableComponent} from './task/available/task-available.component';
 import {TaskCreateComponent} from './task/create/task-create.component';
 import {TaskDetailComponent} from './task/detail/task-detail.component';
-import {TaskTypeListComponent} from './task-type/list/task-type-list.component';
-import {TaskTypeCreateComponent} from './task-type/create/task-type-create.component';
+import {TaskTemplateListComponent} from './task-template/list/task-template-list.component';
+import {TaskTemplateCreateComponent} from './task-template/create/task-template-create.component';
 import {TaskAssignComponent} from './task/assign/task-assign.component';
 import {TaskInteractionHistoryComponent} from './task-interaction/history/task-interaction-history.component';
 import {VolunteerProfileComponent} from './volunteer/profile/volunteer-profile.component';
@@ -25,7 +25,7 @@ import {CompetenceService} from './_service/competence.service';
 import {SourceService} from './_service/source.service';
 import {ContractorService} from './_service/contractor.service';
 import {TaskService} from './_service/task.service';
-import {TaskTypeService} from './_service/task-type.service';
+import {TaskTemplateService} from './_service/task-template.service';
 import {TaskInteractionService} from './_service/task-interaction.service';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {EmployeeService} from './_service/employee.service';
@@ -37,6 +37,7 @@ import {GermanDateAdapter} from './_adapter/german-date-adapter';
 import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {DateAdapter} from '@angular/material/core';
+import {WorkflowService} from './_service/workflow.service';
 
 @NgModule({
   declarations: [
@@ -47,8 +48,8 @@ import {DateAdapter} from '@angular/material/core';
     TaskAvailableComponent,
     TaskCreateComponent,
     TaskDetailComponent,
-    TaskTypeListComponent,
-    TaskTypeCreateComponent,
+    TaskTemplateListComponent,
+    TaskTemplateCreateComponent,
     TaskAssignComponent,
     TaskInteractionHistoryComponent,
     VolunteerProfileComponent
@@ -70,7 +71,7 @@ import {DateAdapter} from '@angular/material/core';
     SourceService,
     ContractorService,
     TaskService,
-    TaskTypeService,
+    TaskTemplateService,
     TaskInteractionService,
     EmployeeGuard,
     EmployeeService,
@@ -78,6 +79,7 @@ import {DateAdapter} from '@angular/material/core';
     VolunteerService,
     VolunteerProfileService,
     VolunteerRepositoryService,
+    WorkflowService,
     {provide: DateAdapter, useClass: GermanDateAdapter},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}

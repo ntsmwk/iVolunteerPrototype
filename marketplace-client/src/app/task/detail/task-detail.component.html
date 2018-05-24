@@ -7,11 +7,11 @@
 
   <form class="task-form" [formGroup]="">
     <mat-form-field class="full-width">
-      <input matInput placeholder="Name" [readonly]="true" [value]="task.type.name">
+      <input matInput placeholder="Name" [readonly]="true" [value]="task.name">
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Description" [readonly]="true" [value]="task.type.description">
+      <input matInput placeholder="Description" [readonly]="true" [value]="task.description">
     </mat-form-field>
 
     <mat-form-field class="full-width">
@@ -29,14 +29,14 @@
     <mat-form-field class="full-width">
       <p>Required Competences</p><b></b>
       <mat-chip-list>
-        <mat-chip disabled *ngFor="let competence of task.type.requiredCompetences">{{ competence.name }}</mat-chip>
+        <mat-chip disabled *ngFor="let competence of task.requiredCompetences">{{ competence.name }}</mat-chip>
       </mat-chip-list>
     </mat-form-field>
 
     <mat-form-field class="full-width">
       <p>Acquirable Competences</p><b></b>
       <mat-chip-list>
-        <mat-chip disabled *ngFor="let competence of task.type.acquirableCompetences">{{ competence.name }}</mat-chip>
+        <mat-chip disabled *ngFor="let competence of task.acquirableCompetences">{{ competence.name }}</mat-chip>
       </mat-chip-list>
     </mat-form-field>
   </form>

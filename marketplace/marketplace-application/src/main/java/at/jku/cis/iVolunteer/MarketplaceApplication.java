@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace;
+package at.jku.cis.iVolunteer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

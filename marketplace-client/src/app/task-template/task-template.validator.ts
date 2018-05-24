@@ -1,6 +1,6 @@
 import {AbstractControl} from '@angular/forms';
 
-export const TaskTypeValidator = (control: AbstractControl): { [key: string]: boolean } => {
+export const TaskTemplateValidator = (control: AbstractControl): { [key: string]: boolean } => {
   const requiredCompetences = control.get('requiredCompetences');
   const acquirableCompetences = control.get('acquirableCompetences');
 
