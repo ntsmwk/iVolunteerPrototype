@@ -46,7 +46,6 @@ public class MarketplaceRestClient {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestURI).queryParam("volunteerId",
 				volunteerId);
 		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, new HttpEntity<>(headers), Void.class);
-
 	}
 
 	public void unassignTask(String taskId, String volunteerId) {
