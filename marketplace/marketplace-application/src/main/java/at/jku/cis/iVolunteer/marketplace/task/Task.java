@@ -16,6 +16,7 @@ public class Task {
 	private String id;
 	private String name;
 	private String description;
+	private String workflowKey;
 	private Address address;
 	private Material material;
 	private TaskStatus status;
@@ -48,6 +49,14 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getWorkflowKey() {
+		return workflowKey;
+	}
+
+	public void setWorkflowKey(String workflowKey) {
+		this.workflowKey = workflowKey;
 	}
 
 	public Address getAddress() {
