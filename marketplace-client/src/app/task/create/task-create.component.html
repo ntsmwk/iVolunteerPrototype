@@ -1,16 +1,16 @@
 <h3>Create Task</h3>
 
+<mat-form-field class="full-width">
+  <mat-select placeholder="Task Template" (change)="onTemplateChange($event)">
+    <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate">
+      {{ taskTemplate.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-divider></mat-divider>
+
+
 <form class="task-form" (submit)="save()" [formGroup]="taskForm">
-
-  <mat-form-field class="full-width">
-    <mat-select placeholder="Task Template">
-      <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate">
-        {{ taskTemplate.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-divider></mat-divider>
-
 
   <mat-form-field class="full-width">
     <input matInput placeholder="Name" formControlName="name">
@@ -22,7 +22,7 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select placeholder="Workflow Key" formControlName="workflowKey" [disabled]="isEditMode()">
+    <mat-select placeholder="Workflow Type" formControlName="workflowType" [disabled]="isEditMode()">
       <mat-option *ngFor="let workflowType of workflowTypes" [value]="workflowType">{{workflowType.name}}
       </mat-option>
     </mat-select>
