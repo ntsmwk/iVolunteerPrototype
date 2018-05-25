@@ -1,17 +1,16 @@
 <h3>Create Task</h3>
 
 <mat-form-field class="full-width">
-  <mat-select placeholder="Task Template" (change)="onTemplateChange($event)">
-    <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate">
+  <mat-select placeholder="Task Template">
+    <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate"
+                (onSelectionChange)="prefillForm($event, taskTemplate)">
       {{ taskTemplate.name }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 <mat-divider></mat-divider>
 
-
 <form class="task-form" (submit)="save()" [formGroup]="taskForm">
-
   <mat-form-field class="full-width">
     <input matInput placeholder="Name" formControlName="name">
   </mat-form-field>
@@ -29,18 +28,6 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
-    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #startDatePicker></mat-datepicker>
-  </mat-form-field>
-
-  <mat-form-field class="full-width">
-    <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
-    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-    <mat-datepicker #endDatePicker></mat-datepicker>
-  </mat-form-field>
-
-  <mat-form-field class="full-width">
     <mat-select placeholder="Required Competences" formControlName="requiredCompetences" multiple>
       <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
     </mat-select>
@@ -50,6 +37,18 @@
     <mat-select placeholder="Acquirable Competences" formControlName="acquirableCompetences" multiple>
       <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
     </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
   </mat-form-field>
 
   <div class="error-message full-width" *ngIf="taskForm.getError('duplactedCompetence')">

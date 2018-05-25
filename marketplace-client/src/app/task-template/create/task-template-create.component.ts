@@ -7,6 +7,8 @@ import {TaskTemplateValidator} from '../task-template.validator';
 import {isNullOrUndefined} from 'util';
 import {CompetenceService} from '../../_service/competence.service';
 import {Competence} from '../../_model/competence';
+import {WorkflowType} from '../../_model/workflow-type';
+import {WorkflowService} from '../../_service/workflow.service';
 
 @Component({
   templateUrl: './task-template-create.component.html',
@@ -15,27 +17,29 @@ import {Competence} from '../../_model/competence';
 export class TaskTemplateCreateComponent implements OnInit {
   competences: Competence[];
   taskTemplateForm: FormGroup;
+  workflowTypes: Array<WorkflowType>;
 
   constructor(formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private taskTemplateService: TaskTemplateService,
-              private competenceService: CompetenceService) {
+              private competenceService: CompetenceService,
+              private workflowService: WorkflowService) {
     this.taskTemplateForm = formBuilder.group({
       'id': new FormControl(undefined),
-      'name': new FormControl(undefined, Validators.required),
-      'description': new FormControl(undefined, Validators.required),
+      'name': new FormControl(undefined),
+      'description': new FormControl(undefined),
       'requiredCompetences': new FormControl([]),
-      'acquirableCompetences': new FormControl([])
+      'acquirableCompetences': new FormControl([]),
+      'workflowKey': new FormControl(undefined),
     }, {validator: TaskTemplateValidator});
   }
 
-
   ngOnInit() {
-    this.competenceService.findAll().toPromise().then((competences: Competence[]) => {
-      this.competences = competences;
-      this.route.params.subscribe(params => this.findTaskTemplate(params['id']));
-    });
+    Promise.all([
+      this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
+      this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences)
+    ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'])));
   }
 
   private findTaskTemplate(id: string) {
@@ -52,7 +56,9 @@ export class TaskTemplateCreateComponent implements OnInit {
         }),
         acquirableCompetences: this.competences.filter((competence: Competence) => {
           return taskTemplate.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
-        })
+        }),
+        workflowKey: this.workflowTypes.find((value: WorkflowType) => taskTemplate.workflowKey === value.key)
+
       });
     });
   }
