@@ -10,4 +10,5 @@ export class TaskTemplate {
   material: Material;
   requiredCompetences: Competence[];
   acquirableCompetences: Competence[];
+  workflowKey: string;
 }

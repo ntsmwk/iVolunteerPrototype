@@ -5,7 +5,7 @@ import {TaskService} from '../../_service/task.service';
 import {TaskTemplate} from '../../_model/task-template';
 import {TaskTemplateService} from '../../_service/task-template.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {isNullOrUndefined} from 'util';
+import {isArray, isNullOrUndefined} from 'util';
 import {Competence} from '../../_model/competence';
 import {CompetenceService} from '../../_service/competence.service';
 import {TaskTemplateValidator} from '../../task-template/task-template.validator';
@@ -19,8 +19,9 @@ import {WorkflowType} from '../../_model/workflow-type';
 export class TaskCreateComponent implements OnInit {
   taskForm: FormGroup;
   competences: Competence[];
-  taskTemplates: TaskTemplate[];
+  taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
+  taskTemplate: TaskTemplate;
 
   constructor(formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -41,19 +42,13 @@ export class TaskCreateComponent implements OnInit {
     }, {validator: TaskTemplateValidator});
   }
 
+
   ngOnInit() {
-    this.taskTemplateService.findAll()
-      .toPromise()
-      .then((taskTemplates: TaskTemplate[]) => {
-        this.taskTemplates = taskTemplates;
-        this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes);
-        this.route.params.subscribe(params => this.findTask(params['id']));
-      });
-
-    this.competenceService.findAll().toPromise().then((competences: Competence[]) => {
-      this.competences = competences;
-    });
-
+    Promise.all([
+      this.taskTemplateService.findAll().toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
+      this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
+      this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences)
+    ]).then(() => this.route.params.subscribe(params => this.findTask(params['id'])));
   }
 
   private findTask(id: string) {
@@ -68,8 +63,12 @@ export class TaskCreateComponent implements OnInit {
         workflowType: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate),
-        acquirableCompetences: task.acquirableCompetences,
-        requiredCompetences: task.requiredCompetences
+        requiredCompetences: this.competences.filter((competence: Competence) => {
+          return task.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.name === competence.name);
+        }),
+        acquirableCompetences: this.competences.filter((competence: Competence) => {
+          return task.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
+        })
       });
     });
   }
@@ -88,5 +87,33 @@ export class TaskCreateComponent implements OnInit {
 
   isEditMode() {
     return !isNullOrUndefined(this.taskForm.value.id);
+  }
+
+  prefillForm(event, taskTemplate) {
+    if (event.source.selected) {
+      const currentValues = this.taskForm.value;
+      currentValues.name = taskTemplate.name;
+      currentValues.description = taskTemplate.description;
+      // currentValues.workflowKey = this.workflowTypes.find((value: WorkflowType) => value.key === taskTemplate.workflowKey);
+
+      if (isArray(taskTemplate.requiredCompetences)) {
+        currentValues.requiredCompetences = this.competences.filter((competence: Competence) => {
+          return taskTemplate.requiredCompetences.find((value: Competence) => value.name === competence.name);
+        });
+      } else {
+        currentValues.requiredCompetences = [];
+      }
+
+      if (isArray(taskTemplate.acquirableCompetences)) {
+        currentValues.acquirableCompetences = this.competences.filter((competence: Competence) => {
+          return taskTemplate.acquirableCompetences.find((value: Competence) => value.name === competence.name);
+        });
+      } else {
+        currentValues.acquirableCompetences = [];
+      }
+
+      this.taskForm.setValue(currentValues);
+
+    }
   }
 }
