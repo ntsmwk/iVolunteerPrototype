@@ -7,6 +7,7 @@ public class WorkflowType {
 	private String name;
 
 	public WorkflowType(String key, String name) {
+		this.key = key;
 		this.name = name;
 	}
 

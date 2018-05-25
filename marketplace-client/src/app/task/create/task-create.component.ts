@@ -34,7 +34,7 @@ export class TaskCreateComponent implements OnInit {
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
       'description': new FormControl(undefined),
-      'workflowKey': new FormControl(undefined, Validators.required),
+      'workflowType': new FormControl(undefined, Validators.required),
       'startDate': new FormControl(undefined, Validators.required),
       'endDate': new FormControl(undefined),
       'requiredCompetences': new FormControl([]),
@@ -60,7 +60,7 @@ export class TaskCreateComponent implements OnInit {
         id: task.id,
         name: task.name,
         description: task.description,
-        workflowKey: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
+        workflowType: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate),
         requiredCompetences: this.competences.filter((competence: Competence) => {
@@ -79,8 +79,10 @@ export class TaskCreateComponent implements OnInit {
     }
 
     const task = this.taskForm.value;
-    task.workflowKey = task.workflowKey.key;
-    this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']));
+    task.workflowKey = task.workflowType.key;
+    this.taskService.save(<Task>task).toPromise().then((createdTask: Task) => {
+      this.workflowService.startWorkflow(createdTask.workflowKey, createdTask.id).toPromise().then(() => this.router.navigate(['/tasks']));
+    });
   }
 
   isEditMode() {
@@ -114,6 +116,4 @@ export class TaskCreateComponent implements OnInit {
 
     }
   }
-
-
 }
