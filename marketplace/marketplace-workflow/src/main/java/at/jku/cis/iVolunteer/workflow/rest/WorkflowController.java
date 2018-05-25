@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowController {
@@ -42,7 +41,14 @@ public class WorkflowController {
 		return workfowTypeService.getWorkflowTypes();
 	}
 
-	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/standard?taskId=abcdedfg
+	@GetMapping("/processId")
+	public String getProcessId(@RequestParam("taskId") String taskId) {
+		return runtimeService.createExecutionQuery().variableValueEquals("taskId", taskId).singleResult()
+				.getProcessInstanceId();
+	}
+
+	// curl -H "Content-Type: application/json" -d ''
+	// http://localhost:8080/workflow/standard?taskId=abcdedfg
 	@PostMapping("/{processKey}")
 	public String startWorkflow(@PathVariable("processKey") String processKey, @RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
@@ -50,7 +56,8 @@ public class WorkflowController {
 		return runtimeService.startProcessInstanceByKey(processKey, params).getProcessInstanceId();
 	}
 
-	// curl -H "Content-Type: application/json" http://localhost:8080/workflow/standard/8/task
+	// curl -H "Content-Type: application/json"
+	// http://localhost:8080/workflow/standard/8/task
 	@GetMapping("/{processKey}/{instanceId}/task")
 	public List<WorkflowStep> getNextTasksByInstanceId(@PathVariable("processKey") String processKey,
 			@PathVariable("instanceId") String instanceId) {
