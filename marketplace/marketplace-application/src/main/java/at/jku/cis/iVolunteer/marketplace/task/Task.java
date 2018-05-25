@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,8 +25,6 @@ public class Task {
 	private Date endDate;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
-
-	private String ProcessInstanceId;
 
 	public String getId() {
 		return id;
@@ -113,14 +112,6 @@ public class Task {
 
 	public void setRequiredCompetences(List<Competence> requiredCompetences) {
 		this.requiredCompetences = requiredCompetences;
-	}
-
-	public String getProcessInstanceId() {
-		return ProcessInstanceId;
-	}
-
-	public void setProcessInstanceId(String processInstanceId) {
-		ProcessInstanceId = processInstanceId;
 	}
 
 	@Override
