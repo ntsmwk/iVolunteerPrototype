@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowController {
+
+	private static final String ACCESS_TOKEN = "accessToken";
 
 	private static final String WORKFLOW_ACTIVITY_LABEL = "label";
 
@@ -43,8 +47,18 @@ public class WorkflowController {
 
 	@GetMapping("/processId")
 	public String getProcessId(@RequestParam("taskId") String taskId) {
-		return runtimeService.createExecutionQuery().variableValueEquals("taskId", taskId).singleResult()
-				.getProcessInstanceId();
+		ProcessInstance instance = runtimeService.createProcessInstanceQuery().active().list().stream()
+				.filter(processInstance -> {
+					if (runtimeService.getVariable(processInstance.getProcessInstanceId(), "taskId") != null) {
+						return runtimeService.getVariable(processInstance.getProcessInstanceId(), "taskId")
+								.equals(taskId);
+					}
+					return false;
+				}).findFirst().orElse(null);
+		if (instance != null) {
+			return instance.getProcessInstanceId();
+		}
+		return null;
 	}
 
 	@PostMapping("/{workflowKey}")
@@ -64,7 +78,8 @@ public class WorkflowController {
 
 	@PostMapping("/{workflowKey}/{instanceId}/step")
 	public void completeWorkflowStep(@PathVariable("workflowKey") String workflowKey,
-			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep) {
+			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep,
+			@RequestHeader("Authorization") String authorization) {
 
 		Task task = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
 		if (!StringUtils.equals(task.getId(), workflowStep.getTaskId())) {
@@ -73,6 +88,7 @@ public class WorkflowController {
 
 		Map<String, Object> params = new HashMap<>();
 		params.put(WORKFLOW_ACTIVITY_LABEL, workflowStep.getLabel());
+		params.put(ACCESS_TOKEN, authorization);
 		if (workflowStep.getParams() != null) {
 			workflowStep.getParams().forEach((name, value) -> params.put(name, value));
 		}

@@ -1,6 +1,6 @@
 {
   "engines": {
-    "composer": "^0.19.5"
+    "composer": "^0.19.6"
   },
   "name": "ivolunteer-blockchain",
   "version": "0.0.3",

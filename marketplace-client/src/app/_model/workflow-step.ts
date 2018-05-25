@@ -1,5 +1,5 @@
 export class WorkflowStep {
   id: string;
-  name: string;
+  label: string;
   params: Map<string, string>;
 }

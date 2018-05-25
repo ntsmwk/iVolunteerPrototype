@@ -3,7 +3,7 @@
 <mat-form-field class="full-width">
   <mat-select placeholder="Task Template" (change)="onTemplateChange($event)">
     <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate">
-      {{ taskTemplate.name }}
+      {{ taskTemplate.label }}
     </mat-option>
   </mat-select>
 </mat-form-field>

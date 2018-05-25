@@ -20,8 +20,9 @@ public class AssignServiceTask implements JavaDelegate {
 	public void execute(DelegateExecution delegateExecution) {
 		String taskId = delegateExecution.getVariable(TASK_ID, String.class);
 		String volunteerId =delegateExecution.getVariable(VOLUNTEER_ID, String.class);
+		String token = delegateExecution.getVariable("accessToken", String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: "+ volunteerId +"}");
 		
-		marketplaceRestClient.assignTask(taskId, volunteerId);
+		marketplaceRestClient.assignTask(taskId, volunteerId, token);
 	}
 }

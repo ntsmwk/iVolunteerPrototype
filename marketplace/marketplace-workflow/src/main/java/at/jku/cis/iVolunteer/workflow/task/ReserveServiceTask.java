@@ -19,9 +19,11 @@ public class ReserveServiceTask implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
 		String taskId = delegateExecution.getVariable(TASK_ID, String.class);
+
+		String token = delegateExecution.getVariable("accessToken", String.class);
 		System.out.println(this.getClass().getName() +"{taskId: "+ taskId+"}");
 		
-		marketplaceRestClient.reserveTask(taskId);
+		marketplaceRestClient.reserveTask(taskId, token);
 		
 	}
 }

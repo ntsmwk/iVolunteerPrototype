@@ -41,6 +41,13 @@
     </mat-form-field>
   </form>
 
+  <div>
+    <button *ngFor="let workflowStep of workflowSteps" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button color="primary">
+      {{workflowStep.label}}
+    </button>
+  </div>
+
+  <!--
   <div *ngIf="role === 'EMPLOYEE'">
     <div *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'">
       <mat-divider></mat-divider>
@@ -83,6 +90,8 @@
     </button>
   </div>
 
+
+  -->
   <mat-divider></mat-divider>
 
   <div *ngIf="role === 'EMPLOYEE'">

@@ -14,6 +14,10 @@ export class WorkflowService {
     return this.http.get(`${this.apiUrl}/type`);
   }
 
+  getProcessId(taskId: string){
+    return this.http.get(`${this.apiUrl}/processId?taskId=${taskId}`);
+  }
+
   startWorkflow(workflowKey: string, taskId: string) {
     return this.http.post(`${this.apiUrl}/${workflowKey}?taskId=${taskId}`, {});
   }

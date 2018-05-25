@@ -10,6 +10,8 @@ import {Participant} from '../../_model/participant';
 import {SourceService} from '../../_service/source.service';
 import {ContractorService} from '../../_service/contractor.service';
 import {Source} from '../../_model/source';
+import { WorkflowStep } from '../../_model/workflow-step';
+import { WorkflowService } from '../../_service/workflow.service';
 
 @Component({
   templateUrl: './task-detail.component.html',
@@ -20,6 +22,8 @@ export class TaskDetailComponent implements OnInit {
   source: Source;
   task: Task;
   participant: Participant;
+  workflowSteps: WorkflowStep[];
+  workflowProcessId: string;
   role;
   isAlreadyReserved = false;
   isAlreadyAssigned = false;
@@ -28,15 +32,13 @@ export class TaskDetailComponent implements OnInit {
               private router: Router,
               private loginService: LoginService,
               private messageService: MessageService,
-              private sourceService: SourceService,
-              private contractorService: ContractorService,
               private taskService: TaskService,
-              private taskInteractionService: TaskInteractionService) {
+              private taskInteractionService: TaskInteractionService,
+              private workflowService: WorkflowService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => this.loadTask(params['id']));
-    this.sourceService.find().toPromise().then((source: Source) => this.source = source);
     this.loginService.getLoggedInParticipantRole().toPromise().then((role) => this.role = role);
   }
 
@@ -57,56 +59,21 @@ export class TaskDetailComponent implements OnInit {
           }
         });
       });
+      this.workflowService.getProcessId(id).toPromise().then((processId: string) => {
+        this.workflowProcessId = processId;
+        this.workflowService.getWorkflowSteps(task.workflowKey, processId).toPromise().then((nextWorkflowSteps: WorkflowStep[]) => {
+          console.log(nextWorkflowSteps);
+          this.workflowSteps = nextWorkflowSteps;
+        })
+      });
     });
   }
 
-  unreserve() {
-    this.contractorService.unreserve(this.source, this.task).toPromise().then(() => this.loadTask(this.task.id));
-  }
-
-  reserve() {
-    this.contractorService.reserve(this.source, this.task).toPromise().then(() => this.loadTask(this.task.id));
-  }
-
-  publish() {
-    this.taskService.publish(this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
-  }
-
-  start() {
-    this.taskService.start(this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
-  }
-
-  suspend() {
-    this.taskService.suspend(this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
-  }
-
-  resume() {
-    this.taskService.resume(this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
-  }
-
-  finish() {
-    this.contractorService.finish(this.source, this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
-  }
-
-  abort() {
-    this.taskService.abort(this.task).toPromise().then(() => {
-      this.loadTask(this.task.id);
-      this.messageService.broadcast('historyChanged', {});
-    });
+  executeNextWorkflowStep(workflowStep: WorkflowStep){
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep).toPromise().then(
+      () => {
+        this.loadTask(this.task.id);
+        this.messageService.broadcast('historyChanged', {});
+      });
   }
 }

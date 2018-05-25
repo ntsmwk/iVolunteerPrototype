@@ -19,8 +19,9 @@ public class PublishServiceTask implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
 		String taskId = delegateExecution.getVariable(TASK_ID, String.class);
+		String token = delegateExecution.getVariable("accessToken", String.class);
 		System.out.println(this.getClass().getName() +"{taskId: "+ taskId+"}");
 		
-		marketplaceRestClient.publishTask(taskId);
+		marketplaceRestClient.publishTask(taskId, token);
 	}
 }
