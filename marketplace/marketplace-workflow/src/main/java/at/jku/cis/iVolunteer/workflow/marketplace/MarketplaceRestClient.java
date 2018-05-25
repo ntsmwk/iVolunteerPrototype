@@ -24,6 +24,11 @@ public class MarketplaceRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	public void updateTask(String taskId) {
+		String requestURI = buildContractorRequestURI(taskId);
+		restTemplate.put(requestURI, taskId, Void.class);
+	}
+
 	public void publishTask(String taskId) {
 		String requestURI = buildContractorRequestURI(taskId + "/publish");
 		restTemplate.postForObject(requestURI, taskId, Void.class);

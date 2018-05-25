@@ -41,15 +41,20 @@ public class WorkflowController {
 		return workfowTypeService.getWorkflowTypes();
 	}
 
-	// curl -H "Content-Type: application/json" -d '' http://localhost:8080/workflow/standard?taskId=abcdedfg
+	@GetMapping("/processId")
+	public String getProcessId(@RequestParam("taskId") String taskId) {
+		return runtimeService.createExecutionQuery().variableValueEquals("taskId", taskId).singleResult()
+				.getProcessInstanceId();
+	}
+
 	@PostMapping("/{workflowKey}")
-	public String startWorkflow(@PathVariable("workflowKey") String workflowKey, @RequestParam("taskId") String taskId) {
+	public String startWorkflow(@PathVariable("workflowKey") String workflowKey,
+			@RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("taskId", taskId);
 		return runtimeService.startProcessInstanceByKey(workflowKey, params).getProcessInstanceId();
 	}
 
-	// curl -H "Content-Type: application/json" http://localhost:8080/workflow/standard/8/step
 	@GetMapping("/{workflowKey}/{instanceId}/step")
 	public List<WorkflowStep> getNextWorkflowSteps(@PathVariable("workflowKey") String workflowKey,
 			@PathVariable("instanceId") String instanceId) {
