@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {TaskTemplateService} from '../../_service/task-template.service';
 import {TaskTemplate} from '../../_model/task-template';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TaskTemplateValidator} from '../task-template.validator';
+import {CompetenceValidator} from '../../_validator/competence.validator';
 import {isNullOrUndefined} from 'util';
 import {CompetenceService} from '../../_service/competence.service';
 import {Competence} from '../../_model/competence';
@@ -31,8 +31,8 @@ export class TaskTemplateCreateComponent implements OnInit {
       'description': new FormControl(undefined),
       'requiredCompetences': new FormControl([]),
       'acquirableCompetences': new FormControl([]),
-      'workflowKey': new FormControl(undefined),
-    }, {validator: TaskTemplateValidator});
+      'workflowType': new FormControl(undefined),
+    }, {validator: CompetenceValidator});
   }
 
   ngOnInit() {
@@ -57,8 +57,7 @@ export class TaskTemplateCreateComponent implements OnInit {
         acquirableCompetences: this.competences.filter((competence: Competence) => {
           return taskTemplate.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
         }),
-        workflowKey: this.workflowTypes.find((value: WorkflowType) => taskTemplate.workflowKey === value.key)
-
+        workflowType: this.workflowTypes.find((value: WorkflowType) => taskTemplate.workflowKey === value.key)
       });
     });
   }
@@ -67,8 +66,12 @@ export class TaskTemplateCreateComponent implements OnInit {
     if (!this.taskTemplateForm.valid) {
       return;
     }
-    this.taskTemplateService.save(<TaskTemplate> this.taskTemplateForm.value)
+
+    const taskTemplate = this.taskTemplateForm.value;
+    taskTemplate.workflowKey = taskTemplate.workflowType.key;
+    delete taskTemplate.workflowType;
+    this.taskTemplateService.save(<TaskTemplate> taskTemplate)
       .toPromise()
-      .then((taskTemplate: TaskTemplate) => this.router.navigate(['/taskTemplates']));
+      .then(() => this.router.navigate(['/taskTemplates']));
   }
 }

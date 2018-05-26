@@ -1,15 +1,17 @@
 <h3>Create Task</h3>
 
-<mat-form-field class="full-width">
+<div class="task-form" *ngIf="!isEditMode()">
+  <mat-form-field class="full-width">
+    <mat-select placeholder="Task Template">
+      <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate"
+                  (onSelectionChange)="prefillForm($event, taskTemplate)">
+        {{ taskTemplate.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
-  <mat-select placeholder="Task Template">
-    <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate"
-                (onSelectionChange)="prefillForm($event, taskTemplate)">
-      {{ taskTemplate.label }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-divider></mat-divider>
+<mat-divider *ngIf="!isEditMode()"></mat-divider>
 
 <form class="task-form" (submit)="save()" [formGroup]="taskForm">
   <mat-form-field class="full-width">

@@ -11,7 +11,7 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select placeholder="Workflow Key" formControlName="workflowKey">
+    <mat-select placeholder="Workflow Key" formControlName="workflowType">
       <mat-option *ngFor="let workflowType of workflowTypes" [value]="workflowType">{{workflowType.name}}
       </mat-option>
     </mat-select>

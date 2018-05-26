@@ -6,20 +6,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.marketplace.competence.Competence;
-import at.jku.cis.iVolunteer.marketplace.task.Address;
 
 @Document
 public class TaskTemplate {
 
-	
 	@Id
 	private String id;
 	private String name;
 	private String description;
-	private Address address;	
+	private String workflowKey;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
-
 
 	public String getId() {
 		return id;
@@ -45,14 +42,14 @@ public class TaskTemplate {
 		this.description = description;
 	}
 
-	public Address getAddress() {
-		return address;
+	public String getWorkflowKey() {
+		return workflowKey;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setWorkflowKey(String workflowKey) {
+		this.workflowKey = workflowKey;
 	}
-	
+
 	public List<Competence> getAcquirableCompetences() {
 		return acquirableCompetences;
 	}
@@ -68,7 +65,6 @@ public class TaskTemplate {
 	public void setRequiredCompetences(List<Competence> requiredCompetences) {
 		this.requiredCompetences = requiredCompetences;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
