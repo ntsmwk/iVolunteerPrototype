@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataSourceConfiugration {
 
-	@Value("${spring.data.mysql.uri}")
+	@Value("${spring.data.mysqldb.uri}")
 	private String uri;
 
-	@Value("${spring.data.mysql.user}")
+	@Value("${spring.data.mysqldb.user}")
 	private String user;
 
-	@Value("${spring.data.mysql.password}")
+	@Value("${spring.data.mysqldb.password}")
 	private String password;
 
 	@Bean
