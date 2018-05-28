@@ -3,17 +3,17 @@
   <process id="standard2" name="Standard Workflow 2" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <serviceTask id="servicetask2" name="Start" activiti:expression="${startServiceTask.execute(execution)}"></serviceTask>
-    <userTask id="usertask1" name="Created"></userTask>
+    <userTask id="usertask1" name="Created" activiti:assignee="mmustermann"></userTask>
     <sequenceFlow id="flow24" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
     <serviceTask id="publish" name="Publish" activiti:expression="${publishServiceTask.execute(execution)}"></serviceTask>
-    <userTask id="usertask5" name="Resume"></userTask>
+    <userTask id="usertask5" name="Resume" activiti:assignee="mmustermann"></userTask>
     <serviceTask id="servicetask6" name="Suspend" activiti:expression="${suspendServiceTask.execute(execution)}"></serviceTask>
     <serviceTask id="servicetask7" name="Resume" activiti:expression="${resumeServiceTask.execute(execution)}"></serviceTask>
     <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow52" sourceRef="usertask6" targetRef="exclusivegateway4"></sequenceFlow>
     <sequenceFlow id="flow56" sourceRef="servicetask6" targetRef="usertask5"></sequenceFlow>
     <sequenceFlow id="flow57" sourceRef="usertask5" targetRef="servicetask7"></sequenceFlow>
-    <userTask id="usertask6" name="User Task"></userTask>
+    <userTask id="usertask6" name="User Task" activiti:assignee="mmustermann"></userTask>
     <sequenceFlow id="flow58" sourceRef="servicetask2" targetRef="usertask6"></sequenceFlow>
     <serviceTask id="servicetask8" name="Finish" activiti:expression="${finishServiceTask.execute(execution)}"></serviceTask>
     <endEvent id="endevent1" name="End"></endEvent>
@@ -28,20 +28,20 @@
     <sequenceFlow id="flow66" sourceRef="usertask1" targetRef="publish"></sequenceFlow>
     <subProcess id="subprocess1" name="Sub Process">
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="volunteers" activiti:elementVariable="volunteer"></multiInstanceLoopCharacteristics>
-      <serviceTask id="servicetask10" name="Reserve" activiti:delegateExpression="${unreserveServiceTask.execute(execution)}"></serviceTask>
+      <serviceTask id="servicetask10" name="Reserve" activiti:expression="${reserveServiceTask.execute(execution)}"></serviceTask>
       <userTask id="usertask7" name="Reserved" activiti:assignee="${volunteer}"></userTask>
       <sequenceFlow id="flow69" sourceRef="servicetask10" targetRef="usertask7"></sequenceFlow>
-      <userTask id="usertask8" name="Unreserved" activiti:assignee="${username}"></userTask>
-      <serviceTask id="servicetask11" name="Unreserve" activiti:expression="${reserveServiceTask.execute(execution)}"></serviceTask>
+      <userTask id="usertask8" name="Unreserved" activiti:assignee="${volunteer}"></userTask>
+      <serviceTask id="servicetask11" name="Unreserve" activiti:expression="${unreserveServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow72" sourceRef="servicetask11" targetRef="usertask8"></sequenceFlow>
       <sequenceFlow id="flow73" sourceRef="usertask8" targetRef="servicetask10"></sequenceFlow>
       <sequenceFlow id="flow74" sourceRef="usertask7" targetRef="servicetask11"></sequenceFlow>
       <startEvent id="startevent2" name="Start"></startEvent>
-      <sequenceFlow id="flow85" sourceRef="startevent2" targetRef="usertask7"></sequenceFlow>
+      <sequenceFlow id="flow85" sourceRef="startevent2" targetRef="usertask8"></sequenceFlow>
     </subProcess>
     <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
     <sequenceFlow id="flow81" sourceRef="parallelgateway1" targetRef="subprocess1"></sequenceFlow>
-    <userTask id="usertask9" name="Start"></userTask>
+    <userTask id="usertask9" name="Start" activiti:assignee="mmustermann"></userTask>
     <sequenceFlow id="flow82" sourceRef="publish" targetRef="parallelgateway1"></sequenceFlow>
     <sequenceFlow id="flow83" sourceRef="parallelgateway1" targetRef="usertask9"></sequenceFlow>
     <sequenceFlow id="flow84" sourceRef="usertask9" targetRef="servicetask2"></sequenceFlow>
@@ -88,10 +88,10 @@
         <omgdc:Bounds height="55.0" width="105.0" x="616.0" y="450.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask7" id="BPMNShape_usertask7">
-        <omgdc:Bounds height="55.0" width="105.0" x="616.0" y="363.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="806.0" y="450.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask8" id="BPMNShape_usertask8">
-        <omgdc:Bounds height="55.0" width="105.0" x="806.0" y="450.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="616.0" y="363.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="servicetask11" id="BPMNShape_servicetask11">
         <omgdc:Bounds height="55.0" width="105.0" x="806.0" y="363.0"></omgdc:Bounds>
@@ -146,20 +146,20 @@
         <omgdi:waypoint x="420.0" y="207.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow69" id="BPMNEdge_flow69">
-        <omgdi:waypoint x="668.0" y="450.0"></omgdi:waypoint>
-        <omgdi:waypoint x="668.0" y="418.0"></omgdi:waypoint>
+        <omgdi:waypoint x="721.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="806.0" y="477.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow72" id="BPMNEdge_flow72">
-        <omgdi:waypoint x="858.0" y="418.0"></omgdi:waypoint>
-        <omgdi:waypoint x="858.0" y="450.0"></omgdi:waypoint>
+        <omgdi:waypoint x="806.0" y="390.0"></omgdi:waypoint>
+        <omgdi:waypoint x="721.0" y="390.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow73" id="BPMNEdge_flow73">
-        <omgdi:waypoint x="806.0" y="477.0"></omgdi:waypoint>
-        <omgdi:waypoint x="721.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="668.0" y="418.0"></omgdi:waypoint>
+        <omgdi:waypoint x="668.0" y="450.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow74" id="BPMNEdge_flow74">
-        <omgdi:waypoint x="721.0" y="390.0"></omgdi:waypoint>
-        <omgdi:waypoint x="806.0" y="390.0"></omgdi:waypoint>
+        <omgdi:waypoint x="858.0" y="450.0"></omgdi:waypoint>
+        <omgdi:waypoint x="858.0" y="418.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow85" id="BPMNEdge_flow85">
         <omgdi:waypoint x="575.0" y="434.0"></omgdi:waypoint>

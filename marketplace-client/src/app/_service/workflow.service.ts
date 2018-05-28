@@ -22,12 +22,12 @@ export class WorkflowService {
     return this.http.post(`${this.apiUrl}/${workflowKey}?taskId=${taskId}`, {});
   }
 
-  getWorkflowSteps(workflowKey: string, processInstanceId: string) {
-    return this.http.get(`${this.apiUrl}/${workflowKey}/${processInstanceId}/step`);
+  getWorkflowSteps(workflowKey: string, processInstanceId: string, participantId: string) {
+    return this.http.get(`${this.apiUrl}/${workflowKey}/${processInstanceId}/step?participantId=${participantId}`);
   }
 
-  completeWorkflowStep(workflowKey: string, processInstanceId: string, workflowStep: WorkflowStep) {
-    return this.http.post(`${this.apiUrl}/${workflowKey}/${processInstanceId}/step`, workflowStep);
+  completeWorkflowStep(workflowKey: string, processInstanceId: string, workflowStep: WorkflowStep, participantId: string) {
+    return this.http.post(`${this.apiUrl}/${workflowKey}/${processInstanceId}/step?participantId=${participantId}`, workflowStep);
   }
 
   stopWorkflow(workflowKey: string, processInstanceId: string) {

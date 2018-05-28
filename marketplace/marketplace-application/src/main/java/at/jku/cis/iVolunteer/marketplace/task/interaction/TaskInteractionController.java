@@ -102,8 +102,8 @@ public class TaskInteractionController {
 		Task task = findAndVerifyTaskById(taskId);
 		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
-		if (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
-				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED) {
+		if (lastedTaskInteraction != null && (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
 			return createTaskInteraction(task, loginService.getLoggedInParticipant(),
 					TaskVolunteerOperation.UNRESERVED);
 		} else {

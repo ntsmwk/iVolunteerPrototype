@@ -61,7 +61,7 @@ export class TaskDetailComponent implements OnInit {
       });
       this.workflowService.getProcessId(id).toPromise().then((processId: string) => {
         this.workflowProcessId = processId;
-        this.workflowService.getWorkflowSteps(task.workflowKey, processId).toPromise().then((nextWorkflowSteps: WorkflowStep[]) => {
+        this.workflowService.getWorkflowSteps(task.workflowKey, processId, this.participant.username).toPromise().then((nextWorkflowSteps: WorkflowStep[]) => {
           console.log(nextWorkflowSteps);
           this.workflowSteps = nextWorkflowSteps;
         })
@@ -70,7 +70,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   executeNextWorkflowStep(workflowStep: WorkflowStep){
-    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep).toPromise().then(
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username).toPromise().then(
       () => {
         this.loadTask(this.task.id);
         this.messageService.broadcast('historyChanged', {});
