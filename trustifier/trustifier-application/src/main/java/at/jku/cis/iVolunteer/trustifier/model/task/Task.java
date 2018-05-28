@@ -106,11 +106,11 @@ public class Task  implements IHashObject{
 		json.addProperty("id", id);
 		json.addProperty("name", name);
 		json.addProperty("description", description);
-		json.addProperty("address", address.toString());
-		json.addProperty("material", material.toString());
-		json.addProperty("parent", parent.getId());
+//		json.addProperty("address", address.toString());
+//		json.addProperty("material", material.toString());
+//		json.addProperty("parent", parent.getId());
 		json.addProperty("startDate", startDate.toString());
-		json.addProperty("endDate", endDate.toString());		
+//		json.addProperty("endDate", endDate.toString());		
 		json.addProperty("acquirableCompetences", acquirableCompetences.toString());
 		json.addProperty("requiredCompetences", requiredCompetences.toString());	
 		return json.toString();
