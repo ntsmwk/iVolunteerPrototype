@@ -18,8 +18,8 @@ rm *.bna
 
 # Deploying the business network
 composer archive create -t dir -n .
-composer network install --card PeerAdmin@hlfv1 --archiveFile ivolunteer-blockchain@0.0.3.bna
-composer network start --networkName ivolunteer-blockchain --networkVersion 0.0.3 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+composer network install --card PeerAdmin@hlfv1 --archiveFile ivolunteer-blockchain@0.0.1.bna
+composer network start --networkName ivolunteer-blockchain --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 composer card import --file networkadmin.card
 
 # Creating seperate user for REST server

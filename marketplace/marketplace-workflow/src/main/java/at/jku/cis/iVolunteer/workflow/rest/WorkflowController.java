@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.workflow.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,6 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,8 +72,10 @@ public class WorkflowController {
 	@GetMapping("/{workflowKey}/{instanceId}/step")
 	public List<WorkflowStep> getNextWorkflowSteps(@PathVariable("workflowKey") String workflowKey,
 			@PathVariable("instanceId") String instanceId) {
-		return workflowStepService
-				.getNextWorkflowSteps(retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId));
+		List<Task> tasks = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
+		List<WorkflowStep> steps = new ArrayList<>();
+		tasks.forEach(task -> steps.addAll(workflowStepService.getNextWorkflowSteps(task)));
+		return steps;
 	}
 
 	@PostMapping("/{workflowKey}/{instanceId}/step")
@@ -81,10 +83,10 @@ public class WorkflowController {
 			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep,
 			@RequestHeader("Authorization") String authorization) {
 
-		Task task = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
-		if (!StringUtils.equals(task.getId(), workflowStep.getTaskId())) {
-			throw new UnsupportedOperationException();
-		}
+		List<Task> task = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
+		// if (!StringUtils.equals(task.getId(), workflowStep.getTaskId())) {
+		// throw new UnsupportedOperationException();
+		// }
 
 		Map<String, Object> params = new HashMap<>();
 		params.put(WORKFLOW_ACTIVITY_LABEL, workflowStep.getLabel());
@@ -101,7 +103,7 @@ public class WorkflowController {
 		runtimeService.deleteProcessInstance(instanceId, "Workflow is aborted");
 	}
 
-	private Task retrieveActiveTaskByWorkflowKeyAndInstanceId(String workflowKey, String instanceId) {
-		return taskService.createTaskQuery().processInstanceId(instanceId).active().singleResult();
+	private List<Task> retrieveActiveTaskByWorkflowKeyAndInstanceId(String workflowKey, String instanceId) {
+		return taskService.createTaskQuery().processInstanceId(instanceId).active().list();
 	}
 }
