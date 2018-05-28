@@ -9,6 +9,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,10 +84,10 @@ public class WorkflowController {
 			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep,
 			@RequestHeader("Authorization") String authorization) {
 
-		List<Task> task = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
-		// if (!StringUtils.equals(task.getId(), workflowStep.getTaskId())) {
-		// throw new UnsupportedOperationException();
-		// }
+		List<Task> tasks = retrieveActiveTaskByWorkflowKeyAndInstanceId(workflowKey, instanceId);
+		if (tasks.stream().anyMatch(task -> !StringUtils.equals(task.getId(), workflowStep.getTaskId()))) {
+			throw new UnsupportedOperationException();
+		}
 
 		Map<String, Object> params = new HashMap<>();
 		params.put(WORKFLOW_ACTIVITY_LABEL, workflowStep.getLabel());
