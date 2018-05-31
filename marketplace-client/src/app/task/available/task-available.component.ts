@@ -11,7 +11,7 @@ import {MatTableDataSource} from '@angular/material';
 export class TaskAvailableComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'startDate', 'endDate'];
+  displayedColumns = ['name', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private router: Router,
               private taskService: TaskService) {
