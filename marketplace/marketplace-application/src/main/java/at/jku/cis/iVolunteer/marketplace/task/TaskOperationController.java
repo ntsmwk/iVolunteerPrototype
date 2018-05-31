@@ -53,7 +53,7 @@ public class TaskOperationController {
 			throw new BadRequestException();
 		}
 
-		contractorRestClient.publishTask(task);
+		//contractorRestClient.publishTask(task);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
