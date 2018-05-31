@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.workflow;
+package at.jku.cis.iVolunteer.workflow.configuration;
 
 import javax.sql.DataSource;
 

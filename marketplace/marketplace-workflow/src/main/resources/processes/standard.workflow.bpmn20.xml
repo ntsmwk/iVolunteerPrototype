@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="standard2" name="Standard Workflow 2" isExecutable="true">
+  <process id="standard" name="Standard Workflow" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <serviceTask id="servicetask2" name="Start" activiti:expression="${startServiceTask.execute(execution)}"></serviceTask>
-    <userTask id="usertask1" name="Created" activiti:assignee="mmustermann"></userTask>
+    <userTask id="usertask1" name="Publish" activiti:assignee="mmustermann"></userTask>
     <sequenceFlow id="flow24" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
     <serviceTask id="publish" name="Publish" activiti:expression="${publishServiceTask.execute(execution)}"></serviceTask>
     <userTask id="usertask5" name="Resume" activiti:assignee="mmustermann"></userTask>
@@ -29,9 +29,9 @@
     <subProcess id="subprocess1" name="Sub Process">
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="volunteers" activiti:elementVariable="volunteer"></multiInstanceLoopCharacteristics>
       <serviceTask id="servicetask10" name="Reserve" activiti:expression="${reserveServiceTask.execute(execution)}"></serviceTask>
-      <userTask id="usertask7" name="Reserved" activiti:assignee="${volunteer}"></userTask>
+      <userTask id="usertask7" name="Unreserve" activiti:assignee="${volunteer}"></userTask>
       <sequenceFlow id="flow69" sourceRef="servicetask10" targetRef="usertask7"></sequenceFlow>
-      <userTask id="usertask8" name="Unreserved" activiti:assignee="${volunteer}"></userTask>
+      <userTask id="usertask8" name="Reserve" activiti:assignee="${volunteer}"></userTask>
       <serviceTask id="servicetask11" name="Unreserve" activiti:expression="${unreserveServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow72" sourceRef="servicetask11" targetRef="usertask8"></sequenceFlow>
       <sequenceFlow id="flow73" sourceRef="usertask8" targetRef="servicetask10"></sequenceFlow>

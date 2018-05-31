@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ public class WorkflowController {
 
 	private static final String ACCESS_TOKEN = "accessToken";
 
-	private static final String WORKFLOW_ACTIVITY_LABEL = "label";
-
 	@Autowired
 	private TaskService taskService;
 
@@ -36,10 +33,13 @@ public class WorkflowController {
 	private RuntimeService runtimeService;
 
 	@Autowired
+	private WorkflowTypeService workfowTypeService;
+
+	@Autowired
 	private WorkflowStepService workflowStepService;
 
 	@Autowired
-	private WorkflowTypeService workfowTypeService;
+	private WorkflowProcessService workflowProcessService;
 
 	@GetMapping("/type")
 	public List<WorkflowType> getWorkflowTypes() {
@@ -48,18 +48,7 @@ public class WorkflowController {
 
 	@GetMapping("/processId")
 	public String getProcessId(@RequestParam("taskId") String taskId) {
-		ProcessInstance instance = runtimeService.createProcessInstanceQuery().active().list().stream()
-				.filter(processInstance -> {
-					if (runtimeService.getVariable(processInstance.getProcessInstanceId(), "taskId") != null) {
-						return runtimeService.getVariable(processInstance.getProcessInstanceId(), "taskId")
-								.equals(taskId);
-					}
-					return false;
-				}).findFirst().orElse(null);
-		if (instance != null) {
-			return instance.getProcessInstanceId();
-		}
-		return null;
+		return workflowProcessService.findInstanceIdForTaskId(taskId);
 	}
 
 	@PostMapping("/{workflowKey}")
@@ -67,21 +56,13 @@ public class WorkflowController {
 			@RequestParam("taskId") String taskId) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("taskId", taskId);
-		List<String> volunteers = new ArrayList<>();
-		//TODO retrieve all volunteer names or ids....
-		volunteers.add("broiser");
-		volunteers.add("pstarzer");
-		volunteers.add("mweissenbek");
-		params.put("volunteers", volunteers);
-		
 		return runtimeService.startProcessInstanceByKey(workflowKey, params).getProcessInstanceId();
 	}
 
 	@GetMapping("/{workflowKey}/{instanceId}/step")
 	public List<WorkflowStep> getNextWorkflowSteps(@PathVariable("workflowKey") String workflowKey,
 			@PathVariable("instanceId") String instanceId, @RequestParam("participantId") String participantId) {
-		List<Task> tasks = retrieveActiveTaskByWorkflowKeyAndInstanceIdAndParticipantId(workflowKey, instanceId,
-				participantId);
+		List<Task> tasks = retrieveActiveTaskByInstanceIdAndParticipantId(instanceId, participantId);
 		List<WorkflowStep> steps = new ArrayList<>();
 		tasks.forEach(task -> steps.addAll(workflowStepService.getNextWorkflowSteps(task)));
 		return steps;
@@ -92,18 +73,13 @@ public class WorkflowController {
 			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep,
 			@RequestParam("participantId") String participantId, @RequestHeader("Authorization") String authorization) {
 
-		List<Task> tasks = retrieveActiveTaskByWorkflowKeyAndInstanceIdAndParticipantId(workflowKey, instanceId,
-				participantId);
+		List<Task> tasks = retrieveActiveTaskByInstanceIdAndParticipantId(instanceId, participantId);
 		if (!tasks.stream().anyMatch(task -> StringUtils.equals(task.getId(), workflowStep.getTaskId()))) {
 			throw new UnsupportedOperationException();
 		}
 
 		Map<String, Object> params = new HashMap<>();
-		params.put(WORKFLOW_ACTIVITY_LABEL, workflowStep.getLabel());
 		params.put(ACCESS_TOKEN, authorization);
-		if (workflowStep.getParams() != null) {
-			workflowStep.getParams().forEach((name, value) -> params.put(name, value));
-		}
 		taskService.complete(workflowStep.getTaskId(), params);
 	}
 
@@ -113,8 +89,7 @@ public class WorkflowController {
 		runtimeService.deleteProcessInstance(instanceId, "Workflow is aborted");
 	}
 
-	private List<Task> retrieveActiveTaskByWorkflowKeyAndInstanceIdAndParticipantId(String workflowKey,
-			String instanceId, String participantId) {
+	private List<Task> retrieveActiveTaskByInstanceIdAndParticipantId(String instanceId, String participantId) {
 		return taskService.createTaskQuery().processInstanceId(instanceId).taskAssignee(participantId).active().list();
 	}
 }

@@ -24,9 +24,9 @@ public class WorkflowStepService {
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
 	
 	@Autowired
-	private RepositoryService repositoryService;
-	@Autowired
 	private RuntimeService runtimeService;
+		@Autowired
+	private RepositoryService repositoryService;
 
 	public List<WorkflowStep> getNextWorkflowSteps(Task task) {
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));

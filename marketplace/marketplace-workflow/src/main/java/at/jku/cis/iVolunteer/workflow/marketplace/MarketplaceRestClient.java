@@ -3,10 +3,11 @@ package at.jku.cis.iVolunteer.workflow.marketplace;
 import static java.text.MessageFormat.format;
 
 import java.net.URI;
-import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,18 +18,29 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class MarketplaceRestClient {
 
+	private static final String AUTHORIZATION = "Authorization";
+
 	private static final String TASK_CONTROLLER_URI = "{0}/task/{1}";
 
-	private static final String AUTHORIZATION = "Authorization";
 	@Value("${marketplace.uri}")
 	private URI marketplaceURI;
 
-	public MarketplaceRestClient() {
-	}
-
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
+	public List<Volunteer> findVolunteers(String authorization) {
+		String requestURI = buildMarketplaceRequestURI("/volunteer");
+
+		ParameterizedTypeReference<List<Volunteer>> typeReference = new ParameterizedTypeReference<List<Volunteer>>() {
+		};
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), typeReference).getBody();
+
+	}
+
+	private String buildMarketplaceRequestURI(String requestPath) {
+		return marketplaceURI + requestPath;
+	}
+
 	public void publishTask(String taskId, String authorization) {
 		String requestURI = buildContractorRequestURI(taskId + "/publish");
 		restTemplate.postForObject(requestURI, buildEntity(authorization), Void.class);
