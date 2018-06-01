@@ -5,7 +5,7 @@
     <img src="assets/edit.svg" routerLink="/task/{{task.id}}">
   </div>
 
-  <form class="task-form" [formGroup]="">
+  <form class="task-form">
     <mat-form-field class="full-width">
       <input matInput placeholder="Name" [readonly]="true" [value]="task.name">
     </mat-form-field>
@@ -41,57 +41,15 @@
     </mat-form-field>
   </form>
 
+  <mat-divider></mat-divider>
+
   <div>
-    <button *ngFor="let workflowStep of workflowSteps" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button color="primary">
+    <button *ngFor="let workflowStep of workflowSteps" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button
+            color="primary">
       {{workflowStep.label}}
     </button>
   </div>
 
-  <!--
-  <div *ngIf="role === 'EMPLOYEE'">
-    <div *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'">
-      <mat-divider></mat-divider>
-    </div>
-    <button *ngIf="this.task.status === 'CREATED'" (click)="publish()" mat-raised-button color="primary">
-      Publish
-    </button>
-
-    <button *ngIf="this.task.status === 'PUBLISHED'" routerLink="/task/assign/{{this.task.id}}" mat-raised-button color="primary">
-      Manage Assignments
-    </button>
-
-    <button *ngIf="this.task.status === 'PUBLISHED'" (click)="start()" mat-raised-button color="primary">
-      Start
-    </button>
-
-    <button *ngIf="this.task.status === 'RUNNING'" (click)="suspend()" mat-raised-button color="primary">
-      Suspend
-    </button>
-
-    <button *ngIf="this.task.status === 'SUSPENDED'" (click)="resume()" mat-raised-button color="primary">
-      Resume
-    </button>
-
-    <button *ngIf="this.task.status === 'RUNNING'" (click)="finish()" mat-raised-button color="primary">Finish</button>
-    <button *ngIf="this.task.status !== 'FINISHED' && this.task.status !== 'ABORTED'" (click)="abort()"
-            mat-raised-button color="primary">Abort
-    </button>
-    <mat-divider></mat-divider>
-  </div>
-
-  <div *ngIf="role === 'VOLUNTEER'">
-    <button *ngIf="this.task.status === 'PUBLISHED' && !isAlreadyReserved && !isAlreadyAssigned" (click)="reserve()"
-            mat-raised-button color="primary">
-      Reserve
-    </button>
-    <button *ngIf="this.task.status === 'PUBLISHED' && isAlreadyReserved && !isAlreadyAssigned" (click)="unreserve()"
-            mat-raised-button color="primary">
-      Cancel Reservation
-    </button>
-  </div>
-
-
-  -->
   <mat-divider></mat-divider>
 
   <div *ngIf="role === 'EMPLOYEE'">

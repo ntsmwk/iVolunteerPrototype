@@ -40,8 +40,8 @@ export class TaskAssignComponent implements OnInit {
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
       Promise.all([
-        this.taskInteractionService.findReservedVolunteersByTaskId(this.task).toPromise(),
-        this.taskInteractionService.findAssignedVolunteersByTaskId(this.task).toPromise()
+        this.taskInteractionService.findReservedVolunteersByTask(this.task).toPromise(),
+        this.taskInteractionService.findAssignedVolunteersByTask(this.task).toPromise()
       ]).then((values: Array<any>) => {
         const assignmentVolunteers: AssignmentVolunteer[] = [];
         (<Participant[]> values[0]).forEach((volunteer: Participant) => {
