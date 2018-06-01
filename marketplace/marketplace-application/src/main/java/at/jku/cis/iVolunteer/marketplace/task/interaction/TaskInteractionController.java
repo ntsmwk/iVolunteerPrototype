@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,17 +41,12 @@ public class TaskInteractionController {
 
 	@GetMapping("/task/{taskId}/interaction")
 	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
-			@RequestParam(value = "volunteerId", required = false) String volunteerId,
 			@RequestParam(value = "operation", required = false) TaskOperation operation) {
 
 		Task task = findAndVerifyTaskById(taskId);
 
 		if (operation != null) {
 			return taskInteractionRepository.findByTaskAndOperation(task, operation);
-		}
-		if (StringUtils.isNotBlank(volunteerId)) {
-			Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
-			return taskInteractionRepository.findByTaskAndParticipant(task, volunteer);
 		}
 		return taskInteractionRepository.findByTask(task);
 	}
@@ -74,17 +68,6 @@ public class TaskInteractionController {
 			throw new BadRequestException();
 		}
 		return new ArrayList<>(volunteers);
-	}
-
-	@GetMapping("/task/{taskId}/participant/{participantId}")
-	public TaskOperation getLatestTaskOperation(@PathVariable("taskId") String taskId,
-			@PathVariable("participantId") String participantId) {
-		Volunteer volunteer = volunteerRepository.findOne(participantId);
-		if (volunteer != null) {
-			TaskInteraction taskInteraction = getLatestTaskInteraction(taskRepository.findOne(taskId), volunteer);
-			return taskInteraction != null ? taskInteraction.getOperation() : null;
-		}
-		return null;
 	}
 
 	@PostMapping("/task/{taskId}/reserve")

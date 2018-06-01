@@ -20,8 +20,6 @@ public interface TaskInteractionRepository extends MongoRepository<TaskInteracti
 
 	List<TaskInteraction> findByParticipant(Participant participant);
 
-	List<TaskInteraction> findByTaskAndParticipant(Task task, Participant participant);
-
 	List<TaskInteraction> findSortedByTaskAndParticipant(Task task, Participant participant, Sort sort);
 	
 }

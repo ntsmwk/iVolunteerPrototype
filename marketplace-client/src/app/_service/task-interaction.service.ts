@@ -17,15 +17,12 @@ export class TaskInteractionService {
     return this.http.get('/marketplace/task/' + task.id + '/interaction?operation=FINISHED');
   }
 
-  findReservedVolunteersByTaskId(task: Task) {
+  findReservedVolunteersByTask(task: Task) {
     return this.http.get(`/marketplace/task/${task.id}/participant?operation=RESERVED`);
   }
 
-  findAssignedVolunteersByTaskId(task: Task) {
+  findAssignedVolunteersByTask(task: Task) {
     return this.http.get(`/marketplace/task/${task.id}/participant?operation=ASSIGNED`);
   }
 
-  getLatestTaskOperation(task: Task, participant: Participant) {
-    return this.http.get(`/marketplace/task/${task.id}/participant/${participant.id}`);
-  }
 }
