@@ -16,6 +16,7 @@ public class StartServiceTask implements JavaDelegate {
 
 	private static final String TASK_ID = "taskId";
 	private static final String ACCESS_TOKEN = "accessToken";
+	private static final String VOLUNTEERS = "volunteers";
 
 	@Autowired
 	private TaskService taskService;
@@ -34,6 +35,7 @@ public class StartServiceTask implements JavaDelegate {
 		retrieveAllTaskByDelegationExecution(delegateExecution).forEach((task) -> {
 			taskService.resolveTask(task.getId());
 		});
+		delegateExecution.removeVariable(VOLUNTEERS);
 	}
 
 	private List<Task> retrieveAllTaskByDelegationExecution(DelegateExecution delegateExecution) {
