@@ -5,7 +5,7 @@ import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.workflow.marketplace.MarketplaceRestClient;
+import at.jku.cis.iVolunteer.lib.rest.clients.ContractorRestClient;
 
 @Component
 public class AssignServiceTask implements JavaDelegate {
@@ -14,15 +14,15 @@ public class AssignServiceTask implements JavaDelegate {
 	private static final String VOLUNTEER_ID = "volunteerId";
 
 	@Autowired
-	private MarketplaceRestClient marketplaceRestClient;
+	private ContractorRestClient contractorRestClient;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
 		String taskId = delegateExecution.getVariable(TASK_ID, String.class);
-		String volunteerId =delegateExecution.getVariable(VOLUNTEER_ID, String.class);
+		String volunteerId = delegateExecution.getVariable(VOLUNTEER_ID, String.class);
 		String token = delegateExecution.getVariable("accessToken", String.class);
-		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: "+ volunteerId +"}");
-		
-		marketplaceRestClient.assignTask(taskId, volunteerId, token);
+		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: " + volunteerId + "}");
+
+		contractorRestClient.assignTask(taskId, volunteerId, token);
 	}
 }

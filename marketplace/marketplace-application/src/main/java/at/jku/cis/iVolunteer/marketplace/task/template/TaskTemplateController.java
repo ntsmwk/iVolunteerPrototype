@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.task.template.TaskTemplate;
+
 @RestController
 public class TaskTemplateController {
 

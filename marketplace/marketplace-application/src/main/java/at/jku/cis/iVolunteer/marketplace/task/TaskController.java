@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.exception.NotAcceptableException;
-import at.jku.cis.iVolunteer.marketplace.participant.Volunteer;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
-import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
+import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.TaskStatus;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
 @RestController
 public class TaskController {

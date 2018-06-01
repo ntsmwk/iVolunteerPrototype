@@ -8,9 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.trustifier.model.task.Task;
-import at.jku.cis.iVolunteer.trustifier.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.trustifier.model.volunteer.Volunteer;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 
 @Service
 public class MarketplaceRestClient {
@@ -28,29 +28,29 @@ public class MarketplaceRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public TaskInteraction reserve(String marketplaceURL, String authorization, Task task) {
+	public TaskInteractionDTO reserve(String marketplaceURL, String authorization, TaskDTO task) {
 		String url = format(MARKETPLACE_RESERVE_URL, marketplaceURL, task.getId());
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
 	}
 
-	public TaskInteraction unreserve(String marketplaceURL, String authorization, Task task) {
+	public TaskInteractionDTO unreserve(String marketplaceURL, String authorization, TaskDTO task) {
 		String url = format(MARKETPLACE_UNRESERVE_URL, marketplaceURL, task.getId());
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
 	}
 
-	public TaskInteraction assign(String marketplaceURL, String authorization, Task task, Volunteer volunteer) {
+	public TaskInteractionDTO assign(String marketplaceURL, String authorization, TaskDTO task, VolunteerDTO volunteer) {
 		String url = format(MARKETPLACE_ASSIGN_URL, marketplaceURL, task.getId(), volunteer.getId());
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
 	}
 
-	public TaskInteraction unassign(String marketplaceURL, String authorization, Task task, Volunteer volunteer) {
+	public TaskInteractionDTO unassign(String marketplaceURL, String authorization, TaskDTO task, VolunteerDTO volunteer) {
 		String url = format(MARKETPLACE_UNASSIGN_URL, marketplaceURL, task.getId(), volunteer.getId());
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
 	}
 
-	public TaskInteraction finish(String marketplaceURL, String authorization, Task task) {
+	public TaskInteractionDTO finish(String marketplaceURL, String authorization, TaskDTO task) {
 		String url = format(MARKETPLACE_FINISH_URL, marketplaceURL, task.getId());
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteraction.class);
+		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
 	}
 
 	private HttpEntity<?> buildEntity(String authorization) {

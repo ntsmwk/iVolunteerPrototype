@@ -5,7 +5,7 @@ import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.workflow.marketplace.MarketplaceRestClient;
+import at.jku.cis.iVolunteer.lib.rest.clients.MarketplaceRestClient;
 
 @Component
 public class SuspendServiceTask implements JavaDelegate{

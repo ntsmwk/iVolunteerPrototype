@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.exception.ForbiddenException;
-import at.jku.cis.iVolunteer.marketplace.exception.VerificationFailureException;
-import at.jku.cis.iVolunteer.marketplace.participant.Participant;
+import at.jku.cis.iVolunteer.lib.rest.clients.VerifierRestClient;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
-import at.jku.cis.iVolunteer.marketplace.trustifier.VerifierRestClient;
+import at.jku.cis.iVolunteer.model.exception.ForbiddenException;
+import at.jku.cis.iVolunteer.model.exception.VerificationFailureException;
+import at.jku.cis.iVolunteer.model.participant.Participant;
+import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
 
 @RestController
 @RequestMapping("/volunteer")

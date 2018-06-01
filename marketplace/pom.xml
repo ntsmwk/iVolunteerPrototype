@@ -27,6 +27,8 @@
 		<module>marketplace-application</module>
 		<module>marketplace-security</module>
 		<module>marketplace-workflow</module>
+		<module>marketplace-lib</module>
+		<module>marketplace-model</module>
 	</modules>
 
 	<dependencies>

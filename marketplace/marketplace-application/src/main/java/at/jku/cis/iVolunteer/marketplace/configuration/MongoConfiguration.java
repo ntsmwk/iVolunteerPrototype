@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.convert.CustomConversions;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
-import at.jku.cis.iVolunteer.marketplace.task.interaction.String2TaskOperationConverter;
+import at.jku.cis.iVolunteer.model.task.interaction.String2TaskOperationConverter;
 
 @Configuration
 @EnableAutoConfiguration(exclude = { EmbeddedMongoAutoConfiguration.class })

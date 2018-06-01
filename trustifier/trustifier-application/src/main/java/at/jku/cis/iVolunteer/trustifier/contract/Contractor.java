@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
+import at.jku.cis.iVolunteer.model.contract.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
+import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
+import at.jku.cis.iVolunteer.model.contract.TaskEntry;
+import at.jku.cis.iVolunteer.model.contract.TaskReservation;
+import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
-import at.jku.cis.iVolunteer.trustifier.exception.BadRequestException;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 import at.jku.cis.iVolunteer.trustifier.marketplace.MarketplaceRestClient;
-import at.jku.cis.iVolunteer.trustifier.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.trustifier.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.trustifier.model.task.Task;
-import at.jku.cis.iVolunteer.trustifier.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.trustifier.verification.Verifier;
 
 @RestController
@@ -32,7 +35,7 @@ public class Contractor {
 	private MarketplaceRestClient marketplaceRestClient;
 
 	@PostMapping("/task")
-	public String publishTask(@RequestBody Task task) {
+	public String publishTask(@RequestBody TaskDTO task) {
 		try {
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(task)).getHash();
 		} catch (RestClientException ex) {
@@ -47,7 +50,7 @@ public class Contractor {
 
 		try {
 			String address = reservation.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.reserve(address, authorization,
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.reserve(address, authorization,
 					reservation.getTask());
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 
@@ -63,7 +66,7 @@ public class Contractor {
 
 		try {
 			String address = reservation.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.unreserve(address, authorization,
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.unreserve(address, authorization,
 					reservation.getTask());
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 
@@ -79,8 +82,8 @@ public class Contractor {
 
 		try {
 			String address = assignment.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
-					assignment.getVolunteer());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.assign(address, authorization,
+					assignment.getTask(), assignment.getVolunteer());
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -94,7 +97,7 @@ public class Contractor {
 
 		try {
 			String address = assignment.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.unassign(address, authorization,
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.unassign(address, authorization,
 					assignment.getTask(), assignment.getVolunteer());
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 
@@ -110,7 +113,7 @@ public class Contractor {
 
 		try {
 			String address = completation.getSource().getAddress();
-			TaskInteraction taskInteraction = marketplaceRestClient.finish(address, authorization,
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.finish(address, authorization,
 					completation.getTask());
 			return blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction)).getHash();
 		} catch (RestClientException ex) {

@@ -5,11 +5,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.participant.Employee;
 import at.jku.cis.iVolunteer.marketplace.participant.EmployeeRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.Participant;
-import at.jku.cis.iVolunteer.marketplace.participant.Volunteer;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.participant.Employee;
+import at.jku.cis.iVolunteer.model.participant.Participant;
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
 
 @Service
 public class LoginService {

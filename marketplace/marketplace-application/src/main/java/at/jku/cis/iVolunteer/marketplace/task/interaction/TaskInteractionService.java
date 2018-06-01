@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.participant.Participant;
-import at.jku.cis.iVolunteer.marketplace.participant.Volunteer;
-import at.jku.cis.iVolunteer.marketplace.task.Task;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.participant.Participant;
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
 
 @Service
 public class TaskInteractionService {

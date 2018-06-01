@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
+
 @Service
 public class HashGenerator {
 

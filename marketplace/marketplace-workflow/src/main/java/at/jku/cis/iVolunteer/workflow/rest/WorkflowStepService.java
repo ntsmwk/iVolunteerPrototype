@@ -22,15 +22,15 @@ public class WorkflowStepService {
 
 	private static final String SERVICE_TASK = "serviceTask";
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
-	
+
 	@Autowired
 	private RuntimeService runtimeService;
-		@Autowired
+	@Autowired
 	private RepositoryService repositoryService;
 
 	public List<WorkflowStep> getNextWorkflowSteps(Task task) {
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));
-		
+
 		Set<String> labels = determineWorkflowLabelsForActivity(activity);
 		return labels.stream().map(label -> new WorkflowStep(task.getId(), label)).collect(Collectors.toList());
 	}

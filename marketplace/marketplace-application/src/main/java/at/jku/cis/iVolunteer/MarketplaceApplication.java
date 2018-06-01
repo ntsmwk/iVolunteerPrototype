@@ -9,14 +9,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.marketplace.competence.Competence;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.Employee;
 import at.jku.cis.iVolunteer.marketplace.participant.EmployeeRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.Volunteer;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfile;
 import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfileRepository;
+import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.participant.Employee;
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
 
 @ComponentScan("at.jku.cis.iVolunteer")
 @SpringBootApplication

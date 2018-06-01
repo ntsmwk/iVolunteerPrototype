@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import at.jku.cis.iVolunteer.marketplace.exception.BadRequestException;
-import at.jku.cis.iVolunteer.marketplace.participant.Volunteer;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.TaskInteractionToCompetenceEntryMapper;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.TaskInteractionToTaskEntryMapper;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionToCompetenceEntryMapper;
+import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionToTaskEntryMapper;
+import at.jku.cis.iVolunteer.lib.rest.clients.ContractorPublishingEntityRestClient;
 import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfileRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
-import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionService;
-import at.jku.cis.iVolunteer.marketplace.trustifier.ContractorRestClient;
+import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.TaskStatus;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
 @RestController
 public class TaskOperationController {
@@ -31,7 +33,7 @@ public class TaskOperationController {
 	private LoginService loginService;
 
 	@Autowired
-	private ContractorRestClient contractorRestClient;
+	private ContractorPublishingEntityRestClient contractorRepositoryRestClient;
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -53,7 +55,7 @@ public class TaskOperationController {
 			throw new BadRequestException();
 		}
 
-		//contractorRestClient.publishTask(task);
+		// contractorRestClient.publishTask(task);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
@@ -92,12 +94,11 @@ public class TaskOperationController {
 		}
 		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.FINISHED);
 
-
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 		try {
-			contractorRestClient.publishTaskEntry(taskEntry);
-			competenceEntries.forEach(competenceEntry -> contractorRestClient.publishCompetenceEntry(competenceEntry));
+			contractorRepositoryRestClient.publishTaskEntry(taskEntry);
+			competenceEntries.forEach(competenceEntry -> contractorRepositoryRestClient.publishCompetenceEntry(competenceEntry));
 		} catch (RestClientException ex) {
 			throw new BadRequestException();
 		}

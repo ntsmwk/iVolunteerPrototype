@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.contract.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.contract.TaskEntry;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
-import at.jku.cis.iVolunteer.trustifier.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.trustifier.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.trustifier.model.task.Task;
 
 @RestController
 @RequestMapping("/trustifier/verifier")
@@ -23,7 +23,7 @@ public class Verifier {
 
 
 	@PostMapping("taskInteraction")
-	public boolean verifyTaskInteraction(@RequestBody Task task) {
+	public boolean verifyTaskInteraction(@RequestBody TaskDTO task) {
 		return blockchainRestClient.isTaskInteractionHashInBc(hasher.generateHash(task));
 	}
 

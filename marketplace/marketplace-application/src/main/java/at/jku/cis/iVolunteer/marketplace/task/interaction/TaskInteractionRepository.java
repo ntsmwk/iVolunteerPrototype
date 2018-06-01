@@ -6,8 +6,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import at.jku.cis.iVolunteer.marketplace.participant.Participant;
-import at.jku.cis.iVolunteer.marketplace.task.Task;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.participant.Participant;
+import at.jku.cis.iVolunteer.model.task.TaskOperation;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
 @Repository
 public interface TaskInteractionRepository extends MongoRepository<TaskInteraction, String> {

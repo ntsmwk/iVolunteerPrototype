@@ -10,8 +10,8 @@ import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.workflow.marketplace.MarketplaceRestClient;
-import at.jku.cis.iVolunteer.workflow.marketplace.Volunteer;
+import at.jku.cis.iVolunteer.lib.rest.clients.MarketplaceRestClient;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
 @Component
 public class PublishServiceTask implements JavaDelegate {
@@ -27,13 +27,13 @@ public class PublishServiceTask implements JavaDelegate {
 	public void execute(DelegateExecution delegateExecution) {
 		String taskId = delegateExecution.getVariable(TASK_ID, String.class);
 		String token = delegateExecution.getVariable(ACCESS_TOKEN, String.class);
-		System.out.println( this.getClass().getName() + "{taskId: "+ taskId+"}");
+		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
 		marketplaceRestClient.publishTask(taskId, token);
 		delegateExecution.setVariable(VOLUNTEERS, extractUsername(marketplaceRestClient.findVolunteers(token)));
 	}
 
-	private Set<String> extractUsername(List<Volunteer> volunteers) {
+	private Set<String> extractUsername(List<VolunteerDTO> volunteers) {
 		return volunteers.stream().map(volunteer -> volunteer.getUsername()).collect(toSet());
 	}
 }
