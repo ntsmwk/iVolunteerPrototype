@@ -4,7 +4,7 @@ import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
-public class TaskAssignment {
+public class TaskAssignmentDTO {
 	private SourceDTO source;
 
 	private TaskDTO task;

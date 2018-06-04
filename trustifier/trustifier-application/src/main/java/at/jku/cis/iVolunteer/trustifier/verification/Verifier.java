@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.contract.CompetenceEntry;
-import at.jku.cis.iVolunteer.model.contract.TaskEntry;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
@@ -29,7 +29,7 @@ public class Verifier {
 	}
 
 	@PostMapping("finishedTaskEntry")
-	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntry taskEntry) {
+	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry) {
 		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
 	}
 
@@ -39,7 +39,7 @@ public class Verifier {
 	}
 
 	@PostMapping("competenceEntry")
-	public boolean verifyCompetence(@RequestBody CompetenceEntry competenceEntry) {
+	public boolean verifyCompetence(@RequestBody CompetenceEntryDTO competenceEntry) {
 		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
 	}
 

@@ -2,7 +2,11 @@ package at.jku.cis.iVolunteer.model.participant.profile.dto;
 
 import java.util.Date;
 
-public class CompetenceEntryDTO {
+import com.google.gson.JsonObject;
+
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
+
+public class CompetenceEntryDTO implements IHashObject {
 
 	private String id;
 	private String competenceId;
@@ -48,5 +52,15 @@ public class CompetenceEntryDTO {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("competenceId", competenceId);
+		json.addProperty("competenceName", competenceName);
+		json.addProperty("timestamp", timestamp.toString());
+		return json.toString();
 	}
 }

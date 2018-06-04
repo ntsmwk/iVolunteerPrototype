@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 @Service
 public class ContractorPublishingRestClient {
 
 	private static final String TASK = "task";
-	private static final String TASK_ENTRY = "taskEntry";
+	private static final String FINISHED_TASK_ENTRY = "finishedTaskEntry";
 	private static final String COMPETENCE_ENTRY = "competenceEntry";
 	private static final String CONTRACTOR_URI = "{0}/trustifier/contractor/{1}";
 
@@ -27,19 +27,19 @@ public class ContractorPublishingRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public String publishTask(TaskDTO taskDto) {
+	public String publishTask(TaskDTO task) {
 		String requestURI = buildContractorRequestURI(TASK);
-		return restTemplate.postForObject(requestURI, taskDto, String.class);
+		return restTemplate.postForObject(requestURI, task, String.class);
 	}
 
-	public String publishTaskEntry(TaskEntryDTO taskEntry) {
-		String requestURI = buildContractorRequestURI(TASK_ENTRY);
-		return restTemplate.postForObject(requestURI, taskEntry, String.class);
+	public String publishTaskEntry(VolunteerTaskEntryDTO vte) {
+		String requestURI = buildContractorRequestURI(FINISHED_TASK_ENTRY);
+		return restTemplate.postForObject(requestURI, vte, String.class);
 	}
 
-	public String publishCompetenceEntry(CompetenceEntryDTO competenceEntry) {
+	public String publishCompetenceEntry(VolunteerCompetenceEntryDTO vce) {
 		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
-		return restTemplate.postForObject(requestURI, competenceEntry, String.class);
+		return restTemplate.postForObject(requestURI, vce, String.class);
 	}
 
 	private String buildContractorRequestURI(String requestPath) {

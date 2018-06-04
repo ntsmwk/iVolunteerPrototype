@@ -1,7 +1,5 @@
 package at.jku.cis.iVolunteer.workflow.rest.client;
 
-import static java.text.MessageFormat.format;
-
 import java.net.URI;
 import java.util.List;
 
@@ -19,8 +17,6 @@ import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 @Service
 public class MarketplaceRestClient extends RestClient {
 
-	private static final String TASK_CONTROLLER_URI = "{0}/task/{1}";
-
 	@Value("${marketplace.uri}")
 	private URI marketplaceURI;
 
@@ -36,7 +32,8 @@ public class MarketplaceRestClient extends RestClient {
 
 	public VolunteerDTO findVolunteerByID(String volunteerId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI("/volunteer/" + volunteerId);
-		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class).getBody();
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
+				.getBody();
 	}
 
 	public TaskDTO findTaskById(String taskId, String authorization) {

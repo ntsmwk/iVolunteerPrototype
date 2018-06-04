@@ -23,6 +23,8 @@ import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
@@ -107,14 +109,6 @@ public class TaskOperationController {
 
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
-		try {
-			contractorRepositoryRestClient.publishTaskEntry(taskEntryMapper.toDTO(taskEntry));
-			competenceEntries.forEach(competenceEntry -> {
-				contractorRepositoryRestClient.publishCompetenceEntry(competenceEntryMapper.toDTO(competenceEntry));
-			});
-		} catch (RestClientException ex) {
-			throw new BadRequestException();
-		}
 
 		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
 			@Override
@@ -127,6 +121,24 @@ public class TaskOperationController {
 				volunteerProfile.getTaskList().add(taskEntry);
 				volunteerProfile.getCompetenceList().addAll(competenceEntries);
 				volunteerProfileRepository.save(volunteerProfile);
+
+				try {
+
+					VolunteerTaskEntryDTO vte = (VolunteerTaskEntryDTO) taskEntryMapper.toDTO(taskEntry);
+					vte.setVolunteerId(volunteer.getId());
+
+					contractorRepositoryRestClient.publishTaskEntry(vte);
+					competenceEntries.forEach(competenceEntry -> {
+
+						VolunteerCompetenceEntryDTO vce = (VolunteerCompetenceEntryDTO) competenceEntryMapper
+								.toDTO(competenceEntry);
+						vce.setVolunteerId(volunteer.getId());
+						contractorRepositoryRestClient.publishCompetenceEntry(vce);
+					});
+				} catch (RestClientException ex) {
+					throw new BadRequestException();
+				}
+
 			}
 		});
 

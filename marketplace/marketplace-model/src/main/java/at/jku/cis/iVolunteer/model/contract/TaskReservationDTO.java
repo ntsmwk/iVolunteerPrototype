@@ -3,10 +3,18 @@ package at.jku.cis.iVolunteer.model.contract;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
-public class TaskCompletation {
+public class TaskReservationDTO {
 
 	private SourceDTO source;
 	private TaskDTO task;
+
+	public TaskReservationDTO() {
+	}
+
+	public TaskReservationDTO(SourceDTO source, TaskDTO task) {
+		this.source = source;
+		this.task = task;
+	}
 
 	public SourceDTO getSource() {
 		return source;

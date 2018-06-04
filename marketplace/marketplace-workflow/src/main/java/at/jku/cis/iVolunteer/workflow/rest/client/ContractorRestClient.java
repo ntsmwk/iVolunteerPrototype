@@ -6,23 +6,24 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
-import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
-import at.jku.cis.iVolunteer.model.contract.TaskReservation;
+import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
+import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
+import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 @Service
 public class ContractorRestClient extends RestClient {
 	private static final String CONTRACTOR_URI = "{0}/trustifier/contractor/task/{1}";
-	private static final String RESERVE = "/reserve";
-	private static final String UNRESERVE = "/unreserve";
-	private static final String ASSIGN = "/assign";
-	private static final String UNASSIGN = "/unassign";
-	private static final String FINISH = "/finish";
+	private static final String RESERVE = "reserve";
+	private static final String UNRESERVE = "unreserve";
+	private static final String ASSIGN = "assign";
+	private static final String UNASSIGN = "unassign";
+	private static final String FINISH = "finish";
 
 	@Value("${marketplace.trustifier.uri}")
 	private URI trustifierUri;
@@ -30,56 +31,50 @@ public class ContractorRestClient extends RestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public void reserveTask(String taskId, String authorization) {
+	public void reserveTask(TaskDTO task, SourceDTO source, String authorization) {
 		String requestURI = buildContractorRequestURI(RESERVE);
-		TaskReservation reservation = new TaskReservation();
-		// reservation.setSource(source);
-		// reservation.setTask(task);
+		TaskReservationDTO reservation = new TaskReservationDTO();
+		reservation.setSource(source);
+		reservation.setTask(task);
 
 		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
 	}
 
-	public void unreserveTask(String taskId, String authorization) {
-		String requestURI = buildContractorRequestURI(taskId + UNRESERVE);
-		TaskReservation reservation = new TaskReservation();
-		// reservation.setSource(source);
-		// reservation.setTask(task);
+	public void unreserveTask(TaskDTO task, SourceDTO source, String authorization) {
+		String requestURI = buildContractorRequestURI(UNRESERVE);
+		TaskReservationDTO reservation = new TaskReservationDTO();
+		reservation.setSource(source);
+		reservation.setTask(task);
 
 		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
 
 	}
 
-	public void assignTask(String taskId, String volunteerId, String authorization) {
-		String requestURI = buildContractorRequestURI(taskId + ASSIGN);
-		TaskAssignment assignment = new TaskAssignment();
-		// assignment.setSource(source);
-		// assignment.setTask(task);
-		// assignment.setVolunteer(volunteer);
+	public void assignTask(TaskDTO task, SourceDTO source, VolunteerDTO volunteer, String authorization) {
+		String requestURI = buildContractorRequestURI(ASSIGN);
+		TaskAssignmentDTO assignment = new TaskAssignmentDTO();
+		assignment.setSource(source);
+		assignment.setTask(task);
+		assignment.setVolunteer(volunteer);
 
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestURI).queryParam("volunteerId",
-				volunteerId);
-		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, buildEntity(assignment, authorization),
-				Void.class);
+		restTemplate.postForObject(requestURI, buildEntity(assignment, authorization), Void.class);
 	}
 
-	public void unassignTask(String taskId, String volunteerId, String authorization) {
-		String requestURI = buildContractorRequestURI(taskId + UNASSIGN);
-		TaskAssignment assignment = new TaskAssignment();
-		// assignment.setSource(source);
-		// assignment.setTask(task);
-		// assignment.setVolunteer(volunteer);
+	public void unassignTask(TaskDTO task, SourceDTO source, VolunteerDTO volunteer, String authorization) {
+		String requestURI = buildContractorRequestURI(UNASSIGN);
+		TaskAssignmentDTO assignment = new TaskAssignmentDTO();
+		assignment.setSource(source);
+		assignment.setTask(task);
+		assignment.setVolunteer(volunteer);
 
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestURI).queryParam("volunteerId",
-				volunteerId);
-		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, buildEntity(assignment, authorization),
-				Void.class);
+		restTemplate.postForObject(requestURI, buildEntity(assignment, authorization), Void.class);
 	}
 
-	public void finishTask(String taskId, String authorization) {
-		String requestURI = buildContractorRequestURI(taskId + FINISH);
-		TaskCompletation completation = new TaskCompletation();
-		// completation.setSource(source);
-		// completation.setTask(task);
+	public void finishTask(TaskDTO task, SourceDTO source, String authorization) {
+		String requestURI = buildContractorRequestURI(FINISH);
+		TaskCompletationDTO completation = new TaskCompletationDTO();
+		completation.setSource(source);
+		completation.setTask(task);
 
 		restTemplate.postForObject(requestURI, buildEntity(completation, authorization), Void.class);
 	}

@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
-import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
-import at.jku.cis.iVolunteer.model.contract.TaskReservation;
-import at.jku.cis.iVolunteer.model.contract.VolunteerCompetenceEntry;
-import at.jku.cis.iVolunteer.model.contract.VolunteerTaskEntry;
+import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
+import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
+import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
@@ -46,7 +46,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/reserve")
-	public void reserveTask(@RequestBody TaskReservation reservation,
+	public void reserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
 		verifier.verifyPublishedTask(reservation.getTask());
 
@@ -64,7 +64,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/unreserve")
-	public void unreserveTask(@RequestBody TaskReservation reservation,
+	public void unreserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
 		verifier.verifyPublishedTask(reservation.getTask());
 
@@ -82,7 +82,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/assign")
-	public void assignTask(@RequestBody TaskAssignment assignment,
+	public void assignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
 		verifier.verifyPublishedTask(assignment.getTask());
 
@@ -101,7 +101,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/unassign")
-	public void unassignTask(@RequestBody TaskAssignment assignment,
+	public void unassignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
 		verifier.verifyPublishedTask(assignment.getTask());
 
@@ -120,7 +120,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/finish")
-	public void finishTask(@RequestBody TaskCompletation completation,
+	public void finishTask(@RequestBody TaskCompletationDTO completation,
 			@RequestHeader("Authorization") String authorization) {
 		verifier.verifyPublishedTask(completation.getTask());
 
@@ -139,7 +139,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/competenceEntry")
-	public void publishCompetenceEntry(@RequestBody VolunteerCompetenceEntry vce) {
+	public void publishCompetenceEntry(@RequestBody VolunteerCompetenceEntryDTO vce) {
 		try {
 
 			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
@@ -152,7 +152,7 @@ public class Contractor {
 	}
 
 	@PostMapping("/finishedTaskEntry")
-	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntry vte) {
+	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntryDTO vte) {
 		try {
 
 			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
