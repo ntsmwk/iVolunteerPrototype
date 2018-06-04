@@ -72,6 +72,7 @@ public class BlockchainRestClient {
 
 		try {
 			restTemplate.postForObject(requestUrl, t, BcPublishedTask.class);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
