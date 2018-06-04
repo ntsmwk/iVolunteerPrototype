@@ -10,8 +10,8 @@ import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.lib.rest.clients.MarketplaceRestClient;
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.workflow.rest.client.MarketplaceRestClient;
 
 @Component
 public class PublishServiceTask implements JavaDelegate {

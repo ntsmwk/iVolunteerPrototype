@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.lib.rest.clients;
+package at.jku.cis.iVolunteer.workflow.rest.client;
 
 import static java.text.MessageFormat.format;
 
@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import at.jku.cis.iVolunteer.lib.rest.RestUtils;
 import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
 import at.jku.cis.iVolunteer.model.contract.TaskReservation;
 
 @Service
-public class ContractorRestClient {
+public class ContractorRestClient extends RestClient {
 	private static final String CONTRACTOR_URI = "{0}/trustifier/contractor/task/{1}";
 	private static final String RESERVE = "/reserve";
 	private static final String UNRESERVE = "/unreserve";
@@ -31,14 +30,13 @@ public class ContractorRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-
 	public void reserveTask(String taskId, String authorization) {
 		String requestURI = buildContractorRequestURI(RESERVE);
 		TaskReservation reservation = new TaskReservation();
 		// reservation.setSource(source);
 		// reservation.setTask(task);
 
-		restTemplate.postForObject(requestURI, RestUtils.buildEntity(reservation, authorization), Void.class);
+		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
 	}
 
 	public void unreserveTask(String taskId, String authorization) {
@@ -47,7 +45,7 @@ public class ContractorRestClient {
 		// reservation.setSource(source);
 		// reservation.setTask(task);
 
-		restTemplate.postForObject(requestURI, RestUtils.buildEntity(reservation, authorization), Void.class);
+		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
 
 	}
 
@@ -60,7 +58,7 @@ public class ContractorRestClient {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestURI).queryParam("volunteerId",
 				volunteerId);
-		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, RestUtils.buildEntity(assignment, authorization),
+		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, buildEntity(assignment, authorization),
 				Void.class);
 	}
 
@@ -73,7 +71,7 @@ public class ContractorRestClient {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestURI).queryParam("volunteerId",
 				volunteerId);
-		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, RestUtils.buildEntity(assignment, authorization),
+		restTemplate.exchange(builder.toUriString(), HttpMethod.POST, buildEntity(assignment, authorization),
 				Void.class);
 	}
 
@@ -82,8 +80,8 @@ public class ContractorRestClient {
 		TaskCompletation completation = new TaskCompletation();
 		// completation.setSource(source);
 		// completation.setTask(task);
-		
-		restTemplate.postForObject(requestURI, RestUtils.buildEntity(completation, authorization), Void.class);
+
+		restTemplate.postForObject(requestURI, buildEntity(completation, authorization), Void.class);
 	}
 
 	private String buildContractorRequestURI(String requestPath) {
