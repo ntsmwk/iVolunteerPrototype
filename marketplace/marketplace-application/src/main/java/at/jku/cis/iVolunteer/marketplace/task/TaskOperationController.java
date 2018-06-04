@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,9 @@ public class TaskOperationController {
 	private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
+	
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
 
 	@PostMapping("/task/{id}/publish")
 	public void publishTask(@PathVariable("id") String id) {
@@ -108,7 +112,12 @@ public class TaskOperationController {
 		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.FINISHED);
 
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
+		taskEntry.setMarketplaceId(marketplaceId);
+		
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
+		for(CompetenceEntry ce : competenceEntries) {
+			ce.setMarketplaceId(marketplaceId);
+		}
 
 		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
 			@Override

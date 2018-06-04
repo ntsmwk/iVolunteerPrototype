@@ -7,6 +7,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -71,10 +72,11 @@ public class BlockchainRestClient {
 		BcPublishedTask t = new BcPublishedTask(hash, timestamp, taskId, marketplaceId);
 
 		try {
-			restTemplate.postForObject(requestUrl, t, BcPublishedTask.class);
+			restTemplate.postForObject(requestUrl, t, Void.class);
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
 		}
 
 	}
@@ -85,7 +87,7 @@ public class BlockchainRestClient {
 		BcTaskInteraction ti = new BcTaskInteraction(hash, timestamp, taskId, marketplaceId, taskInteractionType);
 
 		try {
-			restTemplate.postForObject(requestUrl, ti, BcTaskInteraction.class);
+			restTemplate.postForObject(requestUrl, ti, Void.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -97,7 +99,7 @@ public class BlockchainRestClient {
 		BcFinishedTask ft = new BcFinishedTask(hash, timestamp, taskId, marketplaceId, volunteerId);
 
 		try {
-			restTemplate.postForObject(requestUrl, ft, BcFinishedTask.class);
+			restTemplate.postForObject(requestUrl, ft, Void.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -110,7 +112,7 @@ public class BlockchainRestClient {
 		BcCompetence c = new BcCompetence(hash, timestamp, competenceId, marketplaceId, volunteerId);
 
 		try {
-			restTemplate.postForObject(requestUrl, c, BcCompetence.class);
+			restTemplate.postForObject(requestUrl, c, Void.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
