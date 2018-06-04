@@ -14,9 +14,11 @@ public class TaskDTO implements IHashObject {
 	private String name;
 	private String description;
 	private String workflowKey;
+	private String marketplaceId;
+	private TaskStatus status;
+
 	private AddressDTO address;
 	private MaterialDTO material;
-	private TaskStatus status;
 
 	private Date startDate;
 	private Date endDate;
@@ -53,6 +55,14 @@ public class TaskDTO implements IHashObject {
 
 	public void setWorkflowKey(String workflowKey) {
 		this.workflowKey = workflowKey;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public TaskStatus getStatus() {
@@ -117,6 +127,7 @@ public class TaskDTO implements IHashObject {
 		json.addProperty("id", id);
 		json.addProperty("name", name);
 		json.addProperty("description", description);
+		json.addProperty("marketplaceId", marketplaceId);
 		// json.addProperty("address", address.toString());
 		// json.addProperty("material", material.toString());
 		// json.addProperty("parent", parent.getId());

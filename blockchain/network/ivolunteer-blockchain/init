@@ -11,6 +11,8 @@ rm -fr $HOME/.composer
 rm *.card
 rm *.bna
 
+docker rmi -f $(docker images |grep 'dev-peer0.org1.example.com-ivolunteer-blockchain')
+
 # Starting the Fabric
 ~/fabric-tools/downloadFabric.sh
 ~/fabric-tools/startFabric.sh

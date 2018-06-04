@@ -20,17 +20,47 @@ namespace at.jku.cis
 
 participant Marketplace identified by id {
   o String id
-  o String name
 }
 
-asset CompetenceEntryHash identified by hash {
+asset publishedTask identified by hash {
   o String hash
+  o DateTime timestamp
+  o String taskId
+  o String marketplaceId
 }
 
-asset TaskEntryHash identified by hash {
+asset finishedTask identified by hash {
   o String hash
+  o DateTime timestamp
+  o String taskId
+  o String marketplaceId
+  o String volunteerId
 }
 
-asset TaskInteractionHash identified by hash {
+asset taskInteraction identified by hash {
   o String hash
+  o DateTime timestamp
+  o String taskId
+  o String marketplaceId
+  // o String volunteerId
+  o taskInteractionType type
 }
+
+asset competence identified by hash {
+  o String hash
+  o DateTime timestamp
+  o String competenceId
+  o String marketplaceId
+  o String volunteerId
+}
+
+enum taskInteractionType {
+o CREATED 
+o PUBLISHED
+o RUNNING
+o FINISHED
+o SUSPENDED
+o ABORTED
+}
+
+

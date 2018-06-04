@@ -16,9 +16,9 @@ import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 @Service
 public class VerifierRestClient {
 
-	private static final String TASK = "task";
-	private static final String TASK_ENTRY = "taskEntry";
-	private static final String COMPETENCE_ENTRY = "competenceEntry";
+	private static final String PUBLISHED_TASK = "publishedTask";
+	private static final String PUBLISHED_TASK_Entry = "finishedTaskEntry";
+	private static final String PUBLISHED_COMPETENCE_ENTRY = "competenceEntry";
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
 
@@ -29,17 +29,17 @@ public class VerifierRestClient {
 	private RestTemplate restTemplate;
 	
 	public boolean verifyTask(TaskDTO task) {
-		String requestURI = buildContractorRequestURI(TASK);
+		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
 		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();
 	}
 
 	public boolean verifyTaskEntry(TaskEntryDTO taskEntry) {
-		String requestURI = buildContractorRequestURI(TASK_ENTRY);
+		String requestURI = buildContractorRequestURI(PUBLISHED_TASK_Entry);
 		return restTemplate.postForObject(requestURI, taskEntry, Boolean.class).booleanValue();
 	}
 
 	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry) {
-		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
+		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, competenceEntry, Boolean.class).booleanValue();
 	}
 

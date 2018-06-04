@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.model.contract.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.contract.TaskEntry;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 
@@ -21,20 +22,25 @@ public class Verifier {
 	@Autowired
 	private BlockchainRestClient blockchainRestClient;
 
-
 	@PostMapping("taskInteraction")
-	public boolean verifyTaskInteraction(@RequestBody TaskDTO task) {
-		return blockchainRestClient.isTaskInteractionHashInBc(hasher.generateHash(task));
+	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction) {
+		return (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction)) == null) ? false
+				: true;
 	}
 
-	@PostMapping("taskEntry")
-	public boolean verifyTaskEntry(@RequestBody TaskEntry taskEntry) {
-		return blockchainRestClient.isTaskEntryHashInBc(hasher.generateHash(taskEntry));
+	@PostMapping("finishedTaskEntry")
+	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntry taskEntry) {
+		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
+	}
+
+	@PostMapping("publishedTask")
+	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
+		return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)) == null) ? false : true;
 	}
 
 	@PostMapping("competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntry competenceEntry) {
-		return blockchainRestClient.isCompetenceEntryHashInBc(hasher.generateHash(competenceEntry));
+		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
 	}
 
 }

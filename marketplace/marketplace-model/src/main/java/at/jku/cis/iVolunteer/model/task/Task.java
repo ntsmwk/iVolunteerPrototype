@@ -17,6 +17,7 @@ public class Task {
 	private String name;
 	private String description;
 	private String workflowKey;
+	private String marketplaceId;
 	private Address address;
 	private Material material;
 	private TaskStatus status;
@@ -57,6 +58,15 @@ public class Task {
 
 	public void setWorkflowKey(String workflowKey) {
 		this.workflowKey = workflowKey;
+	}
+	
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public Address getAddress() {

@@ -2,6 +2,8 @@
 package at.jku.cis.iVolunteer.trustifier.blockchain;
 
 import java.text.MessageFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,97 +20,99 @@ public class BlockchainRestClient {
 
 	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BlockchainRestClient.class);
 
-	public boolean isCompetenceEntryHashInBc(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/CompetenceEntryHashInBc/{1}", url, hash);
+	public BcPublishedTask getPublishedTaskHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/publishedTask/{1}", url, hash);
+		BcPublishedTask c = null;
 		try {
-			restTemplate.getForObject(requestUrl, String.class);
+			c = restTemplate.getForObject(requestUrl, BcPublishedTask.class);
 		} catch (Exception e) {
-			return false;
+			logger.error(e.getMessage());
 		}
-		return true;
+		return c;
 	}
 
-	public Hash postCompetenceEntryHash(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/CompetenceEntryHash", url);
-		Hash h = new Hash(hash);
+	public BcTaskInteraction getTaskInteractionHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/taskInteraction/{1}", url, hash);
+		BcTaskInteraction c = null;
+		try {
+			c = restTemplate.getForObject(requestUrl, BcTaskInteraction.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return c;
+	}
+
+	public BcFinishedTask getFinishedTaskHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/finishedTask/{1}", url, hash);
+		BcFinishedTask c = null;
+		try {
+			c = restTemplate.getForObject(requestUrl, BcFinishedTask.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return c;
+
+	}
+
+	public BcCompetence getCompetenceHash(String hash) {
+		String requestUrl = MessageFormat.format("{0}/api/competence/{1}", url, hash);
+		BcCompetence c = null;
+		try {
+			c = restTemplate.getForObject(requestUrl, BcCompetence.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return c;
+
+	}
+
+	public void postPublishedTaskHash(String hash, Date timestamp, String taskId, String marketplaceId) {
+		String requestUrl = MessageFormat.format("{0}/api/publishedTask", url);
+		BcPublishedTask t = new BcPublishedTask(hash, timestamp, taskId, marketplaceId);
 
 		try {
-			restTemplate.postForObject(requestUrl, h, Hash.class);
+			restTemplate.postForObject(requestUrl, t, BcPublishedTask.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		return h;
 	}
 
-	public void deletCeompetenceEntryHash(String hash) {
+	public void postTaskInteractionHash(String hash, Date timestamp, String taskId, String marketplaceId,
+			String taskInteractionType) {
+		String requestUrl = MessageFormat.format("{0}/api/taskInteraction", url);
+		BcTaskInteraction ti = new BcTaskInteraction(hash, timestamp, taskId, marketplaceId, taskInteractionType);
+
 		try {
-			restTemplate.delete(MessageFormat.format("{0}/api/CompetenceEntryHash/{1}", url, hash));
+			restTemplate.postForObject(requestUrl, ti, BcTaskInteraction.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
 
-	public boolean isTaskEntryHashInBc(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/TaskEntryHash/{1}", url, hash);
-		try {
-			restTemplate.getForObject(requestUrl, String.class);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	public Hash postTaskEntryHash(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/TaskEntryHash", url);
-		Hash h = new Hash(hash);
+	public void postFinishedTaskHash(String hash, Date timestamp, String taskId, String marketplaceId,
+			String volunteerId) {
+		String requestUrl = MessageFormat.format("{0}/api/finishedTask", url);
+		BcFinishedTask ft = new BcFinishedTask(hash, timestamp, taskId, marketplaceId, volunteerId);
 
 		try {
-			restTemplate.postForObject(requestUrl, h, Hash.class);
+			restTemplate.postForObject(requestUrl, ft, BcFinishedTask.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		return h;
 	}
 
-	public void deleteTaskEntryHash(String hash) {
-		try {
-			restTemplate.delete(MessageFormat.format("{0}/api/TaskEntryHash/{1}", url, hash));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-	}
-
-	public boolean isTaskInteractionHashInBc(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/TaskInteractionHash/{1}", url, hash);
-		try {
-			restTemplate.getForObject(requestUrl, String.class);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	public Hash postTaskInteractionHash(String hash) {
-		String requestUrl = MessageFormat.format("{0}/api/TaskInteractionHash", url);
-
-		Hash h = new Hash(hash);
+	public void postCompetenceHash(String hash, Date timestamp, String competenceId, String marketplaceId,
+			String volunteerId) {
+		String requestUrl = MessageFormat.format("{0}/api/competence", url);
+		BcCompetence c = new BcCompetence(hash, timestamp, competenceId, marketplaceId, volunteerId);
 
 		try {
-			restTemplate.postForObject(requestUrl, h, Hash.class);
+			restTemplate.postForObject(requestUrl, c, BcCompetence.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
-		return h;
-	}
-
-	public void deleteTaskInteractionHash(String hash) {
-		try {
-			restTemplate.delete(MessageFormat.format("{0}/api/TaskInteractionHash/{1}", url, hash));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
 	}
 }

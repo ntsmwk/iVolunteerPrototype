@@ -12,6 +12,7 @@ public class CompetenceEntry implements IHashObject {
 	private String competenceId;
 	private String competenceName;
 	private Date timestamp;
+	private String marketplaceId;
 
 	public String getId() {
 		return id;
@@ -43,6 +44,14 @@ public class CompetenceEntry implements IHashObject {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	@Override
