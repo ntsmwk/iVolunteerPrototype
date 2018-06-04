@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,9 @@ public class TaskController {
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
+	
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
@@ -73,6 +77,7 @@ public class TaskController {
 	public TaskDTO createTask(@RequestBody TaskDTO taskDto) {
 		Task task = taskMapper.toEntity(taskDto);
 		task.setStatus(TaskStatus.CREATED);
+		task.setMarketplaceId(marketplaceId);
 
 		Task createdTask = taskRepository.insert(task);
 
