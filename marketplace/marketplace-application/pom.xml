@@ -24,7 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>at.jku.cis</groupId>
-			<artifactId>marketplace-model</artifactId>
+			<artifactId>marketplace-mapper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
