@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.lib.rest.clients;
+package at.jku.cis.iVolunteer.marketplace.participant.profile;
 
 import static java.text.MessageFormat.format;
 
@@ -9,18 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 @Service
 public class VerifierRestClient {
 
-	private static final String TASK_INTERACTION = "taskInteraction";
 	private static final String PUBLISHED_TASK = "publishedTask";
-	private static final String FINISHED_TASK_Entry = "finishedTaskEntry";
-	private static final String COMPETENCE_ENTRY = "competenceEntry";
+	private static final String PUBLISHED_TASK_Entry = "finishedTaskEntry";
+	private static final String PUBLISHED_COMPETENCE_ENTRY = "competenceEntry";
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
 
@@ -29,24 +27,19 @@ public class VerifierRestClient {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
-	public boolean verifyPublishedTask(Task task) {
+	
+	public boolean verifyTask(TaskDTO task) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
 		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();
 	}
 
-	public boolean verifyTaskInteraction(TaskInteraction taskInteraction) {
-		String requestURI = buildContractorRequestURI(TASK_INTERACTION);
-		return restTemplate.postForObject(requestURI, taskInteraction, Boolean.class).booleanValue();
-	}
-
-	public boolean verifyFinishedTask(TaskEntry taskEntry) {
-		String requestURI = buildContractorRequestURI(FINISHED_TASK_Entry);
+	public boolean verifyTaskEntry(TaskEntryDTO taskEntry) {
+		String requestURI = buildContractorRequestURI(PUBLISHED_TASK_Entry);
 		return restTemplate.postForObject(requestURI, taskEntry, Boolean.class).booleanValue();
 	}
 
-	public boolean verifyCompetenceEntry(CompetenceEntry competenceEntry) {
-		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
+	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry) {
+		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, competenceEntry, Boolean.class).booleanValue();
 	}
 

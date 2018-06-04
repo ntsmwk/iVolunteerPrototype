@@ -5,26 +5,26 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 
-public abstract class AbstractMapper<ENTITY, DTO> {
+public abstract class AbstractMapper<Entity, DTO> {
 
-	private final Class<ENTITY> enitityClazz;
+	private final Class<Entity> enitityClazz;
 	private final Class<DTO> dtoClazz;
 
-	protected AbstractMapper(Class<ENTITY> enitityClazz, Class<DTO> dtoClazz) {
+	protected AbstractMapper(Class<Entity> enitityClazz, Class<DTO> dtoClazz) {
 		super();
 		this.enitityClazz = enitityClazz;
 		this.dtoClazz = dtoClazz;
 	}
 
-	public List<ENTITY> toEntities(List<DTO> dtos) {
+	public List<Entity> toEntities(List<DTO> dtos) {
 		return dtos.stream().map(p -> toEntity(p)).collect(Collectors.toList());
 	}
 
-	public List<DTO> toDTOs(List<ENTITY> entities) {
+	public List<DTO> toDTOs(List<Entity> entities) {
 		return entities.stream().map(p -> toDTO(p)).collect(Collectors.toList());
 	}
 
-	public DTO toDTO(ENTITY entity, String... ignoreProperties) {
+	public DTO toDTO(Entity entity, String... ignoreProperties) {
 		if (entity == null)
 			return null;
 		try {
@@ -36,11 +36,11 @@ public abstract class AbstractMapper<ENTITY, DTO> {
 		return null;
 	}
 
-	public ENTITY toEntity(DTO dto, String... ignoreProperties) {
+	public Entity toEntity(DTO dto, String... ignoreProperties) {
 		if (dto == null)
 			return null;
 		try {
-			final ENTITY entity = enitityClazz.newInstance();
+			final Entity entity = enitityClazz.newInstance();
 			BeanUtils.copyProperties(dto, entity, ignoreProperties);
 			return entity;
 		} catch (InstantiationException | IllegalAccessException e) {

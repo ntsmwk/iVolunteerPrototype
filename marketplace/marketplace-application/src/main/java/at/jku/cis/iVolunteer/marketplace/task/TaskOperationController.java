@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionToCompetenceEntryMapper;
-import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionToTaskEntryMapper;
-import at.jku.cis.iVolunteer.lib.rest.clients.ContractorPublishingEntityRestClient;
+import at.jku.cis.iVolunteer.lib.mapper.participant.profile.CompetenceEntryMapper;
+import at.jku.cis.iVolunteer.lib.mapper.participant.profile.TaskEntryMapper;
+import at.jku.cis.iVolunteer.lib.mapper.task.TaskMapper;
+import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfileRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
@@ -25,6 +26,7 @@ import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 
 @RestController
 public class TaskOperationController {
@@ -33,10 +35,19 @@ public class TaskOperationController {
 	private LoginService loginService;
 
 	@Autowired
-	private ContractorPublishingEntityRestClient contractorRepositoryRestClient;
+	private ContractorPublishingRestClient contractorRepositoryRestClient;
 
 	@Autowired
+	private CompetenceEntryMapper competenceEntryMapper;
+
+	@Autowired
+	private TaskMapper taskMapper;
+	@Autowired
 	private TaskRepository taskRepository;
+	@Autowired
+	private TaskEntryMapper taskEntryMapper;
+	@Autowired
+	private TaskInteractionMapper taskInteractionMapper;
 	@Autowired
 	private TaskInteractionService taskInteractionService;
 	@Autowired
@@ -55,7 +66,7 @@ public class TaskOperationController {
 			throw new BadRequestException();
 		}
 
-		// contractorRestClient.publishTask(task);
+		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task));
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
@@ -87,7 +98,7 @@ public class TaskOperationController {
 	}
 
 	@PostMapping("/task/{id}/finish")
-	public TaskInteraction finishTask(@PathVariable("id") String id) {
+	public TaskInteractionDTO finishTask(@PathVariable("id") String id) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
@@ -97,8 +108,10 @@ public class TaskOperationController {
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 		try {
-			contractorRepositoryRestClient.publishTaskEntry(taskEntry);
-			competenceEntries.forEach(competenceEntry -> contractorRepositoryRestClient.publishCompetenceEntry(competenceEntry));
+			contractorRepositoryRestClient.publishTaskEntry(taskEntryMapper.toDTO(taskEntry));
+			competenceEntries.forEach(competenceEntry -> {
+				contractorRepositoryRestClient.publishCompetenceEntry(competenceEntryMapper.toDTO(competenceEntry));
+			});
 		} catch (RestClientException ex) {
 			throw new BadRequestException();
 		}
@@ -117,7 +130,7 @@ public class TaskOperationController {
 			}
 		});
 
-		return taskInteraction;
+		return taskInteractionMapper.toDTO(taskInteraction);
 	}
 
 	@PostMapping("/task/{id}/abort")

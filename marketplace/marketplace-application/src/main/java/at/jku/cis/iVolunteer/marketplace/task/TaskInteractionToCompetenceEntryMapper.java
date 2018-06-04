@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.lib.mapper.task.interaction;
+package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.Collections;
 import java.util.Date;
@@ -8,12 +8,12 @@ import java.util.UUID;
 
 import org.apache.commons.collections4.Transformer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
-@Component
+@Service
 public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskInteraction, Set<CompetenceEntry>> {
 
 	@Value("${marketplace.identifier}")

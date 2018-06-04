@@ -1,14 +1,14 @@
-package at.jku.cis.iVolunteer.lib.mapper.task.interaction;
+package at.jku.cis.iVolunteer.marketplace.task;
 
 import org.apache.commons.collections4.Transformer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
-@Component
+@Service
 public class TaskInteractionToTaskEntryMapper implements Transformer<TaskInteraction, TaskEntry> {
 
 	@Value("${marketplace.identifier}")
