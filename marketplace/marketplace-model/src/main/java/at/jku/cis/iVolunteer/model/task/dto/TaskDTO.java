@@ -17,13 +17,12 @@ public class TaskDTO implements IHashObject {
 	private String marketplaceId;
 	private TaskStatus status;
 
-	private AddressDTO address;
-	private MaterialDTO material;
-
 	private Date startDate;
 	private Date endDate;
 	private List<CompetenceDTO> acquirableCompetences;
 	private List<CompetenceDTO> requiredCompetences;
+
+	private TaskDTO parent;
 
 	public String getId() {
 		return id;
@@ -73,22 +72,6 @@ public class TaskDTO implements IHashObject {
 		this.status = status;
 	}
 
-	public AddressDTO getAddress() {
-		return address;
-	}
-
-	public void setAddress(AddressDTO address) {
-		this.address = address;
-	}
-
-	public MaterialDTO getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(MaterialDTO material) {
-		this.material = material;
-	}
-
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -121,6 +104,14 @@ public class TaskDTO implements IHashObject {
 		this.requiredCompetences = requiredCompetences;
 	}
 
+	public TaskDTO getParent() {
+		return parent;
+	}
+
+	public void setParent(TaskDTO parent) {
+		this.parent = parent;
+	}
+
 	@Override
 	public String toHashObject() {
 		JsonObject json = new JsonObject();
@@ -128,8 +119,6 @@ public class TaskDTO implements IHashObject {
 		json.addProperty("name", name);
 		json.addProperty("description", description);
 		json.addProperty("marketplaceId", marketplaceId);
-		// json.addProperty("address", address.toString());
-		// json.addProperty("material", material.toString());
 		// json.addProperty("parent", parent.getId());
 		json.addProperty("startDate", startDate.toString());
 		// json.addProperty("endDate", endDate.toString());

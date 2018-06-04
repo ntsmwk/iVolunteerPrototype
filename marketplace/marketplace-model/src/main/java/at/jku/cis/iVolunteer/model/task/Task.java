@@ -18,15 +18,14 @@ public class Task {
 	private String description;
 	private String workflowKey;
 	private String marketplaceId;
-	private Address address;
-	private Material material;
 	private TaskStatus status;
-	@DBRef
-	private Task parent;
 	private Date startDate;
 	private Date endDate;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
+
+	@DBRef
+	private Task parent;
 
 	public String getId() {
 		return id;
@@ -59,7 +58,6 @@ public class Task {
 	public void setWorkflowKey(String workflowKey) {
 		this.workflowKey = workflowKey;
 	}
-	
 
 	public String getMarketplaceId() {
 		return marketplaceId;
@@ -69,36 +67,12 @@ public class Task {
 		this.marketplaceId = marketplaceId;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public Material getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(Material material) {
-		this.material = material;
-	}
-
 	public TaskStatus getStatus() {
 		return status;
 	}
 
 	public void setStatus(TaskStatus status) {
 		this.status = status;
-	}
-
-	public Task getParent() {
-		return parent;
-	}
-
-	public void setParent(Task parent) {
-		this.parent = parent;
 	}
 
 	public Date getStartDate() {
@@ -131,6 +105,14 @@ public class Task {
 
 	public void setRequiredCompetences(List<Competence> requiredCompetences) {
 		this.requiredCompetences = requiredCompetences;
+	}
+
+	public Task getParent() {
+		return parent;
+	}
+
+	public void setParent(Task parent) {
+		this.parent = parent;
 	}
 
 	@Override

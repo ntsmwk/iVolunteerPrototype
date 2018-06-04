@@ -1,16 +1,13 @@
 package at.jku.cis.iVolunteer.lib.mapper.competence;
 
-import org.springframework.stereotype.Service;
+import org.mapstruct.Mapper;
 
-import at.jku.cis.iVolunteer.lib.mapper.AbstractSpringMapper;
+import at.jku.cis.iVolunteer.lib.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 
-@Service
-public class CompetenceMapper extends AbstractSpringMapper<Competence, CompetenceDTO> {
+@Mapper
+public abstract class CompetenceMapper implements AbstractMapper<Competence, CompetenceDTO> {
 
-	protected CompetenceMapper() {
-		super(Competence.class, CompetenceDTO.class);
-	}
 
 }

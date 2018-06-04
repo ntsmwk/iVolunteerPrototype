@@ -1,15 +1,13 @@
 package at.jku.cis.iVolunteer.lib.mapper.participant.profile;
 
-import org.springframework.stereotype.Service;
+import org.mapstruct.Mapper;
 
-import at.jku.cis.iVolunteer.lib.mapper.AbstractSpringMapper;
+import at.jku.cis.iVolunteer.lib.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
 
-@Service
-public class TaskEntryMapper extends AbstractSpringMapper<TaskEntry, TaskEntryDTO> {
+@Mapper
+public abstract class TaskEntryMapper implements AbstractMapper<TaskEntry, TaskEntryDTO> {
 
-	public TaskEntryMapper() {
-		super(TaskEntry.class, TaskEntryDTO.class);
-	}
+	
 }
