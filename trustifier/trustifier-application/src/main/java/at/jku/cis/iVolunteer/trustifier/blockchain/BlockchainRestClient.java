@@ -13,12 +13,10 @@ import org.springframework.web.client.RestTemplate;
 public class BlockchainRestClient {
 
 	@Value("${spring.data.blockchain.uri}")
-	//private String url;
-	private String url = "http://localhost:3001";
+	private String url;
 
 	@Autowired
-	//private RestTemplate restTemplate;
-	private RestTemplate restTemplate = new RestTemplate();
+	private RestTemplate restTemplate;
 
 	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BlockchainRestClient.class);
 

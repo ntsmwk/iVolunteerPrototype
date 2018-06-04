@@ -151,8 +151,7 @@ public class Contractor {
 
 	}
 
-	@PostMapping("/taskEntry")
-	// TODO change to finishedTaskEntry
+	@PostMapping("/finishedTaskEntry")
 	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntry vte) {
 		try {
 
