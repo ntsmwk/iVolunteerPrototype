@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.lib.rest.clients;
+package at.jku.cis.iVolunteer.marketplace.task;
 
 import static java.text.MessageFormat.format;
 
@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 @Service
-public class ContractorPublishingEntityRestClient {
+public class ContractorPublishingRestClient {
 
 	private static final String TASK = "task";
 	private static final String TASK_ENTRY = "taskEntry";
@@ -27,17 +27,17 @@ public class ContractorPublishingEntityRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public String publishTask(Task task) {
+	public String publishTask(TaskDTO taskDto) {
 		String requestURI = buildContractorRequestURI(TASK);
-		return restTemplate.postForObject(requestURI, task, String.class);
+		return restTemplate.postForObject(requestURI, taskDto, String.class);
 	}
 
-	public String publishTaskEntry(TaskEntry taskEntry) {
+	public String publishTaskEntry(TaskEntryDTO taskEntry) {
 		String requestURI = buildContractorRequestURI(TASK_ENTRY);
 		return restTemplate.postForObject(requestURI, taskEntry, String.class);
 	}
 
-	public String publishCompetenceEntry(CompetenceEntry competenceEntry) {
+	public String publishCompetenceEntry(CompetenceEntryDTO competenceEntry) {
 		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, competenceEntry, String.class);
 	}

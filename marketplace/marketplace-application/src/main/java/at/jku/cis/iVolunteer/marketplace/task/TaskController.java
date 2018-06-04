@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.lib.mapper.task.TaskMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
@@ -23,6 +24,7 @@ import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
 @RestController
@@ -31,6 +33,8 @@ public class TaskController {
 	@Autowired
 	private LoginService loginService;
 	@Autowired
+	private TaskMapper taskMapper;
+	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
@@ -38,21 +42,21 @@ public class TaskController {
 	private VolunteerRepository volunteerRepository;
 
 	@GetMapping("/task")
-	public List<Task> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
+	public List<TaskDTO> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
 		if (status == null) {
-			return taskRepository.findAll();
+			return taskMapper.toDTOs(taskRepository.findAll());
 		}
 
-		return taskRepository.findByStatus(status);
+		return taskMapper.toDTOs(taskRepository.findByStatus(status));
 	}
 
 	@GetMapping("/task/{id}")
-	public Task findById(@PathVariable("id") String id) {
-		return taskRepository.findOne(id);
+	public TaskDTO findById(@PathVariable("id") String id) {
+		return taskMapper.toDTO(taskRepository.findOne(id));
 	}
 
 	@GetMapping("/task/volunteer/{id}")
-	public List<Task> findByVolunteer(@PathVariable("id") String id) {
+	public List<TaskDTO> findByVolunteer(@PathVariable("id") String id) {
 
 		Volunteer volunteer = volunteerRepository.findOne(id);
 
@@ -62,17 +66,18 @@ public class TaskController {
 			tasks.add(ti.getTask());
 		}
 
-		return new ArrayList<>(tasks);
+		return taskMapper.toDTOs(new ArrayList<>(tasks));
 	}
 
 	@PostMapping("/task")
-	public Task createTask(@RequestBody Task task) {
+	public TaskDTO createTask(@RequestBody TaskDTO taskDto) {
+		Task task = taskMapper.toEntity(taskDto);
 		task.setStatus(TaskStatus.CREATED);
 
 		Task createdTask = taskRepository.insert(task);
 
 		insertTaskInteraction(createdTask);
-		return createdTask;
+		return taskMapper.toDTO(createdTask);
 	}
 
 	private void insertTaskInteraction(Task task) {
@@ -85,14 +90,14 @@ public class TaskController {
 	}
 
 	@PutMapping("/task/{id}")
-	public Task updateTask(@PathVariable("id") String taskId, @RequestBody Task task) {
+	public TaskDTO updateTask(@PathVariable("id") String taskId, @RequestBody TaskDTO taskDto) {
 		Task orginalTask = taskRepository.findOne(taskId);
 		if (orginalTask == null) {
 			throw new NotAcceptableException();
 		}
-		orginalTask.setStartDate(task.getStartDate());
-		orginalTask.setEndDate(task.getEndDate());
-		return taskRepository.save(orginalTask);
+		orginalTask.setStartDate(taskDto.getStartDate());
+		orginalTask.setEndDate(taskDto.getEndDate());
+		return taskMapper.toDTO(taskRepository.save(orginalTask));
 	}
 
 	@DeleteMapping("/task/{id}")

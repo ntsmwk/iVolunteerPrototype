@@ -1,0 +1,52 @@
+package at.jku.cis.iVolunteer.model.participant.profile.dto;
+
+import java.util.Date;
+
+public class CompetenceEntryDTO {
+
+	private String id;
+	private String competenceId;
+	private String competenceName;
+	private String marketplaceId;
+	private Date timestamp;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getCompetenceId() {
+		return competenceId;
+	}
+
+	public void setCompetenceId(String competenceId) {
+		this.competenceId = competenceId;
+	}
+
+	public String getCompetenceName() {
+		return competenceName;
+	}
+
+	public void setCompetenceName(String competenceName) {
+		this.competenceName = competenceName;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+}

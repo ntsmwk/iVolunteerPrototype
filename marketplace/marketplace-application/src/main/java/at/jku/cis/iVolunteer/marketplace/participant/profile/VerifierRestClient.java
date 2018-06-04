@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.lib.rest.clients;
+package at.jku.cis.iVolunteer.marketplace.participant.profile;
 
 import static java.text.MessageFormat.format;
 
@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 @Service
 public class VerifierRestClient {
@@ -28,17 +28,17 @@ public class VerifierRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public boolean verifyTask(Task task) {
+	public boolean verifyTask(TaskDTO task) {
 		String requestURI = buildContractorRequestURI(TASK);
 		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();
 	}
 
-	public boolean verifyTaskEntry(TaskEntry taskEntry) {
+	public boolean verifyTaskEntry(TaskEntryDTO taskEntry) {
 		String requestURI = buildContractorRequestURI(TASK_ENTRY);
 		return restTemplate.postForObject(requestURI, taskEntry, Boolean.class).booleanValue();
 	}
 
-	public boolean verifyCompetenceEntry(CompetenceEntry competenceEntry) {
+	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry) {
 		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, competenceEntry, Boolean.class).booleanValue();
 	}

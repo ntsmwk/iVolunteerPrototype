@@ -7,14 +7,17 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.task.TaskStatus;
 
 public class TaskDTO implements IHashObject {
 	private String id;
 	private String name;
 	private String description;
+	private String workflowKey;
 	private AddressDTO address;
 	private MaterialDTO material;
-	private TaskDTO parent;
+	private TaskStatus status;
+
 	private Date startDate;
 	private Date endDate;
 	private List<CompetenceDTO> acquirableCompetences;
@@ -44,6 +47,22 @@ public class TaskDTO implements IHashObject {
 		this.description = description;
 	}
 
+	public String getWorkflowKey() {
+		return workflowKey;
+	}
+
+	public void setWorkflowKey(String workflowKey) {
+		this.workflowKey = workflowKey;
+	}
+
+	public TaskStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TaskStatus status) {
+		this.status = status;
+	}
+
 	public AddressDTO getAddress() {
 		return address;
 	}
@@ -58,14 +77,6 @@ public class TaskDTO implements IHashObject {
 
 	public void setMaterial(MaterialDTO material) {
 		this.material = material;
-	}
-
-	public TaskDTO getParent() {
-		return parent;
-	}
-
-	public void setParent(TaskDTO parent) {
-		this.parent = parent;
 	}
 
 	public Date getStartDate() {

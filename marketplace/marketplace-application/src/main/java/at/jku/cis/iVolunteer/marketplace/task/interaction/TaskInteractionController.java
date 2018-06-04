@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
@@ -24,6 +25,7 @@ import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
+import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 
 @RestController
 public class TaskInteractionController {
@@ -33,6 +35,8 @@ public class TaskInteractionController {
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
+	private TaskInteractionMapper taskInteractionMapper;
+	@Autowired
 	private TaskInteractionService taskInteractionService;
 	@Autowired
 	private TaskInteractionRepository taskInteractionRepository;
@@ -40,15 +44,15 @@ public class TaskInteractionController {
 	private VolunteerRepository volunteerRepository;
 
 	@GetMapping("/task/{taskId}/interaction")
-	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
+	public List<TaskInteractionDTO> findByTaskId(@PathVariable("taskId") String taskId,
 			@RequestParam(value = "operation", required = false) TaskOperation operation) {
 
 		Task task = findAndVerifyTaskById(taskId);
 
-		if (operation != null) {
-			return taskInteractionRepository.findByTaskAndOperation(task, operation);
+		if (operation == null) {
+			return taskInteractionMapper.toDTOs(taskInteractionRepository.findByTask(task));
 		}
-		return taskInteractionRepository.findByTask(task);
+		return taskInteractionMapper.toDTOs(taskInteractionRepository.findByTaskAndOperation(task, operation));
 	}
 
 	@GetMapping("/task/{id}/participant")
@@ -84,33 +88,33 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
-	public TaskInteraction unreserveForTask(@PathVariable("taskId") String taskId) {
+	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId) {
 		Task task = findAndVerifyTaskById(taskId);
 		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (lastedTaskInteraction != null && (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
 				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
-			return createTaskInteraction(task, loginService.getLoggedInParticipant(),
-					TaskVolunteerOperation.UNRESERVED);
+			return taskInteractionMapper.toDTO(createTaskInteraction(task, loginService.getLoggedInParticipant(),
+					TaskVolunteerOperation.UNRESERVED));
 		} else {
 			throw new BadRequestException();
 		}
 	}
 
 	@PostMapping("/task/{taskId}/assign")
-	public TaskInteraction assignForTask(@PathVariable("taskId") String taskId,
+	public TaskInteractionDTO assignForTask(@PathVariable("taskId") String taskId,
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
-		return createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED);
+		return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED));
 	}
 
 	@PostMapping("/task/{taskId}/unassign")
-	public TaskInteraction unassignForTask(@PathVariable("taskId") String taskId,
+	public TaskInteractionDTO unassignForTask(@PathVariable("taskId") String taskId,
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
-		return createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED);
+		return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {

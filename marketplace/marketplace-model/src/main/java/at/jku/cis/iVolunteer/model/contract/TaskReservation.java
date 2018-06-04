@@ -1,27 +1,26 @@
 package at.jku.cis.iVolunteer.model.contract;
 
-import at.jku.cis.iVolunteer.model.source.Source;
+import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
 public class TaskReservation {
 
-	private Source source;
+	private SourceDTO source;
 	private TaskDTO task;
 
 	public TaskReservation() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public TaskReservation(Source source, TaskDTO task) {
+	public TaskReservation(SourceDTO source, TaskDTO task) {
 		this.source = source;
 		this.task = task;
 	}
 
-	public Source getSource() {
+	public SourceDTO getSource() {
 		return source;
 	}
 
-	public void setSource(Source source) {
+	public void setSource(SourceDTO source) {
 		this.source = source;
 	}
 
