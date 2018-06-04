@@ -1,5 +1,7 @@
 # iVolunteerPrototype v3 BLOCKCHAIN
 
+### bei Versionierungsproblemen -> Network updaten
+
 ### update network
 0. update version number in package.json
 1. composer archive create -t dir -n .

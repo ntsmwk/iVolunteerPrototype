@@ -13,6 +13,7 @@ public class TaskEntry implements IHashObject {
 	private String taskId;
 	private String taskName;
 	private String taskDescription;
+	private String marketplaceId;
 
 	public TaskEntry() {
 	}
@@ -55,6 +56,15 @@ public class TaskEntry implements IHashObject {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	@Override

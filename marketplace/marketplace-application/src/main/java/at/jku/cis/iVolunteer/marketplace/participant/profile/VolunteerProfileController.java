@@ -65,7 +65,7 @@ public class VolunteerProfileController {
 	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntry) {
 		VolunteerProfile volunteerProfile = getProfile(volunteerId);
 
-		if (verifierRestClient.verifyTaskEntry(taskEntry)) {
+		if (verifierRestClient.verifyFinishedTask(taskEntry)) {
 			volunteerProfile.getTaskList().add(taskEntry);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {

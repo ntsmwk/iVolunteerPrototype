@@ -12,12 +12,14 @@ import org.springframework.web.client.RestTemplate;
 import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 
 @Service
 public class VerifierRestClient {
 
-	private static final String TASK = "task";
-	private static final String TASK_ENTRY = "taskEntry";
+	private static final String TASK_INTERACTION = "taskInteraction";
+	private static final String PUBLISHED_TASK = "publishedTask";
+	private static final String FINISHED_TASK_Entry = "finishedTaskEntry";
 	private static final String COMPETENCE_ENTRY = "competenceEntry";
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
@@ -27,14 +29,19 @@ public class VerifierRestClient {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	public boolean verifyTask(Task task) {
-		String requestURI = buildContractorRequestURI(TASK);
+
+	public boolean verifyPublishedTask(Task task) {
+		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
 		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();
 	}
 
-	public boolean verifyTaskEntry(TaskEntry taskEntry) {
-		String requestURI = buildContractorRequestURI(TASK_ENTRY);
+	public boolean verifyTaskInteraction(TaskInteraction taskInteraction) {
+		String requestURI = buildContractorRequestURI(TASK_INTERACTION);
+		return restTemplate.postForObject(requestURI, taskInteraction, Boolean.class).booleanValue();
+	}
+
+	public boolean verifyFinishedTask(TaskEntry taskEntry) {
+		String requestURI = buildContractorRequestURI(FINISHED_TASK_Entry);
 		return restTemplate.postForObject(requestURI, taskEntry, Boolean.class).booleanValue();
 	}
 

@@ -12,6 +12,7 @@ public class TaskDTO implements IHashObject {
 	private String id;
 	private String name;
 	private String description;
+	private String marketplaceId;
 	private AddressDTO address;
 	private MaterialDTO material;
 	private TaskDTO parent;
@@ -38,6 +39,14 @@ public class TaskDTO implements IHashObject {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public void setDescription(String description) {
