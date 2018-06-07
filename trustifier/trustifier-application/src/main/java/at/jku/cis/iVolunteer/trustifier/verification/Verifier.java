@@ -35,6 +35,10 @@ public class Verifier {
 
 	@PostMapping("publishedTask")
 	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
+		//TODO
+		System.err.println("task to look for: " + task.toString());
+		System.out.println("fetched hash: "+blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)));
+		
 		return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)) == null) ? false : true;
 	}
 

@@ -64,4 +64,10 @@ public class BcTaskInteraction {
 		this.taskInteractionType = taskInteractionType;
 	}
 
+	@Override
+	public String toString() {
+		return "BcTaskInteraction [hash=" + hash + ", timestamp=" + timestamp + ", taskId=" + taskId
+				+ ", marketplaceId=" + marketplaceId + ", taskInteractionType=" + taskInteractionType + "]";
+	}
+
 }

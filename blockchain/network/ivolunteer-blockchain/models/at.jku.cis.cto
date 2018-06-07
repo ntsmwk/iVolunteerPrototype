@@ -43,7 +43,7 @@ asset taskInteraction identified by hash {
   o String taskId
   o String marketplaceId
   // o String volunteerId
-  o taskInteractionType type
+  o String taskInteractionType
 }
 
 asset competence identified by hash {
@@ -54,13 +54,5 @@ asset competence identified by hash {
   o String volunteerId
 }
 
-enum taskInteractionType {
-o CREATED 
-o PUBLISHED
-o RUNNING
-o FINISHED
-o SUSPENDED
-o ABORTED
-}
 
 

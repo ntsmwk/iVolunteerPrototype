@@ -126,4 +126,14 @@ public class TaskDTO implements IHashObject {
 		json.addProperty("requiredCompetences", requiredCompetences.toString());
 		return json.toString();
 	}
+
+	@Override
+	public String toString() {
+		return "TaskDTO [id=" + id + ", name=" + name + ", description=" + description + ", workflowKey=" + workflowKey
+				+ ", marketplaceId=" + marketplaceId + ", status=" + status + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", acquirableCompetences=" + acquirableCompetences + ", requiredCompetences="
+				+ requiredCompetences + ", parent=" + parent + "]";
+	}
+	
+	
 }

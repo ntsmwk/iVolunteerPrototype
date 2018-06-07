@@ -27,7 +27,12 @@ public class BlockchainRestClient {
 		try {
 			c = restTemplate.getForObject(requestUrl, BcPublishedTask.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 		return c;
 	}
@@ -38,7 +43,12 @@ public class BlockchainRestClient {
 		try {
 			c = restTemplate.getForObject(requestUrl, BcTaskInteraction.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 		return c;
 	}
@@ -49,7 +59,12 @@ public class BlockchainRestClient {
 		try {
 			c = restTemplate.getForObject(requestUrl, BcFinishedTask.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 		return c;
 
@@ -61,7 +76,12 @@ public class BlockchainRestClient {
 		try {
 			c = restTemplate.getForObject(requestUrl, BcCompetence.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 		return c;
 
@@ -75,8 +95,12 @@ public class BlockchainRestClient {
 			restTemplate.postForObject(requestUrl, t, Void.class);
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 
 	}
@@ -89,7 +113,12 @@ public class BlockchainRestClient {
 		try {
 			restTemplate.postForObject(requestUrl, ti, Void.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 	}
 
@@ -101,7 +130,12 @@ public class BlockchainRestClient {
 		try {
 			restTemplate.postForObject(requestUrl, ft, Void.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 
 	}
@@ -114,7 +148,12 @@ public class BlockchainRestClient {
 		try {
 			restTemplate.postForObject(requestUrl, c, Void.class);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
 		}
 
 	}

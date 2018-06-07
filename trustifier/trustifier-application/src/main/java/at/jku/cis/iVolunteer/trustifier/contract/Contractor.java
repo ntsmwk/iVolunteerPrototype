@@ -12,6 +12,7 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.exception.VerificationFailureException;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
@@ -48,7 +49,10 @@ public class Contractor {
 	@PostMapping("/task/reserve")
 	public void reserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
-		verifier.verifyPublishedTask(reservation.getTask());
+		if(!verifier.verifyPublishedTask(reservation.getTask())) {
+			throw new VerificationFailureException();
+		}
+
 
 		try {
 			String address = reservation.getSource().getAddress();
@@ -66,8 +70,9 @@ public class Contractor {
 	@PostMapping("/task/unreserve")
 	public void unreserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
-		verifier.verifyPublishedTask(reservation.getTask());
-
+		if(!verifier.verifyPublishedTask(reservation.getTask())) {
+			throw new VerificationFailureException();
+		}
 		try {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.unreserve(address, authorization,
@@ -84,7 +89,9 @@ public class Contractor {
 	@PostMapping("/task/assign")
 	public void assignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
-		verifier.verifyPublishedTask(assignment.getTask());
+		if(!verifier.verifyPublishedTask(assignment.getTask())) {
+			throw new VerificationFailureException();
+		}
 
 		try {
 			String address = assignment.getSource().getAddress();
@@ -103,8 +110,9 @@ public class Contractor {
 	@PostMapping("/task/unassign")
 	public void unassignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
-		verifier.verifyPublishedTask(assignment.getTask());
-
+		if(!verifier.verifyPublishedTask(assignment.getTask())) {
+			throw new VerificationFailureException();
+		}
 		try {
 			String address = assignment.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.unassign(address, authorization,
@@ -122,8 +130,9 @@ public class Contractor {
 	@PostMapping("/task/finish")
 	public void finishTask(@RequestBody TaskCompletationDTO completation,
 			@RequestHeader("Authorization") String authorization) {
-		verifier.verifyPublishedTask(completation.getTask());
-
+		if(!verifier.verifyPublishedTask(completation.getTask())) {
+			throw new VerificationFailureException();
+		}
 		try {
 			String address = completation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.finish(address, authorization,
