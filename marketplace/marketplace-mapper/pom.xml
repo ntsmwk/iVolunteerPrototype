@@ -9,11 +9,7 @@
 		<artifactId>marketplace</artifactId>
 	</parent>
 
-	<artifactId>marketplace-lib</artifactId>
-
-	<properties>
-		<activiti.version>5.22.0</activiti.version>
-	</properties>
+	<artifactId>marketplace-mapper</artifactId>
 
 	<dependencies>
 		<dependency>
