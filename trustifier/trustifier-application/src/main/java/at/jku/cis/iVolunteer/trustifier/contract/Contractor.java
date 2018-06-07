@@ -49,15 +49,16 @@ public class Contractor {
 	@PostMapping("/task/reserve")
 	public void reserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
-		if(!verifier.verifyPublishedTask(reservation.getTask())) {
+
+		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
 		}
-
 
 		try {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.reserve(address, authorization,
 					reservation.getTask());
+
 			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
 					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
 					reservation.getSource().getIdentifier(), taskInteraction.getOperation());
@@ -70,7 +71,7 @@ public class Contractor {
 	@PostMapping("/task/unreserve")
 	public void unreserveTask(@RequestBody TaskReservationDTO reservation,
 			@RequestHeader("Authorization") String authorization) {
-		if(!verifier.verifyPublishedTask(reservation.getTask())) {
+		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {
@@ -89,7 +90,7 @@ public class Contractor {
 	@PostMapping("/task/assign")
 	public void assignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
-		if(!verifier.verifyPublishedTask(assignment.getTask())) {
+		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
 
@@ -110,7 +111,7 @@ public class Contractor {
 	@PostMapping("/task/unassign")
 	public void unassignTask(@RequestBody TaskAssignmentDTO assignment,
 			@RequestHeader("Authorization") String authorization) {
-		if(!verifier.verifyPublishedTask(assignment.getTask())) {
+		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {
@@ -130,7 +131,7 @@ public class Contractor {
 	@PostMapping("/task/finish")
 	public void finishTask(@RequestBody TaskCompletationDTO completation,
 			@RequestHeader("Authorization") String authorization) {
-		if(!verifier.verifyPublishedTask(completation.getTask())) {
+		if (!verifier.verifyPublishedTask(completation.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {

@@ -11,6 +11,7 @@ public class Hasher {
 	@Autowired
 	private HashGenerator hashObjectGenerator;
 	
+	
 	public String generateHash(IHashObject hashObject) {
 		return hashObjectGenerator.sha256(hashObject);
 	}

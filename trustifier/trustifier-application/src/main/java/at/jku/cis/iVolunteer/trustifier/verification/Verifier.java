@@ -19,30 +19,27 @@ public class Verifier {
 
 	@Autowired
 	private Hasher hasher;
+	
 	@Autowired
 	private BlockchainRestClient blockchainRestClient;
 
-	@PostMapping("taskInteraction")
+	@PostMapping("/taskInteraction")
 	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction) {
 		return (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction)) == null) ? false
 				: true;
 	}
 
-	@PostMapping("finishedTaskEntry")
+	@PostMapping("/finishedTaskEntry")
 	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry) {
 		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
 	}
 
-	@PostMapping("publishedTask")
+	@PostMapping("/publishedTask")
 	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
-		//TODO
-		System.err.println("task to look for: " + task.toString());
-		System.out.println("fetched hash: "+blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)));
-		
 		return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)) == null) ? false : true;
 	}
 
-	@PostMapping("competenceEntry")
+	@PostMapping("/competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntryDTO competenceEntry) {
 		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
 	}

@@ -122,8 +122,8 @@ public class TaskDTO implements IHashObject {
 		// json.addProperty("parent", parent.getId());
 		json.addProperty("startDate", startDate.toString());
 		// json.addProperty("endDate", endDate.toString());
-		json.addProperty("acquirableCompetences", acquirableCompetences.toString());
-		json.addProperty("requiredCompetences", requiredCompetences.toString());
+		//json.addProperty("acquirableCompetences", acquirableCompetences.toString());
+		//json.addProperty("requiredCompetences", requiredCompetences.toString());
 		return json.toString();
 	}
 

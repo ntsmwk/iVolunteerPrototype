@@ -61,7 +61,7 @@ public class TaskOperationController {
 	private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
-	
+
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
 
@@ -113,9 +113,9 @@ public class TaskOperationController {
 
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		taskEntry.setMarketplaceId(marketplaceId);
-		
+
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
-		for(CompetenceEntry ce : competenceEntries) {
+		for (CompetenceEntry ce : competenceEntries) {
 			ce.setMarketplaceId(marketplaceId);
 		}
 
@@ -132,18 +132,18 @@ public class TaskOperationController {
 				volunteerProfileRepository.save(volunteerProfile);
 
 				try {
-
 					VolunteerTaskEntryDTO vte = (VolunteerTaskEntryDTO) taskEntryMapper.toDTO(taskEntry);
 					vte.setVolunteerId(volunteer.getId());
 
 					contractorRepositoryRestClient.publishTaskEntry(vte);
+				
 					competenceEntries.forEach(competenceEntry -> {
-
 						VolunteerCompetenceEntryDTO vce = (VolunteerCompetenceEntryDTO) competenceEntryMapper
 								.toDTO(competenceEntry);
 						vce.setVolunteerId(volunteer.getId());
 						contractorRepositoryRestClient.publishCompetenceEntry(vce);
 					});
+					
 				} catch (RestClientException ex) {
 					throw new BadRequestException();
 				}
