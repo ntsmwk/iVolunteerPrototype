@@ -36,6 +36,8 @@ export class TaskDetailComponent implements OnInit {
   }
 
   private loadTask(id: string) {
+    this.taskService.getTree(id).toPromise().then();
+
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant).then(() => {

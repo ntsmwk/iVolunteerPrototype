@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,9 +42,11 @@ public class TaskController {
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
-	
+
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
+
+	HashMap<String, String[]> parentChildMap = new HashMap<String, String[]>();
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
@@ -109,4 +112,55 @@ public class TaskController {
 	public void deleteTask(@PathVariable("id") String id) {
 		taskRepository.delete(id);
 	}
+
+	@GetMapping("/task/{id}/children")
+	public List<TaskDTO> getChildren(@PathVariable("id") String id) {
+		TaskDTO parent = taskMapper.toDTO(taskRepository.findOne(id));
+
+		List<TaskDTO> allTasks = taskMapper.toDTOs(taskRepository.findAll());
+		List<TaskDTO> children = new ArrayList<>();
+
+		for (TaskDTO child : allTasks) {
+			if (child.getParent() != null) {
+				if (child.getParent().getId().equals(parent.getId())) {
+					children.add(child);
+				}
+			}
+		}
+		return children;
+	}
+
+	@GetMapping("/task/{id}/tree")
+	public HashMap<String, String[]> getTreeStructure(@PathVariable("id") String id) {
+		TaskDTO mainTask = taskMapper.toDTO(taskRepository.findOne(id));
+
+		while (mainTask.getParent() != null) {
+			mainTask = mainTask.getParent();
+		}
+
+		generateTree(mainTask);
+		return parentChildMap;
+
+	}
+
+	private void generateTree(TaskDTO parent) {
+		List<TaskDTO> children = getChildren(parent.getId());
+		List<String> list = new ArrayList<String>();
+		for (TaskDTO t : children) {
+			list.add(t.getName());
+		}
+		parentChildMap.put(parent.getName(), list.toArray(new String[0]));
+
+		// TODO
+		// see
+		// https://material.angular.io/components/tree/examples
+		// example "Tree with dynamic data"
+
+		if (!children.isEmpty()) {
+			for (TaskDTO child : children) {
+				generateTree(child);
+			}
+		}
+	}
+
 }

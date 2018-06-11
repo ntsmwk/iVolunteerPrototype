@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,10 +15,13 @@ import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.participant.EmployeeRepository;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfileRepository;
+import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.participant.Employee;
 import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.TaskStatus;
 
 @ComponentScan("at.jku.cis.iVolunteer")
 @SpringBootApplication
@@ -37,9 +42,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 	private VolunteerProfileRepository volunteerProfileRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
 	@Autowired
 	private CompetenceRepository competenceRepository;
+	@Autowired
+	private TaskRepository taskRepository;
 
 	@Bean
 	public RestTemplate prodduceRestTemplate() {
@@ -70,6 +76,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createCompetence("Flexability");
 		createCompetence("Motivation");
 
+		// createDemoTasks();
+
 	}
 
 	private Volunteer createVolunteer(String username, String password) {
@@ -98,5 +106,52 @@ public class MarketplaceApplication implements CommandLineRunner {
 			competence = competenceRepository.insert(competence);
 		}
 		return competence;
+	}
+
+	private void createDemoTasks() {
+		Task t1 = new Task();
+		t1.setName("A");
+		t1.setDescription("A");
+		t1.setParent(null);
+		t1.setStartDate(new Date());
+		t1.setStatus(TaskStatus.CREATED);
+		t1.setMarketplaceId("mId");
+		taskRepository.insert(t1);
+
+		Task t2 = new Task();
+		t2.setName("B");
+		t2.setDescription("B");
+		t2.setParent(t1);
+		t2.setStartDate(new Date());
+		t2.setStatus(TaskStatus.CREATED);
+		t1.setMarketplaceId("mId");
+		taskRepository.insert(t2);
+
+		Task t3 = new Task();
+		t3.setName("C");
+		t3.setDescription("C");
+		t3.setParent(t1);
+		t3.setStartDate(new Date());
+		t3.setStatus(TaskStatus.CREATED);
+		t1.setMarketplaceId("mId");
+		taskRepository.insert(t3);
+
+		Task t4 = new Task();
+		t4.setName("D");
+		t4.setDescription("D");
+		t4.setParent(t2);
+		t4.setStartDate(new Date());
+		t4.setStatus(TaskStatus.CREATED);
+		t1.setMarketplaceId("mId");
+		taskRepository.insert(t4);
+
+		Task t5 = new Task();
+		t5.setName("E");
+		t5.setDescription("E");
+		t5.setParent(t2);
+		t5.setStartDate(new Date());
+		t5.setStatus(TaskStatus.CREATED);
+		t1.setMarketplaceId("mId");
+		taskRepository.insert(t5);
 	}
 }

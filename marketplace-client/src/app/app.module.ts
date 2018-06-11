@@ -38,6 +38,7 @@ import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {DateAdapter} from '@angular/material/core';
 import {WorkflowService} from './_service/workflow.service';
+import {TaskTreeComponent} from './task/task-tree/task-tree.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import {WorkflowService} from './_service/workflow.service';
     TaskTemplateCreateComponent,
     TaskAssignComponent,
     TaskInteractionHistoryComponent,
-    VolunteerProfileComponent
+    VolunteerProfileComponent,
+    TaskTreeComponent
   ],
   imports: [
     AppMaterialModule,
