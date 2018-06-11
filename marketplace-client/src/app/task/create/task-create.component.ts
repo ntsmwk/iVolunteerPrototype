@@ -84,14 +84,19 @@ export class TaskCreateComponent implements OnInit {
     task.workflowKey = task.workflowType.key;
     delete task.workflowType;
 
-    Promise.all([
-      this.loginService.getLoggedIn().toPromise(),
-      this.taskService.save(<Task>task).toPromise()
-    ]).then((values: any[]) => {
-      const createdTask = <Task> values[1];
-      const participantId = (<Participant> values[0]).id;
-      this.workflowService.startWorkflow(createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/tasks']));
-    });
+
+    if (this.isEditMode()) {
+      this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']);
+    } else {
+      Promise.all([
+        this.loginService.getLoggedIn().toPromise(),
+        this.taskService.save(<Task>task).toPromise()
+      ]).then((values: any[]) => {
+        const createdTask = <Task> values[1];
+        const participantId = (<Participant> values[0]).id;
+        this.workflowService.startWorkflow(createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/tasks']));
+      });
+    }
   }
 
   isEditMode() {

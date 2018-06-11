@@ -19,8 +19,8 @@ import at.jku.cis.iVolunteer.lib.mapper.participant.profile.TaskEntryMapper;
 import at.jku.cis.iVolunteer.lib.mapper.participant.profile.VolunteerProfileMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
+import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.ForbiddenException;
-import at.jku.cis.iVolunteer.model.exception.VerificationFailureException;
 import at.jku.cis.iVolunteer.model.participant.Participant;
 import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
@@ -84,7 +84,7 @@ public class VolunteerProfileController {
 			volunteerProfile.getTaskList().add(taskEntryMapper.toEntity(taskEntryDto));
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
-			throw new VerificationFailureException();
+			throw new BadRequestException();
 		}
 	}
 
@@ -129,7 +129,7 @@ public class VolunteerProfileController {
 			volunteerProfile.getCompetenceList().add(competenceEntryMapper.toEntity(competenceEntryDto));
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
-			throw new VerificationFailureException();
+			throw new BadRequestException();
 		}
 	}
 

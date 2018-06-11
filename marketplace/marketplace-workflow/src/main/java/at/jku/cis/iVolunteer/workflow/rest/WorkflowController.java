@@ -54,12 +54,12 @@ public class WorkflowController {
 		return workfowTypeService.getWorkflowTypes();
 	}
 
-	@GetMapping("/process")
+	@GetMapping("/processId")
 	public String getProcessId(@RequestParam("taskId") String taskId) {
 		return workflowProcessService.findInstanceIdForTaskId(taskId);
 	}
 
-	@PostMapping("/{workflowType}")
+	@PostMapping("/{workflowKey}")
 	public String startWorkflow(@PathVariable("workflowKey") String workflowKey, @RequestParam("taskId") String taskId,
 			@RequestParam("employeeId") String employeeId) {
 		Map<String, Object> params = new HashMap<>();
