@@ -46,7 +46,7 @@ public class TaskController {
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
 
-	HashMap<String, String[]> parentChildMap = new HashMap<String, String[]>();
+	HashMap<TaskDTO, List<TaskDTO>> parentChildMap = new HashMap<TaskDTO, List<TaskDTO>>();
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
@@ -131,7 +131,7 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/{id}/tree")
-	public HashMap<String, String[]> getTreeStructure(@PathVariable("id") String id) {
+	public HashMap<TaskDTO, List<TaskDTO>> getTreeStructure(@PathVariable("id") String id) {
 		TaskDTO mainTask = taskMapper.toDTO(taskRepository.findOne(id));
 
 		while (mainTask.getParent() != null) {
@@ -145,11 +145,7 @@ public class TaskController {
 
 	private void generateTree(TaskDTO parent) {
 		List<TaskDTO> children = getChildren(parent.getId());
-		List<String> list = new ArrayList<String>();
-		for (TaskDTO t : children) {
-			list.add(t.getName());
-		}
-		parentChildMap.put(parent.getName(), list.toArray(new String[0]));
+		parentChildMap.put(parent, children);
 
 		// TODO
 		// see
