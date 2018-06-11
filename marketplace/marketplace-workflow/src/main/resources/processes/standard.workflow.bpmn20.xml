@@ -3,26 +3,26 @@
   <process id="standard" name="Standard Workflow" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <serviceTask id="servicetask2" name="Start" activiti:expression="${startServiceTask.execute(execution)}"></serviceTask>
-    <userTask id="usertask1" name="Publish" activiti:assignee="mmustermann"></userTask>
+    <userTask id="usertask1" name="Publish" activiti:assignee="${employeeId}"></userTask>
     <sequenceFlow id="flow24" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
     <serviceTask id="publish" name="Publish" activiti:expression="${publishServiceTask.execute(execution)}"></serviceTask>
     <serviceTask id="servicetask8" name="Finish" activiti:expression="${finishServiceTask.execute(execution)}"></serviceTask>
     <sequenceFlow id="flow66" sourceRef="usertask1" targetRef="publish"></sequenceFlow>
     <subProcess id="subprocess1" name="Sub Process">
-      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="volunteers" activiti:elementVariable="volunteer"></multiInstanceLoopCharacteristics>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="volunteerIds" activiti:elementVariable="volunteerId"></multiInstanceLoopCharacteristics>
       <startEvent id="startevent2" name="Start"></startEvent>
-      <userTask id="usertask8" name="Reserve" activiti:assignee="${volunteer}"></userTask>
+      <userTask id="usertask8" name="Reserve" activiti:assignee="${volunteerId}"></userTask>
       <sequenceFlow id="flow73" sourceRef="usertask8" targetRef="servicetask10"></sequenceFlow>
       <serviceTask id="servicetask10" name="Reserve" activiti:expression="${reserveServiceTask.execute(execution)}"></serviceTask>
       <serviceTask id="servicetask11" name="Unreserve" activiti:expression="${unreserveServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow72" sourceRef="servicetask11" targetRef="usertask8"></sequenceFlow>
-      <userTask id="usertask7" name="Unreserve" activiti:assignee="${volunteer}"></userTask>
+      <userTask id="usertask7" name="Unreserve" activiti:assignee="${volunteerId}"></userTask>
       <sequenceFlow id="flow74" sourceRef="usertask7" targetRef="servicetask11"></sequenceFlow>
       <sequenceFlow id="flow86" sourceRef="startevent2" targetRef="usertask8"></sequenceFlow>
-      <userTask id="usertask11" name="Assign" activiti:assignee="mmustermann"></userTask>
+      <userTask id="usertask11" name="Assign" activiti:assignee="${employeeId}"></userTask>
       <serviceTask id="servicetask12" name="Assign" activiti:expression="${assignServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow92" sourceRef="usertask11" targetRef="servicetask12"></sequenceFlow>
-      <userTask id="usertask12" name="Unassign" activiti:assignee="mmustermann"></userTask>
+      <userTask id="usertask12" name="Unassign" activiti:assignee="${employeeId}"></userTask>
       <serviceTask id="servicetask13" name="Unassign" activiti:expression="${unassignServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow93" sourceRef="usertask12" targetRef="servicetask13"></sequenceFlow>
       <sequenceFlow id="flow94" sourceRef="servicetask12" targetRef="usertask12"></sequenceFlow>
@@ -34,11 +34,11 @@
     </subProcess>
     <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
     <sequenceFlow id="flow81" sourceRef="parallelgateway1" targetRef="subprocess1"></sequenceFlow>
-    <userTask id="usertask9" name="Start" activiti:assignee="mmustermann"></userTask>
+    <userTask id="usertask9" name="Start" activiti:assignee="${employeeId}"></userTask>
     <sequenceFlow id="flow82" sourceRef="publish" targetRef="parallelgateway1"></sequenceFlow>
     <sequenceFlow id="flow83" sourceRef="parallelgateway1" targetRef="usertask9"></sequenceFlow>
     <sequenceFlow id="flow84" sourceRef="usertask9" targetRef="servicetask2"></sequenceFlow>
-    <userTask id="usertask10" name="Finish" activiti:assignee="mmustermann"></userTask>
+    <userTask id="usertask10" name="Finish" activiti:assignee="${employeeId}"></userTask>
     <sequenceFlow id="flow89" sourceRef="usertask10" targetRef="servicetask8"></sequenceFlow>
     <sequenceFlow id="flow90" sourceRef="servicetask2" targetRef="usertask10"></sequenceFlow>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">

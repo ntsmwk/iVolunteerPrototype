@@ -44,7 +44,7 @@ export class TaskDetailComponent implements OnInit {
           if (isNullOrUndefined(workflowProcessId)) {
             return;
           }
-          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.username).toPromise().then((workflowSteps: WorkflowStep[]) => {
+          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.id).toPromise().then((workflowSteps: WorkflowStep[]) => {
             this.workflowSteps = workflowSteps;
           });
         });
@@ -53,7 +53,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   executeNextWorkflowStep(workflowStep: WorkflowStep) {
-    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username).toPromise().then(() => {
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.id).toPromise().then(() => {
       this.loadTask(this.task.id);
       this.messageService.broadcast('historyChanged', {});
     });

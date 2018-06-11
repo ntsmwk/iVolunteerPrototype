@@ -30,7 +30,7 @@ public class MarketplaceRestClient extends RestClient {
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), typeReference).getBody();
 	}
 
-	public VolunteerDTO findVolunteerByID(String volunteerId, String authorization) {
+	public VolunteerDTO findVolunteerById(String volunteerId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI("/volunteer/" + volunteerId);
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
 				.getBody();
