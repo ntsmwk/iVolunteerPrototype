@@ -1,12 +1,9 @@
-package at.jku.cis.iVolunteer.workflow.rest;
-
-import java.util.Map;
+package at.jku.cis.iVolunteer.workflow.service;
 
 public class WorkflowStep {
 
 	private String taskId;
 	private String label;
-	private Map<String, Object> params;
 
 	public WorkflowStep() {
 	}
@@ -31,13 +28,5 @@ public class WorkflowStep {
 
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	public Map<String, Object> getParams() {
-		return params;
-	}
-
-	public void setParams(Map<String, Object> params) {
-		this.params = params;
 	}
 }

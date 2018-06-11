@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.workflow.rest.client.configuration.WorkflowRestTemplate;
 
 @Service
 public class MarketplaceRestClient extends RestClient {
@@ -21,6 +22,7 @@ public class MarketplaceRestClient extends RestClient {
 	private URI marketplaceURI;
 
 	@Autowired
+	@WorkflowRestTemplate
 	private RestTemplate restTemplate;
 
 	public List<VolunteerDTO> findVolunteers(String authorization) {
@@ -30,7 +32,7 @@ public class MarketplaceRestClient extends RestClient {
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), typeReference).getBody();
 	}
 
-	public VolunteerDTO findVolunteerByID(String volunteerId, String authorization) {
+	public VolunteerDTO findVolunteerById(String volunteerId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI("/volunteer/" + volunteerId);
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
 				.getBody();

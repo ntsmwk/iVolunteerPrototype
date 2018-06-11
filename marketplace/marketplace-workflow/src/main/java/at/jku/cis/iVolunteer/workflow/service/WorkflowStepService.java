@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.workflow.rest;
+package at.jku.cis.iVolunteer.workflow.service;
 
 import java.util.HashSet;
 import java.util.List;

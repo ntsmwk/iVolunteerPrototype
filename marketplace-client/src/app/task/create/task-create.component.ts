@@ -11,6 +11,8 @@ import {CompetenceService} from '../../_service/competence.service';
 import {CompetenceValidator} from '../../_validator/competence.validator';
 import {WorkflowService} from '../../_service/workflow.service';
 import {WorkflowType} from '../../_model/workflow-type';
+import {LoginService} from '../../_service/login.service';
+import {Participant} from '../../_model/participant';
 
 @Component({
   templateUrl: './task-create.component.html',
@@ -25,6 +27,7 @@ export class TaskCreateComponent implements OnInit {
   constructor(formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
+              private loginService: LoginService,
               private taskService: TaskService,
               private competenceService: CompetenceService,
               private taskTemplateService: TaskTemplateService,
@@ -80,9 +83,20 @@ export class TaskCreateComponent implements OnInit {
     const task = this.taskForm.value;
     task.workflowKey = task.workflowType.key;
     delete task.workflowType;
-    this.taskService.save(<Task>task).toPromise().then((createdTask: Task) => {
-      this.workflowService.startWorkflow(createdTask.workflowKey, createdTask.id).toPromise().then(() => this.router.navigate(['/tasks']));
-    });
+
+
+    if (this.isEditMode()) {
+      this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']);
+    } else {
+      Promise.all([
+        this.loginService.getLoggedIn().toPromise(),
+        this.taskService.save(<Task>task).toPromise()
+      ]).then((values: any[]) => {
+        const createdTask = <Task> values[1];
+        const participantId = (<Participant> values[0]).id;
+        this.workflowService.startWorkflow(createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/tasks']));
+      });
+    }
   }
 
   isEditMode() {

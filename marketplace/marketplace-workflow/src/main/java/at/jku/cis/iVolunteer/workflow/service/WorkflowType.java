@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.workflow.rest;
+package at.jku.cis.iVolunteer.workflow.service;
 
 import org.apache.commons.lang3.StringUtils;
 
