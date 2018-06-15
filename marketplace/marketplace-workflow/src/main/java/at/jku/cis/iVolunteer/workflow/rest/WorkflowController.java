@@ -1,5 +1,9 @@
 package at.jku.cis.iVolunteer.workflow.rest;
 
+import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.EMPOYEE_ID;
+import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.TASK_ID;
+import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.TOKEN;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +34,6 @@ import at.jku.cis.iVolunteer.workflow.service.WorkflowTypeService;
 @RequestMapping("/workflow")
 public class WorkflowController {
 
-	private static final String ACCESS_TOKEN = "accessToken";
-
 	@Autowired
 	private TaskService taskService;
 
@@ -58,10 +60,11 @@ public class WorkflowController {
 	}
 
 	@PostMapping("/{workflowKey}")
-	public String startWorkflow(@PathVariable("workflowKey") String workflowKey,
-			@RequestParam("taskId") String taskId) {
+	public String startWorkflow(@PathVariable("workflowKey") String workflowKey, @RequestParam("taskId") String taskId,
+			@RequestParam("employeeId") String employeeId) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("taskId", taskId);
+		params.put(TASK_ID, taskId);
+		params.put(EMPOYEE_ID, employeeId);
 		return runtimeService.startProcessInstanceByKey(workflowKey, params).getProcessInstanceId();
 	}
 
@@ -77,7 +80,7 @@ public class WorkflowController {
 	@PostMapping("/{workflowKey}/{instanceId}/step")
 	public void completeWorkflowStep(@PathVariable("workflowKey") String workflowKey,
 			@PathVariable("instanceId") String instanceId, @RequestBody WorkflowStep workflowStep,
-			@RequestParam("participantId") String participantId, @RequestHeader("Authorization") String authorization) {
+			@RequestParam("participantId") String participantId, @RequestHeader("Authorization") String token) {
 
 		List<Task> tasks = retrieveActiveTaskByInstanceIdAndParticipantId(instanceId, participantId);
 		if (!tasks.stream().anyMatch(task -> StringUtils.equals(task.getId(), workflowStep.getTaskId()))) {
@@ -85,7 +88,7 @@ public class WorkflowController {
 		}
 
 		Map<String, Object> params = new HashMap<>();
-		params.put(ACCESS_TOKEN, authorization);
+		params.put(TOKEN, token);
 		taskService.complete(workflowStep.getTaskId(), params);
 	}
 

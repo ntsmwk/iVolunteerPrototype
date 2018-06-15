@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.workflow.model.WorkflowStepType;
 @Service
 public class WorkflowStepService {
 
+	private static final String VOLUNTEER_ID = "volunteerId";
 	private static final String SERVICE_TASK = "serviceTask";
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
 	private static final String PARALLEL_GATEWAY = "parallelGateway";
@@ -35,15 +36,15 @@ public class WorkflowStepService {
 	private RepositoryService repositoryService;
 
 	public List<WorkflowStep> getNextWorkflowSteps(Task task) {
-		String volunteerUsername = determineVolunteerUsername(task);
+		String volunteerId = determineVolunteerId(task);
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));
 		Set<String> labels = determineWorkflowLabelsForActivity(activity);
 		return labels.stream().map(label -> new WorkflowStep(task.getId(), label,
-				WorkflowStepType.valueOf(task.getCategory()), volunteerUsername)).collect(Collectors.toList());
+				WorkflowStepType.valueOf(task.getCategory()), volunteerId)).collect(Collectors.toList());
 	}
 
-	private String determineVolunteerUsername(Task task) {
-		VariableInstance variableInstance = runtimeService.getVariableInstance(task.getExecutionId(), "volunteer");
+	private String determineVolunteerId(Task task) {
+		VariableInstance variableInstance = runtimeService.getVariableInstance(task.getExecutionId(), VOLUNTEER_ID);
 		return variableInstance == null ? null : variableInstance.getTextValue();
 	}
 

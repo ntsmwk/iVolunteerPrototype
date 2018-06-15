@@ -66,5 +66,9 @@ export class TaskService {
     return this.http.post(`${this.apiUrl}/${task.id}/sync`, {});
   }
 
+  getTree(id: string) {
+    return this.http.get(`${this.apiUrl}/${id}/tree`, {});
+
+  }
 
 }

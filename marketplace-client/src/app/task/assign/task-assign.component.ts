@@ -12,6 +12,7 @@ import {Source} from '../../_model/source';
 import { WorkflowStep } from '../../_model/workflow-step';
 import { WorkflowService } from '../../_service/workflow.service';
 import { LoginService } from '../../_service/login.service';
+import { Volunteer } from '../../_model/volunteer';
 
 @Component({
   selector: 'app-task-assign',
@@ -30,39 +31,34 @@ export class TaskAssignComponent implements OnInit {
   displayedColumns = ['isAssigned', 'username'];
 
   constructor(private route: ActivatedRoute,
-              private sourceService: SourceService,
+              private volunteerService: VolunteerService,
               private workflowService: WorkflowService) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadData());
-    this.sourceService.find().toPromise().then((source: Source) => this.source = source);
+    this.dataSource.data = [];
+    console.error(this.workflowStepsAssignment);
+    this.workflowStepsAssignment
+      .forEach((step:WorkflowStep) => {
+        this.volunteerService.findById(step.assignee).toPromise().then((volunteer:Volunteer) => {
+          this.dataSource.data.push(new AssignmentVolunteer(volunteer.username, this.isAssigned(step) , step));
+          console.error(this.dataSource.data);
+        })
+      });
   }
 
-  private loadData() {
-
-    const assignmentVolunteers: AssignmentVolunteer[] = [];
-
-    this.workflowStepsAssignment
-      .filter((step:WorkflowStep) => step.label.toLowerCase() == "assign")
-      .forEach((step:WorkflowStep) => assignmentVolunteers.push(new AssignmentVolunteer(step.assignee, true, step)));
-
-    this.workflowStepsAssignment
-      .filter((step:WorkflowStep) => step.label.toLowerCase() == "unassign")
-      .forEach((step:WorkflowStep) => assignmentVolunteers.push(new AssignmentVolunteer(step.assignee, false, step)));
-
-    console.log(assignmentVolunteers);
-    this.dataSource.data = assignmentVolunteers;
+  private isAssigned(workflowStep: WorkflowStep){
+    return workflowStep.label.toLowerCase() == "unassign";
   }
 
   executeNextWorkflowStep(workflowStep: WorkflowStep) {
-    console.log(workflowStep);
-    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username)
+    console.error(workflowStep);
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.id)
     .toPromise();
   }
 
   handleChange(volunteer: AssignmentVolunteer) {
-    console.log(volunteer);
+    console.error(volunteer);
     this.executeNextWorkflowStep(volunteer.workflowStep);
   }
 }

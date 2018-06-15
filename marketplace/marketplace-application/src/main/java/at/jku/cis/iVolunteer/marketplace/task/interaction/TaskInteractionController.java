@@ -108,7 +108,7 @@ public class TaskInteractionController {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
-		if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
+		if (latestTaskInteraction != null && latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
 			return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED));
 		}
 		throw new PreConditionFailedException("Cannot assign. Volunteer is already assigned or not reserved.");

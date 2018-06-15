@@ -15,6 +15,7 @@ import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.workflow.rest.client.configuration.WorkflowRestTemplate;
 
 @Service
 public class ContractorRestClient extends RestClient {
@@ -29,6 +30,7 @@ public class ContractorRestClient extends RestClient {
 	private URI trustifierUri;
 
 	@Autowired
+	@WorkflowRestTemplate
 	private RestTemplate restTemplate;
 
 	public void reserveTask(TaskDTO task, SourceDTO source, String authorization) {

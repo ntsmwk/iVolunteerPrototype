@@ -38,6 +38,8 @@ export class TaskDetailComponent implements OnInit {
   }
 
   private loadTask(id: string) {
+    this.taskService.getTree(id).toPromise().then();
+
     this.taskService.findById(id).toPromise().then((task: Task) => {
       this.task = task;
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant).then(() => {
@@ -46,7 +48,7 @@ export class TaskDetailComponent implements OnInit {
           if (isNullOrUndefined(workflowProcessId)) {
             return;
           }
-          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.username)
+          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.id)
           .toPromise().then((workflowSteps: WorkflowStep[]) => {
             this.workflowStepsDefault = workflowSteps.filter((step:WorkflowStep) => step.workflowStepType === "DEFAULT");
             this.workflowStepsSpecial = workflowSteps.filter((step:WorkflowStep) => step.workflowStepType === "SPECIAL");
@@ -63,8 +65,8 @@ export class TaskDetailComponent implements OnInit {
   }
 
   executeNextWorkflowStep(workflowStep: WorkflowStep) {
-    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username)
-    .toPromise().then(() => {
+
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.id).toPromise().then(() => {
       this.loadTask(this.task.id);
       this.messageService.broadcast('historyChanged', {});
     });
