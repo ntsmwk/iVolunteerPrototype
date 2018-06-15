@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Volunteer} from '../_model/volunteer';
 import {VolunteerProfile} from '../_model/volunteer-profile';
 import {TaskEntry} from '../_model/task-entry';

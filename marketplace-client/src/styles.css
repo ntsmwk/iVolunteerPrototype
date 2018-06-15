@@ -12,3 +12,5 @@ html, body {
 .mat-divider {
   margin: 20px 0 20px 0 !important;
 }
+
+body { margin: 0; }

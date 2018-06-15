@@ -3,7 +3,7 @@ import {LoginService} from '../_service/login.service';
 import {Participant} from '../_model/participant';
 import {isNullOrUndefined} from 'util';
 import {MessageService} from '../_service/message.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Component({

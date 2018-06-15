@@ -1,8 +1,9 @@
+
+import {map, filter} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import {Subject, Subscription} from 'rxjs';
+
+
 
 @Injectable()
 export class MessageService {
@@ -13,9 +14,9 @@ export class MessageService {
   }
 
   subscribe(type: string, callback: MessageCallback): Subscription {
-    return this.handler
-      .filter(message => message.type === type)
-      .map(message => message.payload)
+    return this.handler.pipe(
+      filter(message => message.type === type),
+      map(message => message.payload),)
       .subscribe(callback);
   }
 }

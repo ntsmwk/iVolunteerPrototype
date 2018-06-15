@@ -86,7 +86,7 @@ export class TaskCreateComponent implements OnInit {
 
 
     if (this.isEditMode()) {
-      this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']);
+      this.taskService.save(<Task>task).toPromise().then(() => this.router.navigate(['/tasks']));
     } else {
       Promise.all([
         this.loginService.getLoggedIn().toPromise(),

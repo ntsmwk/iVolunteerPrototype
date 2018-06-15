@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {TaskInteractionService} from '../../_service/task-interaction.service';
 import {MessageService} from '../../_service/message.service';
 import {Task} from '../../_model/task';
