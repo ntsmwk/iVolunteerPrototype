@@ -44,13 +44,21 @@
   <mat-divider></mat-divider>
 
   <div>
-    <button *ngFor="let workflowStep of workflowSteps" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button
+    <button *ngFor="let workflowStep of workflowStepsDefault" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button
             color="primary">
       {{workflowStep.label}}
     </button>
   </div>
 
   <mat-divider></mat-divider>
+
+  <!-- Custom Workflow Step Implementation -->
+  
+  <div *ngIf="workflowStepsAssignment?.length > 0">
+    <app-task-assign [workflowStepsAssignment]="workflowStepsAssignment" [participant]="participant" [task]="task" [workflowProcessId]="workflowProcessId"></app-task-assign>
+  </div>
+
+  <!-- End Custom Workflow Step Implementation -->
 
   <div *ngIf="role === 'EMPLOYEE'">
     <app-task-interaction-history [id]="task.id"></app-task-interaction-history>

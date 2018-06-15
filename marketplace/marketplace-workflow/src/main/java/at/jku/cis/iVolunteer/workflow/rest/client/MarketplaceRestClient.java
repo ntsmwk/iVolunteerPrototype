@@ -37,6 +37,12 @@ public class MarketplaceRestClient extends RestClient {
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
 				.getBody();
 	}
+	
+	public VolunteerDTO findVolunteerByUserName(String volunteerUsername, String authorization) {
+		String requestURI = buildMarketplaceRequestURI("/volunteer/username/" + volunteerUsername);
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
+				.getBody();
+	}
 
 	public TaskDTO findTaskById(String taskId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI("/task/" + taskId);

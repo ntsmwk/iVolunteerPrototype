@@ -9,6 +9,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.VariableInstance;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -17,11 +18,17 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.workflow.model.WorkflowStep;
+import at.jku.cis.iVolunteer.workflow.model.WorkflowStepType;
+
 @Service
 public class WorkflowStepService {
 
+	private static final String VOLUNTEER_ID = "volunteerId";
 	private static final String SERVICE_TASK = "serviceTask";
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
+	private static final String PARALLEL_GATEWAY = "parallelGateway";
 
 	@Autowired
 	private RuntimeService runtimeService;
@@ -29,10 +36,16 @@ public class WorkflowStepService {
 	private RepositoryService repositoryService;
 
 	public List<WorkflowStep> getNextWorkflowSteps(Task task) {
+		String volunteerId = determineVolunteerId(task);
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));
-
 		Set<String> labels = determineWorkflowLabelsForActivity(activity);
-		return labels.stream().map(label -> new WorkflowStep(task.getId(), label)).collect(Collectors.toList());
+		return labels.stream().map(label -> new WorkflowStep(task.getId(), label,
+				WorkflowStepType.valueOf(task.getCategory()), volunteerId)).collect(Collectors.toList());
+	}
+
+	private String determineVolunteerId(Task task) {
+		VariableInstance variableInstance = runtimeService.getVariableInstance(task.getExecutionId(), VOLUNTEER_ID);
+		return variableInstance == null ? null : variableInstance.getTextValue();
 	}
 
 	private Set<String> determineWorkflowLabelsForActivity(PvmActivity activity) {
@@ -42,6 +55,8 @@ public class WorkflowStepService {
 		for (PvmTransition transition : transitions) {
 			String typeProperty = (String) transition.getDestination().getProperty("type");
 			if (typeProperty.equals(EXCLUSIVE_GATEWAY)) {
+				nextWorkflowLabels.addAll(determineWorkflowLabelsForActivity(transition.getDestination()));
+			} else if (typeProperty.equals(PARALLEL_GATEWAY)) {
 				nextWorkflowLabels.addAll(determineWorkflowLabelsForActivity(transition.getDestination()));
 			} else if (typeProperty.equals(SERVICE_TASK)) {
 				nextWorkflowLabels.add((String) transition.getDestination().getProperty("name"));

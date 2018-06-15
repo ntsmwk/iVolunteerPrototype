@@ -27,4 +27,8 @@ public class VolunteerController {
 	public VolunteerDTO findById(@PathVariable("id") String id) {
 		return volunteerMapper.toDTO(volunteerRepository.findOne(id));
 	}
+	@GetMapping("/volunteer/username/{username}")
+	public VolunteerDTO findByUsername(@PathVariable("username") String username) {
+		return volunteerMapper.toDTO(volunteerRepository.findByUsername(username));
+	}
 }
