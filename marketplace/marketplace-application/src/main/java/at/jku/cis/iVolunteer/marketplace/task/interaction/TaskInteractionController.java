@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.exception.PreConditionFailedException;
 import at.jku.cis.iVolunteer.model.participant.Participant;
 import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.task.Task;
@@ -83,21 +84,21 @@ public class TaskInteractionController {
 				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
 			return createTaskInteraction(task, loginService.getLoggedInParticipant(), TaskVolunteerOperation.RESERVED);
 		} else {
-			throw new BadRequestException();
+			throw new PreConditionFailedException("Cannot reserve! Volunteer is already reserved or assigned.");
 		}
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
 	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId) {
 		Task task = findAndVerifyTaskById(taskId);
-		TaskInteraction lastedTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
+		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
-		if (lastedTaskInteraction != null && (lastedTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
-				|| lastedTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
+		if (latestTaskInteraction != null && (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
+				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
 			return taskInteractionMapper.toDTO(createTaskInteraction(task, loginService.getLoggedInParticipant(),
 					TaskVolunteerOperation.UNRESERVED));
 		} else {
-			throw new BadRequestException();
+			throw new PreConditionFailedException("Cannot cancel reservation! Volunteer is not reserved.");
 		}
 	}
 
@@ -106,7 +107,11 @@ public class TaskInteractionController {
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
-		return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED));
+		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
+		if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
+			return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED));
+		}
+		throw new PreConditionFailedException("Cannot assign. Volunteer is already assigned or not reserved.");
 	}
 
 	@PostMapping("/task/{taskId}/unassign")
@@ -114,7 +119,12 @@ public class TaskInteractionController {
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
-		return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
+		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
+		if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
+			return taskInteractionMapper
+					.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
+		}
+		throw new PreConditionFailedException("Cannot cancel assignment! Volunteer is not assigned.");
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {

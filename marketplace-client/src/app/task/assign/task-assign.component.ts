@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {TaskInteractionService} from '../../_service/task-interaction.service';
 import {Participant} from '../../_model/participant';
@@ -9,6 +9,9 @@ import {VolunteerService} from '../../_service/volunteer.service';
 import {SourceService} from '../../_service/source.service';
 import {ContractorService} from '../../_service/contractor.service';
 import {Source} from '../../_model/source';
+import { WorkflowStep } from '../../_model/workflow-step';
+import { WorkflowService } from '../../_service/workflow.service';
+import { LoginService } from '../../_service/login.service';
 
 @Component({
   selector: 'app-task-assign',
@@ -17,67 +20,61 @@ import {Source} from '../../_model/source';
 })
 export class TaskAssignComponent implements OnInit {
 
-  source: Source;
-  task: Task;
+  @Input() workflowStepsAssignment: WorkflowStep[];
+  @Input() participant: Participant;
+  @Input() task: Task;
+  @Input() workflowProcessId: string;
 
+  source: Source;
   dataSource = new MatTableDataSource<AssignmentVolunteer>();
   displayedColumns = ['isAssigned', 'username'];
 
   constructor(private route: ActivatedRoute,
               private sourceService: SourceService,
-              private contractorService: ContractorService,
-              private taskService: TaskService,
-              private taskInteractionService: TaskInteractionService,
-              private volunteerService: VolunteerService) {
+              private workflowService: WorkflowService) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadData(params['id']));
+    this.route.params.subscribe(params => this.loadData());
     this.sourceService.find().toPromise().then((source: Source) => this.source = source);
   }
 
-  private loadData(id: string) {
-    this.taskService.findById(id).toPromise().then((task: Task) => {
-      this.task = task;
-      Promise.all([
-        this.taskInteractionService.findReservedVolunteersByTask(this.task).toPromise(),
-        this.taskInteractionService.findAssignedVolunteersByTask(this.task).toPromise()
-      ]).then((values: Array<any>) => {
-        const assignmentVolunteers: AssignmentVolunteer[] = [];
-        (<Participant[]> values[0]).forEach((volunteer: Participant) => {
-          assignmentVolunteers.splice(0, 0, new AssignmentVolunteer(volunteer.id, volunteer.username, false));
-        });
-        (<Participant[]> values[1]).forEach((volunteer: Participant) => {
-          assignmentVolunteers.splice(0, 0, new AssignmentVolunteer(volunteer.id, volunteer.username, true));
-        });
-        this.dataSource.data = assignmentVolunteers;
-      });
+  private loadData() {
 
-    });
+    const assignmentVolunteers: AssignmentVolunteer[] = [];
+
+    this.workflowStepsAssignment
+      .filter((step:WorkflowStep) => step.label.toLowerCase() == "assign")
+      .forEach((step:WorkflowStep) => assignmentVolunteers.push(new AssignmentVolunteer(step.assignee, true, step)));
+
+    this.workflowStepsAssignment
+      .filter((step:WorkflowStep) => step.label.toLowerCase() == "unassign")
+      .forEach((step:WorkflowStep) => assignmentVolunteers.push(new AssignmentVolunteer(step.assignee, false, step)));
+
+    console.log(assignmentVolunteers);
+    this.dataSource.data = assignmentVolunteers;
+  }
+
+  executeNextWorkflowStep(workflowStep: WorkflowStep) {
+    console.log(workflowStep);
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username)
+    .toPromise();
   }
 
   handleChange(volunteer: AssignmentVolunteer) {
-    this.volunteerService.findById(volunteer.id).toPromise().then((participant: Participant) => {
-      switch (volunteer.isAssigned) {
-        case true:
-          this.contractorService.unassign(this.source, this.task, participant).toPromise().then(() => this.loadData(this.task.id));
-          break;
-        case false:
-          this.contractorService.assign(this.source, this.task, participant).toPromise().then(() => this.loadData(this.task.id));
-          break;
-      }
-    });
+    console.log(volunteer);
+    this.executeNextWorkflowStep(volunteer.workflowStep);
   }
 }
 
-export class AssignmentVolunteer {
-  id: string;
+export class AssignmentVolunteer {;
   username: string;
   isAssigned: boolean;
+  workflowStep: WorkflowStep;
 
-  constructor(id: string, username: string, isAssigned: boolean) {
-    this.id = id;
+  constructor(username: string, isAssigned: boolean, workflowStep: WorkflowStep) {
     this.username = username;
     this.isAssigned = isAssigned;
+    this.workflowStep = workflowStep;
   }
 }

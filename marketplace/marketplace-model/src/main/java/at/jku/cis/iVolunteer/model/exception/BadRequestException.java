@@ -19,5 +19,4 @@ public class BadRequestException extends RuntimeException {
 	public BadRequestException(Throwable throwable) {
 		super(throwable);
 	}
-
 }

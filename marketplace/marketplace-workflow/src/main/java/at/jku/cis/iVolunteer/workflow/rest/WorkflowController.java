@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.workflow.model.WorkflowStep;
+import at.jku.cis.iVolunteer.workflow.model.WorkflowType;
+import at.jku.cis.iVolunteer.workflow.service.WorkflowProcessService;
+import at.jku.cis.iVolunteer.workflow.service.WorkflowStepService;
+import at.jku.cis.iVolunteer.workflow.service.WorkflowTypeService;
+
 @RestController
 @RequestMapping("/workflow")
 public class WorkflowController {

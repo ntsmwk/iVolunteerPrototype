@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Task} from '../../_model/task';
 import {TaskService} from '../../_service/task.service';
 
@@ -19,11 +19,13 @@ export class TaskDetailComponent implements OnInit {
   role;
   task: Task;
   participant: Participant;
-  workflowSteps: WorkflowStep[];
+  workflowStepsDefault: WorkflowStep[];
+  workflowStepsSpecial: WorkflowStep[];
+  workflowStepsAssignment: WorkflowStep[];
   workflowProcessId: string;
 
+
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private loginService: LoginService,
               private messageService: MessageService,
               private taskService: TaskService,
@@ -44,16 +46,25 @@ export class TaskDetailComponent implements OnInit {
           if (isNullOrUndefined(workflowProcessId)) {
             return;
           }
-          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.username).toPromise().then((workflowSteps: WorkflowStep[]) => {
-            this.workflowSteps = workflowSteps;
+          this.workflowService.getWorkflowSteps(task.workflowKey, workflowProcessId, this.participant.username)
+          .toPromise().then((workflowSteps: WorkflowStep[]) => {
+            this.workflowStepsDefault = workflowSteps.filter((step:WorkflowStep) => step.workflowStepType === "DEFAULT");
+            this.workflowStepsSpecial = workflowSteps.filter((step:WorkflowStep) => step.workflowStepType === "SPECIAL");
+            this.handleSpecialWorkflowSteps();
           });
         });
       });
     });
   }
 
+  private handleSpecialWorkflowSteps(){
+    this.workflowStepsAssignment = this.workflowStepsSpecial
+    .filter((step:WorkflowStep) => step.label.toLowerCase() == "assign" || step.label.toLowerCase() == "unassign");
+  }
+
   executeNextWorkflowStep(workflowStep: WorkflowStep) {
-    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username).toPromise().then(() => {
+    this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.username)
+    .toPromise().then(() => {
       this.loadTask(this.task.id);
       this.messageService.broadcast('historyChanged', {});
     });

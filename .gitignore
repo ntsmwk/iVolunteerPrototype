@@ -9,3 +9,4 @@ composer-logs/
 .project
 marketplace-client/package-lock.json
 marketplace/Servers/**
+/marketplace/.recommenders/**

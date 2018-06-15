@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.workflow.rest;
+package at.jku.cis.iVolunteer.workflow.service;
 
 import static java.util.stream.Collectors.toList;
 
@@ -11,6 +11,8 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import at.jku.cis.iVolunteer.workflow.model.WorkflowType;
 
 @Service
 public class WorkflowTypeService {
