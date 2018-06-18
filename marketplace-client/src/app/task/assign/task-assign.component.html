@@ -1,10 +1,12 @@
 <h3>Task Assignment</h3>
 
-<mat-table #table [dataSource]="dataSource">
+<mat-table #table [(dataSource)]="dataSource">
   <ng-container matColumnDef="isAssigned">
     <mat-header-cell *matHeaderCellDef>Assigned</mat-header-cell>
     <mat-cell *matCellDef="let volunteer">
-     <mat-checkbox (change)="handleChange(volunteer)" [checked]="isVolunteerAssigned(volunteer)"></mat-checkbox>
+     <mat-checkbox (click)="$event.stopPropagation()"
+     (change)="$event ? handleChange(volunteer) : null"
+     [checked]="selection.isSelected(volunteer)"></mat-checkbox>
     </mat-cell>
   </ng-container>
 

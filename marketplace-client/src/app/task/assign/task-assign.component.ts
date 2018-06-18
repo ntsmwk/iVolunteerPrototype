@@ -16,6 +16,7 @@ import { Volunteer } from '../../_model/volunteer';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from '../../_service/message.service';
 import { Alert } from 'selenium-webdriver';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-task-assign',
@@ -32,38 +33,37 @@ export class TaskAssignComponent implements OnInit {
   source: Source;
   dataSource = new MatTableDataSource<AssignmentVolunteer>();
   displayedColumns = ['isAssigned', 'username'];
+  selection: SelectionModel<AssignmentVolunteer>;
 
-  constructor(private route: ActivatedRoute,
-              private volunteerService: VolunteerService,
+  constructor(private volunteerService: VolunteerService,
               private messageService: MessageService,
               private workflowService: WorkflowService) {
   }
 
   ngOnInit() {
     const assignmentVolunteers: AssignmentVolunteer[] = [];
-    
-    console.error(this.workflowStepsAssignment);
-    this.workflowStepsAssignment
-      .forEach((step:WorkflowStep) => {
+    this.selection = new SelectionModel<AssignmentVolunteer>(true, []);
+
+    this.workflowStepsAssignment.forEach((step:WorkflowStep) => {
         this.volunteerService.findById(step.assignee).toPromise().then((volunteer:Volunteer) => {
-          assignmentVolunteers.push(new AssignmentVolunteer(volunteer.username, this.isNextStepAssign(step), step));
-          // assigning the dataSource earlier or later does not display the list correctly!
-          // therefore it is assigned here...
+          const assignedVolunteer = new AssignmentVolunteer(volunteer.username, step);
+          if (this.isNextStepAssign(step)){
+            this.selection.deselect(assignedVolunteer)
+          }else{
+            this.selection.select(assignedVolunteer);
+          }
+          assignmentVolunteers.push(assignedVolunteer);
           this.dataSource.data =  assignmentVolunteers;  
         })
       });
   }
 
   private isNextStepAssign(workflowStep: WorkflowStep){
-    return workflowStep.label.toLowerCase() == "unassign";
-  }
-
-  isVolunteerAssigned(assignedVolunteer: AssignmentVolunteer){
-    return assignedVolunteer.isAssigned;
+    return workflowStep.label.toLowerCase() == "assign";
   }
 
   handleChange(volunteer: AssignmentVolunteer) {
-
+    this.selection.toggle(volunteer);
     this.workflowService.completeWorkflowStep(this.task.workflowKey, this.workflowProcessId, volunteer.workflowStep, this.participant.id)
     .toPromise()
     .then(() =>       this.messageService.broadcast('historyChanged', {}))
@@ -71,21 +71,18 @@ export class TaskAssignComponent implements OnInit {
       if(error.status == 412){
         alert("precondition failed!");
       }
-      this.dataSource.data
-        .filter((assignmentVolunteer: AssignmentVolunteer) => assignmentVolunteer.username == volunteer.username)
-        .forEach((assignmentVolunteer: AssignmentVolunteer) => {assignmentVolunteer.isAssigned = !assignmentVolunteer.isAssigned; console.error("changed!!")});
+      this.selection.deselect(volunteer);
+      console.error(this.selection.isSelected(volunteer));
     });
   }
 }
 
 export class AssignmentVolunteer {;
   username: string;
-  isAssigned: boolean;
   workflowStep: WorkflowStep;
 
-  constructor(username: string, isAssigned: boolean, workflowStep: WorkflowStep) {
+  constructor(username: string, workflowStep: WorkflowStep) {
     this.username = username;
-    this.isAssigned = isAssigned;
     this.workflowStep = workflowStep;
   }
 }
