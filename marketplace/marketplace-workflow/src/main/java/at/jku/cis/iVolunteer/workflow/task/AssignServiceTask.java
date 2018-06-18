@@ -29,7 +29,6 @@ public class AssignServiceTask implements ServiceTask {
 		TaskDTO task = marketplaceRestClient.findTaskById(taskId, token);
 		SourceDTO source = marketplaceRestClient.findSource(token);
 		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById(volunteerId, token);
-
 		contractorRestClient.assignTask(task, source, volunteer, token);
 	}
 }

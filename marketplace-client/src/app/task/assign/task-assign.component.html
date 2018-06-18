@@ -4,7 +4,7 @@
   <ng-container matColumnDef="isAssigned">
     <mat-header-cell *matHeaderCellDef>Assigned</mat-header-cell>
     <mat-cell *matCellDef="let volunteer">
-     <mat-checkbox (change)="handleChange(volunteer)" [checked]="volunteer.isAssigned"></mat-checkbox>
+     <mat-checkbox (change)="handleChange(volunteer)" [checked]="isVolunteerAssigned(volunteer)"></mat-checkbox>
     </mat-cell>
   </ng-container>
 

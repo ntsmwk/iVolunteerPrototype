@@ -8,11 +8,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class TrustifierApplication {
 
-	@Bean
-	public RestTemplate prodduceRestTemplate() {
-		return new RestTemplate();
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(TrustifierApplication.class, args);
 	}
