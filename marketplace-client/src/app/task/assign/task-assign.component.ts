@@ -46,7 +46,7 @@ export class TaskAssignComponent implements OnInit {
     this.workflowStepsAssignment
       .forEach((step:WorkflowStep) => {
         this.volunteerService.findById(step.assignee).toPromise().then((volunteer:Volunteer) => {
-          assignmentVolunteers.push(new AssignmentVolunteer(volunteer.username, this.isAssigned(step), step));
+          assignmentVolunteers.push(new AssignmentVolunteer(volunteer.username, this.isNextStepAssign(step), step));
           // assigning the dataSource earlier or later does not display the list correctly!
           // therefore it is assigned here...
           this.dataSource.data =  assignmentVolunteers;  
@@ -54,7 +54,7 @@ export class TaskAssignComponent implements OnInit {
       });
   }
 
-  private isAssigned(workflowStep: WorkflowStep){
+  private isNextStepAssign(workflowStep: WorkflowStep){
     return workflowStep.label.toLowerCase() == "unassign";
   }
 
