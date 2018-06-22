@@ -11,5 +11,4 @@ public class TrustifierApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TrustifierApplication.class, args);
 	}
-
 }
