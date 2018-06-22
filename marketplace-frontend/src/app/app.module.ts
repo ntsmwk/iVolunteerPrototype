@@ -17,10 +17,15 @@ import { FuseSampleModule } from './main/content/sample/sample.module';
 
 const appRoutes: Routes = [
     {
-        path      : '**',
-        redirectTo: 'sample'
-    }
-];
+        path        : 'login',
+        loadChildren: './login/login.module#LoginModule'
+    },
+    {
+        path: 'main', 
+        loadChildren: './main/main.module#FuseMainModule'
+    }, 
+        {path: '', redirectTo: '/main', pathMatch: 'full'}
+    ];
 
 @NgModule({
     declarations: [

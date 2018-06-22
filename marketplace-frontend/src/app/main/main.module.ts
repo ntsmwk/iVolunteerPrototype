@@ -14,17 +14,21 @@ import { FuseToolbarModule } from 'app/main/toolbar/toolbar.module';
 import { FuseMainComponent } from './main.component';
 
 
+const routes = [
+    {
+        path     : '',
+        component: FuseMainComponent
+    }
+];
+
 @NgModule({
     declarations: [
         FuseMainComponent,
     ],
     imports     : [
-        RouterModule,
-
+        RouterModule.forChild(routes),
         MatSidenavModule,
-
         FuseSharedModule,
-
         FuseThemeOptionsModule,
         FuseNavigationModule,
         FuseSearchBarModule,
