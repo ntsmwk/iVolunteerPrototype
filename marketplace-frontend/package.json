@@ -4,9 +4,9 @@
   "license": "https://themeforest.net/licenses/terms/regular",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
-    "start-hmr": "ng serve --configuration hmr -sm=false",
-    "start-hmr-sourcemaps": "ng serve --hmr -e=hmr",
+    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
+    "start-hmr": "ng serve --configuration hmr -sm=false --host 0.0.0.0 --proxy-config proxy.conf.json",
+    "start-hmr-sourcemaps": "ng serve --hmr -e=hmr --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
     "build-stats": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev --stats-json",
     "build-prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod",
