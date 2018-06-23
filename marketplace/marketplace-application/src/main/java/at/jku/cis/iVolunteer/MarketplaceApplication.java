@@ -78,8 +78,6 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createCompetence("Flexability");
 		createCompetence("Motivation");
 
-		// createDemoTasks();
-
 	}
 
 	private Volunteer createVolunteer(String username, String password) {
