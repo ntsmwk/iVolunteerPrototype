@@ -8,7 +8,6 @@ import {FuseNavigationModule, FuseSearchBarModule, FuseShortcutsModule, FuseSide
 import {FuseContentModule} from 'app/main/content/content.module';
 import {FuseFooterModule} from 'app/main/footer/footer.module';
 import {FuseNavbarModule} from 'app/main/navbar/navbar.module';
-import {FuseQuickPanelModule} from 'app/main/quick-panel/quick-panel.module';
 import {FuseToolbarModule} from 'app/main/toolbar/toolbar.module';
 
 import {FuseMainComponent} from './main.component';
@@ -33,7 +32,6 @@ import {FuseMainComponent} from './main.component';
     FuseContentModule,
     FuseFooterModule,
     FuseNavbarModule,
-    FuseQuickPanelModule,
     FuseToolbarModule,
   ],
   exports: [

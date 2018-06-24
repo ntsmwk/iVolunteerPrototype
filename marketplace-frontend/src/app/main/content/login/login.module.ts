@@ -26,9 +26,6 @@ const routes = [
 
     FuseSharedModule
   ],
-  providers: [
-    LoginService
-  ],
   exports: [
     FuseLoginComponent
   ]

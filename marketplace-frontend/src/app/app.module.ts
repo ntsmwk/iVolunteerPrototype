@@ -31,8 +31,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
 
     // Fuse Main and Shared modules
-    FuseModule.forRoot(fuseConfig),
     FuseSharedModule,
+    FuseModule.forRoot(fuseConfig),
     FuseMainModule
   ],
   bootstrap: [

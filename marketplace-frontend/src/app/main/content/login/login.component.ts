@@ -11,6 +11,7 @@ import {LoginService} from '../_service/login.service';
   selector: 'fuse-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  providers: [LoginService],
   animations: fuseAnimations
 })
 export class FuseLoginComponent implements OnInit {
@@ -30,7 +31,7 @@ export class FuseLoginComponent implements OnInit {
     this.fuseConfig.setConfig({layout: layout});
 
     this.loginFormErrors = {
-      username   : {},
+      username: {},
       password: {}
     };
   }

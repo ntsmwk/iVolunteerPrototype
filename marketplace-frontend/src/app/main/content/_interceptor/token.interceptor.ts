@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -9,16 +10,19 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.endsWith('/login') && request.method === 'POST') {
+    const authorization = localStorage.getItem('token');
+    
+    if (this.isLoginRequest(request) || isNullOrUndefined(authorization)) {
       return next.handle(request);
     }
 
     request = request.clone(
-      {
-        setHeaders:
-          {'Authorization': localStorage.getItem('token')}
-      }
+      {setHeaders: {'Authorization': authorization}}
     );
     return next.handle(request);
+  }
+
+  private isLoginRequest(request: HttpRequest<any>) {
+    return request.url.endsWith('/login') && request.method === 'POST';
   }
 }
