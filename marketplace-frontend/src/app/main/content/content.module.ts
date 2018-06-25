@@ -18,6 +18,25 @@ const routes = [
     path: 'main',
     loadChildren: './sample/sample.module#FuseSampleModule',
     canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/available',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/upcomming',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  }, {
+    path: 'main/tasks/running',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/finished',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
   }
 ];
 

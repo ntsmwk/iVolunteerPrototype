@@ -30,25 +30,25 @@ export const navigation = [
         'id': 'available-tasks',
         'title': 'Available',
         'type': 'item',
-        'url': '/apps/tasks?status=AVAILABLE'
+        'url': '/main/tasks/available'
       },
       {
         'id': 'upcomming-tasks',
         'title': 'Upcomming',
         'type': 'item',
-        'url': '/apps/tasks?status=UPCOMMING'
+        'url': '/main/tasks/upcomming'
       },
       {
         'id': 'running-tasks',
         'title': 'Running',
         'type': 'item',
-        'url': '/apps/tasks?status=RUNNING'
+        'url': '/main/tasks/running'
       },
       {
         'id': 'finished-tasks',
         'title': 'Finished',
         'type': 'item',
-        'url': '/apps/tasks?status=FINISHED'
+        'url': '/main/tasks/finished'
       }
     ]
   },
