@@ -12,11 +12,11 @@
     </div>
     <!-- / HEADER -->
 
-    <div class="courses" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+    <div class="competencies" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
 
-        <div class="course" *ngFor="let competence of competencies" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [ngClass]="competence-bg" [@animate]="{value:'*',params:{y:'100%'}}">
+        <div class="competence" *ngFor="let competence of competencies" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [ngClass]="competence-bg" [@animate]="{value:'*',params:{y:'100%'}}">
 
-            <div class="course-content" fxLayout="column">
+            <div class="competence-content" fxLayout="column">
 
                 <div class="header" fxLayout="row" fxLayoutAlign="center center">
 
@@ -34,6 +34,11 @@
 
             </div>
         </div>
+
+        <div class="no-courses" *ngIf="competencies.length === 0">
+            No competencies found!
+        </div>
+
     </div>
 
 </div>

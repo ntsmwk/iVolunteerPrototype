@@ -1,7 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.participant.profile;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.lib.mapper.competence.CompetenceEntryToCompetenceMapper;
+import at.jku.cis.iVolunteer.lib.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.lib.mapper.participant.profile.CompetenceEntryMapper;
 import at.jku.cis.iVolunteer.lib.mapper.participant.profile.TaskEntryMapper;
 import at.jku.cis.iVolunteer.lib.mapper.participant.profile.VolunteerProfileMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
+import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.ForbiddenException;
 import at.jku.cis.iVolunteer.model.participant.Participant;
@@ -47,6 +53,12 @@ public class VolunteerProfileController {
 	private TaskEntryMapper taskEntryMapper;
 	@Autowired
 	private CompetenceEntryMapper competenceEntryMapper;
+
+	@Autowired
+	private CompetenceMapper competenceMapper;
+
+	@Autowired
+	private CompetenceEntryToCompetenceMapper competenceEntryToCompetenceMapper;
 
 	@GetMapping("/{volunteerId}/profile")
 	public VolunteerProfileDTO getVolunteerProfile(@PathVariable("volunteerId") String volunteerId) {
@@ -100,9 +112,20 @@ public class VolunteerProfileController {
 		volunteerProfileRepository.save(volunteerProfile);
 	}
 
+	@GetMapping("/{volunteerId}/profile/competenceEntry")
+	public Set<CompetenceEntryDTO> getCompetenceEntryList(@PathVariable("volunteerId") String volunteerId) {
+		Set<CompetenceEntryDTO> competenceList = getVolunteerProfile(volunteerId).getCompetenceList();
+		return competenceList;
+	}
+
 	@GetMapping("/{volunteerId}/profile/competence")
-	public Set<CompetenceEntryDTO> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
-		return getVolunteerProfile(volunteerId).getCompetenceList();
+	public List<CompetenceDTO> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
+		List<CompetenceDTO> competenceList = getVolunteerProfile(volunteerId).getCompetenceList().stream()
+				.map((CompetenceEntryDTO competenceEntry) -> competenceEntryMapper.toEntity(competenceEntry))
+				.map((CompetenceEntry competenceEntry) -> competenceEntryToCompetenceMapper
+						.toCompetence(competenceEntry))
+				.map((Competence competence) -> competenceMapper.toDTO(competence)).collect(Collectors.toList());
+		return competenceList;
 	}
 
 	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")

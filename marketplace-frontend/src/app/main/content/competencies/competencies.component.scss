@@ -57,28 +57,28 @@
         }
     }
 
-    .courses {
+    .competencies {
         width: 100%;
         max-width: 1040px;
         margin: 0 auto;
 
-        .no-courses {
+        .no-competencies {
             font-size: 24px;
             margin: 24px 0;
             text-align: center;
         }
 
-        .course {
+        .competence {
             padding: 16px;
 
             &:hover {
 
-                .course-content {
+                .competence-content {
                     @include mat-elevation(8);
                 }
             }
 
-            .course-content {
+            .competence-content {
                 background: white;
                 min-height: 240px;
                 transition: box-shadow 150ms ease-in-out;

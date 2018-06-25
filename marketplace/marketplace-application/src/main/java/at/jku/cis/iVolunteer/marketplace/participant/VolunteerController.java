@@ -36,6 +36,7 @@ public class VolunteerController {
 	
 	@GetMapping("/volunteer/{id}/competencies")
 	public List<CompetenceDTO> findCompetencies(@PathVariable("id") String id){
+		
 		//TODO implement ...
 		return Collections.emptyList();
 	}

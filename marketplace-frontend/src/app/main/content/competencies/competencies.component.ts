@@ -6,12 +6,15 @@ import { fuseAnimations } from '@fuse/animations';
 import { ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { VolunteerService } from '../_service/volunteer.service';
+import { LoginService } from '../_service/login.service';
+import { Participant } from '../_model/participant';
+import { VolunteerProfileService} from '../_service/volunteer-profile.service';
 
 @Component({
   selector: 'fuse-competencies',
   templateUrl: './competencies.component.html',
   styleUrls: ['./competencies.component.scss'],
-  providers: [CompetenceService],
+  providers: [LoginService, CompetenceService, VolunteerProfileService],
   animations: fuseAnimations
 })
 export class FuseCompetenceListComponent implements OnInit {
@@ -21,6 +24,8 @@ export class FuseCompetenceListComponent implements OnInit {
 
   constructor(
     private competenceService: CompetenceService,
+    private volunteerProfileService: VolunteerProfileService,
+    private loginService: LoginService,
     private route: ActivatedRoute
   ) {}
 
@@ -29,17 +34,17 @@ export class FuseCompetenceListComponent implements OnInit {
     this.route.paramMap.subscribe(
       params => this.pageType = params.get('pageType')
     )
-
-    console.error(this.pageType);
     switch(this.pageType){
       case 'all':
         this.competenceService.findAll().toPromise().then((comp: List<Competence>) => this.competencies = comp);
         break;
-      // case 'my':
-      //   this.vol
+      case 'my':
+        console.error("....")
+        this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+          this.volunteerProfileService.findCompetencesByVolunteer(volunteer).toPromise().then((comp: List<Competence>) => this.competencies = comp);
+        });
+        break;
     }
-
-    
   }
 
 }
