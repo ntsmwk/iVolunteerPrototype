@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
@@ -11,12 +11,8 @@ import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatI
 import {MessageService} from '../_service/message.service';
 import {ReactiveFormsModule} from '@angular/forms';
 
-const routes: Route[] = [
-  {
-    path: '',
-    runGuardsAndResolvers: 'paramsChange',
-    component: FuseTaskDetailComponent
-  }
+const routes = [
+  {path: '', component: FuseTaskDetailComponent}
 ];
 
 @NgModule({
