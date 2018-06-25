@@ -16,7 +16,7 @@ import {FuseMainModule} from './main/main.module';
 const appRoutes: Routes = [
   {
     path: '**',
-    redirectTo: 'main'
+    redirectTo: 'main/dashboard'
   }
 ];
 
