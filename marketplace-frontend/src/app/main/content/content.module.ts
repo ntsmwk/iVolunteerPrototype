@@ -20,21 +20,7 @@ const routes = [
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/tasks/available',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard]
-  },
-  {
-    path: 'main/tasks/upcomming',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard]
-  }, {
-    path: 'main/tasks/running',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard]
-  },
-  {
-    path: 'main/tasks/finished',
+    path: 'main/tasks/:pageType',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard]
   }
@@ -47,7 +33,6 @@ const routes = [
   imports: [
     HttpClientModule,
     RouterModule.forChild(routes),
-
     FuseSharedModule,
   ],
   providers: [
