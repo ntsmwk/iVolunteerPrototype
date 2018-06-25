@@ -9,7 +9,7 @@
 	<packaging>pom</packaging>
 
 	<name>marketplace</name>
-
+	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -26,7 +26,6 @@
 	<modules>
 		<module>marketplace-application</module>
 		<module>marketplace-security</module>
-		<module>marketplace-workflow</module>
 		<module>marketplace-mapper</module>
 		<module>marketplace-model</module>
 	</modules>

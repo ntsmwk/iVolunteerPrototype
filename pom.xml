@@ -9,6 +9,13 @@
 	<packaging>pom</packaging>
 
 	<name>ivolunteer</name>
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -18,6 +25,6 @@
 
 	<modules>
 		<module>marketplace</module>
-		<module>trustifier</module>
+		<module>core</module>
 	</modules>
 </project>
