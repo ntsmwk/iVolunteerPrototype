@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Write your transction processor functions here
+ * transction processor functions 
  */
 
 var NS = 'at.jku.cis';

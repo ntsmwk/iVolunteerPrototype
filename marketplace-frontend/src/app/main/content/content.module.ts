@@ -30,6 +30,11 @@ const routes = [
     canActivate: [TokenGuard]
   },
   {
+    path: 'main/tasks/:pageType',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
     path: 'main/competencies/:pageType',
     loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
     canActivate: [TokenGuard, VolunteerGuard]
@@ -43,7 +48,6 @@ const routes = [
   imports: [
     HttpClientModule,
     RouterModule.forChild(routes),
-
     FuseSharedModule,
   ],
   providers: [

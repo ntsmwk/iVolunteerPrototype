@@ -1,17 +1,21 @@
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-
-import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule} from '@angular/material';
-
+import {Route, RouterModule} from '@angular/router';
+import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatTableModule} from '@angular/material';
 import {FuseSharedModule} from '@fuse/shared.module';
-
 import {FuseTaskListComponent} from './task-list.component';
+import {LoginService} from '../_service/login.service';
+import {TaskService} from '../_service/task.service';
 
-const routes = [
-  {path: '', component: FuseTaskListComponent}
+const routes: Route[] = [
+  {path: '', component: FuseTaskListComponent, runGuardsAndResolvers: 'always'}
 ];
 
 @NgModule({
+  providers: [
+    LoginService,
+    TaskService
+  ],
+
   declarations: [
     FuseTaskListComponent
   ],
@@ -22,6 +26,10 @@ const routes = [
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    MatTableModule,
+
+
 
     FuseSharedModule
   ],

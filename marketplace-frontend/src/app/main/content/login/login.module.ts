@@ -6,7 +6,6 @@ import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule} 
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {FuseLoginComponent} from './login.component';
-import {LoginService} from '../_service/login.service';
 
 const routes = [
   {path: '', component: FuseLoginComponent}
