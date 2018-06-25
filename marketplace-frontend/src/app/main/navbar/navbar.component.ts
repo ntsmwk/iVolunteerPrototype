@@ -53,7 +53,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     )
     {
         // Navigation data
-         //TODO
          this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
             switch(role){
                 case 'EMPLOYEE':
@@ -63,7 +62,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 this.navigation = navigation_volunteer;
                 break;
             }
-            console.error("navigation: " + this.navigation);
         })
         // Default layout
         this.layout = 'vertical';

@@ -47,9 +47,7 @@ export class FuseMainComponent implements OnDestroy
             this.document.body.className += ' is-mobile';
         }
 
-        //TODO
         this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
-            console.error("role: " + role);
             switch(role){
                 case 'EMPLOYEE':
                 this.navigation = navigation_employee;
@@ -58,8 +56,6 @@ export class FuseMainComponent implements OnDestroy
                 this.navigation = navigation_volunteer;
                 break;
             }
-
-            console.error("navigation3: " + this.navigation[3]);
         })
     }
 

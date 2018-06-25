@@ -93,7 +93,7 @@ export class FuseToolbarComponent
             this.horizontalNav = settings.layout.navigation === 'top';
             this.noNav = settings.layout.navigation === 'none';
         });
-        //TODO
+        
         this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
             switch(role){
                 case 'EMPLOYEE':
@@ -103,7 +103,6 @@ export class FuseToolbarComponent
                 this.navigation = navigation_volunteer;
                 break;
             }
-            console.error("navigation: " + this.navigation);
         })
     }
 
