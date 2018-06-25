@@ -28,5 +28,4 @@ public class SourceController {
 	private String determineRemoteAddress(HttpServletRequest httpServletRequest) {
 		return "http://" + httpServletRequest.getRemoteAddr() + ":" + serverPort;
 	}
-
 }

@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.rest.client;
+package at.jku.cis.iVolunteer.core.rest.client;
 
 import static java.text.MessageFormat.format;
 

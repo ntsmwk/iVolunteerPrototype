@@ -24,8 +24,9 @@ public class FinishServiceTask implements ServiceTask {
 		
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		TaskDTO task = marketplaceRestClient.findTaskById(taskId, token);
-		SourceDTO source = marketplaceRestClient.findSource(token);
+		//TODO
+		TaskDTO task = marketplaceRestClient.findTaskById("",taskId, token);
+		SourceDTO source = marketplaceRestClient.findSource("",token);
 
 		contractorRestClient.finishTask(task, source, token);
 	}

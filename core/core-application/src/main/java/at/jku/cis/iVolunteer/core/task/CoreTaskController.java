@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 
-@RestController("/task")
+@RestController
 public class CoreTaskController {
 
 	@Autowired
