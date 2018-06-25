@@ -25,7 +25,6 @@ export const navigation = [
     'title': 'Tasks',
     'type': 'collapse',
     'icon': 'work',
-    'url': '/main/task',
     'children': [
       {
         'id': 'available-tasks',
@@ -60,17 +59,16 @@ export const navigation = [
     'icon': 'widgets',
     'children': [
       {
-        'id': 'all-competencies',
-        'title': 'All Competencies',
-        'type': 'item',
-        'url': '/main/competencies/all'
-      }
-      , 
-      {
         'id': 'my-competencies',
         'title': 'My Competencies',
         'type': 'item',
         'url': '/main/competencies/my'
+      },
+      {
+        'id': 'all-competencies',
+        'title': 'All Competencies',
+        'type': 'item',
+        'url': '/main/competencies/all'
       }
     ]
   }

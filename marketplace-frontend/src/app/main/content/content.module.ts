@@ -25,13 +25,13 @@ const routes = [
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/tasks/:pageType',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    path: 'main/task/:taskId',
+    loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/task/:taskId',
-    loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
+    path: 'main/tasks/:pageType',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard]
   },
   {
