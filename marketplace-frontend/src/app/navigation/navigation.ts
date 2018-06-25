@@ -4,7 +4,7 @@ export const navigation = [
     'title': 'Dashboard',
     'type': 'item',
     'icon': 'dashboard',
-    'url': '/main'
+    'url': '/main/dashboard'
   },
   {
     'id': 'profile',
@@ -25,6 +25,7 @@ export const navigation = [
     'title': 'Tasks',
     'type': 'collapse',
     'icon': 'work',
+    'url': '/main/task',
     'children': [
       {
         'id': 'available-tasks',
