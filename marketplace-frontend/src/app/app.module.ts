@@ -1,53 +1,43 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterModule, Routes} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
 import 'hammerjs';
 
-import { FuseModule } from '@fuse/fuse.module';
-import { FuseSharedModule } from '@fuse/shared.module';
+import {FuseModule} from '@fuse/fuse.module';
+import {FuseSharedModule} from '@fuse/shared.module';
 
-import { fuseConfig } from './fuse-config';
+import {fuseConfig} from './fuse-config';
 
-import { AppComponent } from './app.component';
-import { FuseMainModule } from './main/main.module';
-import { FuseSampleModule } from './main/content/sample/sample.module';
+import {AppComponent} from './app.component';
+import {FuseMainModule} from './main/main.module';
 
 const appRoutes: Routes = [
-    {
-        path        : 'login',
-        loadChildren: './login/login.module#LoginModule'
-    },
-    {
-        path: 'main', 
-        loadChildren: './main/main.module#FuseMainModule'
-    }, 
-        {path: '', redirectTo: '/main', pathMatch: 'full'}
-    ];
+  {
+    path: '**',
+    redirectTo: 'main'
+  }
+];
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
-    imports     : [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        RouterModule.forRoot(appRoutes),
-        TranslateModule.forRoot(),
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    TranslateModule.forRoot(),
+    RouterModule.forRoot(appRoutes),
 
-        // Fuse Main and Shared modules
-        FuseModule.forRoot(fuseConfig),
-        FuseSharedModule,
-        FuseMainModule,
-        FuseSampleModule
-    ],
-    bootstrap   : [
-        AppComponent
-    ]
+    // Fuse Main and Shared modules
+    FuseSharedModule,
+    FuseModule.forRoot(fuseConfig),
+    FuseMainModule
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
-export class AppModule
-{
+export class AppModule {
 }
