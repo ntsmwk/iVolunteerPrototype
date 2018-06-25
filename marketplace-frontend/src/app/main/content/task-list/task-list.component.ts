@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs/internal/operators';
 import {MatTableDataSource} from '@angular/material';
 import {LoginService} from '../_service/login.service';
@@ -26,6 +26,8 @@ export class FuseTaskListComponent implements OnInit {
   selectedValue: string;
 
   pageType;
+  navigationSubscription;
+
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
@@ -127,6 +129,10 @@ export class FuseTaskListComponent implements OnInit {
     // this.router.navigate(['/task/' + task.id + '/detail']);
   }
 
-
-
 }
+
+
+
+
+
+
