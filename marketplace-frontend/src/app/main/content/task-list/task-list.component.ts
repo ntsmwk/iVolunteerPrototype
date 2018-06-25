@@ -14,16 +14,8 @@ import {Task} from '../_model/task';
 })
 export class FuseTaskListComponent implements OnInit {
 
-  participant;
-  participantRole;
-
   dataSource = new MatTableDataSource<Task>();
   displayedColumns = ['name', 'status', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
-
-  status: { value: string; viewValue: string }[];
-  selectedValue: string;
-
-  pageType;
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
@@ -36,7 +28,7 @@ export class FuseTaskListComponent implements OnInit {
       map => {
         const pageType = map.get('pageType');
         console.log(pageType);
-        switch (this.pageType) {
+        switch (pageType) {
           case 'available': {
             this.loadAvailableTasks();
             break;

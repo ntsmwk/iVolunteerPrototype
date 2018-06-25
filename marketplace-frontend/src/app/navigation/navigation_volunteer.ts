@@ -1,4 +1,4 @@
-export const navigation = [
+export const navigation_volunteer = [
   {
     'id': 'dashboard',
     'title': 'Dashboard',

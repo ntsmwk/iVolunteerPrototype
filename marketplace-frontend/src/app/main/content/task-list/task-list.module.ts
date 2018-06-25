@@ -7,7 +7,7 @@ import {LoginService} from '../_service/login.service';
 import {TaskService} from '../_service/task.service';
 
 const routes: Route[] = [
-  {path: '', component: FuseTaskListComponent, runGuardsAndResolvers: 'always'}
+  {path: '', component: FuseTaskListComponent}
 ];
 
 @NgModule({
@@ -21,7 +21,6 @@ const routes: Route[] = [
   ],
   imports: [
     RouterModule.forChild(routes),
-
     MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
