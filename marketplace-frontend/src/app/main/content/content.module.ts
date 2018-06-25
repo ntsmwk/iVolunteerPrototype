@@ -18,6 +18,11 @@ const routes = [
     path: 'main',
     loadChildren: './sample/sample.module#FuseSampleModule',
     canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/competencies',
+    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
+    canActivate: [TokenGuard]
   }
 ];
 
