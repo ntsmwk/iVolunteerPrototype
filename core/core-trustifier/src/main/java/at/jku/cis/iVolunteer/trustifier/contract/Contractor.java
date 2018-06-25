@@ -40,16 +40,6 @@ public class Contractor {
 	private BlockchainRestClient blockchainRestClient;
 	@Autowired
 	private TrustifierMarketplaceRestClient marketplaceRestClient;
-
-	@PostConstruct
-	private void init() {
-		System.out.println("asdfasdf\n\n\n");
-	}
-	
-	@GetMapping("/test")
-	public String test() {
-		return "Hello World";
-	}
 	
 	@PostMapping("/task")
 	public void publishTask(@RequestBody TaskDTO task) {

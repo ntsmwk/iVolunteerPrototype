@@ -26,9 +26,10 @@ public class UnassignServiceTask implements ServiceTask {
 		String volunteerId = delegateExecution.getVariable(VOLUNTEER_ID, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: " + volunteerId + "}");
 
-		SourceDTO source = marketplaceRestClient.findSource(token);
-		TaskDTO task = marketplaceRestClient.findTaskById(taskId, token);
-		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById(volunteerId, token);
+		// TODO
+		SourceDTO source = marketplaceRestClient.findSource("", token);
+		TaskDTO task = marketplaceRestClient.findTaskById("", taskId, token);
+		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById("", volunteerId, token);
 
 		contractorRestClient.unassignTask(task, source, volunteer, token);
 	}
