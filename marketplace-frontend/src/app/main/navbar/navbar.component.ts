@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
-import { navigation } from 'app/navigation/navigation';
+import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
 
@@ -49,7 +49,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     )
     {
         // Navigation data
-        this.navigation = navigation;
+        this.navigation = navigation_volunteer;
 
         // Default layout
         this.layout = 'vertical';

@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 
-import { navigation } from 'app/navigation/navigation';
+import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 
 @Component({
     selector     : 'fuse-main',
@@ -42,8 +42,8 @@ export class FuseMainComponent implements OnDestroy
         {
             this.document.body.className += ' is-mobile';
         }
-
-        this.navigation = navigation;
+        //TODO
+        this.navigation = navigation_volunteer;
     }
 
     ngOnDestroy()
