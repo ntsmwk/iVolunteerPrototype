@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
-import { navigation } from 'app/navigation/navigation';
+import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -89,8 +89,8 @@ export class FuseToolbarComponent
             this.horizontalNav = settings.layout.navigation === 'top';
             this.noNav = settings.layout.navigation === 'none';
         });
-
-        this.navigation = navigation;
+        //TODO
+        this.navigation = navigation_volunteer;
     }
 
     toggleSidebarOpened(key)
