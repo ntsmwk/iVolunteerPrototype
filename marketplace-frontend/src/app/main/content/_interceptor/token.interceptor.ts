@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const authorization = localStorage.getItem('token');
-    
+
     if (this.isLoginRequest(request) || isNullOrUndefined(authorization)) {
       return next.handle(request);
     }

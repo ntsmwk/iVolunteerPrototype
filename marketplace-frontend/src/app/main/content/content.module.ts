@@ -23,6 +23,25 @@ const routes = [
     path: 'main/competencies',
     loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
     canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/available',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/upcomming',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  }, {
+    path: 'main/tasks/running',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/tasks/finished',
+    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
   }
 ];
 
