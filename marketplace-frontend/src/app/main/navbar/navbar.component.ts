@@ -9,11 +9,14 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
+import { navigation_employee } from '../../navigation/navigation_employee';
+import { LoginService } from '../content/_service/login.service';
 
 @Component({
     selector     : 'fuse-navbar',
     templateUrl  : './navbar.component.html',
     styleUrls    : ['./navbar.component.scss'],
+    providers    : [LoginService],
     encapsulation: ViewEncapsulation.None
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy
@@ -44,13 +47,24 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
 
     constructor(
         private sidebarService: FuseSidebarService,
+        private loginService: LoginService,
         private navigationService: FuseNavigationService,
         private router: Router
     )
     {
         // Navigation data
-        this.navigation = navigation_volunteer;
-
+         //TODO
+         this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+            switch(role){
+                case 'EMPLOYEE':
+                this.navigation = navigation_employee;
+                break;
+                case 'VOLUNTEER': 
+                this.navigation = navigation_volunteer;
+                break;
+            }
+            console.error("navigation: " + this.navigation);
+        })
         // Default layout
         this.layout = 'vertical';
     }

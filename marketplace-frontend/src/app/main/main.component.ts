@@ -6,11 +6,14 @@ import { Subscription } from 'rxjs';
 import { FuseConfigService } from '@fuse/services/config.service';
 
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
+import { navigation_employee } from 'app/navigation/navigation_employee';
+import { LoginService } from './content/_service/login.service';
 
 @Component({
     selector     : 'fuse-main',
     templateUrl  : './main.component.html',
     styleUrls    : ['./main.component.scss'],
+    providers    : [LoginService],
     encapsulation: ViewEncapsulation.None
 })
 export class FuseMainComponent implements OnDestroy
@@ -25,6 +28,7 @@ export class FuseMainComponent implements OnDestroy
         private _renderer: Renderer2,
         private _elementRef: ElementRef,
         private fuseConfig: FuseConfigService,
+        private loginService: LoginService,
         private platform: Platform,
         @Inject(DOCUMENT) private document: any
     )
@@ -42,8 +46,21 @@ export class FuseMainComponent implements OnDestroy
         {
             this.document.body.className += ' is-mobile';
         }
+
         //TODO
-        this.navigation = navigation_volunteer;
+        this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+            console.error("role: " + role);
+            switch(role){
+                case 'EMPLOYEE':
+                this.navigation = navigation_employee;
+                break;
+                case 'VOLUNTEER': 
+                this.navigation = navigation_volunteer;
+                break;
+            }
+
+            console.error("navigation3: " + this.navigation[3]);
+        })
     }
 
     ngOnDestroy()
