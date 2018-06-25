@@ -30,22 +30,8 @@ const routes = [
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/tasks/available',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
-    path: 'main/tasks/upcomming',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard, VolunteerGuard]
-  }, {
-    path: 'main/tasks/running',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
-    path: 'main/tasks/finished',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    path: 'main/competencies/:pageType',
+    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
     canActivate: [TokenGuard, VolunteerGuard]
   }
 ];

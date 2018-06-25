@@ -56,9 +56,22 @@ export const navigation = [
   {
     'id': 'competencies',
     'title': 'Competencies',
-    'type': 'item',
+    'type': 'collapse',
     'icon': 'widgets',
-    'url': '/main/competencies'
+    'children': [
+      {
+        'id': 'all-competencies',
+        'title': 'All Competencies',
+        'type': 'item',
+        'url': '/main/competencies/all'
+      }
+      , 
+      {
+        'id': 'my-competencies',
+        'title': 'My Competencies',
+        'type': 'item',
+        'url': '/main/competencies/my'
+      }
+    ]
   }
 ];
-
