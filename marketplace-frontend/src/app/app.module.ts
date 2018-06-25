@@ -18,7 +18,7 @@ import {LoginService} from './main/content/_service/login.service';
 const appRoutes: Routes = [
   {
     path: '**',
-    redirectTo: 'main'
+    redirectTo: 'main/dashboard'
   }
 ];
 

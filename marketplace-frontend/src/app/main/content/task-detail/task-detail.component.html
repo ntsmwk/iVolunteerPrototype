@@ -1,0 +1,70 @@
+<div id="task-detail" class="page-layout simple left-sidenav right-sidenav" fusePerfectScrollbar>
+  <mat-sidenav-container>
+
+    <!-- SIDENAV -->
+    <mat-sidenav class="sidenav left-sidenav" position="start" opened="true" mode="side"
+                 fuseMatSidenavHelper="task-detail-left-sidenav" mat-is-locked-open="gt-md">
+      <fuse-task-hierarchy></fuse-task-hierarchy>
+    </mat-sidenav>
+    <!-- / SIDENAV -->
+
+    <!-- CENTER -->
+    <div class="center" fxFlex *ngIf="task">
+
+      <!-- HEADER -->
+      <div class="header p-24 mat-accent-bg" fxHide fxLayout="column" fxLayoutAlign="space-between start">
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT -->
+      <div class="content p-24 mat-white-bg" fusePerfectScrollbar>
+
+        <mat-form-field>
+          <input matInput placeholder="Name" [readonly]="true" [value]="task.name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Description" [readonly]="true" [value]="task.description">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [readonly]="true" placeholder="Start Date" [value]="task.startDate | date: 'dd.MM.yyyy'">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [readonly]="true" placeholder="End Date" [value]="task.endDate | date: 'dd.MM.yyyy'">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Status" [readonly]="true" [value]="task.status">
+        </mat-form-field>
+
+        <mat-form-field>
+          <p>Required Competences</p><b></b>
+          <mat-chip-list>
+            <mat-chip disabled *ngFor="let competence of task.requiredCompetences">{{ competence.name }}</mat-chip>
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field>
+          <p>Acquirable Competences</p><b></b>
+          <mat-chip-list>
+            <mat-chip disabled *ngFor="let competence of task.acquirableCompetences">{{ competence.name }}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-form-field>
+
+      </div>
+      <!-- / CONTENT -->
+
+    </div>
+    <!-- / CENTER -->
+
+    <!-- SIDENAV -->
+    <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
+                 fuseMatSidenavHelper="task-detail-right-sidenav" mat-is-locked-open="gt-md">
+      <fuse-task-timeline></fuse-task-timeline>
+    </mat-sidenav>
+    <!-- / SIDENAV -->
+  </mat-sidenav-container>
+</div>

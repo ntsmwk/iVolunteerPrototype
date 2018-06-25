@@ -4,7 +4,7 @@ export const navigation = [
     'title': 'Dashboard',
     'type': 'item',
     'icon': 'dashboard',
-    'url': '/main'
+    'url': '/main/dashboard'
   },
   {
     'id': 'profile',
@@ -25,6 +25,7 @@ export const navigation = [
     'title': 'Tasks',
     'type': 'collapse',
     'icon': 'work',
+    'url': '/main/task',
     'children': [
       {
         'id': 'available-tasks',
@@ -55,9 +56,22 @@ export const navigation = [
   {
     'id': 'competencies',
     'title': 'Competencies',
-    'type': 'item',
+    'type': 'collapse',
     'icon': 'widgets',
-    'url': '/main/competencies'
+    'children': [
+      {
+        'id': 'all-competencies',
+        'title': 'All Competencies',
+        'type': 'item',
+        'url': '/main/competencies/all'
+      }
+      , 
+      {
+        'id': 'my-competencies',
+        'title': 'My Competencies',
+        'type': 'item',
+        'url': '/main/competencies/my'
+      }
+    ]
   }
 ];
-

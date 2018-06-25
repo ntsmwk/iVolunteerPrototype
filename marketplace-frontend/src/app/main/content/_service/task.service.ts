@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
-import {isNullOrUndefined} from 'util';
-import {Task} from '../_model/task';
+
 import {HttpClient} from '@angular/common/http';
+
+import {isNullOrUndefined} from 'util';
+
+import {Task} from '../_model/task';
 
 @Injectable()
 export class TaskService {

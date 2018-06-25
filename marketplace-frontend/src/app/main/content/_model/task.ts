@@ -11,4 +11,3 @@ export class Task {
   requiredCompetences: Competence[];
   acquirableCompetences: Competence[];
 }
-

@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.participant;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.lib.mapper.participant.VolunteerMapper;
+import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
 @RestController
@@ -30,5 +32,12 @@ public class VolunteerController {
 	@GetMapping("/volunteer/username/{username}")
 	public VolunteerDTO findByUsername(@PathVariable("username") String username) {
 		return volunteerMapper.toDTO(volunteerRepository.findByUsername(username));
+	}
+	
+	@GetMapping("/volunteer/{id}/competencies")
+	public List<CompetenceDTO> findCompetencies(@PathVariable("id") String id){
+		
+		//TODO implement ...
+		return Collections.emptyList();
 	}
 }
