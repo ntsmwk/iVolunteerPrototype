@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.workflow.rest.client.configuration;
+package at.jku.cis.iVolunteer.trustifier.rest.client.configuration;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class RestTemplateConfiguration {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestTemplateConfiguration.class);
 
-	@Bean(name = WorkflowRestTemplate.NAME)
+	@Bean
 	public RestTemplate produceRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {

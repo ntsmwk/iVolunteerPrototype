@@ -14,6 +14,7 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.exception.PreConditionFailedException;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
