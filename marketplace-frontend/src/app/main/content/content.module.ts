@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import {Route, RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
@@ -14,7 +14,7 @@ import {TokenGuard} from './_guard/token.guard';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 
-const routes = [
+const routes: Route[] = [
   {
     path: 'login',
     loadChildren: './login/login.module#FuseLoginModule'
@@ -32,12 +32,14 @@ const routes = [
   {
     path: 'main/tasks/:pageType',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'main/competencies/:pageType',
     loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
-    canActivate: [TokenGuard, VolunteerGuard]
+    canActivate: [TokenGuard, VolunteerGuard],
+    runGuardsAndResolvers: 'always'
   }
 ];
 
