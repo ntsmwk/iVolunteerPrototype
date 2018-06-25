@@ -20,11 +20,6 @@ const routes = [
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/competencies',
-    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
-    canActivate: [TokenGuard]
-  },
-  {
     path: 'main/tasks/available',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard]
@@ -41,6 +36,11 @@ const routes = [
   {
     path: 'main/tasks/finished',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    canActivate: [TokenGuard]
+  },
+  {
+    path: 'main/competencies/:pageType',
+    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
     canActivate: [TokenGuard]
   }
 ];

@@ -4,6 +4,7 @@ import {RouterModule} from '@angular/router';
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import { FuseCompetenceListComponent } from './competencies.component';
+import { MatIconModule } from '@angular/material';
 
 const routes = [
   {path: '', component: FuseCompetenceListComponent}
@@ -15,7 +16,8 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    FuseSharedModule
+    FuseSharedModule,
+    MatIconModule
   ],
   exports: [
     FuseCompetenceListComponent
