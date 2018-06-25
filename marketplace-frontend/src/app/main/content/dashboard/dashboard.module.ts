@@ -3,15 +3,15 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {FuseSampleComponent} from './sample.component';
+import {FuseDashboardComponent} from './dashboard.component';
 
 const routes = [
-  {path: '', component: FuseSampleComponent}
+  {path: '', component: FuseDashboardComponent}
 ];
 
 @NgModule({
   declarations: [
-    FuseSampleComponent
+    FuseDashboardComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -19,9 +19,9 @@ const routes = [
     FuseSharedModule
   ],
   exports: [
-    FuseSampleComponent
+    FuseDashboardComponent
   ]
 })
 
-export class FuseSampleModule {
+export class FuseDashboardModule {
 }

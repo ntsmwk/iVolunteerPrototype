@@ -21,7 +21,7 @@ const routes: Route[] = [
   },
   {
     path: 'main/dashboard',
-    loadChildren: './sample/sample.module#FuseSampleModule',
+    loadChildren: './dashboard/dashboard.module#FuseDashboardModule',
     canActivate: [TokenGuard]
   },
   {
