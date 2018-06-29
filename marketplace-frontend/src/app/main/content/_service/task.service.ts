@@ -6,7 +6,9 @@ import {isNullOrUndefined} from 'util';
 
 import {Task} from '../_model/task';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TaskService {
 
   private apiUrl = '/marketplace/task';

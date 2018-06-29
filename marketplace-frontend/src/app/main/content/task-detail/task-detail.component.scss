@@ -2,6 +2,61 @@
 
 #task-detail {
 
+  .header {
+    position: relative;
+    flex: 1 0 auto;
+    height: 90px;
+    max-height: 90px;
+    background: #1A237E;
+    background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+    text-align: center;
+
+    @include media-breakpoint('xs') {
+      height: 240px;
+      padding: 16px;
+    }
+
+    .hero-text {
+
+      .hero-icon {
+        position: absolute;
+        top: -64px;
+        left: 0px;
+        opacity: 0.04;
+        font-size: 512px !important;
+        width: 512px !important;
+        height: 512px !important;
+      }
+
+      h1 {
+        color: white;
+        font-size: 40px;
+        font-weight: 300;
+        letter-spacing: 0.01em;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0px;
+
+        @include media-breakpoint-down('xs') {
+          font-size: 24px;
+        }
+      }
+
+      h3 {
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 480px;
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 0.03em;
+        margin: 0;
+
+        @include media-breakpoint-down('xs') {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
   mat-sidenav-container {
 
     .sidenav {
