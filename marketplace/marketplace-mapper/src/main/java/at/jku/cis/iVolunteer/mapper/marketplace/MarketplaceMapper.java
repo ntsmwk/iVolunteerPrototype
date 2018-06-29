@@ -8,5 +8,5 @@ import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
 @Mapper
 public abstract class MarketplaceMapper implements AbstractMapper<Marketplace, MarketplaceDTO> {
-
+ 
 }
