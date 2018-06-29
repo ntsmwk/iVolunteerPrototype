@@ -22,6 +22,10 @@ export class TaskService {
     return this.http.get(this.apiUrl + '?status=PUBLISHED');
   }
 
+  findByParticipantAndState(id: string, state: string) {
+    return this.http.get([[this.apiUrl, id].join('/volunteer/'), state].join('/'));
+  }
+
   findAllByParticipant(id: string) {
     return this.http.get([this.apiUrl, id].join('/volunteer/'));
   }

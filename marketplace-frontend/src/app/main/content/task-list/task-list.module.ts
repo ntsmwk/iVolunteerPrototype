@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatTableModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule} from '@angular/material';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskListComponent} from './task-list.component';
 import {LoginService} from '../_service/login.service';
@@ -27,8 +27,7 @@ const routes: Route[] = [
     MatInputModule,
     MatSelectModule,
     MatTableModule,
-
-
+    MatIconModule,
 
     FuseSharedModule
   ],
