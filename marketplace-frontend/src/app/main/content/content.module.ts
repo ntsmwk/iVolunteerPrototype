@@ -22,6 +22,11 @@ const routes: Route[] = [
     canActivate: [TokenGuard]
   },
   {
+    path: 'main/marketplaces',
+    loadChildren: './marketplaces/marketplaces.module#FuseMarketplacesModule',
+    canActivate: [TokenGuard]
+  },
+  {
     path: 'main/task/:taskId',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
     canActivate: [TokenGuard]

@@ -14,6 +14,13 @@ export const navigation_volunteer = [
     'url': '/main/profile'
   },
   {
+    'id': 'marketplaces',
+    'title': 'Marketplaces',
+    'type': 'item',
+    'icon': 'account_balance',
+    'url': '/main/marketplaces'
+  },
+  {
     'id': 'calendar',
     'title': 'Calendar',
     'type': 'item',

@@ -12,7 +12,6 @@ import {fuseConfig} from './fuse-config';
 
 import {AppComponent} from './app.component';
 import {FuseMainModule} from './main/main.module';
-import {LoginService} from './main/content/_service/login.service';
 
 
 const appRoutes: Routes = [
