@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MessageService {
   private handler = new Subject<Message>();
 

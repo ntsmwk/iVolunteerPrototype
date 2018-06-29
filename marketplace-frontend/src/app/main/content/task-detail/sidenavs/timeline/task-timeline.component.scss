@@ -15,3 +15,61 @@
     flex: 1;
   }
 }
+
+.timeline {
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 5.6rem;
+    width: .222rem;
+    height: 100%;
+    background-color: #e7e9f5;
+  }
+
+  .timeline-item {
+    display: table;
+    position: relative;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    .timeline-item-time {
+      display: table-cell;
+      font-size: 1.5rem;
+      font-weight: 500;
+      vertical-align: top;
+      position: absolute;
+      padding-top: .18rem;
+    }
+
+    .timeline-item-cricle {
+      z-index: 1;
+      left: 4.5rem;
+      position: relative;
+      background: white;
+    }
+
+    .timeline-item-text {
+      display: table-cell;
+      vertical-align: top;
+      font-size: 1rem;
+      font-weight: 400;
+      padding-bottom: .3rem;
+      padding-left: 5rem;
+    }
+  }
+
+  ::ng-deep .mat-icon {
+    &:nth-child(3n) {
+      color: #f4516c !important;
+    }
+
+    &:nth-child(3n+1) {
+      color: #34bfa3 !important;
+    }
+
+    &:nth-child(3n+2) {
+      color: #ffb822 !important;
+    }
+  }
+}
