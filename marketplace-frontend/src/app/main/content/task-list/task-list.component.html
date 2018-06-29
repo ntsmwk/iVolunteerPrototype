@@ -2,7 +2,6 @@
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
     <div class="hero-text">
-      <mat-icon class="hero-icon">school</mat-icon>
       <h1>{{header}}</h1>
     </div>
   </div>
@@ -23,6 +22,11 @@
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
         <mat-cell *matCellDef="let task">{{task.status}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="marketplace">
+        <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.marketplaceId}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="startDate">

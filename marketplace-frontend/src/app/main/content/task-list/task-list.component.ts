@@ -20,7 +20,7 @@ export class FuseTaskListComponent implements OnInit {
   volunteer: Volunteer;
   header;
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'status', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
