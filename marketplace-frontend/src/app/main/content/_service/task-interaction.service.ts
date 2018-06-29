@@ -11,20 +11,20 @@ export class TaskInteractionService {
   constructor(private http: HttpClient) {
   }
 
-  findByTask(task: Task, url: String) {
-    return this.http.get('/task/' + task.id + '/interaction');
+  findByTask(task: Task, url: string) {
+    return this.http.get(url + '/task/' + task.id + '/interaction');
   }
 
-  findFinishedByTask(task: Task, url: String) {
+  findFinishedByTask(task: Task, url: string) {
     return this.http.get(url + '/task/' + task.id + '/interaction?operation=FINISHED');
   }
 
-  findReservedVolunteersByTask(task: Task, url: String) {
-    return this.http.get(`/marketplace/task/${task.id}/participant?operation=RESERVED`);
+  findReservedVolunteersByTask(task: Task, url: string) {
+    return this.http.get(`${url}/task/${task.id}/participant?operation=RESERVED`);
   }
 
-  findAssignedVolunteersByTask(task: Task, url: String) {
-    return this.http.get(`/marketplace/task/${task.id}/participant?operation=ASSIGNED`);
+  findAssignedVolunteersByTask(task: Task, url: string) {
+    return this.http.get(`${url}/task/${task.id}/participant?operation=ASSIGNED`);
   }
 
 }
