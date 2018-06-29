@@ -1,49 +1,67 @@
-<h3>Task overview</h3>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
 
-<mat-table #table [dataSource]="dataSource">
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
-  </ng-container>
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <div class="hero-text">
+      <h1>{{header}}</h1>
+    </div>
+  </div>
 
-  <ng-container matColumnDef="description">
-    <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
-  </ng-container>
+  <div class="table" >
 
-  <ng-container matColumnDef="status">
-    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.status}}</mat-cell>
-  </ng-container>
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <mat-header-cell                                                                                                                                                                                                                                *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="startDate">
-    <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.startDate | date: 'dd.MM.yyyy'}}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="endDate">
-    <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
-    <mat-cell *matCellDef="let task">{{task.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.status}}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="requiredCompetences">
-    <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
-    <mat-cell *matCellDef="let task">
-       <span *ngFor="let requiredCompetence of task.requiredCompetences; let last = last">
-        {{requiredCompetence.name}}<span *ngIf="!last">, </span>
-      </span>
-    </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="marketplace">
+        <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.marketplaceId}}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="acquirableCompetences">
-    <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
-    <mat-cell *matCellDef="let task">
-      <span *ngFor="let requiredCompetence of task.acquirableCompetences; let last = last">
-        {{requiredCompetence.name}}<span *ngIf="!last">, </span>
-      </span>
-    </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="startDate">
+        <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.startDate | date: 'dd.MM.yyyy'}}</mat-cell>
+      </ng-container>
 
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
-</mat-table>
+      <ng-container matColumnDef="endDate">
+        <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="requiredCompetences">
+        <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+           <span *ngFor="let requiredCompetence of task.requiredCompetences; let last = last">
+            {{requiredCompetence.name}}<span *ngIf="!last">, </span>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acquirableCompetences">
+        <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <span *ngFor="let requiredCompetence of task.acquirableCompetences; let last = last">
+            {{requiredCompetence.name}}<span *ngIf="!last">, </span>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+    </mat-table>
+
+  </div>
+
+</div>
+

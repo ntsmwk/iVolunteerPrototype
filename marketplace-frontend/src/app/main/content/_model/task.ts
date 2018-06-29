@@ -5,6 +5,7 @@ export class Task {
   name: string;
   description: string;
   workflowKey: string;
+  marketplaceId: string;
   startDate: Date;
   endDate: Date;
   status: string;

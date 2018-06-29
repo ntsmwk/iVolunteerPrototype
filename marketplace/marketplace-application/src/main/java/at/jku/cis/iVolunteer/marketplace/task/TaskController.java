@@ -113,6 +113,38 @@ public class TaskController {
 		taskRepository.delete(id);
 	}
 
+	@GetMapping("/task/volunteer/{id}/{state}")
+	public List<TaskDTO> findByVolunteerAndState(@PathVariable("id") String id, @PathVariable("state") String state) {
+		Volunteer volunteer = volunteerRepository.findOne(id);
+
+		Set<Task> tasks = new HashSet<Task>();
+
+		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
+		for (TaskInteraction ti : taskInteractions) {
+			Task t = ti.getTask();
+
+			switch (state) {
+			case "upcomming":
+				if (t.getStatus().equals(TaskStatus.PUBLISHED)) {
+					tasks.add(t);
+				}
+				break;
+			case "running":
+				if (t.getStatus().equals(TaskStatus.RUNNING)) {
+					tasks.add(t);
+				}
+				break;
+			case "finished":
+				if (t.getStatus().equals(TaskStatus.FINISHED)) {
+					tasks.add(t);
+				}
+				break;
+			}
+		}
+
+		return taskMapper.toDTOs(new ArrayList<>(tasks));
+	}
+
 	@GetMapping("/task/{id}/children")
 	public List<TaskDTO> getChildren(@PathVariable("id") String id) {
 		TaskDTO parent = taskMapper.toDTO(taskRepository.findOne(id));
