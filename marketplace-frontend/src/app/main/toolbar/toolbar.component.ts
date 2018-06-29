@@ -6,11 +6,14 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
+import { navigation_employee } from 'app/navigation/navigation_employee';
+import { LoginService } from '../content/_service/login.service';
 
 @Component({
     selector   : 'fuse-toolbar',
     templateUrl: './toolbar.component.html',
-    styleUrls  : ['./toolbar.component.scss']
+    styleUrls  : ['./toolbar.component.scss'],
+    providers: [LoginService]
 })
 
 export class FuseToolbarComponent
@@ -26,6 +29,7 @@ export class FuseToolbarComponent
     constructor(
         private router: Router,
         private fuseConfig: FuseConfigService,
+        private loginService: LoginService,        
         private sidebarService: FuseSidebarService,
         private translate: TranslateService
     )
@@ -89,8 +93,17 @@ export class FuseToolbarComponent
             this.horizontalNav = settings.layout.navigation === 'top';
             this.noNav = settings.layout.navigation === 'none';
         });
-        //TODO
-        this.navigation = navigation_volunteer;
+        
+        this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+            switch(role){
+                case 'EMPLOYEE':
+                this.navigation = navigation_employee;
+                break;
+                case 'VOLUNTEER': 
+                this.navigation = navigation_volunteer;
+                break;
+            }
+        })
     }
 
     toggleSidebarOpened(key)

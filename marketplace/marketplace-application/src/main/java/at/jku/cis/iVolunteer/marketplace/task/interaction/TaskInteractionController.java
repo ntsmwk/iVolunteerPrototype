@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.lib.mapper.task.interaction.TaskInteractionMapper;
+import at.jku.cis.iVolunteer.mapper.task.interaction.TaskInteractionMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
