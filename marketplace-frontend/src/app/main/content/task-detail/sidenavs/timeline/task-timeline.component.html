@@ -5,7 +5,41 @@
 <!-- / HEADER -->
 
 <!-- SIDENAV CONTENT -->
-<div class="content p-24 mat-white-bg" fusePerfectScrollbar>
+<div class="content p-12 mat-white-bg" fusePerfectScrollbar>
+
+  <div *ngFor="let dayAsString of getDays()">
+
+    <header fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column">
+          <div class="time p-12" style="font-weight: bold; padding-left: 0 !important">{{dayAsString}}
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <div class="content" style="position: relative;">
+      <div class="timeline">
+        <div class="timeline-item" *ngFor="let interaction of getTaskInteractionsByDay(dayAsString)">
+        <span class="timeline-item-time"
+              style="color: #898b96">{{interaction.timestamp | date: 'hh:mm'}}</span>
+          <div class="timeline-item-cricle alert-warning">
+            <mat-icon>change_history</mat-icon>
+          </div>
+          <div class="timeline-item-text" [ngSwitch]="interaction.operation">
+            <span *ngSwitchCase="'CREATED'">Task is <span style="font-weight: bold">created.</span></span>
+            <span *ngSwitchCase="'PUBLISHED'">Task is <span style="font-weight: bold">published.</span></span>
+            <span *ngSwitchCase="'RESERVED'">{{interaction.participant.username}} is <span style="font-weight: bold">reserved.</span></span>
+            <span *ngSwitchCase="'ASSIGNED'">{{interaction.participant.username}} is <span style="font-weight: bold">reserved.</span></span>
+            <span *ngSwitchCase="'RUNNING'">Task is <span style="font-weight: bold">running.</span></span>
+            <span *ngSwitchCase="'SUSPENDED'">Task is <span style="font-weight: bold">suspended.</span></span>
+            <span *ngSwitchCase="'FINISHED'">Task is <span style="font-weight: bold">finished.</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 <!-- / SIDENAV CONTENT -->

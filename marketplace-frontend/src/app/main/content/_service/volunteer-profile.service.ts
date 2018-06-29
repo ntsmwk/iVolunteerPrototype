@@ -4,7 +4,9 @@ import { Volunteer } from '../_model/volunteer';
 import { TaskEntry } from '../_model/task-entry';
 import { CompetenceEntry } from '../_model/competence-entry';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class VolunteerProfileService {
 
   private apiUrl = '/marketplace/volunteer';
@@ -29,7 +31,6 @@ export class VolunteerProfileService {
   }
 
   findCompetencesByVolunteer(volunteer: Volunteer) {
-    console.error("service");
     return this.http.get(`${this.apiUrl}/${volunteer.id}/profile/competence`);
   }
 

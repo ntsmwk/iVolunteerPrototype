@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
@@ -8,8 +9,6 @@ import {FuseTaskHierarchyComponent} from './sidenavs/hierarchy/task-hierarchy.co
 import {FuseTaskTimelineComponent} from './sidenavs/timeline/task-timeline.component';
 
 import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
-import {MessageService} from '../_service/message.service';
-import {ReactiveFormsModule} from '@angular/forms';
 
 const routes = [
   {path: '', component: FuseTaskDetailComponent}
@@ -34,7 +33,6 @@ const routes = [
 
     FuseSharedModule
   ],
-  providers: [MessageService],
   exports: [
     FuseTaskDetailComponent
   ]

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.lib.mapper.competence.CompetenceEntryToCompetenceMapper;
-import at.jku.cis.iVolunteer.lib.mapper.competence.CompetenceMapper;
-import at.jku.cis.iVolunteer.lib.mapper.participant.profile.CompetenceEntryMapper;
-import at.jku.cis.iVolunteer.lib.mapper.participant.profile.TaskEntryMapper;
-import at.jku.cis.iVolunteer.lib.mapper.participant.profile.VolunteerProfileMapper;
+import at.jku.cis.iVolunteer.mapper.competence.CompetenceEntryToCompetenceMapper;
+import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
+import at.jku.cis.iVolunteer.mapper.participant.profile.CompetenceEntryMapper;
+import at.jku.cis.iVolunteer.mapper.participant.profile.TaskEntryMapper;
+import at.jku.cis.iVolunteer.mapper.participant.profile.VolunteerProfileMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.competence.Competence;

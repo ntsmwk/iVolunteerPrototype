@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import {LoginService} from '../_service/login.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EmployeeGuard implements CanActivate {
 
   constructor(private loginService: LoginService, private router: Router) {

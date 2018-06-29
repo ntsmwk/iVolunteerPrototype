@@ -3,7 +3,9 @@ import {HttpClient} from '@angular/common/http';
 
 import {Task} from '../_model/task';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TaskInteractionService {
 
   constructor(private http: HttpClient) {

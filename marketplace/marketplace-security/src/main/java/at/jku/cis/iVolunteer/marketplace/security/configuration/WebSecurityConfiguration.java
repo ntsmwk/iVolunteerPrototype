@@ -14,7 +14,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import at.jku.cis.iVolunteer.marketplace.security.entrypoint.UnauthorizedAuthenticationEntryPoint;
-import at.jku.cis.iVolunteer.marketplace.security.filter.JWTAuthenticationFilter;
 import at.jku.cis.iVolunteer.marketplace.security.filter.JWTAuthorizationFilter;
 import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 
@@ -33,8 +32,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable();
 		http.authorizeRequests().anyRequest().authenticated();
-		http.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-				.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 	}
