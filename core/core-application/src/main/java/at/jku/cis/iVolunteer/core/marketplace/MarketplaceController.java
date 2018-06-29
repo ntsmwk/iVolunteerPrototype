@@ -7,22 +7,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.lib.mapper.marketplace.MarketplaceMapper;
+import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
 @RestController("/marketplace")
 public class MarketplaceController {
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private MarketplaceMapper marketplaceMapper;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
 	
+	@Autowired
+	private MarketplaceMapper marketplaceMapper;
+
 	@PostMapping
-	public Marketplace registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto){
+	public Marketplace registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
 		Marketplace marketplace = marketplaceMapper.toEntity(marketplaceDto);
 		return marketplaceRepository.insert(marketplace);
 	}
-	
+
 	@DeleteMapping("/{marketplaceId}")
 	public void deleteMarketplace(@PathVariable("marketplaceId") String marketplaceId) {
 		marketplaceRepository.delete(marketplaceId);

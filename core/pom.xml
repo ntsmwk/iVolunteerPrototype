@@ -26,9 +26,9 @@
 
 	<modules>
 		<module>core-application</module>
-		<module>core-config</module>
 		<module>core-trustifier</module>
-		<module>core-workflow</module>
+		<module>core-security</module>
+		<module>core-config</module>
 	</modules>
 
 	<dependencies>

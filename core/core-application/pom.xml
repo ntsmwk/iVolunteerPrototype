@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>at.jku.cis</groupId>
-			<artifactId>core-workflow</artifactId>
+			<artifactId>core-security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

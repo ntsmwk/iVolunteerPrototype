@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.lib.mapper.participant.VolunteerMapper;
+import at.jku.cis.iVolunteer.mapper.participant.VolunteerMapper;
 import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
