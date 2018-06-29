@@ -10,15 +10,15 @@ export class LoginService {
   }
 
   getLoggedIn() {
-    return this.http.get('/marketplace/login');
+    return this.http.get('/core/login');
   }
 
   getLoggedInParticipantRole() {
-    return this.http.get('/marketplace/login/role');
+    return this.http.get('/core/login/role');
   }
 
   login(username: string, password: string) {
-    return this.http.post('/marketplace/login', {username: username, password: password}, {observe: 'response'});
+    return this.http.post('/core/login', {username: username, password: password}, {observe: 'response'});
   }
 
 }

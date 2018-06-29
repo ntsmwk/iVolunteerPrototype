@@ -1,7 +1,10 @@
 package at.jku.cis.iVolunteer.core.marketplace;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +19,19 @@ public class MarketplaceController {
 
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
-	
+
 	@Autowired
 	private MarketplaceMapper marketplaceMapper;
 
+	@GetMapping
+	public List<MarketplaceDTO> getMarketplaces() {
+		return marketplaceMapper.toDTOs(marketplaceRepository.findAll());
+	}
+
 	@PostMapping
-	public Marketplace registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
+	public MarketplaceDTO registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
 		Marketplace marketplace = marketplaceMapper.toEntity(marketplaceDto);
-		return marketplaceRepository.insert(marketplace);
+		return marketplaceMapper.toDTO(marketplaceRepository.insert(marketplace));
 	}
 
 	@DeleteMapping("/{marketplaceId}")

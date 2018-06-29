@@ -6,13 +6,12 @@ import {HttpClient} from '@angular/common/http';
 })
 export class CompetenceService {
 
-  private apiUrl = '/marketplace/competence';
+  private endpoint = '/competence';
 
   constructor(private http: HttpClient) {
   }
 
-  findAll() {
-    return this.http.get(this.apiUrl);
+  findAll(url: string) {
+    return this.http.get(`${url}/${this.endpoint}`);
   }
-
 }

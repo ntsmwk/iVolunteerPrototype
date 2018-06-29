@@ -6,16 +6,16 @@ import {HttpClient} from '@angular/common/http';
 })
 export class VolunteerService {
 
-  private apiUrl = '/marketplace/volunteer';
+  private endpoint = '/volunteer';
 
   constructor(private http: HttpClient) {
   }
 
-  findById(id: string) {
-    return this.http.get([this.apiUrl, id].join('/'));
+  findById(id: string, url: string) {
+    return this.http.get(`${url}/${this.endpoint}/${id}`);
   }
 
-  findCompetencies(id: string) {
-    return this.http.get([this.apiUrl, id, "competencies"].join('/'))
+  findCompetencies(id: string, url: string) {
+    return this.http.get(`${url}/${this.endpoint}/${id}/competencies`);
   }
 }

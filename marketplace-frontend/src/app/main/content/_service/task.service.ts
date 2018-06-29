@@ -11,72 +11,72 @@ import {Task} from '../_model/task';
 })
 export class TaskService {
 
-  private apiUrl = '/marketplace/task';
+  private endpoint = '/task';
 
   constructor(private http: HttpClient) {
   }
 
-  findAll() {
-    return this.http.get(this.apiUrl);
+  findAll(url: string) {
+    return this.http.get(this.endpoint);
   }
 
-  findAllPublished() {
-    return this.http.get(this.apiUrl + '?status=PUBLISHED');
+  findAllPublished(url: string) {
+    return this.http.get(`${url}/${this.endpoint}?status=PUBLISHED`);
   }
 
-  findByParticipantAndState(id: string, state: string) {
-    return this.http.get([[this.apiUrl, id].join('/volunteer/'), state].join('/'));
+  findByParticipantAndState(id: string, state: string, url: string) {
+    return this.http.get(`${url}/volunteer/${id}/${state}`);
   }
 
-  findAllByParticipant(id: string) {
-    return this.http.get([this.apiUrl, id].join('/volunteer/'));
+  findAllByParticipant(id: string, url: string) {
+    return this.http.get(`${url}/${this.endpoint}/volunteer/${id}`);
   }
 
-  findById(id: string) {
-    return this.http.get([this.apiUrl, id].join('/'));
+  findById(id: string, url: string) {
+    return this.http.get(`${url}/${this.endpoint}/${id}`);
   }
 
-  save(task: Task) {
+  save(task: Task, url: string) {
     if (isNullOrUndefined(task.id)) {
-      return this.http.post(this.apiUrl, task);
+      return this.http.post(`${url}/${this.endpoint}`, task);
     }
-    return this.http.put([this.apiUrl, task.id].join('/'), task);
+    return this.http.put(`${url}/${this.endpoint}/${task.id}`, task);
   }
 
-  remove(task: Task) {
-    return this.http.delete([this.apiUrl, task.id].join('/'));
+  remove(task: Task, url: string) {
+    return this.http.delete(`${url}/${this.endpoint}/${task.id}`);
   }
 
-  publish(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/publish`, {});
+  publish(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/publish`, {});
   }
 
-  start(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/start`, {});
+  start(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/start`, {});
   }
 
-  suspend(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/suspend`, {});
+  suspend(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/suspend`, {});
   }
 
-  resume(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/resume`, {});
+  resume(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/resume`, {});
   }
 
-  finish(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/finish`, {});
+  finish(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/finish`, {});
   }
 
-  abort(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/abort`, {});
+  abort(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/abort`, {});
   }
 
-  sync(task: Task) {
-    return this.http.post(`${this.apiUrl}/${task.id}/sync`, {});
+  sync(task: Task, url: string) {
+    return this.http.post(`${url}/${this.endpoint}/${task.id}/sync`, {});
   }
 
-  getTree(id: string) {
-    return this.http.get(`${this.apiUrl}/${id}/tree`, {});
+  getTree(id: string, url: string) {
+    return this.http.get(`${this.endpoint}/${id}/tree`, {});
 
   }
 
