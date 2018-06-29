@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 @Injectable()
 export class CompetenceService {
 
-  private apiUrl = '/marketplace/competence';
+  private apiUrl = '/core/competence';
 
   constructor(private http: HttpClient) {
   }
