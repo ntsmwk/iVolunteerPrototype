@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { List } from 'lodash'; 
+import { List } from 'lodash';
 import { Competence } from "../_model/competence";
 import { CompetenceService } from '../_service/competence.service';
 import { fuseAnimations } from '@fuse/animations';
@@ -36,12 +36,14 @@ export class FuseCompetenceListComponent implements OnInit {
     )
     switch(this.pageType){
       case 'all':
-        this.competenceService.findAll().toPromise().then((comp: List<Competence>) => this.competencies = comp);
+        // TODO
+        this.competenceService.findAll('').toPromise().then((comp: List<Competence>) => this.competencies = comp);
         break;
       case 'my':
         console.error("....")
         this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-          this.volunteerProfileService.findCompetencesByVolunteer(volunteer).toPromise().then((comp: List<Competence>) => this.competencies = comp);
+          // TODO
+          this.volunteerProfileService.findCompetencesByVolunteer(volunteer, '').toPromise().then((comp: List<Competence>) => this.competencies = comp);
         });
         break;
     }

@@ -30,8 +30,9 @@ export class FuseTaskTimelineComponent implements OnInit {
   }
 
   private loadTaskInteractions(taskId: string) {
-    this.taskService.findById(taskId).toPromise().then((task: Task) => {
-      this.taskInteractionService.findByTask(task).toPromise().then((taskInteractions: TaskInteraction[]) => {
+    // TODO
+    this.taskService.findById(taskId, '').toPromise().then((task: Task) => {
+      this.taskInteractionService.findByTask(task, '').toPromise().then((taskInteractions: TaskInteraction[]) => {
         const date2Interactions = new Map<string, TaskInteraction[]>();
         taskInteractions.forEach((taskInteraction: TaskInteraction) => {
           const dayAsString = this.datePipe.transform(taskInteraction.timestamp, 'dd.MM.yyyy');
