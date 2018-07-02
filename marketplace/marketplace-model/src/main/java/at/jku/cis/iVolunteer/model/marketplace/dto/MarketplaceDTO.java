@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.marketplace.dto;
 public class MarketplaceDTO {
 
 	private String id;
+	private String name;
 	private String marketplaceId;
 	private String url;
 
@@ -15,6 +16,14 @@ public class MarketplaceDTO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getMarketplaceId() {
