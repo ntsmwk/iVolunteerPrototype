@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -121,12 +122,17 @@ public class VolunteerProfileController {
 
 	@GetMapping("/{volunteerId}/profile/competence")
 	public List<CompetenceDTO> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
-		List<CompetenceDTO> competenceList = getVolunteerProfile(volunteerId).getCompetenceList().stream()
-				.map((CompetenceEntryDTO competenceEntry) -> competenceEntryMapper.toEntity(competenceEntry))
-				.map((CompetenceEntry competenceEntry) -> competenceEntryToCompetenceMapper
-						.toCompetence(competenceEntry))
-				.map((Competence competence) -> competenceMapper.toDTO(competence)).collect(Collectors.toList());
-		return competenceList;
+
+		VolunteerProfileDTO volunteerProfile = getVolunteerProfile(volunteerId);
+		if (volunteerProfile != null) {
+			List<CompetenceDTO> competenceList = volunteerProfile.getCompetenceList().stream()
+					.map((CompetenceEntryDTO competenceEntry) -> competenceEntryMapper.toEntity(competenceEntry))
+					.map((CompetenceEntry competenceEntry) -> competenceEntryToCompetenceMapper
+							.toCompetence(competenceEntry))
+					.map((Competence competence) -> competenceMapper.toDTO(competence)).collect(Collectors.toList());
+			return competenceList;
+		}
+		return Lists.emptyList();
 	}
 
 	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")

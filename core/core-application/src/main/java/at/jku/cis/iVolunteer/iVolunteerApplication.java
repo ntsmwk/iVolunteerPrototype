@@ -8,11 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
+import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
 import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
 @SpringBootApplication
 public class iVolunteerApplication {
@@ -20,7 +22,7 @@ public class iVolunteerApplication {
 	private static final String MARKETPLACE_DEFAULT = "default";
 	private static final String MARKETPLACE_ID = "MP1";
 	private static final String MARKETPLACE_URL = "http://localhost:8080";
-	
+
 	private static final String MMUSTERMANN = "mmustermann";
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String PSTARZER = "pstarzer";
@@ -30,6 +32,9 @@ public class iVolunteerApplication {
 
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
+
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@Autowired
 	private CoreEmployeeRepository coreEmployeeRepository;
@@ -71,6 +76,7 @@ public class iVolunteerApplication {
 			employee.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
 			employee.getRegisteredMarketplaces().add(marketplace);
 			employee = coreEmployeeRepository.insert(employee);
+
 		}
 	}
 
@@ -82,6 +88,14 @@ public class iVolunteerApplication {
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
 			volunteer.getRegisteredMarketplaces().add(marketplace);
 			volunteer = coreVolunteerRepository.insert(volunteer);
+			
+			VolunteerDTO volunteerDto = new VolunteerDTO();
+			volunteerDto.setId(volunteer.getId());
+			volunteerDto.setUsername(volunteer.getUsername());
+			volunteerDto.setPassword(volunteer.getPassword());
+			
+			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtd2Vpc3NlbmJlayIsInVzZXJuYW1lIjoibXdlaXNzZW5iZWsiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxMzk0NTE4fQ.iWi7oXHyJOkATiC1B-tvcFzqizyNM7Lm2WEdym_vXeCZf-CRvHFtWyQJc-7YGZqWM1V__03Otd0TUpyERTEaUg",
+					volunteerDto);
 		}
 	}
 }

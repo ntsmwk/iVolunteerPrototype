@@ -13,7 +13,6 @@ export class CoreVolunteerService {
   }
 
   findRegisteredMarketplaces(id: string) {
-    console.error(`${this.apiUrl}/${id}/marketplaces`);
     return this.http.get(`${this.apiUrl}/${id}/marketplaces`);
   }
 }
