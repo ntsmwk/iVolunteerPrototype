@@ -40,6 +40,11 @@ export class FuseCompetenceListComponent implements OnInit {
           case 'all':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+
+
+              //TODO only selected marketplaces!!
+              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
+
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
                 marketplaces.forEach(marketplace => {
                   this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
@@ -52,6 +57,9 @@ export class FuseCompetenceListComponent implements OnInit {
           case 'my':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+
+              //TODO only selected marketplaces!!
+              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
                 marketplaces.forEach(marketplace => {
                   this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {
