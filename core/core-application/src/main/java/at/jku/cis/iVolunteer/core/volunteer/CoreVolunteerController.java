@@ -44,7 +44,7 @@ public class CoreVolunteerController {
 		return coreVolunteerMapper.toDTO(coreVolunteerRepository.findOne(volunteerId));
 	}
 
-	@GetMapping("/{volunteerId}/marketplace")
+	@GetMapping("/{volunteerId}/marketplaces")
 	public List<MarketplaceDTO> getRegisteredMarketplaces(@PathVariable("volunteerId") String volunteerId) {
 		CoreVolunteer volunteer = coreVolunteerRepository.findOne(volunteerId);
 		return marketplaceMapper.toDTOs(volunteer.getRegisteredMarketplaces());

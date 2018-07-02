@@ -5,11 +5,13 @@ import static java.text.MessageFormat.format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.model.core.participant.dto.CoreVolunteerDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 
+@Service
 public class CoreMarketplaceRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
@@ -34,5 +36,4 @@ public class CoreMarketplaceRestClient {
 		headers.set(AUTHORIZATION, authorization);
 		return headers;
 	}
-
 }
