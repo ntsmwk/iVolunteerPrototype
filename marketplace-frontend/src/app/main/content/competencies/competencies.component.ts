@@ -34,33 +34,35 @@ export class FuseCompetenceListComponent implements OnInit {
   ngOnInit() {
 
     this.route.paramMap.subscribe(
-      params => this.pageType = params.get('pageType')
-    )
-    switch(this.pageType){
-      case 'all':
-        this.competencies = [];
-        this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-          this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-            marketplaces.forEach(marketplace => {
-              this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
-                this.competencies = this.competencies.concat(comp);
+      params => {
+        this.pageType = params.get('pageType');
+        switch(this.pageType){
+          case 'all':
+            this.competencies = [];
+            this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+              this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
+                marketplaces.forEach(marketplace => {
+                  this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
+                    this.competencies = this.competencies.concat(comp);
+                    });
                 });
-            });
-          });
-        });  
-        break;
-      case 'my':
-        this.competencies = [];
-        this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-          this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-            marketplaces.forEach(marketplace => {
-              this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {
-                  this.competencies = this.competencies.concat(comp);
+              });
+            });  
+            break;
+          case 'my':
+            this.competencies = [];
+            this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+              this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
+                marketplaces.forEach(marketplace => {
+                  this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {
+                      this.competencies = this.competencies.concat(comp);
+                    });
                 });
+              });
             });
-          });
-        });
-        break;
-    }
+            break;
+        }
+      }
+    );
   }
 }
