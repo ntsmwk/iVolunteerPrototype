@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.participant.profile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -7,7 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -132,7 +132,7 @@ public class VolunteerProfileController {
 					.map((Competence competence) -> competenceMapper.toDTO(competence)).collect(Collectors.toList());
 			return competenceList;
 		}
-		return Lists.emptyList();
+		return Collections.emptyList();
 	}
 
 	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
