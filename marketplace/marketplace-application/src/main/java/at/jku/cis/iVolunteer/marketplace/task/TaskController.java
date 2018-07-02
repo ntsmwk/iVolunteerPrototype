@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +23,6 @@ import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
-import at.jku.cis.iVolunteer.model.participant.Participant;
 import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;

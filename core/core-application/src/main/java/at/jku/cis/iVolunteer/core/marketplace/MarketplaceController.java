@@ -14,7 +14,7 @@ import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
-@RestController()
+@RestController
 public class MarketplaceController {
 
 	@Autowired

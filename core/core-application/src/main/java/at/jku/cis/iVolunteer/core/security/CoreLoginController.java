@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.core.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.core.participant.CoreEmployeeMapper;
@@ -11,7 +12,8 @@ import at.jku.cis.iVolunteer.model.core.participant.CoreParticipant;
 import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.core.participant.dto.CoreParticipantDTO;
 
-@RestController("/login")
+@RestController
+@RequestMapping("/login")
 public class CoreLoginController {
 
 	@Autowired
