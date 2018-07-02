@@ -38,34 +38,29 @@ export class FuseCompetenceListComponent implements OnInit {
     )
     switch(this.pageType){
       case 'all':
+        this.competencies = [];
         this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-          console.error("volunteer: " + JSON.stringify(volunteer));
           this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-            console.error("marketplaces: " + marketplaces);
             marketplaces.forEach(marketplace => {
-              console.error("mp: " + marketplace);
-              this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise()
-                .then((comp: Competence[]) => this.competencies.concat(comp));
+              this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
+                this.competencies = this.competencies.concat(comp);
+                });
             });
           });
         });  
         break;
       case 'my':
-
-      //TODO change to my competences... currently all...
+        this.competencies = [];
         this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-          console.error("volunteer: " + JSON.stringify(volunteer));
           this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-            console.error("marketplaces: " + marketplaces);
             marketplaces.forEach(marketplace => {
-              console.error("mp: " + marketplace);
-              this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise()
-                .then((comp: Competence[]) => this.competencies.concat(comp));
+              this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {
+                  this.competencies = this.competencies.concat(comp);
+                });
             });
           });
         });
         break;
     }
   }
-
 }

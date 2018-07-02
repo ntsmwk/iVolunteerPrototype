@@ -48,7 +48,7 @@ public class VolunteerController {
 
 	@PostMapping("/volunteer")
 	public VolunteerDTO registerVolunteer(@RequestBody VolunteerDTO volunteerDto) {
-		if(volunteerRepository.findOne(volunteerDto.getId()) == null) {
+		if(volunteerRepository.findOne(volunteerDto.getId()) != null) {
 			throw new BadRequestException("Volunteer already registed");
 		}
 		return volunteerMapper.toDTO(volunteerRepository.insert(volunteerMapper.toEntity(volunteerDto)));

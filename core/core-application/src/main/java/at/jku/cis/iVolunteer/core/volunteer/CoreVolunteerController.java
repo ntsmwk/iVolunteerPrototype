@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.model.core.participant.dto.CoreVolunteerDTO;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -60,11 +61,12 @@ public class CoreVolunteerController {
 		}
 
 		volunteer.getRegisteredMarketplaces().add(marketplace);
-		coreVolunteerRepository.save(volunteer);
+		CoreVolunteer coreVolunteer = coreVolunteerRepository.save(volunteer);
 
-		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization,
-				coreVolunteerMapper.toDTO(volunteer));
-		// TODO send registration to Marketplace...
-
+		VolunteerDTO volunteerDTO = new VolunteerDTO();
+		volunteerDTO.setId(coreVolunteer.getId());
+		volunteerDTO.setPassword(volunteer.getPassword());
+		volunteerDTO.setUsername(volunteer.getUsername());
+		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteerDTO);
 	}
 }

@@ -8,8 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.core.participant.dto.CoreVolunteerDTO;
-import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
+import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 
 @Service
 public class CoreMarketplaceRestClient {
@@ -21,14 +20,14 @@ public class CoreMarketplaceRestClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public TaskInteractionDTO registerVolunteer(String marketplaceURL, String authorization,
-			CoreVolunteerDTO volunteerDto) {
+	public VolunteerDTO registerVolunteer(String marketplaceURL, String authorization, VolunteerDTO volunteerDto) {
 		String url = format(MARKETPLACE_REGISTER_VOLUNTEER, marketplaceURL, volunteerDto);
-		return restTemplate.postForObject(url, buildEntity(authorization), TaskInteractionDTO.class);
+		return restTemplate.postForObject(url, buildEntity(volunteerDto, authorization), VolunteerDTO.class);
 	}
 
-	private HttpEntity<?> buildEntity(String authorization) {
-		return new HttpEntity<>(null, buildAuthorizationHeader(authorization));
+	
+	public HttpEntity<?> buildEntity(Object body, String authorization) {
+		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
 	}
 
 	private HttpHeaders buildAuthorizationHeader(String authorization) {
