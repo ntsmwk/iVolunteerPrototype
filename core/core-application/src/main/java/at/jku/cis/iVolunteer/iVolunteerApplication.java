@@ -57,6 +57,7 @@ public class iVolunteerApplication {
 			marketplace = new Marketplace();
 			marketplace.setMarketplaceId(MARKETPLACE_ID);
 			marketplace.setUrl(MARKETPLACE_URL);
+			marketplace.setId(MARKETPLACE_DEFAULT);
 			marketplaceRepository.insert(marketplace);
 		}
 		return marketplace;

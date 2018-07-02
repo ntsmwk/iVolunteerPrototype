@@ -25,4 +25,5 @@ public class CoreVolunteerController {
 	public List<Marketplace> getRegisteredMarketplaces(@PathVariable("coreVolunteerId") String coreVolunteerId) {
 		return coreVolunteerRepository.findOne(coreVolunteerId).getRegisteredMarketplaces();
 	}
+
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,8 +33,6 @@ import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 public class TaskInteractionController {
 
 	@Autowired
-	private LoginService loginService;
-	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
 	private TaskInteractionMapper taskInteractionMapper;
@@ -43,6 +42,9 @@ public class TaskInteractionController {
 	private TaskInteractionRepository taskInteractionRepository;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
+
+	@Autowired
+	private LoginService loginService;
 
 	@GetMapping("/task/{taskId}/interaction")
 	public List<TaskInteractionDTO> findByTaskId(@PathVariable("taskId") String taskId,
@@ -76,8 +78,10 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/reserve")
-	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId) {
+	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId,
+			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
+		// TODO
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (latestTaskInteraction == null
@@ -89,7 +93,8 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
-	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId) {
+	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId,
+			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 

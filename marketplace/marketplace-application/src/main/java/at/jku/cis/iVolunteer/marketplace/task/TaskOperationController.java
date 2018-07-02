@@ -35,9 +35,6 @@ import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 public class TaskOperationController {
 
 	@Autowired
-	private LoginService loginService;
-
-	@Autowired
 	private ContractorPublishingRestClient contractorRepositoryRestClient;
 
 	@Autowired
@@ -61,6 +58,9 @@ public class TaskOperationController {
 	private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
+
+	@Autowired
+	private LoginService loginService;
 
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
@@ -136,14 +136,14 @@ public class TaskOperationController {
 					vte.setVolunteerId(volunteer.getId());
 
 					contractorRepositoryRestClient.publishTaskEntry(vte);
-				
+
 					competenceEntries.forEach(competenceEntry -> {
 						VolunteerCompetenceEntryDTO vce = (VolunteerCompetenceEntryDTO) competenceEntryMapper
 								.toDTO(competenceEntry);
 						vce.setVolunteerId(volunteer.getId());
 						contractorRepositoryRestClient.publishCompetenceEntry(vce);
 					});
-					
+
 				} catch (RestClientException ex) {
 					throw new BadRequestException();
 				}
