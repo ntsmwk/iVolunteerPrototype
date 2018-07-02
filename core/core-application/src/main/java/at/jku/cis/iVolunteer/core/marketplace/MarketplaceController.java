@@ -14,7 +14,7 @@ import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
-@RestController("/marketplace")
+@RestController()
 public class MarketplaceController {
 
 	@Autowired
@@ -23,18 +23,18 @@ public class MarketplaceController {
 	@Autowired
 	private MarketplaceMapper marketplaceMapper;
 
-	@GetMapping
+	@GetMapping("/marketplace")
 	public List<MarketplaceDTO> getMarketplaces() {
 		return marketplaceMapper.toDTOs(marketplaceRepository.findAll());
 	}
 
-	@PostMapping
+	@PostMapping("/marketplace")
 	public MarketplaceDTO registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
 		Marketplace marketplace = marketplaceMapper.toEntity(marketplaceDto);
 		return marketplaceMapper.toDTO(marketplaceRepository.insert(marketplace));
 	}
 
-	@DeleteMapping("/{marketplaceId}")
+	@DeleteMapping("/marketplace/{marketplaceId}")
 	public void deleteMarketplace(@PathVariable("marketplaceId") String marketplaceId) {
 		marketplaceRepository.delete(marketplaceId);
 	}

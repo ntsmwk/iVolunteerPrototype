@@ -41,8 +41,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 	private VolunteerRepository volunteerRepository;
 	@Autowired
 	private VolunteerProfileRepository volunteerProfileRepository;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+//	@Autowired
+//	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private CompetenceRepository competenceRepository;
 	@Autowired
@@ -60,17 +60,17 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		Employee employee = employeeRepository.findByUsername(MMUSTERMANN);
-		if (employee == null) {
-			employee = new Employee();
-			employee.setUsername(MMUSTERMANN);
-			employee.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
-			employee = employeeRepository.insert(employee);
-		}
-
-		createVolunteer(BROISER, RAW_PASSWORD);
-		createVolunteer(PSTARZER, RAW_PASSWORD);
-		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+//		Employee employee = employeeRepository.findByUsername(MMUSTERMANN);
+//		if (employee == null) {
+//			employee = new Employee();
+//			employee.setUsername(MMUSTERMANN);
+//			employee.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
+//			employee = employeeRepository.insert(employee);
+//		}
+//
+//		createVolunteer(BROISER, RAW_PASSWORD);
+//		createVolunteer(PSTARZER, RAW_PASSWORD);
+//		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 
 		createCompetence("Planning");
 		createCompetence("Leadership");
@@ -80,23 +80,23 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	}
 
-	private Volunteer createVolunteer(String username, String password) {
-		Volunteer volunteer = volunteerRepository.findByUsername(username);
-		if (volunteer == null) {
-			volunteer = new Volunteer();
-			volunteer.setUsername(username);
-			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
-			volunteer = volunteerRepository.insert(volunteer);
-		}
-
-		VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
-		if (volunteerProfile == null) {
-			volunteerProfile = new VolunteerProfile();
-			volunteerProfile.setVolunteer(volunteer);
-			volunteerProfile = volunteerProfileRepository.insert(volunteerProfile);
-		}
-		return volunteer;
-	}
+//	private Volunteer createVolunteer(String username, String password) {
+//		Volunteer volunteer = volunteerRepository.findByUsername(username);
+//		if (volunteer == null) {
+//			volunteer = new Volunteer();
+//			volunteer.setUsername(username);
+//			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
+//			volunteer = volunteerRepository.insert(volunteer);
+//		}
+//
+//		VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
+//		if (volunteerProfile == null) {
+//			volunteerProfile = new VolunteerProfile();
+//			volunteerProfile.setVolunteer(volunteer);
+//			volunteerProfile = volunteerProfileRepository.insert(volunteerProfile);
+//		}
+//		return volunteer;
+//	}
 
 	private Competence createCompetence(String competenceName) {
 		Competence competence = competenceRepository.findByName(competenceName);
