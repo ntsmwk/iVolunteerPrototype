@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 
-import {LoginService} from '../../content/_service/login.service';
 import {Participant} from '../../content/_model/participant';
+import {LoginService} from '../../content/_service/login.service';
 
 @Component({
   selector: 'fuse-user-menu',
   templateUrl: './user-menu.component.html',
-  styleUrls: ['./user-menu.component.scss'],
-  providers: [LoginService]
+  styleUrls: ['./user-menu.component.scss']
 })
 
 export class FuseUserMenuComponent implements OnInit {

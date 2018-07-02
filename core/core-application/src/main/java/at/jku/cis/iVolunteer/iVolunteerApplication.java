@@ -19,8 +19,8 @@ import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 @SpringBootApplication
 public class iVolunteerApplication {
 
-	private static final String MARKETPLACE_DEFAULT = "default";
 	private static final String MARKETPLACE_ID = "MP1";
+	private static final String MARKETPLACE_NAME = "Marketplace 1";
 	private static final String MARKETPLACE_URL = "http://localhost:8080";
 
 	private static final String MMUSTERMANN = "mmustermann";
@@ -57,12 +57,12 @@ public class iVolunteerApplication {
 	}
 
 	private Marketplace createMarketplace() {
-		Marketplace marketplace = marketplaceRepository.findOne(MARKETPLACE_DEFAULT);
+		Marketplace marketplace = marketplaceRepository.findByMarketplaceId(MARKETPLACE_ID);
 		if (marketplace == null) {
 			marketplace = new Marketplace();
 			marketplace.setMarketplaceId(MARKETPLACE_ID);
+			marketplace.setName(MARKETPLACE_NAME);
 			marketplace.setUrl(MARKETPLACE_URL);
-			marketplace.setId(MARKETPLACE_DEFAULT);
 			marketplaceRepository.insert(marketplace);
 		}
 		return marketplace;
@@ -74,6 +74,7 @@ public class iVolunteerApplication {
 			employee = new CoreEmployee();
 			employee.setUsername(MMUSTERMANN);
 			employee.setPassword(bCryptPasswordEncoder.encode(RAW_PASSWORD));
+			employee.getRegisteredMarketplaces().clear();
 			employee.getRegisteredMarketplaces().add(marketplace);
 			employee = coreEmployeeRepository.insert(employee);
 
@@ -86,6 +87,7 @@ public class iVolunteerApplication {
 			volunteer = new CoreVolunteer();
 			volunteer.setUsername(username);
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
+			volunteer.getRegisteredMarketplaces().clear();
 			volunteer.getRegisteredMarketplaces().add(marketplace);
 			volunteer = coreVolunteerRepository.insert(volunteer);
 			
