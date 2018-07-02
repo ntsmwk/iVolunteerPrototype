@@ -24,7 +24,6 @@ public class PublishServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		//TODO
 		marketplaceRestClient.publishTask("",taskId, token);
 		delegateExecution.setVariable(VOLUNTEER_IDS, extractVolunteerIds(marketplaceRestClient.findVolunteers("",token)));
 	}

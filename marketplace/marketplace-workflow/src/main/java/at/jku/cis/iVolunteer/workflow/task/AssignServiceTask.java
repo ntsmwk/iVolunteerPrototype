@@ -26,7 +26,6 @@ public class AssignServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: " + volunteerId + "}");
 
-		//TODO 
 		TaskDTO task = marketplaceRestClient.findTaskById("",taskId, token);
 		SourceDTO source = marketplaceRestClient.findSource("",token);
 		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById("",volunteerId, token);

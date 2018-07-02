@@ -81,7 +81,6 @@ public class TaskInteractionController {
 	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId,
 			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
-		// TODO
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (latestTaskInteraction == null

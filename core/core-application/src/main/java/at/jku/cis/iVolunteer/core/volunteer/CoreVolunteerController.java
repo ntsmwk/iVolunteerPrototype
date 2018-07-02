@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.mapper.core.participant.CoreVolunteerMapper;
 import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
@@ -34,6 +36,9 @@ public class CoreVolunteerController {
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
 
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteerDTO getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
 		return coreVolunteerMapper.toDTO(coreVolunteerRepository.findOne(volunteerId));
@@ -47,16 +52,19 @@ public class CoreVolunteerController {
 
 	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
-			@PathVariable("marketplaceId") String marketplaceId) {
+			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
 		CoreVolunteer volunteer = coreVolunteerRepository.findOne(coreVolunteerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (volunteer == null || marketplace == null) {
 			throw new NotFoundException();
 		}
 
-		// TODO
-		// volunteer.getRegisteredMarketplaces().add()
+		volunteer.getRegisteredMarketplaces().add(marketplace);
+		coreVolunteerRepository.save(volunteer);
+
+		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization,
+				coreVolunteerMapper.toDTO(volunteer));
+		// TODO send registration to Marketplace...
 
 	}
-
 }

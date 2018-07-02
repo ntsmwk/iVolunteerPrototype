@@ -24,9 +24,8 @@ public class UnreserveServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		//TODO
-		SourceDTO source = marketplaceRestClient.findSource("",token);
-		TaskDTO task = marketplaceRestClient.findTaskById("",taskId, token);
+		SourceDTO source = marketplaceRestClient.findSource("", token);
+		TaskDTO task = marketplaceRestClient.findTaskById("", taskId, token);
 
 		contractorRestClient.unreserveTask(task, source, token);
 	}

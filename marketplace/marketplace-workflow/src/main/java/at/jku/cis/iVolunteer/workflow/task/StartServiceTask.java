@@ -25,7 +25,6 @@ public class StartServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		//TODO
 		marketplaceRestClient.startTask("",taskId, token);
 
 		retrieveAllTaskByDelegationExecution(delegateExecution).forEach((task) -> {
