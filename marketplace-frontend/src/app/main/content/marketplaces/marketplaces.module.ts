@@ -3,7 +3,7 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import { MatIconModule } from '@angular/material';
+import {MatButtonModule, MatIconModule} from '@angular/material';
 import {MarketplacesComponent} from './marketplaces.component';
 
 const routes = [
@@ -17,7 +17,8 @@ const routes = [
   imports: [
     RouterModule.forChild(routes),
     FuseSharedModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ]
 })
 

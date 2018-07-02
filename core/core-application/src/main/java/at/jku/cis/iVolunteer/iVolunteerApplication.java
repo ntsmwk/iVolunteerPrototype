@@ -94,7 +94,7 @@ public class iVolunteerApplication {
 			volunteerDto.setUsername(volunteer.getUsername());
 			volunteerDto.setPassword(volunteer.getPassword());
 			
-			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtd2Vpc3NlbmJlayIsInVzZXJuYW1lIjoibXdlaXNzZW5iZWsiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxMzk0NTE4fQ.iWi7oXHyJOkATiC1B-tvcFzqizyNM7Lm2WEdym_vXeCZf-CRvHFtWyQJc-7YGZqWM1V__03Otd0TUpyERTEaUg",
+			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwc3RhcnplciIsInVzZXJuYW1lIjoicHN0YXJ6ZXIiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxMzg2NDAxfQ.dksTEseEiE4J1JZk_-zLYJglgZOdwpf4v7n3HerSbZUxE3wbODZTEDc1n4G3gRfAGrDSFv8LW9n7pCv31U3iAA",
 					volunteerDto);
 		}
 	}

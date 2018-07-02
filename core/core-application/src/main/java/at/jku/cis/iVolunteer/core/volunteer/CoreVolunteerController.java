@@ -50,7 +50,8 @@ public class CoreVolunteerController {
 		CoreVolunteer volunteer = coreVolunteerRepository.findOne(volunteerId);
 		return marketplaceMapper.toDTOs(volunteer.getRegisteredMarketplaces());
 	}
-
+	
+	
 	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {

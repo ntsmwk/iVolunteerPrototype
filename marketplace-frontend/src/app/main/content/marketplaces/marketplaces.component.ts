@@ -5,7 +5,7 @@ import {LoginService} from '../_service/login.service';
 import {CoreService} from '../_service/core.service';
 import {Volunteer} from '../_model/volunteer';
 import {CoreVolunteerService} from '../_service/core.volunteer.service';
-import { List } from 'lodash';
+import {Participant} from '../_model/participant';
 
 @Component({
   selector: 'fuse-marketplaces',
@@ -14,8 +14,8 @@ import { List } from 'lodash';
 })
 export class MarketplacesComponent implements OnInit {
    volunteer: Volunteer;
-   marketplaces: List<Marketplace> = [];
-   registeredMarketplaces: List<Marketplace> = [];
+   allMarketplaces: Array<Marketplace> = [];
+   registeredMarketplaces: Array<Marketplace> = [];
 
 
   constructor(
@@ -26,16 +26,22 @@ export class MarketplacesComponent implements OnInit {
   ){}
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) =>
-      this.volunteer = volunteer);
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      this.volunteer = volunteer;
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
+          this.registeredMarketplaces = marketplaces;
+          });
+      });
 
-    this.coreService.findMarketplaces().toPromise().then((marketplaces: List<Marketplace>) =>
-    this.marketplaces = marketplaces);
+    this.coreService.findMarketplaces().toPromise().then((marketplaces: Array<Marketplace>) =>
+      this.allMarketplaces = marketplaces);
 
-    this.coreVolunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise().then((marketplaces: List<Marketplace>) =>
-      this.registeredMarketplaces = marketplaces);
+  }
 
-
+  subscribe(marketplace: Marketplace) {
+       this.coreVolunteerService.registerMarketplace(this.volunteer.id, marketplace.marketplaceId).toPromise().then(()=>{
+         this.registeredMarketplaces.push(marketplace);
+       });
   }
 
 }
