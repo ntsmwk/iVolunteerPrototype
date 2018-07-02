@@ -1,3 +1,38 @@
-<p>
-  marketplaces works!
-</p>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <div class="hero-text">
+      <mat-icon class="hero-icon">school</mat-icon>
+      <h1>Marketplaces</h1>
+    </div>
+  </div>
+
+  <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+    <div class="marketplace" *ngFor="let marketplace of marketplaces" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [ngClass]="competence-bg" [@animate]="{value:'*',params:{y:'100%'}}">
+
+      <div class="competence-content" fxLayout="column">
+
+        <div class="header" fxLayout="row" fxLayoutAlign="center center">
+
+          <div class="category" fxFlex>
+            {{marketplace.name}}
+          </div>
+        </div>
+
+        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+          <div class="h1">{{marketplace.name}}</div>
+        </div>
+
+        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="no-marketplaces" *ngIf="marketplaces.length === 0">
+      No marketplaces found!
+    </div>
+
+  </div>
+
+</div>
