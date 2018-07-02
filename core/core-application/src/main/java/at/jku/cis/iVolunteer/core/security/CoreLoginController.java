@@ -32,7 +32,7 @@ public class CoreLoginController {
 		return volunteerMapper.toDTO((CoreVolunteer) participant);
 	}
 
-	@GetMapping("/role")
+	@GetMapping("role")
 	public ParticipantRole getLoggedInRole() {
 		return loginService.getLoggedInParticipantRole();
 	}
