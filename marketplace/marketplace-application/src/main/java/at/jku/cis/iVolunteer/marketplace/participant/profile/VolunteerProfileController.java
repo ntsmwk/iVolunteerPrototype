@@ -40,8 +40,6 @@ import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerProfileDTO;
 public class VolunteerProfileController {
 
 	@Autowired
-	private LoginService loginService;
-	@Autowired
 	private VerifierRestClient verifierRestClient;
 	@Autowired
 	private VolunteerRepository volunteerRepository;
@@ -53,6 +51,9 @@ public class VolunteerProfileController {
 	private TaskEntryMapper taskEntryMapper;
 	@Autowired
 	private CompetenceEntryMapper competenceEntryMapper;
+
+	@Autowired
+	private LoginService loginService;
 
 	@Autowired
 	private CompetenceMapper competenceMapper;
