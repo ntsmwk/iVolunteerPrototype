@@ -120,8 +120,8 @@ public class TaskController {
 		Volunteer volunteer = volunteerRepository.findOne(id);
 
 		Set<Task> tasks = new HashSet<Task>();
-
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
+
 		for (TaskInteraction ti : taskInteractions) {
 			Task t = ti.getTask();
 

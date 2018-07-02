@@ -69,25 +69,29 @@ export class FuseTaskListComponent implements OnInit {
 
 
   loadAvailableTasks() {
-    this.taskService.findAllPublished()
+    // TODO
+    this.taskService.findAllPublished('')
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }
 
   loadUpcommingTasks() {
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'upcomming')
+    // TODO
+    this.taskService.findByParticipantAndState(this.volunteer.id, 'upcomming', '')
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }
 
   loadRunningTasks() {
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'running')
+    // TODO
+    this.taskService.findByParticipantAndState(this.volunteer.id, 'running', '')
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }
 
   loadFinishedTasks() {
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'finished')
+    // TODO
+    this.taskService.findByParticipantAndState(this.volunteer.id, 'finished', '')
       .toPromise()
       .then((tasks: Task[]) => this.dataSource.data = tasks);
   }

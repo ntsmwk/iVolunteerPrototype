@@ -17,7 +17,7 @@ export class CoreService {
   }
 
   registerMarketplace(marketplace: Marketplace) {
-    return this.http.post(`${this.apiUrl}/`,marketplace);
+    return this.http.post(`${this.apiUrl}/`, marketplace);
   }
 
   deleteMarketplace(id: string) {
