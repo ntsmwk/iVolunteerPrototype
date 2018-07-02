@@ -17,10 +17,10 @@ import {Volunteer} from '../_model/volunteer';
 
 })
 export class FuseTaskListComponent implements OnInit {
-  volunteer: Volunteer;
-  header;
-  dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+   volunteer: Volunteer;
+   header;
+   dataSource = new MatTableDataSource<Task>();
+   displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
