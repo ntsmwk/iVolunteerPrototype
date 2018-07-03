@@ -8,6 +8,8 @@ import {Participant} from '../_model/participant';
 import {Competence} from '../_model/competence';
 import {VolunteerProfileService} from '../_service/volunteer-profile.service';
 import {Volunteer} from '../_model/volunteer';
+import {CoreVolunteerService} from '../_service/core.volunteer.service';
+import {Marketplace} from '../_model/marketplace';
 
 
 @Component({
@@ -17,83 +19,105 @@ import {Volunteer} from '../_model/volunteer';
 
 })
 export class FuseTaskListComponent implements OnInit {
-   volunteer: Volunteer;
-   header;
-   dataSource = new MatTableDataSource<Task>();
-   displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  header;
+  dataSource = new MatTableDataSource<Task>();
+  data: Task[] = [];
+  displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
               private taskService: TaskService,
+              private coreVolunteerService: CoreVolunteerService,
               private router: Router) {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) =>
-      this.volunteer = volunteer);
+    this.route.paramMap.subscribe(
+      map => {
+        const pageType = map.get('pageType');
+        console.log(pageType);
 
-
-      this.route.paramMap.subscribe(
-        map => {
-          const pageType = map.get('pageType');
-          console.log(pageType);
-
-          switch (pageType) {
-            case 'available': {
-              this.header = 'Available Tasks';
-              this.loadAvailableTasks();
-              break;
-            }
-            case 'upcomming': {
-              this.header = 'Upcomming Tasks';
-              this.loadUpcommingTasks();
-              break;
-            }
-            case 'running': {
-              this.header = 'Running Tasks';
-              this.loadRunningTasks();
-              break;
-            }
-            case 'finished': {
-              this.header = 'Finished Tasks';
-              this.loadFinishedTasks();
-              break;
-            }
-            default:
-              throw new Error('Page type not supported');
+        switch (pageType) {
+          case 'available': {
+            this.header = 'Available Tasks';
+            this.loadAvailableTasks();
+            break;
           }
+          case 'upcomming': {
+            this.header = 'Upcomming Tasks';
+            this.loadUpcommingTasks();
+            break;
+          }
+          case 'running': {
+            this.header = 'Running Tasks';
+            this.loadRunningTasks();
+            break;
+          }
+          case 'finished': {
+            this.header = 'Finished Tasks';
+            this.loadFinishedTasks();
+            break;
+          }
+          default:
+            throw new Error('Page type not supported');
         }
-      );
+      }
+    );
 
   }
 
 
   loadAvailableTasks() {
-    // TODO
-    this.taskService.findAllPublished('')
-      .toPromise()
-      .then((tasks: Task[]) => this.dataSource.data = tasks);
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
+        marketplaces.forEach(marketplace => {
+          this.taskService.findAllPublished(marketplace.url)
+          // TODO find proper way to add tasks to matTable dataSource
+            .toPromise().then((tasks: Task[]) => {
+            this.dataSource.data = this.data.concat(tasks);
+            console.log('tasks: ', tasks.toString());
+            console.log('data: ', this.data.toString());
+            console.log('dataSource.data: ', this.dataSource.data.toString());
+          });
+        });
+      });
+    });
   }
 
   loadUpcommingTasks() {
-    // TODO
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'upcomming', '')
-      .toPromise()
-      .then((tasks: Task[]) => this.dataSource.data = tasks);
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
+        marketplaces.forEach(marketplace => {
+          this.taskService.findByParticipantAndState(volunteer.id, 'upcomming', marketplace.url)
+            // TODO find proper way to add tasks to matTable dataSource
+            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
+        });
+      });
+    });
   }
 
   loadRunningTasks() {
-    // TODO
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'running', '')
-      .toPromise()
-      .then((tasks: Task[]) => this.dataSource.data = tasks);
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
+        marketplaces.forEach(marketplace => {
+          this.taskService.findByParticipantAndState(volunteer.id, 'running', marketplace.url)
+          // TODO find proper way to add tasks to matTable dataSource
+            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
+        });
+      });
+    });
   }
 
   loadFinishedTasks() {
-    // TODO
-    this.taskService.findByParticipantAndState(this.volunteer.id, 'finished', '')
-      .toPromise()
-      .then((tasks: Task[]) => this.dataSource.data = tasks);
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
+        marketplaces.forEach(marketplace => {
+          this.taskService.findByParticipantAndState(volunteer.id, 'finished', marketplace.url)
+          // TODO find proper way to add tasks to matTable dataSource
+            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
+        });
+      });
+    });
   }
 
   onRowSelect(task: Task) {

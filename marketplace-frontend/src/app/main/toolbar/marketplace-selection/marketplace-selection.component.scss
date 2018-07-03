@@ -1,0 +1,8 @@
+::ng-deep mat-chip {
+  font-weight: normal;
+  cursor: pointer !important;
+
+  .mat-chip-selected {
+    background-color: #039be5;
+  }
+}

@@ -39,6 +39,7 @@ export class MarketplacesComponent implements OnInit {
   }
 
   subscribe(marketplace: Marketplace) {
+    console.log('in subscribe!!!')
        this.coreVolunteerService.registerMarketplace(this.volunteer.id, marketplace.marketplaceId).toPromise().then(()=>{
          this.registeredMarketplaces.push(marketplace);
        });
