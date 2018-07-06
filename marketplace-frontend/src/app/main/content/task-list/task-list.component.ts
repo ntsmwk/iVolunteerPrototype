@@ -78,7 +78,7 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(task: Task) {
-    this.router.navigate(['/main/task/' + task.id]);
+    this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadStatusTasks(state: string) {

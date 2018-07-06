@@ -11,7 +11,7 @@ import {FuseTaskTimelineComponent} from './sidenavs/timeline/task-timeline.compo
 import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
 
 const routes = [
-  {path: '', component: FuseTaskDetailComponent}
+  {path: ':marketplaceId/:taskId', component: FuseTaskDetailComponent}
 ];
 
 @NgModule({
