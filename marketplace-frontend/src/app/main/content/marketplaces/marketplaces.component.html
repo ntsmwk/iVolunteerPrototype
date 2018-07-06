@@ -18,11 +18,11 @@
         </div>
 
         <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
-          <div class="h1">{{marketplace.marketplaceId}}</div>
+          <div class="h1">{{marketplace.name}}</div>
         </div>
 
         <div class="footer" fxLayout="row" fxLayoutAlign="center center">
-          <div *ngIf="registeredMarketplaces.indexOf(marketplace) <= -1;">
+          <div *ngIf="isUnsubscribed(marketplace)">
             <button mat-raised-button color="accent" (click)="subscribe(marketplace)">Subscribe
             </button>
           </div>

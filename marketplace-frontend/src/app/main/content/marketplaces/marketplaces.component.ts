@@ -13,25 +13,24 @@ import {Participant} from '../_model/participant';
   styleUrls: ['./marketplaces.component.scss']
 })
 export class MarketplacesComponent implements OnInit {
-   volunteer: Volunteer;
-   allMarketplaces: Array<Marketplace> = [];
-   registeredMarketplaces: Array<Marketplace> = [];
+  volunteer: Volunteer;
+  allMarketplaces: Array<Marketplace> = [];
+  registeredMarketplaces: Array<Marketplace> = [];
 
 
-  constructor(
-    private route: ActivatedRoute,
-    private loginService: LoginService,
-    private coreService: CoreService,
-    private coreVolunteerService: CoreVolunteerService
-  ){}
+  constructor(private route: ActivatedRoute,
+              private loginService: LoginService,
+              private coreService: CoreService,
+              private coreVolunteerService: CoreVolunteerService) {
+  }
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       this.volunteer = volunteer;
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
-          this.registeredMarketplaces = marketplaces;
-          });
+        this.registeredMarketplaces = marketplaces;
       });
+    });
 
     this.coreService.findMarketplaces().toPromise().then((marketplaces: Array<Marketplace>) =>
       this.allMarketplaces = marketplaces);
@@ -40,9 +39,19 @@ export class MarketplacesComponent implements OnInit {
 
   subscribe(marketplace: Marketplace) {
     console.log('in subscribe!!!')
-       this.coreVolunteerService.registerMarketplace(this.volunteer.id, marketplace.marketplaceId).toPromise().then(()=>{
-         this.registeredMarketplaces.push(marketplace);
-       });
+    this.coreVolunteerService.registerMarketplace(this.volunteer.id, marketplace.marketplaceId).toPromise().then(() => {
+      this.registeredMarketplaces.push(marketplace);
+    });
+
+    //     this.messageService.broadcast('marketplaceSelectionChanged', {});
+
   }
 
+  isUnsubscribed(marketplace: Marketplace) {
+    console.log('registeredMarketplaces', this.registeredMarketplaces);
+    console.log('marketplace', marketplace);
+    console.log('isUnsubscribed', this.registeredMarketplaces.indexOf(marketplace) < 0);
+
+    return this.registeredMarketplaces.indexOf(marketplace) < 0;
+  }
 }

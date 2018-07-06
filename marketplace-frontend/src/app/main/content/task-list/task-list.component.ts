@@ -72,14 +72,12 @@ export class FuseTaskListComponent implements OnInit {
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
         marketplaces.forEach(marketplace => {
           this.taskService.findAllPublished(marketplace.url)
-          // TODO find proper way to add tasks to matTable dataSource
             .toPromise().then((tasks: Task[]) => {
-            this.dataSource.data = this.data.concat(tasks);
-            console.log('tasks: ', tasks.toString());
-            console.log('data: ', this.data.toString());
-            console.log('dataSource.data: ', this.dataSource.data.toString());
+            this.data.concat(tasks);
           });
         });
+        // TODO
+        this.dataSource.data = this.data;
       });
     });
   }
@@ -90,7 +88,9 @@ export class FuseTaskListComponent implements OnInit {
         marketplaces.forEach(marketplace => {
           this.taskService.findByParticipantAndState(volunteer.id, 'upcomming', marketplace.url)
             // TODO find proper way to add tasks to matTable dataSource
-            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
+            .toPromise().then((tasks: Task[]) => {
+            this.dataSource.data.push.apply(this.dataSource.data, tasks);
+          });
         });
       });
     });
