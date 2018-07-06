@@ -32,9 +32,6 @@ const routes = [
     MatSidenavModule,
 
     FuseSharedModule
-  ],
-  exports: [
-    FuseTaskDetailComponent
   ]
 })
 export class FuseTaskDetailModule {

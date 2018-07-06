@@ -7,7 +7,7 @@ import {MatButtonModule, MatIconModule} from '@angular/material';
 import {MarketplacesComponent} from './marketplaces.component';
 
 const routes = [
-  {path: '**', component: MarketplacesComponent}
+  {path: '', component: MarketplacesComponent}
 ];
 
 @NgModule({

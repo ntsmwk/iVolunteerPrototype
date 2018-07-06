@@ -1,6 +1,6 @@
 @import "src/@fuse/scss/fuse";
 
-#task-detail {
+#task-form.page-layout {
 
   .header {
     position: relative;
@@ -29,11 +29,6 @@
         font-size: 24px;
       }
     }
-
-  }
-
-  .mat-form-field {
-    width: 100%;
   }
 
 }

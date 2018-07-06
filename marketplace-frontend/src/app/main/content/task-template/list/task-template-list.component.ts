@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-
 import { TaskTemplateService } from '../../_service/task-template.service';
 import { MatTableDataSource } from '@angular/material';
 import { TaskTemplate } from '../../_model/task-template';
@@ -23,13 +21,13 @@ export class FuseTaskTemplateListComponent implements OnInit {
   constructor(private taskTemplateService: TaskTemplateService,
               private loginService: LoginService,
               private coreEmployeeService: CoreEmployeeService
-            ) 
+            )
   {}
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
       this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
-        this.taskTemplateService.findAll(marketplace.url)
+        this.taskTemplateService.findAll(marketplace)
         .toPromise()
         .then((taskTemplates: TaskTemplate[]) => this.dataSource.data = taskTemplates);
       });

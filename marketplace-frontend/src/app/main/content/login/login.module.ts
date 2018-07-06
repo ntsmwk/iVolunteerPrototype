@@ -24,9 +24,6 @@ const routes = [
     MatInputModule,
 
     FuseSharedModule
-  ],
-  exports: [
-    FuseLoginComponent
   ]
 })
 export class FuseLoginModule {

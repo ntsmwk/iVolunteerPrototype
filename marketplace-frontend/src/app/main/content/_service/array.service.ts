@@ -7,6 +7,10 @@ import {isNullOrUndefined} from 'util';
 export class ArrayService {
 
   contains(values: any[], current: any) {
+    if (isNullOrUndefined(values)) {
+      return false;
+    }
+
     return !isNullOrUndefined(values.find((value) => value.id === current.id));
   }
 
