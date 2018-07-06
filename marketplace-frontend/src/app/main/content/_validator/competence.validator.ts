@@ -10,8 +10,4 @@ export const CompetenceValidator = (control: AbstractControl): { [key: string]: 
   requiredCompetences.setErrors(commonCompetences.length === 0 ? null : {duplactedCompetence: true});
   acquirableCompetences.setErrors(commonCompetences.length === 0 ? null : {duplactedCompetence: true});
   return commonCompetences.length === 0 ? null : {duplactedCompetence: true};
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> f3c9cfdf7e5b06afcbe310137f2204578a7948f9
