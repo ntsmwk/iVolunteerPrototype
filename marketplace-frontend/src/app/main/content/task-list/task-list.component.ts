@@ -41,7 +41,6 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   }
 
   loadTasks() {
-    this.dataSource.data = [];
     this.route.paramMap.subscribe(params => {
         this.dataSource.data = [];
         switch (params.get('pageType').toLowerCase()) {
@@ -79,7 +78,7 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(task: Task) {
-    this.router.navigate(['/main/task/' + task.id]);
+    this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadStatusTasks(state: string) {

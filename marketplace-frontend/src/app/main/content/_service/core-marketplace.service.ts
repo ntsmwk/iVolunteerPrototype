@@ -1,18 +1,22 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Marketplace } from '../_model/marketplace';
+import {Marketplace} from '../_model/marketplace';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CoreService {
+export class CoreMarketplaceService {
 
   private apiUrl = '/core/marketplace';
 
   constructor(private http: HttpClient) {
   }
 
-  findMarketplaces() {
+  findById(marketplaceId: string) {
+    return this.http.get(`${this.apiUrl}/${marketplaceId}`);
+  }
+
+  findAll() {
     return this.http.get(`${this.apiUrl}`);
   }
 
@@ -23,4 +27,6 @@ export class CoreService {
   deleteMarketplace(id: string) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+
 }

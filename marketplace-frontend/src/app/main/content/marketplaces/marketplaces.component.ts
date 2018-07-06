@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Marketplace} from '../_model/marketplace';
 import {ActivatedRoute} from '@angular/router';
 import {LoginService} from '../_service/login.service';
-import {CoreService} from '../_service/core.service';
+import {CoreMarketplaceService} from '../_service/core-marketplace.service';
 import {Volunteer} from '../_model/volunteer';
 import {Participant} from '../_model/participant';
 import {ArrayService} from '../_service/array.service';
@@ -26,7 +26,7 @@ export class MarketplacesComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
-              private coreService: CoreService,
+              private coreService: CoreMarketplaceService,
               private arrayService: ArrayService,
               private messageService: MessageService,
               private coreVolunteerService: CoreVolunteerService) {
@@ -40,7 +40,7 @@ export class MarketplacesComponent implements OnInit {
       });
     });
 
-    this.coreService.findMarketplaces().toPromise().then((marketplaces: Array<Marketplace>) =>
+    this.coreService.findAll().toPromise().then((marketplaces: Array<Marketplace>) =>
       this.allMarketplaces = marketplaces);
 
   }
