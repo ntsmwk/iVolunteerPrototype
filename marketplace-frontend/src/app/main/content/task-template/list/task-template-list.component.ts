@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-
 import { TaskTemplateService } from '../../_service/task-template.service';
 import { MatTableDataSource } from '@angular/material';
 import { TaskTemplate } from '../../_model/task-template';
