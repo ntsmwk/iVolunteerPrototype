@@ -41,7 +41,6 @@ export class FuseCompetenceListComponent implements OnInit {
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
 
-
               //TODO only selected marketplaces!!
               const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
 
