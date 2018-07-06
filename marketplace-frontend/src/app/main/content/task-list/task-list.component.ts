@@ -43,6 +43,7 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   loadTasks() {
     this.dataSource.data = [];
     this.route.paramMap.subscribe(params => {
+        this.dataSource.data = [];
         switch (params.get('pageType').toLowerCase()) {
           case 'available': {
             this.header = 'Available Tasks';

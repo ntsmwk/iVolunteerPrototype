@@ -24,6 +24,7 @@ export class FuseCompetenceListComponent implements OnInit, OnDestroy {
   private competencies: Competence[] = [];
   private pageType: any;
   private marketplaceChangeSubscription: Subscription;
+  private header: string;
 
   constructor(private competenceService: CompetenceService,
               private volunteerProfileService: VolunteerProfileService,
@@ -45,6 +46,7 @@ export class FuseCompetenceListComponent implements OnInit, OnDestroy {
         this.pageType = params.get('pageType');
         switch (this.pageType) {
           case 'all':
+            this.header = 'All Competencies';
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
               const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
@@ -60,6 +62,7 @@ export class FuseCompetenceListComponent implements OnInit, OnDestroy {
             });
             break;
           case 'my':
+            this.header = 'My Competencies';
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
               const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));

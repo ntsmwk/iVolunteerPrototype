@@ -6,8 +6,9 @@
     </div>
   </div>
 
-  <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" *fuseIfOnDom>
-    <div class="marketplace" *ngFor="let marketplace of allMarketplaces" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" >
+  <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+
+    <div class="marketplace" *ngFor="let marketplace of allMarketplaces" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [@animate]="{value:'*',params:{y:'100%'}}">
 
       <div class="marketplace-content" fxLayout="column">
 

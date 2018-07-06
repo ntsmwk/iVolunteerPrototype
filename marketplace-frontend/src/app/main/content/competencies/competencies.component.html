@@ -6,7 +6,7 @@
 
         <div class="hero-text">
             <mat-icon class="hero-icon">school</mat-icon>
-            <h1>All Competencies</h1>
+            <h1>{{header}}</h1>
         </div>
 
     </div>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="no-courses" *ngIf="competencies.length === 0">
+        <div class="no-competencies" *ngIf="competencies.length === 0">
             No competencies found!
         </div>
 
