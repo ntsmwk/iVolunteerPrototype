@@ -13,8 +13,9 @@ import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
 import { CoreEmployeeService } from '../_service/core-employee.service';
 import { Marketplace } from '../_model/marketplace';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
+import { CompetenceValidator } from '../_validator/competence.validator';
 
 @Component({
   selector: 'fuse-task-template',
@@ -24,20 +25,29 @@ import { isNullOrUndefined } from 'util';
 })
 export class FuseTaskTemplateComponent implements OnInit {
 
-  taskTemplate: TaskTemplate;
   competences: Competence[];
   taskTemplateForm: FormGroup;
   workflowTypes: Array<WorkflowType>;
 
-  constructor(private route: ActivatedRoute,
+  constructor(formBuilder: FormBuilder,
+              private route: ActivatedRoute,
               private taskTemplateService: TaskTemplateService,
               private workflowService: WorkflowService,
               private competenceService: CompetenceService,
               private loginService: LoginService,
               private coreEmployeeService: CoreEmployeeService,
-              private messageService: MessageService,
               private router: Router
-            ) { }
+            ) 
+  {
+    this.taskTemplateForm = formBuilder.group({
+      'id': new FormControl(undefined),
+      'name': new FormControl(undefined),
+      'description': new FormControl(undefined),
+      'requiredCompetences': new FormControl([]),
+      'acquirableCompetences': new FormControl([]),
+      'workflowType': new FormControl(undefined),
+    }, {validator: CompetenceValidator});
+}
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
@@ -45,7 +55,6 @@ export class FuseTaskTemplateComponent implements OnInit {
         Promise.all([
           this.workflowService.findAllTypes(marketplace.url).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
           this.competenceService.findAll(marketplace.url).toPromise().then((competences: Competence[]) => this.competences = competences)
-        
         ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'], marketplace.url))); 
       });
     });
