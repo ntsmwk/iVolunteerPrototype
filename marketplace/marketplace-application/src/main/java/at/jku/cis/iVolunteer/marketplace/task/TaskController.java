@@ -118,12 +118,17 @@ public class TaskController {
 		Volunteer volunteer = volunteerRepository.findOne(id);
 
 		Set<Task> tasks = new HashSet<Task>();
+
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
+		List<Task> allPublished = taskRepository.findByStatus(TaskStatus.PUBLISHED);
 
 		for (TaskInteraction ti : taskInteractions) {
 			Task t = ti.getTask();
 
 			switch (state) {
+			case "available":
+				allPublished.remove(t);
+				break;
 			case "upcomming":
 				if (t.getStatus().equals(TaskStatus.PUBLISHED)) {
 					tasks.add(t);
@@ -142,7 +147,13 @@ public class TaskController {
 			}
 		}
 
-		return taskMapper.toDTOs(new ArrayList<>(tasks));
+		if (state.equals("available")) {
+			return taskMapper.toDTOs(allPublished);
+
+		} else {
+			return taskMapper.toDTOs(new ArrayList<>(tasks));
+
+		}
 	}
 
 	@GetMapping("/task/{id}/children")
