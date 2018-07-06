@@ -26,6 +26,7 @@ const routes = [
     MatInputModule,
     MatSidenavModule,
     MatTableModule,
+    MatIconModule,
     FuseSharedModule
   ],
   exports: [
