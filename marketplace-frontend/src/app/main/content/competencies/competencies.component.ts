@@ -36,19 +36,12 @@ export class FuseCompetenceListComponent implements OnInit {
     this.route.paramMap.subscribe(
       params => {
         this.pageType = params.get('pageType');
-        switch(this.pageType){
+        switch (this.pageType){
           case 'all':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-
-<<<<<<< HEAD
-
               // TODO only selected marketplaces!!
-              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO
-=======
-              //TODO only selected marketplaces!!
-              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
->>>>>>> 70e9e0a5c6d9bbfe263dae33ba1d0940174a0d32
+              const marketplaces =  JSON.parse(localStorage.getItem('marketplaces')); // TODO
 
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
                 marketplaces.forEach(marketplace => {
@@ -64,7 +57,7 @@ export class FuseCompetenceListComponent implements OnInit {
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
 
               // TODO only selected marketplaces!!
-              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO
+              const marketplaces =  JSON.parse(localStorage.getItem('marketplaces')); // TODO
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
                 marketplaces.forEach(marketplace => {
                   this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Marketplace} from '../_model/marketplace';
 import {ActivatedRoute} from '@angular/router';
 import {LoginService} from '../_service/login.service';
@@ -6,6 +6,8 @@ import {CoreService} from '../_service/core.service';
 import {Volunteer} from '../_model/volunteer';
 import {CoreVolunteerService} from '../_service/core.volunteer.service';
 import {Participant} from '../_model/participant';
+import {ArrayService} from '../_service/array.service';
+import {MessageService} from '../_service/message.service';
 
 @Component({
   selector: 'fuse-marketplaces',
@@ -21,6 +23,8 @@ export class MarketplacesComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
               private coreService: CoreService,
+              private arrayService: ArrayService,
+              private messageService: MessageService,
               private coreVolunteerService: CoreVolunteerService) {
   }
 
@@ -38,20 +42,17 @@ export class MarketplacesComponent implements OnInit {
   }
 
   subscribe(marketplace: Marketplace) {
-    console.log('in subscribe!!!')
     this.coreVolunteerService.registerMarketplace(this.volunteer.id, marketplace.marketplaceId).toPromise().then(() => {
       this.registeredMarketplaces.push(marketplace);
     });
 
-    //     this.messageService.broadcast('marketplaceSelectionChanged', {});
+    this.messageService.broadcast('marketplaceSelectionChanged', {});
 
   }
 
   isUnsubscribed(marketplace: Marketplace) {
-    console.log('registeredMarketplaces', this.registeredMarketplaces);
-    console.log('marketplace', marketplace);
-    console.log('isUnsubscribed', this.registeredMarketplaces.indexOf(marketplace) < 0);
-
-    return this.registeredMarketplaces.indexOf(marketplace) < 0;
+    return !(this.arrayService.contains(this.registeredMarketplaces, marketplace));
   }
+
+
 }

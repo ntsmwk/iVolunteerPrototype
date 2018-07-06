@@ -54,6 +54,7 @@ public class iVolunteerApplication {
 		createVolunteer(BROISER, RAW_PASSWORD, marketplace);
 		createVolunteer(PSTARZER, RAW_PASSWORD, marketplace);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD, marketplace);
+
 	}
 
 	private Marketplace createMarketplace() {

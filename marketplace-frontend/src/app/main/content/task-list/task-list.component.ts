@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material';
 import {LoginService} from '../_service/login.service';
 import {TaskService} from '../_service/task.service';
 import {Task} from '../_model/task';
 import {Participant} from '../_model/participant';
-import {Competence} from '../_model/competence';
-import {VolunteerProfileService} from '../_service/volunteer-profile.service';
-import {Volunteer} from '../_model/volunteer';
 import {CoreVolunteerService} from '../_service/core.volunteer.service';
 import {Marketplace} from '../_model/marketplace';
+import {Subscription} from 'rxjs';
+import {MessageService} from '../_service/message.service';
 
 
 @Component({
@@ -18,25 +17,35 @@ import {Marketplace} from '../_model/marketplace';
   styleUrls: ['./task-list.component.scss']
 
 })
-export class FuseTaskListComponent implements OnInit {
+export class FuseTaskListComponent implements OnInit, OnDestroy {
   header;
   dataSource = new MatTableDataSource<Task>();
-  data: Task[] = [];
+  marketplaceChangeSubscription: Subscription;
   displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private route: ActivatedRoute,
               private loginService: LoginService,
               private taskService: TaskService,
               private coreVolunteerService: CoreVolunteerService,
+              private messageService: MessageService,
               private router: Router) {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(
-      map => {
-        const pageType = map.get('pageType');
-        console.log(pageType);
+    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadTasks.bind(this));
 
+    this.dataSource.data = [];
+    this.loadTasks();
+  }
+
+  ngOnDestroy() {
+    this.marketplaceChangeSubscription.unsubscribe();
+  }
+
+  loadTasks() {
+    this.route.paramMap.subscribe(
+      params => {
+        const pageType = params.get('pageType');
         switch (pageType) {
           case 'available': {
             this.header = 'Available Tasks';
@@ -45,17 +54,17 @@ export class FuseTaskListComponent implements OnInit {
           }
           case 'upcomming': {
             this.header = 'Upcomming Tasks';
-            this.loadUpcommingTasks();
+            this.loadStatusTasks('upcomming');
             break;
           }
           case 'running': {
             this.header = 'Running Tasks';
-            this.loadRunningTasks();
+            this.loadStatusTasks('running');
             break;
           }
           case 'finished': {
             this.header = 'Finished Tasks';
-            this.loadFinishedTasks();
+            this.loadStatusTasks('finished');
             break;
           }
           default:
@@ -63,9 +72,7 @@ export class FuseTaskListComponent implements OnInit {
         }
       }
     );
-
   }
-
 
   loadAvailableTasks() {
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
@@ -73,48 +80,33 @@ export class FuseTaskListComponent implements OnInit {
         marketplaces.forEach(marketplace => {
           this.taskService.findAllPublished(marketplace.url)
             .toPromise().then((tasks: Task[]) => {
-            this.data.concat(tasks);
+
+            // TODO: test
+            const data = this.dataSource.data;
+            tasks.forEach(task => {
+              data.push(task);
+            });
+            this.dataSource.data = data;
           });
         });
-        // TODO
-        this.dataSource.data = this.data;
       });
     });
   }
 
-  loadUpcommingTasks() {
+  loadStatusTasks(state: string) {
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
         marketplaces.forEach(marketplace => {
-          this.taskService.findByParticipantAndState(volunteer.id, 'upcomming', marketplace.url)
-            // TODO find proper way to add tasks to matTable dataSource
+          this.taskService.findByParticipantAndState(volunteer.id, state, marketplace.url)
             .toPromise().then((tasks: Task[]) => {
-            this.dataSource.data.push.apply(this.dataSource.data, tasks);
+
+            // TODO: test
+            const data = this.dataSource.data;
+            tasks.forEach(task => {
+              data.push(task);
+            });
+            this.dataSource.data = data;
           });
-        });
-      });
-    });
-  }
-
-  loadRunningTasks() {
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
-        marketplaces.forEach(marketplace => {
-          this.taskService.findByParticipantAndState(volunteer.id, 'running', marketplace.url)
-          // TODO find proper way to add tasks to matTable dataSource
-            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
-        });
-      });
-    });
-  }
-
-  loadFinishedTasks() {
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[]) => {
-        marketplaces.forEach(marketplace => {
-          this.taskService.findByParticipantAndState(volunteer.id, 'finished', marketplace.url)
-          // TODO find proper way to add tasks to matTable dataSource
-            .toPromise().then((tasks: Task[]) => this.dataSource.data.push.apply(this.dataSource.data, tasks));
         });
       });
     });
