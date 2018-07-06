@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {TaskService} from '../_service/task.service';
 import {MessageService} from '../_service/message.service';
@@ -11,6 +11,10 @@ import { WorkflowType } from '../_model/workflow-type';
 import { Competence } from '../_model/competence';
 import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
+import { CoreEmployeeService } from '../_service/core-employee.service';
+import { Marketplace } from '../_model/marketplace';
+import { FormGroup } from '@angular/forms';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'fuse-task-template',
@@ -21,6 +25,9 @@ import { Participant } from '../_model/participant';
 export class FuseTaskTemplateComponent implements OnInit {
 
   taskTemplate: TaskTemplate;
+  competences: Competence[];
+  taskTemplateForm: FormGroup;
+  workflowTypes: Array<WorkflowType>;
 
   constructor(private route: ActivatedRoute,
               private taskTemplateService: TaskTemplateService,
@@ -28,24 +35,27 @@ export class FuseTaskTemplateComponent implements OnInit {
               private competenceService: CompetenceService,
               private loginService: LoginService,
               private coreEmployeeService: CoreEmployeeService,
-              private messageService: MessageService) {
-  }
+              private messageService: MessageService,
+              private router: Router
+            ) { }
 
   ngOnInit() {
-    Promise.all([
-      //TODO
-      this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
-      
-      this.workflowService.findAllTypes().toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
-      this.competenceService.findAll().toPromise().then((competences: Competence[]) => this.competences = competences)
-    ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'])));
+    this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
+      this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
+        Promise.all([
+          this.workflowService.findAllTypes(marketplace.url).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
+          this.competenceService.findAll(marketplace.url).toPromise().then((competences: Competence[]) => this.competences = competences)
+        
+        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'], marketplace.url))); 
+      });
+    });
   }
 
-  private findTaskTemplate(id: string) {
+  private findTaskTemplate(id: string, url: string) {
     if (isNullOrUndefined(id) || id.length === 0) {
       return;
     }
-    this.taskTemplateService.findById(id).toPromise().then((taskTemplate: TaskTemplate) => {
+    this.taskTemplateService.findById(id, url).toPromise().then((taskTemplate: TaskTemplate) => {
       this.taskTemplateForm.setValue({
         id: taskTemplate.id,
         name: taskTemplate.name,
@@ -69,8 +79,12 @@ export class FuseTaskTemplateComponent implements OnInit {
     const taskTemplate = this.taskTemplateForm.value;
     taskTemplate.workflowKey = taskTemplate.workflowType.key;
     delete taskTemplate.workflowType;
-    this.taskTemplateService.save(<TaskTemplate> taskTemplate)
-      .toPromise()
-      .then(() => this.router.navigate(['/taskTemplates']));
+    this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
+      this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
+        this.taskTemplateService.save(<TaskTemplate> taskTemplate, marketplace.url)
+          .toPromise()
+          .then(() => this.router.navigate(['/taskTemplates']));
+      })
+    });
   }
 }

@@ -34,9 +34,9 @@ public class CoreEmployeeController {
 	}
 
 	@GetMapping("/{coreEmployeeId}/marketplace")
-	public List<MarketplaceDTO> getRegisteredMarketplaces(@PathVariable("coreEmployeeId") String coreEmployeeId) {
+	public MarketplaceDTO getRegisteredMarketplaces(@PathVariable("coreEmployeeId") String coreEmployeeId) {
 		CoreEmployee volunteer = coreEmployeeRepository.findOne(coreEmployeeId);
-		return marketplaceMapper.toDTOs(volunteer.getRegisteredMarketplaces());
+		return marketplaceMapper.toDTO(volunteer.getRegisteredMarketplaces().get(0));
 	}
 
 }

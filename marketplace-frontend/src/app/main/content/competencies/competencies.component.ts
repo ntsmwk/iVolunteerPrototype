@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Competence } from "../_model/competence";
 import { CompetenceService } from '../_service/competence.service';
 import { fuseAnimations } from '@fuse/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { VolunteerService } from '../_service/volunteer.service';
 import { LoginService } from '../_service/login.service';
