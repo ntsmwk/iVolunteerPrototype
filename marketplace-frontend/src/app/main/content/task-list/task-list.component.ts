@@ -5,10 +5,10 @@ import {LoginService} from '../_service/login.service';
 import {TaskService} from '../_service/task.service';
 import {Task} from '../_model/task';
 import {Participant} from '../_model/participant';
-import {CoreVolunteerService} from '../_service/core.volunteer.service';
 import {Marketplace} from '../_model/marketplace';
 import {Subscription} from 'rxjs';
 import {MessageService} from '../_service/message.service';
+import {CoreVolunteerService} from '../_service/core-volunteer.service';
 
 
 @Component({
