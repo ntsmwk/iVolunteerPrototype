@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 import {Marketplace} from '../../content/_model/marketplace';
 import {Participant} from '../../content/_model/participant';
-import {CoreVolunteerService} from '../../content/_service/core.volunteer.service';
+import {CoreVolunteerService} from '../../content/_service/core-volunteer.service';
 import {LoginService} from '../../content/_service/login.service';
 
 import {isNullOrUndefined} from 'util';

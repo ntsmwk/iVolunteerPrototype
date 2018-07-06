@@ -4,10 +4,11 @@ import {ActivatedRoute} from '@angular/router';
 import {LoginService} from '../_service/login.service';
 import {CoreService} from '../_service/core.service';
 import {Volunteer} from '../_model/volunteer';
-import {CoreVolunteerService} from '../_service/core.volunteer.service';
 import {Participant} from '../_model/participant';
 import {ArrayService} from '../_service/array.service';
 import {MessageService} from '../_service/message.service';
+import {CoreVolunteerService} from '../_service/core-volunteer.service';
+
 
 @Component({
   selector: 'fuse-marketplaces',
