@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class CompetenceService {
 
-  private endpoint = '/competence';
+  private endpoint = 'competence';
 
   constructor(private http: HttpClient) {
   }

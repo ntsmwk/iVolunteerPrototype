@@ -65,7 +65,7 @@ export class FuseCompetenceListComponent implements OnInit, OnDestroy {
           case 'my':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-              const selected_marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
+              const selected_marketplaces =  JSON.parse(localStorage.getItem("marketplaces"));
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> 
               { 
                 marketplaces

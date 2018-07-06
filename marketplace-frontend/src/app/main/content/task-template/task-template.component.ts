@@ -21,7 +21,7 @@ import { CompetenceValidator } from '../_validator/competence.validator';
   selector: 'fuse-task-template',
   templateUrl: './task-template.component.html',
   styleUrls: ['./task-template.component.scss'],
-  providers: [TaskTemplateService]
+  providers: [TaskTemplateService, WorkflowService, CompetenceService, LoginService, CoreEmployeeService]
 })
 export class FuseTaskTemplateComponent implements OnInit {
 
@@ -55,7 +55,11 @@ export class FuseTaskTemplateComponent implements OnInit {
         Promise.all([
           this.workflowService.findAllTypes(marketplace.url).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
           this.competenceService.findAll(marketplace.url).toPromise().then((competences: Competence[]) => this.competences = competences)
-        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'], marketplace.url))); 
+        ]).then(() => this.route.params.subscribe(params => {
+          console.error("c: " + this.competences);
+          console.error("w: " + this.workflowTypes);
+          this.findTaskTemplate(params['id'], marketplace.url);
+        })); 
       });
     });
   }
