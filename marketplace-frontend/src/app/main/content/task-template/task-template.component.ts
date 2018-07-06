@@ -55,11 +55,9 @@ export class FuseTaskTemplateComponent implements OnInit {
         Promise.all([
           this.workflowService.findAllTypes(marketplace.url).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
           this.competenceService.findAll(marketplace.url).toPromise().then((competences: Competence[]) => this.competences = competences)
-        ]).then(() => this.route.params.subscribe(params => {
-          console.error("c: " + this.competences);
-          console.error("w: " + this.workflowTypes);
-          this.findTaskTemplate(params['id'], marketplace.url);
-        })); 
+        ]).then(() => this.route.params.subscribe(params => 
+          this.findTaskTemplate(params['id'], marketplace.url)
+        )); 
       });
     });
   }
