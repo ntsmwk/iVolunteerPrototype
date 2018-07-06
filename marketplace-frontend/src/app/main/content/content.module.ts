@@ -41,7 +41,7 @@ const routes: Route[] = [
   {
     path: 'main/task/:taskId',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
-    canActivate: [TokenGuard, VolunteerGuard]
+    canActivate: [TokenGuard]
   },
   {
     path: 'main/task-form',
