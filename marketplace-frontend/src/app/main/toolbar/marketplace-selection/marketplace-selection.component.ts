@@ -8,6 +8,7 @@ import {LoginService} from '../../content/_service/login.service';
 import {isNullOrUndefined} from 'util';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MessageService} from '../../content/_service/message.service';
+import {ArrayService} from '../../content/_service/array.service';
 
 @Component({
   selector: 'fuse-marketplace-selection',
@@ -22,8 +23,9 @@ export class FuseMarketplaceSelectionComponent implements OnInit {
   private selection = new SelectionModel<Marketplace>(true, []);
 
 
-  constructor(private loginService: LoginService,
+  constructor(private arrayService: ArrayService,
               private messageService: MessageService,
+              private loginService: LoginService,
               private volunterService: CoreVolunteerService) {
   }
 
@@ -35,7 +37,16 @@ export class FuseMarketplaceSelectionComponent implements OnInit {
       this.role = <string> values[1];
       if (this.isRoleVolunteer(this.role)) {
         this.volunterService.findRegisteredMarketplaces((<Participant> values[0]).id)
-          .toPromise().then((marketplaces: Marketplace[]) => this.marketplaces = marketplaces);
+          .toPromise()
+          .then((marketplaces: Marketplace[]) => {
+            this.marketplaces = marketplaces;
+            this.marketplaces.forEach((marketplace: Marketplace) => {
+              const storedMarketplaces = <Marketplace[]> JSON.parse(localStorage.getItem('marketplaces'));
+              if (this.arrayService.contains(storedMarketplaces, marketplace)) {
+                this.selection.select(marketplace);
+              }
+            });
+          });
       }
     });
   }
