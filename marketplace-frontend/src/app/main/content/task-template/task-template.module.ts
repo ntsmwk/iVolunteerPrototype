@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
+import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatOptionModule, MatSelectModule} from '@angular/material';
 import { FuseTaskTemplateComponent } from './task-template.component';
 
 const routes = [
@@ -25,7 +25,8 @@ const routes = [
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
-
+    MatSelectModule,
+    MatOptionModule,
     FuseSharedModule
   ],
   exports: [

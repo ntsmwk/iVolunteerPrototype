@@ -7,7 +7,7 @@ import {Marketplace} from '../_model/marketplace';
 })
 export class CompetenceService {
 
-  private endpoint = '/competence';
+  private endpoint = 'competence';
 
   constructor(private http: HttpClient) {
   }

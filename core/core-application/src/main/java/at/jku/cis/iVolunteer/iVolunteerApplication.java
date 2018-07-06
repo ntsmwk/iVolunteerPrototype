@@ -54,6 +54,7 @@ public class iVolunteerApplication {
 		createVolunteer(BROISER, RAW_PASSWORD, marketplace);
 		createVolunteer(PSTARZER, RAW_PASSWORD, marketplace);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD, marketplace);
+
 	}
 
 	private Marketplace createMarketplace() {
@@ -96,7 +97,7 @@ public class iVolunteerApplication {
 			volunteerDto.setUsername(volunteer.getUsername());
 			volunteerDto.setPassword(volunteer.getPassword());
 			
-			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtd2Vpc3NlbmJlayIsInVzZXJuYW1lIjoibXdlaXNzZW5iZWsiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxMzk0NTE4fQ.iWi7oXHyJOkATiC1B-tvcFzqizyNM7Lm2WEdym_vXeCZf-CRvHFtWyQJc-7YGZqWM1V__03Otd0TUpyERTEaUg",
+			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwc3RhcnplciIsInVzZXJuYW1lIjoicHN0YXJ6ZXIiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxNDczNzE2fQ.TjOFHCR_10gAG6fI0CKVSaco6sVwwfeTNCNrp8xoAlSKFP-n_PI-Ozgsa0-lklDO9j35kfMgtW6j-V5g8t56pg",
 					volunteerDto);
 		}
 	}
