@@ -34,6 +34,11 @@ const routes: Route[] = [
     canActivate: [TokenGuard]
   },
   {
+    path: 'main/tasktemplate/edit/:taskTemplateId',
+    loadChildren: './task-template/task-template.module#FuseTaskTemplateModule',
+    canActivate: [TokenGuard]
+  },
+  {
     path: 'main/tasktemplate/all',
     loadChildren: './task-template/list/task-template-list.module#FuseTaskTemplateListModule',
     canActivate: [TokenGuard]
