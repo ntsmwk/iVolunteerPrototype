@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Competence } from "../_model/competence";
 import { CompetenceService } from '../_service/competence.service';
 import { fuseAnimations } from '@fuse/animations';
@@ -8,8 +8,10 @@ import { VolunteerService } from '../_service/volunteer.service';
 import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
 import { VolunteerProfileService} from '../_service/volunteer-profile.service';
-import { CoreVolunteerService } from '../_service/core.volunteer.service';
+import { CoreVolunteerService } from '../_service/core-volunteer.service';
 import { Marketplace } from '../_model/marketplace';
+import { Subscription } from 'rxjs';
+import { MessageService } from '../_service/message.service';
 
 @Component({
   selector: 'fuse-competencies',
@@ -18,21 +20,29 @@ import { Marketplace } from '../_model/marketplace';
   providers: [LoginService, CompetenceService, VolunteerProfileService],
   animations: fuseAnimations
 })
-export class FuseCompetenceListComponent implements OnInit {
+export class FuseCompetenceListComponent implements OnInit, OnDestroy {
+ 
 
   private competencies: Competence[] = [];
   private pageType: any;
+  private marketplaceChangeSubscription: Subscription;
 
   constructor(
     private competenceService: CompetenceService,
     private volunteerProfileService: VolunteerProfileService,
     private coreVolunteerService: CoreVolunteerService,
     private loginService: LoginService,
+    private messageService: MessageService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
 
+    this.loadCompetencies();
+    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadCompetencies.bind(this));
+  }
+
+  private loadCompetencies(){
     this.route.paramMap.subscribe(
       params => {
         this.pageType = params.get('pageType');
@@ -40,31 +50,32 @@ export class FuseCompetenceListComponent implements OnInit {
           case 'all':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-
-              //TODO only selected marketplaces!!
-              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
-
+              const selected_marketplaces =  JSON.parse(localStorage.getItem("marketplaces"));
               this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-                marketplaces.forEach(marketplace => {
-                  this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
-                    this.competencies = this.competencies.concat(comp);
+                marketplaces
+                  .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id == mp.id))
+                  .forEach(marketplace => {
+                    this.competenceService.findAll(marketplace.url).toPromise().then((comp: Competence[]) => {
+                      this.competencies = this.competencies.concat(comp);
                     });
-                });
+                  });
               });
             });  
             break;
           case 'my':
             this.competencies = [];
             this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-
-              //TODO only selected marketplaces!!
-              const marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
-              this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> {
-                marketplaces.forEach(marketplace => {
-                  this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => {
+              const selected_marketplaces =  JSON.parse(localStorage.getItem("marketplaces")); // TODO 
+              this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id).toPromise().then((marketplaces: Marketplace[])=> 
+              { 
+                marketplaces
+                  .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id == mp.id))
+                  .forEach(marketplace => {
+                    this.volunteerProfileService.findCompetencesByVolunteer(volunteer, marketplace.url).toPromise().then((comp: Competence[]) => 
+                    {
                       this.competencies = this.competencies.concat(comp);
                     });
-                });
+                  });
               });
             });
             break;
@@ -72,4 +83,9 @@ export class FuseCompetenceListComponent implements OnInit {
       }
     );
   }
+
+  ngOnDestroy() {
+    this.marketplaceChangeSubscription.unsubscribe();
+  }
+
 }

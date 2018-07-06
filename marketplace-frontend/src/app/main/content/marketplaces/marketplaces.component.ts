@@ -4,7 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {LoginService} from '../_service/login.service';
 import {CoreService} from '../_service/core.service';
 import {Volunteer} from '../_model/volunteer';
-import {CoreVolunteerService} from '../_service/core.volunteer.service';
+import {CoreVolunteerService} from '../_service/core-volunteer.service';
 import { List } from 'lodash';
 
 @Component({

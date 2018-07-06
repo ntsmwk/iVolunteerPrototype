@@ -19,6 +19,25 @@ export const navigation_employee = [
       'type': 'item',
       'icon': 'today',
       'url': '/main/calendar'
+    }, {
+      'id': 'tasksTemplate',
+      'title': 'Task Templates',
+      'type': 'collapse',
+      'icon': 'work',
+      'children': [
+        {
+            'id': 'create-tasks-template',
+            'title': 'Create',
+            'type': 'item',
+            'url': '/main/tasktemplate/create'
+          },
+        {
+          'id': 'all-task-templates',
+          'title': 'All',
+          'type': 'item',
+          'url': '/main/tasktemplate/all'
+        }
+      ]
     },
     {
       'id': 'tasks',
@@ -30,7 +49,7 @@ export const navigation_employee = [
             'id': 'create-tasks',
             'title': 'Create',
             'type': 'item',
-            'url': '/main/tasks/all'
+            'url': '/main/tasks/create'
           },
         {
           'id': 'all-tasks',
