@@ -28,33 +28,15 @@ export const navigation_employee = [
     'children': [
       {
         'id': 'create-tasks',
-        'title': 'Create',
+        'title': 'Form',
         'type': 'item',
         'url': '/main/task-form'
       },
       {
         'id': 'all-tasks',
-        'title': 'All',
+        'title': 'List',
         'type': 'item',
         'url': '/main/tasks/all'
-      },
-      {
-        'id': 'upcomming-tasks',
-        'title': 'Upcomming',
-        'type': 'item',
-        'url': '/main/tasks/upcomming'
-      },
-      {
-        'id': 'running-tasks',
-        'title': 'Running',
-        'type': 'item',
-        'url': '/main/tasks/running'
-      },
-      {
-        'id': 'finished-tasks',
-        'title': 'Finished',
-        'type': 'item',
-        'url': '/main/tasks/finished'
       }
     ]
   },

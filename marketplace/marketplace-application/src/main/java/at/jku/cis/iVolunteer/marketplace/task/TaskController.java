@@ -50,12 +50,8 @@ public class TaskController {
 	HashMap<TaskDTO, List<TaskDTO>> parentChildMap = new HashMap<TaskDTO, List<TaskDTO>>();
 
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(name = "status", required = false) TaskStatus status) {
-		if (status == null) {
-			return taskMapper.toDTOs(taskRepository.findAll());
-		}
-
-		return taskMapper.toDTOs(taskRepository.findByStatus(status));
+	public List<TaskDTO> findAll() {
+		return taskMapper.toDTOs(taskRepository.findAll());
 	}
 
 	@GetMapping("/task/{id}")
