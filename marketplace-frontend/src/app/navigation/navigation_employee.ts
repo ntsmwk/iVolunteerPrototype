@@ -37,24 +37,6 @@ export const navigation_employee = [
         'title': 'All',
         'type': 'item',
         'url': '/main/tasks/all'
-      },
-      {
-        'id': 'upcomming-tasks',
-        'title': 'Upcomming',
-        'type': 'item',
-        'url': '/main/tasks/upcomming'
-      },
-      {
-        'id': 'running-tasks',
-        'title': 'Running',
-        'type': 'item',
-        'url': '/main/tasks/running'
-      },
-      {
-        'id': 'finished-tasks',
-        'title': 'Finished',
-        'type': 'item',
-        'url': '/main/tasks/finished'
       }
     ]
   },
