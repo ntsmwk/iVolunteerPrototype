@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {isNullOrUndefined} from 'util';
 
 import {Task} from '../_model/task';
+import {Marketplace} from '../_model/marketplace';
 
 @Injectable({
   providedIn: 'root'
@@ -32,15 +33,15 @@ export class TaskService {
     return this.http.get(`${url}/${this.endpoint}/volunteer/${id}`);
   }
 
-  findById(id: string, url: string) {
-    return this.http.get(`${url}/${this.endpoint}/${id}`);
+  findById(marketplace: Marketplace, id: string) {
+    return this.http.get(`${marketplace.url}/${this.endpoint}/${id}`);
   }
 
-  save(task: Task, url: string) {
+  save(marketplace: Marketplace, task: Task) {
     if (isNullOrUndefined(task.id)) {
-      return this.http.post(`${url}/${this.endpoint}`, task);
+      return this.http.post(`${marketplace.url}/${this.endpoint}`, task);
     }
-    return this.http.put(`${url}/${this.endpoint}/${task.id}`, task);
+    return this.http.put(`${marketplace.url}/${this.endpoint}/${task.id}`, task);
   }
 
   remove(task: Task, url: string) {

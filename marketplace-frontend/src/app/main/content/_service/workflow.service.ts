@@ -1,8 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {WorkflowStep} from '../_model/workflow-step';
+import {Marketplace} from '../_model/marketplace';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WorkflowService {
 
   private endpoint = 'workflow';
@@ -10,16 +13,16 @@ export class WorkflowService {
   constructor(private http: HttpClient) {
   }
 
-  findAllTypes(url: string) {
-    return this.http.get(`${url}/${this.endpoint}/type`);
+  findAllTypes(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/${this.endpoint}/type`);
   }
 
   getProcessId(taskId: string, url: string) {
     return this.http.get(`${url}/${this.endpoint}/processId?taskId=${taskId}`);
   }
 
-  startWorkflow(workflowKey: string, taskId: string, employeeId: string, url: string) {
-    return this.http.post(`${url}/${this.endpoint}/${workflowKey}?taskId=${taskId}&employeeId=${employeeId}`, {});
+  startWorkflow(marketplace: Marketplace, workflowKey: string, taskId: string, employeeId: string) {
+    return this.http.post(`${marketplace.url}/${this.endpoint}/${workflowKey}?taskId=${taskId}&employeeId=${employeeId}`, {});
   }
 
   getWorkflowSteps(workflowKey: string, processInstanceId: string, participantId: string, url: string) {

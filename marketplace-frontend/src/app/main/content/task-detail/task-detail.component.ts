@@ -26,7 +26,7 @@ export class FuseTaskDetailComponent implements OnInit {
 
   private loadTask(taskId: string) {
     // TODO
-    this.taskService.findById(taskId, '').toPromise().then((task: Task) => this.task = task);
+    this.taskService.findById(undefined, taskId).toPromise().then((task: Task) => this.task = task);
   }
 
 }

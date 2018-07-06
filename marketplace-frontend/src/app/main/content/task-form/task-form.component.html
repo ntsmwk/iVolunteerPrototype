@@ -1,0 +1,69 @@
+<div id="task-form" class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Task-Form</h1>
+  </div>
+
+  <div class="content">
+    <div class="task-form" *ngIf="!isEditMode()">
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Task Template">
+          <mat-option *ngFor="let taskTemplate of taskTemplates" [value]="taskTemplate"
+                      (onSelectionChange)="prefillForm($event, taskTemplate)">
+            {{ taskTemplate.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-divider *ngIf="!isEditMode()"></mat-divider>
+
+    <form class="task-form" (submit)="save()" [formGroup]="taskForm">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Name" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Workflow Type" formControlName="workflowType" [disabled]="isEditMode()">
+          <mat-option *ngFor="let workflowType of workflowTypes" [value]="workflowType">{{workflowType.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Required Competences" formControlName="requiredCompetences" multiple>
+          <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-select placeholder="Acquirable Competences" formControlName="acquirableCompetences" multiple>
+          <mat-option *ngFor="let competence of competences" [value]="competence">{{competence.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <div class="error-message full-width" *ngIf="taskForm.getError('duplactedCompetence')">
+        <div class="error-text">Required and acquirable competences can't contain the same competence!</div>
+      </div>
+
+      <button type="submit" mat-raised-button color="primary">Save</button>
+    </form>
+  </div>
+</div>
+

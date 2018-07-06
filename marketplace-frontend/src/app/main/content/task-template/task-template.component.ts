@@ -1,20 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-
-import {TaskService} from '../_service/task.service';
 import {MessageService} from '../_service/message.service';
-import { TaskTemplate } from '../_model/task-template';
-import { TaskTemplateService } from '../_service/task-template.service';
-import { CompetenceService } from '../_service/competence.service';
-import { WorkflowService } from '../_service/workflow.service';
-import { WorkflowType } from '../_model/workflow-type';
-import { Competence } from '../_model/competence';
-import { LoginService } from '../_service/login.service';
-import { Participant } from '../_model/participant';
-import { CoreEmployeeService } from '../_service/core-employee.service';
-import { Marketplace } from '../_model/marketplace';
-import { FormGroup } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
+import {TaskTemplate} from '../_model/task-template';
+import {TaskTemplateService} from '../_service/task-template.service';
+import {CompetenceService} from '../_service/competence.service';
+import {WorkflowService} from '../_service/workflow.service';
+import {WorkflowType} from '../_model/workflow-type';
+import {Competence} from '../_model/competence';
+import {LoginService} from '../_service/login.service';
+import {Participant} from '../_model/participant';
+import {CoreEmployeeService} from '../_service/core-employee.service';
+import {Marketplace} from '../_model/marketplace';
+import {FormGroup} from '@angular/forms';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'fuse-task-template',
@@ -36,26 +34,26 @@ export class FuseTaskTemplateComponent implements OnInit {
               private loginService: LoginService,
               private coreEmployeeService: CoreEmployeeService,
               private messageService: MessageService,
-              private router: Router
-            ) { }
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
       this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
         Promise.all([
-          this.workflowService.findAllTypes(marketplace.url).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
-          this.competenceService.findAll(marketplace.url).toPromise().then((competences: Competence[]) => this.competences = competences)
-        
-        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(params['id'], marketplace.url))); 
+          this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
+          this.competenceService.findAll(marketplace).toPromise().then((competences: Competence[]) => this.competences = competences)
+
+        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(marketplace, params['id'])));
       });
     });
   }
 
-  private findTaskTemplate(id: string, url: string) {
+  private findTaskTemplate(marketplace: Marketplace, id: string) {
     if (isNullOrUndefined(id) || id.length === 0) {
       return;
     }
-    this.taskTemplateService.findById(id, url).toPromise().then((taskTemplate: TaskTemplate) => {
+    this.taskTemplateService.findById(marketplace, id).toPromise().then((taskTemplate: TaskTemplate) => {
       this.taskTemplateForm.setValue({
         id: taskTemplate.id,
         name: taskTemplate.name,
@@ -81,10 +79,10 @@ export class FuseTaskTemplateComponent implements OnInit {
     delete taskTemplate.workflowType;
     this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
       this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
-        this.taskTemplateService.save(<TaskTemplate> taskTemplate, marketplace.url)
+        this.taskTemplateService.save(marketplace, <TaskTemplate> taskTemplate)
           .toPromise()
           .then(() => this.router.navigate(['/taskTemplates']));
-      })
+      });
     });
   }
 }

@@ -8,7 +8,9 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
+
 import {TokenGuard} from './_guard/token.guard';
+import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 
 const routes: Route[] = [
@@ -24,12 +26,17 @@ const routes: Route[] = [
   {
     path: 'main/marketplaces',
     loadChildren: './marketplaces/marketplaces.module#FuseMarketplacesModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/task/:taskId',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
+    path: 'main/task-form',
+    loadChildren: './task-form/task-form.module#FuseTaskFormModule',
+    canActivate: [TokenGuard, EmployeeGuard]
   },
   {
     path: 'main/tasks/:pageType',

@@ -17,9 +17,6 @@ const routes = [
     RouterModule.forChild(routes),
 
     FuseSharedModule
-  ],
-  exports: [
-    FuseDashboardComponent
   ]
 })
 
