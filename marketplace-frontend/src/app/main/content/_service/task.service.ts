@@ -25,7 +25,7 @@ export class TaskService {
   }
 
   findByParticipantAndState(id: string, state: string, url: string) {
-    return this.http.get(`${url}/volunteer/${id}/${state}`);
+    return this.http.get(`${url}/${this.endpoint}/volunteer/${id}/${state}`);
   }
 
   findAllByParticipant(id: string, url: string) {

@@ -11,7 +11,11 @@ export class CoreVolunteerService {
   constructor(private http: HttpClient) {
   }
 
-  findRegisteredMarketplaces(volunterId: string) {
-    return this.http.get(`${this.apiUrl}/${volunterId}/marketplace`);
+  findRegisteredMarketplaces(volunteerId: string) {
+    return this.http.get(`${this.apiUrl}/${volunteerId}/marketplaces`);
+  }
+
+  registerMarketplace(volunteerId: string, marketplaceId: string) {
+    return this.http.post(`${this.apiUrl}/${volunteerId}/register/${marketplaceId}`, {});
   }
 }

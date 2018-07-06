@@ -2,20 +2,18 @@
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
     <div class="hero-text">
-      <mat-icon class="hero-icon">school</mat-icon>
       <h1>Marketplaces</h1>
     </div>
   </div>
 
-  <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
-    <div class="marketplace" *ngFor="let marketplace of marketplaces" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" [ngClass]="competence-bg" [@animate]="{value:'*',params:{y:'100%'}}">
+  <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" *fuseIfOnDom>
+    <div class="marketplace" *ngFor="let marketplace of allMarketplaces" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33" >
 
-      <div class="competence-content" fxLayout="column">
+      <div class="marketplace-content" fxLayout="column">
 
         <div class="header" fxLayout="row" fxLayoutAlign="center center">
-
           <div class="category" fxFlex>
-            {{marketplace.name}}
+            {{marketplace.marketplaceId}}
           </div>
         </div>
 
@@ -24,12 +22,16 @@
         </div>
 
         <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+          <div *ngIf="isUnsubscribed(marketplace)">
+            <button mat-raised-button color="accent" (click)="subscribe(marketplace)">Subscribe
+            </button>
+          </div>
         </div>
 
       </div>
     </div>
 
-    <div class="no-marketplaces" *ngIf="marketplaces.length === 0">
+    <div class="no-marketplaces" *ngIf="allMarketplaces.length === 0">
       No marketplaces found!
     </div>
 
