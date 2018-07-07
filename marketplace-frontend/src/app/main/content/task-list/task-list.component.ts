@@ -67,7 +67,7 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
           case 'all': {
             this.header = 'All Tasks';
             this.loadAllTasks();
-
+            break;
           }
           default: {
             throw new Error('Page type not supported');

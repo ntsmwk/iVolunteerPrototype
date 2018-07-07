@@ -26,7 +26,7 @@ public class ContractorRestClient extends RestClient {
 	private static final String UNASSIGN = "unassign";
 	private static final String FINISH = "finish";
 
-	@Value("${marketplace.trustifier.uri}")
+	@Value("${trustifier.uri}")
 	private URI trustifierUri;
 
 	@Autowired

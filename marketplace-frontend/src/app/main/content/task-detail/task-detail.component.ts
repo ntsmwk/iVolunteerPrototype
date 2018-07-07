@@ -24,7 +24,7 @@ export class FuseTaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadTask(params['marketplaceId'], params['taskId']));
+    this.route.params.subscribe(params => this.loadTask(params['shortName'], params['taskId']));
   }
 
   private loadTask(marketplaceId: string, taskId: string) {

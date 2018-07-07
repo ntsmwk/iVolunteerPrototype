@@ -6,6 +6,4 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 public interface MarketplaceRepository extends MongoRepository<Marketplace, String> {
 
-	Marketplace findByMarketplaceId(String marketplaceId);
-
 }

@@ -22,12 +22,12 @@ public class VerifierRestClient {
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
 
-	@Value("${marketplace.trustifier.uri}")
+	@Value("${trustifier.uri}")
 	private URI trustifierURI;
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	public boolean verifyTask(TaskDTO task) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
 		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();

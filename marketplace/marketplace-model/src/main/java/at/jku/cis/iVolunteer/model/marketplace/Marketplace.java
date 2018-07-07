@@ -8,9 +8,9 @@ public class Marketplace {
 
 	@Id
 	private String id;
-	private String name;
-	private String marketplaceId;
 	private String url;
+	private String name;
+	private String shortName;
 
 	public Marketplace() {
 	}
@@ -23,6 +23,14 @@ public class Marketplace {
 		this.id = id;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -31,19 +39,11 @@ public class Marketplace {
 		this.name = name;
 	}
 
-	public String getMarketplaceId() {
-		return marketplaceId;
+	public String getShortName() {
+		return shortName;
 	}
 
-	public void setMarketplaceId(String marketplaceId) {
-		this.marketplaceId = marketplaceId;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 }

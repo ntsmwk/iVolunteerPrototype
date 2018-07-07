@@ -19,8 +19,9 @@ import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 @SpringBootApplication
 public class iVolunteerApplication {
 
-	private static final String MARKETPLACE_ID = "MP1";
+	private static final String MARKETPLACE_ID = "0eaf3a6281df11e8adc0fa7ae01bbebc";
 	private static final String MARKETPLACE_NAME = "Marketplace 1";
+	private static final String MARKETPLACE_SHORTNAME = "MP1";
 	private static final String MARKETPLACE_URL = "http://localhost:8080";
 
 	private static final String MMUSTERMANN = "mmustermann";
@@ -58,12 +59,13 @@ public class iVolunteerApplication {
 	}
 
 	private Marketplace createMarketplace() {
-		Marketplace marketplace = marketplaceRepository.findByMarketplaceId(MARKETPLACE_ID);
+		Marketplace marketplace = marketplaceRepository.findOne(MARKETPLACE_ID);
 		if (marketplace == null) {
 			marketplace = new Marketplace();
-			marketplace.setMarketplaceId(MARKETPLACE_ID);
-			marketplace.setName(MARKETPLACE_NAME);
+			marketplace.setId(MARKETPLACE_ID);
 			marketplace.setUrl(MARKETPLACE_URL);
+			marketplace.setName(MARKETPLACE_NAME);
+			marketplace.setShortName(MARKETPLACE_SHORTNAME);
 			marketplaceRepository.insert(marketplace);
 		}
 		return marketplace;
@@ -91,13 +93,14 @@ public class iVolunteerApplication {
 			volunteer.getRegisteredMarketplaces().clear();
 			volunteer.getRegisteredMarketplaces().add(marketplace);
 			volunteer = coreVolunteerRepository.insert(volunteer);
-			
+
 			VolunteerDTO volunteerDto = new VolunteerDTO();
 			volunteerDto.setId(volunteer.getId());
 			volunteerDto.setUsername(volunteer.getUsername());
 			volunteerDto.setPassword(volunteer.getPassword());
-			
-			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwc3RhcnplciIsInVzZXJuYW1lIjoicHN0YXJ6ZXIiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxNDczNzE2fQ.TjOFHCR_10gAG6fI0CKVSaco6sVwwfeTNCNrp8xoAlSKFP-n_PI-Ozgsa0-lklDO9j35kfMgtW6j-V5g8t56pg",
+
+			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL,
+					"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwc3RhcnplciIsInVzZXJuYW1lIjoicHN0YXJ6ZXIiLCJhdXRob3JpdGllcyI6WyJWT0xVTlRFRVIiXSwiZXhwIjoxNTMxNDczNzE2fQ.TjOFHCR_10gAG6fI0CKVSaco6sVwwfeTNCNrp8xoAlSKFP-n_PI-Ozgsa0-lklDO9j35kfMgtW6j-V5g8t56pg",
 					volunteerDto);
 		}
 	}
