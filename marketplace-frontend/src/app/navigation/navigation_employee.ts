@@ -48,15 +48,15 @@ export const navigation_employee = [
     'children': [
       {
         'id': 'create-tasks-template',
-        'title': 'Create',
+        'title': 'Form',
         'type': 'item',
-        'url': '/main/tasktemplate/create'
+        'url': '/main/task-template-form'
       },
       {
         'id': 'all-task-templates',
-        'title': 'All',
+        'title': 'List',
         'type': 'item',
-        'url': '/main/tasktemplate/all'
+        'url': '/main/task-templates/all'
       }
     ]
   }

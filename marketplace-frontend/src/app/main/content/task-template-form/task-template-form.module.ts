@@ -4,16 +4,17 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatOptionModule, MatSelectModule} from '@angular/material';
-import { FuseTaskTemplateComponent } from './task-template.component';
+import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatOptionModule, MatSelectModule, MatSidenavModule} from '@angular/material';
+import {FuseTaskTemplateFormComponent} from './task-template-form.component';
 
 const routes = [
-  {path: '', component: FuseTaskTemplateComponent}
+  {path: '', component: FuseTaskTemplateFormComponent},
+  {path: ':taskTemplateId', component: FuseTaskTemplateFormComponent}
 ];
 
 @NgModule({
   declarations: [
-    FuseTaskTemplateComponent
+    FuseTaskTemplateFormComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -27,11 +28,9 @@ const routes = [
     MatSidenavModule,
     MatSelectModule,
     MatOptionModule,
+
     FuseSharedModule
-  ],
-  exports: [
-    FuseTaskTemplateComponent
   ]
 })
-export class FuseTaskTemplateModule {
+export class FuseTaskTemplateFormModule {
 }

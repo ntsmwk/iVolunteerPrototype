@@ -1,6 +1,6 @@
 @import "src/@fuse/scss/fuse";
 
-#task-detail {
+.page-layout {
 
   .header {
     position: relative;
@@ -16,6 +16,7 @@
       padding: 16px;
     }
 
+
     h1 {
       color: white;
       font-size: 40px;
@@ -29,11 +30,25 @@
         font-size: 24px;
       }
     }
-
   }
 
-  .mat-form-field {
-    width: 100%;
+  .table {
+    mat-row:nth-child(even) {
+      background-color: #afcbe6;
+    }
+
+    mat-row:nth-child(odd) {
+      background-color: white;
+    }
+
+    mat-row {
+      cursor: pointer;
+    }
+
+    mat-row:hover {
+      opacity: 0.5;
+    }
+
   }
 
 }

@@ -16,10 +16,10 @@ import {isNullOrUndefined} from 'util';
 import {CompetenceValidator} from '../_validator/competence.validator';
 
 @Component({
-  templateUrl: './task-template.component.html',
-  styleUrls: ['./task-template.component.scss']
+  templateUrl: './task-template-form.component.html',
+  styleUrls: ['./task-template-form.component.scss']
 })
-export class FuseTaskTemplateComponent implements OnInit {
+export class FuseTaskTemplateFormComponent implements OnInit {
 
   competences: Competence[];
   taskTemplateForm: FormGroup;
@@ -51,7 +51,7 @@ export class FuseTaskTemplateComponent implements OnInit {
           this.competenceService.findAll(marketplace).toPromise().then((competences: Competence[]) => this.competences = competences),
 
           this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
-        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(marketplace, params['id'])));
+        ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(marketplace, params['taskTemplateId'])));
       });
     });
   }

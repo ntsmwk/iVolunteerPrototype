@@ -1,4 +1,4 @@
-<div id="task-template" class="page-layout blank left-sidenav right-sidenav p-24" fusePerfectScrollbar>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
 
   <!-- HEADER -->
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
@@ -23,7 +23,7 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select placeholder="Workflow Key" formControlName="workflowType">
+          <mat-select placeholder="Workflow Key" formControlName="workflowType" fxFlex="100">
             <mat-option *ngFor="let workflowType of workflowTypes" [value]="workflowType">{{workflowType.name}}
             </mat-option>
           </mat-select>

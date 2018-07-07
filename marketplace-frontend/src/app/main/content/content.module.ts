@@ -29,18 +29,13 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
-    path: 'main/tasktemplate/create',
-    loadChildren: './task-template/task-template.module#FuseTaskTemplateModule',
-    canActivate: [TokenGuard]
+    path: 'main/task-template-form',
+    loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
+    canActivate: [TokenGuard, EmployeeGuard]
   },
   {
-    path: 'main/tasktemplate/edit/:taskTemplateId',
-    loadChildren: './task-template/task-template.module#FuseTaskTemplateModule',
-    canActivate: [TokenGuard]
-  },
-  {
-    path: 'main/tasktemplate/all',
-    loadChildren: './task-template/list/task-template-list.module#FuseTaskTemplateListModule',
+    path: 'main/task-templates/all',
+    loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
     canActivate: [TokenGuard]
   },
   {
