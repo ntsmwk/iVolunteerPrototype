@@ -9,6 +9,7 @@ import {MessageService} from '../_service/message.service';
 import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
 import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreMarketplaceService} from '../_service/core-marketplace.service';
 
 
 @Component({
@@ -22,16 +23,24 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Task>();
   marketplaceChangeSubscription: Subscription;
   displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  allMarketplaces: Marketplace[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private messageService: MessageService,
               private loginService: LoginService,
               private coreEmployeeService: CoreEmployeeService,
+              private coreMarketplaceService: CoreMarketplaceService,
               private taskService: TaskService) {
   }
 
   ngOnInit() {
+    this.coreMarketplaceService.findAll()
+      .toPromise()
+      .then((marketplaces: Marketplace[]) => {
+        this.allMarketplaces = marketplaces;
+      });
+
     this.loadTasks();
     this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadTasks.bind(this));
   }
@@ -110,5 +119,10 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
             .then((tasks: Task[]) => this.dataSource.data = tasks);
         });
       });
+  }
+
+
+  getMarketplaceName(id: string) {
+    return this.allMarketplaces.filter(marketplace => marketplace.id === id)[0].name;
   }
 }

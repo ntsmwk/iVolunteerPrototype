@@ -24,7 +24,7 @@
 
       <ng-container matColumnDef="marketplace">
         <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
-        <mat-cell *matCellDef="let task">{{task.marketplaceId}}</mat-cell>
+        <mat-cell *matCellDef="let task">{{getMarketplaceName(task.marketplaceId)}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="startDate">
@@ -58,6 +58,10 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
     </mat-table>
+
+    <div class="no-data" *ngIf="dataSource.data.length === 0">
+      No Tasks found!
+    </div>
 
   </div>
 
