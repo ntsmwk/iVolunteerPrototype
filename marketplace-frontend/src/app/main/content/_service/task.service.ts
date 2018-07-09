@@ -12,7 +12,7 @@ import {Marketplace} from '../_model/marketplace';
 })
 export class TaskService {
 
-  private endpoint = '/task';
+  private endpoint = 'task';
 
   constructor(private http: HttpClient) {
   }
