@@ -29,6 +29,19 @@
         font-size: 24px;
       }
     }
-
   }
+
+  .alert-danger {
+    color: #f44336;
+    background-color: #f8d7da;
+    border-color: #f44336;
+  }
+  .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+  }
+
 }
