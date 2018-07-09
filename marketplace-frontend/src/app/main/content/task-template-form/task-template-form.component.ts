@@ -88,7 +88,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
       this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
         this.taskTemplateService.save(marketplace, <TaskTemplate> taskTemplate)
           .toPromise()
-          .then(() => this.router.navigate(['/taskTemplates']));
+          .then(() => this.router.navigate(['/main/task-templates/all']));
       });
     });
   }

@@ -7,8 +7,8 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskDetailComponent} from './task-detail.component';
 import {FuseTaskHierarchyComponent} from './sidenavs/hierarchy/task-hierarchy.component';
 import {FuseTaskTimelineComponent} from './sidenavs/timeline/task-timeline.component';
-
-import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
+import {FuseTaskAssignComponent} from './assign/task-assign.component';
+import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatDivider, MatDividerModule, MatTableModule, MatCheckboxModule} from '@angular/material';
 
 const routes = [
   {path: ':shortName/:taskId', component: FuseTaskDetailComponent}
@@ -19,18 +19,21 @@ const routes = [
     FuseTaskDetailComponent,
     FuseTaskHierarchyComponent,
     FuseTaskTimelineComponent,
+    FuseTaskAssignComponent
   ],
   imports: [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-
+    
     MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
-
+    MatDividerModule,
+    MatTableModule,
+    MatCheckboxModule,
     FuseSharedModule
   ]
 })

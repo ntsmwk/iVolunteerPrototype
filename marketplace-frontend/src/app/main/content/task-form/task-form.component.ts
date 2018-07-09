@@ -99,7 +99,7 @@ export class FuseTaskFormComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (this.isEditMode()) {
-          this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/tasks']));
+          this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
         } else {
           Promise.all([
             this.loginService.getLoggedIn().toPromise(),
@@ -107,7 +107,7 @@ export class FuseTaskFormComponent implements OnInit {
           ]).then((values: any[]) => {
             const createdTask = <Task> values[1];
             const participantId = (<Participant> values[0]).id;
-            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/tasks']));
+            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
           });
         }
       });

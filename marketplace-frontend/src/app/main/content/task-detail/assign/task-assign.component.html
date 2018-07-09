@@ -1,0 +1,22 @@
+<h3>Task Assignment</h3>
+
+<mat-table #table [(dataSource)]="dataSource">
+  <ng-container matColumnDef="isAssigned">
+    <mat-header-cell *matHeaderCellDef>Assigned</mat-header-cell>
+    <mat-cell *matCellDef="let volunteer">
+     <mat-checkbox (click)="$event.stopPropagation()"
+     (change)="$event ? handleChange(volunteer) : null"
+     [checked]="selection.isSelected(volunteer)"></mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="username">
+    <mat-header-cell *matHeaderCellDef>Volunteer Name</mat-header-cell>
+    <mat-cell *matCellDef="let volunteer">{{volunteer.username}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let volunteer; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+

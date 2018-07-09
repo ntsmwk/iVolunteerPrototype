@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
@@ -17,6 +18,9 @@ public class PublishServiceTask implements ServiceTask {
 
 	@Autowired
 	private WorkflowMarketplaceRestClient marketplaceRestClient;
+	
+	@Value("${marketplace.uri}")
+	private String marketplaceUri;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
@@ -24,7 +28,7 @@ public class PublishServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		marketplaceRestClient.publishTask("",taskId, token);
+		marketplaceRestClient.publishTask(marketplaceUri,taskId, token);
 		delegateExecution.setVariable(VOLUNTEER_IDS, extractVolunteerIds(marketplaceRestClient.findVolunteers("",token)));
 	}
 

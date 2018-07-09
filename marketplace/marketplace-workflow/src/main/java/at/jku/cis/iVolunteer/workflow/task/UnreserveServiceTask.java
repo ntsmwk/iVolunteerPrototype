@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.workflow.task;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
@@ -17,6 +18,8 @@ public class UnreserveServiceTask implements ServiceTask {
 
 	@Autowired
 	private WorkflowMarketplaceRestClient marketplaceRestClient;
+	@Value("${marketplace.uri}")
+	private String marketplaceUri;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
@@ -24,8 +27,8 @@ public class UnreserveServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		SourceDTO source = marketplaceRestClient.findSource("", token);
-		TaskDTO task = marketplaceRestClient.findTaskById("", taskId, token);
+		SourceDTO source = marketplaceRestClient.findSource(marketplaceUri, token);
+		TaskDTO task = marketplaceRestClient.findTaskById(marketplaceUri, taskId, token);
 
 		contractorRestClient.unreserveTask(task, source, token);
 	}
