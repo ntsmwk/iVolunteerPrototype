@@ -3,28 +3,29 @@ import {ActivatedRoute} from '@angular/router';
 
 import {Task} from '../_model/task';
 import {TaskService} from '../_service/task.service';
-import {MessageService} from '../_service/message.service';
 import {CoreMarketplaceService} from '../_service/core-marketplace.service';
 import {Marketplace} from '../_model/marketplace';
+import {LoginService} from '../_service/login.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
-  selector: 'fuse-task-detail',
   templateUrl: './task-detail.component.html',
-  styleUrls: ['./task-detail.component.scss'],
-  providers: [TaskService]
+  styleUrls: ['./task-detail.component.scss']
 })
 export class FuseTaskDetailComponent implements OnInit {
 
   task: Task;
+  role: string;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
-              private marketplaceService: CoreMarketplaceService,
-              private messageService: MessageService) {
+              private loginService: LoginService,
+              private marketplaceService: CoreMarketplaceService) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadTask(params['shortName'], params['taskId']));
+    this.route.params.subscribe(params => this.loadTask(params['marketplaceId'], params['taskId']));
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => this.role = role);
   }
 
   private loadTask(marketplaceId: string, taskId: string) {
@@ -33,4 +34,7 @@ export class FuseTaskDetailComponent implements OnInit {
     });
   }
 
+  showEdit() {
+    return !isNullOrUndefined(this.role) && this.role === 'EMPLOYEE' && !isNullOrUndefined(this.task);
+  }
 }
