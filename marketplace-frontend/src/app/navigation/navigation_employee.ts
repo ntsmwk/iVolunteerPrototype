@@ -28,7 +28,7 @@ export const navigation_employee = [
     'children': [
       {
         'id': 'create-tasks',
-        'title': 'Form',
+        'title': 'Create',
         'type': 'item',
         'url': '/main/task-form'
       },
@@ -48,7 +48,7 @@ export const navigation_employee = [
     'children': [
       {
         'id': 'create-tasks-template',
-        'title': 'Form',
+        'title': 'Create',
         'type': 'item',
         'url': '/main/task-template-form'
       },
