@@ -4,7 +4,7 @@
       <h1>Task Templates</h1>
   </div>
 
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.name}}</mat-cell>
@@ -43,5 +43,9 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
+  <div class="no-data" *ngIf="dataSource.data.length === 0">
+    No Templates found!
+  </div>
 
 </div>

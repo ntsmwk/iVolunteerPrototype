@@ -43,5 +43,8 @@
     border: 1px solid transparent;
     border-radius: .25rem;
   }
-
+  
+  ::ng-deep .mat-select-disabled .mat-select-value {
+    color: black;
+  }
 }
