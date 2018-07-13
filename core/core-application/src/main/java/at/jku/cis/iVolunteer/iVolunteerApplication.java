@@ -101,6 +101,7 @@ public class iVolunteerApplication {
 
 			coreMarketplaceRestClient.registerVolunteer(MARKETPLACE_URL,
 					"Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJFTVBMT1lFRSJdLCJleHAiOjE1MzE3Mzg1Nzd9.YxIp9xY0sJ56rz9Q_ZzV-LT12wiw4UbXnIiaebTBaRv6AFgiDdWO-Yj-UWbf8qJyewkp3nAYtqzjbzvTiToc-Q",
+
 					volunteerDto);
 		}
 	}

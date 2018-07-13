@@ -29,7 +29,7 @@ public class PublishServiceTask implements ServiceTask {
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
 		marketplaceRestClient.publishTask(marketplaceUri,taskId, token);
-		delegateExecution.setVariable(VOLUNTEER_IDS, extractVolunteerIds(marketplaceRestClient.findVolunteers("",token)));
+		delegateExecution.setVariable(VOLUNTEER_IDS, extractVolunteerIds(marketplaceRestClient.findVolunteers(marketplaceUri,token)));
 	}
 
 	private Set<String> extractVolunteerIds(List<VolunteerDTO> volunteers) {

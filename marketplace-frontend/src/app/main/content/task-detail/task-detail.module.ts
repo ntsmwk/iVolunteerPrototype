@@ -11,7 +11,7 @@ import {FuseTaskAssignComponent} from './assign/task-assign.component';
 import {MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatDivider, MatDividerModule, MatTableModule, MatCheckboxModule} from '@angular/material';
 
 const routes = [
-  {path: ':shortName/:taskId', component: FuseTaskDetailComponent}
+  {path: ':marketplaceId/:taskId', component: FuseTaskDetailComponent}
 ];
 
 @NgModule({

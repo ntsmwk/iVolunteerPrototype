@@ -3,18 +3,18 @@ import {ActivatedRoute} from '@angular/router';
 
 import {Task} from '../_model/task';
 import {TaskService} from '../_service/task.service';
-import {MessageService} from '../_service/message.service';
 import {CoreMarketplaceService} from '../_service/core-marketplace.service';
 import {Marketplace} from '../_model/marketplace';
+
 import { WorkflowStep } from '../_model/workflow-step';
 import { WorkflowType } from '../_model/workflow-type';
 import { WorkflowService } from '../_service/workflow.service';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
+import { MessageService } from '../_service/message.service';
 
 @Component({
-  selector: 'fuse-task-detail',
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
@@ -27,6 +27,7 @@ export class FuseTaskDetailComponent implements OnInit {
   workflowStepsSpecial: WorkflowStep[] = [];
   workflowStepsAssignment: WorkflowStep[] ;
   workflowProcessId: string;
+  role: string;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -37,9 +38,9 @@ export class FuseTaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      console.error(params['shortName']);
-      this.loadTask(params['shortName'], params['taskId']);});
+    this.route.params.subscribe(params => this.loadTask(params['marketplaceId'], params['taskId']));
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => this.role = role);
+
   }
 
   private loadTask(marketplaceId: string, taskId: string) {
@@ -81,4 +82,7 @@ export class FuseTaskDetailComponent implements OnInit {
     });
   }
 
+  showEdit() {
+    return !isNullOrUndefined(this.role) && this.role === 'EMPLOYEE' && !isNullOrUndefined(this.task);
+  }
 }

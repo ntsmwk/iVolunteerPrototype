@@ -2,6 +2,7 @@
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
     <h1>Task detail</h1>
+    <mat-icon id="edit" *ngIf="showEdit()" routerLink="/main/task-form/{{task.id}}">edit</mat-icon>
   </div>
 
 

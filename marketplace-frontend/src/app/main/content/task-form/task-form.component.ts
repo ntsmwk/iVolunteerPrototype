@@ -107,7 +107,10 @@ export class FuseTaskFormComponent implements OnInit {
           ]).then((values: any[]) => {
             const createdTask = <Task> values[1];
             const participantId = (<Participant> values[0]).id;
-            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
+
+            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId)
+              .toPromise()
+              .then(() => this.router.navigate(['/main/tasks/all']));
           });
         }
       });

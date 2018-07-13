@@ -29,6 +29,12 @@
         font-size: 24px;
       }
     }
+
+    #edit {
+      cursor: pointer;
+      right: 1em;
+      position: absolute;
+    }
   }
 
   mat-sidenav-container {

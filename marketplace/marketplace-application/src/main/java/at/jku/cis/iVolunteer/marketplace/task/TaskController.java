@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.task.TaskMapper;
@@ -46,8 +45,6 @@ public class TaskController {
 
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
-
-	HashMap<TaskDTO, List<TaskDTO>> parentChildMap = new HashMap<TaskDTO, List<TaskDTO>>();
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll() {
@@ -168,34 +165,4 @@ public class TaskController {
 		}
 		return children;
 	}
-
-	@GetMapping("/task/{id}/tree")
-	public HashMap<TaskDTO, List<TaskDTO>> getTreeStructure(@PathVariable("id") String id) {
-		TaskDTO mainTask = taskMapper.toDTO(taskRepository.findOne(id));
-
-		while (mainTask.getParent() != null) {
-			mainTask = mainTask.getParent();
-		}
-
-		generateTree(mainTask);
-		return parentChildMap;
-
-	}
-
-	private void generateTree(TaskDTO parent) {
-		List<TaskDTO> children = getChildren(parent.getId());
-		parentChildMap.put(parent, children);
-
-		// TODO
-		// see
-		// https://material.angular.io/components/tree/examples
-		// example "Tree with dynamic data"
-
-		if (!children.isEmpty()) {
-			for (TaskDTO child : children) {
-				generateTree(child);
-			}
-		}
-	}
-
 }
