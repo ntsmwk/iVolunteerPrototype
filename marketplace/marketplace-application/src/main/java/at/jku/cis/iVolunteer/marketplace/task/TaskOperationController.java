@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
@@ -66,13 +67,13 @@ public class TaskOperationController {
 	private String marketplaceId;
 
 	@PostMapping("/task/{id}/publish")
-	public void publishTask(@PathVariable("id") String id) {
+	public void publishTask(@PathVariable("id") String id, @RequestHeader("authorization") String authorization) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
 
-		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task));
+		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task), authorization);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
@@ -104,7 +105,8 @@ public class TaskOperationController {
 	}
 
 	@PostMapping("/task/{id}/finish")
-	public TaskInteractionDTO finishTask(@PathVariable("id") String id) {
+	public TaskInteractionDTO finishTask(@PathVariable("id") String id,
+			@RequestHeader("authorization") String authorization) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
@@ -135,13 +137,13 @@ public class TaskOperationController {
 					VolunteerTaskEntryDTO vte = (VolunteerTaskEntryDTO) taskEntryMapper.toDTO(taskEntry);
 					vte.setVolunteerId(volunteer.getId());
 
-					contractorRepositoryRestClient.publishTaskEntry(vte);
+					contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
 
 					competenceEntries.forEach(competenceEntry -> {
 						VolunteerCompetenceEntryDTO vce = (VolunteerCompetenceEntryDTO) competenceEntryMapper
 								.toDTO(competenceEntry);
 						vce.setVolunteerId(volunteer.getId());
-						contractorRepositoryRestClient.publishCompetenceEntry(vce);
+						contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
 					});
 
 				} catch (RestClientException ex) {

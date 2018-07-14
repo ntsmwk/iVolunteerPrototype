@@ -6,6 +6,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;
@@ -18,6 +19,8 @@ public class StartServiceTask implements ServiceTask {
 
 	@Autowired
 	private WorkflowMarketplaceRestClient marketplaceRestClient;
+	@Value("${marketplace.uri}")
+	private String marketplaceUri;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
@@ -25,7 +28,7 @@ public class StartServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		marketplaceRestClient.startTask("",taskId, token);
+		marketplaceRestClient.startTask(marketplaceUri,taskId, token);
 
 		retrieveAllTaskByDelegationExecution(delegateExecution).forEach((task) -> {
 			taskService.resolveTask(task.getId());

@@ -62,6 +62,24 @@
         </mat-form-field>
 
       </div>
+
+      <div>
+        <button *ngFor="let workflowStep of workflowStepsDefault" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button
+                color="primary">
+          {{workflowStep.label}}
+        </button>
+      </div>
+    
+      <mat-divider></mat-divider>
+    
+      <!-- Custom Workflow Step Implementation -->
+      
+      <div *ngIf="workflowStepsAssignment?.length > 0">
+        <app-task-assign [workflowStepsAssignment]="workflowStepsAssignment" [participant]="participant" [task]="task" [workflowProcessId]="workflowProcessId" [marketplace]="marketplace"></app-task-assign>
+      </div>
+    
+      <!-- End Custom Workflow Step Implementation -->
+  
       <!-- / CONTENT -->
 
     </div>

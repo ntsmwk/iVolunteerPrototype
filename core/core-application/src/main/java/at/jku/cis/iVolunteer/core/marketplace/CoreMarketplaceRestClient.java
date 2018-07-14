@@ -26,7 +26,7 @@ public class CoreMarketplaceRestClient {
 	}
 
 	
-	public HttpEntity<?> buildEntity(Object body, String authorization) {
+	private HttpEntity<?> buildEntity(Object body, String authorization) {
 		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
 	}
 
