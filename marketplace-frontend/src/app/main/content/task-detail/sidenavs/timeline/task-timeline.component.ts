@@ -8,6 +8,8 @@ import {TaskService} from '../../../_service/task.service';
 import {TaskInteractionService} from '../../../_service/task-interaction.service';
 import {DatePipe} from '@angular/common';
 import {isNullOrUndefined} from 'util';
+import {CoreMarketplaceService} from '../../../_service/core-marketplace.service';
+import {Marketplace} from '../../../_model/marketplace';
 
 @Component({
   selector: 'fuse-task-timeline',
@@ -21,27 +23,29 @@ export class FuseTaskTimelineComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private datePipe: DatePipe,
+              private marketplaceService: CoreMarketplaceService,
               private taskService: TaskService,
               private taskInteractionService: TaskInteractionService) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.loadTaskInteractions(params['taskId']));
+    this.route.params.subscribe(params => this.loadTaskInteractions(params['marketplaceId'], params['taskId']));
   }
 
-  private loadTaskInteractions(taskId: string) {
-    // TODO
-    this.taskService.findById(undefined, taskId).toPromise().then((task: Task) => {
-      this.taskInteractionService.findByTask(task, '').toPromise().then((taskInteractions: TaskInteraction[]) => {
-        const date2Interactions = new Map<string, TaskInteraction[]>();
-        taskInteractions.forEach((taskInteraction: TaskInteraction) => {
-          const dayAsString = this.datePipe.transform(taskInteraction.timestamp, 'dd.MM.yyyy');
-          if (!date2Interactions.has(dayAsString)) {
-            date2Interactions.set(dayAsString, new Array<TaskInteraction>());
-          }
-          date2Interactions.get(dayAsString).push(taskInteraction);
+  private loadTaskInteractions(marketplaceId: string, taskId: string) {
+    this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
+      this.taskService.findById(marketplace, taskId).toPromise().then((task: Task) => {
+        this.taskInteractionService.findByTask(marketplace, task).toPromise().then((taskInteractions: TaskInteraction[]) => {
+          const date2Interactions = new Map<string, TaskInteraction[]>();
+          taskInteractions.forEach((taskInteraction: TaskInteraction) => {
+            const dayAsString = this.datePipe.transform(taskInteraction.timestamp, 'dd.MM.yyyy');
+            if (!date2Interactions.has(dayAsString)) {
+              date2Interactions.set(dayAsString, new Array<TaskInteraction>());
+            }
+            date2Interactions.get(dayAsString).push(taskInteraction);
+          });
+          this.date2Interactions = date2Interactions;
         });
-        this.date2Interactions = date2Interactions;
       });
     });
   }
