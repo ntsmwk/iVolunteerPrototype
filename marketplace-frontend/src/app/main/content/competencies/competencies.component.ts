@@ -15,7 +15,6 @@ import {MessageService} from '../_service/message.service';
   selector: 'fuse-competencies',
   templateUrl: './competencies.component.html',
   styleUrls: ['./competencies.component.scss'],
-  providers: [LoginService, CompetenceService, VolunteerProfileService],
   animations: fuseAnimations
 })
 export class FuseCompetenceListComponent implements OnInit, OnDestroy {

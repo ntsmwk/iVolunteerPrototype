@@ -1,0 +1,32 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Your Engagements</h1>
+  </div>
+
+  <div class="projects" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+
+    <h1 fxFlex="100" style="text-align: center">Current Projects</h1>
+
+    <div class="project" *ngFor="let project of currentProjects" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
+         [@animate]="{value:'*',params:{y:'100%'}}">
+
+      <div class="project-content" fxLayout="column">
+
+        <div class="header" fxLayout="row" fxLayoutAlign="center center">
+          {{project.name}}
+        </div>
+
+        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+          <p>{{project.description}}</p>
+        </div>
+
+        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+          <button mat-raised-button color="accent" routerLink="/main/project/{{project.marketplaceId}}/{{project.id}}}">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,7 @@ export const fuseConfig = {
     },
     colorClasses    : {
         toolbar: 'mat-white-500-bg',
-        navbar : 'mat-fuse-dark-700-bg',
+        navbar : 'mat-fuse-light-blue-900-bg',
         footer : 'mat-fuse-dark-900-bg'
     },
     customScrollbars: true,
