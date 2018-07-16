@@ -8,7 +8,7 @@
   <mat-sidenav-container>
 
     <!-- CENTER -->
-    <div class="center" fxFlex>
+    <div class="center">
 
       <!-- HEADER -->
       <div class="header p-24 mat-accent-bg" fxHide fxLayout="column" fxLayoutAlign="space-between start">
@@ -16,7 +16,7 @@
       <!-- / HEADER -->
 
       <!-- CONTENT -->
-      <div class="content p-24 mat-white-bg" fusePerfectScrollbar *ngIf="project">
+      <div class="content p-24 mat-white-bg" fusePerfectScrollbar *ngIf="project" style="min-height: 330px;">
         <mat-form-field>
           <input matInput placeholder="Name" [readonly]="true" [value]="project.name">
         </mat-form-field>
