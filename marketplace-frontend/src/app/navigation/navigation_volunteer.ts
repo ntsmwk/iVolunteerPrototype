@@ -28,6 +28,13 @@ export const navigation_volunteer = [
     'url': '/main/calendar'
   },
   {
+    'id': 'achievements',
+    'title': 'Your Achievements',
+    'type': 'item',
+    'icon': 'today',
+    'url': '/main/achievements'
+  },
+  {
     'id': 'tasks',
     'title': 'Tasks',
     'type': 'collapse',
