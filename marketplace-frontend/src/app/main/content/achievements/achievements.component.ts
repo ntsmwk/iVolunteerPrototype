@@ -18,6 +18,14 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
     ]
   };
 
+  badges = {
+    'badges': [
+      {'name': 'badge 1', 'image': '', 'marketplace': 'Marketplace 1', 'description': 'abc'},
+      {'name': 'badge 2', 'image': '', 'marketplace': 'Marketplace 1', 'description': 'def'},
+      {'name': 'badge 3', 'image': '', 'marketplace': 'Marketplace 2', 'description': 'ghi'}
+    ]
+  }
+
 
   constructor() {
   }

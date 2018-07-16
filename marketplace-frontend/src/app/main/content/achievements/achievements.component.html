@@ -2,15 +2,21 @@
 
   <div class="layout" fxLayout="row wrap" fxLayoutAlign="center">
 
+    <!-- line chart -->
     <div class="chart pr-12" fxFlex="100" fxFlex.gt-sm="75">
       <div class="chart-container fuse-card">
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h1">Top Friends</div>
+        </div>
+
         <canvas id="myChart"></canvas>
       </div>
     </div>
+    <!-- line chart end -->
 
+
+    <!-- Friends -->
     <div class="friends" fxFlex="100" fxFlex.gt-sm="25">
-      <!-- Widget 9 -->
-
       <div class="fuse-card">
 
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
@@ -42,6 +48,58 @@
           <button mat-button color="accent">Go to Friends</button>
         </div>
       </div>
+    </div>
+    <!-- Friends end -->
+
+    
+    <div class="layout" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- Badges -->
+      <div class="badges use-card" fxFlex="100" fxFlex.gt-sm="25">
+        <div class="badges" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}"
+             *fuseIfOnDom>
+
+          <div class="badge" *ngFor="let badge of badges.badges" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
+               [@animate]="{value:'*',params:{y:'100%'}}">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+              <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                <div>badge.name</div>
+
+                <button mat-icon-button fuseWidgetToggle aria-label="more">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </div>
+
+              <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                badge.image
+              </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
+              <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                      aria-label="Flip widget">
+                <mat-icon class="s-16">close</mat-icon>
+              </button>
+
+              <div>
+                badge.description
+              </div>
+            </div>
+            <!-- / Back -->
+
+
+          </div>
+        </div>
+
+
+      </div>
+      <!-- Badges end -->
+
+
     </div>
   </div>
 </div>
