@@ -30,6 +30,11 @@ const routes: Route[] = [
     canActivate: [TokenGuard]
   },
   {
+    path: 'main/projects',
+    loadChildren: './projects/projects.module#FuseProjectsModule',
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
     path: 'main/marketplaces',
     loadChildren: './marketplaces/marketplaces.module#FuseMarketplacesModule',
     canActivate: [TokenGuard, VolunteerGuard]
