@@ -3,7 +3,7 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatIconModule} from '@angular/material';
+import {MatButtonModule, MatGridListModule, MatIconModule, MatMenuModule} from '@angular/material';
 import {FuseAchievementsComponent} from './achievements.component';
 
 const routes = [
@@ -17,6 +17,9 @@ const routes = [
   imports: [
     RouterModule.forChild(routes),
     MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+
     FuseSharedModule
   ]
 })

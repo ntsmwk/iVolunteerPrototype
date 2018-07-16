@@ -1,5 +1,55 @@
-<div id="achievements" class="page-layout simple tabbed" fusePerfectScrollbar>
-  <div style="width:600px; height:300px; margin:20px; padding:10px;">
-    <canvas id="myChart"></canvas>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="layout" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <div class="chart" fxFlex="100" fxFlex.gt-sm="66">
+      <div class="chart-container fuse-card">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+
+    <div class="friends" fxFlex="100" fxFlex.gt-sm="33">
+      <!-- Widget 9 -->
+      <div class="mb-48" [ngClass.lt-lg]="'mr-32'" [ngClass.xs]="'mr-0'">
+
+        <div class="fuse-card">
+
+          <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="h1">Top Friends</div>
+          </div>
+
+          <table class="simple clickable">
+            <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th class="text-right"># Tasks</th>
+              <th class="text-right">Hours</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let friend of about.friends">
+              <td> <img [src]="friend.avatar"> </td>
+              <td> {{friend.name}} </td>
+              <td class="text-right"> {{friend.number}} </td>
+              <td class="text-right"> {{friend.hours}} </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="card-divider full-width"></div>
+
+          <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+            <button mat-button color="accent">Go to Friends</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
   </div>
 </div>
+

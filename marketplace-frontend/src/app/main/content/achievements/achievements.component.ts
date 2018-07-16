@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import * as Chart from 'chart.js'
+import * as Chart from 'chart.js';
 
 @Component({
   selector: 'fuse-achievements',
@@ -10,7 +10,16 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
 
-  constructor() { }
+  about = {
+    'friends': [
+      {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg', 'number': '6', 'hours': '12,4'},
+      {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/carl.jpg', 'number': '5', 'hours': '6,4'}
+    ]
+  };
+
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
@@ -33,17 +42,15 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
           borderColor: '#8e5ea2',
           fill: false
         }, {
-            label: 'Marketplace 3',
-            data: [1, 3, 7, 14, 13, 12, 14, 5, 3, 1, 1, 5],
-            borderColor: '#c45850',
-            fill: false
-          }]
+          label: 'Marketplace 3',
+          data: [1, 3, 7, 14, 13, 12, 14, 5, 3, 1, 1, 5],
+          borderColor: '#c45850',
+          fill: false
+        }]
       },
       options: {
-        title: {
-          display: true,
-          text: 'Finished Tasks per Marketplace'
-        }
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }
