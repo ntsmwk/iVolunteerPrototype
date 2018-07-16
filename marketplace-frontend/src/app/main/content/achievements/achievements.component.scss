@@ -1,5 +1,12 @@
-.chart-container {
-  margin: auto;
-  height: 80vh;
-  width: 80vw;
+.page-layout {
+
+  .fuse-card {
+    height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+
+    img {
+      max-width: 46px;
+    }
+  }
 }
