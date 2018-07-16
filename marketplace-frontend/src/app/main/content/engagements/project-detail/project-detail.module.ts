@@ -3,8 +3,9 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatIconModule} from '@angular/material';
+import {MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
 import {FuseProjectDetailComponent} from './project-detail.component';
+import {FuseProjectMemberComponent} from './sidenavs/project-member/project-member.component';
 
 const routes = [
   {path: '**', component: FuseProjectDetailComponent}
@@ -12,12 +13,16 @@ const routes = [
 
 @NgModule({
   declarations: [
-    FuseProjectDetailComponent
+    FuseProjectDetailComponent,
+    FuseProjectMemberComponent
   ],
   imports: [
     RouterModule.forChild(routes),
 
     MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSidenavModule,
 
     FuseSharedModule
   ]
