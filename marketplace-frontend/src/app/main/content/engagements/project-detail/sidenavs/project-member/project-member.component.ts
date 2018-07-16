@@ -12,6 +12,12 @@ import {CoreMarketplaceService} from '../../../../_service/core-marketplace.serv
   styleUrls: ['./project-member.component.scss']
 })
 export class FuseProjectMemberComponent implements OnInit {
+  about = {
+    'friends': [
+      {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg', 'number': '6', 'hours': '12,4'},
+      {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/carl.jpg', 'number': '5', 'hours': '6,4'}
+    ]
+  };
 
   constructor(private route: ActivatedRoute,
               private projectService: ProjectService,
