@@ -1,11 +1,40 @@
-<!-- HEADER -->
-<div class="header mat-accent-bg p-24" fxHide fxLayout="column" fxLayoutAlign="space-between">
+<div class="page-layout blank p-24" fusePerfectScrollbar>
 
-</div>
-<!-- / HEADER -->
 
-<!-- SIDENAV CONTENT -->
-<div class="content p-12 mat-white-bg" fusePerfectScrollbar>
-  Project Member
+  <!-- HEADER -->
+  <div class="header mat-accent-bg p-24" fxHide fxLayout="column" fxLayoutAlign="space-between">
+  </div>
+  <!-- / HEADER -->
+
+  <!-- SIDENAV CONTENT -->
+  <div class="content p-12 mat-white-bg" fusePerfectScrollbar>
+    <div class="fuse-card">
+
+      <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="h1">Project Member</div>
+      </div>
+
+      <table class="simple clickable">
+        <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th class="text-right">Hours contributed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let friend of about.friends">
+          <td><img [src]="friend.avatar"></td>
+          <td> {{friend.name}}</td>
+          <td class="text-right"> {{friend.hours}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="card-divider full-width"></div>
+
+    </div>
+
+  </div>
+  <!-- / SIDENAV CONTENT -->
 </div>
-<!-- / SIDENAV CONTENT -->

@@ -16,7 +16,7 @@
       <!-- / HEADER -->
 
       <!-- CONTENT -->
-      <div class="content p-24 mat-white-bg" fusePerfectScrollbar>
+      <div class="content p-24 mat-white-bg" fusePerfectScrollbar *ngIf="project">
         <mat-form-field>
           <input matInput placeholder="Name" [readonly]="true" [value]="project.name">
         </mat-form-field>
@@ -37,5 +37,6 @@
       <fuse-project-member></fuse-project-member>
     </mat-sidenav>
     <!-- / SIDENAV -->
+    
   </mat-sidenav-container>
 </div>
