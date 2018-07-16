@@ -7,20 +7,6 @@ export const navigation_employee = [
     'url': '/main/dashboard'
   },
   {
-    'id': 'profile',
-    'title': 'Profile',
-    'type': 'item',
-    'icon': 'person',
-    'url': '/main/profile'
-  },
-  {
-    'id': 'calendar',
-    'title': 'Calendar',
-    'type': 'item',
-    'icon': 'today',
-    'url': '/main/calendar'
-  },
-  {
     'id': 'tasks',
     'title': 'Tasks',
     'type': 'collapse',

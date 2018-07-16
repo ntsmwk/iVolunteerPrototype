@@ -21,11 +21,11 @@ export const navigation_volunteer = [
     'url': '/main/marketplaces'
   },
   {
-    'id': 'calendar',
-    'title': 'Calendar',
+    'id': 'engagements',
+    'title': 'Your Engagements',
     'type': 'item',
     'icon': 'today',
-    'url': '/main/calendar'
+    'url': '/main/engagements'
   },
   {
     'id': 'achievements',

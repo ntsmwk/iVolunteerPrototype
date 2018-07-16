@@ -1,7 +1,6 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-
+<div class="page-layout blank p-24" fusePerfectScrollbar fxFlex="100">
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your Engagements</h1>
+    <h1>Your Projects</h1>
   </div>
 
   <div class="projects" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
@@ -22,7 +21,8 @@
         </div>
 
         <div class="footer" fxLayout="row" fxLayoutAlign="center center">
-          <button mat-raised-button color="accent" routerLink="/main/project/{{project.marketplaceId}}/{{project.id}}}">
+          <button mat-raised-button color="accent"
+                  routerLink="/main/engagement/project/{{project.marketplaceId}}/{{project.id}}}">
             Details
           </button>
         </div>

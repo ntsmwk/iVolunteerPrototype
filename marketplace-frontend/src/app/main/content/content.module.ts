@@ -12,7 +12,6 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
-import {FuseAchievementsModule} from './achievements/achievements.module';
 
 const routes: Route[] = [
   {
@@ -30,8 +29,8 @@ const routes: Route[] = [
     canActivate: [TokenGuard]
   },
   {
-    path: 'main/projects',
-    loadChildren: './projects/projects.module#FuseProjectsModule',
+    path: 'main/engagements',
+    loadChildren: './engagements/engagements.module#FuseEngagementsModule',
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
