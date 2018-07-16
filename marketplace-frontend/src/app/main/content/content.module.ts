@@ -12,6 +12,7 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
+import {FuseAchievementsModule} from './achievements/achievements.module';
 
 const routes: Route[] = [
   {
@@ -69,12 +70,18 @@ const routes: Route[] = [
     loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
     canActivate: [TokenGuard, VolunteerGuard],
     runGuardsAndResolvers: 'always'
+  },
+  {
+    path: 'main/achievements',
+    loadChildren: './achievements/achievements.module#FuseAchievementsModule',
+    canActivate: [TokenGuard, VolunteerGuard],
+    runGuardsAndResolvers: 'always'
   }
 ];
 
 @NgModule({
   declarations: [
-    FuseContentComponent
+    FuseContentComponent,
   ],
   imports: [
     HttpClientModule,
