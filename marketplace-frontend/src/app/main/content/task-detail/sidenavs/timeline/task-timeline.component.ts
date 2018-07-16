@@ -19,7 +19,8 @@ import {Marketplace} from '../../../_model/marketplace';
 })
 export class FuseTaskTimelineComponent implements OnInit {
 
-  private date2Interactions;
+  public days = new Set<string>();
+  private date2Interactions = new Map<string, TaskInteraction[]>();
 
   constructor(private route: ActivatedRoute,
               private datePipe: DatePipe,
@@ -36,23 +37,19 @@ export class FuseTaskTimelineComponent implements OnInit {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.taskService.findById(marketplace, taskId).toPromise().then((task: Task) => {
         this.taskInteractionService.findByTask(marketplace, task).toPromise().then((taskInteractions: TaskInteraction[]) => {
-          const date2Interactions = new Map<string, TaskInteraction[]>();
           taskInteractions.forEach((taskInteraction: TaskInteraction) => {
-            const dayAsString = this.datePipe.transform(taskInteraction.timestamp, 'dd.MM.yyyy');
-            if (!date2Interactions.has(dayAsString)) {
-              date2Interactions.set(dayAsString, new Array<TaskInteraction>());
+            const day = this.datePipe.transform(taskInteraction.timestamp, 'dd.MM.yyyy');
+            if (!this.date2Interactions.has(day)) {
+              this.days.add(day);
+              this.date2Interactions.set(day, new Array<TaskInteraction>());
             }
-            date2Interactions.get(dayAsString).push(taskInteraction);
+            this.date2Interactions.get(day).push(taskInteraction);
           });
-          this.date2Interactions = date2Interactions;
         });
       });
     });
   }
 
-  getDays() {
-    return isNullOrUndefined(this.date2Interactions) ? [] : this.date2Interactions.keys();
-  }
 
   getTaskInteractionsByDay(dayAsString: string) {
     return isNullOrUndefined(this.date2Interactions) ? [] : this.date2Interactions.get(dayAsString);

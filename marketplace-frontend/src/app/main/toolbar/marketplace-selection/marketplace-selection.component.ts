@@ -64,7 +64,6 @@ export class FuseMarketplaceSelectionComponent implements OnInit {
   }
 
   onMarketplaceSelect(marketplace: Marketplace) {
-    console.log(marketplace);
     this.selection.toggle(marketplace);
     this.messageService.broadcast('marketplaceSelectionChanged', {});
     localStorage.setItem('marketplaces', JSON.stringify(this.selection.selected));
