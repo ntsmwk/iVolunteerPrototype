@@ -5,15 +5,14 @@ import {Marketplace} from '../../_model/marketplace';
 import {CoreVolunteerService} from '../../_service/core-volunteer.service';
 import {ProjectService} from '../../_service/project.service';
 import {Project} from '../../_model/project';
-import {fuseAnimations} from '../../../../../@fuse/animations/index';
 import {MessageService} from '../../_service/message.service';
 import {Subscription} from 'rxjs';
 import {isArray} from 'util';
 
 @Component({
+  selector: 'fuse-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
-  animations: fuseAnimations
 })
 export class FuseProjectsComponent implements OnInit, OnDestroy {
 

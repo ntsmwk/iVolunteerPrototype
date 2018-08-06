@@ -8,7 +8,7 @@ import {FuseAchievementsComponent} from './achievements.component';
 import {FuseWidgetModule} from '../../../../@fuse/components';
 
 const routes = [
-  {path: '', component: FuseAchievementsComponent}
+  {path: '**', component: FuseAchievementsComponent}
 ];
 
 @NgModule({
@@ -17,11 +17,12 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
     FuseWidgetModule,
-    FuseWidgetModule,
+
     FuseSharedModule
   ]
 })

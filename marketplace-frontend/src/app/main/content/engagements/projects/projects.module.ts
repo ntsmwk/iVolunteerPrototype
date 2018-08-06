@@ -1,25 +1,27 @@
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatIconModule} from '@angular/material';
+import {MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
 import {FuseProjectsComponent} from './projects.component';
-
-const routes = [
-  {path: '**', component: FuseProjectsComponent}
-];
+import {FuseProjectMemberComponent} from './sidenavs/project-member/project-member.component';
 
 @NgModule({
   declarations: [
-    FuseProjectsComponent
+    FuseProjectsComponent,
+    FuseProjectMemberComponent
   ],
   imports: [
-    RouterModule.forChild(routes),
-
+    MatDividerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
+    MatSidenavModule,
+
     FuseSharedModule
-  ]
+  ],
+  exports: [FuseProjectsComponent]
 })
 export class FuseProjectsModule {
 }

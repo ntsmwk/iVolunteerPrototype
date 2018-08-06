@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  height: 100%;
+
+  > .content {
+    flex: 1;
+  }
+
+  table img {
+    max-width: 46px;
+  }
+}

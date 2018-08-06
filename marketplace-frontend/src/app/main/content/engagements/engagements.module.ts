@@ -1,10 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
+import {MatTabsModule} from '@angular/material';
+
 import {FuseSharedModule} from '@fuse/shared.module';
-import {FuseEngagementsComponent} from './engagements.component';
-import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@angular/material';
 import {FuseCalendarModule} from './calendar/calendar.module';
+import {FuseProjectsModule} from './projects/projects.module';
+import {FuseEngagementsComponent} from './engagements.component';
 
 const routes: Routes = [
   {
@@ -20,14 +22,11 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
 
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
     MatTabsModule,
 
+    FuseSharedModule,
     FuseCalendarModule,
-
-    FuseSharedModule
+    FuseProjectsModule
   ]
 })
 
