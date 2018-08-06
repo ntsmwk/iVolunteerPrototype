@@ -1,14 +1,13 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
-  <div class="layout" fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
 
     <!-- line chart -->
     <div class="chart pr-12" fxFlex="100" fxFlex.gt-sm="75">
       <div class="chart-container fuse-card">
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
-          <div class="h1">Top Friends</div>
+          <div class="h1">Finished Tasks per Month</div>
         </div>
-
         <canvas id="myChart"></canvas>
       </div>
     </div>
@@ -51,21 +50,25 @@
     </div>
     <!-- Friends end -->
 
-    
-    <div class="layout" fxLayout="row wrap" fxLayoutAlign="center">
+  </div>
+
+
+  <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
 
     <!-- Badges -->
-      <div class="badges use-card" fxFlex="100" fxFlex.gt-sm="25">
-        <div class="badges" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}"
-             *fuseIfOnDom>
+    <div class="fuse-card" fxFlex="50">
+      <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="h1">Recently earned Badges</div>
+      </div>
 
-          <div class="badge" *ngFor="let badge of badges.badges" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
-               [@animate]="{value:'*',params:{y:'100%'}}">
+      <div class="badges" fxLayout="row wrap" fxLayoutAlign="center">
+        <ng-container *ngFor="let badge of badges.badges">
+          <fuse-widget class="badge" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
 
             <!-- Front -->
             <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
               <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                <div>badge.name</div>
+                <div>{{badge.source}}</div>
 
                 <button mat-icon-button fuseWidgetToggle aria-label="more">
                   <mat-icon>more_vert</mat-icon>
@@ -73,7 +76,8 @@
               </div>
 
               <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                badge.image
+                <img class="badge" [src]="badge.image">
+                {{badge.name}}
               </div>
             </div>
             <!-- / Front -->
@@ -86,20 +90,61 @@
               </button>
 
               <div>
-                badge.description
+                {{badge.description}}
               </div>
             </div>
             <!-- / Back -->
+          </fuse-widget>
+        </ng-container>
+      </div>
 
+      <div class="card-divider full-width"></div>
+
+      <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+        <button mat-button color="accent">See all your Badges</button>
+      </div>
+
+    </div>
+    <!-- Badges end -->
+
+
+    <!-- Competences -->
+    <div class="fuse-card" fxFlex="50">
+      <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="h1">Recently earned Competencies</div>
+      </div>
+
+      <div class="competencies" fxLayout="row wrap" fxLayoutAlign="center">
+        <div class="competence" *ngFor="let competence of competencies.competencies" fxFlex="100" fxFlex.gt-xs="50"
+             fxFlex.gt-sm="33">
+          <div class="competence-content" fxLayout="column">
+
+            <div class="header" fxLayout="row" fxLayoutAlign="center center">
+              <div class="category" fxFlex>
+                {{competence.source}}
+              </div>
+            </div>
+
+            <div class="content" fxLayout="column" fxLayoutAlign="center center">
+              <div class="h1">{{competence.name}}</div>
+            </div>
+
+            <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+            </div>
 
           </div>
         </div>
-
-
       </div>
-      <!-- Badges end -->
 
-
+      <div class="card-divider full-width"></div>
+      <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+        <button mat-button color="accent">See all your Competencies</button>
+      </div>
     </div>
+    <!-- Competencies end -->
+
+
   </div>
+
+
 </div>

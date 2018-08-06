@@ -16,9 +16,7 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-
     MatIconModule,
-
     FuseSharedModule
   ]
 })

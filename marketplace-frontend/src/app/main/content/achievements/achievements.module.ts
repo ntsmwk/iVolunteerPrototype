@@ -3,8 +3,9 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatButtonModule, MatGridListModule, MatIconModule, MatMenuModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatMenuModule} from '@angular/material';
 import {FuseAchievementsComponent} from './achievements.component';
+import {FuseWidgetModule} from '../../../../@fuse/components';
 
 const routes = [
   {path: '', component: FuseAchievementsComponent}
@@ -19,7 +20,8 @@ const routes = [
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-
+    FuseWidgetModule,
+    FuseWidgetModule,
     FuseSharedModule
   ]
 })
