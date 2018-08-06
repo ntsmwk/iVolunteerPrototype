@@ -2,22 +2,26 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
+import {FuseEngagementsComponent} from './engagements.component';
+import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@angular/material';
 
 const routes: Routes = [
   {
-    path: '',
-    children: [
-      {path: 'projects', loadChildren: './projects/projects.module#FuseProjectsModule'},
-      {path: 'project/:marketplaceId/:projectId', loadChildren: './project-detail/project-detail.module#FuseProjectDetailModule'},
-      {path: '', redirectTo: 'projects', pathMatch: 'full'}
-    ]
+    path: '**', component: FuseEngagementsComponent
   }
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FuseEngagementsComponent
+  ],
   imports: [
     RouterModule.forChild(routes),
+
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+    MatTabsModule,
 
     FuseSharedModule
   ]

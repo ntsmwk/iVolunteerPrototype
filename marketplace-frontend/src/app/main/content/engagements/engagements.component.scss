@@ -1,0 +1,16 @@
+@import "src/@fuse/scss/fuse";
+
+#engagements {
+
+  .content {
+    flex: 1;
+
+    mat-tab-group {
+      height: 100%;
+
+      .mat-tab-body-wrapper {
+        flex-grow: 1;
+      }
+    }
+  }
+}

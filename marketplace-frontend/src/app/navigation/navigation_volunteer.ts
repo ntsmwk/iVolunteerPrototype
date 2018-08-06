@@ -31,7 +31,7 @@ export const navigation_volunteer = [
     'id': 'achievements',
     'title': 'Your Achievements',
     'type': 'item',
-    'icon': 'today',
+    'icon': 'tommorrow',
     'url': '/main/achievements'
   },
   {
