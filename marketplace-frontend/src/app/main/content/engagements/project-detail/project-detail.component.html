@@ -18,11 +18,21 @@
       <!-- CONTENT -->
       <div class="content p-24 mat-white-bg" fusePerfectScrollbar *ngIf="project" style="min-height: 330px;">
         <mat-form-field>
-          <input matInput placeholder="Name" [readonly]="true" [value]="project.name">
+          <input matInput placeholder="Name" [readonly]="true" [value]="project.name"/>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="Description" [readonly]="true" [value]="project.description">
+          <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
+                    rows="5"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [readonly]="true" placeholder="Start Date"
+                 [value]="project.startDate | date: 'dd.MM.yyyy hh:mm'"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [readonly]="true" placeholder="End Date" [value]="project.endDate | date: 'dd.MM.yyyy hh:mm'">
         </mat-form-field>
       </div>
       <!-- / CONTENT -->

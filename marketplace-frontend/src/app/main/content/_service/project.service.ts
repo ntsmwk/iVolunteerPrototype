@@ -16,6 +16,8 @@ export class ProjectService {
       id: '978465132',
       name: 'Weihnachtsbasar',
       description: 'I love CIS ;)',
+      startDate: new Date().getTime(),
+      endDate: new Date().getTime() + 600000000,
       marketplaceId: '0eaf3a6281df11e8adc0fa7ae01bbebc'
     } as Project;
 
