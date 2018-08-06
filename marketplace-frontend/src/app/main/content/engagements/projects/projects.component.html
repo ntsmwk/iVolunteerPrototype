@@ -1,24 +1,43 @@
-<div class="projects" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+<mat-accordion class="projects p-12 " fxLayout="row wrap" fxLayoutAlign="center">
+  <mat-expansion-panel *ngFor="let project of currentProjects" class="fuse-card" fxFlex="100">
+    <mat-expansion-panel-header>
+      <mat-panel-title><h2>{{project.name}}</h2></mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <div class="project" *ngFor="let project of currentProjects" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
-       [@animate]="{value:'*',params:{y:'100%'}}">
+    <mat-sidenav-container class="mat-expansion-panel-content">
 
-    <div class="project-content" fxLayout="column">
+      <!-- CENTER -->
+      <div class="center">
 
-      <div class="header" fxLayout="row" fxLayoutAlign="center center">
-        {{project.name}}
+        <!-- CONTENT -->
+        <div class="content p-24 mat-white-bg" fusePerfectScrollbar *ngIf="project" style="min-height: 330px;">
+          <mat-form-field>
+            <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
+                      rows="5"></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [readonly]="true" placeholder="Start Date"
+                   [value]="project.startDate | date: 'dd.MM.yyyy hh:mm'"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [readonly]="true" placeholder="End Date"
+                   [value]="project.endDate | date: 'dd.MM.yyyy hh:mm'">
+          </mat-form-field>
+        </div>
+        <!-- / CONTENT -->
+
       </div>
+      <!-- / CENTER -->
 
-      <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
-        <p>{{project.description}}</p>
-      </div>
+      <!-- SIDENAV -->
+      <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
+                   fuseMatSidenavHelper="project-member-right-sidenav" mat-is-locked-open="gt-md">
+        <fuse-project-member></fuse-project-member>
+      </mat-sidenav>
+      <!-- / SIDENAV -->
 
-      <div class="footer" fxLayout="row" fxLayoutAlign="center center">
-        <button mat-raised-button color="accent"
-                routerLink="/main/engagements/project/{{project.marketplaceId}}/{{project.id}}">
-          Details
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+    </mat-sidenav-container>
+  </mat-expansion-panel>
+</mat-accordion>
