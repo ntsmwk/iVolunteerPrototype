@@ -18,7 +18,6 @@ const routes = [
     RouterModule.forChild(routes),
 
     MatIconModule,
-
     FuseSharedModule
   ]
 })

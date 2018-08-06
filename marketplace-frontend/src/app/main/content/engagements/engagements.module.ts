@@ -2,9 +2,9 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
-import {CalendarComponent} from './calendar/calendar.component';
 import {FuseEngagementsComponent} from './engagements.component';
 import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@angular/material';
+import {FuseCalendarModule} from './calendar/calendar.module';
 
 const routes: Routes = [
   {
@@ -15,7 +15,6 @@ const routes: Routes = [
 @NgModule({
 
   declarations: [
-    CalendarComponent,
     FuseEngagementsComponent
   ],
   imports: [
@@ -25,6 +24,8 @@ const routes: Routes = [
     MatDividerModule,
     MatIconModule,
     MatTabsModule,
+
+    FuseCalendarModule,
 
     FuseSharedModule
   ]
