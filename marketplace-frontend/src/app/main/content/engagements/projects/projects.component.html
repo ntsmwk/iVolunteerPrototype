@@ -1,31 +1,23 @@
-<div class="page-layout blank" fusePerfectScrollbar fxFlex="100">
-  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your Projects</h1>
-  </div>
+<div class="projects" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
 
-  <div class="projects" fxLayout="row wrap" fxLayoutAlign="center" [@animateStagger]="{value:'50'}" *fuseIfOnDom>
+  <div class="project" *ngFor="let project of currentProjects" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
+       [@animate]="{value:'*',params:{y:'100%'}}">
 
-    <h1 fxFlex="100" style="text-align: center">Current Projects</h1>
+    <div class="project-content" fxLayout="column">
 
-    <div class="project" *ngFor="let project of currentProjects" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33"
-         [@animate]="{value:'*',params:{y:'100%'}}">
+      <div class="header" fxLayout="row" fxLayoutAlign="center center">
+        {{project.name}}
+      </div>
 
-      <div class="project-content" fxLayout="column">
+      <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+        <p>{{project.description}}</p>
+      </div>
 
-        <div class="header" fxLayout="row" fxLayoutAlign="center center">
-          {{project.name}}
-        </div>
-
-        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
-          <p>{{project.description}}</p>
-        </div>
-
-        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
-          <button mat-raised-button color="accent"
-                  routerLink="/main/engagements/project/{{project.marketplaceId}}/{{project.id}}">
-            Details
-          </button>
-        </div>
+      <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button color="accent"
+                routerLink="/main/engagements/project/{{project.marketplaceId}}/{{project.id}}">
+          Details
+        </button>
       </div>
     </div>
   </div>

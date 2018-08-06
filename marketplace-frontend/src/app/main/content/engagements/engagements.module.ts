@@ -5,6 +5,7 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {CalendarComponent} from './calendar/calendar.component';
 import {FuseEngagementsComponent} from './engagements.component';
 import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@angular/material';
+import {FuseProjectsComponent} from './projects/projects.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
   declarations: [
     CalendarComponent,
+    FuseProjectsComponent,
     FuseEngagementsComponent
   ],
   imports: [
