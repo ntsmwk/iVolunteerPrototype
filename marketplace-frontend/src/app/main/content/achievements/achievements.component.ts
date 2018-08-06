@@ -28,8 +28,8 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
 
   competencies = {
     'competencies': [
-      {'name': 'Planning', 'source': 'Marketplace 1'},
-      {'name': 'Leadership', 'source': 'Marketplace 1'}
+      {'name': 'Planning', 'marketplace': 'Marketplace 1', 'date': '28.07.2018', 'task': 'Project X, Task Y'},
+      {'name': 'Leadership', 'marketplace': 'Marketplace 1',  'date': '03.08.2018', 'task': 'Project A, Task B'}
     ]
   };
 

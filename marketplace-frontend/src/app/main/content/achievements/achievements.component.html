@@ -125,15 +125,17 @@
 
             <div class="header" fxLayout="row" fxLayoutAlign="center center">
               <div class="category" fxFlex>
-                {{competence.source}}
+                {{competence.name}}
               </div>
             </div>
 
             <div class="content" fxLayout="column" fxLayoutAlign="center center">
-              <div class="h1">{{competence.name}}</div>
+              <div class="h1">{{competence.marketplace}}</div>
+              <div class="h1">{{competence.task}}</div>
             </div>
 
             <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+              {{competence.date}}
             </div>
 
           </div>
