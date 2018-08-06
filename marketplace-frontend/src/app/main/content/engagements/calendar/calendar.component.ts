@@ -5,7 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class FuseCalendarComponent implements OnInit {
+
 
   constructor() {
 

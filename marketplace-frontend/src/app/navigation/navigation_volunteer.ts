@@ -1,24 +1,17 @@
 export const navigation_volunteer = [
   {
     'id': 'dashboard',
-    'title': 'Dashboard',
+    'title': 'What\'s Up',
     'type': 'item',
     'icon': 'dashboard',
     'url': '/main/dashboard'
   },
   {
     'id': 'profile',
-    'title': 'Profile',
+    'title': 'Your "I"',
     'type': 'item',
     'icon': 'person',
     'url': '/main/profile'
-  },
-  {
-    'id': 'marketplaces',
-    'title': 'Marketplaces',
-    'type': 'item',
-    'icon': 'account_balance',
-    'url': '/main/marketplaces'
   },
   {
     'id': 'engagements',
@@ -31,8 +24,15 @@ export const navigation_volunteer = [
     'id': 'achievements',
     'title': 'Your Achievements',
     'type': 'item',
-    'icon': 'today',
+    'icon': 'card_membership',
     'url': '/main/achievements'
+  },
+  {
+    'id': 'marketplaces',
+    'title': 'Marketplaces',
+    'type': 'item',
+    'icon': 'account_balance',
+    'url': '/main/marketplaces'
   },
   {
     'id': 'tasks',
