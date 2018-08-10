@@ -27,8 +27,15 @@
         </mat-form-field>
 
         <mat-form-field fxFlex="100">
-          <textarea matInput placeholder="Description" formControlName="description"
+          <textarea matInput placeholder="Description" formControlName="description" rows="10"
                     [readonly]="isEditMode()"></textarea>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+          <mat-select placeholder="Project" formControlName="project" [disabled]="isEditMode()">
+            <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field fxFlex="100">

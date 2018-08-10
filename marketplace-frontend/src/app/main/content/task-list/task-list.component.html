@@ -14,12 +14,17 @@
 
       <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-        <mat-cell *matCellDef="let task">{{task.description}}</mat-cell>
+        <mat-cell *matCellDef="let task">{{task.description | truncate:[20]}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
         <mat-cell *matCellDef="let task">{{task.status}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="project">
+        <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.project.name}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="marketplace">

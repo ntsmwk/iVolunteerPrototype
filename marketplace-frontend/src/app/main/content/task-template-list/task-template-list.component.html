@@ -1,7 +1,7 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-      <h1>Task Templates</h1>
+    <h1>All Task Templates</h1>
   </div>
 
   <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
@@ -12,7 +12,7 @@
 
     <ng-container matColumnDef="description">
       <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-      <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.description}}</mat-cell>
+      <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.description | truncate:[20]}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="requiredCompetences">
@@ -45,7 +45,7 @@
   </mat-table>
 
   <div class="no-data" *ngIf="dataSource.data.length === 0">
-    No Templates found!
+    No Task Templates found!
   </div>
 
 </div>

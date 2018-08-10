@@ -12,6 +12,7 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
+import {TruncatePipe} from './_pipe/truncate.pipe';
 
 const routes: Route[] = [
   {
@@ -26,7 +27,7 @@ const routes: Route[] = [
   {
     path: 'main/profile',
     loadChildren: './profile/profile.module#FuseProfileModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/engagements',
@@ -34,19 +35,15 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
+    path: 'main/achievements',
+    loadChildren: './achievements/achievements.module#FuseAchievementsModule',
+    canActivate: [TokenGuard, VolunteerGuard],
+    runGuardsAndResolvers: 'always'
+  },
+  {
     path: 'main/marketplaces',
     loadChildren: './marketplaces/marketplaces.module#FuseMarketplacesModule',
     canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
-    path: 'main/task-template-form',
-    loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
-    canActivate: [TokenGuard, EmployeeGuard]
-  },
-  {
-    path: 'main/task-templates/all',
-    loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
-    canActivate: [TokenGuard]
   },
   {
     path: 'main/task',
@@ -65,27 +62,43 @@ const routes: Route[] = [
     runGuardsAndResolvers: 'always'
   },
   {
-    path: 'main/competencies/:pageType',
-    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
-    canActivate: [TokenGuard, VolunteerGuard],
-    runGuardsAndResolvers: 'always'
+    path: 'main/project-form',
+    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
+    canActivate: [TokenGuard, EmployeeGuard]
   },
   {
-    path: 'main/achievements',
-    loadChildren: './achievements/achievements.module#FuseAchievementsModule',
-    canActivate: [TokenGuard, VolunteerGuard],
+    path: 'main/projects/all',
+    loadChildren: './project-list/project-list.module#FuseProjectListModule',
+    canActivate: [TokenGuard, EmployeeGuard]
+  },
+  {
+    path: 'main/task-template-form',
+    loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
+    canActivate: [TokenGuard, EmployeeGuard]
+  },
+  {
+    path: 'main/task-templates/all',
+    loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
+    canActivate: [TokenGuard, EmployeeGuard]
+  },
+  {
+    path: 'main/competencies/:pageType',
+    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
+    canActivate: [TokenGuard],
     runGuardsAndResolvers: 'always'
   }
 ];
 
 @NgModule({
   declarations: [
-    FuseContentComponent,
+    FuseContentComponent
   ],
   imports: [
     HttpClientModule,
+
     RouterModule.forChild(routes),
-    FuseSharedModule,
+
+    FuseSharedModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

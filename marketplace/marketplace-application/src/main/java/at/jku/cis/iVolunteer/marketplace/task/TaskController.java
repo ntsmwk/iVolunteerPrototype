@@ -2,23 +2,25 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.task.TaskMapper;
 import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.project.ProjectRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
@@ -31,8 +33,13 @@ import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 @RestController
 public class TaskController {
 
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
+
 	@Autowired
 	private TaskMapper taskMapper;
+	@Autowired
+	private ProjectRepository projectRepository;
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
@@ -43,12 +50,13 @@ public class TaskController {
 	@Autowired
 	private LoginService loginService;
 
-	@Value("${marketplace.identifier}")
-	private String marketplaceId;
-
 	@GetMapping("/task")
-	public List<TaskDTO> findAll() {
-		return taskMapper.toDTOs(taskRepository.findAll());
+	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId) {
+		if (StringUtils.isEmpty(projectId)) {
+			return taskMapper.toDTOs(taskRepository.findAll());
+		}
+		return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
+
 	}
 
 	@GetMapping("/task/{id}")
@@ -66,7 +74,6 @@ public class TaskController {
 		for (TaskInteraction ti : taskInteractions) {
 			tasks.add(ti.getTask());
 		}
-
 		return taskMapper.toDTOs(new ArrayList<>(tasks));
 	}
 
@@ -75,6 +82,7 @@ public class TaskController {
 		Task task = taskMapper.toEntity(taskDto);
 		task.setStatus(TaskStatus.CREATED);
 		task.setMarketplaceId(marketplaceId);
+		task.setProject(projectRepository.findOne(taskDto.getProject().getId()));
 		Task createdTask = taskRepository.insert(task);
 
 		insertTaskInteraction(createdTask);
@@ -147,22 +155,5 @@ public class TaskController {
 			return taskMapper.toDTOs(new ArrayList<>(tasks));
 
 		}
-	}
-
-	@GetMapping("/task/{id}/children")
-	public List<TaskDTO> getChildren(@PathVariable("id") String id) {
-		TaskDTO parent = taskMapper.toDTO(taskRepository.findOne(id));
-
-		List<TaskDTO> allTasks = taskMapper.toDTOs(taskRepository.findAll());
-		List<TaskDTO> children = new ArrayList<>();
-
-		for (TaskDTO child : allTasks) {
-			if (child.getParent() != null) {
-				if (child.getParent().getId().equals(parent.getId())) {
-					children.add(child);
-				}
-			}
-		}
-		return children;
 	}
 }

@@ -22,7 +22,7 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   header: string;
   dataSource = new MatTableDataSource<Task>();
   marketplaceChangeSubscription: Subscription;
-  displayedColumns = ['name', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  displayedColumns = ['name', 'project', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
   allMarketplaces: Marketplace[];
 
   constructor(private route: ActivatedRoute,

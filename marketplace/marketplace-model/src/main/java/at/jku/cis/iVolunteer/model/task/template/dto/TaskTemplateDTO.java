@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.task.template;
+package at.jku.cis.iVolunteer.model.task.template.dto;
 
 import java.util.List;
 

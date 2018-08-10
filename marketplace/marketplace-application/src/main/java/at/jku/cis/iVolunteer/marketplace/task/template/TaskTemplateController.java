@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.task.template.TaskTemplateMapper;
 import at.jku.cis.iVolunteer.model.task.template.TaskTemplate;
-import at.jku.cis.iVolunteer.model.task.template.TaskTemplateDTO;
+import at.jku.cis.iVolunteer.model.task.template.dto.TaskTemplateDTO;
 
 @RestController
 public class TaskTemplateController {

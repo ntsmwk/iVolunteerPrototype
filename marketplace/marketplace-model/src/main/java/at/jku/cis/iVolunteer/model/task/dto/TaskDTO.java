@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.project.dto.ProjectDTO;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 
 public class TaskDTO implements IHashObject {
@@ -22,7 +23,7 @@ public class TaskDTO implements IHashObject {
 	private List<CompetenceDTO> acquirableCompetences;
 	private List<CompetenceDTO> requiredCompetences;
 
-	private TaskDTO parent;
+	private ProjectDTO project;
 
 	public String getId() {
 		return id;
@@ -104,12 +105,12 @@ public class TaskDTO implements IHashObject {
 		this.requiredCompetences = requiredCompetences;
 	}
 
-	public TaskDTO getParent() {
-		return parent;
+	public ProjectDTO getProject() {
+		return project;
 	}
 
-	public void setParent(TaskDTO parent) {
-		this.parent = parent;
+	public void setProject(ProjectDTO project) {
+		this.project = project;
 	}
 
 	@Override
@@ -122,8 +123,8 @@ public class TaskDTO implements IHashObject {
 		// json.addProperty("parent", parent.getId());
 		json.addProperty("startDate", startDate.toString());
 		// json.addProperty("endDate", endDate.toString());
-		//json.addProperty("acquirableCompetences", acquirableCompetences.toString());
-		//json.addProperty("requiredCompetences", requiredCompetences.toString());
+		// json.addProperty("acquirableCompetences", acquirableCompetences.toString());
+		// json.addProperty("requiredCompetences", requiredCompetences.toString());
 		return json.toString();
 	}
 
@@ -132,8 +133,7 @@ public class TaskDTO implements IHashObject {
 		return "TaskDTO [id=" + id + ", name=" + name + ", description=" + description + ", workflowKey=" + workflowKey
 				+ ", marketplaceId=" + marketplaceId + ", status=" + status + ", startDate=" + startDate + ", endDate="
 				+ endDate + ", acquirableCompetences=" + acquirableCompetences + ", requiredCompetences="
-				+ requiredCompetences + ", parent=" + parent + "]";
+				+ requiredCompetences + ", project=" + project + "]";
 	}
-	
-	
+
 }

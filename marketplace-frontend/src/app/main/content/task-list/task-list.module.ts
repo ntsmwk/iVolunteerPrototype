@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatTableModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatTableModule} from '@angular/material';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskListComponent} from './task-list.component';
+import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 
 const routes: Route[] = [
   {path: '', component: FuseTaskListComponent}
@@ -15,15 +16,11 @@ const routes: Route[] = [
   imports: [
     RouterModule.forChild(routes),
 
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
     MatTableModule,
     MatIconModule,
 
-    FuseSharedModule
+    FuseSharedModule,
+    FuseTruncatePipeModule
   ]
 })
 export class FuseTaskListModule {

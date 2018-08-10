@@ -11,12 +11,11 @@ import {FuseNavbarModule} from 'app/main/navbar/navbar.module';
 import {FuseToolbarModule} from 'app/main/toolbar/toolbar.module';
 
 import {FuseMainComponent} from './main.component';
+import {TruncatePipe} from './content/_pipe/truncate.pipe';
 
 
 @NgModule({
-  declarations: [
-    FuseMainComponent,
-  ],
+  declarations: [FuseMainComponent],
   imports: [
     RouterModule,
 
@@ -34,9 +33,7 @@ import {FuseMainComponent} from './main.component';
     FuseNavbarModule,
     FuseToolbarModule,
   ],
-  exports: [
-    FuseMainComponent
-  ]
+  exports: [FuseMainComponent]
 })
 export class FuseMainModule {
 }

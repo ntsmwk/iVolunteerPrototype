@@ -2,18 +2,18 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
-import {MatIconModule, MatTableModule} from '@angular/material';
 
-import {FuseTaskTemplateListComponent} from './task-template-list.component';
+import {MatIconModule, MatTableModule} from '@angular/material';
+import {FuseProjectListComponent} from './project-list.component';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 
 const routes = [
-  {path: '', component: FuseTaskTemplateListComponent}
+  {path: '', component: FuseProjectListComponent}
 ];
 
 @NgModule({
   declarations: [
-    FuseTaskTemplateListComponent
+    FuseProjectListComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -25,5 +25,5 @@ const routes = [
     FuseTruncatePipeModule
   ]
 })
-export class FuseTaskTemplateListModule {
+export class FuseProjectListModule {
 }

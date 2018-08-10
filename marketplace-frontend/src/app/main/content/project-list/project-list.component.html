@@ -1,0 +1,43 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>All Projects</h1>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let project">{{project.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let project">{{project.description | truncate:[20]}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+      <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
+      <mat-cell *matCellDef="let project">{{project.startDate | date: 'dd.MM.yyyy'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
+      <mat-cell *matCellDef="let project">{{project.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let project">
+        <mat-icon style="cursor: pointer" routerLink="/main/project-form/{{project.id}}">edit</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <div class="no-data" *ngIf="dataSource.data.length === 0">
+    No Projects found!
+  </div>
+
+</div>

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.project.Project;
 
 @Document
 public class Task {
@@ -25,7 +26,7 @@ public class Task {
 	private List<Competence> requiredCompetences;
 
 	@DBRef
-	private Task parent;
+	private Project project;
 
 	public String getId() {
 		return id;
@@ -107,12 +108,12 @@ public class Task {
 		this.requiredCompetences = requiredCompetences;
 	}
 
-	public Task getParent() {
-		return parent;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setParent(Task parent) {
-		this.parent = parent;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	@Override

@@ -15,6 +15,8 @@ import {CompetenceValidator} from '../_validator/competence.validator';
 import {Participant} from '../_model/participant';
 import {CoreEmployeeService} from '../_service/core-employee.service';
 import {Marketplace} from '../_model/marketplace';
+import {Project} from '../_model/project';
+import {ProjectService} from '../_service/project.service';
 
 @Component({
   templateUrl: './task-form.component.html',
@@ -22,6 +24,8 @@ import {Marketplace} from '../_model/marketplace';
 })
 export class FuseTaskFormComponent implements OnInit {
   taskForm: FormGroup;
+
+  projects: Array<Project>;
   competences: Array<Competence>;
   taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
@@ -34,11 +38,13 @@ export class FuseTaskFormComponent implements OnInit {
               private taskService: TaskService,
               private competenceService: CompetenceService,
               private taskTemplateService: TaskTemplateService,
-              private workflowService: WorkflowService) {
+              private workflowService: WorkflowService,
+              private projectService: ProjectService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
       'description': new FormControl(undefined),
+      'project': new FormControl(undefined),
       'workflowType': new FormControl(undefined, Validators.required),
       'startDate': new FormControl(undefined, Validators.required),
       'endDate': new FormControl(undefined),
@@ -56,9 +62,10 @@ export class FuseTaskFormComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         Promise.all([
+          this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
+          this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences),
           this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
-          this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes),
-          this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences)
+          this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
         ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
       });
     });
@@ -74,14 +81,15 @@ export class FuseTaskFormComponent implements OnInit {
         id: task.id,
         name: task.name,
         description: task.description,
+        project: this.projects.find((value: Project) => task.project.id === value.id),
         workflowType: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate),
         requiredCompetences: this.competences.filter((competence: Competence) => {
-          return task.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.name === competence.name);
+          return task.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.id === competence.id);
         }),
         acquirableCompetences: this.competences.filter((competence: Competence) => {
-          return task.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
+          return task.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.id === competence.id);
         })
       });
     });
