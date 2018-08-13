@@ -18,21 +18,27 @@ export class TaskService {
   }
 
   findById(marketplace: Marketplace, id: string) {
-    return this.http.get(`${marketplace.url}/${this.endpoint}/${id}`);
+    return this.http.get(`${marketplace.url}/task/${id}`);
   }
 
   findAll(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/${this.endpoint}`);
+    return this.http.get(`${marketplace.url}/task`);
+  }
+
+  findAllByProjectId(marketplace: Marketplace, projectId: string) {
+    return this.http.get(`${marketplace.url}/task?projectId=${projectId}`);
   }
 
   findByParticipantAndState(marketplace: Marketplace, volunteerId: string, state: string) {
-    return this.http.get(`${marketplace.url}/${this.endpoint}/volunteer/${volunteerId}/${state}`);
+    return this.http.get(`${marketplace.url}/task/volunteer/${volunteerId}/${state}`);
   }
 
   save(marketplace: Marketplace, task: Task) {
     if (isNullOrUndefined(task.id)) {
-      return this.http.post(`${marketplace.url}/${this.endpoint}`, task);
+      return this.http.post(`${marketplace.url}/task`, task);
     }
-    return this.http.put(`${marketplace.url}/${this.endpoint}/${task.id}`, task);
+    return this.http.put(`${marketplace.url}/task/${task.id}`, task);
   }
+
+
 }

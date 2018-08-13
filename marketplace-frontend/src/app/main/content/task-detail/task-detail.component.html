@@ -70,7 +70,7 @@
 
         <!-- Custom Workflow Step Implementation -->
 
-        <div *ngIf="workflowStepsAssignment?.length > 0">
+        <div *ngIf="workflowStepsAssignment.length > 0">
           <app-task-assign [workflowStepsAssignment]="workflowStepsAssignment" [participant]="participant" [task]="task"
                            [workflowProcessId]="workflowProcessId" [marketplace]="marketplace"></app-task-assign>
         </div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Marketplace} from '../../content/_model/marketplace';
 import {Participant} from '../../content/_model/participant';
@@ -9,6 +9,7 @@ import {isNullOrUndefined} from 'util';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MessageService} from '../../content/_service/message.service';
 import {ArrayService} from '../../content/_service/array.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'fuse-marketplace-selection',
@@ -16,11 +17,12 @@ import {ArrayService} from '../../content/_service/array.service';
   styleUrls: ['./marketplace-selection.component.scss'],
 })
 
-export class FuseMarketplaceSelectionComponent implements OnInit {
+export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
   private role: string;
   public marketplaces: Marketplace[];
 
   private selection = new SelectionModel<Marketplace>(true, []);
+  private marketplaceRegistrationSubscription: Subscription;
 
 
   constructor(private arrayService: ArrayService,
@@ -30,6 +32,15 @@ export class FuseMarketplaceSelectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadMarketplaces();
+    this.marketplaceRegistrationSubscription = this.messageService.subscribe('marketplaceRegistration', this.loadMarketplaces.bind(this));
+  }
+
+  ngOnDestroy() {
+    this.marketplaceRegistrationSubscription.unsubscribe();
+  }
+
+  loadMarketplaces() {
     Promise.all([
       this.loginService.getLoggedIn().toPromise(),
       this.loginService.getLoggedInParticipantRole().toPromise()

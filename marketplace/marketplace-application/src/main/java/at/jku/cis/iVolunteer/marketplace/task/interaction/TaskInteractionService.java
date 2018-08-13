@@ -50,8 +50,7 @@ public class TaskInteractionService {
 
 	private Map<Participant, List<TaskInteraction>> findByTaskGroupedByParticipant(Task task) {
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
-		Map<Participant, List<TaskInteraction>> collect = taskInteractions.stream().filter(ti -> ti.getParticipant() != null).collect(Collectors.groupingBy(t -> t.getParticipant()));
-		return collect;
+		return taskInteractions.stream().filter(ti -> ti.getParticipant() != null).collect(Collectors.groupingBy(t -> t.getParticipant()));
 	}
 
 }

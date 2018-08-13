@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Marketplace} from '../_model/marketplace';
 import {ActivatedRoute} from '@angular/router';
 import {LoginService} from '../_service/login.service';
@@ -50,7 +50,7 @@ export class MarketplacesComponent implements OnInit {
       this.registeredMarketplaces.push(marketplace);
     });
 
-    this.messageService.broadcast('marketplaceSelectionChanged', {});
+    this.messageService.broadcast('marketplaceRegistration', {});
 
   }
 
