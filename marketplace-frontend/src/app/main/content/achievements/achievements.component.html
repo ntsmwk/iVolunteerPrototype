@@ -152,5 +152,52 @@
 
   </div>
 
+  <div class="layout3" fxLayout="row wrap" fxLayoutAlign="left" >
+
+    <!-- Hard facts -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="33">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">{{widgets.widgetFacts.title}}</div>
+          <mat-form-field>
+            <mat-select class="simplified" [(ngModel)]="widgetFacts.currentRange"
+                        aria-label="Change range">
+              <mat-option *ngFor="let range of widgets.widgetFacts.ranges | keys"
+                          [value]="range.key">
+                {{range.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let fact of widgets.widgetFacts.schedule[widgetFacts.currentRange]">
+          <div>
+            <div class="h3">{{fact.title}}</div>
+            <div class="factValue">
+              <span class="secondary-text h2">{{fact.value}}</span>
+            </div>
+          </div>
+
+          <button mat-icon-button aria-label="More information">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+    </fuse-widget>
+    <!-- / Hard facts -->
+
+
+
+
+
+  </div>
+
 
 </div>

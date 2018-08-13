@@ -7,8 +7,8 @@
     flex: 1 0 auto;
     height: 90px;
     max-height: 90px;
-    background: #1A237E;
-    background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+    background: #FF9927;
+    background: linear-gradient(to right, #FFDFCC 0%, #FF9927 100%);
     text-align: center;
 
     @include media-breakpoint('xs') {
@@ -17,9 +17,9 @@
     }
 
     h1 {
-      color: white;
+      color: ghostwhite;
       font-size: 40px;
-      font-weight: 300;
+      font-weight: 400;
       letter-spacing: 0.01em;
       text-align: center;
       margin-top: 0;
@@ -52,6 +52,12 @@
   div.layout2 .fuse-card {
     min-width: inherit;
     max-width: inherit;
+    margin-bottom: 0.4em;
+
+  }
+
+  div.factValue {
+    margin-left:3em
   }
 
   .competencies {
