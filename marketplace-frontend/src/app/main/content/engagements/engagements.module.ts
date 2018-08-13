@@ -9,9 +9,8 @@ import {FuseProjectsModule} from './projects/projects.module';
 import {FuseEngagementsComponent} from './engagements.component';
 
 const routes: Routes = [
-  {
-    path: '**', component: FuseEngagementsComponent
-  }
+  {path: '', component: FuseEngagementsComponent},
+  {path: 'task', loadChildren: '../task-detail/task-detail.module#FuseTaskDetailModule'}
 ];
 
 @NgModule({

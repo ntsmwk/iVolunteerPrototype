@@ -28,11 +28,11 @@ export const navigation_volunteer = [
     'url': '/main/achievements'
   },
   {
-    'id': 'marketplaces',
-    'title': 'Marketplaces',
+    'id': 'get-engaged',
+    'title': 'Get Engaged',
     'type': 'item',
-    'icon': 'account_balance',
-    'url': '/main/marketplaces'
+    'icon': 'today',
+    'url': '/main/get-engaged'
   },
   {
     'id': 'tasks',

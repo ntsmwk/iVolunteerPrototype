@@ -14,16 +14,16 @@ export class ProjectService {
   constructor(private http: HttpClient) {
   }
 
-  findById(marketplace: Marketplace, projectId: string) {
-    return this.http.get(`${marketplace.url}/project/${projectId}`);
-  }
-
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/project`);
   }
 
-  findAllByVolunteer(marketplace: Marketplace, volunteerId: string) {
-    return this.http.get(`${marketplace.url}/project?volunteerId=${volunteerId}`);
+  findEngaged(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/project?state=ENGAGED`);
+  }
+
+  findById(marketplace: Marketplace, projectId: string) {
+    return this.http.get(`${marketplace.url}/project/${projectId}`);
   }
 
   save(marketplace: Marketplace, project: Project) {

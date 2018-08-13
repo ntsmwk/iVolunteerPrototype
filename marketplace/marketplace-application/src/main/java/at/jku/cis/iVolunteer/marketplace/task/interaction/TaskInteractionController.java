@@ -132,9 +132,8 @@ public class TaskInteractionController {
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {
-		Sort sort = new Sort(Sort.Direction.DESC, "timestamp");
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findSortedByTaskAndParticipant(task,
-				participant, sort);
+				participant, new Sort(Sort.Direction.DESC, "timestamp"));
 		return taskInteractions.isEmpty() ? null : taskInteractions.get(0);
 	}
 

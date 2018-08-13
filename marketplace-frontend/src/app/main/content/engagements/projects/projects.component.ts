@@ -16,7 +16,7 @@ import {isArray} from 'util';
 })
 export class FuseProjectsComponent implements OnInit, OnDestroy {
 
-  public projects: Project[];
+  public projects: Array<Project>;
   private marketplaceChangeSubscription: Subscription;
 
   constructor(private loginService: LoginService,
@@ -35,7 +35,7 @@ export class FuseProjectsComponent implements OnInit, OnDestroy {
   }
 
   private loadProjects() {
-    this.projects = [];
+    this.projects = new Array<Project>();
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
       if (!isArray(selected_marketplaces)) {
@@ -47,9 +47,8 @@ export class FuseProjectsComponent implements OnInit, OnDestroy {
           marketplaces
             .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
             .forEach(marketplace => {
-              this.projectService.findAllByVolunteer(marketplace, volunteer.id)
-                .toPromise()
-                .then((projects: Project[]) => this.projects = this.projects.concat(projects));
+              this.projectService.findEngaged(marketplace)
+                .toPromise().then((projects: Project[]) => this.projects = this.projects.concat(projects));
             });
         });
     });

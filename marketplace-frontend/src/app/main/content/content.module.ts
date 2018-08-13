@@ -12,7 +12,6 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {EmployeeGuard} from './_guard/employee.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
-import {TruncatePipe} from './_pipe/truncate.pipe';
 
 const routes: Route[] = [
   {
@@ -41,9 +40,10 @@ const routes: Route[] = [
     runGuardsAndResolvers: 'always'
   },
   {
-    path: 'main/marketplaces',
-    loadChildren: './marketplaces/marketplaces.module#FuseMarketplacesModule',
-    canActivate: [TokenGuard, VolunteerGuard]
+    path: 'main/get-engaged',
+    loadChildren: './get-engaged/get-engaged.module#FuseGetEngagedModule',
+    canActivate: [TokenGuard, VolunteerGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'main/task',
