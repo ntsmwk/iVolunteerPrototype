@@ -1,10 +1,13 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as Chart from 'chart.js';
+import {fuseAnimations} from '../../../../@fuse/animations';
 
 @Component({
   selector: 'fuse-achievements',
   templateUrl: './achievements.component.html',
-  styleUrls: ['./achievements.component.scss']
+  styleUrls: ['./achievements.component.scss'],
+  animations: fuseAnimations
+
 })
 export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   canvas: any;
@@ -34,7 +37,131 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   };
 
 
+
+  widgetFacts: any = {};
+  widgets = {
+    'widgetFacts': {
+      'title': 'Important Stats',
+      'ranges': {
+        'W': 'Past Week',
+        'M': 'Past Month',
+        'SM': 'Past 6 Month',
+        'T': 'Total'
+      },
+      'schedule': {
+        'W': [
+          {
+            'title': 'Marketplaces engaged:',
+            'value' : '2'
+          },
+          {
+            'title': 'Projects involved:',
+            'value' : '2'
+          },
+          {
+            'title': 'Tasks completed:',
+            'value' : '2'
+          },
+          {
+            'title': 'Likes received:',
+            'value' : '2'
+          },
+          {
+            'title': 'Positive feedback received:',
+            'value' : '2'
+          }
+        ],
+        'M': [
+          {
+            'title': 'Marketplaces engaged:',
+            'value' : '3'
+          },
+          {
+            'title': 'Projects involved:',
+            'value' : '3'
+          },
+          {
+            'title': 'Tasks completed:',
+            'value' : '3'
+          },
+          {
+            'title': 'Likes received:',
+            'value' : '3'
+          },
+          {
+            'title': 'Positive feedback received:',
+            'value' : '3'
+          }
+        ],
+        'SM': [
+          {
+            'title': 'Marketplaces engaged:',
+            'value' : '4'
+          },
+          {
+            'title': 'Projects involved:',
+            'value' : '4'
+          },
+          {
+            'title': 'Tasks completed:',
+            'value' : '4'
+          },
+          {
+            'title': 'Likes received:',
+            'value' : '4'
+          },
+          {
+            'title': 'Positive feedback received:',
+            'value' : '4'
+          }
+        ],
+        'T': [
+          {
+            'title': 'Marketplaces engaged:',
+            'value' : '5'
+          },
+          {
+            'title': 'Projects involved:',
+            'value' : '5'
+          },
+          {
+            'title': 'Tasks completed:',
+            'value' : '5'
+          },
+          {
+            'title': 'Likes received:',
+            'value' : '5'
+          },
+          {
+            'title': 'Positive feedback received:',
+            'value' : '5'
+          }
+        ]
+      }
+    }
+
+  };
+
+
+/*
+    'ranges': [
+      'Past Week', 'Past Month', 'Past 6 Months', 'Total',
+    ],
+    'hardFacts': [
+      {'name': 'Marketplaces engaged', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
+      {'name': 'Projects involved', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
+      {'name': 'Tasks completed', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
+      {'name': 'Likes earned', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
+      {'name': 'Positive feedback earned', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' }
+    ]
+
+*/
+
+
   constructor() {
+    this.widgetFacts = {
+      currentRange: 'W'
+    };
   }
 
   ngOnInit() {

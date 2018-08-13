@@ -3,7 +3,7 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatButtonModule, MatIconModule, MatMenuModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule} from '@angular/material';
 import {FuseAchievementsComponent} from './achievements.component';
 import {FuseWidgetModule} from '../../../../@fuse/components';
 
@@ -21,6 +21,8 @@ const routes = [
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatOptionModule,
+    MatSelectModule,
     FuseWidgetModule,
 
     FuseSharedModule
