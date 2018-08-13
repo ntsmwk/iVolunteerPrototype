@@ -139,23 +139,17 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         ]
       }
     }
-
   };
 
+  finishedProjects = {
+    'finishedProjects': [
+      {'name': 'Project L', 'task1': 'Task 1', 'task2': 'Task 2'},
+      {'name': 'Project X', 'task1': 'Task 4'},
+      {'name': 'Project R', 'task1': 'Task 2', 'task2': 'Task 6'},
 
-/*
-    'ranges': [
-      'Past Week', 'Past Month', 'Past 6 Months', 'Total',
-    ],
-    'hardFacts': [
-      {'name': 'Marketplaces engaged', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
-      {'name': 'Projects involved', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
-      {'name': 'Tasks completed', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
-      {'name': 'Likes earned', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' },
-      {'name': 'Positive feedback earned', 'valuePastWeek': '0', 'valuePastMonth': '2', 'valuePast6Months': '4', 'valueTotal': '5' }
     ]
+  };
 
-*/
 
 
   constructor() {
