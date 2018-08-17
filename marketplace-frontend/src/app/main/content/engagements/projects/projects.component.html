@@ -1,6 +1,6 @@
 <mat-accordion class="projects p-12 " fxLayout="row wrap" fxLayoutAlign="center">
 
-  <mat-expansion-panel *ngFor="let project of projects" class="fuse-card" fxFlex="100">
+  <mat-expansion-panel *ngFor="let project of projects" [expanded]="true" class="fuse-card" fxFlex="100">
     <mat-expansion-panel-header>
       <mat-panel-title><h2>{{project.name}}</h2></mat-panel-title>
     </mat-expansion-panel-header>
