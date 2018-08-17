@@ -170,7 +170,7 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
           label: 'Marketplace 1',
-          data: [0, 0, 0, 5, 4, 8, 12, 13, 10, 8, 6, 7],
+          data: [0, 0, 0, 3, 4, 7, 5, 2, 1, 2, 1, 1],
           borderColor: '#3e95cd',
           fill: false
         }, {
@@ -180,7 +180,7 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
           fill: false
         }, {
           label: 'Marketplace 3',
-          data: [1, 3, 7, 14, 13, 12, 14, 5, 3, 1, 1, 5],
+          data: [6x, 4, 7, 4, 4, 2, 3, 1, 0, 1, 0, 0],
           borderColor: '#c45850',
           fill: false
         }]
