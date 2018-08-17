@@ -32,10 +32,9 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   competencies = {
     'competencies': [
       {'name': 'Planning', 'marketplace': 'Marketplace 1', 'date': '28.07.2018', 'task': 'Project X, Task Y'},
-      {'name': 'Leadership', 'marketplace': 'Marketplace 1',  'date': '03.08.2018', 'task': 'Project A, Task B'}
+      {'name': 'Leadership', 'marketplace': 'Marketplace 1', 'date': '03.08.2018', 'task': 'Project A, Task B'}
     ]
   };
-
 
 
   widgetFacts: any = {};
@@ -53,109 +52,109 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
           {
             'title': 'Marketplaces engaged',
             'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value' : '1'
+            'value': '1'
           },
           {
             'title': 'Projects involved',
             'icon': 'assets/icons/important_stats/project.svg',
 
-            'value' : '1'
+            'value': '1'
           },
           {
             'title': 'Tasks completed',
             'icon': 'assets/icons/important_stats/task.svg',
-            'value' : '2'
+            'value': '2'
           },
           {
             'title': 'Likes received',
             'icon': 'assets/icons/important_stats/like.svg',
-            'value' : '3'
+            'value': '3'
           },
           {
             'title': 'Personal Rating',
             'icon': 'assets/icons/important_stats/rating.svg',
-            'value' : '3.5'
+            'value': '3.5'
           }
         ],
         'M': [
           {
             'title': 'Marketplaces engaged',
             'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value' : '2'
+            'value': '2'
           },
           {
             'title': 'Projects involved',
             'icon': 'assets/icons/important_stats/project.svg',
-            'value' : '3'
+            'value': '3'
           },
           {
             'title': 'Tasks completed',
             'icon': 'assets/icons/important_stats/task.svg',
-            'value' : '9'
+            'value': '9'
           },
           {
             'title': 'Likes received',
             'icon': 'assets/icons/important_stats/like.svg',
-            'value' : '8'
+            'value': '8'
           },
           {
             'title': 'Personal Rating',
             'icon': 'assets/icons/important_stats/rating.svg',
-            'value' : '4.0'
+            'value': '4.0'
           }
         ],
         'SM': [
           {
             'title': 'Marketplaces engaged',
             'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value' : '3'
+            'value': '3'
           },
           {
             'title': 'Projects involved',
             'icon': 'assets/icons/important_stats/project.svg',
-            'value' : '6'
+            'value': '6'
           },
           {
             'title': 'Tasks completed',
             'icon': 'assets/icons/important_stats/task.svg',
-            'value' : '11'
+            'value': '11'
           },
           {
             'title': 'Likes received',
             'icon': 'assets/icons/important_stats/like.svg',
-            'value' : '10'
+            'value': '10'
           },
           {
             'title': 'Personal Rating',
             'icon': 'assets/icons/important_stats/rating.svg',
-            'value' : '4.0'
+            'value': '4.0'
           }
         ],
         'T': [
           {
             'title': 'Marketplaces engaged',
             'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value' : '3'
+            'value': '3'
           },
           {
             'title': 'Projects involved',
             'icon': 'assets/icons/important_stats/project.svg',
-            'value' : '8'
+            'value': '8'
           },
           {
             'title': 'Tasks completed',
             'icon': 'assets/icons/important_stats/task.svg',
-            'value' : '14'
+            'value': '14'
           },
           {
             'title': 'Likes received',
             'icon': 'assets/icons/important_stats/like.svg',
-            'value' : '18'
+            'value': '18'
           },
           {
             'title': 'Personal Rating',
             'icon': 'assets/icons/important_stats/rating.svg',
-            'value' : '4.5'
+            'value': '4.5'
           }
         ]
       }
@@ -172,7 +171,6 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   };
 
 
-
   constructor() {
     this.widgetFacts = {
       currentRange: 'W'
@@ -186,7 +184,7 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
-        type: 'line',
+      type: 'line',
       data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
