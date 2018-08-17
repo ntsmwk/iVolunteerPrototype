@@ -1,14 +1,13 @@
 @import "src/@fuse/scss/fuse";
 
-#engagements {
+.page-layout {
 
   .header {
     position: relative;
     flex: 1 0 auto;
     height: 90px;
     max-height: 90px;
-    background: #1A237E;
-    background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+    background: #D80027;
     text-align: center;
 
     @include media-breakpoint('xs') {
@@ -27,6 +26,18 @@
 
       @include media-breakpoint-down('xs') {
         font-size: 24px;
+      }
+    }
+
+    img.header-icon {
+      left: 10px;
+      padding: 16px;
+      max-height: 100%;
+      position: absolute;
+      filter: brightness(0) invert(1);
+
+      @include media-breakpoint-down('xs') {
+        display: none;
       }
     }
   }

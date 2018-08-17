@@ -40,10 +40,14 @@ const routes: Route[] = [
     runGuardsAndResolvers: 'always'
   },
   {
+    path: 'main/get-connected',
+    loadChildren: './get-connected/get-connected.module#FuseGetConnectedModule',
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
     path: 'main/get-engaged',
     loadChildren: './get-engaged/get-engaged.module#FuseGetEngagedModule',
-    canActivate: [TokenGuard, VolunteerGuard],
-    runGuardsAndResolvers: 'always'
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/task',
