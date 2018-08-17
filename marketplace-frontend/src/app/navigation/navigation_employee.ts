@@ -3,14 +3,12 @@ export const navigation_employee = [
     'id': 'dashboard',
     'title': 'Dashboard',
     'type': 'item',
-    'icon': 'dashboard',
     'url': '/main/dashboard'
   },
   {
     'id': 'projects',
     'title': 'Projects',
     'type': 'collapse',
-    'icon': 'work',
     'children': [
       {
         'id': 'create-project',
@@ -30,7 +28,6 @@ export const navigation_employee = [
     'id': 'tasks',
     'title': 'Tasks',
     'type': 'collapse',
-    'icon': 'work',
     'children': [
       {
         'id': 'create-task',
@@ -50,7 +47,6 @@ export const navigation_employee = [
     'id': 'tasksTemplate',
     'title': 'Task Templates',
     'type': 'collapse',
-    'icon': 'work',
     'children': [
       {
         'id': 'create-tasks-template',

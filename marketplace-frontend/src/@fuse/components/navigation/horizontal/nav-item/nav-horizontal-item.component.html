@@ -19,7 +19,8 @@
     </a>
 
     <ng-template #itemContent>
-        <mat-icon class="nav-link-icon" *ngIf="item.icon">{{item.icon}}</mat-icon>
+        <img  class="nav-link-icon" *ngIf="item.icon" src="assets/icons/{{item.icon}}.svg">
+        <!--<mat-icon class="nav-link-icon" *ngIf="item.icon">{{item.icon}}</mat-icon>-->
         <span class="nav-link-title" [translate]="item.translate">{{item.title}}</span>
         <span class="nav-link-badge" *ngIf="item.badge" [translate]="item.badge.translate"
               [ngStyle]="{'background-color': item.badge.bg,'color': item.badge.fg}">
