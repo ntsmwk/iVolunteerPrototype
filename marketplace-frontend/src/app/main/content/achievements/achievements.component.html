@@ -21,8 +21,7 @@
     </fuse-widget>
     <!-- line chart end -->
 
-
-    <!-- Friends -->
+    <!-- Hard facts -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
                  fxFlex="100" fxFlex.gt-sm="33">
 
@@ -30,37 +29,37 @@
 
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div class="h1">Top Friends</div>
+          <div class="h1">{{widgets.widgetFacts.title}}</div>
+          <mat-form-field>
+            <mat-select class="simplified" [(ngModel)]="widgetFacts.currentRange"
+                        aria-label="Change range">
+              <mat-option *ngFor="let range of widgets.widgetFacts.ranges | keys"
+                          [value]="range.key">
+                {{range.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
-        <table class="simple clickable">
-          <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th class="text-right"># Tasks</th>
-            <th class="text-right">Hours</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let friend of about.friends">
-            <td><img [src]="friend.avatar"></td>
-            <td> {{friend.name}}</td>
-            <td class="text-right"> {{friend.number}}</td>
-            <td class="text-right"> {{friend.hours}}</td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let fact of widgets.widgetFacts.schedule[widgetFacts.currentRange]">
+          <div>
+            <div class="h3">{{fact.title}}</div>
+            <div class="factValue">
+              <span class="secondary-text h2">{{fact.value}}</span>
+            </div>
+          </div>
 
-        <div class="card-divider full-width"></div>
-
-        <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
-          <button mat-button color="accent">Go to Friends</button>
+          <button mat-icon-button aria-label="More information">
+            <mat-icon>more_vert</mat-icon>
+          </button>
         </div>
+
       </div>
 
     </fuse-widget>
-    <!-- Friends end -->
+    <!-- / Hard facts -->
+
 
   </div>
 
@@ -82,13 +81,9 @@
             <fuse-widget class="badge" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
 
               <!-- Front -->
-               <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+              <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                 <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
                   <div>{{badge.source}}</div>
-
-                  <button mat-icon-button fuseWidgetToggle aria-label="more">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
                 </div>
 
                 <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
@@ -97,19 +92,6 @@
                 </div>
               </div>
               <!-- / Front -->
-
-              <!-- Back -->
-              <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
-                        aria-label="Flip widget">
-                  <mat-icon class="s-16">close</mat-icon>
-                </button>
-
-                <div>
-                  {{badge.description}}
-                </div>
-              </div>
-              <!-- / Back -->
             </fuse-widget>
           </ng-container>
         </div>
@@ -161,7 +143,7 @@
         </div>
 
 
-        <div class="card-divider full-width"></div>
+        <mat-divider></mat-divider>
         <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
           <button mat-button color="accent">See all your Competencies</button>
         </div>
@@ -174,7 +156,7 @@
 
   <div class="layout3" fxLayout="row wrap" fxLayoutAlign="center">
 
-    <!-- Hard facts -->
+    <!-- Friends -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
                  fxFlex="100" fxFlex.gt-sm="33">
 
@@ -182,36 +164,37 @@
 
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div class="h1">{{widgets.widgetFacts.title}}</div>
-          <mat-form-field>
-            <mat-select class="simplified" [(ngModel)]="widgetFacts.currentRange"
-                        aria-label="Change range">
-              <mat-option *ngFor="let range of widgets.widgetFacts.ranges | keys"
-                          [value]="range.key">
-                {{range.value}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div class="h1">Top Friends</div>
         </div>
 
-        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
-             *ngFor="let fact of widgets.widgetFacts.schedule[widgetFacts.currentRange]">
-          <div>
-            <div class="h3">{{fact.title}}</div>
-            <div class="factValue">
-              <span class="secondary-text h2">{{fact.value}}</span>
-            </div>
-          </div>
+        <table class="simple clickable">
+          <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th class="text-right"># Tasks</th>
+            <th class="text-right">Hours</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let friend of about.friends">
+            <td><img [src]="friend.avatar"></td>
+            <td> {{friend.name}}</td>
+            <td class="text-right"> {{friend.number}}</td>
+            <td class="text-right"> {{friend.hours}}</td>
+          </tr>
+          </tbody>
+        </table>
 
-          <button mat-icon-button aria-label="More information">
-            <mat-icon>more_vert</mat-icon>
-          </button>
+        <mat-divider></mat-divider>
+
+        <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+          <button mat-button color="accent">Go to Friends</button>
         </div>
-
       </div>
 
     </fuse-widget>
-    <!-- / Hard facts -->
+    <!-- Friends end -->
 
     <!-- Finished Projects/Tasks -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"

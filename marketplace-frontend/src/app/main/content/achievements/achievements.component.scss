@@ -46,29 +46,29 @@
   }
 
   div.layout1 {
-    max-width: inherit;
     margin-bottom: 0.4em;
   }
-  div.layout2 .fuse-card {
-    min-width: inherit;
-    max-width: inherit;
+  div.layout2 {
     margin-bottom: 0.4em;
+
+    img.badge {
+      max-width: 130px;
+    }
 
   }
 
   div.layout3 {
-    .icon {
+    mat-icon {
       position: relative;
-      /* Adjust these values accordingly */
       top: 5px;
       left: 5px;
+      padding-right: 30px;
     }
+
   }
 
-
-
   div.factValue {
-    margin-left:3em
+    margin-left: 3em
   }
 
   .competencies {
