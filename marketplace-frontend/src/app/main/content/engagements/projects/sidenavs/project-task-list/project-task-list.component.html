@@ -8,31 +8,19 @@
             <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
               <div>{{task.name}}</div>
 
-              <button mat-icon-button fuseWidgetToggle aria-label="more">
+              <button mat-icon-button aria-label="more"
+                      [routerLink]="['/main/engagements/task', marketplaceId, task.id]">
                 <mat-icon>more_vert</mat-icon>
               </button>
             </div>
 
-            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+            <div class="pl-16 pr-8 pt-8 pb-32" fxLayout="column">
+              <div>{{task.description | truncate: 100}}</div>
               <div><strong>Start date:</strong> {{task.startDate | date: 'dd.MM.yyyy'}}</div>
               <div *ngIf="task.endDate"><strong>End date:</strong> {{task.endDate | date: 'dd.MM.yyyy'}}</div>
             </div>
           </div>
           <!-- / Front -->
-
-          <!-- Back -->
-          <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-            <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
-              <mat-icon class="s-16">close</mat-icon>
-            </button>
-
-            <div>{{task.description | truncate: 100}}</div>
-
-            <button mat-raised-button
-                    [routerLink]="['/main/engagements/task', marketplaceId, task.id]"> Details
-            </button>
-          </div>
-          <!-- / Back -->
         </fuse-widget>
       </ng-container>
     </div>

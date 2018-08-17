@@ -16,7 +16,7 @@
       </div>
     </header>
 
-    <div class="content" style="position: relative;">
+    <div class="content" style="position: relative; border-radius: 0;">
       <div class="timeline">
         <div class="timeline-item" *ngFor="let interaction of getTaskInteractionsByDay(day)">
           <span class="timeline-item-time" style="color: #898b96">{{interaction.timestamp | date: 'hh:mm'}}</span>

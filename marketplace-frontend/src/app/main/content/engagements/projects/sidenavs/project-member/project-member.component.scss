@@ -7,8 +7,11 @@
   > .content {
     flex: 1;
   }
+  .content {
+    border-radius: 0 !important;
 
-  table img {
-    max-width: 46px;
+    table img {
+      max-width: 46px;
+    }
   }
 }
