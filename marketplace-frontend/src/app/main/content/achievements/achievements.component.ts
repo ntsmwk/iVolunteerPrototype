@@ -180,7 +180,7 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
           fill: false
         }, {
           label: 'Marketplace 3',
-          data: [6x, 4, 7, 4, 4, 2, 3, 1, 0, 1, 0, 0],
+          data: [6  , 4, 7, 4, 4, 2, 3, 1, 0, 1, 0, 0],
           borderColor: '#c45850',
           fill: false
         }]
