@@ -47,6 +47,18 @@
 
   div.layout1 {
     margin-bottom: 0.4em;
+    height: 500px;
+
+    img.icon {
+      max-width: 50px;
+
+    }
+    div.factValue {
+      vertical-align: middle;
+      font-size: 20px;
+      margin-left:20px;
+      margin-right:auto;
+    }
   }
   div.layout2 {
     margin-bottom: 0.4em;
