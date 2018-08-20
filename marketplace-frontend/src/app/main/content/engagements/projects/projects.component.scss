@@ -2,6 +2,31 @@
 
 .projects {
 
+  .mat-expansion-panel-header-title {
+    .progress-bar {
+      width: 50%;
+      margin: auto;
+      margin-right: 0;
+      padding-right: 15px;
+      display: inherit;
+
+      span {
+        padding: 5px;
+        font-size: 20px;
+        line-height: 20px;
+      }
+
+      .mat-progress-bar {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      @include media-breakpoint-down('xs') {
+        display: none;
+      }
+    }
+
+  }
   .mat-expansion-panel-content {
 
     .mat-form-field {
