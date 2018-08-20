@@ -32,10 +32,9 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
   competencies = {
     'competencies': [
       {'name': 'Planning', 'marketplace': 'Marketplace 1', 'date': '28.07.2018', 'task': 'Project X, Task Y'},
-      {'name': 'Leadership', 'marketplace': 'Marketplace 1',  'date': '03.08.2018', 'task': 'Project A, Task B'}
+      {'name': 'Leadership', 'marketplace': 'Marketplace 1', 'date': '03.08.2018', 'task': 'Project A, Task B'}
     ]
   };
-
 
 
   widgetFacts: any = {};
@@ -48,93 +47,114 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         'SM': 'Past 6 Month',
         'T': 'Total'
       },
-      'schedule': {
+      'entries': {
         'W': [
           {
-            'title': 'Marketplaces engaged:',
-            'value' : '2'
+            'title': 'Marketplaces engaged',
+            'icon': 'assets/icons/important_stats/marketplace.svg',
+            'value': '1'
           },
           {
-            'title': 'Projects involved:',
-            'value' : '2'
+            'title': 'Projects involved',
+            'icon': 'assets/icons/important_stats/project.svg',
+
+            'value': '1'
           },
           {
-            'title': 'Tasks completed:',
-            'value' : '2'
+            'title': 'Tasks completed',
+            'icon': 'assets/icons/important_stats/task.svg',
+            'value': '2'
           },
           {
-            'title': 'Likes received:',
-            'value' : '2'
+            'title': 'Likes received',
+            'icon': 'assets/icons/important_stats/like.svg',
+            'value': '3'
           },
           {
-            'title': 'Positive feedback received:',
-            'value' : '2'
+            'title': 'Personal Rating',
+            'icon': 'assets/icons/important_stats/rating.svg',
+            'value': '3.5'
           }
         ],
         'M': [
           {
-            'title': 'Marketplaces engaged:',
-            'value' : '3'
+            'title': 'Marketplaces engaged',
+            'icon': 'assets/icons/important_stats/marketplace.svg',
+            'value': '2'
           },
           {
-            'title': 'Projects involved:',
-            'value' : '3'
+            'title': 'Projects involved',
+            'icon': 'assets/icons/important_stats/project.svg',
+            'value': '3'
           },
           {
-            'title': 'Tasks completed:',
-            'value' : '3'
+            'title': 'Tasks completed',
+            'icon': 'assets/icons/important_stats/task.svg',
+            'value': '9'
           },
           {
-            'title': 'Likes received:',
-            'value' : '3'
+            'title': 'Likes received',
+            'icon': 'assets/icons/important_stats/like.svg',
+            'value': '8'
           },
           {
-            'title': 'Positive feedback received:',
-            'value' : '3'
+            'title': 'Personal Rating',
+            'icon': 'assets/icons/important_stats/rating.svg',
+            'value': '4.0'
           }
         ],
         'SM': [
           {
-            'title': 'Marketplaces engaged:',
-            'value' : '4'
+            'title': 'Marketplaces engaged',
+            'icon': 'assets/icons/important_stats/marketplace.svg',
+            'value': '3'
           },
           {
-            'title': 'Projects involved:',
-            'value' : '4'
+            'title': 'Projects involved',
+            'icon': 'assets/icons/important_stats/project.svg',
+            'value': '6'
           },
           {
-            'title': 'Tasks completed:',
-            'value' : '4'
+            'title': 'Tasks completed',
+            'icon': 'assets/icons/important_stats/task.svg',
+            'value': '11'
           },
           {
-            'title': 'Likes received:',
-            'value' : '4'
+            'title': 'Likes received',
+            'icon': 'assets/icons/important_stats/like.svg',
+            'value': '10'
           },
           {
-            'title': 'Positive feedback received:',
-            'value' : '4'
+            'title': 'Personal Rating',
+            'icon': 'assets/icons/important_stats/rating.svg',
+            'value': '4.0'
           }
         ],
         'T': [
           {
-            'title': 'Marketplaces engaged:',
-            'value' : '5'
+            'title': 'Marketplaces engaged',
+            'icon': 'assets/icons/important_stats/marketplace.svg',
+            'value': '3'
           },
           {
-            'title': 'Projects involved:',
-            'value' : '5'
+            'title': 'Projects involved',
+            'icon': 'assets/icons/important_stats/project.svg',
+            'value': '8'
           },
           {
-            'title': 'Tasks completed:',
-            'value' : '5'
+            'title': 'Tasks completed',
+            'icon': 'assets/icons/important_stats/task.svg',
+            'value': '14'
           },
           {
-            'title': 'Likes received:',
-            'value' : '5'
+            'title': 'Likes received',
+            'icon': 'assets/icons/important_stats/like.svg',
+            'value': '18'
           },
           {
-            'title': 'Positive feedback received:',
-            'value' : '5'
+            'title': 'Personal Rating',
+            'icon': 'assets/icons/important_stats/rating.svg',
+            'value': '4.5'
           }
         ]
       }
@@ -149,7 +169,6 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
 
     ]
   };
-
 
 
   constructor() {
@@ -170,17 +189,17 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
           label: 'Marketplace 1',
-          data: [0, 0, 0, 3, 4, 7, 5, 2, 1, 2, 1, 1],
+          data: [0, 0, 0, 3, 4, 6, 5, 2, 1, 1, 1, 1],
           borderColor: '#3e95cd',
           fill: false
         }, {
           label: 'Marketplace 2',
-          data: [3, 2, 1, 5, 4, 2, 4, 2, 0, 0, 0, 1],
+          data: [3, 2, 1, 5, 4, 4, 4, 2, 0, 0, 0, 0],
           borderColor: '#8e5ea2',
           fill: false
         }, {
           label: 'Marketplace 3',
-          data: [6  , 4, 7, 4, 4, 2, 3, 1, 0, 1, 0, 0],
+          data: [1, 0, 0, 0, 1, 1, 2, 3, 3, 3, 4, 6],
           borderColor: '#c45850',
           fill: false
         }]

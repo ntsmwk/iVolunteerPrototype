@@ -9,7 +9,7 @@
 
     <!-- line chart -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="66">
+                 fxFlex="100" fxFlex.gt-sm="70">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
@@ -24,7 +24,7 @@
 
     <!-- Hard facts -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="33">
+                 fxFlex="100" fxFlex.gt-sm="30">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
@@ -33,7 +33,7 @@
           <div class="h1">{{widgets.widgetFacts.title}}</div>
           <mat-form-field>
             <mat-select class="simplified" [(ngModel)]="widgetFacts.currentRange"
-                        aria-label="Change range">
+                        aria-label="Change range" style="font-size: 12px;">
               <mat-option *ngFor="let range of widgets.widgetFacts.ranges | keys"
                           [value]="range.key">
                 {{range.value}}
@@ -42,21 +42,21 @@
           </mat-form-field>
         </div>
 
+
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
-             *ngFor="let fact of widgets.widgetFacts.schedule[widgetFacts.currentRange]">
-          <div>
-            <div class="h3">{{fact.title}}</div>
-            <div class="factValue">
-              <span class="secondary-text h2">{{fact.value}}</span>
-            </div>
-          </div>
+             *ngFor="let fact of widgets.widgetFacts.entries[widgetFacts.currentRange]">
+          <img class="icon"
+               [src]="fact.icon"
+               [title]="fact.title">
+
+          <div class="factValue">{{fact.value}}</div>
 
           <button mat-icon-button aria-label="More information">
             <mat-icon>more_vert</mat-icon>
           </button>
         </div>
-
       </div>
+
 
     </fuse-widget>
     <!-- / Hard facts -->
