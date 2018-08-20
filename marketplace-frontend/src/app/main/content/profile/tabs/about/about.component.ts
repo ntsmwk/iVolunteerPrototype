@@ -1,13 +1,10 @@
 import {Component} from '@angular/core';
 
-import {fuseAnimations} from '@fuse/animations';
-
 
 @Component({
   selector: 'fuse-profile-about',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss'],
-  animations: fuseAnimations
+  styleUrls: ['./about.component.scss']
 })
 export class FuseProfileAboutComponent {
   about = {

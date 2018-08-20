@@ -6,8 +6,9 @@ import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {FuseProfileComponent} from './profile.component';
-import {FuseProfileTimelineComponent} from './tabs/timeline/timeline.component';
 import {FuseProfileAboutComponent} from './tabs/about/about.component';
+import {FuseProfileFriendsComponent} from './tabs/friends/friends.component';
+import {FuseProfileRepositoryComponent} from './tabs/repository/repository.component';
 
 const routes = [
   {path: '**', component: FuseProfileComponent}
@@ -16,8 +17,9 @@ const routes = [
 @NgModule({
   declarations: [
     FuseProfileComponent,
-    FuseProfileTimelineComponent,
-    FuseProfileAboutComponent
+    FuseProfileAboutComponent,
+    FuseProfileFriendsComponent,
+    FuseProfileRepositoryComponent
   ],
   imports: [
     RouterModule.forChild(routes),

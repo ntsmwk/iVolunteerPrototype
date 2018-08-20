@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule, Routes} from '@angular/router';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import 'hammerjs';
 
@@ -29,13 +29,12 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules}),
 
     // Fuse Main and Shared modules
     FuseSharedModule,
     FuseModule.forRoot(fuseConfig),
     FuseMainModule
-
   ],
   bootstrap: [
     AppComponent

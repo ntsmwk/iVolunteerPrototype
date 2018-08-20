@@ -1,42 +1,29 @@
-<div id="profile" class="page-layout simple tabbed" fusePerfectScrollbar>
+<div id="profile" class="page-layout blank p-24" fusePerfectScrollbar>
 
   <!-- HEADER -->
-  <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-       fxLayoutAlign.gt-sm="space-between end">
-
-    <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-         fxLayoutAlign.gt-sm="start center">
-      <img class="profile-image avatar huge" src="assets/images/avatars/profile.jpg"
-           *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-      <div class="name" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Katherine Wilson
-      </div>
-    </div>
-
-    <div class="actions" fxLayout="row" fxLayoutAlign="end center" *fuseIfOnDom
-         [@animate]="{value:'*',params:{delay:'200ms'}}">
-      <button mat-raised-button color="accent" aria-label="Follow">Follow</button>
-      <button mat-raised-button color="primary" aria-label="Send Message">Send Message</button>
-    </div>
-
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Your "I"</h1>
+    <img class="header-icon" src="assets/icons/profile.svg">
   </div>
   <!-- / HEADER -->
 
   <!-- CONTENT -->
   <div class="content">
-
     <mat-tab-group dynamicHeight="true">
 
-      <mat-tab label="About">
+      <mat-tab label="About me">
         <fuse-profile-about></fuse-profile-about>
       </mat-tab>
 
-      <mat-tab label="Timeline">
-        <fuse-profile-timeline></fuse-profile-timeline>
+      <mat-tab label="My Friends">
+        <fuse-profile-friends></fuse-profile-friends>
+      </mat-tab>
+
+      <mat-tab label="My Repository">
+        <fuse-profile-repository></fuse-profile-repository>
       </mat-tab>
 
     </mat-tab-group>
-
   </div>
   <!-- / CONTENT -->
-
 </div>
