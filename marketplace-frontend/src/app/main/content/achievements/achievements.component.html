@@ -209,9 +209,9 @@
           <div class="h1">Finished Projects and Tasks</div>
         </div>
 
-        <div fusePerfectScrollbar>
-
-          <mat-expansion-panel *ngFor="let project of finishedProjects.finishedProjects" class="fuse-card" fxFlex="100">
+        <mat-accordion [multi]="true" fusePerfectScrollbar>
+          <mat-expansion-panel *ngFor="let project of finishedProjects.finishedProjects" class="fuse-card"
+                               fxFlex="100">
             <mat-expansion-panel-header>
               <mat-panel-title><h2>{{project.name}}</h2></mat-panel-title>
             </mat-expansion-panel-header>
@@ -237,8 +237,7 @@
             </div>
 
           </mat-expansion-panel>
-
-        </div>
+        </mat-accordion>
       </div>
 
     </fuse-widget>
