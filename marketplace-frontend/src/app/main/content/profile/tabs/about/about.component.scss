@@ -2,84 +2,29 @@
 
 :host {
 
-  #about {
-    max-width: 1200px;
+  .about-content {
 
-    .about-content {
+    .general {
 
-      .general {
+      .location {
 
-        .location {
-
-          mat-icon {
-            line-height: 13px !important;
-          }
-        }
-      }
-
-      .work {
-
-        .job {
-
-          .company {
-            padding: 0 16px 0 0;
-            font-weight: 500;
-          }
-
-          .date {
-            color: rgba(0, 0, 0, 0.54);
-          }
+        mat-icon {
+          line-height: 13px !important;
         }
       }
     }
 
-    .about-sidebar {
-      padding-left: 32px;
+    .work {
 
-      @include media-breakpoint('sm') {
-        padding: 8px
-      }
+      .job {
 
-      .friends {
-
-        .content {
-
-          .friend {
-            padding: 4px;
-          }
+        .company {
+          padding: 0 16px 0 0;
+          font-weight: 500;
         }
-      }
 
-      .groups {
-
-        .content {
-
-          .group {
-            margin-bottom: 16px;
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-
-            .logo {
-              border: 1px solid rgba(0, 0, 0, 0.12);
-              margin-right: 16px;
-            }
-
-            .name {
-              font-weight: 500;
-              font-size: 15px;
-            }
-
-            .category,
-            .members {
-              color: rgba(0, 0, 0, 0.54);
-            }
-
-            .members {
-              margin-top: 16px;
-            }
-          }
+        .date {
+          color: rgba(0, 0, 0, 0.54);
         }
       }
     }
