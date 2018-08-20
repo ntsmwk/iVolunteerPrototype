@@ -36,15 +36,7 @@ export class FuseProfileAboutComponent {
       'tel': ['+6 555 6600', '+9 555 5255'],
       'websites': ['withinpixels.com'],
       'emails': ['mail@withinpixels.com', 'mail@creapond.com']
-    },
-    'groups': [
-      {'logo': 'assets/images/logos/google.png', 'name': 'Google', 'category': 'Web', 'members': '1.226.121'},
-      {'logo': 'assets/images/logos/fallout.png', 'name': 'Fallout', 'category': 'Games', 'members': '526.142'}
-    ],
-    'friends': [
-      {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg'},
-      {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/carl.jpg'}
-    ]
+    }
   };
 
   constructor() {

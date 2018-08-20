@@ -2,5 +2,39 @@
 
   <div class="friends-content" fxLayout="column" fxFlex="100">
 
+
+    <div class="profile-box friends" fxLayout="column">
+
+      <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="title">Favorite Friends</div>
+        <div class="more secondary-text">
+          <span><strong>See 454 more...</strong></span>
+        </div>
+      </header>
+
+      <div class="content" fxLayout="row wrap">
+        <div class="friend" fxFlex="5" *ngFor="let friend of friends.favorite">
+          <img [src]="friend.avatar" title="{{friend.name}}">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="profile-box friends" fxLayout="column">
+
+      <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="title">Suggested Friends</div>
+      </header>
+
+      <div class="content" fxLayout="row wrap">
+        <div class="friend" fxFlex="5" *ngFor="let friend of friends.possible">
+          <img [src]="friend.avatar" title="{{friend.name}}">
+        </div>
+      </div>
+
+    </div>
+
+
   </div>
+
 </div>
