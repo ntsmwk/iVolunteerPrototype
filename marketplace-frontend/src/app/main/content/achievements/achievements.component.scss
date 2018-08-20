@@ -73,7 +73,12 @@
     div canvas {
       height: auto !important;
     }
+
+    ::ng-deep div.mat-form-field-wrapper {
+      padding: 8px 0;
+    }
   }
+  x
   div.layout2 {
     margin-bottom: 0.4em;
 
