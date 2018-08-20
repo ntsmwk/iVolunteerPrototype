@@ -162,9 +162,9 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
 
   finishedProjects = {
     'finishedProjects': [
-      {'name': 'Training Course: Paramedic (10.08.2018)', 'task1': 'Practical part', 'task2': 'Examination'},
-      {'name': 'Advent bazaar (18.12.2017)', 'task1': 'Shift 1', 'task2': 'Shift 2'},
-      {'name': 'Firefighter competition (24.05.2018)', 'task1': 'Training'}
+      {'name': 'Training Course: Paramedic (10.08.2018)', 'task1': 'Practical part', 'task1Hours': '120h', 'task1Material': '', 'task2': 'Examination', 'task2Hours': '2h', 'task2Material': ''},
+      {'name': 'Advent bazaar (18.12.2017)', 'task1': 'Shift 1', 'task1Hours': '2h', 'task1Material': 'Strawberry Cake (2x)', 'task2': 'Shift 2', 'task2Hours': '2h', 'task2Material': 'Apple Pie (1x)'},
+      {'name': 'Firefighter competition (24.05.2018)', 'task1': 'Training', 'task1Hours': '16h', 'task1Material': ''}
     ]
   };
 

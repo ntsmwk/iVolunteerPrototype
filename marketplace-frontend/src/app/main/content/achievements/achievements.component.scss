@@ -98,6 +98,17 @@
       padding-right: 30px;
     }
 
+    div.finished {
+      th, td {
+        padding-right: 50px;
+      }
+
+      th {
+        font-weight: normal;
+        border-bottom: 1px solid #ddd;
+      }
+    }
+
   }
 
   div.factValue {
