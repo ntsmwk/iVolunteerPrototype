@@ -78,17 +78,19 @@
       padding: 8px 0;
     }
   }
-  x
+
   div.layout2 {
     margin-bottom: 0.4em;
 
     img.badge {
       max-width: 130px;
+      padding-bottom: 20px;
     }
 
   }
 
   div.layout3 {
+
     mat-icon {
       position: relative;
       top: 5px;
@@ -176,6 +178,8 @@
         }
 
         .footer {
+          text-align: center;
+          padding-top: 30px;
           padding: 16px;
           height: 48px !important;
           min-height: 48px !important;

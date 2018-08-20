@@ -23,16 +23,16 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
 
   badges = {
     'badges': [
-      {'name': 'Badge 1', 'image': 'assets/badges/badge 1.svg', 'source': 'Marketplace 1', 'description': 'Description of badge 1'},
-      {'name': 'Badge 2', 'image': 'assets/badges/badge 2.svg', 'source': 'Marketplace 1', 'description': 'Description of badge 2'},
-      {'name': 'Badge 3', 'image': 'assets/badges/badge 3.svg', 'source': 'Marketplace 2', 'description': 'Description of badge 3'}
+      {'name': 'Workaholic Rookie', 'image': 'assets/badges/badge 1.svg', 'source': 'Marketplace 1', 'description': 'Finish 3 tasks in one month'},
+      {'name': 'Everybody\'s Darling', 'image': 'assets/badges/badge 2.svg', 'source': 'Marketplace 1', 'description': 'Receive 10 likes from individual people'},
+      {'name': 'Multitasking Master', 'image': 'assets/badges/badge 3.svg', 'source': 'Marketplace 2', 'description': 'Be involved in 6 projects at a time'}
     ]
   };
 
   competencies = {
     'competencies': [
-      {'name': 'Planning', 'marketplace': 'Marketplace 1', 'date': '28.07.2018', 'task': 'Project X, Task Y'},
-      {'name': 'Leadership', 'marketplace': 'Marketplace 1', 'date': '03.08.2018', 'task': 'Project A, Task B'}
+      {'name': 'Paramedic', 'marketplace': 'Austrian Red Cross', 'date': '(10.08.2018)', 'task': 'Training Course: Paramedic'},
+      {'name': 'Social Skills 1', 'marketplace': 'Middle School Linz Dornach', 'date': '(18.12.2017)', 'task': 'Advent bazaar Second class'}
     ]
   };
 
@@ -162,10 +162,9 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
 
   finishedProjects = {
     'finishedProjects': [
-      {'name': 'Project L', 'task1': 'Task 1', 'task2': 'Task 2'},
-      {'name': 'Project X', 'task1': 'Task 4'},
-      {'name': 'Project R', 'task1': 'Task 2', 'task2': 'Task 6'},
-
+      {'name': 'Training Course: Paramedic (10.08.2018)', 'task1': 'Practical part', 'task2': 'Examination'},
+      {'name': 'Advent bazaar (18.12.2017)', 'task1': 'Shift 1', 'task2': 'Shift 2'},
+      {'name': 'Firefighter competition (24.05.2018)', 'task1': 'Training'}
     ]
   };
 

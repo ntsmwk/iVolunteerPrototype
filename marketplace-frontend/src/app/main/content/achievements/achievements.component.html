@@ -84,13 +84,12 @@
 
               <!-- Front -->
               <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-                <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                  <div>{{badge.source}}</div>
-                </div>
-
                 <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                   <img class="badge" [src]="badge.image">
-                  {{badge.name}}
+                  <div style="text-align: center;">
+                    <div style="font-weight: bold">{{badge.name}}</div>
+                    {{badge.description}}
+                  </div>
                 </div>
               </div>
               <!-- / Front -->
@@ -126,17 +125,17 @@
             <div class="competence-content" fxLayout="column">
 
               <div class="header" fxLayout="row" fxLayoutAlign="center center">
-                <div class="category" fxFlex>
+                <div style="font-weight: bold" class="category" fxFlex>
                   {{competence.name}}
                 </div>
               </div>
 
               <div class="content" fxLayout="column" fxLayoutAlign="center center">
-                <div class="h1">{{competence.marketplace}}</div>
                 <div class="h1">{{competence.task}}</div>
               </div>
 
               <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                {{competence.marketplace}}
                 {{competence.date}}
               </div>
 
