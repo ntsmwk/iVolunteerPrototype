@@ -201,7 +201,7 @@
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
                  fxFlex="100" fxFlex.gt-sm="66">
 
-      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2 finished">
 
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
@@ -216,16 +216,29 @@
             </mat-expansion-panel-header>
 
             <div class="content pd-12 mat-white-bg">
-              <div>
-                <div class="h3">
-                  <mat-icon>check_circle_outline</mat-icon>
-                  {{project.task1}}
-                </div>
-                <div class="h3" *ngIf="project.task2">
-                  <mat-icon>check_circle_outline</mat-icon>
-                  {{project.task2}}
-                </div>
-              </div>
+              <table>
+                <tr>
+                  <th></th>
+                  <th>Contributed Time</th>
+                  <th>Contributed Resources</th>
+                </tr>
+                <tr>
+                  <td>
+                    <mat-icon>check_circle_outline</mat-icon>
+                    <strong>{{project.task1}}</strong>
+                  </td>
+                  <td align="right">{{project.task1Hours}}</td>
+                  <td align="right">{{project.task1Material}}</td>
+                </tr>
+                <tr>
+                  <td *ngIf="project.task2">
+                    <mat-icon>check_circle_outline</mat-icon>
+                    <strong>{{project.task2}}</strong>
+                  </td>
+                  <td align="right">{{project.task2Hours}}</td>
+                  <td align="right">{{project.task2Material}}</td>
+                </tr>
+              </table>
 
 
               <div class="card-divider full-width"></div>
