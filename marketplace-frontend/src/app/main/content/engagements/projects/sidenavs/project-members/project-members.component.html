@@ -9,15 +9,15 @@
     <thead>
     <tr>
       <th></th>
-      <th></th>
-      <th class="text-right">Hours contributed</th>
+      <th class="text-right">Hours</th>
+      <th class="text-right">Resources</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let friend of about.friends">
-      <td><img [src]="friend.avatar"></td>
-      <td> {{friend.name}}</td>
+    <tr *ngFor="let friend of friends">
+      <td><img [src]="friend.avatar" title="{{friend.name}}"></td>
       <td class="text-right">{{friend.hours}}</td>
+      <td class="text-right">{{friend.resources}}</td>
     </tr>
     </tbody>
   </table>

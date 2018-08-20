@@ -10,8 +10,16 @@
   .content {
     border-radius: 0 !important;
 
-    table img {
-      max-width: 46px;
+    table.simple {
+      tbody tr td,
+      tbody tr th {
+        padding: 10px;
+      }
+
+      img {
+        min-width: 50px;
+        max-width: 50px;
+      }
     }
   }
 }
