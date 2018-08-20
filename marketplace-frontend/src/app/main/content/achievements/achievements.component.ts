@@ -50,14 +50,13 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
       'entries': {
         'W': [
           {
-            'title': 'Marketplaces engaged',
+            'title': 'Marketplaces engaged in',
             'icon': 'assets/icons/important_stats/marketplace.svg',
             'value': '1'
           },
           {
-            'title': 'Projects involved',
+            'title': 'Projects involved in',
             'icon': 'assets/icons/important_stats/project.svg',
-
             'value': '1'
           },
           {
@@ -78,12 +77,12 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         ],
         'M': [
           {
-            'title': 'Marketplaces engaged',
+            'title': 'Marketplaces engaged in',
             'icon': 'assets/icons/important_stats/marketplace.svg',
             'value': '2'
           },
           {
-            'title': 'Projects involved',
+            'title': 'Projects involved in',
             'icon': 'assets/icons/important_stats/project.svg',
             'value': '3'
           },
@@ -105,12 +104,12 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         ],
         'SM': [
           {
-            'title': 'Marketplaces engaged',
+            'title': 'Marketplaces engaged in',
             'icon': 'assets/icons/important_stats/marketplace.svg',
             'value': '3'
           },
           {
-            'title': 'Projects involved',
+            'title': 'Projects involved in',
             'icon': 'assets/icons/important_stats/project.svg',
             'value': '6'
           },
@@ -132,12 +131,12 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
         ],
         'T': [
           {
-            'title': 'Marketplaces engaged',
+            'title': 'Marketplaces engaged in',
             'icon': 'assets/icons/important_stats/marketplace.svg',
             'value': '3'
           },
           {
-            'title': 'Projects involved',
+            'title': 'Projects involved in',
             'icon': 'assets/icons/important_stats/project.svg',
             'value': '8'
           },
