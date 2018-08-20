@@ -183,29 +183,36 @@ export class FuseAchievementsComponent implements OnInit, AfterViewInit {
     this.canvas = document.getElementById('myChart');
     this.ctx = this.canvas.getContext('2d');
     const myChart = new Chart(this.ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
           label: 'Marketplace 1',
           data: [0, 0, 0, 3, 4, 6, 5, 2, 1, 1, 1, 1],
           borderColor: '#3e95cd',
+          backgroundColor: '#3e95cd',
           fill: false
         }, {
           label: 'Marketplace 2',
           data: [3, 2, 1, 5, 4, 4, 4, 2, 0, 0, 0, 0],
           borderColor: '#8e5ea2',
+          backgroundColor: '#8e5ea2',
           fill: false
         }, {
           label: 'Marketplace 3',
           data: [1, 0, 0, 0, 1, 1, 2, 3, 3, 3, 4, 6],
           borderColor: '#c45850',
+          backgroundColor: '#c45850',
           fill: false
         }]
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [{ stacked: true }],
+          yAxes: [{ stacked: true }]
+        }
       }
     });
   }
