@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Marketplace} from '../_model/marketplace';
+import {Marketplace} from '../../_model/marketplace';
 import {ActivatedRoute} from '@angular/router';
-import {LoginService} from '../_service/login.service';
-import {CoreMarketplaceService} from '../_service/core-marketplace.service';
-import {Volunteer} from '../_model/volunteer';
-import {Participant} from '../_model/participant';
-import {ArrayService} from '../_service/array.service';
-import {MessageService} from '../_service/message.service';
-import {CoreVolunteerService} from '../_service/core-volunteer.service';
-import {fuseAnimations} from '../../../../@fuse/animations';
+import {LoginService} from '../../_service/login.service';
+import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
+import {Volunteer} from '../../_model/volunteer';
+import {Participant} from '../../_model/participant';
+import {ArrayService} from '../../_service/array.service';
+import {MessageService} from '../../_service/message.service';
+import {CoreVolunteerService} from '../../_service/core-volunteer.service';
+import {fuseAnimations} from '../../../../../@fuse/animations/index';
 
 
 @Component({

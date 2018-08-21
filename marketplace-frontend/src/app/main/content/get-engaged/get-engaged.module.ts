@@ -3,6 +3,9 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGetEngagedComponent} from './get-engaged.component';
+import {MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
+import {FuseMarketplacesModule} from './marketplaces/marketplaces.module';
+import {FuseWidgetModule} from '../../../../@fuse/components';
 
 const routes: Routes = [
   {path: '', component: FuseGetEngagedComponent},
@@ -18,7 +21,15 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
 
-    FuseSharedModule
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSidenavModule,
+
+    FuseMarketplacesModule,
+    FuseSharedModule,
+    FuseWidgetModule
   ]
 })
 

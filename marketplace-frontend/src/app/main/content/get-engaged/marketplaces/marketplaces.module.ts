@@ -1,25 +1,20 @@
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {MatButtonModule, MatIconModule} from '@angular/material';
 import {MarketplacesComponent} from './marketplaces.component';
 
-const routes = [
-  {path: '', component: MarketplacesComponent}
-];
 
 @NgModule({
-  declarations: [
-    MarketplacesComponent
-  ],
+  declarations: [MarketplacesComponent],
   imports: [
-    RouterModule.forChild(routes),
-    FuseSharedModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+
+    FuseSharedModule
+  ],
+  exports: [MarketplacesComponent]
 })
 
 export class FuseMarketplacesModule {
