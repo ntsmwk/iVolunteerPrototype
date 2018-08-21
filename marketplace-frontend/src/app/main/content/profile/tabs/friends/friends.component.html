@@ -6,14 +6,14 @@
     <div class="profile-box friends" fxLayout="column">
 
       <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="title">Favorite Friends</div>
+        <div class="title">Favorite Follower</div>
         <div class="more secondary-text">
           <span><strong>See 454 more...</strong></span>
         </div>
       </header>
 
       <div class="content" fxLayout="row wrap">
-        <div class="friend" fxFlex="5" *ngFor="let friend of friends.favorite">
+        <div class="friend" fxFlex="5" *ngFor="let friend of friends.follower">
           <img [src]="friend.avatar" title="{{friend.name}}">
         </div>
       </div>
@@ -23,11 +23,11 @@
     <div class="profile-box friends" fxLayout="column">
 
       <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="title">Suggested Friends</div>
+        <div class="title">Following</div>
       </header>
 
       <div class="content" fxLayout="row wrap">
-        <div class="friend" fxFlex="5" *ngFor="let friend of friends.possible">
+        <div class="friend" fxFlex="5" *ngFor="let friend of friend.following">
           <img [src]="friend.avatar" title="{{friend.name}}">
         </div>
       </div>

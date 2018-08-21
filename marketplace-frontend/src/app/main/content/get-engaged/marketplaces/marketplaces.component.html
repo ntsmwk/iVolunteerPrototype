@@ -1,7 +1,7 @@
-<div class="marketplaces" fxFlex="100"  *fuseIfOnDom>
+<div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" *fuseIfOnDom>
 
   <div class="marketplace" *ngFor="let marketplace of allMarketplaces" fxFlex="100" fxFlex.gt-xs="50"
-       fxFlex.gt-sm="33">
+       fxFlex.gt-sm="25">
 
     <div class="marketplace-content" fxLayout="column">
 
@@ -24,9 +24,4 @@
 
     </div>
   </div>
-
-  <div class="no-marketplaces" *ngIf="allMarketplaces.length === 0">
-    No marketplaces available!
-  </div>
-
 </div>

@@ -1,21 +1,13 @@
 @import "src/@fuse/scss/fuse";
 
 .marketplaces {
-  width: 100%;
-  max-width: 1040px;
   margin: 0 auto;
 
-  .no-marketplaces {
-    font-size: 24px;
-    margin: 24px 0;
-    text-align: center;
-  }
-
   .marketplace {
+    width: 100%;
     padding: 16px;
 
     &:hover {
-
       .marketplace-content {
         @include mat-elevation(8);
       }

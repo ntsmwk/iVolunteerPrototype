@@ -9,19 +9,15 @@
 
   <!-- CONTENT -->
   <div class="content">
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="70">
+    <fuse-widget class="widget" fxLayout="column" fxFlex="100">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
         <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
           <div class="h1">Marketplaces</div>
         </div>
-        <div class="px-16 py-8" fxLayout="row" fxLayoutAlign="space-between center" style="min-height: 400px">
-          <fuse-marketplaces></fuse-marketplaces>
-        </div>
+        <fuse-marketplaces></fuse-marketplaces>
       </div>
     </fuse-widget>
-
   </div>
 </div>
