@@ -7,12 +7,12 @@ import {Component} from '@angular/core';
 })
 export class FuseProfileFriendsComponent {
   friends = {
-    'favorite': [
+    'follower': [
       {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/carl.jpg'},
       {'name': 'Danielle Jackson', 'avatar': 'assets/images/avatars/danielle.jpg'},
       {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg'}
     ],
-    'possible': [
+    'following': [
       {'name': 'Alice Newman', 'avatar': 'assets/images/avatars/alice.jpg'},
       {'name': 'Andrew Miller', 'avatar': 'assets/images/avatars/andrew.jpg'},
       {'name': 'James Houser', 'avatar': 'assets/images/avatars/james.jpg'},

@@ -53,4 +53,8 @@ export class FuseProjectsComponent implements OnInit, OnDestroy {
         });
     });
   }
+
+  public calculateProgess(project: Project) {
+    return 50;
+  }
 }

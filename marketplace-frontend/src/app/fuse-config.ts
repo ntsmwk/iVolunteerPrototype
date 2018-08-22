@@ -15,8 +15,8 @@ export const fuseConfig = {
     },
     colorClasses    : {
         toolbar: 'mat-white-500-bg',
-        navbar : 'mat-fuse-light-blue-900-bg',
-        footer : 'mat-fuse-dark-900-bg'
+        navbar : 'mat-grey-100-bg',
+        footer : 'mat-dark-900-bg'
     },
     customScrollbars: true,
     routerAnimation : 'fadeIn' // fadeIn, slideUp, slideDown, slideRight, slideLeft, none
