@@ -9,6 +9,7 @@ import {FuseProfileComponent} from './profile.component';
 import {FuseProfileAboutComponent} from './tabs/about/about.component';
 import {FuseProfileFriendsComponent} from './tabs/friends/friends.component';
 import {FuseProfileRepositoryComponent} from './tabs/repository/repository.component';
+import {FuseWidgetModule} from '../../../../@fuse/components';
 
 const routes = [
   {path: '**', component: FuseProfileComponent}
@@ -28,6 +29,7 @@ const routes = [
     MatDividerModule,
     MatIconModule,
     MatTabsModule,
+    FuseWidgetModule,
 
     FuseSharedModule
   ]

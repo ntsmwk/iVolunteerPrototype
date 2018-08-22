@@ -92,15 +92,17 @@
   div.layout3 {
 
     div.finished {
-      mat-icon {
-        position: relative;
-        top: 5px;
-        left: 5px;
-        padding-right: 30px;
-      }
+
 
       th, td {
         padding-right: 50px;
+
+        mat-icon {
+          position: relative;
+          top: 5px;
+          left: 5px;
+          padding-right: 30px;
+        }
       }
 
       th {

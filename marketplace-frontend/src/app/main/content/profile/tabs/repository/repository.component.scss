@@ -3,6 +3,9 @@
 :host {
 
   .repository-content {
+    div canvas {
+      height: auto !important;
+    }
 
   }
 

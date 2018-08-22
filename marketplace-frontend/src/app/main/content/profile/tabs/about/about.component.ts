@@ -7,6 +7,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./about.component.scss']
 })
 export class FuseProfileAboutComponent {
+
   about = {
     'general': {
       'gender': 'Female',
@@ -41,4 +42,5 @@ export class FuseProfileAboutComponent {
 
   constructor() {
   }
+
 }

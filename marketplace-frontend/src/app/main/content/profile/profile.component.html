@@ -12,15 +12,21 @@
     <mat-tab-group dynamicHeight="true">
 
       <mat-tab label="About me">
-        <fuse-profile-about></fuse-profile-about>
+        <ng-template matTabContent>
+          <fuse-profile-about></fuse-profile-about>
+        </ng-template>
       </mat-tab>
 
       <mat-tab label="My Friends">
-        <fuse-profile-friends></fuse-profile-friends>
+        <ng-template matTabContent>
+          <fuse-profile-friends></fuse-profile-friends>
+        </ng-template>
       </mat-tab>
 
       <mat-tab label="My Repository">
-        <fuse-profile-repository></fuse-profile-repository>
+        <ng-template matTabContent>
+          <fuse-profile-repository></fuse-profile-repository>
+        </ng-template>
       </mat-tab>
 
     </mat-tab-group>
