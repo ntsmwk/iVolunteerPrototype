@@ -5,6 +5,8 @@ import {FuseCalendarComponent} from './calendar.component';
 import {CalendarModule} from 'angular-calendar';
 import {ColorPickerModule} from 'ngx-color-picker';
 import {FuseConfirmDialogModule} from '../../../../../@fuse/components';
+import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
 
@@ -24,7 +26,10 @@ import {FuseConfirmDialogModule} from '../../../../../@fuse/components';
     ColorPickerModule,
 
     FuseSharedModule,
-    FuseConfirmDialogModule
+    FuseConfirmDialogModule,
+
+    NgbModalModule
+
   ],
   exports: [
     FuseCalendarComponent

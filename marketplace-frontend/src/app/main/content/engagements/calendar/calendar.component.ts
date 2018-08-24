@@ -1,16 +1,35 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {Component, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Subject} from 'rxjs';
-import {startOfDay, isSameDay, isSameMonth} from 'date-fns';
-import {CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarMonthViewDay} from 'angular-calendar';
-
-import {FuseConfirmDialogComponent} from '@fuse/components/confirm-dialog/confirm-dialog.component';
+import {CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent} from 'angular-calendar';
 import {fuseAnimations} from '@fuse/animations';
-import {subDays, addDays} from 'date-fns';
 
-// import { FuseCalendarEventFormDialogComponent } from './event-form/event-form.component';
-// import { CalendarEventModel } from './event.model';
-// import { CalendarService } from './calendar.service';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
 
 @Component({
   selector: 'fuse-calendar',
@@ -20,264 +39,145 @@ import {subDays, addDays} from 'date-fns';
   animations: fuseAnimations
 })
 
-export class FuseCalendarComponent implements OnInit {
-  view: string;
-  viewDate: Date;
-  events: CalendarEvent[];
-  public actions: CalendarEventAction[];
-  activeDayIsOpen: boolean;
-  refresh: Subject<any> = new Subject();
-  dialogRef: any;
-  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-  selectedDay: any;
+export class FuseCalendarComponent {
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-  data = [
+  view = 'month';
+
+  viewDate: Date = new Date();
+
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
+
+  actions: CalendarEventAction[] = [
     {
-      id: 'events',
-      data: [
-        {
-          start: subDays(startOfDay(new Date()), 1),
-          end: addDays(new Date(), 1),
-          title: 'A 3 day event',
-          allDay: false,
-          color: {
-            primary: '#ad2121',
-            secondary: '#FAE3E3'
-          },
-          resizable: {
-            beforeStart: true,
-            afterEnd: true
-          },
-          draggable: true,
-          meta: {
-            location: 'Los Angeles',
-            notes: 'Eos eu verear adipiscing, ex ornatus denique iracundia sed, quodsi oportere appellantur an pri.'
-          }
-        }
-      ]
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      onClick: ({event}: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      onClick: ({event}: { event: CalendarEvent }): void => {
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('Deleted', event);
+      }
     }
   ];
 
+  refresh: Subject<any> = new Subject();
 
-  constructor(public dialog: MatDialog,
-              // public calendarService: CalendarService
-  ) {
-    this.view = 'month';
-    this.viewDate = new Date();
-    this.activeDayIsOpen = true;
-    this.selectedDay = {date: startOfDay(new Date())};
-
-    this.actions = [
-      {
-        label: '<i class="material-icons s-16">edit</i>',
-        onClick: ({event}: { event: CalendarEvent }): void => {
-          this.editEvent('edit', event);
-        }
-      },
-      {
-        label: '<i class="material-icons s-16">delete</i>',
-        onClick: ({event}: { event: CalendarEvent }): void => {
-          this.deleteEvent(event);
-        }
-      }
-    ];
-
-    /**
-     * Get events from service/server
-     */
-
-  }
-
-  ngOnInit() {
-    /**
-     * Watch re-render-refresh for updating db
-     */
-    this.refresh.subscribe(updateDB => {
-      // console.warn('REFRESH');
-      if (updateDB) {
-        // console.warn('UPDATE DB');
-        // this.calendarService.updateEvents(this.events);
-      }
-    });
-
-
-    // this.calendarService.onEventsUpdated.subscribe(events => {
-    //  this.setEvents();
-    //  this.refresh.next();
-    // });
-
-  }
-
-  /*  setEvents()
+  events: CalendarEvent[] = [
     {
-      this.events = this.calendarService.events.map(item => {
-        item.actions = this.actions;
-        return new CalendarEventModel(item);
-      });
+      start: addHours(addDays(startOfDay(new Date()), 2), 8),
+      end: addHours(addDays(startOfDay(new Date()), 4), 18),
+      title: 'Marketplace 1: Event A',
+      color: colors.blue,
+      actions: this.actions
+    },
+    {
+      start: addHours(subDays(startOfDay(new Date()), 10), 6),
+      end: addHours(subDays(startOfDay(new Date()), 9), 20),
+      title: 'Marketplace 1: Event C',
+      color: colors.red,
+      actions: this.actions
+    },
+    {
+      start: addHours(startOfDay(startOfDay(new Date())), 8),
+      end: addHours(startOfDay(startOfDay(new Date())), 14),
+      title: 'Marketplace 1: Event B',
+      color: colors.yellow,
+      actions: this.actions
+    },
+
+/*    {
+      start: subDays(startOfDay(new Date()), 1),
+      end: addDays(new Date(), 1),
+      title: 'A 3 day event',
+      color: colors.red,
+      actions: this.actions
+    },
+    {
+      start: startOfDay(new Date()),
+      title: 'An event with no end date',
+      color: colors.yellow,
+      actions: this.actions
+    },
+    {
+      start: subDays(endOfMonth(new Date()), 3),
+      end: addDays(endOfMonth(new Date()), 3),
+      title: 'A long event that spans 2 months',
+      color: colors.blue
+    },
+    {
+      start: addHours(startOfDay(new Date()), 2),
+      end: new Date(),
+      title: 'A draggable and resizable event',
+      color: colors.yellow,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      draggable: true
     }
-  */
+*/
+  ];
 
-  /**
-   * Before View Renderer
-   * @param {any} header
-   * @param {any} body
-   */
-  beforeMonthViewRender({header, body}) {
-    // console.info('beforeMonthViewRender');
-    /**
-     * Get the selected day
-     */
-    const _selectedDay = body.find((_day) => {
-      return _day.date.getTime() === this.selectedDay.date.getTime();
-    });
+  activeDayIsOpen = true;
 
-    if (_selectedDay) {
-      /**
-       * Set selectedday style
-       * @type {string}
-       */
-      _selectedDay.cssClass = 'mat-elevation-z3';
-    }
 
+  constructor(private modal: NgbModal) {
   }
 
-  /**
-   * Day clicked
-   * @param {MonthViewDay} day
-   */
-  dayClicked(day: CalendarMonthViewDay): void {
-    const date: Date = day.date;
-    const events: CalendarEvent[] = day.events;
 
+  dayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
-      if ((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0) {
+      this.viewDate = date;
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
         this.activeDayIsOpen = false;
-      }
-      else {
+      } else {
         this.activeDayIsOpen = true;
-        this.viewDate = date;
       }
     }
-    this.selectedDay = day;
+  }
+
+  eventTimesChanged({
+                      event,
+                      newStart,
+                      newEnd
+                    }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
     this.refresh.next();
   }
 
-  /**
-   * Event times changed
-   * Event dropped or resized
-   * @param {CalendarEvent} event
-   * @param {Date} newStart
-   * @param {Date} newEnd
-   */
-  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
-    event.start = newStart;
-    event.end = newEnd;
-    // console.warn('Dropped or resized', event);
-    this.refresh.next(true);
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = {event, action};
+    this.modal.open(this.modalContent, {size: 'lg'});
   }
-
-  /**
-   * Delete Event
-   * @param event
-   */
-  deleteEvent(event) {
-    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
-      disableClose: false
-    });
-
-    this.confirmDialogRef.componentInstance.confirmMessage = 'Are you sure you want to delete?';
-
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const eventIndex = this.events.indexOf(event);
-        this.events.splice(eventIndex, 1);
-        this.refresh.next(true);
-      }
-      this.confirmDialogRef = null;
-    });
-
-  }
-
-  /**
-   * Edit Event
-   * @param {string} action
-   * @param {CalendarEvent} event
-   */
-
-
-  editEvent(action: string, event: CalendarEvent) {
-  }
-
-  /*
-  const eventIndex = this.events.indexOf(event);
-
-  this.dialogRef = this.dialog.open(FuseCalendarEventFormDialogComponent, {
-    panelClass: 'event-form-dialog',
-    data      : {
-      event : event,
-      action: action
-    }
-  });
-
-  this.dialogRef.afterClosed()
-    .subscribe(response => {
-      if ( !response )
-      {
-        return;
-      }
-      const actionType: string = response[0];
-      const formData: FormGroup = response[1];
-      switch ( actionType )
-      {
-
-         // Save
-
-        case 'save':
-
-          this.events[eventIndex] = Object.assign(this.events[eventIndex], formData.getRawValue());
-          this.refresh.next(true);
-
-          break;
-         // Delete
-
-        case 'delete':
-
-          this.deleteEvent(event);
-
-          break;
-      }
-    });
-}
-*/
-  /**
-   * Add Event
-   */
 
   addEvent(): void {
+    this.events.push({
+      title: 'New event',
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
   }
 
-  /*
-  this.dialogRef = this.dialog.open(FuseCalendarEventFormDialogComponent, {
-    panelClass: 'event-form-dialog',
-    data      : {
-      action: 'new',
-      date  : this.selectedDay.date
-    }
-  });
-  this.dialogRef.afterClosed()
-    .subscribe((response: FormGroup) => {
-      if ( !response )
-      {
-        return;
-      }
-      const newEvent = response.getRawValue();
-      newEvent.actions = this.actions;
-      this.events.push(newEvent);
-      this.refresh.next(true);
-    });
-}
-
-*/
 
 }
 
