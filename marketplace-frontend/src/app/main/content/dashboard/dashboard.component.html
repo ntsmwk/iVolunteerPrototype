@@ -48,8 +48,8 @@
               <div class="title">
                 <span class="username">{{post.user.name}}</span>
                 <span *ngIf="post.type === 'post'">posted on your timeline</span>
+                <span *ngIf="post.type === 'invitation'">invited you</span>
                 <span *ngIf="post.type === 'something'">shared something with you</span>
-                <span *ngIf="post.type === 'video'">shared a video with you</span>
                 <span *ngIf="post.type === 'article'">shared an article with you</span>
               </div>
               <div class="time">{{post.time}}</div>
@@ -67,8 +67,14 @@
           </div>
 
           <div *ngIf="post.media" class="media">
-            <img *ngIf="post.media.type === 'image'" [src]="post.media.preview">
+            <div *ngIf="post.type === 'badge';then a else b"></div>
+            <ng-template #a><img *ngIf="post.media.type === 'image'" [src]="post.media.preview" style="width: 200px">
+            </ng-template>
+            <ng-template #b><img *ngIf="post.media.type === 'image'" [src]="post.media.preview">
+            </ng-template>
+            
             <div *ngIf="post.media.type === 'video'" [innerHtml]="post.media.embed"></div>
+
           </div>
 
           <div *ngIf="post.article" fxLayout="column" class="article">
@@ -78,6 +84,12 @@
             <div class="title">{{post.article.title}}</div>
             <div class="subtitle">{{post.article.subtitle}}</div>
             <div class="excerpt">{{post.article.excerpt}}</div>
+          </div>
+
+          <div *ngIf="post.type === 'invitation'" style="padding-left: 15px;
+          padding-bottom: 15px;">
+            <button mat-raised-button color="accent" class="invite-button">Join Marketplace
+            </button>
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center">
@@ -94,6 +106,7 @@
                         </span>
             </button>
           </div>
+
         </div>
 
         <footer class="" fxLayout="column" fxLayoutAlign="start start">

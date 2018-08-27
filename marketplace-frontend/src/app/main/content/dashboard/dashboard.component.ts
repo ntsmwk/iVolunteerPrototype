@@ -13,7 +13,7 @@ export class FuseDashboardComponent {
           'name': 'Alice Freeman',
           'avatar': 'assets/images/avatars/alice.jpg'
         },
-        'message': 'started following you.',
+        'message': 'finished a task',
         'time': '13 mins. ago'
       },
       {
@@ -21,57 +21,57 @@ export class FuseDashboardComponent {
           'name': 'Andrew Green',
           'avatar': 'assets/images/avatars/andrew.jpg'
         },
-        'message': 'sent you a message.',
-        'time': 'June 10,2015'
+        'message': 'earned a new badge',
+        'time': '2 hours ago'
       },
       {
         'user': {
           'name': 'Garry Newman',
           'avatar': 'assets/images/avatars/garry.jpg'
         },
-        'message': 'shared a public post with your group.',
-        'time': 'June 9,2015'
+        'message': 'invited you to join a project',
+        'time': 'August 27, 2018'
       },
       {
         'user': {
           'name': 'Carl Henderson',
           'avatar': 'assets/images/avatars/carl.jpg'
         },
-        'message': 'wants to play Fallout Shelter with you.',
-        'time': 'June 8,2015'
+        'message': 'earned a new competence',
+        'time': 'August 25, 2018'
       },
       {
         'user': {
-          'name': 'Jane Dean',
-          'avatar': 'assets/images/avatars/jane.jpg'
+          'name': 'Andrew Green',
+          'avatar': 'assets/images/avatars/andrew.jpg'
         },
-        'message': 'started following you.',
-        'time': 'June 7,2015'
+        'message': 'engaged in a new marketplace',
+        'time': 'August 24, 2018'
       },
       {
         'user': {
-          'name': 'Juan Carpenter',
-          'avatar': 'assets/images/avatars/james.jpg'
+          'name': 'Alice Freeman',
+          'avatar': 'assets/images/avatars/alice.jpg'
         },
-        'message': 'sent you a message.',
-        'time': 'June 6,2015'
-      },
-      {
-        'user': {
-          'name': 'Judith Burton',
-          'avatar': 'assets/images/avatars/joyce.jpg'
-        },
-        'message': 'shared a photo with you.',
-        'time': 'June 5,2015'
-      },
-      {
-        'user': {
-          'name': 'Vincent Munoz',
-          'avatar': 'assets/images/avatars/vincent.jpg'
-        },
-        'message': 'shared a photo with you.',
-        'time': 'June 4,2015'
+        'message': 'invited you to join a marketplace.',
+        'time': 'August 20, 2018'
       }
+
+      /*
+      finished a task
+	    earned a new badge
+	    earned a new competence
+	    engaged in a new marketplace
+
+	    invited you to join a marketplace
+	    invited you to join a project
+
+	    challenged you (challenges, badges)
+
+	    started following you
+	    shared a post in group x
+       */
+
     ],
     posts: [
       {
@@ -79,44 +79,35 @@ export class FuseDashboardComponent {
           'name': 'Garry Newman',
           'avatar': 'assets/images/avatars/garry.jpg'
         },
-        'message': 'Remember the place we were talking about the other night? Found it!',
+        'message': 'Hey Guys, does somebody want to join me in the marketplace "Marketplace X"? "Marketplace Description"',
         'time': '32 minutes ago',
-        'type': 'post',
+        'type': 'invitation',
         'like': 5,
-        'share': 21,
-        'media': {
-          'type': 'image',
-          'preview': 'assets/images/etc/early-sunrise.jpg'
-        },
+        'share': 1,
         'comments': [
           {
             'user': {
               'name': 'Alice Freeman',
               'avatar': 'assets/images/avatars/alice.jpg'
             },
-            'time': 'June 10, 2015',
-            'message': 'That’s a wonderful place. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
+            'time': '5 minutes ago',
+            'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo.'
           }
         ]
       },
       {
         'user': {
-          'name': 'Andrew Green',
-          'avatar': 'assets/images/avatars/andrew.jpg'
+          'name': 'Garry Newman',
+          'avatar': 'assets/images/avatars/garry.jpg'
         },
-        'message': 'Hey, man! Check this, it’s pretty awesome!',
-        'time': 'June 12, 2015',
-        'type': 'article',
-        'like': 98,
-        'share': 6,
-        'article': {
-          'title': 'The Fallout 4 Pip-Boy Edition Is Back In Stock Now',
-          'subtitle': 'Kotaku',
-          'excerpt': 'The Fallout 4 Pip-Boy edition is back in stock at Gamestop, for all 3 platforms. Additionally, Walmart also has it in stock for the PS4 and Xbox One as of this writing, as does Best Buy.',
-          'media': {
-            'type': 'image',
-            'preview': 'assets/images/etc/fallout.jpg'
-          }
+        'message': 'Some impressions of our last project. We are always looking for interessted and motivation people. ;)',
+        'time': '3 hours ago',
+        'type': 'something',
+        'like': 5,
+        'share': 0,
+        'media': {
+          'type': 'image',
+          'preview': 'assets/images/etc/tropical-beach.jpg'
         },
         'comments': [
           {
@@ -124,8 +115,16 @@ export class FuseDashboardComponent {
               'name': 'Alice Freeman',
               'avatar': 'assets/images/avatars/alice.jpg'
             },
-            'time': 'June 10, 2015',
-            'message': 'That’s a wonderful place. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
+            'time': '1 hour ago',
+            'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
+          },
+          {
+            'user': {
+              'name': 'Markus Weißenbek',
+              'avatar': 'assets/images/avatars/mweissenbek.jpg'
+            },
+            'time': '2 minutes ago',
+            'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et eleifend ligula. Fusce posuere in sapien ac facilisis. Etiam sit amet justo non felis ornare feugiat.'
           }
         ]
       },
@@ -139,6 +138,21 @@ export class FuseDashboardComponent {
         'type': 'something',
         'like': 4,
         'share': 1
+      },
+      {
+        'user': {
+          'name': 'Garry Newman',
+          'avatar': 'assets/images/avatars/garry.jpg'
+        },
+        'message': 'I earned a new badge!',
+        'time': 'August 20, 2018',
+        'type': 'badge',
+        'like': 2,
+        'share': 0,
+        'media': {
+          'type': 'image',
+          'preview': 'assets/badges/badge3+text.png'
+        },
       }
     ]
   };
