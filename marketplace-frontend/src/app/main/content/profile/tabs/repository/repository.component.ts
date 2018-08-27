@@ -1,6 +1,10 @@
-import {AfterViewInit, Component} from '@angular/core';
+///<reference path="../../../../../../../node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts"/>
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as Chart from 'chart.js';
 import {fuseAnimations} from '../../../../../../@fuse/animations';
+import * as Punchcard from '../../../../../../assets/punchcard.js';
+import d3 from 'd3';
+
 
 @Component({
   selector: 'fuse-profile-repository',
@@ -9,9 +13,14 @@ import {fuseAnimations} from '../../../../../../@fuse/animations';
   animations: fuseAnimations
 
 })
-export class FuseProfileRepositoryComponent implements AfterViewInit {
+export class FuseProfileRepositoryComponent implements AfterViewInit, OnInit {
   canvas: any;
   ctx: any;
+
+  ngOnInit() {
+
+  }
+
 
   ngAfterViewInit() {
     this.canvas = document.getElementById('myChart');
@@ -26,9 +35,9 @@ export class FuseProfileRepositoryComponent implements AfterViewInit {
           data: [14, 10, 10, 8]
         }]
       },
-      options: {
-      }
+      options: {}
     });
   }
+
 
 }

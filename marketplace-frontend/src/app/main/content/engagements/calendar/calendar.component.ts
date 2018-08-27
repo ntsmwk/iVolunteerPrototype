@@ -92,6 +92,7 @@ export class FuseCalendarComponent {
       actions: this.actions
     },
 
+
 /*    {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
