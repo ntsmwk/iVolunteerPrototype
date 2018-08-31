@@ -3,9 +3,11 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGetEngagedComponent} from './get-engaged.component';
-import {MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule} from '@angular/material';
+import {MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatTabsModule} from '@angular/material';
 import {FuseMarketplacesModule} from './marketplaces/marketplaces.module';
 import {FuseWidgetModule} from '../../../../@fuse/components';
+import {FuseSuggestionsModule} from './suggestions/suggestions.module';
+import {FusePreferencesModule} from './preferences/preferences.module';
 
 const routes: Routes = [
   {path: '', component: FuseGetEngagedComponent},
@@ -26,10 +28,13 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
+    MatTabsModule,
 
-    FuseMarketplacesModule,
     FuseSharedModule,
-    FuseWidgetModule
+    FuseWidgetModule,
+    FuseMarketplacesModule,
+    FuseSuggestionsModule,
+    FusePreferencesModule
   ]
 })
 
