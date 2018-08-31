@@ -144,7 +144,7 @@ export class FuseDashboardComponent {
           'name': 'Garry Newman',
           'avatar': 'assets/images/avatars/garry.jpg'
         },
-        'message': 'I earned a new badge!',
+        'message': 'Yeah, finally I earned the badge I was working on!',
         'time': 'August 20, 2018',
         'type': 'badge',
         'like': 2,
