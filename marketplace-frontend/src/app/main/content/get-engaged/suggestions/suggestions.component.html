@@ -1,3 +1,121 @@
-<p>
-  suggestions works!
-</p>
+<div id="suggestion" class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- suggested marketplaces -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="33">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Suggested Marketplaces</div>
+        </div>
+
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let marketplace of marketplaces.suggested">
+          <div>
+            <div class="h3">{{marketplace.name}}</div>
+            <div>
+              <span class="secondary-text">{{marketplace.description}}</span>
+            </div>
+          </div>
+
+          <div>
+            <button mat-icon-button aria-label="More" [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <span>Join</span>
+              </button>
+              <button mat-menu-item>
+                <span>Details</span>
+              </button>
+              <button mat-menu-item>
+                <span>Don't show anymore</span>
+              </button>
+            </mat-menu>
+          </div>
+
+        </div>
+
+
+      </div>
+    </fuse-widget>
+    <!-- suggested marketplaces end -->
+
+    <!-- suggested projects -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="66">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Suggested Projects</div>
+        </div>
+
+        <mat-accordion [multi]="true" fusePerfectScrollbar>
+          <mat-expansion-panel *ngFor="let project of projects.projects" class="fuse-card" fxFlex="100">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h2>{{project.name}}</h2>
+                <h5>({{project.marketplace}})</h5>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="content pd-12 mat-white-bg">
+              <div>{{project.description}}</div>
+              <span>{{project.startDate}} - {{project.endDate}}</span>
+              <div *ngFor="let task of project.tasks">
+                <div>{{task.name}}</div>
+              </div>
+            </div>
+
+            <div class="card-divider full-width"></div>
+            <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-button color="accent">See Project Details</button>
+            </div>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+
+
+      </div>
+    </fuse-widget>
+    <!-- suggested projects end -->
+  </div>
+
+  <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
+    <!-- Manual Search -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="100">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div>
+            <mat-icon>search</mat-icon>
+            <span class="h1">Manual Search</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px">
+          <mat-form-field style="width: 50%; margin-left: 15px">
+            <input matInput type="search" placeholder="Search here" class="search-input">
+          </mat-form-field>
+
+          <mat-radio-group [(ngModel)]="radioOptions" name="radioButtons" style="margin-left: 30px">
+            <mat-radio-button style="margin-right: 30px" [value]="'test1'">Marketplaces</mat-radio-button>
+            <mat-radio-button [value]="'test2'">Projects and Tasks</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div style="height: 200px"></div>
+
+      </div>
+    </fuse-widget>
+    <!-- Manual Search end -->
+  </div>
+
+
+</div>
+
