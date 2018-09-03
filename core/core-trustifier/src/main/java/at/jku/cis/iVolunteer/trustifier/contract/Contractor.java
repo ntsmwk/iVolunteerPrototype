@@ -159,13 +159,11 @@ public class Contractor {
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
-
 	}
 
 	@PostMapping("/finishedTaskEntry")
 	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntryDTO vte) {
 		try {
-
 			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
 					vte.getMarketplaceId(), vte.getVolunteerId());
 
