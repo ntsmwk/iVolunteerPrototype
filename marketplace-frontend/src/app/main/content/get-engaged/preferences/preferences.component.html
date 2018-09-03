@@ -1,3 +1,43 @@
-<p>
-  preferences works!
-</p>
+<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+             fxFlex="100">
+  <div class="h2">Task specific constraints</div>
+
+  <div class="description">Select if you want to work alone or in a team:</div>
+  <mat-radio-group class="radio-group" [(ngModel)]="soloGroup">
+    <mat-radio-button class="radio-button" *ngFor="let taskSpecific of soloGroupOptions" [value]="taskSpecific">
+      {{taskSpecific}}
+    </mat-radio-button>
+  </mat-radio-group>
+
+  <div class="description">Select if you want to perform physical tasks (tasks that require you in person) or
+    virtual tasks (tasks that can be performed via your pc):
+  </div>
+  <mat-radio-group class="radio-group" [(ngModel)]="physicalVirtual">
+    <mat-radio-button class="radio-button" *ngFor="let physicalVirtual of physicalVirtualOptions"
+                      [value]="physicalVirtual">
+      {{physicalVirtual}}
+    </mat-radio-button>
+  </mat-radio-group>
+
+  <mat-divider></mat-divider>
+
+  <div class="h2 header">Social constraints</div>
+  <mat-slide-toggle class="slider">
+    Suggest only tasks with friends involved
+  </mat-slide-toggle>
+
+  <mat-divider></mat-divider>
+
+  <div class="h2 header">Time constraints</div>
+  <div class="checkbox-group">
+
+    <div *ngFor="let day of weekdays">
+      <mat-checkbox class="checkbox-margin">{{day}}</mat-checkbox>
+      <mat-form-field class="duration">
+        <input matInput placeholder="Duration">
+      </mat-form-field>
+    </div>
+
+  </div>
+
+</fuse-widget>

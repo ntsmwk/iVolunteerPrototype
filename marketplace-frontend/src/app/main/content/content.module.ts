@@ -19,9 +19,14 @@ const routes: Route[] = [
     loadChildren: './login/login.module#FuseLoginModule'
   },
   {
+    path: 'main/welcome',
+    loadChildren: './welcome/welcome.module#FuseWelcomeModule',
+    canActivate: [TokenGuard]
+  },
+  {
     path: 'main/dashboard',
     loadChildren: './dashboard/dashboard.module#FuseDashboardModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/profile',
