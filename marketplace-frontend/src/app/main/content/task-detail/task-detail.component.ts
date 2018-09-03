@@ -24,7 +24,7 @@ export class FuseTaskDetailComponent implements OnInit {
   marketplace: Marketplace;
   workflowStepsDefault: WorkflowStep[] = [];
   workflowStepsSpecial: WorkflowStep[] = [];
-  workflowStepsAssignment: WorkflowStep[];
+  workflowStepsAssignment: WorkflowStep[] = [];
   workflowProcessId: string;
   role: string;
 
