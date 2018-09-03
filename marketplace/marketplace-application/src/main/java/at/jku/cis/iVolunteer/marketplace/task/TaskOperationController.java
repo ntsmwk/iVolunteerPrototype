@@ -25,6 +25,8 @@ import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
 import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.Task;
@@ -134,14 +136,15 @@ public class TaskOperationController {
 				volunteerProfileRepository.save(volunteerProfile);
 
 				try {
-					VolunteerTaskEntryDTO vte = (VolunteerTaskEntryDTO) taskEntryMapper.toDTO(taskEntry);
+					VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(
+							taskEntryMapper.toDTO(taskEntry));
 					vte.setVolunteerId(volunteer.getId());
 
 					contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
 
 					competenceEntries.forEach(competenceEntry -> {
-						VolunteerCompetenceEntryDTO vce = (VolunteerCompetenceEntryDTO) competenceEntryMapper
-								.toDTO(competenceEntry);
+						VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
+								competenceEntryMapper.toDTO(competenceEntry));
 						vce.setVolunteerId(volunteer.getId());
 						contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
 					});
@@ -179,4 +182,27 @@ public class TaskOperationController {
 		taskInteraction.setOperation(task.getStatus());
 		return taskInteractionRepository.insert(taskInteraction);
 	}
+
+	private VolunteerCompetenceEntryDTO createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
+			CompetenceEntryDTO competenceEntryDto) {
+		VolunteerCompetenceEntryDTO volunteerCompetenceEntryDTO = new VolunteerCompetenceEntryDTO();
+		volunteerCompetenceEntryDTO.setCompetenceId(competenceEntryDto.getCompetenceId());
+		volunteerCompetenceEntryDTO.setCompetenceName(competenceEntryDto.getCompetenceName());
+		volunteerCompetenceEntryDTO.setId(competenceEntryDto.getId());
+		volunteerCompetenceEntryDTO.setMarketplaceId(competenceEntryDto.getMarketplaceId());
+		volunteerCompetenceEntryDTO.setTimestamp(competenceEntryDto.getTimestamp());
+		return volunteerCompetenceEntryDTO;
+	}
+
+	private VolunteerTaskEntryDTO createVolunteerTaskEntryDTOFromTaskEntryDTO(TaskEntryDTO taskEntryDto) {
+		VolunteerTaskEntryDTO volunteerTaskEntryDTO = new VolunteerTaskEntryDTO();
+		volunteerTaskEntryDTO.setId(taskEntryDto.getId());
+		volunteerTaskEntryDTO.setMarketplaceId(taskEntryDto.getMarketplaceId());
+		volunteerTaskEntryDTO.setTaskDescription(taskEntryDto.getTaskDescription());
+		volunteerTaskEntryDTO.setTaskId(taskEntryDto.getTaskId());
+		volunteerTaskEntryDTO.setTaskName(taskEntryDto.getTaskName());
+		volunteerTaskEntryDTO.setTimestamp(taskEntryDto.getTimestamp());
+		return volunteerTaskEntryDTO;
+	}
+
 }

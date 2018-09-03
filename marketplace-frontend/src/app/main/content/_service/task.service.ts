@@ -27,6 +27,10 @@ export class TaskService {
   findByProjectId(marketplace: Marketplace, projectId: string) {
     return this.http.get(`${marketplace.url}/task?projectId=${projectId}`);
   }
+  
+  findAvailableByProjectId(marketplace: Marketplace, projectId: string) {
+    return this.http.get(`${marketplace.url}/task?projectId=${projectId}&availableOnly=true`);
+  }
 
   findByParticipant(marketplace: Marketplace, participant: Participant) {
     return this.http.get(`${marketplace.url}/task?participantId=${participant.id}`);

@@ -18,6 +18,8 @@ export class FuseProjectTaskListComponent implements OnInit {
   private projectId: string;
   @Input('marketplaceId')
   public marketplaceId: string;
+  @Input('availableOnly')
+  public availableOnly: boolean;
 
   public tasks: Array<Task>;
 
@@ -26,7 +28,12 @@ export class FuseProjectTaskListComponent implements OnInit {
 
   ngOnInit() {
     this.marketplaceService.findById(this.marketplaceId).toPromise().then((marketplace: Marketplace) => {
-      this.taskService.findByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+
+      if (this.availableOnly === true) {
+        this.taskService.findAvailableByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      } else {
+        this.taskService.findByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      }
     });
   }
 
