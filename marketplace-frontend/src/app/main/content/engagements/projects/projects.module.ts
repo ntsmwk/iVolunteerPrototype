@@ -10,12 +10,12 @@ import {MatButtonModule, MatDividerModule, MatExpansionModule, MatFormFieldModul
 import {FuseProjectsComponent} from './projects.component';
 import {FuseProjectMembersComponent} from './sidenavs/project-members/project-members.component';
 import {FuseProjectTaskListComponent} from './sidenavs/project-task-list/project-task-list.component';
+import {FuseProjectTaskListModule} from './sidenavs/project-task-list/project-task-list.module';
+import {FuseProjectMembersModule} from './sidenavs/project-members/project-members.module';
 
 @NgModule({
   declarations: [
-    FuseProjectsComponent,
-    FuseProjectMembersComponent,
-    FuseProjectTaskListComponent
+    FuseProjectsComponent
   ],
   imports: [
     RouterModule,
@@ -29,9 +29,10 @@ import {FuseProjectTaskListComponent} from './sidenavs/project-task-list/project
     MatSidenavModule,
     MatProgressBarModule,
 
+    FuseProjectMembersModule,
+    FuseProjectTaskListModule,
     FuseSharedModule,
-    FuseTruncatePipeModule,
-    FuseWidgetModule
+    FuseTruncatePipeModule
   ],
   exports: [FuseProjectsComponent]
 })

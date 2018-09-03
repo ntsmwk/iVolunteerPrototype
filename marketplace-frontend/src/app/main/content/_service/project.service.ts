@@ -18,6 +18,10 @@ export class ProjectService {
     return this.http.get(`${marketplace.url}/project`);
   }
 
+  findAvailable(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/project?state=AVAILABLE`);
+  }
+
   findEngaged(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/project?state=ENGAGED`);
   }
@@ -32,4 +36,6 @@ export class ProjectService {
     }
     return this.http.put(`${marketplace.url}/project/${project.id}`, project);
   }
+
+
 }
