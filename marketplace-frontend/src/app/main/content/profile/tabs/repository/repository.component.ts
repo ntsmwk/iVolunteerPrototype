@@ -1,26 +1,16 @@
-///<reference path="../../../../../../../node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts"/>
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import * as Chart from 'chart.js';
+import {AfterViewInit, Component} from '@angular/core';
 import {fuseAnimations} from '../../../../../../@fuse/animations';
-import * as Punchcard from '../../../../../../assets/punchcard.js';
-import d3 from 'd3';
-
+import * as Chart from 'chart.js';
 
 @Component({
   selector: 'fuse-profile-repository',
   templateUrl: './repository.component.html',
   styleUrls: ['./repository.component.scss'],
   animations: fuseAnimations
-
 })
-export class FuseProfileRepositoryComponent implements AfterViewInit, OnInit {
+export class FuseProfileRepositoryComponent implements AfterViewInit {
   canvas: any;
   ctx: any;
-
-  ngOnInit() {
-
-  }
-
 
   ngAfterViewInit() {
     this.canvas = document.getElementById('myChart');
