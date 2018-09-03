@@ -5,7 +5,7 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseProjectMembersComponent} from './project-members.component';
 
 @NgModule({
-  declarations: [FuseProjectMembersComponent],
+  declarations: [FuseProjectMembersComponent  ],
   imports: [
     FuseSharedModule
   ],
