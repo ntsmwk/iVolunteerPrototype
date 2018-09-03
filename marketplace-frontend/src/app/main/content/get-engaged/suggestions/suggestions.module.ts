@@ -2,7 +2,10 @@ import {NgModule} from '@angular/core';
 import {FuseSuggestionsComponent} from './suggestions.component';
 import {FuseSharedModule} from '../../../../../@fuse/shared.module';
 import {FuseWidgetModule} from '../../../../../@fuse/components';
-import {MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatRadioModule, MatSidenavModule} from '@angular/material';
+import {
+  MatButtonModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatRadioModule,
+  MatSidenavModule
+} from '@angular/material';
 
 
 @NgModule({
@@ -21,7 +24,8 @@ import {MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule,
     MatExpansionModule,
     MatSidenavModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   exports: [
     FuseSuggestionsComponent

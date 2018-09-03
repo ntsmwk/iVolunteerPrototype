@@ -47,14 +47,14 @@
 
     <!-- suggested projects -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="66">
+                 fxFlex="100" fxFlex.gt-sm="66" fusePerfectScrollbar>
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
           <div class="h1">Suggested Projects</div>
         </div>
 
-        <mat-accordion [multi]="true" fusePerfectScrollbar>
+        <mat-accordion [multi]="true">
           <mat-expansion-panel *ngFor="let project of projects.projects" class="fuse-card" fxFlex="100">
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -71,7 +71,7 @@
               </div>
             </div>
 
-            <div class="card-divider full-width"></div>
+            <mat-divider></mat-divider>
             <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
               <button mat-button color="accent">See Project Details</button>
             </div>
