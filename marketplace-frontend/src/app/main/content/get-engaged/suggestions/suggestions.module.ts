@@ -15,7 +15,7 @@ import {
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {FuseTruncatePipeModule} from '../../_pipe/truncate-pipe.module';
-import {FuseProjectTaskListModule} from '../../engagements/projects/sidenavs/project-task-list/project-task-list.module';
+import {FuseProjectTaskListModule} from '../../@shared/project-task-list/project-task-list.module';
 
 
 @NgModule({

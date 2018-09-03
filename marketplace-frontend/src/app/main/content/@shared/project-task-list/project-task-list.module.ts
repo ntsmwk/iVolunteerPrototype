@@ -5,8 +5,8 @@ import {FuseSharedModule} from '@fuse/shared.module';
 
 import {MatButtonModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressBarModule, MatSidenavModule} from '@angular/material';
 import {FuseProjectTaskListComponent} from './project-task-list.component';
-import {FuseTruncatePipeModule} from '../../../../_pipe/truncate-pipe.module';
-import {FuseWidgetModule} from '../../../../../../../@fuse/components';
+import {FuseTruncatePipeModule} from '../../_pipe/truncate-pipe.module';
+import {FuseWidgetModule} from '../../../../../@fuse/components/index';
 
 
 @NgModule({

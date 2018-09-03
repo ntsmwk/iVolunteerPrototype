@@ -84,12 +84,6 @@ const routes: Route[] = [
     path: 'main/task-templates/all',
     loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
     canActivate: [TokenGuard, EmployeeGuard]
-  },
-  {
-    path: 'main/competencies/:pageType',
-    loadChildren: './competencies/competencies.module#FuseCompetenceListModule',
-    canActivate: [TokenGuard],
-    runGuardsAndResolvers: 'always'
   }
 ];
 
