@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material';
-import {LoginService} from '../_service/login.service';
-import {TaskService} from '../_service/task.service';
-import {Task} from '../_model/task';
-import {Subscription} from 'rxjs';
-import {MessageService} from '../_service/message.service';
-import {Participant} from '../_model/participant';
-import {Marketplace} from '../_model/marketplace';
-import {CoreEmployeeService} from '../_service/core-employee.service';
-import {CoreMarketplaceService} from '../_service/core-marketplace.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material';
+import { LoginService } from '../_service/login.service';
+import { TaskService } from '../_service/task.service';
+import { Task } from '../_model/task';
+import { Subscription } from 'rxjs';
+import { MessageService } from '../_service/message.service';
+import { Participant } from '../_model/participant';
+import { Marketplace } from '../_model/marketplace';
+import { CoreEmployeeService } from '../_service/core-employee.service';
+import { CoreMarketplaceService } from '../_service/core-marketplace.service';
+import { Project } from '../_model/project';
 
 
 @Component({
@@ -26,12 +27,12 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
   allMarketplaces: Marketplace[];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private messageService: MessageService,
-              private loginService: LoginService,
-              private coreEmployeeService: CoreEmployeeService,
-              private coreMarketplaceService: CoreMarketplaceService,
-              private taskService: TaskService) {
+    private router: Router,
+    private messageService: MessageService,
+    private loginService: LoginService,
+    private coreEmployeeService: CoreEmployeeService,
+    private coreMarketplaceService: CoreMarketplaceService,
+    private taskService: TaskService) {
   }
 
   ngOnInit() {
@@ -51,39 +52,38 @@ export class FuseTaskListComponent implements OnInit, OnDestroy {
 
   loadTasks() {
     this.route.paramMap.subscribe(params => {
-        this.dataSource.data = [];
-        switch (params.get('pageType').toLowerCase()) {
-          case 'available': {
-            this.header = 'Available Tasks';
-            this.loadStatusTasks('available');
-            break;
-          }
-          case 'upcomming': {
-            this.header = 'Upcomming Tasks';
-            this.loadStatusTasks('upcomming');
-            break;
-          }
-          case 'running': {
-            this.header = 'Running Tasks';
-            this.loadStatusTasks('running');
-            break;
-          }
-          case 'finished': {
-            this.header = 'Finished Tasks';
-            this.loadStatusTasks('finished');
-            break;
-          }
-          case 'all': {
-            this.header = 'All Tasks';
-            this.loadAllTasks();
-            break;
-          }
-          default: {
-            throw new Error('Page type not supported');
-          }
+      this.dataSource.data = [];
+      switch (params.get('pageType').toLowerCase()) {
+        case 'available': {
+          this.header = 'Available Tasks';
+          this.loadStatusTasks('available');
+          break;
+        }
+        case 'upcomming': {
+          this.header = 'Upcomming Tasks';
+          this.loadStatusTasks('upcomming');
+          break;
+        }
+        case 'running': {
+          this.header = 'Running Tasks';
+          this.loadStatusTasks('running');
+          break;
+        }
+        case 'finished': {
+          this.header = 'Finished Tasks';
+          this.loadStatusTasks('finished');
+          break;
+        }
+        case 'all': {
+          this.header = 'All Tasks';
+          this.loadAllTasks();
+          break;
+        }
+        default: {
+          throw new Error('Page type not supported');
         }
       }
-    );
+    });
   }
 
   onRowSelect(task: Task) {
