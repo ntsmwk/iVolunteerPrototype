@@ -1,5 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {fuseAnimations} from '../../../../../@fuse/animations';
+import {LoginService} from '../../_service/login.service';
+import {Participant} from '../../_model/participant';
+import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
+import {CoreVolunteerService} from '../../_service/core-volunteer.service';
+import {Marketplace} from '../../_model/marketplace';
+import {Volunteer} from '../../_model/volunteer';
+import {MessageService} from '../../_service/message.service';
+import {ArrayService} from '../../_service/array.service';
 
 @Component({
   selector: 'fuse-suggestions',
@@ -11,17 +19,9 @@ import {fuseAnimations} from '../../../../../@fuse/animations';
 export class FuseSuggestionsComponent implements OnInit {
   radioOptions = 'test1';
 
-  marketplaces = {
-    'suggested': [
-      {'name': 'Marketplace 1', 'description': 'Description of Marketplace 1'},
-      {'name': 'Marketplace 2', 'description': 'Description of Marketplace 2'},
-      {'name': 'Marketplace 3', 'description': 'Description of Marketplace 3'},
-      {'name': 'Marketplace 4', 'description': 'Description of Marketplace 4'}
-
-    ]
-  };
-
-  projects = {
+  private volunteer: Participant;
+  public marketplaces = new Array<Marketplace>();
+  public projects = {
     'projects': [
       {
         'name': 'Project 1',
@@ -43,10 +43,35 @@ export class FuseSuggestionsComponent implements OnInit {
     ]
   };
 
-  constructor() {
+  constructor(private arrayService: ArrayService,
+              private loginService: LoginService,
+              private messageService: MessageService,
+              private marketplaceService: CoreMarketplaceService,
+              private volunteerService: CoreVolunteerService) {
   }
 
   ngOnInit() {
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.volunteer = participant as Volunteer;
+      this.loadSuggestedMarketplaces();
+    });
+  }
+
+  private loadSuggestedMarketplaces() {
+    Promise.all([
+      this.marketplaceService.findAll().toPromise(),
+      this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+    ]).then((values: any[]) => {
+      this.marketplaces = this.arrayService.removeAll(values[0], values[1]);
+      console.log(this.marketplaces);
+    });
+  }
+
+  registerMarketplace(marketplace) {
+    this.volunteerService.registerMarketplace(this.volunteer.id, marketplace.id).toPromise().then(() => {
+      this.loadSuggestedMarketplaces();
+      this.messageService.broadcast('marketplaceRegistration', {});
+    });
   }
 
 }
