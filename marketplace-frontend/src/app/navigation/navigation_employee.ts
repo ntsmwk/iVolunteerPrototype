@@ -1,11 +1,5 @@
 export const navigation_employee = [
   {
-    'id': 'dashboard',
-    'title': 'Dashboard',
-    'type': 'item',
-    'url': '/main/dashboard'
-  },
-  {
     'id': 'projects',
     'title': 'Projects',
     'type': 'collapse',
