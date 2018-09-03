@@ -65,8 +65,6 @@
       <!-- / HEADER BOTTOM -->
     </div>
 
-    <!-- ADD EVENT BUTTON -->
-    <!-- / ADD EVENT BUTTON -->
   </div>
   <!-- / HEADER -->
 
@@ -80,9 +78,7 @@
         [refresh]="refresh"
         [activeDayIsOpen]="activeDayIsOpen"
         (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="editEvent('edit', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-        (beforeViewRender)="beforeMonthViewRender($event)">
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-month-view>
       <mwl-calendar-week-view
         *ngSwitchCase="'week'"
@@ -91,7 +87,6 @@
         [events]="events"
         [refresh]="refresh"
         (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="editEvent('edit', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-week-view>
       <mwl-calendar-day-view
@@ -101,10 +96,8 @@
         [events]="events"
         [refresh]="refresh"
         (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="editEvent('edit', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-day-view>
     </div>
   </div>
-  <!-- / CONTENT -->
 </div>
