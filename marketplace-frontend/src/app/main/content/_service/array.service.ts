@@ -14,4 +14,11 @@ export class ArrayService {
     return !isNullOrUndefined(values.find((value) => value.id === current.id));
   }
 
+  removeAll(all: any[], removeables: any[]): any[] {
+    removeables.forEach((removeable: any) => {
+      all = all.filter((current: any) => current.id !== removeable.id);
+    });
+    return all;
+  }
+
 }

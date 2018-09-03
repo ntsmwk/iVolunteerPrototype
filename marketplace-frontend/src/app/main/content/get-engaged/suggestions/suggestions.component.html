@@ -1,24 +1,20 @@
-<div id="suggestion" class="page-layout blank p-24" fusePerfectScrollbar>
+<div id="suggestion" class="page-layout blank p-12" fusePerfectScrollbar>
 
   <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
 
     <!-- suggested marketplaces -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="33">
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="33">
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
           <div class="h1">Suggested Marketplaces</div>
         </div>
 
-
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
-             *ngFor="let marketplace of marketplaces.suggested">
+             *ngFor="let marketplace of marketplaces">
           <div>
             <div class="h3">{{marketplace.name}}</div>
-            <div>
-              <span class="secondary-text">{{marketplace.description}}</span>
-            </div>
           </div>
 
           <div>
@@ -26,28 +22,22 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item (click)="registerMarketplace(marketplace)">
                 <span>Join</span>
               </button>
               <button mat-menu-item>
                 <span>Details</span>
               </button>
-              <button mat-menu-item>
-                <span>Don't show anymore</span>
-              </button>
             </mat-menu>
           </div>
-
         </div>
-
-
       </div>
     </fuse-widget>
     <!-- suggested marketplaces end -->
 
     <!-- suggested projects -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="66" fusePerfectScrollbar>
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="67" fusePerfectScrollbar>
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
