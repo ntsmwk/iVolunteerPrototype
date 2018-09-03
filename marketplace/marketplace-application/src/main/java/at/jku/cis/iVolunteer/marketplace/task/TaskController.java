@@ -25,6 +25,7 @@ import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.model.project.Project;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
@@ -51,30 +52,30 @@ public class TaskController {
 	private LoginService loginService;
 
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId) {
-		if (StringUtils.isEmpty(projectId)) {
-			return taskMapper.toDTOs(taskRepository.findAll());
+	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+			@RequestParam(value = "participantId", required = false) String participantId) {
+		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
+			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
-		return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
+		if (!StringUtils.isEmpty(projectId) && StringUtils.isEmpty(participantId)) {
+			Project project = projectRepository.findOne(projectId);
+			return taskMapper.toDTOs(taskRepository.findByProject(project));
+		}
+		
+		return taskMapper.toDTOs(taskRepository.findAll());
+	}
 
+	public List<Task> findByVolunteer(Volunteer volunteer) {
+		Set<Task> tasks = new HashSet<Task>();
+		for (TaskInteraction ti : taskInteractionRepository.findByParticipant(volunteer)) {
+			tasks.add(ti.getTask());
+		}
+		return new ArrayList<>(tasks);
 	}
 
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {
 		return taskMapper.toDTO(taskRepository.findOne(id));
-	}
-
-	@GetMapping("/task/volunteer/{id}")
-	public List<TaskDTO> findByVolunteer(@PathVariable("id") String id) {
-
-		Volunteer volunteer = volunteerRepository.findOne(id);
-
-		Set<Task> tasks = new HashSet<Task>();
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
-		for (TaskInteraction ti : taskInteractions) {
-			tasks.add(ti.getTask());
-		}
-		return taskMapper.toDTOs(new ArrayList<>(tasks));
 	}
 
 	@PostMapping("/task")
@@ -112,48 +113,5 @@ public class TaskController {
 	@DeleteMapping("/task/{id}")
 	public void deleteTask(@PathVariable("id") String id) {
 		taskRepository.delete(id);
-	}
-
-	@GetMapping("/task/volunteer/{id}/{state}")
-	public List<TaskDTO> findByVolunteerAndState(@PathVariable("id") String id, @PathVariable("state") String state) {
-		Volunteer volunteer = volunteerRepository.findOne(id);
-
-		Set<Task> tasks = new HashSet<Task>();
-
-		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByParticipant(volunteer);
-		List<Task> allPublished = taskRepository.findByStatus(TaskStatus.PUBLISHED);
-
-		for (TaskInteraction ti : taskInteractions) {
-			Task t = ti.getTask();
-
-			switch (state) {
-			case "available":
-				allPublished.remove(t);
-				break;
-			case "upcomming":
-				if (t.getStatus().equals(TaskStatus.PUBLISHED)) {
-					tasks.add(t);
-				}
-				break;
-			case "running":
-				if (t.getStatus().equals(TaskStatus.RUNNING)) {
-					tasks.add(t);
-				}
-				break;
-			case "finished":
-				if (t.getStatus().equals(TaskStatus.FINISHED)) {
-					tasks.add(t);
-				}
-				break;
-			}
-		}
-
-		if (state.equals("available")) {
-			return taskMapper.toDTOs(allPublished);
-
-		} else {
-			return taskMapper.toDTOs(new ArrayList<>(tasks));
-
-		}
 	}
 }

@@ -1,11 +1,21 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+
+import {Task} from '../_model/task';
+import {Volunteer} from '../_model/volunteer';
+
+import {LoginService} from '../_service/login.service';
+import {TaskService} from '../_service/task.service';
+import {Marketplace} from '../_model/marketplace';
+import {isArray} from 'util';
+import {CoreVolunteerService} from '../_service/core-volunteer.service';
 
 @Component({
   selector: 'fuse-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class FuseDashboardComponent {
+export class FuseDashboardComponent implements OnInit {
+
   timeline = {
     activities: [
       {
@@ -154,10 +164,40 @@ export class FuseDashboardComponent {
           'preview': 'assets/badges/badge3+text.png'
         },
       }
-    ]
+    ],
+    tasks: []
   };
 
+  private marketplaces: Marketplace[] = [];
 
-  constructor() {
+  constructor(private loginService: LoginService,
+              private taskService: TaskService,
+              private volunteerService: CoreVolunteerService) {
+  }
+
+  ngOnInit() {
+    this.timeline.tasks = new Array<Task>();
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+      const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
+      if (!isArray(selected_marketplaces)) {
+        return;
+      }
+      this.volunteerService.findRegisteredMarketplaces(volunteer.id)
+        .toPromise()
+        .then((marketplaces: Marketplace[]) => {
+          marketplaces
+            .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
+            .forEach(marketplace => {
+              this.marketplaces = this.marketplaces.concat(marketplace);
+              this.taskService.findByParticipant(marketplace, volunteer)
+                .toPromise()
+                .then((tasks: Array<Task>) => this.timeline.tasks = this.timeline.tasks.concat(tasks));
+            });
+        });
+    });
+  }
+
+  getMarketplaceName(task: Task) {
+    return this.marketplaces.filter(marketplace => marketplace.id === task.marketplaceId)[0].name;
   }
 }

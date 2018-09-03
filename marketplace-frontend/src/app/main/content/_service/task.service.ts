@@ -6,13 +6,12 @@ import {isNullOrUndefined} from 'util';
 
 import {Task} from '../_model/task';
 import {Marketplace} from '../_model/marketplace';
+import {Participant} from '../_model/participant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-
-  private endpoint = 'task';
 
   constructor(private http: HttpClient) {
   }
@@ -25,12 +24,12 @@ export class TaskService {
     return this.http.get(`${marketplace.url}/task`);
   }
 
-  findAllByProjectId(marketplace: Marketplace, projectId: string) {
+  findByProjectId(marketplace: Marketplace, projectId: string) {
     return this.http.get(`${marketplace.url}/task?projectId=${projectId}`);
   }
 
-  findByParticipantAndState(marketplace: Marketplace, volunteerId: string, state: string) {
-    return this.http.get(`${marketplace.url}/task/volunteer/${volunteerId}/${state}`);
+  findByParticipant(marketplace: Marketplace, participant: Participant) {
+    return this.http.get(`${marketplace.url}/task?participantId=${participant.id}`);
   }
 
   save(marketplace: Marketplace, task: Task) {

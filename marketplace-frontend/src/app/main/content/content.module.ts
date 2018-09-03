@@ -21,7 +21,7 @@ const routes: Route[] = [
   {
     path: 'main/dashboard',
     loadChildren: './dashboard/dashboard.module#FuseDashboardModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/profile',
@@ -36,8 +36,7 @@ const routes: Route[] = [
   {
     path: 'main/achievements',
     loadChildren: './achievements/achievements.module#FuseAchievementsModule',
-    canActivate: [TokenGuard, VolunteerGuard],
-    runGuardsAndResolvers: 'always'
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/get-connected',
@@ -52,7 +51,7 @@ const routes: Route[] = [
   {
     path: 'main/task',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
-    canActivate: [TokenGuard]
+    canActivate: [TokenGuard, EmployeeGuard]
   },
   {
     path: 'main/task-form',
@@ -60,10 +59,9 @@ const routes: Route[] = [
     canActivate: [TokenGuard, EmployeeGuard]
   },
   {
-    path: 'main/tasks/:pageType',
+    path: 'main/tasks/all',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard],
-    runGuardsAndResolvers: 'always'
+    canActivate: [TokenGuard, EmployeeGuard]
   },
   {
     path: 'main/project-form',

@@ -26,7 +26,7 @@ export class FuseProjectTaskListComponent implements OnInit {
 
   ngOnInit() {
     this.marketplaceService.findById(this.marketplaceId).toPromise().then((marketplace: Marketplace) => {
-      this.taskService.findAllByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      this.taskService.findByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
     });
   }
 

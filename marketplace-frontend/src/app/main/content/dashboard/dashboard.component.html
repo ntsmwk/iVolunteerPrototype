@@ -9,7 +9,7 @@
 
   <div id="timeline" class="p-24" fxLayout="row wrap">
 
-    <div class="timeline-content" fxLayout="column" fxFlex="100" fxFlex.gt-sm="55" fxFlex.gt-md="65">
+    <div class="timeline-content" fxLayout="column" fxFlex="100" fxFlex.gt-md="67">
 
       <div class="profile-box add-post">
 
@@ -155,7 +155,29 @@
       </div>
     </div>
 
-    <div class="timeline-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-sm="45" fxFlex.gt-md="35">
+    <div class="timeline-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+
+      <div class="profile-box my-tasks" fxLayout="column">
+
+        <header class="mat-accent-bg-violett" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="title">My Tasks</div>
+        </header>
+
+        <div class="content" fxLayout="row wrap">
+          <div class="tasks">
+            <div class="task" fxLayout="row" fxLayoutAlign="start start"
+                 *ngFor="let task of timeline.tasks">
+              <div fxLayout="column">
+                <div>
+                  <span class="name">{{task.name}}</span>
+                  <span class="marketplace"> {{getMarketplaceName(task)}}</span>
+                </div>
+                <span class="time secondary-text">{{task.startDate | date: 'dd.MM.yyyy'}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="profile-box latest-activity" fxLayout="column">
 
