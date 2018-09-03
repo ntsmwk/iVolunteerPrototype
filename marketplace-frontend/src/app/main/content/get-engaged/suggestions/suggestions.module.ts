@@ -3,9 +3,19 @@ import {FuseSuggestionsComponent} from './suggestions.component';
 import {FuseSharedModule} from '../../../../../@fuse/shared.module';
 import {FuseWidgetModule} from '../../../../../@fuse/components';
 import {
-  MatButtonModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatRadioModule,
+  MatButtonModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatRadioModule,
   MatSidenavModule
 } from '@angular/material';
+import {RouterModule} from '@angular/router';
+import {FuseTruncatePipeModule} from '../../_pipe/truncate-pipe.module';
+import {FuseProjectTaskListModule} from '../../@shared/project-task-list/project-task-list.module';
 
 
 @NgModule({
@@ -14,9 +24,6 @@ import {
     FuseSuggestionsComponent
   ],
   imports: [
-    FuseSharedModule,
-    FuseWidgetModule,
-
     MatFormFieldModule,
     MatRadioModule,
     MatInputModule,
@@ -25,7 +32,12 @@ import {
     MatSidenavModule,
     MatDividerModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+
+    FuseProjectTaskListModule,
+    FuseSharedModule,
+    FuseTruncatePipeModule,
+    FuseWidgetModule
   ],
   exports: [
     FuseSuggestionsComponent

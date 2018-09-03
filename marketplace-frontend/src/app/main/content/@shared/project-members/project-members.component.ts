@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Participant} from '../../../../_model/participant';
-import {LoginService} from '../../../../_service/login.service';
+import {Participant} from '../../_model/participant';
+import {LoginService} from '../../_service/login.service';
 
 @Component({
   selector: 'fuse-project-members',

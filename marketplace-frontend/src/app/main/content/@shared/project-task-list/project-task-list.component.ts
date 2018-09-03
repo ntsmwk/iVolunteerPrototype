@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-import {Task} from '../../../../_model/task';
-import {Marketplace} from '../../../../_model/marketplace';
+import {Task} from '../../_model/task';
+import {Marketplace} from '../../_model/marketplace';
 
-import {TaskService} from '../../../../_service/task.service';
-import {CoreMarketplaceService} from '../../../../_service/core-marketplace.service';
+import {TaskService} from '../../_service/task.service';
+import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
 
 @Component({
   selector: 'fuse-project-task-list',

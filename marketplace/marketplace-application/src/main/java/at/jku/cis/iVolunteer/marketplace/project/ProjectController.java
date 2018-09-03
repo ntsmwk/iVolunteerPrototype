@@ -34,6 +34,7 @@ import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
 @RestController
 public class ProjectController {
 
+	private static final String AVAILABLE = "AVAILABLE";
 	private static final String ENGAGED = "ENGAGED";
 
 	@Value("${marketplace.identifier}")
@@ -52,11 +53,25 @@ public class ProjectController {
 
 	@GetMapping("/project")
 	public List<ProjectDTO> findAll(@RequestParam(value = "state", required = false) String state) {
+		if (StringUtils.equalsIgnoreCase(state, AVAILABLE)) {
+			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
+			return projectMapper.toDTOs(findAvailableProjectsByVolunteer(volunteer));
+		}
 		if (StringUtils.equalsIgnoreCase(state, ENGAGED)) {
 			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
 			return projectMapper.toDTOs(findEngagedProjectsByVolunteer(volunteer));
 		}
 		return projectMapper.toDTOs(projectRepository.findAll());
+	}
+
+	private List<Project> findAvailableProjectsByVolunteer(Volunteer volunteer) {
+		Set<Project> projects = new HashSet<>();
+
+		taskRepository.findByStatus(TaskStatus.PUBLISHED).forEach(task -> {
+			projects.add(task.getProject());
+		});
+
+		return new ArrayList<>(projects);
 	}
 
 	private List<Project> findEngagedProjectsByVolunteer(Volunteer volunteer) {
