@@ -51,9 +51,13 @@ public class TaskController {
 	private LoginService loginService;
 
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId) {
+	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly) {
 		if (StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findAll());
+		}
+		if (availableOnly) {
+			return taskMapper.toDTOs(taskRepository.findAvailableByProject(projectRepository.findOne(projectId)));
 		}
 		return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 

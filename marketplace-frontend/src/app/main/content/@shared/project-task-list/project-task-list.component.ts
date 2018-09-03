@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import {Task} from '../../_model/task';
-import {Marketplace} from '../../_model/marketplace';
+import { Task } from '../../_model/task';
+import { Marketplace } from '../../_model/marketplace';
 
-import {TaskService} from '../../_service/task.service';
-import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
+import { TaskService } from '../../_service/task.service';
+import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
 
 @Component({
   selector: 'fuse-project-task-list',
@@ -18,6 +18,8 @@ export class FuseProjectTaskListComponent implements OnInit {
   private projectId: string;
   @Input('marketplaceId')
   public marketplaceId: string;
+  @Input('availableOnly')
+  public availableOnly: boolean;
 
   public tasks: Array<Task>;
 
@@ -25,8 +27,14 @@ export class FuseProjectTaskListComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.error('availableOnly: ' + this.availableOnly);
     this.marketplaceService.findById(this.marketplaceId).toPromise().then((marketplace: Marketplace) => {
-      this.taskService.findAllByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      if (this.availableOnly === true) {
+        console.error('drin');
+        this.taskService.findAvailableByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      } else {
+        this.taskService.findAllByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+      }
     });
   }
 
