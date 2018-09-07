@@ -13,7 +13,8 @@ import {FuseProfileMarketplacesComponent} from './tabs/marketplaces/marketplaces
 import {FuseWidgetModule} from '../../../../@fuse/components';
 
 const routes = [
-  {path: '**', component: FuseProfileComponent}
+  {path: '', component: FuseProfileComponent},
+  {path: ':participantId', component: FuseProfileComponent}
 ];
 
 @NgModule({

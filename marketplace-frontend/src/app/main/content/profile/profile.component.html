@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your "I"</h1>
+    <h1>Your <span *ngIf="isMySelf()">"I"</span><span *ngIf="!isMySelf()">Profile</span></h1>
     <img class="header-icon" src="assets/icons/profile.svg">
   </div>
   <!-- / HEADER -->
@@ -23,13 +23,13 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Repository">
+      <mat-tab label="My Repository" *ngIf="isMySelf()">
         <ng-template matTabContent>
           <fuse-profile-repository></fuse-profile-repository>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Marketplaces">
+      <mat-tab label="My Marketplaces" *ngIf="isMySelf()">
         <ng-template matTabContent>
           <fuse-profile-marketplaces></fuse-profile-marketplaces>
         </ng-template>
