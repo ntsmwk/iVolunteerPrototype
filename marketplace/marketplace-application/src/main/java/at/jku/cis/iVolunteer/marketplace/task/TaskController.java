@@ -66,7 +66,7 @@ public class TaskController {
 		if (availableOnly) {
 			return taskMapper.toDTOs(taskRepository.findAvailableByProject(projectRepository.findOne(projectId)));
 		}
-		return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
+		return taskMapper.toDTOs(taskRepository.findAll());
 	}
 
 	public List<Task> findByVolunteer(Volunteer volunteer) {
