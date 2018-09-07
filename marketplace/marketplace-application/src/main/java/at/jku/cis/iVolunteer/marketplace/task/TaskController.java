@@ -66,8 +66,8 @@ public class TaskController {
 		if (!StringUtils.isEmpty(projectId) && availableOnly) {
 			return taskMapper.toDTOs(taskRepository.findAvailableByProject(projectRepository.findOne(projectId)));
 		}
-		if(!StringUtils.isEmpty(projectId)) {
-			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));	
+		if (!StringUtils.isEmpty(projectId)) {
+			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 		}
 		return taskMapper.toDTOs(taskRepository.findAll());
 	}
