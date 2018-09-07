@@ -58,15 +58,18 @@ public class TaskController {
 		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
-		if (!StringUtils.isEmpty(projectId) && StringUtils.isEmpty(participantId)) {
+		if (!StringUtils.isEmpty(projectId) && !availableOnly) {
 			Project project = projectRepository.findOne(projectId);
 			return taskMapper.toDTOs(taskRepository.findByProject(project));
 		}
 
-		if (availableOnly) {
+		if (!StringUtils.isEmpty(projectId) && availableOnly) {
 			return taskMapper.toDTOs(taskRepository.findAvailableByProject(projectRepository.findOne(projectId)));
 		}
-		return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
+		if(!StringUtils.isEmpty(projectId)) {
+			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));	
+		}
+		return taskMapper.toDTOs(taskRepository.findAll());
 	}
 
 	public List<Task> findByVolunteer(Volunteer volunteer) {
