@@ -75,7 +75,7 @@ export class FuseTaskDetailComponent implements OnInit {
   executeNextWorkflowStep(workflowStep: WorkflowStep) {
     this.workflowService.completeWorkflowStep(this.marketplace, this.task.workflowKey, this.workflowProcessId, workflowStep, this.participant.id).toPromise().then(() => {
       this.loadTask(this.marketplace.id, this.task.id);
-      //TODO broadcast for activity-timeline
+      this.messageService.broadcast('taskHistoryChanged', {});
     });
   }
 
