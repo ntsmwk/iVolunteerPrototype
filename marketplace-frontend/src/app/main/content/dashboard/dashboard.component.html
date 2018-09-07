@@ -169,10 +169,10 @@
                  *ngFor="let task of timeline.tasks">
               <div fxLayout="column">
                 <div>
+                  <span class="time">{{task.startDate | date: 'dd.MM.yyyy'}}</span>
                   <span class="name">{{task.name}}</span>
                   <span class="marketplace"> {{getMarketplaceName(task)}}</span>
                 </div>
-                <span class="time secondary-text">{{task.startDate | date: 'dd.MM.yyyy'}}</span>
               </div>
             </div>
           </div>

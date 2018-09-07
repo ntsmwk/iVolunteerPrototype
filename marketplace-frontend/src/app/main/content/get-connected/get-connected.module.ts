@@ -7,11 +7,11 @@ import {FuseWidgetModule} from '../../../../@fuse/components';
 import {MatButtonModule, MatIconModule, MatTabsModule} from '@angular/material';
 
 const routes: Routes = [
-  {path: '', component: FuseGetConnectedComponent}
+  {path: '', component: FuseGetConnectedComponent},
+  {path: 'profile', loadChildren: '../profile/profile.module#FuseProfileModule'}
 ];
 
 @NgModule({
-
   declarations: [
     FuseGetConnectedComponent
   ],

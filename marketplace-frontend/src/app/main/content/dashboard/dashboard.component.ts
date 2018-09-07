@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Task} from '../_model/task';
 import {Volunteer} from '../_model/volunteer';
@@ -8,15 +8,17 @@ import {TaskService} from '../_service/task.service';
 import {Marketplace} from '../_model/marketplace';
 import {isArray} from 'util';
 import {CoreVolunteerService} from '../_service/core-volunteer.service';
+import {MessageService} from '../_service/message.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'fuse-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class FuseDashboardComponent implements OnInit {
+export class FuseDashboardComponent implements OnInit, OnDestroy {
 
-  timeline = {
+  public timeline = {
     activities: [
       {
         'user': {
@@ -169,13 +171,20 @@ export class FuseDashboardComponent implements OnInit {
   };
 
   private marketplaces: Marketplace[] = [];
+  private marketplaceChangeSubscription: Subscription;
 
-  constructor(private loginService: LoginService,
+  constructor(private messageService: MessageService,
+              private loginService: LoginService,
               private taskService: TaskService,
               private volunteerService: CoreVolunteerService) {
   }
 
   ngOnInit() {
+    this.loadTasks();
+    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadTasks.bind(this));
+  }
+
+  private loadTasks() {
     this.timeline.tasks = new Array<Task>();
     this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
@@ -195,6 +204,10 @@ export class FuseDashboardComponent implements OnInit {
             });
         });
     });
+  }
+
+  ngOnDestroy() {
+    this.marketplaceChangeSubscription.unsubscribe();
   }
 
   getMarketplaceName(task: Task) {
