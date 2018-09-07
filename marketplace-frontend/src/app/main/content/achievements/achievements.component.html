@@ -23,7 +23,7 @@
     </fuse-widget>
     <!-- line chart end -->
 
-    <!-- Hard facts -->
+    <!-- Important stats -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
                  fxFlex="100" fxFlex.gt-sm="30">
 
@@ -60,7 +60,7 @@
 
 
     </fuse-widget>
-    <!-- / Hard facts -->
+    <!-- / Important stats -->
 
 
   </div>
@@ -179,7 +179,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let friend of about.friends">
-            <td><img [src]="friend.avatar"></td>
+            <td><img style="max-width: 100px;" [src]="friend.avatar"></td>
             <td> {{friend.name}}</td>
             <td class="text-right"> {{friend.number}}</td>
             <td class="text-right"> {{friend.hours}}</td>

@@ -3,6 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGetConnectedComponent} from './get-connected.component';
+import {FuseWidgetModule} from '../../../../@fuse/components';
+import {MatButtonModule, MatIconModule, MatTabsModule} from '@angular/material';
 
 const routes: Routes = [
   {path: '', component: FuseGetConnectedComponent}
@@ -15,7 +17,10 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-
+    MatTabsModule,
+    MatButtonModule,
+    MatIconModule,
+    FuseWidgetModule,
     FuseSharedModule
   ]
 })
