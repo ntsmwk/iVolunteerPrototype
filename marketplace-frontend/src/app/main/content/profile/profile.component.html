@@ -13,7 +13,7 @@
 
       <mat-tab label="About me">
         <ng-template matTabContent>
-          <fuse-profile-about></fuse-profile-about>
+          <fuse-profile-about [participant]="participant"></fuse-profile-about>
         </ng-template>
       </mat-tab>
 
@@ -29,9 +29,9 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Marketplaces" *ngIf="isMySelf()">
+      <mat-tab label="My Marketplaces">
         <ng-template matTabContent>
-          <fuse-profile-marketplaces></fuse-profile-marketplaces>
+          <fuse-profile-marketplaces [participant]="participant"></fuse-profile-marketplaces>
         </ng-template>
       </mat-tab>
 

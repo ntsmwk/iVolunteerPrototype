@@ -11,7 +11,7 @@ import {LoginService} from '../../_service/login.service';
 export class FuseProjectMembersComponent implements OnInit {
 
   friends = [
-    {'name': 'Me', 'avatar': undefined, 'hours': '20.8', 'resources': undefined},
+    {'name': 'Me', 'avatar': undefined, 'hours': '20.8'},
     {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg', 'hours': '12.4', 'resources': 'Strawberry Cake (2x)'},
     {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/carl.jpg', 'hours': '6.2', 'resources': 'Apple Pie (1x)'}
   ];

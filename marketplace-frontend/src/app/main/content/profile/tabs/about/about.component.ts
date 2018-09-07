@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Participant} from '../../../_model/participant';
+import {isNullOrUndefined} from 'util';
 
 
 @Component({
@@ -7,29 +9,22 @@ import {Component} from '@angular/core';
   styleUrls: ['./about.component.scss']
 })
 export class FuseProfileAboutComponent {
+  @Input('participant')
+  public participant: Participant;
 
-  about = {
+  public about = {
     'general': {
       'gender': 'Female',
       'birthday': 'May 8th, 1988',
-      'locations': [
-        'Istanbul, Turkey',
-        'New York, USA'
-      ],
-      'about': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget pharetra felis, sed ullamcorper dui. Sed et elementum neque. Vestibulum pellente viverra ultrices. Etiam justo augue, vehicula ac gravida a, interdum sit amet nisl. Integer vitae nisi id nibh dictum mollis in vitae tortor.'
+      'locations': ['Istanbul, Turkey', 'New York, USA'],
+      'about': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget pharetra felis, sed ullamcorper dui.'
     },
     'work': {
       'occupation': 'Developer',
       'skills': 'C#, PHP, Javascript, Angular, JS, HTML, CSS',
       'jobs': [
-        {
-          'company': 'Self-Employed',
-          'date': '2010 - Now'
-        },
-        {
-          'company': 'Google',
-          'date': '2008 - 2010'
-        }
+        {'company': 'Self-Employed', 'date': '2010 - Now'},
+        {'company': 'Google', 'date': '2008 - 2010'}
       ]
     },
     'contact': {
@@ -41,6 +36,13 @@ export class FuseProfileAboutComponent {
   };
 
   constructor() {
+  }
+
+  getAvatarUrl() {
+    if (isNullOrUndefined(this.participant)) {
+      return `assets/images/avatars/profile.jpg`;
+    }
+    return `assets/images/avatars/${this.participant.username}.jpg`;
   }
 
 }
