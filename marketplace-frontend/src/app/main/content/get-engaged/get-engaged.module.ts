@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGetEngagedComponent} from './get-engaged.component';
 import {MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatTabsModule} from '@angular/material';
 import {FuseWidgetModule} from '../../../../@fuse/components';
 import {FuseSuggestionsModule} from './suggestions/suggestions.module';
 import {FusePreferencesModule} from './preferences/preferences.module';
+import { FuseSharedModule } from '../../../../@fuse/shared.module';
 
 const routes: Routes = [
   {path: '', component: FuseGetEngagedComponent},

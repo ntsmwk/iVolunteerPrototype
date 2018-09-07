@@ -25,8 +25,7 @@
           </mat-form-field>
 
           <mat-form-field>
-            <textarea matInput placeholder="Description" [readonly]="true" [value]="task.description"
-                      rows="10"></textarea>
+            <textarea matInput placeholder="Description" [readonly]="true" [value]="task.description" rows="10"></textarea>
           </mat-form-field>
 
           <mat-form-field>
@@ -59,9 +58,8 @@
         </div>
 
         <div>
-          <button *ngFor="let workflowStep of workflowStepsDefault" (click)="executeNextWorkflowStep(workflowStep)"
-                  mat-raised-button
-                  color="primary">
+          <button *ngFor="let workflowStep of workflowStepsDefault" (click)="executeNextWorkflowStep(workflowStep)" mat-raised-button
+            color="primary">
             {{workflowStep.label}}
           </button>
         </div>
@@ -71,8 +69,8 @@
         <!-- Custom Workflow Step Implementation -->
 
         <div *ngIf="workflowStepsAssignment.length > 0">
-          <app-task-assign [workflowStepsAssignment]="workflowStepsAssignment" [participant]="participant" [task]="task"
-                           [workflowProcessId]="workflowProcessId" [marketplace]="marketplace"></app-task-assign>
+          <app-task-assign [workflowStepsAssignment]="workflowStepsAssignment" [participant]="participant" [task]="task" [workflowProcessId]="workflowProcessId"
+            [marketplace]="marketplace"></app-task-assign>
         </div>
 
         <!-- End Custom Workflow Step Implementation -->
@@ -83,8 +81,8 @@
     <!-- / CONTENT -->
 
     <!-- SIDENAV -->
-    <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
-                 fuseMatSidenavHelper="task-detail-right-sidenav" mat-is-locked-open="gt-md">
+    <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side" fuseMatSidenavHelper="task-detail-right-sidenav"
+      mat-is-locked-open="gt-md">
       <fuse-task-timeline></fuse-task-timeline>
     </mat-sidenav>
     <!-- / SIDENAV -->
