@@ -22,29 +22,22 @@
 
           <div *ngFor="let project of about.workedWith">
             <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
-              <div class="project-title">
+              <div class="workedWith-title">
                 {{project.project}}
-                <span style="font-size: 16px;">({{project.date}})</span>
+                <span style="font-size:16px; color:gray;">({{project.date}})</span>
               </div>
               <div>
-                <button mat-icon-button aria-label="Project Details">
+                <button mat-icon-button title="Project Details">
                   <mat-icon>more_vert</mat-icon>
                 </button>
               </div>
             </div>
 
-
-            <table class="simple clickable">
-              <tbody>
-              <tr *ngFor="let vol of project.volunteers" [routerLink]="'/main/get-connected/profile/1'">
-                <td><img style="max-width: 75px;" [src]="vol.avatar"></td>
-                <td> {{vol.name}}</td>
-              </tr>
-              </tbody>
-            </table>
-
-            <mat-divider></mat-divider>
-
+            <div class="workedWith-data" fxLayout="row">
+              <div *ngFor="let vol of project.volunteers" [routerLink]="'/main/get-connected/profile/1'">
+                <img class="avatar big cursor" [title]="vol.name" [src]="vol.avatar">
+              </div>
+            </div>
 
           </div>
 
@@ -59,17 +52,23 @@
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
-            <mat-tab-group mat-stretch-tabs>
 
-              <mat-tab class="h1" label="Following">
-                <div>You are following</div>
+            <mat-tab-group>
+              <mat-tab label="Following">
+                <div class="follow" fxLayout="row">
+                  <div *ngFor="let friend of friends.following" [routerLink]="'/main/get-connected/profile/1'">
+                    <img class="avatar big" [title]="friend.name" [src]="friend.avatar">
+                  </div>
+                </div>
               </mat-tab>
 
-              <mat-tab class="h1" label="Follower">
-                <div>Your Follower</div>
-
+              <mat-tab label="Follower">
+                <div class="follow" fxLayout="row" fxLayoutAlign="">
+                  <div *ngFor="let friend of friends.follower" [routerLink]="'/main/get-connected/profile/1'">
+                    <img class="avatar big" [title]="friend.name" [src]="friend.avatar">
+                  </div>
+                </div>
               </mat-tab>
-
 
             </mat-tab-group>
 
@@ -82,7 +81,7 @@
     <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
       <!-- Groups -->
       <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                   fxFlex="100" fxFlex.gt-sm="100">
+                   fxFlex="83">
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
@@ -99,10 +98,50 @@
 
           <mat-tab-group dynamicHeight="true">
 
-            <mat-tab label="Your Groups">
+            <mat-tab label="Discover">
+              <div *ngFor="let group of groups.discover">
+                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
+                  <div>
+                    <img class="avatar" [src]="group.icon">
+                  </div>
+                  <div class="group-data" fxLayout="column" fxLayoutAlign="">
+                    <div class="group-name">{{group.name}}</div>
+                    <div fxLayout="row">
+                      <div class="group-follower">{{group.follower}} Follower</div>
+                      <div class="group-member">{{group.member}} Member</div>
+                    </div>
+                  </div>
+
+                  <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+                    <button mat-raised-button color="primary">Join</button>
+                    <button mat-raised-button color="primary">Hide</button>
+                  </div>
+
+                </div>
+              </div>
             </mat-tab>
 
-            <mat-tab label="Discover">
+            <mat-tab label="Your Groups">
+              <div *ngFor="let group of groups.yourGroups">
+                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
+                  <div>
+                    <img class="avatar" [src]="group.icon">
+                  </div>
+                  <div class="group-data" fxLayout="column" fxLayoutAlign="">
+                    <div class="group-name">{{group.name}}</div>
+                    <div fxLayout="row">
+                      <div class="group-follower">{{group.follower}} Follower</div>
+                      <div class="group-member">{{group.member}} Member</div>
+                    </div>
+                  </div>
+
+                  <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+                    <button mat-raised-button color="primary">Leave</button>
+                    <button mat-raised-button color="primary">Favorize</button>
+                  </div>
+
+                </div>
+              </div>
             </mat-tab>
 
 
