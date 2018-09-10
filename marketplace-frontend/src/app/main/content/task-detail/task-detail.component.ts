@@ -45,7 +45,6 @@ export class FuseTaskDetailComponent implements OnInit {
     });
   }
 
-
   private loadTask(marketplaceId: string, taskId: string) {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;

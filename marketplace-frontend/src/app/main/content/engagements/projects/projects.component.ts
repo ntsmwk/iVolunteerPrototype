@@ -1,13 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoginService} from '../../_service/login.service';
-import {Participant} from '../../_model/participant';
-import {Marketplace} from '../../_model/marketplace';
-import {CoreVolunteerService} from '../../_service/core-volunteer.service';
-import {ProjectService} from '../../_service/project.service';
-import {Project} from '../../_model/project';
-import {MessageService} from '../../_service/message.service';
-import {Subscription} from 'rxjs';
-import {isArray} from 'util';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LoginService } from '../../_service/login.service';
+import { Participant } from '../../_model/participant';
+import { Marketplace } from '../../_model/marketplace';
+import { CoreVolunteerService } from '../../_service/core-volunteer.service';
+import { ProjectService } from '../../_service/project.service';
+import { Project } from '../../_model/project';
+import { MessageService } from '../../_service/message.service';
+import { Subscription } from 'rxjs';
+import { isArray } from 'util';
 
 @Component({
   selector: 'fuse-projects',
@@ -20,9 +20,9 @@ export class FuseProjectsComponent implements OnInit, OnDestroy {
   private marketplaceChangeSubscription: Subscription;
 
   constructor(private loginService: LoginService,
-              private messageService: MessageService,
-              private projectService: ProjectService,
-              private coreVolunteerService: CoreVolunteerService) {
+    private messageService: MessageService,
+    private projectService: ProjectService,
+    private coreVolunteerService: CoreVolunteerService) {
   }
 
   ngOnInit() {
