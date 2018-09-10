@@ -17,19 +17,19 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Friends">
+      <mat-tab label="Your Friends">
         <ng-template matTabContent>
           <fuse-profile-friends></fuse-profile-friends>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Repository" *ngIf="isMySelf()">
+      <mat-tab label="Your Repository" *ngIf="isMySelf()">
         <ng-template matTabContent>
           <fuse-profile-repository></fuse-profile-repository>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Marketplaces">
+      <mat-tab label="Your Marketplaces">
         <ng-template matTabContent>
           <fuse-profile-marketplaces [participant]="participant"></fuse-profile-marketplaces>
         </ng-template>
