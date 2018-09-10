@@ -63,7 +63,7 @@
     flex: 1 auto;
   }
 
-  .project-title {
+  .workedWith-title {
     font-size: 24px;
 
   }
@@ -72,7 +72,59 @@
     padding-top: 15px;
   }
 
+  .workedWith-data {
+    margin-left: 15px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   td {
     padding: 8px 8px;
+  }
+
+  .group-name {
+    font-size: 20px;
+  }
+  .group-follower, .group-member {
+    margin-left: 10px;
+    color: grey;
+  }
+  .mat-raised-button {
+    margin-right: 20px;
+  }
+
+  .follow {
+    margin-left: 15px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+
+  .actions {
+    margin-left: auto;
+  }
+
+  .cursor {
+    cursor: pointer;
+  }
+
+  div.layout1 {
+    ::ng-deep {
+      .mat-tab-labels {
+        margin-top: -6px;
+      }
+      .mat-tab-label {
+        font-size: 24px;
+        font-weight: normal;
+        color: black;
+      }
+    }
+
+
   }
 }
