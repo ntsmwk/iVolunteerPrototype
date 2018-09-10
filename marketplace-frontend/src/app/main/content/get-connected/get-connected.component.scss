@@ -113,5 +113,18 @@
     cursor: pointer;
   }
 
-  
+  div.layout1 {
+    ::ng-deep {
+      .mat-tab-labels {
+        margin-top: -6px;
+      }
+      .mat-tab-label {
+        font-size: 24px;
+        font-weight: normal;
+        color: black;
+      }
+    }
+
+
+  }
 }

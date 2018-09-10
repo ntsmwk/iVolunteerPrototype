@@ -63,7 +63,7 @@
               </mat-tab>
 
               <mat-tab label="Follower">
-                <div class="follow" fxLayout="row" fxLayoutAlign="">
+                <div class="follow" fxLayout="row">
                   <div *ngFor="let friend of friends.follower" [routerLink]="'/main/get-connected/profile/1'">
                     <img class="avatar big" [title]="friend.name" [src]="friend.avatar">
                   </div>
@@ -137,7 +137,6 @@
 
                   <div class="actions" fxLayout="row" fxLayoutAlign="end center">
                     <button mat-raised-button color="primary">Leave</button>
-                    <button mat-raised-button color="primary">Favorize</button>
                   </div>
 
                 </div>
