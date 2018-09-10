@@ -13,12 +13,42 @@
 
       <!-- worked with -->
       <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                   fxFlex.gt-sm="50" fusePerfectScrollbar>
+                   fxFlex.gt-sm="33" fusePerfectScrollbar>
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
             <div class="h1">Worked With</div>
           </div>
+
+          <div *ngFor="let project of about.workedWith">
+            <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
+              <div class="project-title">
+                {{project.project}}
+                <span style="font-size: 16px;">({{project.date}})</span>
+              </div>
+              <div>
+                <button mat-icon-button aria-label="Project Details">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </div>
+            </div>
+
+
+            <table class="simple clickable">
+              <tbody>
+              <tr *ngFor="let vol of project.volunteers" [routerLink]="'/main/get-connected/profile/1'">
+                <td><img style="max-width: 75px;" [src]="vol.avatar"></td>
+                <td> {{vol.name}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+            <mat-divider></mat-divider>
+
+
+          </div>
+
+
         </div>
       </fuse-widget>
       <!-- worked with end -->
@@ -61,7 +91,7 @@
               <div>
                 <button mat-raised-button color="accent" class="newGroup-button">
                   <mat-icon>playlist_add</mat-icon>
-                    New Group
+                  New Group
                 </button>
               </div>
             </div>
