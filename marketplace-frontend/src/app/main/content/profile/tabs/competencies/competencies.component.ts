@@ -20,11 +20,13 @@ import { Observable, of } from 'rxjs';
 import { MatTableDataSource } from '@angular/material';
 import { DataSource } from '@angular/cdk/table';
 import { Competence } from '../../../_model/competence';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'fuse-profile-competencies',
   templateUrl: './competencies.component.html',
   styleUrls: ['./competencies.component.scss'],
+  providers: [DatePipe],
   animations: fuseAnimations
 })
 export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
@@ -34,7 +36,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   dataSource: MatDataSource;
 
   columns = [
-    { columnDef: 'name', columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
+    { columnDef: 'name', marketplace: null, columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
   ];
   displayedColumns: any[];
 
@@ -56,6 +58,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
     private coreVolunteerService: CoreVolunteerService,
+    private datePipe: DatePipe,
     private volunteerProfileService: VolunteerProfileService,
     private volunteerRepositoryService: VolunteerRepositoryService) {
 
@@ -72,9 +75,11 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
         return;
       }
 
+      this.columns.push({ columnDef: 'timestamp',  marketplace: null, columnType: 'text', header: 'Timestamp', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
+      
       selected_marketplaces.forEach((mp: Marketplace) => {
-        this.columns.push({ columnDef: mp.id, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
-      })
+        this.columns.push({ columnDef: mp.id, marketplace: mp, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
+      });
 
 
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
@@ -150,87 +155,33 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     this.combinedCompetencies = this.privateProfile.competenceList;
     this.publicProfiles.forEach((p,id) => {
       this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
-    })
+    });
 
     this.dataSource = new MatDataSource(this.combinedCompetencies);
     this.displayedColumns = this.columns.map(x => x.columnDef);
   }
 
-  // containsTaskInPublic(taskEntry: TaskEntry) {
-  //   return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.taskList, taskEntry);
-  // }
-  // 
-  // containsTaskInPrivate(taskEntry: TaskEntry) {
-  //   return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.taskList, taskEntry);
-  // }
+  publishCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
+    this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
+      alert('Competence is published to marketplace.');
+      // this.publicProfile.competenceList.push(competenceEntry);
+    });
+  }
 
-  // containsCompetenceInPublic(competenceEntry: CompetenceEntry) {
-  //   return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.competenceList, competenceEntry);
-  // }
-  // this.publicProfiles.forEach(pp => {
-  //   pp.competenceList.forEach( c => {
-  //     if(this.dataSource.find(row => row.competenceId === c.competenceId)){
-  //       this.dataSource[]
-  //     }
-  //   })
-  // })
+  revokeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
+    this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
+      alert('Competence is revoked from marketplace.');
+      // this.publicProfile.competenceList = this.publicProfile.competenceList
+      //   .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
+    });
+  }
 
-  // if (isNullOrUndefined(this.publicProfiles)) {
-  //   return;
-  // }
-  // if (isNullOrUndefined(this.privateProfile) && !isNullOrUndefined(this.publicProfiles)) {
-  //   this.handlePublicProfiles();
-  // } else {
-  //   this.handlePublicProfiles();
-  //   this.commonProfile.competenceList = this.arrayService.concat(this.privateProfile.competenceList, this.commonProfile.competenceList);
-  // }
-  // console.error(this.commonProfile);
-  // containsCompetenceInPrivate(competenceEntry: CompetenceEntry) {
-  //   return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.competenceList, competenceEntry);
-  // }
-
-  // shareTask(taskEntry: TaskEntry) {
-  //   this.volunteerProfileService.shareTaskByVolunteer(this.volunteer, taskEntry, this.marketplaces[0].url).toPromise().then(() => {
-  //     alert('Task is published to marketplace.');
-  //     this.publicProfile.taskList.push(taskEntry);
-  //   });
-  // }
-
-  // revokeTask(taskEntry: TaskEntry) {
-  //   this.volunteerProfileService.revokeTaskByVolunteer(this.volunteer, taskEntry, this.marketplaces[0].url).toPromise().then(() => {
-  //     alert('Task is revoked from marketplace.');
-  //     this.publicProfile.taskList = this.publicProfile.taskList.filter((task: TaskEntry) => task.id !== taskEntry.id);
-  //   });
-  // }
-
-  // synchronizeTask(taskEntry: TaskEntry) {
-  //   this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => {
-  //     alert('Task is synchronized to local repository.');
-  //     this.privateProfile.taskList.push(taskEntry);
-  //   });
-  // }
-
-  // shareCompetence(competenceEntry: CompetenceEntry) {
-  //   this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry, this.marketplaces[0].url).toPromise().then(() => {
-  //     alert('Competence is published to marketplace.');
-  //     this.publicProfile.competenceList.push(competenceEntry);
-  //   });
-  // }
-
-  // revokeCompetence(competenceEntry: CompetenceEntry) {
-  //   this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry, this.marketplaces[0].url).toPromise().then(() => {
-  //     alert('Competence is revoked from marketplace.');
-  //     this.publicProfile.competenceList = this.publicProfile.competenceList
-  //       .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
-  //   });
-  // }
-
-  // synchronizeCompetence(competenceEntry: CompetenceEntry) {
-  //   this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
-  //     alert('Competence is synchronized to local repository.');
-  //     this.privateProfile.competenceList.push(competenceEntry);
-  //   });
-  // }
+  synchronizeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
+    this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
+      alert('Competence is synchronized to local repository.');
+      // this.privateProfile.competenceList.push(competenceEntry);
+    });
+  }
 
 }
 
