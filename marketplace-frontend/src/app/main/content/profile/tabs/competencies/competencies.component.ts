@@ -34,11 +34,13 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   dataSource: MatDataSource;
 
   columns = [
-    { columnDef: 'name', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
+    { columnDef: 'name', columnType:'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
   ];
   displayedColumns: any[];
 
   competencies: CompetenceEntry[] = [];
+  combinedCompetencies: CompetenceEntry[] = [];
+
 
   private volunteer: Volunteer;
   private publicProfiles: VolunteerProfile[] = [];
@@ -71,19 +73,19 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       }
 
       selected_marketplaces.forEach((mp: Marketplace)=> {
-        this.columns.push({columnDef: mp.id, header: mp.name, cell: (row: CompetenceEntry) => `...` })
+        this.columns.push({columnDef: mp.id, columnType:'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
       })
 
 
-      // this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
-      //   .toPromise()
-      //   .then((marketplaces: Marketplace[]) => {
-      //     marketplaces
-      //       .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
-      //       .forEach(mp => {
-      //         this.loadPublicVolunteerProfile(this.volunteer, mp);
-      //       });
-      //   });
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
+        .toPromise()
+        .then((marketplaces: Marketplace[]) => {
+          marketplaces
+            .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
+            .forEach(mp => {
+              this.loadPublicVolunteerProfile(this.volunteer, mp);
+            });
+        });
 
       this.volunteerRepositoryService.findByVolunteer(volunteer)
         .toPromise()
@@ -92,6 +94,13 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
           this.onLoadingComplete();
         });
     });
+  }
+
+  handleCompetenceMarketplace(marketplace: Marketplace, competenceEntry: CompetenceEntry): string{
+    if(this.privateProfile.competenceList.find(c => c.competenceId == competenceEntry.competenceId)){
+      return 'REVOKE'
+    }
+    return 'SYNC';
   }
 
   ngAfterViewInit() {
@@ -121,6 +130,10 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   private onLoadingComplete() {
+    this.combinedCompetencies = this.privateProfile.competenceList;
+    this.publicProfiles.forEach(p => {
+      this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
+    })
 
     this.dataSource = new MatDataSource(this.privateProfile.competenceList);
     this.displayedColumns = this.columns.map(x => x.columnDef);
