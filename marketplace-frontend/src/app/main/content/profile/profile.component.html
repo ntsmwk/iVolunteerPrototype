@@ -23,9 +23,16 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Your Repository" *ngIf="isMySelf()">
+      <mat-tab label="Your Competencies" *ngIf="isMySelf()">
         <ng-template matTabContent>
-          <fuse-profile-repository></fuse-profile-repository>
+          <fuse-profile-competencies></fuse-profile-competencies>
+        </ng-template>
+      </mat-tab>
+
+
+      <mat-tab label="Your Finished Tasks" *ngIf="isMySelf()">
+        <ng-template matTabContent>
+          <!-- <fuse-profile-repository></fuse-profile-repository> -->
         </ng-template>
       </mat-tab>
 

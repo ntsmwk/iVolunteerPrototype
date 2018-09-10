@@ -1,0 +1,97 @@
+<div id="about" class="p-24" fxLayout="row wrap">
+
+  <div class="repository-content" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <mat-table #table [dataSource]="dataSource">
+
+      <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef">
+        <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>
+        <mat-cell *cdkCellDef="let row">{{ column.cell(row) }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </mat-table>
+
+    <!-- <div *ngIf="commonProfile">
+      <div>
+        <h4>Competence List</h4>
+        <mat-list role="list">
+          <mat-list-item role="listitem"
+                         *ngFor="let competenceEntry of commonProfile.competenceList">
+            <img mat-list-icon src="../../../../../../assets/thumb.svg">
+            <h5 mat-line>
+              <strong>{{competenceEntry.competenceName}}</strong>
+              <span>gained at {{competenceEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
+            </h5>
+            <div mat-line class="actions">
+              <button class="action-button"
+                      *ngIf="containsCompetenceInPrivate(competenceEntry) && !containsCompetenceInPublic(competenceEntry)"
+                      (click)="shareCompetence(competenceEntry)" mat-raised-button color="primary">Publish
+              </button>
+              <button class="action-button"
+                      *ngIf="containsCompetenceInPrivate(competenceEntry) && containsCompetenceInPublic(competenceEntry)"
+                      (click)="revokeCompetence(competenceEntry)" mat-raised-button color="primary">Revoke
+              </button>
+              <button class="action-button"
+                      *ngIf="!containsCompetenceInPrivate(competenceEntry) && containsCompetenceInPublic(competenceEntry)"
+                      (click)="synchronizeCompetence(competenceEntry)" mat-raised-button color="primary">
+                Synchronize
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div> -->
+
+    <!--<mat-divider></mat-divider>
+    
+      <div>
+        <h4>Task List</h4>
+        <mat-list role="list">
+          <mat-list-item role="listitem" *ngFor="let taskEntry of commonProfile.taskList">
+            <img mat-list-icon src="../../../../../../assets/assignment.svg">
+            <h5 mat-line>
+              <strong>{{taskEntry.taskName}}</strong>
+              <span>finished at {{taskEntry.timestamp | date: 'dd.MM.yyyy HH:mm'}}</span>
+            </h5>
+            <p mat-line>{{taskEntry.taskDescription}}</p>
+            <div mat-line class="actions">
+              <button class="action-button"
+                      *ngIf="containsTaskInPrivate(taskEntry) && !containsTaskInPublic(taskEntry)"
+                      (click)="shareTask(taskEntry)" mat-raised-button color="primary">Publish
+              </button>
+              <button class="action-button"
+                      *ngIf="containsTaskInPrivate(taskEntry) && containsTaskInPublic(taskEntry)"
+                      (click)="revokeTask(taskEntry)" mat-raised-button color="primary">Revoke
+              </button>
+              <button class="action-button"
+                      *ngIf="!containsTaskInPrivate(taskEntry) && containsTaskInPublic(taskEntry)"
+                      (click)="synchronizeTask(taskEntry)" mat-raised-button color="primary">
+                Synchronize
+              </button>
+            </div>
+    
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div> -->
+
+    <!-- chart -->
+    <!-- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="100">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h1">Your competence/skill distribution</div>
+        </div>
+        <div class="px-16 py-8" fxLayout="row" fxLayoutAlign="space-between center">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </fuse-widget> -->
+    <!-- chart end -->
+
+  </div>
+</div>

@@ -1,16 +1,18 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
-import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@angular/material';
+import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule, MatListModule, MatTableModule} from '@angular/material';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {FuseProfileComponent} from './profile.component';
 import {FuseProfileAboutComponent} from './tabs/about/about.component';
 import {FuseProfileFriendsComponent} from './tabs/friends/friends.component';
-import {FuseProfileRepositoryComponent} from './tabs/repository/repository.component';
 import {FuseProfileMarketplacesComponent} from './tabs/marketplaces/marketplaces.component';
 import {FuseWidgetModule} from '../../../../@fuse/components';
+import { FuseProfileCompetenciesComponent } from './tabs/competencies/competencies.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CommonModule } from '@angular/common';
 
 const routes = [
   {path: '', component: FuseProfileComponent},
@@ -23,16 +25,19 @@ const routes = [
     FuseProfileAboutComponent,
     FuseProfileFriendsComponent,
     FuseProfileMarketplacesComponent,
-    FuseProfileRepositoryComponent
+    FuseProfileCompetenciesComponent
   ],
   imports: [
     RouterModule.forChild(routes),
-
+    CdkTableModule,
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
     MatTabsModule,
-
+    MatListModule,
+    MatTableModule,
+    CommonModule,
+    
     FuseWidgetModule,
     FuseSharedModule
   ]
