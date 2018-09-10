@@ -6,8 +6,9 @@
 
     .profile {
       .name {
-        color: #fff;
+        color: gray;
         font-size: 34px;
+        padding-left: 5px;
       }
 
     }
@@ -46,14 +47,17 @@
     header,
     .header {
       padding: 16px;
-      background-color: #FFDA44 !important;
+      //background-color: #FFDA44 !important;
+      background-color: #ffefb4 !important;
 
       .title {
         font-size: 17px;
+        color: gray;
       }
 
       .more {
         cursor: pointer;
+        color: gray;
       }
     }
 

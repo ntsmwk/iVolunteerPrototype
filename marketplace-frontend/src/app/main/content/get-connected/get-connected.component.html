@@ -57,7 +57,7 @@
               <mat-tab label="Following">
                 <div class="follow" fxLayout="row">
                   <div *ngFor="let friend of friends.following" [routerLink]="'/main/get-connected/profile/1'">
-                    <img class="avatar big" [title]="friend.name" [src]="friend.avatar">
+                    <img class="avatar big cursor" [title]="friend.name" [src]="friend.avatar">
                   </div>
                 </div>
               </mat-tab>
@@ -65,7 +65,7 @@
               <mat-tab label="Follower">
                 <div class="follow" fxLayout="row">
                   <div *ngFor="let friend of friends.follower" [routerLink]="'/main/get-connected/profile/1'">
-                    <img class="avatar big" [title]="friend.name" [src]="friend.avatar">
+                    <img class="avatar big cursor" [title]="friend.name" [src]="friend.avatar">
                   </div>
                 </div>
               </mat-tab>
