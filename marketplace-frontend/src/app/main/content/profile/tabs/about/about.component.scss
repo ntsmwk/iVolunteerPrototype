@@ -4,6 +4,14 @@
 
   .about-content {
 
+    .profile {
+      .name {
+        color: #fff;
+        font-size: 34px;
+      }
+
+    }
+
     .general {
 
       .location {
@@ -35,7 +43,8 @@
     margin-bottom: 16px;
     @include mat-elevation(2);
 
-    header {
+    header,
+    .header {
       padding: 16px;
       background-color: #FFDA44 !important;
 
@@ -80,4 +89,5 @@
       }
     }
   }
+
 }
