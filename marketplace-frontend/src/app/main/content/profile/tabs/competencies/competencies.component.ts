@@ -5,7 +5,7 @@ import { Volunteer } from '../../../_model/volunteer';
 import { VolunteerProfile, CompetenceTableRow } from '../../../_model/volunteer-profile';
 import { VolunteerProfileService } from '../../../_service/volunteer-profile.service';
 import { VolunteerRepositoryService } from '../../../_service/volunteer-repository.service';
-import { isNullOrUndefined, isArray } from 'util';
+import { isNullOrUndefined, isArray, error } from 'util';
 import { TaskEntry } from '../../../_model/task-entry';
 import { CompetenceEntry } from '../../../_model/competence-entry';
 import { LoginService } from '../../../_service/login.service';
@@ -34,7 +34,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   dataSource: MatDataSource;
 
   columns = [
-    { columnDef: 'name', columnType:'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
+    { columnDef: 'name', columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
   ];
   displayedColumns: any[];
 
@@ -43,7 +43,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
 
   private volunteer: Volunteer;
-  private publicProfiles: VolunteerProfile[] = [];
+  private publicProfiles: Map<string, VolunteerProfile> = new Map();
   private privateProfile: VolunteerProfile;
 
   public commonProfile: VolunteerProfile;
@@ -72,8 +72,8 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      selected_marketplaces.forEach((mp: Marketplace)=> {
-        this.columns.push({columnDef: mp.id, columnType:'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
+      selected_marketplaces.forEach((mp: Marketplace) => {
+        this.columns.push({ columnDef: mp.id, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
       })
 
 
@@ -96,11 +96,28 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  handleCompetenceMarketplace(marketplace: Marketplace, competenceEntry: CompetenceEntry): string{
-    if(this.privateProfile.competenceList.find(c => c.competenceId == competenceEntry.competenceId)){
+  handleCompetenceMarketplace(marketplace: Marketplace, competenceEntry: CompetenceEntry): string {
+
+    if (this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
       return 'REVOKE'
+    } else if (!this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
+      return 'SYNC';
+    } else if (this.privateProfileContains(competenceEntry) && !this.publicProfileContains(competenceEntry, marketplace)) {
+      return 'PUBLISH';
     }
-    return 'SYNC';
+    throw new error('please reload page...');
+    return '';
+  }
+
+  private privateProfileContains(competenceEntry: CompetenceEntry): boolean {
+    return this.privateProfile.competenceList.find(c => c.competenceId == competenceEntry.competenceId) != null;
+  }
+
+  private publicProfileContains(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
+    if(this.publicProfiles.has(marketplace.id)){
+      return this.publicProfiles.get(marketplace.id).competenceList.find(c => c.competenceId == competenceEntry.competenceId);
+    }
+    return false;
   }
 
   ngAfterViewInit() {
@@ -124,49 +141,20 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     return this.volunteerProfileService.findByVolunteer(volunteer, marketplace.url)
       .toPromise()
       .then((volunteerProfile: VolunteerProfile) => {
-        this.publicProfiles.push(volunteerProfile);
+        this.publicProfiles.set(marketplace.id, volunteerProfile);
         this.onLoadingComplete();
       });
   }
 
   private onLoadingComplete() {
     this.combinedCompetencies = this.privateProfile.competenceList;
-    this.publicProfiles.forEach(p => {
+    this.publicProfiles.forEach((p,id) => {
       this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
     })
 
-    this.dataSource = new MatDataSource(this.privateProfile.competenceList);
+    this.dataSource = new MatDataSource(this.combinedCompetencies);
     this.displayedColumns = this.columns.map(x => x.columnDef);
-
-    // this.publicProfiles.forEach(pp => {
-    //   pp.competenceList.forEach( c => {
-    //     if(this.dataSource.find(row => row.competenceId === c.competenceId)){
-    //       this.dataSource[]
-    //     }
-    //   })
-    // })
-
-    // if (isNullOrUndefined(this.publicProfiles)) {
-    //   return;
-    // }
-    // if (isNullOrUndefined(this.privateProfile) && !isNullOrUndefined(this.publicProfiles)) {
-    //   this.handlePublicProfiles();
-    // } else {
-    //   this.handlePublicProfiles();
-    //   this.commonProfile.competenceList = this.arrayService.concat(this.privateProfile.competenceList, this.commonProfile.competenceList);
-    // }
-    // console.error(this.commonProfile);
   }
-
-  // private handlePublicProfiles() {
-  //   if (!this.commonProfile.competenceList) {
-  //     this.commonProfile.competenceList = [];
-  //   }
-  //   this.publicProfiles.forEach(p => {
-  //     this.commonProfile.competenceList = this.arrayService.concat(this.commonProfile.competenceList, p.competenceList);
-  //   });
-  // }
-
 
   // containsTaskInPublic(taskEntry: TaskEntry) {
   //   return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.taskList, taskEntry);
@@ -179,7 +167,24 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   // containsCompetenceInPublic(competenceEntry: CompetenceEntry) {
   //   return !isNullOrUndefined(this.publicProfile) && this.arrayService.contains(this.publicProfile.competenceList, competenceEntry);
   // }
+  // this.publicProfiles.forEach(pp => {
+  //   pp.competenceList.forEach( c => {
+  //     if(this.dataSource.find(row => row.competenceId === c.competenceId)){
+  //       this.dataSource[]
+  //     }
+  //   })
+  // })
 
+  // if (isNullOrUndefined(this.publicProfiles)) {
+  //   return;
+  // }
+  // if (isNullOrUndefined(this.privateProfile) && !isNullOrUndefined(this.publicProfiles)) {
+  //   this.handlePublicProfiles();
+  // } else {
+  //   this.handlePublicProfiles();
+  //   this.commonProfile.competenceList = this.arrayService.concat(this.privateProfile.competenceList, this.commonProfile.competenceList);
+  // }
+  // console.error(this.commonProfile);
   // containsCompetenceInPrivate(competenceEntry: CompetenceEntry) {
   //   return !isNullOrUndefined(this.privateProfile) && this.arrayService.contains(this.privateProfile.competenceList, competenceEntry);
   // }

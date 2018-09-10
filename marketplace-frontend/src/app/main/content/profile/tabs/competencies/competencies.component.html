@@ -8,7 +8,11 @@
         <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>
         <mat-cell *cdkCellDef="let row">
 
-          <button class="action-button" *ngIf="column.columnType == 'function'" mat-raised-button color="primary">True
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'SYNC'" mat-raised-button color="primary">Sync
+          </button>
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'PUBLISH'" mat-raised-button color="primary">Publish
+          </button>
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'REVOKE'" mat-raised-button color="primary">Revoke
           </button>
           <div *ngIf="column.columnType == 'text'">
             {{ column.cell(row) }}
