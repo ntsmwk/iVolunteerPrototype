@@ -1,68 +1,85 @@
 <div id="about" class="p-24" fxLayout="row wrap">
 
-  <div class="about-content" style="display: inherit;">
-
-    <div class="profile-box info-box general" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"
-         style="margin-right: 10px">
-      <header class="mat-accent-bg">
-        <div class="title">General Information</div>
-      </header>
-
-      <div class="content">
-        <div class="info-line">
-          <div class="title">Gender</div>
-          <div class="info">{{about.general.gender}}</div>
-        </div>
-
-        <div class="info-line">
-          <div class="title">Birthday</div>
-          <div class="info">{{about.general.birthday}}</div>
-        </div>
-
-        <div class="info-line">
-          <div class="title">Locations</div>
-          <div class="info location" fxLayout="row" fxLayoutAlign="start center"
-               *ngFor="let location of about.general.locations">
-            <span>{{location}}</span>
-            <mat-icon class="s-16 ml-4">location_on</mat-icon>
+  <div class="about-content">
+    <div fxLayout="row wrap" fxLayoutAlign="center">
+      <div class="profile-box info-box profile" fxFlex="100">
+        <div class="header p-24 mat-accent-bg" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center center"
+             fxLayoutAlign.gt-sm="space-between end">
+          <div class="user-info" fxlayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center center"
+               fxLayoutAlign.gt-sm="start center">
+            <img class="avatar huge" [src]="getAvatarUrl()">
+            <div class="name" *ngIf="participant">{{participant.username}}</div>
           </div>
-        </div>
-
-        <div class="info-line">
-          <div class="title">About Me</div>
-          <div class="info">{{about.general.about}}</div>
+          <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+            <button mat-raised-button aria-label="Follow" color="accent" class="mr-12">Follow</button>
+            <button mat-raised-button aria-label="Send Message" color="primary">Send Message</button>
+          </div>
         </div>
       </div>
-
     </div>
 
-    <div class="profile-box info-box contact" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+    <div fxLayout="row wrap" fxLayoutAlign="center">
 
-      <header class="mat-accent-bg">
-        <div class="title">Contact</div>
-      </header>
+      <div class="profile-box info-box general" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+        <header class="mat-accent-bg">
+          <div class="title">General Information</div>
+        </header>
 
-      <div class="content">
-        <div class="info-line">
-          <div class="title">Address</div>
-          <div class="info">{{about.contact.address}}</div>
-        </div>
-        <div class="info-line">
-          <div class="title">Tel.</div>
-          <div class="info" *ngFor="let tel of about.contact.tel">
-            <span>{{tel}}</span>
+        <div class="content">
+          <div class="info-line">
+            <div class="title">Gender</div>
+            <div class="info">{{about.general.gender}}</div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">Birthday</div>
+            <div class="info">{{about.general.birthday}}</div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">Locations</div>
+            <div class="info location" fxLayout="row" fxLayoutAlign="start center"
+                 *ngFor="let location of about.general.locations">
+              <span>{{location}}</span>
+              <mat-icon class="s-16 ml-4">location_on</mat-icon>
+            </div>
+          </div>
+
+          <div class="info-line">
+            <div class="title">About Me</div>
+            <div class="info">{{about.general.about}}</div>
           </div>
         </div>
-        <div class="info-line">
-          <div class="title">Website</div>
-          <div class="info" *ngFor="let website of about.contact.websites">
-            <span>{{website}}</span>
+
+      </div>
+
+      <div class="profile-box info-box contact" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+        <header class="mat-accent-bg">
+          <div class="title">Contact</div>
+        </header>
+
+        <div class="content">
+          <div class="info-line">
+            <div class="title">Address</div>
+            <div class="info">{{about.contact.address}}</div>
           </div>
-        </div>
-        <div class="info-line">
-          <div class="title">Emails</div>
-          <div class="info" *ngFor="let email of about.contact.emails">
-            <span>{{email}}</span>
+          <div class="info-line">
+            <div class="title">Tel.</div>
+            <div class="info" *ngFor="let tel of about.contact.tel">
+              <span>{{tel}}</span>
+            </div>
+          </div>
+          <div class="info-line">
+            <div class="title">Website</div>
+            <div class="info" *ngFor="let website of about.contact.websites">
+              <span>{{website}}</span>
+            </div>
+          </div>
+          <div class="info-line">
+            <div class="title">Emails</div>
+            <div class="info" *ngFor="let email of about.contact.emails">
+              <span>{{email}}</span>
+            </div>
           </div>
         </div>
       </div>

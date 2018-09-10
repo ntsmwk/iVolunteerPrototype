@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your "I"</h1>
+    <h1>Your <span *ngIf="isMySelf()">"I"</span><span *ngIf="!isMySelf()">Profile</span></h1>
     <img class="header-icon" src="assets/icons/profile.svg">
   </div>
   <!-- / HEADER -->
@@ -13,7 +13,7 @@
 
       <mat-tab label="About me">
         <ng-template matTabContent>
-          <fuse-profile-about></fuse-profile-about>
+          <fuse-profile-about [participant]="participant"></fuse-profile-about>
         </ng-template>
       </mat-tab>
 
@@ -23,22 +23,22 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Your Competencies">
+      <mat-tab label="Your Competencies" *ngIf="isMySelf()">
         <ng-template matTabContent>
-          <fuse-profile-repository></fuse-profile-repository>
+          <fuse-profile-competencies></fuse-profile-competencies>
         </ng-template>
       </mat-tab>
 
 
-      <mat-tab label="Your Finished Tasks">
+      <mat-tab label="Your Finished Tasks" *ngIf="isMySelf()">
         <ng-template matTabContent>
-          <fuse-profile-repository></fuse-profile-repository>
+          <!-- <fuse-profile-repository></fuse-profile-repository> -->
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="My Marketplaces">
+      <mat-tab label="Your Marketplaces">
         <ng-template matTabContent>
-          <fuse-profile-marketplaces></fuse-profile-marketplaces>
+          <fuse-profile-marketplaces [participant]="participant"></fuse-profile-marketplaces>
         </ng-template>
       </mat-tab>
 

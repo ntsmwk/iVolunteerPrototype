@@ -5,11 +5,11 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGetConnectedComponent} from './get-connected.component';
 
 const routes: Routes = [
-  {path: '', component: FuseGetConnectedComponent}
+  {path: '', component: FuseGetConnectedComponent},
+  {path: 'profile', loadChildren: '../profile/profile.module#FuseProfileModule'}
 ];
 
 @NgModule({
-
   declarations: [
     FuseGetConnectedComponent
   ],
