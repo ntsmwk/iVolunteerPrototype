@@ -68,19 +68,17 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     this.commonProfile = new VolunteerProfile();
     this.commonProfile.competenceList = [];
 
+    this.columns.push({ columnDef: 'timestamp', marketplace: null, columnType: 'text', header: 'Timestamp', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
+
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
       this.volunteer = volunteer;
       if (!isArray(selected_marketplaces)) {
         return;
       }
-
-      this.columns.push({ columnDef: 'timestamp',  marketplace: null, columnType: 'text', header: 'Timestamp', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
-      
       selected_marketplaces.forEach((mp: Marketplace) => {
         this.columns.push({ columnDef: mp.id, marketplace: mp, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
       });
-
 
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
         .toPromise()
@@ -119,7 +117,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   private publicProfileContains(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
-    if(this.publicProfiles.has(marketplace.id)){
+    if (this.publicProfiles.has(marketplace.id)) {
       return this.publicProfiles.get(marketplace.id).competenceList.find(c => c.competenceId == competenceEntry.competenceId);
     }
     return false;
@@ -153,7 +151,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
   private onLoadingComplete() {
     this.combinedCompetencies = this.privateProfile.competenceList;
-    this.publicProfiles.forEach((p,id) => {
+    this.publicProfiles.forEach((p, id) => {
       this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
     });
 
