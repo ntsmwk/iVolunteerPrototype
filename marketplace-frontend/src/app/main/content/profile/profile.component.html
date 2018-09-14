@@ -17,26 +17,26 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Your Friends">
+      <mat-tab label="Friends">
         <ng-template matTabContent>
           <fuse-profile-friends></fuse-profile-friends>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Your Competencies" *ngIf="isMySelf()">
+      <mat-tab label="Competencies" *ngIf="isMySelf()">
         <ng-template matTabContent>
           <fuse-profile-competencies></fuse-profile-competencies>
         </ng-template>
       </mat-tab>
 
 
-      <mat-tab label="Your Finished Tasks" *ngIf="isMySelf()">
+      <mat-tab label="Finished Tasks" *ngIf="isMySelf()">
         <ng-template matTabContent>
           <!-- <fuse-profile-repository></fuse-profile-repository> -->
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Your Marketplaces">
+      <mat-tab label="Marketplaces">
         <ng-template matTabContent>
           <fuse-profile-marketplaces [participant]="participant"></fuse-profile-marketplaces>
         </ng-template>
