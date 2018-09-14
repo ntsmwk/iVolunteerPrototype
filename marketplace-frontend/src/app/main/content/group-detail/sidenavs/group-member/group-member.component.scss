@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  height: 100%;
+
+  > .content {
+    flex: 1;
+  }
+  .content {
+    border-radius: 0 !important;
+
+    table.simple {
+      tbody tr td,
+      tbody tr th {
+        padding: 10px;
+      }
+
+      img {
+        min-width: 50px;
+        max-width: 50px;
+      }
+    }
+  }
+}

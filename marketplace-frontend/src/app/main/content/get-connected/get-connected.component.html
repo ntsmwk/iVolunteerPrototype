@@ -13,7 +13,7 @@
 
       <!-- worked with -->
       <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                   fxFlex.gt-sm="33" fusePerfectScrollbar>
+                   fxFlex.gt-sm="50" fusePerfectScrollbar>
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
@@ -81,7 +81,7 @@
     <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
       <!-- Groups -->
       <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                   fxFlex="83">
+                   fxFlex="100">
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
@@ -102,7 +102,8 @@
               <div *ngFor="let group of groups.discover">
                 <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
                   <div>
-                    <img class="avatar" [src]="group.icon">
+                    <img class="avatar" [src]="group.icon"
+                         style="cursor: pointer" routerLink="/main/get-connected/group/ad4e47e80b80e9ba">
                   </div>
                   <div class="group-data" fxLayout="column" fxLayoutAlign="">
                     <div class="group-name">{{group.name}}</div>
@@ -125,7 +126,8 @@
               <div *ngFor="let group of groups.yourGroups">
                 <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
                   <div>
-                    <img class="avatar" [src]="group.icon">
+                    <img class="avatar" [src]="group.icon"
+                         style="cursor: pointer" routerLink="/main/get-connected/group/a9f04fec753a4577">
                   </div>
                   <div class="group-data" fxLayout="column" fxLayoutAlign="">
                     <div class="group-name">{{group.name}}</div>

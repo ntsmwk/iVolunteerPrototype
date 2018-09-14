@@ -1,0 +1,33 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Group</h1>
+  </div>
+
+  <mat-sidenav-container>
+
+    <!-- CENTER -->
+    <div class="center">
+
+      <!-- HEADER -->
+      <div class="header p-24 mat-accent-bg" fxHide fxLayout="column" fxLayoutAlign="space-between start">
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT -->
+      <div class="content p-24 mat-white-bg" fusePerfectScrollbar style="min-height: 600px">
+      </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+    <!-- SIDENAV -->
+    <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
+                 fuseMatSidenavHelper="task-detail-right-sidenav"
+                 mat-is-locked-open="gt-md">
+      <fuse-group-member></fuse-group-member>
+    </mat-sidenav>
+    <!-- / SIDENAV -->
+  </mat-sidenav-container>
+</div>
+
