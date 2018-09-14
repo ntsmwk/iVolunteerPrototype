@@ -13,7 +13,7 @@
 
       <mat-tab label="About me">
         <ng-template matTabContent>
-          <fuse-profile-about [participant]="participant"></fuse-profile-about>
+          <fuse-profile-about [participant]="participant" [enableFollow]="!isMySelf()"></fuse-profile-about>
         </ng-template>
       </mat-tab>
 

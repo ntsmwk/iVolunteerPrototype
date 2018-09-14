@@ -9,6 +9,9 @@ import {isNullOrUndefined} from 'util';
   styleUrls: ['./about.component.scss']
 })
 export class FuseProfileAboutComponent {
+  @Input('enableFollow')
+  public enableFollow: boolean;
+
   @Input('participant')
   public participant: Participant;
 
