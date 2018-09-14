@@ -1,26 +1,21 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { fuseAnimations } from '../../../../../../@fuse/animations';
-import * as Chart from 'chart.js';
-import { Volunteer } from '../../../_model/volunteer';
-import { VolunteerProfile, CompetenceTableRow } from '../../../_model/volunteer-profile';
-import { VolunteerProfileService } from '../../../_service/volunteer-profile.service';
-import { VolunteerRepositoryService } from '../../../_service/volunteer-repository.service';
-import { isNullOrUndefined, isArray, error } from 'util';
-import { TaskEntry } from '../../../_model/task-entry';
-import { CompetenceEntry } from '../../../_model/competence-entry';
-import { LoginService } from '../../../_service/login.service';
-import { ArrayService } from '../../../_service/array.service';
-import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
-import { ActivatedRoute } from '@angular/router';
-import { Marketplace } from '../../../_model/marketplace';
-import { Participant } from '../../../_model/participant';
-import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
-import { isEmpty } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { MatTableDataSource } from '@angular/material';
-import { DataSource } from '@angular/cdk/table';
-import { Competence } from '../../../_model/competence';
-import { DatePipe } from '@angular/common';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {fuseAnimations} from '../../../../../../@fuse/animations';
+import {Volunteer} from '../../../_model/volunteer';
+import {VolunteerProfile} from '../../../_model/volunteer-profile';
+import {VolunteerProfileService} from '../../../_service/volunteer-profile.service';
+import {VolunteerRepositoryService} from '../../../_service/volunteer-repository.service';
+import {error, isArray} from 'util';
+import {CompetenceEntry} from '../../../_model/competence-entry';
+import {LoginService} from '../../../_service/login.service';
+import {ArrayService} from '../../../_service/array.service';
+import {CoreMarketplaceService} from '../../../_service/core-marketplace.service';
+import {ActivatedRoute} from '@angular/router';
+import {Marketplace} from '../../../_model/marketplace';
+import {Participant} from '../../../_model/participant';
+import {CoreVolunteerService} from '../../../_service/core-volunteer.service';
+import {Observable, of} from 'rxjs';
+import {DataSource} from '@angular/cdk/table';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'fuse-profile-competencies',
@@ -102,14 +97,13 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   handleCompetenceMarketplace(marketplace: Marketplace, competenceEntry: CompetenceEntry): string {
 
     if (this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
-      return 'REVOKE'
+      return 'REVOKE';
     } else if (!this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
       return 'SYNC';
     } else if (this.privateProfileContains(competenceEntry) && !this.publicProfileContains(competenceEntry, marketplace)) {
       return 'PUBLISH';
     }
     throw new error('please reload page...');
-    return '';
   }
 
   private privateProfileContains(competenceEntry: CompetenceEntry): boolean {
