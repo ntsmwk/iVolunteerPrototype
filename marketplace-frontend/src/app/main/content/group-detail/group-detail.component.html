@@ -1,7 +1,7 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Group</h1>
+    <h1>Thiem Austria</h1>
   </div>
 
   <mat-sidenav-container>
@@ -16,8 +16,89 @@
 
       <!-- CONTENT -->
       <div class="content p-24 mat-white-bg" fusePerfectScrollbar style="min-height: 600px">
-      </div>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+          dolore, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+          erat.</p>
+        <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu
+          feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
+          zzril.</p>
 
+
+        <div class="timeline-content" fxLayout="column" fxFlex="100">
+          <div class="add-post">
+            <div class="form">
+              <textarea placeholder="Write something.."></textarea>
+              <footer fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                  <button mat-icon-button aria-label="Add photo" matTooltip="Add Photo">
+                    <mat-icon>photo</mat-icon>
+                  </button>
+                  <button mat-icon-button aria-label="Mention somebody" matTooltip="Mention somebody">
+                    <mat-icon>person</mat-icon>
+                  </button>
+                  <button mat-icon-button aria-label="Add location" matTooltip="Add location">
+                    <mat-icon>location_on</mat-icon>
+                  </button>
+                </div>
+                <button mat-raised-button color="accent" class="post-button" aria-label="POST">POST</button>
+              </footer>
+            </div>
+          </div>
+
+
+          <div class="timeline-item" *ngFor="let post of group.posts">
+
+            <header fxLayout="row" fxLayoutAlign="space-between start">
+              <div class="user" fxLayout="row" fxLayoutAlign="start center">
+                <img class="avatar" [src]="post.user.avatar">
+
+                <div fxLayout="column">
+                  <div class="title">
+                    <span class="username">{{post.user.name}}</span>
+                    <span *ngIf="post.type === 'post'">posted on your timeline</span>
+                    <span *ngIf="post.type === 'badge'">earned something new</span>
+                    <span *ngIf="post.type === 'invitation'">invited you</span>
+                    <span *ngIf="post.type === 'something'">shared something with you</span>
+                    <span *ngIf="post.type === 'article'">shared an article with you</span>
+                  </div>
+                  <div class="time">{{post.time}}</div>
+                </div>
+              </div>
+
+              <button mat-icon-button aria-label="More">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </header>
+
+            <div class="content">
+              <div *ngIf="post.message" class="message">
+                {{post.message}}
+              </div>
+
+              <div *ngIf="post.type === 'invitation'" style="padding-left: 15px; padding-bottom: 15px;">
+                <button mat-raised-button color="accent" class="invite-button">Join Marketplace
+                </button>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-button class="like-button">
+                        <span fxLayout="row" fxLayoutAlign="start center">
+                            <mat-icon class="s-16">favorite</mat-icon>
+                            <span>Like</span>&nbsp;<span>({{post.like}})</span>
+                        </span>
+                </button>
+                <button mat-button class="share-button">
+                        <span fxLayout="row" fxLayoutAlign="start center">
+                            <mat-icon class="s-16">share</mat-icon>
+                            <span>Share</span>&nbsp;<span>({{post.share}})</span>
+                        </span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- / CONTENT -->
 
