@@ -29,8 +29,8 @@
       "id": "2",
       "volunteer": {
         "username": "mweissenbek"
-      }, 
-	"taskList": [
+      },
+      "taskList": [
         {
           "id": "5af553d01046082598f116ce",
           "taskId": "5af54c8510460823c3af2e2a",
@@ -61,6 +61,27 @@
           "competenceName": "Flexability",
           "marketplaceId": "ABCD",
           "timestamp": 1526027216040
+        },
+        {
+          "id": "16c0f5bb-052a-4aa3-8d1a-74c0053fcdf5",
+          "competenceId": "5b431182d305422125b87b83",
+          "competenceName": "Leadership",
+          "marketplaceId": "0eaf3a6281df11e8adc0fa7ae01bbebc",
+          "timestamp": 1531135316936
+        },
+        {
+          "id": "9b83247a-f122-42e4-8f39-6c07390beedb",
+          "competenceId": "5b431182d305422125b87b85",
+          "competenceName": "Flexability",
+          "marketplaceId": "0eaf3a6281df11e8adc0fa7ae01bbebc",
+          "timestamp": 1535975010181
+        },
+        {
+          "id": "16c0f5bb-052a-4aa3-8d1a-74c0053fcdf5",
+          "competenceId": "5b431182d305422125b87b83",
+          "competenceName": "Leadership",
+          "marketplaceId": "0eaf3a6281df11e8adc0fa7ae01bbebc",
+          "timestamp": 1531135316936
         }
       ]
     },
