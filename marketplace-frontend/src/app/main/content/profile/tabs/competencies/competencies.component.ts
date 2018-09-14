@@ -33,7 +33,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
 
-  dataSource: MatDataSource;
+  dataSource: CompetenciesDataSource;
 
   columns = [
     { columnDef: 'name', marketplace: null, columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
@@ -67,8 +67,9 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.commonProfile = new VolunteerProfile();
     this.commonProfile.competenceList = [];
+    this.privateProfile = new VolunteerProfile();
 
-    this.columns.push({ columnDef: 'timestamp', marketplace: null, columnType: 'text', header: 'Timestamp', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
+    this.columns.push({ columnDef: 'timestamp', marketplace: null, columnType: 'text', header: 'Achieved on', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
 
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
@@ -100,7 +101,6 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   handleCompetenceMarketplace(marketplace: Marketplace, competenceEntry: CompetenceEntry): string {
-
     if (this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
       return 'REVOKE'
     } else if (!this.privateProfileContains(competenceEntry) && this.publicProfileContains(competenceEntry, marketplace)) {
@@ -109,16 +109,17 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       return 'PUBLISH';
     }
     throw new error('please reload page...');
-    return '';
   }
 
   private privateProfileContains(competenceEntry: CompetenceEntry): boolean {
-    return this.privateProfile.competenceList.find(c => c.competenceId == competenceEntry.competenceId) != null;
+    if (this.privateProfile.competenceList) {
+      return this.privateProfile.competenceList.find(c => c.competenceId == competenceEntry.competenceId) != null;
+    }
   }
 
-  private publicProfileContains(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
-    if (this.publicProfiles.has(marketplace.id)) {
-      return this.publicProfiles.get(marketplace.id).competenceList.find(c => c.competenceId == competenceEntry.competenceId);
+  private publicProfileContains(competenceEntry: CompetenceEntry, marketplace: Marketplace): boolean {
+    if (this.publicProfiles.has(marketplace.id) && this.publicProfiles.get(marketplace.id).competenceList) {
+      return this.publicProfiles.get(marketplace.id).competenceList.filter(c => c.competenceId == competenceEntry.competenceId).length > 0;
     }
     return false;
   }
@@ -150,12 +151,13 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   private onLoadingComplete() {
-    this.combinedCompetencies = this.privateProfile.competenceList;
+    if (this.privateProfile && this.privateProfile.competenceList && this.privateProfile.competenceList.length > 0) {
+      this.combinedCompetencies = this.privateProfile.competenceList;
+    }
     this.publicProfiles.forEach((p, id) => {
       this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
     });
-
-    this.dataSource = new MatDataSource(this.combinedCompetencies);
+    this.dataSource = new CompetenciesDataSource(this.combinedCompetencies);
     this.displayedColumns = this.columns.map(x => x.columnDef);
   }
 
@@ -184,7 +186,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 }
 
 
-export class MatDataSource extends DataSource<CompetenceEntry> {
+export class CompetenciesDataSource extends DataSource<CompetenceEntry> {
 
   constructor(
     private competencies: CompetenceEntry[]

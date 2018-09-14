@@ -13,6 +13,7 @@ import {FuseWidgetModule} from '../../../../@fuse/components';
 import { FuseProfileCompetenciesComponent } from './tabs/competencies/competencies.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
+import { FuseProfileTaskComponent } from './tabs/tasks/tasks.component';
 
 const routes = [
   {path: '', component: FuseProfileComponent},
@@ -25,7 +26,8 @@ const routes = [
     FuseProfileAboutComponent,
     FuseProfileFriendsComponent,
     FuseProfileMarketplacesComponent,
-    FuseProfileCompetenciesComponent
+    FuseProfileCompetenciesComponent,
+    FuseProfileTaskComponent
   ],
   imports: [
     RouterModule.forChild(routes),

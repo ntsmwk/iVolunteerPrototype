@@ -1,8 +1,8 @@
 <div id="about" class="p-24" fxLayout="row wrap">
 
-  <div class="repository-content" fxLayout="row wrap" fxLayoutAlign="center">
+  <div class="repository-content" fxLayout="row wrap" fxLayoutAlign="center" class="competenceTableDiv">
 
-    <mat-table #table [dataSource]="dataSource">
+    <mat-table #table [dataSource]="dataSource" class="competenceTable">
 
       <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef">
         <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>

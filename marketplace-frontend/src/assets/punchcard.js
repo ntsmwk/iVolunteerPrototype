@@ -24,7 +24,6 @@ var border = chart.append('rect')
 load('sample1.csv')
 
 function test() {
-  console.error('test')
 }
 
 function load(name) {
