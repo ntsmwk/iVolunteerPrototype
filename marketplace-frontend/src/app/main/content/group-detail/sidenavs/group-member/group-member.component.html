@@ -1,0 +1,25 @@
+<!-- HEADER -->
+<div class="header mat-accent-bg p-24" fxHide fxLayout="column" fxLayoutAlign="space-between">
+</div>
+<!-- / HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<div class="content p-12 mat-white-bg" fusePerfectScrollbar>
+
+  <table class="simple clickable">
+    <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let members of group.members">
+      <td><img [src]="members.avatar" title="{{members.name}}"></td>
+      <td>{{members.name}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+<!-- / SIDENAV CONTENT -->
