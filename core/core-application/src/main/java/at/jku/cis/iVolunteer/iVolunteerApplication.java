@@ -10,8 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @SpringBootApplication

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.core.participant.CoreEmployeeMapper;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreEmployeeMapper;
 import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
-import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.core.participant.dto.CoreEmployeeDTO;
+import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.dto.CoreEmployeeDTO;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
 @RestController

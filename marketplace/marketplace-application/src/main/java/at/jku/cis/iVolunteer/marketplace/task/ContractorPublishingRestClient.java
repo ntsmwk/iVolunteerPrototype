@@ -11,9 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerCompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerTaskEntryDTO;
 
 @Service
 public class ContractorPublishingRestClient {

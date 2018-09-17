@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import at.jku.cis.iVolunteer.mapper.participant.profile.CompetenceEntryMapper;
-import at.jku.cis.iVolunteer.mapper.participant.profile.TaskEntryMapper;
 import at.jku.cis.iVolunteer.mapper.task.TaskMapper;
 import at.jku.cis.iVolunteer.mapper.task.interaction.TaskInteractionMapper;
-import at.jku.cis.iVolunteer.marketplace.participant.profile.VolunteerProfileRepository;
+import at.jku.cis.iVolunteer.mapper.volunteer.profile.CompetenceEntryMapper;
+import at.jku.cis.iVolunteer.mapper.volunteer.profile.TaskEntryMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionService;
+import at.jku.cis.iVolunteer.marketplace.volunteer.profile.VolunteerProfileRepository;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
-import at.jku.cis.iVolunteer.model.participant.profile.TaskEntry;
-import at.jku.cis.iVolunteer.model.participant.profile.VolunteerProfile;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.CompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.TaskEntryDTO;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerCompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.participant.profile.dto.VolunteerTaskEntryDTO;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerCompetenceEntryDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerTaskEntryDTO;
 
 @RestController
 public class TaskOperationController {
