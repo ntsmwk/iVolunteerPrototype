@@ -1,8 +1,8 @@
 package at.jku.cis.iVolunteer.model.contract;
 
-import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 
 public class TaskAssignmentDTO {
 	private SourceDTO source;

@@ -6,9 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.participant.Participant;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
 public class TaskInteraction {
@@ -18,7 +18,7 @@ public class TaskInteraction {
 	@DBRef
 	private Task task;
 	@DBRef
-	private Participant participant;
+	private User participant;
 	private TaskOperation operation;
 	private Date timestamp;
 	private String comment;
@@ -48,11 +48,11 @@ public class TaskInteraction {
 		this.task = task;
 	}
 
-	public Participant getParticipant() {
+	public User getParticipant() {
 		return participant;
 	}
 
-	public void setParticipant(Participant participant) {
+	public void setParticipant(User participant) {
 		this.participant = participant;
 	}
 

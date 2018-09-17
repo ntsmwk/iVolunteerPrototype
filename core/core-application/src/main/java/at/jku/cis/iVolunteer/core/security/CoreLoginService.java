@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
-import at.jku.cis.iVolunteer.model.core.participant.CoreParticipant;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
 @Service
 public class CoreLoginService {
@@ -20,13 +20,13 @@ public class CoreLoginService {
 	@Autowired
 	private CoreVolunteerRepository coreVolunteerRepository;
 
-	public CoreParticipant getLoggedInParticipant() {
+	public CoreUser getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
 	public ParticipantRole getLoggedInParticipantRole() {
-		CoreParticipant participant = getLoggedInParticipant();
+		CoreUser participant = getLoggedInParticipant();
 		if (participant instanceof CoreEmployee) {
 			return ParticipantRole.EMPLOYEE;
 		}
@@ -36,7 +36,7 @@ public class CoreLoginService {
 		return null;
 	}
 
-	private CoreParticipant findByUsername(String username) {
+	private CoreUser findByUsername(String username) {
 		CoreEmployee employee = coreEmployeeRepository.findByUsername(username);
 		if (employee != null) {
 			return employee;

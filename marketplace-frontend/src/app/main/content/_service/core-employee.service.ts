@@ -6,12 +6,10 @@ import {HttpClient} from '@angular/common/http';
 })
 export class CoreEmployeeService {
 
-  private apiUrl = '/core/employee';
-
   constructor(private http: HttpClient) {
   }
 
   findRegisteredMarketplaces(employeeId: string) {
-    return this.http.get(`${this.apiUrl}/${employeeId}/marketplace`);
+    return this.http.get(`/core/employee/${employeeId}/marketplace`);
   }
 }

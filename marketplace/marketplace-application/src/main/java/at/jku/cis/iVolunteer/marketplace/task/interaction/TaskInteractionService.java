@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.participant.Participant;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class TaskInteractionService {
@@ -48,7 +48,7 @@ public class TaskInteractionService {
 		return volunteers;
 	}
 
-	private Map<Participant, List<TaskInteraction>> findByTaskGroupedByParticipant(Task task) {
+	private Map<User, List<TaskInteraction>> findByTaskGroupedByParticipant(Task task) {
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findByTask(task);
 		return taskInteractions.stream().filter(ti -> ti.getParticipant() != null).collect(Collectors.groupingBy(t -> t.getParticipant()));
 	}

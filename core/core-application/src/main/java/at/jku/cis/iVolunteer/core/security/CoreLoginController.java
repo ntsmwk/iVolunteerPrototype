@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.core.participant.CoreEmployeeMapper;
-import at.jku.cis.iVolunteer.mapper.core.participant.CoreVolunteerMapper;
-import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
-import at.jku.cis.iVolunteer.model.core.participant.CoreParticipant;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.core.participant.dto.CoreParticipantDTO;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreEmployeeMapper;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreVolunteerMapper;
+import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.dto.CoreParticipantDTO;
 
 @RestController
 @RequestMapping("/login")
@@ -25,7 +25,7 @@ public class CoreLoginController {
 
 	@GetMapping
 	public CoreParticipantDTO getLoggedInParticipant() {
-		CoreParticipant participant = loginService.getLoggedInParticipant();
+		CoreUser participant = loginService.getLoggedInParticipant();
 		if (participant instanceof CoreEmployee) {
 			return employeeMapper.toDTO((CoreEmployee) participant);
 		}
