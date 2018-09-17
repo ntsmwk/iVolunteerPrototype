@@ -10,7 +10,7 @@ import {Marketplace} from '../_model/marketplace';
 })
 export class VolunteerProfileService {
 
-  private endpoint = '/volunteer';
+  private endpoint = 'volunteer';
 
   constructor(private http: HttpClient) {
   }
@@ -40,6 +40,7 @@ export class VolunteerProfileService {
   }
 
   revokeCompetenceByVolunteer(volunteer: Volunteer, competenceEntry: CompetenceEntry, url: string) {
-    return this.http.delete(`${url}/${this.endpoint}/${volunteer.id}/profile/competence/${competenceEntry.id}`);
+    console.error(competenceEntry);
+    return this.http.delete(`${url}/${this.endpoint}/${volunteer.id}/profile/competence/${competenceEntry.competenceId}`);
   }
 }

@@ -1,21 +1,21 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {fuseAnimations} from '../../../../../../@fuse/animations';
-import {Volunteer} from '../../../_model/volunteer';
-import {VolunteerProfile} from '../../../_model/volunteer-profile';
-import {VolunteerProfileService} from '../../../_service/volunteer-profile.service';
-import {VolunteerRepositoryService} from '../../../_service/volunteer-repository.service';
-import {error, isArray} from 'util';
-import {CompetenceEntry} from '../../../_model/competence-entry';
-import {LoginService} from '../../../_service/login.service';
-import {ArrayService} from '../../../_service/array.service';
-import {CoreMarketplaceService} from '../../../_service/core-marketplace.service';
-import {ActivatedRoute} from '@angular/router';
-import {Marketplace} from '../../../_model/marketplace';
-import {Participant} from '../../../_model/participant';
-import {CoreVolunteerService} from '../../../_service/core-volunteer.service';
-import {Observable, of} from 'rxjs';
-import {DataSource} from '@angular/cdk/table';
-import {DatePipe} from '@angular/common';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { fuseAnimations } from '../../../../../../@fuse/animations';
+import { Volunteer } from '../../../_model/volunteer';
+import { VolunteerProfile } from '../../../_model/volunteer-profile';
+import { VolunteerProfileService } from '../../../_service/volunteer-profile.service';
+import { VolunteerRepositoryService } from '../../../_service/volunteer-repository.service';
+import { error, isArray } from 'util';
+import { CompetenceEntry } from '../../../_model/competence-entry';
+import { LoginService } from '../../../_service/login.service';
+import { ArrayService } from '../../../_service/array.service';
+import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
+import { ActivatedRoute } from '@angular/router';
+import { Marketplace } from '../../../_model/marketplace';
+import { Participant } from '../../../_model/participant';
+import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
+import { Observable, of } from 'rxjs';
+import { DataSource } from '@angular/cdk/table';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'fuse-profile-competencies',
@@ -66,6 +66,10 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
     this.columns.push({ columnDef: 'timestamp', marketplace: null, columnType: 'text', header: 'Achieved on', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
 
+    this.loadCompetencies();
+  }
+
+  loadCompetencies() {
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
       this.volunteer = volunteer;
@@ -140,7 +144,9 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     return this.volunteerProfileService.findByVolunteer(volunteer, marketplace.url)
       .toPromise()
       .then((volunteerProfile: VolunteerProfile) => {
-        this.publicProfiles.set(marketplace.id, volunteerProfile);
+        if (volunteerProfile) {
+          this.publicProfiles.set(marketplace.id, volunteerProfile);
+        }
         this.onLoadingComplete();
       });
   }
@@ -158,23 +164,19 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
   publishCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
-      alert('Competence is published to marketplace.');
-      // this.publicProfile.competenceList.push(competenceEntry);
+      this.loadCompetencies();
     });
   }
 
   revokeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
-      alert('Competence is revoked from marketplace.');
-      // this.publicProfile.competenceList = this.publicProfile.competenceList
-      //   .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
+      this.loadCompetencies();
     });
   }
 
   synchronizeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
-      alert('Competence is synchronized to local repository.');
-      // this.privateProfile.competenceList.push(competenceEntry);
+      this.loadCompetencies();
     });
   }
 
