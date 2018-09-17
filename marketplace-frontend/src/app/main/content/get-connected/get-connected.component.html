@@ -100,10 +100,10 @@
 
             <mat-tab label="Discover">
               <div *ngFor="let group of groups.discover">
-                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
+                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start"
+                     style="cursor: pointer;" routerLink="/main/get-connected/group/ad4e47e80b80e9ba">
                   <div>
-                    <img class="avatar" [src]="group.icon"
-                         style="cursor: pointer" routerLink="/main/get-connected/group/ad4e47e80b80e9ba">
+                    <img class="avatar" [src]="group.icon">
                   </div>
                   <div class="group-data" fxLayout="column" fxLayoutAlign="">
                     <div class="group-name">{{group.name}}</div>
@@ -124,10 +124,10 @@
 
             <mat-tab label="Your Groups">
               <div *ngFor="let group of groups.yourGroups">
-                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start">
+                <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start"
+                     style="cursor: pointer" routerLink="/main/get-connected/group/a9f04fec753a4577">
                   <div>
-                    <img class="avatar" [src]="group.icon"
-                         style="cursor: pointer" routerLink="/main/get-connected/group/a9f04fec753a4577">
+                    <img class="avatar" [src]="group.icon">
                   </div>
                   <div class="group-data" fxLayout="column">
                     <div class="group-name">{{group.name}}</div>
