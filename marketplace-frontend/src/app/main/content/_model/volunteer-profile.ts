@@ -5,8 +5,8 @@ import { TaskEntry } from "./task-entry";
 export class VolunteerProfile {
   id: string;
   volunteer: Volunteer;
-  taskList: Array<TaskEntry>;
-  competenceList: Array<CompetenceEntry>;
+  taskList: TaskEntry[];
+  competenceList: CompetenceEntry[];
 }
 
 export class CompetenceTableRow {

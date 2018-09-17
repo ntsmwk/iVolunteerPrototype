@@ -24,8 +24,6 @@ export class ArrayService {
     if (isNullOrUndefined(values)) {
       return false;
     }
-    console.error('values...')
-    console.error(values);
     return !isNullOrUndefined(values.find((value) => value ? value.id === current.id : false));
   }
 
