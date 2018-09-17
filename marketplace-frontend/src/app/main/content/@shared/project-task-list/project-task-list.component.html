@@ -2,7 +2,7 @@
   <div class="content pd-12 mat-white-bg" fusePerfectScrollbar>
     <div class="tasks" fxLayout="row wrap" fxLayoutAlign="center">
       <ng-container *ngFor="let task of tasks">
-        <fuse-widget class="task" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="25">
+        <fuse-widget class="task" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="50">
           <!-- Front -->
           <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
             <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
@@ -15,7 +15,7 @@
             </div>
 
             <div class="pl-16 pr-8 pt-8 pb-32" fxLayout="column">
-              <div>{{task.description | truncate: 100}}</div>
+              <div>{{task.description}}</div>
               <div><strong>Start date:</strong> {{task.startDate | date: 'dd.MM.yyyy'}}</div>
               <div *ngIf="task.endDate"><strong>End date:</strong> {{task.endDate | date: 'dd.MM.yyyy'}}</div>
             </div>

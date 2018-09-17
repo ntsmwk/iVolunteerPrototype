@@ -109,7 +109,6 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       return 'PUBLISH';
     }
     throw new error('please reload page...');
-    return '';
   }
 
   private privateProfileContains(competenceEntry: CompetenceEntry): boolean {

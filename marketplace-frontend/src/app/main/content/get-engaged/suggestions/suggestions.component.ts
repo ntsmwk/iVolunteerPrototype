@@ -22,6 +22,13 @@ import {Subscription} from 'rxjs';
 })
 export class FuseSuggestionsComponent implements OnInit, OnDestroy {
 
+  about = {
+    'suggestions': [
+      {'suggestion': 'Marketplace 1', 'name': 'Garry Newman', 'avatar': 'assets/images/backgrounds/winter.jpg'},
+      {'suggestion': 'Project X', 'name': 'Danielle Jackson', 'avatar': 'assets/images/backgrounds/spring.jpg'}
+    ]
+  };
+
   radioOptions = 'test1';
 
   private marketplaceChangeSubscription: Subscription;
