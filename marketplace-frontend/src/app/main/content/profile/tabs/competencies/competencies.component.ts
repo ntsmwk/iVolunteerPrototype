@@ -4,7 +4,7 @@ import {Volunteer} from '../../../_model/volunteer';
 import {VolunteerProfile} from '../../../_model/volunteer-profile';
 import {VolunteerProfileService} from '../../../_service/volunteer-profile.service';
 import {VolunteerRepositoryService} from '../../../_service/volunteer-repository.service';
-import {error, isArray} from 'util';
+import {error, isArray, isNullOrUndefined} from 'util';
 import {CompetenceEntry} from '../../../_model/competence-entry';
 import {LoginService} from '../../../_service/login.service';
 import {ArrayService} from '../../../_service/array.service';
@@ -31,7 +31,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   dataSource: CompetenciesDataSource;
 
   columns = [
-    { columnDef: 'name', marketplace: null, columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}` },
+    {columnDef: 'name', marketplace: null, columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}`},
   ];
   displayedColumns: any[];
 
@@ -47,15 +47,14 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
   marketplaces: Marketplace[] = [];
 
-  constructor(
-    private arrayService: ArrayService,
-    private route: ActivatedRoute,
-    private loginService: LoginService,
-    private marketplaceService: CoreMarketplaceService,
-    private coreVolunteerService: CoreVolunteerService,
-    private datePipe: DatePipe,
-    private volunteerProfileService: VolunteerProfileService,
-    private volunteerRepositoryService: VolunteerRepositoryService) {
+  constructor(private arrayService: ArrayService,
+              private route: ActivatedRoute,
+              private loginService: LoginService,
+              private marketplaceService: CoreMarketplaceService,
+              private coreVolunteerService: CoreVolunteerService,
+              private datePipe: DatePipe,
+              private volunteerProfileService: VolunteerProfileService,
+              private volunteerRepositoryService: VolunteerRepositoryService) {
 
   }
 
@@ -64,7 +63,13 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     this.commonProfile.competenceList = [];
     this.privateProfile = new VolunteerProfile();
 
-    this.columns.push({ columnDef: 'timestamp', marketplace: null, columnType: 'text', header: 'Achieved on', cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy') });
+    this.columns.push({
+      columnDef: 'timestamp',
+      marketplace: null,
+      columnType: 'text',
+      header: 'Achieved on',
+      cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy')
+    });
 
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
@@ -73,7 +78,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
         return;
       }
       selected_marketplaces.forEach((mp: Marketplace) => {
-        this.columns.push({ columnDef: mp.id, marketplace: mp, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row) })
+        this.columns.push({columnDef: mp.id, marketplace: mp, columnType: 'function', header: mp.name, cell: (row: CompetenceEntry) => this.handleCompetenceMarketplace(mp, row)});
       });
 
       this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
@@ -113,10 +118,11 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   private publicProfileContains(competenceEntry: CompetenceEntry, marketplace: Marketplace): boolean {
-    if (this.publicProfiles.has(marketplace.id) && this.publicProfiles.get(marketplace.id).competenceList) {
-      return this.publicProfiles.get(marketplace.id).competenceList.filter(c => c.competenceId == competenceEntry.competenceId).length > 0;
+    const profile = this.publicProfiles.get(marketplace.id);
+    if (isNullOrUndefined(profile) || !isArray(profile.competenceList)) {
+      return false;
     }
-    return false;
+    return profile.competenceList.filter(c => c.competenceId === competenceEntry.competenceId).length > 0;
   }
 
   ngAfterViewInit() {
@@ -150,7 +156,9 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       this.combinedCompetencies = this.privateProfile.competenceList;
     }
     this.publicProfiles.forEach((p, id) => {
-      this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
+      if (!isNullOrUndefined(p) && isArray(p.competenceList)) {
+        this.combinedCompetencies = this.arrayService.concat(this.combinedCompetencies, p.competenceList);
+      }
     });
     this.dataSource = new CompetenciesDataSource(this.combinedCompetencies);
     this.displayedColumns = this.columns.map(x => x.columnDef);
@@ -183,9 +191,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
 export class CompetenciesDataSource extends DataSource<CompetenceEntry> {
 
-  constructor(
-    private competencies: CompetenceEntry[]
-  ) {
+  constructor(private competencies: CompetenceEntry[]) {
     super();
   }
 
@@ -193,5 +199,6 @@ export class CompetenciesDataSource extends DataSource<CompetenceEntry> {
     return of(this.competencies);
   }
 
-  disconnect() { }
+  disconnect() {
+  }
 }
