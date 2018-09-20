@@ -22,5 +22,4 @@ export class LoginService {
   login(username: string, password: string) {
     return this.http.post('/core/login', {username: username, password: password}, {observe: 'response'});
   }
-
 }
