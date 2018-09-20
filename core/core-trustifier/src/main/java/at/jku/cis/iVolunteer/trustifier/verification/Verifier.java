@@ -17,11 +17,9 @@ import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 @RequestMapping("/trustifier/verifier")
 public class Verifier {
 
-	@Autowired
-	private Hasher hasher;
-	
-	@Autowired
-	private BlockchainRestClient blockchainRestClient;
+	@Autowired private Hasher hasher;
+
+	@Autowired private BlockchainRestClient blockchainRestClient;
 
 	@PostMapping("/taskInteraction")
 	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction) {
