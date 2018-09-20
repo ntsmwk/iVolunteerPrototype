@@ -1,5 +1,5 @@
 package at.jku.cis.iVolunteer.model.user.dto;
 
-public class EmployeeDTO extends UserDTO {
+public class HelpSeekerDTO extends UserDTO {
 
 }

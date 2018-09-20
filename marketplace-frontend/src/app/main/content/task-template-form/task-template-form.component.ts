@@ -9,7 +9,7 @@ import {WorkflowType} from '../_model/workflow-type';
 import {Competence} from '../_model/competence';
 import {LoginService} from '../_service/login.service';
 import {Participant} from '../_model/participant';
-import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Marketplace} from '../_model/marketplace';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {isNullOrUndefined} from 'util';
@@ -31,7 +31,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
               private workflowService: WorkflowService,
               private competenceService: CompetenceService,
               private loginService: LoginService,
-              private coreEmployeeService: CoreEmployeeService,
+              private coreHelpSeekerService: CoreHelpSeekerService,
               private router: Router) {
     this.taskTemplateForm = formBuilder.group({
       'id': new FormControl(undefined),
@@ -45,8 +45,8 @@ export class FuseTaskTemplateFormComponent implements OnInit {
 
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         Promise.all([
           this.competenceService.findAll(marketplace).toPromise().then((competences: Competence[]) => this.competences = competences),
 
@@ -84,8 +84,8 @@ export class FuseTaskTemplateFormComponent implements OnInit {
     const taskTemplate = this.taskTemplateForm.value;
     taskTemplate.workflowKey = taskTemplate.workflowType.key;
     delete taskTemplate.workflowType;
-    this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         this.taskTemplateService.save(marketplace, <TaskTemplate> taskTemplate)
           .toPromise()
           .then(() => this.router.navigate(['/main/task-templates/all']));

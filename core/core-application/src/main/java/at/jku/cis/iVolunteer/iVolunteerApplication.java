@@ -7,10 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
+import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
@@ -33,7 +33,7 @@ public class iVolunteerApplication {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	private CoreEmployeeRepository coreEmployeeRepository;
+	private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired
 	private CoreVolunteerRepository coreVolunteerRepository;
 
@@ -47,7 +47,7 @@ public class iVolunteerApplication {
 	@PostConstruct
 	private void init() {
 		Marketplace marketplace = createMarketplace();
-		createEmployee(MMUSTERMANN, RAW_PASSWORD, marketplace);
+		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, marketplace);
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
@@ -67,17 +67,17 @@ public class iVolunteerApplication {
 		return marketplace;
 	}
 
-	private CoreEmployee createEmployee(String username, String password, Marketplace marketplace) {
-		CoreEmployee employee = coreEmployeeRepository.findByUsername(username);
-		if (employee == null) {
-			employee = new CoreEmployee();
-			employee.setUsername(username);
-			employee.setPassword(bCryptPasswordEncoder.encode(password));
-			employee.getRegisteredMarketplaces().clear();
-			employee.getRegisteredMarketplaces().add(marketplace);
-			employee = coreEmployeeRepository.insert(employee);
+	private CoreHelpSeeker createHelpSeeker(String username, String password, Marketplace marketplace) {
+		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
+		if (helpSeeker == null) {
+			helpSeeker = new CoreHelpSeeker();
+			helpSeeker.setUsername(username);
+			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
+			helpSeeker.getRegisteredMarketplaces().clear();
+			helpSeeker.getRegisteredMarketplaces().add(marketplace);
+			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
 		}
-		return employee;
+		return helpSeeker;
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password) {

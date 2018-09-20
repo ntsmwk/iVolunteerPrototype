@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ParticipantRole } from '../_model/participant';
 
 @Injectable({
   providedIn: 'root'

@@ -5,20 +5,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
+import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
 @Service
 public class CoreLoginService {
 
-	@Autowired
-	private CoreEmployeeRepository coreEmployeeRepository;
-	
-	@Autowired
-	private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
+	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 
 	public CoreUser getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
@@ -27,8 +24,8 @@ public class CoreLoginService {
 
 	public ParticipantRole getLoggedInParticipantRole() {
 		CoreUser participant = getLoggedInParticipant();
-		if (participant instanceof CoreEmployee) {
-			return ParticipantRole.EMPLOYEE;
+		if (participant instanceof CoreHelpSeeker) {
+			return ParticipantRole.HELP_SEEKER;
 		}
 		if (participant instanceof CoreVolunteer) {
 			return ParticipantRole.VOLUNTEER;
@@ -37,9 +34,9 @@ public class CoreLoginService {
 	}
 
 	private CoreUser findByUsername(String username) {
-		CoreEmployee employee = coreEmployeeRepository.findByUsername(username);
-		if (employee != null) {
-			return employee;
+		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
+		if (helpSeeker != null) {
+			return helpSeeker;
 		}
 		return coreVolunteerRepository.findByUsername(username);
 	}

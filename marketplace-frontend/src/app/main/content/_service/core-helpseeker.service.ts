@@ -4,12 +4,12 @@ import {HttpClient} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class CoreEmployeeService {
+export class CoreHelpSeekerService {
 
   constructor(private http: HttpClient) {
   }
 
-  findRegisteredMarketplaces(employeeId: string) {
-    return this.http.get(`/core/employee/${employeeId}/marketplace`);
+  findRegisteredMarketplaces(helpSeekerId: string) {
+    return this.http.get(`/core/helpseeker/${helpSeekerId}/marketplace`);
   }
 }

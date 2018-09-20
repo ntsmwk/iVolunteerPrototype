@@ -13,7 +13,7 @@ import {TaskTemplateService} from '../_service/task-template.service';
 import {WorkflowService} from '../_service/workflow.service';
 import {CompetenceValidator} from '../_validator/competence.validator';
 import {Participant} from '../_model/participant';
-import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Marketplace} from '../_model/marketplace';
 import {Project} from '../_model/project';
 import {ProjectService} from '../_service/project.service';
@@ -34,7 +34,7 @@ export class FuseTaskFormComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private loginService: LoginService,
-              private coreEmployeeService: CoreEmployeeService,
+              private coreHelpSeekerService: CoreHelpSeekerService,
               private taskService: TaskService,
               private competenceService: CompetenceService,
               private taskTemplateService: TaskTemplateService,
@@ -60,7 +60,7 @@ export class FuseTaskFormComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         Promise.all([
           this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
           this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences),
@@ -105,7 +105,7 @@ export class FuseTaskFormComponent implements OnInit {
     delete task.workflowType;
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (this.isEditMode()) {
           this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
         } else {

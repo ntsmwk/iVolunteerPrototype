@@ -6,8 +6,9 @@ import { Subscription } from 'rxjs';
 import { FuseConfigService } from '@fuse/services/config.service';
 
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
-import { navigation_employee } from 'app/navigation/navigation_employee';
+import { navigation_helpseeker } from 'app/navigation/navigation_helpseeker';
 import { LoginService } from './content/_service/login.service';
+import { ParticipantRole } from './content/_model/participant';
 
 @Component({
     selector     : 'fuse-main',
@@ -47,10 +48,10 @@ export class FuseMainComponent implements OnDestroy
             this.document.body.className += ' is-mobile';
         }
 
-        this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+        this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
             switch(role){
-                case 'EMPLOYEE':
-                this.navigation = navigation_employee;
+                case 'HELP_SEEKER':
+                this.navigation = navigation_helpseeker;
                 break;
                 case 'VOLUNTEER': 
                 this.navigation = navigation_volunteer;
