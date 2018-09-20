@@ -25,7 +25,7 @@ public class HelpSeekerController {
 
 	@PostMapping("/helpseeker")
 	public HelpSeekerDTO registerHelpSeeker(@RequestBody HelpSeekerDTO helpSeekerDto) {
-		if (helpSeekerRepository.findOne(helpSeekerDto.getId()) == null) {
+		if (helpSeekerRepository.findOne(helpSeekerDto.getId()) != null) {
 			throw new BadRequestException("HelpSeeker already registed");
 		}
 		return helpSeekerMapper.toDTO(helpSeekerRepository.insert(helpSeekerMapper.toEntity(helpSeekerDto)));

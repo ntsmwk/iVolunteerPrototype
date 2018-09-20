@@ -25,20 +25,11 @@ import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 @RequestMapping("/volunteer")
 public class CoreVolunteerController {
 
-	@Autowired
-	private MarketplaceMapper marketplaceMapper;
-
-	@Autowired
-	private CoreVolunteerMapper coreVolunteerMapper;
-
-	@Autowired
-	private CoreVolunteerRepository coreVolunteerRepository;
-
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
-
-	@Autowired
-	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired private MarketplaceMapper marketplaceMapper;
+	@Autowired private CoreVolunteerMapper coreVolunteerMapper;
+	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteerDTO getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
@@ -50,7 +41,7 @@ public class CoreVolunteerController {
 		CoreVolunteer volunteer = coreVolunteerRepository.findOne(volunteerId);
 		return marketplaceMapper.toDTOs(volunteer.getRegisteredMarketplaces());
 	}
-	
+
 	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {

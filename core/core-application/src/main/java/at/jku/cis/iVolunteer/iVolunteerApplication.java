@@ -8,8 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
+import at.jku.cis.iVolunteer.mapper.user.HelpSeekerMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
@@ -29,16 +32,14 @@ public class iVolunteerApplication {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private static final String AUTHORIZATION = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzMzA4MTZ9.A4et3t79PPLzLOnbDNl0259Sr0L5sdBEzDjEnRDaC0hzSJgKLOuHk2YIk2rhALmecMFoOaNYsYx6coJHao7SEg";
 
-	@Autowired
-	private CoreHelpSeekerRepository coreHelpSeekerRepository;
-	@Autowired
-	private CoreVolunteerRepository coreVolunteerRepository;
-
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
+	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreMarketplaceRestClient marketplaceRestClient;
+	@Autowired private CoreHelpSeekerMapper helpSeekerMapper;
 
 	public static void main(String[] args) {
 		SpringApplication.run(iVolunteerApplication.class, args);
@@ -76,6 +77,7 @@ public class iVolunteerApplication {
 			helpSeeker.getRegisteredMarketplaces().clear();
 			helpSeeker.getRegisteredMarketplaces().add(marketplace);
 			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
+			marketplaceRestClient.registerHelpSeeker(MARKETPLACE_URL, AUTHORIZATION, helpSeekerMapper.toDTO(helpSeeker));
 		}
 		return helpSeeker;
 	}

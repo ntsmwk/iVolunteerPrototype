@@ -69,7 +69,7 @@ export class FuseProfileTaskComponent implements OnInit {
     this.loadFinishedTasks();
   }
 
-  loadFinishedTasks(){
+  loadFinishedTasks() {
     this.commonProfile = new VolunteerProfile();
     this.commonProfile.taskList = [];
     this.privateProfile = new VolunteerProfile();
@@ -121,7 +121,7 @@ export class FuseProfileTaskComponent implements OnInit {
   }
 
   private publicProfileContains(taskEntry: TaskEntry, marketplace: Marketplace): boolean {
-    if (this.publicProfiles.has(marketplace.id) && this.publicProfiles.get(marketplace.id).taskList) {
+    if (this.publicProfiles.get(marketplace.id) && this.publicProfiles.get(marketplace.id).taskList) {
       return this.publicProfiles.get(marketplace.id).taskList.filter(c => c.taskId == taskEntry.taskId).length > 0;
     }
     return false;
@@ -131,8 +131,10 @@ export class FuseProfileTaskComponent implements OnInit {
     return this.volunteerProfileService.findByVolunteer(volunteer, marketplace.url)
       .toPromise()
       .then((volunteerProfile: VolunteerProfile) => {
-        this.publicProfiles.set(marketplace.id, volunteerProfile);
-        this.onLoadingComplete();
+        if (volunteerProfile) {
+          this.publicProfiles.set(marketplace.id, volunteerProfile);
+          this.onLoadingComplete();
+        }
       });
   }
 
@@ -160,11 +162,10 @@ export class FuseProfileTaskComponent implements OnInit {
   }
 
   synchronizeTask(taskEntry: TaskEntry, marketplace: Marketplace) {
-    this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => { 
+    this.volunteerRepositoryService.synchronizeTask(this.volunteer, taskEntry).toPromise().then(() => {
       this.loadFinishedTasks();
     });
   }
-
 }
 
 
