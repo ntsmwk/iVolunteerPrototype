@@ -1,18 +1,18 @@
 export const navigation_employee = [
   {
     'id': 'projects',
-    'title': 'Projects',
-    'type': 'collapse',
+    'title': 'Project',
+    'type': 'group',
     'children': [
       {
-        'id': 'create-project',
-        'title': 'Create',
+        'id': 'project-form',
+        'title': 'Form',
         'type': 'item',
         'url': '/main/project-form'
       },
       {
-        'id': 'all-projects',
-        'title': 'List',
+        'id': 'project-list',
+        'title': 'Overview',
         'type': 'item',
         'url': '/main/projects/all'
       }
@@ -20,37 +20,43 @@ export const navigation_employee = [
   },
   {
     'id': 'tasks',
-    'title': 'Tasks',
-    'type': 'collapse',
+    'title': 'Task',
+    'type': 'group',
     'children': [
       {
-        'id': 'create-task',
-        'title': 'Create',
+        'id': 'task-form',
+        'title': 'Form',
         'type': 'item',
         'url': '/main/task-form'
       },
       {
-        'id': 'all-tasks',
-        'title': 'List',
+        'id': 'task-detail',
+        'title': 'Detail',
+        'type': 'item',
+        'url': '/main/task'
+      },
+      {
+        'id': 'task-list',
+        'title': 'Overview',
         'type': 'item',
         'url': '/main/tasks/all'
       }
     ]
   },
   {
-    'id': 'tasksTemplate',
+    'id': 'taskTemplates',
     'title': 'Task Templates',
-    'type': 'collapse',
+    'type': 'group',
     'children': [
       {
-        'id': 'create-tasks-template',
-        'title': 'Create',
+        'id': 'task-template-form',
+        'title': 'Form',
         'type': 'item',
         'url': '/main/task-template-form'
       },
       {
-        'id': 'all-task-templates',
-        'title': 'List',
+        'id': 'task-template-list',
+        'title': 'Overview',
         'type': 'item',
         'url': '/main/task-templates/all'
       }

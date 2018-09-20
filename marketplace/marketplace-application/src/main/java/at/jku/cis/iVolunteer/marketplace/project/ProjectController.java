@@ -22,14 +22,14 @@ import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
-import at.jku.cis.iVolunteer.model.participant.Participant;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.project.Project;
 import at.jku.cis.iVolunteer.model.project.dto.ProjectDTO;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 public class ProjectController {
@@ -91,7 +91,7 @@ public class ProjectController {
 		return taskInteraction != null && TaskVolunteerOperation.ASSIGNED == taskInteraction.getOperation();
 	}
 
-	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {
+	private TaskInteraction getLatestTaskInteraction(Task task, User participant) {
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findSortedByTaskAndParticipant(task,
 				participant, new Sort(Sort.Direction.DESC, "timestamp"));
 		return taskInteractions.isEmpty() ? null : taskInteractions.get(0);

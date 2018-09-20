@@ -10,10 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.participant.EmployeeRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.participant.Employee;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.marketplace.user.EmployeeRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.user.Employee;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.marketplace.security.service.ParticipantDetailsService;
 
 @Service

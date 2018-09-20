@@ -7,12 +7,10 @@ import {Marketplace} from '../_model/marketplace';
 })
 export class CompetenceService {
 
-  private endpoint = 'competence';
-
   constructor(private http: HttpClient) {
   }
 
   findAll(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/${this.endpoint}`);
+    return this.http.get(`${marketplace.url}/competence`);
   }
 }

@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.task.interaction.TaskInteractionMapper;
-import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.PreConditionFailedException;
-import at.jku.cis.iVolunteer.model.participant.Participant;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 public class TaskInteractionController {
@@ -59,7 +59,7 @@ public class TaskInteractionController {
 	}
 
 	@GetMapping("/task/{id}/participant")
-	public List<Participant> findParticipantsByTaskOperation(@PathVariable("id") String taskId,
+	public List<User> findParticipantsByTaskOperation(@PathVariable("id") String taskId,
 			@RequestParam(name = "operation", required = false) TaskVolunteerOperation taskOperation) {
 		Task task = findAndVerifyTaskById(taskId);
 
@@ -131,13 +131,13 @@ public class TaskInteractionController {
 		throw new PreConditionFailedException("Cannot cancel assignment! Volunteer is not assigned.");
 	}
 
-	private TaskInteraction getLatestTaskInteraction(Task task, Participant participant) {
+	private TaskInteraction getLatestTaskInteraction(Task task, User participant) {
 		List<TaskInteraction> taskInteractions = taskInteractionRepository.findSortedByTaskAndParticipant(task,
 				participant, new Sort(Sort.Direction.DESC, "timestamp"));
 		return taskInteractions.isEmpty() ? null : taskInteractions.get(0);
 	}
 
-	private TaskInteraction createTaskInteraction(Task task, Participant participant, TaskOperation taskOperation) {
+	private TaskInteraction createTaskInteraction(Task task, User participant, TaskOperation taskOperation) {
 		TaskInteraction taskInteraction = new TaskInteraction();
 		taskInteraction.setOperation(taskOperation);
 		taskInteraction.setParticipant(participant);

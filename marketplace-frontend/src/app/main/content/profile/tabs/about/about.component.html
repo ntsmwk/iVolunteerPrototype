@@ -10,9 +10,12 @@
             <img class="avatar huge" [src]="getAvatarUrl()">
             <div class="name" *ngIf="participant">{{participant.username}}</div>
           </div>
-          <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+          <div class="actions" fxLayout="row" fxLayoutAlign="end center" *ngIf="enableFollow">
             <button mat-raised-button aria-label="Follow" color="primary" class="mr-12">Follow</button>
             <button mat-raised-button aria-label="Send Message" color="primary">Send Message</button>
+          </div>
+          <div class="actions" fxLayout="row" fxLayoutAlign="end center" *ngIf="!enableFollow">
+            <button mat-raised-button aria-label="Edit" color="primary">Edit Profile</button>
           </div>
         </div>
       </div>

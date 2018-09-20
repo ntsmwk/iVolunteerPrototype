@@ -17,6 +17,5 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 
 	List<Task> findByProject(Project project);
 	
-	@Query("{'status': 'PUBLISHED'}")
-	List<Task> findAvailableByProject(Project project);
+	List<Task> findByProjectAndStatus(Project project, TaskStatus status);
 }

@@ -5,15 +5,15 @@ import java.util.Date;
 import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
-import at.jku.cis.iVolunteer.model.participant.dto.ParticipantDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.user.dto.UserDTO;
 
 public class TaskInteractionDTO implements IHashObject {
 
 	private String id;
 	private TaskDTO task;
 	private String operation;
-	private ParticipantDTO participant;
+	private UserDTO participant;
 	private Date timestamp;
 	private String comment;
 
@@ -44,11 +44,11 @@ public class TaskInteractionDTO implements IHashObject {
 		this.operation = operation;
 	}
 
-	public ParticipantDTO getParticipant() {
+	public UserDTO getParticipant() {
 		return participant;
 	}
 
-	public void setParticipant(ParticipantDTO participant) {
+	public void setParticipant(UserDTO participant) {
 		this.participant = participant;
 	}
 

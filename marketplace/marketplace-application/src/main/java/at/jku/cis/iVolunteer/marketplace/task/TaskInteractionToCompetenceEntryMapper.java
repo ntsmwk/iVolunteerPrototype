@@ -10,8 +10,8 @@ import org.apache.commons.collections4.Transformer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 
 @Service
 public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskInteraction, Set<CompetenceEntry>> {

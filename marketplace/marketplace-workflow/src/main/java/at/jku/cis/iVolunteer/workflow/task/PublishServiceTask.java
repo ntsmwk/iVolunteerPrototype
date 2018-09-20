@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;
 
 @Component

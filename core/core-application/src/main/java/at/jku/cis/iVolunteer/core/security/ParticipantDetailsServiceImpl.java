@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
 import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.participant.CoreEmployee;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
 @Service
 public class ParticipantDetailsServiceImpl implements ParticipantDetailsService {

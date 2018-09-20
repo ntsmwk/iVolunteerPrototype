@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.mapper.competence;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.participant.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 
 @Component
 public class CompetenceEntryToCompetenceMapper {

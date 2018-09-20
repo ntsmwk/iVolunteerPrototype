@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.mapper.core.participant.CoreVolunteerMapper;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreVolunteerMapper;
 import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
-import at.jku.cis.iVolunteer.model.core.participant.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.core.participant.dto.CoreVolunteerDTO;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.dto.CoreVolunteerDTO;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
-import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 
 @RestController
 @RequestMapping("/volunteer")

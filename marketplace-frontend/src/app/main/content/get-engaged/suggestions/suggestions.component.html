@@ -2,13 +2,13 @@
 
   <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
 
-    <!-- suggested projects -->
+    <!-- recommended projects -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                 fxFlex.gt-sm="67" fusePerfectScrollbar>
+                 fxFlex.gt-sm="40" fusePerfectScrollbar>
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div class="h1">Suggested Projects</div>
+          <div class="h1">Recommended Projects</div>
         </div>
 
         <mat-accordion [multi]="true">
@@ -25,7 +25,7 @@
                 <div class="content pd-12 mat-white-bg" fusePerfectScrollbar>
                   <mat-form-field>
                     <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
-                              rows="10"></textarea>
+                              rows="4"></textarea>
                   </mat-form-field>
 
                   <mat-form-field>
@@ -49,15 +49,15 @@
         </mat-accordion>
       </div>
     </fuse-widget>
-    <!-- suggested projects end -->
+    <!-- /recommended projects -->
 
-    <!-- suggested marketplaces -->
+    <!-- recommended marketplaces -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                 fxFlex.gt-sm="33">
+                 fxFlex.gt-sm="30">
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div class="h1">Suggested Marketplaces</div>
+          <div class="h1">Recommended Marketplaces</div>
         </div>
 
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
@@ -82,7 +82,43 @@
         </div>
       </div>
     </fuse-widget>
-    <!-- suggested marketplaces end -->
+    <!-- /recommended marketplaces -->
+
+    <!-- suggested sections -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="30">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Friends' Suggestions</div>
+        </div>
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let suggestion of about.suggestions">
+          <div fxLayout="row" fxLayoutAlign="space-between start" style="width: 100%;">
+            <div>
+              <img class="avatar" [src]="suggestion.avatar">
+            </div>
+            <div fxLayout="column">
+              <div class="suggestion">{{suggestion.suggestion}}</div>
+              <div fxLayout="row">
+                <div class="suggester">suggested by</div>
+                <div class="suggester2">{{suggestion.name}}</div>
+              </div>
+            </div>
+
+            <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+              <button mat-icon-button title="Details">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </fuse-widget>
+    <!-- /suggested section -->
   </div>
 
   <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">

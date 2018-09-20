@@ -1,7 +1,8 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
-  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Group</h1>
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Get Connected</h1>
+    <img class="header-icon" src="assets/icons/get-connected.svg">
   </div>
 
   <mat-sidenav-container>
@@ -16,8 +17,83 @@
 
       <!-- CONTENT -->
       <div class="content p-24 mat-white-bg" fusePerfectScrollbar style="min-height: 600px">
-      </div>
 
+        <h1 style="font-size: 36px; margin-top: -12px;">Thiem Austria</h1>
+
+        <div class="timeline-content" fxLayout="column" fxFlex="100">
+          <div class="add-post">
+            <div class="form">
+              <textarea placeholder="Write something.."></textarea>
+              <footer fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                  <button mat-icon-button aria-label="Add photo" matTooltip="Add Photo">
+                    <mat-icon>photo</mat-icon>
+                  </button>
+                  <button mat-icon-button aria-label="Mention somebody" matTooltip="Mention somebody">
+                    <mat-icon>person</mat-icon>
+                  </button>
+                  <button mat-icon-button aria-label="Add location" matTooltip="Add location">
+                    <mat-icon>location_on</mat-icon>
+                  </button>
+                </div>
+                <button mat-raised-button color="accent" class="post-button" aria-label="POST">POST</button>
+              </footer>
+            </div>
+          </div>
+
+          <div class="timeline-item" *ngFor="let post of group.posts">
+
+            <header fxLayout="row" fxLayoutAlign="space-between start">
+              <div class="user" fxLayout="row" fxLayoutAlign="start center">
+                <img class="avatar" [src]="post.user.avatar">
+
+                <div fxLayout="column">
+                  <div class="title">
+                    <span class="username">{{post.user.name}}</span>
+                    <span *ngIf="post.type === 'post'">posted on your timeline</span>
+                    <span *ngIf="post.type === 'badge'">earned something new</span>
+                    <span *ngIf="post.type === 'invitation'">invited you</span>
+                    <span *ngIf="post.type === 'something'">shared something with you</span>
+                    <span *ngIf="post.type === 'article'">shared an article with you</span>
+                  </div>
+                  <div class="time">{{post.time}}</div>
+                </div>
+              </div>
+
+              <button mat-icon-button aria-label="More">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </header>
+
+            <div class="content">
+              <div *ngIf="post.message" class="message">
+                {{post.message}}
+              </div>
+
+              <div *ngIf="post.type === 'invitation'" style="padding-left: 15px; padding-bottom: 15px;">
+                <button mat-raised-button color="accent" class="invite-button">Join Marketplace
+                </button>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-button class="like-button">
+                        <span fxLayout="row" fxLayoutAlign="start center">
+                            <mat-icon class="s-16">favorite</mat-icon>
+                            <span>Like</span>&nbsp;<span>({{post.like}})</span>
+                        </span>
+                </button>
+                <button mat-button class="share-button">
+                        <span fxLayout="row" fxLayoutAlign="start center">
+                            <mat-icon class="s-16">share</mat-icon>
+                            <span>Share</span>&nbsp;<span>({{post.share}})</span>
+                        </span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- / CONTENT -->
 
@@ -25,6 +101,21 @@
     <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
                  fuseMatSidenavHelper="task-detail-right-sidenav"
                  mat-is-locked-open="gt-md">
+      <div class="content p-12 mat-white-bg" fusePerfectScrollbar>
+
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h2">Description</div>
+        </div>
+
+        <p style="text-align: justify">Lorem ipsum dolor sit amet, consetetur sadipscing elitr. Dominic Thiem (* 3.
+          September 1993 in Wiener Neustadt[1]) ist ein österreichischer Tennisspieler. Er ist nach Thomas Muster und
+          Jürgen Melzer der dritte
+          Österreicher, dem der Sprung in die Top Ten der Weltrangliste gelungen ist. Zudem konnte der vor allem auf
+          Sandplätzen erfolgreiche Thiem als erster Österreicher einen ATP-Titel auf Rasen gewinnen. et justo duo
+          dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+      </div>
+
+
       <fuse-group-member></fuse-group-member>
     </mat-sidenav>
     <!-- / SIDENAV -->

@@ -13,9 +13,9 @@ import at.jku.cis.iVolunteer.marketplace.config.rest.client.configuration.Workfl
 import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
-import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
+import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 
 @Service
 public class ContractorRestClient extends RestClient {

@@ -5,11 +5,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.participant.EmployeeRepository;
-import at.jku.cis.iVolunteer.marketplace.participant.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.participant.Employee;
-import at.jku.cis.iVolunteer.model.participant.Participant;
-import at.jku.cis.iVolunteer.model.participant.Volunteer;
+import at.jku.cis.iVolunteer.marketplace.user.EmployeeRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.user.Employee;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class LoginService {
@@ -20,13 +20,13 @@ public class LoginService {
 	@Autowired
 	private VolunteerRepository volunteerRepository;
 
-	public Participant getLoggedInParticipant() {
+	public User getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
 	public ParticipantRole getLoggedInParticipantRole() {
-		Participant participant = getLoggedInParticipant();
+		User participant = getLoggedInParticipant();
 		if (participant instanceof Employee) {
 			return ParticipantRole.EMPLOYEE;
 		}
@@ -36,7 +36,7 @@ public class LoginService {
 		return null;
 	}
 
-	private Participant findByUsername(String username) {
+	private User findByUsername(String username) {
 		Employee employee = employeeRepository.findByUsername(username);
 		if (employee != null) {
 			return employee;

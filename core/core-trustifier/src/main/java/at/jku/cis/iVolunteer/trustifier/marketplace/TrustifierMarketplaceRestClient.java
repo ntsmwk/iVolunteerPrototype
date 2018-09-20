@@ -8,9 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.participant.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
+import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 
 @Service
 public class TrustifierMarketplaceRestClient {
