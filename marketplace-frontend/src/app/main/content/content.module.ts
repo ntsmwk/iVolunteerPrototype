@@ -12,6 +12,7 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
+import { LoginGuard } from './_guard/login.guard';
 
 const routes: Route[] = [
   {
@@ -19,14 +20,9 @@ const routes: Route[] = [
     loadChildren: './login/login.module#FuseLoginModule'
   },
   {
-    path: 'main/welcome',
-    loadChildren: './welcome/welcome.module#FuseWelcomeModule',
-    canActivate: [TokenGuard]
-  },
-  {
     path: 'main/dashboard',
     loadChildren: './dashboard/dashboard.module#FuseDashboardModule',
-    canActivate: [TokenGuard, VolunteerGuard]
+    canActivate: [TokenGuard, LoginGuard]
   },
   {
     path: 'main/profile',
