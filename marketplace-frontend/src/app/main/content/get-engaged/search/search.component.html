@@ -1,0 +1,37 @@
+<div class="page-layout blank p-12" fusePerfectScrollbar>
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- Manual Search -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="100">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div>
+            <mat-icon>search</mat-icon>
+            <span class="h1">Manual Search</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px">
+          <mat-form-field style="width: 50%; margin-left: 15px">
+            <input matInput type="search" placeholder="Search here" class="search-input">
+          </mat-form-field>
+
+          <mat-radio-group [(ngModel)]="radioOptions" name="radioButtons" style="margin-left: 30px">
+            <mat-radio-button style="margin-right: 30px" [value]="'test1'">Marketplaces</mat-radio-button>
+            <mat-radio-button [value]="'test2'">Projects and Tasks</mat-radio-button>
+          </mat-radio-group>
+
+          <button class="search-button" mat-raised-button  color="accent">Search</button>
+
+        </div>
+
+        <div style="height: 100px"></div>
+
+      </div>
+    </fuse-widget>
+    <!-- Manual Search end -->
+
+  </div>
+</div>

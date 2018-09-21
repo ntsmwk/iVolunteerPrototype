@@ -11,13 +11,13 @@ export class FuseGroupDetailComponent implements OnInit {
     posts: [
       {
         'user': {
-          'name': 'Garry Newman',
-          'avatar': 'assets/images/avatars/garry.jpg'
+          'name': 'Danielle Jackson',
+          'avatar': 'assets/images/avatars/danielle.jpg'
         },
         'message': 'Hey Guys, does somebody want to join me in the marketplace "Marketplace X"? "Marketplace Description"',
         'time': '32 minutes ago',
         'type': 'invitation',
-        'like': 5,
+        'like': 2,
         'share': 1
       },
       {
@@ -25,7 +25,7 @@ export class FuseGroupDetailComponent implements OnInit {
           'name': 'Garry Newman',
           'avatar': 'assets/images/avatars/garry.jpg'
         },
-        'message': 'Some impressions of our last project. We are always looking for interessted and motivation people. ;)',
+        'message': 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.',
         'time': '3 hours ago',
         'type': 'something',
         'like': 5,

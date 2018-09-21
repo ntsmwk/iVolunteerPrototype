@@ -1,0 +1,87 @@
+<div class="page-layout blank p-12" fusePerfectScrollbar>
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- recommended projects -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="50" fusePerfectScrollbar>
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Recommended Projects</div>
+        </div>
+
+        <mat-accordion [multi]="true">
+          <mat-expansion-panel *ngFor="let project of projects" class="fuse-card" fxFlex="100">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h2>{{project.name}}</h2>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <ng-template matExpansionPanelContent>
+              <div class="mat-expansion-panel-content">
+                <!-- CONTENT -->
+                <div class="content pd-12 mat-white-bg" fusePerfectScrollbar>
+                  <mat-form-field>
+                    <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
+                              rows="4"></textarea>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input matInput [readonly]="true" placeholder="Start Date"
+                           [value]="project.startDate | date: 'dd.MM.yyyy hh:mm'"/>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input matInput [readonly]="true" placeholder="End Date"
+                           [value]="project.endDate | date: 'dd.MM.yyyy hh:mm'">
+                  </mat-form-field>
+                </div>
+                <!-- / CONTENT -->
+                <mat-divider></mat-divider>
+
+                <fuse-project-task-list [projectId]="project.id" [availableOnly]="true"
+                                        [marketplaceId]="project.marketplaceId"></fuse-project-task-list>
+              </div>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </fuse-widget>
+    <!-- /recommended projects -->
+
+    <!-- recommended marketplaces -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="50">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Recommended Marketplaces</div>
+        </div>
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let marketplace of marketplaces">
+          <div>
+            <div class="h3">{{marketplace.name}}</div>
+          </div>
+
+          <div>
+            <button mat-icon-button aria-label="More" [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="registerMarketplace(marketplace)">
+                <span>Join</span>
+              </button>
+              <button mat-menu-item>
+                <span>Details</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </fuse-widget>
+    <!-- /recommended marketplaces -->
+
+  </div>
+</div>

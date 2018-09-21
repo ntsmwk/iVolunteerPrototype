@@ -1,0 +1,127 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- line chart -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="70">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h1">Finished Tasks per Month</div>
+        </div>
+        <div class="px-16 py-8" fxLayout="row" fxLayoutAlign="space-between center" style="min-height: 400px">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </fuse-widget>
+    <!-- line chart end -->
+
+    <!-- Important stats -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="30">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">{{widgets.widgetFacts.title}}</div>
+          <mat-form-field>
+            <mat-select class="simplified" [(ngModel)]="widgetFacts.currentRange"
+                        aria-label="Change range" style="font-size: 12px;">
+              <mat-option *ngFor="let range of widgets.widgetFacts.ranges | keys"
+                          [value]="range.key">
+                {{range.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let fact of widgets.widgetFacts.entries[widgetFacts.currentRange]">
+          <img class="icon"
+               [src]="fact.icon"
+               [title]="fact.title">
+
+          <div class="factValue">{{fact.value}}</div>
+
+          <button mat-icon-button aria-label="More information">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+      </div>
+
+
+    </fuse-widget>
+    <!-- / Important stats -->
+
+
+  </div>
+
+  <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- Finished Projects/Tasks -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="100">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2 finished">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Finished Projects and Tasks</div>
+        </div>
+
+        <mat-accordion [multi]="true" fusePerfectScrollbar>
+          <mat-expansion-panel *ngFor="let project of finishedProjects.finishedProjects" class="fuse-card"
+                               fxFlex="100">
+            <mat-expansion-panel-header>
+              <mat-panel-title><h2>{{project.name}}</h2></mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="content pd-12 mat-white-bg">
+              <table>
+                <tr>
+                  <th></th>
+                  <th>Contributed Time</th>
+                  <th>Contributed Resources</th>
+                </tr>
+                <tr>
+                  <td>
+                    <mat-icon>check_circle_outline</mat-icon>
+                    <strong>{{project.task1}}</strong>
+                  </td>
+                  <td align="right">{{project.task1Hours}}</td>
+                  <td align="right">{{project.task1Material}}</td>
+                </tr>
+                <tr>
+                  <td *ngIf="project.task2">
+                    <mat-icon>check_circle_outline</mat-icon>
+                    <strong>{{project.task2}}</strong>
+                  </td>
+                  <td align="right">{{project.task2Hours}}</td>
+                  <td align="right">{{project.task2Material}}</td>
+                </tr>
+              </table>
+
+
+              <div class="card-divider full-width"></div>
+              <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+                <button mat-button color="accent">See Project Details</button>
+              </div>
+
+            </div>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+
+    </fuse-widget>
+    <!-- / Finished Projects/Tasks -->
+
+
+  </div>
+
+</div>
+

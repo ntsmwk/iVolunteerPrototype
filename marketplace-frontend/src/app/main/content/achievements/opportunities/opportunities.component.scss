@@ -1,0 +1,46 @@
+div.layout1 {
+  margin-bottom: 0.4em;
+
+  img.icon {
+    max-width: 50px;
+
+  }
+  div.factValue {
+    vertical-align: middle;
+    font-size: 20px;
+    margin-left: 20px;
+    margin-right: auto;
+  }
+
+  div canvas {
+    height: auto !important;
+  }
+
+  ::ng-deep div.mat-form-field-wrapper {
+    padding: 8px 0;
+  }
+}
+
+div.layout2 {
+
+  div.finished {
+
+
+    th, td {
+      padding-right: 50px;
+
+      mat-icon {
+        position: relative;
+        top: 5px;
+        left: 5px;
+        padding-right: 30px;
+      }
+    }
+
+    th {
+      font-weight: normal;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+
+}

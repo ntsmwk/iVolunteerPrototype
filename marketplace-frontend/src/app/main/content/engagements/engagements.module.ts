@@ -7,6 +7,10 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseCalendarModule} from './calendar/calendar.module';
 import {FuseProjectsModule} from './projects/projects.module';
 import {FuseEngagementsComponent} from './engagements.component';
+import { CollaborationsComponent } from './collaborations/collaborations.component';
+import { ContributionsComponent } from './contributions/contributions.component';
+import { EncouragementsComponent } from './encouragements/encouragements.component';
+import { OpportunitiesComponent } from './opportunities/opportunities.component';
 
 const routes: Routes = [
   {path: '', component: FuseEngagementsComponent},
@@ -16,7 +20,11 @@ const routes: Routes = [
 @NgModule({
 
   declarations: [
-    FuseEngagementsComponent
+    FuseEngagementsComponent,
+    CollaborationsComponent,
+    ContributionsComponent,
+    EncouragementsComponent,
+    OpportunitiesComponent
   ],
   imports: [
     RouterModule.forChild(routes),

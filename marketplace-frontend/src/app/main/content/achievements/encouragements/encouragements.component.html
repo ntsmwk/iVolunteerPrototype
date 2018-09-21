@@ -1,0 +1,94 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- Badges -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="50">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Recently earned Badges</div>
+        </div>
+
+        <div class="badges" fxLayout="row wrap" fxLayoutAlign="center">
+          <ng-container *ngFor="let badge of badges.badges">
+            <fuse-widget class="badge" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
+
+              <!-- Front -->
+              <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                  <img class="badge" [src]="badge.image">
+                  <div style="text-align: center;">
+                    <div style="font-weight: bold">{{badge.name}}</div>
+                    {{badge.description}}
+                  </div>
+                </div>
+              </div>
+              <!-- / Front -->
+            </fuse-widget>
+          </ng-container>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+          <button mat-button color="accent">See all your Badges</button>
+        </div>
+
+      </div>
+    </fuse-widget>
+    <!-- Badges end -->
+
+
+    <!-- Competences -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="50">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Recently earned Competencies</div>
+        </div>
+
+        <div class="competencies" fxLayout="row wrap" fxLayoutAlign="center">
+          <div class="competence" *ngFor="let competence of competencies.competencies" fxFlex="100" fxFlex.gt-xs="50"
+               fxFlex.gt-sm="33">
+            <div class="competence-content" fxLayout="column">
+
+              <div class="header" fxLayout="row" fxLayoutAlign="center center">
+                <div style="font-weight: bold" class="category" fxFlex>
+                  {{competence.name}}
+                </div>
+              </div>
+
+              <div class="content" fxLayout="column" fxLayoutAlign="center center">
+                <div class="h1">{{competence.task}}</div>
+              </div>
+
+              <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                {{competence.marketplace}}
+                {{competence.date}}
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <mat-divider></mat-divider>
+        <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="start center">
+          <button mat-button color="accent">See all your Competencies</button>
+        </div>
+      </div>
+    </fuse-widget>
+    <!-- Competencies end -->
+
+
+  </div>
+
+</div>
+
