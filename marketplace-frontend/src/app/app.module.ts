@@ -5,19 +5,19 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import 'hammerjs';
 
-import {FuseModule} from '@fuse/fuse.module';
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {fuseConfig} from './fuse-config';
 
 import {AppComponent} from './app.component';
 import {FuseMainModule} from './main/main.module';
+import { FuseModule } from '@fuse/fuse.module';
 
 
 const appRoutes: Routes = [
   {
     path: '**',
-    redirectTo: 'main/welcome'
+    redirectTo: 'main/dashboard'
   }
 ];
 

@@ -61,7 +61,6 @@ export class FuseProfileTaskComponent implements OnInit {
     private datePipe: DatePipe,
     private volunteerProfileService: VolunteerProfileService,
     private volunteerRepositoryService: VolunteerRepositoryService) {
-
   }
 
   ngOnInit() {

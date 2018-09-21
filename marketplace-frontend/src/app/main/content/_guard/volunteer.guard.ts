@@ -12,11 +12,10 @@ export class VolunteerGuard implements CanActivate {
   }
 
   canActivate(): Promise<boolean> {
-    const promise = new Promise<boolean>(resolve => {
+    return new Promise<boolean>(resolve => {
       this.loginService.getLoggedInParticipantRole()
         .toPromise()
         .then((role: ParticipantRole) => resolve(role == "VOLUNTEER"));
     });
-    return promise;
   }
 }

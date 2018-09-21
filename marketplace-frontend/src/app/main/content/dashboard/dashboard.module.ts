@@ -6,6 +6,8 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseDashboardComponent} from './dashboard.component';
 import {MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule, MatSidenavModule} from '@angular/material';
 import {FuseWidgetModule} from '../../../../@fuse/components';
+import { FuseVolunteerDashboardComponent } from './dashboard-volunteer/dashboard-volunteer.component';
+import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -13,6 +15,8 @@ const routes = [
 
 @NgModule({
   declarations: [
+    FuseVolunteerDashboardComponent,
+    FuseHelpSeekerDashboardComponent,
     FuseDashboardComponent
   ],
   imports: [
