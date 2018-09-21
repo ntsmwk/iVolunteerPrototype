@@ -1,6 +1,6 @@
 package at.jku.cis.iVolunteer.workflow.rest;
 
-import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.EMPOYEE_ID;
+import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.HELP_SEEKER_ID;
 import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.TASK_ID;
 import static at.jku.cis.iVolunteer.workflow.task.ServiceTask.TOKEN;
 
@@ -34,20 +34,15 @@ import at.jku.cis.iVolunteer.workflow.service.WorkflowTypeService;
 @RequestMapping("/workflow")
 public class WorkflowController {
 
-	@Autowired
-	private TaskService taskService;
+	@Autowired private TaskService taskService;
 
-	@Autowired
-	private RuntimeService runtimeService;
+	@Autowired private RuntimeService runtimeService;
 
-	@Autowired
-	private WorkflowTypeService workfowTypeService;
+	@Autowired private WorkflowTypeService workfowTypeService;
 
-	@Autowired
-	private WorkflowStepService workflowStepService;
+	@Autowired private WorkflowStepService workflowStepService;
 
-	@Autowired
-	private WorkflowProcessService workflowProcessService;
+	@Autowired private WorkflowProcessService workflowProcessService;
 
 	@GetMapping("/type")
 	public List<WorkflowType> getWorkflowTypes() {
@@ -61,10 +56,10 @@ public class WorkflowController {
 
 	@PostMapping("/{workflowKey}")
 	public String startWorkflow(@PathVariable("workflowKey") String workflowKey, @RequestParam("taskId") String taskId,
-			@RequestParam("employeeId") String employeeId) {
+			@RequestParam("helpSeekerId") String helpSeekerId) {
 		Map<String, Object> params = new HashMap<>();
 		params.put(TASK_ID, taskId);
-		params.put(EMPOYEE_ID, employeeId);
+		params.put(HELP_SEEKER_ID, helpSeekerId);
 		return runtimeService.startProcessInstanceByKey(workflowKey, params).getProcessInstanceId();
 	}
 

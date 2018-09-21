@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="standard" name="Standard Workflow 6" isExecutable="true">
+  <process id="standard" name="Standard Workflow 7" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
-    <userTask id="usertask1" name="Publish" activiti:assignee="${employeeId}" activiti:category="DEFAULT"></userTask>
+    <userTask id="usertask1" name="Publish" activiti:assignee="${helpSeekerId}" activiti:category="DEFAULT"></userTask>
     <sequenceFlow id="flow24" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
     <serviceTask id="servicetask8" name="Finish" activiti:expression="${finishServiceTask.execute(execution)}"></serviceTask>
     <subProcess id="subprocess1" name="Sub Process">
@@ -16,9 +16,9 @@
       <userTask id="usertask7" name="Unreserve" activiti:assignee="${volunteerId}" activiti:category="DEFAULT"></userTask>
       <sequenceFlow id="flow74" sourceRef="usertask7" targetRef="servicetask11"></sequenceFlow>
       <sequenceFlow id="flow92" sourceRef="servicetask10" targetRef="usertask7"></sequenceFlow>
-      <userTask id="usertask14" name="Assign" activiti:assignee="${employeeId}" activiti:category="SPECIAL"></userTask>
+      <userTask id="usertask14" name="Assign" activiti:assignee="${helpSeekerId}" activiti:category="SPECIAL"></userTask>
       <serviceTask id="servicetask14" name="Assign" activiti:expression="${assignServiceTask.execute(execution)}"></serviceTask>
-      <userTask id="usertask16" name="Unassign" activiti:assignee="${employeeId}" activiti:category="SPECIAL"></userTask>
+      <userTask id="usertask16" name="Unassign" activiti:assignee="${helpSeekerId}" activiti:category="SPECIAL"></userTask>
       <serviceTask id="servicetask15" name="Unassign" activiti:expression="${unassignServiceTask.execute(execution)}"></serviceTask>
       <sequenceFlow id="flow101" sourceRef="usertask14" targetRef="servicetask14"></sequenceFlow>
       <sequenceFlow id="flow102" sourceRef="servicetask14" targetRef="usertask16"></sequenceFlow>
@@ -32,8 +32,8 @@
     </subProcess>
     <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
     <sequenceFlow id="flow81" sourceRef="parallelgateway1" targetRef="subprocess1"></sequenceFlow>
-    <userTask id="usertask9" name="Start" activiti:assignee="${employeeId}" activiti:category="DEFAULT"></userTask>
-    <userTask id="usertask10" name="Finish" activiti:assignee="${employeeId}" activiti:category="DEFAULT"></userTask>
+    <userTask id="usertask9" name="Start" activiti:assignee="${helpSeekerId}" activiti:category="DEFAULT"></userTask>
+    <userTask id="usertask10" name="Finish" activiti:assignee="${helpSeekerId}" activiti:category="DEFAULT"></userTask>
     <sequenceFlow id="flow89" sourceRef="usertask10" targetRef="servicetask8"></sequenceFlow>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>

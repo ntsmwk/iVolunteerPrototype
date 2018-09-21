@@ -1,4 +1,4 @@
-export const navigation_employee = [
+export const navigation_helpseeker = [
   {
     'id': 'projects',
     'title': 'Project',

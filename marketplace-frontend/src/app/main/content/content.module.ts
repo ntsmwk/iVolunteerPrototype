@@ -10,7 +10,7 @@ import {TokenInterceptor} from './_interceptor/token.interceptor';
 import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 
 import {TokenGuard} from './_guard/token.guard';
-import {EmployeeGuard} from './_guard/employee.guard';
+import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 
 const routes: Route[] = [
@@ -56,37 +56,37 @@ const routes: Route[] = [
   {
     path: 'main/task',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task-form',
     loadChildren: './task-form/task-form.module#FuseTaskFormModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/tasks/all',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/project-form',
     loadChildren: './project-form/project-form.module#FuseProjectFormModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/projects/all',
     loadChildren: './project-list/project-list.module#FuseProjectListModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task-templates/all',
     loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
-    canActivate: [TokenGuard, EmployeeGuard]
+    canActivate: [TokenGuard, HelpSeekerGuard]
   }
 ];
 

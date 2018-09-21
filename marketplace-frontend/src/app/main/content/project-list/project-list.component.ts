@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {LoginService} from '../_service/login.service';
-import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
 import {Project} from '../_model/project';
@@ -17,13 +17,13 @@ export class FuseProjectListComponent implements OnInit {
   displayedColumns = ['name', 'description', 'startDate', 'endDate', 'actions'];
 
   constructor(private loginService: LoginService,
-              private coreEmployeeService: CoreEmployeeService,
+              private coreHelpSeekerService: CoreHelpSeekerService,
               private projectService: ProjectService) {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((employee: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(employee.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         this.projectService.findAll(marketplace)
           .toPromise()
           .then((projects: Project[]) => this.dataSource.data = projects);

@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoginService} from '../_service/login.service';
 import {Participant} from '../_model/participant';
-import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Marketplace} from '../_model/marketplace';
 import {ProjectService} from '../_service/project.service';
 import {Project} from '../_model/project';
@@ -20,7 +20,7 @@ export class FuseProjectFormComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private loginService: LoginService,
-              private coreEmployeeService: CoreEmployeeService,
+              private coreHelpSeekerService: CoreHelpSeekerService,
               private projectService: ProjectService) {
     this.projectForm = formBuilder.group({
       'id': new FormControl(undefined),
@@ -38,7 +38,7 @@ export class FuseProjectFormComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.route.params.subscribe(params => this.findProject(marketplace, params['projectId']));
       });
     });
@@ -67,7 +67,7 @@ export class FuseProjectFormComponent implements OnInit {
 
     const project = <Project>this.projectForm.value;
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.coreEmployeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.projectService.save(marketplace, project).toPromise().then(() => this.router.navigate(['/main/projects/all']));
       });
     });

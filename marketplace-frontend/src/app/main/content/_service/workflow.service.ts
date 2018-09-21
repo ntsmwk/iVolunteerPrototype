@@ -20,8 +20,8 @@ export class WorkflowService {
     return this.http.get(`${marketplace.url}/workflow/processId?taskId=${taskId}`);
   }
 
-  startWorkflow(marketplace: Marketplace, workflowKey: string, taskId: string, employeeId: string) {
-    return this.http.post(`${marketplace.url}/workflow/${workflowKey}?taskId=${taskId}&employeeId=${employeeId}`, {});
+  startWorkflow(marketplace: Marketplace, workflowKey: string, taskId: string, helpSeekerId: string) {
+    return this.http.post(`${marketplace.url}/workflow/${workflowKey}?taskId=${taskId}&helpSeekerId=${helpSeekerId}`, {});
   }
 
   getWorkflowSteps(marketplace: Marketplace, workflowKey: string, processInstanceId: string, participantId: string) {
@@ -29,6 +29,8 @@ export class WorkflowService {
   }
 
   completeWorkflowStep(marketplace: Marketplace, workflowKey: string, processInstanceId: string, workflowStep: WorkflowStep, participantId: string) {
+    console.error('complete workflow');
+    console.error(participantId);
     return this.http.post(`${marketplace.url}/workflow/${workflowKey}/${processInstanceId}/step?participantId=${participantId}`, workflowStep);
   }
 

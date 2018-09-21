@@ -10,7 +10,7 @@ import { WorkflowStep } from '../_model/workflow-step';
 import { WorkflowService } from '../_service/workflow.service';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from '../_service/login.service';
-import { Participant } from '../_model/participant';
+import { Participant, ParticipantRole } from '../_model/participant';
 import { MessageService } from '../_service/message.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class FuseTaskDetailComponent implements OnInit {
   workflowStepsSpecial: WorkflowStep[] = [];
   workflowStepsAssignment: WorkflowStep[] = [];
   workflowProcessId: string;
-  role: string;
+  role: ParticipantRole;
 
   constructor(private route: ActivatedRoute,
     private taskService: TaskService,
@@ -38,7 +38,7 @@ export class FuseTaskDetailComponent implements OnInit {
 
   ngOnInit() {
     Promise.all([
-      this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => this.role = role),
+      this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
     ]).then(() => {
       this.route.params.subscribe(params => this.loadTask(params['marketplaceId'], params['taskId']));
@@ -81,6 +81,6 @@ export class FuseTaskDetailComponent implements OnInit {
   }
 
   showEdit() {
-    return !isNullOrUndefined(this.role) && this.role === 'EMPLOYEE' && !isNullOrUndefined(this.task);
+    return !isNullOrUndefined(this.role) && this.role === 'HELP_SEEKER' && !isNullOrUndefined(this.task);
   }
 }

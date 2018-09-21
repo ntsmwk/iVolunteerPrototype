@@ -71,6 +71,10 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       cell: (row: CompetenceEntry) => this.datePipe.transform(row.timestamp, 'dd.MM.yyyy')
     });
 
+    this.loadCompetencies();
+  }
+
+  loadCompetencies() {
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
       this.volunteer = volunteer;
@@ -146,7 +150,9 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     return this.volunteerProfileService.findByVolunteer(volunteer, marketplace.url)
       .toPromise()
       .then((volunteerProfile: VolunteerProfile) => {
-        this.publicProfiles.set(marketplace.id, volunteerProfile);
+        if (volunteerProfile) {
+          this.publicProfiles.set(marketplace.id, volunteerProfile);
+        }
         this.onLoadingComplete();
       });
   }
@@ -166,23 +172,19 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
 
   publishCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerProfileService.shareCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
-      alert('Competence is published to marketplace.');
-      // this.publicProfile.competenceList.push(competenceEntry);
+      this.loadCompetencies();
     });
   }
 
   revokeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerProfileService.revokeCompetenceByVolunteer(this.volunteer, competenceEntry, marketplace.url).toPromise().then(() => {
-      alert('Competence is revoked from marketplace.');
-      // this.publicProfile.competenceList = this.publicProfile.competenceList
-      //   .filter((competence: CompetenceEntry) => competence.id !== competenceEntry.id);
+      this.loadCompetencies();
     });
   }
 
   synchronizeCompetence(competenceEntry: CompetenceEntry, marketplace: Marketplace) {
     this.volunteerRepositoryService.synchronizeCompetence(this.volunteer, competenceEntry).toPromise().then(() => {
-      alert('Competence is synchronized to local repository.');
-      // this.privateProfile.competenceList.push(competenceEntry);
+      this.loadCompetencies();
     });
   }
 

@@ -5,7 +5,7 @@ import {Task} from '../_model/task';
 import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
 
-import {CoreEmployeeService} from '../_service/core-employee.service';
+import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {LoginService} from '../_service/login.service';
 import {TaskService} from '../_service/task.service';
 
@@ -23,7 +23,7 @@ export class FuseTaskListComponent implements OnInit {
 
   constructor(private router: Router,
               private loginService: LoginService,
-              private employeeService: CoreEmployeeService,
+              private helpSeekerService: CoreHelpSeekerService,
               private taskService: TaskService) {
   }
 
@@ -37,7 +37,7 @@ export class FuseTaskListComponent implements OnInit {
 
   private loadAllTasks() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.employeeService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+      this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplaces = [].concat(marketplace);
         this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
       });

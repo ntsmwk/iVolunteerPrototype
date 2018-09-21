@@ -34,22 +34,15 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 @RestController
 public class TaskController {
 
-	@Value("${marketplace.identifier}")
-	private String marketplaceId;
+	@Value("${marketplace.identifier}") private String marketplaceId;
 
-	@Autowired
-	private TaskMapper taskMapper;
-	@Autowired
-	private ProjectRepository projectRepository;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskInteractionRepository taskInteractionRepository;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
+	@Autowired private TaskMapper taskMapper;
+	@Autowired private ProjectRepository projectRepository;
+	@Autowired private TaskRepository taskRepository;
+	@Autowired private TaskInteractionRepository taskInteractionRepository;
+	@Autowired private VolunteerRepository volunteerRepository;
 
-	@Autowired
-	private LoginService loginService;
+	@Autowired private LoginService loginService;
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
@@ -64,7 +57,10 @@ public class TaskController {
 		}
 
 		if (!StringUtils.isEmpty(projectId) && availableOnly) {
-			return taskMapper.toDTOs(taskRepository.findAvailableByProject(projectRepository.findOne(projectId)));
+			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId),
+					TaskStatus.PUBLISHED);
+			return taskMapper.toDTOs(
+					taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
 		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
