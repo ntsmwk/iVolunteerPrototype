@@ -55,7 +55,6 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
               private datePipe: DatePipe,
               private volunteerProfileService: VolunteerProfileService,
               private volunteerRepositoryService: VolunteerRepositoryService) {
-
   }
 
   ngOnInit() {

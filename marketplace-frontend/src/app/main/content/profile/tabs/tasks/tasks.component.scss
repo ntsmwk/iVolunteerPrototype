@@ -1,14 +1,11 @@
 @import "src/@fuse/scss/fuse";
 
 :host {
-
   .repository-content {
     div canvas {
       height: auto !important;
     }
-
   }
-
 }
 
 .taskTable{
