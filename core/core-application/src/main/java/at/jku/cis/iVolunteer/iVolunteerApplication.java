@@ -32,7 +32,7 @@ public class iVolunteerApplication {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	private static final String AUTHORIZATION = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzMzA4MTZ9.A4et3t79PPLzLOnbDNl0259Sr0L5sdBEzDjEnRDaC0hzSJgKLOuHk2YIk2rhALmecMFoOaNYsYx6coJHao7SEg";
+	private static final String AUTHORIZATION = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzOTQ4MDJ9.lhe39ukOhsrxzKw_5X4cXsyqBu8Z0ukZciaQrhsTCG3H0yMIxMb4chlVWv_A3vibBDnKqWn8NMhUkEg7AWy0CQ";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;

@@ -8,7 +8,7 @@ export const navigation_volunteer = [
   },
   {
     'id': 'profile',
-    'title': 'Your "I"',
+    'title': 'Your Profile',
     'type': 'item',
     'icon': 'profile',
     'url': '/main/profile'
