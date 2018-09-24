@@ -25,14 +25,15 @@ import {DatePipe} from '@angular/common';
   animations: fuseAnimations
 })
 export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
-  canvas: any;
-  ctx: any;
+  
 
   dataSource: CompetenciesDataSource;
 
   columns = [
     {columnDef: 'name', marketplace: null, columnType: 'text', header: 'Name', cell: (row: CompetenceEntry) => `${row.competenceName}`},
   ];
+
+
   displayedColumns: any[];
 
   competencies: CompetenceEntry[] = [];
@@ -71,6 +72,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     });
 
     this.loadCompetencies();
+    
   }
 
   loadCompetencies() {
@@ -129,20 +131,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.canvas = document.getElementById('myChart');
-    // this.ctx = this.canvas.getContext('2d');
-    // const myChart = new Chart(this.ctx, {
-    //   type: 'radar',
-    //   data: {
-    //     labels: ['Professional skills', 'Methodical expertise', 'Social skills', 'Self competences'],
-    //     datasets: [{
-    //       label: 'You',
-    //       backgroundColor: 'rgba(200,0,0,0.2)',
-    //       data: [14, 10, 10, 8]
-    //     }]
-    //   },
-    //   options: {}
-    // });
+    
   }
 
   private loadPublicVolunteerProfile(volunteer: Volunteer, marketplace: Marketplace) {
@@ -186,7 +175,6 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       this.loadCompetencies();
     });
   }
-
 }
 
 
