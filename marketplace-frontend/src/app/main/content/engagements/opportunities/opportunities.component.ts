@@ -20,14 +20,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 })
 export class OpportunitiesComponent implements OnInit, OnDestroy {
-  private mySelf: boolean;
-
-  public participant: Participant;
-  public registeredMarketplaces: Array<Marketplace> = [];
-
-
   public projects: Array<Project>;
   private marketplaceChangeSubscription: Subscription;
+
+  public participant: Participant;
+
+  public registeredMarketplaces: Array<Marketplace> = [];
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -41,24 +40,12 @@ export class OpportunitiesComponent implements OnInit, OnDestroy {
     this.loadProjects();
     this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadProjects.bind(this));
 
-    this.route.params.subscribe((params) => {
-      const participantId = params['participantId'];
-      if (isNullOrUndefined(participantId)) {
-        this.mySelf = true;
-        this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant);
-      } else {
-        this.mySelf = false;
-        this.coreVolunteerService.findById(participantId).toPromise().then((volunteer: Volunteer) => this.participant = volunteer);
-      }
-
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.participant = participant;
       this.coreVolunteerService.findRegisteredMarketplaces(this.participant.id).toPromise().then((registeredMarketplaces: Marketplace[]) => {
         this.registeredMarketplaces = registeredMarketplaces;
       });
     });
-
-
-
-
   }
 
   ngOnDestroy() {

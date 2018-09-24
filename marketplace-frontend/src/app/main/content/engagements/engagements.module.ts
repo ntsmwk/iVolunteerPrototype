@@ -19,7 +19,7 @@ import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 import {CalendarModule} from 'angular-calendar';
 import {ColorPickerModule} from 'ngx-color-picker';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
-import {FuseConfirmDialogModule} from '../../../../@fuse/components';
+import {FuseConfirmDialogModule, FuseWidgetModule} from '../../../../@fuse/components';
 import {FuseCalendarComponent} from './calendar/calendar.component';
 
 const routes: Routes = [
@@ -64,6 +64,7 @@ const routes: Routes = [
     FuseTruncatePipeModule,
     FuseSharedModule,
     FuseConfirmDialogModule,
+    FuseWidgetModule,
 
     NgbModalModule
   ]

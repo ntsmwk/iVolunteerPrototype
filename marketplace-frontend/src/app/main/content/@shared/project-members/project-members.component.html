@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let friend of friends">
-      <td><img [src]="friend.avatar" title="{{friend.name}}"></td>
+      <td><img *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}"></td>
       <td class="text-right">{{friend.hours}}</td>
       <td class="text-right">{{friend.resources}}</td>
     </tr>

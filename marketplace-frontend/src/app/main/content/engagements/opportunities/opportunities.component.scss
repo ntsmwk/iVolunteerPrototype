@@ -91,8 +91,8 @@
 
       .header {
         color: blue;
-        // background: mat-color($mat-blue, 500);
-        background: #ffefb4;
+        background: mat-color($mat-blue, 500);
+        // background: #ffefb4;
         padding: 16px 24px;
         height: 64px !important;
         min-height: 64px !important;
@@ -145,4 +145,6 @@
     }
   }
 }
+
+
 
