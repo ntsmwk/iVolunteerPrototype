@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,33 +35,45 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 @RestController
 public class TaskController {
 
-	@Value("${marketplace.identifier}") private String marketplaceId;
+	@Value("${marketplace.identifier}")
+	private String marketplaceId;
 
-	@Autowired private TaskMapper taskMapper;
-	@Autowired private ProjectRepository projectRepository;
-	@Autowired private TaskRepository taskRepository;
-	@Autowired private TaskInteractionRepository taskInteractionRepository;
-	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired
+	private TaskMapper taskMapper;
+	@Autowired
+	private ProjectRepository projectRepository;
+	@Autowired
+	private TaskRepository taskRepository;
+	@Autowired
+	private TaskInteractionRepository taskInteractionRepository;
+	@Autowired
+	private VolunteerRepository volunteerRepository;
 
-	@Autowired private LoginService loginService;
+	@Autowired
+	private LoginService loginService;
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly) {
+			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
+			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly) {
 		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
-		if (!StringUtils.isEmpty(projectId) && !availableOnly) {
+		if (!StringUtils.isEmpty(projectId) && !availableOnly && !engagedOnly) {
 			Project project = projectRepository.findOne(projectId);
 			return taskMapper.toDTOs(taskRepository.findByProject(project));
 		}
 
-		if (!StringUtils.isEmpty(projectId) && availableOnly) {
+		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
 			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId),
 					TaskStatus.PUBLISHED);
 			return taskMapper.toDTOs(
 					taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
+		}
+		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
+			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+					.filter(task -> task.getStatus().equals(TaskStatus.RUNNING)).collect(Collectors.toList());
 		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));

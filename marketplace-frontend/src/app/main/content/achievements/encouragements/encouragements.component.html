@@ -13,7 +13,7 @@
         </div>
 
         <mat-list>
-          <mat-list-item *ngFor="let badgeGroup of badgeGroups">
+          <mat-list-item *ngFor="let badgeGroup of badgeGroups" class="badge-row">
             <div fxFlex="40">{{badgeGroup.name}}</div>
             <mat-progress-bar class="progressBar" fxFlex="30" value="{{badgeGroup.progress}}"></mat-progress-bar>
             <div *ngFor="let badge of badgeGroup.badges" fxFlex="10">
@@ -28,7 +28,7 @@
 
         </mat-list>
 
-        <!--  
+        <!--
         <div class="badges" fxLayout="row wrap" fxLayoutAlign="center">
           <ng-container *ngFor="let badge of badges.badges">
             <fuse-widget class="badge" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
@@ -43,7 +43,7 @@
                 </div>
               </div>
             </fuse-widget>
-          </ng-container> 
+          </ng-container>
         </div>-->
 
         <mat-divider></mat-divider>
@@ -97,7 +97,7 @@
       </div>
     </fuse-widget>
 
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="100">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
