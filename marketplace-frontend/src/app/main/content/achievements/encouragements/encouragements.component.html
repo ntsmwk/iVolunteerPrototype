@@ -3,21 +3,36 @@
   <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
 
     <!-- Badges -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="50">
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"
+      *ngIf="badgeGroups">
 
-      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2" *ngIf="badgeGroups.length > 0">
 
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
-          <div class="h1">Recently earned Badges</div>
+        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h1">Your Badges</div>
         </div>
 
+        <mat-list>
+          <mat-list-item *ngFor="let badgeGroup of badgeGroups">
+            <div fxFlex="40">{{badgeGroup.name}}</div>
+            <mat-progress-bar class="progressBar" fxFlex="30" value="{{badgeGroup.progress}}"></mat-progress-bar>
+            <div *ngFor="let badge of badgeGroup.badges" fxFlex="10">
+
+              <img [src]="badge.image" fxFlex="10" class="badgeSmall">
+
+            </div>
+            <!-- <img [src]="badgeGroup.badges[0].image" fxFlex="10" class="badgeSmall">
+            <img [src]="badgeGroup.badges[1].image" fxFlex="10" class="badgeSmall">
+            <img [src]="badgeGroup.badges[2].image" fxFlex="10" class="badgeSmall"> -->
+          </mat-list-item>
+
+        </mat-list>
+
+        <!--  
         <div class="badges" fxLayout="row wrap" fxLayoutAlign="center">
           <ng-container *ngFor="let badge of badges.badges">
             <fuse-widget class="badge" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33">
 
-              <!-- Front -->
               <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                 <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                   <img class="badge" [src]="badge.image">
@@ -27,10 +42,9 @@
                   </div>
                 </div>
               </div>
-              <!-- / Front -->
             </fuse-widget>
-          </ng-container>
-        </div>
+          </ng-container> 
+        </div>-->
 
         <mat-divider></mat-divider>
 
@@ -44,19 +58,17 @@
 
 
     <!-- Competences -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="50">
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
+        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
           <div class="h1">Recently earned Competencies</div>
         </div>
 
         <div class="competencies" fxLayout="row wrap" fxLayoutAlign="center">
           <div class="competence" *ngFor="let competence of competencies.competencies" fxFlex="100" fxFlex.gt-xs="50"
-               fxFlex.gt-sm="33">
+            fxFlex.gt-sm="33">
             <div class="competence-content" fxLayout="column">
 
               <div class="header" fxLayout="row" fxLayoutAlign="center center">
@@ -70,8 +82,7 @@
               </div>
 
               <div class="footer" fxLayout="row" fxLayoutAlign="center center">
-                {{competence.marketplace}}
-                {{competence.date}}
+                {{competence.marketplace}} {{competence.date}}
               </div>
 
             </div>
@@ -85,10 +96,19 @@
         </div>
       </div>
     </fuse-widget>
-    <!-- Competencies end -->
 
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="h1">Your competence/skill distribution</div>
+        </div>
+        <div class="px-16 py-8" fxLayout="row" fxLayoutAlign="space-between center">
+          <canvas id="competenceRadar"></canvas>
+        </div>
+      </div>
+    </fuse-widget>
 
   </div>
 
 </div>
-

@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import * as Chart from 'chart.js';
 import {fuseAnimations} from '../../../../@fuse/animations';
 
 @Component({

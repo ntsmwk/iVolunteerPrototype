@@ -5,7 +5,9 @@ import {FuseSharedModule} from '@fuse/shared.module';
 
 import {
   MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule, MatSidenavModule,
-  MatTabsModule
+  MatTabsModule,
+  MatListModule,
+  MatProgressBarModule
 } from '@angular/material';
 import {FuseAchievementsComponent} from './achievements.component';
 import {FuseWidgetModule} from '../../../../@fuse/components';
@@ -28,10 +30,11 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-
+    MatProgressBarModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatListModule,
     MatOptionModule,
     MatSelectModule,
     MatExpansionModule,
