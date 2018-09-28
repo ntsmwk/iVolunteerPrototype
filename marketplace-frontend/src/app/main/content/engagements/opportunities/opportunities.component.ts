@@ -19,9 +19,9 @@ import {ActivatedRoute, Router} from '@angular/router';
   animations: fuseAnimations
 
 })
-export class OpportunitiesComponent implements OnInit, OnDestroy {
+export class OpportunitiesComponent implements OnInit {
+  @Input('projects')
   public projects: Array<Project>;
-  private marketplaceChangeSubscription: Subscription;
 
   public participant: Participant;
 
@@ -37,9 +37,6 @@ export class OpportunitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadProjects();
-    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadProjects.bind(this));
-
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.participant = participant;
       this.coreVolunteerService.findRegisteredMarketplaces(this.participant.id).toPromise().then((registeredMarketplaces: Marketplace[]) => {
@@ -48,29 +45,6 @@ export class OpportunitiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.marketplaceChangeSubscription.unsubscribe();
-  }
-
-  private loadProjects() {
-    this.projects = new Array<Project>();
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-      const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
-      if (!isArray(selected_marketplaces)) {
-        return;
-      }
-      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
-        .toPromise()
-        .then((marketplaces: Marketplace[]) => {
-          marketplaces
-            .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
-            .forEach(marketplace => {
-              this.projectService.findEngaged(marketplace)
-                .toPromise().then((projects: Project[]) => this.projects = this.projects.concat(projects));
-            });
-        });
-    });
-  }
 
   public calculateProgess(project: Project) {
     return 50;

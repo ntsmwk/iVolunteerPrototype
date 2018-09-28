@@ -13,15 +13,15 @@
     <mat-tab-group dynamicHeight="true">
 
       <mat-tab label="Opportunities">
-        <fuse-opportunities></fuse-opportunities>
+        <fuse-opportunities [projects]="projects"></fuse-opportunities>
       </mat-tab>
 
       <mat-tab label="Collaborations">
-        <fuse-collaborations></fuse-collaborations>
+        <fuse-collaborations [projects]="projects"></fuse-collaborations>
       </mat-tab>
 
       <mat-tab label="Contributions">
-        <fuse-contributions></fuse-contributions>
+        <fuse-contributions [projects]="projects"></fuse-contributions>
       </mat-tab>
 
       <mat-tab label="Encouragements">

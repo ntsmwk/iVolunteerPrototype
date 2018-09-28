@@ -1,3 +1,77 @@
-<p>
-  collaborations works!
-</p>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+
+    <!-- Projects -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                 fxFlex="100" fxFlex.gt-sm="75">
+
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+        <!--
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Projects</div>
+        </div>
+        -->
+
+        <div *ngFor="let project of projects" fxFlex="100">
+          <table class="simple clickable">
+            <thead>
+            <tr>
+              <th class="header">{{project.name}}</th>
+              <th>Name</th>
+              <th class="text-right">Common Groups</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+              <td><img class="avatar big cursor" [src]="me.avatar" title="{{me.name}}"></td>
+              <td>{{me.name}}</td>
+              <td></td>
+            </tr>
+
+            <th class="subHeader">Follower</th>
+            <tr *ngFor="let friend of friends.follower" [routerLink]="'/main/get-connected/profile/1'">
+              <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
+              </td>
+              <td>{{friend.name}}</td>
+              <td class="text-right">
+                <span *ngFor="let group of friend.groups">
+                  <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">
+                </span>
+              </td>
+            </tr>
+
+            <th class="subHeader">Following</th>
+            <tr *ngFor="let friend of friends.following" [routerLink]="'/main/get-connected/profile/1'">
+              <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
+              </td>
+              <td>{{friend.name}}</td>
+              <td class="text-right">
+                <span *ngFor="let group of friend.groups">
+                  <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">
+                </span>
+              </td>
+            </tr>
+
+            <th class="subHeader">Others</th>
+            <tr *ngFor="let friend of friends.others" [routerLink]="'/main/get-connected/profile/1'">
+              <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
+              </td>
+              <td>{{friend.name}}</td>
+              <td class="text-right">
+                <span *ngFor="let group of friend.groups">
+                  <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </fuse-widget>
+  </div>
+</div>

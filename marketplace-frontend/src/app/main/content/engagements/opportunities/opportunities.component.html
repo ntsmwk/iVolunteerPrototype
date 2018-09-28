@@ -4,7 +4,7 @@
 
     <!-- Projects -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="70">
+                 fxFlex="100" fxFlex.gt-sm="60">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
@@ -37,7 +37,7 @@
                     <div class="content pd-12 mat-white-bg" fusePerfectScrollbar>
                       <mat-form-field>
                 <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
-                          rows="10"></textarea>
+                          rows="5"></textarea>
                       </mat-form-field>
 
                       <mat-form-field>
@@ -53,9 +53,10 @@
                     <!-- / CONTENT -->
                   </div>
                   <!-- / CENTER -->
-                  <!-- SIDENAV -->
+                  <!-- SIDENAV
+
                   <mat-sidenav class="sidenav right-sidenav " position="end" opened="true" mode="side"
-                               fuseMatSidenavHelper="project-member-right-sidenav" mat-is-locked-open="gt-md">
+                               fuseMatSidenavHelper="project-member-right-sidenav" mat-is-locked-open="gt-sm">
                     <fuse-project-members></fuse-project-members>
                   </mat-sidenav>
                   <!-- / SIDENAV -->
@@ -75,7 +76,7 @@
 
     <!-- Marketplaces -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="30">
+                 fxFlex="100" fxFlex.gt-sm="40">
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
