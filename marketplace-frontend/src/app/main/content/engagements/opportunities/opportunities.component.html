@@ -63,12 +63,10 @@
                 </mat-sidenav-container>
                 <mat-divider></mat-divider>
                 <mat-sidenav-container>
-                  {{participant.id}}
-                  {{participant.id}}
-                  {{participant.id}}
                   <div *ngIf="participant">
-                  <fuse-project-task-list [projectId]="project.id" [availableOnly]="false" [engagedOnly]="true"
-                                          [marketplaceId]="project.marketplaceId" [participantId]="participant.id"></fuse-project-task-list>
+                    <fuse-project-task-list [projectId]="project.id" [availableOnly]="false" [engagedOnly]="true"
+                                            [marketplaceId]="project.marketplaceId"
+                                            [participantId]="participant.id"></fuse-project-task-list>
                   </div>
                 </mat-sidenav-container>
               </div>

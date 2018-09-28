@@ -73,7 +73,7 @@ public class TaskController {
 		}
 		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.RUNNING)).collect(Collectors.toList());
+					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED)|| task.getStatus().equals(TaskStatus.RUNNING)).collect(Collectors.toList());
 		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));

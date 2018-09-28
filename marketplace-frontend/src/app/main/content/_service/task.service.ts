@@ -37,7 +37,6 @@ export class TaskService {
   }
 
   findEngagedByParticipant(marketplace: Marketplace, participantId: string, projectId: string) {
-    console.log('findEngagedByParticipant');
     return this.http.get(`${marketplace.url}/task?projectId=${projectId}&participantId=${participantId}&engagedOnly=true`);
   }
 
