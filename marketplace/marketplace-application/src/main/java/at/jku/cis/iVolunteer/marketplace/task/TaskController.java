@@ -71,9 +71,12 @@ public class TaskController {
 			return taskMapper.toDTOs(
 					taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
 		}
-		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
+		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {			
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED)|| task.getStatus().equals(TaskStatus.RUNNING)).collect(Collectors.toList());
+					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED)
+							|| task.getStatus().equals(TaskStatus.RUNNING))
+					.filter(task -> task.getProject().getId().equals(projectId))
+					.collect(Collectors.toList());
 		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
@@ -92,6 +95,19 @@ public class TaskController {
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {
 		return taskMapper.toDTO(taskRepository.findOne(id));
+	}
+
+	@GetMapping("/task/finished")
+	public List<TaskDTO> findAllFinished(
+			@RequestParam(value = "participantId", required = true) String participantId) {
+		
+		List<TaskDTO> test = taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+				.filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).collect(Collectors.toList());
+
+
+		return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+				.filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).collect(Collectors.toList());
+
 	}
 
 	@PostMapping("/task")

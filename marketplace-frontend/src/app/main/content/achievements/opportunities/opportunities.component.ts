@@ -1,6 +1,9 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import * as Chart from 'chart.js';
 import {fuseAnimations} from '../../../../../@fuse/animations';
+import {Project} from '../../_model/project';
+import {Participant} from '../../_model/participant';
+import {LoginService} from '../../_service/login.service';
 
 @Component({
   selector: 'fuse-opportunities',
@@ -10,6 +13,11 @@ import {fuseAnimations} from '../../../../../@fuse/animations';
 
 })
 export class OpportunitiesComponent implements OnInit, AfterViewInit {
+  @Input('projects')
+  public projects: Array<Project>;
+
+  public participant: Participant;
+
   canvas: any;
   ctx: any;
 
@@ -162,13 +170,16 @@ export class OpportunitiesComponent implements OnInit, AfterViewInit {
     ]
   };
 
-  constructor() {
+  constructor(private loginService: LoginService) {
     this.widgetFacts = {
       currentRange: 'W'
     };
   }
 
   ngOnInit() {
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.participant = participant;
+    });
   }
 
   ngAfterViewInit() {
@@ -202,8 +213,8 @@ export class OpportunitiesComponent implements OnInit, AfterViewInit {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{ stacked: true }],
-          yAxes: [{ stacked: true }]
+          xAxes: [{stacked: true}],
+          yAxes: [{stacked: true}]
         }
       }
     });

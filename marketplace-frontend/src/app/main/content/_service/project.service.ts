@@ -26,6 +26,10 @@ export class ProjectService {
     return this.http.get(`${marketplace.url}/project?state=ENGAGED`);
   }
 
+  findFinished(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/project?state=FINISHED`);
+  }
+
   findById(marketplace: Marketplace, projectId: string) {
     return this.http.get(`${marketplace.url}/project/${projectId}`);
   }

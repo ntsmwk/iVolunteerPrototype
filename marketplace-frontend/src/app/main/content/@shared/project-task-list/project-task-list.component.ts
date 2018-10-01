@@ -12,18 +12,20 @@ import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
   styleUrls: ['./project-task-list.component.scss']
 })
 export class FuseProjectTaskListComponent implements OnInit {
-
-
   @Input('projectId')
   private projectId: string;
   @Input('marketplaceId')
   public marketplaceId: string;
+  @Input('participantId')
+  public participantId: string;
+
   @Input('availableOnly')
   public availableOnly: boolean;
   @Input('engagedOnly')
   public engagedOnly: boolean;
-  @Input('participantId')
-  public participantId: string;
+  @Input('finishedOnly')
+  public finishedOnly: boolean;
+
 
   public tasks: Array<Task>;
 
@@ -33,10 +35,14 @@ export class FuseProjectTaskListComponent implements OnInit {
   ngOnInit() {
     this.marketplaceService.findById(this.marketplaceId).toPromise().then((marketplace: Marketplace) => {
 
-      if (this.availableOnly === true && this.engagedOnly === false) {
+      if (this.availableOnly === true) {
         this.taskService.findAvailableByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
-      } else if (this.engagedOnly === true && this.availableOnly === false) {
+
+      } else if (this.engagedOnly === true) {
         this.taskService.findEngagedByParticipant(marketplace, this.participantId, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
+
+      } else if (this.finishedOnly === true) {
+        this.taskService.findFinishedByParticipant(marketplace, this.participantId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);
 
       } else {
         this.taskService.findByProjectId(marketplace, this.projectId).toPromise().then((tasks: Array<Task>) => this.tasks = tasks);

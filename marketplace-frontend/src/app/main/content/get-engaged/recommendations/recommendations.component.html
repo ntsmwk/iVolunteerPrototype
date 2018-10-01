@@ -40,8 +40,11 @@
                 <!-- / CONTENT -->
                 <mat-divider></mat-divider>
 
-                <fuse-project-task-list [projectId]="project.id" [availableOnly]="true"
-                                        [marketplaceId]="project.marketplaceId"></fuse-project-task-list>
+                <fuse-project-task-list [projectId]="project.id"
+                                        [marketplaceId]="project.marketplaceId"
+                                        [finishedOnly]="false"
+                                        [availableOnly]="true"
+                                        [engagedOnly]="false"></fuse-project-task-list>
               </div>
             </ng-template>
           </mat-expansion-panel>

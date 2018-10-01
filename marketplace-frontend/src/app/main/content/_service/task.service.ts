@@ -40,6 +40,10 @@ export class TaskService {
     return this.http.get(`${marketplace.url}/task?projectId=${projectId}&participantId=${participantId}&engagedOnly=true`);
   }
 
+  findFinishedByParticipant(marketplace: Marketplace, participantId: string) {
+    return this.http.get(`${marketplace.url}/task/finished?participantId=${participantId}`);
+  }
+
   save(marketplace: Marketplace, task: Task) {
     if (isNullOrUndefined(task.id)) {
       return this.http.post(`${marketplace.url}/task`, task);

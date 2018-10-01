@@ -42,8 +42,6 @@ const routes: Routes = [
     RouterModule,
 
     MatTabsModule,
-    MatExpansionModule,
-
     MatButtonModule,
     MatDividerModule,
     MatExpansionModule,

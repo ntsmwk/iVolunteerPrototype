@@ -36,6 +36,8 @@ public class ProjectController {
 
 	private static final String AVAILABLE = "AVAILABLE";
 	private static final String ENGAGED = "ENGAGED";
+	private static final String FINISHED = "FINISHED";
+
 
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
@@ -61,6 +63,10 @@ public class ProjectController {
 			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
 			return projectMapper.toDTOs(findEngagedProjectsByVolunteer(volunteer));
 		}
+		if (StringUtils.equalsIgnoreCase(state, FINISHED)) {
+			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
+			return projectMapper.toDTOs(findFinishedProjectsByVolunteer(volunteer));
+		}
 		return projectMapper.toDTOs(projectRepository.findAll());
 	}
 
@@ -78,6 +84,19 @@ public class ProjectController {
 		Set<Project> projects = new HashSet<>();
 
 		taskRepository.findByStatus(TaskStatus.RUNNING).forEach(task -> {
+			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
+			if (isAssignedTaskInteraction(taskInteraction)) {
+				projects.add(task.getProject());
+			}
+		});
+
+		return new ArrayList<>(projects);
+	}
+	
+	private List<Project> findFinishedProjectsByVolunteer(Volunteer volunteer) {
+		Set<Project> projects = new HashSet<>();
+
+		taskRepository.findByStatus(TaskStatus.FINISHED).forEach(task -> {
 			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
 			if (isAssignedTaskInteraction(taskInteraction)) {
 				projects.add(task.getProject());
