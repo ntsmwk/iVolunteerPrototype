@@ -2,17 +2,20 @@
 
   <div class="repository-content" fxLayout="row wrap" fxLayoutAlign="center" class="taskTableDiv">
 
-    <mat-table #table [dataSource]="dataSource" class="taskTable">
+    <mat-table #table [dataSource]="dataSource" class="taskTable" *ngIf="commonProfile.taskList.length > 0">
 
       <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef">
         <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>
         <mat-cell *cdkCellDef="let row">
 
-          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'SYNC'" (click)="synchronizeTask(row, column.marketplace)" mat-raised-button color="primary">Sync
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'SYNC'" (click)="synchronizeTask(row, column.marketplace)"
+            mat-raised-button color="primary">Sync
           </button>
-          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'PUBLISH'" (click)="publishTask(row, column.marketplace)" mat-raised-button color="primary">Publish
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'PUBLISH'" (click)="publishTask(row, column.marketplace)"
+            mat-raised-button color="primary">Publish
           </button>
-          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'REVOKE'" (click)="revokeTask(row, column.marketplace)" mat-raised-button color="primary">Revoke
+          <button class="action-button" *ngIf="column.columnType == 'function' && column.cell(row) == 'REVOKE'" (click)="revokeTask(row, column.marketplace)"
+            mat-raised-button color="primary">Revoke
           </button>
           <div *ngIf="column.columnType == 'text'">
             {{ column.cell(row) }}
@@ -24,6 +27,10 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
     </mat-table>
+
+    <div *ngIf="!commonProfile || commonProfile.taskList.length == 0">
+      <strong> No tasks found. </strong>
+    </div>
 
   </div>
 </div>

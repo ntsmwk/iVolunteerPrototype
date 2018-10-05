@@ -12,8 +12,20 @@
 
     <mat-tab-group dynamicHeight="true">
 
-      <mat-tab label="List">
-        <fuse-projects></fuse-projects>
+      <mat-tab label="Opportunities">
+        <fuse-opportunities [projects]="projects"></fuse-opportunities>
+      </mat-tab>
+
+      <mat-tab label="Collaborations">
+        <fuse-collaborations [projects]="projects"></fuse-collaborations>
+      </mat-tab>
+
+      <mat-tab label="Contributions">
+        <fuse-contributions [projects]="projects"></fuse-contributions>
+      </mat-tab>
+
+      <mat-tab label="Encouragements">
+        <fuse-encouragements></fuse-encouragements>
       </mat-tab>
 
       <mat-tab label="Calendar">

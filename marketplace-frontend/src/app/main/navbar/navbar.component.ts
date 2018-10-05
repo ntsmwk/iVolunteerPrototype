@@ -9,8 +9,9 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
-import { navigation_employee } from '../../navigation/navigation_employee';
+import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
 import { LoginService } from '../content/_service/login.service';
+import { ParticipantRole } from '../content/_model/participant';
 
 @Component({
     selector     : 'fuse-navbar',
@@ -53,10 +54,10 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
     )
     {
         // Navigation data
-         this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+         this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
             switch(role){
-                case 'EMPLOYEE':
-                this.navigation = navigation_employee;
+                case 'HELP_SEEKER':
+                this.navigation = navigation_helpseeker;
                 break;
                 case 'VOLUNTEER': 
                 this.navigation = navigation_volunteer;

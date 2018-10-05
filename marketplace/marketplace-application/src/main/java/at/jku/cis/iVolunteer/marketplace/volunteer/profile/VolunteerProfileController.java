@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,27 +41,15 @@ import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerProfileDTO;
 @RequestMapping("/volunteer")
 public class VolunteerProfileController {
 
-	@Autowired
-	private VerifierRestClient verifierRestClient;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
-	@Autowired
-	private VolunteerProfileMapper volunteerProfileMapper;
-	@Autowired
-	private VolunteerProfileRepository volunteerProfileRepository;
-	@Autowired
-	private TaskEntryMapper taskEntryMapper;
-	@Autowired
-	private CompetenceEntryMapper competenceEntryMapper;
-
-	@Autowired
-	private LoginService loginService;
-
-	@Autowired
-	private CompetenceMapper competenceMapper;
-
-	@Autowired
-	private CompetenceEntryToCompetenceMapper competenceEntryToCompetenceMapper;
+	@Autowired private VerifierRestClient verifierRestClient;
+	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private VolunteerProfileMapper volunteerProfileMapper;
+	@Autowired private VolunteerProfileRepository volunteerProfileRepository;
+	@Autowired private TaskEntryMapper taskEntryMapper;
+	@Autowired private CompetenceEntryMapper competenceEntryMapper;
+	@Autowired private LoginService loginService;
+	@Autowired private CompetenceMapper competenceMapper;
+	@Autowired private CompetenceEntryToCompetenceMapper competenceEntryToCompetenceMapper;
 
 	@GetMapping("/{volunteerId}/profile")
 	public VolunteerProfileDTO getVolunteerProfile(@PathVariable("volunteerId") String volunteerId) {
@@ -91,10 +80,11 @@ public class VolunteerProfileController {
 	}
 
 	@PostMapping("/{volunteerId}/profile/task")
-	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntryDTO taskEntryDto) {
+	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntryDTO taskEntryDto,
+			@RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
-		if (verifierRestClient.verifyTaskEntry(taskEntryDto)) {
+		if (verifierRestClient.verifyTaskEntry(taskEntryDto, authorization)) {
 			volunteerProfile.getTaskList().add(taskEntryMapper.toEntity(taskEntryDto));
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
@@ -147,15 +137,15 @@ public class VolunteerProfileController {
 	}
 
 	private Predicate<CompetenceEntry> filterByCompetenceEntryId(String competenceEntryId) {
-		return competenceEntry -> competenceEntry.getId().equals(competenceEntryId);
+		return competenceEntry -> competenceEntry.getCompetenceId().equals(competenceEntryId);
 	}
 
 	@PostMapping("/{volunteerId}/profile/competence")
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@RequestBody CompetenceEntryDTO competenceEntryDto) {
+			@RequestBody CompetenceEntryDTO competenceEntryDto, @RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
-		if (verifierRestClient.verifyCompetenceEntry(competenceEntryDto)) {
+		if (verifierRestClient.verifyCompetenceEntry(competenceEntryDto, authorization)) {
 			volunteerProfile.getCompetenceList().add(competenceEntryMapper.toEntity(competenceEntryDto));
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {

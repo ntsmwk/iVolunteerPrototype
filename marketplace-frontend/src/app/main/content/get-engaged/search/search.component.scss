@@ -1,0 +1,18 @@
+@import "src/@fuse/scss/fuse";
+
+.page-layout {
+
+  .search-button {
+    margin-left: 30px;
+  }
+
+  mat-icon {
+    color: #000000;
+    margin: 0 8px 0 0;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    padding-right: 30px;
+  }
+
+}

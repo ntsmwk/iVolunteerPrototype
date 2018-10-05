@@ -6,8 +6,9 @@ import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
 
 import {navigation_volunteer} from 'app/navigation/navigation_volunteer';
-import {navigation_employee} from 'app/navigation/navigation_employee';
+import {navigation_helpseeker} from '../../navigation/navigation_helpseeker';
 import {LoginService} from '../content/_service/login.service';
+import { Participant, ParticipantRole } from '../content/_model/participant';
 
 @Component({
   selector: 'fuse-toolbar',
@@ -87,10 +88,10 @@ export class FuseToolbarComponent {
       this.noNav = settings.layout.navigation === 'none';
     });
 
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role: string) => {
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
       switch (role) {
-        case 'EMPLOYEE':
-          this.navigation = navigation_employee;
+        case 'HELP_SEEKER':
+          this.navigation = navigation_helpseeker;
           break;
         case 'VOLUNTEER':
           this.navigation = navigation_volunteer;

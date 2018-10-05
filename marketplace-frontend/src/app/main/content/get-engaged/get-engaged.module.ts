@@ -2,11 +2,19 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {FuseGetEngagedComponent} from './get-engaged.component';
-import {MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSidenavModule, MatTabsModule} from '@angular/material';
+import {
+  MatButtonModule, MatCheckboxModule,
+  MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatRadioModule, MatSidenavModule, MatSlideToggleModule,
+  MatTabsModule
+} from '@angular/material';
 import {FuseWidgetModule} from '../../../../@fuse/components';
-import {FuseSuggestionsModule} from './suggestions/suggestions.module';
-import {FusePreferencesModule} from './preferences/preferences.module';
-import { FuseSharedModule } from '../../../../@fuse/shared.module';
+import {FuseSharedModule} from '../../../../@fuse/shared.module';
+import {RecommendationsComponent} from './recommendations/recommendations.component';
+import {SearchComponent} from './search/search.component';
+import {SuggestionsComponent} from './suggestions/suggestions.component';
+import {PreferencesComponent} from './preferences/preferences.component';
+import {FuseProjectTaskListModule} from '../@shared/project-task-list/project-task-list.module';
+import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 
 const routes: Routes = [
   {path: '', component: FuseGetEngagedComponent},
@@ -17,7 +25,11 @@ const routes: Routes = [
 @NgModule({
 
   declarations: [
-    FuseGetEngagedComponent
+    FuseGetEngagedComponent,
+    RecommendationsComponent,
+    SuggestionsComponent,
+    PreferencesComponent,
+    SearchComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -28,11 +40,18 @@ const routes: Routes = [
     MatInputModule,
     MatSidenavModule,
     MatTabsModule,
+    MatRadioModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
 
     FuseSharedModule,
     FuseWidgetModule,
-    FuseSuggestionsModule,
-    FusePreferencesModule
+    FuseProjectTaskListModule,
+    FuseTruncatePipeModule
+
   ]
 })
 

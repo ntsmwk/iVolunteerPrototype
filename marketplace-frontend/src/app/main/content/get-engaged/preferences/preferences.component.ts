@@ -8,7 +8,7 @@ import {fuseAnimations} from '../../../../../@fuse/animations';
   animations: fuseAnimations
 })
 
-export class FusePreferencesComponent implements OnInit {
+export class PreferencesComponent implements OnInit {
   soloGroup: string;
   soloGroupOptions: string[] = ['Solo Task', 'Group Task'];
 

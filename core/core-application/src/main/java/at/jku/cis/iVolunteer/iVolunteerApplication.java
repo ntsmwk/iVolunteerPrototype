@@ -7,10 +7,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import at.jku.cis.iVolunteer.core.employee.CoreEmployeeRepository;
+import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreEmployee;
+import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
+import at.jku.cis.iVolunteer.mapper.user.HelpSeekerMapper;
+import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
@@ -29,16 +32,14 @@ public class iVolunteerApplication {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private static final String AUTHORIZATION = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzOTQ4MDJ9.lhe39ukOhsrxzKw_5X4cXsyqBu8Z0ukZciaQrhsTCG3H0yMIxMb4chlVWv_A3vibBDnKqWn8NMhUkEg7AWy0CQ";
 
-	@Autowired
-	private CoreEmployeeRepository coreEmployeeRepository;
-	@Autowired
-	private CoreVolunteerRepository coreVolunteerRepository;
-
-	@Autowired
-	private MarketplaceRepository marketplaceRepository;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
+	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreMarketplaceRestClient marketplaceRestClient;
+	@Autowired private CoreHelpSeekerMapper helpSeekerMapper;
 
 	public static void main(String[] args) {
 		SpringApplication.run(iVolunteerApplication.class, args);
@@ -47,7 +48,7 @@ public class iVolunteerApplication {
 	@PostConstruct
 	private void init() {
 		Marketplace marketplace = createMarketplace();
-		createEmployee(MMUSTERMANN, RAW_PASSWORD, marketplace);
+		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, marketplace);
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
@@ -67,17 +68,18 @@ public class iVolunteerApplication {
 		return marketplace;
 	}
 
-	private CoreEmployee createEmployee(String username, String password, Marketplace marketplace) {
-		CoreEmployee employee = coreEmployeeRepository.findByUsername(username);
-		if (employee == null) {
-			employee = new CoreEmployee();
-			employee.setUsername(username);
-			employee.setPassword(bCryptPasswordEncoder.encode(password));
-			employee.getRegisteredMarketplaces().clear();
-			employee.getRegisteredMarketplaces().add(marketplace);
-			employee = coreEmployeeRepository.insert(employee);
+	private CoreHelpSeeker createHelpSeeker(String username, String password, Marketplace marketplace) {
+		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
+		if (helpSeeker == null) {
+			helpSeeker = new CoreHelpSeeker();
+			helpSeeker.setUsername(username);
+			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
+			helpSeeker.getRegisteredMarketplaces().clear();
+			helpSeeker.getRegisteredMarketplaces().add(marketplace);
+			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
+			marketplaceRestClient.registerHelpSeeker(MARKETPLACE_URL, AUTHORIZATION, helpSeekerMapper.toDTO(helpSeeker));
 		}
-		return employee;
+		return helpSeeker;
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password) {

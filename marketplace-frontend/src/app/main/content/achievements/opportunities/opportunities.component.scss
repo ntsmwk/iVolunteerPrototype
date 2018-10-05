@@ -1,0 +1,116 @@
+@import "src/@fuse/scss/fuse";
+
+div.layout1 {
+  margin-bottom: 0.4em;
+
+  img.icon {
+    max-width: 50px;
+
+  }
+  div.factValue {
+    vertical-align: middle;
+    font-size: 20px;
+    margin-left: 20px;
+    margin-right: auto;
+  }
+
+  div canvas {
+    height: auto !important;
+  }
+
+  ::ng-deep div.mat-form-field-wrapper {
+    padding: 8px 0;
+  }
+}
+
+div.layout2 {
+
+  div.finished {
+
+
+    th, td {
+      padding-right: 50px;
+
+      mat-icon {
+        position: relative;
+        top: 5px;
+        left: 5px;
+        padding-right: 30px;
+      }
+    }
+
+    th {
+      font-weight: normal;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+}
+
+.projects {
+
+  .mat-expansion-panel-header-title {
+    .progress-bar {
+      width: 50%;
+      margin: auto;
+      margin-right: 0;
+      padding-right: 15px;
+      display: inherit;
+
+      span {
+        padding: 5px;
+        font-size: 20px;
+        line-height: 20px;
+      }
+
+      .mat-progress-bar {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      @include media-breakpoint-down('xs') {
+        display: none;
+      }
+    }
+
+  }
+  .mat-expansion-panel-content {
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    .sidenav {
+      width: 380px !important;
+      min-width: 380px !important;
+      max-width: 380px !important;
+
+      &.right-sidenav {
+        @include media-breakpoint('gt-md') {
+          z-index: 0;
+        }
+      }
+    }
+
+    > .mat-drawer-content,
+    > .mat-sidenav-content {
+      z-index: 1;
+
+      .center {
+
+        .header {
+          position: relative;
+          height: 160px;
+          min-height: 160px;
+          max-height: 160px;
+
+          @include media-breakpoint-down('sm') {
+            height: 120px;
+            min-height: 120px;
+            max-height: 120px;
+          }
+        }
+
+      }
+    }
+  }
+}

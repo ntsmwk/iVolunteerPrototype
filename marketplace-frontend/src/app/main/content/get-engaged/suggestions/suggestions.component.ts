@@ -20,78 +20,22 @@ import {Subscription} from 'rxjs';
   animations: fuseAnimations
 
 })
-export class FuseSuggestionsComponent implements OnInit, OnDestroy {
+export class SuggestionsComponent implements OnInit {
 
-  about = {
-    'suggestions': [
-      {'suggestion': 'Marketplace 1', 'name': 'Garry Newman', 'avatar': 'assets/images/backgrounds/winter.jpg'},
+  suggestions = {
+    'marketplaces': [
+      {'suggestion': 'Marketplace A', 'name': 'Garry Newman', 'avatar': 'assets/images/backgrounds/winter.jpg'},
+      {'suggestion': 'Marketplace B', 'name': 'Katherine Green', 'avatar': 'assets/images/backgrounds/summer.jpg'}
+
+    ],
+    'projects': [
       {'suggestion': 'Project X', 'name': 'Danielle Jackson', 'avatar': 'assets/images/backgrounds/spring.jpg'}
     ]
   };
 
-  radioOptions = 'test1';
-
-  private marketplaceChangeSubscription: Subscription;
-
-  private volunteer: Participant;
-  public projects = new Array<Project>();
-  public marketplaces = new Array<Marketplace>();
-
-
-  constructor(private arrayService: ArrayService,
-              private loginService: LoginService,
-              private projectService: ProjectService,
-              private messageService: MessageService,
-              private marketplaceService: CoreMarketplaceService,
-              private volunteerService: CoreVolunteerService) {
-  }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.volunteer = participant as Volunteer;
-      this.loadSuggestedProjects();
-      this.loadSuggestedMarketplaces();
-    });
-    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadSuggestedProjects.bind(this));
   }
 
-  ngOnDestroy() {
-    this.marketplaceChangeSubscription.unsubscribe();
-  }
-
-  private loadSuggestedMarketplaces() {
-    Promise.all([
-      this.marketplaceService.findAll().toPromise(),
-      this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-    ]).then((values: any[]) => {
-      this.marketplaces = this.arrayService.removeAll(values[0], values[1]);
-    });
-  }
-
-  registerMarketplace(marketplace) {
-    this.volunteerService.registerMarketplace(this.volunteer.id, marketplace.id).toPromise().then(() => {
-      this.loadSuggestedMarketplaces();
-      this.messageService.broadcast('marketplaceRegistration', {});
-    });
-  }
-
-  private loadSuggestedProjects() {
-    this.projects = new Array<Project>();
-    const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
-    if (!isArray(selected_marketplaces)) {
-      return;
-    }
-    this.volunteerService.findRegisteredMarketplaces(this.volunteer.id)
-      .toPromise()
-      .then((marketplaces: Marketplace[]) => {
-        marketplaces
-          .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
-          .forEach(marketplace => {
-            this.projectService.findAvailable(marketplace)
-              .toPromise()
-              .then((projects: Project[]) => this.projects = this.projects.concat(projects));
-          });
-      });
 
   }
-}

@@ -1,100 +1,17 @@
-<div id="suggestion" class="page-layout blank p-12" fusePerfectScrollbar>
-
+<div class="page-layout blank p-12" fusePerfectScrollbar>
   <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
 
-    <!-- recommended projects -->
+    <!-- suggested projects -->
     <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                 fxFlex.gt-sm="40" fusePerfectScrollbar>
+                 fxFlex.gt-sm="50">
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div class="h1">Recommended Projects</div>
-        </div>
-
-        <mat-accordion [multi]="true">
-          <mat-expansion-panel *ngFor="let project of projects" class="fuse-card" fxFlex="100">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <h2>{{project.name}}</h2>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <ng-template matExpansionPanelContent>
-              <div class="mat-expansion-panel-content">
-                <!-- CONTENT -->
-                <div class="content pd-12 mat-white-bg" fusePerfectScrollbar>
-                  <mat-form-field>
-                    <textarea matInput placeholder="Description" [readonly]="true" [value]="project.description"
-                              rows="4"></textarea>
-                  </mat-form-field>
-
-                  <mat-form-field>
-                    <input matInput [readonly]="true" placeholder="Start Date"
-                           [value]="project.startDate | date: 'dd.MM.yyyy hh:mm'"/>
-                  </mat-form-field>
-
-                  <mat-form-field>
-                    <input matInput [readonly]="true" placeholder="End Date"
-                           [value]="project.endDate | date: 'dd.MM.yyyy hh:mm'">
-                  </mat-form-field>
-                </div>
-                <!-- / CONTENT -->
-                <mat-divider></mat-divider>
-
-                <fuse-project-task-list [projectId]="project.id" [availableOnly]="true"
-                                        [marketplaceId]="project.marketplaceId"></fuse-project-task-list>
-              </div>
-            </ng-template>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-    </fuse-widget>
-    <!-- /recommended projects -->
-
-    <!-- recommended marketplaces -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                 fxFlex.gt-sm="30">
-      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
-          <div class="h1">Recommended Marketplaces</div>
+          <div class="h1">Friends' Suggested Projects</div>
         </div>
 
         <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
-             *ngFor="let marketplace of marketplaces">
-          <div>
-            <div class="h3">{{marketplace.name}}</div>
-          </div>
-
-          <div>
-            <button mat-icon-button aria-label="More" [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="registerMarketplace(marketplace)">
-                <span>Join</span>
-              </button>
-              <button mat-menu-item>
-                <span>Details</span>
-              </button>
-            </mat-menu>
-          </div>
-        </div>
-      </div>
-    </fuse-widget>
-    <!-- /recommended marketplaces -->
-
-    <!-- suggested sections -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
-                 fxFlex.gt-sm="30">
-      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
-          <div class="h1">Friends' Suggestions</div>
-        </div>
-
-        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
-             *ngFor="let suggestion of about.suggestions">
+             *ngFor="let suggestion of suggestions.projects">
           <div fxLayout="row" fxLayoutAlign="space-between start" style="width: 100%;">
             <div>
               <img class="avatar" [src]="suggestion.avatar">
@@ -118,40 +35,44 @@
         </div>
       </div>
     </fuse-widget>
-    <!-- /suggested section -->
-  </div>
+    <!-- /suggested projects -->
 
-  <div class="layout2" fxLayout="row wrap" fxLayoutAlign="center">
-    <!-- Manual Search -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="100">
+    <!-- suggested marketplaces -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="50">
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
-          <div>
-            <mat-icon>search</mat-icon>
-            <span class="h1">Manual Search</span>
+          <div class="h1">Friends' Suggested Marketplaces</div>
+        </div>
+
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let suggestion of suggestions.marketplaces">
+          <div fxLayout="row" fxLayoutAlign="space-between start" style="width: 100%;">
+            <div>
+              <img class="avatar" [src]="suggestion.avatar">
+            </div>
+            <div fxLayout="column">
+              <div class="suggestion">{{suggestion.suggestion}}</div>
+              <div fxLayout="row">
+                <div class="suggester">suggested by</div>
+                <div class="suggester2">{{suggestion.name}}</div>
+              </div>
+            </div>
+
+            <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+              <button mat-icon-button title="Details">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+
           </div>
+          <mat-divider></mat-divider>
         </div>
-
-        <div style="margin-top: 10px">
-          <mat-form-field style="width: 50%; margin-left: 15px">
-            <input matInput type="search" placeholder="Search here" class="search-input">
-          </mat-form-field>
-
-          <mat-radio-group [(ngModel)]="radioOptions" name="radioButtons" style="margin-left: 30px">
-            <mat-radio-button style="margin-right: 30px" [value]="'test1'">Marketplaces</mat-radio-button>
-            <mat-radio-button [value]="'test2'">Projects and Tasks</mat-radio-button>
-          </mat-radio-group>
-        </div>
-
-        <div style="height: 200px"></div>
-
       </div>
     </fuse-widget>
-    <!-- Manual Search end -->
+    <!-- /suggested marketplaces -->
+
   </div>
-
-
 </div>
 

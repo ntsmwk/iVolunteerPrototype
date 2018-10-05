@@ -20,7 +20,6 @@ export class FuseGetConnectedComponent {
         'project': 'Project Y', 'date': '10.05.2018', 'volunteers': [{'name': 'Danielle Jackson', 'avatar': 'assets/images/avatars/danielle.jpg'},
           {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg'}]
       }
-
     ]
   };
 

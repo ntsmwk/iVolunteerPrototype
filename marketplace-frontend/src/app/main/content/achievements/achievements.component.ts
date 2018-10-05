@@ -1,6 +1,15 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import * as Chart from 'chart.js';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {fuseAnimations} from '../../../../@fuse/animations';
+import {Project} from '../_model/project';
+import {Subscription} from 'rxjs';
+import {Participant} from '../_model/participant';
+import {Marketplace} from '../_model/marketplace';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CoreVolunteerService} from '../_service/core-volunteer.service';
+import {ProjectService} from '../_service/project.service';
+import {LoginService} from '../_service/login.service';
+import {MessageService} from '../_service/message.service';
+import {isArray} from 'util';
 
 @Component({
   selector: 'fuse-achievements',
@@ -9,210 +18,45 @@ import {fuseAnimations} from '../../../../@fuse/animations';
   animations: fuseAnimations
 
 })
-export class FuseAchievementsComponent implements OnInit, AfterViewInit {
-  canvas: any;
-  ctx: any;
+export class FuseAchievementsComponent implements OnInit, OnDestroy {
+  public projects: Array<Project>;
+  private marketplaceChangeSubscription: Subscription;
 
-  about = {
-    'friends': [
-      {'name': 'Garry Newman', 'avatar': 'assets/images/avatars/garry.jpg', 'number': '6', 'hours': '12,4'},
-      {'name': 'Carl Henderson', 'avatar': 'assets/images/avatars/mweissenbek.jpg', 'number': '5', 'hours': '6,4'},
-      {'name': 'Danielle Jackson', 'avatar': 'assets/images/avatars/danielle.jpg', 'number': '2', 'hours': '1,4'}
-    ]
-  };
-
-  badges = {
-    'badges': [
-      {'name': 'Workaholic Rookie', 'image': 'assets/badges/badge 1.svg', 'source': 'Marketplace 1', 'description': 'Finish 3 tasks in one month'},
-      {'name': 'Everybody\'s Darling', 'image': 'assets/badges/badge 2.svg', 'source': 'Marketplace 1', 'description': 'Receive 10 likes from individual people'},
-      {'name': 'Multitasking Master', 'image': 'assets/badges/badge 3.svg', 'source': 'Marketplace 2', 'description': 'Be involved in 6 projects at a time'}
-    ]
-  };
-
-  competencies = {
-    'competencies': [
-      {'name': 'Paramedic', 'marketplace': 'Austrian Red Cross', 'date': '(10.08.2018)', 'task': 'Training Course: Paramedic'},
-      {'name': 'Social Skills 1', 'marketplace': 'Middle School Linz Dornach', 'date': '(18.12.2017)', 'task': 'Advent bazaar Second class'}
-    ]
-  };
-
-
-  widgetFacts: any = {};
-  widgets = {
-    'widgetFacts': {
-      'title': 'Important Stats',
-      'ranges': {
-        'W': 'Past Week',
-        'M': 'Past Month',
-        'SM': 'Past 6 Month',
-        'T': 'Total'
-      },
-      'entries': {
-        'W': [
-          {
-            'title': 'Marketplaces engaged in',
-            'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value': '1'
-          },
-          {
-            'title': 'Projects involved in',
-            'icon': 'assets/icons/important_stats/project.svg',
-            'value': '1'
-          },
-          {
-            'title': 'Tasks completed',
-            'icon': 'assets/icons/important_stats/task.svg',
-            'value': '2'
-          },
-          {
-            'title': 'Likes received',
-            'icon': 'assets/icons/important_stats/like.svg',
-            'value': '3'
-          },
-          {
-            'title': 'Personal Rating',
-            'icon': 'assets/icons/important_stats/rating.svg',
-            'value': '3.5'
-          }
-        ],
-        'M': [
-          {
-            'title': 'Marketplaces engaged in',
-            'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value': '2'
-          },
-          {
-            'title': 'Projects involved in',
-            'icon': 'assets/icons/important_stats/project.svg',
-            'value': '3'
-          },
-          {
-            'title': 'Tasks completed',
-            'icon': 'assets/icons/important_stats/task.svg',
-            'value': '9'
-          },
-          {
-            'title': 'Likes received',
-            'icon': 'assets/icons/important_stats/like.svg',
-            'value': '8'
-          },
-          {
-            'title': 'Personal Rating',
-            'icon': 'assets/icons/important_stats/rating.svg',
-            'value': '4.0'
-          }
-        ],
-        'SM': [
-          {
-            'title': 'Marketplaces engaged in',
-            'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value': '3'
-          },
-          {
-            'title': 'Projects involved in',
-            'icon': 'assets/icons/important_stats/project.svg',
-            'value': '6'
-          },
-          {
-            'title': 'Tasks completed',
-            'icon': 'assets/icons/important_stats/task.svg',
-            'value': '11'
-          },
-          {
-            'title': 'Likes received',
-            'icon': 'assets/icons/important_stats/like.svg',
-            'value': '10'
-          },
-          {
-            'title': 'Personal Rating',
-            'icon': 'assets/icons/important_stats/rating.svg',
-            'value': '4.0'
-          }
-        ],
-        'T': [
-          {
-            'title': 'Marketplaces engaged in',
-            'icon': 'assets/icons/important_stats/marketplace.svg',
-            'value': '3'
-          },
-          {
-            'title': 'Projects involved in',
-            'icon': 'assets/icons/important_stats/project.svg',
-            'value': '8'
-          },
-          {
-            'title': 'Tasks completed',
-            'icon': 'assets/icons/important_stats/task.svg',
-            'value': '14'
-          },
-          {
-            'title': 'Likes received',
-            'icon': 'assets/icons/important_stats/like.svg',
-            'value': '18'
-          },
-          {
-            'title': 'Personal Rating',
-            'icon': 'assets/icons/important_stats/rating.svg',
-            'value': '4.5'
-          }
-        ]
-      }
-    }
-  };
-
-  finishedProjects = {
-    'finishedProjects': [
-      {'name': 'Training Course: Paramedic (10.08.2018)', 'task1': 'Practical part', 'task1Hours': '120h', 'task1Material': '', 'task2': 'Examination', 'task2Hours': '2h', 'task2Material': ''},
-      {'name': 'Advent bazaar (18.12.2017)', 'task1': 'Shift 1', 'task1Hours': '2h', 'task1Material': 'Strawberry Cake (2x)', 'task2': 'Shift 2', 'task2Hours': '2h', 'task2Material': 'Apple Pie (1x)'},
-      {'name': 'Firefighter competition (24.05.2018)', 'task1': 'Training', 'task1Hours': '16h', 'task1Material': ''}
-    ]
-  };
-
-
-  constructor() {
-    this.widgetFacts = {
-      currentRange: 'W'
-    };
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private loginService: LoginService,
+              private messageService: MessageService,
+              private projectService: ProjectService,
+              private coreVolunteerService: CoreVolunteerService) {
   }
 
   ngOnInit() {
+    this.loadProjects();
+    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadProjects.bind(this));
   }
 
-  ngAfterViewInit() {
-    this.canvas = document.getElementById('myChart');
-    this.ctx = this.canvas.getContext('2d');
-    const myChart = new Chart(this.ctx, {
-      type: 'bar',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        datasets: [{
-          label: 'Marketplace 1',
-          data: [0, 0, 0, 3, 4, 6, 5, 2, 1, 1, 1, 1],
-          borderColor: '#3e95cd',
-          backgroundColor: '#3e95cd',
-          fill: false
-        }, {
-          label: 'Marketplace 2',
-          data: [3, 2, 1, 5, 4, 4, 4, 2, 0, 0, 0, 0],
-          borderColor: '#8e5ea2',
-          backgroundColor: '#8e5ea2',
-          fill: false
-        }, {
-          label: 'Marketplace 3',
-          data: [1, 0, 0, 0, 1, 1, 2, 3, 3, 3, 4, 6],
-          borderColor: '#c45850',
-          backgroundColor: '#c45850',
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [{ stacked: true }],
-          yAxes: [{ stacked: true }]
-        }
+  ngOnDestroy() {
+    this.marketplaceChangeSubscription.unsubscribe();
+  }
+
+
+  private loadProjects() {
+    this.projects = new Array<Project>();
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
+      const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
+      if (!isArray(selected_marketplaces)) {
+        return;
       }
+      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
+        .toPromise()
+        .then((marketplaces: Marketplace[]) => {
+          marketplaces
+            .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
+            .forEach(marketplace => {
+              this.projectService.findFinished(marketplace)
+                .toPromise().then((projects: Project[]) => this.projects = this.projects.concat(projects));
+            });
+        });
     });
   }
 

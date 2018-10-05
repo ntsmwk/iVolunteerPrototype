@@ -50,11 +50,6 @@
                 <div fxLayout="column">
                   <div class="title">
                     <span class="username">{{post.user.name}}</span>
-                    <span *ngIf="post.type === 'post'">posted on your timeline</span>
-                    <span *ngIf="post.type === 'badge'">earned something new</span>
-                    <span *ngIf="post.type === 'invitation'">invited you</span>
-                    <span *ngIf="post.type === 'something'">shared something with you</span>
-                    <span *ngIf="post.type === 'article'">shared an article with you</span>
                   </div>
                   <div class="time">{{post.time}}</div>
                 </div>

@@ -8,7 +8,6 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseProfileComponent} from './profile.component';
 import {FuseProfileAboutComponent} from './tabs/about/about.component';
 import {FuseProfileFriendsComponent} from './tabs/friends/friends.component';
-import {FuseProfileMarketplacesComponent} from './tabs/marketplaces/marketplaces.component';
 import {FuseWidgetModule} from '../../../../@fuse/components';
 import { FuseProfileCompetenciesComponent } from './tabs/competencies/competencies.component';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -25,7 +24,6 @@ const routes = [
     FuseProfileComponent,
     FuseProfileAboutComponent,
     FuseProfileFriendsComponent,
-    FuseProfileMarketplacesComponent,
     FuseProfileCompetenciesComponent,
     FuseProfileTaskComponent
   ],
@@ -39,7 +37,7 @@ const routes = [
     MatListModule,
     MatTableModule,
     CommonModule,
-    
+
     FuseWidgetModule,
     FuseSharedModule
   ]

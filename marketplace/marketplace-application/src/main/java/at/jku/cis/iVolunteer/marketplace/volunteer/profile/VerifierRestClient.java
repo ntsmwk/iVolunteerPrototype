@@ -6,6 +6,8 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,29 +24,43 @@ public class VerifierRestClient {
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
 
+	private static final String AUTHORIZATION = "Authorization";
+
 	@Value("${trustifier.uri}")
 	private URI trustifierURI;
 
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public boolean verifyTask(TaskDTO task) {
+	public boolean verifyTask(TaskDTO task, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
-		return restTemplate.postForObject(requestURI, task, Boolean.class).booleanValue();
+		return restTemplate.postForObject(requestURI, buildEntity(task, authorization), Boolean.class).booleanValue();
 	}
 
-	public boolean verifyTaskEntry(TaskEntryDTO taskEntry) {
+	public boolean verifyTaskEntry(TaskEntryDTO taskEntry, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK_Entry);
-		return restTemplate.postForObject(requestURI, taskEntry, Boolean.class).booleanValue();
+		return restTemplate.postForObject(requestURI, buildEntity(taskEntry, authorization), Boolean.class)
+				.booleanValue();
 	}
 
-	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry) {
+	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
-		return restTemplate.postForObject(requestURI, competenceEntry, Boolean.class).booleanValue();
+		return restTemplate.postForObject(requestURI, buildEntity(competenceEntry, authorization), Boolean.class)
+				.booleanValue();
 	}
 
 	private String buildContractorRequestURI(String requestPath) {
 		return format(VERIFIER_URI, trustifierURI, requestPath);
+	}
+
+	private HttpEntity<?> buildEntity(Object body, String authorization) {
+		return new HttpEntity<>(body, buildAuthorizationHeader(authorization));
+	}
+
+	private HttpHeaders buildAuthorizationHeader(String authorization) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(AUTHORIZATION, authorization);
+		return headers;
 	}
 
 }
