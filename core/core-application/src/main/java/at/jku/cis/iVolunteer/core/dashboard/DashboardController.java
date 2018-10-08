@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
+import at.jku.cis.iVolunteer.model.core.dashboard.Dashboard;
+import at.jku.cis.iVolunteer.model.core.dashboard.Dashlet;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 @RestController

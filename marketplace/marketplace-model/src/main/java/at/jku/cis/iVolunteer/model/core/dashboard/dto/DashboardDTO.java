@@ -1,20 +1,20 @@
-package at.jku.cis.iVolunteer.core.dashboard;
+package at.jku.cis.iVolunteer.model.core.dashboard.dto;
 
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import at.jku.cis.iVolunteer.model.core.user.dto.CoreUserDTO;
 
-@Document
-public class Dashboard {
+public class DashboardDTO {
 
-	@Id
 	private String id;
 	private String name;
-	private List<Dashlet> dashlets;
 	private Date creationDate;
 	private Date modificationDate;
+
+	private CoreUserDTO user;
+
+	private List<DashletDTO> dashlets;
 
 	public String getId() {
 		return id;
@@ -30,14 +30,6 @@ public class Dashboard {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Dashlet> getDashlets() {
-		return dashlets;
-	}
-
-	public void setDashlets(List<Dashlet> dashlets) {
-		this.dashlets = dashlets;
 	}
 
 	public Date getCreationDate() {
@@ -56,11 +48,19 @@ public class Dashboard {
 		this.modificationDate = modificationDate;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Dashboard)) {
-			return false;
-		}
-		return ((Dashboard) obj).id.equals(id);
+	public CoreUserDTO getUser() {
+		return user;
+	}
+
+	public void setUser(CoreUserDTO user) {
+		this.user = user;
+	}
+
+	public List<DashletDTO> getDashlets() {
+		return dashlets;
+	}
+
+	public void setDashlets(List<DashletDTO> dashlets) {
+		this.dashlets = dashlets;
 	}
 }

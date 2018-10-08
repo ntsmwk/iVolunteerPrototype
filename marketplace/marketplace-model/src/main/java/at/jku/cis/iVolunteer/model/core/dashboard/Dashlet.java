@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.core.dashboard;
+package at.jku.cis.iVolunteer.model.core.dashboard;
 
 public class Dashlet {
 	private int x;

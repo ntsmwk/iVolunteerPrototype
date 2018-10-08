@@ -6,7 +6,7 @@ import java.util.List;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.dto.UserDTO;
 
-public class CoreParticipantDTO extends UserDTO {
+public class CoreUserDTO extends UserDTO {
 
 	private List<Marketplace> registeredMarketplaces = new ArrayList<>();
 

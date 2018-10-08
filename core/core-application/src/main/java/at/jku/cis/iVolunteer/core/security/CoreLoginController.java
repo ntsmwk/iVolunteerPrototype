@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.mapper.core.user.CoreVolunteerMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.core.user.dto.CoreParticipantDTO;
+import at.jku.cis.iVolunteer.model.core.user.dto.CoreUserDTO;
 
 @RestController
 @RequestMapping("/login")
@@ -21,7 +21,7 @@ public class CoreLoginController {
 	@Autowired private CoreVolunteerMapper volunteerMapper;
 
 	@GetMapping
-	public CoreParticipantDTO getLoggedInParticipant() {
+	public CoreUserDTO getLoggedInParticipant() {
 		CoreUser participant = loginService.getLoggedInParticipant();
 		if (participant instanceof CoreHelpSeeker) {
 			return helpSeekerMapper.toDTO((CoreHelpSeeker) participant);
