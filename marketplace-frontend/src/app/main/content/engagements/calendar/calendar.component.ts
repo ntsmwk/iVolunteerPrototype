@@ -95,6 +95,8 @@ export class FuseCalendarComponent {
 
   activeDayIsOpen = true;
 
+  selectedDay: any;
+
 
   constructor(private modal: NgbModal) {
   }
