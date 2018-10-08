@@ -4,10 +4,20 @@ import {RouterModule} from '@angular/router';
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {
-  MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule, MatSidenavModule,
-  MatTabsModule,
+  MatButtonModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
   MatListModule,
-  MatProgressBarModule, MatSlideToggleModule, MatFormFieldModule, MatToolbarModule, MatInputModule, MatDatepickerModule
+  MatMenuModule,
+  MatOptionModule,
+  MatProgressBarModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatTabsModule,
+  MatToolbarModule
 } from '@angular/material';
 import {FuseAchievementsComponent} from './achievements.component';
 import {FuseConfirmDialogModule, FuseWidgetModule} from '../../../../@fuse/components';
@@ -15,12 +25,10 @@ import {CollaborationsComponent} from './collaborations/collaborations.component
 import {ContributionsComponent} from './contributions/contributions.component';
 import {EncouragementsComponent} from './encouragements/encouragements.component';
 import {OpportunitiesComponent} from './opportunities/opportunities.component';
-import {FuseProjectTaskListModule} from '../@shared/project-task-list/project-task-list.module';
+import {FuseProjectTaskListModule} from '../_components/project-task-list/project-task-list.module';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
-import {FuseProjectMembersModule} from '../@shared/project-members/project-members.module';
-import {ColorPickerModule} from 'ngx-color-picker';
-import {CalendarModule} from 'angular-calendar';
+import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
 
 const routes = [
   {path: '**', component: FuseAchievementsComponent}
@@ -36,7 +44,6 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    RouterModule,
 
     MatProgressBarModule,
     MatIconModule,
@@ -52,7 +59,7 @@ const routes = [
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
-    
+
     FuseProjectMembersModule,
     FuseProjectTaskListModule,
     FuseTruncatePipeModule,

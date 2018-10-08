@@ -2,19 +2,28 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {
-  MatButtonModule, MatDatepickerModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressBarModule, MatSidenavModule,
+  MatButtonModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressBarModule,
+  MatSidenavModule,
   MatSlideToggleModule,
-  MatTabsModule, MatToolbarModule
+  MatTabsModule,
+  MatToolbarModule
 } from '@angular/material';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseEngagementsComponent} from './engagements.component';
-import { CollaborationsComponent } from './collaborations/collaborations.component';
-import { ContributionsComponent } from './contributions/contributions.component';
-import { EncouragementsComponent } from './encouragements/encouragements.component';
-import { OpportunitiesComponent } from './opportunities/opportunities.component';
-import {FuseProjectMembersModule} from '../@shared/project-members/project-members.module';
-import {FuseProjectTaskListModule} from '../@shared/project-task-list/project-task-list.module';
+import {CollaborationsComponent} from './collaborations/collaborations.component';
+import {ContributionsComponent} from './contributions/contributions.component';
+import {EncouragementsComponent} from './encouragements/encouragements.component';
+import {OpportunitiesComponent} from './opportunities/opportunities.component';
+import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
+import {FuseProjectTaskListModule} from '../_components/project-task-list/project-task-list.module';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 import {CalendarModule} from 'angular-calendar';
 import {ColorPickerModule} from 'ngx-color-picker';
@@ -39,7 +48,6 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    RouterModule,
 
     MatTabsModule,
     MatButtonModule,

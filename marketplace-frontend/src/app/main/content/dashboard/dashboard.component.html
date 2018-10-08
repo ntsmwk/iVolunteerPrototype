@@ -1,17 +1,36 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
-    <!-- HEADER -->
-    <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-        <h1>What's Up</h1>
-        <img class="header-icon" src="assets/icons/dashboard.svg">
-    </div>
-    <!-- / HEADER -->
+  <!-- HEADER -->
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>What's Up</h1>
+    <img class="header-icon" src="assets/icons/dashboard.svg">
+  </div>
+  <!-- / HEADER -->
 
-    <div *ngIf="role == 'VOLUNTEER'">
-        <fuse-dashboard-volunteer></fuse-dashboard-volunteer>
-    </div>
+  <div class="content">
+    <div fxLayout="row wrap" fxLayoutAlign="center">
+      <div [@animate]="{value:'*',params:{y:'100%'}}" fxLayout="column" fxFlex="100" fusePerfectScrollbar>
 
-    <div *ngIf="role == 'HELP_SEEKER'">
-        <fuse-dashboard-helpseeker></fuse-dashboard-helpseeker>
+        <div *ngIf="gridContent.length === 0">
+          <div id="empty-message" *ngIf="!isInEditMode" class="dashboard-message">
+            Please click on "Edit"-button to add dashlets to the dashboard.
+          </div>
+          <div id="empty-edit-message" *ngIf="isInEditMode" class="dashboard-message">
+            Please select dashlets from the drop-down menu to add them to the dashboard.
+          </div>
+        </div>
+
+        <div class="dashboard-area">
+          <gridster #gridster [options]="gridConfig">
+            <gridster-item [item]="item" *ngFor="let item of gridContent" style="padding: 5px;">
+              <ndc-dynamic [ndcDynamicComponent]="viewService.findDashlet(item.id)"
+                           [ndcDynamicInputs]="{dashboardId: dashboardId,
+                       pollingIntervalInMilliseconds: item.pollingIntervalInMilliseconds}">
+              </ndc-dynamic>
+            </gridster-item>
+          </gridster>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

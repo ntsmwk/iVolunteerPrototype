@@ -6,8 +6,8 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseDashboardComponent} from './dashboard.component';
 import {MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule, MatSidenavModule} from '@angular/material';
 import {FuseWidgetModule} from '../../../../@fuse/components';
-import { FuseVolunteerDashboardComponent } from './dashboard-volunteer/dashboard-volunteer.component';
-import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
+import {DynamicModule} from 'ng-dynamic-component';
+import {GridsterModule} from 'angular-gridster2';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -15,8 +15,6 @@ const routes = [
 
 @NgModule({
   declarations: [
-    FuseVolunteerDashboardComponent,
-    FuseHelpSeekerDashboardComponent,
     FuseDashboardComponent
   ],
   imports: [
@@ -31,6 +29,9 @@ const routes = [
     MatSidenavModule,
     MatDividerModule,
     FuseWidgetModule,
+
+    GridsterModule,
+    DynamicModule.withComponents([]),
 
     FuseSharedModule
   ]

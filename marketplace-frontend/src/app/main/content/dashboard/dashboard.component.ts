@@ -1,36 +1,48 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
-import {Task} from '../_model/task';
-import {Volunteer} from '../_model/volunteer';
-
-import {LoginService} from '../_service/login.service';
-import {TaskService} from '../_service/task.service';
-import {Marketplace} from '../_model/marketplace';
-import {isArray} from 'util';
-import {CoreVolunteerService} from '../_service/core-volunteer.service';
-import {MessageService} from '../_service/message.service';
-import {Subscription} from 'rxjs';
-import { ParticipantRole } from '../_model/participant';
+import {GridsterComponent, GridsterConfig} from 'angular-gridster2';
+import {Dashlet} from '../_model/dashlet';
 
 @Component({
   selector: 'fuse-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class FuseDashboardComponent implements OnInit {
+export class FuseDashboardComponent implements OnInit, OnDestroy {
 
-  role: ParticipantRole;
+  @ViewChild('gridster')
+  gridsterComponent: GridsterComponent;
 
-  constructor(
-    private coreVolunteerService: CoreVolunteerService,
-    private loginService: LoginService,
-  ) {
+  gridConfig: GridsterConfig;
+  gridContent: Dashlet[] = [];
+
+  isInEditMode = true;
+
+  constructor() {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-      this.role = role;
-    })
+    this.updateGridConfig(this.isInEditMode);
+
   }
 
+  ngOnDestroy() {
+  }
+
+  private updateGridConfig(isEditable: boolean) {
+    this.gridConfig = {
+      minCols: 80,
+      maxCols: 80,
+      minRows: 32,
+      maxRows: 32,
+      margin: 5,
+
+      draggable: {
+        enabled: isEditable
+      },
+      resizable: {
+        enabled: isEditable
+      }
+    };
+  }
 }
