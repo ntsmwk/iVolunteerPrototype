@@ -7,7 +7,7 @@ networks:
 services:
   rest-server:
     container_name: composer-rest-server
-    image: hyperledger/composer-rest-server
+    image: hyperledger/composer-rest-server:0.20.1
     networks:
       - composer_default
     ports:

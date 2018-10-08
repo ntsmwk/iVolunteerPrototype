@@ -3,8 +3,8 @@
 echo "INIT START"
 docker rm -f composer-rest-server
 
-~/fabric-tools/stopFabric.sh
-~/fabric-tools/teardownFabric.sh
+~/fabric-dev-servers/stopFabric.sh
+~/fabric-dev-servers/teardownFabric.sh
 
 rm -fr $HOME/.composer
 
@@ -14,9 +14,9 @@ rm *.bna
 docker rmi -f $(docker images |grep 'dev-peer0.org1.example.com-ivolunteer-blockchain')
 
 # Starting the Fabric
-~/fabric-tools/downloadFabric.sh
-~/fabric-tools/startFabric.sh
-~/fabric-tools/createPeerAdminCard.sh
+~/fabric-dev-servers/downloadFabric.sh
+~/fabric-dev-servers/startFabric.sh
+~/fabric-dev-servers/createPeerAdminCard.sh
 
 # Deploying the business network
 composer archive create -t dir -n .
@@ -30,6 +30,7 @@ composer identity issue -c admin@ivolunteer-blockchain -f restadmin.card -u rest
 composer card import -f restadmin.card
 
 # Updating restadmin's connection.json, since REST server is running in docker container
-sed -e 's/localhost:/orderer.example.com:/' -e 's/localhost:/peer0.org1.example.com:/' -e 's/localhost:/peer0.org1.example.com:/' -e 's/localhost:/ca.org1.example.com:/'  < $HOME/.composer/cards/restadmin@ivolunteer-blockchain/connection.json  > /tmp/connection.json && cp -p /tmp/connection.json $HOME/.composer/cards/restadmin@ivolunteer-blockchain/
+cd $HOME
+sed -e 's/localhost:7051/172.17.0.1:7051/' -e 's/localhost:7053/172.17.0.1:7053/' -e 's/localhost:7054/172.17.0.1:7054/'  -e 's/localhost:7050/172.17.0.1:7050/'  < $HOME/.composer/cards/restadmin@ivolunteer-blockchain/connection.json  > /tmp/connection.json && cp -p /tmp/connection.json $HOME/.composer/cards/restadmin@ivolunteer-blockchain/ 
 
 
