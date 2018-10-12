@@ -6,5 +6,4 @@ export class Dashlet {
   cols: number;
   minItemRows?: number;
   minItemCols?: number;
-  pollingIntervalInMilliseconds: number;
 }
