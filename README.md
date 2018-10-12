@@ -15,3 +15,10 @@ docker run --name marketplace-workflow-db --restart=unless-stopped -e MYSQL_DATA
 2. docker-compose up -d
 
 
+### Deployment:
+
+mvn clean install -Pdev 
+
+mvn clean install -Pprod
+
+start: java -jar target/marketplace-application-0.0.1-SNAPSHOT.jar
