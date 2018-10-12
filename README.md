@@ -1,7 +1,7 @@
 # iVolunteerPrototype v4
 
 ### Marketplace-DB:
-docker run --name marketplace-db --restart=unless-stopped -p 27017:27017 -d mongo:3.6.2
+docker run --name marketplace-db --restart=unless-stopped -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 -d mongo:3.6.2
 
 ### Marketplace-Workflow-DB
 docker run --name marketplace-workflow-db --restart=unless-stopped -e MYSQL_DATABASE=workflow -e MYSQL_USER=workflow -e MYSQL_PASSWORD=workflow -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:5.7.22
