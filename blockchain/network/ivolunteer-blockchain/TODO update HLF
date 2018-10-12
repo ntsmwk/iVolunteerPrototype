@@ -16,7 +16,7 @@ Update to HLF 1.2 and composer 0.20.1
 	export FABRIC_VERSION=hlfv12
 	./downloadFabric.sh
 
-5. run init
+5. run init (check Path!)
 	cd ~/iVolunteerPrototype/blockchain/network/ivolunteer-blockchain
 	./init
 
