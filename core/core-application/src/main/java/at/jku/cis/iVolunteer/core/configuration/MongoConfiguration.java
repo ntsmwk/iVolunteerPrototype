@@ -1,7 +1,8 @@
 package at.jku.cis.iVolunteer.core.configuration;
 
+import static java.util.Arrays.asList;
+
 import java.net.URI;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +14,8 @@ import org.springframework.data.mongodb.core.convert.CustomConversions;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 import at.jku.cis.iVolunteer.model.task.interaction.String2TaskOperationConverter;
 
@@ -20,8 +23,16 @@ import at.jku.cis.iVolunteer.model.task.interaction.String2TaskOperationConverte
 @EnableAutoConfiguration(exclude = { EmbeddedMongoAutoConfiguration.class })
 public class MongoConfiguration extends AbstractMongoConfiguration {
 
+	private static final String ADMIN = "admin";
+
 	@Value("${spring.data.mongodb.uri}")
 	private URI uri;
+
+	@Value("${spring.data.mongodb.user}")
+	private String user;
+
+	@Value("${spring.data.mongodb.password}")
+	private String password;
 
 	@Override
 	protected String getDatabaseName() {
@@ -30,7 +41,8 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 
 	@Bean
 	public Mongo mongo() throws Exception {
-		return new MongoClient(uri.getHost(), uri.getPort());
+		MongoCredential credential = createMongoCredential();
+		return new MongoClient(createServerAddress(), asList(credential));
 	}
 
 	@Override
@@ -40,8 +52,14 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 
 	@Override
 	public CustomConversions customConversions() {
-		return new CustomConversions(Arrays.asList(new String2TaskOperationConverter()));
+		return new CustomConversions(asList(new String2TaskOperationConverter()));
 	}
 
-	
+	private ServerAddress createServerAddress() {
+		return new ServerAddress(uri.getHost(), uri.getPort());
+	}
+
+	private MongoCredential createMongoCredential() {
+		return MongoCredential.createCredential(user, ADMIN, password.toCharArray());
+	}
 }
