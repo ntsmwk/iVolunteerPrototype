@@ -8,12 +8,14 @@ import {Marketplace} from '../_model/marketplace';
 import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {LoginService} from '../_service/login.service';
 import {TaskService} from '../_service/task.service';
+import { fuseAnimations } from '@fuse/animations';
 
 
 @Component({
   selector: 'fuse-task-list',
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss']
+  styleUrls: ['./task-list.component.scss'],
+  animations: fuseAnimations
 
 })
 export class FuseTaskListComponent implements OnInit {
