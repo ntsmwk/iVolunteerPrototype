@@ -68,6 +68,30 @@
 			<version>1.2.0.Final</version>
 		</dependency>
 	</dependencies>
+	
+	<profiles>
+	    <profile>
+	        <id>dev</id>
+	        <activation>
+	            <activeByDefault>true</activeByDefault>
+	        </activation>
+	        <properties>
+	            <spring.profiles.active>dev</spring.profiles.active>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <id>prod1</id>
+	        <properties>
+	            <spring.profiles.active>prod1</spring.profiles.active>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <id>prod2</id>
+	        <properties>
+	            <spring.profiles.active>prod2</spring.profiles.active>
+	        </properties>
+	    </profile>
+	</profiles>
 
 	<build>
 		<plugins>

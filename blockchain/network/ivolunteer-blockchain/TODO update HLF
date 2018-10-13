@@ -1,0 +1,25 @@
+Update to HLF 1.2 and composer 0.20.1
+
+1. uninstall composer-cli, rest-server
+	npm uninstall -g composer-cli composer-rest-server generator-hyperledger-composer
+
+2. install new version of cli and rest-server
+	npm install -g composer-cli@0.20.1 composer-rest-server@0.20.1 generator-hyperledger-composer@0.20.1
+
+3. install Hyperledger Fabric tools
+	mkdir ~/fabric-dev-servers && cd ~/fabric-dev-servers
+	curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz
+	tar -xvf fabric-dev-servers.tar.gz
+
+4. download newest images
+	cd ~/fabric-dev-servers
+	export FABRIC_VERSION=hlfv12
+	./downloadFabric.sh
+
+5. run init (check Path!)
+	cd ~/iVolunteerPrototype/blockchain/network/ivolunteer-blockchain
+	./init
+
+6. run rest server
+	cd ~/iVolunteerPrototype/blockchain/rest server
+	docker-compose up -d
