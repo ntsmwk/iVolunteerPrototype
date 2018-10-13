@@ -18,6 +18,7 @@ const routes: Route[] = [
 
     MatTableModule,
     MatIconModule,
+    MatButtonModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule

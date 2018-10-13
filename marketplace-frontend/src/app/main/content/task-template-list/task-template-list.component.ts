@@ -6,6 +6,7 @@ import {LoginService} from '../_service/login.service';
 import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'fuse-task-template-list',
@@ -19,7 +20,8 @@ export class FuseTaskTemplateListComponent implements OnInit {
 
   constructor(private taskTemplateService: TaskTemplateService,
               private loginService: LoginService,
-              private coreHelpSeekerService: CoreHelpSeekerService) {
+              private coreHelpSeekerService: CoreHelpSeekerService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -30,5 +32,9 @@ export class FuseTaskTemplateListComponent implements OnInit {
           .then((taskTemplates: TaskTemplate[]) => this.dataSource.data = taskTemplates);
       });
     });
+  }
+
+  addTaskTemplate(){
+    this.router.navigate(['/main/task-template-form']);
   }
 }

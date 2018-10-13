@@ -1,7 +1,14 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>All Projects</h1>
+    <h1>Projects</h1>
+  </div>
+
+  <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+    <button mat-fab class="mat-warn" (click)="addProject()" aria-label="Add projet" *fuseIfOnDom
+      [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 
   <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">

@@ -48,4 +48,8 @@ export class FuseTaskListComponent implements OnInit {
   getMarketplaceName(id: string) {
     return this.marketplaces.filter(marketplace => marketplace.id === id)[0].name;
   }
+
+  addTask(){
+    this.router.navigate(['/main/task-form']);
+  }
 }

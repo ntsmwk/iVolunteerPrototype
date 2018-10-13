@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {LoginService} from '../_service/login.service';
 import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
@@ -6,10 +6,14 @@ import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
 import {Project} from '../_model/project';
 import {ProjectService} from '../_service/project.service';
+import { fuseAnimations } from '@fuse/animations';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+  styleUrls: ['./project-list.component.scss'],    
+  encapsulation: ViewEncapsulation.None,
+  animations   : fuseAnimations
 })
 export class FuseProjectListComponent implements OnInit {
 
@@ -18,7 +22,9 @@ export class FuseProjectListComponent implements OnInit {
 
   constructor(private loginService: LoginService,
               private coreHelpSeekerService: CoreHelpSeekerService,
-              private projectService: ProjectService) {
+              private projectService: ProjectService,
+              private router: Router
+              ) {
   }
 
   ngOnInit() {
@@ -29,5 +35,9 @@ export class FuseProjectListComponent implements OnInit {
           .then((projects: Project[]) => this.dataSource.data = projects);
       });
     });
+  }
+
+  addProject(){
+    this.router.navigate(['/main/project-form'])
   }
 }

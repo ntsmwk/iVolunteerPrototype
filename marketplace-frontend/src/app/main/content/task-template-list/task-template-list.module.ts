@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
-import {MatIconModule, MatTableModule} from '@angular/material';
+import {MatIconModule, MatTableModule, MatButtonModule} from '@angular/material';
 
 import {FuseTaskTemplateListComponent} from './task-template-list.component';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
@@ -20,7 +20,7 @@ const routes = [
 
     MatIconModule,
     MatTableModule,
-
+    MatButtonModule,
     FuseSharedModule,
     FuseTruncatePipeModule
   ]
