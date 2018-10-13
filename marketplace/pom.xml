@@ -80,9 +80,15 @@
 	        </properties>
 	    </profile>
 	    <profile>
-	        <id>prod</id>
+	        <id>prod1</id>
 	        <properties>
-	            <spring.profiles.active>prod</spring.profiles.active>
+	            <spring.profiles.active>prod1</spring.profiles.active>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <id>prod2</id>
+	        <properties>
+	            <spring.profiles.active>prod2</spring.profiles.active>
 	        </properties>
 	    </profile>
 	</profiles>
