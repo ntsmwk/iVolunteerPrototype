@@ -7,6 +7,7 @@ import {isNullOrUndefined} from 'util';
   selector: 'fuse-profile-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
+
 })
 export class FuseProfileAboutComponent {
   @Input('enableFollow')
@@ -39,6 +40,10 @@ export class FuseProfileAboutComponent {
   };
 
   constructor() {
+  }
+
+  backClicked() {
+    window.history.back();
   }
 
   getAvatarUrl() {

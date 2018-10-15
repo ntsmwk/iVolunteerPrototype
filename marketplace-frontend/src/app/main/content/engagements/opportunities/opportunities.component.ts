@@ -49,4 +49,8 @@ export class OpportunitiesComponent implements OnInit {
   public calculateProgess(project: Project) {
     return 50;
   }
+
+  public unregisterMarketplace(marketplace: Marketplace) {
+
+  }
 }

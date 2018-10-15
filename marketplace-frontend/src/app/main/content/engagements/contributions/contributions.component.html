@@ -8,19 +8,15 @@
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
-        <!--
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
-          <div class="h1">Projects</div>
-        </div>
-        -->
-
-        <div *ngFor="let project of projects" fxFlex="100">
-          <table class="simple clickable">
+      <!--  <div *ngFor="let project of projects" fxFlex="100">
+      -->
+        <div fxFlex="100">
+        <table class="simple clickable">
             <thead>
             <tr>
-              <th class="header">{{project.name}}</th>
+              <th></th>
               <th>Name</th>
+              <th class="text-right">Common Projects</th>
               <th class="text-right">Time contributed [h]</th>
               <th class="text-right">Resources contributed</th>
             </tr>
@@ -30,9 +26,13 @@
               <td><img class="avatar big cursor" [src]="me.avatar" title="{{me.name}}">
               </td>
               <td>{{me.name}}</td>
-              <td class="text-right">{{me.time}}</td>
-              <td class="text-right">{{me.resources}}</td>
               <td></td>
+              <td class="text-right">{{me.time}}</td>
+              <td class="text-right">
+                <div *ngFor="let resource of me.resources" fxLayout="column wrap">
+                  {{resource.name}}
+                </div>
+              </td>
             </tr>
 
             <th class="subHeader">Friends</th>
@@ -40,6 +40,9 @@
               <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
               </td>
               <td>{{friend.name}}</td>
+              <td class="text-right">
+                {{dummyProjects.project1.name}}
+              </td>
               <td class="text-right">{{friend.time}}</td>
               <td class="text-right">
                 <div *ngFor="let resource of friend.resources" fxLayout="column wrap">

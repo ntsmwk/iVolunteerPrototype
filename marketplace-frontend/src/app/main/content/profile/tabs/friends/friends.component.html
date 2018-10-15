@@ -2,37 +2,47 @@
 
   <div class="friends-content" fxLayout="column" fxFlex="100">
 
-
-    <div class="profile-box friends" fxLayout="column">
-
-      <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="title">Follower</div>
-        <div class="more secondary-text">
-          <span><strong>See 454 more...</strong></span>
+    <!-- follower -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="50" fusePerfectScrollbar>
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Follower</div>
         </div>
-      </header>
 
-      <div class="content" fxLayout="row wrap">
-        <div class="friend" fxFlex="5" *ngFor="let friend of friends.follower">
-          <img [src]="friend.avatar" title="{{friend.name}}">
+        <div class="content" fxLayout="row wrap">
+          <div class="friend" fxFlex="5" *ngFor="let friend of friends.follower">
+            <img class="avatar big cursor" [title]="friend.name" [src]="friend.avatar">
+
+          </div>
         </div>
+
+
       </div>
+    </fuse-widget>
+    <!-- follower end -->
 
-    </div>
-
-    <div class="profile-box friends" fxLayout="column">
-
-      <header class="mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="title">Following</div>
-      </header>
-
-      <div class="content" fxLayout="row wrap">
-        <div class="friend" fxFlex="5" *ngFor="let friend of friends.following">
-          <img [src]="friend.avatar" title="{{friend.name}}">
+    <!-- following -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="50" fusePerfectScrollbar>
+      <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Following</div>
         </div>
-      </div>
 
-    </div>
+        <div class="content" fxLayout="row wrap">
+          <div class="friend" fxFlex="5" *ngFor="let friend of friends.following">
+            <img class="avatar big cursor" [title]="friend.name" [src]="friend.avatar">
+
+          </div>
+        </div>
+
+
+      </div>
+    </fuse-widget>
+    <!-- following end -->
 
 
   </div>

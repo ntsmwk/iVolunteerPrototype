@@ -1,9 +1,12 @@
 import {Component} from '@angular/core';
+import {fuseAnimations} from '../../../../../../@fuse/animations';
 
 @Component({
   selector: 'fuse-profile-friends',
   templateUrl: './friends.component.html',
-  styleUrls: ['./friends.component.scss']
+  styleUrls: ['./friends.component.scss'],
+  animations: fuseAnimations
+
 })
 export class FuseProfileFriendsComponent {
   friends = {

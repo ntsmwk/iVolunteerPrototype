@@ -24,9 +24,10 @@
     <div fxLayout="row wrap" fxLayoutAlign="center">
 
       <div class="profile-box info-box general" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
-        <header class="mat-accent-bg">
-          <div class="title">General Information</div>
-        </header>
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">General Information</div>
+        </div>
 
         <div class="content">
           <div class="info-line">
@@ -57,9 +58,10 @@
       </div>
 
       <div class="profile-box info-box contact" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50">
-        <header class="mat-accent-bg">
-          <div class="title">Contact</div>
-        </header>
+        <div class="px-16 py-8 border-bottom" fxLayout="row"
+             fxLayoutAlign="space-between center">
+          <div class="h1">Contact</div>
+        </div>
 
         <div class="content">
           <div class="info-line">
@@ -86,6 +88,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" (click)="backClicked()" *ngIf="enableFollow">
+      <button mat-raised-button color="primary">Back</button>
     </div>
 
   </div>

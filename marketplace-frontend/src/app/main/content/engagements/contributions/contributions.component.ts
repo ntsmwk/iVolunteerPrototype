@@ -13,7 +13,16 @@ export class ContributionsComponent implements OnInit {
   @Input('projects')
   public projects: Array<Project>;
 
-  me = {'name': 'You', 'avatar': 'assets/images/avatars/profile.jpg', 'time': '20,8', 'resources': ''};
+  dummyProjects = {
+    'project1':
+      {'name': 'Project A'}
+  }
+
+  me = {'name': 'You',
+        'avatar': 'assets/images/avatars/profile.jpg',
+        'time': '20,8',
+        'resources': [{'name': 'Resource B'}, {'name': 'Resource C'}]
+  };
 
   friends = {
     'friends': [
