@@ -84,7 +84,7 @@ export class FuseTaskFormComponent implements OnInit {
 
 
     $("#startDate").periodpicker({
-      norange: true, // use only one value
+      norange: false, // use only one value
       cells: [1, 1], // show only one month
   
       resizeButton: false, // deny resize picker
