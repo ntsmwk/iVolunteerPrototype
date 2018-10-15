@@ -41,6 +41,10 @@ export class FuseProfileAboutComponent {
   constructor() {
   }
 
+  backClicked() {
+    window.history.back();
+  }
+
   getAvatarUrl() {
     if (isNullOrUndefined(this.participant)) {
       return `assets/images/avatars/profile.jpg`;
