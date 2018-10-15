@@ -2,9 +2,19 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {
-  MatButtonModule, MatDatepickerModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressBarModule, MatSidenavModule,
+  MatButtonModule,
+  MatDatepickerModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatProgressBarModule,
+  MatSidenavModule,
   MatSlideToggleModule,
-  MatTabsModule, MatToolbarModule
+  MatTabsModule,
+  MatToolbarModule
 } from '@angular/material';
 
 import {FuseSharedModule} from '@fuse/shared.module';
@@ -53,6 +63,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    MatMenuModule,
 
     CalendarModule.forRoot(),
     ColorPickerModule,

@@ -5,6 +5,9 @@ import {Marketplace} from '../../_model/marketplace';
 
 import {TaskService} from '../../_service/task.service';
 import {CoreMarketplaceService} from '../../_service/core-marketplace.service';
+import {TaskInteractionService} from '../../_service/task-interaction.service';
+import {TaskInteraction} from '../../_model/task-interaction';
+import {Participant} from '../../_model/participant';
 
 @Component({
   selector: 'fuse-project-task-list',
@@ -28,8 +31,11 @@ export class FuseProjectTaskListComponent implements OnInit {
 
 
   public tasks: Array<Task>;
+  public taskInteractions: Array<TaskInteraction>;
 
-  constructor(private taskService: TaskService, private marketplaceService: CoreMarketplaceService) {
+  constructor(private taskService: TaskService,
+              private marketplaceService: CoreMarketplaceService,
+              private taskInteractionService: TaskInteractionService) {
   }
 
   ngOnInit() {
@@ -50,6 +56,12 @@ export class FuseProjectTaskListComponent implements OnInit {
     });
   }
 
+  getInteractions(marketplace: Marketplace, task: Task) {
+    //
+    // this.taskInteractionService.findByTask(marketplace, task).toPromise().then(taskInteractions: TaskInteraction[]) => {
+    //  this.taskInteractions = taskInteractions;
+    // });
+  }
 
 }
 

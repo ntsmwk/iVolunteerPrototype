@@ -104,7 +104,7 @@ export class FuseProfileTaskComponent implements OnInit {
 
   handleTaskMarketplace(marketplace: Marketplace, taskEntry: TaskEntry): string {
     if (this.privateProfileContains(taskEntry) && this.publicProfileContains(taskEntry, marketplace)) {
-      return 'REVOKE'
+      return 'REVOKE';
     } else if (!this.privateProfileContains(taskEntry) && this.publicProfileContains(taskEntry, marketplace)) {
       return 'SYNC';
     } else if (this.privateProfileContains(taskEntry) && !this.publicProfileContains(taskEntry, marketplace)) {

@@ -80,39 +80,38 @@
       </div>
     </fuse-widget>
 
-    <!-- Marketplaces -->
-    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                 fxFlex="100" fxFlex.gt-sm="40">
-
+    <!-- recommended marketplaces -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                 fxFlex.gt-sm="40">
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-
         <div class="px-16 py-8 border-bottom" fxLayout="row"
              fxLayoutAlign="space-between center">
           <div class="h1">Marketplaces</div>
         </div>
 
-        <div class="marketplaces" fxLayout="row wrap" fxLayoutAlign="center" *fuseIfOnDom>
-          <div class="marketplace" *ngFor="let marketplace of registeredMarketplaces" fxFlex="100">
+        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center"
+             *ngFor="let marketplace of registeredMarketplaces">
+          <div>
+            <div class="h3">{{marketplace.name}}</div>
+          </div>
 
-            <div class="marketplace-content" fxLayout="column">
-
-              <div class="header" fxLayout="row" fxLayoutAlign="center center">
-                <div class="category" fxFlex>
-                  {{marketplace.name}}
-                </div>
-              </div>
-
-              <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
-                <div class="h1">{{marketplace.shortName}}</div>
-                <div class="h1">{{marketplace.url}}</div>
-
-              </div>
-            </div>
+          <div>
+            <button mat-icon-button aria-label="More" [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="unregisterMarketplace(marketplace)">
+                <span>Leave</span>
+              </button>
+              <button mat-menu-item>
+                <span>Details</span>
+              </button>
+            </mat-menu>
           </div>
         </div>
-
       </div>
     </fuse-widget>
+    <!-- /recommended marketplaces -->
 
   </div>
 </div>

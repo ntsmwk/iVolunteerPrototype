@@ -41,7 +41,7 @@ export class FuseAchievementsComponent implements OnInit, OnDestroy {
 
 
   private loadProjects() {
-    this.projects = new Array<Project>();
+    this.projects = [];
     this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
       const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
       if (!isArray(selected_marketplaces)) {
@@ -59,6 +59,5 @@ export class FuseAchievementsComponent implements OnInit, OnDestroy {
         });
     });
   }
-
 }
 
