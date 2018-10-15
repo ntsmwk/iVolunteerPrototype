@@ -13,7 +13,7 @@ import at.jku.cis.iVolunteer.model.project.Project;
 @Document
 public class Task {
 
-	@Id
+	@Id 
 	private String id;
 	private String name;
 	private String description;
@@ -25,7 +25,7 @@ public class Task {
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
 
-	@DBRef
+	@DBRef 
 	private Project project;
 
 	public String getId() {
