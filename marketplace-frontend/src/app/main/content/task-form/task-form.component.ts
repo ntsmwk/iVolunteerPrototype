@@ -25,8 +25,8 @@ declare var $: JQuery;
 
 declare global {
   interface JQuery {
-    (selector: string): JQuery;
-    periodpicker(t): JQuery;
+    (selector: string): any;
+    periodpicker(t): any;
   }
 }
 
@@ -143,35 +143,35 @@ export class FuseTaskFormComponent implements OnInit {
   }
 
   save() {
-    console.error(this.taskForm.value);
-   
-    // if (!this.taskForm.valid) {
-    //   return;
-    // }
+    // console.error(this.taskForm.value);
+    // console.error($("#startDate")[0].value);
+    // console.error($("#endDate")[0].value);
 
-    // const task = this.taskForm.value;
-    // task.workflowKey = task.workflowType.key;
-    // delete task.workflowType;
 
-    // this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-    //   this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-    //     if (this.isEditMode()) {
-    //       this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
-    //     } else {
-    //       Promise.all([
-    //         this.loginService.getLoggedIn().toPromise(),
-    //         this.taskService.save(marketplace, <Task>task).toPromise()
-    //       ]).then((values: any[]) => {
-    //         const createdTask = <Task> values[1];
-    //         const participantId = (<Participant> values[0]).id;
+    const task = this.taskForm.value;
+    // task.startDate = $("#startDate")[0].value;
+    task.workflowKey = task.workflowType.key;
+    delete task.workflowType;
 
-    //         this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId)
-    //           .toPromise()
-    //           .then(() => this.router.navigate(['/main/tasks/all']));
-    //       });
-    //     }
-    //   });
-    // });
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+        if (this.isEditMode()) {
+          this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
+        } else {
+          Promise.all([
+            this.loginService.getLoggedIn().toPromise(),
+            this.taskService.save(marketplace, <Task>task).toPromise()
+          ]).then((values: any[]) => {
+            const createdTask = <Task> values[1];
+            const participantId = (<Participant> values[0]).id;
+
+            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId)
+              .toPromise()
+              .then(() => this.router.navigate(['/main/tasks/all']));
+          });
+        }
+      });
+    });
   }
 
   prefillForm(event, taskTemplate) {
