@@ -23,7 +23,6 @@ public class ContractorPublishingRestClient {
 	private static final String COMPETENCE_ENTRY = "competenceEntry";
 	private static final String CONTRACTOR_URI = "{0}/trustifier/contractor/{1}";
 
-
 	private static final String AUTHORIZATION = "Authorization";
 	
 	@Value("${trustifier.uri}")

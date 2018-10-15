@@ -28,28 +28,24 @@ import at.jku.cis.iVolunteer.trustifier.verification.Verifier;
 @RequestMapping("/trustifier/contractor")
 public class Contractor {
 
-	@Autowired
-	private Hasher hasher;
-	@Autowired
-	private Verifier verifier;
-	@Autowired
-	private BlockchainRestClient blockchainRestClient;
-	@Autowired
-	private TrustifierMarketplaceRestClient marketplaceRestClient;
+	@Autowired private Hasher hasher;
+	@Autowired private Verifier verifier;
+	@Autowired private BlockchainRestClient blockchainRestClient;
+	@Autowired private TrustifierMarketplaceRestClient marketplaceRestClient;
 
 	@PostMapping("/task")
 	public void publishTask(@RequestBody TaskDTO task) {
 		try {
-			blockchainRestClient.postPublishedTaskHash(hasher.generateHash(task), new Date(), task.getId(),
-					task.getMarketplaceId());
+			//TODO @blockchain
+//			blockchainRestClient.postPublishedTaskHash(hasher.generateHash(task), new Date(), task.getId(),
+//					task.getMarketplaceId());
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
 	}
 
 	@PostMapping("/task/reserve")
-	public void reserveTask(@RequestBody TaskReservationDTO reservation,
-			@RequestHeader("Authorization") String authorization) {
+	public void reserveTask(@RequestBody TaskReservationDTO reservation, @RequestHeader("Authorization") String authorization) {
 
 		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
@@ -57,12 +53,11 @@ public class Contractor {
 
 		try {
 			String address = reservation.getSource().getAddress();
-			TaskInteractionDTO taskInteraction = marketplaceRestClient.reserve(address, authorization,
-					reservation.getTask());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.reserve(address, authorization, reservation.getTask());
 
-			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
-					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
-					reservation.getSource().getIdentifier(), taskInteraction.getOperation());
+			//TODO @blockchain
+//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+//					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -70,18 +65,16 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/unreserve")
-	public void unreserveTask(@RequestBody TaskReservationDTO reservation,
-			@RequestHeader("Authorization") String authorization) {
+	public void unreserveTask(@RequestBody TaskReservationDTO reservation, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {
 			String address = reservation.getSource().getAddress();
-			TaskInteractionDTO taskInteraction = marketplaceRestClient.unreserve(address, authorization,
-					reservation.getTask());
-			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
-					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
-					reservation.getSource().getIdentifier(), taskInteraction.getOperation());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.unreserve(address, authorization, reservation.getTask());
+			//TODO @blockchain
+//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+//					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -89,20 +82,19 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/assign")
-	public void assignTask(@RequestBody TaskAssignmentDTO assignment,
-			@RequestHeader("Authorization") String authorization) {
+	public void assignTask(@RequestBody TaskAssignmentDTO assignment, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
 
 		try {
 			String address = assignment.getSource().getAddress();
-			TaskInteractionDTO taskInteraction = marketplaceRestClient.assign(address, authorization,
-					assignment.getTask(), assignment.getVolunteer());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
+					assignment.getVolunteer());
 
-			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
-					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
-					assignment.getSource().getIdentifier(), taskInteraction.getOperation());
+			//TODO @blockchain
+//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+//					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -110,19 +102,18 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/unassign")
-	public void unassignTask(@RequestBody TaskAssignmentDTO assignment,
-			@RequestHeader("Authorization") String authorization) {
+	public void unassignTask(@RequestBody TaskAssignmentDTO assignment, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {
 			String address = assignment.getSource().getAddress();
-			TaskInteractionDTO taskInteraction = marketplaceRestClient.unassign(address, authorization,
-					assignment.getTask(), assignment.getVolunteer());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.unassign(address, authorization, assignment.getTask(),
+					assignment.getVolunteer());
 
-			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
-					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
-					assignment.getSource().getIdentifier(), taskInteraction.getOperation());
+			//TODO @blockchain
+//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+//					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -130,19 +121,17 @@ public class Contractor {
 	}
 
 	@PostMapping("/task/finish")
-	public void finishTask(@RequestBody TaskCompletationDTO completation,
-			@RequestHeader("Authorization") String authorization) {
+	public void finishTask(@RequestBody TaskCompletationDTO completation, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(completation.getTask())) {
 			throw new VerificationFailureException();
 		}
 		try {
 			String address = completation.getSource().getAddress();
-			TaskInteractionDTO taskInteraction = marketplaceRestClient.finish(address, authorization,
-					completation.getTask());
+			TaskInteractionDTO taskInteraction = marketplaceRestClient.finish(address, authorization, completation.getTask());
 
-			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction),
-					taskInteraction.getTimestamp(), taskInteraction.getTask().getId(),
-					completation.getSource().getIdentifier(), taskInteraction.getOperation());
+			//TODO @blockchain
+//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+//					taskInteraction.getTask().getId(), completation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -153,8 +142,9 @@ public class Contractor {
 	public void publishCompetenceEntry(@RequestBody VolunteerCompetenceEntryDTO vce) {
 		try {
 
-			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
-					vce.getMarketplaceId(), vce.getVolunteerId());
+			//TODO @blockchain
+//			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
+//					vce.getMarketplaceId(), vce.getVolunteerId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -164,8 +154,9 @@ public class Contractor {
 	@PostMapping("/finishedTaskEntry")
 	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntryDTO vte) {
 		try {
-			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
-					vte.getMarketplaceId(), vte.getVolunteerId());
+			//TODO @blockchain
+//			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
+//					vte.getMarketplaceId(), vte.getVolunteerId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
