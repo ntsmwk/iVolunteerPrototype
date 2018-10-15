@@ -149,7 +149,7 @@ export class FuseTaskFormComponent implements OnInit {
 
 
     const task = this.taskForm.value;
-    task.startDate = $("#startDate")[0].value;
+    // task.startDate = $("#startDate")[0].value;
     task.workflowKey = task.workflowType.key;
     delete task.workflowType;
 

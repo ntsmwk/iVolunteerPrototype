@@ -7,11 +7,13 @@ import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Participant} from '../_model/participant';
 import {Marketplace} from '../_model/marketplace';
 import { Router } from '@angular/router';
+import { fuseAnimations } from '@fuse/animations';
 
 @Component({
   selector: 'fuse-task-template-list',
   templateUrl: './task-template-list.component.html',
-  styleUrls: ['./task-template-list.component.scss']
+  styleUrls: ['./task-template-list.component.scss'],
+  animations: fuseAnimations
 })
 export class FuseTaskTemplateListComponent implements OnInit {
 
