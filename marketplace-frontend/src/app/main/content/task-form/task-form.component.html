@@ -55,26 +55,13 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- <mat-form-field fxFlex="100">
-          <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #startDatePicker></mat-datepicker>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field fxFlex="100"> -->
-        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" id="startDate" type="text" />
-        <!-- <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="startDate">
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #startDatePicker></mat-datepicker> -->
-        <!-- </mat-form-field> -->
-
-        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" id="endDate" type="text" />
-<!-- 
         <mat-form-field fxFlex="100">
-          <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="endDate">
-          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #endDatePicker></mat-datepicker>
-        </mat-form-field> -->
+          <input matInput formControlName="startDate" id="startDate" type="text" />
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100"> -->
+          <input matInput formControlName="endDate" id="endDate" type="text" />
+        </mat-form-field>
 
         <div class="alert alert-danger" fxFlex="100" *ngIf="taskForm.getError('duplactedCompetence')">
           <span>Required and acquirable competences can't contain the same competence!</span>
