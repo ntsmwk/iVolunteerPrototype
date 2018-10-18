@@ -1,4 +1,4 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
+<div class="page-layout blank p-24" style="overflow: hidden;">
 
   <!-- HEADER -->
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
@@ -8,34 +8,35 @@
   <!-- / HEADER -->
 
   <div class="content">
-    <div class="dashboard-configuration">
-      <button mat-button (click)="toggleEditMode()" class="button pull-right">Edit</button>
-      <fuse-dashlets-selector *ngIf="inEditMode" [dashlets]="gridContent"
+    <div class="dashboard-configuration" *ngIf="role === 'VOLUNTEER'">
+      <button mat-button (click)="toggleEditMode()">Edit</button>
+      <fuse-dashlets-selector *ngIf="inEditMode" [dashlets]="dashboard.dashlets"
                               (dashlets)="dashboard.dashlets = $event"></fuse-dashlets-selector>
     </div>
 
-    <div fxLayout="row wrap" fxLayoutAlign="center">
-      <div fxLayout="column" fxFlex="100" fusePerfectScrollbar>
+    <div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="role === 'VOLUNTEER' && dashboard">
+      <div fxLayout="column" fxFlex="100">
 
-        <div *ngIf="!gridContent || gridContent.length === 0">
+        <div *ngIf="!dashboard.dashlets || dashboard.dashlets.length === 0">
           <div id="empty-message" *ngIf="!inEditMode" class="dashboard-message">
             Please click on "Edit"-button to add dashlets to the dashboard.
           </div>
-          <div id="empty-edit-message" *ngIf="inEditMode" class="dashboard-message">
-            Please select dashlets from the drop-down menu to add them to the dashboard.
-          </div>
         </div>
 
-        <div class="dashboard-area" style="background-color: inherit">
-          <gridster #gridster [options]="gridConfig" style="min-height: 1000px;">
-            <gridster-item [item]="item" *ngFor="let item of gridContent" style="padding: 5px;">
-              <fuse-dashlet [name]="item.name" [inEditMode]="inEditMode">
-                <ndc-dynamic [ndcDynamicComponent]="findDashletComponenet(item.id)"></ndc-dynamic>
+        <div class="dashboard-area">
+          <gridster #gridster [options]="gridConfig">
+            <gridster-item *ngFor="let dashlet of dashboard.dashlets" [item]="dashlet">
+              <fuse-dashlet [name]="dashlet.name" [inEditMode]="inEditMode">
+                <ndc-dynamic [ndcDynamicComponent]="findDashletComponenet(dashlet.id)"></ndc-dynamic>
               </fuse-dashlet>
             </gridster-item>
           </gridster>
         </div>
       </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="role === 'EMPLOYEE'">
+      <strong>Help Seeker....</strong>
     </div>
   </div>
 </div>

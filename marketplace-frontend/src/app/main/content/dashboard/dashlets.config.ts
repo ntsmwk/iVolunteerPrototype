@@ -1,4 +1,5 @@
 import {isNullOrUndefined} from 'util';
+import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
 import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
 
 export class DashletsConf {
@@ -9,7 +10,13 @@ export class DashletsConf {
       name: 'Project Members',
       type: FuseProjectMembersComponent,
       initItemCols: 12,
-      initItemRows: 8
+      initItemRows: 16
+    }, {
+      id: 'timeline',
+      name: 'Timeline',
+      type: FuseTimelineComponent,
+      initItemCols: 32,
+      initItemRows: 32 * 2,
     }
   ];
 

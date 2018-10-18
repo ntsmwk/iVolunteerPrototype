@@ -5,6 +5,8 @@ import {CoreDashboardService} from '../_service/core-dashboard.service';
 import {Dashboard} from '../_model/dashboard';
 import {DashletsConf} from './dashlets.config';
 import {isNullOrUndefined} from 'util';
+import {LoginService} from '../_service/login.service';
+import {ParticipantRole} from '../_model/participant';
 
 @Component({
   selector: 'fuse-dashboard',
@@ -13,19 +15,17 @@ import {isNullOrUndefined} from 'util';
 })
 export class FuseDashboardComponent implements OnInit {
 
+  public role: ParticipantRole;
+
   @ViewChild('gridster')
   private gridsterComponent: GridsterComponent;
-
   public dashboard: Dashboard;
-  public gridConfig: GridsterConfig;
 
+  public gridConfig: GridsterConfig;
   public inEditMode = false;
 
-  constructor(private dashboardService: CoreDashboardService) {
-  }
-
-  get gridContent() {
-    return isNullOrUndefined(this.dashboard) ? [] : this.dashboard.dashlets;
+  constructor(private loginService: LoginService,
+              private dashboardService: CoreDashboardService) {
   }
 
   ngOnInit() {
@@ -38,6 +38,7 @@ export class FuseDashboardComponent implements OnInit {
         this.dashboard.dashlets = [];
       }
     });
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role);
   }
 
   findDashletComponenet(id: string) {
@@ -54,10 +55,14 @@ export class FuseDashboardComponent implements OnInit {
 
   private updateGridConfig(editable: boolean) {
     this.gridConfig = {
-      minCols: 40,
-      maxCols: 40,
+      minCols: 16,
+      maxCols: 64,
       minRows: 32,
-      maxRows: 32,
+      maxRows: 128,
+      gridType: 'fixed',
+      fixedColWidth: 25,
+      fixedRowHeight: 25,
+      setGridSize: true,
       margin: 5,
       displayGrid: editable ? DisplayGrid.Always : DisplayGrid.None,
       draggable: {

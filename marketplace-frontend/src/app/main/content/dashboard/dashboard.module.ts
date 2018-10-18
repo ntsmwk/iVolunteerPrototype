@@ -13,6 +13,8 @@ import {FuseDashletsSelectorComponent} from './dashlets-selector.component';
 
 import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
 import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
+import {FuseTimelineModule} from '../_components/timeline/timeline.module';
+import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -35,15 +37,18 @@ const routes = [
     MatExpansionModule,
     MatSidenavModule,
     MatDividerModule,
+
+    FuseProjectMembersModule,
+    FuseTimelineModule,
     FuseWidgetModule,
 
     GridsterModule,
-    FuseProjectMembersModule,
     DynamicModule.withComponents([]),
 
     FuseSharedModule
   ],
   entryComponents: [
+    FuseTimelineComponent,
     FuseProjectMembersComponent
   ]
 })
