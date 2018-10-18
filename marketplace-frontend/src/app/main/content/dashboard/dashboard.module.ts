@@ -15,6 +15,10 @@ import {FuseProjectMembersModule} from '../_components/project-members/project-m
 import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
 import {FuseTimelineModule} from '../_components/timeline/timeline.module';
 import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
+import {FuseTimelineActivitiesModule} from '../_components/timeline-activities/timeline-activities.module';
+import {FuseTimelineActivitiesComponent} from '../_components/timeline-activities/timeline-activities.component';
+import {FuseTimelineTasksModule} from '../_components/timeline-tasks/timeline-tasks.module';
+import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -40,6 +44,8 @@ const routes = [
 
     FuseProjectMembersModule,
     FuseTimelineModule,
+    FuseTimelineActivitiesModule,
+    FuseTimelineTasksModule,
     FuseWidgetModule,
 
     GridsterModule,
@@ -48,8 +54,10 @@ const routes = [
     FuseSharedModule
   ],
   entryComponents: [
+    FuseProjectMembersComponent,
     FuseTimelineComponent,
-    FuseProjectMembersComponent
+    FuseTimelineActivitiesComponent,
+    FuseTimelineTasksComponent
   ]
 })
 

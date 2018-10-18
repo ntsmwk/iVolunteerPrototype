@@ -1,6 +1,9 @@
 import {isNullOrUndefined} from 'util';
-import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
+
 import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
+import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
+import {FuseTimelineActivitiesComponent} from '../_components/timeline-activities/timeline-activities.component';
+import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
 
 export class DashletsConf {
 
@@ -17,6 +20,19 @@ export class DashletsConf {
       type: FuseTimelineComponent,
       initItemCols: 32,
       initItemRows: 32 * 2,
+    }, {
+      id: 'timeline-activities',
+      name: 'Timeline Activities',
+      type: FuseTimelineActivitiesComponent,
+      initItemCols: 12,
+      initItemRows: 24
+    },
+    {
+      id: 'timeline-tasks',
+      name: 'Timeline Tasks',
+      type: FuseTimelineTasksComponent,
+      initItemCols: 12,
+      initItemRows: 24
     }
   ];
 

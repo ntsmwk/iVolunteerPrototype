@@ -1,0 +1,31 @@
+@import "src/@fuse/scss/fuse";
+
+.latest-activity {
+
+  .content {
+    background-color: #FFF;
+
+    .activities {
+
+      .activity {
+        padding: 16px 0;
+
+        .avatar {
+          margin-right: 16px;
+        }
+
+        .username {
+          font-weight: 500;
+          color: mat-color($accent)
+        }
+
+        .message {
+          font-weight: 500;
+        }
+
+        .time {
+        }
+      }
+    }
+  }
+}
