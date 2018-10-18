@@ -17,10 +17,22 @@ import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
 import {Marketplace} from '../_model/marketplace';
 import {Project} from '../_model/project';
 import {ProjectService} from '../_service/project.service';
+// import * as $ from 'jquery'
+// import 'periodpicker'
+// declare var jquery:any;
+// declare var $ :any;
+declare var $: JQuery;
+
+declare global {
+  interface JQuery {
+    (selector: string): any;
+    periodpicker(t): any;
+  }
+}
 
 @Component({
   templateUrl: './task-form.component.html',
-  styleUrls: ['./task-form.component.scss']
+  styleUrls: ['./task-form.component.scss'],
 })
 export class FuseTaskFormComponent implements OnInit {
   taskForm: FormGroup;
@@ -69,6 +81,41 @@ export class FuseTaskFormComponent implements OnInit {
         ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
       });
     });
+
+
+    $("#startDate").periodpicker({
+      norange: true, // use only one value
+      cells: [1, 1], // show only one month
+  
+      resizeButton: false, // deny resize picker
+      fullsizeButton: false,
+      fullsizeOnDblClick: false,
+  
+      timepicker: true, // use timepicker
+      timepickerOptions: {
+        hours: true,
+        minutes: true,
+        seconds: false,
+        ampm: true
+      }
+    });
+
+    $("#endDate").periodpicker({
+      norange: true, // use only one value
+      cells: [1, 1], // show only one month
+  
+      resizeButton: false, // deny resize picker
+      fullsizeButton: false,
+      fullsizeOnDblClick: false,
+  
+      timepicker: true, // use timepicker
+      timepickerOptions: {
+        hours: true,
+        minutes: true,
+        seconds: false,
+        ampm: true
+      }
+    });
   }
 
   private findTask(marketplace: Marketplace, taskId: string) {
@@ -96,11 +143,13 @@ export class FuseTaskFormComponent implements OnInit {
   }
 
   save() {
-    if (!this.taskForm.valid) {
-      return;
-    }
+    // console.error(this.taskForm.value);
+    // console.error($("#startDate")[0].value);
+    // console.error($("#endDate")[0].value);
+
 
     const task = this.taskForm.value;
+    // task.startDate = $("#startDate")[0].value;
     task.workflowKey = task.workflowType.key;
     delete task.workflowType;
 

@@ -136,8 +136,7 @@ public class TaskOperationController {
 				volunteerProfileRepository.save(volunteerProfile);
 
 				try {
-					VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(
-							taskEntryMapper.toDTO(taskEntry));
+					VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
 					vte.setVolunteerId(volunteer.getId());
 
 					contractorRepositoryRestClient.publishTaskEntry(vte, authorization);

@@ -9,6 +9,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatMenuModule,
   MatProgressBarModule,
   MatSidenavModule,
   MatSlideToggleModule,
@@ -61,6 +62,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    MatMenuModule,
 
     CalendarModule.forRoot(),
     ColorPickerModule,

@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +16,6 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	@Autowired private CompetenceRepository competenceRepository;
 
-	@Value("${trustifier.uri}")
-	private String test;
-	
 	@Bean
 	@Primary
 	public RestTemplate produceRestTemplate() {
@@ -32,10 +28,6 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		System.out.println(test);
-		System.out.println(test);
-		System.out.println(test);
-		System.out.println(test);
 		createCompetence("Planning");
 		createCompetence("Leadership");
 		createCompetence("Creativity");

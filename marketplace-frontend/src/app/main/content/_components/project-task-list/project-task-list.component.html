@@ -16,6 +16,7 @@
 
             <div class="pl-16 pr-8 pt-8 pb-32" fxLayout="column">
               <div>{{task.description}}</div>
+              <div><strong>Status:</strong> {{task.status}}</div>
               <div><strong>Start date:</strong> {{task.startDate | date: 'dd.MM.yyyy'}}</div>
               <div *ngIf="task.endDate"><strong>End date:</strong> {{task.endDate | date: 'dd.MM.yyyy'}}</div>
             </div>

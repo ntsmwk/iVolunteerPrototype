@@ -30,6 +30,8 @@
                             "src/styles.scss"
                         ],
                         "scripts": [
+                            "src/assets/periodpicker/jquery.min.js",
+                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js"
                         ]
                     },
                     "configurations": {
@@ -88,7 +90,10 @@
                         "styles": [
                             "styles.scss"
                         ],
-                        "scripts": [],
+                        "scripts": [
+                            "src/assets/periodpicker/jquery.min.js",
+                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js"
+                        ],
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"

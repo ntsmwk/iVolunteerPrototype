@@ -8,19 +8,13 @@
 
       <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
 
-        <!--
-        <div class="px-16 py-8 border-bottom" fxLayout="row"
-             fxLayoutAlign="space-between center">
-          <div class="h1">Projects</div>
-        </div>
-        -->
-
-        <div *ngFor="let project of projects" fxFlex="100">
+        <div fxFlex="100">
           <table class="simple clickable">
             <thead>
             <tr>
-              <th class="header">{{project.name}}</th>
+              <th></th>
               <th>Name</th>
+              <th class="text-right">Common Projects</th>
               <th class="text-right">Common Groups</th>
             </tr>
             </thead>
@@ -30,6 +24,7 @@
               <td><img class="avatar big cursor" [src]="me.avatar" title="{{me.name}}"></td>
               <td>{{me.name}}</td>
               <td></td>
+              <td></td>
             </tr>
 
             <th class="subHeader">Follower</th>
@@ -37,6 +32,9 @@
               <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
               </td>
               <td>{{friend.name}}</td>
+              <td class="text-right">
+                {{dummyProjects.project1.name}}
+              </td>
               <td class="text-right">
                 <span *ngFor="let group of friend.groups">
                   <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">
@@ -50,6 +48,9 @@
               </td>
               <td>{{friend.name}}</td>
               <td class="text-right">
+                {{dummyProjects.project1.name}}
+              </td>
+              <td class="text-right">
                 <span *ngFor="let group of friend.groups">
                   <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">
                 </span>
@@ -61,6 +62,9 @@
               <td><img class="avatar big cursor" *ngIf="friend.avatar" [src]="friend.avatar" title="{{friend.name}}">
               </td>
               <td>{{friend.name}}</td>
+              <td class="text-right">
+                {{dummyProjects.project1.name}}
+              </td>
               <td class="text-right">
                 <span *ngFor="let group of friend.groups">
                   <img class="avatar big cursor" [src]="group.avatar" title="{{group.name}}">

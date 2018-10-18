@@ -4,7 +4,7 @@
 
   .header {
     position: relative;
-    flex: 1 0 auto;
+    //flex: 1 0 auto;
     height: 90px;
     max-height: 90px;
     background: #1A237E;
@@ -30,10 +30,9 @@
       }
     }
 
-    #edit {
+    .iconButton {
       cursor: pointer;
       right: 1em;
-      position: absolute;
     }
   }
 

@@ -83,4 +83,8 @@ export class FuseTaskDetailComponent implements OnInit {
   showEdit() {
     return !isNullOrUndefined(this.role) && this.role === 'HELP_SEEKER' && !isNullOrUndefined(this.task);
   }
+
+  backClicked() {
+    window.history.back();
+  }
 }

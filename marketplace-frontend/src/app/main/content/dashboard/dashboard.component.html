@@ -9,11 +9,8 @@
 
   <div class="content">
     <div class="dashboard-configuration">
-      <button mat-button (click)="toggleEditMode()" class="button">Edit</button>
-    </div>
-
-    <div *ngIf="inEditMode">
-      <fuse-dashlets-selector [dashlets]="gridContent"
+      <button mat-button (click)="toggleEditMode()" class="button pull-right">Edit</button>
+      <fuse-dashlets-selector *ngIf="inEditMode" [dashlets]="gridContent"
                               (dashlets)="dashboard.dashlets = $event"></fuse-dashlets-selector>
     </div>
 

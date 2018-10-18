@@ -15,4 +15,5 @@ export class TaskInteractionService {
   findByTask(marketplace: Marketplace, task: Task) {
     return this.http.get(`${marketplace.url}/task/${task.id}/interaction`);
   }
+
 }

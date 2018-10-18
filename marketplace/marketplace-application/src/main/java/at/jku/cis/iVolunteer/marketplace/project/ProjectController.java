@@ -38,7 +38,6 @@ public class ProjectController {
 	private static final String ENGAGED = "ENGAGED";
 	private static final String FINISHED = "FINISHED";
 
-
 	@Value("${marketplace.identifier}")
 	private String marketplaceId;
 
@@ -74,7 +73,10 @@ public class ProjectController {
 		Set<Project> projects = new HashSet<>();
 
 		taskRepository.findByStatus(TaskStatus.PUBLISHED).forEach(task -> {
-			projects.add(task.getProject());
+			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
+			if (!isReservedAssignedTaskInteraction(taskInteraction)) {
+				projects.add(task.getProject());
+			}
 		});
 
 		return new ArrayList<>(projects);
@@ -83,31 +85,29 @@ public class ProjectController {
 	private List<Project> findEngagedProjectsByVolunteer(Volunteer volunteer) {
 		Set<Project> projects = new HashSet<>();
 
-		taskRepository.findByStatus(TaskStatus.RUNNING).forEach(task -> {
+		taskRepository.findByStatus(TaskStatus.PUBLISHED).forEach(task -> {
 			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
-			if (isAssignedTaskInteraction(taskInteraction)) {
+			if (isReservedAssignedTaskInteraction(taskInteraction)) {
 				projects.add(task.getProject());
 			}
 		});
 
 		return new ArrayList<>(projects);
 	}
-	
+
 	private List<Project> findFinishedProjectsByVolunteer(Volunteer volunteer) {
 		Set<Project> projects = new HashSet<>();
 
 		taskRepository.findByStatus(TaskStatus.FINISHED).forEach(task -> {
-			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
-			if (isAssignedTaskInteraction(taskInteraction)) {
-				projects.add(task.getProject());
-			}
+			projects.add(task.getProject());
 		});
 
 		return new ArrayList<>(projects);
 	}
 
-	private boolean isAssignedTaskInteraction(TaskInteraction taskInteraction) {
-		return taskInteraction != null && TaskVolunteerOperation.ASSIGNED == taskInteraction.getOperation();
+	private boolean isReservedAssignedTaskInteraction(TaskInteraction taskInteraction) {
+		return taskInteraction != null && (TaskVolunteerOperation.RESERVED == taskInteraction.getOperation()
+				|| TaskVolunteerOperation.ASSIGNED == taskInteraction.getOperation());
 	}
 
 	private TaskInteraction getLatestTaskInteraction(Task task, User participant) {

@@ -13,6 +13,11 @@ export class CollaborationsComponent implements OnInit {
   @Input('projects')
   public projects: Array<Project>;
 
+  dummyProjects = {
+    'project1':
+      {'name': 'Project A'}
+  }
+
   me = {'name': 'You', 'avatar': 'assets/images/avatars/profile.jpg'};
 
   friends = {

@@ -1,8 +1,12 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
-  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+  <div class="header mat-accent-bg" fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-icon class="iconButton" (click)="backClicked()" style="margin-left: 20px">keyboard_return</mat-icon>
     <h1>Task detail</h1>
-    <mat-icon id="edit" *ngIf="showEdit()" routerLink="/main/task-form/{{task.id}}">edit</mat-icon>
+    <mat-icon class="iconButton" *ngIf="showEdit(); else elsee" routerLink="/main/task-form/{{task.id}}" style="margin-right: 20px">edit</mat-icon>
+    <ng-template #elsee>
+      <div></div>
+    </ng-template>
   </div>
 
 
@@ -87,4 +91,5 @@
     </mat-sidenav>
     <!-- / SIDENAV -->
   </mat-sidenav-container>
+
 </div>
