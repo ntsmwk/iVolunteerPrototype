@@ -44,7 +44,7 @@
     "@swimlane/ngx-dnd": "4.0.0",
     "@types/prismjs": "1.9.0",
     "angular-calendar": "0.24.0",
-    "angular-gridster2": "6.0.10",
+    "angular-gridster2": "5.1.0",
     "angular-in-memory-web-api": "0.6.0",
     "chart.js": "2.7.2",
     "classlist.js": "1.1.20150312",

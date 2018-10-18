@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,25 +19,26 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashboard;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashlet;
-import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 @RestController
 public class DashboardController {
 
+	private static final String CURRENT = "current";
+	
 	@Autowired
 	private CoreLoginService loginService;
 	@Autowired
 	private DashboardRepository dashboardRepository;
 
-	@GetMapping("dashboard")
-	public List<Dashboard> findAllForUser() {
-		CoreUser user = loginService.getLoggedInParticipant();
-		return dashboardRepository.findByUser(user);
-	}
-
 	@GetMapping(path = "/dashboard/{id}")
 	public Dashboard findById(@PathVariable("id") String id) {
-		Dashboard dashboardFromDb = dashboardRepository.findOne(id);
+		Dashboard dashboardFromDb = null;
+		if (StringUtils.equals(id, CURRENT)) {
+			dashboardFromDb = dashboardRepository.findByUser(loginService.getLoggedInParticipant());
+		} else {
+			dashboardFromDb = dashboardRepository.findOne(id);
+		}
+
 		if (dashboardFromDb == null) {
 			throw new NotFoundException();
 		}
@@ -51,7 +53,7 @@ public class DashboardController {
 		return dashboardRepository.insert(dashboard);
 	}
 
-	@PutMapping(path = "/dashboard/{id}/dashlets")
+	@PutMapping(path = "/dashboard/{id}/dashlet")
 	public Dashboard updateDashboardPages(@PathVariable("id") String id, @RequestBody List<Dashlet> dashlets) {
 		Dashboard dashboardFromDb = dashboardRepository.findOne(id);
 		if (dashboardFromDb == null) {

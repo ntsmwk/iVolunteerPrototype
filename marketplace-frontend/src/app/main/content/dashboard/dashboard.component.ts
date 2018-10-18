@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 
 import {DisplayGrid, GridsterComponent, GridsterConfig} from 'angular-gridster2';
-import {Dashlet} from '../_model/dashlet';
 import {CoreDashboardService} from '../_service/core-dashboard.service';
 import {Dashboard} from '../_model/dashboard';
+import {DashletsConf} from './dashlets.config';
 import {isNullOrUndefined} from 'util';
 
 @Component({
@@ -11,33 +11,27 @@ import {isNullOrUndefined} from 'util';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class FuseDashboardComponent implements OnInit, OnDestroy {
+export class FuseDashboardComponent implements OnInit {
 
   @ViewChild('gridster')
-  gridsterComponent: GridsterComponent;
+  private gridsterComponent: GridsterComponent;
 
-  gridConfig: GridsterConfig;
-  gridContent: Dashlet[] = [];
+  private dashboard: Dashboard;
+  public gridConfig: GridsterConfig;
 
-  inEditMode = false;
+  public inEditMode = false;
 
   constructor(private dashboardService: CoreDashboardService) {
   }
 
+  get gridContent() {
+    return isNullOrUndefined(this.dashboard) ? [] : this.dashboard.dashlets;
+  }
+
   ngOnInit() {
     this.updateGridConfig(this.inEditMode);
-    this.dashboardService.findAll().toPromise().then((dashboard: Dashboard) => {
-      if (!isNullOrUndefined(dashboard)) {
-        this.gridContent = dashboard.dashlets;
-      } else {
-        this.gridContent = new Array<Dashlet>();
-        const dashlet = new Dashlet();
-        dashlet.x = 0;
-        dashlet.y = 0;
-        dashlet.cols = 1;
-        dashlet.rows = 1;
-        this.gridContent.push(dashlet);
-      }
+    this.dashboardService.findCurrent().toPromise().then((dashboard: Dashboard) => {
+      this.dashboard = dashboard;
     });
   }
 
@@ -46,13 +40,18 @@ export class FuseDashboardComponent implements OnInit, OnDestroy {
     this.updateGridConfig(this.inEditMode);
   }
 
-  ngOnDestroy() {
+  saveDashboard() {
+    this.dashboardService.save(this.dashboard).toPromise().then(() => alert('Dashboard is saved'));
+  }
+
+  findDashlet(id: string) {
+    return DashletsConf.getDashletEntryById(id);
   }
 
   private updateGridConfig(editable: boolean) {
     this.gridConfig = {
-      minCols: 80,
-      maxCols: 80,
+      minCols: 40,
+      maxCols: 40,
       minRows: 32,
       maxRows: 32,
       margin: 5,
