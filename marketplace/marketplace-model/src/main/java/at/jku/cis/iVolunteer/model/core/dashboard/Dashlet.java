@@ -1,13 +1,30 @@
 package at.jku.cis.iVolunteer.model.core.dashboard;
 
 public class Dashlet {
+	private String id;
+	private String name;
 	private int x;
 	private int y;
 	private int rows;
 	private int cols;
-	private String id;
 	private int minItemRows;
 	private int minItemCols;
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public int getX() {
 		return x;
@@ -39,14 +56,6 @@ public class Dashlet {
 
 	public void setCols(int cols) {
 		this.cols = cols;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public int getMinItemRows() {

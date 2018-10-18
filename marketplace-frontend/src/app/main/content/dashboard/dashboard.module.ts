@@ -8,6 +8,11 @@ import {MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, Ma
 import {FuseWidgetModule} from '../../../../@fuse/components';
 import {DynamicModule} from 'ng-dynamic-component';
 import {GridsterModule} from 'angular-gridster2';
+import {FuseDashletComponent} from './dashlet.component';
+import {FuseDashletsSelectorComponent} from './dashlets-selector.component';
+
+import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
+import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -15,7 +20,9 @@ const routes = [
 
 @NgModule({
   declarations: [
-    FuseDashboardComponent
+    FuseDashletComponent,
+    FuseDashboardComponent,
+    FuseDashletsSelectorComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -31,9 +38,13 @@ const routes = [
     FuseWidgetModule,
 
     GridsterModule,
+    FuseProjectMembersModule,
     DynamicModule.withComponents([]),
 
     FuseSharedModule
+  ],
+  entryComponents: [
+    FuseProjectMembersComponent
   ]
 })
 

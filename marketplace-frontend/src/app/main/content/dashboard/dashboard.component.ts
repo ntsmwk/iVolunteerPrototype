@@ -16,7 +16,7 @@ export class FuseDashboardComponent implements OnInit {
   @ViewChild('gridster')
   private gridsterComponent: GridsterComponent;
 
-  private dashboard: Dashboard;
+  public dashboard: Dashboard;
   public gridConfig: GridsterConfig;
 
   public inEditMode = false;
@@ -31,21 +31,25 @@ export class FuseDashboardComponent implements OnInit {
   ngOnInit() {
     this.updateGridConfig(this.inEditMode);
     this.dashboardService.findCurrent().toPromise().then((dashboard: Dashboard) => {
-      this.dashboard = dashboard;
+      if (!isNullOrUndefined(dashboard)) {
+        this.dashboard = dashboard;
+      } else {
+        this.dashboard = new Dashboard();
+        this.dashboard.dashlets = [];
+      }
     });
+  }
+
+  findDashletComponenet(id: string) {
+    return DashletsConf.getDashletEntryById(id).type;
   }
 
   toggleEditMode() {
     this.inEditMode = !this.inEditMode;
     this.updateGridConfig(this.inEditMode);
-  }
-
-  saveDashboard() {
-    this.dashboardService.save(this.dashboard).toPromise().then(() => alert('Dashboard is saved'));
-  }
-
-  findDashlet(id: string) {
-    return DashletsConf.getDashletEntryById(id);
+    if (!this.inEditMode) {
+      this.dashboardService.save(this.dashboard).toPromise().then(() => alert('Dashboard is saved'));
+    }
   }
 
   private updateGridConfig(editable: boolean) {

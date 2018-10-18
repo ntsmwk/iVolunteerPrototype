@@ -8,8 +8,8 @@ export class DashletsConf {
       id: 'project-members',
       name: 'Project Members',
       type: FuseProjectMembersComponent,
-      initItemCols: 24,
-      initItemRows: 16
+      initItemCols: 12,
+      initItemRows: 8
     }
   ];
 

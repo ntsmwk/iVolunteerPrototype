@@ -3,9 +3,6 @@ package at.jku.cis.iVolunteer.core.dashboard;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashboard;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashlet;
+import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 
 @RestController
 public class DashboardController {
@@ -50,6 +49,7 @@ public class DashboardController {
 		Date currentDate = new Date();
 		dashboard.setCreationDate(currentDate);
 		dashboard.setModificationDate(currentDate);
+		dashboard.setUser(loginService.getLoggedInParticipant());
 		return dashboardRepository.insert(dashboard);
 	}
 

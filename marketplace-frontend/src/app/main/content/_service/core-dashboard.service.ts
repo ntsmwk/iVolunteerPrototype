@@ -40,7 +40,7 @@ export class CoreDashboardService {
     if (isNullOrUndefined(dashboard.id)) {
       return this.http.post(`/core/dashboard`, dashboard);
     }
-    return this.http.put(`/core/dashboard/${dashboard.id}/dashlet`, dashboard);
+    return this.http.put(`/core/dashboard/${dashboard.id}/dashlet`, dashboard.dashlets);
   }
 
 }

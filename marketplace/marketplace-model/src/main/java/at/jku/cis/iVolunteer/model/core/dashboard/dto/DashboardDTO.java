@@ -8,12 +8,9 @@ import at.jku.cis.iVolunteer.model.core.user.dto.CoreUserDTO;
 public class DashboardDTO {
 
 	private String id;
-	private String name;
+	private CoreUserDTO user;
 	private Date creationDate;
 	private Date modificationDate;
-
-	private CoreUserDTO user;
-
 	private List<DashletDTO> dashlets;
 
 	public String getId() {
@@ -22,14 +19,6 @@ public class DashboardDTO {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public Date getCreationDate() {

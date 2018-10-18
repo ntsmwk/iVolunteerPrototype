@@ -8,8 +8,14 @@
   <!-- / HEADER -->
 
   <div class="content">
-    <button mat-button (click)="toggleEditMode()" class="button">Edit</button>
-    <button mat-button (click)="saveDashboard()" class="button" *ngIf="inEditMode">Save</button>
+    <div class="dashboard-configuration">
+      <button mat-button (click)="toggleEditMode()" class="button">Edit</button>
+    </div>
+
+    <div *ngIf="inEditMode">
+      <fuse-dashlets-selector [dashlets]="gridContent"
+                              (dashlets)="dashboard.dashlets = $event"></fuse-dashlets-selector>
+    </div>
 
     <div fxLayout="row wrap" fxLayoutAlign="center">
       <div fxLayout="column" fxFlex="100" fusePerfectScrollbar>
@@ -23,10 +29,12 @@
           </div>
         </div>
 
-        <div class="dashboard-area">
+        <div class="dashboard-area" style="background-color: inherit">
           <gridster #gridster [options]="gridConfig" style="min-height: 1000px;">
             <gridster-item [item]="item" *ngFor="let item of gridContent" style="padding: 5px;">
-              <ndc-dynamic [ndcDynamicComponent]="findDashlet(item.id)"></ndc-dynamic>
+              <fuse-dashlet [name]="item.name" [inEditMode]="inEditMode">
+                <ndc-dynamic [ndcDynamicComponent]="findDashletComponenet(item.id)"></ndc-dynamic>
+              </fuse-dashlet>
             </gridster-item>
           </gridster>
         </div>

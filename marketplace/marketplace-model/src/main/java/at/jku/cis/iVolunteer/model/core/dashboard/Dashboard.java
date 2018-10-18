@@ -14,13 +14,10 @@ public class Dashboard {
 
 	@Id
 	private String id;
-	private String name;
-	private Date creationDate;
-	private Date modificationDate;
-
 	@DBRef
 	private CoreUser user;
-
+	private Date creationDate;
+	private Date modificationDate;
 	private List<Dashlet> dashlets;
 
 	public String getId() {
@@ -29,14 +26,6 @@ public class Dashboard {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public Date getCreationDate() {
