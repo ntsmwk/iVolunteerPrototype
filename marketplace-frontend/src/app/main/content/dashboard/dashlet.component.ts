@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'fuse-dashlet',
@@ -12,7 +12,14 @@ export class FuseDashletComponent {
   @Input('inEditMode')
   inEditMode: boolean;
 
+  @Output('remove')
+  removeDashletEmitter = new EventEmitter<undefined>();
+
   constructor() {
+  }
+
+  remove() {
+    this.removeDashletEmitter.emit(undefined);
   }
 
 }

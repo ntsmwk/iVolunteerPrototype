@@ -7,6 +7,7 @@ import {DashletsConf} from './dashlets.config';
 import {isNullOrUndefined} from 'util';
 import {LoginService} from '../_service/login.service';
 import {ParticipantRole} from '../_model/participant';
+import {Dashlet} from '../_model/dashlet';
 
 @Component({
   selector: 'fuse-dashboard',
@@ -41,9 +42,16 @@ export class FuseDashboardComponent implements OnInit {
     this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role);
   }
 
-  findDashletComponenet(id: string) {
+  findDashletComponent(id: string) {
     return DashletsConf.getDashletEntryById(id).type;
   }
+
+  removeDashlet(dashlet: Dashlet) {
+    console.log(this.dashboard.dashlets);
+    this.dashboard.dashlets.splice(this.dashboard.dashlets.findIndex((current: Dashlet) => current.id === dashlet.id), 1);
+    console.log(this.dashboard.dashlets);
+  }
+
 
   toggleEditMode() {
     this.inEditMode = !this.inEditMode;

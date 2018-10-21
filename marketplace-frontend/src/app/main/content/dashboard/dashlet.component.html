@@ -3,8 +3,9 @@
     <div class="dashlet">
       <div class="header">
         <span class="header-title">{{name}}</span>
-        <button mat-button class="header-settings-button" *ngIf="inEditMode">
-          <mat-icon>settings</mat-icon>
+
+        <button mat-button class="header-settings-button" *ngIf="inEditMode" (click)="remove()">
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
       <div class="dashlet-content">

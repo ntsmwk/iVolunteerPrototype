@@ -4,12 +4,17 @@
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
     <h1>What's Up</h1>
     <img class="header-icon" src="assets/icons/dashboard.svg">
+
+    <button mat-button class="edit-button" (click)="toggleEditMode()" *ngIf="role === 'VOLUNTEER'">
+      <mat-icon *ngIf="inEditMode">save</mat-icon>
+      <mat-icon *ngIf="!inEditMode">edit</mat-icon>
+    </button>
   </div>
   <!-- / HEADER -->
 
   <div class="content">
     <div class="dashboard-configuration" *ngIf="role === 'VOLUNTEER'">
-      <button mat-button (click)="toggleEditMode()">Edit</button>
+
       <fuse-dashlets-selector *ngIf="inEditMode" [dashlets]="dashboard.dashlets"
                               (dashlets)="dashboard.dashlets = $event"></fuse-dashlets-selector>
     </div>
@@ -26,8 +31,8 @@
         <div class="dashboard-area">
           <gridster #gridster [options]="gridConfig">
             <gridster-item *ngFor="let dashlet of dashboard.dashlets" [item]="dashlet">
-              <fuse-dashlet [name]="dashlet.name" [inEditMode]="inEditMode">
-                <ndc-dynamic [ndcDynamicComponent]="findDashletComponenet(dashlet.id)"></ndc-dynamic>
+              <fuse-dashlet [name]="dashlet.name" [inEditMode]="inEditMode" (remove)="removeDashlet(dashlet)">
+                <ndc-dynamic [ndcDynamicComponent]="findDashletComponent(dashlet.id)"></ndc-dynamic>
               </fuse-dashlet>
             </gridster-item>
           </gridster>
