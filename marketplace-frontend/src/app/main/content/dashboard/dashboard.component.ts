@@ -3,10 +3,12 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {DisplayGrid, GridsterComponent, GridsterConfig} from 'angular-gridster2';
 import {CoreDashboardService} from '../_service/core-dashboard.service';
 import {Dashboard} from '../_model/dashboard';
-import {DashletsConf} from './dashlets.config';
 import {isNullOrUndefined} from 'util';
 import {LoginService} from '../_service/login.service';
 import {ParticipantRole} from '../_model/participant';
+import {MatDialog} from '@angular/material';
+import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
+import {DashletsConf} from './dashlets.config';
 import {Dashlet} from '../_model/dashlet';
 
 @Component({
@@ -25,7 +27,8 @@ export class FuseDashboardComponent implements OnInit {
   public gridConfig: GridsterConfig;
   public inEditMode = false;
 
-  constructor(private loginService: LoginService,
+  constructor(private dialog: MatDialog,
+              private loginService: LoginService,
               private dashboardService: CoreDashboardService) {
   }
 
@@ -40,6 +43,17 @@ export class FuseDashboardComponent implements OnInit {
       }
     });
     this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(FuseDashletSelectorDialog, {
+      width: '250px',
+      data: {dashlet: undefined}
+    });
+
+    dialogRef.afterClosed().toPromise().then((dashlet: Dashlet) => {
+      this.dashboard.dashlets.push(dashlet);
+    });
   }
 
   findDashletComponent(id: string) {

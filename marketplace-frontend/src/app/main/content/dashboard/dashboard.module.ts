@@ -4,12 +4,22 @@ import {RouterModule} from '@angular/router';
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {FuseDashboardComponent} from './dashboard.component';
-import {MatButtonModule, MatDividerModule, MatExpansionModule, MatIconModule, MatMenuModule, MatOptionModule, MatSelectModule, MatSidenavModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatIconModule,
+  MatMenuModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatSidenavModule
+} from '@angular/material';
 import {FuseWidgetModule} from '../../../../@fuse/components';
 import {DynamicModule} from 'ng-dynamic-component';
 import {GridsterModule} from 'angular-gridster2';
 import {FuseDashletComponent} from './dashlet.component';
-import {FuseDashletsSelectorComponent} from './dashlets-selector.component';
+import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
 
 import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
 import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
@@ -28,19 +38,20 @@ const routes = [
   declarations: [
     FuseDashletComponent,
     FuseDashboardComponent,
-    FuseDashletsSelectorComponent
+    FuseDashletSelectorDialog
   ],
   imports: [
     RouterModule.forChild(routes),
 
-    MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatIconModule,
     MatMenuModule,
     MatOptionModule,
     MatSelectModule,
-    MatExpansionModule,
     MatSidenavModule,
-    MatDividerModule,
 
     FuseProjectMembersModule,
     FuseTimelineModule,
@@ -57,7 +68,9 @@ const routes = [
     FuseProjectMembersComponent,
     FuseTimelineComponent,
     FuseTimelineActivitiesComponent,
-    FuseTimelineTasksComponent
+    FuseTimelineTasksComponent,
+
+    FuseDashletSelectorDialog
   ]
 })
 

@@ -12,27 +12,27 @@ export class DashletsConf {
       id: 'project-members',
       name: 'Project Members',
       type: FuseProjectMembersComponent,
-      initItemCols: 12,
-      initItemRows: 16
+      cols: 12,
+      rows: 16
     }, {
       id: 'timeline',
       name: 'Timeline',
       type: FuseTimelineComponent,
-      initItemCols: 32,
-      initItemRows: 32 * 2,
+      cols: 32,
+      rows: 32 * 1.5,
     }, {
       id: 'timeline-activities',
       name: 'Timeline Activities',
       type: FuseTimelineActivitiesComponent,
-      initItemCols: 12,
-      initItemRows: 24
+      cols: 12,
+      rows: 16
     },
     {
       id: 'timeline-tasks',
       name: 'Timeline Tasks',
       type: FuseTimelineTasksComponent,
-      initItemCols: 12,
-      initItemRows: 24
+      cols: 12,
+      rows: 24
     }
   ];
 
@@ -55,6 +55,6 @@ export class DashletEntry {
   id: string;
   name: string;
   type: any;
-  initItemRows: number;
-  initItemCols: number;
+  cols: number;
+  rows: number;
 }

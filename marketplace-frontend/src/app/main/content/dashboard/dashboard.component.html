@@ -5,20 +5,20 @@
     <h1>What's Up</h1>
     <img class="header-icon" src="assets/icons/dashboard.svg">
 
-    <button mat-button class="edit-button" (click)="toggleEditMode()" *ngIf="role === 'VOLUNTEER'">
-      <mat-icon *ngIf="inEditMode">save</mat-icon>
-      <mat-icon *ngIf="!inEditMode">edit</mat-icon>
-    </button>
+    <div class="buttons">
+      <button mat-button class="add-button" (click)="openDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">add</mat-icon>
+      </button>
+
+      <button mat-button class="edit-button" (click)="toggleEditMode()" *ngIf="role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">save</mat-icon>
+        <mat-icon *ngIf="!inEditMode">edit</mat-icon>
+      </button>
+    </div>
   </div>
   <!-- / HEADER -->
 
   <div class="content">
-    <div class="dashboard-configuration" *ngIf="role === 'VOLUNTEER'">
-
-      <fuse-dashlets-selector *ngIf="inEditMode" [dashlets]="dashboard.dashlets"
-                              (dashlets)="dashboard.dashlets = $event"></fuse-dashlets-selector>
-    </div>
-
     <div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="role === 'VOLUNTEER' && dashboard">
       <div fxLayout="column" fxFlex="100">
 
