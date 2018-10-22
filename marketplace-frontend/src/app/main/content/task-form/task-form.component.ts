@@ -82,6 +82,7 @@ export class FuseTaskFormComponent implements OnInit {
       });
     });
 
+    //jQuery('#startDate').periodpicker('formatDecoreDateTimeWithYear')
 
     $("#startDate").periodpicker({
       norange: false, // use only one value
