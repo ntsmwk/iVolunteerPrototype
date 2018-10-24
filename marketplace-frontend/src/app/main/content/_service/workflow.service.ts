@@ -29,8 +29,6 @@ export class WorkflowService {
   }
 
   completeWorkflowStep(marketplace: Marketplace, workflowKey: string, processInstanceId: string, workflowStep: WorkflowStep, participantId: string) {
-    console.error('complete workflow');
-    console.error(participantId);
     return this.http.post(`${marketplace.url}/workflow/${workflowKey}/${processInstanceId}/step?participantId=${participantId}`, workflowStep);
   }
 

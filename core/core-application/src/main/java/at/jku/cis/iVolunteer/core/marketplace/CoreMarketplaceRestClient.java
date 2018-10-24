@@ -27,7 +27,7 @@ public class CoreMarketplaceRestClient {
 		return restTemplate.postForObject(url, buildEntity(volunteerDto, authorization), VolunteerDTO.class);
 	}
 
-	public HelpSeekerDTO registerHelpSeeker(String marketplaceURL, String authorization, CoreHelpSeekerDTO helpSeekerDto) {
+	public HelpSeekerDTO registerHelpSeeker(String marketplaceURL, String authorization, HelpSeekerDTO helpSeekerDto) {
 		String url = format(MARKETPLACE_REGISTER_HELP_SEEKER, marketplaceURL, helpSeekerDto);
 		return restTemplate.postForObject(url, buildEntity(helpSeekerDto, authorization), HelpSeekerDTO.class);
 	}

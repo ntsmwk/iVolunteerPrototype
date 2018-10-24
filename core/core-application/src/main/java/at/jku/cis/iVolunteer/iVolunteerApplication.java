@@ -1,6 +1,12 @@
 package at.jku.cis.iVolunteer;
 
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+
 import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,12 +16,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.security.SecurityConstants;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
-import at.jku.cis.iVolunteer.mapper.user.HelpSeekerMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @SpringBootApplication
 public class iVolunteerApplication {
@@ -32,7 +41,8 @@ public class iVolunteerApplication {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	private static final String AUTHORIZATION = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzOTQ4MDJ9.lhe39ukOhsrxzKw_5X4cXsyqBu8Z0ukZciaQrhsTCG3H0yMIxMb4chlVWv_A3vibBDnKqWn8NMhUkEg7AWy0CQ";
+	// private static final String AUTHORIZATION = "Bearer
+	// eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzOTQ4MDJ9.lhe39ukOhsrxzKw_5X4cXsyqBu8Z0ukZciaQrhsTCG3H0yMIxMb4chlVWv_A3vibBDnKqWn8NMhUkEg7AWy0CQ";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
@@ -74,10 +84,10 @@ public class iVolunteerApplication {
 			helpSeeker = new CoreHelpSeeker();
 			helpSeeker.setUsername(username);
 			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
-			helpSeeker.getRegisteredMarketplaces().clear();
-			helpSeeker.getRegisteredMarketplaces().add(marketplace);
+//			helpSeeker.getRegisteredMarketplaces().clear();
+//			helpSeeker.getRegisteredMarketplaces().add(marketplace);
 			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
-			marketplaceRestClient.registerHelpSeeker(MARKETPLACE_URL, AUTHORIZATION, helpSeekerMapper.toDTO(helpSeeker));
+//			marketplaceRestClient.registerHelpSeeker(MARKETPLACE_URL, token, helpSeekerMapper.toDTO(helpSeeker));
 		}
 		return helpSeeker;
 	}
@@ -92,4 +102,30 @@ public class iVolunteerApplication {
 		}
 		return volunteer;
 	}
+
+//	private String createJWT(String subject) {
+//		// The JWT signature algorithm we will be using to sign the token
+//		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
+//
+//		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.SECRET);
+//		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+//
+//		HashMap<String, Object> claims = new HashMap<>();
+//		claims.put("sub", subject);
+//		claims.put("username", subject);
+//		claims.put("authorities", new String[] { "HELP_SEEKER" });
+//
+//		// @formatter:off
+//		JwtBuilder builder = Jwts.builder()
+//									.setIssuedAt(new Date(System.currentTimeMillis()))
+//									.setClaims(claims)
+//									.signWith(signatureAlgorithm, signingKey);
+//		// @formatter:on
+//
+//		long expMillis = System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME;
+//		Date exp = new Date(expMillis);
+//		builder.setExpiration(exp);
+//
+//		return SecurityConstants.TOKEN_PREFIX + builder.compact();
+//	}
 }

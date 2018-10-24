@@ -22,9 +22,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class OpportunitiesComponent implements OnInit {
   @Input('projects')
   public projects: Array<Project>;
-
   public participant: Participant;
-
   public registeredMarketplaces: Array<Marketplace> = [];
 
 
