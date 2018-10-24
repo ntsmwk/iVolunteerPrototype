@@ -41,15 +41,10 @@ public class iVolunteerApplication {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	// private static final String AUTHORIZATION = "Bearer
-	// eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtbXVzdGVybWFubiIsInVzZXJuYW1lIjoibW11c3Rlcm1hbm4iLCJhdXRob3JpdGllcyI6WyJIRUxQX1NFRUtFUiJdLCJleHAiOjE1MzgzOTQ4MDJ9.lhe39ukOhsrxzKw_5X4cXsyqBu8Z0ukZciaQrhsTCG3H0yMIxMb4chlVWv_A3vibBDnKqWn8NMhUkEg7AWy0CQ";
-
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient marketplaceRestClient;
-	@Autowired private CoreHelpSeekerMapper helpSeekerMapper;
 
 	public static void main(String[] args) {
 		SpringApplication.run(iVolunteerApplication.class, args);
@@ -57,8 +52,8 @@ public class iVolunteerApplication {
 
 	@PostConstruct
 	private void init() {
-		Marketplace marketplace = createMarketplace();
-		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD, marketplace);
+		createMarketplace();
+		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
@@ -78,16 +73,13 @@ public class iVolunteerApplication {
 		return marketplace;
 	}
 
-	private CoreHelpSeeker createHelpSeeker(String username, String password, Marketplace marketplace) {
+	private CoreHelpSeeker createHelpSeeker(String username, String password) {
 		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
 		if (helpSeeker == null) {
 			helpSeeker = new CoreHelpSeeker();
 			helpSeeker.setUsername(username);
 			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
-//			helpSeeker.getRegisteredMarketplaces().clear();
-//			helpSeeker.getRegisteredMarketplaces().add(marketplace);
 			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
-//			marketplaceRestClient.registerHelpSeeker(MARKETPLACE_URL, token, helpSeekerMapper.toDTO(helpSeeker));
 		}
 		return helpSeeker;
 	}
@@ -102,30 +94,4 @@ public class iVolunteerApplication {
 		}
 		return volunteer;
 	}
-
-//	private String createJWT(String subject) {
-//		// The JWT signature algorithm we will be using to sign the token
-//		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
-//
-//		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.SECRET);
-//		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-//
-//		HashMap<String, Object> claims = new HashMap<>();
-//		claims.put("sub", subject);
-//		claims.put("username", subject);
-//		claims.put("authorities", new String[] { "HELP_SEEKER" });
-//
-//		// @formatter:off
-//		JwtBuilder builder = Jwts.builder()
-//									.setIssuedAt(new Date(System.currentTimeMillis()))
-//									.setClaims(claims)
-//									.signWith(signatureAlgorithm, signingKey);
-//		// @formatter:on
-//
-//		long expMillis = System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME;
-//		Date exp = new Date(expMillis);
-//		builder.setExpiration(exp);
-//
-//		return SecurityConstants.TOKEN_PREFIX + builder.compact();
-//	}
 }
