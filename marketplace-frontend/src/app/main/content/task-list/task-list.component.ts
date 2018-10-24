@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material';
-import {Task} from '../_model/task';
-import {Participant} from '../_model/participant';
-import {Marketplace} from '../_model/marketplace';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material';
+import { Task } from '../_model/task';
+import { Participant } from '../_model/participant';
+import { Marketplace } from '../_model/marketplace';
 
-import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
-import {LoginService} from '../_service/login.service';
-import {TaskService} from '../_service/task.service';
+import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { LoginService } from '../_service/login.service';
+import { TaskService } from '../_service/task.service';
 import { fuseAnimations } from '@fuse/animations';
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -24,9 +25,9 @@ export class FuseTaskListComponent implements OnInit {
   displayedColumns = ['name', 'project', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
 
   constructor(private router: Router,
-              private loginService: LoginService,
-              private helpSeekerService: CoreHelpSeekerService,
-              private taskService: TaskService) {
+    private loginService: LoginService,
+    private helpSeekerService: CoreHelpSeekerService,
+    private taskService: TaskService) {
   }
 
   ngOnInit() {
@@ -40,8 +41,10 @@ export class FuseTaskListComponent implements OnInit {
   private loadAllTasks() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-        this.marketplaces = [].concat(marketplace);
-        this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
+        if (!isNullOrUndefined(marketplace)) {
+          this.marketplaces = [].concat(marketplace);
+          this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
+        }
       });
     });
   }
@@ -51,7 +54,7 @@ export class FuseTaskListComponent implements OnInit {
     return this.marketplaces.filter(marketplace => marketplace.id === id)[0].name;
   }
 
-  addTask(){
+  addTask() {
     this.router.navigate(['/main/task-form']);
   }
 }
