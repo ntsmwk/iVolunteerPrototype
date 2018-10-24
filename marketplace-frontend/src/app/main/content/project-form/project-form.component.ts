@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {isNullOrUndefined} from 'util';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {LoginService} from '../_service/login.service';
-import {Participant} from '../_model/participant';
-import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
-import {Marketplace} from '../_model/marketplace';
-import {ProjectService} from '../_service/project.service';
-import {Project} from '../_model/project';
+import { Component, OnInit } from '@angular/core';
+import { isNullOrUndefined } from 'util';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../_service/login.service';
+import { Participant } from '../_model/participant';
+import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { Marketplace } from '../_model/marketplace';
+import { ProjectService } from '../_service/project.service';
+import { Project } from '../_model/project';
 
 @Component({
   templateUrl: './project-form.component.html',
@@ -17,11 +17,11 @@ export class FuseProjectFormComponent implements OnInit {
   projectForm: FormGroup;
 
   constructor(formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
-              private loginService: LoginService,
-              private coreHelpSeekerService: CoreHelpSeekerService,
-              private projectService: ProjectService) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private loginService: LoginService,
+    private coreHelpSeekerService: CoreHelpSeekerService,
+    private projectService: ProjectService) {
     this.projectForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
@@ -39,7 +39,9 @@ export class FuseProjectFormComponent implements OnInit {
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-        this.route.params.subscribe(params => this.findProject(marketplace, params['projectId']));
+        if (!isNullOrUndefined(marketplace)) {
+          this.route.params.subscribe(params => this.findProject(marketplace, params['projectId']));
+        }
       });
     });
   }
@@ -68,7 +70,9 @@ export class FuseProjectFormComponent implements OnInit {
     const project = <Project>this.projectForm.value;
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-        this.projectService.save(marketplace, project).toPromise().then(() => this.router.navigate(['/main/projects/all']));
+        if (!isNullOrUndefined(marketplace)) {
+          this.projectService.save(marketplace, project).toPromise().then(() => this.router.navigate(['/main/projects/all']));
+        }
       });
     });
   }

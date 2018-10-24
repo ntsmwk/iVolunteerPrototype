@@ -1,22 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {isArray, isNullOrUndefined} from 'util';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Competence} from '../_model/competence';
-import {Task} from '../_model/task';
-import {TaskTemplate} from '../_model/task-template';
-import {WorkflowType} from '../_model/workflow-type';
-import {ActivatedRoute, Router} from '@angular/router';
-import {LoginService} from '../_service/login.service';
-import {TaskService} from '../_service/task.service';
-import {CompetenceService} from '../_service/competence.service';
-import {TaskTemplateService} from '../_service/task-template.service';
-import {WorkflowService} from '../_service/workflow.service';
-import {CompetenceValidator} from '../_validator/competence.validator';
-import {Participant} from '../_model/participant';
-import {CoreHelpSeekerService} from '../_service/core-helpseeker.service';
-import {Marketplace} from '../_model/marketplace';
-import {Project} from '../_model/project';
-import {ProjectService} from '../_service/project.service';
+import { Component, OnInit } from '@angular/core';
+import { isArray, isNullOrUndefined } from 'util';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Competence } from '../_model/competence';
+import { Task } from '../_model/task';
+import { TaskTemplate } from '../_model/task-template';
+import { WorkflowType } from '../_model/workflow-type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../_service/login.service';
+import { TaskService } from '../_service/task.service';
+import { CompetenceService } from '../_service/competence.service';
+import { TaskTemplateService } from '../_service/task-template.service';
+import { WorkflowService } from '../_service/workflow.service';
+import { CompetenceValidator } from '../_validator/competence.validator';
+import { Participant } from '../_model/participant';
+import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { Marketplace } from '../_model/marketplace';
+import { Project } from '../_model/project';
+import { ProjectService } from '../_service/project.service';
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;
@@ -43,15 +43,15 @@ export class FuseTaskFormComponent implements OnInit {
   workflowTypes: Array<WorkflowType>;
 
   constructor(formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
-              private loginService: LoginService,
-              private coreHelpSeekerService: CoreHelpSeekerService,
-              private taskService: TaskService,
-              private competenceService: CompetenceService,
-              private taskTemplateService: TaskTemplateService,
-              private workflowService: WorkflowService,
-              private projectService: ProjectService) {
+    private route: ActivatedRoute,
+    private router: Router,
+    private loginService: LoginService,
+    private coreHelpSeekerService: CoreHelpSeekerService,
+    private taskService: TaskService,
+    private competenceService: CompetenceService,
+    private taskTemplateService: TaskTemplateService,
+    private workflowService: WorkflowService,
+    private projectService: ProjectService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
@@ -62,7 +62,7 @@ export class FuseTaskFormComponent implements OnInit {
       'endDate': new FormControl(undefined),
       'requiredCompetences': new FormControl([]),
       'acquirableCompetences': new FormControl([])
-    }, {validator: CompetenceValidator});
+    }, { validator: CompetenceValidator });
   }
 
 
@@ -73,12 +73,14 @@ export class FuseTaskFormComponent implements OnInit {
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-        Promise.all([
-          this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
-          this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences),
-          this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
-          this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
-        ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
+        if (!isNullOrUndefined(marketplace)) {
+          Promise.all([
+            this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
+            this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences),
+            this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
+            this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
+          ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
+        }
       });
     });
 
@@ -86,11 +88,11 @@ export class FuseTaskFormComponent implements OnInit {
     $("#startDate").periodpicker({
       norange: true, // use only one value
       cells: [1, 1], // show only one month
-  
+
       resizeButton: false, // deny resize picker
       fullsizeButton: false,
       fullsizeOnDblClick: false,
-  
+
       timepicker: true, // use timepicker
       timepickerOptions: {
         hours: true,
@@ -103,11 +105,11 @@ export class FuseTaskFormComponent implements OnInit {
     $("#endDate").periodpicker({
       norange: true, // use only one value
       cells: [1, 1], // show only one month
-  
+
       resizeButton: false, // deny resize picker
       fullsizeButton: false,
       fullsizeOnDblClick: false,
-  
+
       timepicker: true, // use timepicker
       timepickerOptions: {
         hours: true,
@@ -155,20 +157,22 @@ export class FuseTaskFormComponent implements OnInit {
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-        if (this.isEditMode()) {
-          this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
-        } else {
-          Promise.all([
-            this.loginService.getLoggedIn().toPromise(),
-            this.taskService.save(marketplace, <Task>task).toPromise()
-          ]).then((values: any[]) => {
-            const createdTask = <Task> values[1];
-            const participantId = (<Participant> values[0]).id;
+        if (!isNullOrUndefined(marketplace)) {
+          if (this.isEditMode()) {
+            this.taskService.save(marketplace, <Task>task).toPromise().then(() => this.router.navigate(['/main/tasks/all']));
+          } else {
+            Promise.all([
+              this.loginService.getLoggedIn().toPromise(),
+              this.taskService.save(marketplace, <Task>task).toPromise()
+            ]).then((values: any[]) => {
+              const createdTask = <Task>values[1];
+              const participantId = (<Participant>values[0]).id;
 
-            this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId)
-              .toPromise()
-              .then(() => this.router.navigate(['/main/tasks/all']));
-          });
+              this.workflowService.startWorkflow(marketplace, createdTask.workflowKey, createdTask.id, participantId)
+                .toPromise()
+                .then(() => this.router.navigate(['/main/tasks/all']));
+            });
+          }
         }
       });
     });

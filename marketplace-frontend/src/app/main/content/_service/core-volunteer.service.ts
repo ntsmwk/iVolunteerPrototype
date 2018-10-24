@@ -20,6 +20,4 @@ export class CoreVolunteerService {
   registerMarketplace(volunteerId: string, marketplaceId: string) {
     return this.http.post(`/core/volunteer/${volunteerId}/register/${marketplaceId}`, {});
   }
-
-
 }

@@ -1,17 +1,47 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
+<div class="page-layout blank p-24" style="overflow: hidden;">
 
-    <!-- HEADER -->
-    <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-        <h1>What's Up</h1>
-        <img class="header-icon" src="assets/icons/dashboard.svg">
-    </div>
-    <!-- / HEADER -->
+  <!-- HEADER -->
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>What's Up</h1>
+    <img class="header-icon" src="assets/icons/dashboard.svg">
 
-    <div *ngIf="role == 'VOLUNTEER'">
-        <fuse-dashboard-volunteer></fuse-dashboard-volunteer>
+    <div class="buttons">
+      <button mat-button class="add-button" (click)="openDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">add</mat-icon>
+      </button>
+
+      <button mat-button class="edit-button" (click)="toggleEditMode()" *ngIf="role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">save</mat-icon>
+        <mat-icon *ngIf="!inEditMode">edit</mat-icon>
+      </button>
+    </div>
+  </div>
+  <!-- / HEADER -->
+
+  <div class="content">
+    <div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="role === 'VOLUNTEER' && dashboard">
+      <div fxLayout="column" fxFlex="100">
+
+        <div *ngIf="!dashboard.dashlets || dashboard.dashlets.length === 0">
+          <div id="empty-message" *ngIf="!inEditMode" class="dashboard-message">
+            Please click on "Edit"-button to add dashlets to the dashboard.
+          </div>
+        </div>
+
+        <div class="dashboard-area">
+          <gridster #gridster [options]="gridConfig">
+            <gridster-item *ngFor="let dashlet of dashboard.dashlets" [item]="dashlet">
+              <fuse-dashlet [name]="dashlet.name" [inEditMode]="inEditMode" (remove)="removeDashlet(dashlet)">
+                <ndc-dynamic [ndcDynamicComponent]="findDashletComponent(dashlet.id)"></ndc-dynamic>
+              </fuse-dashlet>
+            </gridster-item>
+          </gridster>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="role == 'HELP_SEEKER'">
-        <fuse-dashboard-helpseeker></fuse-dashboard-helpseeker>
+    <div *ngIf="role === 'HELP_SEEKER'">
+      <fuse-dashboard-helpseeker></fuse-dashboard-helpseeker>
     </div>
+  </div>
 </div>
