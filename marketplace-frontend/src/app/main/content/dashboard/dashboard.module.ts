@@ -29,7 +29,7 @@ import {FuseTimelineActivitiesModule} from '../_components/timeline-activities/t
 import {FuseTimelineActivitiesComponent} from '../_components/timeline-activities/timeline-activities.component';
 import {FuseTimelineTasksModule} from '../_components/timeline-tasks/timeline-tasks.module';
 import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
-import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
+import {FuseHelpSeekerDashboardComponent} from './dashboard-helpseeker/dashboard-helpseeker.component';
 
 const routes = [
   {path: '', component: FuseDashboardComponent}

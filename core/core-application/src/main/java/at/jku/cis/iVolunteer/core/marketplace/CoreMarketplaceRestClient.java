@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.core.user.dto.CoreHelpSeekerDTO;
 import at.jku.cis.iVolunteer.model.user.dto.HelpSeekerDTO;
 import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 

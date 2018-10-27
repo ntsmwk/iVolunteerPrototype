@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.core.dashboard;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +22,7 @@ import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 public class DashboardController {
 
 	private static final String CURRENT = "current";
-	
+
 	@Autowired
 	private CoreLoginService loginService;
 	@Autowired
@@ -46,9 +45,7 @@ public class DashboardController {
 
 	@PostMapping(path = "/dashboard")
 	public Dashboard create(@RequestBody Dashboard dashboard) {
-		Date currentDate = new Date();
-		dashboard.setCreationDate(currentDate);
-		dashboard.setModificationDate(currentDate);
+		dashboard.setId(null);
 		dashboard.setUser(loginService.getLoggedInParticipant());
 		return dashboardRepository.insert(dashboard);
 	}
@@ -60,7 +57,6 @@ public class DashboardController {
 			throw new BadRequestException();
 		}
 		dashboardFromDb.setDashlets(dashlets);
-		dashboardFromDb.setModificationDate(new Date());
 		return dashboardRepository.save(dashboardFromDb);
 	}
 

@@ -32,7 +32,10 @@ export class DashletsConf {
       name: 'Timeline Tasks',
       type: FuseTimelineTasksComponent,
       cols: 12,
-      rows: 24
+      rows: 24,
+      settings: {
+        status: ['AVAILABLE', 'ENGAGED', 'FINISHED']
+      }
     }
   ];
 
@@ -55,6 +58,8 @@ export class DashletEntry {
   id: string;
   name: string;
   type: any;
+  settings?: any;
+
   cols: number;
   rows: number;
 }

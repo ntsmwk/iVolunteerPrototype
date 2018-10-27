@@ -8,7 +8,6 @@ import {LoginService} from '../_service/login.service';
 import {ParticipantRole} from '../_model/participant';
 import {MatDialog} from '@angular/material';
 import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
-import {DashletsConf} from './dashlets.config';
 import {Dashlet} from '../_model/dashlet';
 
 @Component({
@@ -56,14 +55,13 @@ export class FuseDashboardComponent implements OnInit {
     });
   }
 
-  findDashletComponent(id: string) {
-    return DashletsConf.getDashletEntryById(id).type;
+  updateDashlet(dashlet: Dashlet) {
+    this.removeDashlet(dashlet);
+    this.dashboard.dashlets.push(dashlet);
   }
 
   removeDashlet(dashlet: Dashlet) {
-    console.log(this.dashboard.dashlets);
     this.dashboard.dashlets.splice(this.dashboard.dashlets.findIndex((current: Dashlet) => current.id === dashlet.id), 1);
-    console.log(this.dashboard.dashlets);
   }
 
 

@@ -1,13 +1,6 @@
-package at.jku.cis.iVolunteer.model.core.dashboard.dto;
+package at.jku.cis.iVolunteer.model.core.dashboard;
 
-import java.util.Map;
-
-public class DashletDTO {
-	private String id;
-	private String name;
-	private String type;
-
-	private Map<String, Object> settings;
+public abstract class DashletGridPosition {
 
 	private int x;
 	private int y;
@@ -15,38 +8,6 @@ public class DashletDTO {
 	private int cols;
 	private int minItemRows;
 	private int minItemCols;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Map<String, Object> getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Map<String, Object> settings) {
-		this.settings = settings;
-	}
 
 	public int getX() {
 		return x;
