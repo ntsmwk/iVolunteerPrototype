@@ -27,7 +27,7 @@ export class FuseDashletComponent {
     if (isNullOrUndefined(this.dashlet)) {
       return null;
     }
-    return DashletsConf.getDashletEntryById(this.dashlet.id).type;
+    return DashletsConf.getDashletEntryById(this.dashlet.dashletId).type;
   }
 
   updateStatus(status: string) {
@@ -38,8 +38,6 @@ export class FuseDashletComponent {
   remove() {
     this.removeDashletEmitter.emit(this.dashlet);
   }
-
-
 }
 
 

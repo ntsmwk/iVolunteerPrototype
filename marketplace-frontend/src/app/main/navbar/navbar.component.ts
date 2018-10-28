@@ -7,10 +7,12 @@ import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrol
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
 
 import {navigation_volunteer} from 'app/navigation/navigation_volunteer';
-import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
 import {navigation_helpseeker} from '../../navigation/navigation_helpseeker';
+import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
 import {LoginService} from '../content/_service/login.service';
-import {ParticipantRole} from '../content/_model/participant';
+import {CoreDashboardService} from '../content/_service/core-dashboard.service';
+import {Dashboard} from '../content/_model/dashboard';
+import {MessageService} from '../content/_service/message.service';
 
 @Component({
   selector: 'fuse-navbar',
@@ -20,6 +22,7 @@ import {ParticipantRole} from '../content/_model/participant';
   encapsulation: ViewEncapsulation.None
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy {
+  private dashboardChangedSubscription: Subscription;
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
 
   @ViewChild(FusePerfectScrollbarDirective) set directive(theDirective: FusePerfectScrollbarDirective) {
@@ -37,32 +40,27 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       });
   }
 
-  @Input() layout;
-  navigation: any;
+  @Input()
+  layout;
+  navigation: Array<any>;
   navigationServiceWatcher: Subscription;
   fusePerfectScrollbarUpdateTimeout;
 
-  constructor(private sidebarService: FuseSidebarService,
-              private loginService: LoginService,
-              private navigationService: FuseNavigationService,
-              private router: Router) {
+  constructor(private loginService: LoginService,
+              private messageService: MessageService,
+              private dashboardService: CoreDashboardService,
+              private router: Router,
+              private sidebarService: FuseSidebarService,
+              private navigationService: FuseNavigationService) {
     // Default layout
     this.layout = 'vertical';
 
     // Navigation data
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-      switch (role) {
-        case 'HELP_SEEKER':
-          this.navigation = navigation_helpseeker;
-          break;
-        case 'VOLUNTEER':
-          this.navigation = navigation_volunteer;
-          break;
-      }
-    });
+    this.loadNavigationData();
   }
 
   ngOnInit() {
+    this.dashboardChangedSubscription = this.messageService.subscribe('dashboardChanged', () => this.loadNavigationData());
     this.router.events.subscribe(
       (event) => {
         if (event instanceof NavigationEnd) {
@@ -72,6 +70,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         }
       }
     );
+
   }
 
   ngOnDestroy() {
@@ -82,6 +81,35 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     if (this.navigationServiceWatcher) {
       this.navigationServiceWatcher.unsubscribe();
     }
+    this.dashboardChangedSubscription.unsubscribe();
+  }
+
+  private loadNavigationData() {
+    Promise.all([
+      this.loginService.getLoggedIn().toPromise(),
+      this.loginService.getLoggedInParticipantRole().toPromise()
+    ]).then((values: any[]) => {
+      if ('VOLUNTEER' === values[1]) {
+        this.navigation = navigation_volunteer;
+        this.dashboardService.findByParticipant(values[0].id).toPromise().then((dashboards: Dashboard[]) => {
+          const dashboardNavigation = this.navigation.find((item) => 'dashboard' === item.id);
+          dashboardNavigation.type = 'collapse';
+          dashboardNavigation.children = [];
+          dashboards.forEach((dashboard: Dashboard) => {
+            const item = {
+              'id': `dashboard-${dashboard.id}`,
+              'title': `${dashboard.name}`,
+              'type': 'item',
+              'icon': `${dashboardNavigation.icon}`,
+              'url': `${dashboardNavigation.url}/${dashboard.id}`
+            };
+            dashboardNavigation.children.push(item);
+          });
+        });
+      } else {
+        this.navigation = navigation_helpseeker;
+      }
+    });
   }
 
   toggleSidebarOpened() {

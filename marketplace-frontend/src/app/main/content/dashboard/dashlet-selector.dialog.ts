@@ -25,9 +25,10 @@ export class FuseDashletSelectorDialog {
 
   private buildDashlet(dashletEntry: DashletEntry) {
     const dashlet = new Dashlet();
-    dashlet.id = dashletEntry.id;
-    dashlet.type = dashletEntry.type as string;
+    dashlet.id = `${new Date().getTime()}`;
+    dashlet.dashletId = dashletEntry.id;
     dashlet.name = dashletEntry.name;
+    dashlet.type = dashletEntry.type as string;
     dashlet.cols = dashletEntry.cols;
     dashlet.minItemCols = dashletEntry.cols;
     dashlet.rows = dashletEntry.rows;

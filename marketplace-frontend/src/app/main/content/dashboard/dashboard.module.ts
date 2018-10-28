@@ -9,7 +9,9 @@ import {
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
+  MatFormFieldModule,
   MatIconModule,
+  MatInputModule,
   MatMenuModule,
   MatOptionModule,
   MatSelectModule,
@@ -32,7 +34,8 @@ import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline
 import {FuseHelpSeekerDashboardComponent} from './dashboard-helpseeker/dashboard-helpseeker.component';
 
 const routes = [
-  {path: '', component: FuseDashboardComponent}
+  {path: '', component: FuseDashboardComponent},
+  {path: ':dashboardId', component: FuseDashboardComponent}
 ];
 
 @NgModule({
@@ -49,7 +52,9 @@ const routes = [
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatMenuModule,
     MatOptionModule,
     MatSelectModule,

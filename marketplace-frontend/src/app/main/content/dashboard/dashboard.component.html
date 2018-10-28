@@ -29,6 +29,10 @@
           </div>
         </div>
 
+        <mat-form-field *ngIf="inEditMode" fxFlex="100">
+          <input matInput placeholder="Name" [(ngModel)]="dashboard.name">
+        </mat-form-field>
+
         <div class="dashboard-area">
           <gridster #gridster [options]="gridConfig">
             <gridster-item *ngFor="let dashlet of dashboard.dashlets" [item]="dashlet">

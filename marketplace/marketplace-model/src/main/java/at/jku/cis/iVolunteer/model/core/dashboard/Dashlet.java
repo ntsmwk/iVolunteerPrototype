@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Dashlet extends DashletGridPosition {
 	private String id;
+	private String dashletId;
 	private String name;
 	private String type;
 	private Map<String, Object> settings = new HashMap<>();
@@ -15,6 +16,14 @@ public class Dashlet extends DashletGridPosition {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getDashletId() {
+		return dashletId;
+	}
+
+	public void setDashletId(String dashletId) {
+		this.dashletId = dashletId;
 	}
 
 	public String getName() {

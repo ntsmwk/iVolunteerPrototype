@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {DisplayGrid, GridsterComponent, GridsterConfig} from 'angular-gridster2';
+import {DisplayGrid, GridsterConfig} from 'angular-gridster2';
 import {CoreDashboardService} from '../_service/core-dashboard.service';
 import {Dashboard} from '../_model/dashboard';
 import {isNullOrUndefined} from 'util';
@@ -9,6 +9,8 @@ import {ParticipantRole} from '../_model/participant';
 import {MatDialog} from '@angular/material';
 import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
 import {Dashlet} from '../_model/dashlet';
+import {ActivatedRoute} from '@angular/router';
+import {MessageService} from '../_service/message.service';
 
 @Component({
   selector: 'fuse-dashboard',
@@ -19,21 +21,35 @@ export class FuseDashboardComponent implements OnInit {
 
   public role: ParticipantRole;
 
-  @ViewChild('gridster')
-  private gridsterComponent: GridsterComponent;
   public dashboard: Dashboard;
 
   public gridConfig: GridsterConfig;
   public inEditMode = false;
 
   constructor(private dialog: MatDialog,
+              private route: ActivatedRoute,
               private loginService: LoginService,
+              private messageService: MessageService,
               private dashboardService: CoreDashboardService) {
   }
 
   ngOnInit() {
     this.updateGridConfig(this.inEditMode);
-    this.dashboardService.findCurrent().toPromise().then((dashboard: Dashboard) => {
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
+      this.role = role;
+      if ('VOLUNTEER' === role) {
+        this.route.params.subscribe(params => {
+          const dashboardId = params['dashboardId'];
+          if (!isNullOrUndefined(dashboardId) && 0 < dashboardId.length) {
+            this.loadDashboard(dashboardId);
+          }
+        });
+      }
+    });
+  }
+
+  loadDashboard(dashboardId: string) {
+    this.dashboardService.findById(dashboardId).toPromise().then((dashboard: Dashboard) => {
       if (!isNullOrUndefined(dashboard)) {
         this.dashboard = dashboard;
       } else {
@@ -41,7 +57,6 @@ export class FuseDashboardComponent implements OnInit {
         this.dashboard.dashlets = [];
       }
     });
-    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role);
   }
 
   openDialog(): void {
@@ -69,7 +84,11 @@ export class FuseDashboardComponent implements OnInit {
     this.inEditMode = !this.inEditMode;
     this.updateGridConfig(this.inEditMode);
     if (!this.inEditMode) {
-      this.dashboardService.save(this.dashboard).toPromise().then(() => alert('Dashboard is saved'));
+      this.dashboardService.save(this.dashboard)
+        .toPromise()
+        .then(() => {
+          this.messageService.broadcast('dashboardChanged', {});
+        });
     }
   }
 
