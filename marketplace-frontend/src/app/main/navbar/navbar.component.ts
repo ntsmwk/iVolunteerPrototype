@@ -92,6 +92,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       if ('VOLUNTEER' === values[1]) {
         this.navigation = navigation_volunteer;
         this.dashboardService.findByParticipant(values[0].id).toPromise().then((dashboards: Dashboard[]) => {
+          if (dashboards.length === 0) {
+            return;
+          }
           const dashboardNavigation = this.navigation.find((item) => 'dashboard' === item.id);
           dashboardNavigation.type = 'collapse';
           dashboardNavigation.children = [];

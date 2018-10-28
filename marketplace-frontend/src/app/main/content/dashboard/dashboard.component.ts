@@ -9,7 +9,7 @@ import {ParticipantRole} from '../_model/participant';
 import {MatDialog} from '@angular/material';
 import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
 import {Dashlet} from '../_model/dashlet';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from '../_service/message.service';
 
 @Component({
@@ -28,6 +28,7 @@ export class FuseDashboardComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private route: ActivatedRoute,
+              private router: Router,
               private loginService: LoginService,
               private messageService: MessageService,
               private dashboardService: CoreDashboardService) {
@@ -41,25 +42,17 @@ export class FuseDashboardComponent implements OnInit {
         this.route.params.subscribe(params => {
           const dashboardId = params['dashboardId'];
           if (!isNullOrUndefined(dashboardId) && 0 < dashboardId.length) {
-            this.loadDashboard(dashboardId);
+            this.dashboardService.findById(dashboardId).toPromise().then((dashboard: Dashboard) => this.dashboard = dashboard);
+          } else {
+            this.dashboard = new Dashboard();
+            this.dashboard.dashlets = [];
           }
         });
       }
     });
   }
 
-  loadDashboard(dashboardId: string) {
-    this.dashboardService.findById(dashboardId).toPromise().then((dashboard: Dashboard) => {
-      if (!isNullOrUndefined(dashboard)) {
-        this.dashboard = dashboard;
-      } else {
-        this.dashboard = new Dashboard();
-        this.dashboard.dashlets = [];
-      }
-    });
-  }
-
-  openDialog(): void {
+  openDashboardSelectionDialog(): void {
     const dialogRef = this.dialog.open(FuseDashletSelectorDialog, {
       width: '250px',
       data: {dashlet: undefined}
@@ -86,10 +79,18 @@ export class FuseDashboardComponent implements OnInit {
     if (!this.inEditMode) {
       this.dashboardService.save(this.dashboard)
         .toPromise()
-        .then(() => {
+        .then((dashboard: Dashboard) => {
+          this.router.navigate(['main', 'dashboard', dashboard.id]);
           this.messageService.broadcast('dashboardChanged', {});
         });
     }
+  }
+
+  removeDashboard() {
+    this.dashboardService.remove(this.dashboard).toPromise().then(() => {
+      this.router.navigate(['main', 'dashboard']);
+      this.messageService.broadcast('dashboardChanged', {});
+    });
   }
 
   private updateGridConfig(editable: boolean) {

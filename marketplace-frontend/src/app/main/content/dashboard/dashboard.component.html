@@ -6,13 +6,17 @@
     <img class="header-icon" src="assets/icons/dashboard.svg">
 
     <div class="buttons">
-      <button mat-button class="add-button" (click)="openDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+      <button mat-button class="add-button" (click)="openDashboardSelectionDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
         <mat-icon *ngIf="inEditMode">add</mat-icon>
       </button>
 
       <button mat-button class="edit-button" (click)="toggleEditMode()" *ngIf="role === 'VOLUNTEER'">
         <mat-icon *ngIf="inEditMode">save</mat-icon>
         <mat-icon *ngIf="!inEditMode">edit</mat-icon>
+      </button>
+
+      <button mat-button class="delete-button" (click)="removeDashboard()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">delete</mat-icon>
       </button>
     </div>
   </div>
