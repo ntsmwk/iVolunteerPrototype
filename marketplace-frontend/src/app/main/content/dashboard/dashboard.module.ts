@@ -6,6 +6,7 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseDashboardComponent} from './dashboard.component';
 import {
   MatButtonModule,
+  MatCardModule,
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
@@ -49,6 +50,7 @@ const routes = [
     RouterModule.forChild(routes),
 
     MatButtonModule,
+    MatCardModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,

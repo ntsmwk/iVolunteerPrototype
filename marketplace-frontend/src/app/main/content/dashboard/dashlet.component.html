@@ -11,7 +11,7 @@
 
         <mat-menu #settingsMenu="matMenu" [overlapTrigger]="false">
 
-          <ng-container *ngIf="dashlet.settings.status">
+          <ng-container *ngIf="dashlet.settings && dashlet.settings.status">
             <button mat-menu-item (click)="updateStatus('AVAILABLE')">
               <span>Show available tasks</span>
             </button>

@@ -54,7 +54,7 @@ export class FuseDashboardComponent implements OnInit {
 
   openDashboardSelectionDialog(): void {
     const dialogRef = this.dialog.open(FuseDashletSelectorDialog, {
-      width: '250px',
+      width: '768px',
       data: {dashlet: undefined}
     });
 

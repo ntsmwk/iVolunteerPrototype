@@ -7,44 +7,32 @@ import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline
 
 export class DashletsConf {
 
-  private static dashletEntries: DashletEntry[] = [
-    {
-      id: 'project-members',
-      name: 'Project Members',
-      type: FuseProjectMembersComponent,
-      cols: 12,
-      rows: 16
-    }, {
-      id: 'timeline',
-      name: 'Timeline',
-      type: FuseTimelineComponent,
-      cols: 32,
-      rows: 32 * 1.5,
-    }, {
-      id: 'timeline-activities',
-      name: 'Timeline Activities',
-      type: FuseTimelineActivitiesComponent,
-      cols: 12,
-      rows: 16
-    },
-    {
-      id: 'timeline-tasks',
-      name: 'Timeline Tasks',
-      type: FuseTimelineTasksComponent,
-      cols: 12,
-      rows: 24,
-      settings: {
-        status: ['AVAILABLE', 'ENGAGED', 'FINISHED']
-      }
-    }
+  private static projectDashletEntries: DashletEntry[] = [
+    {id: 'project-members', name: 'Project Members', type: FuseProjectMembersComponent, cols: 12, rows: 16}
+  ];
+  private static timelineDashletEntries: DashletEntry[] = [
+    {id: 'timeline', name: 'Timeline', type: FuseTimelineComponent, cols: 32, rows: 32 * 1.5},
+    {id: 'timeline-activities', name: 'Timeline Activities', type: FuseTimelineActivitiesComponent, cols: 12, rows: 16},
+    {id: 'timeline-tasks', name: 'Timeline Tasks', type: FuseTimelineTasksComponent, cols: 12, rows: 24, settings: {status: ['AVAILABLE', 'ENGAGED', 'FINISHED']}}
   ];
 
   public static getDashletEntries(): DashletEntry[] {
-    return this.dashletEntries;
+    let dashletEntries = [];
+    dashletEntries = dashletEntries.concat(this.projectDashletEntries);
+    dashletEntries = dashletEntries.concat(this.timelineDashletEntries);
+    return dashletEntries;
+  }
+
+  public static getDashletEntriesByCategoryProject(): DashletEntry[] {
+    return this.projectDashletEntries;
+  }
+
+  public static getDashletEntriesByCategoryTimeline(): DashletEntry[] {
+    return this.timelineDashletEntries;
   }
 
   public static getDashletEntryById(id: string): DashletEntry {
-    const dashletEntry = this.dashletEntries.find((entry) => entry.id === id);
+    const dashletEntry = this.getDashletEntries().find((entry) => entry.id === id);
 
     if (!isNullOrUndefined(dashletEntry)) {
       return dashletEntry;

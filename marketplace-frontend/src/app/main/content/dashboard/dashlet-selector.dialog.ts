@@ -10,10 +10,20 @@ import {isArray, isNullOrUndefined} from 'util';
 })
 export class FuseDashletSelectorDialog {
 
-  dashletEntries = DashletsConf.getDashletEntries();
+  step = 0;
+
   selectedDashletEntry: DashletEntry;
 
+  projectDashletEntries: DashletEntry[];
+  timelineDashletEntries: DashletEntry[];
+
   constructor(private dialogRef: MatDialogRef<FuseDashletSelectorDialog>) {
+    this.projectDashletEntries = DashletsConf.getDashletEntriesByCategoryProject();
+    this.timelineDashletEntries = DashletsConf.getDashletEntriesByCategoryTimeline();
+  }
+
+  openStep(step: number) {
+    this.step = step;
   }
 
   closeDialog() {
@@ -22,6 +32,11 @@ export class FuseDashletSelectorDialog {
     }
     this.dialogRef.close(this.buildDashlet(this.selectedDashletEntry));
   }
+
+  selectDashletEntry(selectedDashletEntry: DashletEntry) {
+    this.selectedDashletEntry = selectedDashletEntry;
+  }
+
 
   private buildDashlet(dashletEntry: DashletEntry) {
     const dashlet = new Dashlet();
