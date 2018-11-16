@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,6 @@ import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
@@ -123,36 +121,33 @@ public class TaskOperationController {
 			ce.setMarketplaceId(marketplaceId);
 		}
 
-		taskInteractionService.findAssignedVolunteersByTask(task).forEach(new Consumer<Volunteer>() {
-			@Override
-			public void accept(Volunteer volunteer) {
-				VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
-				if (volunteerProfile == null) {
-					volunteerProfile = new VolunteerProfile();
-					volunteerProfile.setVolunteer(volunteer);
-				}
-				volunteerProfile.getTaskList().add(taskEntry);
-				volunteerProfile.getCompetenceList().addAll(competenceEntries);
-				volunteerProfileRepository.save(volunteerProfile);
-
-				try {
-					VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
-					vte.setVolunteerId(volunteer.getId());
-
-					contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
-
-					competenceEntries.forEach(competenceEntry -> {
-						VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
-								competenceEntryMapper.toDTO(competenceEntry));
-						vce.setVolunteerId(volunteer.getId());
-						contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
-					});
-
-				} catch (RestClientException ex) {
-					throw new BadRequestException();
-				}
-
+		taskInteractionService.findAssignedVolunteersByTask(task).forEach(volunteer -> {
+			VolunteerProfile volunteerProfile = volunteerProfileRepository.findByVolunteer(volunteer);
+			if (volunteerProfile == null) {
+				volunteerProfile = new VolunteerProfile();
+				volunteerProfile.setVolunteer(volunteer);
 			}
+			volunteerProfile.getTaskList().add(taskEntry);
+			volunteerProfile.getCompetenceList().addAll(competenceEntries);
+			volunteerProfileRepository.save(volunteerProfile);
+
+			try {
+				VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
+				vte.setVolunteerId(volunteer.getId());
+
+				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
+
+				competenceEntries.forEach(competenceEntry -> {
+					VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
+							competenceEntryMapper.toDTO(competenceEntry));
+					vce.setVolunteerId(volunteer.getId());
+					contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
+				});
+
+			} catch (RestClientException ex) {
+				throw new BadRequestException();
+			}
+
 		});
 
 		return taskInteractionMapper.toDTO(taskInteraction);
