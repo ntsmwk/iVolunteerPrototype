@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +36,11 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 @RestController
 public class TaskController {
 
-	@Value("${marketplace.identifier}") 
+	private static final String STATUS_ENGAGED = "ENGAGED";
+	private static final String STATUS_AVAILABLE = "AVAILABLE";
+	private static final Object STATUS_FINISHED = "FINISHED";
+
+	@Value("${marketplace.identifier}")
 	private String marketplaceId;
 
 	@Autowired private TaskMapper taskMapper;
@@ -49,26 +54,44 @@ public class TaskController {
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
-			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly) {
-		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
+			@RequestParam(value = "status", required = false) String status) {
+
+		if (!StringUtils.isEmpty(participantId) && !StringUtils.isEmpty(status)) {
+			Stream<Task> taskStream = findByVolunteer(volunteerRepository.findOne(participantId)).stream();
+			if (!StringUtils.isEmpty(projectId)) {
+				taskStream = taskStream.filter(task -> task.getProject().getId().equals(projectId));
+			}
+			if (STATUS_AVAILABLE.equals(status)) {
+				taskStream = taskStream.filter(task -> TaskStatus.PUBLISHED == task.getStatus());
+			} else if (STATUS_ENGAGED.equals(status)) {
+				taskStream = taskStream.filter(
+						task -> TaskStatus.PUBLISHED == task.getStatus() || TaskStatus.RUNNING == task.getStatus());
+			} else if (STATUS_FINISHED.equals(status)) {
+				taskStream = taskStream.filter(task -> TaskStatus.FINISHED == task.getStatus());
+			}
+
+			return taskMapper.toDTOs(taskStream.collect(Collectors.toList()));
+		}
+
+		if (!StringUtils.isEmpty(participantId) && StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
-		if (!StringUtils.isEmpty(projectId) && !availableOnly && !engagedOnly) {
+
+		if (!StringUtils.isEmpty(projectId) && StringUtils.isEmpty(status)) {
 			Project project = projectRepository.findOne(projectId);
 			return taskMapper.toDTOs(taskRepository.findByProject(project));
 		}
 
-		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
-			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
-			return taskMapper
-					.toDTOs(taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
-		}
-		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
-			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED) || task.getStatus().equals(TaskStatus.RUNNING))
-					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList());
-		}
+//		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
+//			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
+//			return taskMapper
+//					.toDTOs(taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
+//		}
+//		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
+//			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+//					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED) || task.getStatus().equals(TaskStatus.RUNNING))
+//					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList());
+//		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 		}
