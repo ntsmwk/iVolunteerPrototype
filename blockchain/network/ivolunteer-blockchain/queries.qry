@@ -1,0 +1,165 @@
+/**
+ * queries
+ */
+
+// TODO: ADD QUERIES FOR DATES IF NECESSARY
+
+// ###### marketplaces queries
+
+query selectAllMarketplaces {
+  description: "Get all marketplaces"
+  statement: 
+    SELECT at.jku.cis.Marketplace
+}
+
+query selectMarketPlaceByID {
+  description: "Get Mmrketplace by ID"
+  statement: 
+    SELECT at.jku.cis.Marketplace
+      WHERE (id == _$ID)
+}
+
+// ###### volunteers queries
+
+query selectAllVolunteers {
+  description: "Get all volunteers"
+  statement: 
+    SELECT at.jku.cis.Volunteer
+}
+
+query selectVolunteerByID {
+  description: "Get volunteer by ID"
+  statement: 
+    SELECT at.jku.cis.Volunteer
+      WHERE (id == _$ID)
+}
+
+// ###### task interaction queries
+
+query selectAllTaskInteractions {
+  description: "Get all taskInteractions"
+  statement: 
+    SELECT at.jku.cis.taskInteraction
+}
+
+query selectTaskInteractionByHash {
+  description: "Get taskInteractions"
+  statement: 
+    SELECT at.jku.cis.taskInteraction
+      WHERE (hash == _$HASH)
+}
+
+query selectTaskInteractionsByMarketplace {
+  description: "Get taskInteractions from a marketplace"
+  statement: 
+    SELECT at.jku.cis.taskInteraction
+      WHERE (marketplaceId == _$ID)
+}
+
+query selectTaskInteractionsByType {
+  description: "Get taskInteraction types"
+  statement: 
+    SELECT at.jku.cis.taskInteraction
+      WHERE (taskInteractionType == _$TYPE)
+}
+
+// ###### published tasks queries
+
+query selectAllPublishedTasks {
+  description: "Get all published tasks"
+  statement: 
+    SELECT at.jku.cis.publishedTask
+}
+
+query selectPublishedTaskByHash {
+  description: "Get published task by hash"
+  statement: 
+    SELECT at.jku.cis.publishedTask
+      WHERE (hash == _$HASH)
+}
+
+query selectPublishedTaskByID {
+  description: "Get published task by ID"
+  statement: 
+    SELECT at.jku.cis.publishedTask
+      WHERE (taskId == _$ID)
+}
+
+query selectPublishedTasksByMarketplace {
+  description: "Get all published tasks from a marketplace"
+  statement: 
+    SELECT at.jku.cis.publishedTask
+      WHERE (marketplaceId == _$ID)
+}
+
+// ###### finished tasks queries
+
+query selectAllFinishedTasks {
+  description: "Get all finished tasks"
+  statement:
+    SELECT at.jku.cis.finishedTask
+}
+
+query selectFinishedTaskByHash {
+  description: "Get finished task by hash"
+  statement:
+    SELECT at.jku.cis.finishedTask
+      WHERE (hash == _$HASH)
+}
+
+query selectFinishedTaskByID {
+  description: "Get finished task by ID"
+  statement:
+    SELECT at.jku.cis.finishedTask
+      WHERE (taskId == _$ID)
+}
+
+query selectFinishedTasksByVolunteer {
+  description: "Get all finished tasks by volunteer"
+  statement: 
+    SELECT at.jku.cis.finishedTask
+      WHERE (volunteerId == _$ID)
+}
+
+query selectFinishedTasksByMarketplace {
+  description: "Get all finished tasks by marketplace"
+  statement: 
+    SELECT at.jku.cis.finishedTask
+      WHERE (marketplaceId == _$ID)
+}
+
+// ##### competences queries
+
+query selectAllCompetences {
+  description: "Get all competences"
+  statement:
+    SELECT at.jku.cis.competence
+}
+
+query selectCompetenceByHash {
+  description: "Get competence by hash"
+  statement:
+    SELECT at.jku.cis.competence
+      WHERE (hash == _$HASH)
+}
+
+query selectCompetenceByID {
+  description: "Get competence by ID"
+  statement:
+    SELECT at.jku.cis.competence
+      WHERE (competenceId == _$ID)
+}
+
+query selectCompetencesByVolunteer {
+  description: "Get competences by volunteer"
+  statement:
+    SELECT at.jku.cis.competence
+      WHERE (volunteerId == _$ID)
+}
+
+query selectCompetencesByMarketplace {
+  description: "Get competences by marketplace"
+  statement:
+    SELECT at.jku.cis.competence
+      WHERE (marketplaceId == _$ID)
+}

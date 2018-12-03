@@ -6,6 +6,12 @@ namespace at.jku.cis
 
 participant Marketplace identified by id {
   o String id
+  //o String name
+}
+
+participant Volunteer identified by id {
+  o String id
+  //o String name
 }
 
 asset publishedTask identified by hash {
@@ -31,9 +37,58 @@ asset finishedTask identified by hash {
   o String volunteerId
 }
 
+/*
+asset competence identified by hash {
+  o String hash
+  //o DateTime timestamp
+  o String name
+  o String marketplaceId
+  o String[] taskHashes // ???
+}
+*/
+
+// rename to 'achievedCompetences' and create new asset 'competence'?
 asset competence identified by hash {
   o String hash
   o DateTime timestamp
+  o String competenceId
+  o String marketplaceId
+  o String volunteerId
+  //--> competence competence
+}
+
+// ##### transactions
+
+transaction AddNewMarketplace {
+  o String marketplaceId
+}
+
+transaction AddNewVolunteer {
+  o String volunteerId
+}
+
+transaction AddNewPublishedTask {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+}
+
+transaction AddNewTaskInteraction {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+  o String taskInteractionType
+}
+
+transaction AddNewFinishedTask {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+  o String volunteerId
+}
+
+transaction AddNewCompetence {
+  o DateTime timeStamp
   o String competenceId
   o String marketplaceId
   o String volunteerId

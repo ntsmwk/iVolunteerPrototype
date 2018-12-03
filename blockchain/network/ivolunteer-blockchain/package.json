@@ -3,7 +3,7 @@
     "composer": "^0.19.6"
   },
   "name": "ivolunteer-blockchain",
-  "version": "0.0.1",
+  "version": "0.0.22",
   "description": "iVolunteer Blockchain network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/ivolunteer-blockchain.bna",
