@@ -35,13 +35,9 @@ import at.jku.cis.iVolunteer.workflow.service.WorkflowTypeService;
 public class WorkflowController {
 
 	@Autowired private TaskService taskService;
-
 	@Autowired private RuntimeService runtimeService;
-
 	@Autowired private WorkflowTypeService workfowTypeService;
-
 	@Autowired private WorkflowStepService workflowStepService;
-
 	@Autowired private WorkflowProcessService workflowProcessService;
 
 	@GetMapping("/type")

@@ -29,17 +29,16 @@ public class WorkflowStepService {
 	private static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
 	private static final String PARALLEL_GATEWAY = "parallelGateway";
 
-	@Autowired
-	private RuntimeService runtimeService;
-	@Autowired
-	private RepositoryService repositoryService;
+	@Autowired private RuntimeService runtimeService;
+	@Autowired private RepositoryService repositoryService;
 
 	public List<WorkflowStep> getNextWorkflowSteps(Task task) {
 		String volunteerId = determineVolunteerId(task);
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));
 		Set<String> labels = determineWorkflowLabelsForActivity(activity);
-		return labels.stream().map(label -> new WorkflowStep(task.getId(), label,
-				WorkflowStepType.valueOf(task.getCategory()), volunteerId)).collect(Collectors.toList());
+		return labels.stream()
+				.map(label -> new WorkflowStep(task.getId(), label, WorkflowStepType.valueOf(task.getCategory()), volunteerId))
+				.collect(Collectors.toList());
 	}
 
 	private String determineVolunteerId(Task task) {
@@ -52,18 +51,24 @@ public class WorkflowStepService {
 		List<PvmTransition> transitions = activity.getOutgoingTransitions();
 
 		for (PvmTransition transition : transitions) {
-			String typeProperty = (String) transition.getDestination().getProperty("type");
-			if (typeProperty.equals(EXCLUSIVE_GATEWAY)) {
-				nextWorkflowLabels.addAll(determineWorkflowLabelsForActivity(transition.getDestination()));
-			} else if (typeProperty.equals(PARALLEL_GATEWAY)) {
-				nextWorkflowLabels.addAll(determineWorkflowLabelsForActivity(transition.getDestination()));
-			} else if (typeProperty.equals(SERVICE_TASK)) {
-				nextWorkflowLabels.add((String) transition.getDestination().getProperty("name"));
-			} else {
-				throw new UnsupportedOperationException("Activity type not supported");
-			}
+			handleTransition(nextWorkflowLabels, transition);
 		}
 		return nextWorkflowLabels;
+	}
+
+	private void handleTransition(Set<String> nextWorkflowLabels, PvmTransition transition) {
+		String typeProperty = (String) transition.getDestination().getProperty("type");
+		switch (typeProperty) {
+		case EXCLUSIVE_GATEWAY:
+		case PARALLEL_GATEWAY:
+			nextWorkflowLabels.addAll(determineWorkflowLabelsForActivity(transition.getDestination()));
+			break;
+		case SERVICE_TASK:
+			nextWorkflowLabels.add((String) transition.getDestination().getProperty("name"));
+			break;
+		default:
+			throw new UnsupportedOperationException("Activity type not supported");
+		}
 	}
 
 	private ExecutionEntity findExecutionForTask(Task task) {
