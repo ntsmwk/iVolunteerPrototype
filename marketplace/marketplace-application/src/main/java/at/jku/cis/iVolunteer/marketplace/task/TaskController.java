@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,63 +27,78 @@ import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
-import at.jku.cis.iVolunteer.model.project.Project;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 public class TaskController {
 
-	@Value("${marketplace.identifier}")
-	private String marketplaceId;
+	private static final String STATUS_ENGAGED = "ENGAGED";
+	private static final String STATUS_AVAILABLE = "AVAILABLE";
+	private static final String STATUS_FINISHED = "FINISHED";
 
-	@Autowired
-	private TaskMapper taskMapper;
-	@Autowired
-	private ProjectRepository projectRepository;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskInteractionRepository taskInteractionRepository;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
+	@Value("${marketplace.identifier}") private String marketplaceId;
 
-	@Autowired
-	private LoginService loginService;
+	@Autowired private TaskMapper taskMapper;
+	@Autowired private ProjectRepository projectRepository;
+	@Autowired private TaskRepository taskRepository;
+	@Autowired private TaskInteractionRepository taskInteractionRepository;
+	@Autowired private VolunteerRepository volunteerRepository;
+
+	@Autowired private LoginService loginService;
 
 	@GetMapping("/task")
 	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
-			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly) {
+			@RequestParam(value = "status", required = false) String status) {
 		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
-		if (!StringUtils.isEmpty(projectId) && !availableOnly && !engagedOnly) {
-			Project project = projectRepository.findOne(projectId);
-			return taskMapper.toDTOs(taskRepository.findByProject(project));
+		if (!StringUtils.isEmpty(projectId) && StringUtils.isEmpty(status)) {
+			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 		}
-
-		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
-			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId),
-					TaskStatus.PUBLISHED);
-			return taskMapper.toDTOs(
-					taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED));
-		}
-		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {			
-			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED)
-							|| task.getStatus().equals(TaskStatus.RUNNING))
-					.filter(task -> task.getProject().getId().equals(projectId))
-					.collect(Collectors.toList());
+		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(status)) {
+			return findAllByStatus(status, projectId, participantId);
 		}
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 		}
 		return taskMapper.toDTOs(taskRepository.findAll());
+	}
+
+	private List<TaskDTO> findAllByStatus(String status, String projectId, String participantId) {
+		switch (status) {
+		case STATUS_AVAILABLE:
+			return handleAvailable(projectId, participantId);
+		case STATUS_ENGAGED:
+			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED) || task.getStatus().equals(TaskStatus.RUNNING))
+					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList());
+		case STATUS_FINISHED:
+			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)).stream()
+					.filter(task -> TaskStatus.FINISHED == task.getStatus())
+					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList()));
+		}
+		return Collections.emptyList();
+	}
+
+	private List<TaskDTO> handleAvailable(String projectId, String participantId) {
+		Volunteer volunteer = volunteerRepository.findOne(participantId);
+		List<Task> tasks = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
+		removeAlreadyReservedOrAssignedTasks(volunteer, tasks);
+		return taskMapper.toDTOs(tasks);
+	}
+
+	private void removeAlreadyReservedOrAssignedTasks(Volunteer volunteer, List<Task> tasks) {
+		tasks.removeIf(t -> {
+			List<TaskInteraction> taskInteractions = taskInteractionRepository.findSortedByTaskAndParticipant(t, volunteer,
+					new Sort(Sort.Direction.DESC, "timestamp"));
+			return !taskInteractions.isEmpty() && taskInteractions.get(0).getOperation() != TaskVolunteerOperation.UNRESERVED;
+		});
 	}
 
 	public List<Task> findByVolunteer(Volunteer volunteer) {
@@ -98,16 +115,9 @@ public class TaskController {
 	}
 
 	@GetMapping("/task/finished")
-	public List<TaskDTO> findAllFinished(
-			@RequestParam(value = "participantId", required = true) String participantId) {
-		
-		List<TaskDTO> test = taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-				.filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).collect(Collectors.toList());
-
-
+	public List<TaskDTO> findAllFinished(@RequestParam(value = "participantId", required = true) String participantId) {
 		return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
 				.filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).collect(Collectors.toList());
-
 	}
 
 	@PostMapping("/task")

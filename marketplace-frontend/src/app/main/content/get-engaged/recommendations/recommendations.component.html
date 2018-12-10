@@ -39,12 +39,15 @@
                 </div>
                 <!-- / CONTENT -->
                 <mat-divider></mat-divider>
-
-                <fuse-project-task-list [projectId]="project.id"
-                                        [marketplaceId]="project.marketplaceId"
-                                        [finishedOnly]="false"
-                                        [availableOnly]="true"
-                                        [engagedOnly]="false"></fuse-project-task-list>
+                <div *ngIf="volunteer">
+                  <fuse-project-task-list [projectId]="project.id"
+                                          [marketplaceId]="project.marketplaceId"
+                                          [participantId]="volunteer.id"
+                                          [finishedOnly]="false"
+                                          [availableOnly]="true"
+                                          [engagedOnly]="false"></fuse-project-task-list>
+                </div>
+                
               </div>
             </ng-template>
           </mat-expansion-panel>

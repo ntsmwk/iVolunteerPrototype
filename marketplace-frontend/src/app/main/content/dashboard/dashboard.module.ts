@@ -6,10 +6,13 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseDashboardComponent} from './dashboard.component';
 import {
   MatButtonModule,
+  MatCardModule,
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
+  MatFormFieldModule,
   MatIconModule,
+  MatInputModule,
   MatMenuModule,
   MatOptionModule,
   MatSelectModule,
@@ -29,10 +32,11 @@ import {FuseTimelineActivitiesModule} from '../_components/timeline-activities/t
 import {FuseTimelineActivitiesComponent} from '../_components/timeline-activities/timeline-activities.component';
 import {FuseTimelineTasksModule} from '../_components/timeline-tasks/timeline-tasks.module';
 import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
-import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
+import {FuseHelpSeekerDashboardComponent} from './dashboard-helpseeker/dashboard-helpseeker.component';
 
 const routes = [
-  {path: '', component: FuseDashboardComponent}
+  {path: '', component: FuseDashboardComponent},
+  {path: ':dashboardId', component: FuseDashboardComponent}
 ];
 
 @NgModule({
@@ -46,10 +50,13 @@ const routes = [
     RouterModule.forChild(routes),
 
     MatButtonModule,
+    MatCardModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatMenuModule,
     MatOptionModule,
     MatSelectModule,
