@@ -91,6 +91,13 @@ public class ProjectController {
 				projects.add(task.getProject());
 			}
 		});
+		
+		taskRepository.findByStatus(TaskStatus.RUNNING).forEach(task -> {
+			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
+			if (isReservedAssignedTaskInteraction(taskInteraction)) {
+				projects.add(task.getProject());
+			}
+		});
 
 		return new ArrayList<>(projects);
 	}
