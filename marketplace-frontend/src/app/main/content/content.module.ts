@@ -12,7 +12,8 @@ import {Http401Interceptor} from './_interceptor/http-401.interceptor';
 import {TokenGuard} from './_guard/token.guard';
 import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
-import { LoginGuard } from './_guard/login.guard';
+import {LoginGuard} from './_guard/login.guard';
+import {AdminGuard} from './_guard/admin.guard';
 
 const routes: Route[] = [
   {
@@ -50,6 +51,26 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
+    path: 'main/marketplace-form',
+    loadChildren: './marketplace-form/marketplace-form.module#FuseMarketplaceFormModule',
+    canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: 'main/marketplaces/all',
+    loadChildren: './marketplace-list/marketplace-list.module#FuseMarketplaceListModule',
+    canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: 'main/project-form',
+    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/projects/all',
+    loadChildren: './project-list/project-list.module#FuseProjectListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
     path: 'main/task',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
@@ -64,16 +85,7 @@ const routes: Route[] = [
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-  {
-    path: 'main/project-form',
-    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-  {
-    path: 'main/projects/all',
-    loadChildren: './project-list/project-list.module#FuseProjectListModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
+
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',

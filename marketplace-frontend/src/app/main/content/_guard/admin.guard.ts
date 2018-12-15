@@ -6,7 +6,7 @@ import {ParticipantRole} from '../_model/participant';
 @Injectable({
   providedIn: 'root'
 })
-export class VolunteerGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
 
   constructor(private loginService: LoginService) {
   }
@@ -15,7 +15,7 @@ export class VolunteerGuard implements CanActivate {
     return new Promise<boolean>(resolve => {
       this.loginService.getLoggedInParticipantRole()
         .toPromise()
-        .then((role: ParticipantRole) => resolve(role === 'VOLUNTEER'));
+        .then((role: ParticipantRole) => resolve(role === 'ADMIN'));
     });
   }
 }

@@ -56,7 +56,6 @@ public class CoreVolunteerController {
 
 		VolunteerDTO volunteerDTO = new VolunteerDTO();
 		volunteerDTO.setId(coreVolunteer.getId());
-		volunteerDTO.setPassword(volunteer.getPassword());
 		volunteerDTO.setUsername(volunteer.getUsername());
 		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteerDTO);
 	}
