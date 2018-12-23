@@ -1,9 +1,6 @@
 package at.jku.cis.iVolunteer.trustifier.contract;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,8 +12,6 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
-import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
