@@ -1,6 +1,10 @@
 package at.jku.cis.iVolunteer.model.volunteer.profile;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 public class CompetenceEntry {
 
@@ -8,7 +12,21 @@ public class CompetenceEntry {
 	private String competenceId;
 	private String competenceName;
 	private String marketplaceId;
-	private Date timestamp;
+	private Date timeStamp;
+	
+	// added
+	private String volunteerId;
+	
+	public CompetenceEntry() {}
+	
+	public CompetenceEntry(String id, String competenceId, String marketplaceId, String volunteerId, Date timestamp) {
+		setId(id);
+		setCompetenceId(competenceId);
+		setCompetenceName(competenceName);
+		setMarketplaceId(marketplaceId);
+		setVolunteerId(volunteerId);
+		setTimestamp(timestamp);
+	}
 
 	public String getId() {
 		return id;
@@ -43,11 +61,19 @@ public class CompetenceEntry {
 	}
 
 	public Date getTimestamp() {
-		return timestamp;
+		return timeStamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		this.timeStamp = timestamp;
+	}
+	
+	public String getVolunteerId() {
+		return volunteerId;
+	}
+	
+	public void setVolunteerId(String volunteerId) {
+		this.volunteerId = volunteerId;
 	}
 
 	@Override
@@ -62,11 +88,19 @@ public class CompetenceEntry {
 		}
 		return ((CompetenceEntry) obj).id.equals(id);
 	}
+	
+	public MultiValueMap<String, String> getProperties() {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getTimestamp()));
+		map.add("competenceId", getCompetenceId());
+		map.add("marketplaceId", getMarketplaceId());
+		map.add("volunteerId", getVolunteerId());
+		return map;
+	}
 
 	@Override
 	public String toString() {
 		return "CompetenceEntry [id=" + id + ", competenceId=" + competenceId + ", competenceName=" + competenceName
-				+ ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp + "]";
+				+ ", marketplaceId=" + marketplaceId + ", volunteerId=" + volunteerId + ", timeStamp=" + timeStamp + "]";
 	}
-
 }

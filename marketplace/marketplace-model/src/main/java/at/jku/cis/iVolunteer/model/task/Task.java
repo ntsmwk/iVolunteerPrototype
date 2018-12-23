@@ -1,11 +1,14 @@
 package at.jku.cis.iVolunteer.model.task;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.project.Project;
@@ -115,6 +118,14 @@ public class Task {
 	public void setProject(Project project) {
 		this.project = project;
 	}
+	
+	public MultiValueMap<String, String> getProperties() {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getStartDate()));
+		map.add("taskId", getId());
+		map.add("marketplaceId", getMarketplaceId());
+		return map;
+	} 
 
 	@Override
 	public boolean equals(Object obj) {

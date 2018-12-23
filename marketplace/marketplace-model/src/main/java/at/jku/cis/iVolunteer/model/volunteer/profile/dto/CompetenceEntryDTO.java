@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.volunteer.profile.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.google.gson.JsonObject;
@@ -13,6 +14,9 @@ public class CompetenceEntryDTO implements IHashObject {
 	private String competenceName;
 	private String marketplaceId;
 	private Date timestamp;
+	
+	// added
+	private String volunteerId;
 
 	public String getId() {
 		return id;
@@ -45,6 +49,14 @@ public class CompetenceEntryDTO implements IHashObject {
 	public void setMarketplaceId(String marketplaceId) {
 		this.marketplaceId = marketplaceId;
 	}
+	
+	public void setVolunteerId(String volunteerId) {
+		this.volunteerId = volunteerId;
+	}
+	
+	public String getVolunteerId() {
+		return volunteerId;
+	}
 
 	public Date getTimestamp() {
 		return timestamp;
@@ -53,14 +65,19 @@ public class CompetenceEntryDTO implements IHashObject {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-
+	
 	@Override
 	public String toHashObject() {
 		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
+		//json.addProperty("id", id);
+		json.addProperty("timeStamp", new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'").format(timestamp).toString());
 		json.addProperty("competenceId", competenceId);
-		json.addProperty("competenceName", competenceName);
-		json.addProperty("timestamp", timestamp.toString());
+		//json.addProperty("competenceName", competenceName);
+
+		// added
+		json.addProperty("marketplaceId", marketplaceId);
+		json.addProperty("volunteerId", volunteerId);
+		System.out.println(json.toString());
 		return json.toString();
 	}
 }

@@ -3,8 +3,9 @@ package at.jku.cis.iVolunteer.trustifier.blockchain;
 import java.util.Date;
 
 public class BcCompetence {
+
 	private String hash;
-	private Date timestamp;
+	private Date timeStamp;
 	private String competenceId;
 	private String marketplaceId;
 	private String volunteerId;
@@ -16,7 +17,7 @@ public class BcCompetence {
 	public BcCompetence(String hash, Date timestamp, String competenceId, String marketplaceId, String volunteerId) {
 		super();
 		this.hash = hash;
-		this.timestamp = timestamp;
+		this.timeStamp = timestamp;
 		this.competenceId = competenceId;
 		this.marketplaceId = marketplaceId;
 		this.volunteerId = volunteerId;
@@ -31,11 +32,11 @@ public class BcCompetence {
 	}
 
 	public Date getTimestamp() {
-		return timestamp;
+		return timeStamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		this.timeStamp = timestamp;
 	}
 
 	public String getCompetenceId() {

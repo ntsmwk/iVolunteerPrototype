@@ -1,5 +1,9 @@
 package at.jku.cis.iVolunteer;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,12 @@ import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
+import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
+import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 
 @SpringBootApplication
 public class iVolunteerApplication {
@@ -33,7 +43,8 @@ public class iVolunteerApplication {
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
-
+	@Autowired private BlockchainRestClient blockchainRestClient;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(iVolunteerApplication.class, args);
 	}
@@ -45,9 +56,93 @@ public class iVolunteerApplication {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
-
+		
+//		System.out.println("\n##### starting test #####");
+//		Task task = new Task();
+//		task.setStartDate(new Timestamp(118, 11, 5, 21, 25, 39, 527000000));
+//		task.setId("testId01");
+//		task.setMarketplaceId("Marketplace1");
+//		testPostPublishedTask(task);
+//		testGetPublishedTask(task);
+//		System.out.println("#####  ending test  #####\n");
 	}
 
+	// ######################### TESTS begin #########################
+	
+//	private static CompetenceEntry e = new CompetenceEntry("", "competenceId01", "marketplace01", 
+//			"volunteer1", new Date());
+	
+	private void testPostMarketplace() {
+		blockchainRestClient.postNewMarketplace("Marketplace8");
+	}
+	
+	private void testPostCompetence() {
+		// TODO Auto-generated method stub
+//		CompetenceEntryDTO entry = new CompetenceEntryDTO();
+//		entry.setTimestamp(new Date());
+//		entry.setCompetenceId("competenceId01");
+//		entry.setMarketplaceId("Marketplace1");
+//		entry.setVolunteerId("Volunteer1");
+		CompetenceEntry entry = new CompetenceEntry("", "competenceId01", "marketplace01",
+				"volunteer1", new Date());
+		blockchainRestClient.postCompetence(entry);
+	}
+	
+	private void testGetCompetence() {
+		Timestamp timestamp = new Timestamp(118, 11, 5, 21, 25, 39, 527000000);
+		CompetenceEntry entry = new CompetenceEntry("", "competenceId01", "marketplace01", 
+				"volunteer1", timestamp);
+		blockchainRestClient.getCompetence(entry);
+	}
+	
+	private void testPostPublishedTask(Task task) {
+//		Task task = new Task();
+//		task.setStartDate(new Timestamp(118, 11, 5, 21, 25, 39, 527000000));
+//		task.setId("testId01");
+//		task.setMarketplaceId("Marketplace1");
+//		blockchainRestClient.postPublishedTask(task);
+	}
+	
+	private void testGetPublishedTask(Task task) {
+//		Task task = new Task();
+//		task.setStartDate(new Timestamp(118, 11, 6, 23, 53, 17, 467000000));
+//		task.setId("testId01");
+//		task.setMarketplaceId("Marketplace1");
+//		blockchainRestClient.getPublishedTask(task);
+	}
+	
+	private void testPostTaskInteraction() {
+		TaskInteraction task = new TaskInteraction();
+		task.setTimestamp(new Date());
+		task.setId("testId01");
+		Task t = new Task();
+		t.setMarketplaceId("Marketplace1");
+		task.setTask(t);
+		blockchainRestClient.postTaskInteraction(task);
+	}
+	
+	private void testPostFinishedTask() {
+		TaskEntry entry = new TaskEntry();
+		entry.setId("");
+		entry.setTimestamp(new Date());
+		entry.setTaskId("testId01");
+		entry.setMarketplaceId("Marketplace1");
+		entry.setVolunteerId("Volunteer1");
+		blockchainRestClient.postFinishedTask(entry);
+	}
+	
+	private void testGetFinishedTask() {
+		TaskEntry entry = new TaskEntry();
+		entry.setId("");
+		entry.setTimestamp(new Timestamp(118, 11, 6, 23, 47, 55, 060000000));
+		entry.setTaskId("testId01");
+		entry.setMarketplaceId("Marketplace1");
+		entry.setVolunteerId("Volunteer1");
+		blockchainRestClient.getFinishedTask(entry);
+	}
+
+	// ######################### TESTS end #########################
+	
 	private Marketplace createMarketplace() {
 		Marketplace marketplace = marketplaceRepository.findOne(MARKETPLACE_ID);
 		if (marketplace == null) {

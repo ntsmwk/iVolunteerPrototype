@@ -3,121 +3,19 @@
  * transction processor functions 
  */
 
-var NS = 'at.jku.cis';
-var MARKETPLACE = 'Marketplace';
-var VOLUNTEER = 'Volunteer';
-var COMPETENCE = 'competence';
-var PUBLISHEDTASK = 'publishedTask';
-var TASKINTERACTION = 'taskInteraction';
-var FINISHEDTASK = 'finishedTask';
+const NS = 'at.jku.cis';
+const MARKETPLACE = 'Marketplace';
+const VOLUNTEER = 'Volunteer';
+const COMPETENCE = 'competence';
+const PUBLISHEDTASK = 'publishedTask';
+const TASKINTERACTION = 'taskInteraction';
+const FINISHEDTASK = 'finishedTask';
 
-// ###### marketplaces queries
 
-async function getAllMarketplaces() {
-    let results = await query('selectAllMarketplaces');
-}
+// https://hyperledger-fabric.readthedocs.io/en/latest/whatsnew.html
+// https://github.com/hyperledger/composer/issues/3169
+// const hasher = require('./sha256');
 
-async function getMarketplaceByID() {
-    let results = await query('selectMarketplaceByID');
-}
-
-// ###### volunteers queries
-
-async function getAllVolunteers() {
-    let results = await query('selectAllVolunteers');
-}
-
-async function getVolunteerByID() {
-    let results = await query('selectVolunteerByID');
-}
-
-// ###### task interaction queries
-
-async function getAllTaskInteractions() {
-    let results = await query('selectAllTaskInteractions');
-}
-
-async function getTaskInteractionByHash() {
-    let results = await query('selectTaskInteractionByHash');
-}
-
-async function getTaskInteractionsByMarketplace() {
-    let results = await query('selectTaskInteractionsByMarketplace');
-}
-
-async function getTaskInteractionsByType() {
-    let results = await query('selectTaskInteractionsByType');
-}
-// ###### published tasks queries
-
-async function getAllPublishedTasks() {
-    let results = await query('selectAllPublishedTasks');
-}
-
-async function getPublishedTaskByHash() {
-    let results = await query('selectPublishedTaskByHash');
-}
-
-async function getPublishedTaskByID() {
-    let results = await query('selectPublishedTaskByID');
-}
-
-async function getPublishedTasksByMarketplace() {
-    let results = await query('selectPublishedTasksByMarketplace');
-}
-
-// ###### finished tasks queries
-
-async function getAllFinishedTasks() {
-    let results = await query('selectAllFinishedTasks');
-}
-
-async function getFinishedTaskByHash() {
-    let results = await query('selectFinishedTaskByHash');
-}
-
-async function getFinishedTasksByID() {
-    let results = await query('selectFinishedTaskByID');
-}
-
-async function getAllFinishedTasksByVolunteer() {
-    let results = await query('selectFinishedTasksByVolunteer');
-}
-
-async function getAllFinishedTasksByMarketplace() {
-    let results = await query('selectFinishedTasksByMarketplace');
-}
-
-// ##### competences queries
-
-async function getAllCompetences() {
-    let results = await query('selectAllCompetences');
-}
-
-async function getCompetenceByHash() {
-    let results = await query('selectCompetenceByHash');
-}
-
-async function getCompetenceByID() {
-    let results = await query('selectCompetenceByID');
-}
-
-async function getCompetencesByVolunteer() {
-    let results = await query('selectCompetencesByVolunteer');
-}
-
-async function getCompetencesByMarketplace() {
-    let results = await query('selectCompetencesByMarketplace');
-}
-
-// https://stackoverflow.com/questions/50820526/creating-new-participant-and-adding-array-of-assets-by-reference-to-it#50822327
-// https://stackoverflow.com/questions/50915604/cannot-post-hyperledger-transaction-on-rest-api?rq=1
-
-// https://hyperledger.github.io/composer/latest/api/api-doc-index
-// https://hyperledger.github.io/composer/latest/reference/js_scripts
-
-// fix for transaction not going through:
-// https://stackoverflow.com/questions/50915604/cannot-post-hyperledger-transaction-on-rest-api?rq=1
 
 /**
  * @param {at.jku.cis.AddNewMarketplace} transaction
@@ -125,11 +23,10 @@ async function getCompetencesByMarketplace() {
  */
 async function AddNewMarketplace(transaction) {
     let registry = await getParticipantRegistry(NS + "." + MARKETPLACE);
-    let marketplace = getFactory().newResource(NS, MARKETPLACE, SHA256(transaction.marketplaceId));
+    let marketplace = getFactory().newResource(NS, MARKETPLACE, transaction.marketplaceId);
     try {
         await registry.add(marketplace);
     } catch (error) { 
-        // TODO: proper error handling
         throw new Error ('Error while trying to add new marketplace' + '\n' + error);
     }
 }
@@ -140,11 +37,10 @@ async function AddNewMarketplace(transaction) {
  */
 async function AddNewVolunteer(transaction) {
     let registry = await getParticipantRegistry(NS + "." + VOLUNTEER);
-    let volunteer = getFactory().newResource(NS, VOLUNTEER, SHA256(transaction.volunteerId));
+    let volunteer = getFactory().newResource(NS, VOLUNTEER, transaction.volunteerId);
     try {
         await registry.add(volunteer);    
     } catch (error) { 
-        // TODO: proper error handling
         throw new Error ('Error while trying to add new volunteer' + '\n' + error);
     }
 }
@@ -163,7 +59,7 @@ async function AddNewPublishedTask(transaction) {
     task.taskId = transaction.taskId;
     task.marketplaceId =  transaction.marketplaceId;
 
-    await registry.add(task);    
+    await registry.add(task);
 }
 
 /**
@@ -179,7 +75,7 @@ async function AddNewTaskInteraction(transaction) {
     task.timestamp =  transaction.timeStamp;
     task.taskId = transaction.taskId;
     task.marketplaceId =  transaction.marketplaceId;
-    task.taskInteractionType = transaction.taskInteractionType; // SHA256 needed?
+    task.taskInteractionType = transaction.taskInteractionType;
     
     await registry.add(task); 
 }
@@ -195,9 +91,9 @@ async function AddNewFinishedTask(transaction) {
     
     let task = getFactory().newResource(NS, FINISHEDTASK, hash);
     task.timestamp =  transaction.timeStamp;
-    task.taskId = SHA256(transaction.taskId);
-    task.marketplaceId =  SHA256(transaction.marketplaceId);
-    task.volunteerId = SHA256(transaction.volunteerId);
+    task.taskId = transaction.taskId;
+    task.marketplaceId =  transaction.marketplaceId;
+    task.volunteerId = transaction.volunteerId;
     
     await registry.add(task);    
 }
@@ -207,21 +103,62 @@ async function AddNewFinishedTask(transaction) {
  * @transaction
  */
 async function AddNewCompetence(transaction) {
-    // TODO: check if competence can be rewarded
-
     let registry = await getAssetRegistry(NS + "." + COMPETENCE);
     let hash = SHA256(transaction.timeStamp + transaction.competenceId +
         transaction.marketplaceId + transaction.volunteerId);
 
     let competence = getFactory().newResource(NS, COMPETENCE, hash);
     competence.timestamp = transaction.timeStamp;
-    competence.competenceId = SHA256(transaction.competenceId);
-    competence.marketplaceId = SHA256(transaction.marketplaceId);
-    competence.volunteerId = SHA256(transaction.volunteerId);
+    competence.competenceId = transaction.competenceId;
+    competence.marketplaceId = transaction.marketplaceId;
+    competence.volunteerId = transaction.volunteerId;
 
     await registry.add(competence);
 }
 
+/**
+ * @param {at.jku.cis.GetPublishedTask} transaction
+ * @returns {at.jku.cis.publishedTask[]}
+ * @transaction
+ */
+async function GetPublishedTask(transaction) {
+    let hash = SHA256(transaction.timeStamp + transaction.taskId +
+        transaction.marketplaceId);
+    return query('selectPublishedTaskByHash', { HASH: hash });
+}
+
+/**
+ * @param {at.jku.cis.GetTaskInteraction} transaction
+ * @returns {at.jku.cis.taskInteraction[]}
+ * @transaction
+ */
+async function GetTaskInteraction(transaction) {
+    let hash = SHA256(transaction.timeStamp + transaction.taskId +
+        transaction.marketplaceId + transaction.taskInteractionType);
+    return query('selectTaskInteractionByHash', { HASH: hash });
+}
+
+/**
+ * @param {at.jku.cis.GetFinishedTask} transaction
+ * @returns {at.jku.cis.finishedTask[]}
+ * @transaction
+ */
+async function GetFinishedTask(transaction) {
+    let hash = SHA256(transaction.timeStamp + transaction.taskId +
+        transaction.marketplaceId + transaction.volunteerId);
+    return query('selectFinishedTaskByHash', { HASH: hash });
+}
+
+/**
+ * @param {at.jku.cis.GetCompetence} transaction
+ * @returns {at.jku.cis.competence[]}
+ * @transaction
+ */
+async function GetCompetence(transaction) {
+    let hash = SHA256(transaction.timeStamp + transaction.competenceId +
+        transaction.marketplaceId + transaction.volunteerId);
+    return query('selectCompetenceByHash', { HASH: hash });
+}
 
 // online hash calculator to verify if necessary:
 // https://www.xorbin.com/tools/sha256-hash-calculator
@@ -560,5 +497,3 @@ function SHA256(s){
  
 
 }
-
-

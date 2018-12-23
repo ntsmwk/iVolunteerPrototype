@@ -1,15 +1,21 @@
 package at.jku.cis.iVolunteer.model.volunteer.profile;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 public class TaskEntry {
 
 	private String id;
+	private Date timestamp;
 	private String taskId;
 	private String taskName;
 	private String taskDescription;
 	private String marketplaceId;
-	private Date timestamp;
+	private String volunteerId;
+	
 
 	public TaskEntry() {
 	}
@@ -62,11 +68,28 @@ public class TaskEntry {
 		this.timestamp = timestamp;
 	}
 
+	public String getVolunteerId() {
+		return volunteerId;
+	}
+
+	public void setVolunteerId(String volunteerId) {
+		this.volunteerId = volunteerId;
+	}
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-
+	
+	public MultiValueMap<String, String> getProperties() {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("timeStamp", new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'").format(getTimestamp()));
+		map.add("taskId", getTaskId());
+		map.add("marketplaceId", getMarketplaceId());
+		map.add("volunteerId", getVolunteerId());
+		return map;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TaskEntry)) {
@@ -78,7 +101,7 @@ public class TaskEntry {
 	@Override
 	public String toString() {
 		return "TaskEntry [id=" + id + ", taskId=" + taskId + ", taskName=" + taskName + ", taskDescription="
-				+ taskDescription + ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp + "]";
+				+ taskDescription + ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp 
+				+ "volunteerId" + volunteerId + "]";
 	}
-
 }

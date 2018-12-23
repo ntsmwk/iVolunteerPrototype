@@ -1,10 +1,13 @@
 package at.jku.cis.iVolunteer.model.task.interaction;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
@@ -22,7 +25,12 @@ public class TaskInteraction {
 	private TaskOperation operation;
 	private Date timestamp;
 	private String comment;
-
+	
+	private String taskInteractionType;
+	private String marketplaceId;
+	
+	private String volunteerId;
+	
 	public TaskInteraction() {
 	}
 
@@ -79,7 +87,43 @@ public class TaskInteraction {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+	
+	public String getTaskInteractionType() {
+		return taskInteractionType;
+	}
 
+	public void setTaskInteractionType(String taskInteractionType) {
+		this.taskInteractionType = taskInteractionType;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
+	}	
+
+	public String getVolunteerId() {
+		return volunteerId;
+	}
+
+	public void setVolunteerId(String volunteerId) {
+		this.volunteerId = volunteerId;
+	}
+	
+	public MultiValueMap<String, String> getProperties(boolean getVolunteer) {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getTimestamp()));
+		map.add("taskId", getId());
+		map.add("marketplaceId", getMarketplaceId());
+		map.add("taskInteractionType", getTaskInteractionType());
+		if (getVolunteer) {
+			map.add("volunteerId", getVolunteerId());			
+		}
+		return map;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TaskInteraction)) {
@@ -92,5 +136,4 @@ public class TaskInteraction {
 	public int hashCode() {
 		return id.hashCode();
 	}
-
 }

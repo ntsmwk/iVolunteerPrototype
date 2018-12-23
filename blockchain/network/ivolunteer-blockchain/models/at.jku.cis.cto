@@ -6,14 +6,13 @@ namespace at.jku.cis
 
 participant Marketplace identified by id {
   o String id
-  //o String name
 }
 
 participant Volunteer identified by id {
   o String id
-  //o String name
 }
 
+// task -> publishedTask
 asset publishedTask identified by hash {
   o String hash
   o DateTime timestamp
@@ -21,14 +20,17 @@ asset publishedTask identified by hash {
   o String marketplaceId
 }
 
+// taskInteraction -> taskInteraction
 asset taskInteraction identified by hash {
   o String hash
   o DateTime timestamp
   o String taskId
   o String marketplaceId
   o String taskInteractionType
+  o String volunteerId optional
 }
 
+// taskEntry -> finishedTask
 asset finishedTask identified by hash {
   o String hash
   o DateTime timestamp
@@ -37,24 +39,13 @@ asset finishedTask identified by hash {
   o String volunteerId
 }
 
-/*
-asset competence identified by hash {
-  o String hash
-  //o DateTime timestamp
-  o String name
-  o String marketplaceId
-  o String[] taskHashes // ???
-}
-*/
-
-// rename to 'achievedCompetences' and create new asset 'competence'?
+// competenceEntry -> competence
 asset competence identified by hash {
   o String hash
   o DateTime timestamp
   o String competenceId
   o String marketplaceId
   o String volunteerId
-  //--> competence competence
 }
 
 // ##### transactions
@@ -88,6 +79,43 @@ transaction AddNewFinishedTask {
 }
 
 transaction AddNewCompetence {
+  o DateTime timeStamp
+  o String competenceId
+  o String marketplaceId
+  o String volunteerId
+}
+
+// ##### read-only transactions // https://hyperledger.github.io/composer/latest/reference/js_scripts
+
+@commit(false)
+@returns(publishedTask[])
+transaction GetPublishedTask {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+}
+
+@commit(false)
+@returns(taskInteraction[])
+transaction GetTaskInteraction {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+  o String taskInteractionType
+}
+
+@commit(false)
+@returns(finishedTask[])
+transaction GetFinishedTask {
+  o DateTime timeStamp
+  o String taskId
+  o String marketplaceId
+  o String volunteerId
+}
+
+@commit(false)
+@returns(competence[])
+transaction GetCompetence {
   o DateTime timeStamp
   o String competenceId
   o String marketplaceId

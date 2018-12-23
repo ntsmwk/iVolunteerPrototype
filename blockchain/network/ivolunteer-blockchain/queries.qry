@@ -2,8 +2,6 @@
  * queries
  */
 
-// TODO: ADD QUERIES FOR DATES IF NECESSARY
-
 // ###### marketplaces queries
 
 query selectAllMarketplaces {
