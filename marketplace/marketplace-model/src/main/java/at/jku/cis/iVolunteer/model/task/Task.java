@@ -23,11 +23,13 @@ public class Task {
 	private String workflowKey;
 	private String marketplaceId;
 	private TaskStatus status;
+	
 	private Date startDate;
 	private Date endDate;
+	private Date publishedDate;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
-
+		
 	@DBRef
 	private Project project;
 
@@ -117,15 +119,23 @@ public class Task {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}	
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
 	}
 	
 	public MultiValueMap<String, String> getProperties() {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getStartDate()));
-		map.add("taskId", getId());
-		map.add("marketplaceId", getMarketplaceId());
+		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(publishedDate));
+		map.add("taskId", id);
+		map.add("marketplaceId", marketplaceId);
 		return map;
-	} 
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -139,5 +149,4 @@ public class Task {
 	public int hashCode() {
 		return id.hashCode();
 	}
-
 }

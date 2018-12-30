@@ -22,6 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.volunteer.profile.VolunteerProfileRepos
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
@@ -69,12 +70,17 @@ public class TaskOperationController {
 	@PostMapping("/task/{id}/publish")
 	public void publishTask(@PathVariable("id") String id, @RequestHeader("authorization") String authorization) {
 		Task task = taskRepository.findOne(id);
+		
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
 
-		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task), authorization);
-		updateTaskStatus(task, TaskStatus.PUBLISHED);
+		TaskInteraction taskInteraction = updateTaskStatus(task, TaskStatus.PUBLISHED);
+
+		TaskDTO dto = taskMapper.toDTO(task);
+		dto.setStatusDate(taskInteraction.getTimestamp());
+
+		contractorRepositoryRestClient.publishTask(dto, authorization);
 	}
 
 	@PostMapping("/task/{id}/start")
@@ -115,6 +121,7 @@ public class TaskOperationController {
 
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		taskEntry.setMarketplaceId(marketplaceId);
+		taskEntry.setTimestamp(taskInteraction.getTimestamp());
 
 		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
 		for (CompetenceEntry ce : competenceEntries) {
@@ -134,6 +141,7 @@ public class TaskOperationController {
 			try {
 				VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
 				vte.setVolunteerId(volunteer.getId());
+				vte.setTimestamp(taskInteraction.getTimestamp());
 
 				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
 

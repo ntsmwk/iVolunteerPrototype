@@ -23,6 +23,7 @@ import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.PreConditionFailedException;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
+import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
@@ -49,9 +50,7 @@ public class TaskInteractionController {
 	@GetMapping("/task/{taskId}/interaction")
 	public List<TaskInteractionDTO> findByTaskId(@PathVariable("taskId") String taskId,
 			@RequestParam(value = "operation", required = false) TaskOperation operation) {
-
 		Task task = findAndVerifyTaskById(taskId);
-
 		if (operation == null) {
 			return taskInteractionMapper.toDTOs(taskInteractionRepository.findByTask(task));
 		}
@@ -81,29 +80,36 @@ public class TaskInteractionController {
 	public TaskInteraction reserveForTask(@PathVariable("taskId") String taskId,
 			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
-		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
-
-		if (latestTaskInteraction == null
-				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
-			return createTaskInteraction(task, loginService.getLoggedInParticipant(), TaskVolunteerOperation.RESERVED);
-		} else {
-			throw new PreConditionFailedException("Cannot reserve! Volunteer is already reserved or assigned.");
+		List<TaskInteraction> publishedTaskInteraction = taskInteractionRepository.findByTaskAndOperation(task, TaskStatus.PUBLISHED);
+		if (publishedTaskInteraction.isEmpty()) {
+			throw new PreConditionFailedException("Cannot reserve! Task is not published.");
 		}
+		task.setPublishedDate(publishedTaskInteraction.get(0).getTimestamp());
+		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
+		
+		if (latestTaskInteraction == null || latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNRESERVED) {
+			return createTaskInteraction(task, loginService.getLoggedInParticipant(), TaskVolunteerOperation.RESERVED);
+		}
+		throw new PreConditionFailedException("Cannot reserve! Volunteer is already reserved or assigned.");
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
 	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId,
 			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
+		List<TaskInteraction> publishedTaskInteraction = taskInteractionRepository.findByTaskAndOperation(task, TaskStatus.PUBLISHED);
+		if (publishedTaskInteraction.isEmpty()) {
+			throw new PreConditionFailedException("Cannot cancel reservation! Task is not published.");
+		}
+		task.setPublishedDate(publishedTaskInteraction.get(0).getTimestamp());
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (latestTaskInteraction != null && (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
 				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
 			return taskInteractionMapper.toDTO(createTaskInteraction(task, loginService.getLoggedInParticipant(),
 					TaskVolunteerOperation.UNRESERVED));
-		} else {
-			throw new PreConditionFailedException("Cannot cancel reservation! Volunteer is not reserved.");
 		}
+		throw new PreConditionFailedException("Cannot cancel reservation! Volunteer is not reserved.");	
 	}
 
 	@PostMapping("/task/{taskId}/assign")
@@ -125,8 +131,7 @@ public class TaskInteractionController {
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
 		if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
-			return taskInteractionMapper
-					.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
+			return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
 		}
 		throw new PreConditionFailedException("Cannot cancel assignment! Volunteer is not assigned.");
 	}

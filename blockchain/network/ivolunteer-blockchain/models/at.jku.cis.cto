@@ -27,7 +27,7 @@ asset taskInteraction identified by hash {
   o String taskId
   o String marketplaceId
   o String taskInteractionType
-  o String volunteerId optional
+  o String volunteerId
 }
 
 // taskEntry -> finishedTask
@@ -69,6 +69,7 @@ transaction AddNewTaskInteraction {
   o String taskId
   o String marketplaceId
   o String taskInteractionType
+  o String volunteerId
 }
 
 transaction AddNewFinishedTask {
@@ -102,6 +103,7 @@ transaction GetTaskInteraction {
   o String taskId
   o String marketplaceId
   o String taskInteractionType
+  o String volunteerId
 }
 
 @commit(false)

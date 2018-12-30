@@ -80,4 +80,13 @@ public class CompetenceEntryDTO implements IHashObject {
 		System.out.println(json.toString());
 		return json.toString();
 	}
+	
+//	public MultiValueMap<String, String> getProperties() {
+//		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+//		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getTimestamp()));
+//		map.add("competenceId", getCompetenceId());
+//		map.add("marketplaceId", getMarketplaceId());
+//		map.add("volunteerId", getVolunteerId());
+//		return map;
+//	}
 }

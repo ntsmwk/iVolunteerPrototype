@@ -68,14 +68,16 @@ async function AddNewPublishedTask(transaction) {
  */
 async function AddNewTaskInteraction(transaction) {
     let registry = await getAssetRegistry(NS + "." + TASKINTERACTION);
-    let hash = SHA256(transaction.timeStamp + transaction.taskId +
-        transaction.marketplaceId + transaction.taskInteractionType);
+    let hash = SHA256(transaction.timeStamp + 
+        transaction.taskId + transaction.marketplaceId + 
+        transaction.taskInteractionType + transaction.volunteerId);
     
     let task = getFactory().newResource(NS, TASKINTERACTION, hash);
     task.timestamp =  transaction.timeStamp;
     task.taskId = transaction.taskId;
     task.marketplaceId =  transaction.marketplaceId;
     task.taskInteractionType = transaction.taskInteractionType;
+    task.volunteerId = transaction.volunteerId;
     
     await registry.add(task); 
 }
@@ -133,8 +135,9 @@ async function GetPublishedTask(transaction) {
  * @transaction
  */
 async function GetTaskInteraction(transaction) {
-    let hash = SHA256(transaction.timeStamp + transaction.taskId +
-        transaction.marketplaceId + transaction.taskInteractionType);
+    let hash = SHA256(transaction.timeStamp + 
+        transaction.taskId + transaction.marketplaceId + 
+        transaction.taskInteractionType + transaction.volunteerId);
     return query('selectTaskInteractionByHash', { HASH: hash });
 }
 

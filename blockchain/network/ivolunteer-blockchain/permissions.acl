@@ -30,9 +30,9 @@ rule NetworkAdminSystem {
 
 // added
 rule ReadRessources {
-	description: "Grant Volunteers READ access to system resources"
-	participant: "at.jku.cis.Volunteer"
-	operation: ALL
-	resource: "org.hyperledger.composer.system.**"
-	action: ALLOW
+    description: "Grant Volunteers READ access to system resources"
+    participant: "at.jku.cis.Volunteer"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
 }

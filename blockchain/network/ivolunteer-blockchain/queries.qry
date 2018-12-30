@@ -61,6 +61,20 @@ query selectTaskInteractionsByType {
       WHERE (taskInteractionType == _$TYPE)
 }
 
+query selectTaskInteractionsForTask {
+  description: "Get all interactions of a task"
+  statement:
+    SELECT at.jku.cis.taskInteraction
+      WHERE (taskId == _$ID)
+}
+
+query selectTaskInteractionsForVolunteer {
+  description: "Get all interactions of a volunteer"
+  statement:
+    SELECT at.jku.cis.taskInteraction
+      WHERE (volunteerId == _$ID)
+}
+
 // ###### published tasks queries
 
 query selectAllPublishedTasks {

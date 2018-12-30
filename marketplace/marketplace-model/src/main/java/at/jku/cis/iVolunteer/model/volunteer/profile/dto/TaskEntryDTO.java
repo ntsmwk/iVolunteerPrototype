@@ -14,6 +14,7 @@ public class TaskEntryDTO implements IHashObject{
 	private String taskDescription;
 	private String marketplaceId;
 	private Date timestamp;
+	private String volunteerId;
 
 	public String getId() {
 		return id;
@@ -61,6 +62,14 @@ public class TaskEntryDTO implements IHashObject{
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getVolunteerId() {
+		return volunteerId;
+	}
+
+	public void setVolunteerId(String volunteerId) {
+		this.volunteerId = volunteerId;
 	}
 	
 	@Override

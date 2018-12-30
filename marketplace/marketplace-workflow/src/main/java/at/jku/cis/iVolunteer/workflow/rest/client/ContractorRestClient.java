@@ -49,7 +49,6 @@ public class ContractorRestClient extends RestClient {
 		reservation.setTask(task);
 
 		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
-
 	}
 
 	public void assignTask(TaskDTO task, SourceDTO source, VolunteerDTO volunteer, String authorization) {

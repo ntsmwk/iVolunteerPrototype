@@ -12,6 +12,8 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
 import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
@@ -35,22 +37,20 @@ public class Contractor {
 	private TrustifierMarketplaceRestClient marketplaceRestClient;
 
 	@PostMapping("/task")
-	public void publishTask(@RequestBody TaskInteractionDTO task) { // maybe revert to TaskDTO task...
+	public void publishTask(@RequestBody TaskDTO tDTO) {
 		try {
-			TaskInteraction t = new TaskInteraction();
-			t.setTimestamp(task.getTimestamp()); 
-			t.setId(task.getId());
-			t.setMarketplaceId(task.getTask().getMarketplaceId());
+			Task t = new Task();
+			t.setPublishedDate(tDTO.getStatusDate());
+			t.setId(tDTO.getId());
+			t.setMarketplaceId(tDTO.getMarketplaceId());
 			blockchainRestClient.postPublishedTask(t);
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
 	}
 
-//	@PostMapping("/task/reserve/{marketplaceId}")
 	@PostMapping("/task/reserve")
-	public void reserveTask(@RequestBody TaskReservationDTO reservation,
-			@RequestHeader("Authorization") String authorization/*, @PathVariable("marketplaceId") String marketplaceId*/) {
+	public void reserveTask(@RequestBody TaskReservationDTO reservation, @RequestHeader("Authorization") String authorization) {
 
 		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
@@ -60,10 +60,11 @@ public class Contractor {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteractionDTO = marketplaceRestClient.reserve(address, authorization, reservation.getTask());
 			TaskInteraction taskInteraction = new TaskInteraction();
-			taskInteraction.setId(taskInteractionDTO.getId());
 			taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
-			taskInteraction.setTaskInteractionType("reserve");
+			taskInteraction.setTaskId(taskInteractionDTO.getTask().getId());
 			taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+			taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+			taskInteraction.setVolunteerId(taskInteractionDTO.getParticipant().getId());
 			blockchainRestClient.postTaskInteraction(taskInteraction);
 
 		} catch (RestClientException ex) {
@@ -71,10 +72,8 @@ public class Contractor {
 		}
 	}
 
-//	@PostMapping("/task/unreserve/{marketplaceId}")
 	@PostMapping("/task/unreserve")
-	public void unreserveTask(@RequestBody TaskReservationDTO reservation,
-			@RequestHeader("Authorization") String authorization/*, @PathVariable("marketplaceId") String marketplaceId*/) {
+	public void unreserveTask(@RequestBody TaskReservationDTO reservation, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(reservation.getTask())) {
 			throw new VerificationFailureException();
 		}
@@ -82,10 +81,11 @@ public class Contractor {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteractionDTO = marketplaceRestClient.unreserve(address, authorization, reservation.getTask());
 			TaskInteraction taskInteraction = new TaskInteraction();
-			taskInteraction.setId(taskInteractionDTO.getId());
 			taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
-			taskInteraction.setTaskInteractionType("unreserve");
+			taskInteraction.setTaskId(taskInteractionDTO.getTask().getId());
 			taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+			taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+			taskInteraction.setVolunteerId(taskInteractionDTO.getParticipant().getId());
 			blockchainRestClient.postTaskInteraction(taskInteraction);
 
 		} catch (RestClientException ex) {
@@ -93,10 +93,8 @@ public class Contractor {
 		}
 	}
 
-//	@PostMapping("/task/assign/{marketplaceId}")
 	@PostMapping("/task/assign")
-	public void assignTask(@RequestBody TaskAssignmentDTO assignment,
-			@RequestHeader("Authorization") String authorization/*, @PathVariable("marketplaceId") String marketplaceId*/) {
+	public void assignTask(@RequestBody TaskAssignmentDTO assignment, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
@@ -106,20 +104,19 @@ public class Contractor {
 			TaskInteractionDTO taskInteractionDTO = marketplaceRestClient.assign(address, authorization,
 					assignment.getTask(), assignment.getVolunteer());
 			TaskInteraction taskInteraction = new TaskInteraction();
-			taskInteraction.setId(taskInteractionDTO.getId());
 			taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
-			taskInteraction.setTaskInteractionType("assign");
+			taskInteraction.setTaskId(taskInteractionDTO.getTask().getId());
 			taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+			taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+			taskInteraction.setVolunteerId(taskInteractionDTO.getParticipant().getId());
 			blockchainRestClient.postTaskInteraction(taskInteraction);
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
 	}
 
-//	@PostMapping("/task/unassign/{marketplaceId}")
 	@PostMapping("/task/unassign")
-	public void unassignTask(@RequestBody TaskAssignmentDTO assignment,
-			@RequestHeader("Authorization") String authorization/*, @PathVariable("marketplaceId") String marketplaceId*/) {
+	public void unassignTask(@RequestBody TaskAssignmentDTO assignment, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(assignment.getTask())) {
 			throw new VerificationFailureException();
 		}
@@ -128,20 +125,19 @@ public class Contractor {
 			TaskInteractionDTO taskInteractionDTO = marketplaceRestClient.unassign(address, authorization,
 					assignment.getTask(), assignment.getVolunteer());
 			TaskInteraction taskInteraction = new TaskInteraction();
-			taskInteraction.setId(taskInteractionDTO.getId());
 			taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
-			taskInteraction.setTaskInteractionType("unassign");
+			taskInteraction.setTaskId(taskInteractionDTO.getTask().getId());
 			taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+			taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+			taskInteraction.setVolunteerId(taskInteractionDTO.getParticipant().getId());
 			blockchainRestClient.postTaskInteraction(taskInteraction);
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
 	}
 
-//	@PostMapping("/task/finish/{marketplaceId}")
 	@PostMapping("/task/finish")
-	public void finishTask(@RequestBody TaskCompletationDTO completation,
-			@RequestHeader("Authorization") String authorization/*, @PathVariable("marketplaceId") String marketplaceId*/) {
+	public void finishTask(@RequestBody TaskCompletationDTO completation, @RequestHeader("Authorization") String authorization) {
 		if (!verifier.verifyPublishedTask(completation.getTask())) {
 			throw new VerificationFailureException();
 		}
@@ -149,10 +145,11 @@ public class Contractor {
 			String address = completation.getSource().getAddress();
 			TaskInteractionDTO taskInteractionDTO = marketplaceRestClient.finish(address, authorization, completation.getTask());
 			TaskInteraction taskInteraction = new TaskInteraction();
-			taskInteraction.setId(taskInteractionDTO.getId());
 			taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
-			taskInteraction.setTaskInteractionType("finish");
+			taskInteraction.setTaskId(taskInteractionDTO.getTask().getId());
 			taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+			taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+			taskInteraction.setVolunteerId(taskInteractionDTO.getParticipant().getId());
 			blockchainRestClient.postTaskInteraction(taskInteraction);
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);

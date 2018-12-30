@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.task.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +21,13 @@ public class TaskDTO implements IHashObject {
 
 	private Date startDate;
 	private Date endDate;
+	
+	private Date publishedDate;
+	private Date statusDate;
+
 	private List<CompetenceDTO> acquirableCompetences;
 	private List<CompetenceDTO> requiredCompetences;
-
+	
 	private ProjectDTO project;
 
 	public String getId() {
@@ -112,19 +117,32 @@ public class TaskDTO implements IHashObject {
 	public void setProject(ProjectDTO project) {
 		this.project = project;
 	}
+	
+	public Date getStatusDate() {
+		return statusDate;
+	}
 
+	public void setStatusDate(Date statusDate) {
+		this.statusDate = statusDate;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
+	}
+	
 	@Override
 	public String toHashObject() {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
-		json.addProperty("name", name);
-		json.addProperty("description", description);
+		JsonObject json = new JsonObject();	
+		if (publishedDate != null) 
+		{
+			json.addProperty("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(publishedDate));
+		}
+		json.addProperty("taskId", id);
 		json.addProperty("marketplaceId", marketplaceId);
-		// json.addProperty("parent", parent.getId());
-		json.addProperty("startDate", startDate.toString());
-		// json.addProperty("endDate", endDate.toString());
-		// json.addProperty("acquirableCompetences", acquirableCompetences.toString());
-		// json.addProperty("requiredCompetences", requiredCompetences.toString());
 		return json.toString();
 	}
 
@@ -135,5 +153,4 @@ public class TaskDTO implements IHashObject {
 				+ endDate + ", acquirableCompetences=" + acquirableCompetences + ", requiredCompetences="
 				+ requiredCompetences + ", project=" + project + "]";
 	}
-
 }

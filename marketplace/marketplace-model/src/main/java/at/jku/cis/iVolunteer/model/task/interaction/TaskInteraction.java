@@ -29,6 +29,7 @@ public class TaskInteraction {
 	private String taskInteractionType;
 	private String marketplaceId;
 	
+	private String taskId;
 	private String volunteerId;
 	
 	public TaskInteraction() {
@@ -111,18 +112,39 @@ public class TaskInteraction {
 	public void setVolunteerId(String volunteerId) {
 		this.volunteerId = volunteerId;
 	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
 	
-	public MultiValueMap<String, String> getProperties(boolean getVolunteer) {
+	private MultiValueMap<String, String> getBasicProperties() {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(getTimestamp()));
-		map.add("taskId", getId());
-		map.add("marketplaceId", getMarketplaceId());
-		map.add("taskInteractionType", getTaskInteractionType());
-		if (getVolunteer) {
-			map.add("volunteerId", getVolunteerId());			
-		}
+		map.add("timeStamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(timestamp));
+		map.add("taskId", taskId);
+		map.add("marketplaceId", marketplaceId);
 		return map;
 	}
+	
+	public MultiValueMap<String, String> getTaskInteractionProperties() {
+		MultiValueMap<String, String> map = getBasicProperties();
+		map.add("taskInteractionType", taskInteractionType);
+		map.add("volunteerId", volunteerId); 
+		return map;
+	}
+	
+	public MultiValueMap<String, String> getPublishedTaskProperties() {
+		return getBasicProperties();
+	}
+	
+	public MultiValueMap<String, String> getFinishedTaskProperties() {
+		MultiValueMap<String, String> map = getBasicProperties();
+		map.add("volunteerId", getVolunteerId());
+		return map;
+	} 
 	
 	@Override
 	public boolean equals(Object obj) {

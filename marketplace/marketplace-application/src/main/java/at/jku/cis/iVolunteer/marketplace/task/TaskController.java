@@ -111,9 +111,22 @@ public class TaskController {
 
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {
-		return taskMapper.toDTO(taskRepository.findOne(id));
-	}
+		Task task = taskRepository.findOne(id);
+		
+		List<TaskInteraction> t = taskInteractionRepository.findByTaskAndOperation(task, task.getStatus());
+		
+		TaskDTO dto = taskMapper.toDTO(task);
+		dto.setStatusDate(t.iterator().next().getTimestamp());
+		
+		t = taskInteractionRepository.findByTaskAndOperation(task, TaskStatus.PUBLISHED);
 
+		if (!t.isEmpty()) {
+			dto.setPublishedDate(t.iterator().next().getTimestamp());
+		}
+		
+		return dto;
+	}
+	
 	@GetMapping("/task/finished")
 	public List<TaskDTO> findAllFinished(@RequestParam(value = "participantId", required = true) String participantId) {
 		return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
@@ -126,6 +139,7 @@ public class TaskController {
 		task.setStatus(TaskStatus.CREATED);
 		task.setMarketplaceId(marketplaceId);
 		task.setProject(projectRepository.findOne(taskDto.getProject().getId()));
+		task.setPublishedDate(taskDto.getStatusDate());
 		Task createdTask = taskRepository.insert(task);
 
 		insertTaskInteraction(createdTask);

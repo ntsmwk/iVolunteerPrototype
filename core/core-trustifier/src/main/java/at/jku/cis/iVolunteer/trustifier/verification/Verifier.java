@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.trustifier.verification;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,56 +15,50 @@ import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
 import at.jku.cis.iVolunteer.model.volunteer.profile.dto.TaskEntryDTO;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
-import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 
 @RestController
 @RequestMapping("/trustifier/verifier")
 public class Verifier {
 
-//	@Autowired private Hasher hasher;
-
 	@Autowired private BlockchainRestClient blockchainRestClient;
 
-//	@PostMapping("/taskInteraction")
 	@PostMapping("/taskInteraction/{marketplaceId}")
-	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction, @PathVariable("marketplaceId") String marketplaceId) {
-//		return (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction)) == null) ? false : true;
-		TaskInteraction entry = new TaskInteraction();
-		entry.setId(taskInteraction.getId());
-		entry.setTimestamp(taskInteraction.getTimestamp());
-		entry.setTaskInteractionType("verifyTaskInteraction"); // TODO ??
-		entry.setMarketplaceId(marketplaceId);
-		return (blockchainRestClient.getTaskInteraction(entry) == null) ? false : true;
+	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteractionDTO) {
+		TaskInteraction taskInteraction = new TaskInteraction();
+		taskInteraction.setTimestamp(taskInteractionDTO.getTimestamp());
+		taskInteraction.setId(taskInteractionDTO.getId());
+		taskInteraction.setMarketplaceId(taskInteractionDTO.getTask().getMarketplaceId());
+		taskInteraction.setTaskInteractionType(taskInteractionDTO.getOperation());
+		return (blockchainRestClient.getTaskInteraction(taskInteraction) == null) ? false : true;
 	}
 
-	@PostMapping("/finishedTaskEntry/{volunteerId}")
-//	@PostMapping("/finishedTaskEntry")
-	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry, @PathVariable("volunteerId") String volunteerId) {
-//		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
+	@PostMapping("/finishedTaskEntry")
+	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry) {
 		TaskEntry entry = new TaskEntry();
 		entry.setId(taskEntry.getId());
 		entry.setTimestamp(taskEntry.getTimestamp());
 		entry.setMarketplaceId(taskEntry.getMarketplaceId());
-		entry.setVolunteerId(volunteerId);
+		entry.setVolunteerId(taskEntry.getVolunteerId());
 		return (blockchainRestClient.getFinishedTask(entry) == null) ? false : true;
 	}
 
 	@PostMapping("/publishedTask")
-	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
-//		return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)) == null) ? false : true;
-		TaskInteraction t = new TaskInteraction();
-		t.setId(task.getId());
-		t.setTimestamp(task.getStartDate());
-		t.setMarketplaceId(task.getMarketplaceId());
+	public boolean verifyPublishedTask(@RequestBody TaskDTO taskDTO) {
+		Task t = new Task();
+		t.setId(taskDTO.getId());
+		t.setMarketplaceId(taskDTO.getMarketplaceId());
+		t.setPublishedDate(taskDTO.getPublishedDate());
 		return (blockchainRestClient.getPublishedTask(t) == null) ? false : true;
 	}
 
 	@PostMapping("/competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntryDTO competenceEntry) {
-//		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
-		return (blockchainRestClient.getCompetence(new CompetenceEntry(competenceEntry.getId(),
-		competenceEntry.getCompetenceId(), competenceEntry.getMarketplaceId(),
-		competenceEntry.getVolunteerId(), competenceEntry.getTimestamp())) == null) ? false : true;
+		CompetenceEntry entry = new CompetenceEntry();
+		entry.setId(competenceEntry.getId());
+		entry.setMarketplaceId(competenceEntry.getMarketplaceId());
+		entry.setTimestamp(competenceEntry.getTimestamp());
+		entry.setVolunteerId(competenceEntry.getVolunteerId());
+		return (blockchainRestClient.getCompetence(entry) == null) ? false : true;
 	}
 
 }
