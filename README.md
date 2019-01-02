@@ -19,6 +19,8 @@ docker run --name marketplace-workflow-db --restart=unless-stopped -e MYSQL_DATA
 
 mvn clean install -Pdev 
 
-mvn clean install -Pprod
+mvn clean install -Pprod1
+mvn clean install -Pprod2
 
-start: java -jar target/marketplace-application-0.0.1-SNAPSHOT.jar
+start: nohup java -jar target/marketplace-application-0.0.1-SNAPSHOT.jar &> marketplace.out &
+
