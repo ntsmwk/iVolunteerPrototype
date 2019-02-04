@@ -51,12 +51,15 @@ public class TaskController {
 
 	@Autowired
 	private LoginService loginService;
+	
 
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+	public List<TaskDTO> findAll(
+			@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
 			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
 			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly) {
+		
 		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
 			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
 		}
@@ -81,6 +84,7 @@ public class TaskController {
 		if (!StringUtils.isEmpty(projectId)) {
 			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
 		}
+		
 		return taskMapper.toDTOs(taskRepository.findAll());
 	}
 

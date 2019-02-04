@@ -23,13 +23,13 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules}),
+    RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules/*, enableTracing: true*/}),
 
     // Fuse Main and Shared modules
     FuseSharedModule,

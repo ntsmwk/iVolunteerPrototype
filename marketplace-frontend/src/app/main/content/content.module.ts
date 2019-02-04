@@ -14,6 +14,8 @@ import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
 
+
+
 const routes: Route[] = [
   {
     path: 'login',
@@ -74,6 +76,33 @@ const routes: Route[] = [
     loadChildren: './project-list/project-list.module#FuseProjectListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
+  //AK
+  { path: 'main/properties/all',
+    loadChildren: './property-list/property-list.module#FusePropertyListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/property',
+    loadChildren: './property-detail/property-detail.module#FusePropertyDetailModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/all',
+    loadChildren: './user-defined-task-template-list/user-defined-task-template-list.module#FuseUserDefinedTaskTemplateListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/detail',
+    loadChildren: './user-defined-task-template-detail/user-defined-task-template-detail.module#FuseUserDefinedTaskTemplateDetailModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/detail/edit',
+    loadChildren: './user-defined-task-template-detail-form/user-defined-task-template-detail-form.module#FuseUserDefinedTaskTemplateDetailFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  //AK
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
@@ -88,7 +117,13 @@ const routes: Route[] = [
 
 @NgModule({
   declarations: [
-    FuseContentComponent
+    FuseContentComponent,
+    
+    
+    
+    
+    
+
   ],
   imports: [
     HttpClientModule,

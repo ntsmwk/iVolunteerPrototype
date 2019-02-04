@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { isNullOrUndefined } from 'util';
 
+import { MinimalTaskTemplate } from "../_model/minimal-task-template";
+
 @Component({
   selector: 'fuse-task-template-list',
   templateUrl: './task-template-list.component.html',
@@ -20,6 +22,12 @@ export class FuseTaskTemplateListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<TaskTemplate>();
   displayedColumns = ['name', 'description', 'requiredCompetences', 'acquirableCompetences', 'actions'];
+
+
+  //TEST
+  dataSourceMinimal = new MatTableDataSource<MinimalTaskTemplate>();
+  displayedColumnsMinimal = ['id', 'name', 'description'];
+  
 
   constructor(private taskTemplateService: TaskTemplateService,
     private loginService: LoginService,
@@ -34,6 +42,12 @@ export class FuseTaskTemplateListComponent implements OnInit {
           this.taskTemplateService.findAll(marketplace)
             .toPromise()
             .then((taskTemplates: TaskTemplate[]) => this.dataSource.data = taskTemplates);
+          
+          //TESTING
+          this.taskTemplateService.findAllMinimal(marketplace)
+            .toPromise()
+            .then((minimalTaskTemplates: MinimalTaskTemplate[]) => this.dataSourceMinimal.data = minimalTaskTemplates);
+            //TESTING_END
         }
       });
     });

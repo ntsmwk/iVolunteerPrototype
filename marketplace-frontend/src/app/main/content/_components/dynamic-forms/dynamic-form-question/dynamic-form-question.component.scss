@@ -1,0 +1,23 @@
+@import "src/@fuse/scss/fuse";
+.page-layout {
+    
+   // .a {
+        .form-field {
+            width: 100%;
+        }
+
+        .slide-toggle-field {
+            width: 100%;
+            line-height: 100%;
+        }
+        
+        .mat-form-field--no-underline .mat-input-underline {
+            background-color: transparent;
+            width: 100%;
+          }
+ 
+    //}
+
+
+}
+

@@ -10,12 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.project.Project;
 
+
 @Document
 public class Task {
 
 	@Id 
 	private String id;
 	private String name;
+	
 	private String description;
 	private String workflowKey;
 	private String marketplaceId;
