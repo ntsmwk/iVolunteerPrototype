@@ -1,0 +1,14 @@
+<h2>
+  {{comment.text}}
+</h2>
+
+<label>
+ <input [(ngModel)] = "comment.text" placeholder = "Neuen Kommentar verfassen">
+ <button (click)= "save(comment)">Save</button>
+</label>
+
+
+<h2 *ngFor="let comment1 of comments">
+	<h2>{{comment1.text}}</h2>
+	
+</h2>

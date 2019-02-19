@@ -9,13 +9,23 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
+import at.jku.cis.iVolunteer.marketplace.group.GroupRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.group.Group;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @SpringBootApplication
 public class MarketplaceApplication implements CommandLineRunner {
 
 	@Autowired private CompetenceRepository competenceRepository;
+	@Autowired private GroupRepository groupRepository;
+	@Autowired private VolunteerRepository volunteerRepository;
 
+	private static final String BROISER = "broiser";
+	private static final String RAW_PASSWORD = "passme";
+	
 	@Bean
 	@Primary
 	public RestTemplate produceRestTemplate() {
@@ -33,6 +43,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createCompetence("Creativity");
 		createCompetence("Flexability");
 		createCompetence("Motivation");
+		createVolunteer(BROISER, RAW_PASSWORD);
+		createGroup("Testgroup1", "This is my testgroup", false);
 	}
 
 	private Competence createCompetence(String competenceName) {
@@ -43,5 +55,25 @@ public class MarketplaceApplication implements CommandLineRunner {
 			competence = competenceRepository.insert(competence);
 		}
 		return competence;
+	}
+
+	private Group createGroup(String name, String description, boolean autoJoin) {
+		Group group = new Group();
+		group.setName(name);
+		group.setDescription(description);
+		group.setAutoJoin(autoJoin);
+		group = groupRepository.insert(group);
+		return group;
+	}
+	
+	private Volunteer createVolunteer(String username, String password) {
+		Volunteer volunteer = volunteerRepository.findByUsername(username);
+		if (volunteer == null) {
+			volunteer = new Volunteer();
+			volunteer.setUsername(username);
+			volunteer.setPassword(password);
+			volunteer = volunteerRepository.insert(volunteer);
+		}
+		return volunteer;
 	}
 }

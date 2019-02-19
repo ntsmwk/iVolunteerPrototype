@@ -88,7 +88,7 @@
             <div class="wrap margin">
               <div class="h1">Groups</div>
               <div>
-                <button mat-raised-button color="accent" class="newGroup-button">
+                <button mat-raised-button color="accent" class="newGroup-button" [routerLink]="'main/get-connected/group-form/'">
                   <mat-icon>playlist_add</mat-icon>
                   New Group
                 </button>
@@ -123,7 +123,7 @@
             </mat-tab>
 
             <mat-tab label="Your Groups">
-              <div *ngFor="let group of groups.yourGroups">
+              <div *ngFor="let group of groups">
                 <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start"
                      style="cursor: pointer" routerLink="/main/get-connected/group/a9f04fec753a4577">
                   <div>
@@ -131,10 +131,7 @@
                   </div>
                   <div class="group-data" fxLayout="column">
                     <div class="group-name">{{group.name}}</div>
-                    <div fxLayout="row">
-                      <div class="group-follower">{{group.follower}} Follower</div>
-                      <div class="group-member">{{group.member}} Member</div>
-                    </div>
+                    
                   </div>
 
                   <div class="actions" fxLayout="row" fxLayoutAlign="end center">

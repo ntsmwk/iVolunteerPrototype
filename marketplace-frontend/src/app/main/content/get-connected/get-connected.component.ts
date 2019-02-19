@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 
 import {fuseAnimations} from '@fuse/animations';
+import { GroupService } from '../_service/group.service';
+import { Group } from '../_model/group';
 
 @Component({
   templateUrl: './get-connected.component.html',
@@ -23,19 +25,7 @@ export class FuseGetConnectedComponent {
     ]
   };
 
-  groups = {
-    'discover': [
-      {'name': 'Group 1', 'icon': 'assets/images/backgrounds/spring.jpg', 'follower': '4', 'member': '143'},
-      {'name': 'Group 2', 'icon': 'assets/images/backgrounds/summer.jpg', 'follower': '2', 'member': '234'},
-      {'name': 'Group 3', 'icon': 'assets/images/backgrounds/autumn.jpg', 'follower': '0', 'member': '23'}
-    ],
-    'yourGroups': [
-      {'name': 'Group 4', 'icon': 'assets/images/backgrounds/winter.jpg', 'follower': '4', 'member': '143'},
-      {'name': 'Group 5', 'icon': 'assets/images/backgrounds/autumn.jpg', 'follower': '2', 'member': '234'},
-      {'name': 'Group 6', 'icon': 'assets/images/backgrounds/spring.jpg', 'follower': '0', 'member': '23'}
-
-    ]
-  };
+  groups;
 
   friends = {
     'follower': [
@@ -54,7 +44,9 @@ export class FuseGetConnectedComponent {
     ]
   };
 
-  constructor() {
+  constructor(private groupService: GroupService) {
+    this.groups = groupService.getGroups().toPromise().then<Group[]>();
+    console.log(this.groups);
 
   }
 }

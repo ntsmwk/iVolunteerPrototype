@@ -9,7 +9,8 @@ import {MatButtonModule, MatDividerModule, MatIconModule, MatTabsModule} from '@
 const routes: Routes = [
   {path: '', component: FuseGetConnectedComponent},
   {path: 'profile', loadChildren: '../profile/profile.module#FuseProfileModule'},
-  {path: 'group', loadChildren: '../group-detail/group-detail.module#FuseGroupDetailModule'}
+  {path: 'group', loadChildren: '../group-detail/group-detail.module#FuseGroupDetailModule'},
+  {path: 'group-form', loadChildren: '../group-form/group-form.module#FuseGroupFormModule'}
 ];
 
 @NgModule({
