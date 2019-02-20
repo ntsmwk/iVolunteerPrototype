@@ -28,11 +28,22 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-// added
-rule ReadRessources {
-    description: "Grant Volunteers READ access to system resources"
-    participant: "at.jku.cis.Volunteer"
+// Rules for Marketplace
+// TODO: implement...
+rule ReadRessourcesMarketplace {
+    description: "Grant Marketplaces full access to system resources"
+    participant: "at.jku.cis.Marketplace"
     operation: ALL
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+
+// Rules for Volunteers 
+rule ReadRessourcesVolunteer {
+    description: "Grant Volunteers READ access to system resources"
+    participant: "at.jku.cis.Volunteer"
+    operation: READ
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+// TODO: implement...

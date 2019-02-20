@@ -12,17 +12,27 @@ participant Volunteer identified by id {
   o String id
 }
 
-// task -> publishedTask
-asset publishedTask identified by hash {
+abstract asset Hashable identified by hash {
   o String hash
+  o AssetType assetType
+}
+
+enum AssetType {
+  o PUBLISHEDTASK
+  o TASKINTERACTION
+  o FINISHEDTASK
+  o COMPETENCE
+}
+
+// task -> publishedTask
+asset publishedTask extends Hashable {
   o DateTime timestamp
   o String taskId
   o String marketplaceId
 }
 
 // taskInteraction -> taskInteraction
-asset taskInteraction identified by hash {
-  o String hash
+asset taskInteraction extends Hashable {
   o DateTime timestamp
   o String taskId
   o String marketplaceId
@@ -31,8 +41,7 @@ asset taskInteraction identified by hash {
 }
 
 // taskEntry -> finishedTask
-asset finishedTask identified by hash {
-  o String hash
+asset finishedTask extends Hashable {
   o DateTime timestamp
   o String taskId
   o String marketplaceId
@@ -40,8 +49,7 @@ asset finishedTask identified by hash {
 }
 
 // competenceEntry -> competence
-asset competence identified by hash {
-  o String hash
+asset competence extends Hashable {
   o DateTime timestamp
   o String competenceId
   o String marketplaceId
@@ -86,6 +94,10 @@ transaction AddNewCompetence {
   o String volunteerId
 }
 
+transaction AddHashables {
+  o Hashable[] hashables
+}
+
 // ##### read-only transactions // https://hyperledger.github.io/composer/latest/reference/js_scripts
 
 @commit(false)
@@ -122,4 +134,10 @@ transaction GetCompetence {
   o String competenceId
   o String marketplaceId
   o String volunteerId
+}
+
+@commit(false)
+@returns(Hashable[])
+transaction GetHashables {
+  // TODO
 }

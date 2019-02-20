@@ -175,3 +175,16 @@ query selectCompetencesByMarketplace {
     SELECT at.jku.cis.competence
       WHERE (marketplaceId == _$ID)
 }
+
+// ##### hashable queries
+
+query selectHashables {
+  description: "Get certain hashables"
+  statement:
+    SELECT at.jku.cis.Hashable
+      WHERE (
+        assetType == _$TYPE1 OR
+        assetType == _$TYPE2 OR
+        assetType == _$TYPE3 OR
+        assetType == _$TYPE4)
+}
