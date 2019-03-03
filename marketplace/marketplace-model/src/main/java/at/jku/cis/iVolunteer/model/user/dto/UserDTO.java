@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.model.user.dto;
 public class UserDTO {
 	private String id;
 	private String username;
-	private String password;
 
 	public String getId() {
 		return id;
@@ -20,15 +19,5 @@ public class UserDTO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	
 
 }

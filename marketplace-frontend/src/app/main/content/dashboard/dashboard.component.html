@@ -1,7 +1,7 @@
 <div class="page-layout blank p-24" style="overflow: hidden;">
 
   <!-- HEADER -->
-  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center" *ngIf="role === 'VOLUNTEER' && dashboard">
     <h1>What's Up</h1>
     <img class="header-icon" src="assets/icons/dashboard.svg">
 

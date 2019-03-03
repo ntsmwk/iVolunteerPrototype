@@ -25,7 +25,7 @@ import {DatePipe} from '@angular/common';
   animations: fuseAnimations
 })
 export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
-  
+
 
   dataSource: CompetenciesDataSource;
 
@@ -72,7 +72,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
     });
 
     this.loadCompetencies();
-    
+
   }
 
   loadCompetencies() {
@@ -131,7 +131,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    
+
   }
 
   private loadPublicVolunteerProfile(volunteer: Volunteer, marketplace: Marketplace) {
@@ -155,6 +155,7 @@ export class FuseProfileCompetenciesComponent implements OnInit, AfterViewInit {
       }
     });
     this.dataSource = new CompetenciesDataSource(this.combinedCompetencies);
+
     this.displayedColumns = this.columns.map(x => x.columnDef);
   }
 

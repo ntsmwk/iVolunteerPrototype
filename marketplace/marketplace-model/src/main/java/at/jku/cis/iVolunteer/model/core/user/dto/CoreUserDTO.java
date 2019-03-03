@@ -1,20 +1,24 @@
 package at.jku.cis.iVolunteer.model.core.user.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+public class CoreUserDTO {
+	
+	private String id;
+	private String username;
 
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.dto.UserDTO;
-
-public class CoreUserDTO extends UserDTO {
-
-	private List<Marketplace> registeredMarketplaces = new ArrayList<>();
-
-	public List<Marketplace> getRegisteredMarketplaces() {
-		return registeredMarketplaces;
+	public String getId() {
+		return id;
 	}
 
-	public void setRegisteredMarketplaces(List<Marketplace> registeredMarketplaces) {
-		this.registeredMarketplaces = registeredMarketplaces;
+	public void setId(String id) {
+		this.id = id;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 }

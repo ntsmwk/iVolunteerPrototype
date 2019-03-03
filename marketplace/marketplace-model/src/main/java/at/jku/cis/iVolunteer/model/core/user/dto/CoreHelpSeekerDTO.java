@@ -1,6 +1,20 @@
+
 package at.jku.cis.iVolunteer.model.core.user.dto;
 
-public class CoreHelpSeekerDTO extends CoreUserDTO{
-	
+import java.util.ArrayList;
+import java.util.List;
 
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+
+public class CoreHelpSeekerDTO extends CoreUserDTO {
+
+	private List<Marketplace> registeredMarketplaces = new ArrayList<>();
+
+	public List<Marketplace> getRegisteredMarketplaces() {
+		return registeredMarketplaces;
+	}
+
+	public void setRegisteredMarketplaces(List<Marketplace> registeredMarketplaces) {
+		this.registeredMarketplaces = registeredMarketplaces;
+	}
 }

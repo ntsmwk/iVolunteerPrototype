@@ -177,7 +177,7 @@ query selectCompetencesByMarketplace {
 }
 
 // ##### hashable queries
-
+/*
 query selectHashables {
   description: "Get certain hashables"
   statement:
@@ -188,3 +188,4 @@ query selectHashables {
         assetType == _$TYPE3 OR
         assetType == _$TYPE4)
 }
+*/

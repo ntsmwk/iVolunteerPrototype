@@ -1,0 +1,43 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+      <h1>BC-Entries</h1>
+    </div>
+    <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+        <button mat-fab class="mat-warn" (click)="addBCEntry()" aria-label="Add task" *fuseIfOnDom
+          [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+  
+      <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+          <mat-cell *matCellDef="let bcEntry">{{bcEntry.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="checked">
+          <mat-header-cell *matHeaderCellDef>Checked</mat-header-cell>
+          <mat-cell *matCellDef="let bcEntry">
+            <mat-checkbox (click)="$event.stopPropagation()" 
+            (change)="$event ? handleChange(bcEntry) : null"
+            [checked]="bcEntry.checked">
+          </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+            <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+            <mat-cell *matCellDef="let bcEntry">
+              <button mat-button (click)="deleteBCEntry(bcEntry)">Delete</button>
+            </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+    <div class="no-data" *ngIf="dataSource.data.length === 0">
+      No BC-Entries found!
+    </div>
+</div>

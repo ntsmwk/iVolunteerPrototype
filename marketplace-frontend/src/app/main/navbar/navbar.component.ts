@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs';
 
 import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
-
+import {navigation_admin} from '../../navigation/navigation_admin';
 import {navigation_volunteer} from 'app/navigation/navigation_volunteer';
 import {navigation_helpseeker} from '../../navigation/navigation_helpseeker';
 import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
@@ -89,7 +89,11 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       this.loginService.getLoggedIn().toPromise(),
       this.loginService.getLoggedInParticipantRole().toPromise()
     ]).then((values: any[]) => {
-      if ('VOLUNTEER' === values[1]) {
+      if ('ADMIN' === values[1]) {
+        this.navigation = navigation_admin;
+      } else if ('HELP_SEEKER' === values[1]) {
+        this.navigation = navigation_helpseeker;
+      } else { // VOLUNTEER
         this.navigation = navigation_volunteer;
         this.dashboardService.findByParticipant(values[0].id).toPromise().then((dashboards: Dashboard[]) => {
           if (dashboards.length === 0) {
@@ -109,8 +113,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
             dashboardNavigation.children.push(item);
           });
         });
-      } else {
-        this.navigation = navigation_helpseeker;
       }
     });
   }

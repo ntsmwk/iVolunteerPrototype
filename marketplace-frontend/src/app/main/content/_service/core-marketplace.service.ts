@@ -1,32 +1,35 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Marketplace} from '../_model/marketplace';
+import {isNullOrUndefined} from 'util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoreMarketplaceService {
 
-  private apiUrl = '/core/marketplace';
-
   constructor(private http: HttpClient) {
   }
 
-  findById(marketplaceId: string) {
-    return this.http.get(`${this.apiUrl}/${marketplaceId}`);
-  }
-
   findAll() {
-    return this.http.get(`${this.apiUrl}`);
+    return this.http.get(`/core/marketplace`);
   }
 
-  registerMarketplace(marketplace: Marketplace) {
-    return this.http.post(`${this.apiUrl}/`, marketplace);
+
+  findById(marketplaceId: string) {
+    return this.http.get(`/core/marketplace/${marketplaceId}`);
   }
 
-  deleteMarketplace(id: string) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+
+  save(marketplace: Marketplace) {
+    if (isNullOrUndefined(marketplace.id)) {
+      return this.http.post(`/core/marketplace`, marketplace);
+    }
+    return this.http.put(`/core/marketplace/${marketplace.id}`, marketplace);
   }
 
+  delete(marketplace: Marketplace){
+    return this.http.delete(`/core/marketplace/${marketplace.id}`);
+  }
 
 }

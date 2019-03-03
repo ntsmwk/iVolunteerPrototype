@@ -57,7 +57,7 @@ public class CoreHelpSeekerController {
 
 		HelpSeekerDTO helpSeekerDTO = new HelpSeekerDTO();
 		helpSeekerDTO.setId(coreHelpSeeker.getId());
-		helpSeekerDTO.setPassword(helpSeeker.getPassword());
+//		helpSeekerDTO.setPassword(helpSeeker.getPassword());
 		helpSeekerDTO.setUsername(helpSeeker.getUsername());
 		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeekerDTO);
 	}

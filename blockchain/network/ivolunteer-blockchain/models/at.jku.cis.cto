@@ -14,7 +14,7 @@ participant Volunteer identified by id {
 
 abstract asset Hashable identified by hash {
   o String hash
-  o AssetType assetType
+  //o AssetType assetType
 }
 
 enum AssetType {
