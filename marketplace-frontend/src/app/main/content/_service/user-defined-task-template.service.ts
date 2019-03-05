@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Marketplace } from '../_model/marketplace';
 import { PropertyListItem, Property } from '../_model/properties/Property';
 import { Observable } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +21,10 @@ export class UserDefinedTaskTemplateService {
 
   //Task Templates
 
-  public getTaskTemplates(marketplace: Marketplace) {
+  public getAllTaskTemplates(marketplace: Marketplace, stub: boolean) {
     console.log("calling get /tasktemplate/user");
     //return this.http.get(`/textProperties`);
-    return this.http.get(`${marketplace.url}/tasktemplate/user`);
+    return this.http.get(`${marketplace.url}/tasktemplate/user?stub=${stub}`);
   }
 
   // public sendPropertytoServer(marketplace: Marketplace, property: Property<string>) {
@@ -36,17 +37,35 @@ export class UserDefinedTaskTemplateService {
   //   return this.http.put(`${marketplace.url}/properties/${property.id}/update`, property);
   // }
 
-  public findById(marketplace: Marketplace, templateId: string) {
+  public getTaskTemplate(marketplace: Marketplace, templateId: string) {
     console.log("calling get " + marketplace.url +"/tasktemplate/user/id");
     return this.http.get(`${marketplace.url}/tasktemplate/user/${templateId}`);
   }
 
-  public newEmptyTemplate(marketplace: Marketplace, name: string) {
-    console.log("calling post " + marketplace.url + "/tasktemplate/user");
-    return this.http.post(`${marketplace.url}/tasktemplate/user/new`, name);
+  public newTaskTemplate(marketplace: Marketplace, name: string, description: string) {
+    console.log("calling post " + marketplace.url + "/tasktemplate/user/new");
+
+    let params: string[] = [];
+    params.push(name);
+    params.push(description);
+
+    console.log(name + " " + description);
+
+    return this.http.post(`${marketplace.url}/tasktemplate/user/new`, params);
   }
 
-  public deleteTemplate(marketplace: Marketplace, templateId: string) {
+  public updateTaskTemplate(marketplace: Marketplace, templateId: string, name: string, description: string) {
+    console.log("calling put " + marketplace.url + "/tasktemplate/user/update");
+
+
+    let params: string[] = [];
+    params.push(name);
+    params.push(description);
+
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}`, params);
+  }
+
+  public deleteTaskTemplate(marketplace: Marketplace, templateId: string) {
     console.log("calling delete " + marketplace.url +"/tasktemplate/user/id/")
     return this.http.delete(`${marketplace.url}/tasktemplate/user/${templateId}`);
   }

@@ -60,7 +60,7 @@ public class PropertyToBooleanPropertyMapper implements PropertyToTypePropertyMa
 
 		List<ListEntry<Boolean>> legalValues = new ArrayList<ListEntry<Boolean>>();
 		if (property.getLegalValues() != null) {
-			for (ListEntry entry : property.getLegalValues()) {
+			for (ListEntry<?> entry : property.getLegalValues()) {
 				
 				ListEntry<Boolean> bEntry = new ListEntry<Boolean>(entry.getId(), convertObjectToBoolean(entry.getValue()));
 				legalValues.add(bEntry);
@@ -70,7 +70,7 @@ public class PropertyToBooleanPropertyMapper implements PropertyToTypePropertyMa
 		
 		List<ListEntry<Boolean>> values = new ArrayList<ListEntry<Boolean>>();
 		if (property.getValues() != null) {
-			for (ListEntry entry : property.getValues()) {
+			for (ListEntry<?> entry : property.getValues()) {
 				ListEntry<Boolean> bEntry = new ListEntry<Boolean>(entry.getId(), convertObjectToBoolean(entry.getValue()));
 				values.add(bEntry);
 			}
@@ -118,7 +118,7 @@ public class PropertyToBooleanPropertyMapper implements PropertyToTypePropertyMa
         }
 
         List<BooleanProperty> list = new ArrayList<BooleanProperty>(properties.size());
-        for (Property prop : properties) {
+        for (Property<?> prop : properties) {
         	list.add(toTypeProperty(prop));
         }
 

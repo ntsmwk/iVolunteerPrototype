@@ -56,31 +56,4 @@
     No Task Templates found!
   </div>
 
-  <h3>Minimal Templates</h3>
-
-  <mat-table #table [dataSource]="dataSourceMinimal" *ngIf="dataSourceMinimal.data.length != 0">
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
-      <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.id}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-      <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.name}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-      <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.description | truncate:[20]}}</mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumnsMinimal"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumnsMinimal;"></mat-row>
-
-  </mat-table>
-
-  <div class="no-data" *ngIf="dataSourceMinimal.data.length === 0">
-    No Task Templates found!
-  </div>
-
 </div>

@@ -9,11 +9,15 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 public class PropertyDTO<T> {
 	String id;
 	String name;
+	
 	T value;
 	T defaultValue;
+	
 	List<RuleDTO> rules;
+	
 	List<ListEntryDTO<T>> legalValues;
 	List<ListEntryDTO<T>> values;
+	
 	PropertyKind kind;
 	
 	public String getId() {

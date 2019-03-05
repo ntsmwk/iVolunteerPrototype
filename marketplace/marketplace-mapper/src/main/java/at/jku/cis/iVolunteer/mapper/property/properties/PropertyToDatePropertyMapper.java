@@ -1,7 +1,5 @@
 package at.jku.cis.iVolunteer.mapper.property.properties;
-//package at.jku.cis.iVolunteer.mapper.property.properties;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import at.jku.cis.iVolunteer.model.property.DateProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyToDatePropertyMapper implements PropertyToTypePropertyMapper<DateProperty> {
 
@@ -114,20 +112,23 @@ public class PropertyToDatePropertyMapper implements PropertyToTypePropertyMappe
 				Date date = sdf.parse((String) source); 
 				
 				return date;
-			
+			} else if (source == null) {
+//				Date date = new Date(0);
+				return null;
 				
 			} else {
 				//System.out.println("class: " + source.getClass().getName());
+				//System.out.println(source);
 				throw new IllegalArgumentException();
 			}
 			
 		} catch (NullPointerException | NumberFormatException e ) {
-			System.out.println("entered Exception Branche convert Object to Date");
-			return new Date(0);
+			System.out.println("entered Exception Branch convert Object to Date");
+			return null;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new Date(0);
+			System.out.println("Unparsable Date");
+			return null;
 		}
 	}
 	

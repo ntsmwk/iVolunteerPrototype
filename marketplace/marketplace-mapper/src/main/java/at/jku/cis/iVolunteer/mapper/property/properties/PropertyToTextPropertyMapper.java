@@ -11,10 +11,11 @@ import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyToTextPropertyMapper implements PropertyToTypePropertyMapper<TextProperty> {
 
+	
 	@Override
 	public Property<?> toGenericProperty(TextProperty source) {
 		if ( source == null ) {

@@ -10,12 +10,8 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 
-//@Mapper
-//public abstract class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDTO<?>> {
-//
-//
-//}
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDTO<?>> {
 

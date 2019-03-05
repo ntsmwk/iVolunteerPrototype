@@ -27,6 +27,7 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 		UserDefinedTaskTemplateDTO dto = new UserDefinedTaskTemplateDTO();
 		dto.setId(source.getId());
 		dto.setName(source.getName());
+		dto.setDescription(source.getDescription());
 		
 		List<PropertyDTO<?>> props = new LinkedList<>();
 		if (source.getProperties() != null) {
@@ -66,6 +67,7 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 		UserDefinedTaskTemplate template = new UserDefinedTaskTemplate();
 		template.setId(target.getId());
 		template.setName(target.getName());
+		template.setDescription(target.getDescription());
 		
 		List<Property<?>> props = new LinkedList<>();
 		if (target.getProperties() != null) {

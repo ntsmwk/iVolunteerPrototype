@@ -1,43 +1,42 @@
+import { ValidatorFn } from "@angular/forms";
+
   export class QuestionBase<T> {
     value: T;
     key: string;
     label: string;
-    required: boolean;
     order: number;
     controlType: string;
+    required: boolean;
 
     //values?: T[];
 
-    validations?: Validator[];
+    validators?: ValidatorFn[];
+    messages: Map<string,string>
    
     constructor(options: {
         value?: T,
         key?: string,
         label?: string,
-        required?: boolean,
         order?: number,
         controlType?: string,
+        required?: boolean,
         //values?: T[],
         
-        validations?: Validator[]
+        validators?: ValidatorFn[],
+        messages?: Map<string,string>
       } = {}) {
       this.value = options.value;
       this.key = options.key || '';
       this.label = options.label || '';
-      this.required = !!options.required;
       this.order = options.order === undefined ? 1 : options.order;
       this.controlType = options.controlType || '';
       //this.values = options.values || undefined;
-      this.validations = options.validations || undefined;
-      
+      this.validators = options.validators || undefined;    
+      this.required = options.required || false;  
+      this.messages = options.messages || undefined;
     }
   }
 
-  export interface Validator {
-    name: string;
-    validator: any;
-    message: string;
-  }
 
   export class TextboxQuestion extends QuestionBase<string> {
     controlType = 'textbox';

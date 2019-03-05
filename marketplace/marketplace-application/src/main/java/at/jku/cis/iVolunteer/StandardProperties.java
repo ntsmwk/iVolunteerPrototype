@@ -2,9 +2,7 @@ package at.jku.cis.iVolunteer;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +23,8 @@ import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
+import at.jku.cis.iVolunteer.model.property.rule.Rule;
+import at.jku.cis.iVolunteer.model.property.rule.RuleKind;
 
 
 @Component
@@ -81,12 +81,12 @@ public class StandardProperties {
 		
 		cp1.setLegalValues(addCompetenceLegalValues());
 
-		List<ListEntry<String>> values = new LinkedList<ListEntry<String>>();
-		Competence c0 = competenceRepository.findAll().get(0);
-		Competence c3 = competenceRepository.findAll().get(3);
-		values.add(new ListEntry<String>(c0.getId(), c0.getValue()));
-		values.add(new ListEntry<String>(c3.getId(), c3.getValue()));
-		cp1.setValues(values);
+//		List<ListEntry<String>> values = new LinkedList<ListEntry<String>>();
+//		Competence c0 = competenceRepository.findAll().get(0);
+//		Competence c3 = competenceRepository.findAll().get(3);
+//		values.add(new ListEntry<String>(c0.getId(), c0.getValue()));
+//		values.add(new ListEntry<String>(c3.getId(), c3.getValue()));
+//		cp1.setValues(values);
 		props.add(cp1);
 		
 		cp2.setLegalValues(addCompetenceLegalValues());
@@ -123,7 +123,7 @@ public class StandardProperties {
 		Map<String, Property<?>> props = new HashMap<>();
 		
 		List<Property<?>> list = getAll();
-		for (Property p : list) {
+		for (Property<?> p : list) {
 			//p.setId(p.getName());
 			props.put(p.getId(), p);
 		}
@@ -147,8 +147,21 @@ public class StandardProperties {
 			this.setId("name");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Name");
-			this.setDefaultValue("test");
-			this.setValue("test");
+//			this.setDefaultValue("");
+//			this.setValue("");
+			
+			//TODO Testrules
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			rules.get(rules.size()-1).setMessage("Custom Defined Message Required");
+			rules.add(new Rule(RuleKind.MAX_LENGTH, 100));
+			//rules.get(rules.size()-1).setMessage("Testmessage max length");
+			rules.add(new Rule(RuleKind.MIN_LENGTH, 5));
+			//rules.get(rules.size()-1).setMessage("Testmessage min length");
+			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*")); //Only Letters and Spaces, Start with Letter
+			//rules.get(rules.size()-1).setMessage("Testmessage regex");
+			this.setRules(rules);
+			
 		}
 	}
 	
@@ -163,8 +176,12 @@ public class StandardProperties {
 			this.setId("description");
 			this.setName("Description");
 			this.setKind(PropertyKind.LONG_TEXT);
-			this.setDefaultValue("lorem ipsum dolor sit amet");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("lorem ipsum dolor sit amet");
+//			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MIN_LENGTH, 30));
+			this.setRules(rules);
 		}
 	}
 	
@@ -179,8 +196,12 @@ public class StandardProperties {
 			this.setId("workflow_key");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Workflow Key");
-			this.setDefaultValue("");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("");
+//			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^WF_K[0-9]+")); //Matches "WF_K<number>" i.e. "WF_K1" or "WF_K39099" NOT "WF_K" or "wf_k<number>"
+			this.setRules(rules);
 		}
 	}
 	
@@ -193,8 +214,10 @@ public class StandardProperties {
 			this.setId("content");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Content");
-			this.setDefaultValue("");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("");
+//			this.setValue(getDefaultValue());
+			
+			
 		
 		}
 	}
@@ -208,17 +231,19 @@ public class StandardProperties {
 			this.setId("priority");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Priority");
-			this.setDefaultValue("Normal");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("Normal");
+//			this.setValue(getDefaultValue());
 			
 			List<ListEntry<String>> legalValues = new ArrayList<>();
 			legalValues.add(new ListEntry<String>("low", "Low"));
 			legalValues.add(new ListEntry<String>("normal", "Normal"));
 			legalValues.add(new ListEntry<String>("high", "High"));
 			legalValues.add(new ListEntry<String>("critical", "Critical"));
-
-			
 			this.setLegalValues(legalValues);
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
 			
 		}
 	}
@@ -231,8 +256,8 @@ public class StandardProperties {
 			this.setId("importancy");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Importancy");
-			this.setDefaultValue("Somewhat Important");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("Somewhat Important");
+//			this.setValue(getDefaultValue());
 			
 			List<ListEntry<String>> legalValues = new ArrayList<>();
 			legalValues.add(new ListEntry<String>("not_important", "Not Important"));
@@ -242,6 +267,10 @@ public class StandardProperties {
 			legalValues.add(new ListEntry<String>("critically_important", "Critically Important"));
 			
 			this.setLegalValues(legalValues);
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
 		}
 	}
 	
@@ -254,7 +283,12 @@ public class StandardProperties {
 			this.setId("role");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Role");
-			this.setValue("");
+//			this.setValue("");
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MIN_LENGTH, 3));
+			this.setRules(rules);
+			
 		}
 	}
 	
@@ -267,8 +301,10 @@ public class StandardProperties {
 			this.setId("location");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Location");
-			this.setDefaultValue("");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("");
+//			this.setValue(getDefaultValue());
+			
+			
 		}
 	}
 	
@@ -283,6 +319,10 @@ public class StandardProperties {
 			this.setName("Required Equipment");
 			this.setDefaultValue("None");
 			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
 		}
 	}
 	
@@ -294,8 +334,8 @@ public class StandardProperties {
 			this.setId("workshift");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Allocated Shift");
-			this.setDefaultValue("Evening");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("Evening");
+//			this.setValue(getDefaultValue());
 			
 			List<ListEntry<String>> legalValues = new ArrayList<>();
 			legalValues.add(new ListEntry<String>("morning", "Morning"));
@@ -306,6 +346,11 @@ public class StandardProperties {
 			legalValues.add(new ListEntry<String>("night-morning", "Night-Morning"));
 
 			this.setLegalValues(legalValues);
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
+			
 		}
 	}
 	
@@ -317,9 +362,10 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("period_type");
+			this.setKind(PropertyKind.TEXT);
 			this.setName("Period Type");
-			this.setDefaultValue("Weeks");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("Weeks");
+//			this.setValue(getDefaultValue());
 			
 			List<ListEntry<String>> legalValues = new ArrayList<>();
 			legalValues.add(new ListEntry<String>("days", "Days"));
@@ -330,6 +376,11 @@ public class StandardProperties {
 			legalValues.add(new ListEntry<String>("monthly", "Monthly"));
 
 			this.setLegalValues(legalValues);
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
+			
 		}
 	}
 	
@@ -342,9 +393,10 @@ public class StandardProperties {
 			this.setId("keywords");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Keywords");
-			this.setDefaultValue("");
-			this.setValue(getDefaultValue());
-		}
+//			this.setDefaultValue("");
+//			this.setValue(getDefaultValue());
+		}		
+		
 	}
 	
 	////Rewards ??
@@ -357,8 +409,8 @@ public class StandardProperties {
 			this.setId("offered_rewards");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Offered Reward(s)");
-			this.setDefaultValue("10 Coins, Badge??");
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue("");
+//			this.setValue(getDefaultValue());
 		}
 	}
 	
@@ -377,6 +429,15 @@ public class StandardProperties {
 			this.setName("Postcode");
 			this.setDefaultValue(1234);
 			this.setValue(1234);
+			
+			//TODO Testrules
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MAX_LENGTH, 4));
+			rules.add(new Rule(RuleKind.MIN_LENGTH, 4));
+			rules.add(new Rule(RuleKind.REGEX_PATTERN));
+			this.setRules(rules);
+			
+			
 		}
 	}
 	
@@ -389,13 +450,19 @@ public class StandardProperties {
 			this.setId("number_of_volunteers");
 			this.setKind(PropertyKind.WHOLE_NUMBER);
 			this.setName("Number of Volunteers");
-			this.setDefaultValue(1);
-			this.setValue(getDefaultValue());
+//			this.setDefaultValue(1);
+//			this.setValue(getDefaultValue());
+			
 			List<ListEntry<Integer>> legalValues = new LinkedList<ListEntry<Integer>>();
 			for(int i = 1; i <=10; i++) {
 				legalValues.add(new ListEntry<Integer>(String.valueOf(i), i));
 			}
 			this.setLegalValues(legalValues);
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
+			
 		}
 	}
 	
@@ -411,6 +478,11 @@ public class StandardProperties {
 			this.setName("Period length");
 			this.setDefaultValue(1);
 			this.setValue(getDefaultValue());
+			
+			//TODO Testrules
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			this.setRules(rules);
 		}
 	}
 	
@@ -430,6 +502,12 @@ public class StandardProperties {
 			this.setName("Starting Date");
 			this.setDefaultValue(new Date()); //Default current Date
 			this.setValue(getDefaultValue());
+			
+			//TODO Testrules
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+			rules.add(new Rule(RuleKind.MIN, System.currentTimeMillis()));
+			this.setRules(rules);
 		}
 	}
 	
@@ -441,8 +519,12 @@ public class StandardProperties {
 			this.setId("end_date");
 			this.setKind(PropertyKind.DATE);
 			this.setName("End Date");
-			this.setDefaultValue(new GregorianCalendar(2020, Calendar.FEBRUARY, 11).getTime());
-			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MIN, "starting_date")); //means end date is not allowed to be before starting date
+			rules.get(rules.size()-1).setMessage("End Date must not be before the Starting date");
+			this.setRules(rules);
+
 		}
 	}
 	
@@ -501,8 +583,8 @@ public class StandardProperties {
 			this.setId("feedback_requested");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Feedback Requested");
-			this.setDefaultValue(true);
-			this.setValue(getDefaultValue());
+			this.setDefaultValue(false);
+			this.setValue(getDefaultValue());	
 		}
 	}
 	
@@ -533,8 +615,13 @@ public class StandardProperties {
 			this.setId("latitude");
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Latitude");
-			this.setDefaultValue(0.0);
+			this.setDefaultValue(0.01);
 			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MIN, -90));
+			rules.add(new Rule(RuleKind.MAX, 90));
+			this.setRules(rules);	
 		}
 	}
 	
@@ -547,8 +634,13 @@ public class StandardProperties {
 			this.setId("longitude");
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Longitude");
-			this.setDefaultValue(0.0);
+			this.setDefaultValue(Double.NaN);
 			this.setValue(getDefaultValue());
+			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.MIN, -180));
+			rules.add(new Rule(RuleKind.MAX, 180));
+			this.setRules(rules);
 		}
 	}
 	

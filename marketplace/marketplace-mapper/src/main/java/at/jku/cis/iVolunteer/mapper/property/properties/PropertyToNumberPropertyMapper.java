@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyToNumberPropertyMapper implements PropertyToTypePropertyMapper<NumberProperty> {
 
@@ -103,6 +103,9 @@ public class PropertyToNumberPropertyMapper implements PropertyToTypePropertyMap
 		} catch (ClassCastException e) {
 			
 			System.out.println("Integer ClassCastException triggered");
+			return 0;
+		} catch (NumberFormatException e) {
+			System.out.println("NumberFormatException triggered");
 			return 0;
 		}
 	}

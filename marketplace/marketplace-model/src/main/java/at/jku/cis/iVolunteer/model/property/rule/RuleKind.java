@@ -2,8 +2,9 @@ package at.jku.cis.iVolunteer.model.property.rule;
 
 
 public enum RuleKind {
-	MANDATORY("MANDATORY"), MAX("MAX"), MIN("MIN"), GREATER("GREATER"), GREATER_OR_EQUAL("GREATER_OR_EQUAL"), 
-		LESS("LESS"), LESS_OR_EQUAL("LESS_OR_EQUAL"), EQUAL("EQUAL");
+	REQUIRED("REQUIRED"), REQUIRED_TRUE("REQUIRED_TRUE"), REGEX_PATTERN("REGEX_PATTERN"),
+	MAX("MAX"), MIN("MIN"), MAX_LENGTH("MAX_LENGTH"), MIN_LENGTH("MIN_LENGTH"), 
+	/*EQUAL("EQUAL"),  GREATER("GREATER"), LESS("LESS")*/ ;
 	
 	private final String kind;
 	

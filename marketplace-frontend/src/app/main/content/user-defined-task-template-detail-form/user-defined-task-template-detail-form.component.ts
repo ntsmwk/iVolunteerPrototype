@@ -53,7 +53,7 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
   loadProperty(marketplaceId: string, templateId: string): void {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
-      this.userDefinedTaskTemplateService.findById(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
+      this.userDefinedTaskTemplateService.getTaskTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
         this.template = template;    
       }).then(() => {
          console.log("DETAIL PAGE FOR PROPERTY " + this.template.id);
@@ -85,6 +85,8 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
    let props: ReturnProperty[] = [];
 
    for (let prop of this.template.properties) {
+     console.log(prop.id + ": ")
+     console.log(form.controls[prop.id].value);
       if (!isNullOrUndefined(form.controls[prop.id].value)) {
         //console.log(prop.id + ": " + form.controls[prop.id].value);
 

@@ -32,7 +32,7 @@
     <h3> Property Rules</h3>
     <div *ngIf="property.rules != null">
       <mat-list>
-        <mat-list-item *ngFor="let r of property.rules"> {{ r }} </mat-list-item>
+        <mat-list-item *ngFor="let r of property.rules"> {{ r.id }} -- {{ r.kind }} ({{r.value}} / {{r.regex}}) </mat-list-item>
       </mat-list>
     </div>
 

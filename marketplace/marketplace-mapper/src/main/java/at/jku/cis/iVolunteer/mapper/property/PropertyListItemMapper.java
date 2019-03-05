@@ -9,12 +9,7 @@ import at.jku.cis.iVolunteer.mapper.OneWayDtoMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 
-
-
-
-//@Mapper
-//public abstract class PropertyListItemMapper implements AbstractMapper<Property<Object>, PropertyListItemDTO>{
-//}
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyListItemMapper implements OneWayDtoMapper<Property<?>, PropertyListItemDTO<?>>{
 

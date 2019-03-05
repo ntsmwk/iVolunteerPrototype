@@ -8,8 +8,10 @@ public class RuleDTO {
 	String id;
 	
 	RuleKind kind;
-	int value;
-	String regex;
+	long value;
+	String data;
+	
+	String message;
 	
 	/* Getters and Setters */ 
 
@@ -29,39 +31,36 @@ public class RuleDTO {
 		this.kind = kind;
 	}
 	
-	public int getValue() {
+	public long getValue() {
 		return value;
 	}
 	
-	public void setValue(int value) {
+	public void setValue(long value) {
 		this.value = value;
 	}
 	
-	public String getRegex() {
-		return regex;
+	public String getData() {
+		return data;
 	}
 	
-	public void setRegex(String regex) {
-		this.regex = regex;
+	public void setData(String data) {
+		this.data = data;
 	}
 	
-//	public String getKind() {
-//		return kind;
-//	}
-//
-//	public void setKind(String kind) {
-//		this.kind = kind;
-//	}
+	public String getMessage() {
+		return message;
+	}
+	
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
 	/* Overrides */
 	
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}
-
-	
-
-	
 
 	@Override
 	public boolean equals(Object obj) {

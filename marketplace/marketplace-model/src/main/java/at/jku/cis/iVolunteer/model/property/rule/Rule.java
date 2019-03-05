@@ -11,12 +11,35 @@ public class Rule {
 	String id;
 	
 	RuleKind kind;
-	int value;
-	String regex;
+	long value;
+	String data; //can be a Regular Expression or a key to a different property
+	
+	String message;
 
 	
 	/* Getters and Setters */ 
+	
+	public Rule() {}
+	
+	public Rule(RuleKind kind) {
+		this.kind = kind;
+		this.id = kind.getKind().toLowerCase();
+	}
+	
+	public Rule(RuleKind kind, long value) {
+		this.kind = kind;
+		this.value = value;
+		this.id = kind.getKind().toLowerCase();
+	}
+	
+	public Rule(RuleKind kind, String data) {
+		this.kind = kind;
+		this.data = data;
+		this.id = kind.getKind().toLowerCase();
+	}
 
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -33,43 +56,37 @@ public class Rule {
 		this.kind = kind;
 	}
 	
-	public int getValue() {
+	public long getValue() {
 		return value;
 	}
 	
-	public void setValue(int value) {
+	public void setValue(long value) {
 		this.value = value;
 	}
 	
-	public String getRegex() {
-		return regex;
+	public String getData() {
+		return data;
 	}
 	
-	public void setRegex(String regex) {
-		this.regex = regex;
+	public void setData(String data) {
+		this.data = data;
 	}
 
-//	public String getKind() {
-//		return kind;
-//	}
-//	
-//	public void setKind(String kind) {
-//		this.kind = kind;
-//	}
+	public String getMessage() {
+		return message;
+	}
 	
+	public void setMessage(String message) {
+		this.message = message;
+	}
 	
 
-	
 	/* Overrides */
 	
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}
-
-	
-
-	
 
 	@Override
 	public boolean equals(Object obj) {

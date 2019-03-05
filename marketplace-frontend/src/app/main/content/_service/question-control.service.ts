@@ -2,6 +2,7 @@ import { Injectable }   from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { QuestionBase } from '../_model/dynamic-forms/questions';
+import { isNull, isNullOrUndefined } from 'util';
 
 @Injectable()
 export class QuestionControlService {
@@ -9,11 +10,14 @@ export class QuestionControlService {
 
   toFormGroup(questions: QuestionBase<any>[] ) {
     let group: any = {};
-
-    questions.forEach(question => {
-      group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                              : new FormControl(question.value || '');
-    });
+      questions.forEach(question => {
+        group[question.key] = !isNullOrUndefined(question.validators) ? new FormControl(question.value || '', question.validators) 
+                                                                      : new FormControl(question.value || '');
+      });
+    
     return new FormGroup(group);
   }
+
+
+ 
 }

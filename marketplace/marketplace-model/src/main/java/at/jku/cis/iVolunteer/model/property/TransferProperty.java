@@ -1,13 +1,10 @@
+//TODO delete probably dead code
+
 package at.jku.cis.iVolunteer.model.property;
-
-import java.util.List;
-
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
-
 
 public class TransferProperty extends TextProperty {
 	
-	String id;
+//	String id;
 	
 //	String name;
 //	String value;
@@ -15,22 +12,22 @@ public class TransferProperty extends TextProperty {
 //	String defaultValue;
 //	
 //	List<String> legalValues;
-	List<Rule> rules;
+//	List<Rule> rules;
 //	
 //	PropertyKind kind;
 //	
 
 	
 	
-	@Override
-	public String getId() {
-		return id;
-	}
-	@Override
-	public void setId(String id) {
-		this.id = id;
-		
-	}
+//	@Override
+//	public String getId() {
+//		return id;
+//	}
+//	@Override
+//	public void setId(String id) {
+//		this.id = id;
+//		
+//	}
 //	@Override
 //	public String getName() {
 //		return name;

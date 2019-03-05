@@ -32,9 +32,7 @@ export class FusePropertyDetailComponent implements OnInit {
       }
 
   ngOnInit() {
-    
-
-    console.log("Property DETAIL");
+    console.log("Navigated Property Detail Page");
     
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
@@ -44,15 +42,13 @@ export class FusePropertyDetailComponent implements OnInit {
       this.route.params.subscribe(params => this.loadProperty(params['marketplaceId'], params['propertyId']));
     });
 
-    
-    
   }
 
 
   loadProperty(marketplaceId: string, propId: string): void {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
-      this.propertyService.findById(marketplace, propId).toPromise().then((property: Property<any>) => {
+      this.propertyService.getProperty(marketplace, propId).toPromise().then((property: Property<any>) => {
         this.property = property;    
       }).then(() => {
         console.log("DETAIL PAGE FOR PROPERTY " + this.property.id);
@@ -67,7 +63,4 @@ export class FusePropertyDetailComponent implements OnInit {
   navigateBack() {
     window.history.back();
   }
-
-  
-
 }

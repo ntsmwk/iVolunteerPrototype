@@ -23,12 +23,6 @@ export class FuseTaskTemplateListComponent implements OnInit {
   dataSource = new MatTableDataSource<TaskTemplate>();
   displayedColumns = ['name', 'description', 'requiredCompetences', 'acquirableCompetences', 'actions'];
 
-
-  //TEST
-  dataSourceMinimal = new MatTableDataSource<MinimalTaskTemplate>();
-  displayedColumnsMinimal = ['id', 'name', 'description'];
-  
-
   constructor(private taskTemplateService: TaskTemplateService,
     private loginService: LoginService,
     private coreHelpSeekerService: CoreHelpSeekerService,
@@ -42,12 +36,6 @@ export class FuseTaskTemplateListComponent implements OnInit {
           this.taskTemplateService.findAll(marketplace)
             .toPromise()
             .then((taskTemplates: TaskTemplate[]) => this.dataSource.data = taskTemplates);
-          
-          //TESTING
-          this.taskTemplateService.findAllMinimal(marketplace)
-            .toPromise()
-            .then((minimalTaskTemplates: MinimalTaskTemplate[]) => this.dataSourceMinimal.data = minimalTaskTemplates);
-            //TESTING_END
         }
       });
     });

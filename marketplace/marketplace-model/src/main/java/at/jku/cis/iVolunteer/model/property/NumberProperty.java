@@ -1,13 +1,6 @@
 package at.jku.cis.iVolunteer.model.property;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
 
 @Document
 public class NumberProperty extends Property<Integer> {
@@ -30,85 +23,85 @@ public class NumberProperty extends Property<Integer> {
 	}
 	
 	
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public Integer getValue() {
-		return value;
-	}
-
-	@Override
-	public void setValue(Integer value) {
-		this.value = value;
-	}
-	
-	@Override
-	public List<ListEntry<Integer>> getValues() {
-		return values;
-	}
-
-	@Override
-	public void setValues(List<ListEntry<Integer>> values) {
-		this.values = values;
-	}
-
-	@Override
-	public Integer getDefaultValue() {
-		return defaultValue;
-	}
-
-	@Override
-	public void setDefaultValue(Integer defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	@Override
-	public List<ListEntry<Integer>> getLegalValues() {
-		return legalValues;
-	}
-	
-	@Override
-	public void setLegalValues(List<ListEntry<Integer>> legalValues) {
-		this.legalValues = legalValues;
-		
-	}
-	
-	@Override
-	public PropertyKind getKind() {
-		return kind;
-	}
-	@Override
-	public void setKind(PropertyKind kind) {
-		this.kind = kind;
-	}
-	
-	@Override
-	public List<Rule> getRules() {
-		return rules;
-	}
-	
-	@Override
-	public void setRules(List<Rule> rules) {
-		this.rules = rules;
-	}
+//	@Override
+//	public String getId() {
+//		return id;
+//	}
+//
+//	@Override
+//	public void setId(String id) {
+//		this.id = id;
+//	}
+//
+//	@Override
+//	public String getName() {
+//		return name;
+//	}
+//
+//	@Override
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	@Override
+//	public Integer getValue() {
+//		return value;
+//	}
+//
+//	@Override
+//	public void setValue(Integer value) {
+//		this.value = value;
+//	}
+//	
+//	@Override
+//	public List<ListEntry<Integer>> getValues() {
+//		return values;
+//	}
+//
+//	@Override
+//	public void setValues(List<ListEntry<Integer>> values) {
+//		this.values = values;
+//	}
+//
+//	@Override
+//	public Integer getDefaultValue() {
+//		return defaultValue;
+//	}
+//
+//	@Override
+//	public void setDefaultValue(Integer defaultValue) {
+//		this.defaultValue = defaultValue;
+//	}
+//
+//	@Override
+//	public List<ListEntry<Integer>> getLegalValues() {
+//		return legalValues;
+//	}
+//	
+//	@Override
+//	public void setLegalValues(List<ListEntry<Integer>> legalValues) {
+//		this.legalValues = legalValues;
+//		
+//	}
+//	
+//	@Override
+//	public PropertyKind getKind() {
+//		return kind;
+//	}
+//	@Override
+//	public void setKind(PropertyKind kind) {
+//		this.kind = kind;
+//	}
+//	
+//	@Override
+//	public List<Rule> getRules() {
+//		return rules;
+//	}
+//	
+//	@Override
+//	public void setRules(List<Rule> rules) {
+//		this.rules = rules;
+//	}
 	
 	@Override
 	public boolean equals(Object obj) {

@@ -4,7 +4,7 @@
     <h1> USER DEFINED TASK TEMPLATES </h1>
   </div>
   <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-fab class="mat-warn" (click)="newTaskTemplate()" aria-label="New TaskTemplate" *fuseIfOnDom
+    <button mat-fab class="mat-warn" (click)="newTaskTemplate()" matTooltip="Add new Template" matTooltipPosition="above" aria-label="New TaskTemplate" *fuseIfOnDom
       [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
       <mat-icon>add</mat-icon>
     </button>
@@ -24,6 +24,11 @@
           <ng-container matColumnDef="name">
               <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
               <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.name}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+            <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.description}}</mat-cell>
           </ng-container>
 
 

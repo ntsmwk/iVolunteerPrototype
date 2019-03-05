@@ -6,18 +6,24 @@
     </div>
  
    
-    <div class="form-row" *ngIf="!disabled">
-      <button type="submit" mat-raised-button color="primary">
-      <!-- [disabled]="!form.valid"> -->
+    <div class="form-row" *ngIf="!formDisabled">
+      <button type="submit" mat-raised-button color="primary" >
         Save</button>
+       
+        &nbsp; &nbsp;
+
+      <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button>
     </div>
-    <div class="form-row" *ngIf="disabled">
-      <button type="button" (click)="navigateBack()" mat-raised-button color="primary">Cancel</button>
-    </div>
+    
+    <!-- <div class="form-row" *ngIf="formDisabled">
+      <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Back</button>
+    </div> -->
+
   </form>
+
  
   <div *ngIf="payLoad" class="form-row">
-    <strong>Saved the following values</strong><br>{{payLoad}}
+    <strong>Saved the following values:</strong><br>{{output}}
   </div>
 
 

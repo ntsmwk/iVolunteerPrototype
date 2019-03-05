@@ -38,14 +38,18 @@ export class PropertyListItem {
 export class Rule {
     id: string;
     kind: RuleKind;
+    value?: number;
+    data?: string;
+    message: string;
 }
 
 
 export enum PropertyKind {
     TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL", 
-    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST"
+    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MULTIPLE="MULTIPLE"
 }
 
 export enum RuleKind {
-    MAX = "max", MIN= "min", GREATER = "gtr", GREATER_OR_EQUAL = "gte", LESS = "lss", LESS_OR_EQUAL = "leq", EQUAL = "eq"
+    REQUIRED = "REQUIRED", REQUIRED_TRUE = "REQUIRED_TRUE", REGEX_PATTERN = "REGEX_PATTERN", MAX_LENGTH = "MAX_LENGTH", 
+    MIN_LENGTH = "MIN_LENGTH", MAX = "MAX", MIN = "MIN"
 }

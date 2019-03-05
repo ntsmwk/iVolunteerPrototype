@@ -1,41 +1,25 @@
 package at.jku.cis.iVolunteer.mapper.property;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.tomcat.util.digester.Rules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.mapper.OneWayDtoMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
-import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
-import at.jku.cis.iVolunteer.model.property.BooleanProperty;
-import at.jku.cis.iVolunteer.model.property.DateProperty;
-import at.jku.cis.iVolunteer.model.property.DoubleProperty;
-import at.jku.cis.iVolunteer.model.property.NumberProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
 
-
-
-//@Mapper
-//public abstract class PropertyListItemMapper implements AbstractMapper<Property<Object>, PropertyListItemDTO>{
-//}
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyMapper implements AbstractMapper<Property<?>, PropertyDTO<?>>{
 	

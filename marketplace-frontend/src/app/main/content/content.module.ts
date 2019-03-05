@@ -102,7 +102,7 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  //AK
+  //!--AK
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',

@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
 public class PropertyToDoublePropertyMapper implements PropertyToTypePropertyMapper<DoubleProperty> {
 
@@ -95,8 +95,10 @@ public class PropertyToDoublePropertyMapper implements PropertyToTypePropertyMap
 			
 			return (Double) source;
 		} catch (ClassCastException e) {
-			System.out.println("Double ClassCastException triggered");
-			return Double.NaN;
+			System.out.println("Double ClassCastException triggered: " + source);
+			return Double.parseDouble((String) source);
+		} catch (NumberFormatException e) {
+			return 0.0;
 		}
 	}
 

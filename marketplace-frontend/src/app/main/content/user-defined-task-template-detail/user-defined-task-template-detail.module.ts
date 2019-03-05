@@ -16,8 +16,13 @@ import { MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule,
 
   import { FuseUserDefinedTaskTemplateDetailComponent } from './user-defined-task-template-detail.component';
 import { QuestionService } from '../_service/question.service';
-import { AddOrRemoveDialogModule } from './add-or-remove-dialog/add-or-remove-dialog.module';
-import { AddOrRemoveDialogComponent } from './add-or-remove-dialog/add-or-remove-dialog.component';
+import { AddOrRemoveDialogModule } from '../_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
+import { AddOrRemoveDialogComponent } from '../_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.component';
+
+import { TextFieldDialogComponent } from "../_components/dialogs/text-field-dialog/text-field-dialog.component";
+import { TextFieldDialogModule } from "../_components/dialogs/text-field-dialog/text-field-dialog.module";
+import { ConfirmDialogComponent } from '../_components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogModule } from '../_components/dialogs/confirm-dialog/confirm-dialog.module';
 
 const routes = [
   {path: ':marketplaceId/:templateId', component: FuseUserDefinedTaskTemplateDetailComponent}
@@ -42,12 +47,16 @@ const routes = [
     MatListModule,
     MatTooltipModule,
     FuseSharedModule,
+
     AddOrRemoveDialogModule,
+    TextFieldDialogModule,
+    ConfirmDialogModule,
+
     DynamicFormModule,
     DynamicFormQuestionModule
 
   ],
-  entryComponents:[AddOrRemoveDialogComponent]
+  entryComponents:[AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent]
 
   
   

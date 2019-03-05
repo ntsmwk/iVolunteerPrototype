@@ -11,21 +11,18 @@ import { FusePropertyListComponent } from './property-list.component';
 import { FuseTruncatePipeModule } from "../_pipe/truncate-pipe.module";
 
 
-
-
 const routes: Route[] = [
   {path: '', component: FusePropertyListComponent}
 ];
 
 @NgModule({
   declarations: [
-    FusePropertyListComponent
-    
+    FusePropertyListComponent   
   ],
 
   imports: [
     RouterModule.forChild(routes),
-    
+  
     MatTableModule,
     MatIconModule,
     MatButtonModule,

@@ -3,6 +3,8 @@ import { FormGroup }                 from '@angular/forms';
  
 import { QuestionBase }              from '../../../_model/dynamic-forms/questions';
 import { QuestionControlService }    from '../../../_service/question-control.service';
+import { isNullOrUndefined } from 'util';
+declare var $:JQueryStatic;
 
  
 @Component({
@@ -13,10 +15,10 @@ import { QuestionControlService }    from '../../../_service/question-control.se
 export class DynamicFormComponent implements OnInit {
  
   @Input() questions: QuestionBase<any>[] = [];
-  @Input() disabled: boolean;
+  @Input() formDisabled: boolean;
   
   form: FormGroup;
-  payLoad = '';
+  output = '';
 
   @Output() resultEvent: EventEmitter<any> = new EventEmitter();
  
@@ -24,19 +26,45 @@ export class DynamicFormComponent implements OnInit {
  
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
-    if (this.disabled) {
+    if (this.formDisabled) {
       console.log("Disabling form");
       this.form.disable();
     }
   }
  
   onSubmit() {
-    this.payLoad = JSON.stringify(this.form.value);
+    this.form.updateValueAndValidity();
 
-    console.log("Values")
-    console.log(this.form.value);
+    if (this.form.valid) {
+      this.output = JSON.stringify(this.form.value);
+      
 
-    this.fireResultEvent();
+      console.log("Values")
+      console.log(this.form.value);
+  
+      this.fireResultEvent();
+      
+    } else {
+      console.log("not valid - try again");
+
+      let firstKey: string;
+      
+      //Mark errornous Fields
+      Object.keys(this.form.controls).forEach(key => {
+        this.form.get(key).markAsTouched();
+        if (isNullOrUndefined(firstKey)) {
+          firstKey = key;
+        }
+      });
+
+      //focus on first error using jQuery
+      $('input.ng-invalid').first().focus();
+
+
+      
+      
+    }
+
 
 
   }
