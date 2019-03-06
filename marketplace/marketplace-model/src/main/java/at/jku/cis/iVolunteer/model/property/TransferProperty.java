@@ -1,9 +1,9 @@
 //TODO delete probably dead code
-
-package at.jku.cis.iVolunteer.model.property;
-
-public class TransferProperty extends TextProperty {
-	
+//
+//package at.jku.cis.iVolunteer.model.property;
+//
+//public class TransferProperty extends TextProperty {
+//	
 //	String id;
 	
 //	String name;
@@ -81,22 +81,22 @@ public class TransferProperty extends TextProperty {
 //	public void setKind(PropertyKind kind) {
 //		this.kind = kind;
 //	}
+//	
+//	@Override
+//	public int hashCode() {
+//		return id.hashCode();
+//	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (!(obj instanceof TransferProperty)) {
+//			return false;
+//		}
+//		return ((TransferProperty) obj).id.equals(id);
+//	}
+//	
+//	
+//	
 	
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TransferProperty)) {
-			return false;
-		}
-		return ((TransferProperty) obj).id.equals(id);
-	}
 	
 	
-	
-	
-	
-	
-}
+//}

@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.mapper.property.listEntry;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
@@ -11,17 +10,17 @@ import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+//@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
-public class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDTO<?>> {
+public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEntryDTO<Object>> {
 
 	@Override
-	public ListEntryDTO<?> toDTO(ListEntry<?> source) {
+	public ListEntryDTO<Object> toDTO(ListEntry<Object> source) {
 		
 		if (source == null) {
 			return null;
 		} else {
-			ListEntryDTO dto = new ListEntryDTO<>();
+			ListEntryDTO<Object> dto = new ListEntryDTO<>();
 			dto.setId(source.getId());
 			dto.setValue(source.getValue());
 
@@ -32,13 +31,13 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDT
 	}
 
 	@Override
-	public List<ListEntryDTO<?>> toDTOs(List<ListEntry<?>> sources) {
+	public List<ListEntryDTO<Object>> toDTOs(List<ListEntry<Object>> sources) {
 
 		if (sources == null) {
 			return null;
 		} else {
-			List<ListEntryDTO<?>> list = new LinkedList<ListEntryDTO<?>>();
-			for (ListEntry entry : sources) {
+			List<ListEntryDTO<Object>> list = new LinkedList<>();
+			for (ListEntry<Object> entry : sources) {
 				list.add(this.toDTO(entry));
 			}
 			
@@ -48,7 +47,7 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDT
 	}
 
 	@Override
-	public ListEntry<?> toEntity(ListEntryDTO<?> target) {
+	public ListEntry<Object> toEntity(ListEntryDTO<Object> target) {
 		
 		if (target == null) {
 			return null;
@@ -63,13 +62,13 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<?>, ListEntryDT
 	}
 
 	@Override
-	public List<ListEntry<?>> toEntities(List<ListEntryDTO<?>> targets) {
+	public List<ListEntry<Object>> toEntities(List<ListEntryDTO<Object>> targets) {
 
 		if (targets == null) {
 			return null;
 		} else {
-			List<ListEntry<?>> list = new LinkedList<ListEntry<?>>();
-			for (ListEntryDTO entry : targets) {
+			List<ListEntry<Object>> list = new LinkedList<>();
+			for (ListEntryDTO<Object> entry : targets) {
 				list.add(this.toEntity(entry));
 			}
 			

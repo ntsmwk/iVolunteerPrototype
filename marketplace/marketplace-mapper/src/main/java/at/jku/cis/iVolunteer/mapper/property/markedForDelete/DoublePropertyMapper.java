@@ -1,3 +1,4 @@
+package at.jku.cis.iVolunteer.mapper.property.markedForDelete;
 // TODO remove
 //
 //package at.jku.cis.iVolunteer.mapper.property;

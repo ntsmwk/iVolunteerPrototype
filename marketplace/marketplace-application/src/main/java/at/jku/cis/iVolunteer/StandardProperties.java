@@ -39,7 +39,7 @@ public class StandardProperties {
 	//========== Text Properties ==============
 	//=========================================
 	
-	public List<Property<?>> getAll() {
+	public List<Property<Object>> getAll() {
 		List<Property<?>> props = new LinkedList<>();
 		
 		NameProperty np = new NameProperty();
@@ -95,7 +95,11 @@ public class StandardProperties {
 		props.add(cp3);
 		
 		
-		return props;
+		List<Property<Object>> ret = new ArrayList(props);
+		
+		
+		
+		return ret;
 		
 	}
 	
@@ -119,16 +123,17 @@ public class StandardProperties {
 //		}
 //	}
 	
-	public Map<String, Property<?>> getAllMap() {
+	public Map<String, Property<Object>> getAllMap() {
 		Map<String, Property<?>> props = new HashMap<>();
 		
-		List<Property<?>> list = getAll();
+		List<Property<Object>> list = getAll();
 		for (Property<?> p : list) {
 			//p.setId(p.getName());
 			props.put(p.getId(), p);
 		}
 		
-		return props;
+		
+		return new HashMap(props);
 		
 	}
 	

@@ -11,10 +11,10 @@ import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
-public class PropertyListItemMapper implements OneWayDtoMapper<Property<?>, PropertyListItemDTO<?>>{
+public class PropertyListItemMapper implements OneWayDtoMapper<Property<Object>, PropertyListItemDTO<Object>>{
 
 	@Override
-	public PropertyListItemDTO toDTO(Property<?> source) {
+	public PropertyListItemDTO toDTO(Property<Object> source) {
 		
 		if (source == null) {
 			return null;
@@ -29,13 +29,13 @@ public class PropertyListItemMapper implements OneWayDtoMapper<Property<?>, Prop
 	}
 
 	@Override
-	public List<PropertyListItemDTO<?>> toDTOs(List<Property<?>> sources) {
+	public List<PropertyListItemDTO<Object>> toDTOs(List<Property<Object>> sources) {
 		if (sources == null)  {
 			return null;
 		}
 		
-		List<PropertyListItemDTO<?>> list = new ArrayList<PropertyListItemDTO<?>>(sources.size());
-        for ( Property<?> propItem : sources ) {
+		List<PropertyListItemDTO<Object>> list = new ArrayList<PropertyListItemDTO<Object>>(sources.size());
+        for ( Property<Object> propItem : sources ) {
             list.add( toDTO( propItem ) );
         }
 		return list;

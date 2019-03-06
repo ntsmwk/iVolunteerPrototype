@@ -60,13 +60,7 @@ export class DynamicFormComponent implements OnInit {
       //focus on first error using jQuery
       $('input.ng-invalid').first().focus();
 
-
-      
-      
     }
-
-
-
   }
 
   fireResultEvent() {

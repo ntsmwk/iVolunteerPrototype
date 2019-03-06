@@ -6,9 +6,6 @@ import { isNullOrUndefined } from 'util';
 import { QuestionService } from 'app/main/content/_service/question.service';
 
 
-
-
- 
 @Component({
   selector: 'app-question',
   templateUrl: './dynamic-form-question.component.html',
@@ -72,6 +69,7 @@ export class DynamicFormQuestionComponent implements OnInit{
       this.form.controls[this.question.key].hasError('maxlength') ? this.getErrorMessage('maxlength'):
       this.form.controls[this.question.key].hasError('max') ? this.getErrorMessage('max'):
       this.form.controls[this.question.key].hasError('min') ? this.getErrorMessage('min'):
+      this.form.controls[this.question.key].hasError('mindate') ? this.getErrorMessage('mindate'):
       '';
     
   }
@@ -119,9 +117,11 @@ export class DynamicFormQuestionComponent implements OnInit{
       case 'maxlength':
         return 'String too long - maximum length: ' +  this.getRequiredLength('maxlength') + 'characters to remove: ' + (this.getRemainingLength('maxlength')*-1);
       case 'min':
-        return 'Value exceeded maximum';
-      case 'max':
         return 'Value below minimum';
+      case 'max':
+        return 'Value exceeds maximum';
+      case 'mindate':
+        return 'Invalid Date'
       default:
         return '';
     }

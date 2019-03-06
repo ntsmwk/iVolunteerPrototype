@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import at.jku.cis.iVolunteer.model.property.Property;
 
 @Repository
-public interface PropertyRepository extends MongoRepository<Property<?>, String> {
+public interface PropertyRepository extends MongoRepository<Property<Object>, String> {
 
 }
 

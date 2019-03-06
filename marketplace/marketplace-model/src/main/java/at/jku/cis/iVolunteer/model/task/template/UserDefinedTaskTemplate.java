@@ -20,7 +20,7 @@ public class UserDefinedTaskTemplate {
 	
 	String description;
 	
-	List<Property<?>> properties;
+	List<Property<Object>> properties;
 	
 	public UserDefinedTaskTemplate() {}
 	
@@ -52,11 +52,11 @@ public class UserDefinedTaskTemplate {
 		this.description = description;
 	}
 	
-	public List<Property<?>> getProperties() {
+	public List<Property<Object>> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List< Property<?>> properties) {
+	public void setProperties(List< Property<Object>> properties) {
 		this.properties = properties;
 	}
 	

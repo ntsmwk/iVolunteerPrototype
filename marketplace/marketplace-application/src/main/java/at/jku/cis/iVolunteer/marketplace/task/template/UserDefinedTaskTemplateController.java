@@ -69,12 +69,12 @@ public class UserDefinedTaskTemplateController {
 		UserDefinedTaskTemplate t2 = new UserDefinedTaskTemplate("1");
 
 		t1.setName("My Template 1");
-		List<Property<?>> p1 = sp.getAll();	
+		List<Property<Object>> p1 = sp.getAll();	
 		t1.setProperties(p1);
 		templates.add(t1);
 
 		t2.setName("My Template 2");
-		List<Property<?>> p2 = sp.getAll();
+		List<Property<Object>> p2 = sp.getAll();
 		t2.setProperties(p2);
 		templates.add(t2);
 		
@@ -123,7 +123,7 @@ public class UserDefinedTaskTemplateController {
 		
 		System.out.println("New Template - " + params[0] + " " + params[1] );
 		
-		taskTemplate.setProperties(new LinkedList<Property<?>>());
+		taskTemplate.setProperties(new LinkedList<Property<Object>>());
 		
 		return userDefinedTaskTemplateMapper.toDTO(userDefinedTaskTemplateRepository.save(taskTemplate));
 	}
@@ -178,7 +178,7 @@ public class UserDefinedTaskTemplateController {
 		//List<Property<?>> standardProperties = propertyRepository.findAll();
 		
 		for (String propId : propIds) {
-			Property<?> p = propertyRepository.findOne(propId);
+			Property<Object> p = propertyRepository.findOne(propId);
 			if (!t.getProperties().contains(p)) {
 				t.getProperties().add(p);
 				System.out.println("added " + p.getId() );
@@ -196,15 +196,15 @@ public class UserDefinedTaskTemplateController {
 	}
 	
 	@PutMapping("/tasktemplate/user/{templateId}/updateproperties")
-	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO[] properties) {
+	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
 		System.out.println("called updated properties");
 		//UserDefinedTaskTemplate t = templates.get(templates.indexOf(new UserDefinedTaskTemplate(templateId)));
 		UserDefinedTaskTemplate t = userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		Map<String,Property<Object>> map = this.toMap(t.getProperties());
 		System.out.println("\n");
-		for(PropertyDTO<?> dto : properties) {
-			Property p = propertyMapper.toEntity(dto);
+		for(PropertyDTO<Object> dto : properties) {
+			Property<Object> p = propertyMapper.toEntity(dto);
 
 			
 			System.out.println("===Property to Update===");
@@ -220,7 +220,7 @@ public class UserDefinedTaskTemplateController {
 
 		}
 		
-		t.setProperties(new LinkedList(map.values()));
+		t.setProperties(new LinkedList<Property<Object>>(map.values()));
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(t);
 		
 		return userDefinedTaskTemplateMapper.toDTO(ret);
@@ -239,7 +239,7 @@ public class UserDefinedTaskTemplateController {
 			System.out.println("REMOVE: "  + " - " + propId);
 		}
 		
-		t.setProperties(new LinkedList(map.values()));
+		t.setProperties(new LinkedList<Property<Object>>(map.values()));
 //		
 //		System.out.println("\n\nPROPERTIES after remove");
 //		for (Property<?> p : t.getProperties()) {
@@ -252,10 +252,10 @@ public class UserDefinedTaskTemplateController {
 		
 	}
 	
-	private Map<String, Property<Object>> toMap(List<Property<?>> list) {
+	private Map<String, Property<Object>> toMap(List<Property<Object>> list) {
 			
 		Map<String,Property<Object>> map = new LinkedHashMap<String,Property<Object>>();
-		for (Property<?> p : list) {
+		for (Property<Object> p : list) {
 			map.put(p.getId(),(Property<Object>) p);
 		}
 		

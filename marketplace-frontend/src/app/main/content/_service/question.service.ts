@@ -283,15 +283,16 @@ export class QuestionService {
         break;
 
       case RuleKind.MAX:
-        //console.log("adding max Validator" + rule.value);
+        console.log("adding max Validator" + rule.value);
         validator = Validators.max(rule.value);
         key = 'max';
         break;
 
       case RuleKind.MIN:
-        //console.log("adding min Validator" + rule.value);
+        
         if (!isNullOrUndefined(rule.data)) {
           if (propertyKind==PropertyKind.DATE) {
+            console.log("adding min Validator" + rule.data);
             let q = this.questions.find((q: QuestionBase<any>) => {
               return q.key == rule.data;
             });
@@ -299,7 +300,7 @@ export class QuestionService {
               console.log("not null or undefined");
               console.log(q);
               validator = minDate(q);
-              key = 'minDate';
+              key = 'mindate';
             } else {
               console.log("is null or undefined");
               console.log(q);
@@ -308,6 +309,7 @@ export class QuestionService {
             
           }
         } else if (!isNullOrUndefined(rule.value)) {
+          console.log("adding min Validator" + rule.value);
           validator = Validators.min(rule.value);
           key = 'min';
         } else {

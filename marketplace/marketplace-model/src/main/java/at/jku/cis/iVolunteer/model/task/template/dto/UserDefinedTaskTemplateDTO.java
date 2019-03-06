@@ -11,7 +11,7 @@ public class UserDefinedTaskTemplateDTO {
 	
 	String description;
 	
-	List<PropertyDTO<?>> properties;
+	List<PropertyDTO<Object>> properties;
 
 	public String getId() {
 		return id;
@@ -37,11 +37,11 @@ public class UserDefinedTaskTemplateDTO {
 		this.description = description;
 	}
 
-	public List<PropertyDTO<?>> getProperties() {
+	public List<PropertyDTO<Object>> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<PropertyDTO<?>> properties) {
+	public void setProperties(List<PropertyDTO<Object>> properties) {
 		this.properties = properties;
 	}
 	

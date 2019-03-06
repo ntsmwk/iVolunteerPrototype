@@ -32,27 +32,27 @@ public class PropertyController {
 
 	@Autowired StandardProperties sp;
 	
-	private Map<String, Property<?>> props;
+	private Map<String, Property<Object>> props;
 	
 	
 	@GetMapping("/properties/list") 
-	public List<PropertyListItemDTO<?>> getPropertiesList() {
+	public List<PropertyListItemDTO<Object>> getPropertiesList() {
 
 		setTestValues();
 
-		List<PropertyListItemDTO<?>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
+		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
 		
 		return retVal;
 		
 	}
 	
 	@GetMapping("/properties/full")
-	public List<PropertyDTO<?>> getPropertiesFull() {
+	public List<PropertyDTO<Object>> getPropertiesFull() {
 		
 		//System.out.println("Props: " + props.size());
 		setTestValues();
 		
-		List<PropertyDTO<?>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
+		List<PropertyDTO<Object>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
 		
 		
 		return retVal;
@@ -65,7 +65,7 @@ public class PropertyController {
 			
 			setUpFlag = false;
 			
-			for (Property p : sp.getAll()) {
+			for (Property<Object> p : sp.getAll()) {
 				System.out.println("Setup Property:  "+ p.getId() + " -- " + p.getKind() + ": " + p.getName() + ": " + p.getValue() + " "
 						);
 				if (!propertyRepository.exists(p.getId())) {
@@ -95,12 +95,12 @@ public class PropertyController {
 	}
 	
 	@PostMapping("/properties/new")
-	public void addProperty(@RequestBody PropertyDTO dto) {
+	public void addProperty(@RequestBody PropertyDTO<?> dto) {
 		//TODO
 	}
 	
 	@PutMapping("/properties/{id}/update")
-	public void updateProperty(@PathVariable("id") String id, @RequestBody PropertyDTO dto) {
+	public void updateProperty(@PathVariable("id") String id, @RequestBody PropertyDTO<?> dto) {
 		//TODO
 
 	}

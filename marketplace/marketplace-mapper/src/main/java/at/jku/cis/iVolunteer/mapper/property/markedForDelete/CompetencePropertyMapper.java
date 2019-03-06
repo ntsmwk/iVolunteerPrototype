@@ -1,3 +1,4 @@
+package at.jku.cis.iVolunteer.mapper.property.markedForDelete;
 //package at.jku.cis.iVolunteer.mapper.property;
 //
 //import org.mapstruct.Mapper;
