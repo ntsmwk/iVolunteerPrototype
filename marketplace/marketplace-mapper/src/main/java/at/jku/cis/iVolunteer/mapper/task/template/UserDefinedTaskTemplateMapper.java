@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
+import at.jku.cis.iVolunteer.mapper.property.SinglePropertyMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.dto.UserDefinedTaskTemplateDTO;
 
@@ -29,9 +32,9 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 		dto.setName(source.getName());
 		dto.setDescription(source.getDescription());
 		
-		List<PropertyDTO<Object>> props = new LinkedList<PropertyDTO<Object>>();
+		List<PropertyDTO<Object>> props = new LinkedList<>();
 		if (source.getProperties() != null) {
-			for (Property<Object> p : source.getProperties()) {
+			for (Property p : source.getProperties()) {
 				props.add(propertyMapper.toDTO(p));
 				
 			}
@@ -69,7 +72,7 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 		template.setName(target.getName());
 		template.setDescription(target.getDescription());
 		
-		List<Property<Object>> props = new LinkedList<Property<Object>>();
+		List<Property> props = new LinkedList<>();
 		if (target.getProperties() != null) {
 			for (PropertyDTO<Object> p : target.getProperties()) {
 				props.add(propertyMapper.toEntity(p));

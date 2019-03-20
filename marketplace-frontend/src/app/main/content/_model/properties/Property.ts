@@ -11,11 +11,11 @@ export class Property<T> {
     rules?: Rule[];
 
     kind: PropertyKind;
+
+    properties?: Property<any>[];
 }
 
-export class ReturnProperty extends Property<string> {
-    
-}
+
 
 export class ListValue<T> {
     id: string;

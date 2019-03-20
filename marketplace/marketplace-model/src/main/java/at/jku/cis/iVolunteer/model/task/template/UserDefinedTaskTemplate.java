@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.property.SingleProperty;
 
 /**
  * @author alexander
@@ -20,7 +21,7 @@ public class UserDefinedTaskTemplate {
 	
 	String description;
 	
-	List<Property<Object>> properties;
+	List<Property> properties;
 	
 	public UserDefinedTaskTemplate() {}
 	
@@ -52,11 +53,11 @@ public class UserDefinedTaskTemplate {
 		this.description = description;
 	}
 	
-	public List<Property<Object>> getProperties() {
+	public List<Property> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List< Property<Object>> properties) {
+	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
 	

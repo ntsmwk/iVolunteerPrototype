@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.property;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class NumberProperty extends Property<Integer> {
+public class NumberProperty extends SingleProperty<Integer> {
 	
 	public NumberProperty() {
 		kind = PropertyKind.WHOLE_NUMBER;

@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.StandardProperties;
+import at.jku.cis.iVolunteer.mapper.property.MultiplePropertyMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-
+import at.jku.cis.iVolunteer.mapper.property.SinglePropertyMapper;
+import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
+import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 
 
 
@@ -25,14 +29,19 @@ import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 public class PropertyController {
 	
 	@Autowired private PropertyListItemMapper propertyListItemMapper;
+//	@Autowired private SinglePropertyMapper singlePropertyMapper;
+//	@Autowired private MultiplePropertyMapper multiplePropertyMapper;
 	@Autowired private PropertyMapper propertyMapper;
+	
+//	@Autowired private SinglePropertyRepository singlePropertyRepository;
 	@Autowired private PropertyRepository propertyRepository;
+	
 
 	private boolean setUpFlag = true;
 
 	@Autowired StandardProperties sp;
 	
-	private Map<String, Property<Object>> props;
+	private Map<String, Property> props;
 	
 	
 	@GetMapping("/properties/list") 
@@ -61,14 +70,14 @@ public class PropertyController {
 	private void setTestValues() {
 		if (setUpFlag) {
 			
-			props = sp.getAllMap();
+			props = sp.getAllSingleMap();
 			
 			setUpFlag = false;
 			
-			for (Property<Object> p : sp.getAll()) {
-				System.out.println("Setup Property:  "+ p.getId() + " -- " + p.getKind() + ": " + p.getName() + ": " + p.getValue() + " "
+			for (Property p : sp.getAllSingle()) {
+				System.out.println("Setup Property:  "+ p.getId() + " -- " + p.getKind() + ": " + p.getName() + ": " + " "
 						);
-				if (!propertyRepository.exists(p.getId())) {
+				if (propertyRepository.findByName(p.getName()) == null) {
 					System.out.println("adding prop to db");
 					propertyRepository.save(p);
 				} else {
@@ -78,8 +87,22 @@ public class PropertyController {
 			
 			System.out.println("Number Of Properties pushed: " + props.size());
 			System.out.println("Number Of Properties in DB : " + propertyRepository.count());
-			System.out.println("=> done/n/n");
+			System.out.println("=> done Single\n\n");
+			System.out.println("Getting Multi Properties");
 			
+			for (Property p : sp.getAllMulti()) {
+				System.out.println("Setup Property: " + p.getId() + "--" + p.getKind() + " - Properties: " );
+				for (Property mp : ((MultipleProperty)p).getProperties()) {
+					System.out.println(mp.getId() + ": " + mp.getName() + " = " );
+				}
+				
+				if (p.getId() == null || !propertyRepository.exists(p.getId())) {
+					propertyRepository.save(p);
+					System.out.println("prop added");
+				} else {
+					System.out.println("prop already in db");
+				}
+			}
 			
 		}
 		
@@ -87,7 +110,7 @@ public class PropertyController {
 	}
 	
 	@GetMapping("/properties/{id}") 
-	public PropertyDTO<?> getPropertyByID(@PathVariable("id") String id) {
+	public PropertyDTO<Object> getPropertyByID(@PathVariable("id") String id) {
 		
 		
 

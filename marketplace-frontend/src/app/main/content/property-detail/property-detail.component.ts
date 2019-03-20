@@ -55,6 +55,8 @@ export class FusePropertyDetailComponent implements OnInit {
         console.log(this.property.name + ": " + this.property.value);
         console.log("Kind: " + this.property.kind);
         console.log("Default Value: " + this.property.defaultValue)
+        console.log("============================");
+        console.log(this.property);
         this.isLoaded = true;
       });
     });  

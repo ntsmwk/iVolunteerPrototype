@@ -12,6 +12,8 @@ import { ValidatorFn } from "@angular/forms";
 
     validators?: ValidatorFn[];
     messages: Map<string,string>
+
+    subQuestions?: QuestionBase<T>[]
    
     constructor(options: {
         value?: T,
@@ -24,6 +26,7 @@ import { ValidatorFn } from "@angular/forms";
         
         validators?: ValidatorFn[],
         messages?: Map<string,string>
+        subQuestions?: QuestionBase<T>[]
       } = {}) {
       this.value = options.value;
       this.key = options.key || '';
@@ -34,6 +37,7 @@ import { ValidatorFn } from "@angular/forms";
       this.validators = options.validators || undefined;    
       this.required = options.required || false;  
       this.messages = options.messages || undefined;
+      this.subQuestions = options.subQuestions || undefined;
     }
   }
 
@@ -134,6 +138,20 @@ import { ValidatorFn } from "@angular/forms";
       super(options);
       this.options = options['options'] || [];
       this.values = options['values'] || [];
+    }
+  }
+
+  export class MultipleQuestion extends QuestionBase<string> {
+    controlType = 'multiple'
+    options: {key: string, value: string}[] = [];
+    values: {key: string, value: string}[] = [];
+    //subQuestions: QuestionBase<any>[] = [];
+
+    constructor(options: {} = {}) {
+      super(options);
+      this.options = options['options'] || [];
+      this.values = options['values'] || [];
+      //this.subQuestions = options['subQuestions'] || [];
     }
   }
 

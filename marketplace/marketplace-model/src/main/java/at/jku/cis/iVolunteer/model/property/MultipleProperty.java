@@ -1,21 +1,29 @@
 package at.jku.cis.iVolunteer.model.property;
 
-import java.util.LinkedList;
+import java.util.List;
 
-public class MultipleProperty extends Property<Object> {
+public class MultipleProperty extends Property {
 
-	LinkedList<Property<?>> properties;
+	List<Property> properties;
 	
 
 	public MultipleProperty() {
 		kind = PropertyKind.MULTIPLE;
 	}
 	
-	public LinkedList<Property<?>> getProperties() {
+	public MultipleProperty(Property p) {
+		kind = PropertyKind.MULTIPLE;
+		super.id = p.id;
+		super.kind = p.kind;
+		super.name = p.name;
+		super.rules = p.rules;
+	}
+	
+	public List<Property> getProperties() {
 		return properties;
 	}
 	
-	public void setProperties(LinkedList<Property<?>> properties) {
+	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
 	

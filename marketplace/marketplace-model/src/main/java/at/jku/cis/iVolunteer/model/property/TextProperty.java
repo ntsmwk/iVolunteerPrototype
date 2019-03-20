@@ -3,8 +3,9 @@ package at.jku.cis.iVolunteer.model.property;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class TextProperty extends Property<String> {
+public class TextProperty extends SingleProperty<String> {
 
+	
 	public TextProperty() {
 		kind = PropertyKind.TEXT;
 	}

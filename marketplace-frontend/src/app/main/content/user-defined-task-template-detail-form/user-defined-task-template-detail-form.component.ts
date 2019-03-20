@@ -8,9 +8,9 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { Property, PropertyKind, ListValue, ReturnProperty } from '../_model/properties/Property';
+import { Property, PropertyKind, ListValue } from '../_model/properties/Property';
 import { FormGroup } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNull } from 'util';
 
 @Component({
   selector: 'app-user-defined-task-template-detail-form',
@@ -74,51 +74,32 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
     window.history.back();
   }
 
-  displayResult(form: FormGroup) {
+  consumeResultEvent(form: FormGroup) {
     console.log("EVENT RECEIVED");
     //console.log(value);
     console.log("attempt to update properties of template");
     console.log("Values:");
 
    
-   // console.log(form.controls.name.value);
-   let props: ReturnProperty[] = [];
-
-   for (let prop of this.template.properties) {
-     console.log(prop.id + ": ")
-     console.log(form.controls[prop.id].value);
-      if (!isNullOrUndefined(form.controls[prop.id].value)) {
-        //console.log(prop.id + ": " + form.controls[prop.id].value);
-
-        
-        if (prop.kind === PropertyKind.LIST) {
-          let values: ListValue<any>[] = [];
-          let arr = form.controls[prop.id].value;
-
-          for (let val of prop.legalValues) {
-            for (let i = 0; i < form.controls[prop.id].value.length; i++) { 
-              if (val.id === form.controls[prop.id].value[i]) {
-                values.push(new ListValue<any>(val.id, val.value));
-              }
-            } 
-          }
-
-          console.log(values);
-          prop.values = values;
-
-
-
-
-
-        } else {
-          prop.value = form.controls[prop.id].value;
-        }
-
-        props.push(prop);
-      }
-    }
+    let props: Property<any>[] = [];
+    console.log("====================================================");
+    //console.log("form");
+    //console.log(JSON.stringify(form));
+    console.log("form.value");
+    console.log(JSON.stringify(form.value));
     
+    
+    props = this.traverseResultAndUpdateProperties(form.value, this.template.properties);
+
+   
+    
+    console.log("====================================================");
+    console.log("Properties:");
     console.log(props);
+    console.log("Form Values:");
+    console.log(form.value);
+    console.log("====================================================");
+
 
     this.userDefinedTaskTemplateService.updatePropertiesInTemplate(this.marketplace, this.template.id, props).toPromise().then(() => {
       console.log("finished - returning to previous page");
@@ -126,4 +107,35 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
     })
   }
 
+
+  private traverseResultAndUpdateProperties(values: any[], properties: Property<any>[]): Property<any>[] {
+    
+    for (let prop of properties) {
+      if (prop.kind == PropertyKind.MULTIPLE) {
+        //TODO DO NESTED
+        this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
+      } else {
+        if (!isNullOrUndefined(values[prop.id])) {
+          if (prop.kind === PropertyKind.LIST) {
+            //TODO do list stuff
+            const result: ListValue<any>[] = [];
+            let arr = values[prop.id];
+
+            for (let val of prop.legalValues) {
+              for (let i = 0; i < arr.length; i++) { 
+                if (val.id === arr[i]) {
+                  result.push(new ListValue<any>(val.id, val.value));
+                }
+              } 
+            }
+
+            prop.values = result;
+          } else {
+            prop.value = values[prop.id];
+          }
+        }
+      }
+    }
+    return properties;
+  }
 }

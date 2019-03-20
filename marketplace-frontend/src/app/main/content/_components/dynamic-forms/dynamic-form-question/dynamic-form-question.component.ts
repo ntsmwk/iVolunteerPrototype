@@ -4,6 +4,7 @@ import { FormGroup, FormControl }        from '@angular/forms';
 import { QuestionBase }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 import { QuestionService } from 'app/main/content/_service/question.service';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 
 @Component({
@@ -27,11 +28,16 @@ export class DynamicFormQuestionComponent implements OnInit{
     if (this.question.required) {
       this.requiredMarker = '*';
     }
+    console.log("=========================================================================================");
+    console.log(this.form);
+    console.log("QUESTION");
+    console.log(this.question);
 
-    this.form.controls[this.question.key].valueChanges.subscribe( valueChanged => {
-       if (valueChanged) {
-        //  console.log("Val changed");
-        //  console.log(this.question);
+    
+    // console.log("form controls for" + this.question.label + ":");
+    // console.log(this.form.controls);
+
+    
 
          //TODO create a shared service
          //fire a value changed event
@@ -40,12 +46,10 @@ export class DynamicFormQuestionComponent implements OnInit{
          //search if key of validator == key here - update validator
          //then do this: (re-set the validators)
          
-         this.form.controls[this.question.key].setValidators(null);
-         this.form.controls[this.question.key].setValidators(this.question.validators);
-         //this.form.controls[this.question.key].updateValueAndValidity();
-       }
-      // this.form.controls[this.question.key].updateValueAndValidity();
-    });
+        //  this.form.controls[this.question.key].setValidators(null);
+        //  this.form.controls[this.question.key].setValidators(this.question.validators);
+        //  //this.form.controls[this.question.key].updateValueAndValidity();
+  
 
     
     //console.log(this.form.controls[this.question.key].errors);
@@ -125,6 +129,12 @@ export class DynamicFormQuestionComponent implements OnInit{
       default:
         return '';
     }
+  }
+
+  getNestedFormGroups() {
+    // console.log("----------------" +this.question.key + "---:");
+    // console.log(this.form.get(this.question.key).get('nested1'));
+    return this.form.get(this.question.key);
   }
 
 }

@@ -10,17 +10,21 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
+import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.property.BooleanProperty;
 import at.jku.cis.iVolunteer.model.property.DateProperty;
 import at.jku.cis.iVolunteer.model.property.DoubleProperty;
+import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.NumberProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
@@ -32,6 +36,7 @@ public class StandardProperties {
 	
 	
 	@Autowired public CompetenceRepository competenceRepository;
+	@Autowired public PropertyRepository propertyRepository;
 
 	
 	
@@ -39,8 +44,8 @@ public class StandardProperties {
 	//========== Text Properties ==============
 	//=========================================
 	
-	public List<Property<Object>> getAll() {
-		List<Property<?>> props = new LinkedList<>();
+	public List<Property> getAllSingle() {
+		List<Property> props = new LinkedList<>();
 		
 		NameProperty np = new NameProperty();
 		np.inst();
@@ -95,13 +100,51 @@ public class StandardProperties {
 		props.add(cp3);
 		
 		
-		List<Property<Object>> ret = new ArrayList(props);
 		
 		
-		
+		List<Property> ret = new ArrayList(props);
 		return ret;
 		
 	}
+	
+	public List<Property> getAllMulti() {
+		List<Property> props = new LinkedList<>();
+		
+		MultipleProperty mp = new TestMultiProperty();
+		List<Property> allProps = propertyRepository.findAll();
+		List<Property> multiProps = new LinkedList<>();
+		
+		multiProps.add(allProps.get(0));
+		//props.getLast().setId(new ObjectId().toString());
+		
+		multiProps.add(new PostcodeProperty());
+		multiProps.add(new LatitudeProperty());
+		multiProps.add(new LongitudeProperty());
+		MultipleProperty mp11 = new TestMultiProperty();
+		mp11.setId("nested1");
+		
+		MultipleProperty mp111 = new TestMultiProperty();
+		mp111.setProperties(new ArrayList<>(multiProps));
+		mp111.setId("nested2");
+		
+		
+		mp11.setProperties(new ArrayList<>(multiProps));
+		mp11.getProperties().add(mp111);
+		
+		
+		multiProps.add(mp11);
+		
+		
+		
+		mp.setProperties(new ArrayList<>(multiProps));
+		
+		props.add(mp);
+		
+		List<Property> ret = new ArrayList(props);
+		return ret;
+	}
+	
+	
 	
 	public List<ListEntry<String>> addCompetenceLegalValues() {
 	
@@ -123,11 +166,11 @@ public class StandardProperties {
 //		}
 //	}
 	
-	public Map<String, Property<Object>> getAllMap() {
-		Map<String, Property<?>> props = new HashMap<>();
+	public Map<String, Property> getAllSingleMap() {
+		Map<String, Property> props = new HashMap<>();
 		
-		List<Property<Object>> list = getAll();
-		for (Property<?> p : list) {
+		List<Property> list = getAllSingle();
+		for (Property p : list) {
 			//p.setId(p.getName());
 			props.put(p.getId(), p);
 		}
@@ -149,7 +192,7 @@ public class StandardProperties {
 		
 		@PostConstruct
 		public void inst() {
-			this.setId("name");
+			//this.setId("name");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Name");
 //			this.setDefaultValue("");
@@ -753,6 +796,17 @@ public class StandardProperties {
 //			
 //			this.setLegalValues(legalValues);
 //		}
+	}
+	
+	
+	public static class TestMultiProperty extends MultipleProperty {
+		public TestMultiProperty() {
+			this.setId("test_multi");
+			this.setKind(PropertyKind.MULTIPLE);
+			this.setName("Test Multi");
+			
+
+		}
 	}
 	
 	

@@ -12,13 +12,14 @@ import { MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule,
   from '@angular/material';
 
   import { FusePropertyDetailComponent } from './property-detail.component';
+import { MultiPropertyDetailComponent } from './multi-property-detail/multi-property-detail.component';
 
 const routes = [
   {path: ':marketplaceId/:propertyId', component: FusePropertyDetailComponent}
 ];
 
 @NgModule({
-  declarations: [FusePropertyDetailComponent],
+  declarations: [FusePropertyDetailComponent, MultiPropertyDetailComponent],
   
   imports: [
     RouterModule.forChild(routes),

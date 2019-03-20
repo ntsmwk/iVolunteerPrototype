@@ -6,21 +6,19 @@ import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
-public class PropertyDTO<T> {
+public class SinglePropertyDTO<T> {
 	String id;
 	String name;
-	
-	List<RuleDTO> rules;
-	
-	PropertyKind kind;
 	
 	T value;
 	T defaultValue;
 	
-	List<ListEntryDTO<T>> values;
-	List<ListEntryDTO<T>> legalValues;
+	List<RuleDTO> rules;
 	
-	List<PropertyDTO<T>> properties;
+	List<ListEntryDTO<T>> legalValues;
+	List<ListEntryDTO<T>> values;
+	
+	PropertyKind kind;
 	
 	public String getId() {
 		return id;
@@ -35,9 +33,6 @@ public class PropertyDTO<T> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-
 
 	public T getValue() {
 		return value;
@@ -45,30 +40,28 @@ public class PropertyDTO<T> {
 	public void setValue(T value) {
 		this.value = value;
 	}
-	public T getDefaultValue() {
-		return defaultValue;
-	}
-	public void setDefaultValue(T defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+	
 	public List<ListEntryDTO<T>> getValues() {
 		return values;
 	}
 	public void setValues(List<ListEntryDTO<T>> values) {
 		this.values = values;
 	}
+
+	public T getDefaultValue() {
+		return defaultValue;
+	}
+	public void setDefaultValue(T defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	public List<ListEntryDTO<T>> getLegalValues() {
 		return legalValues;
 	}
 	public void setLegalValues(List<ListEntryDTO<T>> legalValues) {
 		this.legalValues = legalValues;
 	}
-	public List<PropertyDTO<T>> getProperties() {
-		return properties;
-	}
-	public void setProperties(List<PropertyDTO<T>> properties) {
-		this.properties = properties;
-	}
+
 	public List<RuleDTO> getRules() {
 		return rules;
 	}
@@ -85,10 +78,10 @@ public class PropertyDTO<T> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof PropertyDTO<?>)) {
+		if (!(obj instanceof SinglePropertyDTO<?>)) {
 			return false;
 		}
-		return ((PropertyDTO<?>) obj).id.equals(id);
+		return ((SinglePropertyDTO<?>) obj).id.equals(id);
 	
 	}
 	@Override

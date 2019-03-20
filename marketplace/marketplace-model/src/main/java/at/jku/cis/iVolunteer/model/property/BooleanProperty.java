@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.property;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class BooleanProperty extends Property<Boolean> {
+public class BooleanProperty extends SingleProperty<Boolean> {
 	
 	public BooleanProperty() {
 		kind = PropertyKind.BOOL;

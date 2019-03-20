@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.property;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class DoubleProperty extends Property<Double> {
+public class DoubleProperty extends SingleProperty<Double> {
 	
 	public DoubleProperty() {
 		kind = PropertyKind.FLOAT_NUMBER;

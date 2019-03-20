@@ -26,6 +26,8 @@ export class DynamicFormComponent implements OnInit {
  
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
+
+
     if (this.formDisabled) {
       console.log("Disabling form");
       this.form.disable();

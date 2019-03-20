@@ -41,6 +41,21 @@
     </div>
 
 
+    <h3> Properties (Multi)</h3>
+    <div *ngIf="property.properties != null">
+      <mat-list>
+        <div *ngFor="let p of property.properties">
+          <mat-list-item > {{p.id}}: {{p.name}} = {{p.value}}</mat-list-item>
+          <app-multi-property-detail [property]="p"></app-multi-property-detail> 
+        </div>
+      </mat-list>
+    </div>
+
+    <div *ngIf="property.properties == null">
+      contains no properties or is not a multi property
+    </div>
+
+
 
 
 

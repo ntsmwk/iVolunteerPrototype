@@ -1,7 +1,7 @@
 import { Injectable }       from '@angular/core';
 
 import { DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion, 
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion } from '../_model/dynamic-forms/questions';
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion } from '../_model/dynamic-forms/questions';
 
 import { Property, PropertyKind, ListValue, Rule, RuleKind } from '../_model/properties/Property';
 import { isNullOrUndefined } from 'util';
@@ -25,32 +25,27 @@ export interface SingleValidatorData {
   providedIn: 'root',
 })
 export class QuestionService {
-  questions: QuestionBase<any>[] = [];
+  //questions: QuestionBase<any>[] = [];
+  key: number =  0;
 
   getQuestionsFromProperties(properties: Property<any>[]): any[] {
-    this.questions = []; //reset questions
-    let questions = this.questions;
+    //this.questions = []; //reset questions
+    let questions: QuestionBase<any>[] = [];
     
     console.log("Question Service called");
+    console.log(properties);
 
-    for (let property of properties) {
-      
-      console.log("Kind: " + property.kind + " Name: " + property.name);
-      let question = this.createQuestion(property);
+    questions = this.setQuestions(properties);
 
-      question.key = property.id;
-      question.label = property.name;
-      question.order = properties.indexOf(property);
-
-      
-      questions.push(question);
-    } 
+    console.log(questions);
+    
+    
     console.log("-->done with question setup");
    
     // 2nd pass for validators
     for (let i=0; i<properties.length; i++) {
 
-      let validatorData = this.getValidatorData(properties[i].rules, properties[i].kind);
+      let validatorData = this.getValidatorData(properties[i].rules, properties[i].kind, questions);
 
       if (!isNullOrUndefined(validatorData)) {
         let question = questions[i];
@@ -182,6 +177,24 @@ export class QuestionService {
       
     }
 
+
+    ///TEST MultiProp List
+    else if (property.kind === PropertyKind.MULTIPLE) {
+      console.log("Multiple Property found:");
+      console.log(property);
+      question = new MultipleQuestion({
+        //TODO for each sub-question, call createQuestion - keys don't have to be unique since it's a separate array
+        subQuestions: this.setQuestions(property.properties),
+      });
+      //console.log(question.subQuestions[0].label);
+      // for (let q of question.subQuestions) {
+      //  // console.log("BEFORE: " + q.key);
+      //   q.key = this.key + q.key;
+      //  // console.log("AFTER: " + q.key);
+      // }
+      //this.key++;
+    }
+
     return question;
   }
 
@@ -214,7 +227,24 @@ export class QuestionService {
     return ret;
   }
 
-  private getValidatorData(rules: Rule[], propertyKind: PropertyKind): ValidatorData {
+  private setQuestions(properties: Property<any>[]) {
+    let questions: QuestionBase<any>[] = [];
+    for (let property of properties) {
+      
+      console.log("Kind: " + property.kind + " Name: " + property.name);
+      let question = this.createQuestion(property);
+
+      question.key = property.id;
+      question.label = property.name;
+      question.order = properties.indexOf(property);
+
+      
+      questions.push(question);
+    } 
+    return questions;
+  }
+
+  private getValidatorData(rules: Rule[], propertyKind: PropertyKind, questions: QuestionBase<any>[]): ValidatorData {
     let validators: ValidatorFn[] = [];
     let messages: Map<string,string> = new Map<string,string>();
     let required: boolean = false;
@@ -223,7 +253,7 @@ export class QuestionService {
       for (let rule of rules) {
         //console.log("processing rule: " + rule.id);
 
-        let singleValidatorData = this.convertRuleToValidator(rule, propertyKind);
+        let singleValidatorData = this.convertRuleToValidator(rule, propertyKind, questions);
         
         if (!isNullOrUndefined(singleValidatorData)) {
           validators.push(singleValidatorData.validator);
@@ -246,7 +276,7 @@ export class QuestionService {
     } 
   }
 
-  private convertRuleToValidator(rule: Rule, propertyKind: PropertyKind): SingleValidatorData {
+  private convertRuleToValidator(rule: Rule, propertyKind: PropertyKind, questions: QuestionBase<any>[]): SingleValidatorData {
 
     let validator: ValidatorFn;
     let key: string;
@@ -293,7 +323,7 @@ export class QuestionService {
         if (!isNullOrUndefined(rule.data)) {
           if (propertyKind==PropertyKind.DATE) {
             console.log("adding min Validator" + rule.data);
-            let q = this.questions.find((q: QuestionBase<any>) => {
+            let q = questions.find((q: QuestionBase<any>) => {
               return q.key == rule.data;
             });
             if (!isNullOrUndefined(q)) {

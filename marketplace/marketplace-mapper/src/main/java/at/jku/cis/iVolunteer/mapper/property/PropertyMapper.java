@@ -15,8 +15,11 @@ import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
@@ -25,41 +28,26 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
 //@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
-public class PropertyMapper implements AbstractMapper<Property<Object>, PropertyDTO<Object>>{
+public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Object>> {
 	
 	@Autowired RuleMapper ruleMapper;
 	@Autowired CompetenceMapper competenceMapper;
 	@Autowired ListEntryMapper listEntryMapper;
+	@Autowired MultiplePropertyMapper multiplePropertyMapper;
+	@Autowired PropertyMapper propertyMapper;
 
 	@Override
-	public PropertyDTO<Object> toDTO(Property<Object> source) {
+	public PropertyDTO<Object> toDTO(Property source) {
 		
 		if (source == null) {
 			return null;
 		}
 		
-		PropertyDTO<Object> propertyDTO = new PropertyDTO<>();
+		PropertyDTO<Object> propertyDTO = new PropertyDTO<Object>();
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
-		
-		propertyDTO.setValue(source.getValue());
-		
-		
 		propertyDTO.setKind(source.getKind());
-		propertyDTO.setDefaultValue(source.getDefaultValue());
 		
-		//TODO legal Values
-		if (source.getLegalValues() != null) {
-			
-			List<ListEntryDTO<Object>> legalValues = new ArrayList<>();
-			
-				for(ListEntry<Object> entry : source.getLegalValues()) {
-					legalValues.add(listEntryMapper.toDTO(entry));
-				}
-		
-			
-			propertyDTO.setLegalValues(legalValues);
-		}
 		
 		//TODO rules
 		if (source.getRules() != null) {
@@ -70,27 +58,58 @@ public class PropertyMapper implements AbstractMapper<Property<Object>, Property
 			propertyDTO.setRules(ruleMapper.toDTOs(rules));
 		}
 		
-		//TODO values
 		
-		if (source.getValues() != null) {
-			List<ListEntryDTO<Object>> values = new ArrayList<>();
-			for (ListEntry<Object> entry : source.getValues()) {
-				values.add(listEntryMapper.toDTO(entry));
+		if (propertyDTO.getKind().equals(PropertyKind.MULTIPLE)) {
+			List<PropertyDTO<Object>> props = new LinkedList<>();
+			
+			for (Property p : ((MultipleProperty)source).getProperties()) {
+				props.add(propertyMapper.toDTO(p));
 			}
-			propertyDTO.setValues(values);
+			
+			propertyDTO.setProperties(props);
+			
+		} else {
+			SingleProperty<Object> s = (SingleProperty<Object>) source;
+			
+			propertyDTO.setValue(s.getValue());
+			propertyDTO.setDefaultValue(s.getDefaultValue());
+			
+			//TODO legal Values
+			if (s.getLegalValues() != null) {
+				
+				List<ListEntryDTO<Object>> legalValues = new ArrayList<>();
+				
+					for(ListEntry<Object> entry : s.getLegalValues()) {
+						legalValues.add(listEntryMapper.toDTO(entry));
+					}
+			
+				
+				propertyDTO.setLegalValues(legalValues);
+			}
+			
+			//TODO values
+			if (s.getValues() != null) {
+				List<ListEntryDTO<Object>> values = new ArrayList<>();
+				for (ListEntry<Object> entry : s.getValues()) {
+					values.add(listEntryMapper.toDTO(entry));
+				}
+				propertyDTO.setValues(values);
+			}
+			
 		}
+
 		
 		return propertyDTO;
 	}
 
 	@Override
-	public List<PropertyDTO<Object>> toDTOs(List<Property<Object>> sources) {
+	public List<PropertyDTO<Object>> toDTOs(List<Property> sources) {
 		if (sources == null)  {
 			return null;
 		}
 		
 		List<PropertyDTO<Object>> list = new ArrayList<PropertyDTO<Object>>(sources.size());
-        for ( Property<Object> propItem : sources ) {
+        for ( Property propItem : sources ) {
             list.add( toDTO( propItem ) );
         }
 		return list;
@@ -99,52 +118,17 @@ public class PropertyMapper implements AbstractMapper<Property<Object>, Property
 
 
 	@Override
-	public Property<Object> toEntity(PropertyDTO<Object> target) {
+	public Property toEntity(PropertyDTO<Object> target) {
 		
 		if (target == null) {
 			return null;
 		}
 		
-		Property<Object> prop = new Property<>();
+		Property prop = new Property();
 		
 		prop.setId(target.getId());
 		prop.setName(target.getName());
-		
-		if (target.getKind().equals(PropertyKind.DATE)) {
-			prop.setValue(this.convertObjectToDate(target.getValue()));
-			prop.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
-		
-		
-		} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-			prop.setValue(this.convertObjectToDouble(target.getValue()));
-			prop.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
-		} else {
-			prop.setValue(target.getValue());
-			prop.setDefaultValue(target.getDefaultValue());
-		
-		}
-				
 		prop.setKind(target.getKind());
-		
-		List<ListEntry<Object>> values = new LinkedList<>();
-		
-		if (target.getValues() != null) {
-			for (ListEntryDTO<Object> entry : target.getValues()) {
-				values.add(listEntryMapper.toEntity(entry));
-			}
-		}
-		prop.setValues(values);
-		
-		
-		List<ListEntry<Object>> legalValues = new LinkedList<ListEntry<Object>>();
-		
-		if (target.getLegalValues() != null) {
-			for (ListEntryDTO<Object> entry : target.getLegalValues()) {
-				legalValues.add(listEntryMapper.toEntity(entry));
-			}
-		}
-		
-		prop.setLegalValues(legalValues);
 		
 		List<Rule> rules = new LinkedList<Rule>();
 		if (target.getRules() != null) {
@@ -155,16 +139,81 @@ public class PropertyMapper implements AbstractMapper<Property<Object>, Property
 		prop.setRules(rules);
 		
 		
+		if (prop.getKind().equals(PropertyKind.MULTIPLE)) {
+			MultipleProperty ret = new MultipleProperty(prop);
+			List<Property> props = new LinkedList<>();
+			
+			if (target.getProperties() != null) {
+				for (PropertyDTO<Object> dto : target.getProperties()) {
+					props.add(propertyMapper.toEntity(dto));
+				}
+			}
+//			((MultipleProperty)prop).setProperties(props);
+			ret.setProperties(props);
+			
+			return ret;
 		
-		return prop;
+		} else {
+			SingleProperty<Object> ret = new SingleProperty<>(prop);
+
+			if (target.getKind().equals(PropertyKind.DATE)) {
+				ret.setValue(this.convertObjectToDate(target.getValue()));
+				ret.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
+			
+			
+			} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
+				ret.setValue(this.convertObjectToDouble(target.getValue()));
+				ret.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
+			} else {
+				ret.setValue(target.getValue());
+				ret.setDefaultValue(target.getDefaultValue());
+			
+			}
+					
+			
+			
+			List<ListEntry<Object>> values = new LinkedList<>();
+			
+			if (target.getValues() != null) {
+				for (ListEntryDTO<Object> entry : target.getValues()) {
+					values.add(listEntryMapper.toEntity(entry));
+				}
+			}
+			ret.setValues(values);
+			
+			
+			List<ListEntry<Object>> legalValues = new LinkedList<ListEntry<Object>>();
+			
+			if (target.getLegalValues() != null) {
+				for (ListEntryDTO<Object> entry : target.getLegalValues()) {
+					legalValues.add(listEntryMapper.toEntity(entry));
+				}
+			}
+			
+			ret.setLegalValues(legalValues);
+			
+			return ret;
+			
+		}
+		
+		
+		
 	
 	}
 	
 
 	@Override
-	public List<Property<Object>> toEntities(List<PropertyDTO<Object>> targets) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Property> toEntities(List<PropertyDTO<Object>> targets) {
+		if (targets == null) {
+			return null;
+		}
+		
+		List<Property> list = new ArrayList<>();
+		for (PropertyDTO<Object> prop : targets) {
+			list.add(this.toEntity(prop));
+		}
+		
+		return list;
 	}
 	
 	//TODO ??not sure if fixed - kinda ugly 
@@ -212,10 +261,13 @@ public class PropertyMapper implements AbstractMapper<Property<Object>, Property
 				
 				return (Double) source;
 			} catch (ClassCastException e) {
-				System.out.println("Double ClassCastException triggered: " + source);
-				return Double.parseDouble((String) source);
-			} catch (NumberFormatException e) {
-				return 0.0;
+				try {
+						System.out.println("Double ClassCastException triggered: " + source + " returning 0.0");
+						double ret =  Double.parseDouble((String) source);
+						return ret;
+					} catch (NumberFormatException e2) {
+						return 0.0;
+					}
 			}
 		}
 

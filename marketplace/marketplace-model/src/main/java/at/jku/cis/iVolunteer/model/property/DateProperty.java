@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class DateProperty extends Property<Date> {
+public class DateProperty extends SingleProperty<Date> {
 	
 	public DateProperty() {
 		kind = PropertyKind.DATE;
