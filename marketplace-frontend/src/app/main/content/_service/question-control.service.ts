@@ -75,7 +75,7 @@ export class QuestionControlService {
         // console.log(ret);
 
       } else {
-        parent.addControl(question.key, fb.control('', question.validators));
+        parent.addControl(question.key, fb.control(question.value, question.validators));
       }
     });
     return parent;

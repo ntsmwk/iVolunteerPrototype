@@ -28,10 +28,10 @@ export class DynamicFormQuestionComponent implements OnInit{
     if (this.question.required) {
       this.requiredMarker = '*';
     }
-    console.log("=========================================================================================");
-    console.log(this.form);
-    console.log("QUESTION");
-    console.log(this.question);
+    // console.log("=========================================================================================");
+    // console.log(this.form);
+    // console.log("QUESTION");
+    // console.log(this.question);
 
     
     // console.log("form controls for" + this.question.label + ":");

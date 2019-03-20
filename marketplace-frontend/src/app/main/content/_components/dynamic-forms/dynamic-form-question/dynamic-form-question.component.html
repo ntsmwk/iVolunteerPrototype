@@ -10,7 +10,7 @@
     
       <mat-form-field class="form-field" *ngSwitchCase="'textbox'">
         <input matInput placeholder="{{question.label}} {{requiredMarker}}"  [formControlName]="question.key"
-                [id]="question.key" [type]="question.type" [value]="question.value"/>
+                [id]="question.key"  [type]="question.type" [value]="question.value"/>
                 
                 <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
                      
@@ -20,13 +20,13 @@
         <textarea matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
                 [id]="question.key" [type]="question.type" [value]="question.value" 
                 matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'numberbox'">
         <input matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
                 [id]="question.key" [type]="question.type" [value]="question.value"/>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown'">
@@ -37,7 +37,7 @@
           <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>
         </mat-select>
 
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown-multiple'">
@@ -47,7 +47,7 @@
               <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>
           
         </mat-select>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'numberdropdown'">
@@ -55,7 +55,7 @@
                 [id]="question.key" [value]="question.value">
           <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>      
         </mat-select>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
@@ -67,7 +67,7 @@
                 [id]="question.key">
           <mat-radio-button *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}} &nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
       
     
@@ -77,7 +77,7 @@
           <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}" formControlName="{{question.key}}" [value]="question.value">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+          <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
 
         </mat-form-field>
       </ng-container>
@@ -94,7 +94,7 @@
           [checked]="question.value">
           {{question.label}} 
         </mat-slide-toggle>
-        <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-card>
 
 

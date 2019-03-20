@@ -115,7 +115,7 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
         //TODO DO NESTED
         this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
       } else {
-        if (!isNullOrUndefined(values[prop.id])) {
+        if (!isNullOrUndefined(values[prop.id]) && values[prop.id] != '') {
           if (prop.kind === PropertyKind.LIST) {
             //TODO do list stuff
             const result: ListValue<any>[] = [];
@@ -131,7 +131,12 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
 
             prop.values = result;
           } else {
+
+            
             prop.value = values[prop.id];
+
+            
+            
           }
         }
       }
