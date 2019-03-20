@@ -156,14 +156,20 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		} else {
 			SingleProperty<Object> ret = new SingleProperty<>(prop);
 
+			System.out.println("PropertyMapper: " + ret.getName());
+			
 			if (target.getKind().equals(PropertyKind.DATE)) {
 				ret.setValue(this.convertObjectToDate(target.getValue()));
 				ret.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
 			
-			
 			} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
 				ret.setValue(this.convertObjectToDouble(target.getValue()));
 				ret.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
+				
+			} else if (target.getKind().equals(PropertyKind.WHOLE_NUMBER)) {
+				ret.setValue(this.convertObjectToInteger(target.getValue()));	
+				ret.setDefaultValue(this.convertObjectToInteger(target.getDefaultValue()));
+			
 			} else {
 				ret.setValue(target.getValue());
 				ret.setDefaultValue(target.getDefaultValue());
@@ -262,12 +268,38 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 				return (Double) source;
 			} catch (ClassCastException e) {
 				try {
-						System.out.println("Double ClassCastException triggered: " + source + " returning 0.0");
-						double ret =  Double.parseDouble((String) source);
-						return ret;
+						System.out.println("PropertyMapper: Double ClassCastException triggered: " + source + " trying to parse");
+						double ret;
+						
+						if (source instanceof String) {
+							ret =  Double.parseDouble((String) source);
+							return ret;
+						} else if (source instanceof Integer) {
+							ret = (Integer) source;
+							return ret;
+						} else {
+							throw new IllegalArgumentException("PropertyMapper - unable to parse - should not happen: " + source);
+						}
+						
 					} catch (NumberFormatException e2) {
+						System.out.println("PropertyMapper: NumberformatException triggered: returning 0.0");
 						return 0.0;
 					}
+			}
+		}
+		
+		private long convertObjectToInteger(Object source) {
+			try {
+				return (int) source;
+			} catch (ClassCastException e) {
+				try {
+					System.out.println("PropertyMapper: Long CCE triggered: " + source + "trying to pars ");
+					long ret = Integer.parseInt((String) source);
+					return ret;
+				} catch (NumberFormatException e2) {
+					System.out.println("PropertyMapper: NumberFormatException triggered: returning 0");
+					return 0;
+				}
 			}
 		}
 

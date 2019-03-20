@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.task.template;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,7 @@ import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateStubMapper;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
+import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
@@ -203,35 +205,95 @@ public class UserDefinedTaskTemplateController {
 		//UserDefinedTaskTemplate t = templates.get(templates.indexOf(new UserDefinedTaskTemplate(templateId)));
 		UserDefinedTaskTemplate t = userDefinedTaskTemplateRepository.findOne(templateId);
 		
-		Map<String,Property> map = this.toMap(t.getProperties());
-		System.out.println("\n");
-		for(PropertyDTO<Object> dto : properties) {
+		System.out.println();
+		System.out.println("INCOMING PROPERTIES: ");
+		
+		List<PropertyDTO<Object>> propertyList = Arrays.asList(properties);
+//		this.printPropertyDTOs(propertyList);
+		
+//		System.out.println();
+//		System.out.println();
+//		System.out.println("MAP:");
+		
+//		Map<String,Property> map = this.toMap(t.getProperties());
+		
+//		for (String s : map.keySet()) {
+//			System.out.println("KEY: " + s);
+//			
+//			if (s.equals("test_multi")) {
+//				List<Property> props = ((MultipleProperty)map.get(s)).getProperties();
+//				System.out.println("multiproperty");
+//				for (Property p : props) {
+//					System.out.println(p.getId() + " " + p.getName());
+//				}
+//			}
+//		}
+//		System.out.println("\n");
+		
+		Map <String,Property> map = setPropertiesRec(propertyList, t.getProperties());
+		
+		t.setProperties(new LinkedList<Property>(map.values()));
+		
+//		System.out.println("\n\n - ");
+//		System.out.println("Values to update");
+//		for (Property p : t.getProperties()) {
+//			System.out.println(p.getName() +": " + ((SingleProperty)p).getValue());
+//		}
+		
+		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(t);
+		
+		return userDefinedTaskTemplateMapper.toDTO(ret);
+	}
+	
+	
+	private void printPropertyDTOs(List<PropertyDTO<Object>> properties) {
+		
+		
+		for (PropertyDTO<Object> p : properties) {
+			System.out.println(p.getId() + ": " + p.getName() + " - " + p.getValue());
+			if (p.getKind().equals(PropertyKind.MULTIPLE)) {
+				System.out.println("===>");
+				printPropertyDTOs(p.getProperties());
+				System.out.println("<===");
+			}
+		}
+	}
+	
+	private Map<String,Property> setPropertiesRec(List<PropertyDTO<Object>> updateProperties, List<Property> currentProperties) {
+		Map<String,Property> map = this.toMap(currentProperties);
+		
+		for(PropertyDTO<Object> dto : updateProperties) {
 			Property p = propertyMapper.toEntity(dto);
-
-			
 			System.out.println("===Property to Update===");
 
 			if (!p.getKind().equals(PropertyKind.MULTIPLE) && map.containsKey(p.getId())) {
 				
-				SingleProperty<Object> sp = (SingleProperty<Object>) p;
+				SingleProperty<Object> update = (SingleProperty<Object>) p;
+				SingleProperty<Object> current = (SingleProperty<Object>) (map.get(p.getId()));
 				
-				SingleProperty<Object> aa = (SingleProperty<Object>) (map.get(p.getId()));
-				aa.setValue(sp.getValue());	
-				aa.setValues(sp.getValues());
+				current.setValue(update.getValue());	
+				current.setValues(update.getValues());
 				
 				//System.out.println("updated Property");
-				System.out.println("updated Property: " + sp.getName());
+				System.out.println("updated Property: " + update.getName());
+			} else if (p.getKind().equals(PropertyKind.MULTIPLE)) {
+				System.out.println("\nMULTIPLE--> " + p.getId());
+				
+				MultipleProperty current = (MultipleProperty) (map.get(p.getId()));
+				
+				Map<String,Property> nestedMap = setPropertiesRec(dto.getProperties(), current.getProperties() );
+				
+				current.setProperties(new LinkedList<>(nestedMap.values()));
+				System.out.println();
 			}
 			
 			System.out.println("========================");
 
 		}
 		
-		t.setProperties(new LinkedList<Property>(map.values()));
-		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(t);
-		
-		return userDefinedTaskTemplateMapper.toDTO(ret);
+		return map;
 	}
+	
 	
 	@PutMapping("/tasktemplate/user/{templateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @RequestBody String[] propIds ) {

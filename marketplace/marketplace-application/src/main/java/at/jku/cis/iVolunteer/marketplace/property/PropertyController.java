@@ -106,6 +106,8 @@ public class PropertyController {
 			
 		}
 		
+		System.out.println("PropertyController: DONE\n\n");
+		
 		
 	}
 	
