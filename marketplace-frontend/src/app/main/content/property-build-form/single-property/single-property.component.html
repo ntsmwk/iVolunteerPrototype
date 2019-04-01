@@ -1,0 +1,204 @@
+  
+<form #form="ngForm">
+  <br>
+
+  <h1>Create Single Property</h1>
+
+  <mat-form-field>
+    <input matInput placeholder="Name" [(ngModel)]="model.name" name="name" required/>
+    <!-- <input matInput placeholder="Name" formControlName="propertyName" required/> -->
+  </mat-form-field>
+
+  <mat-form-field>
+      <mat-select placeholder="Property Kind / Type" [(ngModel)]="model.kind" name="kind" required>
+        <mat-option value="undefined"></mat-option>
+        <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
+      </mat-select>
+
+      <!-- <mat-select placeholder="Property Kind / Type" formControlName="propertyKind" required>
+        <mat-option value="undefined"></mat-option>
+        <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
+      </mat-select> -->
+  </mat-form-field>
+
+  <!--According to Type you should be able to have different possiblities for values to be created-->
+  <!--i.e. List - possible to add a list of Default Values Boolean choice between false/true-->
+  
+  <div *ngIf="!isDropdown">
+    <mat-form-field *ngIf="model.kind=='TEXT' || model.kind=='LONG_TEXT'" >
+        <input matInput placeholder="Default Text" [(ngModel)]="model.defaultValue" name="defaultValue"/>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="model.kind=='WHOLE_NUMBER' || model.kind=='FLOAT_NUMBER'" >
+        <input matInput placeholder="Default Number" [(ngModel)]="model.defaultValue" type="number" name="defaultValue"/>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="model.kind=='DATE'">
+        <input matInput [matDatepicker]="picker" placeholder="Default Date" [(ngModel)]="model.defaultValue" name="defaultValue"/>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="model.kind=='BOOL'" floatPlaceholder="always" name="defaultValue">
+        <input matInput placeholder="Default State" style="display: none">
+        <br>
+        <br>
+        <mat-radio-group name="Default State" [(ngModel)]="model.defaultValue">
+            <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
+            <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
+        </mat-radio-group>
+    </mat-form-field>
+  </div>
+
+  <br>
+
+  <!--Choice if property should contain default values-->
+  <!--Possiblity to add Rules-->
+  
+  <div *ngIf="model.kind!='LIST' && model.kind!=undefined">
+    <label id="is-dropdown"><h2>Dropdown or Selection Set?</h2></label>
+    <mat-slide-toggle [checked]="isDropdown" [(ngModel)]="isDropdown" [ngModelOptions]="{standalone: true}" (click)="clearPropertyLegalValues()" ></mat-slide-toggle>
+  </div>
+
+  <!---------------------->
+  <!-----Legal Values----->
+  <!---------------------->
+
+  
+
+  <div *ngIf="isDropdown || propertyKind=='LIST'" style="padding-left: 20px; padding-right: 50%">
+    <h2>Dropdown / List Values</h2>
+    
+    <div *ngFor="let val of propertyLegalValuesCurrent; let i = index; trackBy:trackByFn" fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field >
+        <input matInput placeholder="value {{i+1}}" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
+      </mat-form-field>
+
+      <mat-icon class="iconButton" (click)="updatePropertyLegalValue(i)" style="cursor: pointer" matTooltip="Update Value" matTooltipPosition="above"
+        aria-label="Update Value">check</mat-icon>
+        <mat-icon class="iconButton" (click)="revertPropertyLegalValue(i)" style="cursor: pointer" matTooltip="Revert Value" matTooltipPosition="above"
+        aria-label="Revert Value">replay</mat-icon>
+      <mat-icon class="iconButton" (click)="removePropertyLegalValue(i)" style="cursor: pointer" matTooltip="Remove Value" matTooltipPosition="above"
+        aria-label="Remove Value">delete</mat-icon>
+    </div>
+  
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field >
+          <input matInput placeholder="add a value" [(ngModel)]="propertyAddedValue" [ngModelOptions]="{standalone: true}"/>
+      </mat-form-field>
+      <mat-icon class="iconButton" (click)="addPropertyLegalValue()" style="cursor: pointer" matTooltip="Add Value" matTooltipPosition="above"
+        aria-label="Add Value">add</mat-icon>
+    </div>
+  </div>
+  
+
+  
+
+  <div *ngIf="isDropdown || propertyKind=='LIST'">
+    <mat-form-field>
+        <mat-select placeholder="Default Value" [(ngModel)]="model.defaultValue" name="defaultValue" [disabled]="model.legalValues.length <= 0">
+          <mat-option [value]=undefined ></mat-option>
+          <mat-option *ngFor="let val of model.legalValues" [value]="val">{{val}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+  </div>
+
+
+<!----------------->
+<!----- RULES ----->
+<!----------------->
+
+  <div>
+    <label id="rules"><h2>Property contains rules?</h2></label>
+    <mat-slide-toggle [checked]="hasRules" [(ngModel)]="hasRules" [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+  </div>
+
+  <div [formGroup]="rulesForm">
+
+    <div *ngIf="hasRules" style="padding-left: 20px;">
+      <h3 *ngIf="propertyRulesCurrent.length > 0">Rules</h3>
+      <br>
+      <div *ngFor="let rule of propertyRulesCurrent; let i = index; trackBy:trackByFn">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-form-field> 
+          <!--  <mat-select  placeholder="Rule Type" [(ngModel)]="propertyRulesCurrent[i].kind" [ngModelOptions]="{standalone: true}" [disabled]=getRuleFieldDisabled(i) required>
+              <div *ngFor="let option of ruleKindOptions">
+                <mat-option *ngIf="option.display" [value]="option.kind" [disabled]=option.disabled>{{option.label}}</mat-option> 
+                
+              </div>
+            </mat-select>  -->
+
+            <mat-select  placeholder="Rule Type" formControlName="kind{{i}}" [value]="propertyRulesCurrent[i].kind"  [disabled]=getRuleFieldDisabled(i) required>
+                <div *ngFor="let option of ruleKindOptions">
+                  <mat-option *ngIf="option.display" [value]="option.kind" [disabled]=option.disabled (click)="ruleKindUpdatedEvent($event, rule, i, option)" >{{option.label}}</mat-option> 
+                </div>
+            </mat-select> 
+
+            <mat-error *ngIf="!currentRuleValid">This field is required</mat-error>
+          </mat-form-field>
+          
+          <div>&nbsp;</div>
+          
+          <!-- <mat-form-field> *ngIf="hasValueField(rule)"> -->
+          <mat-form-field *ngIf="hasValueField(rule)">
+            <input matInput placeholder="Value" formControlName="value{{i}}" [value]="propertyRulesCurrent[i].value" type="number" [disabled]=getRuleFieldDisabled(i) requried/>
+            <mat-error *ngIf="!currentRuleValid">This field is required</mat-error>
+          </mat-form-field>
+          
+          <div>&nbsp;</div>
+          
+          <!-- <mat-form-field> *ngIf="hasDataField(rule)"> -->
+          <mat-form-field *ngIf="hasDataField(rule)"> 
+            <input matInput placeholder="Data" formControlName="data{{i}}" [value]="propertyRulesCurrent[i].data" [disabled]=getRuleFieldDisabled(i) required/>
+            <mat-error *ngIf="!currentRuleValid">
+              This field is required</mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <mat-form-field>
+            <input matInput placeholder="Message" formControlName="message{{i}}" [value]="propertyRulesCurrent[i].message" [disabled]=getRuleFieldDisabled(i)/>
+        </mat-form-field>
+
+        <div *ngIf="!getRuleFieldDisabled(i)">
+          <mat-icon class="iconButton" (click)="updateRule(i)" style="cursor: pointer" matTooltip="Update Rule" matTooltipPosition="above"
+            aria-label="Update Rule">check</mat-icon>
+          <!-- <mat-icon class="iconButton" (click)="revertRule(i)" style="cursor: pointer" matTooltip="Revert Rule" matTooltipPosition="above"
+            aria-label="Revert Rule">replay</mat-icon> -->
+          <mat-icon class="iconButton" (click)="removeRule(i)" style="cursor: pointer" matTooltip="Remove Rule" matTooltipPosition="above"
+            aria-label="Remove Rule">delete</mat-icon>
+
+          <mat-error *ngIf="!currentRuleValid">
+            
+            Please check rule settings</mat-error>
+        </div>
+
+        <div *ngIf="getRuleFieldDisabled(i)">
+          <mat-icon class="iconButton" (click)="setActiveRule(i)" style="cursor: pointer" matTooltip="Edit Rule" matTooltipPosition="above"
+            aria-label="Edit Rule">edit</mat-icon>
+          <mat-icon class="iconButton" (click)="removeRule(i)" style="cursor: pointer" matTooltip="Remove Rule" matTooltipPosition="above"
+            aria-label="Remove Rule">delete</mat-icon>
+        </div>
+
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="canAddNewRule">
+        <div>
+          <mat-icon class="iconButton" (click)="addNewRule()" style="cursor: pointer" matTooltip="New Rule" matTooltipPosition="above"
+            aria-label="New Rule">add</mat-icon>
+            Add a new Rule
+        </div>
+      </div>
+    </div>
+  <!--form-->
+  </div>    
+
+  <br>
+  {{ propertyName }}: {{ propertyDefaultValue }} -- TYPE: {{ propertyKind }}
+
+</form>
+
