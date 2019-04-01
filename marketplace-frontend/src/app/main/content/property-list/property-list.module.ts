@@ -4,7 +4,7 @@ import { MatTableModule, MatIconModule, MatButtonModule } from '@angular/materia
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { FusePropertyListComponent } from './property-list.component';
+import { PropertyListComponent } from './property-list.component';
 
 
 
@@ -12,12 +12,12 @@ import { FuseTruncatePipeModule } from "../_pipe/truncate-pipe.module";
 
 
 const routes: Route[] = [
-  {path: '', component: FusePropertyListComponent}
+  {path: '', component: PropertyListComponent}
 ];
 
 @NgModule({
   declarations: [
-    FusePropertyListComponent   
+    PropertyListComponent   
   ],
 
   imports: [
@@ -34,4 +34,4 @@ const routes: Route[] = [
   
 })
 
-export class FusePropertyListModule { }
+export class PropertyListModule { }

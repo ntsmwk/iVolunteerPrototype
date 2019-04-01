@@ -6,9 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NumberProperty extends SingleProperty<Integer> {
 	
 	public NumberProperty() {
+		super();
 		kind = PropertyKind.WHOLE_NUMBER;
-		defaultValue = 0;
-		value = defaultValue;
 	}
 	
 	@Override

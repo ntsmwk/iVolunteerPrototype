@@ -47,6 +47,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
 		propertyDTO.setKind(source.getKind());
+		propertyDTO.setOrder(source.getOrder());
 		
 		
 		//TODO rules
@@ -71,7 +72,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		} else {
 			SingleProperty<Object> s = (SingleProperty<Object>) source;
 			
-			propertyDTO.setValue(s.getValue());
+			//propertyDTO.setValue(s.getValue());
 			propertyDTO.setDefaultValue(s.getDefaultValue());
 			
 			//TODO legal Values
@@ -129,6 +130,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		prop.setId(target.getId());
 		prop.setName(target.getName());
 		prop.setKind(target.getKind());
+		prop.setOrder(target.getOrder());
 		
 		List<Rule> rules = new LinkedList<Rule>();
 		if (target.getRules() != null) {
@@ -159,19 +161,19 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			System.out.println("PropertyMapper: " + ret.getName());
 			
 			if (target.getKind().equals(PropertyKind.DATE)) {
-				ret.setValue(this.convertObjectToDate(target.getValue()));
+				//ret.setValue(this.convertObjectToDate(target.getValue()));
 				ret.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
 			
 			} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-				ret.setValue(this.convertObjectToDouble(target.getValue()));
+//				ret.setValue(this.convertObjectToDouble(target.getValue()));
 				ret.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
 				
 			} else if (target.getKind().equals(PropertyKind.WHOLE_NUMBER)) {
-				ret.setValue(this.convertObjectToInteger(target.getValue()));	
+//				ret.setValue(this.convertObjectToInteger(target.getValue()));	
 				ret.setDefaultValue(this.convertObjectToInteger(target.getDefaultValue()));
 			
 			} else {
-				ret.setValue(target.getValue());
+//				ret.setValue(target.getValue());
 				ret.setDefaultValue(target.getDefaultValue());
 			
 			}
@@ -182,7 +184,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			if (target.getValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getValues()) {
-					values.add(listEntryMapper.toEntity(entry));
+					values.add(listEntryMapper.toEntity(entry, target.getKind()));
 				}
 			}
 			ret.setValues(values);
@@ -192,7 +194,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			if (target.getLegalValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getLegalValues()) {
-					legalValues.add(listEntryMapper.toEntity(entry));
+					legalValues.add(listEntryMapper.toEntity(entry, target.getKind()));
 				}
 			}
 			
@@ -288,13 +290,17 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			}
 		}
 		
-		private long convertObjectToInteger(Object source) {
+		private Object convertObjectToInteger(Object source) {
 			try {
+				
+				if (source == null) {
+					return source;
+				}
 				return (int) source;
 			} catch (ClassCastException e) {
 				try {
 					System.out.println("PropertyMapper: Long CCE triggered: " + source + "trying to pars ");
-					long ret = Integer.parseInt((String) source);
+					int ret = Integer.parseInt((String) source);
 					return ret;
 				} catch (NumberFormatException e2) {
 					System.out.println("PropertyMapper: NumberFormatException triggered: returning 0");

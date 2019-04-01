@@ -23,6 +23,8 @@ import { TextFieldDialogComponent } from "../_components/dialogs/text-field-dial
 import { TextFieldDialogModule } from "../_components/dialogs/text-field-dialog/text-field-dialog.module";
 import { ConfirmDialogComponent } from '../_components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModule } from '../_components/dialogs/confirm-dialog/confirm-dialog.module';
+import { SortDialogModule } from '../_components/dialogs/sort-dialog/sort-dialog.module';
+import { SortDialogComponent } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 
 const routes = [
   {path: ':marketplaceId/:templateId', component: FuseUserDefinedTaskTemplateDetailComponent}
@@ -34,6 +36,7 @@ const routes = [
   imports: [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    
     MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
@@ -46,17 +49,19 @@ const routes = [
     MatProgressSpinnerModule,
     MatListModule,
     MatTooltipModule,
+    
     FuseSharedModule,
 
     AddOrRemoveDialogModule,
     TextFieldDialogModule,
     ConfirmDialogModule,
+    SortDialogModule,
 
     DynamicFormModule,
     DynamicFormQuestionModule
 
   ],
-  entryComponents:[AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent]
+  entryComponents:[AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, SortDialogComponent]
 
   
   

@@ -38,86 +38,7 @@ export class QuestionService {
     questions = this.setQuestions(properties);
 
     console.log(questions);
-    
-    
     console.log("-->done with question setup");
-   
-    // 2nd pass for validators
-    for (let i=0; i<properties.length; i++) {
-
-      let validatorData = this.getValidatorData(properties[i].rules, properties[i].kind, questions);
-
-      if (!isNullOrUndefined(validatorData)) {
-        let question = questions[i];
-        //question = undefined;
-        
-        // if ID is not correct, find the correct one - should never happen
-        if (!isNullOrUndefined(question) && question.key != properties[i].id) {
-          console.log("id not correct - attemting to find the correct one - should never happen... it did though :(");
-          question = questions.find((q: QuestionBase<any>) => {
-            return q.key == properties[i].id;
-          });
-        }
-        if (!isNullOrUndefined(question)) {
-          console.log("found id");
-          question.validators = validatorData.validators;
-          question.required = validatorData.required;
-          question.messages = validatorData.messages;
-        }
-       
-      }
-    }
-   
-    // console.log("Properties        Questions")
-    // for (let i=0; i<properties.length; i++) {
-    //   console.log(properties[i].id + "      " + questions[i].key);
-
-    //   if (questions[i].key == "end_date") {
-
-    //     let p = properties.find((p: Property<any>) => {
-    //       return p.id == "starting_date"
-            
-    //     });
-
-    //     let q = questions.find((q: QuestionBase<any>) => {
-    //       return q.key == "starting_date"
-            
-    //     });
-
-
-    //     console.log(p);
-    //     console.log(p.value);
-    //     console.log("======");
-        
-    //     console.log(questions[i]);
-    //     console.log(q);
-        
-    //     if (isNullOrUndefined(questions[i].validators)) {
-    //       questions[i].validators = [];
-    //     }
-        
-    //     console.log("=====");
-        
-    //     questions[i].validators.push(minDate(q.value));
-    //     console.log(questions[i]);
-        
-    //   }
-    // }
-
-    /**TODO Inter-Property validators:
-     *  Has to be done in a second pass though all the questions (since all questions have to be prepared to be accessible)
-     * 
-     * Might be better if all validators are processed in one step -> faster overall since less time is spent overall searching though the rules
-     * if everything is done at once - restructuring necessary
-     * 
-     * inter property validators need 
-     * -either a reference to a property in the form (not possible with the current setup (at least in this service) - since forms are created after)
-     * -or a question/value is passed directly after question setup (which is possible inside this service with a bit of wrangling around)
-     * 
-     * 
-     *  
-     * */    
-
 
     return questions.sort((a, b) => a.order - b.order);
   }
@@ -128,13 +49,13 @@ export class QuestionService {
       if (isNullOrUndefined(property.legalValues)) {
         
         question = new TextboxQuestion( {            
-          value: property.value,
+          value: Property.getValue(property),
         });
       
       } else {
           question = new DropdownQuestion( {
-            value: property.value,
-            options: this.setValues(property.legalValues),
+            value: Property.getValue(property),
+            options: this.setValuesWithoutKeys(property.legalValues),
         });
       }
 
@@ -142,72 +63,72 @@ export class QuestionService {
       
       if (isNullOrUndefined(property.legalValues)) {
         question = new NumberBoxQuestion({
-          value: property.value,  
+          value: Property.getValue(property),
         });
 
       } else {
         question = new NumberDropdownQuestion({
-          value: property.value,
-          options: this.setValues(property.legalValues),
+          options: this.setValuesWithoutKeys(property.legalValues),
+          value: Property.getValue(property),
         });
       }
 
     } else if (property.kind === PropertyKind.LONG_TEXT) {
         question = new TextAreaQuestion({
-          value: property.value,   
-      });
+          value: Property.getValue(property),
+        });
 
     } else if (property.kind === PropertyKind.BOOL) {
         question = new SlideToggleQuestion({
-          value: property.value,
+          value: Property.getValue(property),
       });
 
     } else if (property.kind === PropertyKind.LIST) {
       question = new DropdownMultipleQuestion({
         values: this.setKeys(property.values),
-        value: '',
-        options: this.setValues(property.legalValues),
+        options: this.setListValues(property.legalValues),
       });
 
     } else if (property.kind === PropertyKind.DATE) {
       question = new DatepickerQuestion({
-        value: this.setDateValue(property.value),
+        value: this.setDateValue(Property.getValue(property)),
       });
       
       
     }
-
 
     ///TEST MultiProp List
     else if (property.kind === PropertyKind.MULTIPLE) {
       console.log("Multiple Property found:");
       console.log(property);
       question = new MultipleQuestion({
-        //TODO for each sub-question, call createQuestion - keys don't have to be unique since it's a separate array
         subQuestions: this.setQuestions(property.properties),
       });
-      //console.log(question.subQuestions[0].label);
-      // for (let q of question.subQuestions) {
-      //  // console.log("BEFORE: " + q.key);
-      //   q.key = this.key + q.key;
-      //  // console.log("AFTER: " + q.key);
-      // }
-      //this.key++;
     }
 
     return question;
   }
 
-  private setValues(values: ListValue<any>[]) :any {
-    let ret: {key: string, value: string}[] = [];
+  private setListValues(values: ListValue<any>[]) :any {
+    let ret: {key: string, value: any}[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
         ret.push({key: values[i].id, value: values[i].value});
-        //console.log("SETVALUES:  o-" + ret[i] + "  key-" + ret[i].key + " val-" + ret[i].value)
       }
     }
     return ret;
   }
+
+  private setValuesWithoutKeys(values: ListValue<any>[]) :any {
+    let ret: any[] = [];
+    if (!isNullOrUndefined(values)) {
+      for (let i = 0; i < values.length; i++) {
+        ret.push(values[i].value);
+      }
+    }
+    return ret;
+  }
+
 
   public setDateValue(value: any) {
     if (!isNullOrUndefined(value)) {
@@ -216,6 +137,13 @@ export class QuestionService {
       return undefined;
     }
   }
+
+  public setDateValueArr(value: Date): Date[] {
+    let ret: Date[] = [];
+    ret.push(this.setDateValue(value));
+    return ret;
+  }
+
 
   private setKeys(values: ListValue<any>[]) :any {
     let ret: string[] = [];
@@ -238,13 +166,21 @@ export class QuestionService {
       question.label = property.name;
       question.order = properties.indexOf(property);
 
-      
+      //Set Validators
+
+      let validatorData = this.getValidatorData(property.rules, property.kind);
+
+      if (!isNullOrUndefined(validatorData)) {
+        question.validators = validatorData.validators;
+        question.required = validatorData.required;
+        question.messages = validatorData.messages;
+      }
       questions.push(question);
     } 
     return questions;
   }
 
-  private getValidatorData(rules: Rule[], propertyKind: PropertyKind, questions: QuestionBase<any>[]): ValidatorData {
+  private getValidatorData(rules: Rule[], propertyKind: PropertyKind /*, questions: QuestionBase<any>[]*/): ValidatorData {
     let validators: ValidatorFn[] = [];
     let messages: Map<string,string> = new Map<string,string>();
     let required: boolean = false;
@@ -253,7 +189,7 @@ export class QuestionService {
       for (let rule of rules) {
         //console.log("processing rule: " + rule.id);
 
-        let singleValidatorData = this.convertRuleToValidator(rule, propertyKind, questions);
+        let singleValidatorData = this.convertRuleToValidator(rule, propertyKind);
         
         if (!isNullOrUndefined(singleValidatorData)) {
           validators.push(singleValidatorData.validator);
@@ -276,7 +212,7 @@ export class QuestionService {
     } 
   }
 
-  private convertRuleToValidator(rule: Rule, propertyKind: PropertyKind, questions: QuestionBase<any>[]): SingleValidatorData {
+  private convertRuleToValidator(rule: Rule, propertyKind: PropertyKind/*, questions: QuestionBase<any>[]*/): SingleValidatorData {
 
     let validator: ValidatorFn;
     let key: string;
@@ -313,39 +249,15 @@ export class QuestionService {
         break;
 
       case RuleKind.MAX:
-        console.log("adding max Validator" + rule.value);
+        //console.log("adding max Validator" + rule.value);
         validator = Validators.max(rule.value);
         key = 'max';
         break;
 
       case RuleKind.MIN:
-        
-        if (!isNullOrUndefined(rule.data)) {
-          if (propertyKind==PropertyKind.DATE) {
-            console.log("adding min Validator" + rule.data);
-            let q = questions.find((q: QuestionBase<any>) => {
-              return q.key == rule.data;
-            });
-            if (!isNullOrUndefined(q)) {
-              console.log("not null or undefined");
-              console.log(q);
-              validator = minDate(q);
-              key = 'mindate';
-            } else {
-              console.log("is null or undefined");
-              console.log(q);
-              return undefined;
-            }
-            
-          }
-        } else if (!isNullOrUndefined(rule.value)) {
-          console.log("adding min Validator" + rule.value);
-          validator = Validators.min(rule.value);
-          key = 'min';
-        } else {
-          console.log("should not happen (min Validator)");
-        }
-        
+        //console.log("adding min Validator" + rule.value);
+        validator = Validators.min(rule.value);
+        key = 'min';
         break;
 
       default:

@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.property.listEntry;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +15,7 @@ public class ListEntry<T> {
 	}
 	
 	public ListEntry(T value) {
+		this.id = new ObjectId().toHexString();
 		this.value = value;
 	}
 	

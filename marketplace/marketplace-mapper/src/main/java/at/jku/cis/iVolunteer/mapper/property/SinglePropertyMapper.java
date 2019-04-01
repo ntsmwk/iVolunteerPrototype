@@ -42,8 +42,8 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
 		
-		propertyDTO.setValue(source.getValue());
-		
+//		propertyDTO.setValue(source.getValue());
+		propertyDTO.setOrder(source.getOrder());
 		
 		propertyDTO.setKind(source.getKind());
 		propertyDTO.setDefaultValue(source.getDefaultValue());
@@ -109,17 +109,18 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		prop.setId(target.getId());
 		prop.setName(target.getName());
+		prop.setOrder(target.getOrder());
 		
 		if (target.getKind().equals(PropertyKind.DATE)) {
-			prop.setValue(this.convertObjectToDate(target.getValue()));
+//			prop.setValue(this.convertObjectToDate(target.getValue()));
 			prop.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
 		
 		
 		} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-			prop.setValue(this.convertObjectToDouble(target.getValue()));
+//			<>prop.setValue(this.convertObjectToDouble(target.getValue()));
 			prop.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
 		} else {
-			prop.setValue(target.getValue());
+//			prop.setValue(target.getValue());
 			prop.setDefaultValue(target.getDefaultValue());
 		
 		}

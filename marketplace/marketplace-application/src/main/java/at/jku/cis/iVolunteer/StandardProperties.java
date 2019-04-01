@@ -193,6 +193,7 @@ public class StandardProperties {
 		@PostConstruct
 		public void inst() {
 			//this.setId("name");
+//			this.setId("name");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Name");
 //			this.setDefaultValue("");
@@ -366,7 +367,11 @@ public class StandardProperties {
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Required Equipment");
 			this.setDefaultValue("None");
-			this.setValue(getDefaultValue());
+			
+			
+			List<ListEntry<String>> values = new ArrayList<>();
+			values.add(new ListEntry<String>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.REQUIRED));
@@ -476,7 +481,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.WHOLE_NUMBER);
 			this.setName("Postcode");
 			this.setDefaultValue(1234);
-			this.setValue(1234);
+			
+			List<ListEntry<Integer>> values = new ArrayList<>();
+			values.add(new ListEntry<Integer>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			//TODO Testrules
 			List<Rule> rules = new LinkedList<Rule>();
@@ -525,7 +533,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.WHOLE_NUMBER);
 			this.setName("Period length");
 			this.setDefaultValue(1);
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Integer>> values = new ArrayList<>();
+			values.add(new ListEntry<Integer>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			//TODO Testrules
 			List<Rule> rules = new LinkedList<Rule>();
@@ -549,7 +560,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.DATE);
 			this.setName("Starting Date");
 			this.setDefaultValue(new Date()); //Default current Date
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Date>> values = new ArrayList<>();
+			values.add(new ListEntry<Date>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			//TODO Testrules
 			List<Rule> rules = new LinkedList<Rule>();
@@ -590,7 +604,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Urgent");
 			this.setDefaultValue(false);
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Boolean>> values = new ArrayList<>();
+			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			this.setValues(values);	
 		}
 	}
 	
@@ -604,7 +621,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Highlighted");
 			this.setDefaultValue(false);
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Boolean>> values = new ArrayList<>();
+			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			this.setValues(values);	
 		}
 	}
 	
@@ -618,7 +638,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Promotion");
 			this.setDefaultValue(false);
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Boolean>> values = new ArrayList<>();
+			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			this.setValues(values);	
 		}
 	}
 	
@@ -632,7 +655,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Feedback Requested");
 			this.setDefaultValue(false);
-			this.setValue(getDefaultValue());	
+
+			List<ListEntry<Boolean>> values = new ArrayList<>();
+			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			this.setValues(values);	
 		}
 	}
 	
@@ -646,7 +672,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Remind Participants");
 			this.setDefaultValue(true);
-			this.setValue(getDefaultValue());
+
+			List<ListEntry<Boolean>> values = new ArrayList<>();
+			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			this.setValues(values);	
 		}
 	}
 	
@@ -664,7 +693,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Latitude");
 			this.setDefaultValue(0.01);
-			this.setValue(getDefaultValue());
+
+			List<ListEntry<Double>> values = new ArrayList<>();
+			values.add(new ListEntry<Double>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.MIN, -90));
@@ -683,7 +715,10 @@ public class StandardProperties {
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Longitude");
 			this.setDefaultValue(Double.NaN);
-			this.setValue(getDefaultValue());
+			
+			List<ListEntry<Double>> values = new ArrayList<>();
+			values.add(new ListEntry<Double>(this.getDefaultValue()));
+			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.MIN, -180));

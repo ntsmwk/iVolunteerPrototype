@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FuseSharedModule } from "@fuse/shared.module";
 import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
 //import { DynamicFormModule } from "../dynamic-form/dynamic-form.module";
-import {GermanDateAdapter} from '../../../_adapter/german-date-adapter';
+import { GermanDateAdapter } from '../../../_adapter/german-date-adapter';
 import { DynamicFormErrorModule } from "../dynamic-form-error/dynamic-form-error.module";
 
 
@@ -37,9 +37,12 @@ import {
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, 
+
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatChipsModule, 
     MatDividerModule, MatIconModule, MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, 
-    MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule ,FuseSharedModule,
+    MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule,
+    
+    FuseSharedModule,
     DynamicFormErrorModule
   ],
   declarations: [DynamicFormQuestionComponent],

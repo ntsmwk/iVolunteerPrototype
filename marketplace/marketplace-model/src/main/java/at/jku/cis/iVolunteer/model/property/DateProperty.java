@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DateProperty extends SingleProperty<Date> {
 	
 	public DateProperty() {
+		super();
 		kind = PropertyKind.DATE;
 	}
 

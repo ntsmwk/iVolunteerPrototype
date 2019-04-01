@@ -14,12 +14,12 @@ import { PropertyService } from "../_service/property.service";
 import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'fuse-property-list',
+  selector: 'app-property-list',
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.scss'],
   animations: fuseAnimations
 })
-export class FusePropertyListComponent implements OnInit {
+export class PropertyListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<PropertyListItem>();
   displayedColumns = ['id', 'name', 'value', 'kind'];
@@ -36,10 +36,10 @@ export class FusePropertyListComponent implements OnInit {
     this.loadAllProperties();
   }
 
-  onRowSelect(p: Property<Object>) {
+  onRowSelect(p: PropertyListItem) {
     console.log("Property Clicked: " + p.name );
     console.log("CURRENT URL: " + this.router.url)
-    this.router.navigate(['/main/property/' + this.marketplace.id + '/' + p.id]);
+    this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
   }
 
 
@@ -54,6 +54,7 @@ export class FusePropertyListComponent implements OnInit {
           this.marketplace = marketplace;
           this.propertyService.getPropertyList(marketplace).toPromise().then((pArr: PropertyListItem[]) => {
           this.dataSource.data = pArr;
+          console.log(pArr);
         })}
       })
     });
@@ -61,30 +62,29 @@ export class FusePropertyListComponent implements OnInit {
 
   newProperty() {
     console.log("clicked new Property");
-    this.addProperty();
+    this.router.navigate(['main/property/new/' + this.marketplace.id] );
   }
 
- private addProperty() {
-  console.log("TODO: Navigate to add Property Detail page");
-
-  }
 
   updateProperty(item: PropertyListItem) {
   console.log("clicked to update property " + item.id + " " + item.name + " TODO - link to detail page");
 
   }
 
-  updatePropertySave(property: Property<string>) {
-    console.log("attempt to update");
-    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
-      this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-        if (!isNullOrUndefined(marketplace)) {
-          this.propertyService.updateProperty(marketplace, <Property<string>>property).toPromise().then(() => 
-            console.log("Updated"));
+  // updatePropertySave(property: Property<string>) {
+  //   console.log("attempt to update");
+  //   this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
+  //     this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
+  //       if (!isNullOrUndefined(marketplace)) {
+  //         this.propertyService.updateProperty(marketplace, <Property<string>>property).toPromise().then(() => 
+  //           console.log("Updated"));
           
-        }
-      })
-    });
-  }
+  //       }
+  //     })
+  //   });
+  //}
 
+  displayPropertyValue(property: PropertyListItem): string {    
+    return PropertyListItem.getValue(property);
+  }
 }

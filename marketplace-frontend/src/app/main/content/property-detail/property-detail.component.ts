@@ -9,13 +9,14 @@ import { ParticipantRole, Participant } from '../_model/participant';
 import { Property, PropertyKind } from '../_model/properties/Property';
 import { Marketplace } from '../_model/marketplace';
 import { PropertyService } from '../_service/property.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-property-detail',
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.scss']
 })
-export class FusePropertyDetailComponent implements OnInit {
+export class PropertyDetailComponent implements OnInit {
 
   role: ParticipantRole;
   participant: Participant;
@@ -52,7 +53,7 @@ export class FusePropertyDetailComponent implements OnInit {
         this.property = property;    
       }).then(() => {
         console.log("DETAIL PAGE FOR PROPERTY " + this.property.id);
-        console.log(this.property.name + ": " + this.property.value);
+        console.log(this.property.name + ": " + Property.getValue(this.property));
         console.log("Kind: " + this.property.kind);
         console.log("Default Value: " + this.property.defaultValue)
         console.log("============================");
@@ -60,6 +61,10 @@ export class FusePropertyDetailComponent implements OnInit {
         this.isLoaded = true;
       });
     });  
+  }
+
+  displayPropertyValue(property: Property<any>): string {    
+    return Property.getValue(property);
   }
 
   navigateBack() {

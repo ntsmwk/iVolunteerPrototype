@@ -3,8 +3,7 @@ import { FormGroup, FormControl }        from '@angular/forms';
  
 import { QuestionBase }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
-import { QuestionService } from 'app/main/content/_service/question.service';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+
 
 
 @Component({
@@ -136,5 +135,14 @@ export class DynamicFormQuestionComponent implements OnInit{
     // console.log(this.form.get(this.question.key).get('nested1'));
     return this.form.get(this.question.key);
   }
+
+  public getQuestionValue(question: QuestionBase<any>) {
+    console.log("getQurstionvValue");
+    console.log(question.values[0]);
+
+    let ret = question.values[0];
+    return ret
+  }
+
 
 }

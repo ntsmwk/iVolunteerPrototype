@@ -38,6 +38,7 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
 		propertyDTO.setKind(source.getKind());
+		propertyDTO.setOrder(source.getOrder());
 		
 		propertyDTO.setProperties(propertyMapper.toDTOs(source.getProperties()));
 		
@@ -112,7 +113,7 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		prop.setId(target.getId());
 		prop.setName(target.getName());
 		prop.setKind(target.getKind());
-
+		prop.setOrder(target.getOrder());
 		
 		prop.setProperties(propertyMapper.toEntities(target.getProperties()));
 				

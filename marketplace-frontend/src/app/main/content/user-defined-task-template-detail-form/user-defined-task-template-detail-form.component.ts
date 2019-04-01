@@ -61,7 +61,7 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
 
          console.log("VALUES:");
          for (let property of this.template.properties) {
-           console.log(property.id + ": " + property.value);
+           console.log(property.id + ": " + Property.getValue(property));
 
          }
         this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
@@ -93,18 +93,18 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
 
    
     
-    console.log("====================================================");
-    console.log("Properties:");
-    console.log(props);
-    console.log("Form Values:");
-    console.log(form.value);
-    console.log("====================================================");
+    // console.log("====================================================");
+    // console.log("Properties:");
+    // console.log(props);
+    // console.log("Form Values:");
+    // console.log(form.value);
+    // console.log("====================================================");
 
 
     this.userDefinedTaskTemplateService.updatePropertiesInTemplate(this.marketplace, this.template.id, props).toPromise().then(() => {
       console.log("finished - returning to previous page");
       this.navigateBack();
-    })
+    });
   }
 
 
@@ -132,11 +132,12 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
             prop.values = result;
           } else {
 
-            
-            prop.value = values[prop.id];
-
-            
-            
+            if (isNullOrUndefined(prop.values)) {
+              prop.values = []
+              prop.values.push(new ListValue<any>(null, values[prop.id]));
+            } else {
+              prop.values[0].value = values[prop.id];
+            }
           }
         }
       }

@@ -1,10 +1,13 @@
+import { isNullOrUndefined } from "util";
 
 export class Property<T> {
     id: string;
     name: string;
-    value: T;
+    // value: T;
 
-    values?: ListValue<T>[];
+    values: ListValue<T>[];
+
+    order: number;
 
     defaultValue: T;
     legalValues?: ListValue<T>[];
@@ -13,26 +16,51 @@ export class Property<T> {
     kind: PropertyKind;
 
     properties?: Property<any>[];
+
+    public static getValue(property: Property<any>): any {
+        if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
+            return property.values[0].value;
+        } else {
+            return '';
+        }
+    }
+
+    public static getId(property: Property<any>): string {
+        if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
+            return property.values[0].id;
+        } else {
+            return '';
+        }
+    }
+
 }
-
-
 
 export class ListValue<T> {
     id: string;
-    value: string;
+    value: T;
 
-    constructor (id: string, value: string) {
+    constructor (id: string, value: T) {
         this.id = id;
         this.value = value;
-    }
-    
+    }  
 }
 
 export class PropertyListItem {
     id: string;
     name: string;
-    value: any;
+    values: ListValue<any>[];
     kind: PropertyKey;
+    order: number;
+
+
+    public static getValue(propertyListItem: PropertyListItem): any {
+        if (!isNullOrUndefined(propertyListItem.values) && propertyListItem.values.length >= 1) {
+            return propertyListItem.values[0].value;
+        } else {
+            return undefined;
+        }
+        
+    }
 }
 
 export class Rule {
@@ -41,8 +69,15 @@ export class Rule {
     value?: number;
     data?: string;
     message: string;
-}
 
+    copyRule(rule: Rule) {
+        this.id = rule.id;
+        this.kind = rule.kind;
+        this.value = rule.value;
+        this.data = rule.data;
+        this.message = rule.message;
+    }
+}
 
 export enum PropertyKind {
     TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL", 

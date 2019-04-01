@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class BooleanProperty extends SingleProperty<Boolean> {
 	
 	public BooleanProperty() {
+		super();
 		kind = PropertyKind.BOOL;
 	}
 

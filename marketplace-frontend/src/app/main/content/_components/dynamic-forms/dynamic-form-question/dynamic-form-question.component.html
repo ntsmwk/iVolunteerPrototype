@@ -26,18 +26,19 @@
       <mat-form-field class="form-field" *ngSwitchCase="'numberbox'">
         <input matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
                 [id]="question.key" [type]="question.type" [value]="question.value"/>
-        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>      
       </mat-form-field>
-
+      
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown'">
         
         <mat-select placeholder="{{question.label}} {{requiredMarker}}"  [formControlName]="question.key"
                 [id]="question.key" [value]="question.value">
           <!-- <mat-option [value]="undefined"></mat-option> -->
-          <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>
+          <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>
         </mat-select>
-
+        <!-- {{ getQuestionValue(question) }} -->
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown-multiple'">
@@ -53,9 +54,10 @@
       <mat-form-field class="form-field" *ngSwitchCase="'numberdropdown'">
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
                 [id]="question.key" [value]="question.value">
-          <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>      
+          <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>      
         </mat-select>
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+        {{ question.value }} - {{ question.values }}
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
@@ -65,29 +67,24 @@
         <br>
         <mat-radio-group name="{{question.label}}" [formControlName]="question.key"
                 [id]="question.key">
-          <mat-radio-button *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}} &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button *ngFor="let opt of question.options" [value]="opt">{{opt}} &nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
+      
       
     
       <ng-container >
         <mat-form-field class="form-field"  *ngSwitchCase="'datepicker'">
 
-          <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}" formControlName="{{question.key}}" [value]="question.value">
+          <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}" formControlName="{{question.key}}" 
+            [value]="question.value">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
 
         </mat-form-field>
       </ng-container>
-
-      <!--
-      <mat-form-field class="form-field" *ngSwitchCase="'slider'">
-        
-      </mat-form-field>
-      -->
-      
       
       <mat-card *ngSwitchCase="'slidetoggle'">
         <mat-slide-toggle class="slide-toggle-field" [id]="question.key" [formControlName]="question.key" 

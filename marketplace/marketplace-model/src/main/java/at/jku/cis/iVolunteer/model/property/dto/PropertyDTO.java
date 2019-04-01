@@ -14,11 +14,17 @@ public class PropertyDTO<T> {
 	
 	PropertyKind kind;
 	
-	T value;
+//	T value;
 	T defaultValue;
+	
+	int order;
+	boolean custom;
 	
 	List<ListEntryDTO<T>> values;
 	List<ListEntryDTO<T>> legalValues;
+	
+//	List<T> values;
+//	List<T> legalValues;
 	
 	List<PropertyDTO<T>> properties;
 	
@@ -35,22 +41,33 @@ public class PropertyDTO<T> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 
-
-	public T getValue() {
-		return value;
-	}
-	public void setValue(T value) {
-		this.value = value;
-	}
+//	public T getValue() {
+//		return value;
+//	}
+//	public void setValue(T value) {
+//		this.value = value;
+//	}
+	
 	public T getDefaultValue() {
 		return defaultValue;
 	}
 	public void setDefaultValue(T defaultValue) {
 		this.defaultValue = defaultValue;
 	}
+	public int getOrder() {
+		return order;
+	}
+	public void setOrder(int order) {
+		this.order = order;
+	}
+	public boolean isCustom() {
+		return custom;
+	}
+	public void setCustom(boolean custom) {
+		this.custom = custom;
+	}
+
 	public List<ListEntryDTO<T>> getValues() {
 		return values;
 	}
@@ -63,6 +80,8 @@ public class PropertyDTO<T> {
 	public void setLegalValues(List<ListEntryDTO<T>> legalValues) {
 		this.legalValues = legalValues;
 	}
+
+	
 	public List<PropertyDTO<T>> getProperties() {
 		return properties;
 	}

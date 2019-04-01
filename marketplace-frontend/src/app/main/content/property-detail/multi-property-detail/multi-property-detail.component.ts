@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Property } from '../../_model/properties/Property';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-multi-property-detail',
@@ -15,6 +16,16 @@ export class MultiPropertyDetailComponent implements OnInit {
   ngOnInit() {
 
     
+  }
+
+  displayPropertyValue(property: Property<any>): string {    
+    // if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
+    //   return property.values[0].value;
+    // } else {
+    //     return undefined;
+    // }
+
+    return Property.getValue(property);
   }
 
 }

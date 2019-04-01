@@ -73,12 +73,12 @@ public class UserDefinedTaskTemplateController {
 		UserDefinedTaskTemplate t2 = new UserDefinedTaskTemplate("1");
 
 		t1.setName("My Template 1");
-		List<Property> p1 = sp.getAllSingle();	
+		List<Property> p1 = propertyRepository.findAll();
 		t1.setProperties(p1);
 		templates.add(t1);
 
 		t2.setName("My Template 2");
-		List<Property> p2 = sp.getAllSingle();
+		List<Property> p2 = propertyRepository.findAll();
 		t2.setProperties(p2);
 		templates.add(t2);
 		
@@ -250,7 +250,7 @@ public class UserDefinedTaskTemplateController {
 		
 		
 		for (PropertyDTO<Object> p : properties) {
-			System.out.println(p.getId() + ": " + p.getName() + " - " + p.getValue());
+			System.out.println(p.getId() + ": " + p.getName() + " - " + p.getValues().size());
 			if (p.getKind().equals(PropertyKind.MULTIPLE)) {
 				System.out.println("===>");
 				printPropertyDTOs(p.getProperties());
@@ -271,7 +271,7 @@ public class UserDefinedTaskTemplateController {
 				SingleProperty<Object> update = (SingleProperty<Object>) p;
 				SingleProperty<Object> current = (SingleProperty<Object>) (map.get(p.getId()));
 				
-				current.setValue(update.getValue());	
+//				current.setValue(update.getValue());	
 				current.setValues(update.getValues());
 				
 				//System.out.println("updated Property");

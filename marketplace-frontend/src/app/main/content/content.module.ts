@@ -78,13 +78,19 @@ const routes: Route[] = [
   },
   //AK
   { path: 'main/properties/all',
-    loadChildren: './property-list/property-list.module#FusePropertyListModule',
+    loadChildren: './property-list/property-list.module#PropertyListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/property',
-    loadChildren: './property-detail/property-detail.module#FusePropertyDetailModule',
+  { path: 'main/properties',
+    loadChildren: './property-detail/property-detail.module#PropertyDetailModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/property/new',
+    loadChildren: './property-build-form/property-build-form.module#PropertyBuildFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+
   },
 
   { path: 'main/task-templates/user/all',

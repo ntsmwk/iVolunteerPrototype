@@ -10,13 +10,18 @@ public class SinglePropertyDTO<T> {
 	String id;
 	String name;
 	
-	T value;
+	//T value;
 	T defaultValue;
+	
+	int order;
 	
 	List<RuleDTO> rules;
 	
 	List<ListEntryDTO<T>> legalValues;
 	List<ListEntryDTO<T>> values;
+	
+//	List<T> legalValues;
+//	List<T> values;
 	
 	PropertyKind kind;
 	
@@ -34,12 +39,12 @@ public class SinglePropertyDTO<T> {
 		this.name = name;
 	}
 
-	public T getValue() {
-		return value;
-	}
-	public void setValue(T value) {
-		this.value = value;
-	}
+//	public T getValue() {
+//		return value;
+//	}
+//	public void setValue(T value) {
+//		this.value = value;
+//	}
 	
 	public List<ListEntryDTO<T>> getValues() {
 		return values;
@@ -47,12 +52,21 @@ public class SinglePropertyDTO<T> {
 	public void setValues(List<ListEntryDTO<T>> values) {
 		this.values = values;
 	}
+	
 
 	public T getDefaultValue() {
 		return defaultValue;
 	}
 	public void setDefaultValue(T defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+	
+	public int getOrder() {
+		return order;
+	}
+	
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	public List<ListEntryDTO<T>> getLegalValues() {
@@ -62,6 +76,7 @@ public class SinglePropertyDTO<T> {
 		this.legalValues = legalValues;
 	}
 
+	
 	public List<RuleDTO> getRules() {
 		return rules;
 	}

@@ -13,7 +13,7 @@
     </div>
   
 
-    <br>Value: {{ property.value }}
+    <br>Value: {{ displayPropertyValue(property) }}
     <br>Default Value: {{ property.defaultValue }}
     <br>Property Kind: {{ property.kind }}
 
@@ -45,7 +45,7 @@
     <div *ngIf="property.properties != null">
       <mat-list>
         <div *ngFor="let p of property.properties">
-          <mat-list-item > {{p.id}}: {{p.name}} = {{p.value}}</mat-list-item>
+          <mat-list-item > {{p.id}}: {{p.name}} = {{displayPropertyValue(p)}}</mat-list-item>
           <app-multi-property-detail [property]="p"></app-multi-property-detail> 
         </div>
       </mat-list>

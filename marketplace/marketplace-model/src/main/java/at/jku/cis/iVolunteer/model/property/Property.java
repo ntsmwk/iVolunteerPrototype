@@ -16,6 +16,10 @@ public class Property {
 	List<Rule> rules;
 	PropertyKind kind;
 	
+	int order;
+	
+	boolean custom;
+	
 	public String getId() {
 		return id;
 	}
@@ -46,6 +50,22 @@ public class Property {
 	
 	public void setKind(PropertyKind kind) {
 		this.kind = kind;
+	}
+	
+	public int getOrder() {
+		return order;
+	}
+	
+	public void setOrder(int order) {
+		this.order = order;
+	}
+	
+	public boolean isCustomProperty() {
+		return custom;
+	}
+	
+	public void setCustomProperty(boolean custom) {
+		this.custom = custom;
 	}
 	
 	@Override

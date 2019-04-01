@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.property;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,15 +11,16 @@ import at.jku.cis.iVolunteer.model.property.rule.Rule;
 @Document
 public class SingleProperty<T> extends Property {
 
-	T value;
+	//T value;
 	List<ListEntry<T>> values;
+	
 	
 	T defaultValue;
 	
 	List<ListEntry<T>> legalValues;
+
 	
 	public SingleProperty() {
-		
 	}
 	
 	public SingleProperty(Property p) {
@@ -44,14 +46,14 @@ public class SingleProperty<T> extends Property {
 		this.name = name;
 	}
 
-	public T getValue() {
-		return value;
-	}
-	
-	public void setValue(T value) {
-		this.value = value;
-	}
-	
+//	public T getValue() {
+//		return value;
+//	}
+//	
+//	public void setValue(T value) {
+//		this.value = value;
+//	}
+//	
 	public List<ListEntry<T>> getValues() {
 		return values;
 	}
@@ -59,6 +61,9 @@ public class SingleProperty<T> extends Property {
 	public void setValues(List<ListEntry<T>> values) {
 		this.values = values;
 	}
+	
+
+	
 
 	public T getDefaultValue() {
 		return defaultValue;
@@ -75,6 +80,7 @@ public class SingleProperty<T> extends Property {
 	public void setLegalValues(List<ListEntry<T>> legalValues) {
 		this.legalValues = legalValues;
 	}
+		
 
 	public List<Rule> getRules() {
 		return rules;

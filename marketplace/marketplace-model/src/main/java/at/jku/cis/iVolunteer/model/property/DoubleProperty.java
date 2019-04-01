@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DoubleProperty extends SingleProperty<Double> {
 	
 	public DoubleProperty() {
+		super();
 		kind = PropertyKind.FLOAT_NUMBER;
 	}
 

@@ -51,6 +51,7 @@ public class PropertyController {
 
 		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
 		
+				
 		return retVal;
 		
 	}
@@ -113,9 +114,6 @@ public class PropertyController {
 	
 	@GetMapping("/properties/{id}") 
 	public PropertyDTO<Object> getPropertyByID(@PathVariable("id") String id) {
-		
-		
-
 		return propertyMapper.toDTO(propertyRepository.findOne(id));
 	}
 	

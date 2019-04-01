@@ -8,7 +8,7 @@ import { ValidatorFn } from "@angular/forms";
     controlType: string;
     required: boolean;
 
-    //values?: T[];
+    values: T[];
 
     validators?: ValidatorFn[];
     messages: Map<string,string>
@@ -22,7 +22,7 @@ import { ValidatorFn } from "@angular/forms";
         order?: number,
         controlType?: string,
         required?: boolean,
-        //values?: T[],
+        values?: T[],
         
         validators?: ValidatorFn[],
         messages?: Map<string,string>
@@ -33,7 +33,7 @@ import { ValidatorFn } from "@angular/forms";
       this.label = options.label || '';
       this.order = options.order === undefined ? 1 : options.order;
       this.controlType = options.controlType || '';
-      //this.values = options.values || undefined;
+      this.values = options.values || undefined;
       this.validators = options.validators || undefined;    
       this.required = options.required || false;  
       this.messages = options.messages || undefined;
@@ -132,7 +132,7 @@ import { ValidatorFn } from "@angular/forms";
   export class DropdownMultipleQuestion extends QuestionBase<string> {
     controlType = 'dropdown-multiple'
     options: {key: string, value: string}[] = [];
-    values: {key: string, value: string}[] = [];
+    values: any[] = [];
 
     constructor(options: {} = {}) {
       super(options);
@@ -144,13 +144,13 @@ import { ValidatorFn } from "@angular/forms";
   export class MultipleQuestion extends QuestionBase<string> {
     controlType = 'multiple'
     options: {key: string, value: string}[] = [];
-    values: {key: string, value: string}[] = [];
+    //values: {key: string, value: string}[] = [];
     //subQuestions: QuestionBase<any>[] = [];
 
     constructor(options: {} = {}) {
       super(options);
       this.options = options['options'] || [];
-      this.values = options['values'] || [];
+      //this.values = options['values'] || [];
       //this.subQuestions = options['subQuestions'] || [];
     }
   }

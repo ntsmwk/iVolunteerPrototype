@@ -16,6 +16,7 @@ import { QuestionBase } from '../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../_components/dialogs/text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../_components/dialogs/confirm-dialog/confirm-dialog.component';
+import { SortDialogComponent, SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 
 @Component({
   selector: 'user-defined-task-template-detail',
@@ -182,6 +183,20 @@ export class FuseUserDefinedTaskTemplateDetailComponent implements OnInit {
       }
 
     });
+  }
+
+  propertyOrderDialog() {
+    console.log("clicked order properties");
+
+    const dialogRef = this.dialog.open(SortDialogComponent, {
+      width: '500px',
+      data: {order: this.properties, label: "Change Property Order"}
+    });
+    
+    dialogRef.afterClosed().subscribe((result: SortDialogData) => {
+      console.log("Dialog closed - displayed result");
+      console.log(result);
+    })
   }
 
   editDescriptionDialog() {

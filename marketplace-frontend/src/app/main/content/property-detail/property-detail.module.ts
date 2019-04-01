@@ -11,15 +11,15 @@ import { MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule,
   MatInputModule, MatSidenavModule, MatDividerModule, MatTableModule, MatCheckboxModule } 
   from '@angular/material';
 
-  import { FusePropertyDetailComponent } from './property-detail.component';
+  import { PropertyDetailComponent } from './property-detail.component';
 import { MultiPropertyDetailComponent } from './multi-property-detail/multi-property-detail.component';
 
 const routes = [
-  {path: ':marketplaceId/:propertyId', component: FusePropertyDetailComponent}
+  {path: ':marketplaceId/:propertyId', component: PropertyDetailComponent}
 ];
 
 @NgModule({
-  declarations: [FusePropertyDetailComponent, MultiPropertyDetailComponent],
+  declarations: [PropertyDetailComponent, MultiPropertyDetailComponent],
   
   imports: [
     RouterModule.forChild(routes),
@@ -41,4 +41,4 @@ const routes = [
   ]
   
 })
-export class FusePropertyDetailModule { }
+export class PropertyDetailModule { }
