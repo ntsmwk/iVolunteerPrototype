@@ -10,7 +10,7 @@
   </mat-form-field>
 
   <mat-form-field>
-      <mat-select placeholder="Property Kind / Type" [(ngModel)]="model.kind" name="kind" required>
+      <mat-select placeholder="Property Kind / Type" [(ngModel)]="model.kind" name="kind" (selectionChange)="clearPropertyLegalAndDefaultValues()" required>
         <mat-option value="undefined"></mat-option>
         <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
       </mat-select>
@@ -21,10 +21,20 @@
       </mat-select> -->
   </mat-form-field>
 
+   <!--Choice if Property should be a Dropdown (which contains default values-->
+   <div *ngIf="model.kind!='LIST' && model.kind!=undefined">
+    <label id="is-dropdown"><h2>Should be Property contain a set of fixed Values inside a Drop-Down-Menu?</h2></label>
+    
+    <mat-radio-group aria-labelledby="is-dropdown" [(ngModel)]="isDropdown" (change)="clearPropertyLegalAndDefaultValues()" [ngModelOptions]="{standalone: true}">
+      <mat-radio-button [value]="true" matTooltip="Property with a single value" matTooltipPosition="above">Yes</mat-radio-button>
+      <mat-radio-button [value]="false" matTooltip="Property which contains more than one value" matTooltipPosition="above">No</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
   <!--According to Type you should be able to have different possiblities for values to be created-->
   <!--i.e. List - possible to add a list of Default Values Boolean choice between false/true-->
   
-  <div *ngIf="!isDropdown">
+  <div *ngIf="!isDropdown && isDropdown!=undefined">
     <mat-form-field *ngIf="model.kind=='TEXT' || model.kind=='LONG_TEXT'" >
         <input matInput placeholder="Default Text" [(ngModel)]="model.defaultValue" name="defaultValue"/>
     </mat-form-field>
@@ -52,13 +62,10 @@
 
   <br>
 
-  <!--Choice if property should contain default values-->
-  <!--Possiblity to add Rules-->
-  
-  <div *ngIf="model.kind!='LIST' && model.kind!=undefined">
+  <!-- <div *ngIf="model.kind!='LIST' && model.kind!=undefined">
     <label id="is-dropdown"><h2>Dropdown or Selection Set?</h2></label>
     <mat-slide-toggle [checked]="isDropdown" [(ngModel)]="isDropdown" [ngModelOptions]="{standalone: true}" (click)="clearPropertyLegalValues()" ></mat-slide-toggle>
-  </div>
+  </div> -->
 
   <!---------------------->
   <!-----Legal Values----->
@@ -66,13 +73,40 @@
 
   
 
-  <div *ngIf="isDropdown || propertyKind=='LIST'" style="padding-left: 20px; padding-right: 50%">
+  <div *ngIf="isDropdown || model.kind=='LIST'" style="padding-left: 20px; padding-right: 50%">
     <h2>Dropdown / List Values</h2>
     
     <div *ngFor="let val of propertyLegalValuesCurrent; let i = index; trackBy:trackByFn" fxLayout="row" fxLayoutAlign="space-between center">
-      <mat-form-field >
-        <input matInput placeholder="value {{i+1}}" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
+     
+     
+      <!--TODO reuse input field template markup-->
+     
+      <mat-form-field *ngIf="model.kind=='TEXT' || model.kind=='LONG_TEXT'" >
+        <input matInput placeholder="Value {{i+1}}" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
       </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='WHOLE_NUMBER' || model.kind=='FLOAT_NUMBER'" >
+        <input matInput placeholder="Number {{i+1}}" type="number" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>   
+      </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='DATE'">
+        <input matInput [matDatepicker]="picker2" placeholder="Date {{i+1}}" [(ngModel)]="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='BOOL'" floatPlaceholder="always">
+        <input matInput placeholder="value {{i+1}}" style="display: none">
+        <br>
+        <br>
+        <mat-radio-group name="value {{i+1}}" [(ngModel)]="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}">
+            <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
+            <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
+        </mat-radio-group>
+      </mat-form-field>
+
+      <!--TODO end reuse-->
+
 
       <mat-icon class="iconButton" (click)="updatePropertyLegalValue(i)" style="cursor: pointer" matTooltip="Update Value" matTooltipPosition="above"
         aria-label="Update Value">check</mat-icon>
@@ -83,18 +117,52 @@
     </div>
   
     <div fxLayout="row" fxLayoutAlign="space-between center">
+      
+      <!--TODO reuse input field template markup-->
+<!-- 
+      <mat-form-field *ngIf="model.kind=='TEXT' || model.kind=='LONG_TEXT'" >
+        <input matInput placeholder="add a text value" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='WHOLE_NUMBER' || model.kind=='FLOAT_NUMBER'" >
+        <input matInput placeholder="add a number value" type="number" [(ngModel)] ="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>     
+      </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='DATE'">
+        <input matInput [matDatepicker]="picker2" placeholder="add a date value" [(ngModel)]="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}"/>
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="model.kind=='BOOL'" floatPlaceholder="always">
+        <input matInput placeholder="add a boolean value" style="display: none">
+        <br>
+        <br>
+        <mat-radio-group name="add a boolean value" [(ngModel)]="propertyLegalValuesCurrent[i]" [ngModelOptions]="{standalone: true}">
+            <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
+            <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
+        </mat-radio-group>
+      </mat-form-field> -->
+
+
+      <!--TODO end reuse-->
+<!-- 
       <mat-form-field >
           <input matInput placeholder="add a value" [(ngModel)]="propertyAddedValue" [ngModelOptions]="{standalone: true}"/>
-      </mat-form-field>
+      </mat-form-field> -->
+
+
       <mat-icon class="iconButton" (click)="addPropertyLegalValue()" style="cursor: pointer" matTooltip="Add Value" matTooltipPosition="above"
-        aria-label="Add Value">add</mat-icon>
+        aria-label="Add Value">add a new legal value</mat-icon>
     </div>
   </div>
   
+  <!------------------------------------------->
+  <!--Default Value when Legal Values present-->
+  <!-------------------------------------------> 
 
-  
 
-  <div *ngIf="isDropdown || propertyKind=='LIST'">
+  <div *ngIf="isDropdown || model.kind=='LIST'">
     <mat-form-field>
         <mat-select placeholder="Default Value" [(ngModel)]="model.defaultValue" name="defaultValue" [disabled]="model.legalValues.length <= 0">
           <mat-option [value]=undefined ></mat-option>

@@ -76,7 +76,7 @@ export class SinglePropertyComponent implements OnInit {
       this.propertyLegalValuesCurrent[i] = this.propertyLegalValues[i];
     }
 
-    this.isDropdown = false;
+    this.isDropdown = undefined;
     this.hasRules = false;
     this.isLoaded = true;
     this.canAddNewRule = true;
@@ -147,11 +147,19 @@ export class SinglePropertyComponent implements OnInit {
     this.propertyLegalValuesCurrent[i] = this.model.legalValues[i];
   }
 
+  clearPropertyLegalAndDefaultValues() {
+    console.log("clearing");
+    this.clearPropertyDefaultValues();
+    this.clearPropertyLegalValues();
+  }
+
+  clearPropertyDefaultValues() {
+    this.model.defaultValue = '';
+  }
+
   clearPropertyLegalValues() {
     this.model.legalValues = [];
-    this.propertyLegalValuesCurrent = [];
-    this.model.defaultValue = '';
-    
+    this.propertyLegalValuesCurrent = [];    
   }
 
   //----------------------------------------------------
