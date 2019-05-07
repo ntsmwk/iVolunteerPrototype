@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.mapper.property;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +116,7 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		
 		prop.setProperties(propertyMapper.toEntities(target.getProperties()));
 				
-		List<Rule> rules = new LinkedList<Rule>();
+		List<Rule> rules = new ArrayList<Rule>();
 		if (target.getRules() != null) {
 			for (RuleDTO r : target.getRules()) {
 				rules.add(ruleMapper.toEntity(r));

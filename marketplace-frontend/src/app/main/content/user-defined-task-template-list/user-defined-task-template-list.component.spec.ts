@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FuseUserDefinedTaskTemplateListComponent } from './user-defined-task-template-list.component';
+import { UserDefinedTaskTemplateListComponent } from './user-defined-task-template-list.component';
 
 describe('UserDefinedTaskTemplateListComponent', () => {
-  let component: FuseUserDefinedTaskTemplateListComponent;
-  let fixture: ComponentFixture<FuseUserDefinedTaskTemplateListComponent>;
+  let component: UserDefinedTaskTemplateListComponent;
+  let fixture: ComponentFixture<UserDefinedTaskTemplateListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FuseUserDefinedTaskTemplateListComponent ]
+      declarations: [ UserDefinedTaskTemplateListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FuseUserDefinedTaskTemplateListComponent);
+    fixture = TestBed.createComponent(UserDefinedTaskTemplateListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,10 +1,10 @@
-import { FusePropertyListModule } from './property-list.module';
+import { PropertyListModule } from './property-list.module';
 
 describe('PropertyListModule', () => {
-  let propertyListModule: FusePropertyListModule;
+  let propertyListModule: PropertyListModule;
 
   beforeEach(() => {
-    propertyListModule = new FusePropertyListModule();
+    propertyListModule = new PropertyListModule();
   });
 
   it('should create an instance', () => {

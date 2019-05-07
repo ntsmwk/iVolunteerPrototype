@@ -8,17 +8,17 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { Property, PropertyKind, ListValue } from '../_model/properties/Property';
+import { Property, PropertyKind, ListEntry } from '../_model/properties/Property';
 import { FormGroup } from '@angular/forms';
-import { isNullOrUndefined, isNull } from 'util';
+import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'app-user-defined-task-template-detail-form',
-  templateUrl: './user-defined-task-template-detail-form.component.html',
-  styleUrls: ['./user-defined-task-template-detail-form.component.scss'],
+  selector: 'app-user-defined-task-template-detail-form-single',
+  templateUrl: './user-defined-task-template-detail-form-single.component.html',
+  styleUrls: ['./user-defined-task-template-detail-form-single.component.scss'],
   providers:  [QuestionService]
 })
-export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
+export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit {
   questions: QuestionBase<any>[];
 
   role: ParticipantRole;
@@ -26,6 +26,10 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
   marketplace: Marketplace;
   template: UserDefinedTaskTemplate;
   isLoaded: boolean;
+
+  templateId: string;
+  subtemplateId: string;
+
  
 
   constructor(private router: Router,
@@ -45,29 +49,81 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
     ]).then(() => {
       
-      this.route.params.subscribe(params => this.loadProperty(params['marketplaceId'], params['templateId']));
+      let queryParameters;
+      let urlParameters;
+
+      Promise.all([
+        this.route.queryParams.subscribe(params => {
+          console.log(params);
+          queryParameters = params;
+        }),
+        this.route.params.subscribe(params => {
+          console.log(params);
+          urlParameters = params;
+        })
+      ]).then(() => {
+        this.loadProperty(urlParameters['marketplaceId'], urlParameters['templateId'], urlParameters['subtemplateId'], queryParameters['ref']);
+      });
+      
+      // this.route.params.subscribe(params => this.loadProperty(params['marketplaceId'], params['templateId']));
     });
   
   }
 
-  loadProperty(marketplaceId: string, templateId: string): void {
+  private loadProperty(marketplaceId: string, templateId: string, subtemplateId: string, ref: string): void {
+
+    console.log(ref);
+    this.templateId = templateId;
+    this.subtemplateId = subtemplateId;
+
+    if (ref == 'single') {
+      this.loadFromSingleTemplate(marketplaceId, templateId);
+    } else if (ref == 'nested') {
+      console.log("entered nested");
+      this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
+    } else {
+      console.log("no reference key");
+      if (!isNullOrUndefined(subtemplateId)) {
+        console.log("load nested");
+        this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
+      } else {
+        console.log("load single");
+        this.loadFromSingleTemplate(marketplaceId, templateId);
+      }
+    }
+  }
+
+  private loadFromSingleTemplate(marketplaceId: string, templateId: string) {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
-      this.userDefinedTaskTemplateService.getTaskTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
+      this.userDefinedTaskTemplateService.getTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
         this.template = template;    
       }).then(() => {
-         console.log("DETAIL PAGE FOR PROPERTY " + this.template.id);
-         console.log(this.template.name + ": ");
+        console.log("DETAIL PAGE FOR PROPERTY " + this.template.id);
+        console.log(this.template.name + ": ");
 
-         console.log("VALUES:");
-         for (let property of this.template.properties) {
-           console.log(property.id + ": " + Property.getValue(property));
+        console.log("VALUES:");
+        for (let property of this.template.properties) {
+          console.log(property.id + ": " + Property.getValue(property));
 
-         }
+        }
         this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
         this.isLoaded = true;
       });
-    });  
+    }); 
+  }
+
+  private loadFromNestedTemplate(marketplaceId: string, templateId: string, subtemplateId: string) {
+    this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
+      this.marketplace = marketplace;
+      this.userDefinedTaskTemplateService.getSubTemplate(marketplace, templateId, subtemplateId).toPromise().then((subtemplate: UserDefinedTaskTemplate) => {
+        this.template = subtemplate;
+      }).then(() => {
+        console.log(this.template);
+        this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
+        this.isLoaded = true;
+      });
+    });
   }
 
   navigateBack() {
@@ -101,10 +157,11 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
     // console.log("====================================================");
 
 
-    this.userDefinedTaskTemplateService.updatePropertiesInTemplate(this.marketplace, this.template.id, props).toPromise().then(() => {
+    this.userDefinedTaskTemplateService.updateProperties(this.marketplace, this.templateId, this.subtemplateId, props).toPromise().then(() => {
       console.log("finished - returning to previous page");
       this.navigateBack();
     });
+
   }
 
 
@@ -118,13 +175,13 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
         if (!isNullOrUndefined(values[prop.id]) && values[prop.id] != '') {
           if (prop.kind === PropertyKind.LIST) {
             //TODO do list stuff
-            const result: ListValue<any>[] = [];
+            const result: ListEntry<any>[] = [];
             let arr = values[prop.id];
 
             for (let val of prop.legalValues) {
               for (let i = 0; i < arr.length; i++) { 
                 if (val.id === arr[i]) {
-                  result.push(new ListValue<any>(val.id, val.value));
+                  result.push(new ListEntry<any>(val.id, val.value));
                 }
               } 
             }
@@ -132,9 +189,9 @@ export class FuseUserDefinedTaskTemplateDetailFormComponent implements OnInit {
             prop.values = result;
           } else {
 
-            if (isNullOrUndefined(prop.values)) {
+            if (isNullOrUndefined(prop.values) || isNullOrUndefined(prop.values[0])) {
               prop.values = []
-              prop.values.push(new ListValue<any>(null, values[prop.id]));
+              prop.values.push(new ListEntry<any>(null, values[prop.id]));
             } else {
               prop.values[0].value = values[prop.id];
             }

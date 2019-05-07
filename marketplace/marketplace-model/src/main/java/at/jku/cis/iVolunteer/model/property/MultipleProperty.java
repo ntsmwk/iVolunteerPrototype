@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.model.property;
 
+import java.util.LinkedList;
 import java.util.List;
+
 
 public class MultipleProperty extends Property {
 
@@ -19,6 +21,17 @@ public class MultipleProperty extends Property {
 		super.rules = p.rules;
 	}
 	
+	public MultipleProperty(MultiplePropertyRet p) {
+		this.id = p.id;
+		this.kind = p.kind;
+		this.name = p.name;
+		this.order = p.order;
+		this.rules = p.rules;
+		this.custom = true;
+		this.rules = new LinkedList<>();
+		this.properties = new LinkedList<>();
+	}
+
 	public List<Property> getProperties() {
 		return properties;
 	}
@@ -34,6 +47,14 @@ public class MultipleProperty extends Property {
 		}
 		return ((MultipleProperty) obj).id.equals(id);
 	}
+
+	@Override
+	public String toString() {
+		return "MultipleProperty [properties=" + properties + ", id=" + id + ", name=" + name + ", rules=" + rules
+				+ ", kind=" + kind + ", order=" + order + ", custom=" + custom + "]";
+	}
+	
+	
 
 	
 	

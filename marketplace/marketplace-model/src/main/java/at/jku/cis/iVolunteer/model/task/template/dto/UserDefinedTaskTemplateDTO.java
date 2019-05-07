@@ -8,10 +8,12 @@ public class UserDefinedTaskTemplateDTO {
 
 	String id;
 	String name;
-	
 	String description;
 	
+	String kind;
+	
 	List<PropertyDTO<Object>> properties;
+	List<SingleUserDefinedTaskTemplateDTO> templates;
 
 	public String getId() {
 		return id;
@@ -33,6 +35,14 @@ public class UserDefinedTaskTemplateDTO {
 		return description;
 	}
 	
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+	
+	public String getKind() {
+		return kind;
+	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -43,6 +53,14 @@ public class UserDefinedTaskTemplateDTO {
 
 	public void setProperties(List<PropertyDTO<Object>> properties) {
 		this.properties = properties;
+	}
+	
+	public List<SingleUserDefinedTaskTemplateDTO> getTemplates() {
+		return templates;
+	}
+	
+	public void setTemplates(List<SingleUserDefinedTaskTemplateDTO> templates) {
+		this.templates = templates;
 	}
 	
 	@Override

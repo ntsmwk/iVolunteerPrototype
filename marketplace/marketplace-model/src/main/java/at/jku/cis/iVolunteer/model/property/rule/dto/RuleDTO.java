@@ -70,5 +70,13 @@ public class RuleDTO {
 		return ((RuleDTO) obj).id.equals(id);
 	}
 
+	@Override
+	public String toString() {
+		return "\nRuleDTO [id=" + id + ", kind=" + kind + ", value=" + value + ", data=" + data + ", message=" + message
+				+ "]";
+	}
+	
+	
+
 }
 

@@ -31,7 +31,7 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEn
 		} 
 		
 		ListEntryDTO<Object> dto = new ListEntryDTO<>();
-		System.out.println("Processing " + source.getId() + ": " + source.getValue());
+//		System.out.println("Processing " + source.getId() + ": " + source.getValue());
 		dto.setId(source.getId());
 		dto.setValue(source.getValue());
 

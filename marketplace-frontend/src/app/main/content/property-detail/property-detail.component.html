@@ -13,9 +13,27 @@
     </div>
   
 
+    <div *ngIf="templateItem!=undefined"> Parent Template: {{templateItem.id}}: {{templateItem.name}}</div>
+    <div *ngIf="subtemplateItem!=undefined"> Parent Sub-Template: {{subtemplateItem.id}}: {{subtemplateItem.name}}</div>
+
+    <br>
+    <br>
+
     <br>Value: {{ displayPropertyValue(property) }}
     <br>Default Value: {{ property.defaultValue }}
     <br>Property Kind: {{ property.kind }}
+
+
+    <h3> Default Value</h3>
+    
+    <div *ngIf="property.defaultValues != null">
+      <mat-list>
+        <mat-list-item *ngFor="let v of property.defaultValues"> {{ v.id }} -- {{ v.value }} </mat-list-item>
+      </mat-list>
+    </div>
+    <div *ngIf="property.defaultValues == null">
+      conatins no default value definitions
+    </div>
 
     <h3> Legal Values</h3>
     

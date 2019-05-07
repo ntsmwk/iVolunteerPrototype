@@ -9,9 +9,10 @@ public class PropertyListItemDTO<T> {
 	String id;
 	String name;
 	List<ListEntryDTO<T>> values;
-//	List<T> values;
+	List<ListEntryDTO<T>> defaultValues;
 	PropertyKind kind;
 	int order;
+	boolean custom;
 	
 	
 	public String getId() {
@@ -34,12 +35,12 @@ public class PropertyListItemDTO<T> {
 		this.values = values;
 	}
 
-//	public List<T> getValue() {
-//		return values;
-//	}
-//	public void setValues(List<T> values) {
-//		this.values = values;
-//	}
+	public List<ListEntryDTO<T>> getDefaultValues() {
+		return defaultValues;
+	}
+	public void setDefaultValues(List<ListEntryDTO<T>> defaultValues) {
+		this.defaultValues = defaultValues;
+	}
 	
 	public PropertyKind getKind() {
 		return kind;
@@ -54,6 +55,14 @@ public class PropertyListItemDTO<T> {
 	
 	public void setOrder(int order) {
 		this.order = order;
+	}
+	
+	public boolean isCustom() {
+		return custom;
+	}
+	
+	public void setCustom(boolean custom) {
+		this.custom = custom;
 	}
 	
 	

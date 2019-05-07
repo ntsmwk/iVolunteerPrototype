@@ -40,13 +40,13 @@
       background-color: white;
     }
 
-    mat-row {
-      cursor: pointer;
-    }
+    // mat-row {
+    //   cursor: pointer;
+    // }
 
-    mat-row:hover {
-      opacity: 0.5;
-    }
+    // mat-row:hover {
+    //   opacity: 0.5;
+    // }
 
   }
 
@@ -54,6 +54,12 @@
     font-size: 20px;
     margin: 24px 0;
     text-align: center;
+  }
+
+  .mat-spinner {
+    position: relative;
+    margin-left: 50%;
+    margin-right: 50%;
   }
 
 }

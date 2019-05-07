@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FusePropertyListComponent } from './property-list.component';
+import { PropertyListComponent } from './property-list.component';
 
 describe('PropertyListComponent', () => {
-  let component: FusePropertyListComponent;
-  let fixture: ComponentFixture<FusePropertyListComponent>;
+  let component: PropertyListComponent;
+  let fixture: ComponentFixture<PropertyListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FusePropertyListComponent ]
+      declarations: [ PropertyListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FusePropertyListComponent);
+    fixture = TestBed.createComponent(PropertyListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

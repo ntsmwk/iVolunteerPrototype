@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FusePropertyDetailComponent } from './property-detail.component';
+import { PropertyDetailComponent } from './property-detail.component';
 
 describe('PropertyDetailComponent', () => {
-  let component: FusePropertyDetailComponent;
-  let fixture: ComponentFixture<FusePropertyDetailComponent>;
+  let component: PropertyDetailComponent;
+  let fixture: ComponentFixture<PropertyDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FusePropertyDetailComponent ]
+      declarations: [ PropertyDetailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FusePropertyDetailComponent);
+    fixture = TestBed.createComponent(PropertyDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

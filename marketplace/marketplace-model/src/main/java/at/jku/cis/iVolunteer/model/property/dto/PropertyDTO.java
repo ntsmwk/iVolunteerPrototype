@@ -2,6 +2,8 @@ package at.jku.cis.iVolunteer.model.property.dto;
 
 import java.util.List;
 
+import com.mongodb.util.JSON;
+
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
@@ -13,18 +15,13 @@ public class PropertyDTO<T> {
 	List<RuleDTO> rules;
 	
 	PropertyKind kind;
-	
-//	T value;
-	T defaultValue;
-	
+
 	int order;
 	boolean custom;
 	
 	List<ListEntryDTO<T>> values;
+	List<ListEntryDTO<T>> defaultValues;
 	List<ListEntryDTO<T>> legalValues;
-	
-//	List<T> values;
-//	List<T> legalValues;
 	
 	List<PropertyDTO<T>> properties;
 	
@@ -41,19 +38,12 @@ public class PropertyDTO<T> {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-//	public T getValue() {
-//		return value;
-//	}
-//	public void setValue(T value) {
-//		this.value = value;
-//	}
 	
-	public T getDefaultValue() {
-		return defaultValue;
+	public List<ListEntryDTO<T>> getDefaultValues() {
+		return defaultValues;
 	}
-	public void setDefaultValue(T defaultValue) {
-		this.defaultValue = defaultValue;
+	public void setDefaultValues(List<ListEntryDTO<T>> defaultValues) {
+		this.defaultValues = defaultValues;
 	}
 	public int getOrder() {
 		return order;
@@ -114,5 +104,15 @@ public class PropertyDTO<T> {
 	public int hashCode() {
 		return this.id.hashCode();
 	}
+	@Override
+	public String toString() {
+		return "PropertyDTO [id=" + id + ", name=" + name + ", rules=" + rules + ", kind=" + kind + ", defaultValue="
+				+ defaultValues + ", order=" + order + ", custom=" + custom + ", values=" + values + ", legalValues="
+				+ legalValues + ", properties=" + properties + "]";
+	}
+	
+	
+	
+	
 	
 }

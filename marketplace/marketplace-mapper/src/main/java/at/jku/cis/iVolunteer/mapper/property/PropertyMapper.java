@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
-import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
@@ -48,6 +46,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		propertyDTO.setName(source.getName());
 		propertyDTO.setKind(source.getKind());
 		propertyDTO.setOrder(source.getOrder());
+		propertyDTO.setCustom(source.isCustom());
 		
 		
 		//TODO rules
@@ -60,8 +59,8 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		}
 		
 		
-		if (propertyDTO.getKind().equals(PropertyKind.MULTIPLE)) {
-			List<PropertyDTO<Object>> props = new LinkedList<>();
+		if (propertyDTO.getKind().equals(PropertyKind.MULTIPLE) || propertyDTO.getKind().equals(PropertyKind.MAP)) {
+			List<PropertyDTO<Object>> props = new ArrayList<>();
 			
 			for (Property p : ((MultipleProperty)source).getProperties()) {
 				props.add(propertyMapper.toDTO(p));
@@ -72,17 +71,14 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		} else {
 			SingleProperty<Object> s = (SingleProperty<Object>) source;
 			
-			//propertyDTO.setValue(s.getValue());
-			propertyDTO.setDefaultValue(s.getDefaultValue());
-			
 			//TODO legal Values
 			if (s.getLegalValues() != null) {
 				
 				List<ListEntryDTO<Object>> legalValues = new ArrayList<>();
 				
-					for(ListEntry<Object> entry : s.getLegalValues()) {
-						legalValues.add(listEntryMapper.toDTO(entry));
-					}
+				for(ListEntry<Object> entry : s.getLegalValues()) {
+					legalValues.add(listEntryMapper.toDTO(entry));
+				}
 			
 				
 				propertyDTO.setLegalValues(legalValues);
@@ -95,6 +91,14 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 					values.add(listEntryMapper.toDTO(entry));
 				}
 				propertyDTO.setValues(values);
+			}
+			
+			if (s.getDefaultValues() != null) {
+				List<ListEntryDTO<Object>> values = new ArrayList<>();
+				for (ListEntry<Object> entry : s.getDefaultValues()) {
+					values.add(listEntryMapper.toDTO(entry));
+				}
+				propertyDTO.setDefaultValues(values);
 			}
 			
 		}
@@ -131,8 +135,9 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		prop.setName(target.getName());
 		prop.setKind(target.getKind());
 		prop.setOrder(target.getOrder());
+		prop.setCustom(target.isCustom());
 		
-		List<Rule> rules = new LinkedList<Rule>();
+		List<Rule> rules = new ArrayList<Rule>();
 		if (target.getRules() != null) {
 			for (RuleDTO r : target.getRules()) {
 				rules.add(ruleMapper.toEntity(r));
@@ -143,7 +148,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		
 		if (prop.getKind().equals(PropertyKind.MULTIPLE)) {
 			MultipleProperty ret = new MultipleProperty(prop);
-			List<Property> props = new LinkedList<>();
+			List<Property> props = new ArrayList<>();
 			
 			if (target.getProperties() != null) {
 				for (PropertyDTO<Object> dto : target.getProperties()) {
@@ -157,30 +162,8 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		
 		} else {
 			SingleProperty<Object> ret = new SingleProperty<>(prop);
-
-			System.out.println("PropertyMapper: " + ret.getName());
 			
-			if (target.getKind().equals(PropertyKind.DATE)) {
-				//ret.setValue(this.convertObjectToDate(target.getValue()));
-				ret.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
-			
-			} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-//				ret.setValue(this.convertObjectToDouble(target.getValue()));
-				ret.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
-				
-			} else if (target.getKind().equals(PropertyKind.WHOLE_NUMBER)) {
-//				ret.setValue(this.convertObjectToInteger(target.getValue()));	
-				ret.setDefaultValue(this.convertObjectToInteger(target.getDefaultValue()));
-			
-			} else {
-//				ret.setValue(target.getValue());
-				ret.setDefaultValue(target.getDefaultValue());
-			
-			}
-					
-			
-			
-			List<ListEntry<Object>> values = new LinkedList<>();
+			List<ListEntry<Object>> values = new ArrayList<>();
 			
 			if (target.getValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getValues()) {
@@ -190,7 +173,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			ret.setValues(values);
 			
 			
-			List<ListEntry<Object>> legalValues = new LinkedList<ListEntry<Object>>();
+			List<ListEntry<Object>> legalValues = new ArrayList<ListEntry<Object>>();
 			
 			if (target.getLegalValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getLegalValues()) {
@@ -199,6 +182,17 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			}
 			
 			ret.setLegalValues(legalValues);
+			
+			List<ListEntry<Object>> defaultValues = new ArrayList<ListEntry<Object>>();
+			
+			if (target.getDefaultValues() != null) {
+				for (ListEntryDTO<Object> entry : target.getDefaultValues()) {
+					defaultValues.add(listEntryMapper.toEntity(entry, target.getKind()));
+				}
+			}
+			
+			ret.setDefaultValues(defaultValues);
+			
 			
 			return ret;
 			
@@ -224,90 +218,90 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		return list;
 	}
 	
-	//TODO ??not sure if fixed - kinda ugly 
-		private Date convertObjectToDate(Object source) {
-			try {
-				
-				//System.out.println("convert: " + source);
-				
-				if (source instanceof Long) {
-					//System.out.println("convert long - " + source.getClass().getName());
-					return new Date((Long)source);
-					
-				} else if (source instanceof Date) {
-					//System.out.println("convert Date - " + source.getClass().getName());
-					return (Date) source;
-				} else if (source instanceof String) {
-					//System.out.println("convert String - " + source.getClass().getName());
-					
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-					Date date = sdf.parse((String) source); 
-					
-					return date;
-				} else if (source == null) {
-//					Date date = new Date(0);
-					return null;
-					
-				} else {
-					//System.out.println("class: " + source.getClass().getName());
-					//System.out.println(source);
-					throw new IllegalArgumentException();
-				}
-				
-			} catch (NullPointerException | NumberFormatException e ) {
-				System.out.println("entered Exception Branch convert Object to Date");
-				return null;
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Unparsable Date");
-				return null;
-			}
-		}
-		
-		private Double convertObjectToDouble(Object source) {
-			try {
-				
-				return (Double) source;
-			} catch (ClassCastException e) {
-				try {
-						System.out.println("PropertyMapper: Double ClassCastException triggered: " + source + " trying to parse");
-						double ret;
-						
-						if (source instanceof String) {
-							ret =  Double.parseDouble((String) source);
-							return ret;
-						} else if (source instanceof Integer) {
-							ret = (Integer) source;
-							return ret;
-						} else {
-							throw new IllegalArgumentException("PropertyMapper - unable to parse - should not happen: " + source);
-						}
-						
-					} catch (NumberFormatException e2) {
-						System.out.println("PropertyMapper: NumberformatException triggered: returning 0.0");
-						return 0.0;
-					}
-			}
-		}
-		
-		private Object convertObjectToInteger(Object source) {
-			try {
-				
-				if (source == null) {
-					return source;
-				}
-				return (int) source;
-			} catch (ClassCastException e) {
-				try {
-					System.out.println("PropertyMapper: Long CCE triggered: " + source + "trying to pars ");
-					int ret = Integer.parseInt((String) source);
-					return ret;
-				} catch (NumberFormatException e2) {
-					System.out.println("PropertyMapper: NumberFormatException triggered: returning 0");
-					return 0;
-				}
-			}
-		}
+//	//TODO ??not sure if fixed - kinda ugly 
+//		private Date convertObjectToDate(Object source) {
+//			try {
+//				
+//				//System.out.println("convert: " + source);
+//				
+//				if (source instanceof Long) {
+//					//System.out.println("convert long - " + source.getClass().getName());
+//					return new Date((Long)source);
+//					
+//				} else if (source instanceof Date) {
+//					//System.out.println("convert Date - " + source.getClass().getName());
+//					return (Date) source;
+//				} else if (source instanceof String) {
+//					//System.out.println("convert String - " + source.getClass().getName());
+//					
+//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//					Date date = sdf.parse((String) source); 
+//					
+//					return date;
+//				} else if (source == null) {
+////					Date date = new Date(0);
+//					return null;
+//					
+//				} else {
+//					//System.out.println("class: " + source.getClass().getName());
+//					//System.out.println(source);
+//					throw new IllegalArgumentException();
+//				}
+//				
+//			} catch (NullPointerException | NumberFormatException e ) {
+//				System.out.println("entered Exception Branch convert Object to Date");
+//				return null;
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				System.out.println("Unparsable Date");
+//				return null;
+//			}
+//		}
+//		
+//		private Double convertObjectToDouble(Object source) {
+//			try {
+//				
+//				return (Double) source;
+//			} catch (ClassCastException e) {
+//				try {
+//						System.out.println("PropertyMapper: Double ClassCastException triggered: " + source + " trying to parse");
+//						double ret;
+//						
+//						if (source instanceof String) {
+//							ret =  Double.parseDouble((String) source);
+//							return ret;
+//						} else if (source instanceof Integer) {
+//							ret = (Integer) source;
+//							return ret;
+//						} else {
+//							throw new IllegalArgumentException("PropertyMapper - unable to parse - should not happen: " + source);
+//						}
+//						
+//					} catch (NumberFormatException e2) {
+//						System.out.println("PropertyMapper: NumberformatException triggered: returning 0.0");
+//						return 0.0;
+//					}
+//			}
+//		}
+//		
+//		private Object convertObjectToInteger(Object source) {
+//			try {
+//				
+//				if (source == null) {
+//					return source;
+//				}
+//				return (int) source;
+//			} catch (ClassCastException e) {
+//				try {
+//					System.out.println("PropertyMapper: Long CCE triggered: " + source + "trying to pars ");
+//					int ret = Integer.parseInt((String) source);
+//					return ret;
+//				} catch (NumberFormatException e2) {
+//					System.out.println("PropertyMapper: NumberFormatException triggered: returning 0");
+//					return 0;
+//				}
+//			}
+//		}
 
 	
 }

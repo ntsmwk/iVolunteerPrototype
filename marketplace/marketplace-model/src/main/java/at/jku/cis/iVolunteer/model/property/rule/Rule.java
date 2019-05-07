@@ -96,5 +96,13 @@ public class Rule {
 		return ((Rule) obj).id.equals(id);
 	}
 
+	@Override
+	public String toString() {
+		return "\nRule [id=" + id + ", kind=" + kind + ", value=" + value + ", data=" + data + ", message=" + message
+				+ "]\n";
+	}
+	
+	
+
 }
 

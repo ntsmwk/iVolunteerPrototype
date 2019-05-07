@@ -18,10 +18,9 @@ public class UserDefinedTaskTemplate {
 	@Id
 	String id;
 	String name;
-	
 	String description;
 	
-	List<Property> properties;
+	
 	
 	public UserDefinedTaskTemplate() {}
 	
@@ -53,14 +52,6 @@ public class UserDefinedTaskTemplate {
 		this.description = description;
 	}
 	
-	public List<Property> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
-	}
-	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -73,6 +64,19 @@ public class UserDefinedTaskTemplate {
 		}
 		return ((UserDefinedTaskTemplate) obj).id.equals(id);
 	}
+
+	@Override
+	public String toString() {
+		String s = "UserDefinedTaskTemplate [id=" + id + ", name=" + name + ", description=" + description + ", \n";
+		if (this instanceof SingleUserDefinedTaskTemplate) {
+			s = s + ((SingleUserDefinedTaskTemplate)this).properties;
+		} else if (this instanceof MultiUserDefinedTaskTemplate) {
+			s = s + ((MultiUserDefinedTaskTemplate)this).templates;
+		}
+		return s;
+	}
+	
+	
 	
 	
 	

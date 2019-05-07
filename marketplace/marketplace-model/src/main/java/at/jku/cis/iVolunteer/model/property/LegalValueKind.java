@@ -1,10 +1,11 @@
 package at.jku.cis.iVolunteer.model.property;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum LegalValueKind {
-	WHOLE_NUMBERS("whole_numbers"), FLOAT_NUMBERS("float_numbers"), ALL("all"), BOOLEAN("boolean"), 
-		REGEX("regex"), LIST("list");
+	WHOLE_NUMBERS("WHOLE_NUMBERS"), FLOAT_NUMBERS("FLOAT_NUMBERS"), ALL("ALL"), BOOLEAN("BOOLEAN"), 
+		REGEX("REGEX"), LIST("LIST");
 	
 	String kind;
 	

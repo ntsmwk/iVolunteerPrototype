@@ -1,10 +1,10 @@
-import { FuseUserDefinedTaskTemplateListModule } from './user-defined-task-template-list.module';
+import { UserDefinedTaskTemplateListModule } from './user-defined-task-template-list.module';
 
 describe('UserDefinedTaskTemplateListModule', () => {
-  let userDefinedTaskTemplateListModule: FuseUserDefinedTaskTemplateListModule;
+  let userDefinedTaskTemplateListModule: UserDefinedTaskTemplateListModule;
 
   beforeEach(() => {
-    userDefinedTaskTemplateListModule = new FuseUserDefinedTaskTemplateListModule();
+    userDefinedTaskTemplateListModule = new UserDefinedTaskTemplateListModule();
   });
 
   it('should create an instance', () => {

@@ -3,7 +3,7 @@ import { Injectable }       from '@angular/core';
 import { DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion, 
   SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion } from '../_model/dynamic-forms/questions';
 
-import { Property, PropertyKind, ListValue, Rule, RuleKind } from '../_model/properties/Property';
+import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/properties/Property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
@@ -109,7 +109,7 @@ export class QuestionService {
     return question;
   }
 
-  private setListValues(values: ListValue<any>[]) :any {
+  private setListValues(values: ListEntry<any>[]) :any {
     let ret: {key: string, value: any}[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
@@ -119,7 +119,7 @@ export class QuestionService {
     return ret;
   }
 
-  private setValuesWithoutKeys(values: ListValue<any>[]) :any {
+  private setValuesWithoutKeys(values: ListEntry<any>[]) :any {
     let ret: any[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
@@ -145,7 +145,7 @@ export class QuestionService {
   }
 
 
-  private setKeys(values: ListValue<any>[]) :any {
+  private setKeys(values: ListEntry<any>[]) :any {
     let ret: string[] = [];
     if (!isNullOrUndefined(values)) {
       for (let val of values) {

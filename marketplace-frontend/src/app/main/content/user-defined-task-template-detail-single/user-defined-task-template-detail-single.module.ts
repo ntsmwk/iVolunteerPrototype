@@ -14,7 +14,7 @@ import { MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule,
   MatInputModule, MatSidenavModule, MatDividerModule, MatTableModule, MatCheckboxModule, MatTooltipModule } 
   from '@angular/material';
 
-  import { FuseUserDefinedTaskTemplateDetailComponent } from './user-defined-task-template-detail.component';
+import { SingleUserDefinedTaskTemplateDetailComponent } from './user-defined-task-template-detail-single.component';
 import { QuestionService } from '../_service/question.service';
 import { AddOrRemoveDialogModule } from '../_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
 import { AddOrRemoveDialogComponent } from '../_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.component';
@@ -25,13 +25,14 @@ import { ConfirmDialogComponent } from '../_components/dialogs/confirm-dialog/co
 import { ConfirmDialogModule } from '../_components/dialogs/confirm-dialog/confirm-dialog.module';
 import { SortDialogModule } from '../_components/dialogs/sort-dialog/sort-dialog.module';
 import { SortDialogComponent } from '../_components/dialogs/sort-dialog/sort-dialog.component';
+import { DialogFactoryModule } from '../_components/dialogs/_dialog-factory/dialog-factory.module';
 
 const routes = [
-  {path: ':marketplaceId/:templateId', component: FuseUserDefinedTaskTemplateDetailComponent}
+  {path: ':marketplaceId/:templateId', component: SingleUserDefinedTaskTemplateDetailComponent}
 ];
 
 @NgModule({
-  declarations: [FuseUserDefinedTaskTemplateDetailComponent],
+  declarations: [SingleUserDefinedTaskTemplateDetailComponent],
   
   imports: [
     RouterModule.forChild(routes),
@@ -52,7 +53,9 @@ const routes = [
     
     FuseSharedModule,
 
-    AddOrRemoveDialogModule,
+    DialogFactoryModule,
+
+    
     TextFieldDialogModule,
     ConfirmDialogModule,
     SortDialogModule,
@@ -61,9 +64,9 @@ const routes = [
     DynamicFormQuestionModule
 
   ],
-  entryComponents:[AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, SortDialogComponent]
+  entryComponents:[ConfirmDialogComponent, SortDialogComponent]
 
   
   
 })
-export class FuseUserDefinedTaskTemplateDetailModule { }
+export class SingleUserDefinedTaskTemplateDetailModule { }

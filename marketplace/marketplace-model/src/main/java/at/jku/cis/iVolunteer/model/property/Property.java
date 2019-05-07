@@ -60,11 +60,11 @@ public class Property {
 		this.order = order;
 	}
 	
-	public boolean isCustomProperty() {
+	public boolean isCustom() {
 		return custom;
 	}
 	
-	public void setCustomProperty(boolean custom) {
+	public void setCustom(boolean custom) {
 		this.custom = custom;
 	}
 	
@@ -80,6 +80,17 @@ public class Property {
 	public int hashCode() {
 		return this.id.hashCode();
 	}
+
+	@Override
+	public String toString() {
+		return "\nProperty [id=" + id + ", name=" + name + ", rules=" + rules + ", kind=" + kind + ", order=" + order
+				+ ", custom=" + custom + "]\n";
+	}
+	
+	
+
+	
+	
 
 	
 }

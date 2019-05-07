@@ -34,6 +34,12 @@ export const navigation_helpseeker = [
     'title': 'User Defined Task Templates',
     'type': 'item',
     'url': '/main/task-templates/user/all'
+  },
+  {
+    'id': 'testMapProperty',
+    'title': 'Test Map Property',
+    'type': 'item',
+    'url': '/main/test-map-property'
   }
 
 ];

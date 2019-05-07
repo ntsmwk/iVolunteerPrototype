@@ -45,4 +45,11 @@ public class ListEntryDTO<T> {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	@Override
+	public String toString() {
+		return "\nListEntryDTO [id=" + id + ", value=" + value + "]";
+	}
+	
+	
 }

@@ -38,8 +38,6 @@ public class StandardProperties {
 	@Autowired public CompetenceRepository competenceRepository;
 	@Autowired public PropertyRepository propertyRepository;
 
-	
-	
 	//=========================================
 	//========== Text Properties ==============
 	//=========================================
@@ -139,6 +137,8 @@ public class StandardProperties {
 		mp.setProperties(new ArrayList<>(multiProps));
 		
 		props.add(mp);
+		
+		props.add(new MapProperty());
 		
 		List<Property> ret = new ArrayList(props);
 		return ret;
@@ -366,11 +366,14 @@ public class StandardProperties {
 			this.setId("required_equipment");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Required Equipment");
-			this.setDefaultValue("None");
+			
+			List<ListEntry<String>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<String>("None"));
+			this.setDefaultValues(defaultValues);
 			
 			
 			List<ListEntry<String>> values = new ArrayList<>();
-			values.add(new ListEntry<String>(this.getDefaultValue()));
+			values.add(defaultValues.get(0));
 			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
@@ -399,6 +402,10 @@ public class StandardProperties {
 			legalValues.add(new ListEntry<String>("night-morning", "Night-Morning"));
 
 			this.setLegalValues(legalValues);
+			
+			List<ListEntry<String>> defaultValues = new ArrayList<>();
+			defaultValues.add(legalValues.get(3));
+			this.setDefaultValues(defaultValues);
 			
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.REQUIRED));
@@ -480,10 +487,13 @@ public class StandardProperties {
 			this.setId("postcode");
 			this.setKind(PropertyKind.WHOLE_NUMBER);
 			this.setName("Postcode");
-			this.setDefaultValue(1234);
+			
+			List<ListEntry<Integer>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Integer>(1234));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Integer>> values = new ArrayList<>();
-			values.add(new ListEntry<Integer>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 			
 			//TODO Testrules
@@ -532,10 +542,13 @@ public class StandardProperties {
 			this.setId("period_length");
 			this.setKind(PropertyKind.WHOLE_NUMBER);
 			this.setName("Period length");
-			this.setDefaultValue(1);
+			
+			List<ListEntry<Integer>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Integer>(1));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Integer>> values = new ArrayList<>();
-			values.add(new ListEntry<Integer>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 			
 			//TODO Testrules
@@ -559,10 +572,13 @@ public class StandardProperties {
 			this.setId("starting_date");
 			this.setKind(PropertyKind.DATE);
 			this.setName("Starting Date");
-			this.setDefaultValue(new Date()); //Default current Date
+			
+			List<ListEntry<Date>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Date>(new Date()));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Date>> values = new ArrayList<>();
-			values.add(new ListEntry<Date>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 			
 			//TODO Testrules
@@ -603,10 +619,13 @@ public class StandardProperties {
 			this.setId("urgent");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Urgent");
-			this.setDefaultValue(false);
+			
+			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Boolean>(false));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Boolean>> values = new ArrayList<>();
-			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 		}
 	}
@@ -620,10 +639,13 @@ public class StandardProperties {
 			this.setId("highlighted");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Highlighted");
-			this.setDefaultValue(false);
+			
+			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Boolean>(false));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Boolean>> values = new ArrayList<>();
-			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 		}
 	}
@@ -637,10 +659,13 @@ public class StandardProperties {
 			this.setId("promotion");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Promotion");
-			this.setDefaultValue(false);
+			
+			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Boolean>(false));
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Boolean>> values = new ArrayList<>();
-			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 		}
 	}
@@ -654,10 +679,13 @@ public class StandardProperties {
 			this.setId("feedback_requested");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Feedback Requested");
-			this.setDefaultValue(false);
+			
+			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Boolean>(false));
+			this.setDefaultValues(defaultValues);
 
 			List<ListEntry<Boolean>> values = new ArrayList<>();
-			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 		}
 	}
@@ -671,10 +699,13 @@ public class StandardProperties {
 			this.setId("remind_participants");
 			this.setKind(PropertyKind.BOOL);
 			this.setName("Remind Participants");
-			this.setDefaultValue(true);
 
+			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
+			defaultValues.add(new ListEntry<Boolean>(false));
+			this.setDefaultValues(defaultValues);
+			
 			List<ListEntry<Boolean>> values = new ArrayList<>();
-			values.add(new ListEntry<Boolean>(this.getDefaultValue()));
+			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 		}
 	}
@@ -686,16 +717,36 @@ public class StandardProperties {
 	public static class LatitudeProperty extends DoubleProperty {
 		public LatitudeProperty() {
 			inst();
+			setTestValues();
+		}
+		
+		public LatitudeProperty(double latitude) {
+			inst();
+			this.getDefaultValues().add(new ListEntry<Double>(latitude));
+			this.getValues().add(this.getDefaultValues().get(0));
+		}
+		
+		public LatitudeProperty(double[] latitude) {
+			inst();
+			
+			for (int i = 0; i < latitude.length; i++) {
+				this.getDefaultValues().add(new ListEntry<>(latitude[i]));
+				this.getValues().add(this.getDefaultValues().get(i));
+			}
+				
+			
 		}
 		
 		public void inst() {
 			this.setId("latitude");
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Latitude");
-			this.setDefaultValue(0.01);
+			
+			List<ListEntry<Double>> defaultValues = new ArrayList<>();
+			this.setDefaultValues(defaultValues);
+			
 
-			List<ListEntry<Double>> values = new ArrayList<>();
-			values.add(new ListEntry<Double>(this.getDefaultValue()));
+			List<ListEntry<Double>> values = new ArrayList<>();	
 			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
@@ -703,27 +754,56 @@ public class StandardProperties {
 			rules.add(new Rule(RuleKind.MAX, 90));
 			this.setRules(rules);	
 		}
+		
+		private void setTestValues() {
+			this.getDefaultValues().add(new ListEntry<Double>(0.01));	
+			this.getValues().add(this.getDefaultValues().get(0));
+		}
 	}
 	
 	public static class LongitudeProperty extends DoubleProperty {
 		public LongitudeProperty() {
 			inst();
+			setTestValues();
+		}
+		
+		public LongitudeProperty(double longitude) {
+			inst();
+			this.getDefaultValues().add(new ListEntry<Double>(longitude));
+			this.getValues().add(this.getDefaultValues().get(0));
+		}
+		
+		public LongitudeProperty(double[] longitude) {
+			inst();
+			
+			for (int i = 0; i < longitude.length; i++) {
+				this.getDefaultValues().add(new ListEntry<>(longitude[i]));
+				this.getValues().add(this.getDefaultValues().get(i));
+			}
+				
+			
 		}
 		
 		public void inst() {
 			this.setId("longitude");
 			this.setKind(PropertyKind.FLOAT_NUMBER);
 			this.setName("Longitude");
-			this.setDefaultValue(Double.NaN);
+			
+			List<ListEntry<Double>> defaultValues = new ArrayList<>();
+			this.setDefaultValues(defaultValues);
 			
 			List<ListEntry<Double>> values = new ArrayList<>();
-			values.add(new ListEntry<Double>(this.getDefaultValue()));
 			this.setValues(values);	
 			
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.MIN, -180));
 			rules.add(new Rule(RuleKind.MAX, 180));
 			this.setRules(rules);
+		}
+		
+		private void setTestValues() {
+			this.getDefaultValues().add(new ListEntry<Double>(Double.NaN));	
+			this.getValues().add(this.getDefaultValues().get(0));
 		}
 	}
 	
@@ -843,6 +923,106 @@ public class StandardProperties {
 
 		}
 	}
+	
+	//-----------------------------------------
+	//--------------MAP PROPERTY
+	//-----------------------------------------
+	
+	
+	public static class MapProperty extends MultipleProperty {
+	
+		public MapProperty() {
+			this.setKind(PropertyKind.MAP);
+			this.setName("Map Property");
+			this.setProperties(new ArrayList<>());
+			
+			setTestValues();
+		}
+		
+		public void setViewPort(double latitude, double longitude) {
+			if (this.getProperties().size() <= 0) {
+				this.getProperties().add(new MapEntryProperty(latitude, longitude));
+			} else {
+				this.getProperties().set(0, new MapEntryProperty(latitude, longitude));
+			}
+		}
+		
+		public void setMarker(double latitude, double longitude) {
+			if (this.getProperties().size() <= 0) {
+				this.getProperties().add(new MapEntryProperty(latitude, longitude));
+			}
+			this.getProperties().add(new MapEntryProperty(latitude, longitude));
+
+		}
+		
+		public void setArea(double[] latitude, double[] longitude) {
+			if (this.getProperties().size() <= 0) {
+				this.getProperties().add(new MapEntryProperty(latitude[0], longitude[0]));
+			}
+			
+			this.getProperties().add(new MapEntryProperty(latitude, longitude));
+		}
+		
+		private void setTestValues() {
+//			MapEntryProperty e0 = new MapEntryProperty(0,0);
+//			MapEntryProperty e1 = new MapEntryProperty(10,10);
+//			MapEntryProperty e2 = new MapEntryProperty(40,33);
+			
+			this.setViewPort(0, 0);
+			this.setMarker(10, 10);
+			this.setMarker(0, 0);
+			this.setMarker(40, 33);
+						
+			this.setArea(new double[]{10, 12, 13}, new double[]{11, 13, 15});
+			
+			
+			
+		}
+	}
+	
+	public static class MapEntryProperty extends MultipleProperty {
+		
+		public MapEntryProperty() {
+			this.setId(new ObjectId().toHexString());
+			this.setKind(PropertyKind.MULTIPLE);
+			this.setName("Map Entry");
+			this.setProperties(new ArrayList<>());
+			
+			this.getProperties().add(new LatitudeProperty());
+			this.getProperties().add(new LongitudeProperty());
+			
+		}
+		
+		public MapEntryProperty(double latitude, double longitude) {
+			this.setId(new ObjectId().toHexString());
+
+			this.setKind(PropertyKind.MULTIPLE);
+			this.setName("Map Entry");
+			this.setProperties(new ArrayList<>());
+			
+			LatitudeProperty lat = new LatitudeProperty(latitude);
+			this.getProperties().add(lat);
+			
+			LongitudeProperty lng = new LongitudeProperty(longitude);
+			this.getProperties().add(lng);
+		}
+		
+		public MapEntryProperty (double[] latitude, double[] longitude) {
+			this.setId(new ObjectId().toHexString());
+
+			this.setKind(PropertyKind.MULTIPLE);
+			this.setName("Map Area");
+			this.setProperties(new ArrayList<>());
+			
+			LatitudeProperty lat = new LatitudeProperty(latitude);
+			this.getProperties().add(lat);
+			
+			LongitudeProperty lng = new LongitudeProperty(longitude);
+			this.getProperties().add(lng);
+		}
+	}
+	
+	
 	
 	
 	

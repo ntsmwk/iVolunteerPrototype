@@ -2,26 +2,29 @@ package at.jku.cis.iVolunteer.marketplace.property;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.StandardProperties;
-import at.jku.cis.iVolunteer.mapper.property.MultiplePropertyMapper;
+import at.jku.cis.iVolunteer.mapper.property.MultiplePropertyRetMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.mapper.property.SinglePropertyMapper;
 import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.property.dto.MultiplePropertyRetDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
-import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
+import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
 
@@ -29,12 +32,10 @@ import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 public class PropertyController {
 	
 	@Autowired private PropertyListItemMapper propertyListItemMapper;
-//	@Autowired private SinglePropertyMapper singlePropertyMapper;
-//	@Autowired private MultiplePropertyMapper multiplePropertyMapper;
 	@Autowired private PropertyMapper propertyMapper;
 	
-//	@Autowired private SinglePropertyRepository singlePropertyRepository;
 	@Autowired private PropertyRepository propertyRepository;
+	@Autowired private MultiplePropertyRetMapper multiplePropertyRetMapper;
 	
 
 	private boolean setUpFlag = true;
@@ -97,7 +98,8 @@ public class PropertyController {
 					System.out.println(mp.getId() + ": " + mp.getName() + " = " );
 				}
 				
-				if (p.getId() == null || !propertyRepository.exists(p.getId())) {
+//				if (p.getId() == null || !propertyRepository.exists(p.getId())) {
+				if (propertyRepository.findByName(p.getName()) == null) {
 					propertyRepository.save(p);
 					System.out.println("prop added");
 				} else {
@@ -117,16 +119,78 @@ public class PropertyController {
 		return propertyMapper.toDTO(propertyRepository.findOne(id));
 	}
 	
-	@PostMapping("/properties/new")
-	public void addProperty(@RequestBody PropertyDTO<?> dto) {
-		//TODO
+	@PostMapping("/properties/new/single")
+	public void addSingleProperty(@RequestBody PropertyDTO<Object> dto) {
+		System.out.println("Adding Single Property");
+		
+		System.out.println("DTO");
+		System.out.println(dto.getLegalValues().size());
+		System.out.println(dto.getDefaultValues().size());
+		
+
+		
+		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
+		
+		
+		//fix the ids for Default Values
+		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
+			for (ListEntry<Object> val : p.getLegalValues()) {
+				
+				try {
+					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
+					defaultValue.id = val.id;
+				} catch (NoSuchElementException e) {
+					System.out.println("No such Element - " + val.getId() +": " + val.getValue());
+					System.out.println("Continue");
+					continue;
+				}
+			}	
+		}
+
+		p.setCustom(true);
+		this.propertyRepository.save(p);
+					
 	}
 	
-	@PutMapping("/properties/{id}/update")
-	public void updateProperty(@PathVariable("id") String id, @RequestBody PropertyDTO<?> dto) {
-		//TODO
-
+	@PostMapping("/properties/new/multiple")
+	public void addMultipleProperty(@RequestBody MultiplePropertyRetDTO dto) {
+		System.out.println("Adding Multiple Property");
+		
+		MultipleProperty mp = new MultipleProperty(multiplePropertyRetMapper.toEntity(dto));
+				
+		for (String id : dto.getPropertyIDs()) {		
+			Property p = propertyRepository.findOne(id);			
+			mp.getProperties().add(p);
+		}
+		
+		this.propertyRepository.save(mp);
+		
 	}
+	
+	@DeleteMapping("/properties/{id}")
+	public void deleteProperty(@PathVariable("id") String id) {
+		this.propertyRepository.delete(id);
+	}
+	
+//	@PutMapping("/properties/{id}/update/single")
+//	public void updatePropertySingle(@PathVariable("id") String id, @RequestBody PropertyDTO<Object> dto) {
+//		//TODO Test if working (after frontend has been implemented)
+//		Property current = propertyRepository.findOne(id);
+//		
+//		if (current == null) {
+//			return;
+//		} else {
+//			propertyRepository.save(propertyMapper.toEntity(dto));
+//		}
+//		
+//		
+//		
+//	}
+//	
+//	@PutMapping("/properties/{id}/update/multiple")
+//	public void updateMultipleProperty(@PathVariable("id") String id, @RequestBody MultiplePropertyRetDTO dto) {
+//		
+//	}
 	
 	/* Old Test Properties		
 	 

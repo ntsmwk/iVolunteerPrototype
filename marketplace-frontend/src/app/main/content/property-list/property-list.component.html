@@ -4,14 +4,27 @@
      <h1> PROPERTY LIST </h1>
     </div>
 
-    <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-        <button mat-fab class="mat-warn" (click)="newProperty()" aria-label="New Property" *fuseIfOnDom
-            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-            <mat-icon>add</mat-icon>    
-        </button>
+    <div class="center-div" *ngIf="!isLoaded">
+        <mat-spinner></mat-spinner>
     </div>
 
-    <div class="table">
+    <div *ngIf="isLoaded" fxLayout="row" fxLayoutAlign="space-between center"> 
+        
+        <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+            <button mat-fab class="mat-warn" (click)="newPropertyAction()" aria-label="New Property" *fuseIfOnDom
+                [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}" matTooltip="New Property" matTooltipPosition="above">
+                <mat-icon>add</mat-icon>    
+            </button>
+        </div>
+
+        <div>
+            <mat-slide-toggle class="slide-toggle-field" [(ngModel)]="customOnly" [checked]="customOnly" style="cursor: pointer" (change)="updateDataSource()">
+                Show custom / editable properties only
+            </mat-slide-toggle>
+        </div>
+    </div>
+
+    <div *ngIf="isLoaded" class="table">
         <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
             <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
@@ -23,9 +36,10 @@
                 <mat-cell *matCellDef="let property">{{property.name}}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="value">
-                <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-                <mat-cell *matCellDef="let property">{{displayPropertyValue(property)}}</mat-cell>
+            <ng-container matColumnDef="defaultValue">
+                <mat-header-cell *matHeaderCellDef>Default Value</mat-header-cell>
+                <!-- <mat-cell *matCellDef="let property">{{displayPropertyValue(property)}}</mat-cell> -->
+                <mat-cell *matCellDef="let property">{{property.defaultValue}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="kind">
@@ -33,14 +47,35 @@
                 <mat-cell *matCellDef="let property">{{property.kind}}</mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                <mat-cell *matCellDef="let property">
+
+                    <mat-icon class="iconButton" (click)="viewPropertyAction(property)" style="cursor: pointer" matTooltip="View Property {{property.name}}" matTooltipPosition="above"
+                    aria-label="View Property">remove_red_eye</mat-icon>
+
+                    <div>&nbsp;</div>
+
+                    <mat-icon *ngIf="property.custom" class="iconButton" (click)="editPropertyAction(property)" style="cursor: pointer" matTooltip="Edit Property {{property.name}}" matTooltipPosition="above"
+                        aria-label="Edit Property">edit</mat-icon>
+
+                    <div>&nbsp;</div>
+
+                    <mat-icon *ngIf="property.custom" class="iconButton" (click)="deletePropertyAction(property)" style="cursor: pointer" matTooltip="Delete Property {{property.name}}" matTooltipPosition="above"
+                    aria-label="Delete Property">delete</mat-icon>
+
+                </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+            <!-- <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editPropertyAction(row)"></mat-row> -->
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
     </div>
 
-    <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-        <button mat-fab class="mat-warn" (click)="newProperty()" aria-label="New Property" *fuseIfOnDom
-            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+    <div *ngIf="isLoaded" class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+        <button mat-fab class="mat-warn" (click)="newPropertyAction()" aria-label="New Property" *fuseIfOnDom
+            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}" matTooltip="New Property" matTooltipPosition="above">
             <mat-icon>add</mat-icon>    
         </button>
     </div>

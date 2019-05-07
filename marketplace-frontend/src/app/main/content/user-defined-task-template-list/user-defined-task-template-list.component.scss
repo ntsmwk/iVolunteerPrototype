@@ -48,6 +48,10 @@
       opacity: 0.5;
     }
 
+    .mat-column-actions {
+      flex: 0 0 55px;
+    }
+
   }
 
   .no-data {
@@ -60,6 +64,6 @@
     position: relative;
     margin-left: 50%;
     margin-right: 50%;
-}
+  }
 
 }

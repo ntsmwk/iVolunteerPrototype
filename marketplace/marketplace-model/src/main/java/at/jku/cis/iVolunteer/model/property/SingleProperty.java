@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.property;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,11 +11,13 @@ import at.jku.cis.iVolunteer.model.property.rule.Rule;
 public class SingleProperty<T> extends Property {
 
 	//T value;
+	//Value Displayed of the Property in the Task/Template/etc.
 	List<ListEntry<T>> values;
 	
+	//Default Value of the Property, can be changed when editing property, cannot be changed from inside a template/task/etc.
+	List<ListEntry<T>> defaultValues;
 	
-	T defaultValue;
-	
+	//Allowed Values
 	List<ListEntry<T>> legalValues;
 
 	
@@ -46,14 +47,6 @@ public class SingleProperty<T> extends Property {
 		this.name = name;
 	}
 
-//	public T getValue() {
-//		return value;
-//	}
-//	
-//	public void setValue(T value) {
-//		this.value = value;
-//	}
-//	
 	public List<ListEntry<T>> getValues() {
 		return values;
 	}
@@ -61,16 +54,13 @@ public class SingleProperty<T> extends Property {
 	public void setValues(List<ListEntry<T>> values) {
 		this.values = values;
 	}
-	
 
-	
-
-	public T getDefaultValue() {
-		return defaultValue;
+	public List<ListEntry<T>> getDefaultValues() {
+		return defaultValues;
 	}
 	
-	public void setDefaultValue(T defaultValue) {
-		this.defaultValue = defaultValue;
+	public void setDefaultValues(List<ListEntry<T>> defaultValues) {
+		this.defaultValues = defaultValues;
 	}
 
 	public List<ListEntry<T>> getLegalValues() {

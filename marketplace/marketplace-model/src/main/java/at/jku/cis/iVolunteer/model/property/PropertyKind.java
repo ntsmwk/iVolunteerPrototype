@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum PropertyKind {
 	TEXT("TEXT"), LONG_TEXT("LONG_TEXT"), WHOLE_NUMBER("WHOLE_NUMBER"), FLOAT_NUMBER("FLOAT_NUMBER"), BOOL("BOOL"), 
-	DATE("DATE"), LIST("LIST"), MULTIPLE("MULTIPLE"); 
+	DATE("DATE"), LIST("LIST"), GRAPH("GRAPH"), MAP("MAP"), MULTIPLE("MULTIPLE"); 
 
 	private final String kind;
 
@@ -32,3 +32,4 @@ public enum PropertyKind {
 	}
 
 }
+

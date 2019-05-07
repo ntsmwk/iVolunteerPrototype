@@ -6,6 +6,8 @@ public class UserDefinedTaskTemplateStubDTO {
 	String name;
 	
 	String description;
+	
+	String kind;
 
 
 	public String getId() {
@@ -30,6 +32,14 @@ public class UserDefinedTaskTemplateStubDTO {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getKind() {
+		return kind;
+	}
+	
+	public void setKind(String kind) {
+		this.kind = kind;
 	}
 	
 	@Override

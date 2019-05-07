@@ -10,17 +10,19 @@ import { UserDefinedTaskTemplate, UserDefinedTaskTemplateStub } from "../_model/
 import { Participant } from '../_model/participant';
 import { isNullOrUndefined } from 'util';
 import { fuseAnimations } from '@fuse/animations';
-import { TextFieldDialogComponent, TextFieldDialogData } from '../_components/dialogs/text-field-dialog/text-field-dialog.component';
+import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
+
 
 @Component({
   templateUrl: './user-defined-task-template-list.component.html',
   styleUrls: ['./user-defined-task-template-list.component.scss'],
-  animations: fuseAnimations
+  animations: fuseAnimations,
+  providers: [DialogFactoryComponent]
 })
-export class FuseUserDefinedTaskTemplateListComponent implements OnInit {
+export class UserDefinedTaskTemplateListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<UserDefinedTaskTemplateStub>();
-  displayedColumns = ['id', 'name', 'description'];
+  displayedColumns = ['id', 'name', 'description', 'actions'];
   marketplace: Marketplace;
   isLoaded: boolean =  false;
 
@@ -28,7 +30,7 @@ export class FuseUserDefinedTaskTemplateListComponent implements OnInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
-    public dialog: MatDialog) 
+    private dialogFactory: DialogFactoryComponent) 
     { }
 
   ngOnInit() {
@@ -46,42 +48,100 @@ export class FuseUserDefinedTaskTemplateListComponent implements OnInit {
     });
   }
 
-  onRowSelect(t: UserDefinedTaskTemplate) {
+  onRowSelect(t: UserDefinedTaskTemplateStub) {
     console.log(t.id + ": " + t.name + " row selected!");
     console.log("navigate to TaskTemplate detail page");
-    this.router.navigate(['/main/task-templates/user/detail/' + this.marketplace.id + '/' + t.id]);
+    if (t.kind == 'single') {
+      this.router.navigate(['/main/task-templates/user/detail/single/' + this.marketplace.id + '/' + t.id]);
+    } else if (t.kind = 'nested') {
+      console.log("TODO navigate to nested form builder");
+      console.log(t);
+      this.router.navigate(['main/task-templates/user/detail/nested/' + this.marketplace.id + '/' + t.id]);
+    }
+    
   }
 
-  newTaskTemplate() {
+  newSingleTaskTemplate() {
     console.log("clicked new TaskTemplate!");
     console.log("navigate to new TaskTemplate from");
 
-    const dialogRef = this.dialog.open(TextFieldDialogComponent, {
-      width: '500px',
-      data: {label: 'New Template', 
-             fields: [{description: 'Name', hintText: 'Name', value: null},
-                      {description: 'Description', hintText: 'Description', value: null}]
-          }
+    this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
+      this.userDefinedTaskTemplateService.newRootSingleTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
+        if (!isNullOrUndefined(result) && result.length == 2 && !isNullOrUndefined(result[0]) && !isNullOrUndefined(result[1])) {
+          this.router.navigate(['/main/task-templates/user/detail/single/' + this.marketplace.id + '/' + t.id]);
+        }
+      });
+    });
+  }
+
+  newNestedTaskTemplate() {
+    console.log("clicked new nested Task Template");
+
+
+    this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
+      this.userDefinedTaskTemplateService.newRootMultiTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
+        if (!isNullOrUndefined(result) && result.length == 2 && !isNullOrUndefined(result[0]) && !isNullOrUndefined(result[1])) {
+          this.router.navigate(['/main/task-templates/user/detail/nested/' + this.marketplace.id + '/' + t.id]);
+        }
+      });
     });
 
-    dialogRef.afterClosed().subscribe((result: TextFieldDialogData) => {
+  }
+
+  //create dialog
+  newTaskTemplateFromExisting() {
+    //Open dialog with selection of template (maybe with a preview of properties inside template), then create new
+    let idOfCopy = this.dataSource.data[0].id;
+
+    let entries: {id: string, label: string, description: string}[] = [];
+
+    for (let template of this.dataSource.data) {
+      entries.push({id: template.id, label: template.name, description: template.description});
+    }
+
+
+    this.dialogFactory.chooseTemplateToCopyDialog(entries).then((result: any) => {
+
       if (!isNullOrUndefined(result)) {
-        
-        console.log(result.fields.length) //must be 2
-        console.log(result.fields);
+        console.log("Result: ");
+        console.log(result);
+
+        this.userDefinedTaskTemplateService.newTaskTemplateFromExisting(this.marketplace, result.copyId, result.newName, result.newDescription).toPromise().then((newTemplate: UserDefinedTaskTemplate) => {
+          console.log("done - new Template:");
+          console.log(newTemplate);
 
 
-        let name = result.fields[0].value;
-        let description = result.fields[1].value; //why??
-      
+          this.dataSource.data.push({id: newTemplate.id, name: newTemplate.name, description: newTemplate.description, kind: newTemplate.kind});
 
-        this.userDefinedTaskTemplateService.newTaskTemplate(this.marketplace, name, description).toPromise().then((t: UserDefinedTaskTemplate) => {
-          this.router.navigate(['/main/task-templates/user/detail/' + this.marketplace.id + '/' + t.id]);
+          this.dataSource.data = this.dataSource.data;
+          
         });
 
       } else {
-        console.log("Cancelled");
+        console.log("cancelled");
       }
+    });
+
+    
+    // this.userDefinedTaskTemplateService.newTaskTemplateFromExisting(this.marketplace, idOfCopy, "COPY", "DESC").toPromise().then(() => {
+    //   this.isLoaded = false;
+    //   this.ngOnInit();
+    // });
+  }
+
+
+  removeTemplate(taskTemplate: UserDefinedTaskTemplateStub, i: number) {
+    this.dialogFactory.confirmationDialog("Remove Sub-Template " + taskTemplate.name + "...", 
+    "Are you sure you want to delete the Sub-Template " + taskTemplate.name + "? \nThis action accont be reverted" )
+      .then((cont: boolean) => {
+        if (cont) {
+          this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, taskTemplate.id).toPromise().then((success: boolean) => {
+            if (success) {
+              this.dataSource.data.splice(i, 1);
+              this.dataSource.data = this.dataSource.data;
+            }
+          });
+        }
     });
   }
 }

@@ -22,9 +22,15 @@ import { isNullOrUndefined } from 'util';
 export class PropertyListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<PropertyListItem>();
-  displayedColumns = ['id', 'name', 'value', 'kind'];
+  displayedColumns = ['id', 'name', 'defaultValue', 'kind', 'actions'];
+  // displayedColumns = ['id', 'name', 'defaultValue', 'kind'];
 
   marketplace: Marketplace;
+
+  propertyArray: PropertyListItem[];
+
+  customOnly: boolean;
+  isLoaded: boolean;
 
   constructor(private router: Router,
     private propertyService: PropertyService,
@@ -33,7 +39,10 @@ export class PropertyListComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.isLoaded = false;
+    this.customOnly = false;
     this.loadAllProperties();
+
   }
 
   onRowSelect(p: PropertyListItem) {
@@ -53,23 +62,69 @@ export class PropertyListComponent implements OnInit {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
           this.propertyService.getPropertyList(marketplace).toPromise().then((pArr: PropertyListItem[]) => {
-          this.dataSource.data = pArr;
-          console.log(pArr);
+            this.propertyArray = pArr;
+            this.updateDataSource();
+            console.log(pArr);
+            this.isLoaded = true;
         })}
       })
     });
   }
 
-  newProperty() {
+  updateDataSource() {
+    let ret: PropertyListItem[] = [];
+
+    for (let property of this.propertyArray) {
+      if (!this.customOnly) {
+        ret.push(property);
+      }  else {
+        property.custom ? ret.push(property) : null ;
+      }
+    }
+
+    this.dataSource.data = ret;
+  }
+
+  
+
+  viewPropertyAction(property: PropertyListItem) {
+    console.log("clicked view Property")
+    this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id],{queryParams: {ref: 'list'}});
+    console.log(property);
+  }
+
+  newPropertyAction() {
     console.log("clicked new Property");
-    this.router.navigate(['main/property/new/' + this.marketplace.id] );
+    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/'] );
+  }
+
+  editPropertyAction(property: PropertyListItem) { 
+    console.log("clicked edit Property: ");
+    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
+
+    console.log(property)
+
+    console.log("TODO create detail/edit page");
+
+  }
+
+  deletePropertyAction(property: PropertyListItem) {
+    console.log("clicked delete Property: ");
+    console.log(property)
+
+    this.propertyService.deleteProperty(this.marketplace, property.id).toPromise().then(() => {
+      this.ngOnInit();
+      console.log("done");
+    });
+
+
   }
 
 
-  updateProperty(item: PropertyListItem) {
-  console.log("clicked to update property " + item.id + " " + item.name + " TODO - link to detail page");
+  // updateProperty(item: PropertyListItem) {
+  // console.log("clicked to update property " + item.id + " " + item.name + " TODO - link to detail page");
 
-  }
+  // }
 
   // updatePropertySave(property: Property<string>) {
   //   console.log("attempt to update");
@@ -84,7 +139,7 @@ export class PropertyListComponent implements OnInit {
   //   });
   //}
 
-  displayPropertyValue(property: PropertyListItem): string {    
-    return PropertyListItem.getValue(property);
-  }
+  // displayPropertyValue(property: PropertyListItem): string {    
+  //   return PropertyListItem.getValue(property);
+  // }
 }

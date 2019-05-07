@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { MatTableModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { MatTableModule, MatIconModule, MatButtonModule, MatTooltipModule, MatSlideToggleModule, MatCommonModule, MatCardModule, MatProgressSpinnerModule } from '@angular/material';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
@@ -23,13 +23,18 @@ const routes: Route[] = [
   imports: [
     RouterModule.forChild(routes),
   
+    MatCommonModule,
+    MatCardModule,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    MatTooltipModule,
+    MatSlideToggleModule,
+
+    MatProgressSpinnerModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule
-
   ]
   
 })

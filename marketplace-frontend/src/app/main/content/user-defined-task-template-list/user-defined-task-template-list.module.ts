@@ -2,23 +2,24 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Route } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
-import { FuseUserDefinedTaskTemplateListComponent } from './user-defined-task-template-list.component';
-import { MatTableModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule } from '@angular/material';
+import { UserDefinedTaskTemplateListComponent } from './user-defined-task-template-list.component';
+import { MatTableModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatMenuModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
-import { TextFieldDialogComponent } from '../_components/dialogs/text-field-dialog/text-field-dialog.component';
-import { TextFieldDialogModule } from '../_components/dialogs/text-field-dialog/text-field-dialog.module';
+
 import { DynamicFormModule } from '../_components/dynamic-forms/dynamic-form/dynamic-form.module';
 import { DynamicFormQuestionModule } from '../_components/dynamic-forms/dynamic-form-question/dynamic-form-question.module';
+import { DialogFactoryModule } from '../_components/dialogs/_dialog-factory/dialog-factory.module';
 
 
 const routes: Route[] = [
-  {path: '', component: FuseUserDefinedTaskTemplateListComponent}
+  {path: '', component: UserDefinedTaskTemplateListComponent}
 ];
 
 @NgModule({
-  declarations: [FuseUserDefinedTaskTemplateListComponent],
+  declarations: [UserDefinedTaskTemplateListComponent],
   imports: [
+    CommonModule,
     RouterModule.forChild(routes),
     
     MatTableModule,
@@ -26,15 +27,15 @@ const routes: Route[] = [
     MatButtonModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatMenuModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule,
-    
-    TextFieldDialogModule,
 
+    DialogFactoryModule,
+    
     DynamicFormModule,
     DynamicFormQuestionModule
   ],
-  entryComponents:[TextFieldDialogComponent]
 })
-export class FuseUserDefinedTaskTemplateListModule { }
+export class UserDefinedTaskTemplateListModule { }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FuseUserDefinedTaskTemplateDetailFormComponent } from './user-defined-task-template-detail-form.component';
+import { SingleUserDefinedTaskTemplateDetailFormComponent } from './user-defined-task-template-detail-form-single.component';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { RouterModule } from '@angular/router';
 import { QuestionService } from '../_service/question.service';
@@ -11,11 +11,12 @@ import { DynamicFormQuestionModule } from '../_components/dynamic-forms/dynamic-
 
 
 const routes = [
-  {path: ':marketplaceId/:templateId', component: FuseUserDefinedTaskTemplateDetailFormComponent}
+  {path: ':marketplaceId/:templateId', component: SingleUserDefinedTaskTemplateDetailFormComponent},
+  {path: ':marketplaceId/:templateId/:subtemplateId', component: SingleUserDefinedTaskTemplateDetailFormComponent}
 ];
 
 @NgModule({
-  declarations: [FuseUserDefinedTaskTemplateDetailFormComponent],
+  declarations: [SingleUserDefinedTaskTemplateDetailFormComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -29,4 +30,4 @@ const routes = [
   ]
   
 })
-export class FuseUserDefinedTaskTemplateDetailFormModule { }
+export class SingleUserDefinedTaskTemplateDetailFormModule { }

@@ -32,10 +32,11 @@ public class PropertyListItemMapper implements OneWayDtoMapper<Property, Propert
 		propertyListItemDTO.setId(source.getId());
 		propertyListItemDTO.setName(source.getName());
 		propertyListItemDTO.setOrder(source.getOrder());
+		propertyListItemDTO.setCustom(source.isCustom());
 		
 		propertyListItemDTO.setKind(source.getKind());
 		
-		if (!propertyListItemDTO.getKind().equals(PropertyKind.MULTIPLE)) {
+		if (!propertyListItemDTO.getKind().equals(PropertyKind.MULTIPLE) && !propertyListItemDTO.getKind().equals(PropertyKind.MAP)) {
 			
 			SingleProperty<Object> s = (SingleProperty) source;
 			
@@ -46,7 +47,20 @@ public class PropertyListItemMapper implements OneWayDtoMapper<Property, Propert
 					values.add(listEntryMapper.toDTO(entry));
 				}
 				propertyListItemDTO.setValues(values);
+				
 			}
+			
+			if (s.getDefaultValues() != null) {
+				List<ListEntryDTO<Object>> values = new ArrayList<>();
+				
+				for (ListEntry<Object> entry : s.getDefaultValues()) {
+					values.add(listEntryMapper.toDTO(entry));
+				}
+				propertyListItemDTO.setDefaultValues(values);
+			}
+			
+			
+			
 		} else {
 			List<ListEntryDTO<String>> values = new ArrayList<>();
 			values.add(new ListEntryDTO<String>("0","multiple"));

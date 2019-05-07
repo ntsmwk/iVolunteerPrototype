@@ -9,19 +9,14 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 public class SinglePropertyDTO<T> {
 	String id;
 	String name;
-	
-	//T value;
-	T defaultValue;
-	
+
 	int order;
 	
 	List<RuleDTO> rules;
 	
 	List<ListEntryDTO<T>> legalValues;
+	List<ListEntryDTO<T>> defaultValues;
 	List<ListEntryDTO<T>> values;
-	
-//	List<T> legalValues;
-//	List<T> values;
 	
 	PropertyKind kind;
 	
@@ -54,11 +49,11 @@ public class SinglePropertyDTO<T> {
 	}
 	
 
-	public T getDefaultValue() {
-		return defaultValue;
+	public List<ListEntryDTO<T>> getDefaultValues() {
+		return defaultValues;
 	}
-	public void setDefaultValue(T defaultValue) {
-		this.defaultValue = defaultValue;
+	public void setDefaultValues(List<ListEntryDTO<T>> defaultValues) {
+		this.defaultValues = defaultValues;
 	}
 	
 	public int getOrder() {

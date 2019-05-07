@@ -1,10 +1,10 @@
-import { FusePropertyDetailModule } from './property-detail.module';
+import { PropertyDetailModule } from './property-detail.module';
 
 describe('PropertyDetailModule', () => {
-  let propertyDetailModule: FusePropertyDetailModule;
+  let propertyDetailModule: PropertyDetailModule;
 
   beforeEach(() => {
-    propertyDetailModule = new FusePropertyDetailModule();
+    propertyDetailModule = new PropertyDetailModule();
   });
 
   it('should create an instance', () => {

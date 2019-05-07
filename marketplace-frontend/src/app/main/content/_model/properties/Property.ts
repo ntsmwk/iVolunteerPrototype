@@ -3,31 +3,41 @@ import { isNullOrUndefined } from "util";
 export class Property<T> {
     id: string;
     name: string;
-    // value: T;
 
-    values: ListValue<T>[];
+    values: ListEntry<T>[];
 
     order: number;
 
-    defaultValue: T;
-    legalValues?: ListValue<T>[];
+    defaultValues?: ListEntry<T>[];
+    legalValues?: ListEntry<T>[];
     rules?: Rule[];
+
+    custom: boolean;
 
     kind: PropertyKind;
 
     properties?: Property<any>[];
 
+
+
     public static getValue(property: Property<any>): any {
         if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
+            
+            if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
+
             return property.values[0].value;
         } else {
             return '';
         }
     }
 
-    public static getId(property: Property<any>): string {
-        if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
-            return property.values[0].id;
+    public static getDefaultValue(property: Property<any>): any {
+        if (!isNullOrUndefined(property.defaultValues) && property.defaultValues.length >= 1) {
+
+            if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
+
+
+            return property.defaultValues[0].value;
         } else {
             return '';
         }
@@ -35,7 +45,16 @@ export class Property<T> {
 
 }
 
-export class ListValue<T> {
+export class MultiplePropertyRet {
+    id: string;
+    name: string;
+    order: number;
+    kind: PropertyKind;
+    rules?: Rule[];
+    propertyIDs: string[];
+}
+
+export class ListEntry<T> {
     id: string;
     value: T;
 
@@ -48,20 +67,24 @@ export class ListValue<T> {
 export class PropertyListItem {
     id: string;
     name: string;
-    values: ListValue<any>[];
+    values: ListEntry<any>[];
+    defaultValues: ListEntry<any>[];
     kind: PropertyKey;
     order: number;
+    custom: boolean
 
+    //has to be set from frontend
+    show: boolean;
 
-    public static getValue(propertyListItem: PropertyListItem): any {
-        if (!isNullOrUndefined(propertyListItem.values) && propertyListItem.values.length >= 1) {
-            return propertyListItem.values[0].value;
-        } else {
-            return undefined;
-        }
-        
-    }
 }
+
+export class PropertyParentItem {
+    id: string;
+    name: string;
+}
+
+export class PropertyParentSubTemplate extends PropertyParentItem{};
+export class PropertyParentTemplate extends PropertyParentItem{};
 
 export class Rule {
     id: string;
@@ -70,18 +93,11 @@ export class Rule {
     data?: string;
     message: string;
 
-    copyRule(rule: Rule) {
-        this.id = rule.id;
-        this.kind = rule.kind;
-        this.value = rule.value;
-        this.data = rule.data;
-        this.message = rule.message;
-    }
 }
 
 export enum PropertyKind {
     TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL", 
-    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MULTIPLE="MULTIPLE"
+    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MAP = "MAP", GRAPH="GRAPH", MULTIPLE="MULTIPLE"
 }
 
 export enum RuleKind {
