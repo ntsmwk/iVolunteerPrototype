@@ -23,23 +23,25 @@ export class Property<T> {
     public static getValue(property: Property<any>): any {
         if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
             
-            if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
+            // if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
 
             return property.values[0].value;
         } else {
-            return '';
+            // return '';
+            return null;
         }
     }
 
     public static getDefaultValue(property: Property<any>): any {
         if (!isNullOrUndefined(property.defaultValues) && property.defaultValues.length >= 1) {
 
-            if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
+            // if (property.kind == 'DATE') {return new Date(property.values[0].value).toLocaleString();}
 
 
             return property.defaultValues[0].value;
         } else {
-            return '';
+            // return '';
+            return null;
         }
     }
 

@@ -96,54 +96,19 @@
 
 
       <div *ngSwitchCase="'multiple'" class="nested-border" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-       
-          <!--Display question label (name of property)-->
-          <!-- <mat-form-field class="form-field">
-            <input matInput placeholder="Name {{requiredMarker}}"  [formControlName]="question.key"
-                    [id]="question.key" [value]="question.label"/>
-          </mat-form-field> -->
-          <h2>{{ question.label }}</h2>
+        <!--Display question label (name of property)-->
+        <h2>{{ question.label }}</h2>
+            <!--Iterate though sub-questions, for every question call <app-question> -->
+        <div *ngFor="let q of question.subQuestions">  
+            <app-question [question]="q" [form]="getNestedFormGroups()"></app-question> 
+        </div>
 
-         
-          
-             <!--Iterate though sub-questions, for every question call <app-question> -->
-            <div *ngFor="let q of question.subQuestions">
-                
-                <app-question [question]="q" [form]="getNestedFormGroups()"></app-question> 
-                <!-- {{question.label}}-{{q.label}}:<br>
-                {{getNestedFormGroups()}} -->
+      </div>
 
-                <!-- {{ q.key }}: {{ q.label }} = {{ q.value }} <br> -->
+      <div *ngSwitchCase="'generic'">
+        generic property - not yet implemented: {{ question.label }}
+      </div>
 
-
-                <!-- <div [ngSwitch]="q.controlType" >
-
-                  <mat-form-field class="form-field" *ngSwitchCase="'textbox'">
-                      <input matInput placeholder="{{q.label}} {{requiredMarker}}"  [formControlName]="q.key"
-                              [id]="q.key" [type]="q.type" [value]="q.value"/>
-                      <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>        
-                  </mat-form-field>
-
-              
-                </div>  -->
-                <!-- TESTING-->
-
-
-            </div>
-          <!-- </div> -->
-          <!-- Test Multiple Property should be displayed here soon: &nbsp;
-          {{ question.subQuestions[4].label }} &nbsp;
-          {{ question.subQuestions[4].subQuestions[0].label }} &nbsp;
-          {{ question.subQuestions[4].subQuestions[4].label }} &nbsp;
-          {{ question.subQuestions[4].subQuestions[4].subQuestions[0].label }} &nbsp; -->
-
-
-          </div>
-
-
-      
-      
-      
     </div>  
   </ng-template>
 

@@ -91,14 +91,12 @@ export class MultiplePropertyComponent implements OnInit {
   }
 
   //Add Property List
-
   public setShowAddPropertyList(val: boolean) { //TODO
     this.showAddPropertyList = val;
   }
   
-
   filterKind: string;
-
+  filterName: string;
 
   public filterInput = (value: string) => {
     if (this.filterKind == undefined) {
@@ -118,33 +116,38 @@ export class MultiplePropertyComponent implements OnInit {
       };
     }
 
-    
-    if (value.length > 0) {
+    if (!isNullOrUndefined(value) && value.length > 0) {
       this.dataSource.filter = value.trim().toLocaleLowerCase();
+      this.filterName = this.dataSource.filter.trim().toLocaleLowerCase();
+    } else if (!isNullOrUndefined(value) && value.length <= 0) {
+      this.filterName = undefined;
     } else if (!isNullOrUndefined(this.filterKind)) {
       this.dataSource.filter = this.filterKind.trim().toLocaleLowerCase();
     }
-    
   }
-
-
 
 
   //exclude filtering other columns
   public filterPropertyKind = (option: string) => {
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
-      return data.kind.toString().toLowerCase() == filter;
+      if (!isNullOrUndefined(data.name) && !isNullOrUndefined(this.filterName)) {
+        return data.kind.toString().toLocaleLowerCase() == filter && data.name.toString().toLocaleLowerCase().includes(this.filterName.toLocaleLowerCase());
+      } else if (!isNullOrUndefined(data.name) && isNullOrUndefined(this.filterName)) {
+        return data.kind.toString().toLocaleLowerCase() == filter;
+      } else {
+        return data.kind.toString().toLowerCase() == filter;
+      } 
     };
 
     if (option == null) {
       this.dataSource.filter = '';
       this.filterKind = undefined;
+      
+      this.filterInput(this.filterName);
     } else {
       this.dataSource.filter = option.trim().toLowerCase();
       this.filterKind = option.trim().toLowerCase();
     }
-
-    
   }
 
   public addProperty(prop: PropertyListItem) {
@@ -167,20 +170,17 @@ export class MultiplePropertyComponent implements OnInit {
   }
 
   public removeProperty(prop: PropertyListItem) {
-
     // removing from "added Properties"
     this.addedDataSource.data = this.addedProperties.filter((p: PropertyListItem) => {
       if (p.id != prop.id) {
         return p;
       }
     });
-
     this.addedProperties = this.addedDataSource.data;
-
 
     //update property to be shown in list "show = true"
     for (let p of this.propertyListItems) {
-      if (p.id == prop.id && p.id != this.currentProperty.id) {
+      if (p.id == prop.id) {
         p.show = true;
         break;
       }
@@ -188,7 +188,7 @@ export class MultiplePropertyComponent implements OnInit {
 
     //update the datasource of the table
     this.dataSource.data = this.propertyListItems.filter((p: PropertyListItem) => {
-      if (p.show == true) {
+      if (p.show) {
         return p;
       }
     });

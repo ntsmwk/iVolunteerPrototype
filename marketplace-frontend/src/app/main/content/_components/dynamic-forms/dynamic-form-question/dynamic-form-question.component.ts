@@ -65,6 +65,9 @@ export class DynamicFormQuestionComponent implements OnInit{
   
   displayErrorMessage() {
 
+    // console.log(this.form.controls[this.question.key]);
+    // console.log(this.question);
+
     return this.form.controls[this.question.key].hasError('required') ?  this.getErrorMessage('required'):
       this.form.controls[this.question.key].hasError('requiredtrue') ? this.getErrorMessage('requiredtrue'):
       this.form.controls[this.question.key].hasError('pattern') ? this.getErrorMessage('pattern'):

@@ -42,6 +42,16 @@ public class StandardProperties {
 	//========== Text Properties ==============
 	//=========================================
 	
+	public StandardProperties() {
+		
+	}
+	
+	public StandardProperties(CompetenceRepository cp, PropertyRepository pp) {
+		this.competenceRepository = cp;
+		this.propertyRepository = pp;
+	}
+	
+	
 	public List<Property> getAllSingle() {
 		List<Property> props = new LinkedList<>();
 		
@@ -83,15 +93,7 @@ public class StandardProperties {
 		AquireableCompetencesProperty cp3 = new AquireableCompetencesProperty();
 		
 		cp1.setLegalValues(addCompetenceLegalValues());
-
-//		List<ListEntry<String>> values = new LinkedList<ListEntry<String>>();
-//		Competence c0 = competenceRepository.findAll().get(0);
-//		Competence c3 = competenceRepository.findAll().get(3);
-//		values.add(new ListEntry<String>(c0.getId(), c0.getValue()));
-//		values.add(new ListEntry<String>(c3.getId(), c3.getValue()));
-//		cp1.setValues(values);
 		props.add(cp1);
-		
 		cp2.setLegalValues(addCompetenceLegalValues());
 		props.add(cp2);
 		cp3.setLegalValues(addCompetenceLegalValues());
@@ -109,11 +111,11 @@ public class StandardProperties {
 		List<Property> props = new LinkedList<>();
 		
 		MultipleProperty mp = new TestMultiProperty();
-		List<Property> allProps = propertyRepository.findAll();
+//		List<Property> allProps = propertyRepository.findAll();
 		List<Property> multiProps = new LinkedList<>();
 		
-		multiProps.add(allProps.get(0));
-		//props.getLast().setId(new ObjectId().toString());
+//		multiProps.add(allProps.get(0));
+//		props.getLast().setId(new ObjectId().toString());
 		
 		multiProps.add(new PostcodeProperty());
 		multiProps.add(new LatitudeProperty());
@@ -144,6 +146,46 @@ public class StandardProperties {
 		return ret;
 	}
 	
+	public List<Property> getAllSybos() {
+		List<Property> list = new LinkedList<>();
+		
+		list.add(new DurationTimeProperty());
+		list.add(new AreaOfExpertiseProperty());
+		list.add(new PlanningTypeProperty());
+		list.add(new DurationHoursProperty());
+		list.add(new PointsProperty());
+		list.add(new DepartmentProperty());
+		list.add(new StreetProperty());
+		list.add(new HouseNumberProperty());
+		list.add(new DoorNumberProperty());
+		list.add(new CityProperty());
+		list.add(new AddressProperty());
+		list.add(new CommentsProperty());
+		list.add(new VehicleSelectionProperty());
+		list.add(new EventTypeProperty());
+		list.add(new PublicEventProperty());
+		list.add(new PaidProperty());
+		list.add(new PrerequisitesProperty());
+		list.add(new ActivityGroupProperty());
+		list.add(new RegisterDateProperty());
+		list.add(new EducationClassProperty());
+		list.add(new GradeProperty());
+		
+		return new ArrayList<>(list);
+	}
+	
+	public List<Property> getAll() {
+		List<Property> sps = this.getAllSingle();
+		List<Property> mps = this.getAllMulti();
+		List<Property> sbs = this.getAllSybos();
+	
+		sps.addAll(mps);
+		sps.addAll(sbs);
+		
+		return sps;
+	
+	}
+	
 	
 	
 	public List<ListEntry<String>> addCompetenceLegalValues() {
@@ -151,38 +193,35 @@ public class StandardProperties {
 		List<ListEntry<String>> legalValues = new LinkedList<ListEntry<String>>();
 		
 		
+		
 		for (Competence c : competenceRepository.findAll()) {
 			legalValues.add(new ListEntry<String>(c.getId(), c.getValue()));
 		}
+	
+		
 		
 		return legalValues;
 	}
-	
-
-	
-//	public static void setIds(List<Property<?>> props) {
-//		for (Property p : props) {
-//			//p.setId(p.getName());
-//		}
-//	}
 	
 	public Map<String, Property> getAllSingleMap() {
 		Map<String, Property> props = new HashMap<>();
 		
 		List<Property> list = getAllSingle();
 		for (Property p : list) {
-			//p.setId(p.getName());
 			props.put(p.getId(), p);
 		}
-		
-		
+			
 		return new HashMap(props);
 		
 	}
 	
+	/**
+	 * 
+	 * Standard Properties
+	 *
+	 */
 	
 	
-
 	
 	public static class NameProperty extends TextProperty {
 
@@ -192,12 +231,10 @@ public class StandardProperties {
 		
 		@PostConstruct
 		public void inst() {
-			//this.setId("name");
-//			this.setId("name");
+			this.setId("name");
 			this.setKind(PropertyKind.TEXT);
 			this.setName("Name");
-//			this.setDefaultValue("");
-//			this.setValue("");
+
 			
 			//TODO Testrules
 			List<Rule> rules = new LinkedList<Rule>();
@@ -565,14 +602,21 @@ public class StandardProperties {
 	
 	public static class StartDateProperty extends DateProperty {
 		public StartDateProperty() {
-			inst();
-		}
-		
-		public void inst() {
+			
 			this.setId("starting_date");
 			this.setKind(PropertyKind.DATE);
 			this.setName("Starting Date");
 			
+			List<Rule> rules = new LinkedList<Rule>();
+			rules.add(new Rule(RuleKind.REQUIRED));
+//			rules.add(new Rule(RuleKind.MIN, System.currentTimeMillis()));
+			this.setRules(rules);
+			
+			setTestValues();
+		}
+		
+		public void setTestValues() {
+
 			List<ListEntry<Date>> defaultValues = new ArrayList<>();
 			defaultValues.add(new ListEntry<Date>(new Date()));
 			this.setDefaultValues(defaultValues);
@@ -581,27 +625,35 @@ public class StandardProperties {
 			values.add(this.getDefaultValues().get(0));
 			this.setValues(values);	
 			
-			//TODO Testrules
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
-			rules.add(new Rule(RuleKind.MIN, System.currentTimeMillis()));
-			this.setRules(rules);
 		}
 	}
 	
 	public static class EndDateProperty extends DateProperty {
 		public EndDateProperty() {
-			inst();
-		}
-		public void inst() {
 			this.setId("end_date");
 			this.setKind(PropertyKind.DATE);
 			this.setName("End Date");
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MIN, "starting_date")); //means end date is not allowed to be before starting date
-			rules.get(rules.size()-1).setMessage("End Date must not be before the Starting date");
-			this.setRules(rules);
+//			List<Rule> rules = new LinkedList<Rule>();
+			
+			List<ListEntry<Date>> defaultValues = new ArrayList<>();
+//			defaultValues.add(new ListEntry<Date>(null));
+			this.setDefaultValues(defaultValues);
+			
+			List<ListEntry<Date>> values = new ArrayList<>();
+//			values.add(this.getDefaultValues().get(0));
+			this.setValues(values);
+			
+//			rules.add(new Rule(RuleKind.MIN, "starting_date")); //means end date is not allowed to be before starting date
+//			rules.get(rules.size()-1).setMessage("End Date must not be before the Starting date");
+//			this.setRules(rules);
+			
+			setTestValues();
+		}
+		
+		public void setTestValues() {
+			
+			
 
 		}
 	}
@@ -823,26 +875,8 @@ public class StandardProperties {
 			this.setName("Required Competences");
 			this.setId("required_competences");
 			this.setKind(PropertyKind.LIST);
-			//postInst();
 		}
-		
-//		public void postInst() {			
-//			List<ListEntry<String>> legalValues = new LinkedList<ListEntry<String>>();
-//			
-//			for (Competence c : competences) {
-//				legalValues.add(new ListEntry<String>(c.getId(), c.getValue()));
-//			}
-//			
-//			this.setLegalValues(legalValues);
-//			
-//			
-//			List<ListEntry<String>> values = new LinkedList<ListEntry<String>>();
-//			Competence c0 = competences.get(0);
-//			Competence c3 = competences.get(3);
-//			values.add(new ListEntry<String>(c0.getId(), c0.getValue()));
-//			values.add(new ListEntry<String>(c3.getId(), c3.getValue()));
-//			this.setValues(values);
-//		}
+
 	}
 	
 	public static class OptionalCompetencesProperty extends TextProperty {
@@ -858,25 +892,7 @@ public class StandardProperties {
 			this.setName("Optional Competences");
 			this.setId("optional_competences");
 			this.setKind(PropertyKind.LIST);
-			//postInst();
-		}
-		
-//		@PostConstruct
-//		public void postInst() {
-//			List<ListEntry<String>> legalValues = new LinkedList<ListEntry<String>>();
-//			
-//			
-//			
-//			List<Competence> competences = sp.getAllCompetences();
-//			
-//			for (Competence c : competences) {
-//				legalValues.add(new ListEntry<String>(c.getId(), c.getValue()));
-//			}
-//			
-//			this.setLegalValues(legalValues);
-//		}
-		
-		
+		}	
 	}
 	
 	public static class AquireableCompetencesProperty extends TextProperty {
@@ -884,45 +900,272 @@ public class StandardProperties {
 		@Autowired StandardProperties sp ;
 		
 		public AquireableCompetencesProperty() {
-			inst();
-			
+			inst();	
 		}
-		
 		
 		public void inst() {
 			this.setName("Aquirable Competences");
-			this.setId("aquirable_competences");
+			this.setId("aquireable_competences");
 
 			this.setKind(PropertyKind.LIST);
-			//postInst();
 		}
-		
-//		@PostConstruct
-//		public void postInst() {
-//			List<ListEntry<String>> legalValues = new LinkedList<ListEntry<String>>();
-//			
-//			
-//			
-//			List<Competence> competences = sp.getAllCompetences();
-//			
-//			for (Competence c : competences) {
-//				legalValues.add(new ListEntry<String>(c.getId(), c.getValue()));
-//			}
-//			
-//			this.setLegalValues(legalValues);
-//		}
 	}
-	
 	
 	public static class TestMultiProperty extends MultipleProperty {
 		public TestMultiProperty() {
 			this.setId("test_multi");
 			this.setKind(PropertyKind.MULTIPLE);
 			this.setName("Test Multi");
-			
-
 		}
 	}
+	
+	
+	//-----------------------------------------
+	//--------------SyBOS Properties
+	//-----------------------------------------
+	
+	public static class DurationTimeProperty extends MultipleProperty {
+		public DurationTimeProperty() {
+			this.setId("duration_time");
+			this.setName("duration");
+			
+			this.setProperties(new ArrayList<>(2));
+			
+			StartDateProperty start = new StartDateProperty();
+			start.setName("From");
+			
+			
+			EndDateProperty end = new EndDateProperty();
+			end.setName("To");
+			
+			this.getProperties().add(start);
+			this.getProperties().add(end);
+		}	
+	}
+	
+	public static class PlanningTypeProperty extends TextProperty {
+		public PlanningTypeProperty() {
+			this.setId("planning_type");
+			this.setName("Planning Type");
+			this.setLegalValues(new ArrayList<>(2));
+			this.getLegalValues().add(new ListEntry<String>("repeating"));
+			this.getLegalValues().add(new ListEntry<String>("once"));
+		
+		}
+	}
+	
+	public static class AreaOfExpertiseProperty extends TextProperty {
+		public AreaOfExpertiseProperty() {
+			this.setId("area_of_expertise");
+			this.setName("Area of Expertise");
+			this.setLegalValues(new ArrayList<>(5));
+			this.getLegalValues().add(new ListEntry<String>("Brandbereitschaftsdienst"));
+			this.getLegalValues().add(new ListEntry<String>("Ordnungs- und Absperrdienst"));
+			this.getLegalValues().add(new ListEntry<String>("Wasserbeförderung"));
+			this.getLegalValues().add(new ListEntry<String>("Hilfs- und Assistenzdienst"));
+			this.getLegalValues().add(new ListEntry<String>("Schädlingsbekämpfung"));
+		}
+	}
+	
+	
+	public static class DurationHoursProperty extends DoubleProperty {
+		public DurationHoursProperty() {
+			this.setId("duration_hours");
+			this.setName("Duration (in hrs)");
+		}
+	}
+	
+	public static class PointsProperty extends DoubleProperty {
+		public PointsProperty() {
+			this.setId("points");
+			this.setName("Points");
+		}
+	}
+	
+	public static class DepartmentProperty extends TextProperty {
+		public DepartmentProperty() {
+			this.setId("department");
+			this.setName("Department");
+			
+			this.setLegalValues(new ArrayList<>());	
+			this.getLegalValues().add(new ListEntry<>("FF Grieskirchen"));
+			this.getLegalValues().add(new ListEntry<>("FF Krems"));
+			this.getLegalValues().add(new ListEntry<>("FF Wels"));
+			this.getLegalValues().add(new ListEntry<>("FF Ried"));
+			this.getLegalValues().add(new ListEntry<>("BF Linz"));
+			this.getLegalValues().add(new ListEntry<>("FW Ravensburg"));	
+		}
+	}
+	
+	public static class StreetProperty extends TextProperty {
+		public StreetProperty() {
+			this.setId("street");
+			this.setName("Street");
+		}
+	}
+	
+	public static class HouseNumberProperty extends TextProperty {
+		public HouseNumberProperty() {
+			this.setId("house_number");
+			this.setName("House Number");
+		}
+	}
+	
+	public static class DoorNumberProperty extends TextProperty {
+		public DoorNumberProperty() {
+			this.setId("door_number");
+			this.setName("Door Number");
+		}
+	}
+	
+	public static class CityProperty extends TextProperty {
+		public CityProperty() {
+			this.setId("city");
+			this.setName("city");
+		}
+	}
+	
+	public static class AddressProperty extends MultipleProperty {
+		public AddressProperty() {
+			this.setId("address");
+			this.setName("Address");
+			
+			this.setProperties(new ArrayList<>());
+			this.getProperties().add(new StreetProperty());
+			this.getProperties().add(new HouseNumberProperty());
+			this.getProperties().add(new DoorNumberProperty());
+			this.getProperties().add(new PostcodeProperty());
+			this.getProperties().add(new CityProperty());		
+			this.getProperties().add(new DescriptionProperty());
+		}
+	}
+	
+	public static class CommentsProperty extends TextProperty {
+		public CommentsProperty() {
+			this.setId("comments");
+			this.setName("Comments");
+			this.setKind(PropertyKind.LONG_TEXT);
+		}
+	}
+	
+	public static class VehicleSelectionProperty extends TextProperty {
+		public VehicleSelectionProperty() {
+			this.setId("vehicle_selection");
+			this.setName("Vehicle");
+			
+			this.setLegalValues(new ArrayList<>());
+			
+			this.getLegalValues().add(new ListEntry<>("Arbeitsboot (1)"));
+			this.getLegalValues().add(new ListEntry<>("Arbeitsboot (2)"));
+			this.getLegalValues().add(new ListEntry<>("TLF 2000"));
+			this.getLegalValues().add(new ListEntry<>("LF-B 1"));
+			this.getLegalValues().add(new ListEntry<>("LF-B 2"));
+			this.getLegalValues().add(new ListEntry<>("KLF"));
+			this.getLegalValues().add(new ListEntry<>("TLF A"));
+			this.getLegalValues().add(new ListEntry<>("ULF"));
+			this.getLegalValues().add(new ListEntry<>("SLF"));
+			this.getLegalValues().add(new ListEntry<>("RLF-T"));
+		}
+	}
+	
+	public static class EventTypeProperty extends TextProperty {
+		public EventTypeProperty() {
+			this.setId("event_type");
+			this.setName("Event Type");
+			
+			this.setLegalValues(new ArrayList<>());
+			this.getLegalValues().add(new ListEntry<>("Besprechung"));
+			this.getLegalValues().add(new ListEntry<>("Kurs"));
+			this.getLegalValues().add(new ListEntry<>("Schulung"));
+			this.getLegalValues().add(new ListEntry<>("sonstiges"));
+		}
+	}
+	
+	public static class PublicEventProperty extends BooleanProperty {
+		public PublicEventProperty() {
+			this.setId("public_event");
+			this.setName("Event is public");
+		}
+	}
+	
+	public static class PaidProperty extends BooleanProperty {
+		public PaidProperty() {
+			this.setId("paid");
+			this.setName("paid");
+		}
+	}
+	
+	public static class PrerequisitesProperty extends TextProperty {
+		public PrerequisitesProperty() {
+			this.setId("prerequisites");
+			this.setName("Prerequisites");
+			this.setKind(PropertyKind.LONG_TEXT);
+		}
+	}
+	
+	public static class ActivityGroupProperty extends TextProperty {
+		public ActivityGroupProperty() {
+			this.setId("activity_group");
+			this.setName("Activity Group");
+			
+			this.setLegalValues(new ArrayList<>());
+			
+			this.getLegalValues().add(new ListEntry<>("Education"));
+			this.getLegalValues().add(new ListEntry<>("Meeting"));
+			this.getLegalValues().add(new ListEntry<>("Recruitment"));
+			this.getLegalValues().add(new ListEntry<>("Maintainence"));
+		}
+	}
+	
+	public static class RegisterDateProperty extends DateProperty {
+		public RegisterDateProperty() {
+			this.setId("register_date");
+			this.setName("Register Date");
+		
+		}
+	}
+	
+	public static class EducationClassProperty extends TextProperty {
+		public EducationClassProperty() {
+			this.setId("education_class");
+			this.setName("Education Class");
+		}
+	}
+	
+	public static class GradeProperty extends TextProperty {
+		public GradeProperty() {
+			this.setId("grade");
+			this.setName("Grade");
+			
+			this.setLegalValues(new ArrayList<>());
+			
+			this.getLegalValues().add(new ListEntry<>("Mit Erfolg Teilgenommen"));
+			this.getLegalValues().add(new ListEntry<>("Teilgenommen"));
+			this.getLegalValues().add(new ListEntry<>("Ohne Erfolg Teilgenommen"));
+			this.getLegalValues().add(new ListEntry<>("sehr gut (1)"));
+			this.getLegalValues().add(new ListEntry<>("gut (2)"));
+			this.getLegalValues().add(new ListEntry<>("befriedigend (3)"));
+			this.getLegalValues().add(new ListEntry<>("genügend (4)"));
+			this.getLegalValues().add(new ListEntry<>("nicht genügend (5)"));
+			
+		}
+	}
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//-----------------------------------------
 	//--------------MAP PROPERTY
@@ -932,6 +1175,7 @@ public class StandardProperties {
 	public static class MapProperty extends MultipleProperty {
 	
 		public MapProperty() {
+			this.setId("map");
 			this.setKind(PropertyKind.MAP);
 			this.setName("Map Property");
 			this.setProperties(new ArrayList<>());
@@ -964,19 +1208,13 @@ public class StandardProperties {
 		}
 		
 		private void setTestValues() {
-//			MapEntryProperty e0 = new MapEntryProperty(0,0);
-//			MapEntryProperty e1 = new MapEntryProperty(10,10);
-//			MapEntryProperty e2 = new MapEntryProperty(40,33);
 			
 			this.setViewPort(0, 0);
 			this.setMarker(10, 10);
 			this.setMarker(0, 0);
 			this.setMarker(40, 33);
 						
-			this.setArea(new double[]{10, 12, 13}, new double[]{11, 13, 15});
-			
-			
-			
+			this.setArea(new double[]{10, 12, 13}, new double[]{11, 13, 15});	
 		}
 	}
 	
@@ -989,8 +1227,7 @@ public class StandardProperties {
 			this.setProperties(new ArrayList<>());
 			
 			this.getProperties().add(new LatitudeProperty());
-			this.getProperties().add(new LongitudeProperty());
-			
+			this.getProperties().add(new LongitudeProperty());	
 		}
 		
 		public MapEntryProperty(double latitude, double longitude) {
@@ -1021,6 +1258,128 @@ public class StandardProperties {
 			this.getProperties().add(lng);
 		}
 	}
+	
+
+	
+	public static class GraphProperty extends MultipleProperty {
+		public GraphProperty() {
+			this.setId("graph");
+			this.setName("Graph");
+			this.setKind(PropertyKind.GRAPH);
+			
+			this.setProperties(new ArrayList<>());
+			
+		}
+		
+		public void addNode(String name) {
+			this.getProperties().add(new GraphPropertyEntry(name));
+		}
+		
+		public void addNode(GraphPropertyEntry entry) {
+			this.getProperties().add(entry);
+		}
+		
+		public void addEdge(String idFrom, String idTo) {
+			GraphPropertyEntry from = (GraphPropertyEntry) this.getProperties().stream().filter(p -> p.getId().equals(idFrom)).findFirst().get();
+			GraphPropertyEntry to = (GraphPropertyEntry) this.getProperties().stream().filter(p -> p.getId().equals(idTo)).findFirst().get();
+			
+			from.addEdge(idTo, to.getName());
+		}
+		
+		public String print() {
+			
+			StringBuilder sb = new StringBuilder();
+			
+			for (Property p : this.getProperties()) {
+				sb.append(((GraphPropertyEntry)p).print());
+			}
+			
+			return sb.toString();
+		}
+	}
+	
+	public static class GraphPropertyEntry extends SingleProperty<String> {
+		public GraphPropertyEntry(String name) {
+			this.setId(name);
+			this.setName(name);
+			this.setKind(PropertyKind.TEXT);
+			
+			this.setValues(new ArrayList<ListEntry<String>>());	
+		}
+		
+		
+		
+		public void addEdge(String nodeId, String nodeLabel) {
+			this.getValues().add(new ListEntry<String>(nodeId, nodeLabel));
+		}
+		
+		public String print() {
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(this.getName());
+			sb.append(": ");
+			
+			for (ListEntry<String> entry : this.getValues()) {
+				sb.append(entry.value);
+				sb.append(" -> ");
+			}
+			sb.append("/\n");
+			
+			return sb.toString();
+		}
+	}
+	
+	//Testgraph
+	
+	/** Graph:
+	 * 0---1
+	 * |  /| \  
+	 * | / |  2
+	 * |/  | /
+	 * 4---3	
+	 * 
+	 */
+	
+	public static void main(String[] args) {
+		GraphProperty graph = new GraphProperty();
+		
+		GraphPropertyEntry n0 = new GraphPropertyEntry("0");
+		GraphPropertyEntry n1 = new GraphPropertyEntry("1");
+		GraphPropertyEntry n2 = new GraphPropertyEntry("2");
+		GraphPropertyEntry n3 = new GraphPropertyEntry("3");
+		GraphPropertyEntry n4 = new GraphPropertyEntry("4");
+
+		n0.addEdge(n1.getId(), n1.getName());
+		n0.addEdge(n4.getId(), n4.getName());
+		
+		n1.addEdge(n0.getId(), n0.getName());
+		n1.addEdge(n4.getId(), n4.getName());
+		n1.addEdge(n2.getId(), n2.getName());
+		n1.addEdge(n3.getId(), n3.getName());
+		
+		n2.addEdge(n1.getId(), n1.getName());
+		n2.addEdge(n3.getId(), n3.getName());
+		
+		n3.addEdge(n1.getId(), n1.getName());
+		n3.addEdge(n4.getId(), n4.getName());
+		n3.addEdge(n2.getId(), n2.getName());
+		
+		n4.addEdge(n3.getId(), n3.getName());
+		n4.addEdge(n0.getId(), n0.getName());
+		n4.addEdge(n1.getId(), n1.getName());
+		
+		graph.addNode(n0);
+		graph.addNode(n1);
+		graph.addNode(n2);
+		graph.addNode(n3);
+		graph.addNode(n4);
+		
+		System.out.println("Adj. List: ");
+		System.out.println(graph.print());
+		
+	}
+	
+	
 	
 	
 	

@@ -48,7 +48,7 @@ public class PropertyController {
 	@GetMapping("/properties/list") 
 	public List<PropertyListItemDTO<Object>> getPropertiesList() {
 
-		setTestValues();
+//		setTestValues();
 
 		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
 		
@@ -61,7 +61,7 @@ public class PropertyController {
 	public List<PropertyDTO<Object>> getPropertiesFull() {
 		
 		//System.out.println("Props: " + props.size());
-		setTestValues();
+//		setTestValues();
 		
 		List<PropertyDTO<Object>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
 		

@@ -61,129 +61,14 @@ public class UserDefinedTaskTemplateController {
 	
 	@Autowired
 	private PropertyRepository propertyRepository;
-	
-	@Autowired private StandardProperties sp;
-	
+		
 	List<UserDefinedTaskTemplate> templates;
-	boolean testValuesSet = false;
-	
-	
-	
-	
-	private void setupTestValues() {
-		templates = new ArrayList<UserDefinedTaskTemplate>();
-		SingleUserDefinedTaskTemplate t1 = new SingleUserDefinedTaskTemplate("0");
-		SingleUserDefinedTaskTemplate t2 = new SingleUserDefinedTaskTemplate("1");
-		MultiUserDefinedTaskTemplate nested = new MultiUserDefinedTaskTemplate("SmallExampleTasks");
 
-		t1.setName("My Template 1");
-		List<Property> p1 = propertyRepository.findAll();
-		t1.setProperties(p1);
-		templates.add(t1);
 
-		t2.setName("My Template 2");
-		List<Property> p2 = propertyRepository.findAll();
-		t2.setProperties(p2);
-		templates.add(t2);
-		
-		nested.setName("Test nested template");
-		nested.setDescription("This is a description");
-		List<SingleUserDefinedTaskTemplate> nestedTemplates = new ArrayList<>();
-		
-		SingleUserDefinedTaskTemplate s1 = new SingleUserDefinedTaskTemplate("CleanFloor");
-		s1.setName("Clean Garage Floor");
-		s1.setDescription("Clean garage floor at the end of the day");
-		List<Property> nsp1 = new ArrayList<>();
-		nsp1.add(propertyRepository.findOne("location"));
-		nsp1.add(propertyRepository.findOne("postcode"));
-		nsp1.add(propertyRepository.findOne("number_of_volunteers"));
-		nsp1.add(propertyRepository.findOne("period_type"));
-		nsp1.add(propertyRepository.findOne("priority"));
-		nsp1.add(propertyRepository.findOne("urgent"));
-		nsp1.add(propertyRepository.findOne("workshift"));
-		
-		s1.setProperties(nsp1);
-		nestedTemplates.add(s1);
-		
-		SingleUserDefinedTaskTemplate s2 = new SingleUserDefinedTaskTemplate("drivecartoservice");
-		s2.setName("Drive car to service");
-		s2.setDescription("A car is has to be serviced soon, someone has to drive the car described to the service partner");
-		List<Property> nsp2 = new ArrayList<>();
-		nsp2.add(propertyRepository.findOne("location"));
-		nsp2.add(propertyRepository.findOne("postcode"));
-		nsp2.add(propertyRepository.findOne("number_of_volunteers"));
-		nsp2.add(propertyRepository.findOne("urgent"));
-		nsp2.add(propertyRepository.findOne("priority"));
-		nsp2.add(propertyRepository.findOne("description"));
-		s2.setProperties(nsp2);
-		nestedTemplates.add(s2);
-
-		SingleUserDefinedTaskTemplate s3 = new SingleUserDefinedTaskTemplate("PickupPerson");
-		s3.setName("Person");
-		s3.setDescription("This is a description for the 3rd nested template");
-		List<Property> nsp3 = new ArrayList<>();
-		nsp3.add(propertyRepository.findOne("5c9d1b251704ee0f8972b313"));
-		nsp3.add(propertyRepository.findOne("postcode"));
-		nsp3.add(propertyRepository.findOne("location"));
-		nsp3.add(propertyRepository.findOne("description"));
-		nsp3.add(propertyRepository.findOne("starting_date"));
-		nsp3.add(propertyRepository.findOne("latitude"));
-		nsp3.add(propertyRepository.findOne("longitude"));
-		nsp3.add(propertyRepository.findOne("priority"));
-		nsp3.add(propertyRepository.findOne("importancy"));
-		
-		
-		s3.setProperties(nsp3);
-		nestedTemplates.add(s3);
-		
-		SingleUserDefinedTaskTemplate s4 = new SingleUserDefinedTaskTemplate("genericworktask");
-		s4.setName("Generic Worktask");
-		s4.setDescription("This is a description for the fourth nested template");
-		List<Property> nsp4 = new ArrayList<>();
-		nsp4.add(propertyRepository.findOne("5c9d1b251704ee0f8972b313"));
-		nsp4.add(propertyRepository.findOne("workshift"));
-		nsp4.add(propertyRepository.findOne("offered_rewards"));
-		nsp4.add(propertyRepository.findOne("number_of_volunteers"));
-		nsp4.add(propertyRepository.findOne("location"));
-		nsp4.add(propertyRepository.findOne("starting_date"));
-		nsp4.add(propertyRepository.findOne("end_date"));
-		s4.setProperties(nsp4);
-		nestedTemplates.add(s4);
-		
-		nested.setTemplates(nestedTemplates);
-		
-		
-		if (!userDefinedTaskTemplateRepository.exists(t1.getId())) {
-			userDefinedTaskTemplateRepository.save(t1);
-			System.out.println("Testtemplate " + 0 + "added");
-		} else {
-			System.out.println("Template 0 already in db");
-		}
-		
-		if (!userDefinedTaskTemplateRepository.exists(t2.getId())) {
-			userDefinedTaskTemplateRepository.save(t2);
-			System.out.println("Testtemplate " + 1 + "added");
-		} else {
-			System.out.println("Template 1 already in db");
-		}
-		
-		if (!userDefinedTaskTemplateRepository.exists(nested.getId())) {
-			userDefinedTaskTemplateRepository.save(nested);
-			System.out.println("TestTemplate nested added");
-		} else {
-			System.out.println("TestTemplate nested already in db");
-		}
-	}
 
 	@GetMapping("/tasktemplate/user")
 	public List<?> findAll(@RequestParam(value = "stub", required = true) boolean stub) {
-		if (!testValuesSet) {
-			this.setupTestValues();
-			this.testValuesSet = true;
-		}
-
-		List<UserDefinedTaskTemplate> t = userDefinedTaskTemplateRepository.findAll();
-		
+		List<UserDefinedTaskTemplate> t = userDefinedTaskTemplateRepository.findAll();	
 		if (stub) {
 			return userDefinedTaskTemplateStubMapper.toDTOs(t);
 		} else {

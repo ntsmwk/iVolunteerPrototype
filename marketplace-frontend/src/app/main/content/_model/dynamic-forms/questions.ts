@@ -155,3 +155,13 @@ import { ValidatorFn } from "@angular/forms";
     }
   }
 
+  export class GenericQuestion extends QuestionBase<string> {
+    controlType = 'generic'
+    options: {key: string, value: string}[] = [];
+
+    constructor(options: {} = {}) {
+      super(options);
+      this.options = options['options'] || [];
+    }
+  }
+

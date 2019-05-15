@@ -20,7 +20,7 @@
     <br>
 
     <br>Value: {{ displayPropertyValue(property) }}
-    <br>Default Value: {{ property.defaultValue }}
+    <br>Default Value: {{ displayPropertyDefaultValue(property) }}
     <br>Property Kind: {{ property.kind }}
 
 
@@ -32,7 +32,7 @@
       </mat-list>
     </div>
     <div *ngIf="property.defaultValues == null">
-      conatins no default value definitions
+      contains no default value definitions
     </div>
 
     <h3> Legal Values</h3>
@@ -43,7 +43,7 @@
       </mat-list>
     </div>
     <div *ngIf="property.legalValues == null">
-      conatins no legal value definitions
+      contains no legal value definitions
     </div>
 
 

@@ -23,7 +23,7 @@ const routes: Route[] = [
     MatFormFieldModule,
 
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDiwSZ8L-1r9TXW_q5UTK_--GE2MKHK-jE'
+      // apiKey: 'AIzaSyDiwSZ8L-1r9TXW_q5UTK_--GE2MKHK-jE' //enter Google Maps API Key
       
     })
   ],

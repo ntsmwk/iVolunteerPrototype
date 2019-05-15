@@ -123,7 +123,7 @@ export class SinglePropertyComponent implements OnInit {
     this.form.get('kind').setValue(this.currentProperty.kind);
 
     if (!isNullOrUndefined(this.currentProperty.defaultValues)) {
-      this.form.get('defaultValue').setValue(this.currentProperty.defaultValues[0]);
+      this.form.get('defaultValue').setValue(this.currentProperty.defaultValues[0].value);
     }
     
     if (!isNullOrUndefined(this.currentProperty.legalValues) && this.currentProperty.legalValues.length > 0) {

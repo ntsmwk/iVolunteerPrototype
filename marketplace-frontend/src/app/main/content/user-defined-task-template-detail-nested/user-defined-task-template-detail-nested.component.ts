@@ -154,7 +154,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   removeSubTemplate(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
     this.dialogFactory.confirmationDialog("Remove Sub-Template " + subtemplate.name + "...", 
-      "Are you sure you want to delete the Sub-Template " + subtemplate.name + "? \nThis action accont be reverted" )
+      "Are you sure you want to delete the Sub-Template " + subtemplate.name + "? \nThis action cannot be reverted" )
       .then((cont: boolean) => {
         if (cont) {
           this.userDefinedTaskTemplateService.deleteNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id).toPromise().then((success: boolean) => {

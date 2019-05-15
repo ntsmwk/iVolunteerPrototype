@@ -111,6 +111,10 @@ export class PropertyDetailComponent implements OnInit {
     return Property.getValue(property);
   }
 
+  displayPropertyDefaultValue(property: Property<any>): string {
+    return Property.getDefaultValue(property);
+  }
+
   navigateBack() {
     window.history.back();
   }

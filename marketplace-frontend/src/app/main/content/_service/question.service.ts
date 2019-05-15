@@ -1,7 +1,7 @@
 import { Injectable }       from '@angular/core';
 
 import { DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion, 
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion } from '../_model/dynamic-forms/questions';
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion } from '../_model/dynamic-forms/questions';
 
 import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/properties/Property';
 import { isNullOrUndefined } from 'util';
@@ -90,6 +90,8 @@ export class QuestionService {
       });
 
     } else if (property.kind === PropertyKind.DATE) {
+      console.log("leifnleifn");
+      console.log(property);
       question = new DatepickerQuestion({
         value: this.setDateValue(Property.getValue(property)),
       });
@@ -104,6 +106,12 @@ export class QuestionService {
       question = new MultipleQuestion({
         subQuestions: this.setQuestions(property.properties),
       });
+    } else {
+      console.log("property kind not implemented: " + property.kind);
+      question = new GenericQuestion({
+           
+      });
+
     }
 
     return question;

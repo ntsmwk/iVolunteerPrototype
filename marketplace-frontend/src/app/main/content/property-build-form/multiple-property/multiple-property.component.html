@@ -47,8 +47,7 @@
       
       <mat-error *ngIf="submitPressed && addedProperties.length<=0">Must add at least one property from here</mat-error>
 
-      <div fxLayout="row" fxLayoutAlign="start center">
-        
+      <div fxLayout="row" fxLayoutAlign="start center"> 
         <mat-form-field>
           <input matInput type="text" (keyup)="filterInput($event.target.value)" placeholder="Filter">
         </mat-form-field>
@@ -59,14 +58,12 @@
           &nbsp;
         </div>
 
-        
         <mat-form-field>
-            <mat-select  placeholder="Filter by Kind" style="width: 200px">
+            <mat-select placeholder="Filter by Kind" style="width: 200px">
               <mat-option (click)="filterPropertyKind(null)">--</mat-option>
               <mat-option *ngFor="let option of propertyKindOptions" [value]="option" (click)="filterPropertyKind(option)" >{{option}}</mat-option> 
             </mat-select> 
-        </mat-form-field>
-        
+        </mat-form-field>   
 
       </div>
       

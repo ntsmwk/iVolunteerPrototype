@@ -36,7 +36,7 @@ export class QuestionControlService {
     console.log("ROOT created");
     console.log(ret);
 
-    this.displayFormGroup(ret);
+    // this.displayFormGroup(ret);
 
     return ret;
 
