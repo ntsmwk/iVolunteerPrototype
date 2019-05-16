@@ -6,7 +6,6 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Property, PropertyKind } from 'app/main/content/_model/properties/Property';
-import { getOrSetAsInMap } from '@angular/animations/browser/src/render/shared';
 
 @Component({
   selector: 'app-map-property-test',
@@ -22,10 +21,7 @@ export class MapPropertyTestComponent implements OnInit {
 
   markers: {lat: number, lng: number}[] = [];
 
-
-
   constructor(private propertyService: PropertyService,
-    private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService,
     private loginService: LoginService) { }
 
@@ -36,19 +32,13 @@ export class MapPropertyTestComponent implements OnInit {
           this.mapProperties = properties.filter((property: Property<any>) => {
             return property.kind == PropertyKind.MAP;
           });
-
-          console.log(this.mapProperties);
-
           this.prepareMap();
       });
     });
-
-
     });
   }
 
   prepareMap() {
-
     this.latMap = this.mapProperties[0].properties[0].properties[0].values[0].value;
     this.lngMap = this.mapProperties[0].properties[0].properties[1].values[0].value;
 
@@ -56,8 +46,6 @@ export class MapPropertyTestComponent implements OnInit {
       this.markers.push({lat: property.properties[0].values[0].value, 
                          lng: property.properties[1].values[0].value});
     }
-
-    
   }
 
   moveMarker(evt: any) {

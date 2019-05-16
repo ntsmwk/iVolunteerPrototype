@@ -7,8 +7,6 @@ import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/pro
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
-import { minDate } from "../_validator/custom.validators";
-
 export interface ValidatorData {
     validators: ValidatorFn[];
     required: boolean;
@@ -20,25 +18,14 @@ export interface SingleValidatorData {
   validator: ValidatorFn;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class QuestionService {
-  //questions: QuestionBase<any>[] = [];
-  key: number =  0;
 
   getQuestionsFromProperties(properties: Property<any>[]): any[] {
-    //this.questions = []; //reset questions
     let questions: QuestionBase<any>[] = [];
-    
-    console.log("Question Service called");
-    console.log(properties);
-
     questions = this.setQuestions(properties);
-
-    console.log(questions);
-    console.log("-->done with question setup");
 
     return questions.sort((a, b) => a.order - b.order);
   }
@@ -90,30 +77,21 @@ export class QuestionService {
       });
 
     } else if (property.kind === PropertyKind.DATE) {
-      console.log("leifnleifn");
-      console.log(property);
       question = new DatepickerQuestion({
         value: this.setDateValue(Property.getValue(property)),
       });
-      
-      
     }
 
     ///TEST MultiProp List
     else if (property.kind === PropertyKind.MULTIPLE) {
-      console.log("Multiple Property found:");
-      console.log(property);
       question = new MultipleQuestion({
         subQuestions: this.setQuestions(property.properties),
       });
     } else {
-      console.log("property kind not implemented: " + property.kind);
       question = new GenericQuestion({
            
       });
-
     }
-
     return question;
   }
 
@@ -167,9 +145,7 @@ export class QuestionService {
     let questions: QuestionBase<any>[] = [];
     for (let property of properties) {
       
-      console.log("Kind: " + property.kind + " Name: " + property.name);
       let question = this.createQuestion(property);
-
       question.key = property.id;
       question.label = property.name;
       question.order = properties.indexOf(property);
@@ -195,7 +171,6 @@ export class QuestionService {
 
     if (!isNullOrUndefined(rules)) {
       for (let rule of rules) {
-        //console.log("processing rule: " + rule.id);
 
         let singleValidatorData = this.convertRuleToValidator(rule, propertyKind);
         
@@ -206,11 +181,7 @@ export class QuestionService {
           if (singleValidatorData.key === 'required') {
             required = true;
           }
-        } else {
-          console.log("undefined - done nothing - continue");
-        }
-
-        
+        } 
       }
       const ret = {validators: validators, messages: messages, required: required}
       return ret;
@@ -227,43 +198,36 @@ export class QuestionService {
 
     switch (rule.kind) {
       case RuleKind.REQUIRED:
-        //console.log("adding requried Validator");
         validator = Validators.required;
         key = 'required';
         break;
 
       case RuleKind.REQUIRED_TRUE:
-        //console.log("adding requried_true Validator");
         validator = Validators.requiredTrue;
         key = 'requiredtrue';
         break;
 
       case RuleKind.REGEX_PATTERN:
-        //console.log("adding regex_pattern Validator" + rule.regex);
         validator = Validators.pattern(rule.data);
         key = 'pattern';
         break;
 
       case RuleKind.MAX_LENGTH:
-        //console.log("adding max_length Validator" + rule.value);
         validator = Validators.maxLength(rule.value);
         key = 'maxlength';
         break;
 
       case RuleKind.MIN_LENGTH:
-        //console.log("adding min_length Validator: " + rule.value);
         validator = Validators.minLength(rule.value);
         key = 'minlength';
         break;
 
       case RuleKind.MAX:
-        //console.log("adding max Validator" + rule.value);
         validator = Validators.max(rule.value);
         key = 'max';
         break;
 
       case RuleKind.MIN:
-        //console.log("adding min Validator" + rule.value);
         validator = Validators.min(rule.value);
         key = 'min';
         break;

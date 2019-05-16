@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { templateNameUniqueValidator } from 'app/main/content/_validator/template-name-unique.validator';
 import { UserDefinedTaskTemplateService } from 'app/main/content/_service/user-defined-task-template.service';
 import { LoginService } from 'app/main/content/_service/login.service';
@@ -25,9 +24,7 @@ export interface ChooseTemplateToCopyDialogData {
 export class ChooseTemplateToCopyDialogComponent implements OnInit {
 
   firstFormGroup: FormGroup;
-
   templateNames: string[];
-
   step1Loaded: boolean;
 
   constructor(
@@ -38,24 +35,17 @@ export class ChooseTemplateToCopyDialogComponent implements OnInit {
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-
-
-    // public returnData: ChooseDialogReturnData
     ) {
   }
 
   displayedColumns: string[] = ['label', 'description', 'option'];
 
-
   ngOnInit() {
     this.step1Loaded = false;
     this.getTemplateNames();
- 
   }
 
-
   getTemplateNames() {
-    console.log("prepare Choose Properties Step for template ");
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
@@ -75,24 +65,17 @@ export class ChooseTemplateToCopyDialogComponent implements OnInit {
       name: ['', [Validators.required, templateNameUniqueValidator(this.templateNames)] ],
       description: ['']
     });
-
-
     this.step1Loaded = true;
-
   }
 
   setReturnValues() {
-    // console.log(this.firstFormGroup.value);
     this.data.newLabel = this.firstFormGroup.get('name').value;
     this.data.newDescription = this.firstFormGroup.get('description').value;
   }
 
   getNewName() {
-
     return !isNullOrUndefined(this.firstFormGroup) ? this.firstFormGroup.get('name').value : '';
   }
-
-
 
   onNoClick(): void {
     this.dialogRef.close();

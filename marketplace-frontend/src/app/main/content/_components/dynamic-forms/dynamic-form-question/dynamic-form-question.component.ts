@@ -4,8 +4,6 @@ import { FormGroup, FormControl }        from '@angular/forms';
 import { QuestionBase }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
-
-
 @Component({
   selector: 'app-question',
   templateUrl: './dynamic-form-question.component.html',
@@ -27,32 +25,6 @@ export class DynamicFormQuestionComponent implements OnInit{
     if (this.question.required) {
       this.requiredMarker = '*';
     }
-    // console.log("=========================================================================================");
-    // console.log(this.form);
-    // console.log("QUESTION");
-    // console.log(this.question);
-
-    
-    // console.log("form controls for" + this.question.label + ":");
-    // console.log(this.form.controls);
-
-    
-
-         //TODO create a shared service
-         //fire a value changed event
-         //register the changed value and the key
-         //add a listener to the validator (or question service)
-         //search if key of validator == key here - update validator
-         //then do this: (re-set the validators)
-         
-        //  this.form.controls[this.question.key].setValidators(null);
-        //  this.form.controls[this.question.key].setValidators(this.question.validators);
-        //  //this.form.controls[this.question.key].updateValueAndValidity();
-  
-
-    
-    //console.log(this.form.controls[this.question.key].errors);
-
   }
   
   prepareDatePicker() {
@@ -64,9 +36,6 @@ export class DynamicFormQuestionComponent implements OnInit{
   } 
   
   displayErrorMessage() {
-
-    // console.log(this.form.controls[this.question.key]);
-    // console.log(this.question);
 
     return this.form.controls[this.question.key].hasError('required') ?  this.getErrorMessage('required'):
       this.form.controls[this.question.key].hasError('requiredtrue') ? this.getErrorMessage('requiredtrue'):
@@ -110,7 +79,6 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
   
   private getStandardMessage(errorName: string) {
-    
     switch(errorName) {
       case 'required': 
         return "You must enter a value";
@@ -134,15 +102,10 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
 
   getNestedFormGroups() {
-    // console.log("----------------" +this.question.key + "---:");
-    // console.log(this.form.get(this.question.key).get('nested1'));
     return this.form.get(this.question.key);
   }
 
   public getQuestionValue(question: QuestionBase<any>) {
-    console.log("getQurstionvValue");
-    console.log(question.values[0]);
-
     let ret = question.values[0];
     return ret
   }
