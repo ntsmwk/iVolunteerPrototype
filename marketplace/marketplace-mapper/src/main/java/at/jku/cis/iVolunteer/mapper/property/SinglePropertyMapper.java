@@ -1,9 +1,6 @@
 package at.jku.cis.iVolunteer.mapper.property;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
@@ -40,26 +36,17 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		SinglePropertyDTO<Object> propertyDTO = new SinglePropertyDTO<>();
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
-		
-//		propertyDTO.setValue(source.getValue());
-		propertyDTO.setOrder(source.getOrder());
-		
+		propertyDTO.setOrder(source.getOrder());	
 		propertyDTO.setKind(source.getKind());
 		
-		//TODO legal Values
-		if (source.getLegalValues() != null) {
-			
+		if (source.getLegalValues() != null) {	
 			List<ListEntryDTO<Object>> legalValues = new ArrayList<>();
-			
-				for(ListEntry<Object> entry : source.getLegalValues()) {
-					legalValues.add(listEntryMapper.toDTO(entry));
-				}
-		
-			
+			for(ListEntry<Object> entry : source.getLegalValues()) {
+				legalValues.add(listEntryMapper.toDTO(entry));
+			}
 			propertyDTO.setLegalValues(legalValues);
 		}
 		
-		//TODO rules
 		if (source.getRules() != null) {
 			List<Rule> rules = new ArrayList<Rule>();
 			for (Rule r : source.getRules()) {
@@ -67,8 +54,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 			}
 			propertyDTO.setRules(ruleMapper.toDTOs(rules));
 		}
-		
-		//TODO values
 		
 		if (source.getValues() != null) {
 			List<ListEntryDTO<Object>> values = new ArrayList<>();
@@ -115,22 +100,7 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		prop.setId(target.getId());
 		prop.setName(target.getName());
-		prop.setOrder(target.getOrder());
-//		
-//		if (target.getKind().equals(PropertyKind.DATE)) {
-////			prop.setValue(this.convertObjectToDate(target.getValue()));
-//			prop.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
-//		
-//		
-//		} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-////			<>prop.setValue(this.convertObjectToDouble(target.getValue()));
-//			prop.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
-//		} else {
-////			prop.setValue(target.getValue());
-//			prop.setDefaultValue(target.getDefaultValue());
-//		
-//		}
-				
+		prop.setOrder(target.getOrder());			
 		prop.setKind(target.getKind());
 		
 		List<ListEntry<Object>> values = new ArrayList<ListEntry<Object>>();
@@ -142,18 +112,15 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		}
 		prop.setValues(values);
 		
-		
 		List<ListEntry<Object>> legalValues = new ArrayList<ListEntry<Object>>();
 		
 		if (target.getLegalValues() != null) {
 			for (ListEntryDTO<Object> entry : target.getLegalValues()) {
 				legalValues.add(listEntryMapper.toEntity(entry));
 			}
-		}
-		
+		}	
 		prop.setLegalValues(legalValues);
-		
-		
+			
 		List<ListEntry<Object>> defaultValues = new ArrayList<>();
 		if (target.getDefaultValues() != null) {
 			for (ListEntryDTO<Object> entry : target.getValues()) {
@@ -161,23 +128,18 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 			}
 		}
 		prop.setDefaultValues(defaultValues);
-		
-		
-		
+
 		List<Rule> rules = new ArrayList<Rule>();
+		
 		if (target.getRules() != null) {
 			for (RuleDTO r : target.getRules()) {
 				rules.add(ruleMapper.toEntity(r));
 			}
 		}
 		prop.setRules(rules);
-		
-		
-		
+
 		return prop;
-	
 	}
-	
 
 	@Override
 	public List<SingleProperty<Object>> toEntities(List<SinglePropertyDTO<Object>> targets) {
@@ -192,58 +154,4 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		return list;
 	}
-	
-//	//TODO ??not sure if fixed - kinda ugly 
-//		private Date convertObjectToDate(Object source) {
-//			try {
-//				
-//				//System.out.println("convert: " + source);
-//				
-//				if (source instanceof Long) {
-//					//System.out.println("convert long - " + source.getClass().getName());
-//					return new Date((Long)source);
-//					
-//				} else if (source instanceof Date) {
-//					//System.out.println("convert Date - " + source.getClass().getName());
-//					return (Date) source;
-//				} else if (source instanceof String) {
-//					//System.out.println("convert String - " + source.getClass().getName());
-//					
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//					Date date = sdf.parse((String) source); 
-//					
-//					return date;
-//				} else if (source == null) {
-////					Date date = new Date(0);
-//					return null;
-//					
-//				} else {
-//					//System.out.println("class: " + source.getClass().getName());
-//					//System.out.println(source);
-//					throw new IllegalArgumentException();
-//				}
-//				
-//			} catch (NullPointerException | NumberFormatException e ) {
-//				System.out.println("entered Exception Branch convert Object to Date");
-//				return null;
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				System.out.println("Unparsable Date");
-//				return null;
-//			}
-//		}
-//		
-//		private Double convertObjectToDouble(Object source) {
-//			try {
-//				
-//				return (Double) source;
-//			} catch (ClassCastException e) {
-//				System.out.println("Double ClassCastException triggered: " + source);
-//				return Double.parseDouble((String) source);
-//			} catch (NumberFormatException e) {
-//				return 0.0;
-//			}
-//		}
-
-	
 }

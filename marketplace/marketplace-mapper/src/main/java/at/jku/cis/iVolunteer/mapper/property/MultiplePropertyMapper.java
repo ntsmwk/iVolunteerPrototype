@@ -41,7 +41,6 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		
 		propertyDTO.setProperties(propertyMapper.toDTOs(source.getProperties()));
 		
-		//TODO rules
 		if (source.getRules() != null) {
 			List<Rule> rules = new ArrayList<Rule>();
 			for (Rule r : source.getRules()) {
@@ -49,39 +48,7 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 			}
 			propertyDTO.setRules(ruleMapper.toDTOs(rules));
 		}
-		
-//		
-//		propertyDTO.setValue(source.getValue());
-//		
-//		
-//		propertyDTO.setKind(source.getKind());
-//		propertyDTO.setDefaultValue(source.getDefaultValue());
-//		
-//		//TODO legal Values
-//		if (source.getLegalValues() != null) {
-//			
-//			List<ListEntryDTO<Object>> legalValues = new ArrayList<>();
-//			
-//				for(ListEntry<Object> entry : source.getLegalValues()) {
-//					legalValues.add(listEntryMapper.toDTO(entry));
-//				}
-//		
-//			
-//			propertyDTO.setLegalValues(legalValues);
-//		}
-//		
-
-//		
-//		//TODO values
-//		
-//		if (source.getValues() != null) {
-//			List<ListEntryDTO<Object>> values = new ArrayList<>();
-//			for (ListEntry<Object> entry : source.getValues()) {
-//				values.add(listEntryMapper.toDTO(entry));
-//			}
-//			propertyDTO.setValues(values);
-//		}
-		
+	
 		return propertyDTO;
 	}
 
@@ -124,70 +91,13 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		}
 		prop.setRules(rules);
 		
-		
-		
 		return prop;
 	
 	}
 	
-
 	@Override
 	public List<MultipleProperty> toEntities(List<MultiplePropertyDTO> targets) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//	//TODO ??not sure if fixed - kinda ugly 
-//		private Date convertObjectToDate(Object source) {
-//			try {
-//				
-//				//System.out.println("convert: " + source);
-//				
-//				if (source instanceof Long) {
-//					//System.out.println("convert long - " + source.getClass().getName());
-//					return new Date((Long)source);
-//					
-//				} else if (source instanceof Date) {
-//					//System.out.println("convert Date - " + source.getClass().getName());
-//					return (Date) source;
-//				} else if (source instanceof String) {
-//					//System.out.println("convert String - " + source.getClass().getName());
-//					
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//					Date date = sdf.parse((String) source); 
-//					
-//					return date;
-//				} else if (source == null) {
-////					Date date = new Date(0);
-//					return null;
-//					
-//				} else {
-//					//System.out.println("class: " + source.getClass().getName());
-//					//System.out.println(source);
-//					throw new IllegalArgumentException();
-//				}
-//				
-//			} catch (NullPointerException | NumberFormatException e ) {
-//				System.out.println("entered Exception Branch convert Object to Date");
-//				return null;
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				System.out.println("Unparsable Date");
-//				return null;
-//			}
-//		}
-//		
-//		private Double convertObjectToDouble(Object source) {
-//			try {
-//				
-//				return (Double) source;
-//			} catch (ClassCastException e) {
-//				System.out.println("Double ClassCastException triggered: " + source);
-//				return Double.parseDouble((String) source);
-//			} catch (NumberFormatException e) {
-//				return 0.0;
-//			}
-//		}
-
 	
 }
