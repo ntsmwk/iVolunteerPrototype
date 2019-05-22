@@ -19,6 +19,8 @@ public class SingleProperty<T> extends Property {
 	
 	//Allowed Values
 	List<ListEntry<T>> legalValues;
+	
+	List<Rule> rules;
 
 	
 	public SingleProperty() {
@@ -29,7 +31,7 @@ public class SingleProperty<T> extends Property {
 		super.id = p.id;
 		super.kind = p.kind;
 		super.name = p.name;
-		super.rules = p.rules;
+//		super.rules = p.rules;
 	}
 
 	public String getId() {
@@ -87,6 +89,7 @@ public class SingleProperty<T> extends Property {
 	public void setKind(PropertyKind kind) {
 		this.kind = kind;
 	}
+	
 	
 	@Override
 	public boolean equals(Object obj) {

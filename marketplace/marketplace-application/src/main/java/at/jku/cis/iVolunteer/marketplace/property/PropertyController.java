@@ -37,81 +37,22 @@ public class PropertyController {
 	@Autowired private PropertyRepository propertyRepository;
 	@Autowired private MultiplePropertyRetMapper multiplePropertyRetMapper;
 	
-
-	private boolean setUpFlag = true;
-
 	@Autowired StandardProperties sp;
-	
-	private Map<String, Property> props;
-	
 	
 	@GetMapping("/properties/list") 
 	public List<PropertyListItemDTO<Object>> getPropertiesList() {
 
-//		setTestValues();
-
 		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
-		
-				
+			
 		return retVal;
-		
 	}
 	
 	@GetMapping("/properties/full")
 	public List<PropertyDTO<Object>> getPropertiesFull() {
-		
-		//System.out.println("Props: " + props.size());
-//		setTestValues();
-		
+
 		List<PropertyDTO<Object>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
-		
-		
+
 		return retVal;
-	}
-	
-	private void setTestValues() {
-		if (setUpFlag) {
-			
-			props = sp.getAllSingleMap();
-			
-			setUpFlag = false;
-			
-			for (Property p : sp.getAllSingle()) {
-				System.out.println("Setup Property:  "+ p.getId() + " -- " + p.getKind() + ": " + p.getName() + ": " + " "
-						);
-				if (propertyRepository.findByName(p.getName()) == null) {
-					System.out.println("adding prop to db");
-					propertyRepository.save(p);
-				} else {
-					System.out.println("prop already in db");
-				}	
-			}
-			
-			System.out.println("Number Of Properties pushed: " + props.size());
-			System.out.println("Number Of Properties in DB : " + propertyRepository.count());
-			System.out.println("=> done Single\n\n");
-			System.out.println("Getting Multi Properties");
-			
-			for (Property p : sp.getAllMulti()) {
-				System.out.println("Setup Property: " + p.getId() + "--" + p.getKind() + " - Properties: " );
-				for (Property mp : ((MultipleProperty)p).getProperties()) {
-					System.out.println(mp.getId() + ": " + mp.getName() + " = " );
-				}
-				
-//				if (p.getId() == null || !propertyRepository.exists(p.getId())) {
-				if (propertyRepository.findByName(p.getName()) == null) {
-					propertyRepository.save(p);
-					System.out.println("prop added");
-				} else {
-					System.out.println("prop already in db");
-				}
-			}
-			
-		}
-		
-		System.out.println("PropertyController: DONE\n\n");
-		
-		
 	}
 	
 	@GetMapping("/properties/{id}") 
@@ -126,8 +67,6 @@ public class PropertyController {
 		System.out.println("DTO");
 		System.out.println(dto.getLegalValues().size());
 		System.out.println(dto.getDefaultValues().size());
-		
-
 		
 		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
 		
@@ -231,5 +170,50 @@ public class PropertyController {
 	
 	
 	p2.setId("7"); p2.setName("Telephone Number"); p2.setValue(123456789); p2.setKind(PropertyKind.WHOLE_NUMBER);
-*/	
+*/
+	
+//	private void setTestValues() {
+//	if (setUpFlag) {
+//		
+//		props = sp.getAllSingleMap();
+//		
+//		setUpFlag = false;
+//		
+//		for (Property p : sp.getAllSingle()) {
+//			System.out.println("Setup Property:  "+ p.getId() + " -- " + p.getKind() + ": " + p.getName() + ": " + " "
+//					);
+//			if (propertyRepository.findByName(p.getName()) == null) {
+//				System.out.println("adding prop to db");
+//				propertyRepository.save(p);
+//			} else {
+//				System.out.println("prop already in db");
+//			}	
+//		}
+//		
+//		System.out.println("Number Of Properties pushed: " + props.size());
+//		System.out.println("Number Of Properties in DB : " + propertyRepository.count());
+//		System.out.println("=> done Single\n\n");
+//		System.out.println("Getting Multi Properties");
+//		
+//		for (Property p : sp.getAllMulti()) {
+//			System.out.println("Setup Property: " + p.getId() + "--" + p.getKind() + " - Properties: " );
+//			for (Property mp : ((MultipleProperty)p).getProperties()) {
+//				System.out.println(mp.getId() + ": " + mp.getName() + " = " );
+//			}
+//			
+////			if (p.getId() == null || !propertyRepository.exists(p.getId())) {
+//			if (propertyRepository.findByName(p.getName()) == null) {
+//				propertyRepository.save(p);
+//				System.out.println("prop added");
+//			} else {
+//				System.out.println("prop already in db");
+//			}
+//		}
+//		
+//	}
+//	
+//	System.out.println("PropertyController: DONE\n\n");
+//	
+//	
+//}
 }

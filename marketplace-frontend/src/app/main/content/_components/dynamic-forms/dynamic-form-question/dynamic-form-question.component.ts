@@ -14,6 +14,7 @@ import { isNullOrUndefined } from 'util';
 export class DynamicFormQuestionComponent implements OnInit{
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
+  @Input() submitPressed: boolean;
 
   date: FormControl;
   requiredMarker: string;
@@ -76,8 +77,11 @@ export class DynamicFormQuestionComponent implements OnInit{
       this.form.controls[this.question.key].hasError('max') ? this.getErrorMessage('max'):
       this.form.controls[this.question.key].hasError('min') ? this.getErrorMessage('min'):
       this.form.controls[this.question.key].hasError('mindate') ? this.getErrorMessage('mindate'):
+      this.form.controls[this.question.key].hasError('requiredother') ? this.getErrorMessage('requiredother'):
+      this.form.controls[this.question.key].hasError('maxother') ? this.getErrorMessage('maxother'):
+      this.form.controls[this.question.key].hasError('minother') ? this.getErrorMessage('minother'):
       '';
-    
+
   }
 
   private getRemainingLength(errorName: string) {
@@ -127,9 +131,21 @@ export class DynamicFormQuestionComponent implements OnInit{
       case 'max':
         return 'Value exceeds maximum';
       case 'mindate':
-        return 'Invalid Date'
+        return 'Invalid Date';
+      case 'requiredother':
+        // console.log(this.form.controls[this.question.key].getError('requiredother').keyThis);
+        return `Field '` +  this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyThis) + `' requires '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyOther) + `' to be filled in`;
+      case 'maxother':
+        return `Value ` + this.form.controls[this.question.key].getError('maxother').valueOther + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyOther) + 
+              `' exceeds ` + this.form.controls[this.question.key].getError('maxother').valueThis + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyThis) +
+              `' `; 
+      case 'minother':
+          return `Value ` + this.form.controls[this.question.key].getError('minother').valueOther + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyOther) + 
+          `' is below ` + this.form.controls[this.question.key].getError('minother').valueThis + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyThis) +
+          `' `; 
       default:
         return '';
+
     }
   }
 
@@ -145,6 +161,14 @@ export class DynamicFormQuestionComponent implements OnInit{
 
     let ret = question.values[0];
     return ret
+  }
+
+  private getQuestionLabel(key: string): string {
+    let ret: string = this.question.subQuestions.find((q: QuestionBase<any> ) => {
+      return q.key == key;
+    }).label;
+
+    return ret;
   }
 
 

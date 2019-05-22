@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
+import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
@@ -20,6 +21,7 @@ import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
+import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
@@ -29,6 +31,8 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Object>> {
 	
 	@Autowired RuleMapper ruleMapper;
+	@Autowired MultiRuleMapper multiRuleMapper;
+	
 	@Autowired CompetenceMapper competenceMapper;
 	@Autowired ListEntryMapper listEntryMapper;
 	@Autowired MultiplePropertyMapper multiplePropertyMapper;
@@ -50,13 +54,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		
 		
 		//TODO rules
-		if (source.getRules() != null) {
-			List<Rule> rules = new ArrayList<Rule>();
-			for (Rule r : source.getRules()) {
-				rules.add(r);
-			}
-			propertyDTO.setRules(ruleMapper.toDTOs(rules));
-		}
+
 		
 		
 		if (propertyDTO.getKind().equals(PropertyKind.MULTIPLE) || propertyDTO.getKind().equals(PropertyKind.MAP)) {
@@ -67,6 +65,16 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			}
 			
 			propertyDTO.setProperties(props);
+			
+			if (((MultipleProperty)source).getRules() != null) {
+				List<MultiRule> rules = new ArrayList<>();
+				for (MultiRule r : ((MultipleProperty)source).getRules()) {
+					rules.add(r);
+				}
+				propertyDTO.setRules(multiRuleMapper.toDTOs(rules));
+			}
+			
+			
 			
 		} else {
 			SingleProperty<Object> s = (SingleProperty<Object>) source;
@@ -79,8 +87,6 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 				for(ListEntry<Object> entry : s.getLegalValues()) {
 					legalValues.add(listEntryMapper.toDTO(entry));
 				}
-			
-				
 				propertyDTO.setLegalValues(legalValues);
 			}
 			
@@ -100,6 +106,15 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 				}
 				propertyDTO.setDefaultValues(values);
 			}
+			
+			if (s.getRules() != null) {
+				List<Rule> rules = new ArrayList<>();
+				for (Rule r : s.getRules()) {
+					rules.add(r);
+				}
+				propertyDTO.setRules(ruleMapper.toDTOs(rules));
+			}
+			
 			
 		}
 
@@ -137,13 +152,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		prop.setOrder(target.getOrder());
 		prop.setCustom(target.isCustom());
 		
-		List<Rule> rules = new ArrayList<Rule>();
-		if (target.getRules() != null) {
-			for (RuleDTO r : target.getRules()) {
-				rules.add(ruleMapper.toEntity(r));
-			}
-		}
-		prop.setRules(rules);
+		
 		
 		
 		if (prop.getKind().equals(PropertyKind.MULTIPLE)) {
@@ -157,6 +166,14 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			}
 //			((MultipleProperty)prop).setProperties(props);
 			ret.setProperties(props);
+			
+			List<MultiRule> rules = new ArrayList<>();
+			if (target.getRules() != null) {
+				for (RuleDTO r : target.getRules()) {
+					rules.add(multiRuleMapper.toEntity(r));
+				}
+			}
+			ret.setRules(rules);
 			
 			return ret;
 		
@@ -192,6 +209,15 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			}
 			
 			ret.setDefaultValues(defaultValues);
+			
+			
+			List<Rule> rules = new ArrayList<Rule>();
+			if (target.getRules() != null) {
+				for (RuleDTO r : target.getRules()) {
+					rules.add(ruleMapper.toEntity(r));
+				}
+			}
+			ret.setRules(rules);
 			
 			
 			return ret;

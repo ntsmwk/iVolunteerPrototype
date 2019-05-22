@@ -13,7 +13,7 @@ public class Property {
 	String id;
 	String name;
 	
-	List<Rule> rules;
+//	List<Rule> rules;
 	PropertyKind kind;
 	
 	int order;
@@ -36,13 +36,13 @@ public class Property {
 	}
 
 
-	public List<Rule> getRules() {
-		return rules;
-	}
-	
-	public void setRules(List<Rule> rules) {
-		this.rules = rules;
-	}
+//	public List<Rule> getRules() {
+//		return rules;
+//	}
+//	
+//	public void setRules(List<Rule> rules) {
+//		this.rules = rules;
+//	}
 
 	public PropertyKind getKind() {
 		return kind;
@@ -83,7 +83,7 @@ public class Property {
 
 	@Override
 	public String toString() {
-		return "\nProperty [id=" + id + ", name=" + name + ", rules=" + rules + ", kind=" + kind + ", order=" + order
+		return "\nProperty [id=" + id + ", name=" + name + /*", rules=" + rules +*/ ", kind=" + kind + ", order=" + order
 				+ ", custom=" + custom + "]\n";
 	}
 	

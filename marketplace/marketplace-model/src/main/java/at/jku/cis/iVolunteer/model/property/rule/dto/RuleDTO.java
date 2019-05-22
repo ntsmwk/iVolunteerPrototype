@@ -7,9 +7,12 @@ public class RuleDTO {
 
 	String id;
 	
-	RuleKind kind;
+	String kind;
 	long value;
 	String data;
+	
+	String key;
+	String keyOther;
 	
 	String message;
 	
@@ -23,11 +26,11 @@ public class RuleDTO {
 		this.id = id;
 	}
 
-	public RuleKind getKind() {
+	public String getKind() {
 		return kind;
 	}
 
-	public void setKind(RuleKind kind) {
+	public void setKind(String kind) {
 		this.kind = kind;
 	}
 	
@@ -45,6 +48,22 @@ public class RuleDTO {
 	
 	public void setData(String data) {
 		this.data = data;
+	}
+	
+	public String getKey() {
+		return key;
+	}
+	
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public String getKeyOther() {
+		return keyOther;
+	}
+	
+	public void setKeyOther(String keyOther) {
+		this.keyOther = keyOther;
 	}
 	
 	public String getMessage() {

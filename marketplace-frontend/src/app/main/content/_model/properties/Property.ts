@@ -93,6 +93,9 @@ export class Rule {
     kind: RuleKind;
     value?: number;
     data?: string;
+    
+    key?: string;
+    keyOther?: string;
     message: string;
 
 }
@@ -104,5 +107,6 @@ export enum PropertyKind {
 
 export enum RuleKind {
     REQUIRED = "REQUIRED", REQUIRED_TRUE = "REQUIRED_TRUE", REGEX_PATTERN = "REGEX_PATTERN", MAX_LENGTH = "MAX_LENGTH", 
-    MIN_LENGTH = "MIN_LENGTH", MAX = "MAX", MIN = "MIN"
+    MIN_LENGTH = "MIN_LENGTH", MAX = "MAX", MIN = "MIN", REQUIRED_OTHER = "REQUIRED_OTHER", MIN_OTHER = "MIN_OTHER", 
+    MAX_OTHER = "MAX_OTHER"
 }

@@ -36,6 +36,9 @@ export class QuestionControlService {
     console.log("ROOT created");
     console.log(ret);
 
+    console.log("Questions");
+    console.log(questions);
+    
     // this.displayFormGroup(ret);
 
     return ret;
@@ -68,6 +71,10 @@ export class QuestionControlService {
         // });
         const ret = this.addChildToGroup(fb, question.subQuestions, nested);
 
+        console.log("RET");
+        console.log(ret);
+
+        ret.setValidators(question.validators);
         parent.addControl(question.key, ret);
         
         

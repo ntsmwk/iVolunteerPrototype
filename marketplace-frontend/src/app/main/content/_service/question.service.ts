@@ -7,7 +7,7 @@ import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/pro
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
-import { minDate } from "../_validator/custom.validators";
+import { minDate, maxOther, minOther, requiredOther } from "../_validator/custom.validators";
 
 export interface ValidatorData {
     validators: ValidatorFn[];
@@ -138,7 +138,7 @@ export class QuestionService {
   }
 
 
-  public setDateValue(value: any) {
+  private setDateValue(value: any) {
     if (!isNullOrUndefined(value)) {
       return new Date(value);
     } else {
@@ -146,7 +146,7 @@ export class QuestionService {
     }
   }
 
-  public setDateValueArr(value: Date): Date[] {
+  private setDateValueArr(value: Date): Date[] {
     let ret: Date[] = [];
     ret.push(this.setDateValue(value));
     return ret;
@@ -268,12 +268,34 @@ export class QuestionService {
         key = 'min';
         break;
 
+      /**
+       * MultiProperties Validator
+       */
+      case RuleKind.REQUIRED_OTHER: 
+        console.log("adding required other validator");
+        console.log(rule);
+        validator = requiredOther(rule.key, rule.keyOther);
+        key = 'requiredother';
+        break;
+
+      case RuleKind.MAX_OTHER:
+        validator = maxOther(rule.key, rule.keyOther);
+        key = 'maxother';
+        break;
+
+      case RuleKind.MIN_OTHER:
+        validator = minOther(rule.key, rule.keyOther);
+        key = 'minother';
+        break;
+
       default:
-        console.log("VALIDATORS: switch-default should not happen");
+        console.error("VALIDATORS: switch-default should not happen");
         break;
     }
    
     const ret = {key: key, validator: validator};
+    console.log("Q");
+    console.log(ret);
     return ret;
   }
 }

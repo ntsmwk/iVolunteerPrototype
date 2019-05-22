@@ -1,11 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyListItem, Property, PropertyKind, MultiplePropertyRet } from '../../_model/properties/Property';
+import { PropertyListItem, Property, PropertyKind, MultiplePropertyRet, RuleKind } from '../../_model/properties/Property';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';
 import { isNullOrUndefined } from 'util';
+
+
+export class RuleKindOption {
+  kind: string;
+  label: string;
+  display: boolean;
+
+  hasValueField: boolean;
+}
 
 @Component({
   selector: 'app-multiple-property',
@@ -23,6 +32,7 @@ export class MultiplePropertyComponent implements OnInit {
   submitPressed: boolean;
 
   propertyKindOptions: string[] = [];
+  ruleKindOptions: RuleKindOption[] = [];
 
   //MultiProperty
   addedProperties: PropertyListItem[] = [];
@@ -51,6 +61,8 @@ export class MultiplePropertyComponent implements OnInit {
     for (let kind in PropertyKind) {
       this.propertyKindOptions.push(kind);
     }
+
+    this.prepareRuleKindOptions();
 
     if (!isNullOrUndefined(this.currentProperty)) {
       this.form.get('name').setValue(this.currentProperty.name);
@@ -88,6 +100,22 @@ export class MultiplePropertyComponent implements OnInit {
     });
 
     this.submitPressed = false;
+  }
+
+
+  private prepareRuleKindOptions() {
+    for (let kind in RuleKind) {
+      switch(kind) {
+        case RuleKind.REQUIRED_OTHER: {
+          this.ruleKindOptions.push({kind: kind, label: kind, display: true, hasValueField: false});
+          break;
+        }
+        case RuleKind.MAX_OTHER: case RuleKind.MIN_OTHER: {
+          this.ruleKindOptions.push({kind: kind, label: kind, display: true, hasValueField: true})
+          break;
+        }
+      } 
+    }
   }
 
   //Add Property List

@@ -100,8 +100,9 @@
         <h2>{{ question.label }}</h2>
             <!--Iterate though sub-questions, for every question call <app-question> -->
         <div *ngFor="let q of question.subQuestions">  
-            <app-question [question]="q" [form]="getNestedFormGroups()"></app-question> 
+            <app-question [question]="q" [form]="getNestedFormGroups()" [submitPressed]="submitPressed"></app-question> 
         </div>
+        <mat-error *ngIf="submitPressed && form.controls[question.key].invalid ">{{ displayErrorMessage() }}</mat-error>
 
       </div>
 

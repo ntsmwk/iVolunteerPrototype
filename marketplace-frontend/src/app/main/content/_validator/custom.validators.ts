@@ -2,41 +2,52 @@ import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup } from "@angu
 import { isNullOrUndefined } from "util";
 import { QuestionBase } from "../_model/dynamic-forms/questions";
 
-// export function equalsValidator(value: number): ValidatorFn {
-//     return (control: AbstractControl): {[key: string]: any} | null => {
-//         return value != control.value ? {'equals': {value: control.value}}  : null
-//     };
-// }
-
-// export function greaterValidator(value: number): ValidatorFn {
-//     return (control: AbstractControl): {[key: string]: any} | null => {
-//         return value <= control.value ? {'greater': {value: control.value}} : null
-//     };
-// }
-
-// export function lessValidator(value: number): ValidatorFn {
-//     return (control: AbstractControl): {[key: string]: any} | null => {
-//         return value >= control.value ? {'less': {value: control.value}} : null
-//     };
-// }
 
 /**
+ * @param keyThis - Key to the base property
  * @param keyOther - Key of the other property
  * 
- * @description Validator that requires that the FormControl contains a another property with the key specified * 
+ * @description Validator that requires that if the value of the "base" property is filled in, 
+ *              then the value of the "other" property has to be filled in as well.
  * 
- * @returns An error map with the `requiredotherproperty` property if the validation check fails, otherwise `null`.
+ * @returns An error map with the `requiredother` property containing @param keyThis and @param keyOther if the validation check fails, otherwise `null`.
  */
-export function requiredOtherProperty(keyOther: string): ValidatorFn {
+export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} | null => {
     
-        const containsKey = isNullOrUndefined(control.get(keyOther));
-        
-        return !containsKey ? {'requiredotherproperty': {value: true}} : null;
+        const containsKeyThis = !isNullOrUndefined(control.get(keyThis));
+        const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
+
+        if (!containsKeyThis || !containsKeyOther) {
+            console.log("at least one key is not avaiable");
+            return null;
+        }
+
+        // if (!containsKeyThis && !containsKeyOther) {
+        //     console.log("keys_null");
+        //     return null;
+        // }
+
+        let displayError = false;
+       
+        if (!isEmptyInputValue(control.get(keyThis).value) && isEmptyInputValue(control.get(keyOther).value)) {
+            control.get(keyOther).setErrors({'empty': true});
+            displayError = true;
+        }
+
+        if (!isEmptyInputValue(control.get(keyThis).value) && !isEmptyInputValue(control.get(keyOther).value)) {
+ 
+            displayError = false;
+        }
+
+        // return !isEmptyInputValue(control.get(keyThis).value) && isEmptyInputValue(control.get(keyOther).value) ? {'requiredother': {keyThis: keyThis, keyOther: keyOther}} : null;
+        return displayError ? {'requiredother': {'keyThis': keyThis, 'keyOther': keyOther}} : null;
+
     };
 }
 
 /**
+ * TODO
  * @param keyOther - Key of the other property
  * 
  * @description Validator that requires that a value of the current property to be less than another property with the key in keyOther.
@@ -50,22 +61,9 @@ export function minDate(minQuestion: QuestionBase<Date>): ValidatorFn {
         if (isNullOrUndefined(minQuestion)) {
             return null;
         }
-        // console.log("11");
-
-        
-        // console.log("22");
 
         const value = control.value;
         const minValue = minQuestion.value;
-        
-
-        // if (value !instanceof Date) {
-        //     console.log("not instance of Date") 
-        //     console.log(value);
-        //     console.log(min);
-        //     return null;
-        // }
-
 
         // Controls with NaN values after parsing should be treated as not having a
         // minimum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
@@ -74,36 +72,134 @@ export function minDate(minQuestion: QuestionBase<Date>): ValidatorFn {
 }
 
 /**
+ * @param keyThis - Key to the base property
  * @param keyOther - Key of the other property
  * 
- * @description Validator that requires that a value of the current property to be larger than another property with the key in keyOther
- * based on the "max" validator
+ * @description Validator that requires that a value of the base property to be larger than the one of the other property.
+ *              based on the "max" validator
  * 
- * @returns An error map with the `maxother` property if the validation check fails, otherwise `null`.
+ * @returns An error map with the `maxother` property containing @param keyOther, @param valueOther, as well as @param keyThis, @param valueThis 
+ *          if the validation check fails, otherwise `null`.
  */
-export function maxOther(keyOther: string): ValidatorFn {
+export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
 
-        if (isNullOrUndefined(keyOther)) {
+        const containsKeyThis = !isNullOrUndefined(control.get(keyThis));
+        const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
+
+        if (!containsKeyThis || !containsKeyOther) {
+            console.log("at least one key is not avaiable");
             return null;
         }
 
+        const thisValue = parseFloat(control.get(keyThis).value);
         const otherValue = parseFloat(control.get(keyOther).value);
         
-        if (isEmptyInputValue(otherValue) || isEmptyInputValue(control.value)) {
+        if (isEmptyInputValue(otherValue) || isEmptyInputValue(thisValue)) {
             return null;  // don't validate empty values to allow optional controls
         }
 
-        const value = parseFloat(control.value);
+
+        let displayError = false;
         // Controls with NaN values after parsing should be treated as not having a
         // maximum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
-        return !isNaN(value) && value > otherValue ? {'maxother': {'maxother': otherValue, 'actual': control.value}} : null;
+        if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue) {
+
+            control.get(keyOther).setErrors({'incorrect_max': true});
+            control.get(keyThis).setErrors({'incorrect_max': true});
+            displayError = true;
+        } else {
+
+            if (control.get(keyOther).hasError('incorrect_max')) {
+                delete control.get(keyOther).errors['incorrect_max'];
+                control.get(keyOther).updateValueAndValidity();
+            }
+
+            if (control.get(keyThis).hasError('incorrect_max')) {
+                delete control.get(keyThis).errors['incorrect_max'];
+                control.get(keyThis).updateValueAndValidity();
+            }
+
+            displayError = false;
+        }
+
+        // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+        return displayError ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+
+    };
+}
+
+/**
+ * @param keyThis - Key to the base property
+ * @param keyOther - Key of the other property
+ * 
+ * @description Validator that requires that a value of the base property to be smaller than the one of the other property.
+ *              based on the "min" validator
+ * 
+ * @returns An error map with the `minother` property containing @param keyOther, @param valueOther, as well as @param keyThis, @param valueThis 
+ *          if the validation check fails, otherwise `null`.
+ */
+export function minOther(keyThis: string, keyOther: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+
+        const containsKeyThis = !isNullOrUndefined(control.get(keyThis));
+        const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
+
+        if (!containsKeyThis || !containsKeyOther) {
+            console.log("at least one key is not avaiable");
+            return null;
+        }
+
+        const thisValue = parseFloat(control.get(keyThis).value);
+        const otherValue = parseFloat(control.get(keyOther).value);
+        
+        if (isEmptyInputValue(otherValue) || isEmptyInputValue(thisValue)) {
+            return null;  // don't validate empty values to allow optional controls
+        }
+
+        let displayError = false;
+        // Controls with NaN values after parsing should be treated as not having a
+        // maximum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
+        if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue) {
+            control.get(keyOther).setErrors({'incorrect_min': true});
+            control.get(keyThis).setErrors({'incorrect_min': true});
+            displayError = true;
+        } else {
+
+            if (control.get(keyOther).hasError('incorrect_min')) {               
+                delete control.get(keyOther).errors['incorrect_min'];
+                control.get(keyOther).updateValueAndValidity();
+            }
+
+            if (control.get(keyThis).hasError('incorrect_min')) {      
+                delete control.get(keyThis).errors['incorrect_min'];
+                control.get(keyThis).updateValueAndValidity();
+            }
+            displayError = false;
+        }
+
+        // if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue >= thisValue) {
+
+        //     console.log("inside");
+        //     if (control.get(keyOther).hasError('incorrect_min')) {
+                
+        //         console.log(keyOther + " has incorrect_min - deleting");
+        //         delete control.get(keyOther).errors['incorrect_min'];
+        //     }
+
+        //     displayError = false;
+        // }
+
+        // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+        return displayError ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+
     };
 }
 
 
-
+//taken from angular validators file
 function isEmptyInputValue(value: any): boolean {
     // we don't check for string here so it also works with arrays
     return value == null || value.length === 0;
-  }
+}
+

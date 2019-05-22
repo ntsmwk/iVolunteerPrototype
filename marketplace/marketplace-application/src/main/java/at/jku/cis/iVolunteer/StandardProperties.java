@@ -27,6 +27,8 @@ import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
+import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
+import at.jku.cis.iVolunteer.model.property.rule.MultiRuleKind;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
 import at.jku.cis.iVolunteer.model.property.rule.RuleKind;
 
@@ -174,13 +176,24 @@ public class StandardProperties {
 		return new ArrayList<>(list);
 	}
 	
+	public List<Property> getTestMultiWithRules() {
+		List<Property> list = new LinkedList<>();
+		
+		list.add(new TestMultiWithRules());
+		
+		return new ArrayList<>(list);
+
+	}
+	
 	public List<Property> getAll() {
 		List<Property> sps = this.getAllSingle();
 		List<Property> mps = this.getAllMulti();
-		List<Property> sbs = this.getAllSybos();
+//		List<Property> sbs = this.getAllSybos();
+		List<Property> tmwr = this.getTestMultiWithRules();
 	
 		sps.addAll(mps);
-		sps.addAll(sbs);
+//		sps.addAll(sbs);
+		sps.addAll(tmwr);
 		
 		return sps;
 	
@@ -240,12 +253,12 @@ public class StandardProperties {
 			List<Rule> rules = new LinkedList<Rule>();
 			rules.add(new Rule(RuleKind.REQUIRED));
 			rules.get(rules.size()-1).setMessage("Custom Defined Message Required");
-			rules.add(new Rule(RuleKind.MAX_LENGTH, 100));
-			//rules.get(rules.size()-1).setMessage("Testmessage max length");
-			rules.add(new Rule(RuleKind.MIN_LENGTH, 5));
-			//rules.get(rules.size()-1).setMessage("Testmessage min length");
-			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*")); //Only Letters and Spaces, Start with Letter
-			//rules.get(rules.size()-1).setMessage("Testmessage regex");
+//			rules.add(new Rule(RuleKind.MAX_LENGTH, 100));
+//			//rules.get(rules.size()-1).setMessage("Testmessage max length");
+//			rules.add(new Rule(RuleKind.MIN_LENGTH, 5));
+//			//rules.get(rules.size()-1).setMessage("Testmessage min length");
+//			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*")); //Only Letters and Spaces, Start with Letter
+//			//rules.get(rules.size()-1).setMessage("Testmessage regex");
 			this.setRules(rules);
 			
 		}
@@ -265,9 +278,9 @@ public class StandardProperties {
 //			this.setDefaultValue("lorem ipsum dolor sit amet");
 //			this.setValue(getDefaultValue());
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MIN_LENGTH, 30));
-			this.setRules(rules);
+//			List<Rule> rules = new LinkedList<Rule>();
+//			rules.add(new Rule(RuleKind.MIN_LENGTH, 30));
+//			this.setRules(rules);
 		}
 	}
 	
@@ -1150,6 +1163,30 @@ public class StandardProperties {
 			
 		}
 	}
+	
+	
+	
+	
+	///////////////////////////////
+	
+	public static class TestMultiWithRules extends MultipleProperty {
+		public TestMultiWithRules() {
+			this.setId("multi_with_rules");
+			this.setName("Multiple Property With Rules");
+			
+			this.setProperties(new ArrayList<>());
+			this.getProperties().add(new NameProperty());
+			this.getProperties().add(new DescriptionProperty());
+			this.getProperties().add(new LongitudeProperty());
+			this.getProperties().add(new LatitudeProperty());
+			
+			this.setRules(new ArrayList<>());
+			this.getRules().add(new MultiRule(MultiRuleKind.REQUIRED_OTHER, this.getProperties().get(0).getId(), this.getProperties().get(1).getId()));
+			this.getRules().add(new MultiRule(MultiRuleKind.MAX_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
+			this.getRules().add(new MultiRule(MultiRuleKind.MIN_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
+		
+		}
+	}
 
 	
 
@@ -1217,6 +1254,7 @@ public class StandardProperties {
 			this.setArea(new double[]{10, 12, 13}, new double[]{11, 13, 15});	
 		}
 	}
+	
 	
 	public static class MapEntryProperty extends MultipleProperty {
 		

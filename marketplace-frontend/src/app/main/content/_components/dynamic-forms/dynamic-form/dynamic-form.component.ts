@@ -18,6 +18,7 @@ export class DynamicFormComponent implements OnInit {
   
   form: FormGroup;
   output = '';
+  submitPressed: boolean;
 
   @Output() resultEvent: EventEmitter<any> = new EventEmitter();
  
@@ -31,9 +32,12 @@ export class DynamicFormComponent implements OnInit {
       console.log("Disabling form");
       this.form.disable();
     }
+
+    this.submitPressed = false;
   }
  
   onSubmit() {
+    this.submitPressed = true;
     this.form.updateValueAndValidity();
 
     if (this.form.valid) {

@@ -5,38 +5,38 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document
-public class Rule {
+public class MultiRule {
 	
 	@Id
 	String id;
 	
-	RuleKind kind;
+	MultiRuleKind kind;
 	long value;
-	String data; //can be a Regular Expression or a key to a different property
+	String key; //of property this rule is applied to
+	String keyOther; //of property the rule refers to
 	
 	String message;
 
 	
 	/* Getters and Setters */ 
 	
-	public Rule() {}
+	public MultiRule() {}
 	
-	public Rule(RuleKind kind) {
+	public MultiRule(MultiRuleKind kind, String key, String keyOther) {
 		this.kind = kind;
+		this.key = key;
+		this.keyOther = keyOther;
 		this.id = kind.getKind().toLowerCase();
 	}
 	
-	public Rule(RuleKind kind, long value) {
+	public MultiRule(MultiRuleKind kind, String key, String keyOther, long value) {
 		this.kind = kind;
+		this.key = key;
+		this.keyOther = keyOther;
 		this.value = value;
 		this.id = kind.getKind().toLowerCase();
 	}
-	
-	public Rule(RuleKind kind, String data) {
-		this.kind = kind;
-		this.data = data;
-		this.id = kind.getKind().toLowerCase();
-	}
+
 
 	
 	public String getId() {
@@ -47,11 +47,11 @@ public class Rule {
 		this.id = id;
 	}
 
-	public RuleKind getKind() {
+	public MultiRuleKind getKind() {
 		return kind;
 	}
 
-	public void setKind(RuleKind kind) {
+	public void setKind(MultiRuleKind kind) {
 		this.kind = kind;
 	}
 	
@@ -63,12 +63,20 @@ public class Rule {
 		this.value = value;
 	}
 	
-	public String getData() {
-		return data;
+	public String getKey() {
+		return key;
 	}
 	
-	public void setData(String data) {
-		this.data = data;
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public String getKeyOther() {
+		return keyOther;
+	}
+	
+	public void setKeyOther(String keyOther) {
+		this.keyOther = keyOther;
 	}
 
 	public String getMessage() {
@@ -89,15 +97,15 @@ public class Rule {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Rule)) {
+		if (!(obj instanceof MultiRule)) {
 			return false;
 		}
-		return ((Rule) obj).id.equals(id);
+		return ((MultiRule) obj).id.equals(id);
 	}
 
 	@Override
 	public String toString() {
-		return "\nRule [id=" + id + ", kind=" + kind + ", value=" + value + ", data=" + data + ", message=" + message
+		return "\nRule [id=" + id + ", kind=" + kind + ", value=" + value + ", key=" + key + ", message=" + message
 				+ "]\n";
 	}
 	

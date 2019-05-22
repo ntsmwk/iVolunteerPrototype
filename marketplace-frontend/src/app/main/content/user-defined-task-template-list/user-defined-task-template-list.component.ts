@@ -67,7 +67,7 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
 
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
       this.userDefinedTaskTemplateService.newRootSingleTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
-        if (!isNullOrUndefined(result) && result.length == 2 && !isNullOrUndefined(result[0]) && !isNullOrUndefined(result[1])) {
+        if (!isNullOrUndefined(t)) {
           this.router.navigate(['/main/task-templates/user/detail/single/' + this.marketplace.id + '/' + t.id]);
         }
       });
@@ -80,7 +80,7 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
 
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
       this.userDefinedTaskTemplateService.newRootMultiTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
-        if (!isNullOrUndefined(result) && result.length == 2 && !isNullOrUndefined(result[0]) && !isNullOrUndefined(result[1])) {
+        if (!isNullOrUndefined(t)) {
           this.router.navigate(['/main/task-templates/user/detail/nested/' + this.marketplace.id + '/' + t.id]);
         }
       });

@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
+import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
 import at.jku.cis.iVolunteer.model.property.MultipleProperty;
 import at.jku.cis.iVolunteer.model.property.dto.MultiplePropertyDTO;
+import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
 import at.jku.cis.iVolunteer.model.property.rule.Rule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
@@ -20,7 +22,7 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 @Component
 public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, MultiplePropertyDTO>{
 	
-	@Autowired RuleMapper ruleMapper;
+	@Autowired MultiRuleMapper multiRuleMapper;
 	@Autowired CompetenceMapper competenceMapper;
 	@Autowired ListEntryMapper listEntryMapper;
 	@Autowired PropertyMapper propertyMapper;
@@ -43,11 +45,11 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		
 		//TODO rules
 		if (source.getRules() != null) {
-			List<Rule> rules = new ArrayList<Rule>();
-			for (Rule r : source.getRules()) {
+			List<MultiRule> rules = new ArrayList<>();
+			for (MultiRule r : source.getRules()) {
 				rules.add(r);
 			}
-			propertyDTO.setRules(ruleMapper.toDTOs(rules));
+			propertyDTO.setRules(multiRuleMapper.toDTOs(rules));
 		}
 		
 //		
@@ -116,10 +118,10 @@ public class MultiplePropertyMapper implements AbstractMapper<MultipleProperty, 
 		
 		prop.setProperties(propertyMapper.toEntities(target.getProperties()));
 				
-		List<Rule> rules = new ArrayList<Rule>();
+		List<MultiRule> rules = new ArrayList<>();
 		if (target.getRules() != null) {
 			for (RuleDTO r : target.getRules()) {
-				rules.add(ruleMapper.toEntity(r));
+				rules.add(multiRuleMapper.toEntity(r));
 			}
 		}
 		prop.setRules(rules);

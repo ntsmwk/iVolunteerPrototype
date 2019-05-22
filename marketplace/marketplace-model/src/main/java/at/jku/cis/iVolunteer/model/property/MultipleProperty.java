@@ -3,10 +3,14 @@ package at.jku.cis.iVolunteer.model.property;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
+
 
 public class MultipleProperty extends Property {
 
 	List<Property> properties;
+	
+	List<MultiRule> rules;
 	
 
 	public MultipleProperty() {
@@ -18,7 +22,7 @@ public class MultipleProperty extends Property {
 		super.id = p.id;
 		super.kind = p.kind;
 		super.name = p.name;
-		super.rules = p.rules;
+//		super.rules = p.rules;
 	}
 	
 	public MultipleProperty(MultiplePropertyRet p) {
@@ -26,9 +30,8 @@ public class MultipleProperty extends Property {
 		this.kind = p.kind;
 		this.name = p.name;
 		this.order = p.order;
-		this.rules = p.rules;
+//		this.rules = p.rules;
 		this.custom = true;
-		this.rules = new LinkedList<>();
 		this.properties = new LinkedList<>();
 	}
 
@@ -38,6 +41,14 @@ public class MultipleProperty extends Property {
 	
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
+	}
+	
+	public List<MultiRule> getRules() {
+		return rules;
+	}
+	
+	public void setRules(List<MultiRule> rules) {
+		this.rules = rules;
 	}
 	
 	@Override
