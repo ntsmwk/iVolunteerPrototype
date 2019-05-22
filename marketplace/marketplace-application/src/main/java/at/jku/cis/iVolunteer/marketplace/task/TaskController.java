@@ -37,10 +37,6 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 @RestController
 public class TaskController {
 
-	private static final String STATUS_ENGAGED = "ENGAGED";
-	private static final String STATUS_AVAILABLE = "AVAILABLE";
-	private static final String STATUS_FINISHED = "FINISHED";
-
 	@Value("${marketplace.identifier}") private String marketplaceId;
 
 	@Autowired private TaskMapper taskMapper;
@@ -48,6 +44,7 @@ public class TaskController {
 	@Autowired private TaskRepository taskRepository;
 	@Autowired private TaskInteractionRepository taskInteractionRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private TaskService taskService;
 
 	@Autowired private LoginService loginService;
 
@@ -55,59 +52,10 @@ public class TaskController {
 	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
 			@RequestParam(value = "status", required = false) String status) {
-		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
-			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)));
-		}
-		if (!StringUtils.isEmpty(projectId) && StringUtils.isEmpty(status)) {
-			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
-		}
-		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(status)) {
-			return findAllByStatus(status, projectId, participantId);
-		}
-		if (!StringUtils.isEmpty(projectId)) {
-			return taskMapper.toDTOs(taskRepository.findByProject(projectRepository.findOne(projectId)));
-		}
-		return taskMapper.toDTOs(taskRepository.findAll());
+		return taskService.findAll(projectId, participantId, status);
 	}
 
-	private List<TaskDTO> findAllByStatus(String status, String projectId, String participantId) {
-		switch (status) {
-		case STATUS_AVAILABLE:
-			return handleAvailable(projectId, participantId);
-		case STATUS_ENGAGED:
-			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED) || task.getStatus().equals(TaskStatus.RUNNING))
-					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList());
-		case STATUS_FINISHED:
-			return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId)).stream()
-					.filter(task -> TaskStatus.FINISHED == task.getStatus())
-					.filter(task -> task.getProject().getId().equals(projectId)).collect(Collectors.toList()));
-		}
-		return Collections.emptyList();
-	}
-
-	private List<TaskDTO> handleAvailable(String projectId, String participantId) {
-		Volunteer volunteer = volunteerRepository.findOne(participantId);
-		List<Task> tasks = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
-		removeAlreadyReservedOrAssignedTasks(volunteer, tasks);
-		return taskMapper.toDTOs(tasks);
-	}
-
-	private void removeAlreadyReservedOrAssignedTasks(Volunteer volunteer, List<Task> tasks) {
-		tasks.removeIf(t -> {
-			List<TaskInteraction> taskInteractions = taskInteractionRepository.findSortedByTaskAndParticipant(t, volunteer,
-					new Sort(Sort.Direction.DESC, "timestamp"));
-			return !taskInteractions.isEmpty() && taskInteractions.get(0).getOperation() != TaskVolunteerOperation.UNRESERVED;
-		});
-	}
-
-	public List<Task> findByVolunteer(Volunteer volunteer) {
-		Set<Task> tasks = new HashSet<Task>();
-		for (TaskInteraction ti : taskInteractionRepository.findByParticipant(volunteer)) {
-			tasks.add(ti.getTask());
-		}
-		return new ArrayList<>(tasks);
-	}
+	
 
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {
@@ -116,7 +64,7 @@ public class TaskController {
 
 	@GetMapping("/task/finished")
 	public List<TaskDTO> findAllFinished(@RequestParam(value = "participantId", required = true) String participantId) {
-		return taskMapper.toDTOs(findByVolunteer(volunteerRepository.findOne(participantId))).stream()
+		return taskMapper.toDTOs(taskService.findByVolunteer(volunteerRepository.findOne(participantId))).stream()
 				.filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).collect(Collectors.toList());
 	}
 
