@@ -4,6 +4,7 @@ import {Competence} from './competence';
 export class Task {
   id: string;
   name: string;
+  
   description: string;
   project: Project;
   workflowKey: string;
@@ -14,3 +15,4 @@ export class Task {
   requiredCompetences: Competence[];
   acquirableCompetences: Competence[];
 }
+

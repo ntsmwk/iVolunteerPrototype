@@ -26,11 +26,11 @@ public class ContractorRestClient extends RestClient {
 	private static final String UNASSIGN = "unassign";
 	private static final String FINISH = "finish";
 
-	@Value("${trustifier.uri}")
+	@Value("${trustifier.uri}") 
 	private URI trustifierUri;
 
-	@Autowired
-	@WorkflowRestTemplate
+	@Autowired 
+	@WorkflowRestTemplate 
 	private RestTemplate restTemplate;
 
 	public void reserveTask(TaskDTO task, SourceDTO source, String authorization) {

@@ -37,6 +37,7 @@ export class FuseTaskDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)

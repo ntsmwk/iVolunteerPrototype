@@ -18,28 +18,41 @@ import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 public class Verifier {
 
 	@Autowired private Hasher hasher;
-
 	@Autowired private BlockchainRestClient blockchainRestClient;
 
 	@PostMapping("/taskInteraction")
 	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction) {
-		return (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction)) == null) ? false
-				: true;
+		return true;
+		// TODO @blockchain
+		// return
+		// (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction))
+		// == null) ? false : true;
 	}
 
 	@PostMapping("/finishedTaskEntry")
 	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry) {
-		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
+		return true;
+		// TODO @blockchain
+		// return
+		// (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) ==
+		// null) ? false : true;
 	}
 
 	@PostMapping("/publishedTask")
 	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
-		return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task)) == null) ? false : true;
+		return true;
+		// TODO @blockchain
+		// return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task))
+		// == null) ? false : true;
 	}
 
 	@PostMapping("/competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntryDTO competenceEntry) {
-		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
+		return true;
+		// TODO @blockchain
+		// return
+		// (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry))
+		// == null) ? false : true;
 	}
 
 }

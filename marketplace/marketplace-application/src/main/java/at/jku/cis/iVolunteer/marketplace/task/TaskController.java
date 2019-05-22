@@ -1,17 +1,11 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +25,6 @@ import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 public class TaskController {
@@ -47,12 +39,15 @@ public class TaskController {
 	@Autowired private TaskService taskService;
 
 	@Autowired private LoginService loginService;
-
+	
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+	public List<TaskDTO> findAll(
+			@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "status", required = false) String status) {
-		return taskService.findAll(projectId, participantId, status);
+			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
+			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly){
+		
+		return taskService.findAll(projectId, participantId, availableOnly, engagedOnly);
 	}
 
 	

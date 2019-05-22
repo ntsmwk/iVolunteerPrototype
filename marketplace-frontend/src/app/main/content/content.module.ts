@@ -15,6 +15,7 @@ import {VolunteerGuard} from './_guard/volunteer.guard';
 import {LoginGuard} from './_guard/login.guard';
 import {AdminGuard} from './_guard/admin.guard';
 
+
 const routes: Route[] = [
   {
     path: 'login',
@@ -86,6 +87,55 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
+  { path: 'main/properties/all',
+    loadChildren: './property-list/property-list.module#PropertyListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/property/detail/view',
+    loadChildren: './property-detail/property-detail.module#PropertyDetailModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  
+
+  { path: 'main/property/detail/edit',
+    loadChildren: './property-build-form/property-build-form.module#PropertyBuildFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+
+  },
+
+  // //new property
+  // { path: 'main/task-templates/user/detail/viewproperty/',
+  //   loadChildren: './property-detail/property-detail.module#PropertyDetailModule',
+  //   canActivate: [TokenGuard, HelpSeekerGuard]
+  // },
+  
+
+  { path: 'main/task-templates/user/all',
+    loadChildren: './user-defined-task-template-list/user-defined-task-template-list.module#UserDefinedTaskTemplateListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/detail/single',
+    loadChildren: './user-defined-task-template-detail-single/user-defined-task-template-detail-single.module#SingleUserDefinedTaskTemplateDetailModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/edit',
+    loadChildren: './user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module#SingleUserDefinedTaskTemplateDetailFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/task-templates/user/detail/nested',
+    loadChildren: './user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module#NestedUserDefinedTaskTemplateDetailModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/test-map-property',
+    loadChildren: './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module#MapPropertyTestModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
   {
     path: 'main/task-template-form',
     loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
@@ -100,7 +150,13 @@ const routes: Route[] = [
 
 @NgModule({
   declarations: [
-    FuseContentComponent
+    FuseContentComponent,
+    
+    
+    
+    
+    
+
   ],
   imports: [
     HttpClientModule,

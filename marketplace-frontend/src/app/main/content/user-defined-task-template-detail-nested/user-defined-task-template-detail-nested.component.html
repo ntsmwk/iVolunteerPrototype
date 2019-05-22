@@ -1,0 +1,197 @@
+<div *ngIf="isLoaded" class="page-layout blank p-24" fusePerfectScrollbar> 
+
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; cursor: pointer">keyboard_return</mat-icon>
+       
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <h1>Edit Sub-Templates for Template "{{template.name}}"</h1>
+            <mat-icon class="iconButton" style="cursor: pointer" (click)="editName(subtemplate, i)" matTooltip="Edit Name" matTooltipPosition="above"
+                            aria-label="Edit Name">edit</mat-icon>
+        </div> 
+        
+        <div></div>
+
+        <div>
+            <mat-icon class="iconButton" style="cursor: pointer" (click)="removeTemplate()" matTooltip="Delete Template" matTooltipPosition="above"
+            aria-label="Delete Template">delete</mat-icon>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24"> 
+        <h2>Description</h2>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div *ngIf="template.description">{{ template.description }}</div>
+            <div *ngIf="!template.description"> </div>
+            <div style="margin-right: 1px; cursor: pointer">
+                <mat-icon class="iconButton" (click)="editDescriptionDialog()" matTooltip="Edit Description" matTooltipPosition="above"
+                    aria-label="Edit Description">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    
+
+    <br>
+
+    <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24">
+        <h2>Sub-Templates</h2>
+
+        <div *ngFor="let subtemplate of template.templates; let i = index">
+
+            <mat-expansion-panel [expanded]="expandedPanelMap[i]" (opened)="expandedPanelMap[i]=true" (closed)="expandedPanelMap[i]=false">
+                <mat-expansion-panel-header style="background-color: #afcbe6">
+                <mat-panel-title fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="column" fxLayoutAlign="start start">
+                        <div><h3 style="margin-bottom: 1px; margin-top: 0px; color: black;">{{subtemplate.name}}</h3></div>
+        
+                        <div style="color: rgb(110, 110, 110); padding-right: 10px"> {{subtemplate.description}} </div>
+                    </div>
+
+                    <div></div>
+                    
+                    <div>
+                        <mat-icon class="iconButton" [matMenuTriggerFor]="newMenu" (click)="$event.stopPropagation();" matTooltip="Actions" matTooltipPosition="above"
+                            aria-label="Actions">more_vert</mat-icon>
+                    </div>
+                        
+                </mat-panel-title>
+
+                <mat-menu #newMenu="matMenu">
+
+                    <label mat-menu-item disabled style="color: black">Template</label>
+
+                    <button mat-menu-item (click)="editSubTemplateName(subtemplate, i)">
+                        <mat-icon>edit</mat-icon>
+                        <span>edit Name</span>
+                    </button>
+                    <button mat-menu-item (click)="editSubTemplateDescription(subtemplate, i)">
+                        <mat-icon>edit</mat-icon>
+                        <span>edit Description</span>
+                    </button>
+
+                    <button mat-menu-item (click)="removeSubTemplate(subtemplate, i)">
+                        <mat-icon>delete</mat-icon>
+                        <span>delete Sub-Template</span>
+                    </button>
+
+                    <mat-divider style="padding-bottom: 20px"></mat-divider>
+
+                    <label mat-menu-item disabled style="color: black">Properties</label>
+
+                    <button mat-menu-item (click)="addProperties(subtemplate, i)">
+                        <mat-icon>add</mat-icon>
+                        <span>add Property</span>
+                    </button>  
+                    <button mat-menu-item (click)="removeProperties(subtemplate, i)">
+                        <mat-icon>remove</mat-icon>
+                        <span>remove Property</span>
+                    </button> 
+
+                    <button mat-menu-item (click)="editProperties(subtemplate, i)">
+                        <mat-icon>edit</mat-icon>
+                        <span>edit Properties</span>
+                    </button>
+
+                    <button mat-menu-item (click)="changePropertyOrder(subtemplate, i)">
+                        <mat-icon>reorder</mat-icon>
+                        <span>change Property order</span>
+                    </button> 
+
+
+                </mat-menu>
+
+
+                <!-- <mat-panel-description>
+                    Type your name and age
+                    <mat-icon>account_circle</mat-icon>
+                </mat-panel-description> -->
+
+                </mat-expansion-panel-header>
+                
+                <div fxLayout="row" fxLayoutAlign="space-between stretch">
+
+            
+                    <mat-table data [dataSource]="dataSources[i]" *ngIf="subtemplate.properties.length > 0; else emptyTable">
+
+                        <ng-container matColumnDef="name">
+                            <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                            <mat-cell *matCellDef="let property">{{property.name}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="value">
+                            <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+                            <!-- <mat-cell *matCellDef="let property">{{displayValue(Property.getValue(property), property.kind)}}</mat-cell> -->
+                            <mat-cell *matCellDef="let property">{{printValue(property)}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="defaultValue">
+                            <mat-header-cell *matHeaderCellDef>Default Value</mat-header-cell>
+                            <mat-cell *matCellDef="let property">{{printDefaultValue(property)}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="kind">
+                            <mat-header-cell *matHeaderCellDef>Kind / Type</mat-header-cell>
+                            <mat-cell *matCellDef="let property">{{property.kind}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                            <mat-cell *matCellDef="let property">
+                                <mat-icon class="iconButton" style="cursor: pointer" (click)="viewPropertyDetails(subtemplate, property, i)" matTooltip="View Details of {{property.name}}" matTooltipPosition="above"
+                                    aria-label="View Details">remove_red_eye</mat-icon>
+                                <mat-icon class="iconButton" style="cursor: pointer" (click)="removeProperty(subtemplate, property, i)" matTooltip="Remove {{property.name}}" matTooltipPosition="above"
+                                    aria-label="Remove Property">delete</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)=undefined></mat-row>
+                    </mat-table>
+              
+                    <div fxLayout="column" fxLayoutAlign="space-between end">
+                        <div fxLayout="row" fxLayoutAlign="space-between end" style="padding-top: 20px">
+                            <mat-icon class="iconButton" style="cursor: pointer" (click)="addProperties(subtemplate,i)" matTooltip="Add Properties" matTooltipPosition="above"
+                                aria-label="Add Properties">add</mat-icon>
+                            <mat-icon class="iconButton" style="cursor: pointer" (click)="removeProperties(subtemplate, i)" matTooltip="Remove Properties" matTooltipPosition="above"
+                                aria-label="Remove Properties">remove</mat-icon>
+                            <mat-icon class="iconButton" style="cursor: pointer" (click)="changePropertyOrder(subtemplate, i)" matTooltip="Change Property Order" matTooltipPosition="above"
+                                aria-label="Change Property Order">reorder</mat-icon>
+                        </div>  
+
+                        <div fxLayout="row" fxLayoutAlign="space-between end">
+                            <mat-icon class="iconButton" style="cursor: pointer" (click)="editProperties(subtemplate, i)" matTooltip="Edit Template" matTooltipPosition="above"
+                                aria-label="Edit Template">edit</mat-icon>
+                            <mat-icon class="iconButton" style="cursor: pointer" (click)="removeSubTemplate(subtemplate,i)" matTooltip="Delete Template" matTooltipPosition="above"
+                                aria-label="Delete Template">delete</mat-icon> 
+                        </div>
+                    </div>
+
+ 
+                    
+                
+                </div>
+                
+
+                <ng-template #emptyTable>
+                    Does not contain properties
+                </ng-template>
+            
+            </mat-expansion-panel>
+
+            <mat-divider></mat-divider>
+
+        </div>
+
+        <br>
+
+        <button mat-raised-button style="width: 100%" color="primary" (click)="newSubTemplate()">Add a new Sub-Template</button>
+
+    </div>
+
+    
+
+</div>

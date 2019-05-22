@@ -35,35 +35,20 @@ import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerTaskEntryDTO;
 @RestController
 public class TaskOperationController {
 
-	@Autowired
-	private ContractorPublishingRestClient contractorRepositoryRestClient;
+	@Autowired private ContractorPublishingRestClient contractorRepositoryRestClient;
+	@Autowired private CompetenceEntryMapper competenceEntryMapper;
+	@Autowired private TaskMapper taskMapper;
+	@Autowired private TaskRepository taskRepository;
+	@Autowired private TaskEntryMapper taskEntryMapper;
+	@Autowired private TaskInteractionMapper taskInteractionMapper;
+	@Autowired private TaskInteractionService taskInteractionService;
+	@Autowired private TaskInteractionRepository taskInteractionRepository;
+	@Autowired private TaskInteractionToTaskEntryMapper taskInteractionToTaskEntryMapper;
+	@Autowired private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
+	@Autowired private VolunteerProfileRepository volunteerProfileRepository;
+	@Autowired private LoginService loginService;
 
-	@Autowired
-	private CompetenceEntryMapper competenceEntryMapper;
-
-	@Autowired
-	private TaskMapper taskMapper;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskEntryMapper taskEntryMapper;
-	@Autowired
-	private TaskInteractionMapper taskInteractionMapper;
-	@Autowired
-	private TaskInteractionService taskInteractionService;
-	@Autowired
-	private TaskInteractionRepository taskInteractionRepository;
-	@Autowired
-	private TaskInteractionToTaskEntryMapper taskInteractionToTaskEntryMapper;
-	@Autowired
-	private TaskInteractionToCompetenceEntryMapper taskInteractionToCompetenceEntryMapper;
-	@Autowired
-	private VolunteerProfileRepository volunteerProfileRepository;
-
-	@Autowired
-	private LoginService loginService;
-
-	@Value("${marketplace.identifier}")
+	@Value("${marketplace.identifier}") 
 	private String marketplaceId;
 
 	@PostMapping("/task/{id}/publish")
@@ -72,7 +57,6 @@ public class TaskOperationController {
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
-
 		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task), authorization);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
@@ -105,8 +89,7 @@ public class TaskOperationController {
 	}
 
 	@PostMapping("/task/{id}/finish")
-	public TaskInteractionDTO finishTask(@PathVariable("id") String id,
-			@RequestHeader("authorization") String authorization) {
+	public TaskInteractionDTO finishTask(@PathVariable("id") String id, @RequestHeader("authorization") String authorization) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
@@ -134,9 +117,8 @@ public class TaskOperationController {
 			try {
 				VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
 				vte.setVolunteerId(volunteer.getId());
-
 				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
-
+				
 				competenceEntries.forEach(competenceEntry -> {
 					VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
 							competenceEntryMapper.toDTO(competenceEntry));

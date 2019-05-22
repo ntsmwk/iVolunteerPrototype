@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { isNullOrUndefined } from 'util';
 
+import { MinimalTaskTemplate } from "../_model/minimal-task-template";
+
 @Component({
   selector: 'fuse-task-template-list',
   templateUrl: './task-template-list.component.html',
