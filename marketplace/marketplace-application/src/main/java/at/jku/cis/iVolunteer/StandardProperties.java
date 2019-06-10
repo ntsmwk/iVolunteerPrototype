@@ -20,17 +20,17 @@ import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.property.BooleanProperty;
 import at.jku.cis.iVolunteer.model.property.DateProperty;
 import at.jku.cis.iVolunteer.model.property.DoubleProperty;
-import at.jku.cis.iVolunteer.model.property.MultipleProperty;
+import at.jku.cis.iVolunteer.model.property.MultiProperty;
 import at.jku.cis.iVolunteer.model.property.NumberProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
-import at.jku.cis.iVolunteer.model.property.rule.MultiRuleKind;
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
-import at.jku.cis.iVolunteer.model.property.rule.RuleKind;
+import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
+import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRuleKind;
+import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
+import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRuleKind;
 
 
 @Component
@@ -112,7 +112,7 @@ public class StandardProperties {
 	public List<Property> getAllMulti() {
 		List<Property> props = new LinkedList<>();
 		
-		MultipleProperty mp = new TestMultiProperty();
+		MultiProperty mp = new TestMultiProperty();
 //		List<Property> allProps = propertyRepository.findAll();
 		List<Property> multiProps = new LinkedList<>();
 		
@@ -122,10 +122,10 @@ public class StandardProperties {
 		multiProps.add(new PostcodeProperty());
 		multiProps.add(new LatitudeProperty());
 		multiProps.add(new LongitudeProperty());
-		MultipleProperty mp11 = new TestMultiProperty();
+		MultiProperty mp11 = new TestMultiProperty();
 		mp11.setId("nested1");
 		
-		MultipleProperty mp111 = new TestMultiProperty();
+		MultiProperty mp111 = new TestMultiProperty();
 		mp111.setProperties(new ArrayList<>(multiProps));
 		mp111.setId("nested2");
 		
@@ -188,11 +188,11 @@ public class StandardProperties {
 	public List<Property> getAll() {
 		List<Property> sps = this.getAllSingle();
 		List<Property> mps = this.getAllMulti();
-//		List<Property> sbs = this.getAllSybos();
+		List<Property> sbs = this.getAllSybos();
 		List<Property> tmwr = this.getTestMultiWithRules();
 	
 		sps.addAll(mps);
-//		sps.addAll(sbs);
+		sps.addAll(sbs);
 		sps.addAll(tmwr);
 		
 		return sps;
@@ -250,8 +250,8 @@ public class StandardProperties {
 
 			
 			//TODO Testrules
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			rules.get(rules.size()-1).setMessage("Custom Defined Message Required");
 //			rules.add(new Rule(RuleKind.MAX_LENGTH, 100));
 //			//rules.get(rules.size()-1).setMessage("Testmessage max length");
@@ -298,8 +298,8 @@ public class StandardProperties {
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^WF_K[0-9]+")); //Matches "WF_K<number>" i.e. "WF_K1" or "WF_K39099" NOT "WF_K" or "wf_k<number>"
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REGEX_PATTERN, "^WF_K[0-9]+")); //Matches "WF_K<number>" i.e. "WF_K1" or "WF_K39099" NOT "WF_K" or "wf_k<number>"
 			this.setRules(rules);
 		}
 	}
@@ -340,8 +340,8 @@ public class StandardProperties {
 			legalValues.add(new ListEntry<String>("critical", "Critical"));
 			this.setLegalValues(legalValues);
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 			
 		}
@@ -367,8 +367,8 @@ public class StandardProperties {
 			
 			this.setLegalValues(legalValues);
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 		}
 	}
@@ -384,8 +384,8 @@ public class StandardProperties {
 			this.setName("Role");
 //			this.setValue("");
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MIN_LENGTH, 3));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MIN_LENGTH, 3));
 			this.setRules(rules);
 			
 		}
@@ -426,8 +426,8 @@ public class StandardProperties {
 			values.add(defaultValues.get(0));
 			this.setValues(values);	
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 		}
 	}
@@ -457,8 +457,8 @@ public class StandardProperties {
 			defaultValues.add(legalValues.get(3));
 			this.setDefaultValues(defaultValues);
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 			
 		}
@@ -487,8 +487,8 @@ public class StandardProperties {
 
 			this.setLegalValues(legalValues);
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 			
 		}
@@ -547,10 +547,10 @@ public class StandardProperties {
 			this.setValues(values);	
 			
 			//TODO Testrules
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MAX_LENGTH, 4));
-			rules.add(new Rule(RuleKind.MIN_LENGTH, 4));
-			rules.add(new Rule(RuleKind.REGEX_PATTERN));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MAX_LENGTH, 4));
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MIN_LENGTH, 4));
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REGEX_PATTERN));
 			this.setRules(rules);
 			
 			
@@ -575,8 +575,8 @@ public class StandardProperties {
 			}
 			this.setLegalValues(legalValues);
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 			
 		}
@@ -602,8 +602,8 @@ public class StandardProperties {
 			this.setValues(values);	
 			
 			//TODO Testrules
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
 		}
 	}
@@ -620,8 +620,8 @@ public class StandardProperties {
 			this.setKind(PropertyKind.DATE);
 			this.setName("Starting Date");
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.REQUIRED));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 //			rules.add(new Rule(RuleKind.MIN, System.currentTimeMillis()));
 			this.setRules(rules);
 			
@@ -814,9 +814,9 @@ public class StandardProperties {
 			List<ListEntry<Double>> values = new ArrayList<>();	
 			this.setValues(values);	
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MIN, -90));
-			rules.add(new Rule(RuleKind.MAX, 90));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MIN, -90));
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MAX, 90));
 			this.setRules(rules);	
 		}
 		
@@ -860,9 +860,9 @@ public class StandardProperties {
 			List<ListEntry<Double>> values = new ArrayList<>();
 			this.setValues(values);	
 			
-			List<Rule> rules = new LinkedList<Rule>();
-			rules.add(new Rule(RuleKind.MIN, -180));
-			rules.add(new Rule(RuleKind.MAX, 180));
+			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MIN, -180));
+			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.MAX, 180));
 			this.setRules(rules);
 		}
 		
@@ -924,10 +924,10 @@ public class StandardProperties {
 		}
 	}
 	
-	public static class TestMultiProperty extends MultipleProperty {
+	public static class TestMultiProperty extends MultiProperty {
 		public TestMultiProperty() {
 			this.setId("test_multi");
-			this.setKind(PropertyKind.MULTIPLE);
+			this.setKind(PropertyKind.MULTI);
 			this.setName("Test Multi");
 		}
 	}
@@ -937,7 +937,7 @@ public class StandardProperties {
 	//--------------SyBOS Properties
 	//-----------------------------------------
 	
-	public static class DurationTimeProperty extends MultipleProperty {
+	public static class DurationTimeProperty extends MultiProperty {
 		public DurationTimeProperty() {
 			this.setId("duration_time");
 			this.setName("duration");
@@ -1038,7 +1038,7 @@ public class StandardProperties {
 		}
 	}
 	
-	public static class AddressProperty extends MultipleProperty {
+	public static class AddressProperty extends MultiProperty {
 		public AddressProperty() {
 			this.setId("address");
 			this.setName("Address");
@@ -1169,7 +1169,7 @@ public class StandardProperties {
 	
 	///////////////////////////////
 	
-	public static class TestMultiWithRules extends MultipleProperty {
+	public static class TestMultiWithRules extends MultiProperty {
 		public TestMultiWithRules() {
 			this.setId("multi_with_rules");
 			this.setName("Multiple Property With Rules");
@@ -1181,9 +1181,9 @@ public class StandardProperties {
 			this.getProperties().add(new LatitudeProperty());
 			
 			this.setRules(new ArrayList<>());
-			this.getRules().add(new MultiRule(MultiRuleKind.REQUIRED_OTHER, this.getProperties().get(0).getId(), this.getProperties().get(1).getId()));
-			this.getRules().add(new MultiRule(MultiRuleKind.MAX_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
-			this.getRules().add(new MultiRule(MultiRuleKind.MIN_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
+			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.REQUIRED_OTHER, this.getProperties().get(0).getId(), this.getProperties().get(1).getId()));
+			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.MAX_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
+			this.getRules().add(new MultiPropertyRule(MultiPropertyRuleKind.MIN_OTHER, this.getProperties().get(2).getId(), this.getProperties().get(3).getId()));
 		
 		}
 	}
@@ -1209,7 +1209,7 @@ public class StandardProperties {
 	//-----------------------------------------
 	
 	
-	public static class MapProperty extends MultipleProperty {
+	public static class MapProperty extends MultiProperty {
 	
 		public MapProperty() {
 			this.setId("map");
@@ -1256,11 +1256,11 @@ public class StandardProperties {
 	}
 	
 	
-	public static class MapEntryProperty extends MultipleProperty {
+	public static class MapEntryProperty extends MultiProperty {
 		
 		public MapEntryProperty() {
 			this.setId(new ObjectId().toHexString());
-			this.setKind(PropertyKind.MULTIPLE);
+			this.setKind(PropertyKind.MULTI);
 			this.setName("Map Entry");
 			this.setProperties(new ArrayList<>());
 			
@@ -1271,7 +1271,7 @@ public class StandardProperties {
 		public MapEntryProperty(double latitude, double longitude) {
 			this.setId(new ObjectId().toHexString());
 
-			this.setKind(PropertyKind.MULTIPLE);
+			this.setKind(PropertyKind.MULTI);
 			this.setName("Map Entry");
 			this.setProperties(new ArrayList<>());
 			
@@ -1285,7 +1285,7 @@ public class StandardProperties {
 		public MapEntryProperty (double[] latitude, double[] longitude) {
 			this.setId(new ObjectId().toHexString());
 
-			this.setKind(PropertyKind.MULTIPLE);
+			this.setKind(PropertyKind.MULTI);
 			this.setName("Map Area");
 			this.setProperties(new ArrayList<>());
 			
@@ -1299,7 +1299,7 @@ public class StandardProperties {
 	
 
 	
-	public static class GraphProperty extends MultipleProperty {
+	public static class GraphProperty extends MultiProperty {
 		public GraphProperty() {
 			this.setId("graph");
 			this.setName("Graph");

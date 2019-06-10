@@ -47,7 +47,7 @@ export class Property<T> {
 
 }
 
-export class MultiplePropertyRet {
+export class MultiPropertyRet {
     id: string;
     name: string;
     order: number;
@@ -102,7 +102,7 @@ export class Rule {
 
 export enum PropertyKind {
     TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL", 
-    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MAP = "MAP", GRAPH="GRAPH", MULTIPLE="MULTIPLE"
+    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MAP = "MAP", GRAPH="GRAPH", MULTI="MULTI"
 }
 
 export enum RuleKind {

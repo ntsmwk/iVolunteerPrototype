@@ -5,38 +5,38 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document
-public class MultiRule {
+public class SinglePropertyRule {
 	
 	@Id
 	String id;
 	
-	MultiRuleKind kind;
+	SinglePropertyRuleKind kind;
 	long value;
-	String key; //of property this rule is applied to
-	String keyOther; //of property the rule refers to
+	String data; //can be a Regular Expression or a key to a different property
 	
 	String message;
 
 	
 	/* Getters and Setters */ 
 	
-	public MultiRule() {}
+	public SinglePropertyRule() {}
 	
-	public MultiRule(MultiRuleKind kind, String key, String keyOther) {
+	public SinglePropertyRule(SinglePropertyRuleKind kind) {
 		this.kind = kind;
-		this.key = key;
-		this.keyOther = keyOther;
 		this.id = kind.getKind().toLowerCase();
 	}
 	
-	public MultiRule(MultiRuleKind kind, String key, String keyOther, long value) {
+	public SinglePropertyRule(SinglePropertyRuleKind kind, long value) {
 		this.kind = kind;
-		this.key = key;
-		this.keyOther = keyOther;
 		this.value = value;
 		this.id = kind.getKind().toLowerCase();
 	}
-
+	
+	public SinglePropertyRule(SinglePropertyRuleKind kind, String data) {
+		this.kind = kind;
+		this.data = data;
+		this.id = kind.getKind().toLowerCase();
+	}
 
 	
 	public String getId() {
@@ -47,11 +47,11 @@ public class MultiRule {
 		this.id = id;
 	}
 
-	public MultiRuleKind getKind() {
+	public SinglePropertyRuleKind getKind() {
 		return kind;
 	}
 
-	public void setKind(MultiRuleKind kind) {
+	public void setKind(SinglePropertyRuleKind kind) {
 		this.kind = kind;
 	}
 	
@@ -63,20 +63,12 @@ public class MultiRule {
 		this.value = value;
 	}
 	
-	public String getKey() {
-		return key;
+	public String getData() {
+		return data;
 	}
 	
-	public void setKey(String key) {
-		this.key = key;
-	}
-	
-	public String getKeyOther() {
-		return keyOther;
-	}
-	
-	public void setKeyOther(String keyOther) {
-		this.keyOther = keyOther;
+	public void setData(String data) {
+		this.data = data;
 	}
 
 	public String getMessage() {
@@ -97,15 +89,15 @@ public class MultiRule {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MultiRule)) {
+		if (!(obj instanceof SinglePropertyRule)) {
 			return false;
 		}
-		return ((MultiRule) obj).id.equals(id);
+		return ((SinglePropertyRule) obj).id.equals(id);
 	}
 
 	@Override
 	public String toString() {
-		return "\nRule [id=" + id + ", kind=" + kind + ", value=" + value + ", key=" + key + ", message=" + message
+		return "\nRule [id=" + id + ", kind=" + kind + ", value=" + value + ", data=" + data + ", message=" + message
 				+ "]\n";
 	}
 	

@@ -1,12 +1,12 @@
 package at.jku.cis.iVolunteer.model.property.rule;
 
 
-public enum MultiRuleKind {
+public enum MultiPropertyRuleKind {
 	REQUIRED_OTHER("REQUIRED_OTHER"), MAX_OTHER("MAX_OTHER"), MIN_OTHER("MIN_OTHER");
 	
 	private final String kind;
 	
-	private MultiRuleKind (String kind) {
+	private MultiPropertyRuleKind (String kind) {
 		this.kind = kind;
 	}
 
@@ -19,8 +19,8 @@ public enum MultiRuleKind {
 		return this.kind;
 	}
 	
-	public static MultiRuleKind getFromRuleKind(String kind){
-        for(MultiRuleKind k : MultiRuleKind.values()){
+	public static MultiPropertyRuleKind getFromRuleKind(String kind){
+        for(MultiPropertyRuleKind k : MultiPropertyRuleKind.values()){
             if(k.getKind().equals(kind)){
                 return k;
             }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Property, PropertyKind, MultiplePropertyRet, PropertyListItem } from '../_model/properties/Property';
+import { Property, PropertyKind, MultiPropertyRet, PropertyListItem } from '../_model/properties/Property';
 import { Marketplace } from '../_model/marketplace';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
@@ -47,7 +47,7 @@ export class PropertyService {
     return this.http.post(`${marketplace.url}/properties/new/single`, property);
   }
 
-  public addMultipleProperty(marketplace, property: MultiplePropertyRet) {
+  public addMultipleProperty(marketplace: Marketplace, property: MultiPropertyRet) {
     console.log ("calling post /properties/new/multiple");
     return this.http.post(`${marketplace.url}/properties/new/multiple`, property);
   }

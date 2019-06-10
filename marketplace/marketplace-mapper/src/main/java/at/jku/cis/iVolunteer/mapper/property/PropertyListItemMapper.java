@@ -36,7 +36,7 @@ public class PropertyListItemMapper implements OneWayDtoMapper<Property, Propert
 		
 		propertyListItemDTO.setKind(source.getKind());
 		
-		if (!propertyListItemDTO.getKind().equals(PropertyKind.MULTIPLE) && !propertyListItemDTO.getKind().equals(PropertyKind.MAP)) {
+		if (!propertyListItemDTO.getKind().equals(PropertyKind.MULTI) && !propertyListItemDTO.getKind().equals(PropertyKind.MAP)) {
 			
 			SingleProperty<Object> s = (SingleProperty) source;
 			

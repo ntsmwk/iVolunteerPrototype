@@ -100,7 +100,7 @@ export class QuestionService {
     }
 
     ///TEST MultiProp List
-    else if (property.kind === PropertyKind.MULTIPLE) {
+    else if (property.kind === PropertyKind.MULTI) {
       console.log("Multiple Property found:");
       console.log(property);
       question = new MultipleQuestion({

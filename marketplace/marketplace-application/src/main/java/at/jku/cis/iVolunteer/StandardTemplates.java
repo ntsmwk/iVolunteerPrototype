@@ -36,14 +36,14 @@ public class StandardTemplates {
 		
 		list.add(createTemplateWithAllProperties());
 		list.add(createNestedTemplateWithExamples());
-//		list.add(createGenericDienstTemplate());
-//		list.add(createGenericTaskTemplate());
-//		list.add(createGenericEventTemplate());
-//		list.add(createGenericActivityTemplate());
-//		list.add(createGenericTrainingTemplate());
-//		list.add(createTrainingTemplate());
-//		list.add(createVehicleTemplate());
-//		list.add(createVolunteerCheckTemplate());
+		list.add(createGenericDienstTemplate());
+		list.add(createGenericTaskTemplate());
+		list.add(createGenericEventTemplate());
+		list.add(createGenericActivityTemplate());
+		list.add(createGenericTrainingTemplate());
+		list.add(createTrainingTemplate());
+		list.add(createVehicleTemplate());
+		list.add(createVolunteerCheckTemplate());
 		
 		return list;
 	}

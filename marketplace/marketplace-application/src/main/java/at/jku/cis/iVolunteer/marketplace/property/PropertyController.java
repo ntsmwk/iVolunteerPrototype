@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.property;
 
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +8,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.StandardProperties;
-import at.jku.cis.iVolunteer.mapper.property.MultiplePropertyRetMapper;
+import at.jku.cis.iVolunteer.mapper.property.MultiPropertyRetMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.model.property.MultipleProperty;
+import at.jku.cis.iVolunteer.model.property.MultiProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.MultiplePropertyRetDTO;
+import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyRetDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
@@ -35,7 +32,7 @@ public class PropertyController {
 	@Autowired private PropertyMapper propertyMapper;
 	
 	@Autowired private PropertyRepository propertyRepository;
-	@Autowired private MultiplePropertyRetMapper multiplePropertyRetMapper;
+	@Autowired private MultiPropertyRetMapper multiPropertyRetMapper;
 	
 	@Autowired StandardProperties sp;
 	
@@ -92,10 +89,10 @@ public class PropertyController {
 	}
 	
 	@PostMapping("/properties/new/multiple")
-	public void addMultipleProperty(@RequestBody MultiplePropertyRetDTO dto) {
+	public void addMultipleProperty(@RequestBody MultiPropertyRetDTO dto) {
 		System.out.println("Adding Multiple Property");
 		
-		MultipleProperty mp = new MultipleProperty(multiplePropertyRetMapper.toEntity(dto));
+		MultiProperty mp = new MultiProperty(multiPropertyRetMapper.toEntity(dto));
 				
 		for (String id : dto.getPropertyIDs()) {		
 			Property p = propertyRepository.findOne(id);			

@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.property.dto;
 
 import java.util.List;
 
-public class MultiplePropertyDTO extends PropertyDTO<Object> {
+public class MultiPropertyDTO extends PropertyDTO<Object> {
 
 	List<PropertyDTO<Object>> properties;
 	
@@ -18,10 +18,10 @@ public class MultiplePropertyDTO extends PropertyDTO<Object> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MultiplePropertyDTO)) {
+		if (!(obj instanceof MultiPropertyDTO)) {
 			return false;
 		}
-		return ((MultiplePropertyDTO) obj).id.equals(id);
+		return ((MultiPropertyDTO) obj).id.equals(id);
 	}
 
 	

@@ -168,7 +168,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
   private traverseResultAndUpdateProperties(values: any[], properties: Property<any>[]): Property<any>[] {
     
     for (let prop of properties) {
-      if (prop.kind == PropertyKind.MULTIPLE) {
+      if (prop.kind == PropertyKind.MULTI) {
         //TODO DO NESTED
         this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
       } else {

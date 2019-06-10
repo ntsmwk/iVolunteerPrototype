@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.property.rule.dto;
 
-import at.jku.cis.iVolunteer.model.property.rule.RuleKind;
 
 public class RuleDTO {
 	

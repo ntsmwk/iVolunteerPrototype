@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
+import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
 
 @Document
 public class SingleProperty<T> extends Property {
@@ -20,7 +20,7 @@ public class SingleProperty<T> extends Property {
 	//Allowed Values
 	List<ListEntry<T>> legalValues;
 	
-	List<Rule> rules;
+	List<SinglePropertyRule> rules;
 
 	
 	public SingleProperty() {
@@ -74,11 +74,11 @@ public class SingleProperty<T> extends Property {
 	}
 		
 
-	public List<Rule> getRules() {
+	public List<SinglePropertyRule> getRules() {
 		return rules;
 	}
 	
-	public void setRules(List<Rule> rules) {
+	public void setRules(List<SinglePropertyRule> rules) {
 		this.rules = rules;
 	}
 

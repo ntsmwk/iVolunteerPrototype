@@ -123,8 +123,8 @@ export class PropertyBuildFormComponent implements OnInit {
   }
 
   setWhichProperty() {
-    if (this.currentProperty.kind == PropertyKind.MULTIPLE) {
-      this.whichProperty = 'multiple';
+    if (this.currentProperty.kind == PropertyKind.MULTI) {
+      this.whichProperty = 'multi';
     } else {
       this.whichProperty = 'single';
     }

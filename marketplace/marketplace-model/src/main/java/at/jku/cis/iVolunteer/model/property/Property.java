@@ -1,11 +1,8 @@
 package at.jku.cis.iVolunteer.model.property;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
 
 @Document
 public class Property {

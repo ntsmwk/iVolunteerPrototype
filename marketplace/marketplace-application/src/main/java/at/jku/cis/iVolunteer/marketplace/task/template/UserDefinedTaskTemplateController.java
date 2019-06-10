@@ -30,7 +30,7 @@ import at.jku.cis.iVolunteer.mapper.property.PropertyParentItemMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateStubMapper;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
-import at.jku.cis.iVolunteer.model.property.MultipleProperty;
+import at.jku.cis.iVolunteer.model.property.MultiProperty;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
@@ -440,7 +440,7 @@ public class UserDefinedTaskTemplateController {
 			Property p = propertyMapper.toEntity(dto);
 			System.out.println("===Property to Update===");
 
-			if (!p.getKind().equals(PropertyKind.MULTIPLE) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
+			if (!p.getKind().equals(PropertyKind.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
 
 				
 				SingleProperty<Object> updateProperty = (SingleProperty<Object>) p;
@@ -454,10 +454,10 @@ public class UserDefinedTaskTemplateController {
 				
 				returnProperties.add(currentProperty);
 				
-			} else if (p.getKind().equals(PropertyKind.MULTIPLE)) {
+			} else if (p.getKind().equals(PropertyKind.MULTI)) {
 				System.out.println("\nMULTIPLE--> " + p.getId());
 				
-				MultipleProperty currentProperty = (MultipleProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
+				MultiProperty currentProperty = (MultiProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
 				
 				List<Property> nestedList= setPropertiesRec(dto.getProperties(), currentProperty.getProperties() );
 				

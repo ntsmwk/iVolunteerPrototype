@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyListItem, Property, PropertyKind, MultiplePropertyRet, RuleKind } from '../../_model/properties/Property';
+import { PropertyListItem, Property, PropertyKind, MultiPropertyRet, RuleKind } from '../../_model/properties/Property';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
@@ -39,7 +39,7 @@ export class MultiplePropertyComponent implements OnInit {
 
   form: FormGroup;
 
-  property: MultiplePropertyRet = new MultiplePropertyRet();
+  property: MultiPropertyRet = new MultiPropertyRet();
 
   constructor(private propertyService: PropertyService,
     private formBuilder: FormBuilder) { }
@@ -237,7 +237,7 @@ export class MultiplePropertyComponent implements OnInit {
         this.property.id = this.currentProperty.id;
       }
 
-      this.property.kind = PropertyKind.MULTIPLE;
+      this.property.kind = PropertyKind.MULTI;
       this.property.name = this.form.get('name').value;
 
       this.property.propertyIDs = [];

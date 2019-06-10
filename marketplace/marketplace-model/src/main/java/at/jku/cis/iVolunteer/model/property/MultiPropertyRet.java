@@ -1,14 +1,11 @@
-package at.jku.cis.iVolunteer.model.property.dto;
+package at.jku.cis.iVolunteer.model.property;
 
 import java.util.List;
 
-import com.mongodb.util.JSON;
-
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
-import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
+import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 
-public class MultiplePropertyRetDTO {
+public class MultiPropertyRet {
 
 	
 	String id;
@@ -16,7 +13,7 @@ public class MultiplePropertyRetDTO {
 	
 	PropertyKind kind;
 	
-	List<RuleDTO> rules;
+	List<MultiPropertyRule> rules;
 	List<String> propertyIDs;
 	
 	int order;
@@ -45,11 +42,11 @@ public class MultiplePropertyRetDTO {
 		this.order = order;
 	}
 	
-	public List<RuleDTO> getRules() {
+	public List<MultiPropertyRule> getRules() {
 		return rules;
 	}
 	
-	public void setRules(List<RuleDTO> rules) {
+	public void setRules(List<MultiPropertyRule> rules) {
 		this.rules = rules;
 	}
 
@@ -71,21 +68,17 @@ public class MultiplePropertyRetDTO {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MultiplePropertyRetDTO)) {
+		if (!(obj instanceof MultiPropertyRet)) {
 			return false;
 		}
-		return ((MultiplePropertyRetDTO) obj).id.equals(id);
+		return ((MultiPropertyRet) obj).id.equals(id);
 	
 	}
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}
-	@Override
-	public String toString() {
-		return "MultiplePropertyRetDTO [id=" + id + ", name=" + name + ", kind=" + kind + ",\nrules=" + rules
-				+ ",\npropertyIDs=" + propertyIDs + ", order=" + order + "]";
-	}
+
 
 	
 	

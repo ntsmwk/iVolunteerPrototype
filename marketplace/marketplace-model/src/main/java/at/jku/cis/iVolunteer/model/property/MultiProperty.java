@@ -3,29 +3,29 @@ package at.jku.cis.iVolunteer.model.property;
 import java.util.LinkedList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.rule.MultiRule;
+import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 
 
-public class MultipleProperty extends Property {
+public class MultiProperty extends Property {
 
 	List<Property> properties;
 	
-	List<MultiRule> rules;
+	List<MultiPropertyRule> rules;
 	
 
-	public MultipleProperty() {
-		kind = PropertyKind.MULTIPLE;
+	public MultiProperty() {
+		kind = PropertyKind.MULTI;
 	}
 	
-	public MultipleProperty(Property p) {
-		kind = PropertyKind.MULTIPLE;
+	public MultiProperty(Property p) {
+		kind = PropertyKind.MULTI;
 		super.id = p.id;
 		super.kind = p.kind;
 		super.name = p.name;
 //		super.rules = p.rules;
 	}
 	
-	public MultipleProperty(MultiplePropertyRet p) {
+	public MultiProperty(MultiPropertyRet p) {
 		this.id = p.id;
 		this.kind = p.kind;
 		this.name = p.name;
@@ -43,25 +43,25 @@ public class MultipleProperty extends Property {
 		this.properties = properties;
 	}
 	
-	public List<MultiRule> getRules() {
+	public List<MultiPropertyRule> getRules() {
 		return rules;
 	}
 	
-	public void setRules(List<MultiRule> rules) {
+	public void setRules(List<MultiPropertyRule> rules) {
 		this.rules = rules;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MultipleProperty)) {
+		if (!(obj instanceof MultiProperty)) {
 			return false;
 		}
-		return ((MultipleProperty) obj).id.equals(id);
+		return ((MultiProperty) obj).id.equals(id);
 	}
 
 	@Override
 	public String toString() {
-		return "MultipleProperty [properties=" + properties + ", id=" + id + ", name=" + name + ", rules=" + rules
+		return "MultiProperty [properties=" + properties + ", id=" + id + ", name=" + name + ", rules=" + rules
 				+ ", kind=" + kind + ", order=" + order + ", custom=" + custom + "]";
 	}
 	

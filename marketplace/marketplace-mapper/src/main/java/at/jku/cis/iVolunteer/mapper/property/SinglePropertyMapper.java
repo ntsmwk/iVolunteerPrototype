@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.mapper.property.rule.RuleMapper;
+import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
-import at.jku.cis.iVolunteer.model.property.rule.Rule;
+import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
 
@@ -26,7 +26,7 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 @Component
 public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Object>, SinglePropertyDTO<Object>>{
 	
-	@Autowired RuleMapper ruleMapper;
+	@Autowired SinglePropertyRuleMapper ruleMapper;
 	@Autowired CompetenceMapper competenceMapper;
 	@Autowired ListEntryMapper listEntryMapper;
 
@@ -61,8 +61,8 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		//TODO rules
 		if (source.getRules() != null) {
-			List<Rule> rules = new ArrayList<Rule>();
-			for (Rule r : source.getRules()) {
+			List<SinglePropertyRule> rules = new ArrayList<SinglePropertyRule>();
+			for (SinglePropertyRule r : source.getRules()) {
 				rules.add(r);
 			}
 			propertyDTO.setRules(ruleMapper.toDTOs(rules));
@@ -164,7 +164,7 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		
 		
-		List<Rule> rules = new ArrayList<Rule>();
+		List<SinglePropertyRule> rules = new ArrayList<SinglePropertyRule>();
 		if (target.getRules() != null) {
 			for (RuleDTO r : target.getRules()) {
 				rules.add(ruleMapper.toEntity(r));
