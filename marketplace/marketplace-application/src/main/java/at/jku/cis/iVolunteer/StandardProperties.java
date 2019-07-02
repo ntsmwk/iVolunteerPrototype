@@ -142,7 +142,7 @@ public class StandardProperties {
 		
 		props.add(mp);
 		
-		props.add(new MapProperty());
+//		props.add(new MapProperty());
 		
 		List<Property> ret = new ArrayList(props);
 		return ret;

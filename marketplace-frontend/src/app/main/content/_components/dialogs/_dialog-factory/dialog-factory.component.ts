@@ -65,7 +65,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, properties: Property<any>[]): AddOrRemoveDialogData {
-    console.log("entered prepareDataForAdd");
     
     let states: {property: Property<any>, disabled: boolean, checked: boolean, dirty: boolean}[] = [];
 
@@ -78,15 +77,12 @@ export class DialogFactoryComponent implements OnInit {
         } 
       }
     }
-    console.log("finished");
     
     let data: AddOrRemoveDialogData = { label: label, checkboxStates: states}
-    console.log(data);
     return data;
   }
 
   removePropertyDialog(template: UserDefinedTaskTemplate) {
-    console.log("clicked remove properies");
     const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
       width: '500px',
       data: this.prepareDataForRemove('Remove Properties', template)
@@ -96,14 +92,9 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log("dialog closed..." + result.label);
-        console.log(result.checkboxStates);
-        console.log("======");
-        
         propIds = [];
         for (let s of result.checkboxStates) {
           if (s.dirty) {
-            console.log(s.property.name + " has changed and marked to be removed" + s.dirty);
             propIds.push(s.property.id);
           }
         }
@@ -137,8 +128,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-    console.log("entered edit Description Dialog");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'Edit Description', 
@@ -150,8 +139,6 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log("Result: " + result.fields[0].value);
-        console.log(result);
         ret = result.fields[0].value;
       }
     });
@@ -162,7 +149,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   editTemplateNameDialog(template: UserDefinedTaskTemplate) {
-    console.log("Entered edit Name Dialog");
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'Edit Name', 
@@ -184,8 +170,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-    console.log("clicked new nested Task Template");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {label: 'New Template',
@@ -201,7 +185,6 @@ export class DialogFactoryComponent implements OnInit {
       if (!isNullOrUndefined(result)) {
 
         for (let val of result.fields) {
-          console.log(val);
           ret.push(val.value);
         }
       }
@@ -214,8 +197,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   confirmationDialog(title: string, description: string) {
-    console.log("clicked delete template");
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       data: {title: title, description: description}
@@ -235,8 +216,6 @@ export class DialogFactoryComponent implements OnInit {
   }
   
   changePropertyOrderDialog(properties: Property<any>[]) {
-    console.log("clicked order properties");
-
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
@@ -246,8 +225,6 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any = undefined;
     
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
-      console.log(result);
       ret = result;
     });
 
@@ -257,7 +234,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changeSubtemplatesOrderDialog(template: UserDefinedTaskTemplate) {
-    console.log("clicked order properties");
 
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
@@ -268,8 +244,7 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any = undefined;
     
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
-      console.log(result);
+
       ret = result;
     });
 
@@ -288,9 +263,7 @@ export class DialogFactoryComponent implements OnInit {
 
     let ret: {copyId: string, newName: string, newDescription: string} = undefined;
     dialogRef.beforeClose().toPromise().then((result: ChooseTemplateToCopyDialogData) => {
-      console.log("result = ");
       ret = {copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription};
-      console.log(ret);
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {

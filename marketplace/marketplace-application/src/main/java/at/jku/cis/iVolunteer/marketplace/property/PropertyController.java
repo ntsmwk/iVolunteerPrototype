@@ -55,16 +55,13 @@ public class PropertyController {
 	@GetMapping("/properties/{id}") 
 	public PropertyDTO<Object> getPropertyByID(@PathVariable("id") String id) {
 		return propertyMapper.toDTO(propertyRepository.findOne(id));
+	
+		
+
 	}
 	
 	@PostMapping("/properties/new/single")
-	public void addSingleProperty(@RequestBody PropertyDTO<Object> dto) {
-		System.out.println("Adding Single Property");
-		
-		System.out.println("DTO");
-		System.out.println(dto.getLegalValues().size());
-		System.out.println(dto.getDefaultValues().size());
-		
+	public void addSingleProperty(@RequestBody PropertyDTO<Object> dto) {		
 		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
 		
 		
@@ -76,8 +73,6 @@ public class PropertyController {
 					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
 					defaultValue.id = val.id;
 				} catch (NoSuchElementException e) {
-					System.out.println("No such Element - " + val.getId() +": " + val.getValue());
-					System.out.println("Continue");
 					continue;
 				}
 			}	
@@ -89,9 +84,7 @@ public class PropertyController {
 	}
 	
 	@PostMapping("/properties/new/multiple")
-	public void addMultipleProperty(@RequestBody MultiPropertyRetDTO dto) {
-		System.out.println("Adding Multiple Property");
-		
+	public void addMultipleProperty(@RequestBody MultiPropertyRetDTO dto) {		
 		MultiProperty mp = new MultiProperty(multiPropertyRetMapper.toEntity(dto));
 				
 		for (String id : dto.getPropertyIDs()) {		

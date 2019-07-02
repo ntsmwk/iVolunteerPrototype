@@ -81,24 +81,5 @@ public class MarketplaceApplication implements CommandLineRunner {
 			}
 		}
 		
-		
-//		UserDefinedTaskTemplate single = st.createTemplateWithAllProperties();
-//		
-//		if (!userDefinedTaskTemplateRepository.exists(single.getId())) {
-//			userDefinedTaskTemplateRepository.save(single);
-//			System.out.println("TestTemplate nested added");
-//		} else {
-//			System.out.println("TestTemplate nested already in db");
-//		}
-//		
-//	
-//		UserDefinedTaskTemplate nested = st.createNestedTemplateWithExamples();
-//		
-//		if (!userDefinedTaskTemplateRepository.exists(nested.getId())) {
-//			userDefinedTaskTemplateRepository.save(nested);
-//			System.out.println("TestTemplate nested added");
-//		} else {
-//			System.out.println("TestTemplate nested already in db");
-//		}
 	}
 }

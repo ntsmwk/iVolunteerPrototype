@@ -7,6 +7,6 @@ import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
 @Mapper
-public abstract class SinglePropertyRuleMapper implements AbstractMapper<SinglePropertyRule, RuleDTO> {
+public abstract class SingleRuleMapper implements AbstractMapper<SinglePropertyRule, RuleDTO> {
 
 }

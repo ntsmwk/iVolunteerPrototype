@@ -64,9 +64,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       .then(() => {
         this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
           this.properties = properties;
-          console.log("loaded Properties: ")
-          console.log(this.properties);
-        
         })
         .then(() => {
           if (!isNullOrUndefined(this.template)) {
@@ -91,19 +88,15 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
   navigateEditForm() {
-    console.log("navigate to edit form");
     this.router.navigate([`/main/task-templates/user/edit/${this.marketplace.id}/${this.template.id}`], {queryParams: {ref: 'single'}});
   }
 
   deleteTemplate() {
-    console.log("clicked delete template");
-
     this.dialogFactory.confirmationDialog(
       "Are you sure?", "Are you sure you want to delete this Template? This action cannot be reverted")
       .then((cont: boolean) => {
         if (cont) {
           this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, this.template.id).toPromise().then( (success: boolean) => {
-            console.log("done - navigate back");
             this.navigateBack();
           });
         }
@@ -113,12 +106,9 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     
 
   addPropertyDialog() {
-    console.log("clicked add property");
-
     this.dialogFactory.addPropertyDialog(this.template, this.properties).then((propIds: string[]) => {   
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
-          console.log("service called");
           this.refresh();
         });
       }
@@ -126,8 +116,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
   
   removePropertyDialog() {
-    console.log("clicked remove properies");
-
     this.dialogFactory.removePropertyDialog(this.template).then((propIds: string[]) => {
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.removePropertiesFromSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
@@ -138,9 +126,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     
   }
 
-  //TODO
   changePropertyOrderDialog() {
-    console.log("clicked order properties");
 
     this.dialogFactory.changePropertyOrderDialog(this.template.properties).then((data: SortDialogData) => {
       if (!isNullOrUndefined(data)) {
@@ -148,15 +134,8 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
           data.list[i].order = i;
         }
 
-        console.log("Properties after order change");
-
-        console.log(data);
-        // this.template.properties = properties;
-
         this.userDefinedTaskTemplateService.updatePropertyOrderSingle(this.marketplace, this.template.id, data.list).toPromise().then((ret: UserDefinedTaskTemplate) => {
-          
-          console.log("result");
-          console.log(ret);
+
           this.refresh();
         });
 
@@ -166,8 +145,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
   editDescriptionDialog() {
-    console.log("entered edit Description Dialog");
-
     this.dialogFactory.editTemplateDescriptionDialog(this.template).then((description: string) => {
       if (!isNullOrUndefined(description)) {
         this.userDefinedTaskTemplateService.updateRootTaskTemplate(this.marketplace, this.template.id, null, description).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
@@ -178,8 +155,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
   
   editNameDialog() {
-    console.log("Entered edit Name Dialog");
-
     this.dialogFactory.editTemplateNameDialog(this.template).then((name: string) => {
       if (!isNullOrUndefined(name)) {
         this.userDefinedTaskTemplateService.updateRootTaskTemplate(this.marketplace, this.template.id, name, null).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
@@ -188,9 +163,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       }
     });
   }
-
-
-
 
   private refresh() {
     this.isLoaded = false;

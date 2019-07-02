@@ -29,7 +29,6 @@ export class DynamicFormComponent implements OnInit {
 
 
     if (this.formDisabled) {
-      console.log("Disabling form");
       this.form.disable();
     }
 
@@ -42,16 +41,9 @@ export class DynamicFormComponent implements OnInit {
 
     if (this.form.valid) {
       this.output = JSON.stringify(this.form.value);
-      
-
-      console.log("Values")
-      console.log(this.form.value);
-  
       this.fireResultEvent();
       
     } else {
-      console.log("not valid - try again");
-
       let firstKey: string;
       
       //Mark errornous Fields
@@ -66,9 +58,6 @@ export class DynamicFormComponent implements OnInit {
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
     for (let q of questions) {
-      // console.log("Q: " + q.key);
-      // console.log(q);
-      // console.log("========");
       control.get(q.key).markAsTouched()
       if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));
@@ -85,7 +74,4 @@ export class DynamicFormComponent implements OnInit {
     window.history.back();
   }
 
-  removeProperty(question: QuestionBase<any>) {
-    console.log("clicked Remove Property")
-  }
 }

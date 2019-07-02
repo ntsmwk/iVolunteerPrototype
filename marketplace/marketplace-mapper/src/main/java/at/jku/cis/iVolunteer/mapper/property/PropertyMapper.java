@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
-import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
+import at.jku.cis.iVolunteer.mapper.property.rule.SingleRuleMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.MultiProperty;
@@ -27,7 +27,7 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 @Component
 public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Object>> {
 	
-	@Autowired SinglePropertyRuleMapper ruleMapper;
+	@Autowired SingleRuleMapper singleRuleMapper;
 	@Autowired MultiRuleMapper multiRuleMapper;
 	
 	@Autowired CompetenceMapper competenceMapper;
@@ -109,7 +109,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 				for (SinglePropertyRule r : s.getRules()) {
 					rules.add(r);
 				}
-				propertyDTO.setRules(ruleMapper.toDTOs(rules));
+				propertyDTO.setRules(singleRuleMapper.toDTOs(rules));
 			}
 			
 			
@@ -210,7 +210,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			List<SinglePropertyRule> rules = new ArrayList<SinglePropertyRule>();
 			if (target.getRules() != null) {
 				for (RuleDTO r : target.getRules()) {
-					rules.add(ruleMapper.toEntity(r));
+					rules.add(singleRuleMapper.toEntity(r));
 				}
 			}
 			ret.setRules(rules);

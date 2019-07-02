@@ -6,10 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.mongodb.async.SingleResultCallback;
+
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
@@ -50,7 +53,7 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 					
 				}
 			}
-			
+						
 			dto.setKind("single");
 			
 			dto.setProperties(props);

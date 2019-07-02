@@ -55,7 +55,6 @@ export class ChooseTemplateToCopyDialogComponent implements OnInit {
 
 
   getTemplateNames() {
-    console.log("prepare Choose Properties Step for template ");
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
@@ -82,7 +81,6 @@ export class ChooseTemplateToCopyDialogComponent implements OnInit {
   }
 
   setReturnValues() {
-    // console.log(this.firstFormGroup.value);
     this.data.newLabel = this.firstFormGroup.get('name').value;
     this.data.newDescription = this.firstFormGroup.get('description').value;
   }

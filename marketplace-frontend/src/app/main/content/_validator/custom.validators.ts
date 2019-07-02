@@ -19,14 +19,8 @@ export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
             return null;
         }
-
-        // if (!containsKeyThis && !containsKeyOther) {
-        //     console.log("keys_null");
-        //     return null;
-        // }
 
         let displayError = false;
        
@@ -40,7 +34,6 @@ export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
             displayError = false;
         }
 
-        // return !isEmptyInputValue(control.get(keyThis).value) && isEmptyInputValue(control.get(keyOther).value) ? {'requiredother': {keyThis: keyThis, keyOther: keyOther}} : null;
         return displayError ? {'requiredother': {'keyThis': keyThis, 'keyOther': keyOther}} : null;
 
     };
@@ -88,7 +81,6 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
             return null;
         }
 
@@ -123,7 +115,6 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
             displayError = false;
         }
 
-        // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
         return displayError ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
 
     };
@@ -146,7 +137,6 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
             return null;
         }
 
@@ -178,19 +168,6 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
             displayError = false;
         }
 
-        // if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue >= thisValue) {
-
-        //     console.log("inside");
-        //     if (control.get(keyOther).hasError('incorrect_min')) {
-                
-        //         console.log(keyOther + " has incorrect_min - deleting");
-        //         delete control.get(keyOther).errors['incorrect_min'];
-        //     }
-
-        //     displayError = false;
-        // }
-
-        // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
         return displayError ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
 
     };

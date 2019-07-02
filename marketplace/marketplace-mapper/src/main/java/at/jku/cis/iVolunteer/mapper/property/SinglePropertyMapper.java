@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
+import at.jku.cis.iVolunteer.mapper.property.rule.SingleRuleMapper;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
@@ -26,7 +26,7 @@ import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 @Component
 public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Object>, SinglePropertyDTO<Object>>{
 	
-	@Autowired SinglePropertyRuleMapper ruleMapper;
+	@Autowired SingleRuleMapper ruleMapper;
 	@Autowired CompetenceMapper competenceMapper;
 	@Autowired ListEntryMapper listEntryMapper;
 
@@ -41,7 +41,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
 		
-//		propertyDTO.setValue(source.getValue());
 		propertyDTO.setOrder(source.getOrder());
 		
 		propertyDTO.setKind(source.getKind());
@@ -116,20 +115,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		prop.setId(target.getId());
 		prop.setName(target.getName());
 		prop.setOrder(target.getOrder());
-//		
-//		if (target.getKind().equals(PropertyKind.DATE)) {
-////			prop.setValue(this.convertObjectToDate(target.getValue()));
-//			prop.setDefaultValue(this.convertObjectToDate(target.getDefaultValue()));
-//		
-//		
-//		} else if (target.getKind().equals(PropertyKind.FLOAT_NUMBER)) {
-////			<>prop.setValue(this.convertObjectToDouble(target.getValue()));
-//			prop.setDefaultValue(this.convertObjectToDouble(target.getDefaultValue()));
-//		} else {
-////			prop.setValue(target.getValue());
-//			prop.setDefaultValue(target.getDefaultValue());
-//		
-//		}
 				
 		prop.setKind(target.getKind());
 		
@@ -178,7 +163,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 	
 	}
 	
-
 	@Override
 	public List<SingleProperty<Object>> toEntities(List<SinglePropertyDTO<Object>> targets) {
 		if (targets == null) {
@@ -193,57 +177,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		return list;
 	}
 	
-//	//TODO ??not sure if fixed - kinda ugly 
-//		private Date convertObjectToDate(Object source) {
-//			try {
-//				
-//				//System.out.println("convert: " + source);
-//				
-//				if (source instanceof Long) {
-//					//System.out.println("convert long - " + source.getClass().getName());
-//					return new Date((Long)source);
-//					
-//				} else if (source instanceof Date) {
-//					//System.out.println("convert Date - " + source.getClass().getName());
-//					return (Date) source;
-//				} else if (source instanceof String) {
-//					//System.out.println("convert String - " + source.getClass().getName());
-//					
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//					Date date = sdf.parse((String) source); 
-//					
-//					return date;
-//				} else if (source == null) {
-////					Date date = new Date(0);
-//					return null;
-//					
-//				} else {
-//					//System.out.println("class: " + source.getClass().getName());
-//					//System.out.println(source);
-//					throw new IllegalArgumentException();
-//				}
-//				
-//			} catch (NullPointerException | NumberFormatException e ) {
-//				System.out.println("entered Exception Branch convert Object to Date");
-//				return null;
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				System.out.println("Unparsable Date");
-//				return null;
-//			}
-//		}
-//		
-//		private Double convertObjectToDouble(Object source) {
-//			try {
-//				
-//				return (Double) source;
-//			} catch (ClassCastException e) {
-//				System.out.println("Double ClassCastException triggered: " + source);
-//				return Double.parseDouble((String) source);
-//			} catch (NumberFormatException e) {
-//				return 0.0;
-//			}
-//		}
 
 	
 }

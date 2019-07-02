@@ -79,6 +79,11 @@ public class UserDefinedTaskTemplateController {
 	@GetMapping("/tasktemplate/user/{templateId}")
 	public UserDefinedTaskTemplateDTO findTemplateById(@PathVariable("templateId") String templateId) {		
 		UserDefinedTaskTemplate t = userDefinedTaskTemplateRepository.findOne(templateId);
+		
+		
+		System.out.println(((SingleProperty)t.getProperties().get(0)).getRules().get(0));
+		
+		System.out.println(userDefinedTaskTemplateMapper.toDTO(t).getProperties().get(0));
 
 		return userDefinedTaskTemplateMapper.toDTO(userDefinedTaskTemplateRepository.findOne(templateId));
 	}
@@ -92,11 +97,7 @@ public class UserDefinedTaskTemplateController {
 	@GetMapping("/tasktemplate/user/names")
 	public List<String> getAllTemplateNames() {
 		List<String> templateNames = userDefinedTaskTemplateRepository.findAll().parallelStream().map(UserDefinedTaskTemplate::getName).collect(Collectors.toList());
-		
-		System.out.println(templateNames.size());
-		for (String s : templateNames) {
-			System.out.println("Name: " + s);
-		}
+				
 		
 		return templateNames;
 		
@@ -106,9 +107,7 @@ public class UserDefinedTaskTemplateController {
 	@GetMapping("/properties/{propId}/parents")
 	public List<PropertyParentItemDTO> getPropertyParents(@PathVariable("propId") String propId, 
 			@RequestParam(value = "templateId", required = true) String templateId, @RequestParam(value = "subtemplateId", required = false) String subtemplateId) {
-		
-		System.out.println("called getPropetyParents");
-		
+				
 		if (subtemplateId != null) {
 			MultiUserDefinedTaskTemplate root = (MultiUserDefinedTaskTemplate) this.userDefinedTaskTemplateRepository.findOne(templateId);
 			SingleUserDefinedTaskTemplate nested = root.getTemplates().stream().filter(t -> t.getId().equals(subtemplateId)).findFirst().get();
@@ -119,8 +118,6 @@ public class UserDefinedTaskTemplateController {
 			
 			return propertyParentItemMapper.toDTOs(items);
 			
-		} else {
-			System.out.println("isNull");
 		}
 		
 		
@@ -129,9 +126,7 @@ public class UserDefinedTaskTemplateController {
 	}
 
 	@PostMapping("/tasktemplate/user/new")
-	public UserDefinedTaskTemplateDTO createRootTemplate(@RequestBody String[] params, @RequestParam(value = "type", required = true) String type) {
-		System.out.println("create task template " + type);
-		
+	public UserDefinedTaskTemplateDTO createRootTemplate(@RequestBody String[] params, @RequestParam(value = "type", required = true) String type) {		
 		if (type.equals("single")) {
 			
 			SingleUserDefinedTaskTemplate taskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
@@ -155,7 +150,6 @@ public class UserDefinedTaskTemplateController {
 	
 	@PostMapping("/tasktemplate/user/{templateId}/new")
 	public UserDefinedTaskTemplateDTO createSubTemplate(@PathVariable("templateId") String templateId, @RequestBody String[] params) {
-		System.out.println("Create sub template called");
 		
 		SingleUserDefinedTaskTemplate newTaskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
 		newTaskTemplate.setId(ObjectId.get().toHexString());
@@ -181,7 +175,6 @@ public class UserDefinedTaskTemplateController {
 	
 	@PostMapping("/tasktemplate/user/{templateId}/new-copy")
 	public UserDefinedTaskTemplateDTO createTemplateFromExisting(@PathVariable("templateId") String templateId, @RequestBody String[] params) {
-		System.out.println("Create template from Copy called");
 		UserDefinedTaskTemplate existingTemplate = userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		if (existingTemplate == null) {throw new NotAcceptableException("no template with id " + templateId + " in database - should not happen");}
@@ -214,9 +207,7 @@ public class UserDefinedTaskTemplateController {
 	@PutMapping("/tasktemplate/user/{templateId}/update")
 	public UserDefinedTaskTemplateDTO updateRootTemplate(@PathVariable("templateId") String templateId, @RequestBody String[] params) {
 		UserDefinedTaskTemplate taskTemplate = userDefinedTaskTemplateRepository.findOne(templateId);
-		
-		System.out.println("called update task Template");
-		
+				
 		if (params[0] != null) {
 			taskTemplate.setName(params[0]);
 		}
@@ -255,15 +246,10 @@ public class UserDefinedTaskTemplateController {
 		System.out.println("called remove single");
 		
 		UserDefinedTaskTemplate rem = userDefinedTaskTemplateRepository.findOne(templateId);
-		
-		System.out.println("Removing TASKTEMPLATE: " + rem.getId() + ": " + rem.getName());// + " - Properties: " + rem.getProperties().size());
-		
+			
 		userDefinedTaskTemplateRepository.delete(templateId);
 		
 		boolean ret = !userDefinedTaskTemplateRepository.exists(templateId);	
-
-
-		if (ret) System.out.println("Deletion successful"); else System.out.println("Deletion failed");
 		
 		return ret;
 		
@@ -271,7 +257,6 @@ public class UserDefinedTaskTemplateController {
 	
 	@DeleteMapping("/tasktemplate/user/{templateId}/{subtemplateId}")
 	public boolean deleteTemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId) {
-		System.out.println("called remove nested");
 
 		MultiUserDefinedTaskTemplate root = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -282,9 +267,7 @@ public class UserDefinedTaskTemplateController {
 		
 		boolean  ret = !remainingSubTemplates.contains(new SingleUserDefinedTaskTemplate(subtemplateId));
 		userDefinedTaskTemplateRepository.save(root);
-		
-		if (ret) System.out.println("Deletion successful"); else System.out.println("Deletion failed");
-		
+				
 		return ret;
 	}
 	
@@ -309,7 +292,6 @@ public class UserDefinedTaskTemplateController {
 	public PropertyDTO<Object> getPropertyFromSubtemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, 
 			@PathVariable("propId") String propId) {
 		
-		System.out.println("called get property from subtemplate");
 		Property ret = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId))
 		.getTemplates().stream()
 			.filter(t -> t.getId().equals(subtemplateId)).findFirst().get()
@@ -323,7 +305,6 @@ public class UserDefinedTaskTemplateController {
 	//Add Properties to Single Template
 	@PutMapping("/tasktemplate/user/{templateId}/addproperties")
 	public UserDefinedTaskTemplateDTO addProperties(@PathVariable("templateId") String templateId,   @RequestBody String[] propIds) {
-		System.out.println("called add properties single");
 
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -331,7 +312,6 @@ public class UserDefinedTaskTemplateController {
 			Property p = propertyRepository.findOne(propId);
 			if (!t.getProperties().contains(p)) {
 				t.getProperties().add(p);
-				System.out.println("added " + p.getId() );
 			}
 		}
 					
@@ -343,7 +323,6 @@ public class UserDefinedTaskTemplateController {
 	//Add Properties to SubTemplate
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/addproperties")
 	public UserDefinedTaskTemplateDTO addProperties(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody String[] propIds) {
-		System.out.println("called add properties single");
 
 		MultiUserDefinedTaskTemplate rootTemplate = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId));
 		
@@ -373,7 +352,6 @@ public class UserDefinedTaskTemplateController {
 			
 			if (p != null && !subTemplate.getProperties().contains(p)) {
 				subTemplate.getProperties().add(p);
-				System.out.println("Added " + p.getId() + " to nested template " + templateId + " > " + subtemplateId + "(index " + indexArr[0] + ")");
 			}
 		}
 		rootTemplate.getTemplates().set(indexArr[0], subTemplate);
@@ -386,14 +364,9 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Single Template
 	@PutMapping("/tasktemplate/user/{templateId}/updateproperties")
 	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
-		System.out.println("called updated properties");
 
-		
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
-		
-
-		System.out.println("INCOMING PROPERTIES: ");
-		
+				
 		List<PropertyDTO<Object>> propertyList = Arrays.asList(properties);
 
 		//Recursively set properties		
@@ -450,7 +423,6 @@ public class UserDefinedTaskTemplateController {
 		
 		for(PropertyDTO<Object> dto : updateProperties) {
 			Property p = propertyMapper.toEntity(dto);
-			System.out.println("===Property to Update===");
 
 			if (!p.getKind().equals(PropertyKind.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
 
@@ -461,13 +433,9 @@ public class UserDefinedTaskTemplateController {
 				currentProperty.setValues(updateProperty.getValues());
 				currentProperty.setDefaultValues(updateProperty.getDefaultValues());
 				
-				System.out.println("updated Property: " + updateProperty.getName()); // + " = " + update.getValues()!=null && update.getValues().get(0) != null ? update.getValues().get(0).value : "null");
-				System.out.println("Default: " + updateProperty.getName()); // + " = " + update.getDefaultValues()!=null && update.getDefaultValues().get(0) != null ? update.getDefaultValues().get(0).value : "null");
-				
 				returnProperties.add(currentProperty);
 				
 			} else if (p.getKind().equals(PropertyKind.MULTI)) {
-				System.out.println("\nMULTIPLE--> " + p.getId());
 				
 				MultiProperty currentProperty = (MultiProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
 				
@@ -476,10 +444,8 @@ public class UserDefinedTaskTemplateController {
 				currentProperty.setProperties(nestedList);
 				
 				returnProperties.add(currentProperty);
-				System.out.println();
 			}
 			
-			System.out.println("========================");
 
 		}
 		
@@ -489,7 +455,6 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Single Template 
 	@PutMapping("/tasktemplate/user/{templateId}/updatepropertyorder")
 	public UserDefinedTaskTemplateDTO updatePropertyOrderSingle(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
-		System.out.println("called updated properties");
 		
 		SingleUserDefinedTaskTemplate rootTemplate = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -508,7 +473,6 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Nested Template inside a Root Template
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/updatepropertyorder")
 	public UserDefinedTaskTemplateDTO updatePropertyOrderNested(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody PropertyDTO<Object>[] properties) {
-		System.out.println("called updated properties");
 		
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -550,9 +514,7 @@ public class UserDefinedTaskTemplateController {
 	
 	@PutMapping("/tasktemplate/user/{templateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @RequestBody List<String> propIds ) {
-		
-		System.out.println("called remove properties single");
-	
+			
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 				
 		ArrayList<Property> remainingProperties = t.getProperties().stream()
@@ -568,9 +530,7 @@ public class UserDefinedTaskTemplateController {
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @PathVariable(value = "subtemplateId") String subtemplateId, 
 			@RequestBody String[] propIds ) {
-		
-		System.out.println("called remove properties nested");
-		
+				
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		int[] indexArr = {0}; //we want the index of the found subtemplate to get quick access to in order to replace it

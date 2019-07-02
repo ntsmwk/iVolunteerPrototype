@@ -25,20 +25,15 @@ export interface SingleValidatorData {
   providedIn: 'root',
 })
 export class QuestionService {
-  //questions: QuestionBase<any>[] = [];
   key: number =  0;
 
   getQuestionsFromProperties(properties: Property<any>[]): any[] {
-    //this.questions = []; //reset questions
     let questions: QuestionBase<any>[] = [];
-    
-    console.log("Question Service called");
-    console.log(properties);
 
     questions = this.setQuestions(properties);
 
     console.log(questions);
-    console.log("-->done with question setup");
+    console.log(properties);
 
     return questions.sort((a, b) => a.order - b.order);
   }
@@ -90,8 +85,6 @@ export class QuestionService {
       });
 
     } else if (property.kind === PropertyKind.DATE) {
-      console.log("leifnleifn");
-      console.log(property);
       question = new DatepickerQuestion({
         value: this.setDateValue(Property.getValue(property)),
       });
@@ -101,13 +94,10 @@ export class QuestionService {
 
     ///TEST MultiProp List
     else if (property.kind === PropertyKind.MULTI) {
-      console.log("Multiple Property found:");
-      console.log(property);
       question = new MultipleQuestion({
         subQuestions: this.setQuestions(property.properties),
       });
     } else {
-      console.log("property kind not implemented: " + property.kind);
       question = new GenericQuestion({
            
       });
@@ -167,7 +157,6 @@ export class QuestionService {
     let questions: QuestionBase<any>[] = [];
     for (let property of properties) {
       
-      console.log("Kind: " + property.kind + " Name: " + property.name);
       let question = this.createQuestion(property);
 
       question.key = property.id;
@@ -190,13 +179,15 @@ export class QuestionService {
   }
 
   private getValidatorData(rules: Rule[], propertyKind: PropertyKind /*, questions: QuestionBase<any>[]*/): ValidatorData {
+    console.log("fetching Validators");
+    console.log(rules);
+    
     let validators: ValidatorFn[] = [];
     let messages: Map<string,string> = new Map<string,string>();
     let required: boolean = false;
 
     if (!isNullOrUndefined(rules)) {
       for (let rule of rules) {
-        //console.log("processing rule: " + rule.id);
 
         let singleValidatorData = this.convertRuleToValidator(rule, propertyKind);
         
@@ -207,8 +198,6 @@ export class QuestionService {
           if (singleValidatorData.key === 'required') {
             required = true;
           }
-        } else {
-          console.log("undefined - done nothing - continue");
         }
 
         
@@ -273,8 +262,6 @@ export class QuestionService {
        * MultiProperties Validator
        */
       case RuleKind.REQUIRED_OTHER: 
-        console.log("adding required other validator");
-        console.log(rule);
         validator = requiredOther(rule.key, rule.keyOther);
         key = 'requiredother';
         break;
@@ -290,13 +277,10 @@ export class QuestionService {
         break;
 
       default:
-        console.error("VALIDATORS: switch-default should not happen");
         break;
     }
    
     const ret = {key: key, validator: validator};
-    console.log("Q");
-    console.log(ret);
     return ret;
   }
 }

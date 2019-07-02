@@ -37,16 +37,3 @@ export class UserDefinedTaskTemplateStub {
     description: string;
     kind: string;
 }
-
-// export class UserDefinedTaskTemplateIdNameStub {
-//     id: string;
-//     name: string;
-
-//     templates?: UserDefinedSubTaskTemplateIdNameStub[];
-//     properties?: PropertyIdNameStub[];
-// }
-
-// export class UserDefinedSubTaskTemplateIdNameStub {
-//     id: string;
-//     name: string;
-// }

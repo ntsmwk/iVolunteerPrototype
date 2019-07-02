@@ -1,8 +1,4 @@
 package at.jku.cis.iVolunteer.mapper.property.listEntry;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +27,6 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEn
 		} 
 		
 		ListEntryDTO<Object> dto = new ListEntryDTO<>();
-//		System.out.println("Processing " + source.getId() + ": " + source.getValue());
 		dto.setId(source.getId());
 		dto.setValue(source.getValue());
 
@@ -39,11 +34,6 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEn
 		
 	}
 	
-//	@Override 
-//	public ListEntryDTO<Object> toDTO(ListEntry<Object> source) {
-//		throw new UnsupportedOperationException("use Method specifying the PropertyKind to ensure type safety");
-//		//return toDTO(source, null);
-//	}
 
 	@Override
 	public List<ListEntryDTO<Object>> toDTOs(List<ListEntry<Object>> sources) {

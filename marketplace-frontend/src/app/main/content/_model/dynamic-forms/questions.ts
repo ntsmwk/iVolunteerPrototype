@@ -144,14 +144,10 @@ import { ValidatorFn } from "@angular/forms";
   export class MultipleQuestion extends QuestionBase<string> {
     controlType = 'multiple'
     options: {key: string, value: string}[] = [];
-    //values: {key: string, value: string}[] = [];
-    //subQuestions: QuestionBase<any>[] = [];
 
     constructor(options: {} = {}) {
       super(options);
       this.options = options['options'] || [];
-      //this.values = options['values'] || [];
-      //this.subQuestions = options['subQuestions'] || [];
     }
   }
 

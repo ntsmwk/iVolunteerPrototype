@@ -29,8 +29,6 @@ export class SortDialogComponent {
 //  displayedColumns: string[] = ['label', 'options'];
 
   ngOnInit() {
-    console.log(this.dialogRef);
-    console.log(this.data);
 
   }
   
@@ -38,9 +36,6 @@ export class SortDialogComponent {
     this.dialogRef.close();
   }
 
-  printProperties() {
-    console.log(this.data);
-  }
 
   
 

@@ -61,17 +61,14 @@ export class SinglePropertyComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log("init")
     this.preparePropertyKindOptions();
     this.prepareRuleKindOptions();
 
     this.clearForm();
 
     if (!isNullOrUndefined(this.currentProperty)) {
-      console.log("prefiling form");
       this.prefillForm();
     } else {
-      console.log("empty form");
       this.isDropdown = false;
       this.hasRules = false;
     }
@@ -174,9 +171,6 @@ export class SinglePropertyComponent implements OnInit {
       this.hasRules = false;
     }
 
-    console.log(this.form.controls);
-    console.log(this.currentProperty);
-
   }
 
   //----------------------------------------------------
@@ -190,15 +184,12 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   addLegalValue() {
-    console.log("adding legal value");
-    // this.legalValues = this.legalValuesForm.get('legalValues') as FormArray;
     this.legalValues = this.form.get('legalValues') as FormArray;
 
     this.legalValues.push(this.createLegalValue());
   }
 
   markLegalValuesAsTouched() {
-    // let legalValues = (this.form.get('legalValues') as FormGroup).controls
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
 
       Object.keys((this.form.get('legalValues') as FormArray).controls).forEach(key => {
@@ -212,7 +203,6 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalAndDefaultValues() {
-    console.log("clearing");
     this.clearDefaultValues();
     this.clearLegalValues();
   }
@@ -222,17 +212,10 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalValues() {
-    console.log("legal values");
-
-    console.log(this.form);
-
-
 
     if (!isNullOrUndefined(this.form.get('legalValues')) && !this.isDropdown) {
-      console.log("removing");
       this.form.removeControl('legalValues');
     } else {
-      console.log("adding");
       this.form.addControl('legalValues', this.formBuilder.array([], listNotEmptyValidator()));
     }
 
@@ -246,27 +229,19 @@ export class SinglePropertyComponent implements OnInit {
 
   //----Only Rules which are fitting for the Type should be displayed
   prepareValidRules(event) {
-
     this.hasRules = false;
     this.clearRules();
-
-    console.log("prepare Rules " + event);
-    console.log(event);
 
     switch (event.value) {
 
       //Texts: no ranges, no required_true reserved for boolean
       // allowed are amount ranges, required and regex
       case PropertyKind.TEXT: case PropertyKind.LONG_TEXT: {
-        console.log("text")
         for (let option of this.ruleKindOptions) {
           if (option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
             option.display = true;
-            console.log(option.kind + ": true")
           } else {
             option.display = false;
-            console.log(option.kind + ": false")
-
           }
         }
         break;
@@ -275,15 +250,11 @@ export class SinglePropertyComponent implements OnInit {
 
       //Boolean: only required_true
       case PropertyKind.BOOL: {
-        console.log("bool")
         for (let option of this.ruleKindOptions) {
           if (option.kind == RuleKind.REQUIRED_TRUE) {
             option.display = true;
-            console.log(option.kind + ": true")
-
           } else {
             option.display = false;
-            console.log(option.kind + ": false")
 
           }
         }
@@ -479,27 +450,15 @@ export class SinglePropertyComponent implements OnInit {
     this.submitPressed = true;
 
     if (valid && !this.ruleEditActive) {
-
       let property = this.createPropertyFromForm();
-
-      console.log(property);
-
-      console.log("call propertyService...");
 
       // call service to send to server (and save in db)
       this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
-        console.log("PropertyService called, property added");
-        console.log(property);
         this.navigateBack();
       });
 
       let ret = JSON.stringify(property, null, 2);
-      console.log(ret);
     } else {
-      console.log("invalid");
-      console.log("Valid: " + valid);
-      console.log("RuleEdit: " + this.ruleEditActive);
-
       this.markLegalValuesAsTouched();
     }
   }

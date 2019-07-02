@@ -40,7 +40,6 @@ export class PropertyDetailComponent implements OnInit {
       }
 
   ngOnInit() {
-    console.log("Navigated Property Detail Page");
     
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
@@ -52,16 +51,13 @@ export class PropertyDetailComponent implements OnInit {
 
       Promise.all([
         this.route.params.subscribe(params => {
-          console.log(params);
           parameters = params;
         }),
         this.route.queryParams.subscribe(params => {
-          console.log(params);
           queryParameters = params;
         })  
       ]).then(() => {
 
-        console.log(parameters);
         this.loadProperty(parameters['marketplaceId'], parameters['templateId'], 
           parameters['subtemplateId'], parameters['propertyId'], queryParameters['ref']);
       });
@@ -70,9 +66,6 @@ export class PropertyDetailComponent implements OnInit {
 
 
   loadProperty(marketplaceId: string, templateId: string, subtemplateId: string, propId: string, ref: string): void {
-    console.log("MP: " + marketplaceId + " TEMPLID: " + templateId + " SUBTEMPLID: " + subtemplateId + " PROPID " + propId + " REF" + ref); 
-
-
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
 
@@ -80,7 +73,6 @@ export class PropertyDetailComponent implements OnInit {
         this.propertyService.getPropertyFromList(marketplace, propId).toPromise().then((property: Property<any>) => {
           this.property = property;    
         }).then(() => {
-          console.log(this.property);
           this.isLoaded = true;
         });
        
@@ -91,8 +83,6 @@ export class PropertyDetailComponent implements OnInit {
           this.property = property;
 
           this.propertyService.getPropertyParentItems(this.marketplace, property.id, templateId, subtemplateId).toPromise().then((parents: PropertyParentItem[]) => {
-            console.log("Recheived PropertyParentItem");
-            console.log(parents);
             this.templateItem = parents[0];
 
             if (parents.length >= 2) {

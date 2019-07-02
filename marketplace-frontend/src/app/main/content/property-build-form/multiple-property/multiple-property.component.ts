@@ -93,7 +93,6 @@ export class MultiplePropertyComponent implements OnInit {
     }
 
     this.dataSource.data = this.propertyListItems.filter((p: PropertyListItem) => {
-      // console.log(p);
       if (p.show == true) {
         return p;
       }
@@ -179,8 +178,6 @@ export class MultiplePropertyComponent implements OnInit {
   }
 
   public addProperty(prop: PropertyListItem) {
-    console.log("adding property ID " + prop.id);
-    console.log(prop);
     prop.show = false;
     this.addedProperties.push(prop);
     this.addedDataSource.data = this.addedProperties;
@@ -192,9 +189,6 @@ export class MultiplePropertyComponent implements OnInit {
         return p;
       }
     });
-    console.log("AFTER");
-    console.log(this.propertyListItems);
-    
   }
 
   public removeProperty(prop: PropertyListItem) {
@@ -223,16 +217,12 @@ export class MultiplePropertyComponent implements OnInit {
   }
 
   public testRow(row: any) {
-    console.log(row);
   }
 
   public onSubmit(valid: boolean) {
     this.submitPressed = true;
 
     if (this.form.valid && this.addedProperties.length > 0) {
-      console.log ("Submitting");
-      
-
       if (!isNullOrUndefined(this.currentProperty)) {
         this.property.id = this.currentProperty.id;
       }
@@ -248,17 +238,12 @@ export class MultiplePropertyComponent implements OnInit {
       }
 
       this.propertyService.addMultipleProperty(this.marketplace, this.property).toPromise().then(() => {
-        console.log("done sending multiple Property");
         this.navigateBack();
       });
-
-
-      console.log(JSON.stringify(this.property));
 
       //todo call service
     } else {
       this.form.get('name').markAsTouched();
-      console.log("invalid")
     }
   }
 

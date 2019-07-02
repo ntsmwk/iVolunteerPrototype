@@ -49,22 +49,15 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
   }
 
   onRowSelect(t: UserDefinedTaskTemplateStub) {
-    console.log(t.id + ": " + t.name + " row selected!");
-    console.log("navigate to TaskTemplate detail page");
     if (t.kind == 'single') {
       this.router.navigate(['/main/task-templates/user/detail/single/' + this.marketplace.id + '/' + t.id]);
     } else if (t.kind = 'nested') {
-      console.log("TODO navigate to nested form builder");
-      console.log(t);
       this.router.navigate(['main/task-templates/user/detail/nested/' + this.marketplace.id + '/' + t.id]);
     }
     
   }
 
   newSingleTaskTemplate() {
-    console.log("clicked new TaskTemplate!");
-    console.log("navigate to new TaskTemplate from");
-
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
       this.userDefinedTaskTemplateService.newRootSingleTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
         if (!isNullOrUndefined(t)) {
@@ -75,9 +68,6 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
   }
 
   newNestedTaskTemplate() {
-    console.log("clicked new nested Task Template");
-
-
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
       this.userDefinedTaskTemplateService.newRootMultiTaskTemplate(this.marketplace, result[0], result[1]).toPromise().then((t: UserDefinedTaskTemplate) => {
         if (!isNullOrUndefined(t)) {
@@ -103,13 +93,7 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
     this.dialogFactory.chooseTemplateToCopyDialog(entries).then((result: any) => {
 
       if (!isNullOrUndefined(result)) {
-        console.log("Result: ");
-        console.log(result);
-
         this.userDefinedTaskTemplateService.newTaskTemplateFromExisting(this.marketplace, result.copyId, result.newName, result.newDescription).toPromise().then((newTemplate: UserDefinedTaskTemplate) => {
-          console.log("done - new Template:");
-          console.log(newTemplate);
-
 
           this.dataSource.data.push({id: newTemplate.id, name: newTemplate.name, description: newTemplate.description, kind: newTemplate.kind});
 
@@ -117,16 +101,9 @@ export class UserDefinedTaskTemplateListComponent implements OnInit {
           
         });
 
-      } else {
-        console.log("cancelled");
       }
     });
 
-    
-    // this.userDefinedTaskTemplateService.newTaskTemplateFromExisting(this.marketplace, idOfCopy, "COPY", "DESC").toPromise().then(() => {
-    //   this.isLoaded = false;
-    //   this.ngOnInit();
-    // });
   }
 
 
