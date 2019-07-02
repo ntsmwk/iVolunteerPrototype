@@ -29,7 +29,7 @@
   <!-------------------------------------------------> 
    <!-- <div *ngIf="model.kind!='LIST' && model.kind!=undefined"> -->
   <div *ngIf="form.get('kind').value != 'LIST' && form.get('kind').value!=''">
-    <label id="is-dropdown"><h2>Should be Property contain a set of fixed Values inside a Drop-Down-Menu?</h2></label>
+    <label id="is-dropdown"><h2>Should the Property contain a set of fixed Values inside a Drop-Down-Menu?</h2></label>
     
     <mat-radio-group aria-labelledby="is-dropdown" name="is-dropdown" [(ngModel)]="isDropdown" (change)="clearLegalAndDefaultValues()" [ngModelOptions]="{standalone: true}" required>
       <mat-radio-button [value]="true" matTooltip="Property with a single value" matTooltipPosition="above">Yes</mat-radio-button>

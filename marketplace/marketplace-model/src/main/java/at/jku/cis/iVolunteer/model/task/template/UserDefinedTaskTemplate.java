@@ -1,28 +1,22 @@
 package at.jku.cis.iVolunteer.model.task.template;
 
-import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.iVolunteerObject.IVolunteerObject;
+
 
 /**
  * @author alexander
  *
  */
 @Document
-public class UserDefinedTaskTemplate {
+public class UserDefinedTaskTemplate extends IVolunteerObject {
 
-	@Id
-	String id;
 	String name;
 	String description;
 	
 	int order;
-	
-	
 	
 	public UserDefinedTaskTemplate() {
 	}

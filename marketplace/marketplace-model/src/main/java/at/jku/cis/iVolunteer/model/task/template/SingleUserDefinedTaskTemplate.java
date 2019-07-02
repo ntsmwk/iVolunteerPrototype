@@ -15,7 +15,7 @@ import at.jku.cis.iVolunteer.model.property.SingleProperty;
 @Document
 public class SingleUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 	
-	List<Property> properties;
+//	List<Property> properties;
 	
 	public SingleUserDefinedTaskTemplate() {
 	}
