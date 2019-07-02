@@ -54,6 +54,12 @@ public class StandardTemplates {
 		
 		t.setName("All Properties");
 		List<Property> p = propertyRepository.findAll();
+		
+		int i = 0;
+		for (Property prop : p) {
+			prop.setOrder(i);
+			i++;
+		}
 		t.setProperties(p);
 		return t;
 		
@@ -77,6 +83,13 @@ public class StandardTemplates {
 		nsp1.add(propertyRepository.findOne("urgent"));
 		nsp1.add(propertyRepository.findOne("workshift"));
 		
+		int i = 0;
+		for (Property prop : nsp1) {
+			prop.setOrder(i);
+			i++;
+		}
+		
+		
 		s1.setProperties(nsp1);
 		nestedTemplates.add(s1);
 		
@@ -90,6 +103,13 @@ public class StandardTemplates {
 		nsp2.add(propertyRepository.findOne("urgent"));
 		nsp2.add(propertyRepository.findOne("priority"));
 		nsp2.add(propertyRepository.findOne("description"));
+		
+		i = 0;
+		for (Property prop : nsp2) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		s2.setProperties(nsp2);
 		nestedTemplates.add(s2);
 
@@ -107,6 +127,11 @@ public class StandardTemplates {
 		nsp3.add(propertyRepository.findOne("priority"));
 		nsp3.add(propertyRepository.findOne("importancy"));
 		
+		i = 0;
+		for (Property prop : nsp3) {
+			prop.setOrder(i);
+			i++;
+		}
 		
 		s3.setProperties(nsp3);
 		nestedTemplates.add(s3);
@@ -122,8 +147,21 @@ public class StandardTemplates {
 		nsp4.add(propertyRepository.findOne("location"));
 		nsp4.add(propertyRepository.findOne("starting_date"));
 		nsp4.add(propertyRepository.findOne("end_date"));
+		
+		i = 0;
+		for (Property prop : nsp4) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		s4.setProperties(nsp4);
 		nestedTemplates.add(s4);
+		
+		i = 0;
+		for (UserDefinedTaskTemplate t : nestedTemplates) {
+			t.setOrder(i);
+			i++;
+		}
 		
 		nested.setTemplates(nestedTemplates);
 		
@@ -145,6 +183,12 @@ public class StandardTemplates {
 		t.getProperties().add(propertyRepository.findOne("paid"));
 		t.getProperties().add(propertyRepository.findOne("comments"));
 		
+		int i = 0;
+		for (Property prop : t.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		return t;
 	
 	}
@@ -159,6 +203,12 @@ public class StandardTemplates {
 		t.getProperties().add(propertyRepository.findOne("description"));
 		t.getProperties().add(propertyRepository.findOne("aquireable_competences"));
 		t.getProperties().add(propertyRepository.findOne("comments"));
+		
+		int i = 0;
+		for (Property prop : t.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
 		
 		return t;
 	
@@ -182,6 +232,12 @@ public class StandardTemplates {
 		t.getProperties().add(propertyRepository.findOne("required_competences"));
 		t.getProperties().add(propertyRepository.findOne("aquireable_competences"));
 		
+		int i = 0;
+		for (Property prop : t.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		return t;
 	}
 	
@@ -198,6 +254,12 @@ public class StandardTemplates {
 		t.getProperties().add(propertyRepository.findOne("duration_time"));
 		t.getProperties().add(propertyRepository.findOne("vehicle_selection"));
 		t.getProperties().add(propertyRepository.findOne("comments"));
+		
+		int i = 0;
+		for (Property prop : t.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
 		
 		return t;
 
@@ -219,6 +281,12 @@ public class StandardTemplates {
 		t.getProperties().add(propertyRepository.findOne("grade"));
 		t.getProperties().add(propertyRepository.findOne("comments"));
 		
+		int i = 0;
+		for (Property prop : t.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		return t;
 	
 	
@@ -238,6 +306,7 @@ public class StandardTemplates {
 		SingleUserDefinedTaskTemplate t1 = new SingleUserDefinedTaskTemplate("preparation");
 		t1.setName("Preparation");
 		t1.setDescription("(Ausbildung: Vorbereitung) Prepare Training");
+
 		
 		t1.setProperties(new ArrayList<>());
 		t1.getProperties().add(propertyRepository.findOne("description"));
@@ -245,6 +314,13 @@ public class StandardTemplates {
 		t1.getProperties().add(propertyRepository.findOne("department"));
 		t1.getProperties().add(propertyRepository.findOne("required_competences"));
 		t1.getProperties().add(propertyRepository.findOne("aquireable_competences"));
+
+		
+		int i = 0;
+		for (Property prop : t1.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
 		
 		root.getTemplates().add(t1);
 		
@@ -258,6 +334,14 @@ public class StandardTemplates {
 		t2.getProperties().add(propertyRepository.findOne("required_competences"));
 		t2.getProperties().add(propertyRepository.findOne("aquireable_competences"));
 		t2.getProperties().add(propertyRepository.findOne("comments"));
+		
+		
+		i = 0;
+		for (Property prop : t2.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t2);
 		
 		SingleUserDefinedTaskTemplate t3 = new SingleUserDefinedTaskTemplate("conduct");
@@ -274,6 +358,13 @@ public class StandardTemplates {
 		t3.getProperties().add(propertyRepository.findOne("comments"));
 		t3.getProperties().add(propertyRepository.findOne("points"));
 		t3.getProperties().add(propertyRepository.findOne("offered_rewards"));
+		
+		i = 0;
+		for (Property prop : t3.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t3);
 		
 		SingleUserDefinedTaskTemplate t4 = new SingleUserDefinedTaskTemplate("follow_up");
@@ -285,7 +376,20 @@ public class StandardTemplates {
 		t4.getProperties().add(propertyRepository.findOne("required_competences"));
 		t4.getProperties().add(propertyRepository.findOne("aquireable_competences"));
 		t4.getProperties().add(propertyRepository.findOne("comments"));
+		
+		i = 0;
+		for (Property prop : t4.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t4);
+		
+		i = 0;
+		for (UserDefinedTaskTemplate template : root.getTemplates()) {
+			template.setOrder(i);
+			i++;
+		}
 		
 		return root;
 	}
@@ -313,6 +417,12 @@ public class StandardTemplates {
 		t1.getProperties().add(propertyRepository.findOne("points"));
 		t1.getProperties().add(propertyRepository.findOne("offered_rewards"));
 		
+		int i = 0;
+		for (Property prop : t1.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t1);
 		
 		SingleUserDefinedTaskTemplate t2 = new SingleUserDefinedTaskTemplate("move_the_vehicle");
@@ -328,6 +438,12 @@ public class StandardTemplates {
 		t2.getProperties().add(propertyRepository.findOne("points"));
 		t2.getProperties().add(propertyRepository.findOne("offered_rewards"));
 		
+		i = 0;
+		for (Property prop : t2.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t2);
 		
 		SingleUserDefinedTaskTemplate t3 = new SingleUserDefinedTaskTemplate("clean_vehicle");
@@ -342,7 +458,19 @@ public class StandardTemplates {
 		t3.getProperties().add(propertyRepository.findOne("points"));
 		t3.getProperties().add(propertyRepository.findOne("offered_rewards"));
 
+		i = 0;
+		for (Property prop : t3.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t3);
+		
+		i = 0;
+		for (UserDefinedTaskTemplate template : root.getTemplates()) {
+			template.setOrder(i);
+			i++;
+		}
 		
 		return root;
 	}
@@ -369,6 +497,12 @@ public class StandardTemplates {
 		t1.getProperties().add(propertyRepository.findOne("points"));
 		t1.getProperties().add(propertyRepository.findOne("offered_rewards"));
 		
+		int i = 0;
+		for (Property prop : t1.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t1);
 		
 		SingleUserDefinedTaskTemplate t2 = new SingleUserDefinedTaskTemplate("breathing_examination");
@@ -388,6 +522,12 @@ public class StandardTemplates {
 		t2.getProperties().add(propertyRepository.findOne("points"));
 		t2.getProperties().add(propertyRepository.findOne("offered_rewards"));
 		
+		i = 0;
+		for (Property prop : t2.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
+		
 		root.getTemplates().add(t2);
 		
 		SingleUserDefinedTaskTemplate t3 = new SingleUserDefinedTaskTemplate("first_aid_course");
@@ -405,17 +545,25 @@ public class StandardTemplates {
 		t3.getProperties().add(propertyRepository.findOne("points"));
 		t3.getProperties().add(propertyRepository.findOne("offered_rewards"));
 		t3.getProperties().add(propertyRepository.findOne("aquireable_competences"));
+		
+		i = 0;
+		for (Property prop : t3.getProperties()) {
+			prop.setOrder(i);
+			i++;
+		}
 
 		root.getTemplates().add(t3);
 		
 		SingleUserDefinedTaskTemplate t4 = new SingleUserDefinedTaskTemplate("vaccination");
 		t4.setName("Vaccination");
 		t4.setDescription("(Impfung)");
+
 		root.getTemplates().add(t4);
 		
 		SingleUserDefinedTaskTemplate t5 = new SingleUserDefinedTaskTemplate("compressor");
 		t5.setName("Yearly Instruction: Air-Compressor");
 		t5.setDescription("(Jährliche Unterweisung: Atemluft-Kompressor)");
+
 		root.getTemplates().add(t5);
 		
 		SingleUserDefinedTaskTemplate t6 = new SingleUserDefinedTaskTemplate("crane");
@@ -427,6 +575,12 @@ public class StandardTemplates {
 		t7.setName("Yearly Instruction: Stapler");
 		t7.setDescription("(Jährliche Unterweisung: Stapler)");
 		root.getTemplates().add(t7);
+		
+		i = 0;
+		for (UserDefinedTaskTemplate template : root.getTemplates()) {
+			template.setOrder(i);
+			i++;
+		}
 		
 		return root;
 

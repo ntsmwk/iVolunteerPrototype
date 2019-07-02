@@ -20,9 +20,12 @@ public class UserDefinedTaskTemplate {
 	String name;
 	String description;
 	
+	int order;
 	
 	
-	public UserDefinedTaskTemplate() {}
+	
+	public UserDefinedTaskTemplate() {
+	}
 	
 	public UserDefinedTaskTemplate(String id) {
 		this.id = id;
@@ -50,6 +53,14 @@ public class UserDefinedTaskTemplate {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public int getOrder() {
+		return order;
+	}
+	
+	public void setOrder(int order) {
+		this.order = order;
 	}
 	
 	@Override

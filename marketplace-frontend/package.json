@@ -57,6 +57,7 @@
     "moment": "2.22.1",
     "ng-dynamic-component": "3.1.2",
     "ng2-charts": "1.6.0",
+    "ng2-dragula": "2.1.1",
     "ngrx-store-freeze": "0.2.2",
     "ngx-color-picker": "6.0.0",
     "ngx-cookie-service": "1.0.10",

@@ -74,7 +74,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			
 		} else {
-			SingleProperty<Object> s = (SingleProperty<Object>) source;
+			SingleProperty<Object> s = new SingleProperty<Object>(source);
 			
 			//TODO legal Values
 			if (s.getLegalValues() != null) {
@@ -147,8 +147,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		prop.setName(target.getName());
 		prop.setKind(target.getKind());
 		prop.setOrder(target.getOrder());
-		prop.setCustom(target.isCustom());
-		
+		prop.setCustom(target.isCustom());		
 		
 		
 		

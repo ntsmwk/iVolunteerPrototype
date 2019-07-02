@@ -17,6 +17,9 @@ public class Property {
 	
 	boolean custom;
 	
+	public Property() {
+	}
+	
 	public String getId() {
 		return id;
 	}

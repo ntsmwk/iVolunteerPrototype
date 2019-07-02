@@ -12,6 +12,7 @@ import {fuseConfig} from './fuse-config';
 import {AppComponent} from './app.component';
 import {FuseMainModule} from './main/main.module';
 import { FuseModule } from '@fuse/fuse.module';
+import { DragulaModule } from 'ng2-dragula';
 
 
 const appRoutes: Routes = [
@@ -30,6 +31,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules/*, enableTracing: true*/}),
+
+    DragulaModule.forRoot(),
 
     // Fuse Main and Shared modules
     FuseSharedModule,

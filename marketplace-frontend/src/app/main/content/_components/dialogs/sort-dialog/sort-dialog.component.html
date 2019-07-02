@@ -1,17 +1,32 @@
+<h1 mat-dialog-title>{{data.label}}</h1>
+<mat-dialog-content>
+
+  <div style="padding-top: 10px; padding-bottom: 15px">
+    Grab a property and drop it at the desired position
+  </div>
 
 
-  <h1 mat-dialog-title>{{data.label}}</h1>
-  <mat-dialog-content>
-    TODO TODO TODO
-    Either use ng7 material drag-and-drop or ng2-dragula
 
-    
-    
+  <div class="wrapper">
+    <div class="container" dragula="DRAGULA_FACTS" [(dragulaModel)]="data.list">
+      <mat-card *ngFor="let elem of data.list" style="cursor: grab; width:250px; height: 50px;">
+        <!-- style=" cursor: grab; width:250px; height: 50px; text-align: center; outline-style:double; outline-color:
+        black; margin-bottom: 5px"> -->
 
-  </mat-dialog-content>  
-  <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-    <button mat-button [mat-dialog-close]="data">Apply</button>
-  </mat-dialog-actions>
-  
+        {{elem.name}}
+
+
+      </mat-card>
+
+    </div>
+  </div>
+
+
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button [mat-dialog-close]="data" (click)="printProperties">Apply</button>
+</mat-dialog-actions>

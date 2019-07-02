@@ -9,6 +9,8 @@ export class UserDefinedTaskTemplate {
 
     properties?: Property<any>[];    
     templates?: UserDefinedTaskTemplate[];
+
+    order: number;
 }
 
 export class SingleUserDefinedTaskTemplate {
@@ -16,6 +18,8 @@ export class SingleUserDefinedTaskTemplate {
     name: string;
     description: string;
     properties: Property<any>[];
+
+    order: number;
 }
 
 export class MultiUserDefinedTaskTemplate {
@@ -23,6 +27,8 @@ export class MultiUserDefinedTaskTemplate {
     name: string;
     description: string;
     templates: UserDefinedTaskTemplate[];
+
+    order: number;
 }
 
 export class UserDefinedTaskTemplateStub {

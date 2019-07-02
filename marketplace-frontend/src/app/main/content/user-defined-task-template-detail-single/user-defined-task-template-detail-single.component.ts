@@ -11,8 +11,9 @@ import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { QuestionService } from '../_service/question.service';
 import { QuestionBase } from '../_model/dynamic-forms/questions';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNull } from 'util';
 import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
+import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 
 @Component({
   selector: 'user-defined-task-template-detail-single',
@@ -141,8 +142,25 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   changePropertyOrderDialog() {
     console.log("clicked order properties");
 
-    this.dialogFactory.changePropertyOrderDialog(this.properties).then((properties: any[]) => {
-      console.log("TODO implement");
+    this.dialogFactory.changePropertyOrderDialog(this.template.properties).then((data: SortDialogData) => {
+      if (!isNullOrUndefined(data)) {
+        for (let i = 0; i<data.list.length; i++) {
+          data.list[i].order = i;
+        }
+
+        console.log("Properties after order change");
+
+        console.log(data);
+        // this.template.properties = properties;
+
+        this.userDefinedTaskTemplateService.updatePropertyOrderSingle(this.marketplace, this.template.id, data.list).toPromise().then((ret: UserDefinedTaskTemplate) => {
+          
+          console.log("result");
+          console.log(ret);
+          this.refresh();
+        });
+
+      }  
 
     });
   }

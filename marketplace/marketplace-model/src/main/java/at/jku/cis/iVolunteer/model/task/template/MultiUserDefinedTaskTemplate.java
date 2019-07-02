@@ -17,15 +17,19 @@ public class MultiUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 	
 	List<SingleUserDefinedTaskTemplate> templates;
 	
-	public MultiUserDefinedTaskTemplate() {}
+	public MultiUserDefinedTaskTemplate() {
+		super();
+	}
 	
 	public MultiUserDefinedTaskTemplate(UserDefinedTaskTemplate template) {
+		super();
 		this.id = template.id;
 		this.name = template.name;
 		this.description = template.description;
 	}
 	
 	public MultiUserDefinedTaskTemplate(String id) {
+		super();
 		this.id = id;
 	}
 

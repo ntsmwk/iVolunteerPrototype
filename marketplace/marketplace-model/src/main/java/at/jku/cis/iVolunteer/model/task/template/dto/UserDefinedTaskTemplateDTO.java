@@ -15,6 +15,8 @@ public class UserDefinedTaskTemplateDTO {
 	List<PropertyDTO<Object>> properties;
 	List<SingleUserDefinedTaskTemplateDTO> templates;
 
+	int order;
+	
 	public String getId() {
 		return id;
 	}
@@ -61,6 +63,14 @@ public class UserDefinedTaskTemplateDTO {
 	
 	public void setTemplates(List<SingleUserDefinedTaskTemplateDTO> templates) {
 		this.templates = templates;
+	}
+	
+	public int getOrder() {
+		return order;
+	}
+	
+	public void setOrder(int order) {
+		this.order = order;
 	}
 	
 	@Override

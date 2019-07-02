@@ -4,6 +4,7 @@ import { Marketplace } from '../_model/marketplace';
 import { PropertyListItem, Property } from '../_model/properties/Property';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
+import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 
 @Injectable({
   providedIn: 'root'
@@ -135,6 +136,12 @@ export class UserDefinedTaskTemplateService {
     console.log("calling delete " + marketplace.url +"/tasktemplate/user/id/")
     return this.http.delete(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}`);
   }
+  
+  public updateTemplateOrderNested(marketplace: Marketplace, templateId: string, templates: UserDefinedTaskTemplate[]) {
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updatetemplateorder`, templates);
+
+  }
+
 
 
   //Properties inside Template
@@ -179,11 +186,21 @@ export class UserDefinedTaskTemplateService {
   }
 
   private updatePropertiesInTemplate(marketplace: Marketplace, templateId: string, properties: Property<any>[]) {    
+    console.log("update in Template")
     return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updateproperties`, properties);
   }
 
   private updatePropertiesInSubtemplate(marketplace: Marketplace, templateId: string, subtemplateId: string, properties: Property<any>[]) {    
     return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updateproperties`, properties);
   }
+
+  public updatePropertyOrderSingle(marketplace: Marketplace, templateId: string, properties: Property<any>[]) {
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updatepropertyorder`, properties);
+  }
+
+  public updatePropertyOrderNested(marketplace: Marketplace, templateId: string, subtemplateId: string, properties: Property<any>[]) {
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updatepropertyorder`, properties);
+  }
+
 
 }

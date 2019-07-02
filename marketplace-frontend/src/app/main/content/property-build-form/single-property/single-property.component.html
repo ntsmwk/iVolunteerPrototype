@@ -17,7 +17,7 @@
     <div>&nbsp;&nbsp;</div>
 
     <mat-form-field style="width: 250px">
-      <mat-select placeholder="Property Kind / Type" formControlName="kind" (selectionChange)="clearLegalAndDefaultValues()" required>
+      <mat-select placeholder="Property Kind / Type" formControlName="kind" (selectionChange)="clearLegalAndDefaultValues(); prepareValidRules($event)" required>
         <!-- <mat-option value=""></mat-option> -->
         <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
       </mat-select>

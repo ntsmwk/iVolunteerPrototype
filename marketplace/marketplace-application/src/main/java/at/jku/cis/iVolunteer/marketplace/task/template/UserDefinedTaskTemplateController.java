@@ -288,6 +288,17 @@ public class UserDefinedTaskTemplateController {
 		return ret;
 	}
 	
+	@PutMapping("/tasktemplate/user/{templateId}/updatetemplateorder")
+	public UserDefinedTaskTemplateDTO updateTemplateOrderNested(@PathVariable("templateId") String templateId, @RequestBody List<SingleUserDefinedTaskTemplate> templates) {
+		
+		MultiUserDefinedTaskTemplate root = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
+		root.setTemplates(templates);
+		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(root);
+		
+		
+		return userDefinedTaskTemplateMapper.toDTO(ret);
+	}
+	
 	
 	///////////////////////////////////////////////////////
 	//////////Property-Manipulation
@@ -377,13 +388,14 @@ public class UserDefinedTaskTemplateController {
 	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
 		System.out.println("called updated properties");
 
+		
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
-		System.out.println();
+
 		System.out.println("INCOMING PROPERTIES: ");
 		
 		List<PropertyDTO<Object>> propertyList = Arrays.asList(properties);
-		
+
 		//Recursively set properties		
 		List<Property> returnProperties = setPropertiesRec(propertyList,  t.getProperties());
 		
@@ -473,6 +485,68 @@ public class UserDefinedTaskTemplateController {
 		
 		return returnProperties;
 	}
+	
+	//Update Properties from Single Template 
+	@PutMapping("/tasktemplate/user/{templateId}/updatepropertyorder")
+	public UserDefinedTaskTemplateDTO updatePropertyOrderSingle(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
+		System.out.println("called updated properties");
+		
+		SingleUserDefinedTaskTemplate rootTemplate = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
+		
+		if (rootTemplate == null) { throw new NotAcceptableException("no template with id " + templateId + " in database - should not happen");}
+		
+		List<Property> newProperties = propertyMapper.toEntities(Arrays.asList(properties));
+		
+		//Brute Forcing my Way
+		rootTemplate.setProperties(newProperties);
+		
+		SingleUserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
+		
+		return userDefinedTaskTemplateMapper.toDTO(ret);
+	}
+	
+	//Update Properties from Nested Template inside a Root Template
+	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/updatepropertyorder")
+	public UserDefinedTaskTemplateDTO updatePropertyOrderNested(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody PropertyDTO<Object>[] properties) {
+		System.out.println("called updated properties");
+		
+		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
+		
+		if (rootTemplate == null) { throw new NotAcceptableException("no template with id " + templateId + " in database - should not happen");}
+		
+		int[] indexArr = {0}; //we want the index of the found subtemplate to get quick access to in order to replace it
+		SingleUserDefinedTaskTemplate subTemplate;	
+		
+		try {	
+			subTemplate = rootTemplate.getTemplates()
+					.stream().filter(sub -> {
+						
+						boolean b = sub.getId().equals(subtemplateId);
+						if (!b) {
+							int i = indexArr[0];
+							i++;
+							indexArr[0] = i;
+						}	
+						return b;	
+					}).findFirst().get();
+		} catch (NoSuchElementException e) {
+			throw new NotAcceptableException("no subtemplate with id " + subtemplateId + " in database - should not happen");
+		}
+		
+
+		//Brute Forcing my Way
+		List<Property> newProperties = propertyMapper.toEntities(Arrays.asList(properties));
+		
+
+		
+		rootTemplate.getTemplates().get(indexArr[0]).setProperties(newProperties);
+
+				
+		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
+		
+		return userDefinedTaskTemplateMapper.toDTO(ret);
+	}
+		
 	
 	@PutMapping("/tasktemplate/user/{templateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @RequestBody List<String> propIds ) {

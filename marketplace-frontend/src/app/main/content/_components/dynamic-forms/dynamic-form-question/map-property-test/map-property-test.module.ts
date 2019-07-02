@@ -5,6 +5,7 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { RouterModule, Route } from '@angular/router';
 import { AgmCoreModule } from '@agm/core';
 import { MatInputModule, MatButtonModule, MatCommonModule, MatFormFieldModule } from '@angular/material';
+import { DragulaModule } from 'ng2-dragula';
 
 
 const routes: Route[] = [
@@ -22,6 +23,8 @@ const routes: Route[] = [
     MatButtonModule,
     MatFormFieldModule,
 
+    DragulaModule,
+    
     AgmCoreModule.forRoot({
       // apiKey: 'AIzaSyDiwSZ8L-1r9TXW_q5UTK_--GE2MKHK-jE' //enter Google Maps API Key
       

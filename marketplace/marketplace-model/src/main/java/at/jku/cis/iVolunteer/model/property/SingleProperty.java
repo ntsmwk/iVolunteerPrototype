@@ -22,15 +22,17 @@ public class SingleProperty<T> extends Property {
 	
 	List<SinglePropertyRule> rules;
 
-	
 	public SingleProperty() {
+		
 	}
+	
 	
 	public SingleProperty(Property p) {
 		super();
 		super.id = p.id;
 		super.kind = p.kind;
 		super.name = p.name;
+		super.order = p.order;
 //		super.rules = p.rules;
 	}
 

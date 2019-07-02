@@ -172,7 +172,8 @@ export class QuestionService {
 
       question.key = property.id;
       question.label = property.name;
-      question.order = properties.indexOf(property);
+      // question.order = properties.indexOf(property);
+      question.order = property.order;
 
       //Set Validators
 

@@ -28,6 +28,8 @@ public class SingleUserDefinedTaskTemplateMapper implements AbstractMapper<Singl
 		dto.setId(source.getId());
 		dto.setName(source.getName());
 		dto.setDescription(source.getDescription());
+		
+		dto.setOrder(source.getOrder());
 
 		
 		
@@ -70,6 +72,7 @@ public class SingleUserDefinedTaskTemplateMapper implements AbstractMapper<Singl
 		template.setName(target.getName());
 		template.setDescription(target.getDescription());
 		
+		template.setOrder(target.getOrder());
 		
 		if (target.getProperties() != null) {
 			

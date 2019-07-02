@@ -17,15 +17,18 @@ public class SingleUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 	
 	List<Property> properties;
 	
-	public SingleUserDefinedTaskTemplate() {}
+	public SingleUserDefinedTaskTemplate() {
+	}
 	
 	public SingleUserDefinedTaskTemplate(UserDefinedTaskTemplate template) {
+		super();
 		this.id = template.id;
 		this.name = template.name;
 		this.description = template.description;
 	}
 	
 	public SingleUserDefinedTaskTemplate(String id) {
+		super();
 		this.id = id;
 	}
 

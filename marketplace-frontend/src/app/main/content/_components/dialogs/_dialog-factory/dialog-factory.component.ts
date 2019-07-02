@@ -239,7 +239,30 @@ export class DialogFactoryComponent implements OnInit {
 
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
-      data: {order: properties, label: "Change Property Order"}
+      // height: '80%',
+      data: {list: properties, label: "Change Property Order"}
+    });
+
+    let ret: any = undefined;
+    
+    dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
+      console.log("Dialog closed - displayed result");
+      console.log(result);
+      ret = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return ret;
+    });
+  }
+
+  changeSubtemplatesOrderDialog(template: UserDefinedTaskTemplate) {
+    console.log("clicked order properties");
+
+    const dialogRef = this.dialog.open(SortDialogComponent, {
+      width: '500px',
+      // height: '80%',
+      data: {list: template.templates, label: "Change Sub-Template Order"}
     });
 
     let ret: any = undefined;

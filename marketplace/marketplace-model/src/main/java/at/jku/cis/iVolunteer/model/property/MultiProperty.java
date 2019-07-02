@@ -22,6 +22,7 @@ public class MultiProperty extends Property {
 		super.id = p.id;
 		super.kind = p.kind;
 		super.name = p.name;
+		super.order = p.order;
 //		super.rules = p.rules;
 	}
 	
