@@ -53,17 +53,17 @@ public class PropertyController {
 		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
 		
 		//fix the ids for Default Values
-		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
-			for (ListEntry<Object> val : p.getLegalValues()) {
-				
-				try {
-					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
-					defaultValue.id = val.id;
-				} catch (NoSuchElementException e) {
-					continue;
-				}
-			}	
-		}
+//		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
+//			for (ListEntry<Object> val : p.getLegalValues()) {
+//				
+//				try {
+//					ListEntry<Object> defaultValue = p.getDefaultValues().stream().filter(entry -> entry.value.equals(val.value)).findFirst().get();
+//					defaultValue.id = val.id;
+//				} catch (NoSuchElementException e) {
+//					continue;
+//				}
+//			}	
+//		}
 		p.setCustom(true);
 		this.propertyRepository.save(p);
 					
