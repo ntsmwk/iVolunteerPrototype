@@ -28,4 +28,9 @@ export class TaskTemplateService {
     }
     return this.http.put(`${marketplace.url}/taskTemplate/${taskTemplate.id}`, taskTemplate);
   }
+
+
+  findAllMinimal(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/minimalTaskTemplate`);
+  }
 }

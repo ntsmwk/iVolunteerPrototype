@@ -1,0 +1,79 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+    
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1> USER DEFINED TASK TEMPLATES </h1>
+  </div>
+  <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+    <button mat-fab class="mat-warn" [matMenuTriggerFor]="newMenu" matTooltip="Add new Template" matTooltipPosition="above" aria-label="New TaskTemplate" *fuseIfOnDom
+      [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <mat-menu #newMenu="matMenu">
+    <button mat-menu-item (click)="newSingleTaskTemplate()">
+      <mat-icon>add</mat-icon>
+      <span>Single Task Template</span>
+    </button>
+    <button mat-menu-item (click)="newNestedTaskTemplate()">
+      <mat-icon>add</mat-icon>
+      <span>Nested Task Template</span>
+    </button>
+    <button mat-menu-item (click)="newTaskTemplateFromExisting()">
+      <mat-icon>add</mat-icon>
+      <span>...from existing Task Template</span>
+    </button>
+
+  </mat-menu>
+
+
+  
+
+  <div *ngIf="isLoaded">
+
+
+    <div class="table">
+      <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+              <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.id}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+              <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.name}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+            <mat-cell *matCellDef="let taskTemplate">{{taskTemplate.description}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let taskTemplate; let i = index">
+              <mat-icon class="iconButton" style="cursor: pointer" (click)="$event.stopPropagation(); removeTemplate(taskTemplate,i)" matTooltip="Delete Template" matTooltipPosition="above"
+                aria-label="Delete Template">delete</mat-icon> 
+            </mat-cell>
+          </ng-container>
+
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+      </mat-table>
+    </div>
+
+    <div class="no-data" *ngIf="dataSource.data == 0">
+      
+        No templates created yet!
+    </div>
+
+  </div>
+
+  <div *ngIf="!isLoaded">
+
+    <mat-spinner class="mat-spinner"></mat-spinner>
+
+  </div>
+
+</div>

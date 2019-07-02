@@ -1,0 +1,129 @@
+<div class="page-layout" [formGroup]="form">
+  <!-- <label [attr.for]="question.key">{{question.label}}</label> -->
+
+
+  <ng-template *ngTemplateOutlet="test"></ng-template>
+    
+  
+  <ng-template #test>
+    <div [ngSwitch]="question.controlType">  
+    
+      <mat-form-field class="form-field" *ngSwitchCase="'textbox'">
+        <input matInput placeholder="{{question.label}} {{requiredMarker}}"  [formControlName]="question.key"
+                [id]="question.key"  [type]="question.type" [value]="question.value"/>
+                
+                <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+                     
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'textarea'">
+        <textarea matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+                [id]="question.key" [type]="question.type" [value]="question.value" 
+                matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'numberbox'">
+        <input matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+                [id]="question.key" [type]="question.type" [value]="question.value"/>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>      
+      </mat-form-field>
+      
+      <mat-form-field class="form-field" *ngSwitchCase="'dropdown'">
+        
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}"  [formControlName]="question.key"
+                [id]="question.key" [value]="question.value">
+          <!-- <mat-option [value]="undefined"></mat-option> -->
+          <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>
+        </mat-select>
+        <!-- {{ getQuestionValue(question) }} -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'dropdown-multiple'">
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}"  [formControlName]="question.key"
+                [id]="question.key" multiple [(ngModel)]="question.values">
+        
+              <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>
+          
+        </mat-select>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'numberdropdown'">
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+                [id]="question.key" [value]="question.value">
+          <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>      
+        </mat-select>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+        {{ question.value }} - {{ question.values }}
+      </mat-form-field>
+
+      <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
+        <!-- the matInput with display:none makes the magic. It's ugly, I've warned you -->
+        <input matInput placeholder="{{question.label}} {{requiredMarker}}" style="display: none" >
+        <br>
+        <br>
+        <mat-radio-group name="{{question.label}}" [formControlName]="question.key"
+                [id]="question.key">
+          <mat-radio-button *ngFor="let opt of question.options" [value]="opt">{{opt}} &nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+      
+      
+    
+      <ng-container >
+        <mat-form-field class="form-field"  *ngSwitchCase="'datepicker'">
+
+          <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}" formControlName="{{question.key}}" 
+            [value]="question.value">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
+        </mat-form-field>
+      </ng-container>
+      
+      <mat-card *ngSwitchCase="'slidetoggle'">
+        <mat-slide-toggle class="slide-toggle-field" [id]="question.key" [formControlName]="question.key" 
+          [checked]="question.value">
+          {{question.label}} 
+        </mat-slide-toggle>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-card>
+
+
+      <div *ngSwitchCase="'multiple'" class="nested-border" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+        <!--Display question label (name of property)-->
+        <h2>{{ question.label }}</h2>
+            <!--Iterate though sub-questions, for every question call <app-question> -->
+        <div *ngFor="let q of question.subQuestions">  
+            <app-question [question]="q" [form]="getNestedFormGroups()"></app-question> 
+        </div>
+
+      </div>
+
+      <div *ngSwitchCase="'generic'">
+        generic property - not yet implemented: {{ question.label }}
+      </div>
+
+    </div>  
+  </ng-template>
+
+ 
+  
+<!-- 
+  <h1>Display template-ref again</h1>
+  <ng-template *ngTemplateOutlet="SwitchRef"></ng-template> -->
+
+
+
+</div>
+
+
+
+
+
+<!--   -->

@@ -14,14 +14,10 @@ import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;
 @Component
 public class AssignServiceTask implements ServiceTask {
 
-	@Autowired
-	private ContractorRestClient contractorRestClient;
+	@Autowired private ContractorRestClient contractorRestClient;
+	@Autowired private WorkflowMarketplaceRestClient marketplaceRestClient;
 
-	@Autowired
-	private WorkflowMarketplaceRestClient marketplaceRestClient;
-	
-
-	@Value("${marketplace.uri}")
+	@Value("${marketplace.uri}") 
 	private String marketplaceUri;
 
 	@Override
@@ -31,9 +27,9 @@ public class AssignServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: " + volunteerId + "}");
 
-		TaskDTO task = marketplaceRestClient.findTaskById(marketplaceUri,taskId, token);
-		SourceDTO source = marketplaceRestClient.findSource(marketplaceUri,token);
-		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById(marketplaceUri,volunteerId, token);
+		TaskDTO task = marketplaceRestClient.findTaskById(marketplaceUri, taskId, token);
+		SourceDTO source = marketplaceRestClient.findSource(marketplaceUri, token);
+		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById(marketplaceUri, volunteerId, token);
 		contractorRestClient.assignTask(task, source, volunteer, token);
 	}
 }

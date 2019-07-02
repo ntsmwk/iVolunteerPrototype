@@ -13,6 +13,7 @@ import at.jku.cis.iVolunteer.model.task.TaskStatus;
 public class TaskDTO implements IHashObject {
 	private String id;
 	private String name;
+	//private NamePropertyDTO name;
 	private String description;
 	private String workflowKey;
 	private String marketplaceId;

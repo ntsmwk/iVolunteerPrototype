@@ -1,0 +1,293 @@
+<!-- <form name="form" (ngSubmit)="onSubmit(f.form.valid, f)" #f='ngForm'> -->
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(f.form.valid, f)" #f='ngForm'>
+
+  <h1>Create Single Property</h1>
+
+  <!------------------------------------------------->
+  <!--------Property Name and Type Selection--------->
+  <!------------------------------------------------->  
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-form-field style="width: 500px">
+      <input matInput placeholder="Name" formControlName="name"/>
+      <mat-error *ngIf="this.form.controls['name'].hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="this.form.controls['name'].hasError('propertynameunique')">Duplicate Name - choose another name for the property</mat-error>
+    </mat-form-field>
+
+    <div>&nbsp;&nbsp;</div>
+
+    <mat-form-field style="width: 250px">
+      <mat-select placeholder="Property Kind / Type" formControlName="kind" (selectionChange)="clearLegalAndDefaultValues()" required>
+        <!-- <mat-option value=""></mat-option> -->
+        <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
+      </mat-select>
+    </mat-form-field> 
+  </div>
+
+  <!------------------------------------------------->
+  <!--Question if Values displayed in Dropdown Menu-->
+  <!-------------------------------------------------> 
+   <!-- <div *ngIf="model.kind!='LIST' && model.kind!=undefined"> -->
+  <div *ngIf="form.get('kind').value != 'LIST' && form.get('kind').value!=''">
+    <label id="is-dropdown"><h2>Should be Property contain a set of fixed Values inside a Drop-Down-Menu?</h2></label>
+    
+    <mat-radio-group aria-labelledby="is-dropdown" name="is-dropdown" [(ngModel)]="isDropdown" (change)="clearLegalAndDefaultValues()" [ngModelOptions]="{standalone: true}" required>
+      <mat-radio-button [value]="true" matTooltip="Property with a single value" matTooltipPosition="above">Yes</mat-radio-button>
+      &nbsp;
+      <mat-radio-button [value]="false" matTooltip="Property which contains more than one value" matTooltipPosition="above">No</mat-radio-button>
+      <!-- <mat-error *ngIf="submitPressed && (f.form.controls['is-dropdown']==undefined || f.form.controls['is-dropdown'].status=='INVALID')">Please choose an option</mat-error> -->
+    </mat-radio-group>
+  </div>
+
+  <br>
+
+  <!------------------------------------------------->
+  <!--Default Value without Legal Values / Dropdown-->
+  <!-------------------------------------------------> 
+
+  <div *ngIf="!isDropdown && isDropdown!=undefined">
+    <mat-form-field *ngIf="form.get('kind').value=='TEXT' || form.get('kind').value=='LONG_TEXT'" >
+        <input matInput placeholder="Default Text" formControlName="defaultValue"/>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="form.get('kind').value=='WHOLE_NUMBER' || form.get('kind').value=='FLOAT_NUMBER'" >
+        <input matInput placeholder="Default Number" type="number" formControlName="defaultValue"/>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="form.get('kind').value=='DATE'">
+        <input matInput [matDatepicker]="picker" placeholder="Default Date" formControlName="defaultValue"/>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="form.get('kind').value=='BOOL'" floatPlaceholder="always">
+        <input matInput placeholder="Default State" style="display: none">
+        <br>
+        <br>
+        <mat-radio-group name="Default State" formControlName="defaultValue">
+            <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
+            &nbsp;
+            <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
+        </mat-radio-group>
+    </mat-form-field>
+  </div>
+
+  <br>
+
+
+  <!---------------------->
+  <!-----Legal Values----->
+  <!---------------------->
+  <fieldset [formGroup]="form" *ngIf="isDropdown || form.get('kind').value=='LIST'" style="padding-left: 20px; padding-right: 50%">
+    <h2>Dropdown / List Values</h2>
+
+    <div formArrayName="legalValues" *ngFor="let value of form.get('legalValues').controls; let i = index;">
+      <div [formGroupName]="i">
+        
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <!--Value Fields-->
+          <div>
+            <mat-form-field *ngIf="form.get('kind').value=='TEXT' || form.get('kind').value=='LONG_TEXT' || form.get('kind').value=='LIST'">
+              <input matInput placeholder="Value {{i+1}}" formControlName="value" [value] ="value.get('value').value" (change)="legalValuesDirty=true" required/>
+              <mat-error *ngIf="value.get('value').hasError('required')">Field required - fill in or remove it</mat-error>
+            </mat-form-field>
+    
+            <mat-form-field *ngIf="form.get('kind').value=='WHOLE_NUMBER' || form.get('kind').value=='FLOAT_NUMBER'" >
+              <input matInput placeholder="Number {{i+1}}" formControlName="value" type="number" [value]="value.get('value').value" (change)="legalValuesDirty=true" required/>   
+              <mat-error *ngIf="value.get('value').hasError('required')">Field required - fill in or remove it</mat-error>
+            </mat-form-field>
+    
+            <mat-form-field *ngIf="form.get('kind').value=='DATE'">
+              <input matInput [matDatepicker]="picker2" placeholder="Date {{i+1}}" formControlName="value" [value]="value.get('value').value" (change)="legalValuesDirty=true" required/>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error *ngIf="value.get('value').hasError('required')">Field required - fill in or remove it</mat-error>
+            </mat-form-field>
+    
+            <mat-form-field *ngIf="form.get('kind').value=='BOOL'" floatPlaceholder="always">
+              <input matInput placeholder="Boolean Value {{i+1}}" style="display: none">
+              <br>
+              <br>
+              <mat-radio-group formControlName="value" [value]="value.get('value').value" (change)="legalValuesDirty=true" required>
+                  <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
+                  &nbsp;
+                  <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="value.get('value').hasError('required')">Field required - fill in or remove it</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!--Buttons-->
+          <div>
+              <!-- <mat-icon class="iconButton" (click)="revertPropertyLegalValue(i)" style="cursor: pointer" matTooltip="Revert Value" matTooltipPosition="above"
+              aria-label="Revert Value">replay</mat-icon> -->
+            <mat-icon class="iconButton" (click)="removeLegalValue(i)" style="cursor: pointer" matTooltip="Remove Value" matTooltipPosition="above"
+              aria-label="Remove Value">delete</mat-icon>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- <div *ngFor="let val of propertyLegalValuesCurrent; let i = index; trackBy:trackByFn" fxLayout="row" fxLayoutAlign="space-between center"> -->
+     
+      
+
+   
+  
+    <!--Add Value-->
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <mat-icon class="iconButton" (click)="addLegalValue()" style="cursor: pointer" matTooltip="Add Value" matTooltipPosition="above"
+          aria-label="Add Value">add</mat-icon> 
+          Add a new value
+      </div>
+    </div>
+
+    <!-- <mat-icon class="iconButton" (click)="updateLegalValues()" style="cursor: pointer" matTooltip="Update Values" matTooltipPosition="above"
+    aria-label="Update Values">check</mat-icon> -->
+
+    <mat-error *ngIf="submitPressed && form.get('legalValues').hasError('listnotempty')" >Add at least one value and confirm</mat-error>
+
+  </fieldset>
+  
+
+  <!------------------------------------------->
+  <!--Default Value when Legal Values present-->
+  <!-------------------------------------------> 
+
+  <div *ngIf="isDropdown || form.get('kind').value=='LIST'">
+    <mat-form-field>
+        <mat-select placeholder="Default Value" formControlName="defaultValue" [disabled]="form.get('legalValues').length <= 0">
+          <mat-option [value]=undefined ></mat-option>
+          <mat-option *ngFor="let val of form.get('legalValues').controls" [value]="val.get('value').value">{{val.get('value').value}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+  </div>
+
+
+<!----------------->
+<!----- RULES ----->
+<!----------------->
+
+  <!-- <div>
+    <label id="rules"><h2>Property contains rules?</h2></label>
+    <mat-slide-toggle [checked]="hasRules" [(ngModel)]="hasRules" [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+  </div> -->
+
+  <div *ngIf="form.get('kind').value!=''">
+    <label id="has-rules"><h2>Do you want to set Rules for the property</h2></label>
+      
+    <mat-radio-group aria-labelledby="has-rules" [(ngModel)]="hasRules" (change)="clearRules()" [ngModelOptions]="{standalone: true}">
+      <mat-radio-button [value]="true" matTooltip="Yes, the Property should contain rules" matTooltipPosition="above">Yes</mat-radio-button>
+      &nbsp;
+      <mat-radio-button [value]="false" matTooltip="No, the Property should not contain rules" matTooltipPosition="above">No</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <br>
+  <br>
+
+  <!-- <div *ngIf="hasRules" style="padding-left: 20px;"> -->
+    <fieldset [formGroup]="form" *ngIf="hasRules" style="padding-left: 20px; padding-right: 50%">
+
+      <h2>Rule List</h2>
+      <br>
+
+      <!--Rules FormArray-->
+      <div formArrayName="rules" *ngFor="let rule of form.get('rules').controls; let i = index;">
+        <div [formGroupName]="i">
+
+          <!--Type and Value should be in the same line-->
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field  style="width: 100%">
+                <mat-select  placeholder="Rule Type*" formControlName="kind" [value]="rule.get('kind').value">
+                  <div *ngFor="let option of ruleKindOptions">
+                    <mat-option *ngIf="option.display" [value]="option.kind" [disabled]=isRuleKindDisabled(option.kind) (click)="ruleKindUpdatedEvent(rule.get('kind').value, rule, option)" >{{option.label}}</mat-option> 
+                  </div>
+                </mat-select> 
+                <mat-error *ngIf="isFieldInvalid(rule.get('kind'))">This field is required - select a rule type</mat-error>
+            </mat-form-field>
+          
+            <mat-form-field  *ngIf="hasValueField(rule.get('kind').value)" style="width: 100%">
+            <!-- <mat-form-field> -->
+              <input matInput placeholder="Value*" formControlName="value" [value]="rule.get('value').value" type="number" />
+            </mat-form-field>
+          </div>
+
+          <!--Data field (i.e. for RegEx) in new line-->
+          <div>
+            <mat-form-field *ngIf="hasDataField(rule.get('kind').value)" style="width: 100%">
+            <!-- <mat-form-field> -->
+              <!-- <textarea matInput placeholder="Data" formControlName="data" [value]="rule.get('data').value" matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 required></textarea> -->
+              <input matInput placeholder="Data*" formControlName="data" [value]="rule.get('data').value" />
+
+              
+            </mat-form-field>
+          </div>
+          
+          <!--Message in new line-->
+          <mat-form-field style="width: 100%">
+              <input matInput placeholder="Message (optional)" formControlName="message" [value]="rule.get('message').value"/>
+          </mat-form-field>
+
+
+          <div *ngIf="!ruleEditActive && rule.disabled">
+            <mat-icon class="iconButton" (click)="setEnabledRule(rule)" style="cursor: pointer" matTooltip="Edit Rule" matTooltipPosition="above"
+              aria-label="Edit Rule">edit</mat-icon>
+            <mat-icon class="iconButton" (click)="removeRule(i)" style="cursor: pointer" matTooltip="Remove Rule" matTooltipPosition="above"
+              aria-label="Remove Rule">delete</mat-icon>
+          </div>
+
+          <div *ngIf="ruleEditActive && rule.disabled">
+              <mat-icon class="iconButton" style="color: grey; cursor: default" aria-label="Edit Rule">edit</mat-icon>
+              <mat-icon class="iconButton" style="color: grey; cursor: default" aria-label="Remove Rule">delete</mat-icon>
+          </div>
+  
+          <div *ngIf="ruleEditActive && rule.enabled">
+            <mat-icon class="iconButton" (click)="setDisabledRule(rule)" style="cursor: pointer" matTooltip="Update Rule" matTooltipPosition="above"
+              aria-label="Update Rule">check</mat-icon>
+
+            <mat-icon class="iconButton" (click)="revertRule(i)" style="cursor: pointer" matTooltip="Revert and Cancel" matTooltipPosition="above"
+              aria-label="Revert">cancel</mat-icon>
+
+            <!-- <mat-icon class="iconButton" (click)="removeRule(i)" style="cursor: pointer" matTooltip="Remove Rule" matTooltipPosition="above"
+              aria-label="Remove Rule">delete</mat-icon> -->
+          </div>
+
+
+        </div>
+
+        <!-- Chosen name: {{ orderForm.controls.items.controls[i].controls.name.value }} -->
+      </div>
+      <!--end for Array-->
+
+
+      <div *ngIf="!ruleEditActive">
+          <mat-icon class="iconButton" (click)="addRule()" style="cursor: pointer" matTooltip="New Rule" matTooltipPosition="above"
+            aria-label="New Rule">add</mat-icon>
+            Add a new Rule
+      </div>
+
+      <!-- <mat-error *ngIf="submitPressed && (model. <= 0 || model.legalValues == undefined)" >Add at least one value and confirm</mat-error> -->
+      <mat-error *ngIf="submitPressed && ruleEditActive">Confirm Rule before Saving</mat-error>
+      <mat-error *ngIf="submitPressed && form.get('rules').hasError('listnotempty')" >Add at least one rule and confirm</mat-error>
+
+    
+
+    </fieldset>
+    <!--end form-->
+
+  <!-- </div> -->
+  <!--end hasRules-->
+
+  <br>
+
+  <div fyLayout="row" fxLayoutAlign="start end">
+    <button *ngIf="form.get('kind').value!=''" type="submit" mat-raised-button color="primary" >Save</button>
+    <div>&nbsp;&nbsp;</div>
+    <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button>
+  </div>
+</form>
+

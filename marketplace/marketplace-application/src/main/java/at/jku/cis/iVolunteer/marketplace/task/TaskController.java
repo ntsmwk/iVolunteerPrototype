@@ -45,7 +45,6 @@ public class TaskController {
 	@Autowired private TaskInteractionRepository taskInteractionRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private TaskService taskService;
-
 	@Autowired private LoginService loginService;
 
 	@GetMapping("/task")
@@ -54,8 +53,6 @@ public class TaskController {
 			@RequestParam(value = "status", required = false) String status) {
 		return taskService.findAll(projectId, participantId, status);
 	}
-
-	
 
 	@GetMapping("/task/{id}")
 	public TaskDTO findById(@PathVariable("id") String id) {

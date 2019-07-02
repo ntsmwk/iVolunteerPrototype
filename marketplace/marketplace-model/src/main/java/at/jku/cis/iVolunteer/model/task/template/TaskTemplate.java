@@ -17,7 +17,8 @@ public class TaskTemplate {
 	private String workflowKey;
 	private List<Competence> acquirableCompetences;
 	private List<Competence> requiredCompetences;
-
+	
+	
 	public String getId() {
 		return id;
 	}
