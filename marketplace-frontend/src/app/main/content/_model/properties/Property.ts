@@ -90,7 +90,7 @@ export class PropertyParentTemplate extends PropertyParentItem{};
 
 export class Rule {
     id: string;
-    kind: RuleKind;
+    kind: string;
     value?: number;
     data?: string;
     

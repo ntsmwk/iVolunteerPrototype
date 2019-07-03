@@ -33,7 +33,6 @@ public class SingleProperty<T> extends Property {
 		super.kind = p.kind;
 		super.name = p.name;
 		super.order = p.order;
-//		super.rules = p.rules;
 	}
 
 	public String getId() {
