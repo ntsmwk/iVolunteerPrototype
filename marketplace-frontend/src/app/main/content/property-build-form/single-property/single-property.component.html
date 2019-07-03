@@ -17,7 +17,7 @@
     <div>&nbsp;&nbsp;</div>
 
     <mat-form-field style="width: 250px">
-      <mat-select placeholder="Property Kind / Type" formControlName="kind" (selectionChange)="clearLegalAndDefaultValues(); prepareValidRules($event)" required>
+      <mat-select placeholder="Property Kind / Type" formControlName="kind" (selectionChange)="clearLegalAndDefaultValues(); prepareValidRules($event, 'type-select')" required>
         <!-- <mat-option value=""></mat-option> -->
         <mat-option *ngFor="let opt of propertyKindOptions" [value]="opt.kind">{{opt.label}}</mat-option>
       </mat-select>
@@ -31,7 +31,7 @@
   <div *ngIf="form.get('kind').value != 'LIST' && form.get('kind').value!=''">
     <label id="is-dropdown"><h2>Should the Property contain a set of fixed Values inside a Drop-Down-Menu?</h2></label>
     
-    <mat-radio-group aria-labelledby="is-dropdown" name="is-dropdown" [(ngModel)]="isDropdown" (change)="clearLegalAndDefaultValues()" [ngModelOptions]="{standalone: true}" required>
+    <mat-radio-group aria-labelledby="is-dropdown" name="is-dropdown" [(ngModel)]="isDropdown" (change)="clearLegalAndDefaultValues(); prepareValidRules($event, 'dropdown-select')" [ngModelOptions]="{standalone: true}" required>
       <mat-radio-button [value]="true" matTooltip="Property with a single value" matTooltipPosition="above">Yes</mat-radio-button>
       &nbsp;
       <mat-radio-button [value]="false" matTooltip="Property which contains more than one value" matTooltipPosition="above">No</mat-radio-button>
@@ -47,15 +47,15 @@
 
   <div *ngIf="!isDropdown && isDropdown!=undefined">
     <mat-form-field *ngIf="form.get('kind').value=='TEXT' || form.get('kind').value=='LONG_TEXT'" >
-        <input matInput placeholder="Default Text" formControlName="defaultValue"/>
+        <input matInput placeholder="Default Text" formControlName="defaultValues"/>
     </mat-form-field>
 
     <mat-form-field *ngIf="form.get('kind').value=='WHOLE_NUMBER' || form.get('kind').value=='FLOAT_NUMBER'" >
-        <input matInput placeholder="Default Number" type="number" formControlName="defaultValue"/>
+        <input matInput placeholder="Default Number" type="number" formControlName="defaultValues"/>
     </mat-form-field>
 
     <mat-form-field *ngIf="form.get('kind').value=='DATE'">
-        <input matInput [matDatepicker]="picker" placeholder="Default Date" formControlName="defaultValue"/>
+        <input matInput [matDatepicker]="picker" placeholder="Default Date" formControlName="defaultValues"/>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -64,7 +64,7 @@
         <input matInput placeholder="Default State" style="display: none">
         <br>
         <br>
-        <mat-radio-group name="Default State" formControlName="defaultValue">
+        <mat-radio-group name="Default State" formControlName="defaultValues">
             <mat-radio-button value="true" type="boolean" matTooltip="true" matTooltipPosition="above">true</mat-radio-button>
             &nbsp;
             <mat-radio-button value="false" type = "boolean" matTooltip="false" matTooltipPosition="above">false</mat-radio-button>
@@ -158,7 +158,7 @@
 
   <div *ngIf="isDropdown || form.get('kind').value=='LIST'">
     <mat-form-field>
-        <mat-select placeholder="Default Value" formControlName="defaultValue" [disabled]="form.get('legalValues').length <= 0">
+        <mat-select placeholder="Default Value" formControlName="defaultValues" [disabled]="form.get('legalValues').length <= 0">
           <mat-option [value]=undefined ></mat-option>
           <mat-option *ngFor="let val of form.get('legalValues').controls" [value]="val.get('value').value">{{val.get('value').value}}</mat-option>
         </mat-select>

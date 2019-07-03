@@ -8,10 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.property.Property;
 import at.jku.cis.iVolunteer.model.property.SingleProperty;
 
-/**
- * @author alexander
- *
- */
 @Document
 public class IVolunteerObject {
 

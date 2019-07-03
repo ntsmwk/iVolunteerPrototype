@@ -12,10 +12,9 @@ import at.jku.cis.iVolunteer.model.property.SingleProperty;
  * @author alexander
  *
  */
-@Document
+
 public class IVolunteerObjectDTO {
 
-	@Id
 	public String id;
 	public List<Property> properties;	
 	

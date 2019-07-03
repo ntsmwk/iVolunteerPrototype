@@ -68,7 +68,7 @@ public class PropertyController {
 		SingleProperty<Object> p = (SingleProperty<Object>) propertyMapper.toEntity(dto);
 		
 		
-		//fix the ids for Default Values
+		//fix the ids for Default Values	
 		if (p.getLegalValues() != null && p.getDefaultValues() != null) {
 			for (ListEntry<Object> val : p.getLegalValues()) {
 				

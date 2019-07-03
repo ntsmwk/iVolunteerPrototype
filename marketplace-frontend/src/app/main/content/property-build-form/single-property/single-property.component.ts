@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNull } from 'util';
 import { PropertyKind, Rule, RuleKind, PropertyListItem, Property } from '../../_model/properties/Property';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
@@ -117,7 +117,8 @@ export class SinglePropertyComponent implements OnInit {
     this.form = this.formBuilder.group({
       name: this.formBuilder.control('', [Validators.required, propertyNameUniqueValidator(this.propertyListItems, this.currentProperty)]),
       kind: this.formBuilder.control('', Validators.required),
-      defaultValue: this.formBuilder.control('')
+      defaultValues: this.formBuilder.control(''),
+      legalValues: this.formBuilder.control('')
     });
   }
 
@@ -126,7 +127,7 @@ export class SinglePropertyComponent implements OnInit {
     this.form.get('kind').setValue(this.currentProperty.kind);
 
     if (!isNullOrUndefined(this.currentProperty.defaultValues)) {
-      this.form.get('defaultValue').setValue(this.currentProperty.defaultValues[0].value);
+      this.form.get('defaultValues').setValue(this.currentProperty.defaultValues[0].value);
     }
 
     if (!isNullOrUndefined(this.currentProperty.legalValues) && this.currentProperty.legalValues.length > 0) {
@@ -218,7 +219,7 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearDefaultValues() {
-    this.form.get('defaultValue').reset();
+    this.form.get('defaultValues').reset();
   }
 
   clearLegalValues() {
@@ -245,7 +246,7 @@ export class SinglePropertyComponent implements OnInit {
   //----------------------------------------------------
 
   //----Only Rules which are fitting for the Type should be displayed
-  prepareValidRules(event) {
+  prepareValidRules(event: any, source: string) {
 
     this.hasRules = false;
     this.clearRules();
@@ -253,71 +254,104 @@ export class SinglePropertyComponent implements OnInit {
     console.log("prepare Rules " + event);
     console.log(event);
 
-    switch (event.value) {
+    if (source == 'dropdown-select') {
 
-      //Texts: no ranges, no required_true reserved for boolean
-      // allowed are amount ranges, required and regex
-      case PropertyKind.TEXT: case PropertyKind.LONG_TEXT: {
-        console.log("text")
+
+      if (this.isDropdown) {
         for (let option of this.ruleKindOptions) {
-          if (option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
-            option.display = true;
-            console.log(option.kind + ": true")
-          } else {
-            option.display = false;
-            console.log(option.kind + ": false")
-
-          }
-        }
-        break;
-        
-      }
-
-      //Boolean: only required_true
-      case PropertyKind.BOOL: {
-        console.log("bool")
-        for (let option of this.ruleKindOptions) {
-          if (option.kind == RuleKind.REQUIRED_TRUE) {
-            option.display = true;
-            console.log(option.kind + ": true")
-
-          } else {
-            option.display = false;
-            console.log(option.kind + ": false")
-
-          }
-        }
-
-        break;
-      }
-
-      //Date: no max/min amount of characters, no required true, no regex
-      case PropertyKind.DATE: {
-        for (let option of this.ruleKindOptions) {
-          if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MIN || option.kind == RuleKind.MIN) {
+          if (option.kind == RuleKind.REQUIRED) {
             option.display = true;
           } else {
             option.display = false;
           }
         }
-
-        break;
+      } else {
+        this.prepareValidRules({value: this.form.get('kind').value}, 'type-select');
       }
-
-      //Numbers ranges and amounts allowed, required allowed, regex maybe allowed, no required_true, 
-      case PropertyKind.FLOAT_NUMBER: case PropertyKind.WHOLE_NUMBER: {
-        for (let option of this.ruleKindOptions) {
-          if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MAX || option.kind == RuleKind.MIN || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.REGEX_PATTERN) {
-            option.display = true;
-          } else {
-            option.display = false;
-          }
-        }
-
-        break;
-      }
-
     }
+
+    else if (source == 'type-select') {
+      switch (event.value) {
+
+        //Texts: no ranges, no required_true reserved for boolean
+        // allowed are amount ranges, required and regex
+        case PropertyKind.TEXT: case PropertyKind.LONG_TEXT: {
+          console.log("text")
+          for (let option of this.ruleKindOptions) {
+            if (option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
+              option.display = true;
+              console.log(option.kind + ": true")
+            } else {
+              option.display = false;
+              console.log(option.kind + ": false")
+
+            }
+          }
+          break;
+
+        }
+
+        //Boolean: only required_true
+        case PropertyKind.BOOL: {
+          console.log("bool")
+          for (let option of this.ruleKindOptions) {
+            if (option.kind == RuleKind.REQUIRED_TRUE) {
+              option.display = true;
+              console.log(option.kind + ": true")
+
+            } else {
+              option.display = false;
+              console.log(option.kind + ": false")
+
+            }
+          }
+
+          break;
+        }
+
+        //Date: no max/min amount of characters, no required true, no regex
+        case PropertyKind.DATE: {
+          for (let option of this.ruleKindOptions) {
+            if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MIN || option.kind == RuleKind.MIN) {
+              option.display = true;
+            } else {
+              option.display = false;
+            }
+          }
+
+          break;
+        }
+
+        //Numbers ranges and amounts allowed, required allowed, regex maybe allowed, no required_true, 
+        case PropertyKind.FLOAT_NUMBER: case PropertyKind.WHOLE_NUMBER: {
+          for (let option of this.ruleKindOptions) {
+            if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MAX || option.kind == RuleKind.MIN || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.REGEX_PATTERN) {
+              option.display = true;
+            } else {
+              option.display = false;
+            }
+          }
+
+          break;
+        }
+
+        case PropertyKind.LIST: {
+          for (let option of this.ruleKindOptions) {
+            if (option.kind == RuleKind.REQUIRED) {
+              option.display = true;
+            } else {
+              option.display = false;
+            }
+          }
+        }
+
+      }
+
+    } else {
+      console.error('should not happen source must either be "type-select" or "dropdown-select"')
+    }
+
+
   }
 
   //----Rule Form manipulation
@@ -478,6 +512,8 @@ export class SinglePropertyComponent implements OnInit {
   onSubmit(valid: boolean, f: any) {
     this.submitPressed = true;
 
+    console.log(this.form);
+
     if (valid && !this.ruleEditActive) {
 
       let property = this.createPropertyFromForm();
@@ -486,17 +522,20 @@ export class SinglePropertyComponent implements OnInit {
 
       console.log("call propertyService...");
 
-      // call service to send to server (and save in db)
+      // TODO call service to send to server (and save in db)
       this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
         console.log("PropertyService called, property added");
         console.log(property);
         this.navigateBack();
       });
 
+      console.log("VALID")
       let ret = JSON.stringify(property, null, 2);
       console.log(ret);
     } else {
-      console.log("invalid");
+      console.log("INVALID");
+      console.log(JSON.stringify(this.createPropertyFromForm(), null, 2));
+
       console.log("Valid: " + valid);
       console.log("RuleEdit: " + this.ruleEditActive);
 
@@ -517,7 +556,16 @@ export class SinglePropertyComponent implements OnInit {
     property.name = this.form.get('name').value;
 
     property.defaultValues = [];
-    property.defaultValues.push({ id: null, value: this.form.get('defaultValue').value });
+    console.log(this.form);
+    if (!isNullOrUndefined(this.form.get('defaultValues')) && !isNullOrUndefined(this.form.get('defaultValues').value)) {
+
+      let arr = this.form.get('defaultValues');
+      console.log(arr);
+
+      property.defaultValues.push({ id: null, value: arr.value });
+
+    }
+
 
     property.legalValues = [];
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
