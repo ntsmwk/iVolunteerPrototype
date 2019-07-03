@@ -41,7 +41,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		if (source == null) {
 			return null;
 		}
-		
+				
 		PropertyDTO<Object> propertyDTO = new PropertyDTO<Object>();
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
@@ -104,9 +104,10 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 				propertyDTO.setDefaultValues(values);
 			}
 			
-			if (s.getRules() != null) {
+			
+			if (((SingleProperty<?>)source).getRules() != null) {
 				List<SinglePropertyRule> rules = new ArrayList<>();
-				for (SinglePropertyRule r : s.getRules()) {
+				for (SinglePropertyRule r : ((SingleProperty<?>)source).getRules()) {
 					rules.add(r);
 				}
 				propertyDTO.setRules(ruleMapper.toDTOs(rules));
@@ -209,6 +210,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			List<SinglePropertyRule> rules = new ArrayList<SinglePropertyRule>();
 			if (target.getRules() != null) {
+				System.out.println("Property Mapper: 213 get rules");
 				for (RuleDTO r : target.getRules()) {
 					rules.add(ruleMapper.toEntity(r));
 				}

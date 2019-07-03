@@ -61,6 +61,9 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		
 		//TODO rules
 		if (source.getRules() != null) {
+			
+			System.out.println("rules not null");
+			
 			List<SinglePropertyRule> rules = new ArrayList<SinglePropertyRule>();
 			for (SinglePropertyRule r : source.getRules()) {
 				rules.add(r);

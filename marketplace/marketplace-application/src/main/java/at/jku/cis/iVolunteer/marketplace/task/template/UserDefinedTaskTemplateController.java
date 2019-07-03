@@ -80,7 +80,8 @@ public class UserDefinedTaskTemplateController {
 	public UserDefinedTaskTemplateDTO findTemplateById(@PathVariable("templateId") String templateId) {		
 		UserDefinedTaskTemplate t = userDefinedTaskTemplateRepository.findOne(templateId);
 
-		return userDefinedTaskTemplateMapper.toDTO(userDefinedTaskTemplateRepository.findOne(templateId));
+
+		return userDefinedTaskTemplateMapper.toDTO(t);
 	}
 	
 	@GetMapping("/tasktemplate/user/{templateId}/{subtemplateId}")
