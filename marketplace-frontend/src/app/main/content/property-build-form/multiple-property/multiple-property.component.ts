@@ -16,6 +16,13 @@ export class RuleKindOption {
   hasValueField: boolean;
 }
 
+export class RuleListItem {
+  property1: Property<any>;
+  property2: Property<any>;
+  kind: RuleKind;
+  value: number;
+}
+
 @Component({
   selector: 'app-multiple-property',
   templateUrl: './multiple-property.component.html',
@@ -47,6 +54,9 @@ export class MultiplePropertyComponent implements OnInit {
   dataSource = new MatTableDataSource<PropertyListItem>();
   addedDataSource = new MatTableDataSource<PropertyListItem>();
   displayedColumns: string[] = ['name', 'kind', 'actions'];
+
+  rulesDataSource = new MatTableDataSource<RuleListItem>();
+  rulesDataDisplayedColumns = ['property1', 'property2', 'ruleKind', 'value'];
 
   ngOnInit() {
 
@@ -98,6 +108,7 @@ export class MultiplePropertyComponent implements OnInit {
         return p;
       }
     });
+
 
     this.submitPressed = false;
   }
