@@ -3,7 +3,7 @@ import { Injectable }       from '@angular/core';
 import { DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion, 
   SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion } from '../_model/dynamic-forms/questions';
 
-import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/properties/Property';
+import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/configurables/Property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 

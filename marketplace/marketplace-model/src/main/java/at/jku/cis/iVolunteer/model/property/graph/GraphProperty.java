@@ -3,8 +3,8 @@ package at.jku.cis.iVolunteer.model.property.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
 
 public class GraphProperty extends Property{
 

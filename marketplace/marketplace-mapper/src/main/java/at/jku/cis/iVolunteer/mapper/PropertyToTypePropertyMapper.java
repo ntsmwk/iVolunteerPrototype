@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.mapper;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
 
 
 public interface PropertyToTypePropertyMapper<T> {

@@ -1,7 +1,7 @@
 import { ValidatorFn, AbstractControl, NG_VALIDATORS, FormControl, Validator, ValidationErrors, FormArray } from "@angular/forms";
 import { isNullOrUndefined } from "util";
 
-import { PropertyListItem } from "../_model/properties/Property";
+import { PropertyListItem } from "../_model/configurables/Property";
 import { Directive } from "@angular/core";
 
 

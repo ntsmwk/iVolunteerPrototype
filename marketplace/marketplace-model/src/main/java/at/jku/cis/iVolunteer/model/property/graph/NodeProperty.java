@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 public class NodeProperty extends SingleProperty<Object> {

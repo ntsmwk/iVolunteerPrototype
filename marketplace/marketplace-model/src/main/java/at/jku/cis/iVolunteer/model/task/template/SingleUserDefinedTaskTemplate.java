@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
 
 /**
  * @author alexander

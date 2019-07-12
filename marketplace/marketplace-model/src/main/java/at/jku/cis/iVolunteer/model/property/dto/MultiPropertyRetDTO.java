@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mongodb.util.JSON;
 
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 

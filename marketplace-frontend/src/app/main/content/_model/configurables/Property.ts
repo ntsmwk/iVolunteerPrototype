@@ -1,6 +1,7 @@
 import { isNullOrUndefined } from "util";
+import { ConfigurableObject } from "./Configurable";
 
-export class Property<T> {
+export class Property<T> extends ConfigurableObject{
     id: string;
     name: string;
 

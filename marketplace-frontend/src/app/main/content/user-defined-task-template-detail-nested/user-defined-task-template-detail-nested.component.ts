@@ -7,7 +7,7 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { Property } from '../_model/properties/Property';
+import { Property } from '../_model/configurables/Property';
 import { isNullOrUndefined } from 'util';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyService } from '../_service/property.service';

@@ -1,3 +1,4 @@
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 //TODO delete probably dead code
 //
 //package at.jku.cis.iVolunteer.model.property;

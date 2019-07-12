@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +16,10 @@ import at.jku.cis.iVolunteer.StandardProperties;
 import at.jku.cis.iVolunteer.mapper.property.MultiPropertyRetMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.model.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
+import at.jku.cis.iVolunteer.marketplace.configurator.ConfigurableObjectRepository;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyRetDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
@@ -33,11 +35,25 @@ public class PropertyController {
 	
 	@Autowired private PropertyRepository propertyRepository;
 	@Autowired private MultiPropertyRetMapper multiPropertyRetMapper;
-	
+		
 	@Autowired StandardProperties sp;
+	
 	
 	@GetMapping("/properties/list") 
 	public List<PropertyListItemDTO<Object>> getPropertiesList() {
+		
+		List<Property> ll = propertyRepository.findAll();
+		
+		System.out.println("List count: " + ll.size());
+		
+		for (Property p : ll) {
+			System.out.println(p.getId());
+		}
+		
+		System.out.println("properties count " + propertyRepository.count());
+		
+		System.out.println(propertyRepository.findByName("Name"));
+		
 
 		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
 			

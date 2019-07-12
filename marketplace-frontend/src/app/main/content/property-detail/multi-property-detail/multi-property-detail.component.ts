@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Property } from '../../_model/properties/Property';
+import { Property } from '../../_model/configurables/Property';
 import { isNullOrUndefined } from 'util';
 
 @Component({

@@ -16,6 +16,7 @@ import { LoginGuard } from './_guard/login.guard';
 
 
 
+
 const routes: Route[] = [
   {
     path: 'login',
@@ -123,6 +124,11 @@ const routes: Route[] = [
 
   { path: 'main/test-map-property',
     loadChildren: './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module#MapPropertyTestModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  { path: 'main/configurator',
+    loadChildren: './configurator/configurator.module#ConfiguratorModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 

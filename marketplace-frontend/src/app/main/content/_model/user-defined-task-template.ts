@@ -1,4 +1,4 @@
-import { Property } from "./properties/Property";
+import { Property } from "./configurables/Property";
 
 export class UserDefinedTaskTemplate {
     id: string;

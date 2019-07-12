@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
-
-import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;

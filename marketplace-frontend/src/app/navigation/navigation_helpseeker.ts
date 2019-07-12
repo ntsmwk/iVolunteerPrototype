@@ -40,6 +40,12 @@ export const navigation_helpseeker = [
     'title': 'Test Map Property',
     'type': 'item',
     'url': '/main/test-map-property'
-  }
+  },
+  {
+    'id': 'configurator',
+    'title': 'Configurator',
+    'type': 'item',
+    'url': '/main/configurator'
+  },
 
 ];

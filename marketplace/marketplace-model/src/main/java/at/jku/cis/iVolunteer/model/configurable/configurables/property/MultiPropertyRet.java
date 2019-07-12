@@ -1,8 +1,8 @@
-package at.jku.cis.iVolunteer.model.property;
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 
 public class MultiPropertyRet {

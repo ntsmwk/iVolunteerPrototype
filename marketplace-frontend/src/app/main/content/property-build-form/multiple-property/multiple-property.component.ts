@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyListItem, Property, PropertyKind, MultiPropertyRet, RuleKind } from '../../_model/properties/Property';
+import { PropertyListItem, Property, PropertyKind, MultiPropertyRet, RuleKind } from '../../_model/configurables/Property';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';

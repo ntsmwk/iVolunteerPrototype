@@ -15,7 +15,7 @@ import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @SpringBootApplication

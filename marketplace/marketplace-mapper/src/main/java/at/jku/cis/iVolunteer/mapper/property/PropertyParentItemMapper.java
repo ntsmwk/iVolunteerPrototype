@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayDtoMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.model.property.Property;
-import at.jku.cis.iVolunteer.model.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.property.dto.PropertyParentItemDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { isNullOrUndefined, isNull } from 'util';
-import { PropertyKind, Rule, RuleKind, PropertyListItem, Property } from '../../_model/properties/Property';
+import { PropertyKind, Rule, RuleKind, PropertyListItem, Property } from '../../_model/configurables/Property';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';

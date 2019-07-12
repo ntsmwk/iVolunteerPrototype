@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from "@angular/material";
 import { QuestionBase } from '../../../_model/dynamic-forms/questions';
-import { Property, PropertyListItem } from '../../../_model/properties/Property';
+import { Property, PropertyListItem } from '../../../_model/configurables/Property';
 
 
 export interface SortDialogData {

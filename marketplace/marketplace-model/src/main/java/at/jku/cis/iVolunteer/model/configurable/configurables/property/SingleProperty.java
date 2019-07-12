@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.property;
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class SingleProperty<T> extends Property {
 	
 	public SingleProperty(Property p) {
 		super();
-		super.id = p.id;
+		super.id = p.getId();
 		super.kind = p.kind;
 		super.name = p.name;
 		super.order = p.order;

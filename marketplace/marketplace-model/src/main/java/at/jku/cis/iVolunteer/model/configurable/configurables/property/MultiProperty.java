@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.property;
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class MultiProperty extends Property {
 	
 	public MultiProperty(Property p) {
 		kind = PropertyKind.MULTI;
-		super.id = p.id;
+		super.id = p.getId();
 		super.kind = p.kind;
 		super.name = p.name;
 		super.order = p.order;

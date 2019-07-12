@@ -5,8 +5,10 @@ import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { Property, PropertyKind } from 'app/main/content/_model/properties/Property';
+import { Property, PropertyKind } from 'app/main/content/_model/configurables/Property';
 import { getOrSetAsInMap } from '@angular/animations/browser/src/render/shared';
+import { ConfiguratorService } from 'app/main/content/_service/configurator.service';
+import { ConfigurableClass, ConfigurableObject } from 'app/main/content/_model/configurables/Configurable';
 
 @Component({
   selector: 'app-map-property-test',
@@ -22,16 +24,22 @@ export class MapPropertyTestComponent implements OnInit {
 
   markers: {lat: number, lng: number}[] = [];
 
+  marketplace: Marketplace;
+
 
 
   constructor(private propertyService: PropertyService,
     private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService,
+
+    private configuratorService: ConfiguratorService,
+
     private loginService: LoginService) { }
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+        this.marketplace = marketplace;
         this.propertyService.getProperties(marketplace).toPromise().then((properties: Property<any>[]) => {
           this.mapProperties = properties.filter((property: Property<any>) => {
             return property.kind == PropertyKind.MAP;
@@ -72,6 +80,43 @@ export class MapPropertyTestComponent implements OnInit {
   addMarker(evt: any) {
     console.log("Marker set");
     console.log(evt)
+  }
+
+  testConfigurator() {
+    this.configuratorService.test(this.marketplace).toPromise().then(() => {
+
+    });
+  
+  
+  }
+
+  testConfiguratorAPI() {
+    this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then(() => {
+       console.log("get all SUCCESS"); 
+    });
+
+    this.configuratorService.getConfigClassById(this.marketplace, "TESTIDBLAH").toPromise().then(() => {
+      console.log("get by id SUCCESS");
+    });
+
+    this.configuratorService.createNewConfigClass(this.marketplace, new ConfigurableClass()).toPromise().then(() => {
+      console.log("create SUCCESS");
+    });
+
+    this.configuratorService.deleteConfigClass(this.marketplace, "TESTID").toPromise().then(() => {
+      console.log("delete SUCCESS");
+    });
+
+    let arr: ConfigurableObject[] = [];
+
+    this.configuratorService.addObjectsToConfigClass(this.marketplace, "TESTID", arr).toPromise().then(() => {
+      console.log("add SUCCESS");
+    });
+
+    let arr2: string[] = [];
+    this.configuratorService.removeObjectFromConfigClass(this.marketplace, "TESTID", arr2).toPromise().then(() => {
+      console.log("remove SUCCESS");
+    });
   }
 
 }

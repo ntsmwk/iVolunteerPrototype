@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 
-import { PropertyListItem, Property, PropertyKind } from "../_model/properties/Property";
+import { PropertyListItem, Property, PropertyKind } from "../_model/configurables/Property";
 
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';

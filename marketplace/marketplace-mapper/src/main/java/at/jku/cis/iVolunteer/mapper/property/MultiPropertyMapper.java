@@ -10,7 +10,7 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
-import at.jku.cis.iVolunteer.model.property.MultiProperty;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
 import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyDTO;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;

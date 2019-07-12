@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.property.dto;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 
 public class PropertyListItemDTO<T> {

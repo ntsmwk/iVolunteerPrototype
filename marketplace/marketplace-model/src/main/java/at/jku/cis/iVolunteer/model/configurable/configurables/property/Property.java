@@ -1,16 +1,19 @@
-package at.jku.cis.iVolunteer.model.property;
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.configurable.ConfigurableObject;
 
-@Document
-public class Property {
-	@Id
-	String id;
+
+@Document(collection = "configurableObject")
+//@TypeAlias("property")
+public class Property extends ConfigurableObject{
+//public class Property {
+	
+//	String id;
 	String name;
 	
-//	List<Rule> rules;
 	PropertyKind kind;
 	
 	int order;
@@ -18,14 +21,11 @@ public class Property {
 	boolean custom;
 	
 	public Property() {
+		super.setConfigurableType("property");
 	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
+
+	public String getConfigurableType() {
+		return super.getConfigurableType();
 	}
 
 	public String getName() {
@@ -34,15 +34,6 @@ public class Property {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
-//	public List<Rule> getRules() {
-//		return rules;
-//	}
-//	
-//	public void setRules(List<Rule> rules) {
-//		this.rules = rules;
-//	}
 
 	public PropertyKind getKind() {
 		return kind;
@@ -86,6 +77,8 @@ public class Property {
 		return "\nProperty [id=" + id + ", name=" + name + /*", rules=" + rules +*/ ", kind=" + kind + ", order=" + order
 				+ ", custom=" + custom + "]\n";
 	}
+
+
 	
 	
 

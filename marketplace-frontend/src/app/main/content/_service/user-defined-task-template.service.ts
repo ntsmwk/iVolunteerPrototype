@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from '../_model/marketplace';
-import { PropertyListItem, Property } from '../_model/properties/Property';
+import { PropertyListItem, Property } from '../_model/configurables/Property';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';

@@ -6,7 +6,7 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { ParticipantRole, Participant } from '../_model/participant';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyListItem, PropertyKind, RuleKind, Rule, Property } from '../_model/properties/Property';
+import { PropertyListItem, PropertyKind, RuleKind, Rule, Property } from '../_model/configurables/Property';
 import { FormGroup } from '@angular/forms';
 import { EventEmitter } from 'events';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';

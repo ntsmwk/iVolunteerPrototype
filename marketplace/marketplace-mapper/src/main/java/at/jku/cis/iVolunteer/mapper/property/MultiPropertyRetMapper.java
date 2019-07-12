@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.model.property.MultiPropertyRet;
+import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiPropertyRet;
 import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyRetDTO;
 
 @Mapper(uses = { SinglePropertyRuleMapper.class})

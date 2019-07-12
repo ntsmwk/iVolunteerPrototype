@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.property;
+package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;

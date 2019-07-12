@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Property, PropertyKind, MultiPropertyRet, PropertyListItem } from '../_model/properties/Property';
+import { Property, PropertyKind, MultiPropertyRet, PropertyListItem } from '../_model/configurables/Property';
 import { Marketplace } from '../_model/marketplace';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';

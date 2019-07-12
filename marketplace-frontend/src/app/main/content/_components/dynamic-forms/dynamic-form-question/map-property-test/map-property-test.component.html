@@ -4,17 +4,28 @@
     map-property-test works!
   </p>
 
-  <agm-map [latitude]="latMap" [longitude]="lngMap" (mapClick)="addMarker($event)">
-    <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [markerDraggable]=true (dragEnd)="moveMarker($event)">
-      <!-- <agm-info-window>HELLO</agm-info-window> -->
+  <!-- <agm-map [latitude]="latMap" [longitude]="lngMap" (mapClick)="addMarker($event)">
+    <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [markerDraggable]=true
+      (dragEnd)="moveMarker($event)">
+      <agm-info-window>HELLO</agm-info-window>
     </agm-marker>
   </agm-map>
 
   LAT: {{lat}}<br>
-  LONG: {{lng}}
+  LONG: {{lng}} -->
 
 
   <br>
+
+
+  <button mat-button (click)="testConfigurator()">Test Config</button>
+
+  <button mat-button (click)="testConfiguratorAPI()">Test Configurator API</button>
+
+  
+
+
+
 
   <h2>Dragula Test</h2>
   <div>
@@ -27,13 +38,14 @@
       <div class="container" dragula="DRAGULA_FACTS">
         <div>This is the default use case. You only need to specify the containers you want to use</div>
         <div>More interactive use cases lie ahead</div>
-        <div>Make sure to check out the <a href="https://github.com/bevacqua/dragula#readme">documentation on GitHub!</a></div>
+        <div>Make sure to check out the <a href="https://github.com/bevacqua/dragula#readme">documentation on
+            GitHub!</a></div>
       </div>
     </div>
   </div>
-  
 
-  
+
+
 
 
 </div>
