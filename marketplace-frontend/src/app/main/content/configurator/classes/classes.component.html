@@ -1,21 +1,12 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
+  <!-- <app-classes-list *ngIf="!configuratorOpened" [marketplace]="marketplace" [configurableClasses]="configurableClasses"></app-classes-list> -->
 
-  <div *ngIf="!configuratorOpened" class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-fab class="mat-warn" (click)="configuratorOpened=true" aria-label="New Property" *fuseIfOnDom
-      [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}" matTooltip="New Property" matTooltipPosition="above">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-
-
-  <app-classes-list *ngIf="!configuratorOpened" [marketplace]="marketplace" [configurableClasses]="configurableClasses"></app-classes-list>
+  <app-classes-overview [marketplace]="marketplace" [configurableClasses]="configurableClasses" [relationships]="relationships"></app-classes-overview>
 
 
 
-
-
-  <app-classes-configurator *ngIf="configuratorOpened" [marketplace]="marketplace"></app-classes-configurator>
+  <!-- <app-classes-configurator *ngIf="configuratorOpened" [marketplace]="marketplace"></app-classes-configurator> -->
 
 
 

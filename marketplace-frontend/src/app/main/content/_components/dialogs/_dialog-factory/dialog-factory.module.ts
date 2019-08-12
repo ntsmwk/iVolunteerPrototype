@@ -11,6 +11,8 @@ import { SortDialogComponent } from '../sort-dialog/sort-dialog.component';
 import { SortDialogModule } from '../sort-dialog/sort-dialog.module';
 import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog.module';
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
+import { RelationshipDialogModule } from "../relationship-dialog/relationship-dialog.module";
+import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
 
 @NgModule({
   imports: [
@@ -20,10 +22,11 @@ import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dia
     ConfirmDialogModule,
     SortDialogModule,
     ChooseTemplateToCopyDialogModule,
+    RelationshipDialogModule,
 
   ],
   declarations: [DialogFactoryComponent],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, 
-                    SortDialogComponent, ChooseTemplateToCopyDialogComponent]
+                    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent]
 })
 export class DialogFactoryModule { }

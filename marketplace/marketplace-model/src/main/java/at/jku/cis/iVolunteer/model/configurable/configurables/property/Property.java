@@ -1,24 +1,22 @@
 package at.jku.cis.iVolunteer.model.configurable.configurables.property;
 
-import org.springframework.data.annotation.TypeAlias;
+import java.util.LinkedList;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.configurable.ConfigurableObject;
+import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
-@Document(collection = "configurableObject")
-//@TypeAlias("property")
+//@Document(collection = "configurableObject")
+@Document
 public class Property extends ConfigurableObject{
-//public class Property {
-	
-//	String id;
 	String name;
-	
 	PropertyKind kind;
-	
 	int order;
-	
 	boolean custom;
+
+	//TODO Matching Priority
 	
 	public Property() {
 		super.setConfigurableType("property");
@@ -57,6 +55,14 @@ public class Property extends ConfigurableObject{
 	
 	public void setCustom(boolean custom) {
 		this.custom = custom;
+	}
+	
+	public static void clearValues(Property p) {
+		if (p instanceof SingleProperty) {
+			((SingleProperty<?>) p).values.clear();
+		} else if (p instanceof MultiProperty) {
+			clearValues(p);
+		}
 	}
 	
 	@Override

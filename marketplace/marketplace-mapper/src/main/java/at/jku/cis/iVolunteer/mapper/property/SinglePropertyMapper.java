@@ -119,6 +119,7 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		prop.setId(target.getId());
 		prop.setName(target.getName());
 		prop.setOrder(target.getOrder());
+		prop.setConfigurableType("property");
 //		
 //		if (target.getKind().equals(PropertyKind.DATE)) {
 ////			prop.setValue(this.convertObjectToDate(target.getValue()));

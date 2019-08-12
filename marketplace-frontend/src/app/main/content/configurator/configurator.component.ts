@@ -12,6 +12,8 @@ import { ConfiguratorService } from '../_service/configurator.service';
 import { ConfigurableClass } from '../_model/configurables/Configurable';
 import { Participant } from '../_model/participant';
 import { fuseAnimations } from '@fuse/animations';
+import { RelationshipService } from '../_service/relationship.service';
+import { Relationship } from '../_model/configurables/Relationship';
 
 
 
@@ -26,6 +28,7 @@ export class ConfiguratorComponent implements OnInit {
 
   marketplace: Marketplace;
   configurableClasses: ConfigurableClass[];
+  relationships: Relationship[];
 
 
   isLoaded: boolean = false;
@@ -34,30 +37,32 @@ export class ConfiguratorComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private configuratorService: ConfiguratorService) {
-
-  }
+    private configuratorService: ConfiguratorService,
+    private relationshipService: RelationshipService) { }
 
   ngOnInit() {
-    console.log("init property build form");
-
-
     // get marketplace
     this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-        console.log(marketplace);
+
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
-          this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((configurableClasses: ConfigurableClass[]) => {
-            this.configurableClasses = configurableClasses;
-            console.log(configurableClasses);
+
+          Promise.all([
+            this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((configurableClasses: ConfigurableClass[]) => {
+              this.configurableClasses = configurableClasses;              
+            }),
+            
+            this.relationshipService.getAllRelationships(this.marketplace).toPromise().then((relationships: Relationship[]) => {
+              this.relationships = relationships;
+            })
+
+          ]).then( () => {
             this.isLoaded = true
           });
         }
-
       });
     });
-
   }
 
 

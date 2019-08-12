@@ -148,7 +148,8 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		prop.setName(target.getName());
 		prop.setKind(target.getKind());
 		prop.setOrder(target.getOrder());
-		prop.setCustom(target.isCustom());		
+		prop.setCustom(target.isCustom());	
+		prop.setConfigurableType("property");
 		
 		
 		

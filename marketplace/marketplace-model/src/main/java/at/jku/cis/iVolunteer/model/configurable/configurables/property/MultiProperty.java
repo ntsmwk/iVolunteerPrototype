@@ -23,7 +23,6 @@ public class MultiProperty extends Property {
 		super.kind = p.kind;
 		super.name = p.name;
 		super.order = p.order;
-//		super.rules = p.rules;
 	}
 	
 	public MultiProperty(MultiPropertyRet p) {
@@ -31,7 +30,6 @@ public class MultiProperty extends Property {
 		this.kind = p.kind;
 		this.name = p.name;
 		this.order = p.order;
-//		this.rules = p.rules;
 		this.custom = true;
 		this.properties = new LinkedList<>();
 	}

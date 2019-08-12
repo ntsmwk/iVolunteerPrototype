@@ -8,6 +8,8 @@ import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dia
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
+import { Relationship } from 'app/main/content/_model/configurables/Relationship';
+import { RelationshipDialogComponent } from "../relationship-dialog/relationship-dialog.component";
 
 @Component({
   selector: 'app-dialog-factory',
@@ -64,6 +66,50 @@ export class DialogFactoryComponent implements OnInit {
 
   }
 
+  addPropertyDialogGeneric(properties: Property<any>[], addedProperties: Property<any>[]) {
+    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
+      position: {top: '50px'},
+      width: '500px',
+      data: this.prepareDataForGenericAdd('Add Properties', addedProperties, properties)
+    });
+
+    let retProperties: Property<any>[] = undefined;
+
+    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        retProperties = [];
+        for (let s of result.checkboxStates) {
+          if (s.dirty) {
+            retProperties.push(s.property);
+          }
+        }
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then( () => {
+      return retProperties;
+    });
+
+  }
+
+  private prepareDataForGenericAdd(label: string, addedProperties: Property<any>[], properties: Property<any>[]): AddOrRemoveDialogData {
+    let states: {property: Property<any>, disabled: boolean, checked: boolean, dirty: boolean}[] = [];
+
+    for (let p of properties) {
+      states.push({property: p, disabled: false, checked: false, dirty: false});
+      for (let ap of addedProperties) {
+        if (p.id === ap.id) {
+          states[states.length-1].disabled = true;
+          states[states.length-1].checked = true;
+        } 
+      }
+    }
+
+    let data: AddOrRemoveDialogData = {label: label, checkboxStates: states};
+    return data;
+
+  }
+
   private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, properties: Property<any>[]): AddOrRemoveDialogData {
     console.log("entered prepareDataForAdd");
     
@@ -80,7 +126,7 @@ export class DialogFactoryComponent implements OnInit {
     }
     console.log("finished");
     
-    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states}
+    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states};
     console.log(data);
     return data;
   }
@@ -297,6 +343,47 @@ export class DialogFactoryComponent implements OnInit {
       return ret;
     });
   }
+
+  newRelationshipDialog(classIdTarget: string) {
+    const dialogRef = this.dialog.open(RelationshipDialogComponent, {
+      width: '500px',
+      data: {classIdTarget: classIdTarget},
+      disableClose: true
+    });
+
+    let ret: Relationship = undefined;
+    dialogRef.beforeClose().toPromise().then((result: Relationship) => {
+      ret = result;
+    });
+  
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return ret;
+    });
+  
+  }
+
+  genericDialog1Textfield(label: string, description: string, hintText: string, value: string) {
+    const dialogRef = this.dialog.open(TextFieldDialogComponent, {
+      width: '500px',
+      data: {label: label, 
+             fields: [{description: description, hintText: hintText, value: value}]}
+    });
+
+    let ret: string = undefined;
+
+    dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
+      
+      if (!isNullOrUndefined(result)) {
+        ret = result.fields[0].value;
+      } 
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return ret;
+    });
+  }
+
+
 
   entries: {id: string, label: string, description: string}[];
   returnId: string;

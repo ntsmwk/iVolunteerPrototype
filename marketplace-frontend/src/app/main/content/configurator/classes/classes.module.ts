@@ -8,6 +8,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { ClassesListModule } from './list/classes-list.module';
 import { ClassesConfiguratorModule } from './configurator/classes-configurator.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClassesOverviewModule } from './overview/overview.module';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
     ClassesListModule,
     ClassesConfiguratorModule,
+    ClassesOverviewModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule,

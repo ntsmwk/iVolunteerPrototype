@@ -8,10 +8,10 @@ public class ConfigurableObject {
 	
 	@Id
 	protected String id;
+	
 	String configurableType;
 	
 	
-
 	public String getId() {
 		return this.id;
 	}

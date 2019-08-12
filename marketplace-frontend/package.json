@@ -65,6 +65,7 @@
     "prismjs": "1.14.0",
     "rxjs": "6.1.0",
     "rxjs-compat": "6.1.0",
+    "vis": "4.21.0",
     "web-animations-js": "2.3.1",
     "zone.js": "0.8.26"
   },
@@ -80,6 +81,7 @@
     "@types/jquery": "3.3.17",
     "@types/lodash": "4.14.108",
     "@types/node": "8.9.5",
+    "@types/vis": "4.21.18",
     "codelyzer": "4.2.1",
     "jasmine-core": "2.99.1",
     "jasmine-spec-reporter": "4.2.1",

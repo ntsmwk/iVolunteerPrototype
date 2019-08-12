@@ -5,6 +5,7 @@ import { ConfiguratorService } from '../../_service/configurator.service';
 import { ConfigurableClass } from '../../_model/configurables/Configurable';
 import { MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { Relationship } from '../../_model/configurables/Relationship';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class ClassesComponent implements OnInit {
 
   @Input() marketplace: Marketplace; 
   @Input() configurableClasses: ConfigurableClass[];
+  @Input() relationships: Relationship[];
   
   isLoaded: boolean = false;
 

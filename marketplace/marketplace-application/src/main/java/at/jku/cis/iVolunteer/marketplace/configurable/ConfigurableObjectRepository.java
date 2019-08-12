@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.configurator;
+package at.jku.cis.iVolunteer.marketplace.configurable;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

@@ -82,41 +82,34 @@ export class MapPropertyTestComponent implements OnInit {
     console.log(evt)
   }
 
-  testConfigurator() {
-    this.configuratorService.test(this.marketplace).toPromise().then(() => {
 
-    });
-  
-  
-  }
+  // testConfiguratorAPI() {
+  //   this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then(() => {
+  //      console.log("get all SUCCESS"); 
+  //   });
 
-  testConfiguratorAPI() {
-    this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then(() => {
-       console.log("get all SUCCESS"); 
-    });
+  //   this.configuratorService.getConfigClassById(this.marketplace, "TESTIDBLAH").toPromise().then(() => {
+  //     console.log("get by id SUCCESS");
+  //   });
 
-    this.configuratorService.getConfigClassById(this.marketplace, "TESTIDBLAH").toPromise().then(() => {
-      console.log("get by id SUCCESS");
-    });
+  //   this.configuratorService.createNewConfigClass(this.marketplace, new ConfigurableClass()).toPromise().then(() => {
+  //     console.log("create SUCCESS");
+  //   });
 
-    this.configuratorService.createNewConfigClass(this.marketplace, new ConfigurableClass()).toPromise().then(() => {
-      console.log("create SUCCESS");
-    });
+  //   this.configuratorService.deleteConfigClasses(this.marketplace, "TESTID").toPromise().then(() => {
+  //     console.log("delete SUCCESS");
+  //   });
 
-    this.configuratorService.deleteConfigClass(this.marketplace, "TESTID").toPromise().then(() => {
-      console.log("delete SUCCESS");
-    });
+  //   let arr: ConfigurableObject[] = [];
 
-    let arr: ConfigurableObject[] = [];
+  //   this.configuratorService.addObjectsToConfigClass(this.marketplace, "TESTID", arr).toPromise().then(() => {
+  //     console.log("add SUCCESS");
+  //   });
 
-    this.configuratorService.addObjectsToConfigClass(this.marketplace, "TESTID", arr).toPromise().then(() => {
-      console.log("add SUCCESS");
-    });
-
-    let arr2: string[] = [];
-    this.configuratorService.removeObjectFromConfigClass(this.marketplace, "TESTID", arr2).toPromise().then(() => {
-      console.log("remove SUCCESS");
-    });
-  }
+  //   let arr2: string[] = [];
+  //   this.configuratorService.removeObjectFromConfigClass(this.marketplace, "TESTID", arr2).toPromise().then(() => {
+  //     console.log("remove SUCCESS");
+  //   });
+  // }
 
 }

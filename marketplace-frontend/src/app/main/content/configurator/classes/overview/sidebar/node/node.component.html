@@ -1,0 +1,57 @@
+<div>
+  <h1>Class Details</h1>
+  Name: {{configurableClass.name}}
+
+  <div fxLayout=row fxLayoutAlign="start center" style="cursor: pointer"
+    (click)=clickedChangeName()>
+    <mat-icon>edit</mat-icon>
+    <div class="pr-5">change</div>
+  </div>
+
+
+  <h1>Properties</h1>
+
+  <div *ngFor="let p of selectedProperties">
+    <div>({{p.id}}) {{p.name}}: {{p.kind}}</div>
+  </div>
+
+  <div fxLayout=row fxLayoutAlign="start center" style="cursor: pointer" class="pt-12" (click)=clickedAddProperty()>
+    <mat-icon>add</mat-icon>
+    <div class="pr-5">Add Property</div>
+  </div>
+
+  <h1>Relationships</h1>
+  <div *ngFor="let r of relationships">
+    <div> {{r.classId1}}--{{r.classId2}}: {{r.relationshipType}}</div>
+  </div>
+
+  <div *ngIf="newRelationships.length > 0">
+    <div *ngFor="let r of newRelationships">
+      <div style="background: rgb(233, 207, 159)"> 
+        {{r.classId1}}--{{r.classId2}}: {{r.relationshipType}}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!relationshipEditMode; else inRelationshipEditMode">
+    <div fxLayout=row fxLayoutAlign="start center" style="cursor: pointer" class="pt-12"
+      (click)=clickedAddRelationship()>
+      <mat-icon>add</mat-icon>
+      <div class="pr-5">Add Relationship</div>
+    </div>
+  </div>
+
+  <ng-template #inRelationshipEditMode>
+    <div>Click on the Class with which the new Class should have a Relationship</div>
+
+    <a (click)="relationshipEditMode=false" style="cursor: pointer">Cancel</a>
+  </ng-template>
+
+
+  <div class="pt-12">
+    <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Save Changes</button>
+  </div>
+
+
+
+</div>

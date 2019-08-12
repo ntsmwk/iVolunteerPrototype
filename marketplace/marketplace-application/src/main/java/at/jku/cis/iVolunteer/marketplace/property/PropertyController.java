@@ -16,7 +16,7 @@ import at.jku.cis.iVolunteer.StandardProperties;
 import at.jku.cis.iVolunteer.mapper.property.MultiPropertyRetMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.configurator.ConfigurableObjectRepository;
+import at.jku.cis.iVolunteer.marketplace.configurable.ConfigurableObjectRepository;
 import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
 import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
 import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
