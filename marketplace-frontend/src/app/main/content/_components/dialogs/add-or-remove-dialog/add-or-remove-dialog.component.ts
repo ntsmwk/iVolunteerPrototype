@@ -1,10 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
-import { QuestionBase } from '../../../_model/dynamic-forms/questions';
-import { Property, PropertyListItem } from '../../../_model/configurables/Property';
-import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
-import { isNullOrUndefined } from 'util';
-
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { Property } from '../../../_model/meta/Property';
 
 export interface AddOrRemoveDialogData {
   checkboxStates: {property: Property<any>, disabled: boolean, checked: boolean, dirty: boolean}[];

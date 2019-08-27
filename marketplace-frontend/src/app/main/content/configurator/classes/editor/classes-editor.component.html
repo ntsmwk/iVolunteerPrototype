@@ -1,0 +1,70 @@
+<div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
+  <h2>Shapes</h2>
+  <div *ngFor="let p of sidebarPalettes">
+    <div style="padding-left: 5px; padding-top: 2px">> {{p.label}}</div>
+    <div *ngFor="let item of p.items">
+      <div draggable="true"
+        style="padding-top: 2px; padding-bottom: 2px; background-color: lightblue; cursor: pointer; text-align: center"
+        (mousedown)="mousedownEvent($event, p, item, graph)">{{item.label}}</div>
+      <div style="padding-top: 3px"></div>
+    </div>
+
+  </div>
+
+  <div style="padding-top: 20px"></div>
+
+  <h2>Tools</h2>
+  <div (click)="zoomInEvent()" style="cursor: pointer">
+    Zoom in
+  </div>
+
+  <div (click)="zoomOutEvent()" style="cursor: pointer">
+    Zoom out
+  </div>
+
+  <div (click)="zoomResetEvent()" style="cursor: pointer">
+    Reset View
+  </div>
+
+  <div style="position: absolute; bottom: 10px; left: 5px">
+    <!-- <button mat-raised-button type="button" color="primary" (click)=createClassInstanceClicked()>create new Instance</button>
+    <div style="padding-top: 10px"></div> -->
+
+    <button mat-raised-button type="button" color="primary" (click)="doShitWithGraph(graph)">print graph to
+      console</button>
+    <div style="padding-top: 5px"></div>
+    <button mat-raised-button type="button" color="primary" (click)="saveGraphClicked()">Save</button>
+  </div>
+</div>
+
+<!-- <div style="border-left: 10px; border-left-color: black"></div> -->
+
+<div #graphContainer id="graphContainer"></div>
+
+<div #rightSidebarContainer id="rightSidebarContainer" style="border-left: solid 6px rgb(160, 160, 160)">
+  <div [ngSwitch]="rightSidebarContext">
+    <div *ngSwitchCase="'properties'">
+
+      <h2>Properties</h2>
+
+        <div *ngFor="let p of currentClass.properties; let i = index">
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div>{{p.name}}</div>
+            <div style="padding-right: 3px"></div>
+            <a style="cursor: pointer" (click)="removePropertyClicked(currentClass, i)">> remove</a>
+          </div>
+        </div>
+
+        <div *ngIf="currentClass.properties.length<=0">
+          No properties added yet.
+        </div>
+
+        <a style="cursor: pointer" (click)="addPropertyClicked(currentClass)">> add Property</a>
+
+      </div>
+
+    <button mat-raised-button type="button" color="primary" (click)="toggleRightSidebar(false); rightSidebarContext=''"
+      style="position: absolute; bottom: 10px; right: 5px">Close</button>
+
+  </div>
+</div>

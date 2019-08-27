@@ -24,14 +24,18 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets"
+                            "src/assets",
+                            {"glob":"**/*", "input":"mxgraph_resources/", "output": "./"}
+
                         ],
                         "styles": [
                             "src/styles.scss"
                         ],
                         "scripts": [
                             "src/assets/periodpicker/jquery.min.js",
-                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js"
+                            "src/assets/periodpicker/build/jquery.periodpicker.full.min.js",
+                            "node_modules/mxgraph/javascript/mxClient.js"
+
                         ]
                     },
                     "configurations": {

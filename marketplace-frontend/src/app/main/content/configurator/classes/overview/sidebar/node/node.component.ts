@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ConfiguratorService } from '../../../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../../../_model/configurables/Configurable';
+import { ClassDefintion } from '../../../../../_model/meta/Class';
 
 import { fuseAnimations } from '@fuse/animations';
 
-import { Relationship, RelationshipType, Inheritance, Association } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship, RelationshipType, Inheritance, Association } from 'app/main/content/_model/meta/Relationship';
 import { Network } from 'vis';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { isNullOrUndefined, isNull } from 'util';
-import { Property } from 'app/main/content/_model/configurables/Property';
+import { isNullOrUndefined } from 'util';
+import { Property } from 'app/main/content/_model/meta/Property';
 import { PropertyService } from 'app/main/content/_service/property.service';
 
 
@@ -26,7 +26,7 @@ import { PropertyService } from 'app/main/content/_service/property.service';
 export class SidebarNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() marketplace: Marketplace;
-  @Input() configurableClass: ConfigurableClass;
+  @Input() configurableClass: ClassDefintion;
   @Input() relationships: Relationship[];
   @Input() network: Network;
 
@@ -133,10 +133,10 @@ export class SidebarNodeComponent implements OnInit, OnDestroy, OnChanges {
         }
       }),
 
-      this.configuratorService.addPropertiesToConfigClassById(this.marketplace, this.configurableClass.id, this.addedProperties.map(p => p.id)).toPromise().then((ret: ConfigurableClass) => {
+      this.configuratorService.addPropertiesToConfigClassById(this.marketplace, this.configurableClass.id, this.addedProperties.map(p => p.id)).toPromise().then((ret: ClassDefintion) => {
         this.configurableClass = ret;
       }),
-      this.configuratorService.changeConfigClassName(this.marketplace, this.configurableClass.id, this.configurableClass.name).toPromise().then((ret: ConfigurableClass) => {
+      this.configuratorService.changeConfigClassName(this.marketplace, this.configurableClass.id, this.configurableClass.name).toPromise().then((ret: ClassDefintion) => {
         this.configurableClass = ret;
       })
     ]).then(() => {
@@ -156,7 +156,7 @@ export class SidebarNodeComponent implements OnInit, OnDestroy, OnChanges {
         event.relationships = ret;
   
       }),
-      this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((ret: ConfigurableClass[]) => {
+      this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((ret: ClassDefintion[]) => {
         event.configurableClasses = ret;
       })
     ]).then(() => {

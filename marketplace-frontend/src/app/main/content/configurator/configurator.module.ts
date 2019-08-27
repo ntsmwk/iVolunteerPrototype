@@ -8,9 +8,8 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { ClassesModule } from './classes/classes.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
 const routes = [
-  {path: '**', component: ConfiguratorComponent}
+  {path: '', component: ConfiguratorComponent}
 ];
 
 @NgModule({

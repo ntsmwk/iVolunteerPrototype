@@ -8,7 +8,7 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { Property, PropertyKind, ListEntry } from '../_model/configurables/Property';
+import { Property, PropertyType, ListEntry } from '../_model/meta/Property';
 import { FormGroup } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 
@@ -168,12 +168,12 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
   private traverseResultAndUpdateProperties(values: any[], properties: Property<any>[]): Property<any>[] {
     
     for (let prop of properties) {
-      if (prop.kind == PropertyKind.MULTI) {
+      if (prop.type == PropertyType.MULTI) {
         //TODO DO NESTED
         this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
       } else {
         if (!isNullOrUndefined(values[prop.id]) && values[prop.id] != '') {
-          if (prop.kind === PropertyKind.LIST) {
+          if (prop.type === PropertyType.LIST) {
             //TODO do list stuff
             const result: ListEntry<any>[] = [];
             let arr = values[prop.id];

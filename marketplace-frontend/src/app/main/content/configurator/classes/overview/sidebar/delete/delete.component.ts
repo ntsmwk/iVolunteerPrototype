@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ConfiguratorService } from '../../../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../../../_model/configurables/Configurable';
+import { ClassDefintion } from '../../../../../_model/meta/Class';
 
 import { fuseAnimations } from '@fuse/animations';
 
-import { Relationship } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { Network, DataSet } from 'vis';
 
 
@@ -19,23 +19,23 @@ import { Network, DataSet } from 'vis';
 })
 export class SidebarDeleteComponent implements OnInit {
 
-  @Input() marketplace: Marketplace; 
-  @Input() configurableClassesCurrent: ConfigurableClass[];
+  @Input() marketplace: Marketplace;
+  @Input() configurableClassesCurrent: ClassDefintion[];
   @Input() relationshipsCurrent: Relationship[];
   @Input() network: Network;
   @Output() submitDeleteEvent: EventEmitter<any> = new EventEmitter();
 
 
 
-  configurableClassesToRemove: Set<ConfigurableClass> = new Set();
+  configurableClassesToRemove: Set<ClassDefintion> = new Set();
   relationshipsToRemove: Set<Relationship> = new Set();
 
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private configuratorService: ConfiguratorService){
+    private configuratorService: ConfiguratorService) {
 
-    }
+  }
 
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class SidebarDeleteComponent implements OnInit {
 
     if (event.nodes.length > 0) {
       //HANDLE NODE CLICKED EVENT
-    
+
       this.handleNodeClickedEvent(event);
 
     }
@@ -64,26 +64,26 @@ export class SidebarDeleteComponent implements OnInit {
 
   handleNodeClickedEvent(event: any) {
     //remove node
-    let delClass = this.configurableClassesCurrent.find((c: ConfigurableClass) => {
+    let delClass = this.configurableClassesCurrent.find((c: ClassDefintion) => {
       return c.id == event.nodes[0];
     });
 
-    
+
     this.configurableClassesToRemove.add(delClass);
-    
+
     //remove edges
 
     let delRelationships = this.relationshipsCurrent.filter((r: Relationship) => {
       return event.edges.find((edge: string) => {
         return r.id == edge;
       });
-    
+
     });
 
     for (let r of delRelationships) {
       this.relationshipsToRemove.add(r);
     }
-    
+
     // console.log("DEL");
     // console.log(delClass);
     // console.log(delRelationships);
@@ -101,22 +101,24 @@ export class SidebarDeleteComponent implements OnInit {
 
   onSubmit() {
     let retRelationships: Relationship[];
-    let retConfigurableClasses: ConfigurableClass[];
+    let retConfigurableClasses: ClassDefintion[];
 
     Promise.all([
-      this.configuratorService.deleteConfigClasses(this.marketplace, Array.from(this.configurableClassesToRemove).map(v => v.id)).toPromise().then((ret: ConfigurableClass[]) => {
-        retConfigurableClasses = ret;
+      this.configuratorService.deleteConfigClasses(this.marketplace, 
+        Array.from(this.configurableClassesToRemove).map(v => v.id)).toPromise().then((ret: ClassDefintion[]) => {
+          retConfigurableClasses = ret;
       }),
-  
-      this.configuratorService.deleteRelationships(this.marketplace, Array.from(this.relationshipsToRemove).map(r => r.id)).toPromise().then((ret: Relationship[]) => {
+
+      this.configuratorService.deleteRelationships(this.marketplace, 
+        Array.from(this.relationshipsToRemove).map(r => r.id)).toPromise().then((ret: Relationship[]) => {
         retRelationships = ret;
       })
     ]).then(() => {
-      this.submitDeleteEvent.emit({configurableClasses: retConfigurableClasses, relationships: retRelationships});
+      this.submitDeleteEvent.emit({ configurableClasses: retConfigurableClasses, relationships: retRelationships });
       console.log(retRelationships);
       console.log(retConfigurableClasses);
     });
-    
+
 
   }
 

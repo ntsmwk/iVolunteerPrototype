@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ConfiguratorService } from '../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../_model/configurables/Configurable';
+import { ClassDefintion } from '../../../_model/meta/Class';
 import { MatTableDataSource } from '@angular/material';
 
 
@@ -14,11 +14,11 @@ import { MatTableDataSource } from '@angular/material';
 export class ClassesListComponent implements OnInit {
 
   @Input() marketplace: Marketplace; 
-  @Input() configurableClasses: ConfigurableClass[];
+  @Input() configurableClasses: ClassDefintion[];
   
   isLoaded: boolean = false;
 
-  dataSource = new  MatTableDataSource<ConfigurableClass>();
+  dataSource = new  MatTableDataSource<ClassDefintion>();
   displayedColumns = ['id'];
 
   constructor(private router: Router,

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Association;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Inheritance;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 
 @RestController
 public class RelationshipController {

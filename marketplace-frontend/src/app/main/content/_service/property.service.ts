@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Property, PropertyKind, MultiPropertyRet, PropertyListItem } from '../_model/configurables/Property';
+import { Property } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
@@ -14,13 +14,6 @@ export class PropertyService {
     private http: HttpClient
   ) { }
 
-  //return list of Properties containing id, name, value and kind
-  public getPropertyList(marketplace: Marketplace) {
-    console.log("calling get /properties");
-    //return this.http.get(`/textProperties`);
-    return this.http.get(`${marketplace.url}/properties/list`);
-  }
-
   public getPropertyParentItems(marketplace: Marketplace, propId: string, templateId: string, subtemplateId: string) {
     if (!isNullOrUndefined(subtemplateId)) {
       return this.http.get(`${marketplace.url}/properties/${propId}/parents?templateId=${templateId}&subtemplateId=${subtemplateId}`);
@@ -33,7 +26,7 @@ export class PropertyService {
   //return actual full Properties
   public getProperties(marketplace: Marketplace) {
     console.log("calling get /properties?full");
-    return this.http.get(`${marketplace.url}/properties/full`);
+    return this.http.get(`${marketplace.url}/properties/all`);
   }
 
   public getPropertyFromList(marketplace: Marketplace, propId: string) {
@@ -41,13 +34,13 @@ export class PropertyService {
     return this.http.get(`${marketplace.url}/properties/${propId}`);
   }
 
-  //crating new Properties
+  //creating new Properties
   public addSingleProperty(marketplace: Marketplace, property: Property<any>) {
     console.log("calling post /properties/new/single")
     return this.http.post(`${marketplace.url}/properties/new/single`, property);
   }
 
-  public addMultipleProperty(marketplace: Marketplace, property: MultiPropertyRet) {
+  public addMultipleProperty(marketplace: Marketplace, property: Property<any>) {
     console.log ("calling post /properties/new/multiple");
     return this.http.post(`${marketplace.url}/properties/new/multiple`, property);
   }

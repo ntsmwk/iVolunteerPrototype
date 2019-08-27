@@ -11,11 +11,11 @@ import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
@@ -45,7 +45,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		PropertyDTO<Object> propertyDTO = new PropertyDTO<Object>();
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
-		propertyDTO.setKind(source.getKind());
+		propertyDTO.setType(source.getType());
 		propertyDTO.setOrder(source.getOrder());
 		propertyDTO.setCustom(source.isCustom());
 		
@@ -54,7 +54,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 
 		
 		
-		if (propertyDTO.getKind().equals(PropertyKind.MULTI) || propertyDTO.getKind().equals(PropertyKind.MAP)) {
+		if (propertyDTO.getType().equals(PropertyType.MULTI) || propertyDTO.getType().equals(PropertyType.MAP) || propertyDTO.getType().equals(PropertyType.GRAPH)) {
 			List<PropertyDTO<Object>> props = new ArrayList<>();
 			
 			for (Property p : ((MultiProperty)source).getProperties()) {
@@ -74,7 +74,9 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			
 		} else {
-			SingleProperty<Object> s = new SingleProperty<Object>(source);
+//			SingleProperty<Object> s = new SingleProperty<Object>(source);
+			
+			SingleProperty<Object> s = (SingleProperty<Object>) source;
 			
 			//TODO legal Values
 			if (s.getLegalValues() != null) {
@@ -146,14 +148,13 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 		
 		prop.setId(target.getId());
 		prop.setName(target.getName());
-		prop.setKind(target.getKind());
+		prop.setType(target.getType());
 		prop.setOrder(target.getOrder());
 		prop.setCustom(target.isCustom());	
-		prop.setConfigurableType("property");
 		
 		
 		
-		if (prop.getKind().equals(PropertyKind.MULTI)) {
+		if (prop.getType().equals(PropertyType.MULTI) || prop.getType().equals(PropertyType.MAP) || prop.getType().equals(PropertyType.GRAPH)) {
 			MultiProperty ret = new MultiProperty(prop);
 			List<Property> props = new ArrayList<>();
 			
@@ -182,7 +183,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			if (target.getValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getValues()) {
-					values.add(listEntryMapper.toEntity(entry, target.getKind()));
+					values.add(listEntryMapper.toEntity(entry, target.getType()));
 				}
 			}
 			ret.setValues(values);
@@ -192,7 +193,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			if (target.getLegalValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getLegalValues()) {
-					legalValues.add(listEntryMapper.toEntity(entry, target.getKind()));
+					legalValues.add(listEntryMapper.toEntity(entry, target.getType()));
 				}
 			}
 			
@@ -202,7 +203,7 @@ public class PropertyMapper implements AbstractMapper<Property, PropertyDTO<Obje
 			
 			if (target.getDefaultValues() != null) {
 				for (ListEntryDTO<Object> entry : target.getDefaultValues()) {
-					defaultValues.add(listEntryMapper.toEntity(entry, target.getKind()));
+					defaultValues.add(listEntryMapper.toEntity(entry, target.getType()));
 				}
 			}
 			

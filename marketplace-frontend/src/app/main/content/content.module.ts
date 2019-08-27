@@ -132,6 +132,13 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
+  { path: 'main/configurator/instance-editor',
+  loadChildren: './configurator/class-instances/form-editor/class-instance-form-editor.module#ClassInstanceFormEditorModule',
+  canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  
+  
   //!--AK
   {
     path: 'main/task-template-form',

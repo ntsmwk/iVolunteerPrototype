@@ -1,10 +1,10 @@
-import { ChooseDialogModule } from './choose-dialog.module';
+import { ChooseTemplateToCopyDialogModule } from './choose-dialog.module';
 
 describe('ChooseDialogModule', () => {
-  let chooseDialogModule: ChooseDialogModule;
+  let chooseDialogModule: ChooseTemplateToCopyDialogModule;
 
   beforeEach(() => {
-    chooseDialogModule = new ChooseDialogModule();
+    chooseDialogModule = new ChooseTemplateToCopyDialogModule();
   });
 
   it('should create an instance', () => {

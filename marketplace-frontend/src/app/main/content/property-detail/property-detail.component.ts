@@ -6,7 +6,7 @@ import { TaskService } from '../_service/task.service';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { Property, PropertyParentItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/configurables/Property';
+import { Property, PropertyParentItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
 import { PropertyService } from '../_service/property.service';
 import { isNullOrUndefined } from 'util';

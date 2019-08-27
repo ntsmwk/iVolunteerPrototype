@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 
 /**
  * @author alexander

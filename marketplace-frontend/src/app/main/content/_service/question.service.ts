@@ -3,7 +3,7 @@ import { Injectable }       from '@angular/core';
 import { DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion, 
   SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion } from '../_model/dynamic-forms/questions';
 
-import { Property, PropertyKind, ListEntry, Rule, RuleKind } from '../_model/configurables/Property';
+import { Property, PropertyType, ListEntry, Rule, RuleKind } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
@@ -45,7 +45,7 @@ export class QuestionService {
 
   private createQuestion(property: Property<any>): QuestionBase<any> {
     let question;
-    if (property.kind === PropertyKind.TEXT) {
+    if (property.type === PropertyType.TEXT) {
       if (isNullOrUndefined(property.legalValues)) {
         
         question = new TextboxQuestion( {            
@@ -59,7 +59,7 @@ export class QuestionService {
         });
       }
 
-    } else if (property.kind === PropertyKind.WHOLE_NUMBER || property.kind === PropertyKind.FLOAT_NUMBER) {
+    } else if (property.type === PropertyType.WHOLE_NUMBER || property.type === PropertyType.FLOAT_NUMBER) {
       
       if (isNullOrUndefined(property.legalValues)) {
         question = new NumberBoxQuestion({
@@ -73,23 +73,23 @@ export class QuestionService {
         });
       }
 
-    } else if (property.kind === PropertyKind.LONG_TEXT) {
+    } else if (property.type === PropertyType.LONG_TEXT) {
         question = new TextAreaQuestion({
           value: Property.getValue(property),
         });
 
-    } else if (property.kind === PropertyKind.BOOL) {
+    } else if (property.type === PropertyType.BOOL) {
         question = new SlideToggleQuestion({
           value: Property.getValue(property),
       });
 
-    } else if (property.kind === PropertyKind.LIST) {
+    } else if (property.type === PropertyType.LIST) {
       question = new DropdownMultipleQuestion({
         values: this.setKeys(property.values),
         options: this.setListValues(property.legalValues),
       });
 
-    } else if (property.kind === PropertyKind.DATE) {
+    } else if (property.type === PropertyType.DATE) {
       console.log("leifnleifn");
       console.log(property);
       question = new DatepickerQuestion({
@@ -100,14 +100,14 @@ export class QuestionService {
     }
 
     ///TEST MultiProp List
-    else if (property.kind === PropertyKind.MULTI) {
+    else if (property.type === PropertyType.MULTI) {
       console.log("Multiple Property found:");
       console.log(property);
       question = new MultipleQuestion({
         subQuestions: this.setQuestions(property.properties),
       });
     } else {
-      console.log("property kind not implemented: " + property.kind);
+      console.log("property kind not implemented: " + property.type);
       question = new GenericQuestion({
            
       });
@@ -167,7 +167,7 @@ export class QuestionService {
     let questions: QuestionBase<any>[] = [];
     for (let property of properties) {
       
-      console.log("Kind: " + property.kind + " Name: " + property.name);
+      console.log("Type: " + property.type + " Name: " + property.name);
       let question = this.createQuestion(property);
 
       question.key = property.id;
@@ -177,7 +177,7 @@ export class QuestionService {
 
       //Set Validators
 
-      let validatorData = this.getValidatorData(property.rules, property.kind);
+      let validatorData = this.getValidatorData(property.rules, property.type);
 
       if (!isNullOrUndefined(validatorData)) {
         question.validators = validatorData.validators;
@@ -189,7 +189,7 @@ export class QuestionService {
     return questions;
   }
 
-  private getValidatorData(rules: Rule[], propertyKind: PropertyKind /*, questions: QuestionBase<any>[]*/): ValidatorData {
+  private getValidatorData(rules: Rule[], propertyKind: PropertyType /*, questions: QuestionBase<any>[]*/): ValidatorData {
     let validators: ValidatorFn[] = [];
     let messages: Map<string,string> = new Map<string,string>();
     let required: boolean = false;
@@ -221,7 +221,7 @@ export class QuestionService {
     } 
   }
 
-  private convertRuleToValidator(rule: Rule, propertyKind: PropertyKind/*, questions: QuestionBase<any>[]*/): SingleValidatorData {
+  private convertRuleToValidator(rule: Rule, propertyKind: PropertyType/*, questions: QuestionBase<any>[]*/): SingleValidatorData {
 
     let validator: ValidatorFn;
     let key: string;

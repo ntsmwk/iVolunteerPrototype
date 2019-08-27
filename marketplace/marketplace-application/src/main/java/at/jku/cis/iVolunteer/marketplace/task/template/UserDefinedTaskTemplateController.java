@@ -30,12 +30,12 @@ import at.jku.cis.iVolunteer.mapper.property.PropertyParentItemMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateStubMapper;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyParentItemDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyParentItemDTO;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
@@ -453,7 +453,7 @@ public class UserDefinedTaskTemplateController {
 			Property p = propertyMapper.toEntity(dto);
 			System.out.println("===Property to Update===");
 
-			if (!p.getKind().equals(PropertyKind.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
+			if (!p.getType().equals(PropertyType.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
 
 				
 				SingleProperty<Object> updateProperty = (SingleProperty<Object>) p;
@@ -467,7 +467,7 @@ public class UserDefinedTaskTemplateController {
 				
 				returnProperties.add(currentProperty);
 				
-			} else if (p.getKind().equals(PropertyKind.MULTI)) {
+			} else if (p.getType().equals(PropertyType.MULTI)) {
 				System.out.println("\nMULTIPLE--> " + p.getId());
 				
 				MultiProperty currentProperty = (MultiProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();

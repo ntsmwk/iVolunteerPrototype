@@ -20,12 +20,13 @@ import at.jku.cis.iVolunteer.marketplace.configurable.relationship.RelationshipR
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.configurable.ConfigurableObject;
-import at.jku.cis.iVolunteer.model.configurable.class_.ConfigurableClass;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Relationship;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.RelationshipType;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.*;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationParameter;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @SpringBootApplication
@@ -97,7 +98,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 	}
 	
 	private void addTestConfigClasses() {
-		ConfigurableClass c1 = new ConfigurableClass();
+		ClassDefinition c1 = new ClassDefinition();
 		c1.setId("test1");
 		c1.setName("Class 1");
 		c1.setProperties(new LinkedList<Property>());
@@ -110,30 +111,30 @@ public class MarketplaceApplication implements CommandLineRunner {
 		
 		
 		
-		ConfigurableClass c2 = new ConfigurableClass();
+		ClassDefinition c2 = new ClassDefinition();
 		c2.setId("test2");
 		c2.setName("Class 2");
 		c2.setProperties(new ArrayList<Property>());
 		
-		ConfigurableClass c3 = new ConfigurableClass();
+		ClassDefinition c3 = new ClassDefinition();
 		c3.setId("test3");
 		c3.setName("Class 3");
 		c3.setProperties(new ArrayList<Property>());
 		
 		
-		ConfigurableClass c4 = new ConfigurableClass();
+		ClassDefinition c4 = new ClassDefinition();
 		c4.setId("test4");
 		c4.setName("Class 4");
 		c4.setProperties(new ArrayList<Property>());
 		
 		
-		ConfigurableClass c5 = new ConfigurableClass();
+		ClassDefinition c5 = new ClassDefinition();
 		c5.setId("test5");
 		c5.setName("Class 5");
 		c5.setProperties(new ArrayList<Property>());
 		
 		
-		ConfigurableClass c6 = new ConfigurableClass();
+		ClassDefinition c6 = new ClassDefinition();
 		c6.setId("test6");
 		c6.setName("Class 6");
 		c6.setProperties(new ArrayList<Property>());

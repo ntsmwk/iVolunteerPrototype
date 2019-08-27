@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ConfiguratorService } from '../../../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../../../_model/configurables/Configurable';
+import { ClassDefintion } from '../../../../../_model/meta/Class';
 
 import { fuseAnimations } from '@fuse/animations';
 
-import { Relationship, RelationshipType, Inheritance, Association } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship, RelationshipType, Inheritance, Association } from 'app/main/content/_model/meta/Relationship';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyService } from 'app/main/content/_service/property.service';
-import { Property } from 'app/main/content/_model/configurables/Property';
+import { Property } from 'app/main/content/_model/meta/Property';
 import { Network } from 'vis';
 import { isNullOrUndefined } from 'util';
 import { ok } from 'assert';
@@ -28,7 +28,7 @@ import { of } from 'rxjs';
 export class SidebarNewClassComponent implements OnInit, OnDestroy {
 
   @Input() marketplace: Marketplace;
-  @Input() configurableClasses: ConfigurableClass[];
+  @Input() configurableClasses: ClassDefintion[];
   @Input() relationships: Relationship[];
   @Input() network: Network;
 
@@ -70,12 +70,12 @@ export class SidebarNewClassComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    let newClass: ConfigurableClass = new ConfigurableClass();
+    let newClass: ClassDefintion = new ClassDefintion();
     newClass.id = null;
     newClass.name = this.form.value['name'];
     newClass.properties = this.selectedProperties;
 
-    this.configuratorService.createNewConfigClass(this.marketplace, newClass).toPromise().then((ret: ConfigurableClass) => {
+    this.configuratorService.createNewConfigClass(this.marketplace, newClass).toPromise().then((ret: ClassDefintion) => {
 
       this.configurableClasses.push(ret);
 
@@ -94,7 +94,7 @@ export class SidebarNewClassComponent implements OnInit, OnDestroy {
 
   }
 
-  createPromise(r: Relationship, ret: ConfigurableClass) {
+  createPromise(r: Relationship, ret: ClassDefintion) {
 
     return new Promise((resolve) => {
 

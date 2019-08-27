@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 
-import { PropertyListItem, Property, PropertyKind } from "../_model/configurables/Property";
+import {Property } from "../_model/meta/Property";
 
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
@@ -21,13 +21,13 @@ import { isNullOrUndefined } from 'util';
 })
 export class PropertyListComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<PropertyListItem>();
+  dataSource = new MatTableDataSource<Property<any>>();
   displayedColumns = ['id', 'name', 'defaultValue', 'kind', 'actions'];
   // displayedColumns = ['id', 'name', 'defaultValue', 'kind'];
 
   marketplace: Marketplace;
 
-  propertyArray: PropertyListItem[];
+  propertyArray: Property<any>[];
 
   customOnly: boolean;
   isLoaded: boolean;
@@ -45,7 +45,7 @@ export class PropertyListComponent implements OnInit {
 
   }
 
-  onRowSelect(p: PropertyListItem) {
+  onRowSelect(p: Property<any>) {
     console.log("Property Clicked: " + p.name );
     console.log("CURRENT URL: " + this.router.url)
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
@@ -61,7 +61,7 @@ export class PropertyListComponent implements OnInit {
       this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
-          this.propertyService.getPropertyList(marketplace).toPromise().then((pArr: PropertyListItem[]) => {
+          this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
             this.propertyArray = pArr;
             this.updateDataSource();
             console.log(pArr);
@@ -72,7 +72,7 @@ export class PropertyListComponent implements OnInit {
   }
 
   updateDataSource() {
-    let ret: PropertyListItem[] = [];
+    let ret: Property<any>[] = [];
 
     for (let property of this.propertyArray) {
       if (!this.customOnly) {
@@ -87,7 +87,7 @@ export class PropertyListComponent implements OnInit {
 
   
 
-  viewPropertyAction(property: PropertyListItem) {
+  viewPropertyAction(property: Property<any>) {
     console.log("clicked view Property")
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id],{queryParams: {ref: 'list'}});
     console.log(property);
@@ -98,7 +98,7 @@ export class PropertyListComponent implements OnInit {
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/'] );
   }
 
-  editPropertyAction(property: PropertyListItem) { 
+  editPropertyAction(property: Property<any>) { 
     console.log("clicked edit Property: ");
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
 
@@ -108,7 +108,7 @@ export class PropertyListComponent implements OnInit {
 
   }
 
-  deletePropertyAction(property: PropertyListItem) {
+  deletePropertyAction(property: Property<any>) {
     console.log("clicked delete Property: ");
     console.log(property)
 

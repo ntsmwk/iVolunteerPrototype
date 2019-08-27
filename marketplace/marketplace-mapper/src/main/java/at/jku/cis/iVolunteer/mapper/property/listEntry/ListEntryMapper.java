@@ -1,8 +1,5 @@
 package at.jku.cis.iVolunteer.mapper.property.listEntry;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyValueConverter;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 
@@ -64,11 +61,11 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEn
 	@Override
 	public ListEntry<Object> toEntity(ListEntryDTO<Object> target) {
 		
-		throw new UnsupportedOperationException("use Method specifying the PropertyKind to ensure type safety");
+		throw new UnsupportedOperationException("use Method specifying the PropertyType to ensure type safety");
 	}
 	
 	
-	public ListEntry<Object> toEntity(ListEntryDTO<Object> target, PropertyKind kind) {
+	public ListEntry<Object> toEntity(ListEntryDTO<Object> target, PropertyType type) {
 		
 		if (target == null) {
 			return null;
@@ -82,7 +79,7 @@ public class ListEntryMapper implements AbstractMapper<ListEntry<Object>, ListEn
 				entry.setId(target.getId());
 			}
 			
-			entry.setValue(propertyValueConverter.convert(target.getValue(), kind));
+			entry.setValue(propertyValueConverter.convert(target.getValue(), type));
 			
 			return entry;
 		}

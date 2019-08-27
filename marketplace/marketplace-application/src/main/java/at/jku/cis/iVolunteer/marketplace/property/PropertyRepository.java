@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 
 @Repository
 public interface PropertyRepository extends MongoRepository<Property, String> {

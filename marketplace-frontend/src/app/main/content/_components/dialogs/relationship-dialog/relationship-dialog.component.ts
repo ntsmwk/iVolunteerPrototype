@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { Relationship, Inheritance, Association, RelationshipType, AssociationParameter } from "../../../_model/configurables/Relationship";
+import { Relationship, Inheritance, Association, RelationshipType, AssociationParameter } from "../../../_model/meta/Relationship";
 
 @Component({
   selector: 'relationship-dialog',

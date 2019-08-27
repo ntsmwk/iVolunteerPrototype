@@ -1,19 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PropertyService } from '../_service/property.service';
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyListItem, PropertyKind, Property } from '../_model/configurables/Property';
 
-import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ConfiguratorService } from '../_service/configurator.service';
-import { ConfigurableClass } from '../_model/configurables/Configurable';
+import { ClassDefintion } from '../_model/meta/Class';
 import { Participant } from '../_model/participant';
-import { fuseAnimations } from '@fuse/animations';
 import { RelationshipService } from '../_service/relationship.service';
-import { Relationship } from '../_model/configurables/Relationship';
+import { Relationship } from '../_model/meta/Relationship';
 
 
 
@@ -27,7 +23,7 @@ import { Relationship } from '../_model/configurables/Relationship';
 export class ConfiguratorComponent implements OnInit {
 
   marketplace: Marketplace;
-  configurableClasses: ConfigurableClass[];
+  configurableClasses: ClassDefintion[];
   relationships: Relationship[];
 
 
@@ -49,7 +45,7 @@ export class ConfiguratorComponent implements OnInit {
           this.marketplace = marketplace;
 
           Promise.all([
-            this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((configurableClasses: ConfigurableClass[]) => {
+            this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((configurableClasses: ClassDefintion[]) => {
               this.configurableClasses = configurableClasses;              
             }),
             

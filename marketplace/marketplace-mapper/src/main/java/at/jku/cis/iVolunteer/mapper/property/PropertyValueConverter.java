@@ -6,19 +6,19 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Component
 public class PropertyValueConverter {
 	
-	public Object convert (Object source, PropertyKind kind) {
+	public Object convert (Object source, PropertyType type) {
 		Object ret;
 		
-		if (kind.equals(PropertyKind.DATE)) {
+		if (type.equals(PropertyType.DATE)) {
 			ret = convertObjectToDate(source);
-		} else if (kind.equals(PropertyKind.FLOAT_NUMBER)) {
+		} else if (type.equals(PropertyType.FLOAT_NUMBER)) {
 			ret = convertObjectToDouble(source);
-		} else if (kind.equals(PropertyKind.WHOLE_NUMBER)) {
+		} else if (type.equals(PropertyType.WHOLE_NUMBER)) {
 			ret = convertObjectToInteger(source);
 		} else {
 			ret = source;

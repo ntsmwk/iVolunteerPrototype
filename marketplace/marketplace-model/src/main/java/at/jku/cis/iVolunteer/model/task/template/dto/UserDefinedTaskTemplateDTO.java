@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.task.template.dto;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 
 public class UserDefinedTaskTemplateDTO {
 

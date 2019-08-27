@@ -5,10 +5,8 @@ import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { Property, PropertyKind } from 'app/main/content/_model/configurables/Property';
-import { getOrSetAsInMap } from '@angular/animations/browser/src/render/shared';
+import { Property, PropertyType } from 'app/main/content/_model/meta/Property';
 import { ConfiguratorService } from 'app/main/content/_service/configurator.service';
-import { ConfigurableClass, ConfigurableObject } from 'app/main/content/_model/configurables/Configurable';
 
 @Component({
   selector: 'app-map-property-test',
@@ -42,7 +40,7 @@ export class MapPropertyTestComponent implements OnInit {
         this.marketplace = marketplace;
         this.propertyService.getProperties(marketplace).toPromise().then((properties: Property<any>[]) => {
           this.mapProperties = properties.filter((property: Property<any>) => {
-            return property.kind == PropertyKind.MAP;
+            return property.type == PropertyType.MAP;
           });
 
           console.log(this.mapProperties);

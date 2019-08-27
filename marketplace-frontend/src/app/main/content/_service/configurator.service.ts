@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "../_model/marketplace";
-import { ConfigurableClass, ConfigurableObject } from "../_model/configurables/Configurable";
-import { Relationship, Association, Inheritance, RelationshipType } from "../_model/configurables/Relationship";
+import { ClassDefintion } from "../_model/meta/Class";
+import { Relationship, Association, Inheritance, RelationshipType } from "../_model/meta/Relationship";
 import { of } from "rxjs";
-import { Property } from "../_model/configurables/Property";
+import { Property } from "../_model/meta/Property";
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +36,7 @@ import { Property } from "../_model/configurables/Property";
 
     }
 
-    createNewConfigClass(marketplace: Marketplace, clazz: ConfigurableClass) {
+    createNewConfigClass(marketplace: Marketplace, clazz: ClassDefintion) {
 
       return this.http.post(`${marketplace.url}/configclass/new`, clazz);
 
@@ -79,7 +79,7 @@ import { Property } from "../_model/configurables/Property";
     }
 
     //TODO
-    addRelationships(marketplace: Marketplace, configurableClass: ConfigurableClass, relationships: any[]) {
+    addRelationships(marketplace: Marketplace, configurableClass: ClassDefintion, relationships: any[]) {
     
       //Patch assigned ID
       let promises: Promise<any>[] = [];
@@ -98,7 +98,7 @@ import { Property } from "../_model/configurables/Property";
 
     }
 
-   private createPromise(marketplace: Marketplace, r: Relationship, c: ConfigurableClass) {
+   private createPromise(marketplace: Marketplace, r: Relationship, c: ClassDefintion) {
 
       return new Promise((resolve) => {
   

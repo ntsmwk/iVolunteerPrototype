@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyListItem, Property, PropertyKind, MultiPropertyRet, RuleKind } from '../../_model/configurables/Property';
+import { Property, PropertyType, RuleKind } from '../../_model/meta/Property';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
@@ -30,7 +30,7 @@ export class RuleListItem {
 })
 export class MultiplePropertyComponent implements OnInit {
 
-  @Input() propertyListItems: PropertyListItem[];
+  @Input() propertyListItems: Property<any>[];
   @Input() marketplace : Marketplace;
   @Input() currentProperty: Property<any>;
 
@@ -42,17 +42,17 @@ export class MultiplePropertyComponent implements OnInit {
   ruleKindOptions: RuleKindOption[] = [];
 
   //MultiProperty
-  addedProperties: PropertyListItem[] = [];
+  addedProperties: Property<any>[] = [];
 
   form: FormGroup;
 
-  property: MultiPropertyRet = new MultiPropertyRet();
+  property: Property<any> = new Property<any>();
 
   constructor(private propertyService: PropertyService,
     private formBuilder: FormBuilder) { }
 
-  dataSource = new MatTableDataSource<PropertyListItem>();
-  addedDataSource = new MatTableDataSource<PropertyListItem>();
+  dataSource = new MatTableDataSource<Property<any>>();
+  addedDataSource = new MatTableDataSource<Property<any>>();
   displayedColumns: string[] = ['name', 'kind', 'actions'];
 
   rulesDataSource = new MatTableDataSource<RuleListItem>();
@@ -68,7 +68,7 @@ export class MultiplePropertyComponent implements OnInit {
       'name': ['', [Validators.required, propertyNameUniqueValidator(this.propertyListItems, this.currentProperty)]]
     });
 
-    for (let kind in PropertyKind) {
+    for (let kind in PropertyType) {
       this.propertyKindOptions.push(kind);
     }
 
@@ -78,7 +78,7 @@ export class MultiplePropertyComponent implements OnInit {
       this.form.get('name').setValue(this.currentProperty.name);
 
       //Hide current Property
-      this.propertyListItems.find( (item: PropertyListItem) => {
+      this.propertyListItems.find( (item: Property<any>) => {
         return item.id == this.currentProperty.id;
       }).show = false;
 
@@ -102,7 +102,7 @@ export class MultiplePropertyComponent implements OnInit {
       this.showAddPropertyList = true;
     }
 
-    this.dataSource.data = this.propertyListItems.filter((p: PropertyListItem) => {
+    this.dataSource.data = this.propertyListItems.filter((p: Property<any>) => {
       // console.log(p);
       if (p.show == true) {
         return p;
@@ -140,18 +140,18 @@ export class MultiplePropertyComponent implements OnInit {
   public filterInput = (value: string) => {
     if (this.filterKind == undefined) {
       this.dataSource.filterPredicate = (data, filter: string): boolean => {
-        return data.name.toLowerCase().includes(filter) || data.kind.toString().toLowerCase().includes(filter);
+        return data.name.toLowerCase().includes(filter) || data.type.toString().toLowerCase().includes(filter);
       };
 
     } else if (value.length > 0) {    
       this.dataSource.filterPredicate = (data, filter: string): boolean => {
-        return data.kind.toString().toLowerCase() == this.filterKind.toLowerCase() && 
+        return data.type.toString().toLowerCase() == this.filterKind.toLowerCase() && 
                 data.name.toLowerCase().includes(filter)
       };
 
     } else {
       this.dataSource.filterPredicate = (data, filter: string): boolean => {
-        return data.kind.toString().toLowerCase() == this.filterKind.toLowerCase();
+        return data.type.toString().toLowerCase() == this.filterKind.toLowerCase();
       };
     }
 
@@ -170,11 +170,11 @@ export class MultiplePropertyComponent implements OnInit {
   public filterPropertyKind = (option: string) => {
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
       if (!isNullOrUndefined(data.name) && !isNullOrUndefined(this.filterName)) {
-        return data.kind.toString().toLocaleLowerCase() == filter && data.name.toString().toLocaleLowerCase().includes(this.filterName.toLocaleLowerCase());
+        return data.type.toString().toLocaleLowerCase() == filter && data.name.toString().toLocaleLowerCase().includes(this.filterName.toLocaleLowerCase());
       } else if (!isNullOrUndefined(data.name) && isNullOrUndefined(this.filterName)) {
-        return data.kind.toString().toLocaleLowerCase() == filter;
+        return data.type.toString().toLocaleLowerCase() == filter;
       } else {
-        return data.kind.toString().toLowerCase() == filter;
+        return data.type.toString().toLowerCase() == filter;
       } 
     };
 
@@ -189,7 +189,7 @@ export class MultiplePropertyComponent implements OnInit {
     }
   }
 
-  public addProperty(prop: PropertyListItem) {
+  public addProperty(prop: Property<any>) {
     console.log("adding property ID " + prop.id);
     console.log(prop);
     prop.show = false;
@@ -197,7 +197,7 @@ export class MultiplePropertyComponent implements OnInit {
     this.addedDataSource.data = this.addedProperties;
     // console.log(this.addedDataSource.data);
 
-    this.dataSource.data = this.propertyListItems.filter((p: PropertyListItem) => {
+    this.dataSource.data = this.propertyListItems.filter((p: Property<any>) => {
       // console.log(p);
       if (p.show == true) {
         return p;
@@ -208,9 +208,9 @@ export class MultiplePropertyComponent implements OnInit {
     
   }
 
-  public removeProperty(prop: PropertyListItem) {
+  public removeProperty(prop: Property<any>) {
     // removing from "added Properties"
-    this.addedDataSource.data = this.addedProperties.filter((p: PropertyListItem) => {
+    this.addedDataSource.data = this.addedProperties.filter((p: Property<any>) => {
       if (p.id != prop.id) {
         return p;
       }
@@ -226,7 +226,7 @@ export class MultiplePropertyComponent implements OnInit {
     }
 
     //update the datasource of the table
-    this.dataSource.data = this.propertyListItems.filter((p: PropertyListItem) => {
+    this.dataSource.data = this.propertyListItems.filter((p: Property<any>) => {
       if (p.show) {
         return p;
       }
@@ -248,14 +248,16 @@ export class MultiplePropertyComponent implements OnInit {
         this.property.id = this.currentProperty.id;
       }
 
-      this.property.kind = PropertyKind.MULTI;
+      this.property.type = PropertyType.MULTI;
       this.property.name = this.form.get('name').value;
 
-      this.property.propertyIDs = [];
+      this.property.properties = [];
       this.property.rules = [];
 
+      this.property.custom = true;
+
       for (let p of this.addedProperties) {
-        this.property.propertyIDs.push(p.id);
+        this.property.properties.push(p);
       }
 
       this.propertyService.addMultipleProperty(this.marketplace, this.property).toPromise().then(() => {

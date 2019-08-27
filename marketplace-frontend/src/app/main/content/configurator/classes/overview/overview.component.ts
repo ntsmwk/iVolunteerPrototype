@@ -2,13 +2,13 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ConfiguratorService } from '../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../_model/configurables/Configurable';
+import { ClassDefintion } from '../../../_model/meta/Class';
 
 import { fuseAnimations } from '@fuse/animations';
 
 
 import { Node, Edge, Network, DataSet } from "vis";
-import { Relationship, RelationshipType, Association, Inheritance, AssociationParameter } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship, RelationshipType, Association, Inheritance, AssociationParameter } from 'app/main/content/_model/meta/Relationship';
 import { detectChanges } from '@angular/core/src/render3';
 import { isNullOrUndefined } from 'util';
 
@@ -22,6 +22,11 @@ const SIDEBAR_CLOSED_COLOR = 'rgba(234, 254, 255, 0.0)';
 const SIDEBAR_OPEN_COLOR = 'rgba(234, 254, 255, 0.4)';
 
 
+
+
+
+
+
 @Component({
   selector: 'app-classes-overview',
   templateUrl: './overview.component.html',
@@ -32,7 +37,7 @@ const SIDEBAR_OPEN_COLOR = 'rgba(234, 254, 255, 0.4)';
 export class ClassesOverviewComponent implements OnInit {
 
   @Input() marketplace: Marketplace;
-  @Input() configurableClasses: ConfigurableClass[];
+  @Input() configurableClasses: ClassDefintion[];
   @Input() relationships: Relationship[];
 
   isLoaded: boolean = false;
@@ -341,7 +346,7 @@ export class ClassesOverviewComponent implements OnInit {
     this.sidebarContentType = 'node';
     this.openSidebar();
 
-    let n = this.configurableClasses.find((c: ConfigurableClass) => {
+    let n = this.configurableClasses.find((c: ClassDefintion) => {
       return c.id == event.nodes[0];
     });
 

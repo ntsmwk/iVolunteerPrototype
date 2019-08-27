@@ -13,18 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.configurable.ConfigurableObjectRepository;
 import at.jku.cis.iVolunteer.marketplace.configurable.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
-import at.jku.cis.iVolunteer.model.configurable.ConfigurableObject;
-import at.jku.cis.iVolunteer.model.configurable.class_.ConfigurableClass;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Association;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Inheritance;
-import at.jku.cis.iVolunteer.model.configurable.class_.relationship.Relationship;
-import at.jku.cis.iVolunteer.model.configurable.configurables.MatchingRule;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.TextProperty;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.TextProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @RestController
@@ -32,7 +30,7 @@ public class ConfigurableClassController {
 
 	
 	@Autowired ConfigurableClassRepository configurableClassRepository;
-	@Autowired ConfigurableObjectRepository configurableObjectRepository;
+//	@Autowired ConfigurableObjectRepository configurableObjectRepository;
 	@Autowired RelationshipRepository relationshipRepository;
 	
 	@Autowired PropertyRepository propertyRepository;
@@ -44,16 +42,16 @@ public class ConfigurableClassController {
 	 */
 	
 	@GetMapping("/configclass/all")
-	private List<ConfigurableClass> getAllConfigClasses() {
+	private List<ClassDefinition> getAllConfigClasses() {
 		System.out.println("/configclass/all");
 		
-		List<ConfigurableClass> ret =  configurableClassRepository.findAll();
+		List<ClassDefinition> ret =  configurableClassRepository.findAll();
 		return ret;
 		
 	}
 	
 	@GetMapping("/configclass/{id}") 
-	private ConfigurableClass getConfigClassByID(@PathVariable("id") String id) {
+	private ClassDefinition getConfigClassByID(@PathVariable("id") String id) {
 		System.out.println("/configclass/" + id);
 
 		return configurableClassRepository.findOne(id);
@@ -61,22 +59,22 @@ public class ConfigurableClassController {
 	}
 	
 	@PostMapping("/configclass/new")
-	private ConfigurableClass newConfigClass(@RequestBody ConfigurableClass configurableClass) {
+	private ClassDefinition newConfigClass(@RequestBody ClassDefinition configurableClass) {
 		System.out.println("/configclass/new");
 
 		return configurableClassRepository.save(configurableClass);
 	}
 	
 	@PutMapping("/configclass/{id}/change-name") 
-	private ConfigurableClass changeConfigClassName(@PathVariable("id") String id, @RequestBody String newName) {
+	private ClassDefinition changeConfigClassName(@PathVariable("id") String id, @RequestBody String newName) {
 
-		ConfigurableClass clazz = configurableClassRepository.findOne(id);
+		ClassDefinition clazz = configurableClassRepository.findOne(id);
 		clazz.setName(newName);
 		return configurableClassRepository.save(clazz);
 	}
 	
 	@PutMapping("/configclass/delete")
-	private List<ConfigurableClass> deleteConfigClass(@RequestBody List<String> idsToRemove) {
+	private List<ClassDefinition> deleteConfigClass(@RequestBody List<String> idsToRemove) {
 		
 		System.out.println("/configclass/delete");
 
@@ -94,8 +92,8 @@ public class ConfigurableClassController {
 	 */
 	
 	@PutMapping("configclass/{id}/add-properties-by-id")
-	private ConfigurableClass addPropertiesToClassById(@PathVariable("id") String id, @RequestBody List<String> propIds) {
-		ConfigurableClass clazz = configurableClassRepository.findOne(id);
+	private ClassDefinition addPropertiesToClassById(@PathVariable("id") String id, @RequestBody List<String> propIds) {
+		ClassDefinition clazz = configurableClassRepository.findOne(id);
 		
 		List<Property> props = Lists.newLinkedList(propertyRepository.findAll(propIds));
 		
@@ -105,9 +103,9 @@ public class ConfigurableClassController {
 	
 	
 	@PutMapping("configclass/{id}/add-properties")
-	private ConfigurableClass addPropertiesToClass(@PathVariable("id") String id, @RequestBody List<PropertyDTO<Object>> properties) {
+	private ClassDefinition addPropertiesToClass(@PathVariable("id") String id, @RequestBody List<PropertyDTO<Object>> properties) {
 		
-		ConfigurableClass clazz = configurableClassRepository.findOne(id);
+		ClassDefinition clazz = configurableClassRepository.findOne(id);
 		
 		List<Property> props= propertyMapper.toEntities(properties);
 		
@@ -119,10 +117,10 @@ public class ConfigurableClassController {
 	
 	
 	@PutMapping("/configclass/{id}/remove-properties")
-	private ConfigurableClass removeConfigObjectFromClass(@PathVariable("id") String id, @RequestBody List<String> idsToRemove) {
+	private ClassDefinition removeConfigObjectFromClass(@PathVariable("id") String id, @RequestBody List<String> idsToRemove) {
 		
 		System.out.println("/configclass/" + id + "/remove-objects");
-		ConfigurableClass clazz = configurableClassRepository.findOne(id);
+		ClassDefinition clazz = configurableClassRepository.findOne(id);
 		
 		
 		ArrayList<Property> remainingObjects = clazz.getProperties().stream()

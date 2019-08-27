@@ -2,11 +2,10 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ConfiguratorService } from '../../../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../../../_model/configurables/Configurable';
 
 import { fuseAnimations } from '@fuse/animations';
 
-import { Relationship } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
 
 
 @Component({

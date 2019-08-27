@@ -2,10 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../_model/marketplace';
 import { ConfiguratorService } from '../../_service/configurator.service';
-import { ConfigurableClass } from '../../_model/configurables/Configurable';
-import { MatTableDataSource } from '@angular/material';
+import { ClassDefintion } from '../../_model/meta/Class';
 import { fuseAnimations } from '@fuse/animations';
-import { Relationship } from '../../_model/configurables/Relationship';
+import { Relationship } from '../../_model/meta/Relationship';
 
 
 @Component({
@@ -18,7 +17,7 @@ import { Relationship } from '../../_model/configurables/Relationship';
 export class ClassesComponent implements OnInit {
 
   @Input() marketplace: Marketplace; 
-  @Input() configurableClasses: ConfigurableClass[];
+  @Input() configurableClasses: ClassDefintion[];
   @Input() relationships: Relationship[];
   
   isLoaded: boolean = false;

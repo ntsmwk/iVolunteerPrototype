@@ -6,6 +6,10 @@ import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatInputModul
 import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 
+// const routes = [
+//   {path: '**', component: ClassesConfiguratorComponent}
+// ];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +19,8 @@ import { FuseSharedModule } from '@fuse/shared.module';
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+
+
 
 
     FuseSharedModule,

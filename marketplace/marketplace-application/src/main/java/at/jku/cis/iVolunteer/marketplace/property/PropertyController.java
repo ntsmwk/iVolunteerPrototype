@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.support.SimpleMongoRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,16 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.StandardProperties;
-import at.jku.cis.iVolunteer.mapper.property.MultiPropertyRetMapper;
-import at.jku.cis.iVolunteer.mapper.property.PropertyListItemMapper;
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.configurable.ConfigurableObjectRepository;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyRetDTO;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyDTO;
-import at.jku.cis.iVolunteer.model.property.dto.PropertyListItemDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 
@@ -30,37 +23,13 @@ import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 @RestController
 public class PropertyController {
 	
-	@Autowired private PropertyListItemMapper propertyListItemMapper;
 	@Autowired private PropertyMapper propertyMapper;
 	
 	@Autowired private PropertyRepository propertyRepository;
-	@Autowired private MultiPropertyRetMapper multiPropertyRetMapper;
 		
 	@Autowired StandardProperties sp;
 	
-	
-	@GetMapping("/properties/list") 
-	public List<PropertyListItemDTO<Object>> getPropertiesList() {
-		
-		List<Property> ll = propertyRepository.findAll();
-		
-		System.out.println("List count: " + ll.size());
-		
-		for (Property p : ll) {
-			System.out.println(p.getId());
-		}
-		
-		System.out.println("properties count " + propertyRepository.count());
-		
-		System.out.println(propertyRepository.findByName("Name"));
-		
-
-		List<PropertyListItemDTO<Object>> retVal = propertyListItemMapper.toDTOs(propertyRepository.findAll());
-			
-		return retVal;
-	}
-	
-	@GetMapping("/properties/full")
+	@GetMapping("/properties/all")
 	public List<PropertyDTO<Object>> getPropertiesFull() {
 
 		List<PropertyDTO<Object>> retVal = propertyMapper.toDTOs(propertyRepository.findAll());
@@ -105,15 +74,18 @@ public class PropertyController {
 	}
 	
 	@PostMapping("/properties/new/multiple")
-	public void addMultipleProperty(@RequestBody MultiPropertyRetDTO dto) {
+	public void addMultipleProperty(@RequestBody PropertyDTO<Object> dto) {
 		System.out.println("Adding Multiple Property");
+		System.out.println("custom: " + dto.isCustom());
 		
-		MultiProperty mp = new MultiProperty(multiPropertyRetMapper.toEntity(dto));
+		MultiProperty mp = (MultiProperty) propertyMapper.toEntity(dto);
 				
-		for (String id : dto.getPropertyIDs()) {		
-			Property p = propertyRepository.findOne(id);			
-			mp.getProperties().add(p);
-		}
+		System.out.println("custom: " + mp.isCustom());
+
+//		for (String id : dto.getPropertyIDs()) {		
+//			Property p = propertyRepository.findOne(id);			
+//			mp.getProperties().add(p);
+//		}
 		
 		this.propertyRepository.save(mp);
 		

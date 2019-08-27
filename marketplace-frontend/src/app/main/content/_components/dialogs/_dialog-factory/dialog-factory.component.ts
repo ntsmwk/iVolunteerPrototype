@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
-import { Property } from 'app/main/content/_model/configurables/Property';
+import { Property } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { Relationship } from 'app/main/content/_model/configurables/Relationship';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { RelationshipDialogComponent } from "../relationship-dialog/relationship-dialog.component";
 
 @Component({

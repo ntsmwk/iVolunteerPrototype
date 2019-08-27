@@ -10,8 +10,8 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.MultiRuleMapper;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.property.dto.MultiPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.MultiPropertyDTO;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
@@ -36,7 +36,7 @@ public class MultiPropertyMapper implements AbstractMapper<MultiProperty, MultiP
 		
 		propertyDTO.setId(source.getId());
 		propertyDTO.setName(source.getName());
-		propertyDTO.setKind(source.getKind());
+		propertyDTO.setType(source.getType());
 		propertyDTO.setOrder(source.getOrder());
 		
 		propertyDTO.setProperties(propertyMapper.toDTOs(source.getProperties()));
@@ -111,7 +111,7 @@ public class MultiPropertyMapper implements AbstractMapper<MultiProperty, MultiP
 		
 		prop.setId(target.getId());
 		prop.setName(target.getName());
-		prop.setKind(target.getKind());
+		prop.setType(target.getType());
 		prop.setOrder(target.getOrder());
 		
 		prop.setProperties(propertyMapper.toEntities(target.getProperties()));

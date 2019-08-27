@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import at.jku.cis.iVolunteer.model.configurable.asset.ConfigurableAsset;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassInstance;
 
 
 @Controller
@@ -17,12 +17,12 @@ public class ConfigurableAssetController {
 	
 	
 	@GetMapping("/configasset/all")
-	List<ConfigurableAsset> getAllConfigurableAssets() {
+	List<ClassInstance> getAllConfigurableAssets() {
 		return configurableAssetRepository.findAll();
 	}
 	
 	@PostMapping("/configasset/{configClassId}/new")
-	ConfigurableAsset createConfigurabeAssetFromClass() {
+	ClassInstance createConfigurabeAssetFromClass() {
 		return null;
 	}
 	

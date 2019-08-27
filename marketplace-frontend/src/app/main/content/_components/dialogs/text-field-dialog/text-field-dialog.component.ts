@@ -1,7 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { QuestionBase } from '../../../_model/dynamic-forms/questions';
-import { Property, PropertyListItem } from '../../../_model/configurables/Property';
 
 
 export interface TextFieldDialogData {

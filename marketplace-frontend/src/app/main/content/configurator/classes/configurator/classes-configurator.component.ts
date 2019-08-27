@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ConfiguratorService } from '../../../_service/configurator.service';
-import { ConfigurableClass } from '../../../_model/configurables/Configurable';
-import { MatTableDataSource } from '@angular/material';
+import { ClassDefintion } from '../../../_model/meta/Class';
 
 
 @Component({
@@ -14,7 +13,7 @@ import { MatTableDataSource } from '@angular/material';
 export class ClassesConfiguratorComponent implements OnInit {
 
   @Input() marketplace: Marketplace; 
-  @Input() configurableClasses: ConfigurableClass[];
+  @Input() configurableClasses: ClassDefintion[];
   
   isLoaded: boolean = false;
 

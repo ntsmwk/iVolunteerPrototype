@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { Property } from '../_model/configurables/Property';
+import { Property } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
 import { PropertyService } from '../_service/property.service';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { isNullOrUndefined, isNull } from 'util';
-import { PropertyKind, Rule, RuleKind, PropertyListItem, Property } from '../../_model/configurables/Property';
+import { PropertyType, Rule, RuleKind, Property } from '../../_model/meta/Property';
 import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';
@@ -30,7 +30,7 @@ export class RuleKindOption {
 export class SinglePropertyComponent implements OnInit {
 
   // @Input() form: FormGroup;
-  @Input() propertyListItems: PropertyListItem[];
+  @Input() propertyListItems: Property<any>[];
   @Input() marketplace: Marketplace;
   @Input() currentProperty: Property<any>;
 
@@ -86,9 +86,9 @@ export class SinglePropertyComponent implements OnInit {
   //----------------------------------------------------
 
   private preparePropertyKindOptions() {
-    for (let kind in PropertyKind) {
+    for (let kind in PropertyType) {
 
-      if (kind != PropertyKind.GRAPH && kind != PropertyKind.MAP && kind != PropertyKind.MULTI && kind != PropertyKind.COMPETENCE) {
+      if (kind != PropertyType.GRAPH && kind != PropertyType.MAP && kind != PropertyType.MULTI && kind != PropertyType.COMPETENCE) {
         this.propertyKindOptions.push({ kind: kind, label: kind, display: true });
       }
     }
@@ -124,7 +124,7 @@ export class SinglePropertyComponent implements OnInit {
 
   prefillForm() {
     this.form.get('name').setValue(this.currentProperty.name);
-    this.form.get('kind').setValue(this.currentProperty.kind);
+    this.form.get('kind').setValue(this.currentProperty.type);
 
     if (!isNullOrUndefined(this.currentProperty.defaultValues)) {
       this.form.get('defaultValues').setValue(this.currentProperty.defaultValues[0].value);
@@ -275,7 +275,7 @@ export class SinglePropertyComponent implements OnInit {
 
         //Texts: no ranges, no required_true reserved for boolean
         // allowed are amount ranges, required and regex
-        case PropertyKind.TEXT: case PropertyKind.LONG_TEXT: {
+        case PropertyType.TEXT: case PropertyType.LONG_TEXT: {
           console.log("text")
           for (let option of this.ruleKindOptions) {
             if (option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
@@ -292,7 +292,7 @@ export class SinglePropertyComponent implements OnInit {
         }
 
         //Boolean: only required_true
-        case PropertyKind.BOOL: {
+        case PropertyType.BOOL: {
           console.log("bool")
           for (let option of this.ruleKindOptions) {
             if (option.kind == RuleKind.REQUIRED_TRUE) {
@@ -310,7 +310,7 @@ export class SinglePropertyComponent implements OnInit {
         }
 
         //Date: no max/min amount of characters, no required true, no regex
-        case PropertyKind.DATE: {
+        case PropertyType.DATE: {
           for (let option of this.ruleKindOptions) {
             if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MIN || option.kind == RuleKind.MIN) {
               option.display = true;
@@ -323,7 +323,7 @@ export class SinglePropertyComponent implements OnInit {
         }
 
         //Numbers ranges and amounts allowed, required allowed, regex maybe allowed, no required_true, 
-        case PropertyKind.FLOAT_NUMBER: case PropertyKind.WHOLE_NUMBER: {
+        case PropertyType.FLOAT_NUMBER: case PropertyType.WHOLE_NUMBER: {
           for (let option of this.ruleKindOptions) {
             if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MAX || option.kind == RuleKind.MIN || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.REGEX_PATTERN) {
               option.display = true;
@@ -335,7 +335,7 @@ export class SinglePropertyComponent implements OnInit {
           break;
         }
 
-        case PropertyKind.LIST: {
+        case PropertyType.LIST: {
           for (let option of this.ruleKindOptions) {
             if (option.kind == RuleKind.REQUIRED) {
               option.display = true;
@@ -594,7 +594,7 @@ export class SinglePropertyComponent implements OnInit {
         property.rules.push(rule);
       }
     }
-    property.kind = this.form.get('kind').value;
+    property.type = this.form.get('kind').value;
 
     return property;
 

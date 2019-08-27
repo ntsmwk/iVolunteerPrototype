@@ -13,9 +13,8 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.mapper.property.rule.SinglePropertyRuleMapper;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.property.dto.SinglePropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.SinglePropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
@@ -119,7 +118,6 @@ public class SinglePropertyMapper implements AbstractMapper<SingleProperty<Objec
 		prop.setId(target.getId());
 		prop.setName(target.getName());
 		prop.setOrder(target.getOrder());
-		prop.setConfigurableType("property");
 //		
 //		if (target.getKind().equals(PropertyKind.DATE)) {
 ////			prop.setValue(this.convertObjectToDate(target.getValue()));

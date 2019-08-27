@@ -3,16 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../_service/property.service';
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
-import { ParticipantRole, Participant } from '../_model/participant';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyListItem, PropertyKind, RuleKind, Rule, Property } from '../_model/configurables/Property';
-import { FormGroup } from '@angular/forms';
-import { EventEmitter } from 'events';
+import { PropertyType, Property } from '../_model/meta/Property';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-
-
-
 
 
 @Component({
@@ -32,7 +26,7 @@ export class PropertyBuildFormComponent implements OnInit {
   whichProperty: string;
 
 
-  propertyListItems: PropertyListItem[];
+  propertyListItems: Property<any>[];
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -54,7 +48,7 @@ export class PropertyBuildFormComponent implements OnInit {
 
         let marketplaceLoaded, propertyLoaded: boolean = false;
 
-        this.propertyService.getPropertyList(marketplace).toPromise().then((pArr: PropertyListItem[]) => {
+        this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
           this.propertyListItems = pArr;
             
             console.log("properties:");
@@ -123,7 +117,7 @@ export class PropertyBuildFormComponent implements OnInit {
   }
 
   setWhichProperty() {
-    if (this.currentProperty.kind == PropertyKind.MULTI) {
+    if (this.currentProperty.type == PropertyType.MULTI) {
       this.whichProperty = 'multi';
     } else {
       this.whichProperty = 'single';

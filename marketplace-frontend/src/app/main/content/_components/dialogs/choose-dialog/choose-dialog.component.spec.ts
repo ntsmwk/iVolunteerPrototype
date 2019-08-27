@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChooseDialogComponent } from './choose-dialog.component';
+import { ChooseTemplateToCopyDialogComponent } from './choose-dialog.component';
 
 describe('ChooseDialogComponent', () => {
-  let component: ChooseDialogComponent;
-  let fixture: ComponentFixture<ChooseDialogComponent>;
+  let component: ChooseTemplateToCopyDialogComponent;
+  let fixture: ComponentFixture<ChooseTemplateToCopyDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChooseDialogComponent ]
+      declarations: [ ChooseTemplateToCopyDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChooseDialogComponent);
+    fixture = TestBed.createComponent(ChooseTemplateToCopyDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

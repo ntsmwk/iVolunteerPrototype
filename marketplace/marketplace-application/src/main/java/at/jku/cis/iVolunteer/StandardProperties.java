@@ -17,15 +17,15 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.BooleanProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.DateProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.DoubleProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.MultiProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.NumberProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.Property;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.PropertyKind;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.SingleProperty;
-import at.jku.cis.iVolunteer.model.configurable.configurables.property.TextProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.BooleanProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.DateProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.DoubleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.NumberProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.TextProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRule;
 import at.jku.cis.iVolunteer.model.property.rule.MultiPropertyRuleKind;
@@ -245,7 +245,7 @@ public class StandardProperties {
 		@PostConstruct
 		public void inst() {
 			this.setId("name");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Name");
 
 			
@@ -274,7 +274,7 @@ public class StandardProperties {
 		public void inst() {
 			this.setId("description");
 			this.setName("Description");
-			this.setKind(PropertyKind.LONG_TEXT);
+			this.setKind(PropertyType.LONG_TEXT);
 //			this.setDefaultValue("lorem ipsum dolor sit amet");
 //			this.setValue(getDefaultValue());
 			
@@ -293,7 +293,7 @@ public class StandardProperties {
 		@PostConstruct
 		public void inst() {
 			this.setId("workflow_key");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Workflow Key");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
@@ -311,7 +311,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("content");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Content");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
@@ -328,7 +328,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("priority");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Priority");
 //			this.setDefaultValue("Normal");
 //			this.setValue(getDefaultValue());
@@ -353,7 +353,7 @@ public class StandardProperties {
 		}
 		public void inst() {
 			this.setId("importancy");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Importancy");
 //			this.setDefaultValue("Somewhat Important");
 //			this.setValue(getDefaultValue());
@@ -380,7 +380,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("role");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Role");
 //			this.setValue("");
 			
@@ -398,7 +398,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("location");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Location");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
@@ -414,7 +414,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("required_equipment");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Required Equipment");
 			
 			List<ListEntry<String>> defaultValues = new ArrayList<>();
@@ -438,7 +438,7 @@ public class StandardProperties {
 		}
 		public void inst() {
 			this.setId("workshift");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Allocated Shift");
 //			this.setDefaultValue("Evening");
 //			this.setValue(getDefaultValue());
@@ -472,7 +472,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("period_type");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Period Type");
 //			this.setDefaultValue("Weeks");
 //			this.setValue(getDefaultValue());
@@ -501,7 +501,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("keywords");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Keywords");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
@@ -517,7 +517,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("offered_rewards");
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			this.setName("Offered Reward(s)");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
@@ -535,7 +535,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("postcode");
-			this.setKind(PropertyKind.WHOLE_NUMBER);
+			this.setKind(PropertyType.WHOLE_NUMBER);
 			this.setName("Postcode");
 			
 			List<ListEntry<Integer>> defaultValues = new ArrayList<>();
@@ -564,7 +564,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("number_of_volunteers");
-			this.setKind(PropertyKind.WHOLE_NUMBER);
+			this.setKind(PropertyType.WHOLE_NUMBER);
 			this.setName("Number of Volunteers");
 //			this.setDefaultValue(1);
 //			this.setValue(getDefaultValue());
@@ -590,7 +590,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("period_length");
-			this.setKind(PropertyKind.WHOLE_NUMBER);
+			this.setKind(PropertyType.WHOLE_NUMBER);
 			this.setName("Period length");
 			
 			List<ListEntry<Integer>> defaultValues = new ArrayList<>();
@@ -617,7 +617,7 @@ public class StandardProperties {
 		public StartDateProperty() {
 			
 			this.setId("starting_date");
-			this.setKind(PropertyKind.DATE);
+			this.setKind(PropertyType.DATE);
 			this.setName("Starting Date");
 			
 			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
@@ -644,7 +644,7 @@ public class StandardProperties {
 	public static class EndDateProperty extends DateProperty {
 		public EndDateProperty() {
 			this.setId("end_date");
-			this.setKind(PropertyKind.DATE);
+			this.setKind(PropertyType.DATE);
 			this.setName("End Date");
 			
 //			List<Rule> rules = new LinkedList<Rule>();
@@ -682,7 +682,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("urgent");
-			this.setKind(PropertyKind.BOOL);
+			this.setKind(PropertyType.BOOL);
 			this.setName("Urgent");
 			
 			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
@@ -702,7 +702,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("highlighted");
-			this.setKind(PropertyKind.BOOL);
+			this.setKind(PropertyType.BOOL);
 			this.setName("Highlighted");
 			
 			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
@@ -722,7 +722,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("promotion");
-			this.setKind(PropertyKind.BOOL);
+			this.setKind(PropertyType.BOOL);
 			this.setName("Promotion");
 			
 			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
@@ -742,7 +742,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("feedback_requested");
-			this.setKind(PropertyKind.BOOL);
+			this.setKind(PropertyType.BOOL);
 			this.setName("Feedback Requested");
 			
 			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
@@ -762,7 +762,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("remind_participants");
-			this.setKind(PropertyKind.BOOL);
+			this.setKind(PropertyType.BOOL);
 			this.setName("Remind Participants");
 
 			List<ListEntry<Boolean>> defaultValues = new ArrayList<>();
@@ -804,7 +804,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("latitude");
-			this.setKind(PropertyKind.FLOAT_NUMBER);
+			this.setKind(PropertyType.FLOAT_NUMBER);
 			this.setName("Latitude");
 			
 			List<ListEntry<Double>> defaultValues = new ArrayList<>();
@@ -851,7 +851,7 @@ public class StandardProperties {
 		
 		public void inst() {
 			this.setId("longitude");
-			this.setKind(PropertyKind.FLOAT_NUMBER);
+			this.setKind(PropertyType.FLOAT_NUMBER);
 			this.setName("Longitude");
 			
 			List<ListEntry<Double>> defaultValues = new ArrayList<>();
@@ -887,7 +887,7 @@ public class StandardProperties {
 		public void inst() {
 			this.setName("Required Competences");
 			this.setId("required_competences");
-			this.setKind(PropertyKind.LIST);
+			this.setKind(PropertyType.LIST);
 		}
 
 	}
@@ -904,7 +904,7 @@ public class StandardProperties {
 		public void inst() {
 			this.setName("Optional Competences");
 			this.setId("optional_competences");
-			this.setKind(PropertyKind.LIST);
+			this.setKind(PropertyType.LIST);
 		}	
 	}
 	
@@ -920,14 +920,14 @@ public class StandardProperties {
 			this.setName("Aquirable Competences");
 			this.setId("aquireable_competences");
 
-			this.setKind(PropertyKind.LIST);
+			this.setKind(PropertyType.LIST);
 		}
 	}
 	
 	public static class TestMultiProperty extends MultiProperty {
 		public TestMultiProperty() {
 			this.setId("test_multi");
-			this.setKind(PropertyKind.MULTI);
+			this.setType(PropertyType.MULTI);
 			this.setName("Test Multi");
 		}
 	}
@@ -1057,7 +1057,7 @@ public class StandardProperties {
 		public CommentsProperty() {
 			this.setId("comments");
 			this.setName("Comments");
-			this.setKind(PropertyKind.LONG_TEXT);
+			this.setKind(PropertyType.LONG_TEXT);
 		}
 	}
 	
@@ -1112,7 +1112,7 @@ public class StandardProperties {
 		public PrerequisitesProperty() {
 			this.setId("prerequisites");
 			this.setName("Prerequisites");
-			this.setKind(PropertyKind.LONG_TEXT);
+			this.setKind(PropertyType.LONG_TEXT);
 		}
 	}
 	
@@ -1213,7 +1213,7 @@ public class StandardProperties {
 	
 		public MapProperty() {
 			this.setId("map");
-			this.setKind(PropertyKind.MAP);
+			this.setType(PropertyType.MAP);
 			this.setName("Map Property");
 			this.setProperties(new ArrayList<>());
 			
@@ -1260,7 +1260,7 @@ public class StandardProperties {
 		
 		public MapEntryProperty() {
 			this.setId(new ObjectId().toHexString());
-			this.setKind(PropertyKind.MULTI);
+			this.setType(PropertyType.MULTI);
 			this.setName("Map Entry");
 			this.setProperties(new ArrayList<>());
 			
@@ -1271,7 +1271,7 @@ public class StandardProperties {
 		public MapEntryProperty(double latitude, double longitude) {
 			this.setId(new ObjectId().toHexString());
 
-			this.setKind(PropertyKind.MULTI);
+			this.setType(PropertyType.MULTI);
 			this.setName("Map Entry");
 			this.setProperties(new ArrayList<>());
 			
@@ -1285,7 +1285,7 @@ public class StandardProperties {
 		public MapEntryProperty (double[] latitude, double[] longitude) {
 			this.setId(new ObjectId().toHexString());
 
-			this.setKind(PropertyKind.MULTI);
+			this.setType(PropertyType.MULTI);
 			this.setName("Map Area");
 			this.setProperties(new ArrayList<>());
 			
@@ -1303,7 +1303,7 @@ public class StandardProperties {
 		public GraphProperty() {
 			this.setId("graph");
 			this.setName("Graph");
-			this.setKind(PropertyKind.GRAPH);
+			this.setType(PropertyType.GRAPH);
 			
 			this.setProperties(new ArrayList<>());
 			
@@ -1340,7 +1340,7 @@ public class StandardProperties {
 		public GraphPropertyEntry(String name) {
 			this.setId(name);
 			this.setName(name);
-			this.setKind(PropertyKind.TEXT);
+			this.setKind(PropertyType.TEXT);
 			
 			this.setValues(new ArrayList<ListEntry<String>>());	
 		}
