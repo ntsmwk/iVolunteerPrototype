@@ -1,12 +1,12 @@
 <div class="page-layout blank p-24" style="overflow: hidden;">
 
   <!-- HEADER -->
-  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+  <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center" *ngIf="role === 'VOLUNTEER' && dashboard">
     <h1>What's Up</h1>
     <img class="header-icon" src="assets/icons/dashboard.svg">
 
     <div class="buttons">
-      <button mat-button class="add-button" (click)="openDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+      <button mat-button class="add-button" (click)="openDashboardSelectionDialog()" *ngIf="inEditMode && role === 'VOLUNTEER'">
         <mat-icon *ngIf="inEditMode">add</mat-icon>
       </button>
 
@@ -14,10 +14,15 @@
         <mat-icon *ngIf="inEditMode">save</mat-icon>
         <mat-icon *ngIf="!inEditMode">edit</mat-icon>
       </button>
+
+      <button mat-button class="delete-button" (click)="removeDashboard()" *ngIf="inEditMode && role === 'VOLUNTEER'">
+        <mat-icon *ngIf="inEditMode">delete</mat-icon>
+      </button>
     </div>
   </div>
   <!-- / HEADER -->
 
+  <!-- CONTENT -->
   <div class="content">
     <div fxLayout="row wrap" fxLayoutAlign="center" *ngIf="role === 'VOLUNTEER' && dashboard">
       <div fxLayout="column" fxFlex="100">
@@ -28,11 +33,15 @@
           </div>
         </div>
 
+        <mat-form-field *ngIf="inEditMode" fxFlex="100">
+          <input matInput placeholder="Name" [(ngModel)]="dashboard.name">
+        </mat-form-field>
+
         <div class="dashboard-area">
           <gridster #gridster [options]="gridConfig">
             <gridster-item *ngFor="let dashlet of dashboard.dashlets" [item]="dashlet">
-              <fuse-dashlet [name]="dashlet.name" [inEditMode]="inEditMode" (remove)="removeDashlet(dashlet)">
-                <ndc-dynamic [ndcDynamicComponent]="findDashletComponent(dashlet.id)"></ndc-dynamic>
+              <fuse-dashlet [dashlet]="dashlet" [inEditMode]="inEditMode"
+                            (update)="updateDashlet($event)" (remove)="removeDashlet($event)">
               </fuse-dashlet>
             </gridster-item>
           </gridster>
@@ -44,4 +53,5 @@
       <fuse-dashboard-helpseeker></fuse-dashboard-helpseeker>
     </div>
   </div>
+  <!-- / CONTENT -->
 </div>

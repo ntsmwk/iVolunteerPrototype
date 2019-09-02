@@ -1,14 +1,13 @@
 package at.jku.cis.iVolunteer.model.core.dashboard.dto;
 
-public class DashletDTO {
+import java.util.Map;
+
+public class DashletDTO extends DashletGridPositionDTO {
 	private String id;
+	private String dashletId;
 	private String name;
-	private int x;
-	private int y;
-	private int rows;
-	private int cols;
-	private int minItemRows;
-	private int minItemCols;
+	private String type;
+	private Map<String, Object> settings;
 
 	public String getId() {
 		return id;
@@ -16,6 +15,14 @@ public class DashletDTO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getDashletId() {
+		return dashletId;
+	}
+
+	public void setDashletId(String dashletId) {
+		this.dashletId = dashletId;
 	}
 
 	public String getName() {
@@ -26,51 +33,19 @@ public class DashletDTO {
 		this.name = name;
 	}
 
-	public int getX() {
-		return x;
+	public String getType() {
+		return type;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public int getY() {
-		return y;
+	public Map<String, Object> getSettings() {
+		return settings;
 	}
 
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getRows() {
-		return rows;
-	}
-
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-
-	public int getCols() {
-		return cols;
-	}
-
-	public void setCols(int cols) {
-		this.cols = cols;
-	}
-
-	public int getMinItemRows() {
-		return minItemRows;
-	}
-
-	public void setMinItemRows(int minItemRows) {
-		this.minItemRows = minItemRows;
-	}
-
-	public int getMinItemCols() {
-		return minItemCols;
-	}
-
-	public void setMinItemCols(int minItemCols) {
-		this.minItemCols = minItemCols;
+	public void setSettings(Map<String, Object> settings) {
+		this.settings = settings;
 	}
 }

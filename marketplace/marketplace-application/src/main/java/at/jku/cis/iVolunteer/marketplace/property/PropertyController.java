@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.StandardProperties;
+
 import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-
-
 
 @RestController
 public class PropertyController {
@@ -28,6 +27,7 @@ public class PropertyController {
 	@Autowired private PropertyRepository propertyRepository;
 		
 	@Autowired StandardProperties sp;
+
 	
 	@GetMapping("/properties/all")
 	public List<PropertyDTO<Object>> getPropertiesFull() {
@@ -88,7 +88,6 @@ public class PropertyController {
 //		}
 		
 		this.propertyRepository.save(mp);
-		
 	}
 	
 	@DeleteMapping("/properties/{id}")
@@ -201,4 +200,5 @@ public class PropertyController {
 //	
 //	
 //}
+
 }

@@ -15,4 +15,5 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 	List<Task> findByStatus(TaskStatus status);
 	List<Task> findByProject(Project project);
 	List<Task> findByProjectAndStatus(Project project, TaskStatus status);
+	
 }

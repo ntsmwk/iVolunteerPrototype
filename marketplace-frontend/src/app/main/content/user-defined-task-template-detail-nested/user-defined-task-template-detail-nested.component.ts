@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { QuestionService } from '../_service/question.service';
@@ -51,7 +51,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log("call on init");
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
@@ -68,7 +67,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
         this.userDefinedTaskTemplateService.getTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
           this.template = template;
         }).then(() => {
-          console.log(this.template);
           this.setUpDataSourcesAndExpandedStates();
         }),
 
@@ -134,9 +132,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
 
-
-
-
   // actions on each subtemplate (displayed once)
   newSubTemplate() {
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
@@ -148,7 +143,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
         newDataSource.data = createdTemplate.templates[createdTemplate.templates.length - 1].properties;
         this.dataSources.push(newDataSource);
         this.expandedPanelMap.push(true);
-        console.log("New: Array lengths: " + this.template.templates.length + " " + this.dataSources.length + " " + this.expandedPanelMap.length)
       });
     });
   }
@@ -164,14 +158,12 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
               this.dataSources.splice(subTemplateIndex, 1);
               this.expandedPanelMap.splice(subTemplateIndex, 1);
             }
-            console.log("Delete: Array lengths: " + this.template.templates.length + " " + this.dataSources.length + " " + this.expandedPanelMap.length)
           });
         }
       });
   }
 
   editSubTemplateName(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    console.log("edit subtemplate name " + subtemplate.name);
     this.dialogFactory.editTemplateNameDialog(subtemplate).then((name: string) => {
       if (!isNullOrUndefined(name)) {
         this.userDefinedTaskTemplateService.updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, name, null).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
@@ -184,7 +176,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
   editSubTemplateDescription(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    console.log("edit subtemplate description " + subtemplate.description);
     this.dialogFactory.editTemplateDescriptionDialog(subtemplate).then((description: string) => {
       if (!isNullOrUndefined(description)) {
         this.userDefinedTaskTemplateService.updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, null, description).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
@@ -222,24 +213,17 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
         this.userDefinedTaskTemplateService.addPropertiesToNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
           this.template = updatedTemplate;
           this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
-          // this.refresh();
         });
       }
     });
   }
 
   editProperties(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    console.log("edit Properties")
-    console.log(subtemplate);
-    console.log(subTemplateIndex);
     this.router.navigate([`/main/task-templates/user/edit/${this.marketplace.id}/${this.template.id}/${subtemplate.id}`], { queryParams: { ref: 'nested' } });
 
   }
 
   changePropertyOrder(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    console.log("change Property Order");
-    console.log(subtemplate);
-    console.log(subTemplateIndex);
 
     this.dialogFactory.changePropertyOrderDialog(subtemplate.properties).then((data: SortDialogData) => {
       if (!isNullOrUndefined(data)) {
@@ -270,11 +254,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   // actions on each row of each subtemplate
   viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, property: Property<any>, subTemplateIndex: number) {
-    console.log("View Property " + property.name + " from subtemplate " + subtemplate.name + " at index " + subTemplateIndex + "...");
-    console.log(property);
-
-    console.log("route: " + `main/task-templates/user/detail/viewproperty/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${property.id}`);
-
     this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${property.id}`], { queryParams: { ref: 'subtemplate' } })
   }
 

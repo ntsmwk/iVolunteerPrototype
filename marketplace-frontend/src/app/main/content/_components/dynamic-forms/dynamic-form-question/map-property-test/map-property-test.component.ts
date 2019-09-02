@@ -27,7 +27,6 @@ export class MapPropertyTestComponent implements OnInit {
 
 
   constructor(private propertyService: PropertyService,
-    private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService,
 
     private classDefinitionService: ClassDefinitionService,
@@ -42,19 +41,13 @@ export class MapPropertyTestComponent implements OnInit {
           this.mapProperties = properties.filter((property: Property<any>) => {
             return property.type == PropertyType.MAP;
           });
-
-          console.log(this.mapProperties);
-
           this.prepareMap();
       });
     });
-
-
     });
   }
 
   prepareMap() {
-
     this.latMap = this.mapProperties[0].properties[0].properties[0].values[0].value;
     this.lngMap = this.mapProperties[0].properties[0].properties[1].values[0].value;
 
@@ -62,8 +55,6 @@ export class MapPropertyTestComponent implements OnInit {
       this.markers.push({lat: property.properties[0].values[0].value, 
                          lng: property.properties[1].values[0].value});
     }
-
-    
   }
 
   moveMarker(evt: any) {

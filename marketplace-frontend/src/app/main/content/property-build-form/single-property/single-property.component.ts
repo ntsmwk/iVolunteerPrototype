@@ -60,18 +60,14 @@ export class SinglePropertyComponent implements OnInit {
     private propertyService: PropertyService) { }
 
   ngOnInit() {
-
-    console.log("init")
     this.preparePropertyKindOptions();
     this.prepareRuleKindOptions();
 
     this.clearForm();
 
     if (!isNullOrUndefined(this.currentProperty)) {
-      console.log("prefiling form");
       this.prefillForm();
     } else {
-      console.log("empty form");
       this.isDropdown = false;
       this.hasRules = false;
     }
@@ -96,7 +92,6 @@ export class SinglePropertyComponent implements OnInit {
 
   private prepareRuleKindOptions() {
     for (let kind in RuleKind) {
-
       switch (kind) {
         case RuleKind.REQUIRED: case RuleKind.REQUIRED_TRUE: {
           this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: false, hasValueField: false });
@@ -175,9 +170,6 @@ export class SinglePropertyComponent implements OnInit {
       this.hasRules = false;
     }
 
-    console.log(this.form.controls);
-    console.log(this.currentProperty);
-
   }
 
   //----------------------------------------------------
@@ -192,14 +184,12 @@ export class SinglePropertyComponent implements OnInit {
 
   addLegalValue() {
     console.log("adding legal value");
-    // this.legalValues = this.legalValuesForm.get('legalValues') as FormArray;
     this.legalValues = this.form.get('legalValues') as FormArray;
 
     this.legalValues.push(this.createLegalValue());
   }
 
   markLegalValuesAsTouched() {
-    // let legalValues = (this.form.get('legalValues') as FormGroup).controls
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
 
       Object.keys((this.form.get('legalValues') as FormArray).controls).forEach(key => {
@@ -213,7 +203,6 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalAndDefaultValues() {
-    console.log("clearing");
     this.clearDefaultValues();
     this.clearLegalValues();
   }
@@ -223,23 +212,15 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalValues() {
-    console.log("legal values");
-
-    console.log(this.form);
-
-
 
     if (!isNullOrUndefined(this.form.get('legalValues')) && !this.isDropdown) {
-      console.log("removing");
       this.form.removeControl('legalValues');
     } else {
-      console.log("adding");
       this.form.addControl('legalValues', this.formBuilder.array([], listNotEmptyValidator()));
     }
 
     if (this.form.get('kind').value == 'LIST') { this.isDropdown = false }
   }
-
 
   //----------------------------------------------------
   //-----------------------Rules------------------------
@@ -369,7 +350,6 @@ export class SinglePropertyComponent implements OnInit {
 
     this.ruleEditActive = true;
     this.isNewRule = true;
-    // this.rules.disable();
   }
 
   clearRules() {
@@ -479,7 +459,6 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     return false;
-
   }
 
   hasValueField(kind: string): boolean {
@@ -518,14 +497,7 @@ export class SinglePropertyComponent implements OnInit {
 
       let property = this.createPropertyFromForm();
 
-      console.log(property);
-
-      console.log("call propertyService...");
-
-      // TODO call service to send to server (and save in db)
       this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
-        console.log("PropertyService called, property added");
-        console.log(property);
         this.navigateBack();
       });
 
@@ -552,7 +524,6 @@ export class SinglePropertyComponent implements OnInit {
       property.id = this.currentProperty.id;
     }
 
-
     property.name = this.form.get('name').value;
 
     property.defaultValues = [];
@@ -568,6 +539,7 @@ export class SinglePropertyComponent implements OnInit {
 
 
     property.legalValues = [];
+   
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
       for (let value of (this.form.get('legalValues') as FormArray).value) {
         property.legalValues.push({ id: null, value: value.value });
@@ -597,7 +569,6 @@ export class SinglePropertyComponent implements OnInit {
     property.type = this.form.get('kind').value;
 
     return property;
-
   }
 
   navigateBack() {

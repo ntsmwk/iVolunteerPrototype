@@ -1,13 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-
 export interface SortDialogData {
   list: any[];
   label: string;
 }
-
-
 
 @Component({
   selector: 'sort-dialog',
