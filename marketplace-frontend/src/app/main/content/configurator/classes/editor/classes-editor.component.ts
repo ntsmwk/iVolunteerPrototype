@@ -9,6 +9,7 @@ import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyService } from 'app/main/content/_service/property.service';
 import { Property, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
+import { removeAllListeners } from 'cluster';
 
 
 
@@ -474,22 +475,61 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   }
 
   mousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
-    let outer = this;
+    const outer = this;
+
+    
+    console.log(event);
+    console.log(item);
+
+    let positionEvent: MouseEvent;
+
+    var onDragstart = function (evt) {
+      evt.dataTransfer.setData('text', item.id);
+      evt.dataTransfer.effect = "move"
+      evt.dataTransfer.effectAllowed = "move";
+
+
+    }
+
+    var onDragOver = function(evt) {
+     
+      positionEvent = evt;
+    }
+
 
     var onDragend = function (evt) {
-      console.log("dragend");
+
+
+      
+      evt.dataTransfer.getData('text');
+
+      
+
       try {
         addObjectToGraph(evt, item, graph);
       } finally {
+        console.log("ending update");
         graph.getModel().endUpdate();
         event.srcElement.removeEventListener('dragend', onDragend);
         event.srcElement.removeEventListener('mouseup', onMouseUp);
+        event.srcElement.removeEventListener("dragstart", onDragstart);
+        outer.graphContainer.nativeElement.removeEventListener("dragover", onDragOver);
+
       }
 
       function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any, graph: mxgraph.mxGraph) {
-        const coords = graph.getPointForEvent(dragEndEvent);
+         
+        const coords = graph.getPointForEvent(positionEvent, false);
+
+        
+
+        // const coords = new mx.mxPoint(dragEndEvent.pageX, dragEndEvent.pageY);
+        console.log(coords);
+        console.log(paletteItem);
+        console.log("-------");
         graph.getModel().beginUpdate();
         if (paletteItem.id == 'class') {
+          console.log("adding class");
           let cell = graph.insertVertex(graph.getDefaultParent(), null, "Class", coords.x, coords.y, 80, 30);
 
           cell.id = "new" + cell.id;
@@ -545,11 +585,18 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     var onMouseUp = function (evt) {
       event.srcElement.removeEventListener("dragend", onDragend);
       event.srcElement.removeEventListener("mouseup", onMouseUp);
+      event.srcElement.removeEventListener("dragstart", onDragstart);
+      outer.graphContainer.nativeElement.removeEventListener("dragover", onDragOver);
     }
-
 
     event.srcElement.addEventListener("dragend", onDragend);
     event.srcElement.addEventListener("mouseup", onMouseUp);
+    event.srcElement.addEventListener("dragstart", onDragstart);
+    this.graphContainer.nativeElement.addEventListener("dragover", onDragOver);
+
+  }
+
+  removeDragListeners(event: any) {
 
   }
 
