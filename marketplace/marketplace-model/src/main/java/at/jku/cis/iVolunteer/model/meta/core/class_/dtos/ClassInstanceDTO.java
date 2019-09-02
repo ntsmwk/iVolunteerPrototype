@@ -7,10 +7,12 @@ import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassInstanceDTO {
 	String id;
+	String classDefinitionId;
+	String parentClassInstanceId;
 	
-	String classId;
+	String name;
 	
-	List<PropertyInstanceDTO<?>> properties;
+	List<PropertyInstanceDTO<Object>> properties;
 	List<MatchingRule> matchingRules;
 	
 	
@@ -26,20 +28,46 @@ public class ClassInstanceDTO {
 	}
 
 	
-	public String getClassId() {
-		return classId;
+	public String getClassDefinitionId() {
+		return classDefinitionId;
 	}
 
-	public void setClassId(String classId) {
-		this.classId = classId;
+	public void setClassDefinitionId(String classDefinitionId) {
+		this.classDefinitionId = classDefinitionId;
+	}
+	
+	public String getParentClassInstanceId() {
+		return parentClassInstanceId;
 	}
 
-	public List<PropertyInstanceDTO<?>> getProperties() {
+	public void setParentClassInstanceId(String parentClassInstanceId) {
+		this.parentClassInstanceId = parentClassInstanceId;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public List<PropertyInstanceDTO<Object>> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<PropertyInstanceDTO<?>> properties) {
+	public void setProperties(List<PropertyInstanceDTO<Object>> properties) {
 		this.properties = properties;
+	}
+	
+	
+
+	public List<MatchingRule> getMatchingRules() {
+		return matchingRules;
+	}
+
+	public void setMatchingRules(List<MatchingRule> matchingRules) {
+		this.matchingRules = matchingRules;
 	}
 
 	@Override

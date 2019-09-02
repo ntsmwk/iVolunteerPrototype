@@ -104,7 +104,7 @@ public class StandardProperties {
 		
 		
 		
-		List<Property> ret = new ArrayList(props);
+		List<Property> ret = new ArrayList<>(props);
 		return ret;
 		
 	}
@@ -144,7 +144,7 @@ public class StandardProperties {
 		
 		props.add(new MapProperty());
 		
-		List<Property> ret = new ArrayList(props);
+		List<Property> ret = new ArrayList<>(props);
 		return ret;
 	}
 	
@@ -224,7 +224,7 @@ public class StandardProperties {
 			props.put(p.getId(), p);
 		}
 			
-		return new HashMap(props);
+		return new HashMap<>(props);
 		
 	}
 	
@@ -262,6 +262,7 @@ public class StandardProperties {
 			this.setRules(rules);
 			
 		}
+		
 	}
 	
 	public static class DescriptionProperty extends TextProperty {

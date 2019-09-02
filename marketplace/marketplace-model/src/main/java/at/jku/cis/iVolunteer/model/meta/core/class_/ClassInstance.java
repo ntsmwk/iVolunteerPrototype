@@ -1,10 +1,13 @@
 package at.jku.cis.iVolunteer.model.meta.core.class_;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
@@ -12,10 +15,12 @@ import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 public class ClassInstance {
 	@Id
 	String id;
+	String classDefinitionId;
+	String parentClassInstanceId;
 	
-	String classId;
+	String name;
 	
-	List<Property> properties;
+	List<PropertyInstance<Object>> properties;
 	List<MatchingRule> matchingRules;
 	
 	
@@ -31,20 +36,45 @@ public class ClassInstance {
 	}
 
 	
-	public String getClassId() {
-		return classId;
+	public String getClassDefinitionId() {
+		return classDefinitionId;
 	}
 
-	public void setClassId(String classId) {
-		this.classId = classId;
+	public void setParentClassInstanceId(String parentClassInstanceId) {
+		this.parentClassInstanceId = parentClassInstanceId;
+	}
+	
+	public String getParentClassInstanceId() {
+		return parentClassInstanceId;
 	}
 
-	public List<Property> getProperties() {
+	public void setClassDefinitionId(String classDefinitionId) {
+		this.classDefinitionId = classDefinitionId;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public List<PropertyInstance<Object>> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<Property> properties) {
+	public void setProperties(List<PropertyInstance<Object>> properties) {
 		this.properties = properties;
+	}
+
+	public List<MatchingRule> getMatchingRules() {
+		return matchingRules;
+	}
+
+	public void setMatchingRules(List<MatchingRule> matchingRules) {
+		this.matchingRules = matchingRules;
 	}
 
 	@Override

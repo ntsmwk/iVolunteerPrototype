@@ -5,10 +5,10 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
 
-import { ConfiguratorService } from '../_service/configurator.service';
+import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
 import { ClassDefintion } from '../_model/meta/Class';
 import { Participant } from '../_model/participant';
-import { RelationshipService } from '../_service/relationship.service';
+import { RelationshipService } from '../_service/meta/core/relationship/relationship.service';
 import { Relationship } from '../_model/meta/Relationship';
 
 
@@ -33,7 +33,7 @@ export class ConfiguratorComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private configuratorService: ConfiguratorService,
+    private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService) { }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class ConfiguratorComponent implements OnInit {
           this.marketplace = marketplace;
 
           Promise.all([
-            this.configuratorService.getAllConfigClasses(this.marketplace).toPromise().then((configurableClasses: ClassDefintion[]) => {
+            this.classDefinitionService.getAllClassDefinitions(this.marketplace).toPromise().then((configurableClasses: ClassDefintion[]) => {
               this.configurableClasses = configurableClasses;              
             }),
             

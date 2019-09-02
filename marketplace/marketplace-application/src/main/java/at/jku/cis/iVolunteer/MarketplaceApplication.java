@@ -15,12 +15,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
-import at.jku.cis.iVolunteer.marketplace.configurable.class_.ConfigurableClassRepository;
-import at.jku.cis.iVolunteer.marketplace.configurable.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationParameter;
@@ -36,7 +37,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 	
 	@Autowired private PropertyRepository propertyRepository;
 	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
-	@Autowired private ConfigurableClassRepository configurableClassRepository;
+	@Autowired private ClassDefinitionRepostiory configurableClassRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 
 	@Bean
@@ -97,6 +98,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 	}
 	
+	
 	private void addTestConfigClasses() {
 		ClassDefinition c1 = new ClassDefinition();
 		c1.setId("test1");
@@ -139,6 +141,21 @@ public class MarketplaceApplication implements CommandLineRunner {
 		c6.setName("Class 6");
 		c6.setProperties(new ArrayList<Property>());
 		
+		ClassDefinition c7 = new ClassDefinition();
+		c7.setId("test7");
+		c7.setName("Class 7");
+		c7.setProperties(new ArrayList<Property>());
+		
+		ClassDefinition c8 = new ClassDefinition();
+		c8.setId("test8");
+		c8.setName("Class 8");
+		c8.setProperties(new ArrayList<Property>());
+		
+		ClassDefinition c9 = new ClassDefinition();
+		c9.setId("test9");
+		c9.setName("Class 9");
+		c9.setProperties(new ArrayList<Property>());
+		
 		
 		
 //		{from: 1, to: 3},
@@ -162,6 +179,15 @@ public class MarketplaceApplication implements CommandLineRunner {
 		Association i6 = new Association(c6.getId(), c6.getId(), AssociationParameter.ONE, AssociationParameter.ZEROSTAR);
 		i6.setId("i6");
 		
+		Association i7 = new Association(c5.getId(), c7.getId(), AssociationParameter.ONE, AssociationParameter.ONESTAR);
+		i7.setId("i7");
+		Association i8 = new Association(c5.getId(), c8.getId(), AssociationParameter.ONE, AssociationParameter.ZEROONE);
+		i8.setId("i8");
+		Association i9 = new Association(c4.getId(), c9.getId(), AssociationParameter.ZEROSTAR, AssociationParameter.ZEROONE);
+		i9.setId("i9");
+		
+		
+		
 		if (!relationshipRepository.exists(i1.getId())) {
 			relationshipRepository.save(i1);
 		}
@@ -179,6 +205,15 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 		if (!relationshipRepository.exists(i6.getId())) {
 			relationshipRepository.save(i6);
+		}
+		if (!relationshipRepository.exists(i7.getId())) {
+			relationshipRepository.save(i7);
+		}
+		if (!relationshipRepository.exists(i8.getId())) {
+			relationshipRepository.save(i8);
+		}
+		if (!relationshipRepository.exists(i9.getId())) {
+			relationshipRepository.save(i9);
 		}
 		  
 		  
@@ -205,5 +240,18 @@ public class MarketplaceApplication implements CommandLineRunner {
 		if (!configurableClassRepository.exists(c6.getId())) {
 			configurableClassRepository.save(c6);
 		}
+		
+		if (!configurableClassRepository.exists(c7.getId())) {
+			configurableClassRepository.save(c7);
+		}
+		
+		if (!configurableClassRepository.exists(c8.getId())) {
+			configurableClassRepository.save(c8);
+		}
+		
+		if (!configurableClassRepository.exists(c9.getId())) {
+			configurableClassRepository.save(c9);
+		}
 	}
+	
 }

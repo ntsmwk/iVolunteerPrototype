@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../_model/marketplace';
-import { ConfiguratorService } from '../../_service/configurator.service';
+import { ClassDefinitionService } from '../../_service/meta/core/class/class-definition.service';
 import { ClassDefintion } from '../../_model/meta/Class';
 import { fuseAnimations } from '@fuse/animations';
 import { Relationship } from '../../_model/meta/Relationship';
@@ -25,7 +25,7 @@ export class ClassesComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private configuratorService: ConfiguratorService){
+    private classDefinitionService: ClassDefinitionService){
 
     }
 

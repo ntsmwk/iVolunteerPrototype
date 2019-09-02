@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
-import { ConfiguratorService } from '../../../_service/configurator.service';
+import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
 import { ClassDefintion } from '../../../_model/meta/Class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
@@ -26,7 +26,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private marketplaceService: CoreMarketplaceService,
-    private configuratorService: ConfiguratorService,
+    private classDefinitionService: ClassDefinitionService,
     private questionService: QuestionService,
     ){
 
@@ -43,8 +43,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.configuratorService.getConfigClassById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefintion) => {
+        this.classDefinitionService.getClassDefinitionById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefintion) => {
           this.configurableClass = configurableClass;
+          //TODO
           this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties);
           this.isLoaded = true;
           console.log(this.marketplace);

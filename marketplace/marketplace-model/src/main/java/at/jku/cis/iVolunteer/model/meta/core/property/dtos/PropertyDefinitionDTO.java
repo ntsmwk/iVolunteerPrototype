@@ -18,7 +18,7 @@ public class PropertyDefinitionDTO<T> {
 	
 	PropertyType type;
 	
-	List<PropertyConstraintDTO<?>> propertyConstraints;
+	List<PropertyConstraintDTO<T>> propertyConstraints;
 	
 	
 	public String getId() {
@@ -45,10 +45,10 @@ public class PropertyDefinitionDTO<T> {
 	public void setType(PropertyType type) {
 		this.type = type;
 	}
-	public List<PropertyConstraintDTO<?>> getPropertyConstraints() {
+	public List<PropertyConstraintDTO<T>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
-	public void setPropertyConstraints(List<PropertyConstraintDTO<?>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraintDTO<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
 	

@@ -6,7 +6,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Property, PropertyType } from 'app/main/content/_model/meta/Property';
-import { ConfiguratorService } from 'app/main/content/_service/configurator.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 @Component({
   selector: 'app-map-property-test',
@@ -30,7 +30,7 @@ export class MapPropertyTestComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService,
 
-    private configuratorService: ConfiguratorService,
+    private classDefinitionService: ClassDefinitionService,
 
     private loginService: LoginService) { }
 

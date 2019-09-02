@@ -118,7 +118,7 @@ public class UserDefinedTaskTemplateController {
 			items.add(root);
 			items.add(nested);
 			
-			return propertyParentItemMapper.toDTOs(items);
+			return propertyParentItemMapper.toTargets(items);
 			
 		} else {
 			System.out.println("isNull");

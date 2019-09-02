@@ -18,6 +18,13 @@ public class Inheritance extends Relationship {
 		this.relationshipType = RelationshipType.INHERITANCE;
 	}
 	
+	public Inheritance(Relationship relationship) {
+		this.id = relationship.getId();
+		this.classId1 = relationship.getClassId1();
+		this.classId2 = relationship.getClassId2();
+		this.relationshipType = relationship.getRelationshipType();
+	}
+	
 	public String getSuperClassId() {
 		return superClassId;
 	}

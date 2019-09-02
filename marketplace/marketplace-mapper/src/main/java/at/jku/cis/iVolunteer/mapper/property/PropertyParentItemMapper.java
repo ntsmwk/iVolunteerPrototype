@@ -6,25 +6,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.OneWayDtoMapper;
+import at.jku.cis.iVolunteer.mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyListItemDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyParentItemDTO;
-import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
-import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
 @Component
-public class PropertyParentItemMapper implements OneWayDtoMapper<UserDefinedTaskTemplate, PropertyParentItemDTO>{
+public class PropertyParentItemMapper implements OneWayMapper<UserDefinedTaskTemplate, PropertyParentItemDTO>{
 
 	@Autowired ListEntryMapper listEntryMapper;
 	
 	@Override
-	public PropertyParentItemDTO toDTO(UserDefinedTaskTemplate source) {
+	public PropertyParentItemDTO toTarget(UserDefinedTaskTemplate source) {
 		
 		if (source == null) {
 			return null;
@@ -39,14 +32,14 @@ public class PropertyParentItemMapper implements OneWayDtoMapper<UserDefinedTask
 	}
 
 	@Override
-	public List<PropertyParentItemDTO> toDTOs(List<UserDefinedTaskTemplate> sources) {
+	public List<PropertyParentItemDTO> toTargets(List<UserDefinedTaskTemplate> sources) {
 		if (sources == null)  {
 			return null;
 		}
 		
 		List<PropertyParentItemDTO> list = new ArrayList<PropertyParentItemDTO>(sources.size());
         for ( UserDefinedTaskTemplate item : sources ) {
-            list.add( toDTO( item ) );
+            list.add( toTarget( item ) );
         }
 		return list;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
@@ -15,7 +16,8 @@ public class ClassDefinition {
 	String id;
 	String parentId;
 	String name;
-	
+// LEGACY
+//	List<ClassProperty<Object>> properties;
 	List<Property> properties;
 	List<MatchingRule> matchingRules;
 	
@@ -47,6 +49,15 @@ public class ClassDefinition {
 		this.name = name;
 	}
 
+//	public List<ClassProperty<Object>> getProperties() {
+//		return properties;
+//	}
+//
+//	public void setProperties(List<ClassProperty<Object>> properties) {
+//		this.properties = properties;
+//	}
+	
+	//----
 	public List<Property> getProperties() {
 		return properties;
 	}
@@ -54,6 +65,9 @@ public class ClassDefinition {
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
+	
+	
+	//----
 	
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;

@@ -16,6 +16,6 @@ export class ClassDefintion {
 export class ClassInstance {
     id: string;
     classDefinitionId: string;
-    Properties: PropertyInstance<any>;
-    matchinRules: any[];
+    properties: PropertyInstance<any>;
+    matchingRules: any[];
 }

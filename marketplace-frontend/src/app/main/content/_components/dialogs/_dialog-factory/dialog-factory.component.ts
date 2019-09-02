@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
-import { Property } from 'app/main/content/_model/meta/Property';
-import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
+import { Property, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
+import { AddOrRemoveDialogComponent, AddOrRemoveDialogData, AddOrRemoveDialogDataPD, AddOrRemoveDialogDataID } from '../add-or-remove-dialog/add-or-remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';

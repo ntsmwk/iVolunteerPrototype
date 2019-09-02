@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
-import { ConfiguratorService } from '../../../_service/configurator.service';
+import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
 import { ClassDefintion } from '../../../_model/meta/Class';
 import { mxgraph } from "mxgraph";
 import { Relationship, RelationshipType, Association, AssociationParameter } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyService } from 'app/main/content/_service/property.service';
-import { Property } from 'app/main/content/_model/meta/Property';
+import { Property, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
 
 
 
@@ -46,7 +46,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private configuratorService: ConfiguratorService,
+    private classDefinitionService: ClassDefinitionService,
     private propertyService: PropertyService,
     private dialogFactory: DialogFactoryComponent) {
 
@@ -595,6 +595,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   }
 
   saveGraphClicked() {
+   console.log(this.graph.getModel().cells);
+   console.log(this.graph.getModel());
+
 
   }
 
@@ -604,6 +607,13 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
     if (cell.id.startsWith('new')) {
       console.log("you have to save first");
+
+      //TODO
+      this.showWorkInProgressInfo = true;
+        let outer = this;
+        setTimeout(function() {
+          outer.showWorkInProgressInfo = false;
+        }, 5000);
     } else {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}`]);
     }
@@ -621,9 +631,13 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
    * SIDEBAR
    */
 
+  propertiesAdded: boolean = false;
+
   addPropertyClicked(currentClass: ClassDefintion) {
     if (isNullOrUndefined(this.properties)) {
       this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
+        console.log("addPropertyCLicked")
+        console.log(properties);
         if (!isNullOrUndefined(properties)) {
           this.properties = properties;
           this.displayAddPropertyDialog(currentClass);
@@ -636,10 +650,32 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   }
 
   private displayAddPropertyDialog(currentClass: ClassDefintion) {
+    //TODO
     this.dialogFactory.addPropertyDialogGeneric(this.properties, this.currentClass.properties).then((ret: Property<any>[]) => {
-      currentClass.properties.push(...ret);
+      if (!isNullOrUndefined(ret)) {
+        currentClass.properties.push(...ret);
+        this.propertiesAdded = true;
+      }
     });
 
+  }
+
+  showWorkInProgressInfo: boolean = false;
+  saveAddedProperties() {
+    this.classDefinitionService.savePropertiesLegacy(this.marketplace, this.currentClass.id, this.currentClass.properties).toPromise().then((ret: ClassDefintion) => {
+      console.log("saveaddedPropertieslegacy")
+      console.log(ret); 
+      this.propertiesAdded = false;
+
+      if (isNullOrUndefined(ret)) {
+        this.showWorkInProgressInfo = true;
+        let outer = this;
+        setTimeout(function() {
+          outer.showWorkInProgressInfo = false;
+        }, 5000);
+      }
+
+    });
   }
 
   removePropertyClicked(currentClass: ClassDefintion, index: number) {

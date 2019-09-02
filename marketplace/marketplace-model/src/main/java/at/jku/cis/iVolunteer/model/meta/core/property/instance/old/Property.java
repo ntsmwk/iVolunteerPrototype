@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 
 //@Document(collection = "configurableObject")

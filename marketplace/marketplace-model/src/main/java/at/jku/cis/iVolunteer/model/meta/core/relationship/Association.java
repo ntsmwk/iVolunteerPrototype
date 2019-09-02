@@ -20,6 +20,13 @@ public class Association extends Relationship {
 		this.relationshipType = RelationshipType.ASSOCIATION;
 	}
 	
+	public Association(Relationship relationship) {
+		this.id = relationship.getId();
+		this.classId1 = relationship.getClassId1();
+		this.classId2 = relationship.getClassId2();
+		this.relationshipType = relationship.getRelationshipType();
+	}
+	
 	public AssociationParameter getParam1() {
 		return param1;
 	}

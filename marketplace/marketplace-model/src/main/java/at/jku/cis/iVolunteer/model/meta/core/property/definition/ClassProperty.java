@@ -1,12 +1,15 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
+@Document
 public class ClassProperty<T> {
 
 	@Id
@@ -24,9 +27,37 @@ public class ClassProperty<T> {
 	
 	int position; 
 	
-	List<PropertyConstraint<?>> propertyConstraints;
+	List<PropertyConstraint<T>> propertyConstraints;
 
+	public ClassProperty() {}
 	
+	public ClassProperty(PropertyDefinition<T> propertyDefinition) {
+		this.id = propertyDefinition.getId();
+		this.name = propertyDefinition.name;
+		this.defaultValues = new ArrayList<T>();
+		
+		
+		this.allowedValues = new ArrayList<T>();
+		if (propertyDefinition.allowedValues != null) {
+			for (T t : propertyDefinition.allowedValues) {
+				this.allowedValues.add(t);
+			}
+		}
+		this.type = propertyDefinition.type;
+		
+		this.immutable = false;
+		this.updateable = false;
+		this.required = false;
+		
+		this.position = 0;
+		
+		this.propertyConstraints = new ArrayList<PropertyConstraint<T>>();
+		if (propertyDefinition.propertyConstraints != null) {
+			for (PropertyConstraint<T> c : propertyDefinition.propertyConstraints) {
+				this.propertyConstraints.add(c);
+			}
+		}
+	}
 	
 	public String getId() {
 		return id;
@@ -50,6 +81,14 @@ public class ClassProperty<T> {
 
 	public void setDefaultValues(List<T> defaultValues) {
 		this.defaultValues = defaultValues;
+	}
+	
+	public List<T> getAllowedValues() {
+		return allowedValues;
+	}
+
+	public void setAllowedValues(List<T> allowedValues) {
+		this.allowedValues = allowedValues;
 	}
 
 	public PropertyType getType() {
@@ -93,11 +132,11 @@ public class ClassProperty<T> {
 	}
 	
 
-	public List<PropertyConstraint<?>> getPropertyConstraints() {
+	public List<PropertyConstraint<T>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
 
-	public void setPropertyConstraints(List<PropertyConstraint<?>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraint<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
 	

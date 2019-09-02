@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Property } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
-import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 
 @Injectable({

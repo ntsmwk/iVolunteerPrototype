@@ -24,7 +24,7 @@ public class PropertyInstanceDTO<T> {
 	
 	int position; 
 	
-	List<PropertyConstraintDTO<?>> propertyConstraints;
+	List<PropertyConstraintDTO<T>> propertyConstraints;
 
 	public String getId() {
 		return id;
@@ -98,11 +98,11 @@ public class PropertyInstanceDTO<T> {
 		this.position = position;
 	}
 
-	public List<PropertyConstraintDTO<?>> getPropertyConstraints() {
+	public List<PropertyConstraintDTO<T>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
 
-	public void setPropertyConstraints(List<PropertyConstraintDTO<?>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraintDTO<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
 	

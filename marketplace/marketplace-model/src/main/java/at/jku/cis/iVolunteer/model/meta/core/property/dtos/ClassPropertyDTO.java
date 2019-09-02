@@ -23,7 +23,7 @@ public class ClassPropertyDTO<T> {
 	
 	int position; 
 	
-	List<PropertyConstraintDTO<?>> propertyConstraints;
+	List<PropertyConstraintDTO<T>> propertyConstraints;
 
 	
 	
@@ -49,6 +49,14 @@ public class ClassPropertyDTO<T> {
 
 	public void setDefaultValues(List<T> defaultValues) {
 		this.defaultValues = defaultValues;
+	}
+	
+	public List<T> getAllowedValues() {
+		return allowedValues;
+	}
+
+	public void setAllowedValues(List<T> allowedValues) {
+		this.allowedValues = allowedValues;
 	}
 
 	public PropertyType getType() {
@@ -92,11 +100,11 @@ public class ClassPropertyDTO<T> {
 	}
 	
 
-	public List<PropertyConstraintDTO<?>> getPropertyConstraints() {
+	public List<PropertyConstraintDTO<T>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
 
-	public void setPropertyConstraints(List<PropertyConstraintDTO<?>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraintDTO<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
 	

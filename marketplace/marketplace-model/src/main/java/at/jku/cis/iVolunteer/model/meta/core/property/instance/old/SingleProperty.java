@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 import at.jku.cis.iVolunteer.model.property.rule.SinglePropertyRule;
 
@@ -35,6 +36,7 @@ public class SingleProperty<T> extends Property {
 		super.name = p.name;
 		super.order = p.order;
 	}
+	
 
 	public String getId() {
 		return id;
