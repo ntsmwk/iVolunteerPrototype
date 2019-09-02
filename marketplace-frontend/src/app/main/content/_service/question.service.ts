@@ -46,7 +46,7 @@ export class QuestionService {
   private createQuestion(property: Property<any>): QuestionBase<any> {
     let question;
     if (property.type === PropertyType.TEXT) {
-      if (isNullOrUndefined(property.legalValues)) {
+      if (isNullOrUndefined(property.legalValues) || property.legalValues.length <= 0) {
         
         question = new TextboxQuestion( {            
           value: Property.getValue(property),
@@ -61,7 +61,7 @@ export class QuestionService {
 
     } else if (property.type === PropertyType.WHOLE_NUMBER || property.type === PropertyType.FLOAT_NUMBER) {
       
-      if (isNullOrUndefined(property.legalValues)) {
+      if (isNullOrUndefined(property.legalValues) || property.legalValues.length <= 0) {
         question = new NumberBoxQuestion({
           value: Property.getValue(property),
         });
