@@ -1,4 +1,4 @@
-import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup } from "@angular/forms";
+import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup, FormControl } from "@angular/forms";
 import { isNullOrUndefined } from "util";
 import { QuestionBase } from "../_model/dynamic-forms/questions";
 
@@ -13,8 +13,8 @@ import { QuestionBase } from "../_model/dynamic-forms/questions";
  * @returns An error map with the `requiredother` property containing @param keyThis and @param keyOther if the validation check fails, otherwise `null`.
  */
 export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} | null => {
-    
+    return (control: AbstractControl): { [key: string]: any } | null => {
+
         const containsKeyThis = !isNullOrUndefined(control.get(keyThis));
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
@@ -29,19 +29,19 @@ export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
         // }
 
         let displayError = false;
-       
+
         if (!isEmptyInputValue(control.get(keyThis).value) && isEmptyInputValue(control.get(keyOther).value)) {
-            control.get(keyOther).setErrors({'empty': true});
+            control.get(keyOther).setErrors({ 'empty': true });
             displayError = true;
         }
 
         if (!isEmptyInputValue(control.get(keyThis).value) && !isEmptyInputValue(control.get(keyOther).value)) {
- 
+
             displayError = false;
         }
 
         // return !isEmptyInputValue(control.get(keyThis).value) && isEmptyInputValue(control.get(keyOther).value) ? {'requiredother': {keyThis: keyThis, keyOther: keyOther}} : null;
-        return displayError ? {'requiredother': {'keyThis': keyThis, 'keyOther': keyOther}} : null;
+        return displayError ? { 'requiredother': { 'keyThis': keyThis, 'keyOther': keyOther } } : null;
 
     };
 }
@@ -67,7 +67,7 @@ export function minDate(minQuestion: QuestionBase<Date>): ValidatorFn {
 
         // Controls with NaN values after parsing should be treated as not having a
         // minimum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
-        return !isNaN(value) && value < minValue ? {'mindate': {'mindate': minValue, 'actual': control.value}} : null;
+        return !isNaN(value) && value < minValue ? { 'mindate': { 'mindate': minValue, 'actual': control.value } } : null;
     };
 }
 
@@ -94,7 +94,7 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
 
         const thisValue = parseFloat(control.get(keyThis).value);
         const otherValue = parseFloat(control.get(keyOther).value);
-        
+
         if (isEmptyInputValue(otherValue) || isEmptyInputValue(thisValue)) {
             return null;  // don't validate empty values to allow optional controls
         }
@@ -105,8 +105,8 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
         // maximum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
         if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue) {
 
-            control.get(keyOther).setErrors({'incorrect_max': true});
-            control.get(keyThis).setErrors({'incorrect_max': true});
+            control.get(keyOther).setErrors({ 'incorrect_max': true });
+            control.get(keyThis).setErrors({ 'incorrect_max': true });
             displayError = true;
         } else {
 
@@ -124,7 +124,7 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
         }
 
         // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
-        return displayError ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+        return displayError ? { 'maxother': { 'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis } } : null;
 
     };
 }
@@ -152,7 +152,7 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
 
         const thisValue = parseFloat(control.get(keyThis).value);
         const otherValue = parseFloat(control.get(keyOther).value);
-        
+
         if (isEmptyInputValue(otherValue) || isEmptyInputValue(thisValue)) {
             return null;  // don't validate empty values to allow optional controls
         }
@@ -161,17 +161,17 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
         // Controls with NaN values after parsing should be treated as not having a
         // maximum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
         if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue) {
-            control.get(keyOther).setErrors({'incorrect_min': true});
-            control.get(keyThis).setErrors({'incorrect_min': true});
+            control.get(keyOther).setErrors({ 'incorrect_min': true });
+            control.get(keyThis).setErrors({ 'incorrect_min': true });
             displayError = true;
         } else {
 
-            if (control.get(keyOther).hasError('incorrect_min')) {               
+            if (control.get(keyOther).hasError('incorrect_min')) {
                 delete control.get(keyOther).errors['incorrect_min'];
                 control.get(keyOther).updateValueAndValidity();
             }
 
-            if (control.get(keyThis).hasError('incorrect_min')) {      
+            if (control.get(keyThis).hasError('incorrect_min')) {
                 delete control.get(keyThis).errors['incorrect_min'];
                 control.get(keyThis).updateValueAndValidity();
             }
@@ -182,7 +182,7 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
 
         //     console.log("inside");
         //     if (control.get(keyOther).hasError('incorrect_min')) {
-                
+
         //         console.log(keyOther + " has incorrect_min - deleting");
         //         delete control.get(keyOther).errors['incorrect_min'];
         //     }
@@ -191,7 +191,105 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
         // }
 
         // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
-        return displayError ? {'minother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+        return displayError ? { 'minother': { 'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis } } : null;
+
+    };
+}
+
+export function maxOtherNew(form: FormGroup, keyThis: string, mode: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+
+        let thisValue = form.value[keyThis];
+
+        let otherValue: number;
+        if (mode == 'aussen') {
+            let choices: number[] = [];
+
+            if (!isNullOrUndefined(form.value['21'])) {
+                choices.push(form.value['21']);
+            }
+            if (!isNullOrUndefined(form.value['31'])) {
+                choices.push(form.value['31']);
+            }
+            if (!isNullOrUndefined(form.value['41'])) {
+                choices.push(form.value['41']);
+            }
+            if (!isNullOrUndefined(form.value['51'])) {
+                choices.push(form.value['51']);
+            }
+            if (!isNullOrUndefined(form.value['61'])) {
+                choices.push(form.value['61']);
+            }
+            if (!isNullOrUndefined(form.value['81'])) {
+                choices.push(form.value['81']);
+            }
+
+            otherValue = Math.max(...choices);
+            // console.log(choices);
+            // console.log(otherValue);
+        } else if (mode == 'innen') {
+
+            let choices: number[] = [];
+
+            if (!isNullOrUndefined(form.value['20'])) {
+                choices.push(form.value['20']);
+            }
+            if (!isNullOrUndefined(form.value['30'])) {
+                choices.push(form.value['30']);
+            }
+            if (!isNullOrUndefined(form.value['40'])) {
+                choices.push(form.value['40']);
+            }
+            if (!isNullOrUndefined(form.value['50'])) {
+                choices.push(form.value['50']);
+            }
+            if (!isNullOrUndefined(form.value['60'])) {
+                choices.push(form.value['60']);
+            }
+
+            if (!isNullOrUndefined(form.value['80'])) {
+                for (let v of form.controls['80'].value) {
+                    if (!isNullOrUndefined(v)) {
+                        choices.push(v);
+                    }
+                }
+            }
+
+            // console.log(choices);
+            // console.log(otherValue);
+            otherValue = Math.max(...choices);
+        } else {
+            return null;
+        }
+
+
+        if (isEmptyInputValue(thisValue) || isEmptyInputValue(otherValue)) {
+            return null;  // don't validate empty values to allow optional controls
+        }
+
+
+        let displayError = false;
+        // Controls with NaN values after parsing should be treated as not having a
+        // maximum, per the HTML forms spec: https://www.w3.org/TR/html5/forms.html#attr-input-min
+        if (!isNaN(thisValue) && !isNaN(otherValue) && otherValue < thisValue) {
+
+            // console.log("error")
+            control.get(keyThis).setErrors({ 'incorrect_max': true });
+            displayError = true;
+        } else {
+            // console.log("noerror")
+            if (control.get(keyThis).hasError('incorrect_max')) {
+                delete control.get(keyThis).errors['incorrect_max'];
+                control.get(keyThis).updateValueAndValidity();
+
+
+            }
+
+            displayError = false;
+        }
+
+        // return !isNaN(thisValue) && !isNaN(otherValue) && otherValue > thisValue ? {'maxother': {'valueOther': otherValue, 'keyOther': keyOther, 'valueThis': thisValue, 'keyThis': keyThis}} : null;
+        return displayError ? { 'maxothernew': { 'valueOther': otherValue, 'valueThis': thisValue, 'keyThis': keyThis } } : null;
 
     };
 }

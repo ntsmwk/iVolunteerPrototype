@@ -58,14 +58,14 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     {
       id: 'building_blocks', label: 'Building Blocks',
       items: [
-        { id: 'class', label: 'Class', imgPath: 'images/rectangle.gif', type: 'vertex', shape: undefined },
+        { id: 'class', label: 'Class', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'vertex', shape: undefined },
       ]
     },
     {
       id: 'relationships', label: 'Relationships',
       items: [
-        { id: 'inheritance', label: 'Inheritance', imgPath: undefined, type: 'edge', shape: undefined },
-        { id: 'association', label: 'Association', imgPath: undefined, type: 'relation', shape: undefined },
+        { id: 'inheritance', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'edge', shape: undefined },
+        { id: 'association', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'relation', shape: undefined },
       ]
     }
   ];
@@ -161,11 +161,8 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
       // this.addHelloWorldToGraphTest(); //Remove
       this.parseServerContent();
 
-      let layout = new mx.mxHierarchicalLayout(this.graph, mx.mxConstants.DIRECTION_EAST);
+      this.setLayout('horizontal');
 
-
-      layout.execute(this.graph.getDefaultParent());
-      this.resetViewport();
 
 
       // console.log(this.graph.getModel());
@@ -186,7 +183,6 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
   private parseIncomingClasses() {
 
-    let drawOverlay = true;
 
     const parent = this.graph.getDefaultParent();
 
@@ -194,11 +190,22 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     try {
       for (let c of this.configurableClasses) {
         let cell = this.graph.insertVertex(parent, c.id, c.name, 20, 20, 80, 30);
-        if (drawOverlay) {
-          var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/dude3.png", 40, 40), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+        
+        if (cell.id=="technische_beschreibung") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/gear.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
           this.graph.addCellOverlay(cell, overlay);
-          drawOverlay = false;
         }
+
+        if (cell.id=="logistischeBeschreibung") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/package.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+          this.graph.addCellOverlay(cell, overlay);
+        }
+
+        if (cell.id=="preislicheBeschreibung") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/printer.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+          this.graph.addCellOverlay(cell, overlay);
+        }
+
       }
     } finally {
       this.graph.getModel().endUpdate();
@@ -212,17 +219,19 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     try {
       for (let r of this.relationships) {
 
-        var source = this.graph.getModel().getCell(r.classId2);
-        var target = this.graph.getModel().getCell(r.classId1);
+        var source = this.graph.getModel().getCell(r.classId1);
+        var target = this.graph.getModel().getCell(r.classId2);
 
         if (r.relationshipType == RelationshipType.INHERITANCE) {
-          var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 100, 100), 'curved=1;endArrow=classic;html=1;');
+          mx.mxConstants.STYLE_EDGE
+          var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none');
           cell.geometry.setTerminalPoint(new mx.mxPoint(), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(), false);
 
           cell.geometry.relative = true;
           cell.edge = true;
           cell.cellType = 'inheritance'
+          cell.id = r.id;
           this.graph.addEdge(cell, parent, source, target);
 
 
@@ -233,6 +242,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
           edge.geometry.relative = true;
           edge.edge = true;
           edge.cellType = 'association';
+          edge.id = r.id;
 
 
           var cell1 = new myMxCell(AssociationParameter[(r as Association).param1], new mx.mxGeometry(-0.8, 0, 0, 0), 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;');
@@ -268,6 +278,34 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     } finally {
       this.graph.getModel().endUpdate();
     }
+  }
+
+  private setLayout(layoutType: string) {
+
+    if (layoutType == 'radial') {
+      let layout = new mx.mxRadialTreeLayout(this.graph);
+      layout.execute(this.graph.getDefaultParent(), this.graph.getModel().getCell('root'));
+
+    } else if (layoutType == 'vertical') {
+      let layout = new mx.mxHierarchicalLayout(this.graph, mx.mxConstants.DIRECTION_NORTH);
+      // layout.execute(this.graph.getDefaultParent(), [this.graph.getModel().getCell('technische_beschreibung'),
+      //                                                this.graph.getModel().getCell('logistischeBeschreibung'),
+      //                                                this.graph.getModel().getCell('preislicheBeschreibung')
+      //                                               ]);
+      layout.execute(this.graph.getDefaultParent(), [this.graph.getModel().getCell('root')]);
+
+    } else if (layoutType == 'horizontal') {
+      let layout = new mx.mxHierarchicalLayout(this.graph, mx.mxConstants.DIRECTION_WEST);
+      // layout.execute(this.graph.getDefaultParent(), [this.graph.getModel().getCell('technische_beschreibung'),
+      //                                                 this.graph.getModel().getCell('logistischeBeschreibung'),
+      //                                                 this.graph.getModel().getCell('preislicheBeschreibung')
+      //                                               ]);
+      layout.execute(this.graph.getDefaultParent(), [this.graph.getModel().getCell('root')]);
+
+    }
+
+    this.resetViewport();
+
   }
 
   createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: myMxCell, evt) {
@@ -542,7 +580,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
 
         } else if (paletteItem.id == 'inheritance') {
-          let cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 100, 100), 'curved=1;endArrow=classic;html=1;');
+          let cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'curved=1;startArrow=classic;endArrow=none;html=1;');
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
 
@@ -618,18 +656,21 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     this.graph.scrollCellToVisible((function getLeftMostCell() {
       let ret: mxgraph.mxCell;
 
-      for (let c of outer.graph.getModel().getChildren(outer.graph.getDefaultParent())) {
-        if (isNullOrUndefined(ret)) {
-          ret = c;
-        } else if (!isNullOrUndefined(c.geometry) && c.geometry.x < ret.geometry.x) {
-          ret = c;
-        }
-      }
-      return ret;
+      // for (let c of outer.graph.getModel().getChildren(outer.graph.getDefaultParent())) {
+      //   if (isNullOrUndefined(ret)) {
+      //     ret = c;
+      //   } else if (!isNullOrUndefined(c.geometry) && c.geometry.x < ret.geometry.x) {
+      //     ret = c;
+      //   }
+      // }
+      // return ret;
+
+      return outer.graph.getModel().getCell('technische_beschreibung');
+
 
     })(), false);
     const translate = this.graph.view.getTranslate()
-    this.graph.view.setTranslate(translate.x + 25, translate.y + 25);
+    this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
   }
 
 
@@ -648,9 +689,14 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
   }
 
-  createClassInstanceClicked(cell: myMxCell) {
+  createClassInstanceClicked(cell: mxgraph.mxCell) {
     console.log("create class instance clicked");
     console.log(cell);
+
+    if (isNullOrUndefined(cell)) {
+      //TODO find root - workaroud assign root manually for demonstration
+      cell = this.graph.getModel().getCell('root');
+    }
 
     if (cell.id.startsWith('new')) {
       console.log("you have to save first");
@@ -665,6 +711,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}`]);
     }
   }
+
 
 
 

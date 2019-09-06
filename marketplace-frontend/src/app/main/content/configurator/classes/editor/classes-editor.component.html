@@ -1,12 +1,13 @@
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
   <h2>Shapes</h2>
   <div *ngFor="let p of sidebarPalettes">
-    <div style="padding-left: 5px; padding-top: 2px">> {{p.label}}</div>
+    <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3>
     <div *ngFor="let item of p.items">
-      <div draggable="true"
-        style="padding-top: 2px; padding-bottom: 2px; background-color: lightblue; cursor: pointer; text-align: center"
-        (mousedown)="mousedownEvent($event, p, item, graph)">{{item.label}}</div>
+
+      <img class="center-image" draggable="true" src="{{item.imgPath}}" style="cursor: pointer; text-align: center"
+        (mousedown)="mousedownEvent($event, p, item, graph)" matTooltip="{{item.label}}">
       <div style="padding-top: 3px"></div>
+
     </div>
 
   </div>
@@ -14,21 +15,49 @@
   <div style="padding-top: 20px"></div>
 
   <h2>Tools</h2>
-  <div (click)="zoomInEvent()" style="cursor: pointer">
-    Zoom in
+  <!-- <img src="../../../../../../assets/mxgraph_resources/images/zoomin.gif" (click)="zoomInEvent()" style="cursor: pointer" matTooltip="zoom in"> -->
+  <div fxLayout="row" fxLayoutAlign="start start">
+    <div
+      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+      <img src="/assets/mxgraph_resources/images/zoomin.gif" width="25" height="25" (click)="zoomInEvent()"
+        style="cursor: pointer" matTooltip="zoom in">
+    </div>
+
+    <div style="padding-right: 3px"></div>
+
+    <div
+      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+      <img src="/assets/mxgraph_resources/images/zoomout.gif" width="25" height="25" (click)="zoomOutEvent()"
+        style="cursor: pointer" matTooltip="zoom out">
+    </div>
+
+    <div style="padding-right: 3px"></div>
+
+    <div
+      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+      <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="25" height="25" (click)="zoomResetEvent()"
+        style="cursor: pointer" matTooltip="reset view">
+    </div>
+
   </div>
 
-  <div (click)="zoomOutEvent()" style="cursor: pointer">
-    Zoom out
-  </div>
+  <div style="padding-top: 5px"></div>
 
-  <div (click)="zoomResetEvent()" style="cursor: pointer">
-    Reset View
-  </div>
+  <mat-form-field style="width: 100%">
+    <mat-select placeholder="Automatic Layout">
+      <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option>
+      <mat-option value="Vertical" (click)="setLayout('vertical')">Vertical</mat-option>
+      <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option>
+    </mat-select>
+  </mat-form-field>
+
 
   <div style="position: absolute; bottom: 10px; left: 5px">
     <!-- <button mat-raised-button type="button" color="primary" (click)=createClassInstanceClicked()>create new Instance</button>
     <div style="padding-top: 10px"></div> -->
+
+    <button mat-raised-button type="button" color="primary" (click)="createClassInstanceClicked(null)">New Instance (from root)</button>
+      <div style="padding-top: 5px"></div>
 
     <button mat-raised-button type="button" color="primary" (click)="doShitWithGraph(graph)">print graph to
       console</button>
@@ -44,8 +73,8 @@
 <div *ngIf="showWorkInProgressInfo" style="position: absolute; left: 50%; top:50%">
   <div style="position: relative; left: -50%; border: dotted red 1px;">
     Adding to or instantiating of newly created classes not yet implemented... :(
-      <br>
-      Please use one of the existing classes
+    <br>
+    Please use one of the existing classes
   </div>
 </div>>
 
@@ -53,29 +82,43 @@
   <div [ngSwitch]="rightSidebarContext">
     <div *ngSwitchCase="'properties'">
 
-      <h2>Properties</h2>
+      <h2>{{currentClass.name}}</h2>
+      <div style="padding-top: 5px"></div>
+      <h3>> Properties</h3>
 
-        <div *ngFor="let p of currentClass.properties; let i = index">
-          <div fxLayout="row" fxLayoutAlign="start center">
-            <div>{{p.name}}</div>
-            <div style="padding-right: 3px"></div>
-            <a style="cursor: pointer" (click)="removePropertyClicked(currentClass, i)">> remove</a>
-          </div>
-        </div>
+      <mat-divider></mat-divider>
 
-        <div *ngIf="currentClass.properties.length<=0">
-          No properties added yet.
-        </div>
+      <div style="padding-left: 12px">
+        <table *ngFor="let p of currentClass.properties; let i = index">
+          <!-- <div fxLayout="row" fxLayoutAlign="start center"> -->
+          <tr>
+            <td>{{p.name}}</td>
+            <!-- <div style="padding-right: 3px"></div> -->
+            <!-- <a style="cursor: pointer" (click)="removePropertyClicked(currentClass, i)">> remove</a> -->
+            <td style="width: 10px">
+              <mat-icon style="cursor: pointer; " (click)="removePropertyClicked(currentClass, i)" matTooltip="remove">
+                delete</mat-icon>
 
-        <a style="cursor: pointer" (click)="addPropertyClicked(currentClass)">> add Property</a>
+            </td>
+          </tr>
 
-        <div style="padding-top: 25px"></div>
-
-        
-
+          <!-- </div> -->
+        </table>
       </div>
 
-    <button *ngIf="propertiesAdded" mat-raised-button type="button" color="primary" (click)="saveAddedProperties()" 
+      <div *ngIf="currentClass.properties.length<=0">
+        No properties added yet.
+      </div>
+
+      <a style="cursor: pointer" (click)="addPropertyClicked(currentClass)">> add Property</a>
+
+      <div style="padding-top: 25px"></div>
+
+
+
+    </div>
+
+    <button *ngIf="propertiesAdded" mat-raised-button type="button" color="primary" (click)="saveAddedProperties()"
       style="position: absolute; bottom: 10px; left: 5px">Save</button>
 
     <button mat-raised-button type="button" color="primary" (click)="toggleRightSidebar(false); rightSidebarContext=''"
