@@ -1,5 +1,6 @@
 @import "src/@fuse/scss/fuse";
 
+
 .center-div
 {
   position: absolute;
@@ -109,4 +110,22 @@
 
 
 
+
+
 }
+
+mat-expansion-panel-header {
+  background: rgb(240, 240, 240);
+
+}
+
+mat-expansion-panel-header:hover, mat-expansion-panel-header.mat-expanded{
+  background-color: rgb(62, 125, 219) !important;
+  mat-panel-title {
+    color: white;
+  }
+  mat-panel-description {
+    color: white;
+  }
+}
+

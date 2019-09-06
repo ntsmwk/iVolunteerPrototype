@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.iVolunteer.mapper.meta.core.relationship.RelationshipMapper;
+import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
@@ -37,7 +39,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 	
 	@Autowired private PropertyRepository propertyRepository;
 	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
-	@Autowired private ClassDefinitionRepostiory configurableClassRepository;
+	@Autowired private ClassDefinitionRepostiory classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 
 	@Bean
@@ -61,7 +63,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 		addStandardProperties();
 		addTestTemplates();
 		
-		addTestConfigClasses();
+//		addTestConfigClasses();
+		addFlexProdConfigClasses();
 	}
 
 	private Competence createCompetence(String competenceName) {
@@ -217,40 +220,511 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 		  
 		  
-		if (!configurableClassRepository.exists(c1.getId())) {
-			configurableClassRepository.save(c1);
+		if (!classDefinitionRepository.exists(c1.getId())) {
+			classDefinitionRepository.save(c1);
 		}
 		
-		if (!configurableClassRepository.exists(c2.getId())) {
-			configurableClassRepository.save(c2);
+		if (!classDefinitionRepository.exists(c2.getId())) {
+			classDefinitionRepository.save(c2);
 		}
 		
-		if (!configurableClassRepository.exists(c3.getId())) {
-			configurableClassRepository.save(c3);
+		if (!classDefinitionRepository.exists(c3.getId())) {
+			classDefinitionRepository.save(c3);
 		}
 		
-		if (!configurableClassRepository.exists(c4.getId())) {
-			configurableClassRepository.save(c4);
+		if (!classDefinitionRepository.exists(c4.getId())) {
+			classDefinitionRepository.save(c4);
 		}
 		
-		if (!configurableClassRepository.exists(c5.getId())) {
-			configurableClassRepository.save(c5);
+		if (!classDefinitionRepository.exists(c5.getId())) {
+			classDefinitionRepository.save(c5);
 		}
 		
-		if (!configurableClassRepository.exists(c6.getId())) {
-			configurableClassRepository.save(c6);
+		if (!classDefinitionRepository.exists(c6.getId())) {
+			classDefinitionRepository.save(c6);
 		}
 		
-		if (!configurableClassRepository.exists(c7.getId())) {
-			configurableClassRepository.save(c7);
+		if (!classDefinitionRepository.exists(c7.getId())) {
+			classDefinitionRepository.save(c7);
 		}
 		
-		if (!configurableClassRepository.exists(c8.getId())) {
-			configurableClassRepository.save(c8);
+		if (!classDefinitionRepository.exists(c8.getId())) {
+			classDefinitionRepository.save(c8);
 		}
 		
-		if (!configurableClassRepository.exists(c9.getId())) {
-			configurableClassRepository.save(c9);
+		if (!classDefinitionRepository.exists(c9.getId())) {
+			classDefinitionRepository.save(c9);
+		}
+	}
+	
+	
+	private void addFlexProdConfigClasses() {
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		List<Relationship> relationships = new ArrayList<Relationship>();
+		
+		ClassDefinition technischeBeschreibung = new ClassDefinition();
+		technischeBeschreibung.setId("technische_beschreibung");
+		technischeBeschreibung.setName("Technische\nBeschreibung");
+		technischeBeschreibung.setProperties(new ArrayList<Property>());
+		classDefinitions.add(technischeBeschreibung);
+		
+			ClassDefinition ofen = new ClassDefinition();
+			ofen.setId("ofen");
+			ofen.setName("Ofen");
+			ofen.setProperties(new ArrayList<Property>());
+			classDefinitions.add(ofen);
+			
+			Inheritance i1 = new Inheritance(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
+			i1.setId("i1");
+			relationships.add(i1);
+			
+			
+				ClassDefinition ofenTechnischeEigenschaften = new ClassDefinition();
+				ofenTechnischeEigenschaften.setId("ofenTechnischeEigenschaften");
+				ofenTechnischeEigenschaften.setName("Technische\nEigenschaften");
+				ofenTechnischeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(ofenTechnischeEigenschaften);
+				
+				Inheritance i11 = new Inheritance(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
+				i11.setId("i11");
+
+				relationships.add(i11);
+
+
+				
+					ClassDefinition oteAllgemein = new ClassDefinition();
+					oteAllgemein.setId("oteAllgemein");
+					oteAllgemein.setName("Allgemein");
+					oteAllgemein.setProperties(new ArrayList<Property>());
+					oteAllgemein.getProperties().add(propertyRepository.findOne("maxgluehtemperatur"));
+					oteAllgemein.getProperties().add(propertyRepository.findOne("verfuegbaresschutzgas"));
+					oteAllgemein.getProperties().add(propertyRepository.findOne("bauart"));
+					oteAllgemein.getProperties().add(propertyRepository.findOne("temperaturhomogenitaet"));
+					oteAllgemein.getProperties().add(propertyRepository.findOne("kaltgewalztesmaterialzulaessig"));
+					oteAllgemein.getProperties().add(propertyRepository.findOne("warmgewalztesmaterialzulaessig"));
+
+					
+					classDefinitions.add(oteAllgemein);
+					
+					Inheritance i111 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteAllgemein.getId(), ofenTechnischeEigenschaften.getId());
+					i111.setId("i111");
+					relationships.add(i111);
+					
+
+					ClassDefinition oteMoeglicheVorbehandlung = new ClassDefinition();
+					oteMoeglicheVorbehandlung.setId("oteMoeglicheVorbehandlung");
+					oteMoeglicheVorbehandlung.setName("Mögliche\nVorbehandlung");
+					oteMoeglicheVorbehandlung.setProperties(new ArrayList<Property>());
+					oteMoeglicheVorbehandlung.getProperties().add(propertyRepository.findOne("bundentfetten"));
+
+					classDefinitions.add(oteMoeglicheVorbehandlung);
+
+					Inheritance i112 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteMoeglicheVorbehandlung.getId(), ofenTechnischeEigenschaften.getId());
+					i112.setId("i112");
+					relationships.add(i112);
+
+					
+					ClassDefinition oteChargierhilfe = new ClassDefinition();
+					oteChargierhilfe.setId("oteChargierhilfe");
+					oteChargierhilfe.setName("Chargierhilfe");
+					oteChargierhilfe.setProperties(new ArrayList<Property>());
+					classDefinitions.add(oteChargierhilfe);
+					
+					Inheritance i113 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(), ofenTechnischeEigenschaften.getId());
+					i113.setId("i113");
+					relationships.add(i113);
+
+
+						ClassDefinition otecKonvektoren = new ClassDefinition();
+						otecKonvektoren.setId("otecKonvektoren");
+						otecKonvektoren.setName("Konvektoren");
+						otecKonvektoren.setProperties(new ArrayList<Property>());
+						otecKonvektoren.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+						otecKonvektoren.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+						otecKonvektoren.getProperties().add(propertyRepository.findOne("hoehe"));
+
+
+						
+						classDefinitions.add(otecKonvektoren);
+						
+						Inheritance i1131 = new Inheritance(oteChargierhilfe.getId(), otecKonvektoren.getId(), oteChargierhilfe.getId());
+						i1131.setId("i1131");
+						relationships.add(i1131);
+
+						
+						ClassDefinition otecTragerahmen = new ClassDefinition();
+						otecTragerahmen.setId("otecTragerahmen");
+						otecTragerahmen.setName("Tragerahmen");
+						otecTragerahmen.setProperties(new ArrayList<Property>());
+						otecTragerahmen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+						otecTragerahmen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+						otecTragerahmen.getProperties().add(propertyRepository.findOne("hoehe"));
+
+						classDefinitions.add(otecTragerahmen);
+
+						Inheritance i1132 = new Inheritance(oteChargierhilfe.getId(), otecTragerahmen.getId(), oteChargierhilfe.getId());
+						i1132.setId("i1132");						
+						relationships.add(i1132);
+
+						
+						ClassDefinition otecZwischenrahmen = new ClassDefinition();
+						otecZwischenrahmen.setId("otecZwischenrahmen");
+						otecZwischenrahmen.setName("Zwischenrahmen");
+						otecZwischenrahmen.setProperties(new ArrayList<Property>());
+						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("hoehe"));
+						
+						classDefinitions.add(otecZwischenrahmen);
+						
+						Inheritance i1133 = new Inheritance(oteChargierhilfe.getId(), otecZwischenrahmen.getId(), oteChargierhilfe.getId());
+						i1133.setId("i1133");
+						relationships.add(i1133);
+
+
+						ClassDefinition otecKronenstoecke = new ClassDefinition();
+						otecKronenstoecke.setId("otecKronenstoecke");
+						otecKronenstoecke.setName("Kronenstöcke");
+						otecKronenstoecke.setProperties(new ArrayList<Property>());
+						otecKronenstoecke.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+						otecKronenstoecke.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+						otecKronenstoecke.getProperties().add(propertyRepository.findOne("hoehe"));
+					
+						classDefinitions.add(otecKronenstoecke);
+						
+						Inheritance i1134 = new Inheritance(oteChargierhilfe.getId(), otecKronenstoecke.getId(), oteChargierhilfe.getId());
+						i1134.setId("i1134");
+						relationships.add(i1134);
+
+
+						ClassDefinition otecChargierkoerbe = new ClassDefinition();
+						otecChargierkoerbe.setId("otecChargierkoerbe");
+						otecChargierkoerbe.setName("Chargierkörbe");
+						otecChargierkoerbe.setProperties(new ArrayList<Property>());
+						
+						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("hoehe"));
+					
+						classDefinitions.add(otecChargierkoerbe);
+
+						Inheritance i1135 = new Inheritance(oteChargierhilfe.getId(), otecChargierkoerbe.getId(), oteChargierhilfe.getId());
+						i1135.setId("i1135");
+						relationships.add(i1135);
+
+						
+				
+				ClassDefinition ofenBetrieblicheEigenschaften = new ClassDefinition();
+				ofenBetrieblicheEigenschaften.setId("ofenBetrieblicheEigenschaften");
+				ofenBetrieblicheEigenschaften.setName("Betriebliche\nEigenschaften");
+				ofenBetrieblicheEigenschaften.setProperties(new ArrayList<Property>());
+				ofenBetrieblicheEigenschaften.getProperties().add(propertyRepository.findOne("gluehzeit"));
+				ofenBetrieblicheEigenschaften.getProperties().add(propertyRepository.findOne("durchsatz"));
+		
+				classDefinitions.add(ofenBetrieblicheEigenschaften);
+				
+				Inheritance i12 = new Inheritance(ofen.getId(), ofenBetrieblicheEigenschaften.getId(), ofen.getId());
+				i12.setId("i12");
+				relationships.add(i12);
+
+				
+				ClassDefinition ofenGeometrischeEigenschaften = new ClassDefinition();
+				ofenGeometrischeEigenschaften.setId("ofenGeometrischeEigenschaften");
+				ofenGeometrischeEigenschaften.setName("Geometrische\nEigenschaften");
+				ofenGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(ofenGeometrischeEigenschaften);
+
+				
+				Inheritance i13 = new Inheritance(ofen.getId(), ofenGeometrischeEigenschaften.getId(), ofen.getId());
+				i13.setId("i13");
+				relationships.add(i13);
+
+				
+					ClassDefinition ogeBaugroesse = new ClassDefinition();
+					ogeBaugroesse.setId("ogeBaugroesse");
+					ogeBaugroesse.setName("Baugröße");
+					ogeBaugroesse.setProperties(new ArrayList<Property>());
+					ogeBaugroesse.getProperties().add(propertyRepository.findOne("moeglicheinnendurchmesser"));
+					ogeBaugroesse.getProperties().add(propertyRepository.findOne("maxaussendurchmesser"));
+					ogeBaugroesse.getProperties().add(propertyRepository.findOne("maxchargierhoehe"));
+
+					classDefinitions.add(ogeBaugroesse);
+					
+					Inheritance i131 = new Inheritance(ofenGeometrischeEigenschaften.getId(), ogeBaugroesse.getId(), ofenGeometrischeEigenschaften.getId());
+					i131.setId("i131");
+					relationships.add(i131);
+
+				
+				ClassDefinition ofenQualitativeEigenschaften = new ClassDefinition();
+				ofenQualitativeEigenschaften.setId("ofenQualitativeEigenschaften");
+				ofenQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
+				ofenQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				
+				classDefinitions.add(ofenQualitativeEigenschaften);
+				
+				Inheritance i14 = new Inheritance(ofen.getId(), ofenQualitativeEigenschaften.getId(), ofen.getId());
+				i14.setId("i14");
+				relationships.add(i14);
+
+				
+					ClassDefinition oqeQualitätsnormen = new ClassDefinition();
+					oqeQualitätsnormen.setId("oqeQualitätsnormen");
+					oqeQualitätsnormen.setName("Qualitätsnormen");
+					oqeQualitätsnormen.setProperties(new ArrayList<Property>());
+					oqeQualitätsnormen.getProperties().add(propertyRepository.findOne("cqi9"));
+					oqeQualitätsnormen.getProperties().add(propertyRepository.findOne("tus"));
+
+					classDefinitions.add(oqeQualitätsnormen);
+
+					Inheritance i141 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeQualitätsnormen.getId(), ofenQualitativeEigenschaften.getId());
+					i141.setId("i141");
+					relationships.add(i141);
+
+					
+					ClassDefinition oqeWartungen = new ClassDefinition();
+					oqeWartungen.setId("oqeWartungen");
+					oqeWartungen.setName("Wartungen");
+					oqeWartungen.setProperties(new ArrayList<Property>());
+					oqeWartungen.getProperties().add(propertyRepository.findOne("letztewartung"));
+					oqeWartungen.getProperties().add(propertyRepository.findOne("wartungsintervall"));
+
+					classDefinitions.add(oqeWartungen);
+					
+					Inheritance i142 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeWartungen.getId(), ofenQualitativeEigenschaften.getId());
+					i142.setId("i142");
+					relationships.add(i142);
+
+
+				
+	//=================================================================================
+			
+			ClassDefinition input = new ClassDefinition();
+			input.setId("input");
+			input.setName("Input");
+			input.setProperties(new ArrayList<Property>());
+			classDefinitions.add(input);
+			
+			Inheritance i2 = new Inheritance(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
+			i2.setId("i2");
+			relationships.add(i2);
+
+			
+				ClassDefinition inGeometrischeEigenschaften = new ClassDefinition();
+				inGeometrischeEigenschaften.setId("inGeometrischeEigenschaften");
+				inGeometrischeEigenschaften.setName("Geometrsiche\nEigenschaften");
+				inGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(inGeometrischeEigenschaften);
+				
+				Inheritance i21 = new Inheritance(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
+				i21.setId("i21");
+				relationships.add(i21);
+
+				
+					ClassDefinition ingeBundabmessungen = new ClassDefinition();
+					ingeBundabmessungen.setId("ingeBundabmessungen");
+					ingeBundabmessungen.setName("Bundabmessungen");
+					ingeBundabmessungen.setProperties(new ArrayList<Property>());
+					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("bandbreite"));
+					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("bandstaerke"));
+
+					classDefinitions.add(ingeBundabmessungen);
+
+					Inheritance i211 = new Inheritance(inGeometrischeEigenschaften.getId(), ingeBundabmessungen.getId(), inGeometrischeEigenschaften.getId());
+					i211.setId("i211");
+					relationships.add(i211);
+
+				
+				ClassDefinition inQualitativeEigenschaften = new ClassDefinition();
+				inQualitativeEigenschaften.setId("inQualitativeEigenschaften");
+				inQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
+				inQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(inQualitativeEigenschaften);
+				
+				Inheritance i22 = new Inheritance(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
+				i22.setId("i22");
+				relationships.add(i22);
+
+	
+					ClassDefinition inqeMaterialart = new ClassDefinition();
+					inqeMaterialart.setId("inqeMaterialart");
+					inqeMaterialart.setName("Materialart");
+					inqeMaterialart.setProperties(new ArrayList<Property>());
+					inqeMaterialart.getProperties().add(propertyRepository.findOne("warmgewalzt"));
+					inqeMaterialart.getProperties().add(propertyRepository.findOne("kaltgewalzt"));
+
+					classDefinitions.add(inqeMaterialart);
+					
+					Inheritance i221 = new Inheritance(inQualitativeEigenschaften.getId(), inqeMaterialart.getId(), inQualitativeEigenschaften.getId());
+					i221.setId("i221");
+					relationships.add(i221);
+
+
+					
+				
+	//=================================================================================
+			
+			
+			ClassDefinition output = new ClassDefinition();
+			output.setId("output");
+			output.setName("Output");
+			output.setProperties(new ArrayList<Property>());
+			classDefinitions.add(output);
+			
+			Inheritance i3 = new Inheritance(technischeBeschreibung.getId(), output.getId(), technischeBeschreibung.getId());
+			i3.setId("i3");
+			relationships.add(i3);
+
+
+				ClassDefinition outTechnischeEigenschaften = new ClassDefinition();
+				outTechnischeEigenschaften.setId("outTechnischeEigenschaften");
+				outTechnischeEigenschaften.setName("Technische\nEigenschaften");
+				outTechnischeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(outTechnischeEigenschaften);
+				
+				Inheritance i31 = new Inheritance(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
+				i31.setId("i31");
+				relationships.add(i31);
+	
+				
+					ClassDefinition outteMechanischeEigenschaften = new ClassDefinition();
+					outteMechanischeEigenschaften.setId("outteMechanischeEigenschaften");
+					outteMechanischeEigenschaften.setName("Mechanische\nEigenschaften");
+					outteMechanischeEigenschaften.setProperties(new ArrayList<Property>());
+					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("streckgrenze"));
+					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("zugfestigkeit"));
+					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("dehnung"));
+
+					classDefinitions.add(outteMechanischeEigenschaften);
+					
+					Inheritance i311 = new Inheritance(outTechnischeEigenschaften.getId(), outteMechanischeEigenschaften.getId(), outTechnischeEigenschaften.getId());
+					i311.setId("i311");
+					relationships.add(i311);
+
+					
+					ClassDefinition outteGefuege = new ClassDefinition();
+					outteGefuege.setId("outteGefuege");
+					outteGefuege.setName("Gefüge");
+					outteGefuege.setProperties(new ArrayList<Property>());
+					outteGefuege.getProperties().add(propertyRepository.findOne("gefuege"));
+					classDefinitions.add(outteGefuege);
+					
+					Inheritance i312 = new Inheritance(outTechnischeEigenschaften.getId(), outteGefuege.getId(), outTechnischeEigenschaften.getId());
+					i312.setId("i312");
+					relationships.add(i312);
+
+
+					
+					
+				ClassDefinition outGeometrischeEigenschaften = new ClassDefinition();
+				outGeometrischeEigenschaften.setId("outGeometrischeEigenschaften");
+				outGeometrischeEigenschaften.setName("Geometrische\nEigenschaften");
+				outGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(outGeometrischeEigenschaften);
+				
+				Inheritance i32 = new Inheritance(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
+				i32.setId("i32");
+				relationships.add(i32);
+
+					
+					ClassDefinition outgeMoeglicheBundabmessungen = new ClassDefinition();
+					outgeMoeglicheBundabmessungen.setId("outgeMoeglicheBundabmessungen");
+					outgeMoeglicheBundabmessungen.setName("Mögliche\nBundabmessungen");
+					outgeMoeglicheBundabmessungen.setProperties(new ArrayList<Property>());
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("bandbreite"));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("bandstaerke"));
+
+					classDefinitions.add(outgeMoeglicheBundabmessungen);
+
+					Inheritance i321 = new Inheritance(outGeometrischeEigenschaften.getId(), outgeMoeglicheBundabmessungen.getId(), outGeometrischeEigenschaften.getId());
+					i321.setId("i321");
+					relationships.add(i321);
+
+					
+				
+				ClassDefinition outQualitativeEigenschaften = new ClassDefinition();
+				outQualitativeEigenschaften.setId("outQualitativeEigenschaften");
+				outQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
+				outQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				classDefinitions.add(outQualitativeEigenschaften);
+				
+				Inheritance i33 = new Inheritance(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
+				i33.setId("i33");
+				relationships.add(i33);
+
+				
+					ClassDefinition outqeMaterialart = new ClassDefinition();
+					outqeMaterialart.setId("outqeMaterialart");
+					outqeMaterialart.setName("Materialart");
+					outqeMaterialart.setProperties(new ArrayList<Property>());
+					outqeMaterialart.getProperties().add(propertyRepository.findOne("warmgewalzt"));
+					outqeMaterialart.getProperties().add(propertyRepository.findOne("kaltgewalzt"));
+
+					classDefinitions.add(outqeMaterialart);
+					
+					Inheritance i331 = new Inheritance(outQualitativeEigenschaften.getId(), outqeMaterialart.getId(), outQualitativeEigenschaften.getId());
+					i331.setId("i331");
+					relationships.add(i331);
+
+
+		//=========================================================	
+		
+		ClassDefinition logistischeBeschreibung = new ClassDefinition();
+		logistischeBeschreibung.setId("logistischeBeschreibung");
+		logistischeBeschreibung.setName("Logistische\nBeschreibung");
+		logistischeBeschreibung.setProperties(new ArrayList<Property>());
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("materialbereitgestellt"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("lieferort"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("verpackung"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("transportart"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("menge"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("lieferdatum"));
+		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("incoterms"));
+		classDefinitions.add(logistischeBeschreibung);
+		
+		ClassDefinition preislicheBeschreibung = new ClassDefinition();
+		preislicheBeschreibung.setId("preislicheBeschreibung");
+		preislicheBeschreibung.setName("Preisliche\nBeschreibung");
+		preislicheBeschreibung.setProperties(new ArrayList<Property>());
+		preislicheBeschreibung.getProperties().add(propertyRepository.findOne("zahlungsbedingungen"));
+		classDefinitions.add(preislicheBeschreibung); 
+		
+		ClassDefinition root = new ClassDefinition();
+		root.setId("root");
+		root.setName("/");
+		root.setProperties(new ArrayList<Property>());
+		classDefinitions.add(root);
+		
+		Inheritance r1 = new Inheritance(root.getId(), technischeBeschreibung.getId(), root.getId());
+		r1.setId("r1");
+		Inheritance r2 = new Inheritance(root.getId(), logistischeBeschreibung.getId(), root.getId());
+		r2.setId("r2");
+		Inheritance r3 = new Inheritance(root.getId(), preislicheBeschreibung.getId(), root.getId());
+		r3.setId("r3");
+		
+		relationships.add(r1);
+		relationships.add(r2);
+		relationships.add(r3);
+		
+		
+		
+
+					
+					
+		for (Relationship r : relationships) {
+			if (!relationshipRepository.exists(r.getId())) {
+				relationshipRepository.save(r);
+			}
+		}
+		
+		for (ClassDefinition cd : classDefinitions) {
+			if (!classDefinitionRepository.exists(cd.getId())) {
+				classDefinitionRepository.save(cd);
+			}
 		}
 	}
 	

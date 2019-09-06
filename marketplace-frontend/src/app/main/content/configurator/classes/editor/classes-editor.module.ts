@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClassesEditorComponent } from './classes-editor.component';
 import { RouterModule } from '@angular/router';
-import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatTableModule, MatButtonModule } from '@angular/material';
+import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatTableModule, MatButtonModule, MatFormFieldModule, MatSelectModule, MatOptionModule, MatTooltipModule, MatDividerModule } from '@angular/material';
 import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { AddOrRemoveDialogComponent } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.component';
@@ -20,6 +20,13 @@ import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialo
     MatIconModule,
     MatTableModule,
     MatButtonModule,
+    MatFormFieldModule,
+
+    MatDividerModule,
+
+    MatSelectModule,
+    MatOptionModule,
+    MatTooltipModule,
 
 
     FuseSharedModule,

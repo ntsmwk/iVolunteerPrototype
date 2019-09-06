@@ -25,7 +25,8 @@
                         "assets": [
                             "src/favicon.ico",
                             "src/assets",
-                            {"glob":"**/*", "input":"mxgraph_resources/", "output": "./"}
+                            "src/assets/mxgraph_resources/",
+                            {"glob":"**/*", "input":"src/assets/mxgraph_resources/", "output": "./"}
 
                         ],
                         "styles": [

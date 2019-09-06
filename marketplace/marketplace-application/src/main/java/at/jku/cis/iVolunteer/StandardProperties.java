@@ -185,15 +185,74 @@ public class StandardProperties {
 
 	}
 	
+	public List<Property> getAllFlexProdProperties() {
+		List<Property> list = new LinkedList<Property>();
+
+		list.add(new MaxGluehtemperaturProperty());
+		list.add(new VerfuegbaresSchutzgasProperty());
+		list.add(new BauartProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		list.add(new KaltgewalztesMaterialZulaessigProperty());
+		list.add(new WarmgewalztesMaterialZulaessigProperty());
+		
+		list.add(new BundEntfettenProperty());
+		
+		list.add(new InnendurchmesserProperty());
+		list.add(new AussendurchmesserProperty());
+		list.add(new HoeheProperty());
+		
+		list.add(new GluehzeitProperty());
+		list.add(new DurchsatzProperty());
+		
+		list.add(new MoeglicheInnendurchmesserProperty());
+		list.add(new MaxAussendurchmesserProperty());
+		list.add(new MaxChargierhoeheProperty());
+		
+		list.add(new CQI9Property());
+		list.add(new TUSProperty());
+		
+		list.add(new LetzteWartungProperty());
+		list.add(new WartungsintervallProperty());
+		
+		list.add(new BandbreiteProperty());
+		list.add(new BandstaerkeProperty());
+		
+		list.add(new WarmgewalztProperty());
+		list.add(new KaltgewalztProperty());
+		
+		list.add(new StreckgrenzeProperty());
+		list.add(new ZugfestigkeitProperty());
+		list.add(new DehnungProperty());
+		
+		list.add(new GefuegeProperty());
+		
+		list.add(new MaterialBereitgestelltProperty());
+		list.add(new LieferortProperty());
+		list.add(new VerpackungProperty());
+		list.add(new TransportartProperty());
+		list.add(new MengeProperty());
+		list.add(new LieferdatumProperty());
+		list.add(new IncotermsProperty());
+		
+		list.add(new ZahlungsbedingungenProperty());
+		
+		
+		
+		return new ArrayList<>(list);
+
+	}
+	
 	public List<Property> getAll() {
 		List<Property> sps = this.getAllSingle();
 		List<Property> mps = this.getAllMulti();
 		List<Property> sbs = this.getAllSybos();
 		List<Property> tmwr = this.getTestMultiWithRules();
+		List<Property> flexProd = this.getAllFlexProdProperties();
 	
 		sps.addAll(mps);
 		sps.addAll(sbs);
 		sps.addAll(tmwr);
+		sps.addAll(flexProd);
 		
 		return sps;
 	
@@ -201,18 +260,15 @@ public class StandardProperties {
 	
 	
 	
+	
 	public List<ListEntry<String>> addCompetenceLegalValues() {
 	
 		List<ListEntry<String>> legalValues = new LinkedList<ListEntry<String>>();
-		
-		
 		
 		for (Competence c : competenceRepository.findAll()) {
 			legalValues.add(new ListEntry<String>(c.getId(), c.getValue()));
 		}
 	
-		
-		
 		return legalValues;
 	}
 	
@@ -225,7 +281,6 @@ public class StandardProperties {
 		}
 			
 		return new HashMap<>(props);
-		
 	}
 	
 	/**
@@ -233,9 +288,6 @@ public class StandardProperties {
 	 * Standard Properties
 	 *
 	 */
-	
-	
-	
 	public static class NameProperty extends TextProperty {
 
 		NameProperty() {
@@ -247,7 +299,6 @@ public class StandardProperties {
 			this.setId("name");
 			this.setKind(PropertyType.TEXT);
 			this.setName("Name");
-
 			
 			//TODO Testrules
 			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
@@ -259,10 +310,8 @@ public class StandardProperties {
 //			//rules.get(rules.size()-1).setMessage("Testmessage min length");
 //			rules.add(new Rule(RuleKind.REGEX_PATTERN, "^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*")); //Only Letters and Spaces, Start with Letter
 //			//rules.get(rules.size()-1).setMessage("Testmessage regex");
-			this.setRules(rules);
-			
+			this.setRules(rules);	
 		}
-		
 	}
 	
 	public static class DescriptionProperty extends TextProperty {
@@ -316,9 +365,6 @@ public class StandardProperties {
 			this.setName("Content");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
-			
-			
-		
 		}
 	}
 	
@@ -344,7 +390,6 @@ public class StandardProperties {
 			List<SinglePropertyRule> rules = new LinkedList<SinglePropertyRule>();
 			rules.add(new SinglePropertyRule(SinglePropertyRuleKind.REQUIRED));
 			this.setRules(rules);
-			
 		}
 	}
 	
@@ -403,8 +448,6 @@ public class StandardProperties {
 			this.setName("Location");
 //			this.setDefaultValue("");
 //			this.setValue(getDefaultValue());
-			
-			
 		}
 	}
 	
@@ -1165,9 +1208,259 @@ public class StandardProperties {
 		}
 	}
 	
+	//-----------------------------------------
+	//--------------FlexProd Properties
+	//-----------------------------------------
 	
 	
+	public static class MaxGluehtemperaturProperty extends NumberProperty {
+		public MaxGluehtemperaturProperty() {
+			this.setId("maxgluehtemperatur");
+			this.setName("Max. Glühtemperatur");
+		}
+	}
 	
+	public static class VerfuegbaresSchutzgasProperty extends TextProperty {
+		public VerfuegbaresSchutzgasProperty() {
+			this.setId("verfuegbaresschutzgas");
+			this.setName("Verfügbares Schutzgas");
+		}
+	}
+	
+	public static class BauartProperty extends TextProperty {
+		public BauartProperty() {
+			this.setId("bauart");
+			this.setName("Bauart");
+		}
+	}
+	
+	public static class TemperaturhomogenitaetProperty extends NumberProperty {
+		public TemperaturhomogenitaetProperty() {
+			this.setId("temperaturhomogenitaet");
+			this.setName("Temperaturhomogenität");
+		}
+	}
+	
+	public static class KaltgewalztesMaterialZulaessigProperty extends BooleanProperty {
+		public KaltgewalztesMaterialZulaessigProperty() {
+			this.setId("kaltgewalztesmaterialzulaessig");
+			this.setName("Kaltgewalztes Material zulässig");
+		}
+	}
+	
+	public static class WarmgewalztesMaterialZulaessigProperty extends BooleanProperty {
+		public WarmgewalztesMaterialZulaessigProperty() {
+			this.setId("warmgewalztesmaterialzulaessig");
+			this.setName("Warmgewalztes Material zulässig");
+		}
+	}
+	
+	public static class BundEntfettenProperty extends BooleanProperty {
+		public BundEntfettenProperty() {
+			this.setId("bundentfetten");
+			this.setName("Bund Entfetten");
+		}
+	}
+	
+	public static class InnendurchmesserProperty extends NumberProperty {
+		public InnendurchmesserProperty() {
+			this.setId("innendurchmesser");
+			this.setName("Innendurchmesser");
+		}
+	}
+	
+	public static class AussendurchmesserProperty extends NumberProperty {
+		public AussendurchmesserProperty() {
+			this.setId("aussendurchmesser");
+			this.setName("Außendurchmesser");
+		}
+	}
+	
+	public static class HoeheProperty extends NumberProperty {
+		public HoeheProperty() {
+			this.setId("hoehe");
+			this.setName("Höhe");
+		}
+	}
+	
+	public static class GluehzeitProperty extends NumberProperty {
+		public GluehzeitProperty() {
+			this.setId("gluehzeit");
+			this.setName("Glühzeit");
+		}
+	}
+	
+	public static class DurchsatzProperty extends NumberProperty {
+		public DurchsatzProperty() {
+			this.setId("durchsatz");
+			this.setName("Durchsatz");
+		}
+	}
+	
+	public static class MoeglicheInnendurchmesserProperty extends NumberProperty {
+		public MoeglicheInnendurchmesserProperty() {
+			this.setId("moeglicheinnendurchmesser");
+			this.setName("Mögliche Innendurchmesser");
+		}
+	}
+	
+	public static class MaxAussendurchmesserProperty extends NumberProperty {
+		public MaxAussendurchmesserProperty() {
+			this.setId("maxaussendurchmesser");
+			this.setName("Max. Außendurchmesser");
+		}
+	}
+	
+	public static class MaxChargierhoeheProperty extends NumberProperty {
+		public MaxChargierhoeheProperty() {
+			this.setId("maxchargierhoehe");
+			this.setName("Max. Chargierhöhe");
+		}
+	}
+	
+	public static class CQI9Property extends BooleanProperty {
+		public CQI9Property() {
+			this.setId("cqi9");
+			this.setName("CQI-9");
+		}
+	}
+	
+	public static class TUSProperty extends BooleanProperty {
+		public TUSProperty() {
+			this.setId("tus");
+			this.setName("TUS");
+		}
+	}
+	
+	public static class LetzteWartungProperty extends DateProperty {
+		public LetzteWartungProperty() {
+			this.setId("letztewartung");
+			this.setName("Letzte Wartung");
+		}
+	}
+	
+	public static class WartungsintervallProperty extends DateProperty {
+		public WartungsintervallProperty() {
+			this.setId("wartungsintervall");
+			this.setName("Wartungsintervall");
+		}
+	}
+	
+	public static class BandbreiteProperty extends NumberProperty {
+		public BandbreiteProperty() {
+			this.setId("bandbreite");
+			this.setName("Bandbreite");
+		}
+	}
+	
+	public static class BandstaerkeProperty extends NumberProperty {
+		public BandstaerkeProperty() {
+			this.setId("bandstaerke");
+			this.setName("Bandstärke");
+		}
+	}
+	
+	public static class WarmgewalztProperty extends BooleanProperty {
+		public WarmgewalztProperty() {
+			this.setId("warmgewalzt");
+			this.setName("Warmgewalzt");
+		}
+	}
+	
+	public static class KaltgewalztProperty extends BooleanProperty {
+		public KaltgewalztProperty() {
+			this.setId("kaltgewalzt");
+			this.setName("Kaltgewalzt");
+		}
+	}
+	
+	public static class StreckgrenzeProperty extends NumberProperty {
+		public StreckgrenzeProperty() {
+			this.setId("streckgrenze");
+			this.setName("Streckgrenze");
+		}
+	}
+	
+	public static class ZugfestigkeitProperty extends NumberProperty {
+		public ZugfestigkeitProperty() {
+			this.setId("zugfestigkeit");
+			this.setName("Zugfestigkeit");
+		}
+	}
+	
+	public static class DehnungProperty extends NumberProperty {
+		public DehnungProperty() {
+			this.setId("dehnung");
+			this.setName("Dehnung");
+		}
+	}
+	
+	public static class GefuegeProperty extends TextProperty {
+		public GefuegeProperty() {
+			this.setId("gefuege");
+			this.setName("Gefüge");
+		}
+	}
+	
+	
+	public static class MaterialBereitgestelltProperty extends BooleanProperty {
+		public MaterialBereitgestelltProperty() {
+			this.setId("materialbereitgestellt");
+			this.setName("Material bereitgestellt?");
+		}
+	}
+	
+
+	public static class LieferortProperty extends TextProperty {
+		public LieferortProperty() {
+			this.setId("lieferort");
+			this.setName("Lieferort");
+		}
+	}
+	
+	public static class VerpackungProperty extends TextProperty {
+		public VerpackungProperty() {
+			this.setId("verpackung");
+			this.setName("Verpackung");
+		}
+	}
+	
+	public static class TransportartProperty extends TextProperty {
+		public TransportartProperty() {
+			this.setId("transportart");
+			this.setName("Transportart");
+		}
+	}
+	
+	
+	public static class MengeProperty extends NumberProperty {
+		public MengeProperty() {
+			this.setId("menge");
+			this.setName("Menge");
+		}
+	}
+	
+	
+	public static class LieferdatumProperty extends DateProperty {
+		public LieferdatumProperty() {
+			this.setId("lieferdatum");
+			this.setName("Lieferdatum");
+		}
+	}
+	
+	public static class IncotermsProperty extends TextProperty {
+		public IncotermsProperty() {
+			this.setId("incoterms");
+			this.setName("Inco-Terms");
+		}
+	}
+	
+	public static class ZahlungsbedingungenProperty extends TextProperty {
+		public ZahlungsbedingungenProperty() {
+			this.setId("zahlungsbedingungen");
+			this.setName("Zahlungsbedingungen");
+		}
+	}
 	///////////////////////////////
 	
 	public static class TestMultiWithRules extends MultiProperty {
