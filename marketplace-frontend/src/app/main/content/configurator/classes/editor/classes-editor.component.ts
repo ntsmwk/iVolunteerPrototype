@@ -158,11 +158,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
 
       // this.addHelloWorldToGraphTest(); //Remove
-      this.parseServerContent();
-
-      this.setLayout('horizontal');
 
 
+      this.showServerContent();
 
       // console.log(this.graph.getModel());
       // const encoder = new mx.mxCodec('');
@@ -174,6 +172,21 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
 
   }
+
+  showServerContent() {
+    this.parseServerContent();
+    this.setLayout('vertical');
+  }
+
+  showEmptyEditor() {
+    this.graph.getModel().beginUpdate();
+    try {
+      this.graph.getModel().clear();
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+  }
+
 
   private parseServerContent() {
     this.parseIncomingClasses();
@@ -189,18 +202,18 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     try {
       for (let c of this.configurableClasses) {
         let cell = this.graph.insertVertex(parent, c.id, c.name, 20, 20, 80, 30);
-        
-        if (cell.id=="technische_beschreibung") {
+
+        if (cell.id == "technische_beschreibung") {
           var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/gear.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
           this.graph.addCellOverlay(cell, overlay);
         }
 
-        if (cell.id=="logistischeBeschreibung") {
+        if (cell.id == "logistischeBeschreibung") {
           var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/package.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
           this.graph.addCellOverlay(cell, overlay);
         }
 
-        if (cell.id=="preislicheBeschreibung") {
+        if (cell.id == "preislicheBeschreibung") {
           var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/printer.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
           this.graph.addCellOverlay(cell, overlay);
         }
@@ -223,7 +236,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
         if (r.relationshipType == RelationshipType.INHERITANCE) {
           mx.mxConstants.STYLE_EDGE
-          var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none');
+          // var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none');
+          var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'sideToSideEdgeStyle=1;startArrow=none;endArrow=none');
+
           cell.geometry.setTerminalPoint(new mx.mxPoint(), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(), false);
 
@@ -350,9 +365,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
           }, null, null, true, true);
 
-          var createClassInstanceItem = menu.addItem('Create new Instance', null, function() {
+          var createClassInstanceItem = menu.addItem('Create new Instance', null, function () {
             outer.createClassInstanceClicked(cell);
-          },null, null, true, true);
+          }, null, null, true, true);
 
         }
       }
@@ -514,7 +529,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   mousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
     const outer = this;
 
-    
+
     console.log(event);
     console.log(item);
 
@@ -528,8 +543,8 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
     }
 
-    var onDragOver = function(evt) {
-     
+    var onDragOver = function (evt) {
+
       positionEvent = evt;
     }
 
@@ -551,10 +566,10 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
       }
 
       function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any, graph: mxgraph.mxGraph) {
-         
+
         const coords = graph.getPointForEvent(positionEvent, false);
 
-        
+
 
         // const coords = new mx.mxPoint(dragEndEvent.pageX, dragEndEvent.pageY);
         console.log(coords);
@@ -575,7 +590,8 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
 
         } else if (paletteItem.id == 'inheritance') {
-          let cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'curved=1;startArrow=classic;endArrow=none;html=1;');
+          // let cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'curved=1;startArrow=classic;endArrow=none;html=1;');
+          var cell = new myMxCell(undefined, new mx.mxGeometry(0, 0, 0, 0), 'sideToSideEdgeStyle=1;startArrow=none;endArrow=none');
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
 
@@ -678,8 +694,8 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   }
 
   saveGraphClicked() {
-   console.log(this.graph.getModel().cells);
-   console.log(this.graph.getModel());
+    console.log(this.graph.getModel().cells);
+    console.log(this.graph.getModel());
 
 
   }
@@ -698,10 +714,10 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
       //TODO
       this.showWorkInProgressInfo = true;
-        let outer = this;
-        setTimeout(function() {
-          outer.showWorkInProgressInfo = false;
-        }, 5000);
+      let outer = this;
+      setTimeout(function () {
+        outer.showWorkInProgressInfo = false;
+      }, 5000);
     } else {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}`]);
     }
@@ -753,13 +769,13 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   saveAddedProperties() {
     this.classDefinitionService.savePropertiesLegacy(this.marketplace, this.currentClass.id, this.currentClass.properties).toPromise().then((ret: ClassDefintion) => {
       console.log("saveaddedPropertieslegacy")
-      console.log(ret); 
+      console.log(ret);
       this.propertiesAdded = false;
 
       if (isNullOrUndefined(ret)) {
         this.showWorkInProgressInfo = true;
         let outer = this;
-        setTimeout(function() {
+        setTimeout(function () {
           outer.showWorkInProgressInfo = false;
         }, 5000);
       }
