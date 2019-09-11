@@ -2,15 +2,11 @@ package at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto;
 
 import java.util.List;
 
-import com.mongodb.util.JSON;
-
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.property.listEntry.dto.ListEntryDTO;
 import at.jku.cis.iVolunteer.model.property.rule.dto.RuleDTO;
 
 public class MultiPropertyRetDTO {
 
-	
 	String id;
 	String name;
 	
@@ -20,12 +16,11 @@ public class MultiPropertyRetDTO {
 	List<String> propertyIDs;
 	
 	int order;
-	
-	
-	
+
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}

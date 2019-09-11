@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.core.dashboard;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -14,10 +13,9 @@ public class Dashboard {
 
 	@Id
 	private String id;
+	private String name;
 	@DBRef
 	private CoreUser user;
-	private Date creationDate;
-	private Date modificationDate;
 	private List<Dashlet> dashlets;
 
 	public String getId() {
@@ -28,20 +26,12 @@ public class Dashboard {
 		this.id = id;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
+	public String getName() {
+		return name;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getModificationDate() {
-		return modificationDate;
-	}
-
-	public void setModificationDate(Date modificationDate) {
-		this.modificationDate = modificationDate;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public CoreUser getUser() {

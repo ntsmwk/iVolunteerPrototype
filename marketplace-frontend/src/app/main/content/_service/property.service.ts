@@ -29,13 +29,11 @@ export class PropertyService {
   }
 
   public getPropertyFromList(marketplace: Marketplace, propId: string) {
-    console.log("calling get /properties/id");
     return this.http.get(`${marketplace.url}/properties/${propId}`);
   }
 
   //creating new Properties
   public addSingleProperty(marketplace: Marketplace, property: Property<any>) {
-    console.log("calling post /properties/new/single")
     return this.http.post(`${marketplace.url}/properties/new/single`, property);
   }
 
@@ -46,12 +44,10 @@ export class PropertyService {
 
   //property manipulation
   public updateProperty(marketplace: Marketplace, property: Property<any>) {
-    console.log("calling post /properties/id/update");
     return this.http.put(`${marketplace.url}/properties/${property.id}/update`, property);
   }
 
   public deleteProperty(marketplace: Marketplace, propId: string) {
-    console.log("calling delete /properties/id/delete")
     return this.http.delete(`${marketplace.url}/properties/${propId}`)
   }
 

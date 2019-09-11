@@ -117,9 +117,7 @@ public class TaskOperationController {
 			try {
 				VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
 				vte.setVolunteerId(volunteer.getId());
-
 				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
-
 				competenceEntries.forEach(competenceEntry -> {
 					VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
 							competenceEntryMapper.toDTO(competenceEntry));

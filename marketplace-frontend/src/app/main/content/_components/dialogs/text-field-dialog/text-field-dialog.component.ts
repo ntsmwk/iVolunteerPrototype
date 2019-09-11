@@ -1,13 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
-
 export interface TextFieldDialogData {
   label: string;
   fields: [{description: string, hintText: string, value: string}];
 }
-
-
 
 @Component({
   selector: 'text-field-dialog',
@@ -15,20 +12,19 @@ export interface TextFieldDialogData {
   styleUrls:['./text-field-dialog.component.scss']
 })
 export class TextFieldDialogComponent implements OnInit{
-  newValues: string[]=[];
+  
+  newValues: string[] = [];
   
   constructor(
     public dialogRef: MatDialogRef<TextFieldDialogComponent>, @Inject(MAT_DIALOG_DATA)
     public data: TextFieldDialogData,
-
     ) {
   }
 
   ngOnInit() {
     for (let i = 0; i < this.data.fields.length; i++) {
       this.newValues[i] = this.data.fields[i].value;
-    }
-    
+    } 
   }
   
   onNoClick(): void {

@@ -13,11 +13,10 @@ import { fuseAnimations } from "@fuse/animations";
 @Component({
     selector: 'fuse-dashboard-helpseeker',
     templateUrl: './dashboard-helpseeker.component.html',
-    styleUrls: ['./dashboard-helpseeker.scss'],
     animations: fuseAnimations
 })
 export class FuseHelpSeekerDashboardComponent implements OnInit {
-   
+
     private helpSeeker: Participant;
     public marketplaces = new Array<Marketplace>();
 

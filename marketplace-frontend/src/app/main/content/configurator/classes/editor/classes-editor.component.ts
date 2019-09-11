@@ -985,7 +985,11 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
 
     var onDragend = function (evt) {
 
+
+      
       evt.dataTransfer.getData('text');
+
+      
 
       try {
         addObjectToGraph(evt, item, graph);

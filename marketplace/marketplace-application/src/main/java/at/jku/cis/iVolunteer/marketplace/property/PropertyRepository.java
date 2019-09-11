@@ -1,14 +1,13 @@
 package at.jku.cis.iVolunteer.marketplace.property;
 
 
-import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Repository;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+
 
 @Repository
 public interface PropertyRepository extends MongoRepository<Property, String> {

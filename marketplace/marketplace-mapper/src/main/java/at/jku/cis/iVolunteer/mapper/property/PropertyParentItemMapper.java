@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyParentItemDTO;
+
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @Component

@@ -1,8 +1,6 @@
 package at.jku.cis.iVolunteer.model.task.template;
 
-
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import at.jku.cis.iVolunteer.model.iVolunteerObject.IVolunteerObject;
 
 
@@ -18,8 +16,8 @@ public class UserDefinedTaskTemplate extends IVolunteerObject {
 	
 	int order;
 	
-	public UserDefinedTaskTemplate() {
-	}
+	public UserDefinedTaskTemplate() {}
+
 	
 	public UserDefinedTaskTemplate(String id) {
 		this.id = id;

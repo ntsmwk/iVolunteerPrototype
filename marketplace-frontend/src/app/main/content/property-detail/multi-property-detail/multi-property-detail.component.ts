@@ -19,12 +19,6 @@ export class MultiPropertyDetailComponent implements OnInit {
   }
 
   displayPropertyValue(property: Property<any>): string {    
-    // if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
-    //   return property.values[0].value;
-    // } else {
-    //     return undefined;
-    // }
-
     return Property.getValue(property);
   }
 

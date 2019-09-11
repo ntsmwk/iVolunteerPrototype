@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { Property, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData, AddOrRemoveDialogDataPD, AddOrRemoveDialogDataID } from '../add-or-remove-dialog/add-or-remove-dialog.component';
@@ -16,20 +16,12 @@ import { RelationshipDialogComponent } from "../relationship-dialog/relationship
   templateUrl: './dialog-factory.component.html',
   styleUrls: ['./dialog-factory.component.scss']
 })
-export class DialogFactoryComponent implements OnInit {
-
+export class DialogFactoryComponent {
 
   constructor(public dialog: MatDialog) { }
-
-  ngOnInit() {
-
-
-  }
-
-
-  ////TODO EXPAND DIALOG FACTORY
-
-
+  
+  //TODO EXPAND DIALOG FACTORY
+  
   /**
    * ADD PROPERTY DIALOG
    * 
@@ -135,7 +127,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   removePropertyDialog(template: UserDefinedTaskTemplate) {
-    console.log("clicked remove properies");
     const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
       width: '500px',
       data: this.prepareDataForRemove('Remove Properties', template)
@@ -145,14 +136,9 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log("dialog closed..." + result.label);
-        console.log(result.checkboxStates);
-        console.log("======");
-
         propIds = [];
         for (let s of result.checkboxStates) {
           if (s.dirty) {
-            console.log(s.property.name + " has changed and marked to be removed" + s.dirty);
             propIds.push(s.property.id);
           }
         }
@@ -186,8 +172,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-    console.log("entered edit Description Dialog");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -212,7 +196,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   editTemplateNameDialog(template: UserDefinedTaskTemplate) {
-    console.log("Entered edit Name Dialog");
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -236,8 +219,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-    console.log("clicked new nested Task Template");
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -267,8 +248,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   confirmationDialog(title: string, description: string) {
-    console.log("clicked delete template");
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       data: { title: title, description: description }
@@ -288,8 +267,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changePropertyOrderDialog(properties: Property<any>[]) {
-    console.log("clicked order properties");
-
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
@@ -321,8 +298,6 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any = undefined;
 
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
-      console.log(result);
       ret = result;
     });
 
@@ -341,9 +316,7 @@ export class DialogFactoryComponent implements OnInit {
 
     let ret: { copyId: string, newName: string, newDescription: string } = undefined;
     dialogRef.beforeClose().toPromise().then((result: ChooseTemplateToCopyDialogData) => {
-      console.log("result = ");
-      ret = { copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription };
-      console.log(ret);
+      ret = {copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription};
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {

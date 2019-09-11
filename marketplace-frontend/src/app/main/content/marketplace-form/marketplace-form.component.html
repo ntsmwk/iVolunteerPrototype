@@ -1,0 +1,30 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Marketplace</h1>
+  </div>
+
+  <div class="content p-24 mat-white-bg" fusePerfectScrollbar>
+
+    <form form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" fxLayout="column" fxLayoutAlign="start"
+          fxFlex="1 0 auto" name="form" (submit)="save()" [formGroup]="marketplaceForm">
+      <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+        <mat-form-field fxFlex="100">
+          <input matInput placeholder="Name" formControlName="name" [readonly]="isEditMode()">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+          <input matInput placeholder="shortName" formControlName="shortName" [readonly]="isEditMode()">
+        </mat-form-field>
+
+        <mat-form-field fxFlex="100">
+          <input matInput placeholder="url" formControlName="url">
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
