@@ -28,7 +28,14 @@
 
       <div class="px-8 px-mat-16">
         <fuse-marketplace-selection></fuse-marketplace-selection>
-
+        <div class="logo ml-16" *ngIf="showEditor == false">
+            <img class="logo-icon" src="assets/ebnerLogo.jpg">
+            MatchMaking-Configurator
+        </div>
+        <div class="logo ml-16"  *ngIf="showEditor == true">
+            <img class="logo-icon" src="assets/acme_logo_quer.png">
+            Haubenofen-Editor
+        </div>
       </div>
 
     </div>

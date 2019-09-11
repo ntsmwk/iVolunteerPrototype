@@ -68,7 +68,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
     {
       id: 'relationships', label: 'Relationships',
       items: [
-        { id: 'inheritance', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'edge', shape: undefined },
+        { id: 'inheritance', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'edge', shape: undefined },
         // { id: 'association', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'relation', shape: undefined },
       ]
     }
