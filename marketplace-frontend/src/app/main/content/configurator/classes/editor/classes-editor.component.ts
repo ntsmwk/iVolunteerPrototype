@@ -383,13 +383,66 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
       this.graph.insertEdge(parent, "e6", null, tech, belade);
 
       let prozess = this.graph.insertVertex(parent, "prozess", "Prozess", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e6", null, tech, prozess);
+      this.graph.insertEdge(parent, "e7", null, tech, prozess);
 
       let input = this.graph.insertVertex(parent, "input", "Input", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e6", null, tech, input);
+      this.graph.insertEdge(parent, "e8", null, tech, input);
 
       let output = this.graph.insertVertex(parent, "output", "Output", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e6", null, tech, output);
+      this.graph.insertEdge(parent, "e9", null, tech, output);
+
+
+      let ofenTech = this.graph.insertVertex(parent, "ofenTech", "Technische\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e10", null, ofen, ofenTech);
+
+      let ofenTechAllg = this.graph.insertVertex(parent, "ofenTechAllg", "Allgemein", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e11", null, ofenTech, ofenTechAllg);
+      
+      let ofenGeo = this.graph.insertVertex(parent, "ofenGeo", "Geometrische\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e12", null, ofen, ofenGeo);
+
+      let presseTech = this.graph.insertVertex(parent, "presseTech", "Technische\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e13", null, presse, presseTech);
+
+      let presseTechAllg = this.graph.insertVertex(parent, "presseTechAllg", "Allgemein", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechAllg);
+
+      let presseTechWerk = this.graph.insertVertex(parent, "presseTechWerk", "Werkzeug-\nKompatibilität", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechWerk);
+
+      let presseGeo = this.graph.insertVertex(parent, "presseGeo", "Geometrische\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e15", null, presse, presseGeo);
+
+      let vorBear = this.graph.insertVertex(parent, "vorBear", "Vorbearbeitungs-\nschritte", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e16", null, prozess, vorBear);
+
+      let nachbear = this.graph.insertVertex(parent, "nachbear", "Nachbearbeitungs-\nschritte", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e17", null, prozess, nachbear);
+
+      let prozBetr = this.graph.insertVertex(parent, "prozBetr", "Betriebliche\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e18", null, prozess, prozBetr);
+
+      let prozBetrDurch = this.graph.insertVertex(parent, "prozBetrDurch", "Durchsatz", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e18a", null, prozess, prozBetrDurch);
+
+  
+
+      let przQual = this.graph.insertVertex(parent, "przQual", "Qualitative\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e19", null, prozess, przQual);
+
+      let przQualNormen = this.graph.insertVertex(parent, "przQualNormen", "Qualitätsnormen", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e19a", null, prozess, przQualNormen);
+
+      let inputGeom = this.graph.insertVertex(parent, "inputGeom", "Geometrische\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e20", null, input, inputGeom);
+
+      let inputQuali = this.graph.insertVertex(parent, "inputQuali", "Qualitative\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e21", null, input, inputQuali);
+
+      let outputQuali = this.graph.insertVertex(parent, "outputQuali", "Qualitative\nEigenschaften", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e22", null, output, outputQuali);
+
+
 
       
 
@@ -497,6 +550,21 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
           this.graph.addCellOverlay(cell, overlay);
         }
 
+        if (cell.id == "input") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/icons/incoming.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+          this.graph.addCellOverlay(cell, overlay);
+        }
+
+        if (cell.id == "output") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/icons/output.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+          this.graph.addCellOverlay(cell, overlay);
+        }
+
+        if (cell.id == "ofen") {
+          var overlay = new mx.mxCellOverlay(new mx.mxImage("/icons/haubenofen.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
+          this.graph.addCellOverlay(cell, overlay);
+        }
+
         let i = 20;
 
         var vfiller = this.graph.insertVertex(cell, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
@@ -506,7 +574,52 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
           if (p.id != "maxgluehtemperatur") {
             cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
             var v11 = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden");
-            var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 45, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/diamond_start.gif;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            
+            if (p.id=="lieferort") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 20, "shape=image;image=/assets/mxgraph_resources/icons/matching/location_dot_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+
+            }
+
+            if (p.id=="zahlungsbedingungen") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/t_rd_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+
+            }
+
+            if (p.id=="menge") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/equal_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="lieferdatum") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/equal_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="verfuegbaresschutzgas") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/exists_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="bauart") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/equal_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="temperaturhomogenitaet") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/lt_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="innendurchmesser") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/lt_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="aussendurchmesser") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/lteq_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="hoehe") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/gteq_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="moeglicheinnendurchmesser") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/gteq_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="maxaussendurchmesser") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/gt_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+            if (p.id=="maxchargierhoehe") {
+              var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 46, 20, 19, "shape=image;image=/assets/mxgraph_resources/icons/matching/lteq_reduced.png;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+            }
+
+            
 
             i = i + 20;
           }
