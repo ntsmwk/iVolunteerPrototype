@@ -16,7 +16,7 @@ import { Participant, ParticipantRole } from '../content/_model/participant';
   styleUrls: ['./toolbar.component.scss']
 })
 
-export class FuseToolbarComponent implements OnInit, OnChanges{
+export class FuseToolbarComponent{
   userStatusOptions: any[];
   languages: any;
   selectedLanguage: any;
