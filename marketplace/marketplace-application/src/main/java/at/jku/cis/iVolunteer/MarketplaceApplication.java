@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.lang3.reflect.InheritanceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -50,6 +52,26 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
+	}
+	
+	@PreDestroy
+	public void onShutdown() {
+		
+		List<Property> props = propertyRepository.findAll();
+		for (Property p : props) {
+			propertyRepository.delete(p.getId());
+		}
+		
+		List<Relationship> rels = relationshipRepository.findAll();
+		for (Relationship r : rels) {
+			relationshipRepository.delete(r.getId());
+		}
+		
+		List<ClassDefinition> clss = classDefinitionRepository.findAll();
+		for (ClassDefinition c : clss) {
+			classDefinitionRepository.delete(c.getId());
+		}
+		
 	}
 
 	@Override
