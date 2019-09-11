@@ -6,6 +6,9 @@ import { PropertyService } from '../../_service/property.service';
 import { Marketplace } from '../../_model/marketplace';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';
 import { listNotEmptyValidator } from "../../_validator/list-not-empty.validator";
+import { Router } from '@angular/router';
+
+
 
 export class PropertyKindOption {
   kind: string;
@@ -57,7 +60,8 @@ export class SinglePropertyComponent implements OnInit {
   };
 
   constructor(private formBuilder: FormBuilder,
-    private propertyService: PropertyService) { }
+    private propertyService: PropertyService,
+    private router: Router) { }
 
   ngOnInit() {
 
@@ -526,7 +530,12 @@ export class SinglePropertyComponent implements OnInit {
       this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
         console.log("PropertyService called, property added");
         console.log(property);
-        this.navigateBack();
+       
+       
+        // this.navigateBack();
+
+        this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
+      
       });
 
       console.log("VALID")

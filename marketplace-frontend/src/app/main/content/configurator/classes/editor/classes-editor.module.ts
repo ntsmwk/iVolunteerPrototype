@@ -12,6 +12,11 @@ import { OpenDialogComponent } from './open-dialog/open-dialog.component';
 import { OpenDialogModule } from './open-dialog/open-dialog.module';
 
 
+// const routes = [
+//   {path: ':open', component: ClassesEditorComponent}
+// ];
+
+
 
 @NgModule({
   imports: [
@@ -23,6 +28,8 @@ import { OpenDialogModule } from './open-dialog/open-dialog.module';
     MatTableModule,
     MatButtonModule,
     MatFormFieldModule,
+
+    // RouterModule.forChild(routes),
 
     MatDividerModule,
 

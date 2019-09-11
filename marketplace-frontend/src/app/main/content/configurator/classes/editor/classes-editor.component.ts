@@ -116,6 +116,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
 
     });
 
+
   }
 
   ngAfterViewInit() {
@@ -279,8 +280,15 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
 
       // this.showEmptyEditor();
       // this.showPresshaerteOfen();
-      this.parseServerContent();
-      this.setLayout('vertical');
+      this.route.queryParams.subscribe(param => {
+        console.log(param);
+
+        if (param['open'] == 'haubenofen') {
+          this.parseServerContent();
+          this.setLayout('vertical');
+        }
+      });
+
       // console.log(this.graph.getModel());
       // const encoder = new mx.mxCodec('');
       // var node = encoder.encode(this.graph.getModel());
@@ -358,39 +366,59 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
     try {
       let root = this.graph.insertVertex(parent, "root", "Presshärteofen", 0, 0, 80, 30);
       let tech = this.graph.insertVertex(parent, "tech", "Technische\nBeschreibung", 0, 0, 80, 30);
-      let log = this.graph.insertVertex(parent, "log", "Logistische\nBeschreibung", 0, 0, 80, 30, "shape=swimlane");
-      let preis = this.graph.insertVertex(parent, "preis", "Preisliche\nBeschreibung", 0, 0, 80, 30, "shape=swimlane");
+      let log = this.graph.insertVertex(parent, "log", "Logistische\nBeschreibung", 0, 0, 80, 30,);
+      let preis = this.graph.insertVertex(parent, "preis", "Preisliche\nBeschreibung", 0, 0, 80, 30, );
 
       this.graph.insertEdge(parent, "e1", null, root, tech);
       this.graph.insertEdge(parent, "e2", null, root, log);
       this.graph.insertEdge(parent, "e3", null, root, preis);
 
+      let ofen = this.graph.insertVertex(parent, "ofen", "Ofen", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e4", null, tech, ofen);
 
-      preis.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
-      log.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
-      tech.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
+      let presse = this.graph.insertVertex(parent, "presse", "Presse", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e5", null, tech, presse);
+
+      let belade = this.graph.insertVertex(parent, "belade", "Belade/Entlade-\nsystem Robotik", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e6", null, tech, belade);
+
+      let prozess = this.graph.insertVertex(parent, "prozess", "Prozess", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e6", null, tech, prozess);
+
+      let input = this.graph.insertVertex(parent, "input", "Input", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e6", null, tech, input);
+
+      let output = this.graph.insertVertex(parent, "output", "Output", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e6", null, tech, output);
+
+      
 
 
-      var v11 = this.graph.insertVertex(preis, "test1", 'Property 1', 5, 45, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
-      var v11i = this.graph.insertVertex(preis, "test1icon", '(I)', 80, 45, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/diamond_start.gif;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
-      var vfiller = this.graph.insertVertex(preis, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
+      // preis.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
+      // log.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
+      // tech.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
 
-      var v12 = this.graph.insertVertex(preis, "test2", 'Property 2', 5, 65, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
-      var v13 = this.graph.insertVertex(preis, "test3", 'Property 3', 5, 85, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
-      var v14 = this.graph.insertVertex(preis, "test4", 'Property 4', 5, 105, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
-      var v15 = this.graph.insertVertex(preis, "test5", 'Property 5', 5, 125, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
 
-      var v16 = this.graph.insertVertex(preis, "add", 'add', 10, 150, 40, 15, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(62,125,219);fontColor=white;strokeColor=none");
+      // var v11 = this.graph.insertVertex(preis, "test1", 'Property 1', 5, 45, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      // var v11i = this.graph.insertVertex(preis, "test1icon", '(I)', 80, 45, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/diamond_start.gif;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+      // var vfiller = this.graph.insertVertex(preis, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
+
+      // var v12 = this.graph.insertVertex(preis, "test2", 'Property 2', 5, 65, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      // var v13 = this.graph.insertVertex(preis, "test3", 'Property 3', 5, 85, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      // var v14 = this.graph.insertVertex(preis, "test4", 'Property 4', 5, 105, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      // var v15 = this.graph.insertVertex(preis, "test5", 'Property 5', 5, 125, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+
+      // var v16 = this.graph.insertVertex(preis, "add", 'add', 10, 150, 40, 15, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(62,125,219);fontColor=white;strokeColor=none");
 
 
 
       // var v11 = this.graph.insertVertex(preis, null, 'Hello,', 10, 40, 120, 80);
-      this.graph.insertVertex(log, "add", "add property", 0, 40, 80, 15);
-      tech.setCollapsed(true);
-      log.setCollapsed(true);
+      // this.graph.insertVertex(log, "add", "add property", 0, 40, 80, 15);
+      // tech.setCollapsed(true);
+      // log.setCollapsed(true);
 
-      let test = this.graph.insertVertex(parent, "test", "Test_after", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e11", null, preis, test);
+      // let test = this.graph.insertVertex(parent, "test", "Test_after", 0, 0, 80, 30);
+      // this.graph.insertEdge(parent, "e11", null, preis, test);
 
 
       // this.graph.collapseToPreferredSize=false;

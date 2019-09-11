@@ -14,16 +14,16 @@
 </div>
 
 <div #fileMenuItemContainer id="fileMenuItemContainer">
-  <div class="menuitem" (click)="showEmptyEditor()">New Definition</div>
-  <div class="menuitem" (click)="showOpenDialog()">Open Defintion</div>
-  <div class="menuitem">Save Defintion</div>
-  <div class="menuitem" (click)="createClassInstanceClicked(null)">New Instance</div>
+  <div class="menuitem" (click)="showEmptyEditor()">New Configurator</div>
+  <div class="menuitem" (click)="showOpenDialog()">Open Configurator</div>
+  <div class="menuitem">Save Configurator</div>
+  <div class="menuitem" (click)="createClassInstanceClicked(null)">New Editor</div>
 </div>
 
 
 
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
-  <h2>Matchmaking Resources</h2>
+  <h2>MatchMaking Resources</h2>
   <div *ngFor="let p of sidebarPalettes">
     <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3> -->
     <div *ngFor="let item of p.items">

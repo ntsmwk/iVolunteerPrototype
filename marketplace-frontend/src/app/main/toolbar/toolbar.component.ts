@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router, Route, ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
 import {FuseConfigService} from '@fuse/services/config.service';
@@ -25,7 +25,10 @@ export class FuseToolbarComponent {
   noNav: boolean;
   navigation: any;
 
+  showInstanceEditorBar: boolean = false;
+
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private fuseConfig: FuseConfigService,
               private loginService: LoginService,
               private sidebarService: FuseSidebarService,
