@@ -17,17 +17,17 @@ export function propertyNameUniqueValidator(properties: Property<any>[], current
             return null;
         }
       
-        let item = undefined;
-        item = properties.find( (prop: Property<any>) => {
-            return prop.name.toLocaleLowerCase() == control.value.toLocaleLowerCase();
-        });
+        // let item = undefined;
+        // item = properties.find( (prop: Property<any>) => {
+        //     return prop.name.toLocaleLowerCase() == control.value.toLocaleLowerCase();
+        // });
 
         
-        if (!isNullOrUndefined(item) && !isNullOrUndefined(currentProperty) && currentProperty.id == item.id) {
-            item = undefined;
-        }
+        // if (!isNullOrUndefined(item) && !isNullOrUndefined(currentProperty) && currentProperty.id == item.id) {
+        //     item = undefined;
+        // }
 
-        return !isNullOrUndefined(item) ? {'propertynameunique': {'propertynameunique': item, 'actual': control.value}} : null;
+        // return !isNullOrUndefined(item) ? {'propertynameunique': {'propertynameunique': item, 'actual': control.value}} : null;
     }
 }
 
