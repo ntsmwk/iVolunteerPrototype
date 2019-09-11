@@ -23,7 +23,7 @@
 
 
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
-  <h2>MatchMaking Resources</h2>
+  <h3>MatchMaking Resource</h3>
   <div *ngFor="let p of sidebarPalettes">
     <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3> -->
     <div *ngFor="let item of p.items">
@@ -36,11 +36,11 @@
 
   </div>
 
-  <h3>Matching Operations</h3>
+  <h3>MatchMaking Operator</h3>
 
   <div>
-  </div fxLayout="row" fxLayoutAlign="start start">
-    <h4>Numerical & Date</h4>
+  <div fxLayout="row" class="subheader" fxLayoutAlign="start start">
+    <h5 class="subheader">Numerical & Date</h5>
   </div>
     <div fxLayout="row" fxLayoutAlign="start start">
       
@@ -85,6 +85,9 @@
   <div style="padding-top: 3px"></div>
 
   <div>
+      <div fxLayout="row" class="subheader" fxLayoutAlign="start start">
+          <h5 class="subheader">Enumeration</h5>
+        </div>
     <div fxLayout="row" fxLayoutAlign="start start">
       <div
         style="width: 30; height: 30; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
@@ -106,6 +109,9 @@
   <div style="padding-top: 3px"></div>
 
   <div>
+      <div fxLayout="row" class="subheader" fxLayoutAlign="start start">
+          <h5 class="subheader">Text</h5>
+        </div>
     <div fxLayout="row" fxLayoutAlign="start start">
       <div
         style="width: 30; height: 30; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
@@ -149,6 +155,9 @@
   <div style="padding-top: 3px"></div>
 
   <div>
+      <div fxLayout="row" class="subheader" fxLayoutAlign="start start">
+          <h5 class="subheader">Location</h5>
+        </div>
     <div fxLayout="row" fxLayoutAlign="start start">
       <div
         style="width: 30; height: 30; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
