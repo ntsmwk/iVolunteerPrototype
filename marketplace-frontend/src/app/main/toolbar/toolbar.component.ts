@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {NavigationEnd, NavigationStart, Router, Route, ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -16,7 +16,7 @@ import { Participant, ParticipantRole } from '../content/_model/participant';
   styleUrls: ['./toolbar.component.scss']
 })
 
-export class FuseToolbarComponent {
+export class FuseToolbarComponent implements OnInit, OnChanges{
   userStatusOptions: any[];
   languages: any;
   selectedLanguage: any;
@@ -25,7 +25,9 @@ export class FuseToolbarComponent {
   noNav: boolean;
   navigation: any;
 
-  showInstanceEditorBar: boolean = false;
+  showEditor: boolean = false;
+
+
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -101,7 +103,23 @@ export class FuseToolbarComponent {
           break;
       }
     });
+
+    setInterval(() => { this.setHeading(this); } , 100);
   }
+
+  private setHeading(self ){
+
+    if(self.router && self.router.url && self.router.url.indexOf('instance-editor') === -1){
+      self.showEditor = false;
+    }
+    else{
+      self.showEditor = true;
+    }
+
+    setInterval(() => { self.setHeading(self); } , 100);
+  }
+
+
 
   toggleSidebarOpened(key) {
     this.sidebarService.getSidebar(key).toggleOpen();
