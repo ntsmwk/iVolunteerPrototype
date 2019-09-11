@@ -1,0 +1,67 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>open_in_new</mat-icon>
+      </td>
+      <td>
+        <h1>Open Definition</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content>
+  <table>
+    <tr width="200px">
+      <td width="200px">
+        <h2>Recent</h2>
+      </td>
+      <td style="padding-left: 50px">
+      </td>
+      <td>
+        <h2>More</h2>
+      </td>
+    <tr>
+      <td>
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="entry" (click)="itemSelected($event, 'Haubenofen')">
+            <td style="padding-left: 50px; padding-right: 50px">Haubenofen</td>
+          </tr>
+          <tr class="entry" (click)="itemSelected($event, 'Presshaerteofen')">
+            <td style="padding-left: 50px; padding-right: 50px">Presshärteofen</td>
+          </tr>
+          <tr class="entry">
+            <td style="padding-left: 50px; padding-right: 50px">Rollenherdofen</td>
+          </tr>
+          <tr class="entry">
+            <td style="padding-left: 50px; padding-right: 50px">Kammerofen</td>
+
+          </tr>
+          <tr class="entry">
+            <td style="padding-left: 50px; padding-right: 50px">Stoßofen</td>
+          </tr>
+        </table>
+      </td>
+
+      <td style="padding-left: 50px">
+      </td>
+
+      <td>
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="entry">
+            <td style="padding-left: 50px; padding-right: 50px" class="right">Find...</td>
+          </tr>
+          <tr class="entry">
+            <td style="padding-left: 50px; padding-right: 50px" class="right">Import</td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+</mat-dialog-actions>

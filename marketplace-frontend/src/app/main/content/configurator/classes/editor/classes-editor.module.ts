@@ -8,6 +8,8 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { AddOrRemoveDialogComponent } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.component';
 import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
+import { OpenDialogComponent } from './open-dialog/open-dialog.component';
+import { OpenDialogModule } from './open-dialog/open-dialog.module';
 
 
 
@@ -34,11 +36,12 @@ import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialo
 
     DialogFactoryModule,
     AddOrRemoveDialogModule,
+    OpenDialogModule
 
   ],
   declarations: [ClassesEditorComponent],
   exports: [ClassesEditorComponent],
-  entryComponents:[AddOrRemoveDialogComponent]
+  entryComponents:[AddOrRemoveDialogComponent, OpenDialogComponent]
 
 
 })

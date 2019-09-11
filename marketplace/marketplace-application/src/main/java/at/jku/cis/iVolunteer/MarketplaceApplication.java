@@ -79,7 +79,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 	
 	private void addStandardProperties() {
 		StandardProperties sp = new StandardProperties(competenceRepository, propertyRepository);
-		List<Property> props = sp.getAll();
+//		List<Property> props = sp.getAll();
+		List<Property> props = sp.getAllFlexProdProperties();
 		
 		for (Property p : props) {
 			if (!propertyRepository.exists(p.getId())) {
@@ -94,11 +95,17 @@ public class MarketplaceApplication implements CommandLineRunner {
 		
 		
 		
-		for (UserDefinedTaskTemplate t : st.createAll()) {
+		for (UserDefinedTaskTemplate t : st.createStandard()) {
 			if (!userDefinedTaskTemplateRepository.exists(t.getId())) {
 				userDefinedTaskTemplateRepository.save(t);
 			}
 		}
+		
+//		for (UserDefinedTaskTemplate t : st.createSYBOS()()) {
+//			if (!userDefinedTaskTemplateRepository.exists(t.getId())) {
+//				userDefinedTaskTemplateRepository.save(t);
+//			}
+//		}
 	}
 	
 	

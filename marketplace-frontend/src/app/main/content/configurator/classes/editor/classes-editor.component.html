@@ -1,7 +1,31 @@
+<div #menubarContainer id="menubarContainer">
+  <div fxLayout="row" fxLayoutAlign="start start">
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem" (click)="openFileMenuItem($event)">File</div>
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem">Edit</div>
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem">View</div>
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem">Extras</div>
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem">Help</div>
+  </div>
+</div>
+
+<div #fileMenuItemContainer id="fileMenuItemContainer">
+  <div class="menuitem" (click)="showEmptyEditor()">New Definition</div>
+  <div class="menuitem" (click)="showOpenDialog()">Open Defintion</div>
+  <div class="menuitem">Save Defintion</div>
+  <div class="menuitem" (click)="createClassInstanceClicked(null)">New Instance</div>
+</div>
+
+
+
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
-  <h2>Shapes</h2>
+  <h2>Matchmaking Resources</h2>
   <div *ngFor="let p of sidebarPalettes">
-    <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3>
+    <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3> -->
     <div *ngFor="let item of p.items">
 
       <img class="center-image" draggable="true" src="{{item.imgPath}}" style="cursor: pointer; text-align: center"
@@ -14,7 +38,7 @@
 
   <div style="padding-top: 20px"></div>
 
-  <h2>Tools</h2>
+  <h2>View</h2>
   <!-- <img src="../../../../../../assets/mxgraph_resources/images/zoomin.gif" (click)="zoomInEvent()" style="cursor: pointer" matTooltip="zoom in"> -->
   <div fxLayout="row" fxLayoutAlign="start start">
     <div
@@ -56,17 +80,21 @@
     <!-- <button mat-raised-button type="button" color="primary" (click)=createClassInstanceClicked()>create new Instance</button>
     <div style="padding-top: 10px"></div> -->
 
-    <button mat-raised-button type="button" color="primary" (click)="createClassInstanceClicked(null)">New Instance (from root)</button>
-      <div style="padding-top: 5px"></div>
+    <button mat-raised-button type="button" color="primary" (click)="createClassInstanceClicked(null)">New Instance
+      (from root)</button>
+    <div style="padding-top: 5px"></div>
 
-      <button mat-raised-button type="button" color="primary" (click)="showEmptyEditor()">Clear</button>
-      <button mat-raised-button type="button" color="primary" (click)="showServerContent()">Haubenofen</button>
+    <!-- <button mat-raised-button type="button" color="primary" (click)="showEmptyEditor()">Clear</button>
+    <button mat-raised-button type="button" color="primary" (click)="showServerContent()">Haubenofen</button>
+    <button mat-raised-button type="button" color="primary" (click)="showPresshaerteOfen()">Presshärteofen</button>
+ -->
+
 
 
     <button mat-raised-button type="button" color="primary" (click)="doShitWithGraph(graph)">print graph to
       console</button>
-    <div style="padding-top: 5px"></div>
-    <button mat-raised-button type="button" color="primary" (click)="saveGraphClicked()">Save</button>
+    <!-- <div style="padding-top: 5px"></div>
+    <button mat-raised-button type="button" color="primary" (click)="saveGraphClicked()">Save</button> -->
   </div>
 </div>
 

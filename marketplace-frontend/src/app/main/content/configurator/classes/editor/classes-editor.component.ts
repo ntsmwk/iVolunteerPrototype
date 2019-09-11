@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
@@ -9,12 +9,14 @@ import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyService } from 'app/main/content/_service/property.service';
 import { Property, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
+import { MatDialog } from '@angular/material';
+import { OpenDialogComponent, OpenDialogData } from './open-dialog/open-dialog.component';
 
 
 
 const mx: typeof mxgraph = require('mxgraph')({
   // mxDefaultLanguage: 'de',
-  // mxBasePath: './mxgraph_resources',
+  // mxBasePath: 'mxgraph',
 });
 
 export class myMxCell extends mx.mxCell {
@@ -29,7 +31,7 @@ export class myMxCell extends mx.mxCell {
   providers: [DialogFactoryComponent]
 
 })
-export class ClassesEditorComponent implements OnInit, AfterViewInit {
+export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() marketplace: Marketplace;
   @Input() configurableClasses: ClassDefintion[];
@@ -48,7 +50,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private classDefinitionService: ClassDefinitionService,
     private propertyService: PropertyService,
-    private dialogFactory: DialogFactoryComponent) {
+    private dialogFactory: DialogFactoryComponent,
+    public dialog: MatDialog,
+   ) {
 
   }
 
@@ -64,7 +68,13 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
       id: 'relationships', label: 'Relationships',
       items: [
         { id: 'inheritance', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'edge', shape: undefined },
-        { id: 'association', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'relation', shape: undefined },
+        // { id: 'association', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'relation', shape: undefined },
+      ]
+    },
+    {
+      id: 'operators', label: 'Operators',
+      items: [
+
       ]
     }
   ];
@@ -72,6 +82,12 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   @ViewChild('graphContainer') graphContainer: ElementRef;
   @ViewChild('leftSidebarContainer') leftSidebarContainer: ElementRef;
   @ViewChild('rightSidebarContainer') rightSidebarContainer: ElementRef;
+
+  @ViewChild('menubarContainer') menubarContainer: ElementRef;
+  @ViewChild('fileMenuItemContainer') fileMenuItemContainer: ElementRef;
+
+  @ViewChild('openFileDialog') openFileDialog: ElementRef;
+
 
   toggleRightSidebar(show: boolean) {
     if (show) {
@@ -87,30 +103,62 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
   // toolbar: mxgraph.mxToolbar;
   graph: mxgraph.mxGraph;
+
+
+
+
   standardTranslate: mxgraph.mxPoint;
 
   ngOnInit() {
     // this.dataSource.data = this.configurableClasses;
 
-    console.log(this.configurableClasses);
-    console.log(this.relationships);
+    // console.log(this.configurableClasses);
+    // console.log(this.relationships);
+
+    this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
+      this.properties = properties;
+    
+    });
+
   }
 
   ngAfterViewInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'hidden';
     this.graphContainer.nativeElement.style.left = '200px';
-    this.graphContainer.nativeElement.style.top = '0px';
+    this.graphContainer.nativeElement.style.top = '25px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
-    this.graphContainer.nativeElement.style.background = 'rgb(230,230,230)';
+    this.graphContainer.nativeElement.style.background = 'white';
     // this.graphContainer.nativeElement.style.margin = '5px';
+
+    this.menubarContainer.nativeElement.style.position = 'absolute';
+    this.menubarContainer.nativeElement.style.overflow = 'hidden';
+    this.menubarContainer.nativeElement.style.padding = '2px';
+    this.menubarContainer.nativeElement.style.right = '0px';
+    this.menubarContainer.nativeElement.style.top = '0px';
+    this.menubarContainer.nativeElement.style.left = '0px';
+    this.menubarContainer.nativeElement.style.height = '25px';
+    this.menubarContainer.nativeElement.style.background = 'white';
+    this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
+
+    this.fileMenuItemContainer.nativeElement.style.position = 'absolute';
+    this.fileMenuItemContainer.nativeElement.style.overflow = 'hidden';
+    this.fileMenuItemContainer.nativeElement.style.padding = '2px';
+    this.fileMenuItemContainer.nativeElement.style.top = '25px';
+    this.fileMenuItemContainer.nativeElement.style.left = '10px';
+    this.fileMenuItemContainer.nativeElement.style.height = 'auto';
+    this.fileMenuItemContainer.nativeElement.style.width = '200px'
+    this.fileMenuItemContainer.nativeElement.style.background = 'white';
+    this.fileMenuItemContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
+    this.fileMenuItemContainer.nativeElement.style.display = 'none';
+
 
     this.leftSidebarContainer.nativeElement.style.position = 'absolute';
     this.leftSidebarContainer.nativeElement.style.overflow = 'hidden';
     this.leftSidebarContainer.nativeElement.style.padding = '2px';
     this.leftSidebarContainer.nativeElement.style.left = '0px';
-    this.leftSidebarContainer.nativeElement.style.top = '0px';
+    this.leftSidebarContainer.nativeElement.style.top = '25px';
     this.leftSidebarContainer.nativeElement.style.width = '200px';
     this.leftSidebarContainer.nativeElement.style.bottom = '0px';
     this.leftSidebarContainer.nativeElement.style.background = 'lightgrey';
@@ -120,14 +168,21 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     this.rightSidebarContainer.nativeElement.style.overflow = 'hidden';
     this.rightSidebarContainer.nativeElement.style.padding = '2px';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
-    this.rightSidebarContainer.nativeElement.style.top = '0px';
+    this.rightSidebarContainer.nativeElement.style.top = '25px';
     this.rightSidebarContainer.nativeElement.style.width = '200px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
     this.rightSidebarContainer.nativeElement.style.background = 'lightgrey';
     this.rightSidebarContainer.nativeElement.style.display = 'none';
 
-    this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
+
+    this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
+    this.graph.isCellSelectable = function (cell) {
+      var state = this.view.getState(cell);
+      var style = (state != null) ? state.style : this.getCellStyle(cell);
+
+      return this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] != 0;
+    };
 
     // this.toolbar = new mx.mxToolbar(this.toolbarContainer.nativeElement);
 
@@ -156,12 +211,53 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
         return outer.createPopupMenu(this.graph, menu, cell, evt);
       });
 
+      document.addEventListener("click", function (event) {
+        outer.clickEvent(event);
+      });
+
+      this.graph.addListener(mx.mxEvent.CLICK, function(sender, evt) {
+        console.log("clicked cell");
+        var cell: mxgraph.mxCell = evt.getProperty("cell");
+        console.log(cell);
+
+
+        if (!isNullOrUndefined(cell)) {
+
+          var parent = cell.getParent();
+          console.log("parent cell");
+
+          console.log(parent);
+
+          if (cell.value == "add") {
+            // let classDefintion: ClassDefintion;
+            for (let c of outer.configurableClasses) {
+              if (c.id == parent.id) {
+                outer.dialogFactory.addPropertyDialogGeneric(outer.properties, c.properties).then((props: Property<any>[]) => {
+                  console.log("returned");
+                  console.log(props);
+                  outer.classDefinitionService.savePropertiesLegacy(outer.marketplace, c.id, props).toPromise().then((ret) => {
+                    c.properties.push(...props);
+                    outer.showServerContent();
+                  })
+                });
+                break;
+              }
+            }
+            
+          }
+        }
+
+      });
+
+
+
 
       // this.addHelloWorldToGraphTest(); //Remove
 
-
-      this.showServerContent();
-
+      // this.showEmptyEditor();
+      // this.showPresshaerteOfen();
+      this.parseServerContent();
+      this.setLayout('vertical');
       // console.log(this.graph.getModel());
       // const encoder = new mx.mxCodec('');
       // var node = encoder.encode(this.graph.getModel());
@@ -173,8 +269,114 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
   }
 
+  //Temporary
+
+  showOpenDialog() {
+    let outer = this;
+    const dialogRef = this.dialog.open(OpenDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { ret: undefined },
+      disableClose: true
+
+    });
+
+    let ret: { ret: string, } = undefined;
+    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+      console.log("result = ");
+      ret = { ret: result.ret };
+      console.log(ret);
+    });
+
+    dialogRef.afterClosed().toPromise().then(() => {
+      if (ret.ret == 'Haubenofen') {
+        outer.showServerContent();
+      } else if (ret.ret == 'Presshaerteofen') {
+        outer.showPresshaerteOfen();
+      }
+    });
+  }
+
+
+
+
   showServerContent() {
+    this.showEmptyEditor();
     this.parseServerContent();
+    this.setLayout('vertical');
+  }
+
+  openFileMenuItem(event: any) {
+    this.fileMenuItemContainer.nativeElement.style.display = 'block';
+  }
+
+  showPresshaerteOfen() {
+    this.showEmptyEditor();
+
+    var modelGetStyle = this.graph.model.getStyle;
+    this.graph.model.getStyle = function (cell) {
+      if (cell != null) {
+        var style = modelGetStyle.apply(this, arguments);
+
+        if (this.isCollapsed(cell)) {
+          style = style + ';shape=rectangle';
+        }
+
+        return style;
+      }
+
+      return null;
+    };
+
+    this.graph.getModel().beginUpdate();
+    const parent = this.graph.getDefaultParent();
+    try {
+      let root = this.graph.insertVertex(parent, "root", "/", 0, 0, 80, 30);
+      let tech = this.graph.insertVertex(parent, "tech", "Technische\nBeschreibung", 0, 0, 80, 30);
+      let log = this.graph.insertVertex(parent, "log", "Logistische\nBeschreibung", 0, 0, 80, 30, "shape=swimlane");
+      let preis = this.graph.insertVertex(parent, "preis", "Preisliche\nBeschreibung", 0, 0, 80, 30, "shape=swimlane");
+
+      this.graph.insertEdge(parent, "e1", null, root, tech);
+      this.graph.insertEdge(parent, "e2", null, root, log);
+      this.graph.insertEdge(parent, "e3", null, root, preis);
+
+
+      preis.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
+      log.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
+      tech.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 200);
+
+
+      var v11 = this.graph.insertVertex(preis, "test1", 'Property 1', 5, 45, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      var v11i = this.graph.insertVertex(preis, "test1icon", '(I)', 80, 45, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/diamond_start.gif;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+      var vfiller = this.graph.insertVertex(preis, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
+
+      var v12 = this.graph.insertVertex(preis, "test2", 'Property 2', 5, 65, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      var v13 = this.graph.insertVertex(preis, "test3", 'Property 3', 5, 85, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      var v14 = this.graph.insertVertex(preis, "test4", 'Property 4', 5, 105, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+      var v15 = this.graph.insertVertex(preis, "test5", 'Property 5', 5, 125, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left");
+
+      var v16 = this.graph.insertVertex(preis, "add", 'add', 10, 150, 40, 15, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(62,125,219);fontColor=white;strokeColor=none");
+      
+
+
+      // var v11 = this.graph.insertVertex(preis, null, 'Hello,', 10, 40, 120, 80);
+      this.graph.insertVertex(log, "add", "add property", 0, 40, 80, 15);
+      tech.setCollapsed(true);
+      log.setCollapsed(true);
+
+      let test = this.graph.insertVertex(parent, "test", "Test_after", 0, 0, 80, 30);
+      this.graph.insertEdge(parent, "e11", null, preis, test);
+
+
+      // this.graph.collapseToPreferredSize=false;
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+
+
+
     this.setLayout('vertical');
   }
 
@@ -194,14 +396,34 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
   }
 
   private parseIncomingClasses() {
+    var modelGetStyle = this.graph.model.getStyle;
+    this.graph.model.getStyle = function (cell) {
+      if (cell != null) {
+        var style = modelGetStyle.apply(this, arguments);
+
+        if (this.isCollapsed(cell)) {
+          style = style + ';shape=rectangle';
+        }
+
+        return style;
+      }
+
+      return null;
+    };
 
 
     const parent = this.graph.getDefaultParent();
 
+
     this.graph.getModel().beginUpdate();
     try {
       for (let c of this.configurableClasses) {
-        let cell = this.graph.insertVertex(parent, c.id, c.name, 20, 20, 80, 30);
+
+        let cell = this.graph.insertVertex(parent, c.id, c.name, 0, 0, 80, 30, "shape=swimlane");
+
+        if (!isNullOrUndefined(c.properties) && c.properties.length <= 0) {
+          cell.setCollapsed(true);
+        }
 
         if (cell.id == "technische_beschreibung") {
           var overlay = new mx.mxCellOverlay(new mx.mxImage("/images/gear.png", 30, 30), "Overlay", mx.mxConstants.ALIGN_LEFT, mx.mxConstants.ALIGN_TOP);
@@ -218,9 +440,26 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
           this.graph.addCellOverlay(cell, overlay);
         }
 
+        let i = 20;
+
+        var vfiller = this.graph.insertVertex(cell, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
+  
+
+        for (let p of c.properties) {
+          cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
+          var v11 = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, "movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden");
+          var v11i = this.graph.insertVertex(cell, "test1icon", '(I)', 80, i + 45, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/diamond_start.gif;noLabel=1;imageBackground=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+
+          i = i + 20;
+        }
+
+        var add = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
+        var hfiller = this.graph.insertVertex(cell, "hfiller", null, 0, i+50+20, 85, 5, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
+       
       }
     } finally {
       this.graph.getModel().endUpdate();
+      
     }
   }
 
@@ -365,14 +604,24 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
           }, null, null, true, true);
 
+
+
+
           var createClassInstanceItem = menu.addItem('Create new Instance', null, function () {
             outer.createClassInstanceClicked(cell);
           }, null, null, true, true);
 
+          var addIconItem = menu.addItem('Add Icon', null, function () {
+            console.log("add Icon");
+          }, null, null, true, true);
+
+          menu.addSeparator(null, true);
+
+
         }
       }
 
-      //Options present in every cell (vertexes as well as edges)
+      // Options present in every cell (vertexes as well as edges)
       var testItem = menu.addItem("Print cell to console", null, function () {
         if (cell.isVertex()) {
           console.log(cell);
@@ -704,10 +953,10 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
     console.log("create class instance clicked");
     console.log(cell);
 
-    if (isNullOrUndefined(cell)) {
-      //TODO find root - workaroud assign root manually for demonstration
-      cell = this.graph.getModel().getCell('root');
-    }
+    // if (isNullOrUndefined(cell)) {
+    //TODO find root - workaroud assign root manually for demonstration
+    cell = this.graph.getModel().getCell('root');
+    // }
 
     if (cell.id.startsWith('new')) {
       console.log("you have to save first");
@@ -728,7 +977,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
 
 
   clickEvent(event: any) {
-    console.log(event);
+    if (event.srcElement.className != "menuitem") {
+      this.fileMenuItemContainer.nativeElement.style.display = 'none';
+    }
   }
 
 
@@ -812,6 +1063,10 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit {
       // Updates the display
       this.graph.getModel().endUpdate();
     }
+  }
+
+  ngOnDestroy() {
+    //removeEventListeners
   }
 
 }

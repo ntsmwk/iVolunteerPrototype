@@ -100,10 +100,13 @@ public class ClassDefinitionController {
 		if (def == null) {
 			return null;
 		}
-		def.setProperties(propertyMapper.toEntities(properties));
+		List<Property> props = propertyMapper.toEntities(properties);
+		
+		def.getProperties().addAll(props);
+		
 		return classDefinitionMapper.toDTO(this.classDefinitionRepository.save(def));
 	}
-	
+
 	
 	
 	
@@ -149,6 +152,8 @@ public class ClassDefinitionController {
 		
 		return cProps;
 	}
+	
+
 	
 	
 //	@PutMapping("/meta/core/class/definition/{id}/remove-properties")

@@ -30,11 +30,18 @@ public class StandardTemplates {
 		this.propertyRepository = pp;
 	}
 	
-	public List<UserDefinedTaskTemplate> createAll() {
+	public List<UserDefinedTaskTemplate> createStandard() {
 		List<UserDefinedTaskTemplate> list = new ArrayList<>();
 		
 		list.add(createTemplateWithAllProperties());
-		list.add(createNestedTemplateWithExamples());
+//		list.add(createNestedTemplateWithExamples());
+	
+		
+		return list;
+	}
+	
+	public List<UserDefinedTaskTemplate> createSYBOS() {
+		List<UserDefinedTaskTemplate> list = new ArrayList<>();
 		list.add(createGenericDienstTemplate());
 		list.add(createGenericTaskTemplate());
 		list.add(createGenericEventTemplate());
@@ -43,7 +50,6 @@ public class StandardTemplates {
 		list.add(createTrainingTemplate());
 		list.add(createVehicleTemplate());
 		list.add(createVolunteerCheckTemplate());
-		
 		return list;
 	}
 
