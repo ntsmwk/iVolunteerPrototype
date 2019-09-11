@@ -43,6 +43,7 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
   // displayedColumns = ['id'];
 
   properties: Property<any>[];
+  showMaxGluehtemperatur: boolean = false;
 
 
 
@@ -248,6 +249,9 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
                     outer.classDefinitionService.savePropertiesLegacy(outer.marketplace, c.id, props).toPromise().then((ret) => {
 
                       let oldProps = c.properties;
+
+                      
+
                       c.properties = [];
                       c.properties.push(...props);
                       c.properties.push(...oldProps);
@@ -462,7 +466,7 @@ showEmptyEditor() {
 
       var vfiller = this.graph.insertVertex(cell, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
 
-
+      let maxgluehtemperaturCounter = 0;
       for (let p of c.properties) {
         if (p.id != "maxgluehtemperatur") {
           cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
@@ -471,6 +475,19 @@ showEmptyEditor() {
 
           i = i + 20;
         }
+
+        if (p.name == "Max. Glühtemperatur") {
+          console.log("Max. Glühtemperatur name detected");
+          maxgluehtemperaturCounter++;
+
+          if (maxgluehtemperaturCounter >= 2) {
+            this.showMaxGluehtemperatur = true;
+          }
+
+
+        }
+        
+        console.log(this.showMaxGluehtemperatur);
       }
 
       var add = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, "shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;");
@@ -988,7 +1005,7 @@ createClassInstanceClicked(cell: mxgraph.mxCell) {
       outer.showWorkInProgressInfo = false;
     }, 5000);
   } else {
-    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}`]);
+    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}/${this.showMaxGluehtemperatur}`]);
   }
 }
 
