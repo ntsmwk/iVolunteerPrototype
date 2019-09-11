@@ -32,7 +32,7 @@
 
             <div style="padding-top: 12px"></div>
 
-            <mat-form-field>
+            <mat-form-field *ngIf="showMaxGluehtemperatur=='true'">
               <input matInput type="number" placeholder="{{demoClasses[0].properties[0].name}} (°C)" id="00"
                 formControlName="00" required />
               <mat-error *ngIf="form.controls['00'].invalid">{{ displayErrorMessage('00', 'requiredOnly') }}</mat-error>
@@ -844,126 +844,126 @@
 
       </div>
 
-</div>
-      <h1>/Logistische Beschreibung</h1>
+    </div>
+    <h1>/Logistische Beschreibung</h1>
 
-      <mat-accordion multi=true displayMode="flat">
+    <mat-accordion multi=true displayMode="flat">
 
-        <!-- Logistische Beschreibung -->
-        <mat-expansion-panel>
+      <!-- Logistische Beschreibung -->
+      <mat-expansion-panel>
 
-          <mat-expansion-panel-header>
-            <mat-panel-title style="width: 20%">
-              {{demoClasses[17].name}}
-            </mat-panel-title>
+        <mat-expansion-panel-header>
+          <mat-panel-title style="width: 20%">
+            {{demoClasses[17].name}}
+          </mat-panel-title>
 
-            <mat-panel-description style="width: 80%; text-align: start">
-              {{demoClassPaths[17]}}
-            </mat-panel-description>
+          <mat-panel-description style="width: 80%; text-align: start">
+            {{demoClassPaths[17]}}
+          </mat-panel-description>
 
 
-          </mat-expansion-panel-header>
+        </mat-expansion-panel-header>
 
-          <div style="padding-top: 12px"></div>
+        <div style="padding-top: 12px"></div>
 
-          <div fxLayout="row" fxLayoutAlign="start start">
-            <mat-slide-toggle class="slide-toggle-field" id="170" formControlName="170" checked="false">
-              {{demoClasses[17].properties[0].name}}
-            </mat-slide-toggle>
-          </div>
+        <div fxLayout="row" fxLayoutAlign="start start">
+          <mat-slide-toggle class="slide-toggle-field" id="170" formControlName="170" checked="false">
+            {{demoClasses[17].properties[0].name}}
+          </mat-slide-toggle>
+        </div>
 
+        <mat-form-field>
+          <input matInput placeholder="{{demoClasses[17].properties[1].name}}" id="171" formControlName="171" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="{{demoClasses[17].properties[2].name}}" id="172" formControlName="172" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select [placeholder]=demoClasses[17].properties[3].name id="173" formControlName="173">
+            <mat-option value="LKW">LKW</mat-option>
+            <mat-option value="Zug">Zug</mat-option>
+            <mat-option value="Schiff">Schiff</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <input matInput type="number" placeholder="{{demoClasses[17].properties[4].name}} (t)" id="174"
+            formControlName="174" />
+        </mat-form-field>
+
+        <ng-container>
           <mat-form-field>
-            <input matInput placeholder="{{demoClasses[17].properties[1].name}}" id="171" formControlName="171" />
-          </mat-form-field>
 
-          <mat-form-field>
-            <input matInput placeholder="{{demoClasses[17].properties[2].name}}" id="172" formControlName="172" />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-select [placeholder]=demoClasses[17].properties[3].name id="173" formControlName="173">
-              <mat-option value="LKW">LKW</mat-option>
-              <mat-option value="Zug">Zug</mat-option>
-              <mat-option value="Schiff">Schiff</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{demoClasses[17].properties[4].name}} (t)" id="174"
-              formControlName="174" />
-          </mat-form-field>
-
-          <ng-container>
-            <mat-form-field>
-
-              <input matInput [matDatepicker]="picker2" placeholder="{{demoClasses[17].properties[5].name}}"
-                formControlName="175">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-              <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
-
-            </mat-form-field>
-          </ng-container>
-
-          <mat-form-field>
-            <mat-select [placeholder]=demoClasses[17].properties[6].name id="176" formControlName="176">
-              <mat-option value="EXW">EXW</mat-option>
-              <mat-option value="FCA">FCA</mat-option>
-              <mat-option value="CPT">CPT</mat-option>
-              <mat-option value="CIP">CIP</mat-option>
-              <mat-option value="DAT">DAT</mat-option>
-              <mat-option value="DAP">DAP</mat-option>
-              <mat-option value="DDP">DDP</mat-option>
-              <mat-option value="FAS" [disabled]="form.value['173'] != 'Schiff'">FAS</mat-option>
-              <mat-option value="FOB" [disabled]="form.value['173'] != 'Schiff'">FOB</mat-option>
-              <mat-option value="CFR" [disabled]="form.value['173'] != 'Schiff'">CFR</mat-option>
-              <mat-option value="CIF" [disabled]="form.value['173'] != 'Schiff'">CIF</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-
-
-
-
-
-
-        </mat-expansion-panel>
-
-      </mat-accordion>
-
-
-      <h1>/Preisliche Beschreibung</h1>
-
-      <mat-accordion multi=true displayMode="flat">
-
-        <!-- Preisliche Beschreibung -->
-        <mat-expansion-panel>
-
-          <mat-expansion-panel-header>
-            <mat-panel-title style="width: 20%">
-              {{demoClasses[18].name}}
-            </mat-panel-title>
-
-            <mat-panel-description style="width: 80%; text-align: start">
-              {{demoClassPaths[18]}}
-            </mat-panel-description>
-
-
-          </mat-expansion-panel-header>
-
-          <div style="padding-top: 12px"></div>
-
-          <mat-form-field>
-            <textarea matInput placeholder="{{demoClasses[18].properties[0].name}}" formControlName="180" id="180"
-              matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
-
+            <input matInput [matDatepicker]="picker2" placeholder="{{demoClasses[17].properties[5].name}}"
+              formControlName="175">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
             <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+
           </mat-form-field>
+        </ng-container>
 
-        </mat-expansion-panel>
+        <mat-form-field>
+          <mat-select [placeholder]=demoClasses[17].properties[6].name id="176" formControlName="176">
+            <mat-option value="EXW">EXW</mat-option>
+            <mat-option value="FCA">FCA</mat-option>
+            <mat-option value="CPT">CPT</mat-option>
+            <mat-option value="CIP">CIP</mat-option>
+            <mat-option value="DAT">DAT</mat-option>
+            <mat-option value="DAP">DAP</mat-option>
+            <mat-option value="DDP">DDP</mat-option>
+            <mat-option value="FAS" [disabled]="form.value['173'] != 'Schiff'">FAS</mat-option>
+            <mat-option value="FOB" [disabled]="form.value['173'] != 'Schiff'">FOB</mat-option>
+            <mat-option value="CFR" [disabled]="form.value['173'] != 'Schiff'">CFR</mat-option>
+            <mat-option value="CIF" [disabled]="form.value['173'] != 'Schiff'">CIF</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      </mat-accordion>
+
+
+
+
+
+
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+
+    <h1>/Preisliche Beschreibung</h1>
+
+    <mat-accordion multi=true displayMode="flat">
+
+      <!-- Preisliche Beschreibung -->
+      <mat-expansion-panel>
+
+        <mat-expansion-panel-header>
+          <mat-panel-title style="width: 20%">
+            {{demoClasses[18].name}}
+          </mat-panel-title>
+
+          <mat-panel-description style="width: 80%; text-align: start">
+            {{demoClassPaths[18]}}
+          </mat-panel-description>
+
+
+        </mat-expansion-panel-header>
+
+        <div style="padding-top: 12px"></div>
+
+        <mat-form-field>
+          <textarea matInput placeholder="{{demoClasses[18].properties[0].name}}" formControlName="180" id="180"
+            matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+
+          <!-- <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error> -->
+        </mat-form-field>
+
+      </mat-expansion-panel>
+
+    </mat-accordion>
 
 
   </form>

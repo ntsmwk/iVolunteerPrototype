@@ -62,6 +62,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   ]
 
   form: FormGroup;
+  showMaxGluehtemperatur: boolean;
   //================
 
   constructor(private router: Router,
@@ -82,6 +83,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
       const marketplaceId = param['marketplaceId'];
       const classId = param['classId'];
+      this.showMaxGluehtemperatur = param['showMaxGluehtemperatur'];
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;

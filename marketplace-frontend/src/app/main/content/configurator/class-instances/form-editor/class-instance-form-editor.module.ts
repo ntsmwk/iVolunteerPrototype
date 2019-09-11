@@ -8,7 +8,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 
 const routes = [
-  {path: ':marketplaceId/:classId', component: ClassInstanceFormEditorComponent}
+  {path: ':marketplaceId/:classId/:showMaxGluehtemperatur', component: ClassInstanceFormEditorComponent}
 ];
 
 @NgModule({
