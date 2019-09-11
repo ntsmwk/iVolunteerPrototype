@@ -369,78 +369,78 @@ export class ClassesEditorComponent implements OnInit, AfterViewInit, OnDestroy 
       let log = this.graph.insertVertex(parent, "log", "Logistische\nBeschreibung", 0, 0, 80, 30,);
       let preis = this.graph.insertVertex(parent, "preis", "Preisliche\nBeschreibung", 0, 0, 80, 30, );
 
-      this.graph.insertEdge(parent, "e1", null, root, tech);
-      this.graph.insertEdge(parent, "e2", null, root, log);
-      this.graph.insertEdge(parent, "e3", null, root, preis);
+      this.graph.insertEdge(parent, "e1", null, root, tech, "startArrow=none;endArrow=none");
+      this.graph.insertEdge(parent, "e2", null, root, log, "startArrow=none;endArrow=none");
+      this.graph.insertEdge(parent, "e3", null, root, preis, "startArrow=none;endArrow=none");
 
       let ofen = this.graph.insertVertex(parent, "ofen", "Ofen", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e4", null, tech, ofen);
+      this.graph.insertEdge(parent, "e4", null, tech, ofen, "startArrow=none;endArrow=none");
 
       let presse = this.graph.insertVertex(parent, "presse", "Presse", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e5", null, tech, presse);
+      this.graph.insertEdge(parent, "e5", null, tech, presse, "startArrow=none;endArrow=none");
 
       let belade = this.graph.insertVertex(parent, "belade", "Belade/Entlade-\nsystem Robotik", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e6", null, tech, belade);
+      this.graph.insertEdge(parent, "e6", null, tech, belade, "startArrow=none;endArrow=none");
 
       let prozess = this.graph.insertVertex(parent, "prozess", "Prozess", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e7", null, tech, prozess);
+      this.graph.insertEdge(parent, "e7", null, tech, prozess, "startArrow=none;endArrow=none");
 
       let input = this.graph.insertVertex(parent, "input", "Input", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e8", null, tech, input);
+      this.graph.insertEdge(parent, "e8", null, tech, input, "startArrow=none;endArrow=none");
 
       let output = this.graph.insertVertex(parent, "output", "Output", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e9", null, tech, output);
+      this.graph.insertEdge(parent, "e9", null, tech, output, "startArrow=none;endArrow=none");
 
 
       let ofenTech = this.graph.insertVertex(parent, "ofenTech", "Technische\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e10", null, ofen, ofenTech);
+      this.graph.insertEdge(parent, "e10", null, ofen, ofenTech, "startArrow=none;endArrow=none");
 
       let ofenTechAllg = this.graph.insertVertex(parent, "ofenTechAllg", "Allgemein", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e11", null, ofenTech, ofenTechAllg);
+      this.graph.insertEdge(parent, "e11", null, ofenTech, ofenTechAllg, "startArrow=none;endArrow=none");
       
       let ofenGeo = this.graph.insertVertex(parent, "ofenGeo", "Geometrische\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e12", null, ofen, ofenGeo);
+      this.graph.insertEdge(parent, "e12", null, ofen, ofenGeo, "startArrow=none;endArrow=none");
 
       let presseTech = this.graph.insertVertex(parent, "presseTech", "Technische\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e13", null, presse, presseTech);
+      this.graph.insertEdge(parent, "e13", null, presse, presseTech, "startArrow=none;endArrow=none");
 
       let presseTechAllg = this.graph.insertVertex(parent, "presseTechAllg", "Allgemein", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechAllg);
+      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechAllg, "startArrow=none;endArrow=none");
 
       let presseTechWerk = this.graph.insertVertex(parent, "presseTechWerk", "Werkzeug-\nKompatibilität", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechWerk);
+      this.graph.insertEdge(parent, "e14", null, presseTech, presseTechWerk, "startArrow=none;endArrow=none");
 
       let presseGeo = this.graph.insertVertex(parent, "presseGeo", "Geometrische\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e15", null, presse, presseGeo);
+      this.graph.insertEdge(parent, "e15", null, presse, presseGeo, "startArrow=none;endArrow=none");
 
       let vorBear = this.graph.insertVertex(parent, "vorBear", "Vorbearbeitungs-\nschritte", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e16", null, prozess, vorBear);
+      this.graph.insertEdge(parent, "e16", null, prozess, vorBear, "startArrow=none;endArrow=none");
 
       let nachbear = this.graph.insertVertex(parent, "nachbear", "Nachbearbeitungs-\nschritte", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e17", null, prozess, nachbear);
+      this.graph.insertEdge(parent, "e17", null, prozess, nachbear, "startArrow=none;endArrow=none");
 
       let prozBetr = this.graph.insertVertex(parent, "prozBetr", "Betriebliche\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e18", null, prozess, prozBetr);
+      this.graph.insertEdge(parent, "e18", null, prozess, prozBetr, "startArrow=none;endArrow=none");
 
       let prozBetrDurch = this.graph.insertVertex(parent, "prozBetrDurch", "Durchsatz", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e18a", null, prozess, prozBetrDurch);
+      this.graph.insertEdge(parent, "e18a", null, prozess, prozBetrDurch, "startArrow=none;endArrow=none");
 
   
 
       let przQual = this.graph.insertVertex(parent, "przQual", "Qualitative\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e19", null, prozess, przQual);
+      this.graph.insertEdge(parent, "e19", null, prozess, przQual, "startArrow=none;endArrow=none");
 
       let przQualNormen = this.graph.insertVertex(parent, "przQualNormen", "Qualitätsnormen", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e19a", null, prozess, przQualNormen);
+      this.graph.insertEdge(parent, "e19a", null, prozess, przQualNormen, "startArrow=none;endArrow=none");
 
       let inputGeom = this.graph.insertVertex(parent, "inputGeom", "Geometrische\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e20", null, input, inputGeom);
+      this.graph.insertEdge(parent, "e20", null, input, inputGeom, "startArrow=none;endArrow=none");
 
       let inputQuali = this.graph.insertVertex(parent, "inputQuali", "Qualitative\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e21", null, input, inputQuali);
+      this.graph.insertEdge(parent, "e21", null, input, inputQuali, "startArrow=none;endArrow=none");
 
       let outputQuali = this.graph.insertVertex(parent, "outputQuali", "Qualitative\nEigenschaften", 0, 0, 80, 30);
-      this.graph.insertEdge(parent, "e22", null, output, outputQuali);
+      this.graph.insertEdge(parent, "e22", null, output, outputQuali, "startArrow=none;endArrow=none");
 
 
 
