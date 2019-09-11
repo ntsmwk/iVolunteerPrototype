@@ -62,6 +62,17 @@ export class PropertyListComponent implements OnInit {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
           this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
+
+
+            let i = 0;
+            for (let p of pArr) {
+              if (p.id =="maxgluehtemperatur") {
+                pArr.splice(i,1);
+              }
+              i++;
+            }
+
+
             this.propertyArray = pArr;
             this.updateDataSource();
             console.log(pArr);
