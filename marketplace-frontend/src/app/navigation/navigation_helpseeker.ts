@@ -5,7 +5,7 @@ export const navigation_helpseeker = [
     'type': 'item',
     'url': '/main/dashboard',
   },
-  {
+/*   {
     'id': 'projects',
     'title': 'Project',
     'type': 'item',
@@ -22,14 +22,14 @@ export const navigation_helpseeker = [
     'title': 'Task Templates',
     'type': 'item',
     'url': '/main/task-templates/all'
-  },
+  }, */
   {
     'id': 'properties',
-    'title': 'Property List',
+    'title': 'Properties',
     'type': 'item',
     'url': '/main/properties/all'
   },
-  {
+  /* {
     'id': 'userDefinedTaskTemplates',
     'title': 'User Defined Task Templates',
     'type': 'item',
@@ -40,7 +40,7 @@ export const navigation_helpseeker = [
     'title': 'Test Map Property',
     'type': 'item',
     'url': '/main/test-map-property'
-  },
+  }, */
   {
     'id': 'configurator',
     'title': 'Configurator',
