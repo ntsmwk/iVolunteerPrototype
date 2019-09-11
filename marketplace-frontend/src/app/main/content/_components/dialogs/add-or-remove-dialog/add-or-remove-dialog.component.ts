@@ -35,7 +35,7 @@ export class AddOrRemoveDialogComponent {
 
   createNewClicked() {
     this.dialogRef.close();
-    this.router.navigate(['/main/properties/all']);
+    this.router.navigate(['/main/property/detail/edit/0eaf3a6281df11e8adc0fa7ae01bbebc']);
 
   }
 

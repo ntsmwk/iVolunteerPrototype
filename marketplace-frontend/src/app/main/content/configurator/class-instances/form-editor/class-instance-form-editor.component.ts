@@ -434,6 +434,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
 
+  returnPressed() {
+    this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
+  }
+
 
   navigateBack() {
     window.history.back();

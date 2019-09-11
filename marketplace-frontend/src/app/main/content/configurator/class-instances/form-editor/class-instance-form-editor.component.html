@@ -7,16 +7,20 @@
 
   <!-- <mat-accordion *ngFor="let c of demoClasses; let i = index"> -->
 
+  <div fxLayout=row fxLayoutAlign="start-between center">
+    <mat-icon (click)="returnPressed()" style="cursor: pointer">keyboard_return</mat-icon>
+  </div>
+
   <form [formGroup]="form">
 
-    <h1>/Technische Beschreibung</h1>
+    <h1>Technische Beschreibung</h1>
     <div style="padding-left: 25px">
       <h1>Ofen</h1>
       <div style="padding-left: 25px">
         <h1>Technische Eigenschaften</h1>
         <mat-accordion multi=true displayMode="flat">
           <!-- Allgemein -->
-          <mat-expansion-panel>
+          <mat-expansion-panel expanded=true>
 
             <mat-expansion-panel-header>
               <mat-panel-title style="width: 20%">
