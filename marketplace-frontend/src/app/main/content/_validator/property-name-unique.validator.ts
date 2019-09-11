@@ -11,6 +11,10 @@ export function propertyNameUniqueValidator(properties: Property<any>[], current
 
         if (isNullOrUndefined(properties)) {
             return null;
+        } 
+        //TODO REMOVE OR ELSE IT DOESNT WORK
+        else {
+            return null;
         }
       
         let item = undefined;

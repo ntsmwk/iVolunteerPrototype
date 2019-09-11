@@ -43,7 +43,7 @@ import { PropertyDefinition, Property } from "../../../../_model/meta/Property";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
     }
 
-    addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: PropertyDefinition<any>[]) {
+    addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: Property<any>[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties`, propsToAdd);
     }
 
