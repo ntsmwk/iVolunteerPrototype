@@ -1,10 +1,10 @@
 export const navigation_helpseeker = [
-  {
+/*   {
     'id': 'dashboard',
     'title': 'Dashboard',
     'type': 'item',
     'url': '/main/dashboard',
-  },
+  }, */
 /*   {
     'id': 'projects',
     'title': 'Project',
