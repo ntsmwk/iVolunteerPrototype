@@ -2,18 +2,13 @@ package at.jku.cis.iVolunteer.marketplace.task.template;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.NotAcceptableException;
 
 import org.bson.types.ObjectId;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,18 +19,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.StandardProperties;
-import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.mapper.property.PropertyParentItemMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyInstanceMapper;
+import at.jku.cis.iVolunteer.mapper.property.PropertyItemMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateMapper;
 import at.jku.cis.iVolunteer.mapper.task.template.UserDefinedTaskTemplateStubMapper;
-import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.MultiProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyParentItemDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyItemDTO;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
@@ -51,17 +49,22 @@ public class UserDefinedTaskTemplateController {
 	private UserDefinedTaskTemplateStubMapper userDefinedTaskTemplateStubMapper;
 	
 	
-	@Autowired
-	private PropertyMapper propertyMapper;
+//	@Autowired private PropertyInstanceMapper propertyInstanceMapper;
+	
+	@Autowired private ClassPropertyMapper classPropertyMapper;
 	
 	@Autowired
 	private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
 	@Autowired
-	private PropertyParentItemMapper propertyParentItemMapper;
+	private PropertyItemMapper propertyItemMapper;
 	
-	@Autowired
-	private PropertyRepository propertyRepository;
-		
+//	@Autowired
+//	private PropertyRepository propertyRepository;
+	
+	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefintionToClassPropertyMapper;	
+	
+	
 	List<UserDefinedTaskTemplate> templates;
 
 
@@ -105,7 +108,7 @@ public class UserDefinedTaskTemplateController {
 	
 	
 	@GetMapping("/properties/{propId}/parents")
-	public List<PropertyParentItemDTO> getPropertyParents(@PathVariable("propId") String propId, 
+	public List<PropertyItemDTO> getPropertyParents(@PathVariable("propId") String propId, 
 			@RequestParam(value = "templateId", required = true) String templateId, @RequestParam(value = "subtemplateId", required = false) String subtemplateId) {
 		
 		System.out.println("called getPropetyParents");
@@ -118,7 +121,7 @@ public class UserDefinedTaskTemplateController {
 			items.add(root);
 			items.add(nested);
 			
-			return propertyParentItemMapper.toTargets(items);
+			return propertyItemMapper.toTargets(items);
 			
 		} else {
 			System.out.println("isNull");
@@ -137,7 +140,7 @@ public class UserDefinedTaskTemplateController {
 			
 			SingleUserDefinedTaskTemplate taskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
 			
-			taskTemplate.setProperties(new ArrayList<Property>());
+			taskTemplate.setTemplateProperties(new ArrayList<ClassProperty<Object>>());
 			
 			return userDefinedTaskTemplateMapper.toDTO(userDefinedTaskTemplateRepository.save(taskTemplate));
 		
@@ -160,7 +163,7 @@ public class UserDefinedTaskTemplateController {
 		
 		SingleUserDefinedTaskTemplate newTaskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
 		newTaskTemplate.setId(ObjectId.get().toHexString());
-		newTaskTemplate.setProperties(new ArrayList<Property>());
+		newTaskTemplate.setTemplateProperties(new ArrayList<ClassProperty<Object>>());
 		
 		MultiUserDefinedTaskTemplate t = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -307,17 +310,17 @@ public class UserDefinedTaskTemplateController {
 	
 	
 	@GetMapping("/tasktemplate/user/{templateId}/{subtemplateId}/{propId}")
-	public PropertyDTO<Object> getPropertyFromSubtemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, 
+	public ClassPropertyDTO<Object> getPropertyFromSubtemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, 
 			@PathVariable("propId") String propId) {
 		
 		System.out.println("called get property from subtemplate");
-		Property ret = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId))
+		ClassProperty<Object> ret = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId))
 		.getTemplates().stream()
 			.filter(t -> t.getId().equals(subtemplateId)).findFirst().get()
-			.getProperties().stream()
+			.getTemplateProperties().stream()
 			.filter(p -> p.getId().equals(propId)).findFirst().get();
 
-		return propertyMapper.toDTO(ret);
+		return classPropertyMapper.toDTO(ret);
 	}
 	
 	
@@ -329,9 +332,10 @@ public class UserDefinedTaskTemplateController {
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		for (String propId : propIds) {
-			Property p = propertyRepository.findOne(propId);
-			if (!t.getProperties().contains(p)) {
-				t.getProperties().add(p);
+			
+			if (!t.getTemplateProperties().stream().anyMatch(i -> i.getId().equals(propId))) {
+				PropertyDefinition<Object> p = propertyDefinitionRepository.findOne(propId);
+				t.getTemplateProperties().add(propertyDefintionToClassPropertyMapper.toTarget(p));
 				System.out.println("added " + p.getId() );
 			}
 		}
@@ -370,10 +374,10 @@ public class UserDefinedTaskTemplateController {
 		}
 						
 		for (String propId : propIds) {
-			Property p = propertyRepository.findOne(propId);
+			PropertyDefinition<Object> p = propertyDefinitionRepository.findOne(propId);
 			
-			if (p != null && !subTemplate.getProperties().contains(p)) {
-				subTemplate.getProperties().add(p);
+			if (p != null && !subTemplate.getTemplateProperties().stream().anyMatch(i -> i.getId().equals(propId))) {
+				subTemplate.getTemplateProperties().add(propertyDefintionToClassPropertyMapper.toTarget(p));
 				System.out.println("Added " + p.getId() + " to nested template " + templateId + " > " + subtemplateId + "(index " + indexArr[0] + ")");
 			}
 		}
@@ -386,21 +390,26 @@ public class UserDefinedTaskTemplateController {
 	
 	//Update Properties from Single Template
 	@PutMapping("/tasktemplate/user/{templateId}/updateproperties")
-	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
+	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
 		System.out.println("called updated properties");
 
+		System.out.println(classProperties[0].getDefaultValues().size());
+		
+		if (classProperties[0].getType().equals(PropertyType.TEXT)) {
+			System.out.println("values: " + classProperties[0].getDefaultValues().get(0) );
+		}
 		
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 
 		System.out.println("INCOMING PROPERTIES: ");
 		
-		List<PropertyDTO<Object>> propertyList = Arrays.asList(properties);
+		List<ClassPropertyDTO<Object>> propertyList = Arrays.asList(classProperties);
 
 		//Recursively set properties		
-		List<Property> returnProperties = setPropertiesRec(propertyList,  t.getProperties());
+		List<ClassProperty<Object>> returnProperties = setPropertiesRec(propertyList,  t.getTemplateProperties());
 		
-		t.setProperties(returnProperties);
+		t.setTemplateProperties(returnProperties);
 
 		
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(t);
@@ -410,7 +419,7 @@ public class UserDefinedTaskTemplateController {
 	
 	//Update Properties from Subtemplate
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/updateproperties")
-	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody PropertyDTO<Object>[] properties) {
+	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
 		
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -437,48 +446,49 @@ public class UserDefinedTaskTemplateController {
 		
 		
 		// replace entry in arraylist
-		ArrayList<PropertyDTO<Object>> propertyList = new ArrayList<>(Arrays.asList(properties));		
-		List<Property> returnProperties= setPropertiesRec(propertyList, subTemplate.getProperties());
+		ArrayList<ClassPropertyDTO<Object>> propertyList = new ArrayList<>(Arrays.asList(classProperties));		
+		List<ClassProperty<Object>> returnProperties= setPropertiesRec(propertyList, subTemplate.getTemplateProperties());
 		
-		rootTemplate.getTemplates().get(indexArr[0]).setProperties(returnProperties);
+		rootTemplate.getTemplates().get(indexArr[0]).setTemplateProperties(returnProperties);
 
 		UserDefinedTaskTemplate ret = this.userDefinedTaskTemplateRepository.save(rootTemplate);
 		return userDefinedTaskTemplateMapper.toDTO(ret);
 	}
 	
-	private List<Property> setPropertiesRec(List<PropertyDTO<Object>> updateProperties, List<Property> currentProperties) {
-		List<Property> returnProperties = new ArrayList<>();
+	private List<ClassProperty<Object>> setPropertiesRec(List<ClassPropertyDTO<Object>> updateProperties, List<ClassProperty<Object>> currentProperties) {
+		List<ClassProperty<Object>> returnProperties = new ArrayList<>();
 		
-		for(PropertyDTO<Object> dto : updateProperties) {
-			Property p = propertyMapper.toEntity(dto);
+		for(ClassPropertyDTO<Object> dto : updateProperties) {
+			ClassProperty<Object> p = classPropertyMapper.toEntity(dto);
 			System.out.println("===Property to Update===");
 
 			if (!p.getType().equals(PropertyType.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
 
 				
-				SingleProperty<Object> updateProperty = (SingleProperty<Object>) p;
-				SingleProperty<Object> currentProperty = (SingleProperty<Object>) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
+				ClassProperty<Object> updateProperty =  p;
+				ClassProperty<Object> currentProperty = currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
 				
-				currentProperty.setValues(updateProperty.getValues());
 				currentProperty.setDefaultValues(updateProperty.getDefaultValues());
+//				currentProperty.setDefaultValues(updateProperty.getDefaultValues());
 				
 				System.out.println("updated Property: " + updateProperty.getName()); // + " = " + update.getValues()!=null && update.getValues().get(0) != null ? update.getValues().get(0).value : "null");
-				System.out.println("Default: " + updateProperty.getName()); // + " = " + update.getDefaultValues()!=null && update.getDefaultValues().get(0) != null ? update.getDefaultValues().get(0).value : "null");
+				
 				
 				returnProperties.add(currentProperty);
-				
-			} else if (p.getType().equals(PropertyType.MULTI)) {
-				System.out.println("\nMULTIPLE--> " + p.getId());
-				
-				MultiProperty currentProperty = (MultiProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
-				
-				List<Property> nestedList= setPropertiesRec(dto.getProperties(), currentProperty.getProperties() );
-				
-				currentProperty.setProperties(nestedList);
-				
-				returnProperties.add(currentProperty);
-				System.out.println();
 			}
+				
+//			} else if (p.getType().equals(PropertyType.MULTI)) {
+//				System.out.println("\nMULTIPLE--> " + p.getId());
+//				
+//				MultiProperty currentProperty = (MultiProperty) currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
+//				
+//				List<Property> nestedList= setPropertiesRec(dto.getProperties(), currentProperty.getProperties() );
+//				
+//				currentProperty.setProperties(nestedList);
+//				
+//				returnProperties.add(currentProperty);
+//				System.out.println();
+//			}
 			
 			System.out.println("========================");
 
@@ -489,17 +499,17 @@ public class UserDefinedTaskTemplateController {
 	
 	//Update Properties from Single Template 
 	@PutMapping("/tasktemplate/user/{templateId}/updatepropertyorder")
-	public UserDefinedTaskTemplateDTO updatePropertyOrderSingle(@PathVariable("templateId") String templateId, @RequestBody PropertyDTO<Object>[] properties) {
+	public UserDefinedTaskTemplateDTO updatePropertyOrderSingle(@PathVariable("templateId") String templateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
 		System.out.println("called updated properties");
 		
 		SingleUserDefinedTaskTemplate rootTemplate = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		if (rootTemplate == null) { throw new NotAcceptableException("no template with id " + templateId + " in database - should not happen");}
 		
-		List<Property> newProperties = propertyMapper.toEntities(Arrays.asList(properties));
+		List<ClassProperty<Object>> newProperties = classPropertyMapper.toEntities(Arrays.asList(classProperties));
 		
 		//Brute Forcing my Way
-		rootTemplate.setProperties(newProperties);
+		rootTemplate.setTemplateProperties(newProperties);
 		
 		SingleUserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
 		
@@ -508,7 +518,7 @@ public class UserDefinedTaskTemplateController {
 	
 	//Update Properties from Nested Template inside a Root Template
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/updatepropertyorder")
-	public UserDefinedTaskTemplateDTO updatePropertyOrderNested(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody PropertyDTO<Object>[] properties) {
+	public UserDefinedTaskTemplateDTO updatePropertyOrderNested(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
 		System.out.println("called updated properties");
 		
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
@@ -536,11 +546,11 @@ public class UserDefinedTaskTemplateController {
 		
 
 		//Brute Forcing my Way
-		List<Property> newProperties = propertyMapper.toEntities(Arrays.asList(properties));
+		List<ClassProperty<Object>> newProperties = classPropertyMapper.toEntities(Arrays.asList(classProperties));
 		
 
 		
-		rootTemplate.getTemplates().get(indexArr[0]).setProperties(newProperties);
+		rootTemplate.getTemplates().get(indexArr[0]).setTemplateProperties(newProperties);
 
 				
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
@@ -556,10 +566,10 @@ public class UserDefinedTaskTemplateController {
 	
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 				
-		ArrayList<Property> remainingProperties = t.getProperties().stream()
+		ArrayList<ClassProperty<Object>> remainingProperties = t.getTemplateProperties().stream()
 				.filter(prop -> propIds.stream().noneMatch(id -> prop.getId().equals(id))).collect(Collectors.toCollection(ArrayList::new));		
 		
-		t.setProperties(remainingProperties);
+		t.setTemplateProperties(remainingProperties);
 
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(t);
 		
@@ -593,11 +603,11 @@ public class UserDefinedTaskTemplateController {
 			throw new NotAcceptableException("no subtemplate with id " + subtemplateId + " in database - should not happen");
 		}
 		
-		ArrayList<Property> remainingProperties = subTemplate.getProperties().stream()
+		ArrayList<ClassProperty<Object>> remainingProperties = subTemplate.getTemplateProperties().stream()
 				.filter(prop -> Arrays.stream(propIds).noneMatch(id -> prop.getId().equals(id))).collect(Collectors.toCollection(ArrayList::new));
 
 		
-		rootTemplate.getTemplates().get(indexArr[0]).setProperties(remainingProperties);
+		rootTemplate.getTemplates().get(indexArr[0]).setTemplateProperties(remainingProperties);
 		
 		
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);

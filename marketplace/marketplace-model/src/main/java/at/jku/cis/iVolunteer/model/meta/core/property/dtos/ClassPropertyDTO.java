@@ -2,20 +2,21 @@ package at.jku.cis.iVolunteer.model.meta.core.property.dtos;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
 import at.jku.cis.iVolunteer.model.meta.constraint.property.dto.PropertyConstraintDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 public class ClassPropertyDTO<T> {
 
 	String id;
+	String classDefinitionId;
+	
 	String name;
 	
 	List<T> defaultValues;
 	List<T> allowedValues;
 	
 	PropertyType type;
+	boolean multiple;
 
 	boolean immutable;
 	boolean updateable;
@@ -33,6 +34,14 @@ public class ClassPropertyDTO<T> {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getClassDefinitionId() {
+		return classDefinitionId;
+	}
+
+	public void setClassDefinitionId(String classDefinitionId) {
+		this.classDefinitionId = classDefinitionId;
 	}
 
 	public String getName() {
@@ -65,6 +74,14 @@ public class ClassPropertyDTO<T> {
 
 	public void setType(PropertyType type) {
 		this.type = type;
+	}
+
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
 	}
 
 	public boolean isImmutable() {

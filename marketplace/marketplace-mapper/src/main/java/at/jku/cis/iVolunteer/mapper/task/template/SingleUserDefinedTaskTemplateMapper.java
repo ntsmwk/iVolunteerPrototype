@@ -7,16 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyInstanceMapper;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.dto.SingleUserDefinedTaskTemplateDTO;
 
 @Component
 public class SingleUserDefinedTaskTemplateMapper implements AbstractMapper<SingleUserDefinedTaskTemplate, SingleUserDefinedTaskTemplateDTO> {
 
-	@Autowired PropertyMapper propertyMapper;
+	@Autowired ClassPropertyMapper classPropertyMapper;
 	
 	@Override
 	public SingleUserDefinedTaskTemplateDTO toDTO(SingleUserDefinedTaskTemplate source) {
@@ -33,14 +36,14 @@ public class SingleUserDefinedTaskTemplateMapper implements AbstractMapper<Singl
 
 		
 		
-		List<PropertyDTO<Object>> props = new ArrayList<>();
-		if (source.getProperties() != null) {
-			for (Property p : source.getProperties()) {
-				props.add(propertyMapper.toDTO(p));
+		List<ClassPropertyDTO<Object>> props = new ArrayList<>();
+		if (source.getTemplateProperties() != null) {
+			for (ClassProperty<Object> p : source.getTemplateProperties()) {
+				props.add(classPropertyMapper.toDTO(p));
 			}
 		}	
 		dto.setKind("single");
-		dto.setProperties(props);
+		dto.setTemplateProperties(props);
 			
 		return dto;
 	}
@@ -74,17 +77,17 @@ public class SingleUserDefinedTaskTemplateMapper implements AbstractMapper<Singl
 		
 		template.setOrder(target.getOrder());
 		
-		if (target.getProperties() != null) {
+		if (target.getTemplateProperties() != null) {
 			
 			SingleUserDefinedTaskTemplate s = new SingleUserDefinedTaskTemplate(template);
-			List<Property> props = new ArrayList<>();
+			List<ClassProperty<Object>> props = new ArrayList<>();
 
-			for (PropertyDTO<Object> p : target.getProperties()) {
-				props.add(propertyMapper.toEntity(p));
+			for (ClassPropertyDTO<Object> p : target.getTemplateProperties()) {
+				props.add(classPropertyMapper.toEntity(p));
 				
 			}
 			
-			s.setProperties(props);
+			s.setTemplateProperties(props);
 			return s;
 		}
 	

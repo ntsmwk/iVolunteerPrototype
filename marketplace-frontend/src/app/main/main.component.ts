@@ -9,6 +9,7 @@ import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { navigation_helpseeker } from 'app/navigation/navigation_helpseeker';
 import { LoginService } from './content/_service/login.service';
 import { ParticipantRole } from './content/_model/participant';
+import { navigation_flexprod } from 'app/navigation/navigation_flexprod';
 
 @Component({
     selector     : 'fuse-main',
@@ -56,6 +57,9 @@ export class FuseMainComponent implements OnDestroy
                 case 'VOLUNTEER': 
                 this.navigation = navigation_volunteer;
                 break;
+                case 'FLEXPROD':
+                this.navigation = navigation_flexprod;
+
             }
         })
     }

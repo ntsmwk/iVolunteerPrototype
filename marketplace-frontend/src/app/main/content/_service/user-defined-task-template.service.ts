@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from '../_model/marketplace';
-import { Property } from '../_model/meta/Property';
+import { PropertyInstance, TemplateProperty } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 
@@ -176,29 +176,30 @@ export class UserDefinedTaskTemplateService {
 
 
   //update Properties
-  public updateProperties(marketplace: Marketplace, templateId: string, subtemplateId: string, properties: Property<any>[]) {
+  public updateProperties(marketplace: Marketplace, templateId: string, subtemplateId: string, templateProperties: TemplateProperty<any>[]) {
     if (!isNullOrUndefined(subtemplateId)) {
-      return this.updatePropertiesInSubtemplate(marketplace, templateId, subtemplateId, properties);
+      return this.updatePropertiesInSubtemplate(marketplace, templateId, subtemplateId, templateProperties);
     } else {
-      return this.updatePropertiesInTemplate(marketplace, templateId, properties);
+      return this.updatePropertiesInTemplate(marketplace, templateId, templateProperties);
     }
   }
 
-  private updatePropertiesInTemplate(marketplace: Marketplace, templateId: string, properties: Property<any>[]) {    
+  private updatePropertiesInTemplate(marketplace: Marketplace, templateId: string, templateProperties: TemplateProperty<any>[]) {    
     console.log("update in Template")
-    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updateproperties`, properties);
+    console.log(templateProperties);
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updateproperties`, templateProperties);
   }
 
-  private updatePropertiesInSubtemplate(marketplace: Marketplace, templateId: string, subtemplateId: string, properties: Property<any>[]) {    
-    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updateproperties`, properties);
+  private updatePropertiesInSubtemplate(marketplace: Marketplace, templateId: string, subtemplateId: string, templateProperties: TemplateProperty<any>[]) {    
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updateproperties`, templateProperties);
   }
 
-  public updatePropertyOrderSingle(marketplace: Marketplace, templateId: string, properties: Property<any>[]) {
-    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updatepropertyorder`, properties);
+  public updatePropertyOrderSingle(marketplace: Marketplace, templateId: string, templateProperties: TemplateProperty<any>[]) {
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/updatepropertyorder`, templateProperties);
   }
 
-  public updatePropertyOrderNested(marketplace: Marketplace, templateId: string, subtemplateId: string, properties: Property<any>[]) {
-    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updatepropertyorder`, properties);
+  public updatePropertyOrderNested(marketplace: Marketplace, templateId: string, subtemplateId: string, templateProperties: TemplateProperty<any>[]) {
+    return this.http.put(`${marketplace.url}/tasktemplate/user/${templateId}/${subtemplateId}/updatepropertyorder`, templateProperties);
   }
 
 

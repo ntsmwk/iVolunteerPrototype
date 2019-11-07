@@ -1,13 +1,13 @@
-import { MultiplePropertyModule } from './multiple-property.module';
+// import { MultiplePropertyModule } from './multiple-property.module';
 
-describe('MultiplePropertyModule', () => {
-  let multiplePropertyModule: MultiplePropertyModule;
+// describe('MultiplePropertyModule', () => {
+//   let multiplePropertyModule: MultiplePropertyModule;
 
-  beforeEach(() => {
-    multiplePropertyModule = new MultiplePropertyModule();
-  });
+//   beforeEach(() => {
+//     multiplePropertyModule = new MultiplePropertyModule();
+//   });
 
-  it('should create an instance', () => {
-    expect(multiplePropertyModule).toBeTruthy();
-  });
-});
+//   it('should create an instance', () => {
+//     expect(multiplePropertyModule).toBeTruthy();
+//   });
+// });

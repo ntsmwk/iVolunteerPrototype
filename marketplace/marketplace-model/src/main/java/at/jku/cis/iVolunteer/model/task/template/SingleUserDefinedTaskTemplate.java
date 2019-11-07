@@ -2,11 +2,10 @@ package at.jku.cis.iVolunteer.model.task.template;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 /**
  * @author alexander
@@ -15,7 +14,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SinglePropert
 @Document
 public class SingleUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 	
-//	List<Property> properties;
+	List<ClassProperty<Object>> templateProperties;
 	
 	public SingleUserDefinedTaskTemplate() {
 	}
@@ -32,12 +31,12 @@ public class SingleUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 		this.id = id;
 	}
 
-	public List<Property> getProperties() {
-		return properties;
+	public List<ClassProperty<Object>> getTemplateProperties() {
+		return templateProperties;
 	}
 
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
+	public void setTemplateProperties(List<ClassProperty<Object>> templateProperties) {
+		this.templateProperties = templateProperties;
 	}
 	
 	@Override

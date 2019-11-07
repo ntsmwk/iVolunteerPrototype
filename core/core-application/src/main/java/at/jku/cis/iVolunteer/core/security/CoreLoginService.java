@@ -5,8 +5,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
@@ -16,6 +18,7 @@ public class CoreLoginService {
 
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 
 	public CoreUser getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
@@ -29,6 +32,8 @@ public class CoreLoginService {
 		}
 		if (participant instanceof CoreVolunteer) {
 			return ParticipantRole.VOLUNTEER;
+		} if (participant instanceof CoreFlexProd) {
+			return ParticipantRole.FLEXPROD;
 		}
 		return null;
 	}
@@ -38,6 +43,12 @@ public class CoreLoginService {
 		if (helpSeeker != null) {
 			return helpSeeker;
 		}
+		CoreFlexProd flexProd = coreFlexProdRepository.findByUsername(username);
+		if (flexProd != null) {
+			return flexProd;
+		}
+		
+		
 		return coreVolunteerRepository.findByUsername(username);
 	}
 

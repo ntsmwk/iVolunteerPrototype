@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class TextPropertyConstraint extends PropertyConstraint<String> {
+public class TextPropertyConstraint<T> extends PropertyConstraint<T> {
 	
 	public TextPropertyConstraint() {
 		setPropertyType(PropertyType.TEXT);
@@ -21,6 +21,6 @@ public class TextPropertyConstraint extends PropertyConstraint<String> {
 		if (!(obj instanceof TextPropertyConstraint)) {
 			return false;
 		}
-		return ((TextPropertyConstraint) obj).getId().equals(getId());
+		return ((TextPropertyConstraint<?>) obj).getId().equals(getId());
 	}
 }

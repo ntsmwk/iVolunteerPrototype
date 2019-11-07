@@ -127,7 +127,7 @@
 
 
                     <mat-table data [dataSource]="dataSources[i]"
-                        *ngIf="subtemplate.properties.length > 0; else emptyTable">
+                        *ngIf="subtemplate.propertyInstances.length > 0; else emptyTable">
 
                         <ng-container matColumnDef="name">
                             <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
@@ -140,14 +140,14 @@
                             <mat-cell *matCellDef="let property">{{printValue(property)}}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="defaultValue">
+                        <!-- <ng-container matColumnDef="defaultValue">
                             <mat-header-cell *matHeaderCellDef>Default Value</mat-header-cell>
                             <mat-cell *matCellDef="let property">{{printDefaultValue(property)}}</mat-cell>
-                        </ng-container>
+                        </ng-container> -->
 
                         <ng-container matColumnDef="kind">
                             <mat-header-cell *matHeaderCellDef>Kind / Type</mat-header-cell>
-                            <mat-cell *matCellDef="let property">{{property.kind}}</mat-cell>
+                            <mat-cell *matCellDef="let property">{{property.type}}</mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="actions">

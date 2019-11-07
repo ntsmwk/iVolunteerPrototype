@@ -1,35 +1,36 @@
 package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.InheritanceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.relationship.RelationshipMapper;
-import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorController;
+import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.property.PropertyRepository;
 import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationParameter;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @SpringBootApplication
@@ -37,10 +38,14 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 	@Autowired private CompetenceRepository competenceRepository;
 	
-	@Autowired private PropertyRepository propertyRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+
 	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
 	@Autowired private ClassDefinitionRepostiory classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
+	
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private ConfiguratorRepository configuratorRepository;
 
 	@Bean
 	@Primary
@@ -60,11 +65,14 @@ public class MarketplaceApplication implements CommandLineRunner {
 		createCompetence("Flexability");
 		createCompetence("Motivation");
 		
-		addStandardProperties();
+//		addStandardProperties();
+		addStandardPropertyDefinitions();
 		addTestTemplates();
 		
-//		addTestConfigClasses();
+		addTestConfigClasses();
 		addFlexProdConfigClasses();
+		
+		addConfigurators();
 	}
 
 	private Competence createCompetence(String competenceName) {
@@ -77,22 +85,32 @@ public class MarketplaceApplication implements CommandLineRunner {
 		return competence;
 	}
 	
-	private void addStandardProperties() {
-		StandardProperties sp = new StandardProperties(competenceRepository, propertyRepository);
-		List<Property> props = sp.getAll();
+//	private void addStandardProperties() {
+//		StandardProperties sp = new StandardProperties(competenceRepository, propertyRepository);
+//		List<Property> props = sp.getAll();
+//		
+//		for (Property p : props) {
+//			if (!propertyRepository.exists(p.getId())) {
+//				propertyRepository.save(p);
+//			}
+//		}
+//	}
+	
+	private void addStandardPropertyDefinitions() {
+		StandardPropertyDefinitions spd = new StandardPropertyDefinitions(competenceRepository, propertyDefinitionRepository);
+		List<PropertyDefinition<Object>> props = spd.getAll();
 		
-		for (Property p : props) {
-			if (!propertyRepository.exists(p.getId())) {
-				propertyRepository.save(p);
+		
+		for (PropertyDefinition<Object> pd : props) {
+			if (!propertyDefinitionRepository.exists(pd.getId())) {
+				propertyDefinitionRepository.save(pd);
 			}
 		}
 	}
 	
 	private void addTestTemplates() {
 		
-		StandardTemplates st = new StandardTemplates(competenceRepository, propertyRepository);
-		
-		
+		StandardTemplates st = new StandardTemplates(competenceRepository, propertyDefinitionRepository, propertyDefinitionToClassPropertyMapper);
 		
 		for (UserDefinedTaskTemplate t : st.createAll()) {
 			if (!userDefinedTaskTemplateRepository.exists(t.getId())) {
@@ -103,61 +121,62 @@ public class MarketplaceApplication implements CommandLineRunner {
 	
 	
 	private void addTestConfigClasses() {
+		
+		StandardPropertyDefinitions spd = new StandardPropertyDefinitions();
+		
 		ClassDefinition c1 = new ClassDefinition();
 		c1.setId("test1");
 		c1.setName("Class 1");
-		c1.setProperties(new LinkedList<Property>());
+		c1.setProperties(new LinkedList<ClassProperty<Object>>());
+		c1.setRoot(true);
 		
+		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty();
+		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
+		c1.getProperties().add(ncp);
 		
-		c1.getProperties().add(new StandardProperties.NameProperty());
-		c1.getProperties().add( new StandardProperties.CommentsProperty());
-		c1.getProperties().add(new StandardProperties.StartDateProperty());
-		c1.getProperties().add(new StandardProperties.DescriptionProperty());
+		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty();	
+		ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
+		c1.getProperties().add(sdcp);
 		
+		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty(); 
+		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
+		c1.getProperties().add(dcp);
 		
 		
 		ClassDefinition c2 = new ClassDefinition();
 		c2.setId("test2");
 		c2.setName("Class 2");
-		c2.setProperties(new ArrayList<Property>());
 		
 		ClassDefinition c3 = new ClassDefinition();
 		c3.setId("test3");
 		c3.setName("Class 3");
-		c3.setProperties(new ArrayList<Property>());
 		
 		
 		ClassDefinition c4 = new ClassDefinition();
 		c4.setId("test4");
 		c4.setName("Class 4");
-		c4.setProperties(new ArrayList<Property>());
 		
 		
 		ClassDefinition c5 = new ClassDefinition();
 		c5.setId("test5");
 		c5.setName("Class 5");
-		c5.setProperties(new ArrayList<Property>());
 		
 		
 		ClassDefinition c6 = new ClassDefinition();
 		c6.setId("test6");
 		c6.setName("Class 6");
-		c6.setProperties(new ArrayList<Property>());
 		
 		ClassDefinition c7 = new ClassDefinition();
 		c7.setId("test7");
 		c7.setName("Class 7");
-		c7.setProperties(new ArrayList<Property>());
 		
 		ClassDefinition c8 = new ClassDefinition();
 		c8.setId("test8");
 		c8.setName("Class 8");
-		c8.setProperties(new ArrayList<Property>());
 		
 		ClassDefinition c9 = new ClassDefinition();
 		c9.setId("test9");
 		c9.setName("Class 9");
-		c9.setProperties(new ArrayList<Property>());
 		
 		
 		
@@ -170,24 +189,24 @@ public class MarketplaceApplication implements CommandLineRunner {
 
 		
 		Inheritance i1 = new Inheritance(c1.getId(), c3.getId(), c1.getId());
-		i1.setId("i1");
+		i1.setId("test_i1");
 		Inheritance i2 = new Inheritance(c1.getId(), c2.getId(), c1.getId());
-		i2.setId("i2");
+		i2.setId("test_i2");
 		Inheritance i3 = new Inheritance(c2.getId(), c4.getId(), c2.getId());
-		i3.setId("i3");
+		i3.setId("test_i3");
 		Inheritance i4 = new Inheritance(c2.getId(), c5.getId(), c2.getId());
-		i4.setId("i4");
+		i4.setId("test_i4");
 		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
-		i5.setId("i5");
+		i5.setId("test_i5");
 		Association i6 = new Association(c6.getId(), c6.getId(), AssociationParameter.ONE, AssociationParameter.ZEROSTAR);
-		i6.setId("i6");
+		i6.setId("test_i6");
 		
 		Association i7 = new Association(c5.getId(), c7.getId(), AssociationParameter.ONE, AssociationParameter.ONESTAR);
-		i7.setId("i7");
+		i7.setId("test_i7");
 		Association i8 = new Association(c5.getId(), c8.getId(), AssociationParameter.ONE, AssociationParameter.ZEROONE);
-		i8.setId("i8");
+		i8.setId("test_i8");
 		Association i9 = new Association(c4.getId(), c9.getId(), AssociationParameter.ZEROSTAR, AssociationParameter.ZEROONE);
-		i9.setId("i9");
+		i9.setId("test_i9");
 		
 		
 		
@@ -266,13 +285,13 @@ public class MarketplaceApplication implements CommandLineRunner {
 		ClassDefinition technischeBeschreibung = new ClassDefinition();
 		technischeBeschreibung.setId("technische_beschreibung");
 		technischeBeschreibung.setName("Technische\nBeschreibung");
-		technischeBeschreibung.setProperties(new ArrayList<Property>());
+		technischeBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
 		classDefinitions.add(technischeBeschreibung);
 		
 			ClassDefinition ofen = new ClassDefinition();
 			ofen.setId("ofen");
 			ofen.setName("Ofen");
-			ofen.setProperties(new ArrayList<Property>());
+			ofen.setProperties(new ArrayList<ClassProperty<Object>>());
 			classDefinitions.add(ofen);
 			
 			Inheritance i1 = new Inheritance(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
@@ -283,7 +302,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition ofenTechnischeEigenschaften = new ClassDefinition();
 				ofenTechnischeEigenschaften.setId("ofenTechnischeEigenschaften");
 				ofenTechnischeEigenschaften.setName("Technische\nEigenschaften");
-				ofenTechnischeEigenschaften.setProperties(new ArrayList<Property>());
+				ofenTechnischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(ofenTechnischeEigenschaften);
 				
 				Inheritance i11 = new Inheritance(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
@@ -296,13 +315,13 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition oteAllgemein = new ClassDefinition();
 					oteAllgemein.setId("oteAllgemein");
 					oteAllgemein.setName("Allgemein");
-					oteAllgemein.setProperties(new ArrayList<Property>());
-					oteAllgemein.getProperties().add(propertyRepository.findOne("maxgluehtemperatur"));
-					oteAllgemein.getProperties().add(propertyRepository.findOne("verfuegbaresschutzgas"));
-					oteAllgemein.getProperties().add(propertyRepository.findOne("bauart"));
-					oteAllgemein.getProperties().add(propertyRepository.findOne("temperaturhomogenitaet"));
-					oteAllgemein.getProperties().add(propertyRepository.findOne("kaltgewalztesmaterialzulaessig"));
-					oteAllgemein.getProperties().add(propertyRepository.findOne("warmgewalztesmaterialzulaessig"));
+					oteAllgemein.setProperties(new ArrayList<ClassProperty<Object>>());
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("maxgluehtemperatur")));
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("verfuegbaresschutzgas")));
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bauart")));
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("temperaturhomogenitaet")));
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("kaltgewalztesmaterialzulaessig")));
+					oteAllgemein.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("warmgewalztesmaterialzulaessig")));
 
 					
 					classDefinitions.add(oteAllgemein);
@@ -315,8 +334,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition oteMoeglicheVorbehandlung = new ClassDefinition();
 					oteMoeglicheVorbehandlung.setId("oteMoeglicheVorbehandlung");
 					oteMoeglicheVorbehandlung.setName("Mögliche\nVorbehandlung");
-					oteMoeglicheVorbehandlung.setProperties(new ArrayList<Property>());
-					oteMoeglicheVorbehandlung.getProperties().add(propertyRepository.findOne("bundentfetten"));
+					oteMoeglicheVorbehandlung.setProperties(new ArrayList<ClassProperty<Object>>());
+					oteMoeglicheVorbehandlung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bundentfetten")));
 
 					classDefinitions.add(oteMoeglicheVorbehandlung);
 
@@ -328,7 +347,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition oteChargierhilfe = new ClassDefinition();
 					oteChargierhilfe.setId("oteChargierhilfe");
 					oteChargierhilfe.setName("Chargierhilfe");
-					oteChargierhilfe.setProperties(new ArrayList<Property>());
+					oteChargierhilfe.setProperties(new ArrayList<ClassProperty<Object>>());
 					classDefinitions.add(oteChargierhilfe);
 					
 					Inheritance i113 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(), ofenTechnischeEigenschaften.getId());
@@ -339,10 +358,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 						ClassDefinition otecKonvektoren = new ClassDefinition();
 						otecKonvektoren.setId("otecKonvektoren");
 						otecKonvektoren.setName("Konvektoren");
-						otecKonvektoren.setProperties(new ArrayList<Property>());
-						otecKonvektoren.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-						otecKonvektoren.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-						otecKonvektoren.getProperties().add(propertyRepository.findOne("hoehe"));
+						otecKonvektoren.setProperties(new ArrayList<ClassProperty<Object>>());
+						otecKonvektoren.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+						otecKonvektoren.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+						otecKonvektoren.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 
 
 						
@@ -356,10 +375,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 						ClassDefinition otecTragerahmen = new ClassDefinition();
 						otecTragerahmen.setId("otecTragerahmen");
 						otecTragerahmen.setName("Tragerahmen");
-						otecTragerahmen.setProperties(new ArrayList<Property>());
-						otecTragerahmen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-						otecTragerahmen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-						otecTragerahmen.getProperties().add(propertyRepository.findOne("hoehe"));
+						otecTragerahmen.setProperties(new ArrayList<ClassProperty<Object>>());
+						otecTragerahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+						otecTragerahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+						otecTragerahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 
 						classDefinitions.add(otecTragerahmen);
 
@@ -371,10 +390,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 						ClassDefinition otecZwischenrahmen = new ClassDefinition();
 						otecZwischenrahmen.setId("otecZwischenrahmen");
 						otecZwischenrahmen.setName("Zwischenrahmen");
-						otecZwischenrahmen.setProperties(new ArrayList<Property>());
-						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-						otecZwischenrahmen.getProperties().add(propertyRepository.findOne("hoehe"));
+						otecZwischenrahmen.setProperties(new ArrayList<ClassProperty<Object>>());
+						otecZwischenrahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+						otecZwischenrahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+						otecZwischenrahmen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 						
 						classDefinitions.add(otecZwischenrahmen);
 						
@@ -386,10 +405,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 						ClassDefinition otecKronenstoecke = new ClassDefinition();
 						otecKronenstoecke.setId("otecKronenstoecke");
 						otecKronenstoecke.setName("Kronenstöcke");
-						otecKronenstoecke.setProperties(new ArrayList<Property>());
-						otecKronenstoecke.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-						otecKronenstoecke.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-						otecKronenstoecke.getProperties().add(propertyRepository.findOne("hoehe"));
+						otecKronenstoecke.setProperties(new ArrayList<ClassProperty<Object>>());
+						otecKronenstoecke.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+						otecKronenstoecke.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+						otecKronenstoecke.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 					
 						classDefinitions.add(otecKronenstoecke);
 						
@@ -401,11 +420,11 @@ public class MarketplaceApplication implements CommandLineRunner {
 						ClassDefinition otecChargierkoerbe = new ClassDefinition();
 						otecChargierkoerbe.setId("otecChargierkoerbe");
 						otecChargierkoerbe.setName("Chargierkörbe");
-						otecChargierkoerbe.setProperties(new ArrayList<Property>());
+						otecChargierkoerbe.setProperties(new ArrayList<ClassProperty<Object>>());
 						
-						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-						otecChargierkoerbe.getProperties().add(propertyRepository.findOne("hoehe"));
+						otecChargierkoerbe.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+						otecChargierkoerbe.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+						otecChargierkoerbe.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 					
 						classDefinitions.add(otecChargierkoerbe);
 
@@ -418,9 +437,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition ofenBetrieblicheEigenschaften = new ClassDefinition();
 				ofenBetrieblicheEigenschaften.setId("ofenBetrieblicheEigenschaften");
 				ofenBetrieblicheEigenschaften.setName("Betriebliche\nEigenschaften");
-				ofenBetrieblicheEigenschaften.setProperties(new ArrayList<Property>());
-				ofenBetrieblicheEigenschaften.getProperties().add(propertyRepository.findOne("gluehzeit"));
-				ofenBetrieblicheEigenschaften.getProperties().add(propertyRepository.findOne("durchsatz"));
+				ofenBetrieblicheEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
+				ofenBetrieblicheEigenschaften.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehzeit")));
+				ofenBetrieblicheEigenschaften.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchsatz")));
 		
 				classDefinitions.add(ofenBetrieblicheEigenschaften);
 				
@@ -432,7 +451,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition ofenGeometrischeEigenschaften = new ClassDefinition();
 				ofenGeometrischeEigenschaften.setId("ofenGeometrischeEigenschaften");
 				ofenGeometrischeEigenschaften.setName("Geometrische\nEigenschaften");
-				ofenGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				ofenGeometrischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(ofenGeometrischeEigenschaften);
 
 				
@@ -444,10 +463,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition ogeBaugroesse = new ClassDefinition();
 					ogeBaugroesse.setId("ogeBaugroesse");
 					ogeBaugroesse.setName("Baugröße");
-					ogeBaugroesse.setProperties(new ArrayList<Property>());
-					ogeBaugroesse.getProperties().add(propertyRepository.findOne("moeglicheinnendurchmesser"));
-					ogeBaugroesse.getProperties().add(propertyRepository.findOne("maxaussendurchmesser"));
-					ogeBaugroesse.getProperties().add(propertyRepository.findOne("maxchargierhoehe"));
+					ogeBaugroesse.setProperties(new ArrayList<ClassProperty<Object>>());
+					ogeBaugroesse.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("moeglicheinnendurchmesser")));
+					ogeBaugroesse.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("maxaussendurchmesser")));
+					ogeBaugroesse.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("maxchargierhoehe")));
 
 					classDefinitions.add(ogeBaugroesse);
 					
@@ -459,7 +478,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition ofenQualitativeEigenschaften = new ClassDefinition();
 				ofenQualitativeEigenschaften.setId("ofenQualitativeEigenschaften");
 				ofenQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
-				ofenQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				ofenQualitativeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				
 				classDefinitions.add(ofenQualitativeEigenschaften);
 				
@@ -471,9 +490,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition oqeQualitätsnormen = new ClassDefinition();
 					oqeQualitätsnormen.setId("oqeQualitätsnormen");
 					oqeQualitätsnormen.setName("Qualitätsnormen");
-					oqeQualitätsnormen.setProperties(new ArrayList<Property>());
-					oqeQualitätsnormen.getProperties().add(propertyRepository.findOne("cqi9"));
-					oqeQualitätsnormen.getProperties().add(propertyRepository.findOne("tus"));
+					oqeQualitätsnormen.setProperties(new ArrayList<ClassProperty<Object>>());
+					oqeQualitätsnormen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("cqi9")));
+					oqeQualitätsnormen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("tus")));
 
 					classDefinitions.add(oqeQualitätsnormen);
 
@@ -485,9 +504,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition oqeWartungen = new ClassDefinition();
 					oqeWartungen.setId("oqeWartungen");
 					oqeWartungen.setName("Wartungen");
-					oqeWartungen.setProperties(new ArrayList<Property>());
-					oqeWartungen.getProperties().add(propertyRepository.findOne("letztewartung"));
-					oqeWartungen.getProperties().add(propertyRepository.findOne("wartungsintervall"));
+					oqeWartungen.setProperties(new ArrayList<ClassProperty<Object>>());
+					oqeWartungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("letztewartung")));
+					oqeWartungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("wartungsintervall")));
 
 					classDefinitions.add(oqeWartungen);
 					
@@ -502,7 +521,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 			ClassDefinition input = new ClassDefinition();
 			input.setId("input");
 			input.setName("Input");
-			input.setProperties(new ArrayList<Property>());
+			input.setProperties(new ArrayList<ClassProperty<Object>>());
 			classDefinitions.add(input);
 			
 			Inheritance i2 = new Inheritance(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
@@ -513,7 +532,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition inGeometrischeEigenschaften = new ClassDefinition();
 				inGeometrischeEigenschaften.setId("inGeometrischeEigenschaften");
 				inGeometrischeEigenschaften.setName("Geometrsiche\nEigenschaften");
-				inGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				inGeometrischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(inGeometrischeEigenschaften);
 				
 				Inheritance i21 = new Inheritance(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
@@ -524,11 +543,11 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition ingeBundabmessungen = new ClassDefinition();
 					ingeBundabmessungen.setId("ingeBundabmessungen");
 					ingeBundabmessungen.setName("Bundabmessungen");
-					ingeBundabmessungen.setProperties(new ArrayList<Property>());
-					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("bandbreite"));
-					ingeBundabmessungen.getProperties().add(propertyRepository.findOne("bandstaerke"));
+					ingeBundabmessungen.setProperties(new ArrayList<ClassProperty<Object>>());
+					ingeBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+					ingeBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+					ingeBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bandbreite")));
+					ingeBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bandstaerke")));
 
 					classDefinitions.add(ingeBundabmessungen);
 
@@ -540,7 +559,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition inQualitativeEigenschaften = new ClassDefinition();
 				inQualitativeEigenschaften.setId("inQualitativeEigenschaften");
 				inQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
-				inQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				inQualitativeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(inQualitativeEigenschaften);
 				
 				Inheritance i22 = new Inheritance(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
@@ -551,9 +570,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition inqeMaterialart = new ClassDefinition();
 					inqeMaterialart.setId("inqeMaterialart");
 					inqeMaterialart.setName("Materialart");
-					inqeMaterialart.setProperties(new ArrayList<Property>());
-					inqeMaterialart.getProperties().add(propertyRepository.findOne("warmgewalzt"));
-					inqeMaterialart.getProperties().add(propertyRepository.findOne("kaltgewalzt"));
+					inqeMaterialart.setProperties(new ArrayList<ClassProperty<Object>>());
+					inqeMaterialart.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("warmgewalzt")));
+					inqeMaterialart.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("kaltgewalzt")));
 
 					classDefinitions.add(inqeMaterialart);
 					
@@ -570,7 +589,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 			ClassDefinition output = new ClassDefinition();
 			output.setId("output");
 			output.setName("Output");
-			output.setProperties(new ArrayList<Property>());
+			output.setProperties(new ArrayList<ClassProperty<Object>>());
 			classDefinitions.add(output);
 			
 			Inheritance i3 = new Inheritance(technischeBeschreibung.getId(), output.getId(), technischeBeschreibung.getId());
@@ -581,7 +600,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition outTechnischeEigenschaften = new ClassDefinition();
 				outTechnischeEigenschaften.setId("outTechnischeEigenschaften");
 				outTechnischeEigenschaften.setName("Technische\nEigenschaften");
-				outTechnischeEigenschaften.setProperties(new ArrayList<Property>());
+				outTechnischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(outTechnischeEigenschaften);
 				
 				Inheritance i31 = new Inheritance(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
@@ -592,10 +611,10 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition outteMechanischeEigenschaften = new ClassDefinition();
 					outteMechanischeEigenschaften.setId("outteMechanischeEigenschaften");
 					outteMechanischeEigenschaften.setName("Mechanische\nEigenschaften");
-					outteMechanischeEigenschaften.setProperties(new ArrayList<Property>());
-					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("streckgrenze"));
-					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("zugfestigkeit"));
-					outteMechanischeEigenschaften.getProperties().add(propertyRepository.findOne("dehnung"));
+					outteMechanischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
+					outteMechanischeEigenschaften.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("streckgrenze")));
+					outteMechanischeEigenschaften.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zugfestigkeit")));
+					outteMechanischeEigenschaften.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("dehnung")));
 
 					classDefinitions.add(outteMechanischeEigenschaften);
 					
@@ -607,8 +626,8 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition outteGefuege = new ClassDefinition();
 					outteGefuege.setId("outteGefuege");
 					outteGefuege.setName("Gefüge");
-					outteGefuege.setProperties(new ArrayList<Property>());
-					outteGefuege.getProperties().add(propertyRepository.findOne("gefuege"));
+					outteGefuege.setProperties(new ArrayList<ClassProperty<Object>>());
+					outteGefuege.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gefuege")));
 					classDefinitions.add(outteGefuege);
 					
 					Inheritance i312 = new Inheritance(outTechnischeEigenschaften.getId(), outteGefuege.getId(), outTechnischeEigenschaften.getId());
@@ -621,7 +640,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition outGeometrischeEigenschaften = new ClassDefinition();
 				outGeometrischeEigenschaften.setId("outGeometrischeEigenschaften");
 				outGeometrischeEigenschaften.setName("Geometrische\nEigenschaften");
-				outGeometrischeEigenschaften.setProperties(new ArrayList<Property>());
+				outGeometrischeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(outGeometrischeEigenschaften);
 				
 				Inheritance i32 = new Inheritance(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
@@ -632,11 +651,11 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition outgeMoeglicheBundabmessungen = new ClassDefinition();
 					outgeMoeglicheBundabmessungen.setId("outgeMoeglicheBundabmessungen");
 					outgeMoeglicheBundabmessungen.setName("Mögliche\nBundabmessungen");
-					outgeMoeglicheBundabmessungen.setProperties(new ArrayList<Property>());
-					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("aussendurchmesser"));
-					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("innendurchmesser"));
-					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("bandbreite"));
-					outgeMoeglicheBundabmessungen.getProperties().add(propertyRepository.findOne("bandstaerke"));
+					outgeMoeglicheBundabmessungen.setProperties(new ArrayList<ClassProperty<Object>>());
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aussendurchmesser")));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser")));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bandbreite")));
+					outgeMoeglicheBundabmessungen.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bandstaerke")));
 
 					classDefinitions.add(outgeMoeglicheBundabmessungen);
 
@@ -649,7 +668,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 				ClassDefinition outQualitativeEigenschaften = new ClassDefinition();
 				outQualitativeEigenschaften.setId("outQualitativeEigenschaften");
 				outQualitativeEigenschaften.setName("Qualitative\nEigenschaften");
-				outQualitativeEigenschaften.setProperties(new ArrayList<Property>());
+				outQualitativeEigenschaften.setProperties(new ArrayList<ClassProperty<Object>>());
 				classDefinitions.add(outQualitativeEigenschaften);
 				
 				Inheritance i33 = new Inheritance(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
@@ -660,9 +679,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 					ClassDefinition outqeMaterialart = new ClassDefinition();
 					outqeMaterialart.setId("outqeMaterialart");
 					outqeMaterialart.setName("Materialart");
-					outqeMaterialart.setProperties(new ArrayList<Property>());
-					outqeMaterialart.getProperties().add(propertyRepository.findOne("warmgewalzt"));
-					outqeMaterialart.getProperties().add(propertyRepository.findOne("kaltgewalzt"));
+					outqeMaterialart.setProperties(new ArrayList<ClassProperty<Object>>());
+					outqeMaterialart.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("warmgewalzt")));
+					outqeMaterialart.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("kaltgewalzt")));
 
 					classDefinitions.add(outqeMaterialart);
 					
@@ -676,27 +695,28 @@ public class MarketplaceApplication implements CommandLineRunner {
 		ClassDefinition logistischeBeschreibung = new ClassDefinition();
 		logistischeBeschreibung.setId("logistischeBeschreibung");
 		logistischeBeschreibung.setName("Logistische\nBeschreibung");
-		logistischeBeschreibung.setProperties(new ArrayList<Property>());
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("materialbereitgestellt"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("lieferort"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("verpackung"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("transportart"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("menge"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("lieferdatum"));
-		logistischeBeschreibung.getProperties().add(propertyRepository.findOne("incoterms"));
+		logistischeBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("materialbereitgestellt")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferort")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("verpackung")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("transportart")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("menge")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
+		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("incoterms")));
 		classDefinitions.add(logistischeBeschreibung);
 		
 		ClassDefinition preislicheBeschreibung = new ClassDefinition();
 		preislicheBeschreibung.setId("preislicheBeschreibung");
 		preislicheBeschreibung.setName("Preisliche\nBeschreibung");
-		preislicheBeschreibung.setProperties(new ArrayList<Property>());
-		preislicheBeschreibung.getProperties().add(propertyRepository.findOne("zahlungsbedingungen"));
+		preislicheBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
+		preislicheBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zahlungsbedingungen")));
 		classDefinitions.add(preislicheBeschreibung); 
 		
 		ClassDefinition root = new ClassDefinition();
 		root.setId("root");
 		root.setName("/");
-		root.setProperties(new ArrayList<Property>());
+		root.setProperties(new ArrayList<ClassProperty<Object>>());
+		root.setRoot(true);
 		classDefinitions.add(root);
 		
 		Inheritance r1 = new Inheritance(root.getId(), technischeBeschreibung.getId(), root.getId());
@@ -711,21 +731,106 @@ public class MarketplaceApplication implements CommandLineRunner {
 		relationships.add(r3);
 		
 		
-		
+		Configurator c5 = new Configurator();
+		c5.setName("Haubenofen");
+		c5.setId("haubenofen");
 
-					
+		c5.setDate(new Date());
+		
+		c5.setRelationshipIds(new ArrayList<>());
+		c5.setClassDefinitionIds(new ArrayList<>());
+
 					
 		for (Relationship r : relationships) {
 			if (!relationshipRepository.exists(r.getId())) {
 				relationshipRepository.save(r);
+				c5.getRelationshipIds().add(r.getId());
 			}
 		}
 		
 		for (ClassDefinition cd : classDefinitions) {
 			if (!classDefinitionRepository.exists(cd.getId())) {
 				classDefinitionRepository.save(cd);
+				c5.getClassDefinitionIds().add(cd.getId());
 			}
 		}
+	
+		if (!configuratorRepository.exists(c5.getId())) {
+			configuratorRepository.save(c5);
+		}
+	}
+	
+	private void addConfigurators() {
+		Configurator c1 = new Configurator();
+		c1.setName("test1");
+		c1.setId("test1");
+		c1.setDate(new Date());
+		
+		c1.setRelationshipIds(new ArrayList<>());
+		c1.getRelationshipIds().add("test_i1");
+		c1.getRelationshipIds().add("test_i2");
+		c1.getRelationshipIds().add("test_i3");
+		c1.getRelationshipIds().add("test_i4");
+		c1.getRelationshipIds().add("test_i5");
+		c1.getRelationshipIds().add("test_i6");
+		c1.getRelationshipIds().add("test_i7");
+		c1.getRelationshipIds().add("test_i8");
+		c1.getRelationshipIds().add("test_i9");
+
+		c1.setClassDefinitionIds(new ArrayList<>());
+		c1.getClassDefinitionIds().add("test1");
+		c1.getClassDefinitionIds().add("test2");
+		c1.getClassDefinitionIds().add("test3");
+		c1.getClassDefinitionIds().add("test4");
+		c1.getClassDefinitionIds().add("test5");
+		c1.getClassDefinitionIds().add("test6");
+		c1.getClassDefinitionIds().add("test7");
+		c1.getClassDefinitionIds().add("test8");
+		c1.getClassDefinitionIds().add("test9");
+		
+		Configurator c2 = new Configurator();
+		c2.setName("test2");
+		c2.setId("test2");
+		c2.setDate(new Date(1289516400000L));
+		
+		Configurator c3 = new Configurator();
+		c3.setName("test3");
+		c3.setId("test3");
+
+		c3.setDate(new Date());
+		
+		Configurator c4 = new Configurator();
+		c4.setName("test4");
+		c4.setId("test4");
+
+		c4.setDate(new Date());
+
+		
+		
+		
+		if (!configuratorRepository.exists(c1.getId())) {
+			configuratorRepository.save(c1);
+		}
+		
+		if (!configuratorRepository.exists(c2.getId())) {
+			configuratorRepository.save(c2);
+		}
+		
+		if (!configuratorRepository.exists(c3.getId())) {
+			configuratorRepository.save(c3);
+		}
+		
+		if (!configuratorRepository.exists(c3.getId())) {
+			configuratorRepository.save(c3);
+		}
+		
+		if (!configuratorRepository.exists(c4.getId())) {
+			configuratorRepository.save(c4);
+		}
+		
+
+		
+
 	}
 	
 }

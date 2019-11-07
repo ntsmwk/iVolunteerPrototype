@@ -1,19 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { Property, PropertyDefinition } from '../../../_model/meta/Property';
+import { PropertyItem, PropertyDefinition } from '../../../_model/meta/Property';
 
 export interface AddOrRemoveDialogData {
-  checkboxStates: {property: Property<any>, disabled: boolean, checked: boolean, dirty: boolean}[];
-  label: string;
-}
-
-export interface AddOrRemoveDialogDataPD {
-  checkboxStates: {property: PropertyDefinition<any>, disabled: boolean, checked: boolean, dirty: boolean}[];
-  label: string;
-}
-
-export interface AddOrRemoveDialogDataID {
-  checkboxStates: {propertyId: string, propertyName: string, disabled: boolean, checked: boolean, dirty: boolean}[];
+  checkboxStates: {propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean}[];
   label: string;
 }
 

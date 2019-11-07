@@ -7,7 +7,7 @@ import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { GermanDateAdapter } from '../_adapter/german-date-adapter';
 import { SinglePropertyModule } from './single-property/single-property.module';
-import { MultiplePropertyModule } from './multiple-property/multiple-property.module';
+// import { MultiplePropertyModule } from './multiple-property/multiple-property.module';
 
 const routes = [
   {path: ':marketplaceId/:propertyId', component: PropertyBuildFormComponent},
@@ -34,7 +34,7 @@ const routes = [
     MatTooltipModule,
 
     SinglePropertyModule,
-    MultiplePropertyModule,
+    // MultiplePropertyModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule,

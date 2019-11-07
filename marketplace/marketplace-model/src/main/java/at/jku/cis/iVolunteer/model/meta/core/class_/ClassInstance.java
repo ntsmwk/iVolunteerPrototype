@@ -1,14 +1,11 @@
 package at.jku.cis.iVolunteer.model.meta.core.class_;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document

@@ -37,18 +37,8 @@ public class PropertyInstanceMapper implements AbstractMapper<PropertyInstance<O
 		}
 		dto.setValues(values);
 		
-		List<Object> allowedValues = new ArrayList<Object>();
-		if (source.getAllowedValues() != null) {
-			for (Object o : source.getAllowedValues()) {
-				allowedValues.add(o);
-			}
-		}
-		dto.setAllowedValues(allowedValues);
-		
 		dto.setType(source.getType());
 		
-		dto.setImmutable(source.isImmutable());
-		dto.setUpdateable(source.isUpdateable());
 		dto.setRequired(source.isRequired());
 		
 		dto.setPosition(source.getPosition());
@@ -86,7 +76,7 @@ public class PropertyInstanceMapper implements AbstractMapper<PropertyInstance<O
 		}
 		
 		PropertyInstance<Object> entity = new PropertyInstance<Object>();
-		entity.setId(target.getId());
+		entity.setId(target.getId());		
 		entity.setName(target.getName());
 		
 		List<Object> values = new ArrayList<Object>();
@@ -97,18 +87,8 @@ public class PropertyInstanceMapper implements AbstractMapper<PropertyInstance<O
 		}
 		entity.setValues(values);
 		
-		List<Object> allowedValues = new ArrayList<Object>();
-		if (target.getAllowedValues() != null) {
-			for (Object o : target.getAllowedValues()) {
-				allowedValues.add(o);
-			}
-		}
-		entity.setValues(allowedValues);
-		
 		entity.setType(target.getType());
-		
-		entity.setImmutable(target.isImmutable());
-		entity.setUpdateable(target.isUpdateable());
+
 		entity.setRequired(target.isRequired());
 		
 		entity.setPosition(target.getPosition());

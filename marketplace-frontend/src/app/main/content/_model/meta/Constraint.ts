@@ -6,6 +6,8 @@ export class PropertyConstraint<T> {
 
     value: T;
     propertyType: PropertyType;
+
+    message?: string;
 }
 
 export enum ConstraintType {

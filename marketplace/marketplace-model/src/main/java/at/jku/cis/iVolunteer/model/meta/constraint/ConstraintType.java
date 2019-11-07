@@ -15,8 +15,7 @@ public enum ConstraintType {
 		return this.type;
 	}
 	
-	@JsonCreator
-	public static ConstraintType getFromPropertyKind(String type) {
+	public static ConstraintType getFromConstraintType(String type) {
 		for(ConstraintType t : ConstraintType.values()){
             if(t.getType().equals(type)){
                 return t;

@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { isNullOrUndefined, isNull } from 'util';
-import { PropertyType, Rule, RuleKind, Property } from '../../_model/meta/Property';
-import { PropertyService } from '../../_service/property.service';
+import { PropertyType, Rule, RuleKind, PropertyDefinition } from '../../_model/meta/Property';
 import { Marketplace } from '../../_model/marketplace';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';
 import { listNotEmptyValidator } from "../../_validator/list-not-empty.validator";
+import { PropertyDefinitionService } from '../../_service/meta/core/property/property-definition.service';
+import { PropertyConstraint } from '../../_model/meta/Constraint';
 
 export class PropertyKindOption {
   kind: string;
@@ -30,9 +31,9 @@ export class RuleKindOption {
 export class SinglePropertyComponent implements OnInit {
 
   // @Input() form: FormGroup;
-  @Input() propertyListItems: Property<any>[];
+  @Input() propertyListItems: PropertyDefinition<any>[];
   @Input() marketplace: Marketplace;
-  @Input() currentProperty: Property<any>;
+  @Input() currentProperty: PropertyDefinition<any>;
 
   //Form Layout Controls
   isLoaded: boolean; isDropdown: boolean; hasRules: boolean;
@@ -57,7 +58,7 @@ export class SinglePropertyComponent implements OnInit {
   };
 
   constructor(private formBuilder: FormBuilder,
-    private propertyService: PropertyService) { }
+    private propertyDefinitionService: PropertyDefinitionService) { }
 
   ngOnInit() {
 
@@ -118,7 +119,7 @@ export class SinglePropertyComponent implements OnInit {
       name: this.formBuilder.control('', [Validators.required, propertyNameUniqueValidator(this.propertyListItems, this.currentProperty)]),
       kind: this.formBuilder.control('', Validators.required),
       defaultValues: this.formBuilder.control(''),
-      legalValues: this.formBuilder.control('')
+      legalValues: this.formBuilder.array([])
     });
   }
 
@@ -126,51 +127,51 @@ export class SinglePropertyComponent implements OnInit {
     this.form.get('name').setValue(this.currentProperty.name);
     this.form.get('kind').setValue(this.currentProperty.type);
 
-    if (!isNullOrUndefined(this.currentProperty.defaultValues)) {
-      this.form.get('defaultValues').setValue(this.currentProperty.defaultValues[0].value);
-    }
+    //TODO remove
+    this.form.get('defaultValues').setValue("");
 
-    if (!isNullOrUndefined(this.currentProperty.legalValues) && this.currentProperty.legalValues.length > 0) {
+
+    if (!isNullOrUndefined(this.currentProperty.allowedValues) && this.currentProperty.allowedValues.length > 0) {
       this.isDropdown = true;
       this.clearLegalValues();
-      let legalValues = this.form.get('legalValues') as FormArray;
+      let formAllowedValues: FormArray = this.form.get('legalValues') as FormArray;
 
-      for (let value of this.currentProperty.legalValues) {
-        legalValues.push(this.createLegalValue());
-        let pushed = legalValues.at(legalValues.length - 1);
+      for (let value of this.currentProperty.allowedValues) {
+        formAllowedValues.push(this.createLegalValue());
+        let pushed = formAllowedValues.at(formAllowedValues.length - 1);
 
-        pushed.get('value').setValue(value.value);
+        pushed.get('value').setValue(value);
       }
     } else {
       this.isDropdown = false;
     }
 
-    if (!isNullOrUndefined(this.currentProperty.rules) && this.currentProperty.rules.length > 0) {
-      this.hasRules = true;
-      this.clearRules();
-      let rules = this.form.get('rules') as FormArray;
+    if (!isNullOrUndefined(this.currentProperty.propertyConstraints) && this.currentProperty.propertyConstraints.length > 0) {
+      // this.hasRules = true;
+      // this.clearRules();
+      // let constraints = this.form.get('rules') as FormArray;
 
-      for (let rule of this.currentProperty.rules) {
-        rules.push(this.createRule());
-        let pushed = rules.at(rules.length - 1);
+      // for (let constraint of this.currentProperty.propertyConstraints) {
+      //   constraints.push(this.createRule());
+      //   let pushed = constraints.at(constraints.length - 1);
 
-        pushed.get('kind').setValue(rule.kind);
-        pushed.get('message').setValue(rule.message);
+      //   pushed.get('kind').setValue(constraint.constraintType);
+      //   pushed.get('message').setValue(constraint.message);
 
-        this.ruleKindUpdatedEvent(rule.kind, pushed as FormGroup, null);
+      //   this.ruleKindUpdatedEvent(constraint.constraintType, pushed as FormGroup, null);
 
-        let control = pushed.get('value');
-        if (!isNullOrUndefined(control)) {
-          control.setValue(rule.value);
-        }
+      //   let control = pushed.get('value');
+      //   if (!isNullOrUndefined(control)) {
+      //     control.setValue(constraint.value);
+      //   }
 
-        control = pushed.get('data');
-        if (!isNullOrUndefined(control)) {
-          control.setValue(rule.data);
-        }
+      //   control = pushed.get('data');
+      //   if (!isNullOrUndefined(control)) {
+      //     control.setValue(constraint.value);
+      //   }
 
-        this.setDisabledRule(pushed as FormGroup);
-      }
+      //   this.setDisabledRule(pushed as FormGroup);
+      // }
     } else {
       this.hasRules = false;
     }
@@ -223,11 +224,6 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalValues() {
-    console.log("legal values");
-
-    console.log(this.form);
-
-
 
     if (!isNullOrUndefined(this.form.get('legalValues')) && !this.isDropdown) {
       console.log("removing");
@@ -238,6 +234,10 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     if (this.form.get('kind').value == 'LIST') { this.isDropdown = false }
+
+
+    console.log("cleared result")
+    console.log(this.form);
   }
 
 
@@ -266,7 +266,7 @@ export class SinglePropertyComponent implements OnInit {
           }
         }
       } else {
-        this.prepareValidRules({value: this.form.get('kind').value}, 'type-select');
+        this.prepareValidRules({ value: this.form.get('kind').value }, 'type-select');
       }
     }
 
@@ -523,7 +523,7 @@ export class SinglePropertyComponent implements OnInit {
       console.log("call propertyService...");
 
       // TODO call service to send to server (and save in db)
-      this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
+      this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then(() => {
         console.log("PropertyService called, property added");
         console.log(property);
         this.navigateBack();
@@ -543,8 +543,8 @@ export class SinglePropertyComponent implements OnInit {
     }
   }
 
-  createPropertyFromForm(): Property<any> {
-    let property: Property<any> = new Property<any>();
+  createPropertyFromForm(): PropertyDefinition<any> {
+    let property: PropertyDefinition<any> = new PropertyDefinition<any>();
 
     if (isNullOrUndefined(this.currentProperty)) {
       property.id = null;
@@ -555,43 +555,43 @@ export class SinglePropertyComponent implements OnInit {
 
     property.name = this.form.get('name').value;
 
-    property.defaultValues = [];
-    console.log(this.form);
-    if (!isNullOrUndefined(this.form.get('defaultValues')) && !isNullOrUndefined(this.form.get('defaultValues').value)) {
+    // property.defaultValues = [];
+    // console.log(this.form);
+    // if (!isNullOrUndefined(this.form.get('defaultValues')) && !isNullOrUndefined(this.form.get('defaultValues').value)) {
 
-      let arr = this.form.get('defaultValues');
-      console.log(arr);
+    //   let arr = this.form.get('defaultValues');
+    //   console.log(arr);
 
-      property.defaultValues.push({ id: null, value: arr.value });
+    //   property.defaultValues.push({ id: null, value: arr.value });
 
-    }
+    // }
 
 
-    property.legalValues = [];
+    property.allowedValues = [];
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
       for (let value of (this.form.get('legalValues') as FormArray).value) {
-        property.legalValues.push({ id: null, value: value.value });
+        property.allowedValues.push(value.value);
       }
     }
 
-    property.rules = [];
+    property.propertyConstraints = [];
     if (!isNullOrUndefined(this.form.get('rules'))) {
       for (let value of (this.form.get('rules') as FormArray).controls) {
 
-        let rule = new Rule();
-        rule.id = null;
-        rule.kind = value.get('kind').value;
+        let constraint = new PropertyConstraint();
+        constraint.id = null;
+        constraint.constraintType = value.get('kind').value;
 
         if (!isNullOrUndefined(value.get('value'))) {
-          rule.value = value.get('value').value;
+          constraint.value = value.get('value').value;
         }
 
         if (!isNullOrUndefined(value.get('data'))) {
-          rule.data = value.get('data').value;
+          constraint.value = value.get('data').value;
         }
-        rule.message = value.get('message').value;
+        constraint.message = value.get('message').value;
 
-        property.rules.push(rule);
+        property.propertyConstraints.push(constraint);
       }
     }
     property.type = this.form.get('kind').value;

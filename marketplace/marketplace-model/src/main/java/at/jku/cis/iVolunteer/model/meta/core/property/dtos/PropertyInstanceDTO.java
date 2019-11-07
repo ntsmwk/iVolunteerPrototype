@@ -2,15 +2,12 @@ package at.jku.cis.iVolunteer.model.meta.core.property.dtos;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import at.jku.cis.iVolunteer.model.meta.constraint.property.dto.PropertyConstraintDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 public class PropertyInstanceDTO<T> {
 
-	String id;
+	String id;	
 	String name;
 	
 	List<T> values;

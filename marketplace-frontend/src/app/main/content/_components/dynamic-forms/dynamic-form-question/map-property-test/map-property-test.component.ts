@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { PropertyService } from 'app/main/content/_service/property.service';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { Property, PropertyType } from 'app/main/content/_model/meta/Property';
+import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/Property';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 
 @Component({
   selector: 'app-map-property-test',
@@ -15,7 +15,7 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 })
 export class MapPropertyTestComponent implements OnInit {
 
-  mapProperties: Property<any>[];
+  mapPropertyDefinitions: PropertyDefinition<any>[];
 
   latMap: number;
   lngMap: number;
@@ -26,11 +26,12 @@ export class MapPropertyTestComponent implements OnInit {
 
 
 
-  constructor(private propertyService: PropertyService,
+  constructor(
     private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService,
 
     private classDefinitionService: ClassDefinitionService,
+    private propertyDefinitionService: PropertyDefinitionService,
 
     private loginService: LoginService) { }
 
@@ -38,12 +39,12 @@ export class MapPropertyTestComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.propertyService.getProperties(marketplace).toPromise().then((properties: Property<any>[]) => {
-          this.mapProperties = properties.filter((property: Property<any>) => {
+        this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+          this.mapPropertyDefinitions = propertyDefinitions.filter((property: PropertyDefinition<any>) => {
             return property.type == PropertyType.MAP;
           });
 
-          console.log(this.mapProperties);
+          console.log(this.mapPropertyDefinitions);
 
           this.prepareMap();
       });
@@ -55,13 +56,13 @@ export class MapPropertyTestComponent implements OnInit {
 
   prepareMap() {
 
-    this.latMap = this.mapProperties[0].properties[0].properties[0].values[0].value;
-    this.lngMap = this.mapProperties[0].properties[0].properties[1].values[0].value;
+    // this.latMap = this.mapPropertyDefinitions[0].properties[0].properties[0].values[0].value;
+    // this.lngMap = this.mapPropertyDefinitions[0].properties[0].properties[1].values[0].value;
 
-    for (let property of this.mapProperties[0].properties) {
-      this.markers.push({lat: property.properties[0].values[0].value, 
-                         lng: property.properties[1].values[0].value});
-    }
+    // for (let property of this.mapProperties[0].properties) {
+    //   this.markers.push({lat: property.properties[0].values[0].value, 
+    //                      lng: property.properties[1].values[0].value});
+    // }
 
     
   }

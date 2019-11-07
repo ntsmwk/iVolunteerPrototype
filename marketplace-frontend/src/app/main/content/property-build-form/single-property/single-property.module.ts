@@ -28,7 +28,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
     ReactiveFormsModule,
 
-
     FuseSharedModule,
     FuseTruncatePipeModule,
   ],

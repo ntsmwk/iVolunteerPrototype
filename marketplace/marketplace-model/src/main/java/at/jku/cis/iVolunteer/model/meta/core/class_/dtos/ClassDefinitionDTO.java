@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.model.meta.core.class_.dtos;
 
 import java.util.List;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassDefinitionDTO {
@@ -12,10 +11,12 @@ public class ClassDefinitionDTO {
 	String name;
 
 //TODO
-//	List<ClassPropertyDTO<Object>> properties;
+	List<ClassPropertyDTO<Object>> properties;
 	
-	List<PropertyDTO<Object>> properties;
+//	List<PropertyDTO<Object>> properties;
 	List<MatchingRule> matchingRules;
+	
+	boolean root;
 	
 	public ClassDefinitionDTO() {
 		// TODO Auto-generated constructor stub
@@ -46,25 +47,21 @@ public class ClassDefinitionDTO {
 	}
 
 //TODO
-//	public List<ClassPropertyDTO<Object>> getProperties() {
-//		return properties;
-//	}
-//
-//	public void setProperties(List<ClassPropertyDTO<Object>> properties) {
-//		this.properties = properties;
-//	}
-//	
-	
-	public List<PropertyDTO<Object>> getProperties() {
-	return properties;
-}
+	public List<ClassPropertyDTO<Object>> getProperties() {
+		return properties;
+	}
 
-public void setProperties(List<PropertyDTO<Object>> properties) {
-	this.properties = properties;
-}
-
+	public void setProperties(List<ClassPropertyDTO<Object>> properties) {
+		this.properties = properties;
+	}
 	
+	public boolean isRoot() {
+		return root;
+	}
 	
+	public void setRoot(boolean root) {
+		this.root = root;
+	}
 	
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;

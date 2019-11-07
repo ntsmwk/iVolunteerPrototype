@@ -2,11 +2,7 @@ package at.jku.cis.iVolunteer.model.iVolunteerObject.dto;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 
 /**
  * @author alexander
@@ -16,7 +12,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SinglePropert
 public class IVolunteerObjectDTO {
 
 	public String id;
-	public List<Property> properties;	
+	public List<PropertyInstanceDTO<Object>> propertyInstances;	
 	
 	
 	public IVolunteerObjectDTO() {
@@ -34,12 +30,12 @@ public class IVolunteerObjectDTO {
 		this.id = id;
 	}
 
-	public List<Property> getProperties() {
-		return properties;
+	public List<PropertyInstanceDTO<Object>> getPropertyInstances() {
+		return propertyInstances;
 	}
 	
-	public void setName(List<Property> properties) {
-		this.properties = properties;
+	public void setName(List<PropertyInstanceDTO<Object>> propertyInstances) {
+		this.propertyInstances = propertyInstances;
 	}
 	
 	@Override

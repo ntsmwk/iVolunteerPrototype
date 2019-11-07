@@ -1,30 +1,20 @@
 package at.jku.cis.iVolunteer;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-
 import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
-import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.security.SecurityConstants;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
+import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @SpringBootApplication
 public class iVolunteerApplication {
@@ -38,12 +28,18 @@ public class iVolunteerApplication {
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String PSTARZER = "pstarzer";
 	private static final String BROISER = "broiser";
+	
+	private static final String FLEXPROD = "flexprod";
 
 	private static final String RAW_PASSWORD = "passme";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	
+	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
+
+	
 	@Autowired private MarketplaceRepository marketplaceRepository;
 
 	public static void main(String[] args) {
@@ -57,6 +53,7 @@ public class iVolunteerApplication {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
 	}
 
@@ -93,5 +90,19 @@ public class iVolunteerApplication {
 			volunteer = coreVolunteerRepository.insert(volunteer);
 		}
 		return volunteer;
+	}
+	
+	private CoreFlexProd createFlexProdUser(String username, String password) {
+		
+		CoreFlexProd fpUser = coreFlexProdRepository.findByUsername(username);
+		
+		if (fpUser == null) {
+			fpUser = new CoreFlexProd();
+			fpUser.setUsername(username);
+			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			fpUser = coreFlexProdRepository.insert(fpUser);
+		}
+		
+		return fpUser;
 	}
 }

@@ -6,10 +6,11 @@ import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
 
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
-import { ClassDefintion } from '../_model/meta/Class';
+import { ClassDefinition } from '../_model/meta/Class';
 import { Participant } from '../_model/participant';
 import { RelationshipService } from '../_service/meta/core/relationship/relationship.service';
 import { Relationship } from '../_model/meta/Relationship';
+import { CoreFlexProdService } from '../_service/core-flexprod.service';
 
 
 
@@ -23,7 +24,7 @@ import { Relationship } from '../_model/meta/Relationship';
 export class ConfiguratorComponent implements OnInit {
 
   marketplace: Marketplace;
-  configurableClasses: ClassDefintion[];
+  configurableClasses: ClassDefinition[];
   relationships: Relationship[];
 
 
@@ -32,30 +33,34 @@ export class ConfiguratorComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
+    // private helpSeekerService: CoreHelpSeekerService,
+    private flexProdService: CoreFlexProdService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService) { }
 
   ngOnInit() {
     // get marketplace
-    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
-      this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-
+    this.loginService.getLoggedIn().toPromise().then((flexProdUser: Participant) => {
+      console.log("logged in")
+      this.flexProdService.findRegisteredMarketplaces(flexProdUser.id).toPromise().then((marketplace: Marketplace) => {
+        console.log("finding marketplaces")
+        console.log(marketplace);
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
+          this.isLoaded = true;
 
-          Promise.all([
-            this.classDefinitionService.getAllClassDefinitions(this.marketplace).toPromise().then((configurableClasses: ClassDefintion[]) => {
-              this.configurableClasses = configurableClasses;              
-            }),
+          // Promise.all([
+          //   this.classDefinitionService.getAllClassDefinitions(this.marketplace).toPromise().then((configurableClasses: ClassDefinition[]) => {
+          //     this.configurableClasses = configurableClasses;              
+          //   }),
             
-            this.relationshipService.getAllRelationships(this.marketplace).toPromise().then((relationships: Relationship[]) => {
-              this.relationships = relationships;
-            })
+          //   this.relationshipService.getAllRelationships(this.marketplace).toPromise().then((relationships: Relationship[]) => {
+          //     this.relationships = relationships;
+          //   })
 
-          ]).then( () => {
-            this.isLoaded = true
-          });
+          // ]).then( () => {
+          //   this.isLoaded = true
+          // });
         }
       });
     });

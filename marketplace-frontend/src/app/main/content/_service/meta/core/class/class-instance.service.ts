@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassDefintion } from "app/main/content/_model/meta/Class";
+import { ClassDefinition } from "app/main/content/_model/meta/Class";
 
 
 @Injectable({
@@ -21,7 +21,7 @@ import { ClassDefintion } from "app/main/content/_model/meta/Class";
       return this.http.get(`${marketplace.url}/meta/core/class/instance/${id}`);
     }
 
-    createNewClassInstance(marketplace: Marketplace, classDefinition: ClassDefintion) {
+    createNewClassInstance(marketplace: Marketplace, classDefinition: ClassDefinition) {
       return this.http.post(`${marketplace.url}/meta/core/class/instance/new`, classDefinition);
     }
 
@@ -29,7 +29,7 @@ import { ClassDefintion } from "app/main/content/_model/meta/Class";
       return this.http.post(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/new`, '');
     }
 
-    updateClassInstance(marketplace: Marketplace, classDefinition: ClassDefintion) {
+    updateClassInstance(marketplace: Marketplace, classDefinition: ClassDefinition) {
       return this.http.put(`${marketplace.url}/meta/core/class/instance/${classDefinition.id}/update`, classDefinition);
     }
 

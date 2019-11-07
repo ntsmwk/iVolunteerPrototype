@@ -30,6 +30,8 @@ public class PropertyDefinitionMapper implements AbstractMapper<PropertyDefiniti
 		dto.setName(source.getName());
 		dto.setType(source.getType());
 		dto.setCustom(source.isCustom());
+		dto.setMultiple(source.isMultiple());
+		dto.setRequired(source.isRequired());
 		
 		List<PropertyConstraintDTO<Object>> propertyConstraints = new ArrayList<PropertyConstraintDTO<Object>>();
 		if (source.getPropertyConstraints() != null) {
@@ -38,6 +40,14 @@ public class PropertyDefinitionMapper implements AbstractMapper<PropertyDefiniti
 			}
 		}
 		dto.setPropertyConstraints(propertyConstraints);
+		
+		List<Object> allowedValues = new ArrayList<Object>();
+		if (source.getAllowedValues() != null) {
+			for (Object o : source.getAllowedValues()) {
+				allowedValues.add(o);
+			}
+		}
+		dto.setAllowedValues(allowedValues);
 		
 		return dto;
 	}
@@ -68,6 +78,7 @@ public class PropertyDefinitionMapper implements AbstractMapper<PropertyDefiniti
 		entity.setName(target.getName());
 		entity.setType(target.getType());
 		entity.setCustom(target.isCustom());
+		entity.setMultiple(target.isMultiple());
 		
 		List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<PropertyConstraint<Object>>();
 		if (target.getPropertyConstraints() != null) {
@@ -76,6 +87,14 @@ public class PropertyDefinitionMapper implements AbstractMapper<PropertyDefiniti
 			}
 		}
 		entity.setPropertyConstraints(propertyConstraints);
+		
+		List<Object> allowedValues = new ArrayList<Object>();
+		if (target.getAllowedValues() != null) {
+			for (Object o : target.getAllowedValues()) {
+				allowedValues.add(o);
+			}
+		}
+		entity.setAllowedValues(allowedValues);
 		
 		return entity;
 	}

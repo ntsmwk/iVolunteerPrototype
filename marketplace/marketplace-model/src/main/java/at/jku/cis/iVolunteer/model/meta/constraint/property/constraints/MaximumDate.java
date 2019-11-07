@@ -1,16 +1,18 @@
 package at.jku.cis.iVolunteer.model.meta.constraint.property.constraints;
 
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.constraint.ConstraintType;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.DatePropertyConstraint;
-import at.jku.cis.iVolunteer.model.meta.constraint.property.TextPropertyConstraint;
 
 @Document
-public class MaximumDate extends DatePropertyConstraint {
+public class MaximumDate extends DatePropertyConstraint<Date> {
 
-	MaximumDate() {
+	MaximumDate(Date value) {
 		setConstraintType(ConstraintType.MAX);
+		this.setValue(value);
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.model.meta.core.relationship;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum RelationshipType {
 	INHERITANCE("INHERITANCE"), ASSOCIATION("ASSOCIATION");
 	
@@ -18,6 +20,7 @@ public enum RelationshipType {
 		return this.relationshipType;
 	}
 	
+	@JsonCreator
 	public static RelationshipType getFromRelationshipType(String type){
         for(RelationshipType t : RelationshipType.values()){
             if(t.getRelationshipType().equals(type)){

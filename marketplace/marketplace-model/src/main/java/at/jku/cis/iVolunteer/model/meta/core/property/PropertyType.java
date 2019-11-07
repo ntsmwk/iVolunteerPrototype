@@ -6,20 +6,20 @@ public enum PropertyType {
 	TEXT("TEXT"), LONG_TEXT("LONG_TEXT"), WHOLE_NUMBER("WHOLE_NUMBER"), FLOAT_NUMBER("FLOAT_NUMBER"), BOOL("BOOL"), 
 	DATE("DATE"), LIST("LIST"), GRAPH("GRAPH"), MAP("MAP"), MULTI("MULTI"); 
 
-	private final String kind;
+	private final String type;
 
-	private PropertyType(String kind) {
-		this.kind = kind;
+	private PropertyType(String type) {
+		this.type = type;
 	}
 	
 	public String getKind() {
-		return this.kind;
+		return this.type;
 	}
 	
 	@JsonCreator
-	public static PropertyType getFromPropertyKind(String kind) {
+	public static PropertyType getPropertyType(String type) {
 		for(PropertyType k : PropertyType.values()){
-            if(k.getKind().equals(kind)){
+            if(k.getKind().equals(type)){
                 return k;
             }
         }
@@ -28,7 +28,7 @@ public enum PropertyType {
 
 	@Override
 	public String toString() {
-		return kind;
+		return type;
 	}
 
 }

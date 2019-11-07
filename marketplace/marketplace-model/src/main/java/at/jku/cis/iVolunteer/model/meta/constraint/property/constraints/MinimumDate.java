@@ -1,15 +1,18 @@
 package at.jku.cis.iVolunteer.model.meta.constraint.property.constraints;
 
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.constraint.ConstraintType;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.DatePropertyConstraint;
 
 @Document
-public class MinimumDate extends DatePropertyConstraint {
+public class MinimumDate extends DatePropertyConstraint<Date> {
 
-	MinimumDate() {
+	MinimumDate(Date value) {
 		setConstraintType(ConstraintType.MIN);
+		this.setValue(value);
 	}
 	
 	@Override

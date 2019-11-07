@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -25,13 +24,13 @@ public class ClassPropertyToPropertyInstanceMapper implements OneWayMapper<Class
 		propertyInstance.setName(source.getName());
 		
 		propertyInstance.setValues(new ArrayList<Object>(source.getDefaultValues()));
-		propertyInstance.setAllowedValues(new ArrayList<Object>(source.getAllowedValues()));
+//		propertyInstance.setAllowedValues(new ArrayList<Object>(source.getAllowedValues()));
 		
 		propertyInstance.setType(source.getType());
 		
-		propertyInstance.setImmutable(source.isImmutable());
-		propertyInstance.setUpdateable(source.isUpdateable());
-		propertyInstance.setRequired(source.isRequired());
+//		propertyInstance.setImmutable(source.isImmutable());
+//		propertyInstance.setUpdateable(source.isUpdateable());
+//		propertyInstance.setRequired(source.isRequired());
 		
 		propertyInstance.setPosition(source.getPosition());
 		

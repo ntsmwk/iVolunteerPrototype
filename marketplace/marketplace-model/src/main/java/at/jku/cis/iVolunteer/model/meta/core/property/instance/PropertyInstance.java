@@ -8,90 +8,25 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 
 @Document
 public class PropertyInstance<T> {
 
 	@Id
-	String id;
+	String id;	
 	String name;
 	
 	List<T> values;
-	List<T> allowedValues;
 	
 	PropertyType type;
 
-	boolean immutable;
-	boolean updateable;
-	boolean required;
-	
 	int position; 
+	
+	boolean required;
 	
 	List<PropertyConstraint<T>> propertyConstraints;
 	
 	public PropertyInstance() {}
-	
-	public PropertyInstance(ClassProperty<T> classProperty) {
-		this.id = classProperty.getId();
-		this.name = classProperty.getName();
-		
-		List<T> values = new ArrayList<T>();
-		if (classProperty.getDefaultValues() != null) {
-			for (T t : classProperty.getDefaultValues()) {
-				values.add(t);
-			}
-		}
-		this.values = values;
-		
-		List<T> allowedValues = new ArrayList<T>();
-		if (classProperty.getAllowedValues() != null) {
-			for (T t : classProperty.getAllowedValues()) {
-				allowedValues.add(t);
-			}
-		}
-		this.allowedValues = allowedValues;
-		
-		this.type = classProperty.getType();
-		
-		this.immutable = classProperty.isImmutable();
-		this.updateable = classProperty.isUpdateable();
-		this.required = classProperty.isRequired();
-		
-		this.position = classProperty.getPosition();
-		
-		List<PropertyConstraint<T>> propertyConstraints = new ArrayList<PropertyConstraint<T>>();
-		if (classProperty.getPropertyConstraints() != null) {
-			for (PropertyConstraint<T> c : classProperty.getPropertyConstraints()) {
-				propertyConstraints.add(c);
-			}
-		}
-		this.propertyConstraints = propertyConstraints;
-	}
-	
-	public PropertyInstance(PropertyDefinition<T> propertyDefinition) {
-		this.id = propertyDefinition.getId();
-		this.name = propertyDefinition.getName();
-		
-		List<T> allowedValues = new ArrayList<T>();
-		if (propertyDefinition.getAllowedValues() != null) {
-			for (T t : propertyDefinition.getAllowedValues()) {
-				allowedValues.add(t);
-			}
-		}
-		this.allowedValues = allowedValues;
-		
-		this.type = propertyDefinition.getType();
-		
-		List<PropertyConstraint<T>> propertyConstraints = new ArrayList<PropertyConstraint<T>>();
-		if (propertyDefinition.getPropertyConstraints() !=  null) {
-			for (PropertyConstraint<T> c : propertyDefinition.getPropertyConstraints()) {
-				propertyConstraints.add(c);
-			}
-		}
-		this.propertyConstraints = propertyConstraints;
-	}
 
 	public String getId() {
 		return id;
@@ -117,14 +52,6 @@ public class PropertyInstance<T> {
 		this.values = values;
 	}
 
-	public List<T> getAllowedValues() {
-		return allowedValues;
-	}
-
-	public void setAllowedValues(List<T> allowedValues) {
-		this.allowedValues = allowedValues;
-	}
-
 	public PropertyType getType() {
 		return type;
 	}
@@ -133,21 +60,14 @@ public class PropertyInstance<T> {
 		this.type = type;
 	}
 
-	public boolean isImmutable() {
-		return immutable;
+	public int getPosition() {
+		return position;
 	}
 
-	public void setImmutable(boolean immutable) {
-		this.immutable = immutable;
+	public void setPosition(int position) {
+		this.position = position;
 	}
-
-	public boolean isUpdateable() {
-		return updateable;
-	}
-
-	public void setUpdateable(boolean updateable) {
-		this.updateable = updateable;
-	}
+	
 
 	public boolean isRequired() {
 		return required;
@@ -155,14 +75,6 @@ public class PropertyInstance<T> {
 
 	public void setRequired(boolean required) {
 		this.required = required;
-	}
-
-	public int getPosition() {
-		return position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
 	}
 
 	public List<PropertyConstraint<T>> getPropertyConstraints() {

@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.constraint.property;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.constraint.Constraint;
@@ -11,6 +12,10 @@ public class PropertyConstraint<T> extends Constraint {
 	T value;
 	
 	PropertyType propertyType;
+	
+	public PropertyConstraint() {
+		this.setId(new ObjectId().toHexString());
+	}
 
 
 	public T getValue() {

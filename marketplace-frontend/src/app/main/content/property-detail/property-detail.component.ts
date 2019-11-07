@@ -6,12 +6,12 @@ import { TaskService } from '../_service/task.service';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { Property, PropertyParentItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/Property';
+import { PropertyDefinition, PropertyItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyService } from '../_service/property.service';
 import { isNullOrUndefined } from 'util';
 import { async } from '@angular/core/testing';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
+import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
 @Component({
   selector: 'app-property-detail',
@@ -23,7 +23,7 @@ export class PropertyDetailComponent implements OnInit {
   role: ParticipantRole;
   participant: Participant;
   marketplace: Marketplace;
-  property: Property<any>;
+  propertyDefintion: PropertyDefinition<any>;
 
   templateItem: PropertyParentTemplate;
   subtemplateItem: PropertyParentSubTemplate;
@@ -34,7 +34,7 @@ export class PropertyDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
-    private propertyService: PropertyService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService) {
       this.isLoaded = false;
       }
@@ -77,29 +77,29 @@ export class PropertyDetailComponent implements OnInit {
       this.marketplace = marketplace;
 
       if (ref == 'list') {
-        this.propertyService.getPropertyFromList(marketplace, propId).toPromise().then((property: Property<any>) => {
-          this.property = property;    
+        this.propertyDefinitionService.getPropertyDefinitionById(marketplace, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
+          this.propertyDefintion = propertyDefintion;    
         }).then(() => {
-          console.log(this.property);
+          console.log(this.propertyDefintion);
           this.isLoaded = true;
         });
        
       } else if (ref == 'template') {
 
       } else if (ref == 'subtemplate') {
-        this.userDefinedTaskTemplateService.getPropertyFromSubTemplate(this.marketplace, templateId, subtemplateId, propId).toPromise().then((property: Property<any>) => {
-          this.property = property;
+        this.userDefinedTaskTemplateService.getPropertyFromSubTemplate(this.marketplace, templateId, subtemplateId, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
+          this.propertyDefintion = propertyDefintion;
 
-          this.propertyService.getPropertyParentItems(this.marketplace, property.id, templateId, subtemplateId).toPromise().then((parents: PropertyParentItem[]) => {
-            console.log("Recheived PropertyParentItem");
-            console.log(parents);
-            this.templateItem = parents[0];
+          // this.propertyDefinitionService.getPropertyParentItems(this.marketplace, propertyDefintion.id, templateId, subtemplateId).toPromise().then((parents: PropertyItem[]) => {
+          //   console.log("Recheived PropertyParentItem");
+          //   console.log(parents);
+          //   this.templateItem = parents[0];
 
-            if (parents.length >= 2) {
-              this.subtemplateItem = parents[0];
-            }
-            this.isLoaded = true;
-          });
+          //   if (parents.length >= 2) {
+          //     this.subtemplateItem = parents[0];
+          //   }
+          //   this.isLoaded = true;
+          // });
 
         });
 
@@ -107,13 +107,13 @@ export class PropertyDetailComponent implements OnInit {
     }); 
   }
 
-  displayPropertyValue(property: Property<any>): string {    
-    return Property.getValue(property);
-  }
+  // displayPropertyValue(property: PropertyDefintion<any>): string {    
+  //   return PropertyDefinition.getValue(property);
+  // }
 
-  displayPropertyDefaultValue(property: Property<any>): string {
-    return Property.getDefaultValue(property);
-  }
+  // displayPropertyDefaultValue(property: Property<any>): string {
+  //   return Property.getDefaultValue(property);
+  // }
 
   navigateBack() {
     window.history.back();

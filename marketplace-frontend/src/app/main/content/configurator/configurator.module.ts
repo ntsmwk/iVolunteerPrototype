@@ -5,8 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatRadioModule, MatTooltipModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule, MatDatepickerModule, DateAdapter, MatNativeDateModule, MatSlideToggleModule, MatDividerModule, MatTabsModule } from '@angular/material';
 import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { ClassesModule } from './classes/classes.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfiguratorEditorModule } from './configurator-editor/configurator-editor.module';
 
 const routes = [
   {path: '', component: ConfiguratorComponent}
@@ -35,7 +34,7 @@ const routes = [
    
     MatTabsModule,
 
-    ClassesModule,
+    ConfiguratorEditorModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule,

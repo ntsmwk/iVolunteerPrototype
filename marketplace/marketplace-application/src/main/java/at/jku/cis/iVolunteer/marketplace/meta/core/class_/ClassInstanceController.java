@@ -51,7 +51,7 @@ public class ClassInstanceController {
 		ClassInstance classInstance = cDTIMapper.toTarget(classDefinition);
 		
 		
-		return null;
+		return classInstanceMapper.toDTO(classInstance);
 	}
 	
 	@PostMapping("/meta/core/class/instance/{id}/new")

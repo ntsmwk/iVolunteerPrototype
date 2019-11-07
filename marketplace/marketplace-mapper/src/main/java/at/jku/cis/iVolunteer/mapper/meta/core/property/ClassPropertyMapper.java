@@ -28,6 +28,7 @@ public class ClassPropertyMapper implements AbstractMapper<ClassProperty<Object>
 		ClassPropertyDTO<Object> dto = new ClassPropertyDTO<Object>();
 		
 		dto.setId(source.getId());
+		
 		dto.setName(source.getName());
 		
 		List<Object> defaultValues = new ArrayList<Object>();
@@ -47,6 +48,7 @@ public class ClassPropertyMapper implements AbstractMapper<ClassProperty<Object>
 		dto.setAllowedValues(allowedValues);
 		
 		dto.setType(source.getType());
+		dto.setMultiple(source.isMultiple());
 		
 		dto.setImmutable(source.isImmutable());
 		dto.setUpdateable(source.isUpdateable());
@@ -107,6 +109,7 @@ public class ClassPropertyMapper implements AbstractMapper<ClassProperty<Object>
 		entity.setAllowedValues(allowedValues);
 		
 		entity.setType(target.getType());
+		entity.setMultiple(target.isMultiple());
 		
 		entity.setImmutable(target.isImmutable());
 		entity.setUpdateable(target.isUpdateable());

@@ -6,10 +6,11 @@ import at.jku.cis.iVolunteer.model.meta.constraint.ConstraintType;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.TextPropertyConstraint;
 
 @Document
-public class TextPattern extends TextPropertyConstraint {
+public class TextPattern extends TextPropertyConstraint<String> {
 
-	TextPattern() {
+	public TextPattern(String value) {
 		setConstraintType(ConstraintType.PATTERN);
+		this.setValue(value);
 	}
 
 	@Override

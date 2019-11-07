@@ -30,6 +30,7 @@ import {FuseTimelineActivitiesComponent} from '../_components/timeline-activitie
 import {FuseTimelineTasksModule} from '../_components/timeline-tasks/timeline-tasks.module';
 import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
 import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
+import { FuseFlexProdDashboardComponent } from "./dashboard-flexprod/dashboard-flexprod.component";
 
 const routes = [
   {path: '', component: FuseDashboardComponent}
@@ -40,7 +41,8 @@ const routes = [
     FuseDashletComponent,
     FuseDashboardComponent,
     FuseDashletSelectorDialog,
-    FuseHelpSeekerDashboardComponent
+    FuseHelpSeekerDashboardComponent,
+    FuseFlexProdDashboardComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

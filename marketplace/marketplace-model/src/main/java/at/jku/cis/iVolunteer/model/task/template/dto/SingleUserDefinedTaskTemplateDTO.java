@@ -2,12 +2,10 @@ package at.jku.cis.iVolunteer.model.task.template.dto;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 
 /**
  * @author alexander
@@ -22,7 +20,7 @@ public class SingleUserDefinedTaskTemplateDTO {
 	
 	String kind;
 	
-	List<PropertyDTO<Object>> properties;
+	List<ClassPropertyDTO<Object>> templateProperties;
 	
 	int order;
 	
@@ -59,12 +57,12 @@ public class SingleUserDefinedTaskTemplateDTO {
 	}
 
 
-	public List<PropertyDTO<Object>> getProperties() {
-		return properties;
+	public List<ClassPropertyDTO<Object>> getTemplateProperties() {
+		return templateProperties;
 	}
 
-	public void setProperties(List<PropertyDTO<Object>> properties) {
-		this.properties = properties;
+	public void setTemplateProperties(List<ClassPropertyDTO<Object>> templateProperties) {
+		this.templateProperties = templateProperties;
 	}
 	
 	public int getOrder() {

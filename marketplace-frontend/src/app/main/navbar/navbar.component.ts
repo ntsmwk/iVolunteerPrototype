@@ -10,6 +10,7 @@ import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component';
 import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
+import { navigation_flexprod } from '../../navigation/navigation_flexprod';
 import { LoginService } from '../content/_service/login.service';
 import { ParticipantRole } from '../content/_model/participant';
 
@@ -62,6 +63,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy
                 case 'VOLUNTEER': 
                 this.navigation = navigation_volunteer;
                 break;
+                case 'FLEXPROD':
+                    this.navigation = navigation_flexprod;
             }
         })
         // Default layout

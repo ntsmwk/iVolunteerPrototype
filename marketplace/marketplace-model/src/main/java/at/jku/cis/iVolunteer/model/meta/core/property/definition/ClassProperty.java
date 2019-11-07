@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -13,13 +12,15 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 public class ClassProperty<T> {
 
 	@Id
-	String id;
+	String id;	
 	String name;
+	
 	
 	List<T> defaultValues;
 	List<T> allowedValues;
 	
 	PropertyType type;
+	boolean multiple;
 
 	boolean immutable;
 	boolean updateable;
@@ -27,37 +28,10 @@ public class ClassProperty<T> {
 	
 	int position; 
 	
-	List<PropertyConstraint<T>> propertyConstraints;
+	List<PropertyConstraint<Object>> propertyConstraints;
 
 	public ClassProperty() {}
 	
-	public ClassProperty(PropertyDefinition<T> propertyDefinition) {
-		this.id = propertyDefinition.getId();
-		this.name = propertyDefinition.name;
-		this.defaultValues = new ArrayList<T>();
-		
-		
-		this.allowedValues = new ArrayList<T>();
-		if (propertyDefinition.allowedValues != null) {
-			for (T t : propertyDefinition.allowedValues) {
-				this.allowedValues.add(t);
-			}
-		}
-		this.type = propertyDefinition.type;
-		
-		this.immutable = false;
-		this.updateable = false;
-		this.required = false;
-		
-		this.position = 0;
-		
-		this.propertyConstraints = new ArrayList<PropertyConstraint<T>>();
-		if (propertyDefinition.propertyConstraints != null) {
-			for (PropertyConstraint<T> c : propertyDefinition.propertyConstraints) {
-				this.propertyConstraints.add(c);
-			}
-		}
-	}
 	
 	public String getId() {
 		return id;
@@ -99,6 +73,17 @@ public class ClassProperty<T> {
 		this.type = type;
 	}
 
+	
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
+	}
+
+
 	public boolean isImmutable() {
 		return immutable;
 	}
@@ -132,11 +117,11 @@ public class ClassProperty<T> {
 	}
 	
 
-	public List<PropertyConstraint<T>> getPropertyConstraints() {
+	public List<PropertyConstraint<Object>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
 
-	public void setPropertyConstraints(List<PropertyConstraint<T>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
 	

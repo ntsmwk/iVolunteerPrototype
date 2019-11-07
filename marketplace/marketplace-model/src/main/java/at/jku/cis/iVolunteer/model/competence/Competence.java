@@ -1,9 +1,7 @@
 package at.jku.cis.iVolunteer.model.competence;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.property.*;
 import at.jku.cis.iVolunteer.model.property.listEntry.ListEntry;
 
 @Document

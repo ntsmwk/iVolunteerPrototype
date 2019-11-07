@@ -8,20 +8,17 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
-import at.jku.cis.iVolunteer.mapper.property.PropertyMapper;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassDefinitionDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Component
 public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, ClassDefinitionDTO> {
 
 	@Autowired ClassPropertyMapper classPropertyMapper;
-	@Autowired PropertyMapper propertyMapper;
+//	@Autowired PropertyMapper propertyMapper;
 	
 	@Override
 	public ClassDefinitionDTO toDTO(ClassDefinition source) {
@@ -36,23 +33,13 @@ public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, Cl
 		
 		dto.setName(source.getName());
 		
-//		List<ClassPropertyDTO<Object>> properties = new ArrayList<ClassPropertyDTO<Object>>();
-//		if (source.getProperties() != null) {
-//			for (ClassProperty<Object> p : source.getProperties()) {
-//				properties.add(classPropertyMapper.toDTO(p));
-//			}
-//		}
-//		dto.setProperties(properties);
-	
-		
-		List<PropertyDTO<Object>> properties = new ArrayList<PropertyDTO<Object>>();
+		List<ClassPropertyDTO<Object>> properties = new ArrayList<ClassPropertyDTO<Object>>();
 		if (source.getProperties() != null) {
-			for (Property p : source.getProperties()) {
-				properties.add(propertyMapper.toDTO(p));
+			for (ClassProperty<Object> p : source.getProperties()) {
+				properties.add(classPropertyMapper.toDTO(p));
 			}
 		}
 		dto.setProperties(properties);
-		
 		
 		
 		List<MatchingRule> matchingRules = new ArrayList<MatchingRule>();
@@ -63,6 +50,7 @@ public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, Cl
 		}
 		dto.setMatchingRules(matchingRules);
 		
+		dto.setRoot(source.isRoot());
 		return dto;
 	}
 
@@ -100,10 +88,10 @@ public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, Cl
 //		}
 //		entity.setProperties(properties);
 		
-		List<Property> properties = new ArrayList<Property>();
+		List<ClassProperty<Object>> properties = new ArrayList<ClassProperty<Object>>();
 		if (target.getProperties() != null) {
-			for (PropertyDTO<Object> p : target.getProperties()) {
-				properties.add(propertyMapper.toEntity(p));
+			for (ClassPropertyDTO<Object> p : target.getProperties()) {
+				properties.add(classPropertyMapper.toEntity(p));
 			}
 		}
 		entity.setProperties(properties);
@@ -115,7 +103,7 @@ public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, Cl
 			}
 		}
 		entity.setMatchingRules(matchingRules);
-		
+		entity.setRoot(target.isRoot());
 		return entity;
 	}
 

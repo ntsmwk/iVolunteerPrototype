@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { Property } from '../_model/meta/Property';
+import { PropertyInstance, PropertyItem, PropertyDefinition } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyService } from '../_service/property.service';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { QuestionService } from '../_service/question.service';
@@ -14,6 +13,8 @@ import { QuestionBase } from '../_model/dynamic-forms/questions';
 import { isNullOrUndefined, isNull } from 'util';
 import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
+import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
+import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
 @Component({
   selector: 'user-defined-task-template-detail-single',
@@ -30,7 +31,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   isLoaded: boolean;
   dialogIds: string[];
   questions: QuestionBase<any>[];
-  properties: Property<any>[];
+  allPropertiesList: PropertyItem[];
  
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -38,7 +39,8 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
     private questionService: QuestionService,
-    private propertyService: PropertyService,
+    private propertyInstanceService: PropertyInstanceService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private dialogFactory: DialogFactoryComponent
     ) {
       this.isLoaded = false;
@@ -62,15 +64,16 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
      
       })
       .then(() => {
-        this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
-          this.properties = properties;
+        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+          this.allPropertiesList = propertyDefinitions;
           console.log("loaded Properties: ")
-          console.log(this.properties);
+          console.log(this.allPropertiesList);
+        
         
         })
         .then(() => {
           if (!isNullOrUndefined(this.template)) {
-            this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
+            this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
           }
           this.isLoaded = true;
         })
@@ -79,9 +82,9 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
 
-  loadProperties() {
-    this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
-      this.properties = properties;
+  loadAllPropertyDefinitions() {
+    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+      this.allPropertiesList = propertyDefinitions;
     });
   }
 
@@ -115,7 +118,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   addPropertyDialog() {
     console.log("clicked add property");
 
-    this.dialogFactory.addPropertyDialog(this.template, this.properties).then((propIds: string[]) => {   
+    this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {   
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
           console.log("service called");
@@ -142,7 +145,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   changePropertyOrderDialog() {
     console.log("clicked order properties");
 
-    this.dialogFactory.changePropertyOrderDialog(this.template.properties).then((data: SortDialogData) => {
+    this.dialogFactory.changePropertyOrderDialog(this.template.templateProperties).then((data: SortDialogData) => {
       if (!isNullOrUndefined(data)) {
         for (let i = 0; i<data.list.length; i++) {
           data.list[i].order = i;

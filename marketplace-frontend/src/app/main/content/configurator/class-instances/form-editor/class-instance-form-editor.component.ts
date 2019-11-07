@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
-import { ClassDefintion } from '../../../_model/meta/Class';
+import { ClassDefinition } from '../../../_model/meta/Class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
@@ -20,7 +20,7 @@ import { maxOtherNew } from "../../../_validator/custom.validators";
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
-  configurableClass: ClassDefintion;
+  configurableClass: ClassDefinition;
 
   isLoaded: boolean = false;
 
@@ -31,7 +31,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   //============DEMO
   flexProdDemoMode: boolean = false;
-  demoClasses: ClassDefintion[] = [];
+  demoClasses: ClassDefinition[] = [];
   demoClassIds: string[] = [
     'oteAllgemein', 'oteMoeglicheVorbehandlung', 'otecKonvektoren', 'otecTragerahmen',
     'otecZwischenrahmen', 'otecKronenstoecke', 'otecChargierkoerbe', 'ofenBetrieblicheEigenschaften',
@@ -85,7 +85,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getClassDefinitionById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefintion) => {
+        this.classDefinitionService.getClassDefinitionById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefinition) => {
           this.configurableClass = configurableClass;
           //TODO
           // this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties);
@@ -94,7 +94,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
             let finishedNumber = 0;
             for (let id of this.demoClassIds) {
-              this.classDefinitionService.getClassDefinitionById(this.marketplace, id).toPromise().then((classDefinition: ClassDefintion) => {
+              this.classDefinitionService.getClassDefinitionById(this.marketplace, id).toPromise().then((classDefinition: ClassDefinition) => {
                 let index = this.demoClassIds.indexOf(id);
                 this.demoClasses[index] = classDefinition;
                 finishedNumber++;

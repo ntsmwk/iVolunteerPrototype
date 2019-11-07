@@ -2,7 +2,8 @@ package at.jku.cis.iVolunteer.model.task.template.dto;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 
 public class UserDefinedTaskTemplateDTO {
 
@@ -12,7 +13,7 @@ public class UserDefinedTaskTemplateDTO {
 	
 	String kind;
 	
-	List<PropertyDTO<Object>> properties;
+	List<ClassPropertyDTO<Object>> templateProperties;
 	List<SingleUserDefinedTaskTemplateDTO> templates;
 
 	int order;
@@ -49,12 +50,12 @@ public class UserDefinedTaskTemplateDTO {
 		this.description = description;
 	}
 
-	public List<PropertyDTO<Object>> getProperties() {
-		return properties;
+	public List<ClassPropertyDTO<Object>> getTemplateProperties() {
+		return templateProperties;
 	}
 
-	public void setProperties(List<PropertyDTO<Object>> properties) {
-		this.properties = properties;
+	public void setTemplateProperties(List<ClassPropertyDTO<Object>> templateProperties) {
+		this.templateProperties = templateProperties;
 	}
 	
 	public List<SingleUserDefinedTaskTemplateDTO> getTemplates() {

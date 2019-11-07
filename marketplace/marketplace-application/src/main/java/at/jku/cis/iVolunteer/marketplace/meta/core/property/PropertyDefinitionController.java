@@ -35,6 +35,10 @@ public class PropertyDefinitionController {
 	private List<PropertyDefinitionDTO<Object>> createNewPropertyDefintion(@RequestBody List<PropertyDefinitionDTO<Object>> propertyDefinitionDTOs) {
 		List<PropertyDefinition<Object>> propertyDefinitions = propertyDefinitionMapper.toEntities(propertyDefinitionDTOs);
 		
+		for (PropertyDefinition<Object> pd : propertyDefinitions) {
+			pd.setCustom(true);
+		}
+		
 		return propertyDefinitionMapper.toDTOs(propertyDefinitionRepository.save(propertyDefinitions));
 	}
 	

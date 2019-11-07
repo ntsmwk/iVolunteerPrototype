@@ -3,15 +3,15 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 
-import {Property } from "../_model/meta/Property";
+import { PropertyDefinition } from "../_model/meta/Property";
 
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { Participant } from '../_model/participant';
 import { Marketplace } from '../_model/marketplace';
 
-import { PropertyService } from "../_service/property.service";
 import { isNullOrUndefined } from 'util';
+import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
 @Component({
   selector: 'app-property-list',
@@ -21,19 +21,19 @@ import { isNullOrUndefined } from 'util';
 })
 export class PropertyListComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<Property<any>>();
+  dataSource = new MatTableDataSource<PropertyDefinition<any>>();
   displayedColumns = ['id', 'name', 'defaultValue', 'kind', 'actions'];
   // displayedColumns = ['id', 'name', 'defaultValue', 'kind'];
 
   marketplace: Marketplace;
 
-  propertyArray: Property<any>[];
+  propertyDefinitionArray: PropertyDefinition<any>[];
 
   customOnly: boolean;
   isLoaded: boolean;
 
   constructor(private router: Router,
-    private propertyService: PropertyService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService) {
     }
@@ -45,7 +45,7 @@ export class PropertyListComponent implements OnInit {
 
   }
 
-  onRowSelect(p: Property<any>) {
+  onRowSelect(p: PropertyDefinition<any>) {
     console.log("Property Clicked: " + p.name );
     console.log("CURRENT URL: " + this.router.url)
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
@@ -61,10 +61,10 @@ export class PropertyListComponent implements OnInit {
       this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
-          this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
-            this.propertyArray = pArr;
+          this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
+            this.propertyDefinitionArray = pdArr;
             this.updateDataSource();
-            console.log(pArr);
+            console.log(pdArr);
             this.isLoaded = true;
         })}
       })
@@ -72,9 +72,9 @@ export class PropertyListComponent implements OnInit {
   }
 
   updateDataSource() {
-    let ret: Property<any>[] = [];
+    let ret: PropertyDefinition<any>[] = [];
 
-    for (let property of this.propertyArray) {
+    for (let property of this.propertyDefinitionArray) {
       if (!this.customOnly) {
         ret.push(property);
       }  else {
@@ -87,7 +87,7 @@ export class PropertyListComponent implements OnInit {
 
   
 
-  viewPropertyAction(property: Property<any>) {
+  viewPropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked view Property")
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id],{queryParams: {ref: 'list'}});
     console.log(property);
@@ -98,7 +98,7 @@ export class PropertyListComponent implements OnInit {
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/'] );
   }
 
-  editPropertyAction(property: Property<any>) { 
+  editPropertyAction(property: PropertyDefinition<any>) { 
     console.log("clicked edit Property: ");
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
 
@@ -108,11 +108,11 @@ export class PropertyListComponent implements OnInit {
 
   }
 
-  deletePropertyAction(property: Property<any>) {
+  deletePropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked delete Property: ");
     console.log(property)
 
-    this.propertyService.deleteProperty(this.marketplace, property.id).toPromise().then(() => {
+    this.propertyDefinitionService.deletePropertyDefinition(this.marketplace, property.id).toPromise().then(() => {
       this.ngOnInit();
       console.log("done");
     });

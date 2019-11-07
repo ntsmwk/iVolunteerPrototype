@@ -7,12 +7,13 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { Property } from '../_model/meta/Property';
+import { PropertyInstance, PropertyItem, PropertyDefinition, TemplateProperty } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { MatTableDataSource } from '@angular/material';
-import { PropertyService } from '../_service/property.service';
 import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
+import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
+import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
 
 @Component({
@@ -27,13 +28,13 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   participant: Participant;
   marketplace: Marketplace;
 
-  propertiesList: Property<any>[];
+  allPropertiesList: PropertyItem[];
 
   template: UserDefinedTaskTemplate;
   isLoaded: boolean;
 
-  dataSources: MatTableDataSource<Property<any>>[] = [];
-  displayedColumns = ['name', 'value', 'defaultValue', 'kind', 'actions'];
+  dataSources: MatTableDataSource<TemplateProperty<any>>[] = [];
+  displayedColumns = ['name', 'value', 'kind', 'actions'];
 
   expandedPanelMap: boolean[] = [];
 
@@ -43,7 +44,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
-    private propertyService: PropertyService,
+    private propertyInstanceService: PropertyInstanceService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private dialogFactory: DialogFactoryComponent,
   ) {
     this.isLoaded = false;
@@ -72,8 +74,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
           this.setUpDataSourcesAndExpandedStates();
         }),
 
-        this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
-          this.propertiesList = properties;
+        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+          this.allPropertiesList = propertyDefinitions;
         })
       ]).then(() => {
         //finally, after all of the crap has been loaded from the server, display it
@@ -85,8 +87,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   private setUpDataSourcesAndExpandedStates() {
 
     for (let t of this.template.templates) {
-      let dataSource: MatTableDataSource<Property<any>> = new MatTableDataSource<Property<any>>();
-      dataSource.data = t.properties;
+      let dataSource: MatTableDataSource<TemplateProperty<any>> = new MatTableDataSource<TemplateProperty<any>>();
+      dataSource.data = t.templateProperties;
       this.dataSources.push(dataSource);
       this.expandedPanelMap.push(false);
     }
@@ -143,9 +145,9 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
       this.userDefinedTaskTemplateService.newNestedSingleTaskTemplate(this.marketplace, this.template.id, result[0], result[1]).toPromise().then((createdTemplate: UserDefinedTaskTemplate) => {
 
         this.template.templates.push(createdTemplate.templates[createdTemplate.templates.length - 1]);
-        let newDataSource = new MatTableDataSource<Property<any>>();
+        let newDataSource = new MatTableDataSource<TemplateProperty<any>>();
 
-        newDataSource.data = createdTemplate.templates[createdTemplate.templates.length - 1].properties;
+        newDataSource.data = createdTemplate.templates[createdTemplate.templates.length - 1].templateProperties;
         this.dataSources.push(newDataSource);
         this.expandedPanelMap.push(true);
         console.log("New: Array lengths: " + this.template.templates.length + " " + this.dataSources.length + " " + this.expandedPanelMap.length)
@@ -217,11 +219,11 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
 
   addProperties(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    this.dialogFactory.addPropertyDialog(subtemplate, this.propertiesList).then((propIds: string[]) => {
+    this.dialogFactory.addPropertyDialog(subtemplate, this.allPropertiesList).then((propIds: string[]) => {
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
           this.template = updatedTemplate;
-          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
+          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
           // this.refresh();
         });
       }
@@ -241,7 +243,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
     console.log(subtemplate);
     console.log(subTemplateIndex);
 
-    this.dialogFactory.changePropertyOrderDialog(subtemplate.properties).then((data: SortDialogData) => {
+    this.dialogFactory.changePropertyOrderDialog(subtemplate.templateProperties).then((data: SortDialogData) => {
       if (!isNullOrUndefined(data)) {
         for (let i = 0; i < data.list.length; i++) {
           data.list[i].order = i;
@@ -250,7 +252,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
         this.userDefinedTaskTemplateService.updatePropertyOrderNested(this.marketplace, this.template.id, subtemplate.id, data.list).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
           console.log(updatedTemplate);
           this.template = updatedTemplate;
-          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
+          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
           // this.refresh();        
         });
       }
@@ -262,26 +264,26 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
           this.template = updatedTemplate;
-          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
+          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
         });
       }
     });
   }
 
   // actions on each row of each subtemplate
-  viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, property: Property<any>, subTemplateIndex: number) {
-    console.log("View Property " + property.name + " from subtemplate " + subtemplate.name + " at index " + subTemplateIndex + "...");
-    console.log(property);
+  viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
+    console.log("View Property " + templateProperty.name + " from subtemplate " + subtemplate.name + " at index " + subTemplateIndex + "...");
+    console.log(templateProperty);
 
-    console.log("route: " + `main/task-templates/user/detail/viewproperty/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${property.id}`);
+    console.log("route: " + `main/task-templates/user/detail/viewproperty/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`);
 
-    this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${property.id}`], { queryParams: { ref: 'subtemplate' } })
+    this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`], { queryParams: { ref: 'subtemplate' } })
   }
 
-  removeProperty(subtemplate: UserDefinedTaskTemplate, property: Property<any>, subTemplateIndex: number) {
-    this.userDefinedTaskTemplateService.removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, [property.id]).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
+  removeProperty(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
+    this.userDefinedTaskTemplateService.removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, [templateProperty.id]).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
       this.template = updatedTemplate;
-      this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
+      this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
     });
   }
   //end OnClick Actions
@@ -291,13 +293,13 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   //Misc
   //==================
 
-  printValue(property: Property<any>) {
-    return Property.getValue(property);
+  printValue(property: PropertyInstance<any>) {
+    return PropertyInstance.getValue(property);
   }
 
-  printDefaultValue(property: Property<any>) {
-    return Property.getDefaultValue(property);
-  }
+  // printDefaultValue(property: PropertyInstance<any>) {
+  //   return PropertyInstance.getDefaultValue(property);
+  // }
 
 
   navigateBack() {

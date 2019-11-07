@@ -1,4 +1,4 @@
-import { Property } from "./meta/Property";
+import { PropertyDefinition, PropertyInstance, TemplateProperty } from "./meta/Property";
 
 export class UserDefinedTaskTemplate {
     id: string;
@@ -7,7 +7,7 @@ export class UserDefinedTaskTemplate {
 
     kind: string;
 
-    properties?: Property<any>[];    
+    templateProperties?: TemplateProperty<any>[];    
     templates?: UserDefinedTaskTemplate[];
 
     order: number;
@@ -17,7 +17,7 @@ export class SingleUserDefinedTaskTemplate {
     id: string;
     name: string;
     description: string;
-    properties: Property<any>[];
+    templateProperties: TemplateProperty<any>[];
 
     order: number;
 }
@@ -37,16 +37,3 @@ export class UserDefinedTaskTemplateStub {
     description: string;
     kind: string;
 }
-
-// export class UserDefinedTaskTemplateIdNameStub {
-//     id: string;
-//     name: string;
-
-//     templates?: UserDefinedSubTaskTemplateIdNameStub[];
-//     properties?: PropertyIdNameStub[];
-// }
-
-// export class UserDefinedSubTaskTemplateIdNameStub {
-//     id: string;
-//     name: string;
-// }

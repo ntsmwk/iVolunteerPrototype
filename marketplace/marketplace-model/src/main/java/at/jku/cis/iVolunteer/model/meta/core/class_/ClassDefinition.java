@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document
@@ -16,10 +15,11 @@ public class ClassDefinition {
 	String id;
 	String parentId;
 	String name;
+	List<ClassProperty<Object>> properties;
 // LEGACY
-//	List<ClassProperty<Object>> properties;
-	List<Property> properties;
+//	List<Property> properties;
 	List<MatchingRule> matchingRules;
+	boolean root;
 	
 	public ClassDefinition() {
 		// TODO Auto-generated constructor stub
@@ -49,25 +49,13 @@ public class ClassDefinition {
 		this.name = name;
 	}
 
-//	public List<ClassProperty<Object>> getProperties() {
-//		return properties;
-//	}
-//
-//	public void setProperties(List<ClassProperty<Object>> properties) {
-//		this.properties = properties;
-//	}
-	
-	//----
-	public List<Property> getProperties() {
+	public List<ClassProperty<Object>> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<Property> properties) {
+	public void setProperties(List<ClassProperty<Object>> properties) {
 		this.properties = properties;
 	}
-	
-	
-	//----
 	
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;
@@ -75,6 +63,14 @@ public class ClassDefinition {
 
 	public void setMatchingRules(List<MatchingRule> matchingRules) {
 		this.matchingRules = matchingRules;
+	}
+	
+	public boolean isRoot() {
+		return root;
+	}
+	
+	public void setRoot(boolean root) {
+		this.root = root;
 	}
 	
 	@Override

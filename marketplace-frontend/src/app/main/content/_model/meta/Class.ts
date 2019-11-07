@@ -1,15 +1,13 @@
-import { ClassProperty, PropertyInstance, Property } from "./Property";
+import { ClassProperty, PropertyInstance } from "./Property";
 
-export class ClassDefintion {
+export class ClassDefinition {
     id: string;
     parentId: string; 
-
+    root: boolean;
     name: string;
 
     //TODO
-    // properties: ClassProperty<any>[];
-    
-    properties: Property<any>[];
+    properties: ClassProperty<any>[];
     matchingRules: any[]
 }
 

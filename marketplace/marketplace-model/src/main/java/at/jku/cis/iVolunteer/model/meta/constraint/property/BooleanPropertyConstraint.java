@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class BooleanPropertyConstraint extends PropertyConstraint<Boolean> {
+public class BooleanPropertyConstraint<T> extends PropertyConstraint<T> {
 	
 	public BooleanPropertyConstraint() {
 		setPropertyType(PropertyType.BOOL);

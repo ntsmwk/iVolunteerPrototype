@@ -18,10 +18,12 @@ public class PropertyDefinition<T> {
 	List<T> allowedValues;
 	
 	boolean custom;
+	boolean multiple;
 	
 	PropertyType type;
 	
-	List<PropertyConstraint<T>> propertyConstraints;
+	boolean required;
+	List<PropertyConstraint<Object>> propertyConstraints;
 	
 	
 	public String getId() {
@@ -52,6 +54,13 @@ public class PropertyDefinition<T> {
 		this.custom = custom;
 	}
 	
+	public boolean isMultiple() {
+		return multiple;
+	}
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
+	}
+	
 	public PropertyType getType() {
 		return type;
 	}
@@ -59,12 +68,20 @@ public class PropertyDefinition<T> {
 		this.type = type;
 	}
 	
-	public List<PropertyConstraint<T>> getPropertyConstraints() {
+	public boolean isRequired() {
+		return required;
+	}
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	public List<PropertyConstraint<Object>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
-	public void setPropertyConstraints(List<PropertyConstraint<T>> propertyConstraints) {
+	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
+
 	
 	
 	

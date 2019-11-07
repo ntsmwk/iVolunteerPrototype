@@ -5,15 +5,14 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.Property;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.SingleProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
 public class IVolunteerObject {
 
 	@Id
 	public String id;
-	public List<Property> properties;	
 	
 	
 	public IVolunteerObject() {
@@ -29,14 +28,6 @@ public class IVolunteerObject {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public List<Property> getProperties() {
-		return properties;
-	}
-	
-	public void setName(List<Property> properties) {
-		this.properties = properties;
 	}
 	
 	@Override

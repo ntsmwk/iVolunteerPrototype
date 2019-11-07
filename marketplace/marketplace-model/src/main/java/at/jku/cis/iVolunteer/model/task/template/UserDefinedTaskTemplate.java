@@ -74,7 +74,7 @@ public class UserDefinedTaskTemplate extends IVolunteerObject {
 	public String toString() {
 		String s = "UserDefinedTaskTemplate [id=" + id + ", name=" + name + ", description=" + description + ", \n";
 		if (this instanceof SingleUserDefinedTaskTemplate) {
-			s = s + ((SingleUserDefinedTaskTemplate)this).properties;
+			s = s + ((SingleUserDefinedTaskTemplate)this).templateProperties;
 		} else if (this instanceof MultiUserDefinedTaskTemplate) {
 			s = s + ((MultiUserDefinedTaskTemplate)this).templates;
 		}

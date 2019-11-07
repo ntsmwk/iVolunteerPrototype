@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class LongNumberPropertyConstraint extends PropertyConstraint<Long> {
+public class LongNumberPropertyConstraint<T> extends PropertyConstraint<T> {
 	
 	public LongNumberPropertyConstraint() {
 		setPropertyType(PropertyType.WHOLE_NUMBER);

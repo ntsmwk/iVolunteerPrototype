@@ -13,6 +13,7 @@ import {TokenGuard} from './_guard/token.guard';
 import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
+import { FlexProdGuard } from './_guard/flexprod-guard';
 
 
 
@@ -129,7 +130,7 @@ const routes: Route[] = [
 
   { path: 'main/configurator',
     loadChildren: './configurator/configurator.module#ConfiguratorModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
+    canActivate: [TokenGuard, FlexProdGuard]
   },
 
   { path: 'main/configurator/instance-editor',

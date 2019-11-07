@@ -6,10 +6,11 @@ import at.jku.cis.iVolunteer.model.meta.constraint.ConstraintType;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.LongNumberPropertyConstraint;
 
 @Document
-public class MinimumValue extends LongNumberPropertyConstraint {
+public class MinimumValue extends LongNumberPropertyConstraint<Integer> {
 
-	public MinimumValue() {
+	public MinimumValue(int value) {
 		setConstraintType(ConstraintType.MIN);
+		this.setValue(value);
 	}
 	
 	@Override

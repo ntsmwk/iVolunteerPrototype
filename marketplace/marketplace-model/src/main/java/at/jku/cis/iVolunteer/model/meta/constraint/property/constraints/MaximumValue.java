@@ -6,10 +6,11 @@ import at.jku.cis.iVolunteer.model.meta.constraint.ConstraintType;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.LongNumberPropertyConstraint;
 
 @Document
-public class MaximumValue extends LongNumberPropertyConstraint {
+public class MaximumValue extends LongNumberPropertyConstraint<Integer> {
 
-	public MaximumValue() {
+	public MaximumValue(int value) {
 		setConstraintType(ConstraintType.MAX);
+		this.setValue(value);
 	}
 	
 	@Override

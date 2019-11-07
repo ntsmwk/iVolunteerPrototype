@@ -13,6 +13,10 @@ import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
 import { RelationshipDialogModule } from "../relationship-dialog/relationship-dialog.module";
 import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
+import { OpenDialogComponent } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.component';
+import { OpenDialogModule } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.module';
+import { SaveAsDialogComponent } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
+import { SaveAsDialogModule } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.module';
 
 @NgModule({
   imports: [
@@ -23,10 +27,12 @@ import { RelationshipDialogComponent } from '../relationship-dialog/relationship
     SortDialogModule,
     ChooseTemplateToCopyDialogModule,
     RelationshipDialogModule,
-
+    OpenDialogModule,
+    SaveAsDialogModule,
   ],
   declarations: [DialogFactoryComponent],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, 
-                    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent]
+                    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
+                    OpenDialogComponent, SaveAsDialogComponent]
 })
 export class DialogFactoryModule { }

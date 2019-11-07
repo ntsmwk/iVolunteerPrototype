@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PropertyService } from '../_service/property.service';
+// import { PropertyService } from '../_service/property.service';
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyType, Property } from '../_model/meta/Property';
+import { PropertyType, PropertyDefinition } from '../_model/meta/Property';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
+import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 export class PropertyBuildFormComponent implements OnInit {
 
   marketplace: Marketplace;
-  currentProperty: Property<any>;
+  currentProperty: PropertyDefinition<any>;
   // form: FormGroup = new FormGroup({});
   
 
@@ -26,11 +27,11 @@ export class PropertyBuildFormComponent implements OnInit {
   whichProperty: string;
 
 
-  propertyListItems: Property<any>[];
+  propertyListItems: PropertyDefinition<any>[];
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private propertyService: PropertyService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private marketPlaceService: CoreMarketplaceService){
@@ -48,8 +49,8 @@ export class PropertyBuildFormComponent implements OnInit {
 
         let marketplaceLoaded, propertyLoaded: boolean = false;
 
-        this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
-          this.propertyListItems = pArr;
+        this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
+          this.propertyListItems = pdArr;
             
             console.log("properties:");
             console.log(this.propertyListItems);
@@ -63,7 +64,7 @@ export class PropertyBuildFormComponent implements OnInit {
         console.log(params['propertyId']);
 
         if (!isNullOrUndefined(params['propertyId'])) {
-          this.propertyService.getPropertyFromList(marketplace, params['propertyId']).toPromise().then((property: Property<any>) => {
+          this.propertyDefinitionService.getPropertyDefinitionById(marketplace, params['propertyId']).toPromise().then((property: PropertyDefinition<any>) => {
             this.currentProperty = property;
 
             console.log("current Property");

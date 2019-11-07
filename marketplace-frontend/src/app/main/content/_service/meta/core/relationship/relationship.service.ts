@@ -2,7 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "../../../../_model/marketplace";
 import { Relationship, RelationshipType, Inheritance, Association } from "app/main/content/_model/meta/Relationship";
-import { ClassDefintion } from "app/main/content/_model/meta/Class";
+import { ClassDefinition } from "app/main/content/_model/meta/Class";
+import { isNull } from "@angular/compiler/src/output/output_ast";
+import { isNullOrUndefined } from "util";
+import { of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +24,14 @@ export class RelationshipService {
     return this.http.get(`${marketplace.url}/meta/core/relationship/${id}`);
   }
 
+  getRelationshipsById(marketplace: Marketplace, ids: string[]) {
+    if (!isNullOrUndefined(ids)) {   
+      return this.http.put(`${marketplace.url}/meta/core/relationship/multiple`, ids);
+    } else {
+      return of(null);
+    }
+  }
+
   getRelationshipsByStartId(marketplace: Marketplace, startId: string) {
     return this.http.get(`${marketplace.url}/meta/core/relationship/start/${startId}/all`);
   }
@@ -34,9 +45,13 @@ export class RelationshipService {
     return this.http.post(`${marketplace.url}/meta/core/relationship/add`, relationships);
   }
 
+  addAndUpdateRelationships(marketplace: Marketplace, relationships: Relationship[]) {
+    return this.http.put(`${marketplace.url}/meta/core/relationship/add-or-update`, relationships);
+  }
+
 
   //TODO - entfernen??
-  addRelationships(marketplace: Marketplace, ClassDefintion: ClassDefintion, relationships: any[]): Promise<any[]> {
+  addRelationships(marketplace: Marketplace, ClassDefintion: ClassDefinition, relationships: any[]): Promise<any[]> {
 
     //Patch assigned ID
     let promises: Promise<any>[] = [];
@@ -55,7 +70,7 @@ export class RelationshipService {
 
   }
 
-  private createPromise(marketplace: Marketplace, r: Relationship, c: ClassDefintion) {
+  private createPromise(marketplace: Marketplace, r: Relationship, c: ClassDefinition) {
 
     return new Promise((resolve) => {
 
