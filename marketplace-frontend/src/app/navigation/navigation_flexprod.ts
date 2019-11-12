@@ -6,6 +6,12 @@ export const navigation_flexprod = [
     'url': '/main/dashboard',
   },
   {
+    'id': 'properties',
+    'title': 'Properties',
+    'type': 'item',
+    'url': '/main/properties/all',
+  },
+  {
     'id': 'configurator',
     'title': 'Configurator',
     'type': 'item',

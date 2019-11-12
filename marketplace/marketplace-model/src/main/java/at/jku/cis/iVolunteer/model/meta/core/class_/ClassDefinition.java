@@ -15,7 +15,9 @@ public class ClassDefinition {
 	String id;
 	String parentId;
 	String name;
-	List<ClassProperty<Object>> properties;
+	private List<ClassProperty<Object>> properties;
+	
+	ClassArchetype archetype;
 // LEGACY
 //	List<Property> properties;
 	List<MatchingRule> matchingRules;
@@ -57,6 +59,14 @@ public class ClassDefinition {
 		this.properties = properties;
 	}
 	
+	public ClassArchetype getArchetype() {
+		return archetype;
+	}
+
+	public void setArchetype(ClassArchetype archetype) {
+		this.archetype = archetype;
+	}
+
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;
 	}

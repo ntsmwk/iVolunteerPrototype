@@ -7,11 +7,12 @@ import { PropertyDefinition } from "../_model/meta/Property";
 
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
-import { Participant } from '../_model/participant';
+import { Participant, ParticipantRole } from '../_model/participant';
 import { Marketplace } from '../_model/marketplace';
 
 import { isNullOrUndefined } from 'util';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
+import { CoreFlexProdService } from '../_service/core-flexprod.service';
 
 @Component({
   selector: 'app-property-list',
@@ -35,8 +36,9 @@ export class PropertyListComponent implements OnInit {
   constructor(private router: Router,
     private propertyDefinitionService: PropertyDefinitionService,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService) {
-    }
+    private helpSeekerService: CoreHelpSeekerService,
+    private flexProdService: CoreFlexProdService) {
+  }
 
   ngOnInit() {
     this.isLoaded = false;
@@ -46,29 +48,42 @@ export class PropertyListComponent implements OnInit {
   }
 
   onRowSelect(p: PropertyDefinition<any>) {
-    console.log("Property Clicked: " + p.name );
+    console.log("Property Clicked: " + p.name);
     console.log("CURRENT URL: " + this.router.url)
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
   }
 
 
- 
-  loadAllProperties() {
-    console.log ("load props from Server...");
 
-   
-    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
-      this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-        if (!isNullOrUndefined(marketplace)) {
-          this.marketplace = marketplace;
-          this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
-            this.propertyDefinitionArray = pdArr;
-            this.updateDataSource();
-            console.log(pdArr);
-            this.isLoaded = true;
-        })}
-      })
+  loadAllProperties() {
+    console.log("load props from Server...");
+
+    let service: CoreHelpSeekerService | CoreFlexProdService;
+
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
+        if (role == 'FLEXPROD') {
+          service = this.flexProdService;
+        } else if (role == 'HELP_SEEKER') {
+          service = this.helpSeekerService;
+        } else {
+          return;
+        }
+      }).then(() => {
+        service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+          if (!isNullOrUndefined(marketplace)) {
+            this.marketplace = marketplace;
+            this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+              this.propertyDefinitionArray = propertyDefinitions;
+              this.updateDataSource();
+              this.isLoaded = true;
+            });
+          }
+        });
+      });
     });
+
+      
   }
 
   updateDataSource() {
@@ -77,28 +92,28 @@ export class PropertyListComponent implements OnInit {
     for (let property of this.propertyDefinitionArray) {
       if (!this.customOnly) {
         ret.push(property);
-      }  else {
-        property.custom ? ret.push(property) : null ;
+      } else {
+        property.custom ? ret.push(property) : null;
       }
     }
 
     this.dataSource.data = ret;
   }
 
-  
+
 
   viewPropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked view Property")
-    this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id],{queryParams: {ref: 'list'}});
+    this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
     console.log(property);
   }
 
   newPropertyAction() {
     console.log("clicked new Property");
-    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/'] );
+    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/']);
   }
 
-  editPropertyAction(property: PropertyDefinition<any>) { 
+  editPropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked edit Property: ");
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
 
@@ -133,7 +148,7 @@ export class PropertyListComponent implements OnInit {
   //       if (!isNullOrUndefined(marketplace)) {
   //         this.propertyService.updateProperty(marketplace, <Property<string>>property).toPromise().then(() => 
   //           console.log("Updated"));
-          
+
   //       }
   //     })
   //   });

@@ -18,28 +18,16 @@ export const navigation_helpseeker = [
     'url': '/main/tasks/all',
   },
   {
-    'id': 'taskTemplates',
-    'title': 'Task Templates',
-    'type': 'item',
-    'url': '/main/task-templates/all'
-  },
-  {
     'id': 'properties',
-    'title': 'Property List',
+    'title': 'Property Definitions',
     'type': 'item',
     'url': '/main/properties/all'
   },
   {
     'id': 'userDefinedTaskTemplates',
-    'title': 'User Defined Task Templates',
+    'title': 'Task Templates',
     'type': 'item',
     'url': '/main/task-templates/user/all'
-  },
-  {
-    'id': 'testMapProperty',
-    'title': 'Test Map Property',
-    'type': 'item',
-    'url': '/main/test-map-property'
   },
   {
     'id': 'configurator',
