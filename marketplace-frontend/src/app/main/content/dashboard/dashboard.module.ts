@@ -6,10 +6,13 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseDashboardComponent} from './dashboard.component';
 import {
   MatButtonModule,
+  MatCardModule,
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
+  MatFormFieldModule,
   MatIconModule,
+  MatInputModule,
   MatMenuModule,
   MatOptionModule,
   MatSelectModule,
@@ -33,7 +36,8 @@ import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboa
 import { FuseFlexProdDashboardComponent } from "./dashboard-flexprod/dashboard-flexprod.component";
 
 const routes = [
-  {path: '', component: FuseDashboardComponent}
+  {path: '', component: FuseDashboardComponent},
+  {path: ':dashboardId', component: FuseDashboardComponent}
 ];
 
 @NgModule({
@@ -48,10 +52,13 @@ const routes = [
     RouterModule.forChild(routes),
 
     MatButtonModule,
+    MatCardModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatMenuModule,
     MatOptionModule,
     MatSelectModule,

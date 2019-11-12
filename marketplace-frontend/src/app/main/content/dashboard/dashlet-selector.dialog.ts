@@ -3,17 +3,27 @@ import {MatDialogRef} from '@angular/material';
 
 import {Dashlet} from '../_model/dashlet';
 import {DashletEntry, DashletsConf} from './dashlets.config';
-import {isNullOrUndefined} from 'util';
+import {isArray, isNullOrUndefined} from 'util';
 
 @Component({
   templateUrl: './dashlet-selector.dialog.html'
 })
 export class FuseDashletSelectorDialog {
 
-  dashletEntries = DashletsConf.getDashletEntries();
+  step = 0;
+
   selectedDashletEntry: DashletEntry;
 
+  projectDashletEntries: DashletEntry[];
+  timelineDashletEntries: DashletEntry[];
+
   constructor(private dialogRef: MatDialogRef<FuseDashletSelectorDialog>) {
+    this.projectDashletEntries = DashletsConf.getDashletEntriesByCategoryProject();
+    this.timelineDashletEntries = DashletsConf.getDashletEntriesByCategoryTimeline();
+  }
+
+  openStep(step: number) {
+    this.step = step;
   }
 
   closeDialog() {
@@ -23,15 +33,35 @@ export class FuseDashletSelectorDialog {
     this.dialogRef.close(this.buildDashlet(this.selectedDashletEntry));
   }
 
+  selectDashletEntry(selectedDashletEntry: DashletEntry) {
+    this.selectedDashletEntry = selectedDashletEntry;
+  }
+
+
   private buildDashlet(dashletEntry: DashletEntry) {
     const dashlet = new Dashlet();
-    dashlet.id = dashletEntry.id;
+    dashlet.id = `${new Date().getTime()}`;
+    dashlet.dashletId = dashletEntry.id;
     dashlet.name = dashletEntry.name;
+    dashlet.type = dashletEntry.type as string;
     dashlet.cols = dashletEntry.cols;
     dashlet.minItemCols = dashletEntry.cols;
     dashlet.rows = dashletEntry.rows;
     dashlet.minItemRows = dashletEntry.rows;
+    if (!isNullOrUndefined(dashletEntry.settings)) {
+      dashlet.settings = this.buildDashletSettings(dashletEntry.settings);
+    }
     return dashlet;
+  }
+
+  private buildDashletSettings(dashletEntrySettings: any) {
+    const dashletSettings = {};
+
+    Object.entries(dashletEntrySettings).forEach((entry: [string, any]) => {
+      dashletSettings[entry[0]] = isArray(entry[1]) ? entry[1][0] : entry[1];
+    });
+
+    return dashletSettings;
   }
 }
 

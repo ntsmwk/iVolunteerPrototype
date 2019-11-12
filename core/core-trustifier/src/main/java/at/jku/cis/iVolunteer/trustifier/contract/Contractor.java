@@ -36,9 +36,8 @@ public class Contractor {
 	@PostMapping("/task")
 	public void publishTask(@RequestBody TaskDTO task) {
 		try {
-			//TODO @blockchain
-//			blockchainRestClient.postPublishedTaskHash(hasher.generateHash(task), new Date(), task.getId(),
-//					task.getMarketplaceId());
+			blockchainRestClient.postPublishedTaskHash(hasher.generateHash(task), new Date(), task.getId(),
+					task.getMarketplaceId());
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 		}
@@ -55,9 +54,8 @@ public class Contractor {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.reserve(address, authorization, reservation.getTask());
 
-			//TODO @blockchain
-//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
-//					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
+			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -72,9 +70,8 @@ public class Contractor {
 		try {
 			String address = reservation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.unreserve(address, authorization, reservation.getTask());
-			//TODO @blockchain
-//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
-//					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
+			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+					taskInteraction.getTask().getId(), reservation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -92,9 +89,8 @@ public class Contractor {
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.assign(address, authorization, assignment.getTask(),
 					assignment.getVolunteer());
 
-			//TODO @blockchain
-//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
-//					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
+			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -111,9 +107,8 @@ public class Contractor {
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.unassign(address, authorization, assignment.getTask(),
 					assignment.getVolunteer());
 
-			//TODO @blockchain
-//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
-//					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
+			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+					taskInteraction.getTask().getId(), assignment.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -129,9 +124,8 @@ public class Contractor {
 			String address = completation.getSource().getAddress();
 			TaskInteractionDTO taskInteraction = marketplaceRestClient.finish(address, authorization, completation.getTask());
 
-			//TODO @blockchain
-//			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
-//					taskInteraction.getTask().getId(), completation.getSource().getIdentifier(), taskInteraction.getOperation());
+			blockchainRestClient.postTaskInteractionHash(hasher.generateHash(taskInteraction), taskInteraction.getTimestamp(),
+					taskInteraction.getTask().getId(), completation.getSource().getIdentifier(), taskInteraction.getOperation());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -142,9 +136,8 @@ public class Contractor {
 	public void publishCompetenceEntry(@RequestBody VolunteerCompetenceEntryDTO vce) {
 		try {
 
-			//TODO @blockchain
-//			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
-//					vce.getMarketplaceId(), vce.getVolunteerId());
+			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
+					vce.getMarketplaceId(), vce.getVolunteerId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -154,9 +147,8 @@ public class Contractor {
 	@PostMapping("/finishedTaskEntry")
 	public void publishFinishedTaskEntry(@RequestBody VolunteerTaskEntryDTO vte) {
 		try {
-			//TODO @blockchain
-//			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
-//					vte.getMarketplaceId(), vte.getVolunteerId());
+			blockchainRestClient.postFinishedTaskHash(hasher.generateHash(vte), vte.getTimestamp(), vte.getTaskId(),
+					vte.getMarketplaceId(), vte.getVolunteerId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);

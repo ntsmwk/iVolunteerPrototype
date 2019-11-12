@@ -55,6 +55,16 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
+    path: 'main/project-form',
+    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/projects/all',
+    loadChildren: './project-list/project-list.module#FuseProjectListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
     path: 'main/task',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
@@ -67,16 +77,6 @@ const routes: Route[] = [
   {
     path: 'main/tasks/all',
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-  {
-    path: 'main/project-form',
-    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-  {
-    path: 'main/projects/all',
-    loadChildren: './project-list/project-list.module#FuseProjectListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 

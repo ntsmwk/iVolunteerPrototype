@@ -32,7 +32,12 @@ public class CoreLoginController {
 		} else if (participant instanceof CoreFlexProd) {
 			return flexProdMapper.toDTO((CoreFlexProd) participant);
 		}
-		return volunteerMapper.toDTO((CoreVolunteer) participant);
+		if (participant instanceof CoreVolunteer) {
+			return volunteerMapper.toDTO((CoreVolunteer) participant);
+		}
+		
+		throw new RuntimeException("User not found");
+		
 	}
 
 	@GetMapping("role")

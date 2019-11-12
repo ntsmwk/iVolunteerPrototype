@@ -17,12 +17,8 @@ import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @SpringBootApplication
-public class iVolunteerApplication {
+public class CoreApplication {
 
-	private static final String MARKETPLACE_ID = "0eaf3a6281df11e8adc0fa7ae01bbebc";
-	private static final String MARKETPLACE_NAME = "Marketplace 1";
-	private static final String MARKETPLACE_SHORTNAME = "MP1";
-	private static final String MARKETPLACE_URL = "http://localhost:8080";
 
 	private static final String MMUSTERMANN = "mmustermann";
 	private static final String MWEISSENBEK = "mweissenbek";
@@ -43,31 +39,17 @@ public class iVolunteerApplication {
 	@Autowired private MarketplaceRepository marketplaceRepository;
 
 	public static void main(String[] args) {
-		SpringApplication.run(iVolunteerApplication.class, args);
+		SpringApplication.run(CoreApplication.class, args);
 	}
 
 	@PostConstruct
 	private void init() {
-		createMarketplace();
 		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
-	}
-
-	private Marketplace createMarketplace() {
-		Marketplace marketplace = marketplaceRepository.findOne(MARKETPLACE_ID);
-		if (marketplace == null) {
-			marketplace = new Marketplace();
-			marketplace.setId(MARKETPLACE_ID);
-			marketplace.setUrl(MARKETPLACE_URL);
-			marketplace.setName(MARKETPLACE_NAME);
-			marketplace.setShortName(MARKETPLACE_SHORTNAME);
-			marketplaceRepository.insert(marketplace);
-		}
-		return marketplace;
 	}
 
 	private CoreHelpSeeker createHelpSeeker(String username, String password) {

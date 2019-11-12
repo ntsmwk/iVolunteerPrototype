@@ -6,7 +6,6 @@ import {isNullOrUndefined} from 'util';
 
 import {Task} from '../_model/task';
 import {Marketplace} from '../_model/marketplace';
-import {Participant} from '../_model/participant';
 
 @Injectable({
   providedIn: 'root'
@@ -28,20 +27,20 @@ export class TaskService {
     return this.http.get(`${marketplace.url}/task?projectId=${projectId}`);
   }
 
-  findAvailableByProjectId(marketplace: Marketplace, projectId: string) {
-    return this.http.get(`${marketplace.url}/task?projectId=${projectId}&availableOnly=true`);
+  findByParticipantAndStatus(marketplace: Marketplace, participantId: string, status: string) {
+    return this.http.get(`${marketplace.url}/task?participantId=${participantId}&status=${status}`);
   }
 
-  findByParticipant(marketplace: Marketplace, participant: Participant) {
-    return this.http.get(`${marketplace.url}/task?participantId=${participant.id}`);
+  findAvailableByParticipantAndProject(marketplace: Marketplace, participantId: string, projectId: string) {
+    return this.http.get(`${marketplace.url}/task?participantId=${participantId}&projectId=${projectId}&status=AVAILABLE`);
   }
 
-  findEngagedByParticipant(marketplace: Marketplace, participantId: string, projectId: string) {
-    return this.http.get(`${marketplace.url}/task?projectId=${projectId}&participantId=${participantId}&engagedOnly=true`);
+  findEngagedByParticipantAndProject(marketplace: Marketplace, participantId: string, projectId: string) {
+    return this.http.get(`${marketplace.url}/task?participantId=${participantId}&projectId=${projectId}&status=ENGAGED`);
   }
 
-  findFinishedByParticipant(marketplace: Marketplace, participantId: string) {
-    return this.http.get(`${marketplace.url}/task/finished?participantId=${participantId}`);
+  findFinishedByParticipantAndProject(marketplace: Marketplace, participantId: string, projectId: string) {
+    return this.http.get(`${marketplace.url}/task?participantId=${participantId}&projectId=${projectId}&status=FINISHED`);
   }
 
   save(marketplace: Marketplace, task: Task) {
