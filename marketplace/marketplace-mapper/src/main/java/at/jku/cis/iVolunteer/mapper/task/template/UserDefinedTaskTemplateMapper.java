@@ -35,11 +35,6 @@ public class UserDefinedTaskTemplateMapper implements AbstractMapper<UserDefined
 		
 		dto.setOrder(source.getOrder());
 		
-		
-//		System.out.println("instance of");
-//		System.out.println("single: " + (source instanceof SingleUserDefinedTaskTemplate));
-//		System.out.println("nested: " + (source instanceof NestedUserDefinedTaskTemplate));
-//		
 		if (source instanceof SingleUserDefinedTaskTemplate) {
 			SingleUserDefinedTaskTemplate s = (SingleUserDefinedTaskTemplate) source;
 			
