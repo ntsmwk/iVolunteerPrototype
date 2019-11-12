@@ -9,12 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @SpringBootApplication
 public class CoreApplication {
@@ -35,8 +33,6 @@ public class CoreApplication {
 	
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 
-	
-	@Autowired private MarketplaceRepository marketplaceRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);

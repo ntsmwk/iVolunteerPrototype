@@ -91,13 +91,7 @@ public class UserDefinedTaskTemplateController {
 	
 	@GetMapping("/tasktemplate/user/names")
 	public List<String> getAllTemplateNames() {
-		List<String> templateNames = userDefinedTaskTemplateRepository.findAll().parallelStream().map(UserDefinedTaskTemplate::getName).collect(Collectors.toList());
-		
-		System.out.println(templateNames.size());
-		for (String s : templateNames) {
-			System.out.println("Name: " + s);
-		}
-		
+		List<String> templateNames = userDefinedTaskTemplateRepository.findAll().parallelStream().map(UserDefinedTaskTemplate::getName).collect(Collectors.toList());	
 		return templateNames;
 		
 	}
@@ -106,9 +100,7 @@ public class UserDefinedTaskTemplateController {
 	@GetMapping("/properties/{propId}/parents")
 	public List<PropertyItemDTO> getPropertyParents(@PathVariable("propId") String propId, 
 			@RequestParam(value = "templateId", required = true) String templateId, @RequestParam(value = "subtemplateId", required = false) String subtemplateId) {
-		
-		System.out.println("called getPropetyParents");
-		
+				
 		if (subtemplateId != null) {
 			MultiUserDefinedTaskTemplate root = (MultiUserDefinedTaskTemplate) this.userDefinedTaskTemplateRepository.findOne(templateId);
 			SingleUserDefinedTaskTemplate nested = root.getTemplates().stream().filter(t -> t.getId().equals(subtemplateId)).findFirst().get();
@@ -119,19 +111,13 @@ public class UserDefinedTaskTemplateController {
 			
 			return propertyItemMapper.toTargets(items);
 			
-		} else {
-			System.out.println("isNull");
 		}
-		
-		
-		
+
 		return null;
 	}
 
 	@PostMapping("/tasktemplate/user/new")
-	public UserDefinedTaskTemplateDTO createRootTemplate(@RequestBody String[] params, @RequestParam(value = "type", required = true) String type) {
-		System.out.println("create task template " + type);
-		
+	public UserDefinedTaskTemplateDTO createRootTemplate(@RequestBody String[] params, @RequestParam(value = "type", required = true) String type) {		
 		if (type.equals("single")) {
 			
 			SingleUserDefinedTaskTemplate taskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
@@ -154,9 +140,7 @@ public class UserDefinedTaskTemplateController {
 	}
 	
 	@PostMapping("/tasktemplate/user/{templateId}/new")
-	public UserDefinedTaskTemplateDTO createSubTemplate(@PathVariable("templateId") String templateId, @RequestBody String[] params) {
-		System.out.println("Create sub template called");
-		
+	public UserDefinedTaskTemplateDTO createSubTemplate(@PathVariable("templateId") String templateId, @RequestBody String[] params) {		
 		SingleUserDefinedTaskTemplate newTaskTemplate = (SingleUserDefinedTaskTemplate) createTemplate(params[0], params[1], "single");
 		newTaskTemplate.setId(ObjectId.get().toHexString());
 		newTaskTemplate.setTemplateProperties(new ArrayList<ClassProperty<Object>>());
@@ -214,13 +198,10 @@ public class UserDefinedTaskTemplateController {
 	@PutMapping("/tasktemplate/user/{templateId}/update")
 	public UserDefinedTaskTemplateDTO updateRootTemplate(@PathVariable("templateId") String templateId, @RequestBody String[] params) {
 		UserDefinedTaskTemplate taskTemplate = userDefinedTaskTemplateRepository.findOne(templateId);
-		
-		System.out.println("called update task Template");
-		
+				
 		if (params[0] != null) {
 			taskTemplate.setName(params[0]);
-		}
-		
+		}	
 		if (params[1] != null) {
 			taskTemplate.setDescription(params[1]);
 		}
@@ -251,19 +232,10 @@ public class UserDefinedTaskTemplateController {
 	}
 	
 	@DeleteMapping("/tasktemplate/user/{templateId}")
-	public boolean deleteTemplate(@PathVariable("templateId") String templateId) {
-		System.out.println("called remove single");
-		
-		UserDefinedTaskTemplate rem = userDefinedTaskTemplateRepository.findOne(templateId);
-		
-		System.out.println("Removing TASKTEMPLATE: " + rem.getId() + ": " + rem.getName());// + " - Properties: " + rem.getProperties().size());
-		
+	public boolean deleteTemplate(@PathVariable("templateId") String templateId) {				
 		userDefinedTaskTemplateRepository.delete(templateId);
 		
 		boolean ret = !userDefinedTaskTemplateRepository.exists(templateId);	
-
-
-		if (ret) System.out.println("Deletion successful"); else System.out.println("Deletion failed");
 		
 		return ret;
 		
@@ -271,8 +243,6 @@ public class UserDefinedTaskTemplateController {
 	
 	@DeleteMapping("/tasktemplate/user/{templateId}/{subtemplateId}")
 	public boolean deleteTemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId) {
-		System.out.println("called remove nested");
-
 		MultiUserDefinedTaskTemplate root = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		List<SingleUserDefinedTaskTemplate> remainingSubTemplates = root.getTemplates().stream()
@@ -282,9 +252,7 @@ public class UserDefinedTaskTemplateController {
 		
 		boolean  ret = !remainingSubTemplates.contains(new SingleUserDefinedTaskTemplate(subtemplateId));
 		userDefinedTaskTemplateRepository.save(root);
-		
-		if (ret) System.out.println("Deletion successful"); else System.out.println("Deletion failed");
-		
+				
 		return ret;
 	}
 	
@@ -309,7 +277,6 @@ public class UserDefinedTaskTemplateController {
 	public ClassPropertyDTO<Object> getPropertyFromSubtemplate(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, 
 			@PathVariable("propId") String propId) {
 		
-		System.out.println("called get property from subtemplate");
 		ClassProperty<Object> ret = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId))
 		.getTemplates().stream()
 			.filter(t -> t.getId().equals(subtemplateId)).findFirst().get()
@@ -323,7 +290,6 @@ public class UserDefinedTaskTemplateController {
 	//Add Properties to Single Template
 	@PutMapping("/tasktemplate/user/{templateId}/addproperties")
 	public UserDefinedTaskTemplateDTO addProperties(@PathVariable("templateId") String templateId,   @RequestBody String[] propIds) {
-		System.out.println("called add properties single");
 
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -344,8 +310,6 @@ public class UserDefinedTaskTemplateController {
 	//Add Properties to SubTemplate
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/addproperties")
 	public UserDefinedTaskTemplateDTO addProperties(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody String[] propIds) {
-		System.out.println("called add properties single");
-
 		MultiUserDefinedTaskTemplate rootTemplate = ((MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId));
 		
 		if (rootTemplate == null) { throw new NotAcceptableException("no template with id " + templateId + " in database - should not happen");}
@@ -374,7 +338,6 @@ public class UserDefinedTaskTemplateController {
 			
 			if (p != null && !subTemplate.getTemplateProperties().stream().anyMatch(i -> i.getId().equals(propId))) {
 				subTemplate.getTemplateProperties().add(propertyDefintionToClassPropertyMapper.toTarget(p));
-				System.out.println("Added " + p.getId() + " to nested template " + templateId + " > " + subtemplateId + "(index " + indexArr[0] + ")");
 			}
 		}
 		rootTemplate.getTemplates().set(indexArr[0], subTemplate);
@@ -387,8 +350,6 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Single Template
 	@PutMapping("/tasktemplate/user/{templateId}/updateproperties")
 	public UserDefinedTaskTemplateDTO updateProperties(@PathVariable("templateId") String templateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
-		System.out.println("called updated properties");
-
 		System.out.println(classProperties[0].getDefaultValues().size());
 		
 		if (classProperties[0].getType().equals(PropertyType.TEXT)) {
@@ -397,8 +358,6 @@ public class UserDefinedTaskTemplateController {
 		
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
-
-		System.out.println("INCOMING PROPERTIES: ");
 		
 		List<ClassPropertyDTO<Object>> propertyList = Arrays.asList(classProperties);
 
@@ -456,7 +415,6 @@ public class UserDefinedTaskTemplateController {
 		
 		for(ClassPropertyDTO<Object> dto : updateProperties) {
 			ClassProperty<Object> p = classPropertyMapper.toEntity(dto);
-			System.out.println("===Property to Update===");
 
 			if (!p.getType().equals(PropertyType.MULTI) && currentProperties.stream().anyMatch(cur -> p.getId().equals(cur.getId()))) {
 
@@ -464,11 +422,7 @@ public class UserDefinedTaskTemplateController {
 				ClassProperty<Object> updateProperty =  p;
 				ClassProperty<Object> currentProperty = currentProperties.stream().filter(cur -> p.getId().equals(cur.getId())).findFirst().get();
 				
-				currentProperty.setDefaultValues(updateProperty.getDefaultValues());
-//				currentProperty.setDefaultValues(updateProperty.getDefaultValues());
-				
-				System.out.println("updated Property: " + updateProperty.getName()); // + " = " + update.getValues()!=null && update.getValues().get(0) != null ? update.getValues().get(0).value : "null");
-				
+				currentProperty.setDefaultValues(updateProperty.getDefaultValues());				
 				
 				returnProperties.add(currentProperty);
 			}
@@ -486,8 +440,6 @@ public class UserDefinedTaskTemplateController {
 //				System.out.println();
 //			}
 			
-			System.out.println("========================");
-
 		}
 		
 		return returnProperties;
@@ -496,7 +448,6 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Single Template 
 	@PutMapping("/tasktemplate/user/{templateId}/updatepropertyorder")
 	public UserDefinedTaskTemplateDTO updatePropertyOrderSingle(@PathVariable("templateId") String templateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
-		System.out.println("called updated properties");
 		
 		SingleUserDefinedTaskTemplate rootTemplate = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -515,7 +466,6 @@ public class UserDefinedTaskTemplateController {
 	//Update Properties from Nested Template inside a Root Template
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/updatepropertyorder")
 	public UserDefinedTaskTemplateDTO updatePropertyOrderNested(@PathVariable("templateId") String templateId, @PathVariable("subtemplateId") String subtemplateId, @RequestBody ClassPropertyDTO<Object>[] classProperties) {
-		System.out.println("called updated properties");
 		
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
@@ -540,14 +490,10 @@ public class UserDefinedTaskTemplateController {
 			throw new NotAcceptableException("no subtemplate with id " + subtemplateId + " in database - should not happen");
 		}
 		
-
 		//Brute Forcing my Way
 		List<ClassProperty<Object>> newProperties = classPropertyMapper.toEntities(Arrays.asList(classProperties));
-		
 
-		
 		rootTemplate.getTemplates().get(indexArr[0]).setTemplateProperties(newProperties);
-
 				
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
 		
@@ -557,9 +503,7 @@ public class UserDefinedTaskTemplateController {
 	
 	@PutMapping("/tasktemplate/user/{templateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @RequestBody List<String> propIds ) {
-		
-		System.out.println("called remove properties single");
-	
+			
 		SingleUserDefinedTaskTemplate t = (SingleUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 				
 		ArrayList<ClassProperty<Object>> remainingProperties = t.getTemplateProperties().stream()
@@ -575,9 +519,7 @@ public class UserDefinedTaskTemplateController {
 	@PutMapping("/tasktemplate/user/{templateId}/{subtemplateId}/deleteproperties")
 	public UserDefinedTaskTemplateDTO deleteProperties(@PathVariable("templateId") String templateId, @PathVariable(value = "subtemplateId") String subtemplateId, 
 			@RequestBody String[] propIds ) {
-		
-		System.out.println("called remove properties nested");
-		
+				
 		MultiUserDefinedTaskTemplate rootTemplate = (MultiUserDefinedTaskTemplate) userDefinedTaskTemplateRepository.findOne(templateId);
 		
 		int[] indexArr = {0}; //we want the index of the found subtemplate to get quick access to in order to replace it
@@ -609,252 +551,6 @@ public class UserDefinedTaskTemplateController {
 		UserDefinedTaskTemplate ret = userDefinedTaskTemplateRepository.save(rootTemplate);
 		return userDefinedTaskTemplateMapper.toDTO(ret);	
 	}
-	
-	
-	
 }
-
-
-
-
-
-//switch (p.getKind()) {
-//case BOOL: {				
-//		BooleanProperty bp = booleanMapper.toTypeProperty(p);
-//		System.out.println("BooleanProperty: "  + bp.getName() + ": " + bp.getValue() + " Kind: " + bp.getKind());
-//		if (bp.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<Boolean> itm : bp.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (bp.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<Boolean> itm : bp.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(bp.getId())) {
-//			((BooleanProperty)map.get(bp.getId())).setValue(bp.getValue());
-//			((BooleanProperty)map.get(bp.getId())).setValues(bp.getValues());
-//			System.out.println("updated Booleanproperty");
-//		} else {
-//			map.put(bp.getId(), bp);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		
-//		break;
-//	}
-//case TEXT: case LONG_TEXT: {
-//		TextProperty tp = textMapper.toTypeProperty(p);
-//		System.out.println("TextProperty: " + tp.getName() + ": "  + tp.getValue() + " Kind: " + tp.getKind());
-//		if (tp.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<String> itm : tp.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (tp.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<String> itm : tp.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(tp.getId())) {
-//			((TextProperty)map.get(tp.getId())).setValue(tp.getValue());
-//			((TextProperty)map.get(tp.getId())).setValues(tp.getValues());
-//			System.out.println("updated Textproperty");
-//		} else {
-//			map.put(tp.getId(), tp);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		break;
-//	}
-//case WHOLE_NUMBER: {
-//		NumberProperty np = numberMapper.toTypeProperty(p);
-//		System.out.println("NumberProperty: " + np.getName() + ": "  + np.getValue() + " Kind: " + np.getKind());
-//		if (np.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<Integer> itm : np.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (np.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<Integer> itm : np.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(np.getId())) {
-//			((NumberProperty)map.get(np.getId())).setValue(np.getValue());
-//			((NumberProperty)map.get(np.getId())).setValues(np.getValues());
-//			System.out.println("updated Numberproperty");
-//		} else {
-//			map.put(np.getId(), np);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		
-//		
-//		break;
-//	}
-//case FLOAT_NUMBER: {
-//		DoubleProperty dp = doubleMapper.toTypeProperty(p);
-//		System.out.println("DoubleProperty: " + dp.getName() + ": " + dp.getValue() + " Kind: " + dp.getKind());
-//		if (dp.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<Double> itm : dp.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (dp.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<Double> itm : dp.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(dp.getId())) {
-//			((DoubleProperty)map.get(dp.getId())).setValue(dp.getValue());
-//			((DoubleProperty)map.get(dp.getId())).setValues(dp.getValues());
-//			System.out.println("updated Doubleproperty");
-//		} else {
-//			map.put(dp.getId(), dp);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		
-//		break;
-//	}
-//case DATE: {
-//		DateProperty dp = dateMapper.toTypeProperty(p);
-//		System.out.println("DateProperty: "  + dp.getName() + ": " + dp.getValue() + " Kind: " + dp.getKind());
-//		if (dp.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<Date> itm : dp.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (dp.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<Date> itm : dp.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(dp.getId())) {
-//			((DateProperty)map.get(dp.getId())).setValue(dp.getValue());
-//			((DateProperty)map.get(dp.getId())).setValues(dp.getValues());
-//			System.out.println("updated Dateproperty");
-//		} else {
-//			map.put(dp.getId(), dp);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		
-//		break;
-//	}
-//case LIST: {
-//		TextProperty tp = textMapper.toTypeProperty(p);
-//		System.out.println("ListProperty: "  + tp.getName() + ": " + tp.getValue() + " Kind: " + tp.getKind());
-//		if (tp.getValues() != null) {
-//			System.out.println("===Multiple Values:");
-//
-//			for (ListEntry<String> itm : tp.getValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		if (tp.getLegalValues() != null) {
-//			System.out.println("===Legal Values:");
-//
-//			for (ListEntry<String> itm : tp.getLegalValues()) {
-//				System.out.println(itm.getId() + " " + itm.getValue());
-//			}
-//		}
-//		
-//		if (map.containsKey(tp.getId())) {
-//			((TextProperty)map.get(tp.getId())).setValue(tp.getValue());
-//			((TextProperty)map.get(tp.getId())).setValues(tp.getValues());
-//			System.out.println("updated Textproperty");
-//		} else {
-//			map.put(tp.getId(), tp);
-//			System.out.println("Added?? Should not happen");
-//		}
-//		
-//		break;
-//	}
-//}
-
-//private void printPropertyDTOs(List<PropertyDTO<Object>> properties) {
-//
-//
-//for (PropertyDTO<Object> p : properties) {
-//	System.out.println(p.getId() + ": " + p.getName() + " - " + p.getValues().size());
-//	if (p.getKind().equals(PropertyKind.MULTIPLE)) {
-//		System.out.println("===>");
-//		printPropertyDTOs(p.getProperties());
-//		System.out.println("<===");
-//	}
-//}
-//}
-
-
-
-
-//private Map<String,Property> setPropertiesRec(List<PropertyDTO<Object>> updateProperties, List<Property> currentProperties) {
-//Map<String,Property> map = this.toMap(currentProperties);
-//
-//for(PropertyDTO<Object> dto : updateProperties) {
-//	Property p = propertyMapper.toEntity(dto);
-//	System.out.println("===Property to Update===");
-//
-//	if (!p.getKind().equals(PropertyKind.MULTIPLE) && map.containsKey(p.getId())) {
-//		
-//		SingleProperty<Object> update = (SingleProperty<Object>) p;
-//		SingleProperty<Object> current = (SingleProperty<Object>) (map.get(p.getId()));
-//		
-//		current.setValues(update.getValues());
-//		current.setDefaultValues(update.getDefaultValues());
-//		
-//		System.out.println("updated Property: " + update.getName()); // + " = " + update.getValues()!=null && update.getValues().get(0) != null ? update.getValues().get(0).value : "null");
-//		System.out.println("Default: " + update.getName()); // + " = " + update.getDefaultValues()!=null && update.getDefaultValues().get(0) != null ? update.getDefaultValues().get(0).value : "null");
-//
-//	} else if (p.getKind().equals(PropertyKind.MULTIPLE)) {
-//		System.out.println("\nMULTIPLE--> " + p.getId());
-//		
-//		MultipleProperty current = (MultipleProperty) (map.get(p.getId()));
-//		
-//		Map<String,Property> nestedMap = setPropertiesRec(dto.getProperties(), current.getProperties() );
-//		
-//		current.setProperties(new ArrayList<>(nestedMap.values()));
-//		System.out.println();
-//	}
-//	
-//	System.out.println("========================");
-//
-//}
-//
-//return map;
-//}
-
-//private Map<String, Property> toMap(List<Property> list) {
-//
-//Map<String,Property> map = new LinkedHashMap<>();
-//for (Property p : list) {
-//map.put(p.getId(),(Property) p);
-//}
-//
-//return map;
-//}
 
 

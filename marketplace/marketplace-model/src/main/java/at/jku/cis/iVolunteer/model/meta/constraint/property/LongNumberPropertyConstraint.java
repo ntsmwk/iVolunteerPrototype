@@ -21,6 +21,6 @@ public class LongNumberPropertyConstraint<T> extends PropertyConstraint<T> {
 		if (!(obj instanceof LongNumberPropertyConstraint)) {
 			return false;
 		}
-		return ((LongNumberPropertyConstraint) obj).getId().equals(getId());
+		return ((LongNumberPropertyConstraint<?>) obj).getId().equals(getId());
 	}
 }

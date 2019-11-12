@@ -8,11 +8,8 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;

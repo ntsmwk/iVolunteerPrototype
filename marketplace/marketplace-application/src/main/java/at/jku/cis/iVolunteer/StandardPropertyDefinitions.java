@@ -27,7 +27,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
 
-
+@SuppressWarnings({"unchecked",  "rawtypes"})
 @Component
 public class StandardPropertyDefinitions {
 	

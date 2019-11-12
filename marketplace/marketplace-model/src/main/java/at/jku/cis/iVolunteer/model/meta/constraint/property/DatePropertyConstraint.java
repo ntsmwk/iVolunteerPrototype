@@ -21,6 +21,6 @@ public class DatePropertyConstraint<T> extends PropertyConstraint<T> {
 		if (!(obj instanceof DatePropertyConstraint)) {
 			return false;
 		}
-		return ((DatePropertyConstraint) obj).getId().equals(getId());
+		return ((DatePropertyConstraint<?>) obj).getId().equals(getId());
 	}
 }

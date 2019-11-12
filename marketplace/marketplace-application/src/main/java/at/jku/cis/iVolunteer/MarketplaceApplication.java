@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorController;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -119,11 +117,9 @@ public class MarketplaceApplication implements CommandLineRunner {
 		}
 	}
 	
-	
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void addTestConfigClasses() {
-		
-		StandardPropertyDefinitions spd = new StandardPropertyDefinitions();
-		
+				
 		ClassDefinition c1 = new ClassDefinition();
 		c1.setId("test1");
 		c1.setName("Class 1");

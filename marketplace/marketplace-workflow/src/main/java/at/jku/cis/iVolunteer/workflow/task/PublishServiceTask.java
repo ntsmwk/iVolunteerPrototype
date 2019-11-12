@@ -9,7 +9,6 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;

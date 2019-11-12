@@ -21,6 +21,6 @@ public class BooleanPropertyConstraint<T> extends PropertyConstraint<T> {
 		if (!(obj instanceof BooleanPropertyConstraint)) {
 			return false;
 		}
-		return ((BooleanPropertyConstraint) obj).getId().equals(getId());
+		return ((BooleanPropertyConstraint<?>) obj).getId().equals(getId());
 	}
 }

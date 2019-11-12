@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreAdmin;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
