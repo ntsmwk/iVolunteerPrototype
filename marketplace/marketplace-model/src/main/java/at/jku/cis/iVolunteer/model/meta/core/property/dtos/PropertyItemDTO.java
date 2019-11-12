@@ -1,7 +1,7 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto;
+package at.jku.cis.iVolunteer.model.meta.core.property.dtos;
 
 
-public class PropertyItemDTO {
+public class PropertyItemDTO{
 	String id;
 	String name;
 	

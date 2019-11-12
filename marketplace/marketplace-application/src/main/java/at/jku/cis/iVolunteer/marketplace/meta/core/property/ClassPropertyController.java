@@ -18,7 +18,6 @@ import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
 @RestController
 public class ClassPropertyController {
 
-	//TODO
 	@Autowired ClassDefinitionRepostiory classDefinitionRepository;
 	@Autowired ClassPropertyMapper classPropertyMapper;
 

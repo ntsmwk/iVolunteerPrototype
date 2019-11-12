@@ -18,13 +18,11 @@ public class ClassDefinition {
 	private List<ClassProperty<Object>> properties;
 	
 	ClassArchetype archetype;
-// LEGACY
-//	List<Property> properties;
+
 	List<MatchingRule> matchingRules;
 	boolean root;
 	
 	public ClassDefinition() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getId() {
