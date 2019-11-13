@@ -1,42 +1,28 @@
 export const navigation_volunteer = [
   {
     'id': 'dashboard',
-    'title': 'What\'s Up',
+    'title': 'Dashboard',
     'type': 'item',
     'icon': 'dashboard',
     'url': '/main/dashboard'
   },
   {
-    'id': 'profile',
-    'title': 'Your Profile',
-    'type': 'item',
-    'icon': 'profile',
-    'url': '/main/profile'
-  },
-  {
     'id': 'engagements',
-    'title': 'Your Engagements',
+    'title': 'Engagements',
     'type': 'item',
     'icon': 'engagements',
     'url': '/main/engagements'
   },
   {
     'id': 'achievements',
-    'title': 'Your Achievements',
+    'title': 'Achievements',
     'type': 'item',
     'icon': 'achievements',
     'url': '/main/achievements'
   },
   {
-    'id': 'get-engaged',
-    'title': 'Get Engaged',
-    'type': 'item',
-    'icon': 'get-engaged',
-    'url': '/main/get-engaged'
-  },
-  {
     'id': 'get-connected',
-    'title': 'Get Connnected',
+    'title': 'Community',
     'type': 'item',
     'icon': 'get-connected',
     'url': '/main/get-connected'

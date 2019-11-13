@@ -3,85 +3,54 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {FuseDashboardComponent} from './dashboard.component';
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatDialogModule,
-  MatDividerModule,
-  MatExpansionModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatMenuModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatSidenavModule
-} from '@angular/material';
-import {FuseWidgetModule} from '../../../../@fuse/components';
-import {DynamicModule} from 'ng-dynamic-component';
-import {GridsterModule} from 'angular-gridster2';
-import {FuseDashletComponent} from './dashlet.component';
-import {FuseDashletSelectorDialog} from './dashlet-selector.dialog';
+import {DashboardComponent, ShareDialog} from './dashboard.component';
+import { MatIconModule, MatButtonModule, MatTableModule, MatIcon, MatTabsModule, MatFormFieldModule, MatSelectModule, MatCommonModule, MatDividerModule, MatMenuModule, MatTooltipModule, MatDialogModule, MatRadioModule, MatProgressSpinnerModule } from '@angular/material';
+import { FuseWidgetModule } from '@fuse/components';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
-import {FuseProjectMembersComponent} from '../_components/project-members/project-members.component';
-import {FuseTimelineModule} from '../_components/timeline/timeline.module';
-import {FuseTimelineComponent} from '../_components/timeline/timeline.component';
-import {FuseTimelineActivitiesModule} from '../_components/timeline-activities/timeline-activities.module';
-import {FuseTimelineActivitiesComponent} from '../_components/timeline-activities/timeline-activities.component';
-import {FuseTimelineTasksModule} from '../_components/timeline-tasks/timeline-tasks.module';
-import {FuseTimelineTasksComponent} from '../_components/timeline-tasks/timeline-tasks.component';
-import { FuseHelpSeekerDashboardComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
-import { FuseFlexProdDashboardComponent } from "./dashboard-flexprod/dashboard-flexprod.component";
+
+
 
 const routes = [
-  {path: '', component: FuseDashboardComponent},
-  {path: ':dashboardId', component: FuseDashboardComponent}
+  {
+      path     : '',
+      component: DashboardComponent
+  }
 ];
 
 @NgModule({
   declarations: [
-    FuseDashletComponent,
-    FuseDashboardComponent,
-    FuseDashletSelectorDialog,
-    FuseHelpSeekerDashboardComponent,
-    FuseFlexProdDashboardComponent,
+    DashboardComponent,
+    ShareDialog
   ],
   imports: [
     RouterModule.forChild(routes),
 
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatOptionModule,
+
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatTabsModule,
+    MatFormFieldModule,
     MatSelectModule,
-    MatSidenavModule,
+    MatCommonModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatRadioModule,
+    MatProgressSpinnerModule,
+    
 
-    FuseProjectMembersModule,
-    FuseTimelineModule,
-    FuseTimelineActivitiesModule,
-    FuseTimelineTasksModule,
-    FuseWidgetModule,
-
-    GridsterModule,
-    DynamicModule.withComponents([]),
-
-    FuseSharedModule
+    FuseSharedModule,
+    FuseWidgetModule
+  ],
+  exports: [
+    DashboardComponent
   ],
   entryComponents: [
-    FuseProjectMembersComponent,
-    FuseTimelineComponent,
-    FuseTimelineActivitiesComponent,
-    FuseTimelineTasksComponent,
-
-    FuseDashletSelectorDialog
+    ShareDialog
   ]
 })
 

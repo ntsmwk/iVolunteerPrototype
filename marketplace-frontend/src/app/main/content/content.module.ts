@@ -30,11 +30,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, LoginGuard]
   },
   {
-    path: 'main/profile',
-    loadChildren: './profile/profile.module#FuseProfileModule',
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
     path: 'main/engagements',
     loadChildren: './engagements/engagements.module#FuseEngagementsModule',
     canActivate: [TokenGuard, VolunteerGuard]
@@ -97,7 +92,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
 
   },
-
   { path: 'main/task-templates/user/all',
     loadChildren: './user-defined-task-template-list/user-defined-task-template-list.module#UserDefinedTaskTemplateListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
