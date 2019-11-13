@@ -10,20 +10,18 @@ import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document
 public class ClassInstance {
-	@Id
-	String id;
-	String classDefinitionId;
-	String parentClassInstanceId;
-	
-	String name;
-	
-	List<PropertyInstance<Object>> properties;
-	List<MatchingRule> matchingRules;
-	
-	
+	@Id private String id;
+	private String classDefinitionId;
+	private String parentClassInstanceId;
+
+	private String name;
+
+	private List<PropertyInstance<Object>> properties;
+	private List<MatchingRule> matchingRules;
+
 	public ClassInstance() {
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -32,7 +30,6 @@ public class ClassInstance {
 		this.id = id;
 	}
 
-	
 	public String getClassDefinitionId() {
 		return classDefinitionId;
 	}
@@ -40,7 +37,7 @@ public class ClassInstance {
 	public void setParentClassInstanceId(String parentClassInstanceId) {
 		this.parentClassInstanceId = parentClassInstanceId;
 	}
-	
+
 	public String getParentClassInstanceId() {
 		return parentClassInstanceId;
 	}
@@ -48,15 +45,14 @@ public class ClassInstance {
 	public void setClassDefinitionId(String classDefinitionId) {
 		this.classDefinitionId = classDefinitionId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public List<PropertyInstance<Object>> getProperties() {
 		return properties;

@@ -6,14 +6,13 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInsta
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassInstanceDTO {
-	String id;
-	String classDefinitionId;
-	String parentClassInstanceId;
+	private String id;
+	private String classDefinitionId;
+	private String parentClassInstanceId;
 
-	String name;
-
-	List<PropertyInstanceDTO<Object>> properties;
-	List<MatchingRule> matchingRules;
+	private String name;
+	private List<PropertyInstanceDTO<Object>> properties;
+	private List<MatchingRule> matchingRules;
 
 	public ClassInstanceDTO() {
 	}
