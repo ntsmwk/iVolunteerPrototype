@@ -10,7 +10,7 @@ export class HelpSeekerGuard implements CanActivate {
 
   constructor(private loginService: LoginService, private router: Router) {
   }
-
+ 
   canActivate(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.loginService.getLoggedInParticipantRole()
