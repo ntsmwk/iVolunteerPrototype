@@ -15,6 +15,7 @@ import {VolunteerGuard} from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
 import { FlexProdOrHelpseekerGuard } from "./_guard/flexprod-helpseeker.guard";
+import { RecruiterGuard } from './_guard/recruiter.guard';
 
 
 
@@ -136,18 +137,17 @@ const routes: Route[] = [
     path: 'main/task-templates/all',
     loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/recruitment',
+    loadChildren: './recruit-view/recruit-view.module#RecruitViewModule',
+    canActivate: [TokenGuard, RecruiterGuard]
   }
 ];
 
 @NgModule({
   declarations: [
     FuseContentComponent,
-    
-    
-    
-    
-    
-
   ],
   imports: [
     HttpClientModule,

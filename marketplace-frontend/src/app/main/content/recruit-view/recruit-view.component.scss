@@ -1,0 +1,151 @@
+
+@import "src/@fuse/scss/fuse";
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Muli'
+);
+@include mat-core($custom-typography);
+
+.page-layout {
+
+    font-family: Muli,"Helvetica Neue",Arial,sans-serif;
+
+    .header {
+        position: relative;
+        flex: 1 0 auto;
+        height: 90px;
+        max-height: 90px;
+        background: #42A5F5;
+        // background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+        text-align: center;
+
+        @include media-breakpoint('xs') {
+            height: 240px;
+            padding: 16px;
+        }
+
+
+        h1 {
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 0px;
+
+            @include media-breakpoint-down('xs') {
+            font-size: 24px;
+            }
+        }
+    }
+
+    .mat-column-status {
+        // flex: 0 0 100px;
+    }
+
+    .mat-column-image {
+        flex: 0 0 100px;
+    }
+
+    .mat-column-name {
+        font-size: 20px;
+    }
+
+    .progressBar {
+        height: 8px !important;
+        padding-left: 10px;
+        margin-right: 20px;
+      }
+
+
+
+
+}
+
+// ::ng-deep .mat-progress-bar-fill::after {
+//     background-color: green;
+// }
+
+// ::ng-deep .mat-progress-bar-buffer {
+//     background: red;
+// }
+
+::ng-deep .green-yellow-progress {
+
+    height: 8px !important;
+    padding-left: 10px;
+    margin-right: 20px;
+
+    .mat-progress-bar-fill::after {
+        background-color: green !important;
+
+    }
+
+    .mat-progress-bar-buffer {
+        background: orange;
+    }
+}
+
+::ng-deep .green-red-progress {
+
+    height: 8px !important;
+    padding-left: 10px;
+    margin-right: 20px;
+
+    .mat-progress-bar-fill::after {
+        background-color: green !important;
+
+    }
+
+    .mat-progress-bar-buffer {
+        background: red;
+    }
+}
+
+
+
+::ng-deep .mat-expansion-panel-body {
+    padding: 0;
+}
+
+mat-expansion-panel,
+mat-expansion-panel-header {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+
+//     img.header-icon {
+//       left: 10px;
+//       padding: 16px;
+//       max-height: 100%;
+//       position: absolute;
+//       filter: brightness(0) invert(1);
+
+//       @include media-breakpoint-down('xs') {
+//         display: none;
+//       }
+//     }
+
+//     .buttons {
+//       right: 0;
+//       position: absolute;
+//     }
+//   }
+
+//   .dashboard-area {
+//     gridster {
+//       min-height: 1000px;
+//       background-color: transparent;
+//     }
+
+//     gridster.display-grid {
+//       background: grey;
+//     }
+//   }
+// }

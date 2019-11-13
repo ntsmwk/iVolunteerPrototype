@@ -17,7 +17,7 @@ export class LoginGuard implements CanActivate {
       this.loginService.getLoggedInParticipantRole()
         .toPromise()
         .then((role: ParticipantRole) => {
-          resolve(role == "HELP_SEEKER" || role == "VOLUNTEER" || role == "FLEXPROD");
+          resolve(role == "HELP_SEEKER" || role == "VOLUNTEER" || role == "RECRUITER" || role == "FLEXPROD");
         });
     });
   }

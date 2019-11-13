@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.model.user.dto.FlexProdDTO;
 import at.jku.cis.iVolunteer.model.user.dto.HelpSeekerDTO;
+import at.jku.cis.iVolunteer.model.user.dto.RecruiterDTO;
 import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
 
 @Service
@@ -19,7 +20,8 @@ public class CoreMarketplaceRestClient {
 
 	private static final String MARKETPLACE_REGISTER_VOLUNTEER = "{0}/volunteer";
 	private static final String MARKETPLACE_REGISTER_HELP_SEEKER = "{0}/helpseeker";
-	
+	private static final String MARKETPLACE_REGISTER_RECRUITER = "{0}/recruiter";
+
 	private static final String MARKETPLACE_REGISTER_FLEXPROD = "{0}/flexprod";
 
 	@Autowired private RestTemplate restTemplate;
@@ -33,7 +35,12 @@ public class CoreMarketplaceRestClient {
 		String url = format(MARKETPLACE_REGISTER_HELP_SEEKER, marketplaceURL, helpSeekerDto);
 		return restTemplate.postForObject(url, buildEntity(helpSeekerDto, authorization), HelpSeekerDTO.class);
 	}
-	
+
+	public RecruiterDTO registerRecruiter(String marketplaceURL, String authorization, RecruiterDTO recruiterDto) {
+		String url = format(MARKETPLACE_REGISTER_RECRUITER, marketplaceURL, recruiterDto);
+		return restTemplate.postForObject(url, buildEntity(recruiterDto, authorization), RecruiterDTO.class);
+	}
+
 	public FlexProdDTO registerFlexProdUser(String marketplaceURL, String authorization, FlexProdDTO flexProdUserDTO) {
 		String url = format(MARKETPLACE_REGISTER_FLEXPROD, marketplaceURL, flexProdUserDTO);
 		return restTemplate.postForObject(url, buildEntity(flexProdUserDTO, authorization), FlexProdDTO.class);

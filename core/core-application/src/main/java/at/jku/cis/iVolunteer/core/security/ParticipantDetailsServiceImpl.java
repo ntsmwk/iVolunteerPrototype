@@ -1,8 +1,9 @@
 package at.jku.cis.iVolunteer.core.security;
 
-import static at.jku.cis.iVolunteer.core.security.ParticipantRole.HELP_SEEKER;
-import static at.jku.cis.iVolunteer.core.security.ParticipantRole.VOLUNTEER;
 import static at.jku.cis.iVolunteer.core.security.ParticipantRole.FLEXPROD;
+import static at.jku.cis.iVolunteer.core.security.ParticipantRole.HELP_SEEKER;
+import static at.jku.cis.iVolunteer.core.security.ParticipantRole.RECRUITER;
+import static at.jku.cis.iVolunteer.core.security.ParticipantRole.VOLUNTEER;
 import static java.util.Arrays.asList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,34 +14,39 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
-import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 
 @Service
 public class ParticipantDetailsServiceImpl implements ParticipantDetailsService {
 
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
-		if (helpSeeker != null) {
-			return new User(helpSeeker.getUsername(), helpSeeker.getPassword(), asList(HELP_SEEKER));
+		CoreUser user = coreHelpSeekerRepository.findByUsername(username);
+		if (user != null) {
+			return new User(user.getUsername(), user.getPassword(), asList(HELP_SEEKER));
 		}
 
-		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
-		if (volunteer != null) {
-			return new User(volunteer.getUsername(), volunteer.getPassword(), asList(VOLUNTEER));
+		user = coreVolunteerRepository.findByUsername(username);
+		if (user != null) {
+			return new User(user.getUsername(), user.getPassword(), asList(VOLUNTEER));
+		}
+
+		user = coreRecruiterRepository.findByUsername(username);
+		if (user != null) {
+			return new User(user.getUsername(), user.getPassword(), asList(RECRUITER));
 		}
 		
-		CoreFlexProd flexProdUser = coreFlexProdRepository.findByUsername(username);
-		if (flexProdUser != null) {
-			return new User(flexProdUser.getUsername(), flexProdUser.getPassword(), asList(FLEXPROD));
+		user = coreFlexProdRepository.findByUsername(username);
+		if (user != null) {
+			return new User(user.getUsername(), user.getPassword(), asList(FLEXPROD));
 		}
 
 		throw new UsernameNotFoundException(username);

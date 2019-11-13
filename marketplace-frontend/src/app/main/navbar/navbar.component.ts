@@ -14,6 +14,7 @@ import { navigation_flexprod } from '../../navigation/navigation_flexprod';
 import { LoginService } from '../content/_service/login.service';
 import { ParticipantRole } from '../content/_model/participant';
 import { MessageService } from '../content/_service/message.service';
+import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
 
 @Component({
   selector: 'fuse-navbar',
@@ -54,6 +55,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
           break;
         case 'FLEXPROD':
           this.navigation = navigation_flexprod;
+        case 'RECRUITER':
+          this.navigation = navigation_recruiter;
       }
     })
     // Default layout
@@ -89,6 +92,4 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       this.navigationServiceWatcher.unsubscribe();
     }
   }
-
-
 }

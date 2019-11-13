@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
@@ -19,6 +21,7 @@ public class CoreLoginService {
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
+	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 
 	public CoreUser getLoggedInParticipant() {
 		Authentication authentication = determineAuthentication();
@@ -27,31 +30,41 @@ public class CoreLoginService {
 
 	public ParticipantRole getLoggedInParticipantRole() {
 		CoreUser participant = getLoggedInParticipant();
-		
+
 		if (participant instanceof CoreHelpSeeker) {
 			return ParticipantRole.HELP_SEEKER;
 		}
 		if (participant instanceof CoreVolunteer) {
 			return ParticipantRole.VOLUNTEER;
-		} if (participant instanceof CoreFlexProd) {
+		}
+		if (participant instanceof CoreFlexProd) {
 			return ParticipantRole.FLEXPROD;
 		}
-
+		if (participant instanceof CoreRecruiter) {
+			return ParticipantRole.RECRUITER;
+		}
 		throw new RuntimeException("User not found");
 	}
 
 	private CoreUser findByUsername(String username) {
-		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
-		if (helpSeeker != null) {
-			return helpSeeker;
+		CoreUser user = coreHelpSeekerRepository.findByUsername(username);
+		if (user != null) {
+			return user;
 		}
-		CoreFlexProd flexProd = coreFlexProdRepository.findByUsername(username);
-		if (flexProd != null) {
-			return flexProd;
+		user = coreVolunteerRepository.findByUsername(username);
+		if (user != null) {
+			return user;
 		}
-		
-		
-		return coreVolunteerRepository.findByUsername(username);
+		user = coreFlexProdRepository.findByUsername(username);
+		if (user != null) {
+			return user;
+		}
+		user = coreRecruiterRepository.findByUsername(username);
+		if (user != null) {
+			return user;
+		}
+
+		return null;
 	}
 
 	private Authentication determineAuthentication() {

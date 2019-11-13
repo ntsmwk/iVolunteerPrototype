@@ -10,6 +10,7 @@ import { navigation_helpseeker } from 'app/navigation/navigation_helpseeker';
 import { LoginService } from './content/_service/login.service';
 import { ParticipantRole } from './content/_model/participant';
 import { navigation_flexprod } from 'app/navigation/navigation_flexprod';
+import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
 
 @Component({
     selector     : 'fuse-main',
@@ -59,9 +60,12 @@ export class FuseMainComponent implements OnDestroy
                 break;
                 case 'FLEXPROD':
                 this.navigation = navigation_flexprod;
-
+                break;
+                case 'RECRUITER':
+                this.navigation = navigation_recruiter;
+                break;
             }
-        })
+        });
     }
 
     ngOnDestroy()

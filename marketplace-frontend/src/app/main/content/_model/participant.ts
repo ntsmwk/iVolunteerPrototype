@@ -3,4 +3,4 @@ export class Participant {
   username: string;
 }
 
-export type ParticipantRole = "VOLUNTEER" | "HELP_SEEKER" | "ADMIN" | "FLEXPROD";
+export type ParticipantRole = "VOLUNTEER" | "HELP_SEEKER" | "ADMIN" | "RECRUITER" | "FLEXPROD";

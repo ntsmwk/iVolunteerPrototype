@@ -9,20 +9,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
 @SpringBootApplication
 public class CoreApplication {
 
-
 	private static final String MMUSTERMANN = "mmustermann";
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String PSTARZER = "pstarzer";
 	private static final String BROISER = "broiser";
-	
+	private static final String RECRUITER = "recruiter";
+
 	private static final String FLEXPROD = "flexprod";
 
 	private static final String RAW_PASSWORD = "passme";
@@ -30,9 +32,8 @@ public class CoreApplication {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
-	
+	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
@@ -44,6 +45,7 @@ public class CoreApplication {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+		createRecruiter(RECRUITER, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
 	}
@@ -69,18 +71,29 @@ public class CoreApplication {
 		}
 		return volunteer;
 	}
-	
+
+	private CoreRecruiter createRecruiter(String username, String password) {
+		CoreRecruiter recruiter = coreRecruiterRepository.findByUsername(username);
+		if (recruiter == null) {
+			recruiter = new CoreRecruiter();
+			recruiter.setUsername(username);
+			recruiter.setPassword(bCryptPasswordEncoder.encode(password));
+			recruiter = coreRecruiterRepository.insert(recruiter);
+		}
+		return recruiter;
+	}
+
 	private CoreFlexProd createFlexProdUser(String username, String password) {
-		
+
 		CoreFlexProd fpUser = coreFlexProdRepository.findByUsername(username);
-		
+
 		if (fpUser == null) {
 			fpUser = new CoreFlexProd();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
 			fpUser = coreFlexProdRepository.insert(fpUser);
 		}
-		
+
 		return fpUser;
 	}
 }
