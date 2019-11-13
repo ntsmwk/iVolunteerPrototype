@@ -2,23 +2,22 @@ package at.jku.cis.iVolunteer.model.meta.core.class_.dtos;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassInstanceDTO {
 	String id;
 	String classDefinitionId;
 	String parentClassInstanceId;
-	
+
 	String name;
-	
+
 	List<PropertyInstanceDTO<Object>> properties;
 	List<MatchingRule> matchingRules;
-	
-	
+
 	public ClassInstanceDTO() {
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -27,7 +26,6 @@ public class ClassInstanceDTO {
 		this.id = id;
 	}
 
-	
 	public String getClassDefinitionId() {
 		return classDefinitionId;
 	}
@@ -35,7 +33,7 @@ public class ClassInstanceDTO {
 	public void setClassDefinitionId(String classDefinitionId) {
 		this.classDefinitionId = classDefinitionId;
 	}
-	
+
 	public String getParentClassInstanceId() {
 		return parentClassInstanceId;
 	}
@@ -47,11 +45,11 @@ public class ClassInstanceDTO {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public List<PropertyInstanceDTO<Object>> getProperties() {
 		return properties;
 	}
@@ -59,8 +57,6 @@ public class ClassInstanceDTO {
 	public void setProperties(List<PropertyInstanceDTO<Object>> properties) {
 		this.properties = properties;
 	}
-	
-	
 
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;

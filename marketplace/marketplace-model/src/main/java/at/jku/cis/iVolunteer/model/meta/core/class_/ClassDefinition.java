@@ -11,17 +11,16 @@ import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 @Document
 public class ClassDefinition {
 
-	@Id
-	String id;
-	String parentId;
-	String name;
+	@Id private String id;
+	private String parentId;
+	private String name;
 	private List<ClassProperty<Object>> properties;
-	
-	ClassArchetype archetype;
 
-	List<MatchingRule> matchingRules;
+	private ClassArchetype archetype;
+
+	private List<MatchingRule> matchingRules;
 	boolean root;
-	
+
 	public ClassDefinition() {
 	}
 
@@ -32,7 +31,7 @@ public class ClassDefinition {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getParentId() {
 		return parentId;
 	}
@@ -40,11 +39,11 @@ public class ClassDefinition {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -56,7 +55,7 @@ public class ClassDefinition {
 	public void setProperties(List<ClassProperty<Object>> properties) {
 		this.properties = properties;
 	}
-	
+
 	public ClassArchetype getArchetype() {
 		return archetype;
 	}
@@ -72,20 +71,20 @@ public class ClassDefinition {
 	public void setMatchingRules(List<MatchingRule> matchingRules) {
 		this.matchingRules = matchingRules;
 	}
-	
+
 	public boolean isRoot() {
 		return root;
 	}
-	
+
 	public void setRoot(boolean root) {
 		this.root = root;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ClassDefinition)) {
@@ -93,9 +92,5 @@ public class ClassDefinition {
 		}
 		return ((ClassDefinition) obj).id.equals(id);
 	}
-	
-	
-	
-	
-	
+
 }

@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
@@ -39,7 +39,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 
 	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
-	@Autowired private ClassDefinitionRepostiory classDefinitionRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;

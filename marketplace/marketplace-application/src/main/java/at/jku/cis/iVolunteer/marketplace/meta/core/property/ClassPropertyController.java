@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepostiory;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
@@ -18,7 +18,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
 @RestController
 public class ClassPropertyController {
 
-	@Autowired ClassDefinitionRepostiory classDefinitionRepository;
+	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired ClassPropertyMapper classPropertyMapper;
 
 	@GetMapping("/meta/core/property/class/{classDefinitionId}/all")

@@ -10,8 +10,8 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassInstanceDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Component

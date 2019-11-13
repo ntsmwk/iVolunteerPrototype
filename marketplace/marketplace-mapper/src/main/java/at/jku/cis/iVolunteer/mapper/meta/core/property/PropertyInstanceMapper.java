@@ -10,8 +10,8 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.mapper.meta.constraint.property.PropertyConstraintMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.dto.PropertyConstraintDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
 
 @Component
 public class PropertyInstanceMapper implements AbstractMapper<PropertyInstance<Object>, PropertyInstanceDTO<Object>> {

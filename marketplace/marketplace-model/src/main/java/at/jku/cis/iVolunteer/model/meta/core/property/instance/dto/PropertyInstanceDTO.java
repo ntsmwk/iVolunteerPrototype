@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.dtos;
+package at.jku.cis.iVolunteer.model.meta.core.property.instance.dto;
 
 import java.util.List;
 

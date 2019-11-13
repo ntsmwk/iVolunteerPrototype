@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 
 @Repository
-public interface ClassDefinitionRepostiory extends MongoRepository<ClassDefinition, String> {
+public interface ClassDefinitionRepository extends MongoRepository<ClassDefinition, String> {
 
 
 	

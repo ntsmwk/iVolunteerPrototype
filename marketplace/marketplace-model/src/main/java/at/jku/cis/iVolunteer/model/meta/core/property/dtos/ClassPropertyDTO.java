@@ -7,27 +7,25 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 public class ClassPropertyDTO<T> {
 
-	String id;
-	String classDefinitionId;
-	
-	String name;
-	
-	List<T> defaultValues;
-	List<T> allowedValues;
-	
-	PropertyType type;
-	boolean multiple;
+	private String id;
+	private String classDefinitionId;
 
-	boolean immutable;
-	boolean updateable;
-	boolean required;
-	
-	int position; 
-	
+	private String name;
+
+	private List<T> defaultValues;
+	private List<T> allowedValues;
+
+	private PropertyType type;
+	private boolean multiple;
+
+	private boolean immutable;
+	private boolean updateable;
+	private boolean required;
+
+	private int position;
+
 	List<PropertyConstraintDTO<T>> propertyConstraints;
 
-	
-	
 	public String getId() {
 		return id;
 	}
@@ -59,7 +57,7 @@ public class ClassPropertyDTO<T> {
 	public void setDefaultValues(List<T> defaultValues) {
 		this.defaultValues = defaultValues;
 	}
-	
+
 	public List<T> getAllowedValues() {
 		return allowedValues;
 	}
@@ -107,7 +105,7 @@ public class ClassPropertyDTO<T> {
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
-	
+
 	public int getPosition() {
 		return position;
 	}
@@ -115,7 +113,6 @@ public class ClassPropertyDTO<T> {
 	public void setPosition(int position) {
 		this.position = position;
 	}
-	
 
 	public List<PropertyConstraintDTO<T>> getPropertyConstraints() {
 		return propertyConstraints;
@@ -124,10 +121,5 @@ public class ClassPropertyDTO<T> {
 	public void setPropertyConstraints(List<PropertyConstraintDTO<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
-	
-	
-	
-	
-	
-	
+
 }

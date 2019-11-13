@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.iVolunteerObject.dto;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
 
 /**
  * @author alexander

@@ -12,18 +12,18 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 public class PropertyDefinition<T> {
 
 	@Id
-	String id;
-	String name;
+	private String id;
+	private String name;
 	
-	List<T> allowedValues;
+	private List<T> allowedValues;
 	
-	boolean custom;
-	boolean multiple;
+	private boolean custom;
+	private boolean multiple;
 	
-	PropertyType type;
+	protected PropertyType type;
 	
-	boolean required;
-	List<PropertyConstraint<Object>> propertyConstraints;
+	private boolean required;
+	private List<PropertyConstraint<Object>> propertyConstraints;
 	
 	
 	public String getId() {

@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.meta.core.class_;
 
 public enum ClassArchetype {
 
-	COMPETENCE("COMPETENCE"), TASK("TASK"), TASKTEMPLATE("TASKTEMPLATE");
+	COMPETENCE("COMPETENCE"), TASK("TASK"), FUNCTION("FUNCTION"), ACHIEVEMENT("ACHIEVEMENT") ;
 	
 	private final String archetype;
 	

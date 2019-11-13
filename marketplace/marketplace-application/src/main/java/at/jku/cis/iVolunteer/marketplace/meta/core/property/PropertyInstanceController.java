@@ -14,8 +14,8 @@ import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassInstanceMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
 
 @RestController
 public class PropertyInstanceController {

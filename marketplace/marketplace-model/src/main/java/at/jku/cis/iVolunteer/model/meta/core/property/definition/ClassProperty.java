@@ -11,28 +11,26 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @Document
 public class ClassProperty<T> {
 
-	@Id
-	String id;	
-	String name;
-	
-	
-	List<T> defaultValues;
-	List<T> allowedValues;
-	
-	PropertyType type;
-	boolean multiple;
+	@Id private String id;
+	private String name;
 
-	boolean immutable;
-	boolean updateable;
-	boolean required;
-	
-	int position; 
-	
-	List<PropertyConstraint<Object>> propertyConstraints;
+	private List<T> defaultValues;
+	private List<T> allowedValues;
 
-	public ClassProperty() {}
-	
-	
+	private PropertyType type;
+	private boolean multiple;
+
+	private boolean immutable;
+	private boolean updateable;
+	private boolean required;
+
+	private int position;
+
+	private List<PropertyConstraint<Object>> propertyConstraints;
+
+	public ClassProperty() {
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -56,7 +54,7 @@ public class ClassProperty<T> {
 	public void setDefaultValues(List<T> defaultValues) {
 		this.defaultValues = defaultValues;
 	}
-	
+
 	public List<T> getAllowedValues() {
 		return allowedValues;
 	}
@@ -73,16 +71,13 @@ public class ClassProperty<T> {
 		this.type = type;
 	}
 
-	
 	public boolean isMultiple() {
 		return multiple;
 	}
 
-
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
 	}
-
 
 	public boolean isImmutable() {
 		return immutable;
@@ -107,7 +102,7 @@ public class ClassProperty<T> {
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
-	
+
 	public int getPosition() {
 		return position;
 	}
@@ -115,7 +110,6 @@ public class ClassProperty<T> {
 	public void setPosition(int position) {
 		this.position = position;
 	}
-	
 
 	public List<PropertyConstraint<Object>> getPropertyConstraints() {
 		return propertyConstraints;
@@ -124,10 +118,5 @@ public class ClassProperty<T> {
 	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
-	
-	
-	
-	
-	
-	
+
 }

@@ -27,156 +27,127 @@ import jersey.repackaged.com.google.common.collect.Lists;
 @RestController
 public class ClassDefinitionController {
 
-	
-	@Autowired ClassDefinitionRepostiory classDefinitionRepository;
+	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
-	
 	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
-	
 	@Autowired ClassPropertyMapper classPropertyMapper;
 	@Autowired ClassDefinitionMapper classDefinitionMapper;
 	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	
 
 	/*
-	 * Operations on ConfigurableClasses
+	 * Operations on ClassDefinition
 	 */
-	
+
 	@GetMapping("/meta/core/class/definition/all")
 	private List<ClassDefinitionDTO> getAllClassDefinitions() {
-		System.out.println("/configclass/all");
-		
-		List<ClassDefinitionDTO> ret =  classDefinitionMapper.toDTOs(classDefinitionRepository.findAll());
-		return ret;
-		
+		return classDefinitionMapper.toDTOs(classDefinitionRepository.findAll());
 	}
-	
-	@GetMapping("/meta/core/class/definition/{id}") 
+
+	@GetMapping("/meta/core/class/definition/{id}")
 	private ClassDefinitionDTO getClassDefinitionById(@PathVariable("id") String id) {
 		return classDefinitionMapper.toDTO(classDefinitionRepository.findOne(id));
-	
 	}
-	
+
 	@PutMapping("/meta/core/class/definition/multiple")
 	private List<ClassDefinitionDTO> getClassDefinitonsById(@RequestBody List<String> ids) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 		return classDefinitionMapper.toDTOs(classDefinitions);
 	}
-	
+
 	@PostMapping("/meta/core/class/definition/new")
 	private ClassDefinitionDTO newClassDefinition(@RequestBody ClassDefinitionDTO classDefinition) {
-		System.out.println("/configclass/new");
-
-		return classDefinitionMapper.toDTO(classDefinitionRepository.save(classDefinitionMapper.toEntity(classDefinition)));
+		return classDefinitionMapper
+				.toDTO(classDefinitionRepository.save(classDefinitionMapper.toEntity(classDefinition)));
 	}
-	
-	@PutMapping("/meta/core/class/definition/{id}/change-name") 
-	private ClassDefinitionDTO changeClassDefinitionName(@PathVariable("id") String id, @RequestBody String newName) {
 
+	@PutMapping("/meta/core/class/definition/{id}/change-name")
+	private ClassDefinitionDTO changeClassDefinitionName(@PathVariable("id") String id, @RequestBody String newName) {
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
 		clazz.setName(newName);
 		return classDefinitionMapper.toDTO(classDefinitionRepository.save(clazz));
 	}
-	
+
 	@PutMapping("/meta/core/class/definition/delete")
 	private List<ClassDefinitionDTO> deleteClassDefinition(@RequestBody List<String> idsToRemove) {
-		
 		for (String id : idsToRemove) {
 			classDefinitionRepository.delete(id);
 		}
-		
 		return classDefinitionMapper.toDTOs(classDefinitionRepository.findAll());
-		
-	}
-	
-	@PutMapping("/meta/core/class/definition/add-or-update")
-	private List<ClassDefinitionDTO> addOrUpdateClassDefinitions(@RequestBody List<ClassDefinitionDTO> classDefinitions) {
-		
-		System.out.println("add-or-update ClassDefinitions");
-		System.out.println("ClassDefinitions #" + classDefinitions.size());
-		
-		return this.classDefinitionMapper.toDTOs(this.classDefinitionRepository.save(classDefinitionMapper.toEntities(classDefinitions)));
-				
+
 	}
 
+	@PutMapping("/meta/core/class/definition/add-or-update")
+	private List<ClassDefinitionDTO> addOrUpdateClassDefinitions(
+			@RequestBody List<ClassDefinitionDTO> classDefinitions) {
+		return this.classDefinitionMapper
+				.toDTOs(this.classDefinitionRepository.save(classDefinitionMapper.toEntities(classDefinitions)));
+	}
 
 	/*
 	 * Operations on Properties
 	 */
-	
+
 	@PutMapping("meta/core/class/definition/get-classproperty-from-propertydefinition-by-id")
-	private List<ClassPropertyDTO<Object>> getClassPropertyFromPropertyDefinitionById(@RequestBody List<String> propIds) {
-		List<PropertyDefinition<Object>> dProps = Lists.newLinkedList(propertyDefinitionRepository.findAll(propIds));
-		List<ClassProperty<Object>> cProps = createClassPropertiesFromDefinitions(dProps);
-		return classPropertyMapper.toDTOs(cProps);
+	private List<ClassPropertyDTO<Object>> getClassPropertyFromPropertyDefinitionById(
+			@RequestBody List<String> propertyIds) {
+		List<PropertyDefinition<Object>> definitionProperties = Lists
+				.newLinkedList(propertyDefinitionRepository.findAll(propertyIds));
+		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(definitionProperties);
+		return classPropertyMapper.toDTOs(classProperties);
 	}
-	
+
 	@PutMapping("meta/core/class/definition/{id}/add-properties-by-id")
-	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id, @RequestBody List<String> propIds) {
+	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id,
+			@RequestBody List<String> propertyIds) {
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
-		
-		List<PropertyDefinition<Object>> dProps = Lists.newLinkedList(propertyDefinitionRepository.findAll(propIds));
-		
-		List<ClassProperty<Object>> cProps = createClassPropertiesFromDefinitions(dProps);
-		
+		List<PropertyDefinition<Object>> definitionProperties = Lists
+				.newLinkedList(propertyDefinitionRepository.findAll(propertyIds));
+		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(definitionProperties);
+
 		if (clazz.getProperties() == null) {
 			clazz.setProperties(new ArrayList<>());
 		}
-		
-		clazz.getProperties().addAll(cProps);
+
+		clazz.getProperties().addAll(classProperties);
 		clazz = classDefinitionRepository.save(clazz);
 		return classPropertyMapper.toDTOs(clazz.getProperties());
 	}
-	
-	
+
 	@PutMapping("meta/core/class/definition/{id}/add-properties")
-	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinition(@PathVariable("id") String id, @RequestBody List<ClassPropertyDTO<Object>> properties) {
-		
+	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinition(@PathVariable("id") String id,
+			@RequestBody List<ClassPropertyDTO<Object>> properties) {
+
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
-		
+
 		List<ClassProperty<Object>> props = classPropertyMapper.toEntities(properties);
 		clazz.getProperties().addAll(props);
 		clazz = classDefinitionRepository.save(clazz);
 		return classPropertyMapper.toDTOs(clazz.getProperties());
 	}
-	
-	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<PropertyDefinition<Object>> propertyDefinitions) {
+
+	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(
+			List<PropertyDefinition<Object>> propertyDefinitions) {
 		List<ClassProperty<Object>> cProps = new ArrayList<>();
-		
+
 		for (PropertyDefinition<Object> d : propertyDefinitions) {
 			cProps.add(propertyDefinitionToClassPropertyMapper.toTarget(d));
 		}
-		
+
 		return cProps;
 	}
-	
-	
+
 	@PutMapping("/meta/core/class/definition/{id}/remove-properties")
-	private ClassDefinitionDTO removePropertiesFromClassDefinition(@PathVariable("id") String id, @RequestBody List<String> idsToRemove) {
+	private ClassDefinitionDTO removePropertiesFromClassDefinition(@PathVariable("id") String id,
+			@RequestBody List<String> idsToRemove) {
 		
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
-		
 		ArrayList<ClassProperty<Object>> remainingObjects = clazz.getProperties().stream()
-				.filter(c -> idsToRemove.stream().noneMatch(remId -> c.getId().equals(remId))).collect(Collectors.toCollection(ArrayList::new));
-		
+				.filter(c -> idsToRemove.stream().noneMatch(remId -> c.getId().equals(remId)))
+				.collect(Collectors.toCollection(ArrayList::new));
+
 		clazz.setProperties(remainingObjects);
-
 		clazz = classDefinitionRepository.save(clazz);
-		
-		
 		return classDefinitionMapper.toDTO(clazz);
-		
 	}
-	
-
-	
-	
-	
-	
-	
-
-	
-	
-	
 }
