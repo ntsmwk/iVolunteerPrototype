@@ -9,18 +9,10 @@ public class ClassDefinitionDTO {
 	String id;
 	String parentId;
 	String name;
-
-//TODO
 	List<ClassPropertyDTO<Object>> properties;
-	
-//	List<PropertyDTO<Object>> properties;
 	List<MatchingRule> matchingRules;
 	
 	boolean root;
-	
-	public ClassDefinitionDTO() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public String getId() {
 		return id;
@@ -46,7 +38,6 @@ public class ClassDefinitionDTO {
 		this.name = name;
 	}
 
-//TODO
 	public List<ClassPropertyDTO<Object>> getProperties() {
 		return properties;
 	}

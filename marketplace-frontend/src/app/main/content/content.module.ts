@@ -14,6 +14,7 @@ import {HelpSeekerGuard} from './_guard/help-seeker.guard';
 import {VolunteerGuard} from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
+import { FlexProdOrHelpseekerGuard } from "./_guard/flexprod-helpseeker.guard";
 
 
 
@@ -54,6 +55,16 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
+    path: 'main/project-form',
+    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/projects/all',
+    loadChildren: './project-list/project-list.module#FuseProjectListModule',
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
     path: 'main/task',
     loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
@@ -68,20 +79,11 @@ const routes: Route[] = [
     loadChildren: './task-list/task-list.module#FuseTaskListModule',
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-  {
-    path: 'main/project-form',
-    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-  {
-    path: 'main/projects/all',
-    loadChildren: './project-list/project-list.module#FuseProjectListModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
+
   //AK
   { path: 'main/properties/all',
     loadChildren: './property-list/property-list.module#PropertyListModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
+    canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
   },
 
   { path: 'main/property/detail/view',
@@ -95,13 +97,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
 
   },
-
-  // //new property
-  // { path: 'main/task-templates/user/detail/viewproperty/',
-  //   loadChildren: './property-detail/property-detail.module#PropertyDetailModule',
-  //   canActivate: [TokenGuard, HelpSeekerGuard]
-  // },
-  
 
   { path: 'main/task-templates/user/all',
     loadChildren: './user-defined-task-template-list/user-defined-task-template-list.module#UserDefinedTaskTemplateListModule',
@@ -130,16 +125,13 @@ const routes: Route[] = [
 
   { path: 'main/configurator',
     loadChildren: './configurator/configurator.module#ConfiguratorModule',
-    canActivate: [TokenGuard, FlexProdGuard]
+    canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
   },
 
   { path: 'main/configurator/instance-editor',
   loadChildren: './configurator/class-instances/form-editor/class-instance-form-editor.module#ClassInstanceFormEditorModule',
   canActivate: [TokenGuard, HelpSeekerGuard]
   },
-
-  
-  
   //!--AK
   {
     path: 'main/task-template-form',

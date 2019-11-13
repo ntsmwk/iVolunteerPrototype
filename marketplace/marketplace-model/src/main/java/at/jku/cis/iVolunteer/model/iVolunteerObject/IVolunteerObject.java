@@ -1,12 +1,7 @@
 package at.jku.cis.iVolunteer.model.iVolunteerObject;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
 public class IVolunteerObject {

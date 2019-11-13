@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyInstanceDTO;
 
 /**
  * @author alexander

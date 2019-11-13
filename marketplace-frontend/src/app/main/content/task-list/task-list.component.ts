@@ -52,7 +52,7 @@ export class FuseTaskListComponent implements OnInit {
 
 
   getMarketplaceName(id: string) {
-    return this.marketplaces.filter(marketplace => marketplace.id === id)[0].name;
+    return this.marketplaces.filter((marketplace:Marketplace) => {return marketplace.id === id})[0].name;
   }
 
   addTask() {

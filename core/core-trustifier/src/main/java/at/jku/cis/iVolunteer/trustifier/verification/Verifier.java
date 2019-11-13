@@ -22,37 +22,24 @@ public class Verifier {
 
 	@PostMapping("/taskInteraction")
 	public boolean verifyTaskInteraction(@RequestBody TaskInteractionDTO taskInteraction) {
-		return true;
-		// TODO @blockchain
-		// return
-		// (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction))
-		// == null) ? false : true;
+		return (blockchainRestClient.getTaskInteractionHash(hasher.generateHash(taskInteraction)) == null) ? false
+				: true;
 	}
 
 	@PostMapping("/finishedTaskEntry")
 	public boolean verifyFinishedTaskEntry(@RequestBody TaskEntryDTO taskEntry) {
-		return true;
-		// TODO @blockchain
-		// return
-		// (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) ==
-		// null) ? false : true;
+		return (blockchainRestClient.getFinishedTaskHash(hasher.generateHash(taskEntry)) == null) ? false : true;
 	}
 
 	@PostMapping("/publishedTask")
 	public boolean verifyPublishedTask(@RequestBody TaskDTO task) {
-		return true;
-		// TODO @blockchain
-		// return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task))
-		// == null) ? false : true;
+		 return (blockchainRestClient.getPublishedTaskHash(hasher.generateHash(task))
+		 == null) ? false : true;
 	}
 
 	@PostMapping("/competenceEntry")
 	public boolean verifyCompetence(@RequestBody CompetenceEntryDTO competenceEntry) {
-		return true;
-		// TODO @blockchain
-		// return
-		// (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry))
-		// == null) ? false : true;
+		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
 	}
 
 }

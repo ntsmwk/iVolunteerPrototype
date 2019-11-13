@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.mapper.core.user.CoreFlexProdMapper;
 import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
 import at.jku.cis.iVolunteer.mapper.core.user.CoreVolunteerMapper;
-import at.jku.cis.iVolunteer.mapper.user.FlexProdMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -32,7 +31,12 @@ public class CoreLoginController {
 		} else if (participant instanceof CoreFlexProd) {
 			return flexProdMapper.toDTO((CoreFlexProd) participant);
 		}
-		return volunteerMapper.toDTO((CoreVolunteer) participant);
+		if (participant instanceof CoreVolunteer) {
+			return volunteerMapper.toDTO((CoreVolunteer) participant);
+		}
+		
+		throw new RuntimeException("User not found");
+		
 	}
 
 	@GetMapping("role")

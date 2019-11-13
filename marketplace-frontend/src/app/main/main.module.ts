@@ -11,7 +11,6 @@ import {FuseNavbarModule} from 'app/main/navbar/navbar.module';
 import {FuseToolbarModule} from 'app/main/toolbar/toolbar.module';
 
 import {FuseMainComponent} from './main.component';
-import {TruncatePipe} from './content/_pipe/truncate.pipe';
 
 
 @NgModule({

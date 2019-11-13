@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,15 +53,12 @@ public class ClassDefinitionController {
 	
 	@GetMapping("/meta/core/class/definition/{id}") 
 	private ClassDefinitionDTO getClassDefinitionById(@PathVariable("id") String id) {
-		System.out.println("/configclass/" + id);
-
 		return classDefinitionMapper.toDTO(classDefinitionRepository.findOne(id));
 	
 	}
 	
 	@PutMapping("/meta/core/class/definition/multiple")
 	private List<ClassDefinitionDTO> getClassDefinitonsById(@RequestBody List<String> ids) {
-		System.out.println("abc");
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 		return classDefinitionMapper.toDTOs(classDefinitions);
@@ -86,8 +82,6 @@ public class ClassDefinitionController {
 	@PutMapping("/meta/core/class/definition/delete")
 	private List<ClassDefinitionDTO> deleteClassDefinition(@RequestBody List<String> idsToRemove) {
 		
-		System.out.println("/configclass/delete");
-
 		for (String id : idsToRemove) {
 			classDefinitionRepository.delete(id);
 		}
@@ -101,31 +95,10 @@ public class ClassDefinitionController {
 		
 		System.out.println("add-or-update ClassDefinitions");
 		System.out.println("ClassDefinitions #" + classDefinitions.size());
-//		this.classDefinitionRepository.deleteAll();
 		
 		return this.classDefinitionMapper.toDTOs(this.classDefinitionRepository.save(classDefinitionMapper.toEntities(classDefinitions)));
 				
 	}
-	
-	
-	
-	//LEGACY
-//	@PutMapping("/meta/core/class/definition/{id}/save-properties-legacy")
-//	private ClassDefinitionDTO legacysave(@PathVariable("id") String id, @RequestBody List<PropertyDTO<Object>> properties) {
-//		System.out.println("legacysave");
-//		ClassDefinition def = this.classDefinitionRepository.findOne(id);
-//		
-//		if (def == null) {
-//			return null;
-//		}
-//		def.setProperties(propertyMapper.toEntities(properties));
-//		return classDefinitionMapper.toDTO(this.classDefinitionRepository.save(def));
-//	}
-	
-	
-	
-	
-	//------
 
 
 	/*
@@ -182,9 +155,7 @@ public class ClassDefinitionController {
 	@PutMapping("/meta/core/class/definition/{id}/remove-properties")
 	private ClassDefinitionDTO removePropertiesFromClassDefinition(@PathVariable("id") String id, @RequestBody List<String> idsToRemove) {
 		
-		System.out.println("/configclass/" + id + "/remove-objects");
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
-		
 		
 		ArrayList<ClassProperty<Object>> remainingObjects = clazz.getProperties().stream()
 				.filter(c -> idsToRemove.stream().noneMatch(remId -> c.getId().equals(remId))).collect(Collectors.toCollection(ArrayList::new));

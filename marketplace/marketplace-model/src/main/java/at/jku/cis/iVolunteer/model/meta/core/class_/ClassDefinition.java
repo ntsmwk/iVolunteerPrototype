@@ -15,14 +15,14 @@ public class ClassDefinition {
 	String id;
 	String parentId;
 	String name;
-	List<ClassProperty<Object>> properties;
-// LEGACY
-//	List<Property> properties;
+	private List<ClassProperty<Object>> properties;
+	
+	ClassArchetype archetype;
+
 	List<MatchingRule> matchingRules;
 	boolean root;
 	
 	public ClassDefinition() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getId() {
@@ -57,6 +57,14 @@ public class ClassDefinition {
 		this.properties = properties;
 	}
 	
+	public ClassArchetype getArchetype() {
+		return archetype;
+	}
+
+	public void setArchetype(ClassArchetype archetype) {
+		this.archetype = archetype;
+	}
+
 	public List<MatchingRule> getMatchingRules() {
 		return matchingRules;
 	}

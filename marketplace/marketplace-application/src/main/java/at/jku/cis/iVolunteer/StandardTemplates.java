@@ -6,14 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;

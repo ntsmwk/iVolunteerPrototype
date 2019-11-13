@@ -7,7 +7,7 @@ import { Marketplace } from '../_model/marketplace';
 
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
 import { ClassDefinition } from '../_model/meta/Class';
-import { Participant } from '../_model/participant';
+import { Participant, ParticipantRole } from '../_model/participant';
 import { RelationshipService } from '../_service/meta/core/relationship/relationship.service';
 import { Relationship } from '../_model/meta/Relationship';
 import { CoreFlexProdService } from '../_service/core-flexprod.service';
@@ -33,35 +33,32 @@ export class ConfiguratorComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private loginService: LoginService,
-    // private helpSeekerService: CoreHelpSeekerService,
+    private helpSeekerService: CoreHelpSeekerService,
     private flexProdService: CoreFlexProdService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService) { }
 
   ngOnInit() {
+    let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
-    this.loginService.getLoggedIn().toPromise().then((flexProdUser: Participant) => {
-      console.log("logged in")
-      this.flexProdService.findRegisteredMarketplaces(flexProdUser.id).toPromise().then((marketplace: Marketplace) => {
-        console.log("finding marketplaces")
-        console.log(marketplace);
-        if (!isNullOrUndefined(marketplace)) {
-          this.marketplace = marketplace;
-          this.isLoaded = true;
-
-          // Promise.all([
-          //   this.classDefinitionService.getAllClassDefinitions(this.marketplace).toPromise().then((configurableClasses: ClassDefinition[]) => {
-          //     this.configurableClasses = configurableClasses;              
-          //   }),
-            
-          //   this.relationshipService.getAllRelationships(this.marketplace).toPromise().then((relationships: Relationship[]) => {
-          //     this.relationships = relationships;
-          //   })
-
-          // ]).then( () => {
-          //   this.isLoaded = true
-          // });
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
+        if (role == "FLEXPROD") {
+          service = this.flexProdService;
+        } else if (role == "HELP_SEEKER") {
+          service = this.helpSeekerService;
         }
+
+        console.log("logged in")
+        service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+          console.log("finding marketplaces")
+          console.log(marketplace);
+          if (!isNullOrUndefined(marketplace)) {
+            this.marketplace = marketplace;
+            this.isLoaded = true;
+
+          }
+        });
       });
     });
   }

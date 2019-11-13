@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
+import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
 
@@ -36,9 +38,22 @@ public class MarketplaceController {
 	}
 
 	@PostMapping
-	public MarketplaceDTO registerMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
+	public MarketplaceDTO createMarketplace(@RequestBody MarketplaceDTO marketplaceDto) {
 		Marketplace marketplace = marketplaceMapper.toEntity(marketplaceDto);
 		return marketplaceMapper.toDTO(marketplaceRepository.insert(marketplace));
+	}
+
+
+	@PutMapping("{marketplaceId}")
+	public MarketplaceDTO updateMarketplace(@PathVariable("marketplaceId") String marketplaceId, @RequestBody MarketplaceDTO marketplaceDto) {
+		Marketplace orginalMarketplace = marketplaceRepository.findOne(marketplaceId);
+		if (orginalMarketplace == null) {
+			throw new NotAcceptableException();
+		}
+		orginalMarketplace.setName(marketplaceDto.getName());
+		orginalMarketplace.setShortName(marketplaceDto.getShortName());
+		orginalMarketplace.setUrl(marketplaceDto.getUrl());
+		return marketplaceMapper.toDTO(marketplaceRepository.save(orginalMarketplace));
 	}
 
 	@DeleteMapping("{marketplaceId}")

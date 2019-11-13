@@ -78,15 +78,6 @@ public class ClassDefinitionMapper implements AbstractMapper<ClassDefinition, Cl
 		entity.setId(target.getId());
 		entity.setParentId(target.getParentId());
 		entity.setName(target.getName());
-
-//TODO		
-//		List<ClassProperty<Object>> properties = new ArrayList<ClassProperty<Object>>();
-//		if (target.getProperties() != null) {
-//			for (ClassPropertyDTO<Object> p : target.getProperties()) {
-//				properties.add(classPropertyMapper.toEntity(p));
-//			}
-//		}
-//		entity.setProperties(properties);
 		
 		List<ClassProperty<Object>> properties = new ArrayList<ClassProperty<Object>>();
 		if (target.getProperties() != null) {

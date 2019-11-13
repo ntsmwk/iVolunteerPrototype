@@ -3,18 +3,14 @@ package at.jku.cis.iVolunteer.mapper.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayMapper;
-import at.jku.cis.iVolunteer.mapper.property.listEntry.ListEntryMapper;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.old.dto.PropertyItemDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyItemDTO;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @Component
 public class PropertyItemMapper implements OneWayMapper<UserDefinedTaskTemplate, PropertyItemDTO>{
-
-	@Autowired ListEntryMapper listEntryMapper;
 	
 	@Override
 	public PropertyItemDTO toTarget(UserDefinedTaskTemplate source) {

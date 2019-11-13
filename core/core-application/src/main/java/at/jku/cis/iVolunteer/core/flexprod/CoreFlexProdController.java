@@ -58,7 +58,6 @@ public class CoreFlexProdController {
 
 		FlexProdDTO flexProdUserDTO = new FlexProdDTO();
 		flexProdUserDTO.setId(coreFlexProdUser.getId());
-		flexProdUserDTO.setPassword(flexProdUser.getPassword());
 		flexProdUserDTO.setUsername(flexProdUser.getUsername());
 		coreMarketplaceRestClient.registerFlexProdUser(marketplace.getUrl(), authorization, flexProdUserDTO);
 	}

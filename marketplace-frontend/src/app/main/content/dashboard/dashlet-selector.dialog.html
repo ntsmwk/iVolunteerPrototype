@@ -1,14 +1,60 @@
 <h1 mat-dialog-title>Dashlet Selection</h1>
 <div mat-dialog-content>
-  <mat-form-field>
-    <mat-select placeholder="Dashlets" [(ngModel)]="selectedDashletEntry">
-      <mat-option *ngFor="let dashletEntry of dashletEntries" [value]="dashletEntry">
-        {{ dashletEntry.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="openStep(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Project
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="row wrap" fxLayoutAlign="left">
+        <ng-container *ngFor="let dashletEntry of projectDashletEntries">
+          <mat-card fxLayout="column" fxFlex="30"
+                    [ngClass]="{'selected': selectedDashletEntry && dashletEntry.id === selectedDashletEntry.id}">
+            <mat-card-header>
+              <mat-card-title>{{dashletEntry.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-button (click)="selectDashletEntry(dashletEntry)"
+                      *ngIf="!(selectedDashletEntry && dashletEntry.id === selectedDashletEntry.id)">Select
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </div>
+
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="openStep(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Timeline
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="row wrap" fxLayoutAlign="left">
+        <ng-container *ngFor="let dashletEntry of timelineDashletEntries">
+          <mat-card fxLayout="column" fxFlex="30"
+                    [ngClass]="{'selected': selectedDashletEntry && dashletEntry.id === selectedDashletEntry.id}">
+            <mat-card-header>
+              <mat-card-title>{{dashletEntry.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-button (click)="selectDashletEntry(dashletEntry)"
+                      *ngIf="!(selectedDashletEntry && dashletEntry.id === selectedDashletEntry.id)">Select
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </div>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>
-  <button mat-button (click)="closeDialog()" cdkFocusInitial>Ok</button>
+  <button mat-button *ngIf="selectedDashletEntry" (click)="closeDialog()" cdkFocusInitial>Ok</button>
 </div>

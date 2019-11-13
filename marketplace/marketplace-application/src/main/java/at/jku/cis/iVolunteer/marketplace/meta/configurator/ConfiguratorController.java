@@ -1,11 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.meta.configurator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,15 +25,12 @@ public class ConfiguratorController {
 	List<Configurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
 		
 		if (sortType.equalsIgnoreCase("asc")) {
-			System.out.println("asc");
 			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
 
 		} else if (sortType.equalsIgnoreCase("desc")) {
-			System.out.println("desc");
 			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
 		} 
 		
-		System.out.println("normal");
 		return configuratorRepository.findAll();
 	}
 	
@@ -48,18 +43,6 @@ public class ConfiguratorController {
 	List<Configurator> getConfiguratorByName(@PathVariable("name") String name) {
 		return configuratorRepository.findByName(name);
 	}
-	
-//	@GetMapping("meta/configurator/all")
-//	List<Configurator> getAllConfiguratorsSortedAsc() {
-//		System.out.println("wlfineilfn");
-//		List<Configurator> test = configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
-//		System.out.println(test.size());
-//		for (Configurator c : test) {
-//			System.out.println(c.getName());
-//		}
-//		
-//		return new ArrayList<>(test);
-//	}
 	
 	@PostMapping("meta/configurator/new-empty")
 	Configurator createNewEmptyConfigurator(@RequestBody String[] params) {

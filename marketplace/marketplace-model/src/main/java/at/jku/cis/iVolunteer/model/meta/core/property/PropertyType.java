@@ -12,14 +12,14 @@ public enum PropertyType {
 		this.type = type;
 	}
 	
-	public String getKind() {
+	public String getType() {
 		return this.type;
 	}
 	
 	@JsonCreator
 	public static PropertyType getPropertyType(String type) {
 		for(PropertyType k : PropertyType.values()){
-            if(k.getKind().equals(type)){
+            if(k.getType().equals(type)){
                 return k;
             }
         }

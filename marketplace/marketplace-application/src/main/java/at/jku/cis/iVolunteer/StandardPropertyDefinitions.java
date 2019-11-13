@@ -27,7 +27,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
 
-
+@SuppressWarnings({"unchecked",  "rawtypes"})
 @Component
 public class StandardPropertyDefinitions {
 	
@@ -258,7 +258,7 @@ public class StandardPropertyDefinitions {
 		List<String> legalValues = new LinkedList<>();
 		
 		for (Competence c : competenceRepository.findAll()) {
-			legalValues.add(c.getValue());
+			legalValues.add(c.getName());
 		}
 	
 		return legalValues;
@@ -661,7 +661,6 @@ public class StandardPropertyDefinitions {
 	//=========================================
 	//========= Competence Properties =========
 	//=========================================
-	//TODO
 	public static class RequiredCompetencesProperty extends TextPropertyDefinition {
 				
 		

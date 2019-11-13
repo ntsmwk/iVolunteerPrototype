@@ -21,6 +21,6 @@ public class FloatNumberPropertyConstraint<T> extends PropertyConstraint<T> {
 		if (!(obj instanceof FloatNumberPropertyConstraint)) {
 			return false;
 		}
-		return ((FloatNumberPropertyConstraint) obj).getId().equals(getId());
+		return ((FloatNumberPropertyConstraint<?>) obj).getId().equals(getId());
 	}
 }

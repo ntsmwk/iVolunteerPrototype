@@ -27,6 +27,7 @@ public class CoreLoginService {
 
 	public ParticipantRole getLoggedInParticipantRole() {
 		CoreUser participant = getLoggedInParticipant();
+		
 		if (participant instanceof CoreHelpSeeker) {
 			return ParticipantRole.HELP_SEEKER;
 		}
@@ -35,7 +36,8 @@ public class CoreLoginService {
 		} if (participant instanceof CoreFlexProd) {
 			return ParticipantRole.FLEXPROD;
 		}
-		return null;
+
+		throw new RuntimeException("User not found");
 	}
 
 	private CoreUser findByUsername(String username) {
