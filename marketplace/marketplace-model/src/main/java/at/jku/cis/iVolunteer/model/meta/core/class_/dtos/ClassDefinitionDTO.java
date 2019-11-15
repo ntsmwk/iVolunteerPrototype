@@ -4,7 +4,6 @@ import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
-import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassDefinitionDTO {
 
@@ -12,7 +11,6 @@ public class ClassDefinitionDTO {
 	private String parentId;
 	private String name;
 	private List<ClassPropertyDTO<Object>> properties;
-	private List<MatchingRule> matchingRules;
 	private ClassArchetype archetype;
 
 	private boolean root;
@@ -55,14 +53,6 @@ public class ClassDefinitionDTO {
 
 	public void setRoot(boolean root) {
 		this.root = root;
-	}
-
-	public List<MatchingRule> getMatchingRules() {
-		return matchingRules;
-	}
-
-	public void setMatchingRules(List<MatchingRule> matchingRules) {
-		this.matchingRules = matchingRules;
 	}
 
 	public ClassArchetype getArchetype() {

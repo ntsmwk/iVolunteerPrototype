@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document
 public class ClassDefinition {
@@ -18,7 +17,6 @@ public class ClassDefinition {
 
 	private ClassArchetype archetype;
 
-	private List<MatchingRule> matchingRules;
 	boolean root;
 
 	public ClassDefinition() {
@@ -62,14 +60,6 @@ public class ClassDefinition {
 
 	public void setArchetype(ClassArchetype archetype) {
 		this.archetype = archetype;
-	}
-
-	public List<MatchingRule> getMatchingRules() {
-		return matchingRules;
-	}
-
-	public void setMatchingRules(List<MatchingRule> matchingRules) {
-		this.matchingRules = matchingRules;
 	}
 
 	public boolean isRoot() {

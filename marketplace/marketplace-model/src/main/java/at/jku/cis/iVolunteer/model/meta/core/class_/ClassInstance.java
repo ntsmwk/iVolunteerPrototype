@@ -6,19 +6,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document
 public class ClassInstance {
-	@Id 
-	private String id;
+	@Id private String id;
 	private String classDefinitionId;
 	private String parentClassInstanceId;
 
 	private String name;
 
 	private List<PropertyInstance<Object>> properties;
-	private List<MatchingRule> matchingRules;
 
 	public ClassInstance() {
 	}
@@ -61,14 +58,6 @@ public class ClassInstance {
 
 	public void setProperties(List<PropertyInstance<Object>> properties) {
 		this.properties = properties;
-	}
-
-	public List<MatchingRule> getMatchingRules() {
-		return matchingRules;
-	}
-
-	public void setMatchingRules(List<MatchingRule> matchingRules) {
-		this.matchingRules = matchingRules;
 	}
 
 	@Override

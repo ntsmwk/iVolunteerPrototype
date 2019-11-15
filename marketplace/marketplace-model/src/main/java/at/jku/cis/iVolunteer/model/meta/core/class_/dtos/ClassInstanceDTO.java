@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.model.meta.core.class_.dtos;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.dto.PropertyInstanceDTO;
-import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 public class ClassInstanceDTO {
 	private String id;
@@ -12,7 +11,6 @@ public class ClassInstanceDTO {
 
 	private String name;
 	private List<PropertyInstanceDTO<Object>> properties;
-	private List<MatchingRule> matchingRules;
 
 	public ClassInstanceDTO() {
 	}
@@ -55,14 +53,6 @@ public class ClassInstanceDTO {
 
 	public void setProperties(List<PropertyInstanceDTO<Object>> properties) {
 		this.properties = properties;
-	}
-
-	public List<MatchingRule> getMatchingRules() {
-		return matchingRules;
-	}
-
-	public void setMatchingRules(List<MatchingRule> matchingRules) {
-		this.matchingRules = matchingRules;
 	}
 
 	@Override

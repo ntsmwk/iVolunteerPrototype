@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 
 public interface ConfiguratorRepository extends MongoRepository<Configurator, String> {
-	
+
 	public List<Configurator> findByName(String name);
-	
+
 	public List<Configurator> findAllWithSort(Sort sort);
 }
