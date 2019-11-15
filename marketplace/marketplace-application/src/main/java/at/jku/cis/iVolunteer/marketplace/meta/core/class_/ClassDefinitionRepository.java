@@ -9,6 +9,4 @@ import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 @Repository
 public interface ClassDefinitionRepository extends MongoRepository<ClassDefinition, String> {
 
-
-	
 }

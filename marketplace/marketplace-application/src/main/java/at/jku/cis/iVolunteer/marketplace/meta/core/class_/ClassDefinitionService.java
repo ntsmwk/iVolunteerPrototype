@@ -34,9 +34,9 @@ public class ClassDefinitionService {
 		return classDefinitionMapper.toDTOs(classDefinitions);
 	}
 
-	ClassDefinitionDTO newClassDefinition(ClassDefinitionDTO classDefinition) {
-		return classDefinitionMapper
-				.toDTO(classDefinitionRepository.save(classDefinitionMapper.toEntity(classDefinition)));
+	ClassDefinitionDTO newClassDefinition(ClassDefinitionDTO classDefinitionDTO) {
+		ClassDefinition classDefinition = classDefinitionRepository.save(classDefinitionMapper.toEntity(classDefinitionDTO));
+		return classDefinitionMapper.toDTO(classDefinition);
 	}
 
 	ClassDefinitionDTO changeClassDefinitionName(String id, String newName) {
