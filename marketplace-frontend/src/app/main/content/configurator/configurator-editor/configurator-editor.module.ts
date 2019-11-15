@@ -9,6 +9,7 @@ import { AddOrRemoveDialogComponent } from 'app/main/content/_components/dialogs
 import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
+import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 
 
 
@@ -42,7 +43,8 @@ import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
   ],
   declarations: [ConfiguratorEditorComponent],
   exports: [ConfiguratorEditorComponent],
-  entryComponents:[AddOrRemoveDialogComponent]
+  entryComponents:[AddOrRemoveDialogComponent],
+
 
 
 })

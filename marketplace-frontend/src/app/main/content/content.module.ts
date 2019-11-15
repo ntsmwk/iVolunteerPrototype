@@ -16,6 +16,7 @@ import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
 import { FlexProdOrHelpseekerGuard } from "./_guard/flexprod-helpseeker.guard";
 import { RecruiterGuard } from './_guard/recruiter.guard';
+import { DataTransportService } from './_service/data-transport/data-transport.service';
 
 
 
@@ -158,7 +159,9 @@ const routes: Route[] = [
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
+    DataTransportService
+
   ],
   exports: [
     FuseContentComponent

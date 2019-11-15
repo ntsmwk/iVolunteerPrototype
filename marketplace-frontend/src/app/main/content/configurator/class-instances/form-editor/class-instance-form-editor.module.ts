@@ -6,9 +6,10 @@ import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatTableModul
 import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
+import { DataTransportService } from 'app/main/content/_service/data-transport/data-transport.service';
 
 const routes = [
-  {path: ':marketplaceId/:classId', component: ClassInstanceFormEditorComponent}
+  {path: ':marketplaceId', component: ClassInstanceFormEditorComponent}
 ];
 
 @NgModule({
@@ -41,7 +42,7 @@ const routes = [
 
   ],
   declarations: [ClassInstanceFormEditorComponent],
-  // exports: [ClassInstanceFormEditorComponent]
+
 
 })
 

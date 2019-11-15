@@ -13,6 +13,7 @@ import {AppComponent} from './app.component';
 import {FuseMainModule} from './main/main.module';
 import { FuseModule } from '@fuse/fuse.module';
 import { DragulaModule } from 'ng2-dragula';
+import { DataTransportService } from './main/content/_service/data-transport/data-transport.service';
 
 
 const appRoutes: Routes = [
@@ -41,7 +42,9 @@ const appRoutes: Routes = [
   ],
   bootstrap: [
     AppComponent
-  ]
+  ],
+  providers: [    
+  ],
 })
 export class AppModule {
 }

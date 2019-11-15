@@ -10,7 +10,7 @@ import { of } from "rxjs";
     providedIn: 'root'
   })
   export class ClassDefinitionService {
-  
+
     constructor(
       private http: HttpClient
     ) { }
@@ -45,6 +45,10 @@ import { of } from "rxjs";
 
     deleteClassDefinitions(marketplace: Marketplace, ids: string[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/delete`, ids);
+    }
+
+    getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/children`, rootClassIds);
     }
 
 

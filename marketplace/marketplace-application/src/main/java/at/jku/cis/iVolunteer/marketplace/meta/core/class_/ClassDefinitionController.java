@@ -1,8 +1,12 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,16 +16,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongodb.util.JSON;
+
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassDefinitionDTO;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @RestController
@@ -33,7 +42,7 @@ public class ClassDefinitionController {
 	@Autowired ClassPropertyMapper classPropertyMapper;
 	@Autowired ClassDefinitionMapper classDefinitionMapper;
 	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-
+	@Autowired RelationshipController relationshipController;
 	/*
 	 * Operations on ClassDefinition
 	 */
@@ -83,6 +92,56 @@ public class ClassDefinitionController {
 		return this.classDefinitionMapper
 				.toDTOs(this.classDefinitionRepository.save(classDefinitionMapper.toEntities(classDefinitions)));
 	}
+	
+	@PutMapping("meta/core/class/definition/get-children")
+	private List<String> getChildrenById(@RequestBody List<String> rootIds) {
+		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
+		
+		List<String> returnIds;
+		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
+			
+		}
+		
+		return null;
+	}
+	
+	@PutMapping("meta/core/class/defintiion/get-parents")
+	private List<String> getParentsById(@RequestBody List<String> childIds) {
+		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
+		
+		
+		List<Relationship> allRelationships = relationshipRepository.findAll();
+		List<String> returnIds = new ArrayList<>();
+		
+		//Pre-Condition: Graph must be acyclic - a child can only have one parent, one parent can have multiple children
+		//Work our way up the chain until we are at the root
+
+		for (ClassDefinition childClassDefinition : childClassDefinitions) {
+			Map<String, String> returnIdMap = new HashMap<String, String>(); 
+			int i = 0;
+			ClassDefinition currentClassDefinition = childClassDefinition;
+			do {
+				//add to map
+				returnIdMap.put(i+"", currentClassDefinition.getId());
+				//find relationship connecting this child with its parents
+				List<Relationship> relationshipList = relationshipRepository.findByClassId1AndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
+				
+				if (relationshipList == null || relationshipList.size()==0) {
+					throw new NotAcceptableException("getParentById: child has no parent");
+				}
+				//traverse - find and assign new currentClassDefinition
+				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getClassId2());
+				
+			} while (!currentClassDefinition.isRoot());
+			//TODO turn map into JSON
+			//TODO append JSON to String List
+		}
+		
+		
+		return null;
+	}
 
 	/*
 	 * Operations on Properties
@@ -113,6 +172,8 @@ public class ClassDefinitionController {
 		clazz = classDefinitionRepository.save(clazz);
 		return classPropertyMapper.toDTOs(clazz.getProperties());
 	}
+	
+
 
 	@PutMapping("meta/core/class/definition/{id}/add-properties")
 	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinition(@PathVariable("id") String id,

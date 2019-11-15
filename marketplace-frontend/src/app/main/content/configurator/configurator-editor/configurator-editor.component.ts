@@ -18,7 +18,9 @@ import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { resource } from 'selenium-webdriver/http';
 import { ObjectUnsubscribedError } from 'rxjs';
+import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 
+declare var require: any
 
 
 const mx: typeof mxgraph = require('mxgraph')({
@@ -86,7 +88,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     private relationshipService: RelationshipService,
     private dialogFactory: DialogFactoryComponent,
     private snackBar: MatSnackBar,
-    private configuratorService: ConfiguratorService) {
+    private configuratorService: ConfiguratorService,
+    private dataTransportService: DataTransportService) {
 
   }
 
@@ -460,7 +463,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
           if (c.id == parent.id) {
             this.dialogFactory.removePropertyDialogGeneric(c.properties).then((props: PropertyItem[]) => {
               let rest = c.properties.filter((p: PropertyItem) => {
-                return !(props.includes(p));
+                return !(props.indexOf(p) >= 0);
               });
 
               c.properties = rest;
@@ -714,16 +717,20 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   }
 
   showWorkInProgressInfo: boolean = false;
-  createClassInstanceClicked(cell: mxgraph.mxCell) {
+  createClassInstanceClicked(cells: myMxCell[]) {
     console.log("create class instance clicked");
-    console.log(cell);
+    console.log(cells);
 
-    if (isNullOrUndefined(cell)) {
-      //TODO find root - workaroud assign root manually for demonstration
-      cell = this.graph.getModel().getCell('root');
+    let allCells: myMxCell[] = this.graph.getModel().getChildCells(this.graph.getDefaultParent()) as myMxCell[];
+    if (isNullOrUndefined(cells) || cells.length == 0) {
+      //get all cells in graph
+      //find first root cell
+      cells = allCells.filter((c: myMxCell) => {
+        return c.root;
+      });
     }
 
-    if (cell.id.startsWith('new')) {
+    if (allCells.filter((c: myMxCell) => {return c.newlyAdded}).length > 0) {
       console.log("you have to save first");
 
       //TODO
@@ -733,7 +740,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
         outer.showWorkInProgressInfo = false;
       }, 5000);
     } else {
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/${cell.id}`]);
+      this.dataTransportService.data = cells;
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`]);
     }
   }
 

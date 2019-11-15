@@ -9,6 +9,7 @@ import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
 import { FormControl, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 import { maxOtherNew } from "../../../_validator/custom.validators";
+import { DataTransportService } from 'app/main/content/_service/data-transport/data-transport.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ import { maxOtherNew } from "../../../_validator/custom.validators";
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
-  configurableClass: ClassDefinition;
+  rootClassDefinitons: ClassDefinition[];
+  allClassDefinitions: ClassDefinition[];
 
   isLoaded: boolean = false;
 
@@ -70,6 +72,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private questionService: QuestionService,
     private fb: FormBuilder,
+    private dataTransportService: DataTransportService,
   ) {
 
   }
@@ -81,36 +84,26 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       console.log(param['marketplaceId']);
 
       const marketplaceId = param['marketplaceId'];
-      const classId = param['classId'];
+      console.log("test datatransportservice:")
+      console.log(this.dataTransportService.data)
+      
+      let rootClassIds = this.dataTransportService.data;
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getClassDefinitionById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefinition) => {
-          this.configurableClass = configurableClass;
-          //TODO
-          // this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties);
-          if (classId == 'root') {
-            this.flexProdDemoMode = true;
+        
+        Promise.all([
+          this.classDefinitionService.getClassDefinitionsById(this.marketplace, rootClassIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
+            this.rootClassDefinitons = this.rootClassDefinitons;
+            //TODO
+            // this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties)
+            
 
-            let finishedNumber = 0;
-            for (let id of this.demoClassIds) {
-              this.classDefinitionService.getClassDefinitionById(this.marketplace, id).toPromise().then((classDefinition: ClassDefinition) => {
-                let index = this.demoClassIds.indexOf(id);
-                this.demoClasses[index] = classDefinition;
-                finishedNumber++;
-                if (finishedNumber >= this.demoClassIds.length) {
-                  this.createDemoFormControl();
-                  this.isLoaded = true;
-                }
-              });
-            }
-
-          }
-
-          // this.isLoaded = true;
-          console.log(this.marketplace);
-          console.log(this.configurableClass);
-        });
+          }),
+          this.classDefinitionService.getAllChildrenIdMap(this.marketplace, rootClassIds).toPromise().then((childrenIds: String[]) => {
+            console.log(childrenIds);
+          })
+        ]);
       });
     });
   }
@@ -410,7 +403,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
 
   chargierhilfeContains(value: string) {
-    return (this.form.value['chargierhilfe'] as String[]).includes(value);
+    return (this.form.value['chargierhilfe'] as String[]).indexOf(value) >= 0;
   }
 
   displayErrorMessage(formControlName: string, key: string) {
