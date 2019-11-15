@@ -30,7 +30,6 @@ public class ClassInstanceController {
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances() {
-
 		return classInstanceMapper.toDTOs(classInstanceRepository.findAll());
 	}
 
@@ -45,7 +44,6 @@ public class ClassInstanceController {
 
 		// TODO create instances from from bottom to top
 		ClassInstance classInstance = classDefinition2InstanceMapper.toTarget(classDefinition);
-
 		return classInstanceMapper.toDTO(classInstance);
 	}
 
