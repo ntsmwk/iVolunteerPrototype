@@ -12,6 +12,5 @@ public interface ConfiguratorRepository extends MongoRepository<Configurator, St
 	
 	public List<Configurator> findByName(String name);
 	
-	@Query(value="{}")
 	public List<Configurator> findAllWithSort(Sort sort);
 }

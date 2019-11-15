@@ -9,18 +9,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Configurator {
 
-	@Id
-	String id;
-	
-	String name;
-	String description;
-	
-	List<String> classDefinitionIds;
-	List<String> relationshipIds;
-	
-	Date date;
-	
-	
+	@Id String id;
+
+	private String name;
+	private String description;
+
+	private List<String> classDefinitionIds;
+	private List<String> relationshipIds;
+
+	private Date date;
+
+	private ConfiguratorArcheType configuratorArcheType;
+
+	public Configurator() {
+	}
 	
 	public String getId() {
 		return id;
@@ -29,7 +31,6 @@ public class Configurator {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
 
 	public String getName() {
 		return name;
@@ -62,7 +63,7 @@ public class Configurator {
 	public void setRelationshipIds(List<String> relationshipIds) {
 		this.relationshipIds = relationshipIds;
 	}
-	
+
 	public Date getDate() {
 		return date;
 	}
@@ -75,12 +76,20 @@ public class Configurator {
 	public int hashCode() {
 		return id.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Configurator)) {
 			return false;
 		}
 		return ((Configurator) obj).id.equals(id);
+	}
+
+	public ConfiguratorArcheType getConfiguratorArcheType() {
+		return configuratorArcheType;
+	}
+
+	public void setConfiguratorArcheType(ConfiguratorArcheType configuratorArcheType) {
+		this.configuratorArcheType = configuratorArcheType;
 	}
 }

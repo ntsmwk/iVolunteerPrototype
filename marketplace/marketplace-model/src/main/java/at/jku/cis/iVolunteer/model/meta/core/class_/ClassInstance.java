@@ -10,7 +10,8 @@ import at.jku.cis.iVolunteer.model.meta.matching.MatchingRule;
 
 @Document
 public class ClassInstance {
-	@Id private String id;
+	@Id 
+	private String id;
 	private String classDefinitionId;
 	private String parentClassInstanceId;
 
