@@ -68,12 +68,12 @@ public class VolunteerProfileController {
 	}
 
 	@PostMapping("/{volunteerId}/profile/task")
-	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntryDto,
+	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntry,
 			@RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
-		if (verifierRestClient.verifyTaskEntry(taskEntryDto, authorization)) {
-			volunteerProfile.getTaskList().add(taskEntryDto);
+		if (verifierRestClient.verifyTaskEntry(taskEntry, authorization)) {
+			volunteerProfile.getTaskList().add(taskEntry);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
 			throw new BadRequestException();
@@ -129,11 +129,11 @@ public class VolunteerProfileController {
 
 	@PostMapping("/{volunteerId}/profile/competence")
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@RequestBody CompetenceEntry competenceEntryDto, @RequestHeader("authorization") String authorization) {
+			@RequestBody CompetenceEntry competenceEntry, @RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
-		if (verifierRestClient.verifyCompetenceEntry(competenceEntryDto, authorization)) {
-			volunteerProfile.getCompetenceList().add(competenceEntryDto);
+		if (verifierRestClient.verifyCompetenceEntry(competenceEntry, authorization)) {
+			volunteerProfile.getCompetenceList().add(competenceEntry);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
 			throw new BadRequestException();

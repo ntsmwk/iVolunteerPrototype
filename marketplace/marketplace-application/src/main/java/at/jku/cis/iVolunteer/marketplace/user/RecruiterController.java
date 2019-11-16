@@ -22,11 +22,11 @@ public class RecruiterController {
 	}
 
 	@PostMapping("/recruiter")
-	public Recruiter registerHelpSeeker(@RequestBody Recruiter recruiterDto) {
-		if (recruiterRepository.findOne(recruiterDto.getId()) != null) {
+	public Recruiter registerHelpSeeker(@RequestBody Recruiter recruiter) {
+		if (recruiterRepository.findOne(recruiter.getId()) != null) {
 			throw new BadRequestException("HelpSeeker already registed");
 		}
-		return recruiterRepository.insert(recruiterDto);
+		return recruiterRepository.insert(recruiter);
 	}
 
 }

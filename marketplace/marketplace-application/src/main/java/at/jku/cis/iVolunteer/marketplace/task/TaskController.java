@@ -114,13 +114,13 @@ public class TaskController {
 	}
 
 	@PutMapping("/task/{id}")
-	public Task updateTask(@PathVariable("id") String taskId, @RequestBody Task taskDto) {
+	public Task updateTask(@PathVariable("id") String taskId, @RequestBody Task task) {
 		Task orginalTask = taskRepository.findOne(taskId);
 		if (orginalTask == null) {
 			throw new NotAcceptableException();
 		}
-		orginalTask.setStartDate(taskDto.getStartDate());
-		orginalTask.setEndDate(taskDto.getEndDate());
+		orginalTask.setStartDate(task.getStartDate());
+		orginalTask.setEndDate(task.getEndDate());
 		return taskRepository.save(orginalTask);
 	}
 

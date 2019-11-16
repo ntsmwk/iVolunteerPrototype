@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.property.listEntry.dto;
+package at.jku.cis.iVolunteer.model.property.listEntry;
 
 public class ListEntry<T> {
 

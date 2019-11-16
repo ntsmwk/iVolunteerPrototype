@@ -22,10 +22,10 @@ public class HelpSeekerController {
 	}
 
 	@PostMapping("/helpseeker")
-	public HelpSeeker registerHelpSeeker(@RequestBody HelpSeeker helpSeekerDto) {
-		if (helpSeekerRepository.findOne(helpSeekerDto.getId()) != null) {
+	public HelpSeeker registerHelpSeeker(@RequestBody HelpSeeker helpSeeker) {
+		if (helpSeekerRepository.findOne(helpSeeker.getId()) != null) {
 			throw new BadRequestException("HelpSeeker already registed");
 		}
-		return helpSeekerRepository.insert(helpSeekerDto);
+		return helpSeekerRepository.insert(helpSeeker);
 	}
 }
