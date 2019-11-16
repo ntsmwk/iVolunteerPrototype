@@ -15,7 +15,7 @@ import { fuseAnimations } from "@fuse/animations";
     templateUrl: './dashboard-helpseeker.component.html',
     animations: fuseAnimations
 })
-export class FuseHelpSeekerDashboardComponent implements OnInit {
+export class DashboardHelpSeekerComponent implements OnInit {
 
     private helpSeeker: Participant;
     public marketplaces = new Array<Marketplace>();
