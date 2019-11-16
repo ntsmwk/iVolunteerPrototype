@@ -1,6 +1,6 @@
-package at.jku.cis.iVolunteer.model.task.template.dto;
+package at.jku.cis.iVolunteer.model.task.template;
 
-public class UserDefinedTaskTemplateStubDTO {
+public class UserDefinedTaskTemplateStub {
 
 	String id;
 	String name;
@@ -49,10 +49,10 @@ public class UserDefinedTaskTemplateStubDTO {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof UserDefinedTaskTemplateStubDTO)) {
+		if (!(obj instanceof UserDefinedTaskTemplateStub)) {
 			return false;
 		}
-		return ((UserDefinedTaskTemplateStubDTO) obj).id.equals(id);
+		return ((UserDefinedTaskTemplateStub) obj).id.equals(id);
 	}
 	
 	

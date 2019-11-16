@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
-import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
-import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.source.Source;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.iVolunteer.workflow.rest.client.ContractorRestClient;
 import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;
 
@@ -17,8 +17,7 @@ public class AssignServiceTask implements ServiceTask {
 	@Autowired private ContractorRestClient contractorRestClient;
 	@Autowired private WorkflowMarketplaceRestClient marketplaceRestClient;
 
-	@Value("${marketplace.uri}") 
-	private String marketplaceUri;
+	@Value("${marketplace.uri}") private String marketplaceUri;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
@@ -27,9 +26,9 @@ public class AssignServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + ", volunteerId: " + volunteerId + "}");
 
-		TaskDTO task = marketplaceRestClient.findTaskById(marketplaceUri, taskId, token);
-		SourceDTO source = marketplaceRestClient.findSource(marketplaceUri, token);
-		VolunteerDTO volunteer = marketplaceRestClient.findVolunteerById(marketplaceUri, volunteerId, token);
+		Task task = marketplaceRestClient.findTaskById(marketplaceUri, taskId, token);
+		Source source = marketplaceRestClient.findSource(marketplaceUri, token);
+		Volunteer volunteer = marketplaceRestClient.findVolunteerById(marketplaceUri, volunteerId, token);
 		contractorRestClient.assignTask(task, source, volunteer, token);
 	}
 }

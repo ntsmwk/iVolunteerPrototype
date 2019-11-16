@@ -9,18 +9,18 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
-import at.jku.cis.iVolunteer.model.task.template.dto.UserDefinedTaskTemplateStubDTO;
+import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplateStub;
 
 @Component
-public class UserDefinedTaskTemplateStubMapper implements AbstractMapper<UserDefinedTaskTemplate, UserDefinedTaskTemplateStubDTO> {
+public class UserDefinedTaskTemplateStubMapper implements AbstractMapper<UserDefinedTaskTemplate, UserDefinedTaskTemplateStub> {
 
     @Override
-    public UserDefinedTaskTemplateStubDTO toDTO(UserDefinedTaskTemplate source) {
+    public UserDefinedTaskTemplateStub toTarget(UserDefinedTaskTemplate source) {
         if ( source == null ) {
             return null;
         }
 
-        UserDefinedTaskTemplateStubDTO userDefinedTaskTemplateStubDTO = new UserDefinedTaskTemplateStubDTO();
+        UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO = new UserDefinedTaskTemplateStub();
 
         userDefinedTaskTemplateStubDTO.setId( source.getId() );
         userDefinedTaskTemplateStubDTO.setName( source.getName() );
@@ -38,21 +38,21 @@ public class UserDefinedTaskTemplateStubMapper implements AbstractMapper<UserDef
     }
 
     @Override
-    public List<UserDefinedTaskTemplateStubDTO> toDTOs(List<UserDefinedTaskTemplate> sources) {
+    public List<UserDefinedTaskTemplateStub> toTargets(List<UserDefinedTaskTemplate> sources) {
         if ( sources == null ) {
             return null;
         }
 
-        List<UserDefinedTaskTemplateStubDTO> list = new ArrayList<UserDefinedTaskTemplateStubDTO>( sources.size() );
+        List<UserDefinedTaskTemplateStub> list = new ArrayList<UserDefinedTaskTemplateStub>( sources.size() );
         for ( UserDefinedTaskTemplate userDefinedTaskTemplate : sources ) {
-            list.add( toDTO( userDefinedTaskTemplate ) );
+            list.add( toTarget( userDefinedTaskTemplate ) );
         }
 
         return list;
     }
 
     @Override
-    public UserDefinedTaskTemplate toEntity(UserDefinedTaskTemplateStubDTO target) {
+    public UserDefinedTaskTemplate toSource(UserDefinedTaskTemplateStub target) {
         if ( target == null ) {
             return null;
         }
@@ -67,14 +67,14 @@ public class UserDefinedTaskTemplateStubMapper implements AbstractMapper<UserDef
     }
 
     @Override
-    public List<UserDefinedTaskTemplate> toEntities(List<UserDefinedTaskTemplateStubDTO> targets) {
+    public List<UserDefinedTaskTemplate> toSources(List<UserDefinedTaskTemplateStub> targets) {
         if ( targets == null ) {
             return null;
         }
 
         List<UserDefinedTaskTemplate> list = new ArrayList<UserDefinedTaskTemplate>( targets.size() );
-        for ( UserDefinedTaskTemplateStubDTO userDefinedTaskTemplateStubDTO : targets ) {
-            list.add( toEntity( userDefinedTaskTemplateStubDTO ) );
+        for ( UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO : targets ) {
+            list.add( toSource( userDefinedTaskTemplateStubDTO ) );
         }
 
         return list;

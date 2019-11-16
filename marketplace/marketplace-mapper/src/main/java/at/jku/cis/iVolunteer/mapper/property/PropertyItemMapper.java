@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayMapper;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.PropertyItemDTO;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyItem;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
 @Component
-public class PropertyItemMapper implements OneWayMapper<UserDefinedTaskTemplate, PropertyItemDTO> {
+public class PropertyItemMapper implements OneWayMapper<UserDefinedTaskTemplate, PropertyItem> {
 
 	@Override
-	public PropertyItemDTO toTarget(UserDefinedTaskTemplate source) {
+	public PropertyItem toTarget(UserDefinedTaskTemplate source) {
 
 		if (source == null) {
 			return null;
 		}
 
-		PropertyItemDTO item = new PropertyItemDTO();
+		PropertyItem item = new PropertyItem();
 		item.setId(source.getId());
 		item.setName(source.getName());
 
@@ -27,12 +27,12 @@ public class PropertyItemMapper implements OneWayMapper<UserDefinedTaskTemplate,
 	}
 
 	@Override
-	public List<PropertyItemDTO> toTargets(List<UserDefinedTaskTemplate> sources) {
+	public List<PropertyItem> toTargets(List<UserDefinedTaskTemplate> sources) {
 		if (sources == null) {
 			return null;
 		}
 
-		List<PropertyItemDTO> list = new ArrayList<PropertyItemDTO>(sources.size());
+		List<PropertyItem> list = new ArrayList<PropertyItem>(sources.size());
 		for (UserDefinedTaskTemplate item : sources) {
 			list.add(toTarget(item));
 		}

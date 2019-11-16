@@ -37,7 +37,7 @@ public class AssociationMapper implements AbstractMapper<Association, Relationsh
 	}
 
 	@Override
-	public RelationshipDTO toDTO(Association source) {
+	public RelationshipDTO toTarget(Association source) {
 		if (source == null) {
 			return null;
 		}
@@ -55,7 +55,7 @@ public class AssociationMapper implements AbstractMapper<Association, Relationsh
 	}
 
 	@Override
-	public List<RelationshipDTO> toDTOs(List<Association> sources) {
+	public List<RelationshipDTO> toTargets(List<Association> sources) {
 		if (sources == null) {
 			return null;
 		}
@@ -63,14 +63,14 @@ public class AssociationMapper implements AbstractMapper<Association, Relationsh
 		List<RelationshipDTO> dtos = new ArrayList<RelationshipDTO>();
 		
 		for (Association entity : sources) {
-			dtos.add(this.toDTO(entity));
+			dtos.add(this.toTarget(entity));
 		}
 
 		return dtos;
 	}
 
 	@Override
-	public Association toEntity(RelationshipDTO target) {
+	public Association toSource(RelationshipDTO target) {
 		if (target == null) {
 			return null;
 		}
@@ -88,14 +88,14 @@ public class AssociationMapper implements AbstractMapper<Association, Relationsh
 	}
 
 	@Override
-	public List<Association> toEntities(List<RelationshipDTO> targets) {
+	public List<Association> toSources(List<RelationshipDTO> targets) {
 		if (targets == null) {
 			return null;
 		}
 		
 		List<Association> entities = new ArrayList<Association>();
 		for (RelationshipDTO dto : targets) {
-			entities.add(this.toEntity(dto));
+			entities.add(this.toSource(dto));
 		}
 	
 		return entities;

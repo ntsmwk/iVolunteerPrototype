@@ -1,6 +1,6 @@
-package at.jku.cis.iVolunteer.model.source.dto;
+package at.jku.cis.iVolunteer.model.source;
 
-public class SourceDTO {
+public class Source {
 	private String identifier;
 	private String address;
 

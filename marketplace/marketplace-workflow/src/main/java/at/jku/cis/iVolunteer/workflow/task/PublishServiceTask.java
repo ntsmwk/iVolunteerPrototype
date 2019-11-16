@@ -10,17 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.iVolunteer.workflow.rest.client.WorkflowMarketplaceRestClient;
 
 @Component
 public class PublishServiceTask implements ServiceTask {
 
-	@Autowired
-	private WorkflowMarketplaceRestClient marketplaceRestClient;
-	
-	@Value("${marketplace.uri}")
-	private String marketplaceUri;
+	@Autowired private WorkflowMarketplaceRestClient marketplaceRestClient;
+
+	@Value("${marketplace.uri}") private String marketplaceUri;
 
 	@Override
 	public void execute(DelegateExecution delegateExecution) {
@@ -28,11 +26,12 @@ public class PublishServiceTask implements ServiceTask {
 		String token = delegateExecution.getVariable(TOKEN, String.class);
 		System.out.println(this.getClass().getName() + "{taskId: " + taskId + "}");
 
-		marketplaceRestClient.publishTask(marketplaceUri,taskId, token);
-		delegateExecution.setVariable(VOLUNTEER_IDS, extractVolunteerIds(marketplaceRestClient.findVolunteers(marketplaceUri,token)));
+		marketplaceRestClient.publishTask(marketplaceUri, taskId, token);
+		delegateExecution.setVariable(VOLUNTEER_IDS,
+				extractVolunteerIds(marketplaceRestClient.findVolunteers(marketplaceUri, token)));
 	}
 
-	private Set<String> extractVolunteerIds(List<VolunteerDTO> volunteers) {
+	private Set<String> extractVolunteerIds(List<Volunteer> volunteers) {
 		return volunteers.stream().map(volunteer -> volunteer.getId()).collect(toSet());
 	}
 }

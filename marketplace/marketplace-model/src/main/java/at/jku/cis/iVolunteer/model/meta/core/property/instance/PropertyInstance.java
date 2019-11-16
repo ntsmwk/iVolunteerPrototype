@@ -12,21 +12,24 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @Document
 public class PropertyInstance<T> {
 
-	@Id
-	String id;	
+	@Id String id;
 	String name;
-	
+
 	List<T> values;
-	
+	List<T> allowedValues;
+
 	PropertyType type;
 
-	int position; 
-	
+	int position;
+
+	boolean immutable;
+	boolean updateable;
 	boolean required;
-	
+
 	List<PropertyConstraint<T>> propertyConstraints;
-	
-	public PropertyInstance() {}
+
+	public PropertyInstance() {
+	}
 
 	public String getId() {
 		return id;
@@ -52,6 +55,14 @@ public class PropertyInstance<T> {
 		this.values = values;
 	}
 
+	public List<T> getAllowedValues() {
+		return allowedValues;
+	}
+
+	public void setAllowedValues(List<T> allowedValues) {
+		this.allowedValues = allowedValues;
+	}
+
 	public PropertyType getType() {
 		return type;
 	}
@@ -60,14 +71,21 @@ public class PropertyInstance<T> {
 		this.type = type;
 	}
 
-	public int getPosition() {
-		return position;
+	public boolean isImmutable() {
+		return immutable;
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
+	public void setImmutable(boolean immutable) {
+		this.immutable = immutable;
 	}
-	
+
+	public boolean isUpdateable() {
+		return updateable;
+	}
+
+	public void setUpdateable(boolean updateable) {
+		this.updateable = updateable;
+	}
 
 	public boolean isRequired() {
 		return required;
@@ -77,6 +95,14 @@ public class PropertyInstance<T> {
 		this.required = required;
 	}
 
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public List<PropertyConstraint<T>> getPropertyConstraints() {
 		return propertyConstraints;
 	}
@@ -84,25 +110,23 @@ public class PropertyInstance<T> {
 	public void setPropertyConstraints(List<PropertyConstraint<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
-	
-	public void resetValues() {
-		values = new ArrayList<T>();
-	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof PropertyInstance<?>)) {
 			return false;
 		}
 		return ((PropertyInstance<?>) obj).id.equals(id);
-	
+
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}
-	
-	
-	
+
+	public void resetValues() {
+		values = new ArrayList<T>();
+	}
+
 }

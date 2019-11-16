@@ -1,18 +1,18 @@
 package at.jku.cis.iVolunteer.model.property.listEntry.dto;
 
-public class ListEntryDTO<T> {
+public class ListEntry<T> {
 
 	String id;
 	private T value;
 
-	public ListEntryDTO() {
+	public ListEntry() {
 	}
 	
-	public ListEntryDTO(T value) {
+	public ListEntry(T value) {
 		this.value = value;
 	}
 	
-	public ListEntryDTO(String id, T value) {
+	public ListEntry(String id, T value) {
 		this.id = id;
 		this.value = value;
 	}
@@ -35,10 +35,10 @@ public class ListEntryDTO<T> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ListEntryDTO<?>)) {
+		if (!(obj instanceof ListEntry<?>)) {
 			return false;
 		}
-		return ((ListEntryDTO<?>) obj).id.equals(id);
+		return ((ListEntry<?>) obj).id.equals(id);
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class ListEntryDTO<T> {
 
 	@Override
 	public String toString() {
-		return "\nListEntryDTO [id=" + id + ", value=" + value + "]";
+		return "\nListEntry [id=" + id + ", value=" + value + "]";
 	}
 	
 	

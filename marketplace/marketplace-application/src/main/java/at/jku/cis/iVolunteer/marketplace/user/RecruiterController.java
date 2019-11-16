@@ -9,26 +9,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.user.RecruiterMapper;
-import at.jku.cis.iVolunteer.model.user.dto.RecruiterDTO;
+import at.jku.cis.iVolunteer.model.user.Recruiter;
 
 @RestController
 public class RecruiterController {
 
-	@Autowired private RecruiterMapper recruiterMapper;
 	@Autowired private RecruiterRepository recruiterRepository;
 
 	@GetMapping("/recruiter/{id}")
-	public RecruiterDTO findById(@PathVariable("id") String id) {
-		return recruiterMapper.toDTO(recruiterRepository.findOne(id));
+	public Recruiter findById(@PathVariable("id") String id) {
+		return recruiterRepository.findOne(id);
 	}
 
 	@PostMapping("/recruiter")
-	public RecruiterDTO registerHelpSeeker(@RequestBody RecruiterDTO recruiterDto) {
+	public Recruiter registerHelpSeeker(@RequestBody Recruiter recruiterDto) {
 		if (recruiterRepository.findOne(recruiterDto.getId()) != null) {
 			throw new BadRequestException("HelpSeeker already registed");
 		}
-		return recruiterMapper.toDTO(recruiterRepository.insert(recruiterMapper.toEntity(recruiterDto)));
+		return recruiterRepository.insert(recruiterDto);
 	}
 
 }

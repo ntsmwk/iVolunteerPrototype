@@ -10,10 +10,8 @@ import javax.ws.rs.NotAcceptableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassDefinitionDTO;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
@@ -22,40 +20,36 @@ public class ClassDefinitionService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 
-	ClassDefinitionDTO getClassDefinitionById(String id) {
-		return classDefinitionMapper.toDTO(classDefinitionRepository.findOne(id));
+	ClassDefinition getClassDefinitionById(String id) {
+		return classDefinitionRepository.findOne(id);
 	}
 
-	List<ClassDefinitionDTO> getClassDefinitonsById(List<String> ids) {
+	List<ClassDefinition> getClassDefinitonsById(List<String> ids) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
-		return classDefinitionMapper.toDTOs(classDefinitions);
+		return classDefinitions;
 	}
 
-	ClassDefinitionDTO newClassDefinition(ClassDefinitionDTO classDefinitionDTO) {
-		ClassDefinition classDefinition = classDefinitionRepository.save(classDefinitionMapper.toEntity(classDefinitionDTO));
-		return classDefinitionMapper.toDTO(classDefinition);
+	ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
+		return classDefinitionRepository.save(classDefinitionDTO);
 	}
 
-	ClassDefinitionDTO changeClassDefinitionName(String id, String newName) {
+	ClassDefinition changeClassDefinitionName(String id, String newName) {
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
 		clazz.setName(newName);
-		return classDefinitionMapper.toDTO(classDefinitionRepository.save(clazz));
+		return (classDefinitionRepository.save(clazz));
 	}
 
-	List<ClassDefinitionDTO> deleteClassDefinition(List<String> idsToRemove) {
+	List<ClassDefinition> deleteClassDefinition(List<String> idsToRemove) {
 		for (String id : idsToRemove) {
 			classDefinitionRepository.delete(id);
 		}
-		return classDefinitionMapper.toDTOs(classDefinitionRepository.findAll());
-
+		return classDefinitionRepository.findAll();
 	}
 
-	List<ClassDefinitionDTO> addOrUpdateClassDefinitions(List<ClassDefinitionDTO> classDefinitions) {
-		return this.classDefinitionMapper
-				.toDTOs(this.classDefinitionRepository.save(classDefinitionMapper.toEntities(classDefinitions)));
+	List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
+		return classDefinitionRepository.save(classDefinitions);
 	}
 
 	List<String> getParentsById(List<String> childIds) {

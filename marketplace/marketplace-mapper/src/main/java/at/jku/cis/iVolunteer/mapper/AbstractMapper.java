@@ -4,12 +4,11 @@ import java.util.List;
 
 public interface AbstractMapper<S, T> {
 
-	T toDTO(S source);
+	T toTarget(S source);
 
-	List<T> toDTOs(List<S> sources);
+	List<T> toTargets(List<S> sources);
 
-	S toEntity(T target);
+	S toSource(T target);
 
-	List<S> toEntities(List<T> targets);
-
+	List<S> toSources(List<T> targets);
 }

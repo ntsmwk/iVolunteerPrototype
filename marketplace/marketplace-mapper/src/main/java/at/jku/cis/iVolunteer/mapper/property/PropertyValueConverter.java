@@ -12,19 +12,16 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 public class PropertyValueConverter {
 
 	public Object convert(Object source, PropertyType type) {
-		Object ret;
-
-		if (type.equals(PropertyType.DATE)) {
-			ret = convertObjectToDate(source);
-		} else if (type.equals(PropertyType.FLOAT_NUMBER)) {
-			ret = convertObjectToDouble(source);
-		} else if (type.equals(PropertyType.WHOLE_NUMBER)) {
-			ret = convertObjectToInteger(source);
-		} else {
-			ret = source;
+		switch (type) {
+		case DATE:
+			return convertObjectToDate(source);
+		case FLOAT_NUMBER:
+			return convertObjectToDouble(source);
+		case WHOLE_NUMBER:
+			return convertObjectToInteger(source);
+		default:
+			return null;
 		}
-
-		return ret;
 	}
 
 	private Date convertObjectToDate(Object source) {
@@ -34,7 +31,7 @@ public class PropertyValueConverter {
 
 			} else if (source instanceof Date) {
 				return (Date) source;
-				
+
 			} else if (source instanceof String) {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 				Date date = sdf.parse((String) source);
@@ -55,22 +52,19 @@ public class PropertyValueConverter {
 		}
 	}
 
+	//TODO @Alex (((double)(Integer) source)) does not work
 	private Double convertObjectToDouble(Object source) {
 		try {
-
 			return (Double) source;
 		} catch (ClassCastException e) {
 			try {
 				System.out
 						.println("PropertyMapper: Double ClassCastException triggered: " + source + " trying to parse");
-				double ret;
 
 				if (source instanceof String) {
-					ret = Double.parseDouble((String) source);
-					return ret;
+					return Double.parseDouble((String) source);
 				} else if (source instanceof Integer) {
-					ret = (Integer) source;
-					return ret;
+					return ((double)(Integer) source);
 				} else {
 					throw new IllegalArgumentException(
 							"PropertyMapper - unable to parse - should not happen: " + source);

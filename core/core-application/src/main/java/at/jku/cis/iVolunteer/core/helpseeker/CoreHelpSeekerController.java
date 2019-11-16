@@ -10,55 +10,49 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.mapper.core.user.CoreHelpSeekerMapper;
-import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
-import at.jku.cis.iVolunteer.model.core.user.dto.CoreHelpSeekerDTO;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
-import at.jku.cis.iVolunteer.model.user.dto.HelpSeekerDTO;
+import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 
 @RestController
 @RequestMapping("/helpseeker")
 public class CoreHelpSeekerController {
 
-	@Autowired private CoreHelpSeekerMapper coreHelpSeekerMapper;
-	@Autowired private MarketplaceMapper marketplaceMapper;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@GetMapping("/{coreHelpSeekerId}")
-	public CoreHelpSeekerDTO getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
-		return coreHelpSeekerMapper.toDTO(coreHelpSeekerRepository.findOne(coreHelpSeekerId));
+	public CoreHelpSeeker getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
+		return coreHelpSeekerRepository.findOne(coreHelpSeekerId);
 	}
 
 	@GetMapping("/{coreHelpSeekerId}/marketplace")
-	public MarketplaceDTO getRegisteredMarketplaces(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
+	public Marketplace getRegisteredMarketplaces(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
 		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
-		if(helpSeeker.getRegisteredMarketplaces().isEmpty()) {
+		if (helpSeeker.getRegisteredMarketplaces().isEmpty()) {
 			return null;
 		}
-		return marketplaceMapper.toDTO(helpSeeker.getRegisteredMarketplaces().get(0));
+		return helpSeeker.getRegisteredMarketplaces().get(0);
 	}
 
 	@PostMapping("/{coreHelpSeekerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
+		CoreHelpSeeker coreHelpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		if (helpSeeker == null || marketplace == null) {
+		if (coreHelpSeeker == null || marketplace == null) {
 			throw new NotFoundException();
 		}
 
-		helpSeeker.getRegisteredMarketplaces().add(marketplace);
-		CoreHelpSeeker coreHelpSeeker = coreHelpSeekerRepository.save(helpSeeker);
+		coreHelpSeeker.getRegisteredMarketplaces().add(marketplace);
+		coreHelpSeeker = coreHelpSeekerRepository.save(coreHelpSeeker);
 
-		HelpSeekerDTO helpSeekerDTO = new HelpSeekerDTO();
-		helpSeekerDTO.setId(coreHelpSeeker.getId());
-		helpSeekerDTO.setUsername(helpSeeker.getUsername());
-		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeekerDTO);
+		HelpSeeker helpSeeker = new HelpSeeker();
+		helpSeeker.setId(coreHelpSeeker.getId());
+		helpSeeker.setUsername(coreHelpSeeker.getUsername());
+		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeeker);
 	}
 
 }

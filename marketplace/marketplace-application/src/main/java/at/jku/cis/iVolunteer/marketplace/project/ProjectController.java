@@ -17,13 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.project.ProjectMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.project.Project;
-import at.jku.cis.iVolunteer.model.project.dto.ProjectDTO;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
@@ -38,35 +36,28 @@ public class ProjectController {
 	private static final String ENGAGED = "ENGAGED";
 	private static final String FINISHED = "FINISHED";
 
-	@Value("${marketplace.identifier}")
-	private String marketplaceId;
+	@Value("${marketplace.identifier}") private String marketplaceId;
 
-	@Autowired
-	private LoginService loginService;
-	@Autowired
-	private ProjectMapper projectMapper;
-	@Autowired
-	private ProjectRepository projectRepository;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskInteractionRepository taskInteractionRepository;
+	@Autowired private LoginService loginService;
+	@Autowired private ProjectRepository projectRepository;
+	@Autowired private TaskRepository taskRepository;
+	@Autowired private TaskInteractionRepository taskInteractionRepository;
 
 	@GetMapping("/project")
-	public List<ProjectDTO> findAll(@RequestParam(value = "state", required = false) String state) {
+	public List<Project> findAll(@RequestParam(value = "state", required = false) String state) {
 		if (StringUtils.equalsIgnoreCase(state, AVAILABLE)) {
 			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
-			return projectMapper.toDTOs(findAvailableProjectsByVolunteer(volunteer));
+			return findAvailableProjectsByVolunteer(volunteer);
 		}
 		if (StringUtils.equalsIgnoreCase(state, ENGAGED)) {
 			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
-			return projectMapper.toDTOs(findEngagedProjectsByVolunteer(volunteer));
+			return findEngagedProjectsByVolunteer(volunteer);
 		}
 		if (StringUtils.equalsIgnoreCase(state, FINISHED)) {
 			Volunteer volunteer = (Volunteer) loginService.getLoggedInParticipant();
-			return projectMapper.toDTOs(findFinishedProjectsByVolunteer(volunteer));
+			return findFinishedProjectsByVolunteer(volunteer);
 		}
-		return projectMapper.toDTOs(projectRepository.findAll());
+		return projectRepository.findAll();
 	}
 
 	private List<Project> findAvailableProjectsByVolunteer(Volunteer volunteer) {
@@ -91,7 +82,7 @@ public class ProjectController {
 				projects.add(task.getProject());
 			}
 		});
-		
+
 		taskRepository.findByStatus(TaskStatus.RUNNING).forEach(task -> {
 			TaskInteraction taskInteraction = getLatestTaskInteraction(task, volunteer);
 			if (isReservedAssignedTaskInteraction(taskInteraction)) {
@@ -124,25 +115,24 @@ public class ProjectController {
 	}
 
 	@GetMapping("/project/{id}")
-	public ProjectDTO findById(@PathVariable("id") String projectId) {
-		return projectMapper.toDTO(projectRepository.findOne(projectId));
+	public Project findById(@PathVariable("id") String projectId) {
+		return projectRepository.findOne(projectId);
 	}
 
 	@PostMapping("/project")
-	public ProjectDTO createProject(@RequestBody ProjectDTO proectDto) {
-		Project project = projectMapper.toEntity(proectDto);
+	public Project createProject(@RequestBody Project project) {
 		project.setMarketplaceId(marketplaceId);
-		return projectMapper.toDTO(projectRepository.insert(project));
+		return projectRepository.insert(project);
 	}
 
 	@PutMapping("/project/{id}")
-	public ProjectDTO updateProject(@PathVariable("id") String projectId, @RequestBody ProjectDTO projectDto) {
+	public Project updateProject(@PathVariable("id") String projectId, @RequestBody Project project) {
 		Project orginalProject = projectRepository.findOne(projectId);
 		if (orginalProject == null) {
 			throw new NotAcceptableException();
 		}
-		orginalProject.setStartDate(projectDto.getStartDate());
-		orginalProject.setEndDate(projectDto.getEndDate());
-		return projectMapper.toDTO(projectRepository.save(orginalProject));
+		orginalProject.setStartDate(project.getStartDate());
+		orginalProject.setEndDate(project.getEndDate());
+		return projectRepository.save(orginalProject);
 	}
 }

@@ -15,63 +15,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.mapper.core.dashboard.DashboardMapper;
-import at.jku.cis.iVolunteer.mapper.core.dashboard.DashletMapper;
 import at.jku.cis.iVolunteer.model.core.dashboard.Dashboard;
-import at.jku.cis.iVolunteer.model.core.dashboard.dto.DashboardDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 
 @RestController
 public class DashboardController {
 
-	@Autowired
-	private CoreLoginService loginService;
-	@Autowired
-	private CoreVolunteerRepository volunteerRepository;
+	@Autowired private CoreLoginService loginService;
+	@Autowired private CoreVolunteerRepository volunteerRepository;
 
-	@Autowired
-	private DashletMapper dashletMapper;
-	@Autowired
-	private DashboardMapper dashboardMapper;
-	@Autowired
-	private DashboardRepository dashboardRepository;
+	@Autowired private DashboardRepository dashboardRepository;
 
 	@GetMapping(path = "/dashboard")
-	public List<DashboardDTO> find(@RequestParam(name = "participantId", required = false) String participantId) {
+	public List<Dashboard> find(@RequestParam(name = "participantId", required = false) String participantId) {
 		if (!StringUtils.isEmpty(participantId)) {
-			return dashboardMapper.toDTOs(dashboardRepository.findByUser(volunteerRepository.findOne(participantId)));
+			return dashboardRepository.findByUser(volunteerRepository.findOne(participantId));
 		}
-		return dashboardMapper.toDTOs(dashboardRepository.findAll());
+		return dashboardRepository.findAll();
 	}
 
 	@GetMapping(path = "/dashboard/{id}")
-	public DashboardDTO findById(@PathVariable("id") String id) {
+	public Dashboard findById(@PathVariable("id") String id) {
 		Dashboard dashboardFromDb = dashboardRepository.findOne(id);
 		if (dashboardFromDb == null) {
 			throw new NotFoundException();
 		}
-		return dashboardMapper.toDTO(dashboardFromDb);
+		return dashboardFromDb;
 	}
 
 	@PostMapping(path = "/dashboard")
-	public DashboardDTO create(@RequestBody DashboardDTO dashboardDto) {
-		Dashboard dashboard = dashboardMapper.toEntity(dashboardDto);
+	public Dashboard create(@RequestBody Dashboard dashboard) {
 		dashboard.setId(null);
-		dashboard.setName(dashboardDto.getName());
 		dashboard.setUser(loginService.getLoggedInParticipant());
-		return dashboardMapper.toDTO(dashboardRepository.insert(dashboard));
+		return dashboardRepository.insert(dashboard);
 	}
 
 	@PutMapping(path = "/dashboard/{id}")
-	public DashboardDTO updateDashboardPages(@PathVariable("id") String id, @RequestBody DashboardDTO dashboardDto) {
+	public Dashboard updateDashboardPages(@PathVariable("id") String id, @RequestBody Dashboard dashboard) {
 		Dashboard dashboardFromDb = dashboardRepository.findOne(id);
 		if (dashboardFromDb == null) {
 			throw new BadRequestException();
 		}
-		dashboardFromDb.setName(dashboardDto.getName());
-		dashboardFromDb.setDashlets(dashletMapper.toEntities(dashboardDto.getDashlets()));
-		return dashboardMapper.toDTO(dashboardRepository.save(dashboardFromDb));
+		dashboardFromDb.setName(dashboard.getName());
+		dashboardFromDb.setDashlets(dashboard.getDashlets());
+		return dashboardRepository.save(dashboardFromDb);
 	}
 
 	@DeleteMapping(path = "/dashboard/{id}")

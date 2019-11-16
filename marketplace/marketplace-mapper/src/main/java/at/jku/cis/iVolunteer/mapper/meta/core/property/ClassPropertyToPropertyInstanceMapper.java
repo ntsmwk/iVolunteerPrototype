@@ -11,31 +11,33 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Component
-public class ClassPropertyToPropertyInstanceMapper implements OneWayMapper<ClassProperty<Object>, PropertyInstance<Object>> {
+public class ClassPropertyToPropertyInstanceMapper
+		implements OneWayMapper<ClassProperty<Object>, PropertyInstance<Object>> {
 
 	@Override
 	public PropertyInstance<Object> toTarget(ClassProperty<Object> source) {
 		if (source == null) {
 			return null;
 		}
-		
+
 		PropertyInstance<Object> propertyInstance = new PropertyInstance<Object>();
 		propertyInstance.setId(source.getId());
 		propertyInstance.setName(source.getName());
-		
+
 		propertyInstance.setValues(new ArrayList<Object>(source.getDefaultValues()));
-//		propertyInstance.setAllowedValues(new ArrayList<Object>(source.getAllowedValues()));
-		
+		propertyInstance.setAllowedValues(new ArrayList<Object>(source.getAllowedValues()));
+
 		propertyInstance.setType(source.getType());
-		
-//		propertyInstance.setImmutable(source.isImmutable());
-//		propertyInstance.setUpdateable(source.isUpdateable());
-//		propertyInstance.setRequired(source.isRequired());
-		
+
+		propertyInstance.setImmutable(source.isImmutable());
+		propertyInstance.setUpdateable(source.isUpdateable());
+		propertyInstance.setRequired(source.isRequired());
+
 		propertyInstance.setPosition(source.getPosition());
-		
-		propertyInstance.setPropertyConstraints(new ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
-		
+
+		propertyInstance
+				.setPropertyConstraints(new ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
+
 		return propertyInstance;
 	}
 
@@ -44,14 +46,13 @@ public class ClassPropertyToPropertyInstanceMapper implements OneWayMapper<Class
 		if (sources == null) {
 			return null;
 		}
-		
+
 		List<PropertyInstance<Object>> instances = new ArrayList<PropertyInstance<Object>>();
 		for (ClassProperty<Object> classProperty : sources) {
 			instances.add(this.toTarget(classProperty));
 		}
-		
+
 		return instances;
 	}
-
 
 }

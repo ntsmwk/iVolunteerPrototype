@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import at.jku.cis.iVolunteer.mapper.task.TaskMapper;
-import at.jku.cis.iVolunteer.mapper.task.interaction.TaskInteractionMapper;
-import at.jku.cis.iVolunteer.mapper.volunteer.profile.CompetenceEntryMapper;
-import at.jku.cis.iVolunteer.mapper.volunteer.profile.TaskEntryMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionRepository;
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionService;
@@ -23,24 +19,17 @@ import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerCompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.TaskEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerCompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerTaskEntryDTO;
+import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
 
 @RestController
 public class TaskOperationController {
 
 	@Autowired private ContractorPublishingRestClient contractorRepositoryRestClient;
-	@Autowired private CompetenceEntryMapper competenceEntryMapper;
-	@Autowired private TaskMapper taskMapper;
 	@Autowired private TaskRepository taskRepository;
-	@Autowired private TaskEntryMapper taskEntryMapper;
-	@Autowired private TaskInteractionMapper taskInteractionMapper;
 	@Autowired private TaskInteractionService taskInteractionService;
 	@Autowired private TaskInteractionRepository taskInteractionRepository;
 	@Autowired private TaskInteractionToTaskEntryMapper taskInteractionToTaskEntryMapper;
@@ -48,8 +37,7 @@ public class TaskOperationController {
 	@Autowired private VolunteerProfileRepository volunteerProfileRepository;
 	@Autowired private LoginService loginService;
 
-	@Value("${marketplace.identifier}") 
-	private String marketplaceId;
+	@Value("${marketplace.identifier}") private String marketplaceId;
 
 	@PostMapping("/task/{id}/publish")
 	public void publishTask(@PathVariable("id") String id, @RequestHeader("authorization") String authorization) {
@@ -57,7 +45,7 @@ public class TaskOperationController {
 		if (task == null || task.getStatus() != TaskStatus.CREATED) {
 			throw new BadRequestException();
 		}
-		contractorRepositoryRestClient.publishTask(taskMapper.toDTO(task), authorization);
+		contractorRepositoryRestClient.publishTask(task, authorization);
 		updateTaskStatus(task, TaskStatus.PUBLISHED);
 	}
 
@@ -89,7 +77,8 @@ public class TaskOperationController {
 	}
 
 	@PostMapping("/task/{id}/finish")
-	public TaskInteractionDTO finishTask(@PathVariable("id") String id, @RequestHeader("authorization") String authorization) {
+	public TaskInteraction finishTask(@PathVariable("id") String id,
+			@RequestHeader("authorization") String authorization) {
 		Task task = taskRepository.findOne(id);
 		if (task == null || task.getStatus() != TaskStatus.RUNNING) {
 			throw new BadRequestException();
@@ -115,14 +104,13 @@ public class TaskOperationController {
 			volunteerProfileRepository.save(volunteerProfile);
 
 			try {
-				VolunteerTaskEntryDTO vte = createVolunteerTaskEntryDTOFromTaskEntryDTO(taskEntryMapper.toDTO(taskEntry));
+				VolunteerTaskEntry vte = createVolunteerTaskEntryFromTaskEntry(taskEntry);
 				vte.setVolunteerId(volunteer.getId());
 
 				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
 
 				competenceEntries.forEach(competenceEntry -> {
-					VolunteerCompetenceEntryDTO vce = createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
-							competenceEntryMapper.toDTO(competenceEntry));
+					VolunteerCompetenceEntry vce = createVolunteerCompetenceEntryFromCompetenceEntry(competenceEntry);
 					vce.setVolunteerId(volunteer.getId());
 					contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
 				});
@@ -133,7 +121,7 @@ public class TaskOperationController {
 
 		});
 
-		return taskInteractionMapper.toDTO(taskInteraction);
+		return taskInteraction;
 	}
 
 	@PostMapping("/task/{id}/abort")
@@ -160,26 +148,26 @@ public class TaskOperationController {
 		return taskInteractionRepository.insert(taskInteraction);
 	}
 
-	private VolunteerCompetenceEntryDTO createVolunteerCompetenceEntryDTOFromCompetenceEntryDTO(
-			CompetenceEntryDTO competenceEntryDto) {
-		VolunteerCompetenceEntryDTO volunteerCompetenceEntryDTO = new VolunteerCompetenceEntryDTO();
-		volunteerCompetenceEntryDTO.setCompetenceId(competenceEntryDto.getCompetenceId());
-		volunteerCompetenceEntryDTO.setCompetenceName(competenceEntryDto.getCompetenceName());
-		volunteerCompetenceEntryDTO.setId(competenceEntryDto.getId());
-		volunteerCompetenceEntryDTO.setMarketplaceId(competenceEntryDto.getMarketplaceId());
-		volunteerCompetenceEntryDTO.setTimestamp(competenceEntryDto.getTimestamp());
-		return volunteerCompetenceEntryDTO;
+	private VolunteerCompetenceEntry createVolunteerCompetenceEntryFromCompetenceEntry(
+			CompetenceEntry competenceEntry) {
+		VolunteerCompetenceEntry volunteerCompetenceEntry = new VolunteerCompetenceEntry();
+		volunteerCompetenceEntry.setCompetenceId(competenceEntry.getCompetenceId());
+		volunteerCompetenceEntry.setCompetenceName(competenceEntry.getCompetenceName());
+		volunteerCompetenceEntry.setId(competenceEntry.getId());
+		volunteerCompetenceEntry.setMarketplaceId(competenceEntry.getMarketplaceId());
+		volunteerCompetenceEntry.setTimestamp(competenceEntry.getTimestamp());
+		return volunteerCompetenceEntry;
 	}
 
-	private VolunteerTaskEntryDTO createVolunteerTaskEntryDTOFromTaskEntryDTO(TaskEntryDTO taskEntryDto) {
-		VolunteerTaskEntryDTO volunteerTaskEntryDTO = new VolunteerTaskEntryDTO();
-		volunteerTaskEntryDTO.setId(taskEntryDto.getId());
-		volunteerTaskEntryDTO.setMarketplaceId(taskEntryDto.getMarketplaceId());
-		volunteerTaskEntryDTO.setTaskDescription(taskEntryDto.getTaskDescription());
-		volunteerTaskEntryDTO.setTaskId(taskEntryDto.getTaskId());
-		volunteerTaskEntryDTO.setTaskName(taskEntryDto.getTaskName());
-		volunteerTaskEntryDTO.setTimestamp(taskEntryDto.getTimestamp());
-		return volunteerTaskEntryDTO;
+	private VolunteerTaskEntry createVolunteerTaskEntryFromTaskEntry(TaskEntry taskEntry) {
+		VolunteerTaskEntry volunteerTaskEntry = new VolunteerTaskEntry();
+		volunteerTaskEntry.setId(taskEntry.getId());
+		volunteerTaskEntry.setMarketplaceId(taskEntry.getMarketplaceId());
+		volunteerTaskEntry.setTaskDescription(taskEntry.getTaskDescription());
+		volunteerTaskEntry.setTaskId(taskEntry.getTaskId());
+		volunteerTaskEntry.setTaskName(taskEntry.getTaskName());
+		volunteerTaskEntry.setTimestamp(taskEntry.getTimestamp());
+		return volunteerTaskEntry;
 	}
 
 }

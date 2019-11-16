@@ -9,44 +9,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.marketplace.config.rest.client.configuration.WorkflowRestTemplate;
-import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
-import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
-import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.source.Source;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class WorkflowMarketplaceRestClient extends RestClient {
 
-	@Autowired
-	@WorkflowRestTemplate
-	private RestTemplate restTemplate;
+	@Autowired @WorkflowRestTemplate private RestTemplate restTemplate;
 
-	public List<VolunteerDTO> findVolunteers(String marketplaceUri, String authorization) {
+	public List<Volunteer> findVolunteers(String marketplaceUri, String authorization) {
 		String requestURI = buildMarketplaceRequestURI(marketplaceUri, "/volunteer");
-		ParameterizedTypeReference<List<VolunteerDTO>> typeReference = new ParameterizedTypeReference<List<VolunteerDTO>>() {
+		ParameterizedTypeReference<List<Volunteer>> typeReference = new ParameterizedTypeReference<List<Volunteer>>() {
 		};
 		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), typeReference).getBody();
 	}
 
-	public VolunteerDTO findVolunteerById(String marketplaceUri, String volunteerId, String authorization) {
+	public Volunteer findVolunteerById(String marketplaceUri, String volunteerId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI(marketplaceUri, "/volunteer/" + volunteerId);
-		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
-				.getBody();
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), Volunteer.class).getBody();
 	}
 
-	public VolunteerDTO findVolunteerByUserName(String marketplaceUri, String volunteerUsername, String authorization) {
+	public Volunteer findVolunteerByUserName(String marketplaceUri, String volunteerUsername, String authorization) {
 		String requestURI = buildMarketplaceRequestURI(marketplaceUri, "/volunteer/username/" + volunteerUsername);
-		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), VolunteerDTO.class)
-				.getBody();
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), Volunteer.class).getBody();
 	}
 
-	public TaskDTO findTaskById(String marketplaceUri, String taskId, String authorization) {
+	public Task findTaskById(String marketplaceUri, String taskId, String authorization) {
 		String requestURI = buildMarketplaceRequestURI(marketplaceUri, "/task/" + taskId);
-		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), TaskDTO.class).getBody();
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), Task.class).getBody();
 	}
 
-	public SourceDTO findSource(String marketplaceUri, String authorization) {
+	public Source findSource(String marketplaceUri, String authorization) {
 		String requestURI = buildMarketplaceRequestURI(marketplaceUri, "/source");
-		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), SourceDTO.class).getBody();
+		return restTemplate.exchange(requestURI, HttpMethod.GET, buildEntity(authorization), Source.class).getBody();
 	}
 
 	public void publishTask(String marketplaceUri, String taskId, String authorization) {

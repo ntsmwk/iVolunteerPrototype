@@ -1,6 +1,6 @@
-package at.jku.cis.iVolunteer.model.meta.core.property.dtos;
+package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
-public class PropertyItemDTO {
+public class PropertyItem {
 	private String id;
 	private String name;
 
@@ -22,10 +22,10 @@ public class PropertyItemDTO {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof PropertyItemDTO)) {
+		if (!(obj instanceof PropertyItem)) {
 			return false;
 		}
-		return ((PropertyItemDTO) obj).id.equals(id);
+		return ((PropertyItem) obj).id.equals(id);
 
 	}
 

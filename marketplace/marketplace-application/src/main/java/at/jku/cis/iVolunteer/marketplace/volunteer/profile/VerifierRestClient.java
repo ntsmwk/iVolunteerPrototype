@@ -11,9 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.TaskEntryDTO;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
+import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 
 @Service
 public class VerifierRestClient {
@@ -26,24 +26,22 @@ public class VerifierRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 
-	@Value("${trustifier.uri}")
-	private URI trustifierURI;
+	@Value("${trustifier.uri}") private URI trustifierURI;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	@Autowired private RestTemplate restTemplate;
 
-	public boolean verifyTask(TaskDTO task, String authorization) {
+	public boolean verifyTask(Task task, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
 		return restTemplate.postForObject(requestURI, buildEntity(task, authorization), Boolean.class).booleanValue();
 	}
 
-	public boolean verifyTaskEntry(TaskEntryDTO taskEntry, String authorization) {
+	public boolean verifyTaskEntry(TaskEntry taskEntry, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_TASK_Entry);
 		return restTemplate.postForObject(requestURI, buildEntity(taskEntry, authorization), Boolean.class)
 				.booleanValue();
 	}
 
-	public boolean verifyCompetenceEntry(CompetenceEntryDTO competenceEntry, String authorization) {
+	public boolean verifyCompetenceEntry(CompetenceEntry competenceEntry, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, buildEntity(competenceEntry, authorization), Boolean.class)
 				.booleanValue();

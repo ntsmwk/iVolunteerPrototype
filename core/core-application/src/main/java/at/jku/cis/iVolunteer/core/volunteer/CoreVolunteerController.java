@@ -12,51 +12,54 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.mapper.core.user.CoreVolunteerMapper;
-import at.jku.cis.iVolunteer.mapper.marketplace.MarketplaceMapper;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.core.user.dto.CoreVolunteerDTO;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.marketplace.dto.MarketplaceDTO;
-import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 @RequestMapping("/volunteer")
 public class CoreVolunteerController {
 
-	@Autowired private MarketplaceMapper marketplaceMapper;
-	@Autowired private CoreVolunteerMapper coreVolunteerMapper;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@GetMapping("/{volunteerId}")
-	public CoreVolunteerDTO getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
-		return coreVolunteerMapper.toDTO(coreVolunteerRepository.findOne(volunteerId));
+	public CoreVolunteer getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
+		return coreVolunteerRepository.findOne(volunteerId);
 	}
 
 	@GetMapping("/{volunteerId}/marketplaces")
-	public List<MarketplaceDTO> getRegisteredMarketplaces(@PathVariable("volunteerId") String volunteerId) {
+	public List<Marketplace> getRegisteredMarketplaces(@PathVariable("volunteerId") String volunteerId) {
 		CoreVolunteer volunteer = coreVolunteerRepository.findOne(volunteerId);
-		return marketplaceMapper.toDTOs(volunteer.getRegisteredMarketplaces());
+		return volunteer.getRegisteredMarketplaces();
 	}
 
 	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreVolunteer volunteer = coreVolunteerRepository.findOne(coreVolunteerId);
+		CoreVolunteer coreVolunteer = coreVolunteerRepository.findOne(coreVolunteerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		if (volunteer == null || marketplace == null) {
+		if (coreVolunteer == null || marketplace == null) {
 			throw new NotFoundException();
 		}
 
-		volunteer.getRegisteredMarketplaces().add(marketplace);
-		CoreVolunteer coreVolunteer = coreVolunteerRepository.save(volunteer);
-
-		VolunteerDTO volunteerDTO = new VolunteerDTO();
-		volunteerDTO.setId(coreVolunteer.getId());
-		volunteerDTO.setUsername(volunteer.getUsername());
-		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteerDTO);
+		coreVolunteer = updateCoreVolunteer(coreVolunteer, marketplace);
+		registerVolunteer(authorization, coreVolunteer, marketplace);
 	}
+
+	private CoreVolunteer updateCoreVolunteer(CoreVolunteer coreVolunteer, Marketplace marketplace) {
+		coreVolunteer.getRegisteredMarketplaces().add(marketplace);
+		coreVolunteer = coreVolunteerRepository.save(coreVolunteer);
+		return coreVolunteer;
+	}
+
+	private void registerVolunteer(String authorization, CoreVolunteer coreVolunteer, Marketplace marketplace) {
+		Volunteer volunteer = new Volunteer();
+		volunteer.setId(coreVolunteer.getId());
+		volunteer.setUsername(coreVolunteer.getUsername());
+		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
+	}
+
 }

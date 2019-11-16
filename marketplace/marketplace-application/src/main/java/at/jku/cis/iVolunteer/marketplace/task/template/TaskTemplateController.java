@@ -13,42 +13,34 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.task.template.TaskTemplateMapper;
 import at.jku.cis.iVolunteer.model.task.template.TaskTemplate;
-import at.jku.cis.iVolunteer.model.task.template.dto.TaskTemplateDTO;
 
 @RestController
 public class TaskTemplateController {
 
-	@Autowired
-	private TaskTemplateMapper taskTemplateMapper;
-	@Autowired
-	private TaskTemplateRepository taskTemplateRepository;
+	@Autowired private TaskTemplateRepository taskTemplateRepository;
 
 	@GetMapping("/taskTemplate")
-	public List<TaskTemplateDTO> findAll() {
-		return taskTemplateMapper.toDTOs(taskTemplateRepository.findAll());
+	public List<TaskTemplate> findAll() {
+		return taskTemplateRepository.findAll();
 	}
 
 	@GetMapping("/taskTemplate/{id}")
-	public TaskTemplateDTO findById(@PathVariable("id") String id) {
-		return taskTemplateMapper.toDTO(taskTemplateRepository.findOne(id));
+	public TaskTemplate findById(@PathVariable("id") String id) {
+		return taskTemplateRepository.findOne(id);
 	}
 
 	@PostMapping("/taskTemplate")
-	public TaskTemplateDTO create(@RequestBody TaskTemplateDTO taskTemplateDto) {
-		TaskTemplate taskTemplate = taskTemplateMapper.toEntity(taskTemplateDto);
-		return taskTemplateMapper.toDTO(taskTemplateRepository.insert(taskTemplate));
+	public TaskTemplate create(@RequestBody TaskTemplate taskTemplate) {
+		return taskTemplateRepository.insert(taskTemplate);
 	}
 
 	@PutMapping("/taskTemplate/{id}")
-	public TaskTemplateDTO update(@PathVariable("id") String id, @RequestBody TaskTemplateDTO taskTemplateDto) {
+	public TaskTemplate update(@PathVariable("id") String id, @RequestBody TaskTemplate taskTemplate) {
 		if (!taskTemplateRepository.exists(id)) {
 			throw new NotAcceptableException();
 		}
-
-		TaskTemplate taskTemplate = taskTemplateMapper.toEntity(taskTemplateDto);
-		return taskTemplateMapper.toDTO(taskTemplateRepository.save(taskTemplate));
+		return taskTemplateRepository.save(taskTemplate);
 	}
 
 	@DeleteMapping("/taskTemplate/{id}")

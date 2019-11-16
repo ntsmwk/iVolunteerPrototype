@@ -2,7 +2,11 @@ package at.jku.cis.iVolunteer.model.volunteer.profile;
 
 import java.util.Date;
 
-public class CompetenceEntry {
+import com.google.gson.JsonObject;
+
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
+
+public class CompetenceEntry implements IHashObject {
 
 	private String id;
 	private String competenceId;
@@ -66,7 +70,18 @@ public class CompetenceEntry {
 	@Override
 	public String toString() {
 		return "CompetenceEntry [id=" + id + ", competenceId=" + competenceId + ", competenceName=" + competenceName
+
 				+ ", marketplaceId=" + marketplaceId + ", timestamp=" + timestamp + "]";
+	}
+
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("competenceId", competenceId);
+		json.addProperty("competenceName", competenceName);
+		json.addProperty("timestamp", timestamp.toString());
+		return json.toString();
 	}
 
 }

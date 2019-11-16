@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassDefinitionDTO;
-import at.jku.cis.iVolunteer.model.meta.core.property.dtos.ClassPropertyDTO;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @RestController
 public class ClassDefinitionPropertyController {
@@ -17,25 +17,25 @@ public class ClassDefinitionPropertyController {
 	@Autowired private ClassDefinitionPropertyService classDefinitionPropertyService;
 
 	@PutMapping("meta/core/class/definition/get-classproperty-from-propertydefinition-by-id")
-	private List<ClassPropertyDTO<Object>> getClassPropertyFromPropertyDefinitionById(
+	private List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(
 			@RequestBody List<String> propertyIds) {
 		return classDefinitionPropertyService.getClassPropertyFromPropertyDefinitionById(propertyIds);
 	}
 
 	@PutMapping("meta/core/class/definition/{id}/add-properties-by-id")
-	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id,
+	private List<ClassProperty<Object>> addPropertiesToClassDefinitionById(@PathVariable("id") String id,
 			@RequestBody List<String> propertyIds) {
 		return classDefinitionPropertyService.addPropertiesToClassDefinitionById(id, propertyIds);
 	}
 
 	@PutMapping("meta/core/class/definition/{id}/add-properties")
-	private List<ClassPropertyDTO<Object>> addPropertiesToClassDefinition(@PathVariable("id") String id,
-			@RequestBody List<ClassPropertyDTO<Object>> properties) {
+	private List<ClassProperty<Object>> addPropertiesToClassDefinition(@PathVariable("id") String id,
+			@RequestBody List<ClassProperty<Object>> properties) {
 		return classDefinitionPropertyService.addPropertiesToClassDefinition(id, properties);
 	}
 
 	@PutMapping("/meta/core/class/definition/{id}/remove-properties")
-	private ClassDefinitionDTO removePropertiesFromClassDefinition(@PathVariable("id") String id,
+	private ClassDefinition removePropertiesFromClassDefinition(@PathVariable("id") String id,
 			@RequestBody List<String> idsToRemove) {
 		return classDefinitionPropertyService.removePropertiesFromClassDefinition(id, idsToRemove);
 	}

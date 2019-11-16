@@ -34,7 +34,7 @@ public class InheritanceMapper implements AbstractMapper<Inheritance, Relationsh
 
 
 	@Override
-	public RelationshipDTO toDTO(Inheritance source) {
+	public RelationshipDTO toTarget(Inheritance source) {
 		if (source == null) {
 			return null;
 		}
@@ -52,14 +52,14 @@ public class InheritanceMapper implements AbstractMapper<Inheritance, Relationsh
 
 
 	@Override
-	public List<RelationshipDTO> toDTOs(List<Inheritance> sources) {
+	public List<RelationshipDTO> toTargets(List<Inheritance> sources) {
 		if (sources == null) {
 			return null;
 		}
 		
 		List<RelationshipDTO> dtos = new ArrayList<RelationshipDTO>();
 		for (Inheritance entity : sources) {
-			dtos.add(this.toDTO(entity));
+			dtos.add(this.toTarget(entity));
 		}
 
 		return dtos;
@@ -67,7 +67,7 @@ public class InheritanceMapper implements AbstractMapper<Inheritance, Relationsh
 
 
 	@Override
-	public Inheritance toEntity(RelationshipDTO target) {
+	public Inheritance toSource(RelationshipDTO target) {
 		if (target == null) {
 			return null;
 		}
@@ -84,14 +84,14 @@ public class InheritanceMapper implements AbstractMapper<Inheritance, Relationsh
 
 
 	@Override
-	public List<Inheritance> toEntities(List<RelationshipDTO> targets) {
+	public List<Inheritance> toSources(List<RelationshipDTO> targets) {
 		if (targets == null) {
 			return null;
 		}
 
 		List<Inheritance> entities = new ArrayList<Inheritance>();
 		for (RelationshipDTO dto : targets) {
-			entities.add(this.toEntity(dto));
+			entities.add(this.toSource(dto));
 		}
 		
 		return entities;

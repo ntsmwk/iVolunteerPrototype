@@ -1,6 +1,6 @@
-package at.jku.cis.iVolunteer.model.volunteer.profile.dto;
+package at.jku.cis.iVolunteer.model.volunteer.profile;
 
-public class VolunteerTaskEntryDTO extends TaskEntryDTO {
+public class VolunteerTaskEntry extends TaskEntry {
 	private String volunteerId;
 
 	public String getVolunteerId() {

@@ -19,23 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.competence.CompetenceEntryToCompetenceMapper;
-import at.jku.cis.iVolunteer.mapper.competence.CompetenceMapper;
-import at.jku.cis.iVolunteer.mapper.volunteer.profile.CompetenceEntryMapper;
-import at.jku.cis.iVolunteer.mapper.volunteer.profile.TaskEntryMapper;
-import at.jku.cis.iVolunteer.mapper.volunteer.profile.VolunteerProfileMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.competence.Competence;
-import at.jku.cis.iVolunteer.model.competence.dto.CompetenceDTO;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.ForbiddenException;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.CompetenceEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.TaskEntryDTO;
-import at.jku.cis.iVolunteer.model.volunteer.profile.dto.VolunteerProfileDTO;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -43,17 +35,13 @@ public class VolunteerProfileController {
 
 	@Autowired private VerifierRestClient verifierRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private VolunteerProfileMapper volunteerProfileMapper;
 	@Autowired private VolunteerProfileRepository volunteerProfileRepository;
-	@Autowired private TaskEntryMapper taskEntryMapper;
-	@Autowired private CompetenceEntryMapper competenceEntryMapper;
 	@Autowired private LoginService loginService;
-	@Autowired private CompetenceMapper competenceMapper;
 	@Autowired private CompetenceEntryToCompetenceMapper competenceEntryToCompetenceMapper;
 
 	@GetMapping("/{volunteerId}/profile")
-	public VolunteerProfileDTO getVolunteerProfile(@PathVariable("volunteerId") String volunteerId) {
-		return volunteerProfileMapper.toDTO(findVolunteerProfile(volunteerId));
+	public VolunteerProfile getVolunteerProfile(@PathVariable("volunteerId") String volunteerId) {
+		return findVolunteerProfile(volunteerId);
 	}
 
 	private VolunteerProfile findVolunteerProfile(String volunteerId) {
@@ -64,14 +52,14 @@ public class VolunteerProfileController {
 	}
 
 	@GetMapping("/{volunteerId}/profile/task")
-	public Set<TaskEntryDTO> getTaskList(@PathVariable("volunteerId") String volunteerId) {
+	public Set<TaskEntry> getTaskList(@PathVariable("volunteerId") String volunteerId) {
 		return getVolunteerProfile(volunteerId).getTaskList();
 	}
 
 	@GetMapping("/{volunteeId}/profile/task/{taskEntryId}")
-	public TaskEntryDTO getTaskEntry(@PathVariable("volunteerId") String volunteerId,
+	public TaskEntry getTaskEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("taskEntryId") String taskEntryId) {
-		return taskEntryMapper.toDTO(findTaskEntry(volunteerId, taskEntryId));
+		return findTaskEntry(volunteerId, taskEntryId);
 	}
 
 	private TaskEntry findTaskEntry(String volunteerId, String taskEntryId) {
@@ -80,12 +68,12 @@ public class VolunteerProfileController {
 	}
 
 	@PostMapping("/{volunteerId}/profile/task")
-	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntryDTO taskEntryDto,
+	public void addTaskEntry(@PathVariable("volunteerId") String volunteerId, @RequestBody TaskEntry taskEntryDto,
 			@RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
 		if (verifierRestClient.verifyTaskEntry(taskEntryDto, authorization)) {
-			volunteerProfile.getTaskList().add(taskEntryMapper.toEntity(taskEntryDto));
+			volunteerProfile.getTaskList().add(taskEntryDto);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
 			throw new BadRequestException();
@@ -105,30 +93,29 @@ public class VolunteerProfileController {
 	}
 
 	@GetMapping("/{volunteerId}/profile/competenceEntry")
-	public Set<CompetenceEntryDTO> getCompetenceEntryList(@PathVariable("volunteerId") String volunteerId) {
-		Set<CompetenceEntryDTO> competenceList = getVolunteerProfile(volunteerId).getCompetenceList();
+	public Set<CompetenceEntry> getCompetenceEntryList(@PathVariable("volunteerId") String volunteerId) {
+		Set<CompetenceEntry> competenceList = getVolunteerProfile(volunteerId).getCompetenceList();
 		return competenceList;
 	}
 
 	@GetMapping("/{volunteerId}/profile/competence")
-	public List<CompetenceDTO> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
+	public List<Competence> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
 
-		VolunteerProfileDTO volunteerProfile = getVolunteerProfile(volunteerId);
+		VolunteerProfile volunteerProfile = getVolunteerProfile(volunteerId);
 		if (volunteerProfile != null) {
-			List<CompetenceDTO> competenceList = volunteerProfile.getCompetenceList().stream()
-					.map((CompetenceEntryDTO competenceEntry) -> competenceEntryMapper.toEntity(competenceEntry))
+			List<Competence> competenceList = volunteerProfile.getCompetenceList().stream()
 					.map((CompetenceEntry competenceEntry) -> competenceEntryToCompetenceMapper
 							.toCompetence(competenceEntry))
-					.map((Competence competence) -> competenceMapper.toDTO(competence)).collect(Collectors.toList());
+					.collect(Collectors.toList());
 			return competenceList;
 		}
 		return Collections.emptyList();
 	}
 
 	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
-	public CompetenceEntryDTO getCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
+	public CompetenceEntry getCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
 			@PathVariable("competenceEntryId") String competenceEntryId) {
-		return competenceEntryMapper.toDTO(findCompetenceEntry(volunteerId, competenceEntryId));
+		return findCompetenceEntry(volunteerId, competenceEntryId);
 	}
 
 	private CompetenceEntry findCompetenceEntry(String volunteerId, String competenceEntryId) {
@@ -142,11 +129,11 @@ public class VolunteerProfileController {
 
 	@PostMapping("/{volunteerId}/profile/competence")
 	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@RequestBody CompetenceEntryDTO competenceEntryDto, @RequestHeader("authorization") String authorization) {
+			@RequestBody CompetenceEntry competenceEntryDto, @RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
 		if (verifierRestClient.verifyCompetenceEntry(competenceEntryDto, authorization)) {
-			volunteerProfile.getCompetenceList().add(competenceEntryMapper.toEntity(competenceEntryDto));
+			volunteerProfile.getCompetenceList().add(competenceEntryDto);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
 			throw new BadRequestException();

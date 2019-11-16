@@ -10,52 +10,49 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.meta.core.class_.dtos.ClassDefinitionDTO;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 
 @RestController
 public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 
 	@Autowired private ClassDefinitionService classDefinitionService;
 
 	@GetMapping("/meta/core/class/definition/all")
-	private List<ClassDefinitionDTO> getAllClassDefinitions() {
-		return classDefinitionMapper.toDTOs(classDefinitionRepository.findAll());
+	private List<ClassDefinition> getAllClassDefinitions() {
+		return classDefinitionRepository.findAll();
 	}
 
 	@GetMapping("/meta/core/class/definition/{id}")
-	private ClassDefinitionDTO getClassDefinitionById(@PathVariable("id") String id) {
+	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
 		return classDefinitionService.getClassDefinitionById(id);
 	}
 
 	@PutMapping("/meta/core/class/definition/multiple")
-	private List<ClassDefinitionDTO> getClassDefinitonsById(@RequestBody List<String> ids) {
+	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids) {
 		return classDefinitionService.getClassDefinitonsById(ids);
 	}
 
 	@PostMapping("/meta/core/class/definition/new")
-	private ClassDefinitionDTO newClassDefinition(@RequestBody ClassDefinitionDTO classDefinition) {
+	private ClassDefinition newClassDefinition(@RequestBody ClassDefinition classDefinition) {
 		return classDefinitionService.newClassDefinition(classDefinition);
 	}
 
 	@PutMapping("/meta/core/class/definition/{id}/change-name")
-	private ClassDefinitionDTO changeClassDefinitionName(@PathVariable("id") String id, @RequestBody String newName) {
+	private ClassDefinition changeClassDefinitionName(@PathVariable("id") String id, @RequestBody String newName) {
 		return classDefinitionService.changeClassDefinitionName(id, newName);
 	}
 
 	@PutMapping("/meta/core/class/definition/delete")
-	private List<ClassDefinitionDTO> deleteClassDefinition(@RequestBody List<String> idsToRemove) {
+	private List<ClassDefinition> deleteClassDefinition(@RequestBody List<String> idsToRemove) {
 		return classDefinitionService.deleteClassDefinition(idsToRemove);
 	}
 
 	@PutMapping("/meta/core/class/definition/add-or-update")
-	private List<ClassDefinitionDTO> addOrUpdateClassDefinitions(
-			@RequestBody List<ClassDefinitionDTO> classDefinitions) {
+	private List<ClassDefinition> addOrUpdateClassDefinitions(@RequestBody List<ClassDefinition> classDefinitions) {
 		return classDefinitionService.addOrUpdateClassDefinitions(classDefinitions);
 	}
 

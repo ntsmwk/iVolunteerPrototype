@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.task.interaction.TaskInteractionMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.task.TaskRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
@@ -25,37 +24,29 @@ import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskVolunteerOperation;
-import at.jku.cis.iVolunteer.model.task.interaction.dto.TaskInteractionDTO;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 public class TaskInteractionController {
 
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private TaskInteractionMapper taskInteractionMapper;
-	@Autowired
-	private TaskInteractionService taskInteractionService;
-	@Autowired
-	private TaskInteractionRepository taskInteractionRepository;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
+	@Autowired private TaskRepository taskRepository;
+	@Autowired private TaskInteractionService taskInteractionService;
+	@Autowired private TaskInteractionRepository taskInteractionRepository;
+	@Autowired private VolunteerRepository volunteerRepository;
 
-	@Autowired
-	private LoginService loginService;
+	@Autowired private LoginService loginService;
 
 	@GetMapping("/task/{taskId}/interaction")
-	public List<TaskInteractionDTO> findByTaskId(@PathVariable("taskId") String taskId,
+	public List<TaskInteraction> findByTaskId(@PathVariable("taskId") String taskId,
 			@RequestParam(value = "operation", required = false) TaskOperation operation) {
 
 		Task task = findAndVerifyTaskById(taskId);
 
 		if (operation == null) {
-			return taskInteractionMapper.toDTOs(taskInteractionRepository.findByTask(task));
+			return taskInteractionRepository.findByTask(task);
 		}
-		return taskInteractionMapper.toDTOs(taskInteractionRepository.findByTaskAndOperation(task, operation));
+		return taskInteractionRepository.findByTaskAndOperation(task, operation);
 	}
 
 	@GetMapping("/task/{id}/participant")
@@ -92,41 +83,40 @@ public class TaskInteractionController {
 	}
 
 	@PostMapping("/task/{taskId}/unreserve")
-	public TaskInteractionDTO unreserveForTask(@PathVariable("taskId") String taskId,
+	public TaskInteraction unreserveForTask(@PathVariable("taskId") String taskId,
 			@RequestHeader("Authorization") String token) {
 		Task task = findAndVerifyTaskById(taskId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, loginService.getLoggedInParticipant());
 
 		if (latestTaskInteraction != null && (latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED
 				|| latestTaskInteraction.getOperation() == TaskVolunteerOperation.UNASSIGNED)) {
-			return taskInteractionMapper.toDTO(createTaskInteraction(task, loginService.getLoggedInParticipant(),
-					TaskVolunteerOperation.UNRESERVED));
+			return createTaskInteraction(task, loginService.getLoggedInParticipant(),
+					TaskVolunteerOperation.UNRESERVED);
 		} else {
 			throw new PreConditionFailedException("Cannot cancel reservation! Volunteer is not reserved.");
 		}
 	}
 
 	@PostMapping("/task/{taskId}/assign")
-	public TaskInteractionDTO assignForTask(@PathVariable("taskId") String taskId,
+	public TaskInteraction assignForTask(@PathVariable("taskId") String taskId,
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
 		if (latestTaskInteraction != null && latestTaskInteraction.getOperation() == TaskVolunteerOperation.RESERVED) {
-			return taskInteractionMapper.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED));
+			return createTaskInteraction(task, volunteer, TaskVolunteerOperation.ASSIGNED);
 		}
 		throw new PreConditionFailedException("Cannot assign. Volunteer is already assigned or not reserved.");
 	}
 
 	@PostMapping("/task/{taskId}/unassign")
-	public TaskInteractionDTO unassignForTask(@PathVariable("taskId") String taskId,
+	public TaskInteraction unassignForTask(@PathVariable("taskId") String taskId,
 			@RequestParam("volunteerId") String volunteerId) {
 		Task task = findAndVerifyTaskById(taskId);
 		Volunteer volunteer = findAndVerifyVolunteerById(volunteerId);
 		TaskInteraction latestTaskInteraction = getLatestTaskInteraction(task, volunteer);
 		if (latestTaskInteraction.getOperation() == TaskVolunteerOperation.ASSIGNED) {
-			return taskInteractionMapper
-					.toDTO(createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED));
+			return createTaskInteraction(task, volunteer, TaskVolunteerOperation.UNASSIGNED);
 		}
 		throw new PreConditionFailedException("Cannot cancel assignment! Volunteer is not assigned.");
 	}

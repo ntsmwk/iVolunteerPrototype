@@ -24,12 +24,12 @@ public class RelationshipController {
 	
 	@GetMapping("/meta/core/relationship/all")
 	private List<RelationshipDTO> findAllRelationships() {
-		return relationshipMapper.toDTOs(relationshipRepository.findAll());
+		return relationshipMapper.toTargets(relationshipRepository.findAll());
 	}
 	
 	@GetMapping("/meta/core/relationship/{id}")
 	RelationshipDTO getRelationshipById(@PathVariable("id") String id) {
-		RelationshipDTO ret = relationshipMapper.toDTO(relationshipRepository.findOne(id));
+		RelationshipDTO ret = relationshipMapper.toTarget(relationshipRepository.findOne(id));
 		return ret;
 	}
 	
@@ -37,14 +37,14 @@ public class RelationshipController {
 	List<RelationshipDTO> getRelationshipsById(@RequestBody List<String> ids) {
 		List<Relationship> relationships = new ArrayList<Relationship>();
 		relationshipRepository.findAll(ids).forEach(relationships::add);
-		return relationshipMapper.toDTOs(relationships);
+		return relationshipMapper.toTargets(relationships);
 	}
 	
 	@PutMapping("/meta/core/relationship/add-or-update")
 	List<RelationshipDTO> addOrUpdateRelationships(@RequestBody List<RelationshipDTO> relationships) {
 		System.out.println("Relationship # " + relationships.size());
 		
-		return relationshipMapper.toDTOs(relationshipRepository.save(relationshipMapper.toEntities(relationships)));
+		return relationshipMapper.toTargets(relationshipRepository.save(relationshipMapper.toSources(relationships)));
 	}
 
 	

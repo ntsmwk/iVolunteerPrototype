@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.marketplace.config.rest.client.configuration.WorkflowRestTemplate;
-import at.jku.cis.iVolunteer.model.contract.TaskAssignmentDTO;
-import at.jku.cis.iVolunteer.model.contract.TaskCompletationDTO;
-import at.jku.cis.iVolunteer.model.contract.TaskReservationDTO;
-import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
-import at.jku.cis.iVolunteer.model.task.dto.TaskDTO;
-import at.jku.cis.iVolunteer.model.user.dto.VolunteerDTO;
+import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
+import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
+import at.jku.cis.iVolunteer.model.contract.TaskReservation;
+import at.jku.cis.iVolunteer.model.source.Source;
+import at.jku.cis.iVolunteer.model.task.Task;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class ContractorRestClient extends RestClient {
@@ -26,25 +26,22 @@ public class ContractorRestClient extends RestClient {
 	private static final String UNASSIGN = "unassign";
 	private static final String FINISH = "finish";
 
-	@Value("${trustifier.uri}") 
-	private URI trustifierUri;
+	@Value("${trustifier.uri}") private URI trustifierUri;
 
-	@Autowired 
-	@WorkflowRestTemplate 
-	private RestTemplate restTemplate;
+	@Autowired @WorkflowRestTemplate private RestTemplate restTemplate;
 
-	public void reserveTask(TaskDTO task, SourceDTO source, String authorization) {
+	public void reserveTask(Task task, Source source, String authorization) {
 		String requestURI = buildContractorRequestURI(RESERVE);
-		TaskReservationDTO reservation = new TaskReservationDTO();
+		TaskReservation reservation = new TaskReservation();
 		reservation.setSource(source);
 		reservation.setTask(task);
 
 		restTemplate.postForObject(requestURI, buildEntity(reservation, authorization), Void.class);
 	}
 
-	public void unreserveTask(TaskDTO task, SourceDTO source, String authorization) {
+	public void unreserveTask(Task task, Source source, String authorization) {
 		String requestURI = buildContractorRequestURI(UNRESERVE);
-		TaskReservationDTO reservation = new TaskReservationDTO();
+		TaskReservation reservation = new TaskReservation();
 		reservation.setSource(source);
 		reservation.setTask(task);
 
@@ -52,9 +49,9 @@ public class ContractorRestClient extends RestClient {
 
 	}
 
-	public void assignTask(TaskDTO task, SourceDTO source, VolunteerDTO volunteer, String authorization) {
+	public void assignTask(Task task, Source source, Volunteer volunteer, String authorization) {
 		String requestURI = buildContractorRequestURI(ASSIGN);
-		TaskAssignmentDTO assignment = new TaskAssignmentDTO();
+		TaskAssignment assignment = new TaskAssignment();
 		assignment.setSource(source);
 		assignment.setTask(task);
 		assignment.setVolunteer(volunteer);
@@ -62,9 +59,9 @@ public class ContractorRestClient extends RestClient {
 		restTemplate.postForObject(requestURI, buildEntity(assignment, authorization), Void.class);
 	}
 
-	public void unassignTask(TaskDTO task, SourceDTO source, VolunteerDTO volunteer, String authorization) {
+	public void unassignTask(Task task, Source source, Volunteer volunteer, String authorization) {
 		String requestURI = buildContractorRequestURI(UNASSIGN);
-		TaskAssignmentDTO assignment = new TaskAssignmentDTO();
+		TaskAssignment assignment = new TaskAssignment();
 		assignment.setSource(source);
 		assignment.setTask(task);
 		assignment.setVolunteer(volunteer);
@@ -72,9 +69,9 @@ public class ContractorRestClient extends RestClient {
 		restTemplate.postForObject(requestURI, buildEntity(assignment, authorization), Void.class);
 	}
 
-	public void finishTask(TaskDTO task, SourceDTO source, String authorization) {
+	public void finishTask(Task task, Source source, String authorization) {
 		String requestURI = buildContractorRequestURI(FINISH);
-		TaskCompletationDTO completation = new TaskCompletationDTO();
+		TaskCompletation completation = new TaskCompletation();
 		completation.setSource(source);
 		completation.setTask(task);
 

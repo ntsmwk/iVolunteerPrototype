@@ -6,12 +6,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.google.gson.JsonObject;
+
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
-public class TaskInteraction {
+public class TaskInteraction implements IHashObject {
 
 	@Id
 	private String id;
@@ -92,5 +95,16 @@ public class TaskInteraction {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("task", task.toString());
+		json.addProperty("operation", operation.toString());
+		json.addProperty("timestamp", timestamp.toString());
+		json.addProperty("comment", comment);
+		return json.toString();
+}
 
 }

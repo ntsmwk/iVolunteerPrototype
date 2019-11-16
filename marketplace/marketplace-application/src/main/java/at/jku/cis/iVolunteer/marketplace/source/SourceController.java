@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.source.dto.SourceDTO;
+import at.jku.cis.iVolunteer.model.source.Source;
 
 @RestController
 public class SourceController {
@@ -18,8 +18,8 @@ public class SourceController {
 	private String identifier;
 
 	@GetMapping("/source")
-	public SourceDTO getMarketplaceSource(HttpServletRequest httpServletRequest) {
-		SourceDTO source = new SourceDTO();
+	public Source getMarketplaceSource(HttpServletRequest httpServletRequest) {
+		Source source = new Source();
 		source.setIdentifier(identifier);
 		source.setAddress(determineRemoteAddress(httpServletRequest));
 		return source;

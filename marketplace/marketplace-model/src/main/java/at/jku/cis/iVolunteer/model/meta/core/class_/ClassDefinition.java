@@ -14,7 +14,6 @@ public class ClassDefinition {
 	private String parentId;
 	private String name;
 	private List<ClassProperty<Object>> properties;
-
 	private ClassArchetype archetype;
 
 	boolean root;
