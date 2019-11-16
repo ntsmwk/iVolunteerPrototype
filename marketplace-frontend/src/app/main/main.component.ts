@@ -11,6 +11,7 @@ import { LoginService } from './content/_service/login.service';
 import { ParticipantRole } from './content/_model/participant';
 import { navigation_flexprod } from 'app/navigation/navigation_flexprod';
 import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
+import { Router } from '@angular/router';
 
 @Component({
     selector     : 'fuse-main',
@@ -33,6 +34,7 @@ export class FuseMainComponent implements OnDestroy
         private fuseConfig: FuseConfigService,
         private loginService: LoginService,
         private platform: Platform,
+        private router: Router,
         @Inject(DOCUMENT) private document: any
     )
     {
@@ -65,6 +67,8 @@ export class FuseMainComponent implements OnDestroy
                 this.navigation = navigation_recruiter;
                 break;
             }
+        }).catch(e => {
+            console.warn(e);
         });
     }
 

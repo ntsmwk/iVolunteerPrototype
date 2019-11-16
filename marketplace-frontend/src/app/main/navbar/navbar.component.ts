@@ -58,7 +58,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         case 'RECRUITER':
           this.navigation = navigation_recruiter;
       }
-    })
+    }).catch(e => {
+      console.warn(e);
+    });
     // Default layout
     this.layout = 'vertical';
   }

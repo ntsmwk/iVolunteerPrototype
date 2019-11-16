@@ -3,9 +3,10 @@ import { RouterModule } from '@angular/router';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { DashboardComponent, ShareDialog } from './dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 import { MatIconModule, MatButtonModule, MatTableModule, MatIcon, MatTabsModule, MatFormFieldModule, MatSelectModule, MatCommonModule, MatDividerModule, MatMenuModule, MatTooltipModule, MatDialogModule, MatRadioModule, MatProgressSpinnerModule } from '@angular/material';
 import { FuseWidgetModule } from '@fuse/components';
+import { ShareDialog } from './dashboard-volunteer/share-dialog/share-dialog.component';
 
 
 

@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
-import {FuseConfigService} from '@fuse/services/config.service';
-import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
+import { FuseConfigService } from '@fuse/services/config.service';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
-import {navigation_volunteer} from 'app/navigation/navigation_volunteer';
-import {navigation_helpseeker} from '../../navigation/navigation_helpseeker';
-import {LoginService} from '../content/_service/login.service';
+import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
+import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
+import { LoginService } from '../content/_service/login.service';
 import { Participant, ParticipantRole } from '../content/_model/participant';
 
 @Component({
@@ -26,10 +26,10 @@ export class FuseToolbarComponent {
   navigation: any;
 
   constructor(private router: Router,
-              private fuseConfig: FuseConfigService,
-              private loginService: LoginService,
-              private sidebarService: FuseSidebarService,
-              private translate: TranslateService) {
+    private fuseConfig: FuseConfigService,
+    private loginService: LoginService,
+    private sidebarService: FuseSidebarService,
+    private translate: TranslateService) {
     this.userStatusOptions = [
       {
         'title': 'Online',
@@ -97,6 +97,8 @@ export class FuseToolbarComponent {
           this.navigation = navigation_volunteer;
           break;
       }
+    }).catch(e => {
+      console.warn(e);
     });
   }
 

@@ -17,7 +17,9 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant);
+    this.loginService.getLoggedIn().toPromise()
+    .then((participant: Participant) => this.participant = participant)
+    .catch(e => console.warn(e));
   }
 
   logout() {

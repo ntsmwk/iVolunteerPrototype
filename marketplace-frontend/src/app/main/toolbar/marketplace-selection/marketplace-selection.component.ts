@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import {Marketplace} from '../../content/_model/marketplace';
-import {Participant, ParticipantRole} from '../../content/_model/participant';
-import {CoreVolunteerService} from '../../content/_service/core-volunteer.service';
-import {LoginService} from '../../content/_service/login.service';
+import { Marketplace } from '../../content/_model/marketplace';
+import { Participant, ParticipantRole } from '../../content/_model/participant';
+import { CoreVolunteerService } from '../../content/_service/core-volunteer.service';
+import { LoginService } from '../../content/_service/login.service';
 
-import {isNullOrUndefined} from 'util';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MessageService} from '../../content/_service/message.service';
-import {ArrayService} from '../../content/_service/array.service';
-import {Subscription} from 'rxjs';
+import { isNullOrUndefined } from 'util';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MessageService } from '../../content/_service/message.service';
+import { ArrayService } from '../../content/_service/array.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'fuse-marketplace-selection',
@@ -26,9 +26,9 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
 
 
   constructor(private arrayService: ArrayService,
-              private messageService: MessageService,
-              private loginService: LoginService,
-              private volunterService: CoreVolunteerService) {
+    private messageService: MessageService,
+    private loginService: LoginService,
+    private volunterService: CoreVolunteerService) {
   }
 
   ngOnInit() {
@@ -45,20 +45,22 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
       this.loginService.getLoggedIn().toPromise(),
       this.loginService.getLoggedInParticipantRole().toPromise()
     ]).then((values: any[]) => {
-      this.role = <ParticipantRole> values[1];
+      this.role = <ParticipantRole>values[1];
       if (this.isRoleVolunteer(this.role)) {
-        this.volunterService.findRegisteredMarketplaces((<Participant> values[0]).id)
+        this.volunterService.findRegisteredMarketplaces((<Participant>values[0]).id)
           .toPromise()
           .then((marketplaces: Marketplace[]) => {
             this.marketplaces = marketplaces;
             this.marketplaces.forEach((marketplace: Marketplace) => {
-              const storedMarketplaces = <Marketplace[]> JSON.parse(localStorage.getItem('marketplaces'));
+              const storedMarketplaces = <Marketplace[]>JSON.parse(localStorage.getItem('marketplaces'));
               if (this.arrayService.contains(storedMarketplaces, marketplace)) {
                 this.selection.select(marketplace);
               }
             });
           });
       }
+    }).catch(e => {
+      console.warn(e);
     });
   }
 
