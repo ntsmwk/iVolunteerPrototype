@@ -38,8 +38,9 @@ public class WorkflowStepService {
 		String volunteerId = determineVolunteerId(task);
 		ActivityImpl activity = findActivityByExecution(findExecutionForTask(task));
 		Set<String> labels = determineWorkflowLabelsForActivity(activity);
-		return labels.stream().map(label -> new WorkflowStep(task.getId(), label,
-				WorkflowStepType.valueOf(task.getCategory()), volunteerId)).collect(Collectors.toList());
+		return labels.stream()
+			.map(label -> new WorkflowStep(task.getId(), label, WorkflowStepType.valueOf(task.getCategory()), volunteerId))
+			.collect(Collectors.toList());
 	}
 
 	private String determineVolunteerId(Task task) {
