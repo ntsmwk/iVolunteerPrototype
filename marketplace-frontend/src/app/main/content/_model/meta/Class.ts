@@ -5,6 +5,7 @@ export class ClassDefinition {
     parentId: string; 
     root: boolean;
     name: string;
+    classArchetype: ClassArchetype;
 
     //TODO
     properties: ClassProperty<any>[];
@@ -17,3 +18,5 @@ export class ClassInstance {
     properties: PropertyInstance<any>;
     matchingRules: any[];
 }
+
+export type ClassArchetype = "COMPETENCE" | "TASK" | "FUNCTION" | "ACHIEVEMENT" | "OTHER"
