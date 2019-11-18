@@ -72,7 +72,7 @@ public class ClassDefinitionService {
 				// add to map
 				returnIdMap.put(i + "", currentClassDefinition.getId());
 				// find relationship connecting this child with its parents
-				List<Relationship> relationshipList = relationshipRepository.findByClassId1AndRelationshipType(
+				List<Relationship> relationshipList = relationshipRepository.findBySourceAndRelationshipType(
 						currentClassDefinition.getId(), RelationshipType.INHERITANCE);
 
 				if (relationshipList == null || relationshipList.size() == 0) {

@@ -51,7 +51,7 @@ export class RelationshipService {
 
 
   //TODO - entfernen??
-  addRelationships(marketplace: Marketplace, ClassDefintion: ClassDefinition, relationships: any[]): Promise<any[]> {
+  addRelationships(marketplace: Marketplace, classDefintion: ClassDefinition, relationships: any[]): Promise<any[]> {
 
     //Patch assigned ID
     let promises: Promise<any>[] = [];
@@ -59,7 +59,7 @@ export class RelationshipService {
     let ret = [];
 
     for (let r of relationships) {
-      promises.push(this.createPromise(marketplace, r, ClassDefintion));
+      promises.push(this.createPromise(marketplace, r, classDefintion));
     }
 
     return Promise.all(promises).then((resolve) => {

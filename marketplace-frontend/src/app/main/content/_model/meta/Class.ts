@@ -7,7 +7,6 @@ export class ClassDefinition {
     name: string;
     classArchetype: ClassArchetype;
 
-    //TODO
     properties: ClassProperty<any>[];
     matchingRules: any[]
 }
