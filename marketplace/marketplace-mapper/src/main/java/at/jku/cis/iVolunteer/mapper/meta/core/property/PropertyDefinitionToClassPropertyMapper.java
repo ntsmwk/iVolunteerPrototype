@@ -41,7 +41,7 @@ public class PropertyDefinitionToClassPropertyMapper implements OneWayMapper<Pro
 		classProperty.setRequired(source.isRequired());
 		
 		return classProperty;
-	}
+	} 
 
 	@Override
 	public List<ClassProperty<Object>> toTargets(List<PropertyDefinition<Object>> sources) {
