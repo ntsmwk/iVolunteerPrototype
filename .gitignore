@@ -7,6 +7,6 @@ composer-logs/
 **/.settings/
 
 .project
-marketplace-client/package-lock.json
+marketplace-frontend/package-lock.json
 marketplace/Servers/**
 /marketplace/.recommenders/**
