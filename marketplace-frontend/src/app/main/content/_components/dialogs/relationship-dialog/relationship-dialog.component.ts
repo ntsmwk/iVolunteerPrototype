@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { Relationship, Inheritance, Association, RelationshipType, AssociationParameter } from "../../../_model/meta/Relationship";
+import { Relationship, Inheritance, Association, RelationshipType, AssociationCardinality } from "../../../_model/meta/Relationship";
 
 @Component({
   selector: 'relationship-dialog',
@@ -25,8 +25,8 @@ export class RelationshipDialogComponent implements OnInit{
   ngOnInit() {
 
     this.associationParameterOptions = [];
-    for (let a in AssociationParameter) {
-      this.associationParameterOptions.push({key: a, label: AssociationParameter[a]});
+    for (let a in AssociationCardinality) {
+      this.associationParameterOptions.push({key: a, label: AssociationCardinality[a]});
     }    
   }
   
@@ -50,8 +50,8 @@ export class RelationshipDialogComponent implements OnInit{
     }
 
     this.relationship.id = null;
-    this.relationship.classId2 = null;
-    this.relationship.classId1 = this.data.classIdTarget;
+    this.relationship.target = null;
+    this.relationship.source = this.data.classIdTarget;
 
   
     
@@ -63,12 +63,12 @@ export class RelationshipDialogComponent implements OnInit{
   }
 
   onParam1Select(event: any) {
-    (this.relationship as Association).param1 = event.value;
+    (this.relationship as Association).sourceCardinality = event.value;
     console.log(this.relationship);
   }
 
   onParam2Select(event: any) {
-    (this.relationship as Association).param2 = event.value;
+    (this.relationship as Association).targetCardinality = event.value;
     console.log(this.relationship);
   }
 

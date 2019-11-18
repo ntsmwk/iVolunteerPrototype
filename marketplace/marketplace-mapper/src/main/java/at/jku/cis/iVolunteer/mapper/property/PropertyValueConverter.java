@@ -52,7 +52,7 @@ public class PropertyValueConverter {
 		}
 	}
 
-	//TODO @Alex (((double)(Integer) source)) does not work
+	// TODO @Alex (((double)(Integer) source)) does not work
 	private Double convertObjectToDouble(Object source) {
 		try {
 			return (Double) source;
@@ -64,7 +64,7 @@ public class PropertyValueConverter {
 				if (source instanceof String) {
 					return Double.parseDouble((String) source);
 				} else if (source instanceof Integer) {
-					return ((double)(Integer) source);
+					return ((double) (Integer) source);
 				} else {
 					throw new IllegalArgumentException(
 							"PropertyMapper - unable to parse - should not happen: " + source);

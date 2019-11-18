@@ -12,71 +12,72 @@ import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplateStub;
 
 @Component
-public class UserDefinedTaskTemplateStubMapper implements AbstractMapper<UserDefinedTaskTemplate, UserDefinedTaskTemplateStub> {
+public class UserDefinedTaskTemplateStubMapper
+		implements AbstractMapper<UserDefinedTaskTemplate, UserDefinedTaskTemplateStub> {
 
-    @Override
-    public UserDefinedTaskTemplateStub toTarget(UserDefinedTaskTemplate source) {
-        if ( source == null ) {
-            return null;
-        }
+	@Override
+	public UserDefinedTaskTemplateStub toTarget(UserDefinedTaskTemplate source) {
+		if (source == null) {
+			return null;
+		}
 
-        UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO = new UserDefinedTaskTemplateStub();
+		UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO = new UserDefinedTaskTemplateStub();
 
-        userDefinedTaskTemplateStubDTO.setId( source.getId() );
-        userDefinedTaskTemplateStubDTO.setName( source.getName() );
-        userDefinedTaskTemplateStubDTO.setDescription( source.getDescription() );
-        
-        if (source instanceof SingleUserDefinedTaskTemplate) {
-        	userDefinedTaskTemplateStubDTO.setKind("single");
-        } else if (source instanceof MultiUserDefinedTaskTemplate) {
-        	userDefinedTaskTemplateStubDTO.setKind("multi");
-        } else {
-        	throw new IllegalStateException("source has to be either Single- or Nested-UserDefinedTaskTemplate");
-        }
+		userDefinedTaskTemplateStubDTO.setId(source.getId());
+		userDefinedTaskTemplateStubDTO.setName(source.getName());
+		userDefinedTaskTemplateStubDTO.setDescription(source.getDescription());
 
-        return userDefinedTaskTemplateStubDTO;
-    }
+		if (source instanceof SingleUserDefinedTaskTemplate) {
+			userDefinedTaskTemplateStubDTO.setKind("single");
+		} else if (source instanceof MultiUserDefinedTaskTemplate) {
+			userDefinedTaskTemplateStubDTO.setKind("multi");
+		} else {
+			throw new IllegalStateException("source has to be either Single- or Nested-UserDefinedTaskTemplate");
+		}
 
-    @Override
-    public List<UserDefinedTaskTemplateStub> toTargets(List<UserDefinedTaskTemplate> sources) {
-        if ( sources == null ) {
-            return null;
-        }
+		return userDefinedTaskTemplateStubDTO;
+	}
 
-        List<UserDefinedTaskTemplateStub> list = new ArrayList<UserDefinedTaskTemplateStub>( sources.size() );
-        for ( UserDefinedTaskTemplate userDefinedTaskTemplate : sources ) {
-            list.add( toTarget( userDefinedTaskTemplate ) );
-        }
+	@Override
+	public List<UserDefinedTaskTemplateStub> toTargets(List<UserDefinedTaskTemplate> sources) {
+		if (sources == null) {
+			return null;
+		}
 
-        return list;
-    }
+		List<UserDefinedTaskTemplateStub> list = new ArrayList<UserDefinedTaskTemplateStub>(sources.size());
+		for (UserDefinedTaskTemplate userDefinedTaskTemplate : sources) {
+			list.add(toTarget(userDefinedTaskTemplate));
+		}
 
-    @Override
-    public UserDefinedTaskTemplate toSource(UserDefinedTaskTemplateStub target) {
-        if ( target == null ) {
-            return null;
-        }
+		return list;
+	}
 
-        UserDefinedTaskTemplate userDefinedTaskTemplate = new UserDefinedTaskTemplate();
+	@Override
+	public UserDefinedTaskTemplate toSource(UserDefinedTaskTemplateStub target) {
+		if (target == null) {
+			return null;
+		}
 
-        userDefinedTaskTemplate.setId( target.getId() );
-        userDefinedTaskTemplate.setName( target.getName() );
-        userDefinedTaskTemplate.setDescription( target.getDescription() );
+		UserDefinedTaskTemplate userDefinedTaskTemplate = new UserDefinedTaskTemplate();
 
-        return userDefinedTaskTemplate;
-    }
+		userDefinedTaskTemplate.setId(target.getId());
+		userDefinedTaskTemplate.setName(target.getName());
+		userDefinedTaskTemplate.setDescription(target.getDescription());
 
-    @Override
-    public List<UserDefinedTaskTemplate> toSources(List<UserDefinedTaskTemplateStub> targets) {
-        if ( targets == null ) {
-            return null;
-        }
+		return userDefinedTaskTemplate;
+	}
 
-        List<UserDefinedTaskTemplate> list = new ArrayList<UserDefinedTaskTemplate>( targets.size() );
-        for ( UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO : targets ) {
-            list.add( toSource( userDefinedTaskTemplateStubDTO ) );
-        }
+	@Override
+	public List<UserDefinedTaskTemplate> toSources(List<UserDefinedTaskTemplateStub> targets) {
+		if (targets == null) {
+			return null;
+		}
 
-        return list;
-    }
+		List<UserDefinedTaskTemplate> list = new ArrayList<UserDefinedTaskTemplate>(targets.size());
+		for (UserDefinedTaskTemplateStub userDefinedTaskTemplateStubDTO : targets) {
+			list.add(toSource(userDefinedTaskTemplateStubDTO));
+		}
+
+		return list;
+	}
 }

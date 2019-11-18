@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -78,7 +79,7 @@ public class ClassDefinitionService {
 					throw new NotAcceptableException("getParentById: child has no parent");
 				}
 				// traverse - find and assign new currentClassDefinition
-				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getClassId2());
+				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getTarget());
 
 			} while (!currentClassDefinition.isRoot());
 			// TODO turn map into JSON
@@ -86,6 +87,10 @@ public class ClassDefinitionService {
 		}
 
 		return null;
+	}
+
+	public List<ClassDefinition> getClassDefinitionByArchetype(ClassArchetype archetype) {
+		return classDefinitionRepository.getByClassArchetype(archetype);
 	}
 
 }

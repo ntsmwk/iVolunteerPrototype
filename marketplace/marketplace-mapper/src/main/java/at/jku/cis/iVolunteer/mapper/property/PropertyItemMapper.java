@@ -38,5 +38,4 @@ public class PropertyItemMapper implements OneWayMapper<UserDefinedTaskTemplate,
 		}
 		return list;
 	}
-
 }

@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from "mxgraph";
-import { Relationship, RelationshipType, Association, AssociationParameter, Inheritance } from 'app/main/content/_model/meta/Relationship';
+import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined, isNull } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyDefinition, PropertyItem, ClassProperty } from 'app/main/content/_model/meta/Property';
@@ -316,8 +316,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
     const parent = this.graph.getDefaultParent();
 
-    var source = this.graph.getModel().getCell(r.classId1);
-    var target = this.graph.getModel().getCell(r.classId2);
+    var source = this.graph.getModel().getCell(r.source);
+    var target = this.graph.getModel().getCell(r.target);
 
     var cell: myMxCell;
     if (r.relationshipType == RelationshipType.INHERITANCE) {
@@ -328,7 +328,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       cell = new myMxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), 'endArrow=none;html=1;curved=1');
       cell.cellType = 'association';
 
-      var cell1 = new myMxCell(AssociationParameter[(r as Association).param1], new mx.mxGeometry(-0.8, 0, 0, 0), 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;');
+      var cell1 = new myMxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;');
       cell1.geometry.relative = true;
       cell1.setConnectable(false);
       cell1.vertex = true;
@@ -339,7 +339,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       }
       cell.insert(cell1);
 
-      var cell2 = new myMxCell(AssociationParameter[(r as Association).param2], new mx.mxGeometry(0.8, 0, 0, 0), 'resizable=0;html=1;align=right;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;');
+      var cell2 = new myMxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), 'resizable=0;html=1;align=right;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;');
       cell2.geometry.relative = true;
       cell2.setConnectable(false);
       cell2.vertex = true;
@@ -689,10 +689,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
       if (!isNullOrUndefined(cell)) {
         if (!isNullOrUndefined(cell.source)) {
-          r.classId1 = cell.source.id;
+          r.source = cell.source.id;
         }
         if (!isNullOrUndefined(cell.target)) {
-          r.classId2 = cell.target.id;
+          r.target = cell.target.id;
         }
 
         if (cell.cellType == 'inheritance') {
@@ -700,8 +700,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
             (<Inheritance>r).superClassId = cell.source.id;
           }
         } else if (cell.cellType == 'association') {
-          (<Association>r).param1 = AssociationParameter.getAssociationParameterFromLabel(cell.getChildAt(0).value);
-          (<Association>r).param2 = AssociationParameter.getAssociationParameterFromLabel(cell.getChildAt(1).value);
+          (<Association>r).sourceCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(0).value);
+          (<Association>r).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
 
         } else {
           console.error("invalid cellType")

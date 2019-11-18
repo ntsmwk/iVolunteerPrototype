@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum RelationshipType {
 	INHERITANCE("INHERITANCE"), ASSOCIATION("ASSOCIATION");
-	
+
 	private final String relationshipType;
-	
-	private RelationshipType (String relationshipType) {
+
+	private RelationshipType(String relationshipType) {
 		this.relationshipType = relationshipType;
 	}
 
@@ -15,18 +15,18 @@ public enum RelationshipType {
 	public String toString() {
 		return relationshipType;
 	}
-	
+
 	public String getRelationshipType() {
 		return this.relationshipType;
 	}
-	
+
 	@JsonCreator
-	public static RelationshipType getFromRelationshipType(String type){
-        for(RelationshipType t : RelationshipType.values()){
-            if(t.getRelationshipType().equals(type)){
-                return t;
-            }
-        }
-        throw new IllegalArgumentException();
-    }	
+	public static RelationshipType getFromRelationshipType(String type) {
+		for (RelationshipType t : RelationshipType.values()) {
+			if (t.getRelationshipType().equals(type)) {
+				return t;
+			}
+		}
+		throw new IllegalArgumentException();
+	}
 }

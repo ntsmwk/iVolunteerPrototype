@@ -23,12 +23,9 @@ public class ClassPropertyToPropertyInstanceMapper
 		PropertyInstance<Object> propertyInstance = new PropertyInstance<Object>();
 		propertyInstance.setId(source.getId());
 		propertyInstance.setName(source.getName());
-
 		propertyInstance.setValues(new ArrayList<Object>(source.getDefaultValues()));
 		propertyInstance.setAllowedValues(new ArrayList<Object>(source.getAllowedValues()));
-
 		propertyInstance.setType(source.getType());
-
 		propertyInstance.setImmutable(source.isImmutable());
 		propertyInstance.setUpdateable(source.isUpdateable());
 		propertyInstance.setRequired(source.isRequired());

@@ -2,26 +2,25 @@ package at.jku.cis.iVolunteer.model.meta.core.relationship;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection="relationship")
 public class Inheritance extends Relationship {
 	
+	//TODO @MWE ?? why needed
 	String superClassId;
 	
 	public Inheritance() {
 		this.relationshipType = RelationshipType.INHERITANCE;
 	}
 	
-	public Inheritance(String classId1, String classId2, String superClassId) {
+	public Inheritance(String child, String parent, String superClassId) {
+		super(child, parent);
 		this.superClassId = superClassId;
-		this.classId1 = classId1;
-		this.classId2 = classId2;
 		this.relationshipType = RelationshipType.INHERITANCE;
 	}
 	
 	public Inheritance(Relationship relationship) {
+		super(relationship.source, relationship.target);
 		this.id = relationship.getId();
-		this.classId1 = relationship.getClassId1();
-		this.classId2 = relationship.getClassId2();
 		this.relationshipType = relationship.getRelationshipType();
 	}
 	

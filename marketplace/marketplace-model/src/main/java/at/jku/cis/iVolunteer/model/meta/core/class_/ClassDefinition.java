@@ -14,7 +14,7 @@ public class ClassDefinition {
 	private String parentId;
 	private String name;
 	private List<ClassProperty<Object>> properties;
-	private ClassArchetype archetype;
+	private ClassArchetype classArchetype;
 
 	boolean root;
 
@@ -54,11 +54,11 @@ public class ClassDefinition {
 	}
 
 	public ClassArchetype getArchetype() {
-		return archetype;
+		return classArchetype;
 	}
 
-	public void setArchetype(ClassArchetype archetype) {
-		this.archetype = archetype;
+	public void setArchetype(ClassArchetype classArchetype) {
+		this.classArchetype = classArchetype;
 	}
 
 	public boolean isRoot() {

@@ -26,7 +26,7 @@ import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationParameter;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
@@ -194,14 +194,14 @@ public class MarketplaceApplication implements CommandLineRunner {
 		i4.setId("test_i4");
 		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
 		i5.setId("test_i5");
-		Association i6 = new Association(c6.getId(), c6.getId(), AssociationParameter.ONE, AssociationParameter.ZEROSTAR);
+		Association i6 = new Association(c6.getId(), c6.getId(), AssociationCardinality.ONE, AssociationCardinality.ZEROSTAR);
 		i6.setId("test_i6");
 		
-		Association i7 = new Association(c5.getId(), c7.getId(), AssociationParameter.ONE, AssociationParameter.ONESTAR);
+		Association i7 = new Association(c5.getId(), c7.getId(), AssociationCardinality.ONE, AssociationCardinality.ONESTAR);
 		i7.setId("test_i7");
-		Association i8 = new Association(c5.getId(), c8.getId(), AssociationParameter.ONE, AssociationParameter.ZEROONE);
+		Association i8 = new Association(c5.getId(), c8.getId(), AssociationCardinality.ONE, AssociationCardinality.ZEROONE);
 		i8.setId("test_i8");
-		Association i9 = new Association(c4.getId(), c9.getId(), AssociationParameter.ZEROSTAR, AssociationParameter.ZEROONE);
+		Association i9 = new Association(c4.getId(), c9.getId(), AssociationCardinality.ZEROSTAR, AssociationCardinality.ZEROONE);
 		i9.setId("test_i9");
 		
 		

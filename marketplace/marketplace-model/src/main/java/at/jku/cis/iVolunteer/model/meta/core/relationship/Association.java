@@ -2,48 +2,47 @@ package at.jku.cis.iVolunteer.model.meta.core.relationship;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "relationship")
 public class Association extends Relationship {
 	
-	AssociationParameter param1;
-	AssociationParameter param2;
+	AssociationCardinality sourceCardinality;
+	AssociationCardinality targetCardinality;
 	
 	public Association() {
 		this.relationshipType = RelationshipType.ASSOCIATION;
 	}
 	
-	public Association(String classId1, String classId2, AssociationParameter param1, AssociationParameter param2) {
-		this.classId1 = classId1;
-		this.classId2 = classId2;
-		this.param1 = param1;
-		this.param2 = param2;
+	public Association(String source, String target, AssociationCardinality sourceCardinality, AssociationCardinality targetCardinality) {
+		this.setSource(source);
+		this.setTarget(target);
+		this.sourceCardinality = sourceCardinality;
+		this.targetCardinality = targetCardinality;
 		this.relationshipType = RelationshipType.ASSOCIATION;
 	}
 	
 	public Association(Relationship relationship) {
 		this.id = relationship.getId();
-		this.classId1 = relationship.getClassId1();
-		this.classId2 = relationship.getClassId2();
+		this.setSource(relationship.source);
+		this.setTarget(relationship.target);
 		this.relationshipType = relationship.getRelationshipType();
 	}
-	
-	public AssociationParameter getParam1() {
-		return param1;
+
+	public AssociationCardinality getSourceCardinality() {
+		return sourceCardinality;
 	}
-	
-	public void setParam1(AssociationParameter param1) {
-		this.param1 = param1;
+
+	public void setSourceCardinality(AssociationCardinality sourceCardinality) {
+		this.sourceCardinality = sourceCardinality;
 	}
-	
-	
-	public AssociationParameter getParam2() {
-		return param2;
+
+	public AssociationCardinality getTargetCardinality() {
+		return targetCardinality;
 	}
-	
-	public void setParam2(AssociationParameter param1) {
-		this.param2 = param1;
+
+	public void setTargetCardinality(AssociationCardinality targetCardinality) {
+		this.targetCardinality = targetCardinality;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();

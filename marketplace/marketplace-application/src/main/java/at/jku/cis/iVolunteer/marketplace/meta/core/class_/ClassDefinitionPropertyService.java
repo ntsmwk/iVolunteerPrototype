@@ -26,10 +26,8 @@ public class ClassDefinitionPropertyService {
 	}
 
 	List<ClassProperty<Object>> addPropertiesToClassDefinitionById(String id, @RequestBody List<String> propertyIds) {
-		// @formatter:off
- 		List<ClassProperty<Object>> classProperties = 
-				createClassPropertiesFromDefinitions(propertyDefinitionRepository.findAll(propertyIds));
-		// @formatter:on
+		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(
+				propertyDefinitionRepository.findAll(propertyIds));
 
 		ClassDefinition clazz = storeClassProperties(id, classProperties);
 		return clazz.getProperties();

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 
 @RestController
@@ -29,6 +30,11 @@ public class ClassDefinitionController {
 	@GetMapping("/meta/core/class/definition/{id}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
 		return classDefinitionService.getClassDefinitionById(id);
+	}
+
+	@GetMapping("/meta/core/class/definition/{archetype}")
+	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype) {
+		return classDefinitionService.getClassDefinitionByArchetype(archetype);
 	}
 
 	@PutMapping("/meta/core/class/definition/multiple")

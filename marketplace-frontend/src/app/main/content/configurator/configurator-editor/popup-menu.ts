@@ -3,7 +3,7 @@ import { myMxCell, ConfiguratorEditorComponent } from "./configurator-editor.com
 import { isNullOrUndefined } from "util";
 import { ClassDefinition } from "app/main/content/_model/meta/Class";
 import { PropertyItem } from "app/main/content/_model/meta/Property";
-import { Relationship, AssociationParameter, Association } from "app/main/content/_model/meta/Relationship";
+import { Relationship, AssociationCardinality, Association } from "app/main/content/_model/meta/Relationship";
 import { defaultUrlMatcher } from "@angular/router/src/shared";
 
 const mx: typeof mxgraph = require('mxgraph')({
@@ -222,19 +222,19 @@ export class EditorPopupMenu {
       }
 
       addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: myMxCell, childId: 0 | 1) {
-        menu.addItem(AssociationParameter.ZEROSTAR, null, function () {
+        menu.addItem(AssociationCardinality.ZEROSTAR, null, function () {
           setCellValue(cell, childId, 'ZEROSTAR');
         }, parent, null, null, null);
     
-        menu.addItem(AssociationParameter.ZEROONE, null, function () {
+        menu.addItem(AssociationCardinality.ZEROONE, null, function () {
           setCellValue(cell, childId, 'ZEROONE');
         }, parent, null, null, null);
     
-        menu.addItem(AssociationParameter.ONE, null, function () {
+        menu.addItem(AssociationCardinality.ONE, null, function () {
           setCellValue(cell, childId, 'ONE');
         }, parent, null, null, null);
     
-        menu.addItem(AssociationParameter.ONESTAR, null, function () {
+        menu.addItem(AssociationCardinality.ONESTAR, null, function () {
           setCellValue(cell, childId, 'ONESTAR');
         }, parent, null, null, null);
     
@@ -246,12 +246,12 @@ export class EditorPopupMenu {
           try {
             graph.getModel().beginUpdate();
             if (!isNullOrUndefined(cell.children)) {
-              graph.getModel().getChildren(cell)[childId].setValue(AssociationParameter[parameter]);
+              graph.getModel().getChildren(cell)[childId].setValue(AssociationCardinality[parameter]);
               //workaround to get graph to update
               graph.getModel().remove(cell);
               graph.addCell(cell);
             } else {
-              cell.setValue(AssociationParameter[parameter]);
+              cell.setValue(AssociationCardinality[parameter]);
               graph.getModel().remove(cell.getParent());
               graph.addCell(cell.getParent());
             }

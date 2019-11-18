@@ -74,10 +74,10 @@ export class RelationshipService {
 
     return new Promise((resolve) => {
 
-      if (r.classId1 == null) {
-        r.classId1 = c.id;
-      } else if (r.classId2 == null) {
-        r.classId2 = c.id;
+      if (r.source == null) {
+        r.source = c.id;
+      } else if (r.target == null) {
+        r.target = c.id;
       }
 
 

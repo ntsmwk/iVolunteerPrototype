@@ -2,8 +2,8 @@
 export class Relationship {
     id: string;
 
-    classId1: string;
-    classId2: string;
+    source: string;
+    target: string;
 
     relationshipType: RelationshipType;
 }
@@ -13,8 +13,8 @@ export class Inheritance extends Relationship {
 }
 
 export class Association extends Relationship {
-    param1: string;
-    param2: string;
+    sourceCardinality: string;
+    targetCardinality: string;
 }
 
 export enum RelationshipType {
@@ -22,20 +22,20 @@ export enum RelationshipType {
     ASSOCIATION = 'ASSOCIATION'
 }
 
-export enum AssociationParameter {
+export enum AssociationCardinality {
     NONE = '', ONE = '1', ZEROONE = '0...1', ZEROSTAR = '0...*', ONESTAR = '1...*'
 }
 
-export namespace AssociationParameter {
-    let reverseMode = new Map<string, AssociationParameter>();
-   
-    export function getAssociationParameterFromLabel(label: string): string { 
-        Object.keys(AssociationParameter).forEach((param: AssociationParameter) => {
-            const modeValue: string = AssociationParameter[<any>param];
+export namespace AssociationCardinality {
+    let reverseMode = new Map<string, AssociationCardinality>();
+
+    export function getAssociationParameterFromLabel(label: string): string {
+        Object.keys(AssociationCardinality).forEach((param: AssociationCardinality) => {
+            const modeValue: string = AssociationCardinality[<any>param];
             reverseMode.set(modeValue, param);
-            
+
         });
         return reverseMode.get(label);
     }
-    
+
 }
