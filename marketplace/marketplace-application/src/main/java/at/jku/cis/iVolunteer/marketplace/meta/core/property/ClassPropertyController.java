@@ -39,7 +39,6 @@ public class ClassPropertyController {
 			return findClassProperty(classDefinition, classPropertyId);
 		}
 		return null;
-
 	}
 
 	@PutMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}/update")
