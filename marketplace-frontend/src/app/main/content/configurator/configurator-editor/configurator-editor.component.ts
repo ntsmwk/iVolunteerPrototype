@@ -2,7 +2,7 @@ import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef } from '
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from "mxgraph";
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined, isNull } from 'util';
@@ -511,7 +511,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
           addedClass.properties = [];
 
           //TODO @Alex change to correct archetype
-          addedClass.classArchetype = ClassArchetype.COMPETENCE;
+          addedClass.classArchetype = "COMPETENCE";
 
           let cell = outer.insertClassIntoGraph(addedClass, new mx.mxGeometry(coords.x, coords.y, 80, 30), true);
           cell.id = "new" + cell.id;

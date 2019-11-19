@@ -5,8 +5,7 @@ export class ClassDefinition {
     parentId: string;
     root: boolean;
     name: string;
-    classArchetype: ClassArchetype;
-
+    classArchetype: string;
     properties: ClassProperty<any>[] = [];
     matchingRules: any[]
 }
@@ -18,10 +17,10 @@ export class ClassInstance {
     matchingRules: any[] = [];
 }
 
-export enum ClassArchetype {
-    COMPETENCE="COMPETENCE",
-    TASK="TASK",
-    FUNCTION="FUNCTION",
-    ACHIEVEMENT="ACHIEVEMENT", 
-    OTHER="OTHER"
-}
+// export enum ClassArchetype {
+//     COMPETENCE="COMPETENCE",
+//     TASK="TASK",
+//     FUNCTION="FUNCTION",
+//     ACHIEVEMENT="ACHIEVEMENT", 
+//     OTHER="OTHER"
+// }
