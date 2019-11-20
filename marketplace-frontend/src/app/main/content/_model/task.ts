@@ -1,10 +1,10 @@
-import {Project} from './project';
-import {Competence} from './competence';
+import { Project } from './project';
+import { CompetenceClassDefinition } from './meta/Class';
 
 export class Task {
   id: string;
   name: string;
-  
+
   description: string;
   project: Project;
   workflowKey: string;
@@ -12,7 +12,7 @@ export class Task {
   startDate: Date;
   endDate: Date;
   status: string;
-  requiredCompetences: Competence[];
-  acquirableCompetences: Competence[];
+  requiredCompetences: CompetenceClassDefinition[];
+  acquirableCompetences: CompetenceClassDefinition[];
 }
 

@@ -6,7 +6,6 @@ import { TaskTemplateService } from '../_service/task-template.service';
 import { CompetenceService } from '../_service/competence.service';
 import { WorkflowService } from '../_service/workflow.service';
 import { WorkflowType } from '../_model/workflow-type';
-import { Competence } from '../_model/competence';
 import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
@@ -14,6 +13,7 @@ import { Marketplace } from '../_model/marketplace';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 import { CompetenceValidator } from '../_validator/competence.validator';
+import { CompetenceClassDefinition } from '../_model/meta/Class';
 
 @Component({
   templateUrl: './task-template-form.component.html',
@@ -21,7 +21,7 @@ import { CompetenceValidator } from '../_validator/competence.validator';
 })
 export class FuseTaskTemplateFormComponent implements OnInit {
 
-  competences: Competence[];
+  competences: CompetenceClassDefinition[];
   taskTemplateForm: FormGroup;
   workflowTypes: Array<WorkflowType>;
 
@@ -49,7 +49,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
       this.coreHelpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           Promise.all([
-            this.competenceService.findAll(marketplace).toPromise().then((competences: Competence[]) => this.competences = competences),
+            this.competenceService.findAll(marketplace).toPromise().then((competences: CompetenceClassDefinition[]) => this.competences = competences),
 
             this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
           ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(marketplace, params['taskTemplateId'])));
@@ -67,11 +67,11 @@ export class FuseTaskTemplateFormComponent implements OnInit {
         id: taskTemplate.id,
         name: taskTemplate.name,
         description: taskTemplate.description,
-        requiredCompetences: this.competences.filter((competence: Competence) => {
-          return taskTemplate.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.name === competence.name);
+        requiredCompetences: this.competences.filter((competence: CompetenceClassDefinition) => {
+          return taskTemplate.requiredCompetences.find((requiredCompetence: CompetenceClassDefinition) => requiredCompetence.name === competence.name);
         }),
-        acquirableCompetences: this.competences.filter((competence: Competence) => {
-          return taskTemplate.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.name === competence.name);
+        acquirableCompetences: this.competences.filter((competence: CompetenceClassDefinition) => {
+          return taskTemplate.acquirableCompetences.find((acquirableCompetence: CompetenceClassDefinition) => acquirableCompetence.name === competence.name);
         }),
         workflowType: this.workflowTypes.find((value: WorkflowType) => taskTemplate.workflowKey === value.key)
       });
