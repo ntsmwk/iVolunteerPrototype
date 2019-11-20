@@ -7,14 +7,26 @@ export class ClassDefinition {
     name: string;
     classArchetype: ClassArchetype;
     properties: ClassProperty<any>[] = [];
-    matchingRules: any[]
+    marketplaceId: string;
+    timestamp: Date;
+}
+
+export class CompetenceClassDefinition extends ClassDefinition{
+
 }
 
 export class ClassInstance {
     id: string;
+    name: string;
     classDefinition: ClassDefinition;
     properties: PropertyInstance<any>;
-    matchingRules: any[] = [];
+    marketplaceId: string;
+    timestamp: Date;
+    userId: string;
+}
+
+export class CompetenceClassInstance extends ClassInstance{
+
 }
 
 export enum ClassArchetype {

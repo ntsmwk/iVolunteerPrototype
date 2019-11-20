@@ -37,16 +37,11 @@ public class PropertyDefinitionToPropertyInstanceMapper implements OneWayMapper<
 	@Override
 	public List<PropertyInstance<Object>> toTargets(List<PropertyDefinition<Object>> sources) {
 		if (sources == null) {
-			System.out.println("returning null");
 			return null;
 		}
 		
-		System.out.println("not returning null");
-		
 		List<PropertyInstance<Object>> targets = new ArrayList<PropertyInstance<Object>>();
 		for (PropertyDefinition<Object> definition : sources) {
-			System.out.println(definition.getId());
-
 			targets.add(toTarget(definition));
 		}
 		
