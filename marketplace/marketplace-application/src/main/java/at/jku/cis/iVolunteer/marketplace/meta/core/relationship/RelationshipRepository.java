@@ -11,5 +11,5 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @Repository
 public interface RelationshipRepository extends MongoRepository<Relationship, String> {
 
-	List<Relationship> findByClassId1AndRelationshipType(String classId1, RelationshipType relationshipType);
+	List<Relationship> findBySourceAndRelationshipType(String source, RelationshipType relationshipType);
 }

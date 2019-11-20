@@ -1,7 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +16,11 @@ import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionReposit
 import at.jku.cis.iVolunteer.marketplace.task.interaction.TaskInteractionService;
 import at.jku.cis.iVolunteer.marketplace.volunteer.profile.VolunteerProfileRepository;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskStatus;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
-import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerCompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
 
@@ -88,8 +87,10 @@ public class TaskOperationController {
 		TaskEntry taskEntry = taskInteractionToTaskEntryMapper.transform(taskInteraction);
 		taskEntry.setMarketplaceId(marketplaceId);
 
-		Set<CompetenceEntry> competenceEntries = taskInteractionToCompetenceEntryMapper.transform(taskInteraction);
-		for (CompetenceEntry ce : competenceEntries) {
+		// TODO @MWE create task instances!
+		List<CompetenceClassInstance> competenceInstances = taskInteractionToCompetenceEntryMapper
+				.transform(taskInteraction);
+		for (CompetenceClassInstance ce : competenceInstances) {
 			ce.setMarketplaceId(marketplaceId);
 		}
 
@@ -100,7 +101,7 @@ public class TaskOperationController {
 				volunteerProfile.setVolunteer(volunteer);
 			}
 			volunteerProfile.getTaskList().add(taskEntry);
-			volunteerProfile.getCompetenceList().addAll(competenceEntries);
+			volunteerProfile.getCompetenceList().addAll(competenceInstances);
 			volunteerProfileRepository.save(volunteerProfile);
 
 			try {
@@ -109,10 +110,8 @@ public class TaskOperationController {
 
 				contractorRepositoryRestClient.publishTaskEntry(vte, authorization);
 
-				competenceEntries.forEach(competenceEntry -> {
-					VolunteerCompetenceEntry vce = createVolunteerCompetenceEntryFromCompetenceEntry(competenceEntry);
-					vce.setVolunteerId(volunteer.getId());
-					contractorRepositoryRestClient.publishCompetenceEntry(vce, authorization);
+				competenceInstances.forEach(competenceEntry -> {
+					contractorRepositoryRestClient.publishCompetenceEntry(competenceEntry, authorization);
 				});
 
 			} catch (RestClientException ex) {
@@ -146,17 +145,6 @@ public class TaskOperationController {
 		taskInteraction.setTimestamp(new Date());
 		taskInteraction.setOperation(task.getStatus());
 		return taskInteractionRepository.insert(taskInteraction);
-	}
-
-	private VolunteerCompetenceEntry createVolunteerCompetenceEntryFromCompetenceEntry(
-			CompetenceEntry competenceEntry) {
-		VolunteerCompetenceEntry volunteerCompetenceEntry = new VolunteerCompetenceEntry();
-		volunteerCompetenceEntry.setCompetenceId(competenceEntry.getCompetenceId());
-		volunteerCompetenceEntry.setCompetenceName(competenceEntry.getCompetenceName());
-		volunteerCompetenceEntry.setId(competenceEntry.getId());
-		volunteerCompetenceEntry.setMarketplaceId(competenceEntry.getMarketplaceId());
-		volunteerCompetenceEntry.setTimestamp(competenceEntry.getTimestamp());
-		return volunteerCompetenceEntry;
 	}
 
 	private VolunteerTaskEntry createVolunteerTaskEntryFromTaskEntry(TaskEntry taskEntry) {

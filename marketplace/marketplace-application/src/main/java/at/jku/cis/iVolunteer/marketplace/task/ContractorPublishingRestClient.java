@@ -11,8 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerCompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
 
 @Service
@@ -39,9 +39,9 @@ public class ContractorPublishingRestClient {
 		return restTemplate.postForObject(requestURI, buildEntity(vte, authorization), String.class);
 	}
 
-	public String publishCompetenceEntry(VolunteerCompetenceEntry vce, String authorization) {
+	public String publishCompetenceEntry(CompetenceClassInstance competenceInstance, String authorization) {
 		String requestURI = buildContractorRequestURI(COMPETENCE_ENTRY);
-		return restTemplate.postForObject(requestURI, buildEntity(vce, authorization), String.class);
+		return restTemplate.postForObject(requestURI, buildEntity(competenceInstance, authorization), String.class);
 	}
 
 	private String buildContractorRequestURI(String requestPath) {

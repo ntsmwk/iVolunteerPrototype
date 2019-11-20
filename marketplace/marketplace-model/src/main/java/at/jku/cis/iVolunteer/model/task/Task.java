@@ -9,29 +9,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
 
-import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.project.Project;
 
-
 @Document
-public class Task implements IHashObject{
+public class Task implements IHashObject {
 
-	@Id 
-	private String id;
+	@Id private String id;
 	private String name;
-	
+
 	private String description;
 	private String workflowKey;
 	private String marketplaceId;
 	private TaskStatus status;
 	private Date startDate;
 	private Date endDate;
-	private List<Competence> acquirableCompetences;
-	private List<Competence> requiredCompetences;
 
-	@DBRef 
-	private Project project;
+	private List<CompetenceClassDefinition> acquirableCompetences;
+	private List<CompetenceClassDefinition> requiredCompetences;
+
+	@DBRef private Project project;
 
 	public String getId() {
 		return id;
@@ -97,28 +95,28 @@ public class Task implements IHashObject{
 		this.endDate = endDate;
 	}
 
-	public List<Competence> getAcquirableCompetences() {
-		return acquirableCompetences;
-	}
-
-	public void setAcquirableCompetences(List<Competence> acquirableCompetences) {
-		this.acquirableCompetences = acquirableCompetences;
-	}
-
-	public List<Competence> getRequiredCompetences() {
-		return requiredCompetences;
-	}
-
-	public void setRequiredCompetences(List<Competence> requiredCompetences) {
-		this.requiredCompetences = requiredCompetences;
-	}
-
 	public Project getProject() {
 		return project;
 	}
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public List<CompetenceClassDefinition> getAcquirableCompetences() {
+		return acquirableCompetences;
+	}
+
+	public void setAcquirableCompetences(List<CompetenceClassDefinition> acquirableCompetences) {
+		this.acquirableCompetences = acquirableCompetences;
+	}
+
+	public List<CompetenceClassDefinition> getRequiredCompetences() {
+		return requiredCompetences;
+	}
+
+	public void setRequiredCompetences(List<CompetenceClassDefinition> requiredCompetences) {
+		this.requiredCompetences = requiredCompetences;
 	}
 
 	@Override
@@ -133,7 +131,7 @@ public class Task implements IHashObject{
 	public int hashCode() {
 		return id.hashCode();
 	}
-	
+
 	@Override
 	public String toHashObject() {
 		JsonObject json = new JsonObject();
@@ -153,8 +151,8 @@ public class Task implements IHashObject{
 	public String toString() {
 		return "Task [id=" + id + ", name=" + name + ", description=" + description + ", workflowKey=" + workflowKey
 				+ ", marketplaceId=" + marketplaceId + ", status=" + status + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", acquirableCompetences=" + acquirableCompetences + ", requiredCompetences="
-				+ requiredCompetences + ", project=" + project + "]";
+				+ endDate + ", acquirableCompetences=" + getAcquirableCompetences() + ", requiredCompetences="
+				+ getRequiredCompetences() + ", project=" + project + "]";
 	}
 
 }

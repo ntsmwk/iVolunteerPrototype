@@ -1,43 +1,43 @@
 package at.jku.cis.iVolunteer.marketplace.task;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.collections4.Transformer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 
 @Service
-public class TaskInteractionToCompetenceEntryMapper implements Transformer<TaskInteraction, Set<CompetenceEntry>> {
+public class TaskInteractionToCompetenceEntryMapper
+		implements Transformer<TaskInteraction, List<CompetenceClassInstance>> {
 
-	@Value("${marketplace.identifier}")
-	private String marketplaceId;
+	@Value("${marketplace.identifier}") private String marketplaceId;
 
 	@Override
-	public Set<CompetenceEntry> transform(TaskInteraction taskInteraction) {
+	public List<CompetenceClassInstance> transform(TaskInteraction taskInteraction) {
 		Date timestamp = taskInteraction.getTimestamp();
 
 		if (!isValidateTaskInteraction(taskInteraction)) {
-			return Collections.emptySet();
+			return Collections.emptyList();
 		}
 
-		Set<CompetenceEntry> competenceEntries = new HashSet<>();
-		taskInteraction.getTask().getAcquirableCompetences().forEach(competence -> {
-			CompetenceEntry competenceEntry = new CompetenceEntry();
-			competenceEntry.setId(UUID.randomUUID().toString());
-			competenceEntry.setCompetenceId(competence.getId());
-			competenceEntry.setCompetenceName(competence.getName());
-			competenceEntry.setMarketplaceId(marketplaceId);
-			competenceEntry.setTimestamp(timestamp);
-			competenceEntries.add(competenceEntry);
+		List<CompetenceClassInstance> competenceInstances = new ArrayList<>();
+		taskInteraction.getTask().getAcquirableCompetences().forEach(competenceDefinition -> {
+			CompetenceClassInstance competenceInstance = new CompetenceClassInstance();
+			competenceInstance.setId(UUID.randomUUID().toString());
+			competenceInstance.setClassDefinition(competenceDefinition);
+			competenceInstance.setName(competenceInstance.getName());
+			competenceInstance.setMarketplaceId(marketplaceId);
+			competenceInstance.setTimestamp(timestamp);
+			competenceInstances.add(competenceInstance);
 		});
-		return competenceEntries;
+		return competenceInstances;
 	}
 
 	private boolean isValidateTaskInteraction(TaskInteraction taskInteraction) {

@@ -5,20 +5,18 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 
 @Document
 public class TaskTemplate {
 
-	@Id
-	private String id;
+	@Id private String id;
 	private String name;
 	private String description;
 	private String workflowKey;
-	private List<Competence> acquirableCompetences;
-	private List<Competence> requiredCompetences;
-	
-	
+	private List<CompetenceClassDefinition> acquirableCompetences;
+	private List<CompetenceClassDefinition> requiredCompetences;
+
 	public String getId() {
 		return id;
 	}
@@ -51,20 +49,20 @@ public class TaskTemplate {
 		this.workflowKey = workflowKey;
 	}
 
-	public List<Competence> getAcquirableCompetences() {
-		return acquirableCompetences;
-	}
-
-	public void setAcquirableCompetences(List<Competence> acquirableCompetences) {
-		this.acquirableCompetences = acquirableCompetences;
-	}
-
-	public List<Competence> getRequiredCompetences() {
+	public List<CompetenceClassDefinition> getRequiredCompetences() {
 		return requiredCompetences;
 	}
 
-	public void setRequiredCompetences(List<Competence> requiredCompetences) {
+	public void setRequiredCompetences(List<CompetenceClassDefinition> requiredCompetences) {
 		this.requiredCompetences = requiredCompetences;
+	}
+
+	public List<CompetenceClassDefinition> getAcquirableCompetences() {
+		return acquirableCompetences;
+	}
+
+	public void setAcquirableCompetences(List<CompetenceClassDefinition> acquirableCompetences) {
+		this.acquirableCompetences = acquirableCompetences;
 	}
 
 	@Override

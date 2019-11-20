@@ -11,8 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 
 @Service
@@ -41,7 +41,7 @@ public class VerifierRestClient {
 				.booleanValue();
 	}
 
-	public boolean verifyCompetenceEntry(CompetenceEntry competenceEntry, String authorization) {
+	public boolean verifyCompetence(CompetenceClassInstance competenceEntry, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
 		return restTemplate.postForObject(requestURI, buildEntity(competenceEntry, authorization), Boolean.class)
 				.booleanValue();

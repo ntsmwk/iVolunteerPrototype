@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.competence.Competence;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
@@ -36,7 +36,7 @@ public class VolunteerController {
 	}
 
 	@GetMapping("/volunteer/{id}/competencies")
-	public List<Competence> findCompetencies(@PathVariable("id") String id) {
+	public List<CompetenceClassDefinition> findCompetencies(@PathVariable("id") String id) {
 
 		// TODO implement ...
 		return Collections.emptyList();

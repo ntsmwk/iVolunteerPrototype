@@ -6,5 +6,4 @@ export class Configurator {
     relationshipIds: string[];
     date: Date;
 
-
 }

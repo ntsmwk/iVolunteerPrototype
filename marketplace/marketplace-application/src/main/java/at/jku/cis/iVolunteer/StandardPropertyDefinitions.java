@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -11,9 +10,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace.competence.CompetenceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MaximumTextLength;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MinimumTextLength;
@@ -27,38 +24,40 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
 
-@SuppressWarnings({"unchecked",  "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Component
 public class StandardPropertyDefinitions {
-	
-	@Autowired public CompetenceRepository competenceRepository;
+
 	@Autowired public PropertyDefinitionRepository propertyDefinitionRepository;
 
-	//=========================================
-	//========== Text Properties ==============
-	//=========================================
-	
+	// =========================================
+	// ========== Text Properties ==============
+	// =========================================
+
 	public StandardPropertyDefinitions() {
-		
+
 	}
 	
-	public StandardPropertyDefinitions(CompetenceRepository cp, PropertyDefinitionRepository pdp) {
-		this.competenceRepository = cp;
-		this.propertyDefinitionRepository = pdp;
+	@PostConstruct
+	public void addStandardPropertyDefinitions() {
+		for (PropertyDefinition<Object> pd : this.getAll()) {
+			if (!propertyDefinitionRepository.exists(pd.getId())) {
+				propertyDefinitionRepository.save(pd);
+			}
+		}
 	}
-	
-	
+
 	public List<PropertyDefinition<Object>> getAllSingle() {
 		List<PropertyDefinition<?>> props = new LinkedList<>();
-		
+
 		NameProperty np = new NameProperty();
 		np.inst();
 		props.add(np);
-		
+
 		DescriptionProperty dp = new DescriptionProperty();
 		np.inst();
 		props.add(dp);
-		
+
 		props.add(new WorkflowKeyProperty());
 		props.add(new ContentProperty());
 		props.add(new PriorityProperty());
@@ -82,26 +81,22 @@ public class StandardPropertyDefinitions {
 		props.add(new RemindParticipantsProperty());
 		props.add(new LatitudeProperty());
 		props.add(new LongitudeProperty());
-		
-		
+
 		RequiredCompetencesProperty cp1 = new RequiredCompetencesProperty();
 		OptionalCompetencesProperty cp2 = new OptionalCompetencesProperty();
 		AquireableCompetencesProperty cp3 = new AquireableCompetencesProperty();
-		
+
 		cp1.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp1);
 		cp2.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp2);
 		cp3.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp3);
-		
-		
-		
-		
+
 		return new ArrayList(props);
-		
+
 	}
-	
+
 //	public List<PropertyDefinition<Object>> getAllMulti() {
 //		List<PropertyDefinition<Object>> props = new LinkedList<>();
 //		
@@ -140,7 +135,7 @@ public class StandardPropertyDefinitions {
 //		List<Property> ret = new ArrayList<>(props);
 //		return ret;
 //	}
-	
+
 //	public List<PropertyDefinition<?>> getAllSybos() {
 //		List<PropertyDefinition<?>> list = new LinkedList<>();
 //		
@@ -168,7 +163,7 @@ public class StandardPropertyDefinitions {
 //		
 //		return new ArrayList<>(list);
 //	}
-	
+
 //	public List<Property> getTestMultiWithRules() {
 //		List<Property> list = new LinkedList<>();
 //		
@@ -177,7 +172,7 @@ public class StandardPropertyDefinitions {
 //		return new ArrayList<>(list);
 //
 //	}
-	
+
 	public List<PropertyDefinition<Object>> getAllFlexProdProperties() {
 		List<PropertyDefinition<?>> list = new LinkedList<>();
 
@@ -187,38 +182,38 @@ public class StandardPropertyDefinitions {
 		list.add(new TemperaturhomogenitaetProperty());
 		list.add(new KaltgewalztesMaterialZulaessigProperty());
 		list.add(new WarmgewalztesMaterialZulaessigProperty());
-		
+
 		list.add(new BundEntfettenProperty());
-		
+
 		list.add(new InnendurchmesserProperty());
 		list.add(new AussendurchmesserProperty());
 		list.add(new HoeheProperty());
-		
+
 		list.add(new GluehzeitProperty());
 		list.add(new DurchsatzProperty());
-		
+
 		list.add(new MoeglicheInnendurchmesserProperty());
 		list.add(new MaxAussendurchmesserProperty());
 		list.add(new MaxChargierhoeheProperty());
-		
+
 		list.add(new CQI9Property());
 		list.add(new TUSProperty());
-		
+
 		list.add(new LetzteWartungProperty());
 		list.add(new WartungsintervallProperty());
-		
+
 		list.add(new BandbreiteProperty());
 		list.add(new BandstaerkeProperty());
-		
+
 		list.add(new WarmgewalztProperty());
 		list.add(new KaltgewalztProperty());
-		
+
 		list.add(new StreckgrenzeProperty());
 		list.add(new ZugfestigkeitProperty());
 		list.add(new DehnungProperty());
-		
+
 		list.add(new GefuegeProperty());
-		
+
 		list.add(new MaterialBereitgestelltProperty());
 		list.add(new LieferortProperty());
 		list.add(new VerpackungProperty());
@@ -226,44 +221,41 @@ public class StandardPropertyDefinitions {
 		list.add(new MengeProperty());
 		list.add(new LieferdatumProperty());
 		list.add(new IncotermsProperty());
-		
+
 		list.add(new ZahlungsbedingungenProperty());
-		
-		
-		
+
 		return new ArrayList(list);
 
 	}
-	
+
 	public List<PropertyDefinition<Object>> getAll() {
 		List<PropertyDefinition<Object>> sps = this.getAllSingle();
 //		List<PropertyDefinition<Object>> mps = this.getAllMulti();
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
 		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-	
+
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
 		sps.addAll(flexProd);
-		
+
 		return sps;
-	
+
 	}
-	
-	
-	
+
 	public List<String> addCompetenceLegalValues() {
-	
+
 		List<String> legalValues = new LinkedList<>();
-		
-		for (Competence c : competenceRepository.findAll()) {
-			legalValues.add(c.getName());
-		}
-	
+
+		// @MWE fix for CompetenceClassDefinitions
+//		for (Competence c : competenceRepository.findAll()) {
+//			legalValues.add(c.getName());
+//		}
+
 		return legalValues;
 	}
-	
+
 //	public Map<String, Property> getAllSingleMap() {
 //		Map<String, Property> props = new HashMap<>();
 //		
@@ -274,7 +266,7 @@ public class StandardPropertyDefinitions {
 //			
 //		return new HashMap<>(props);
 //	}
-	
+
 	/**
 	 * 
 	 * Standard Properties
@@ -285,14 +277,14 @@ public class StandardPropertyDefinitions {
 		NameProperty() {
 			inst();
 		}
-		
+
 		@PostConstruct
 		public void inst() {
 			this.setId("name");
 			this.setType(PropertyType.TEXT);
 			this.setName("Name");
 			this.setRequired(true);
-			
+
 			List<PropertyConstraint<?>> constraints = new ArrayList<>();
 			constraints.add(new MinimumTextLength(3));
 			constraints.add(new MaximumTextLength(10));
@@ -301,13 +293,13 @@ public class StandardPropertyDefinitions {
 
 		}
 	}
-	
+
 	public static class DescriptionProperty extends LongTextPropertyDefinition {
-		
+
 		public DescriptionProperty() {
 			inst();
 		}
-		
+
 		@PostConstruct
 		public void inst() {
 			this.setId("description");
@@ -315,40 +307,40 @@ public class StandardPropertyDefinitions {
 			this.setRequired(true);
 		}
 	}
-	
+
 	public static class WorkflowKeyProperty extends TextPropertyDefinition {
-		
+
 		public WorkflowKeyProperty() {
 			inst();
 		}
-		
+
 		@PostConstruct
 		public void inst() {
 			this.setId("workflow_key");
 			this.setName("Workflow Key");
 		}
 	}
-	
+
 	public static class ContentProperty extends TextPropertyDefinition {
 		public ContentProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("content");
 			this.setName("Content");
 		}
 	}
-	
+
 	public static class PriorityProperty extends TextPropertyDefinition {
 		public PriorityProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("priority");
 			this.setName("Priority");
-			
+
 			List<String> legalValues = new ArrayList<>();
 			legalValues.add("Low");
 			legalValues.add("Normal");
@@ -357,67 +349,69 @@ public class StandardPropertyDefinitions {
 			this.setAllowedValues(legalValues);
 		}
 	}
-	
+
 	public static class ImportancyProperty extends TextPropertyDefinition {
 		public ImportancyProperty() {
 			inst();
 		}
+
 		public void inst() {
 			this.setId("importancy");
 			this.setName("Importancy");
-			
+
 			List<String> legalValues = new ArrayList<>();
 			legalValues.add("Not Important");
 			legalValues.add("Somewhat Important");
 			legalValues.add("Important");
 			legalValues.add("Very Important");
-			legalValues.add("Critically Important");		
+			legalValues.add("Critically Important");
 			this.setAllowedValues(legalValues);
 
 		}
 	}
-	
+
 	public static class RoleProperty extends TextPropertyDefinition {
 		public RoleProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("role");
-			this.setName("Role");			
+			this.setName("Role");
 		}
 	}
-	
+
 	public static class LocationProperty extends TextPropertyDefinition {
 		public LocationProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("location");
 			this.setName("Location");
 		}
 	}
-	
+
 	public static class RequiredEquipmentProperty extends TextPropertyDefinition {
 		public RequiredEquipmentProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("required_equipment");
 			this.setName("Required Equipment");
 		}
 	}
-	
+
 	public static class WorkshiftProperty extends TextPropertyDefinition {
 		public WorkshiftProperty() {
 			inst();
 		}
+
 		public void inst() {
 			this.setId("workshift");
 			this.setName("Allocated Shift");
-			
+
 			List<String> legalValues = new ArrayList<>();
 			legalValues.add("Morning");
 			legalValues.add("Day");
@@ -425,20 +419,20 @@ public class StandardPropertyDefinitions {
 			legalValues.add("Evening-Night");
 			legalValues.add("Night");
 			legalValues.add("Night-Morning");
-			this.setAllowedValues(legalValues);	
+			this.setAllowedValues(legalValues);
 		}
 	}
-	
+
 	public static class TaskPeriodTypeProperty extends TextPropertyDefinition {
-		
+
 		public TaskPeriodTypeProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("period_type");
 			this.setName("Period Type");
-			
+
 			List<String> legalValues = new ArrayList<>();
 			legalValues.add("Days");
 			legalValues.add("Weeks");
@@ -447,182 +441,178 @@ public class StandardPropertyDefinitions {
 			legalValues.add("Daily");
 			legalValues.add("Monthly");
 			this.setAllowedValues(legalValues);
-			
+
 		}
 	}
-	
+
 	public static class KeywordsProperty extends TextPropertyDefinition {
 		public KeywordsProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("keywords");
 			this.setName("Keywords");
-		}		
-		
+		}
+
 	}
-	
-	////Rewards ??
+
+	//// Rewards ??
 	public static class RewardsProperty extends TextPropertyDefinition {
 		public RewardsProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("offered_rewards");
 			this.setName("Offered Reward(s)");
 		}
 	}
-	
-	//=========================================
-	//========== Number Properties ============
-	//=========================================
-	
+
+	// =========================================
+	// ========== Number Properties ============
+	// =========================================
+
 	public static class PostcodeProperty extends LongPropertyDefinition {
 		public PostcodeProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("postcode");
 			this.setName("Postcode");
-			
+
 		}
 	}
-	
+
 	public static class NumberOfVolunteersProperty extends LongPropertyDefinition {
 		public NumberOfVolunteersProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("number_of_volunteers");
 			this.setName("Number of Volunteers");
-			
+
 			List<Long> legalValues = new LinkedList<>();
-			for(long i = 1; i <=10; i++) {
+			for (long i = 1; i <= 10; i++) {
 				legalValues.add(i);
 			}
 			this.setAllowedValues(legalValues);
 		}
 	}
-	
-	
+
 	public static class TaskPeriodValueProperty extends LongPropertyDefinition {
 		public TaskPeriodValueProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("period_length");
 			this.setName("Period length");
-			
+
 			List<Long> defaultValues = new ArrayList<>();
 			defaultValues.add(1L);
 			this.setAllowedValues(defaultValues);
 		}
 	}
-	
-	
-	//=========================================
-	//========== Date Properties ==============
-	//=========================================
-	
+
+	// =========================================
+	// ========== Date Properties ==============
+	// =========================================
+
 	public static class StartDateProperty extends DatePropertyDefinition {
 		public StartDateProperty() {
 			super();
 			this.setId("starting_date");
-			this.setName("Starting Date");			
+			this.setName("Starting Date");
 			setTestValues();
 		}
-		
+
 		public void setTestValues() {
 
 			List<Date> defaultValues = new ArrayList<>();
 			defaultValues.add(new Date());
-		this.setAllowedValues(defaultValues);
-			
+			this.setAllowedValues(defaultValues);
+
 		}
 	}
-	
+
 	public static class EndDateProperty extends DatePropertyDefinition {
 		public EndDateProperty() {
 			this.setId("end_date");
 			this.setName("End Date");
 			setTestValues();
 		}
-		
+
 		public void setTestValues() {
-			
-			
 
 		}
 	}
-	
-	//=========================================
-	//========== Bool Properties ==============
-	//=========================================
-	
+
+	// =========================================
+	// ========== Bool Properties ==============
+	// =========================================
+
 	public static class UrgentProperty extends BooleanPropertyDefinition {
 		public UrgentProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("urgent");
 			this.setName("Urgent");
 		}
 	}
-	
+
 	public static class HighlightedProperty extends BooleanPropertyDefinition {
 		public HighlightedProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("highlighted");
 			this.setName("Highlighted");
 		}
 	}
-	
+
 	public static class PromotedProperty extends BooleanPropertyDefinition {
 		public PromotedProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("promotion");
 			this.setName("Promotion");
 		}
 	}
-	
+
 	public static class FeedbackRequestedProperty extends BooleanPropertyDefinition {
 		public FeedbackRequestedProperty() {
-			inst(); 
+			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("feedback_requested");
 			this.setName("Feedback Requested");
 		}
 	}
-	
+
 	public static class RemindParticipantsProperty extends BooleanPropertyDefinition {
 		public RemindParticipantsProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setId("remind_participants");
 			this.setName("Remind Participants");
 		}
 	}
-	
-	//=========================================
-	//==== Floating Point Number Properties ===
-	//=========================================
-	
+
+	// =========================================
+	// ==== Floating Point Number Properties ===
+	// =========================================
+
 	public static class LatitudeProperty extends DoublePropertyDefinition {
 		public LatitudeProperty() {
 			inst();
@@ -633,42 +623,38 @@ public class StandardPropertyDefinitions {
 			this.setId("latitude");
 			this.setName("Latitude");
 		}
-		
+
 		private void setTestValues() {
 
 		}
 	}
-	
+
 	public static class LongitudeProperty extends DoublePropertyDefinition {
 		public LongitudeProperty() {
 			inst();
 			setTestValues();
 		}
-		
 
-		
 		public void inst() {
 			this.setId("longitude");
 			this.setName("Longitude");
 
 		}
-		
+
 		private void setTestValues() {
-			
+
 		}
 	}
-	
-	//=========================================
-	//========= Competence Properties =========
-	//=========================================
+
+	// =========================================
+	// ========= Competence Properties =========
+	// =========================================
 	public static class RequiredCompetencesProperty extends TextPropertyDefinition {
-				
-		
+
 		public RequiredCompetencesProperty() {
 			inst();
 		}
-		
-		
+
 		public void inst() {
 			this.setName("Required Competences");
 			this.setId("required_competences");
@@ -676,237 +662,232 @@ public class StandardPropertyDefinitions {
 		}
 
 	}
-	
+
 	public static class OptionalCompetencesProperty extends TextPropertyDefinition {
-				
+
 		public OptionalCompetencesProperty() {
 			inst();
 		}
-		
-		
+
 		public void inst() {
 			this.setName("Optional Competences");
 			this.setId("optional_competences");
 			this.setMultiple(true);
-		}	
-	}
-	
-	public static class AquireableCompetencesProperty extends TextPropertyDefinition {
-						
-		public AquireableCompetencesProperty() {
-			inst();	
 		}
-		
+	}
+
+	public static class AquireableCompetencesProperty extends TextPropertyDefinition {
+
+		public AquireableCompetencesProperty() {
+			inst();
+		}
+
 		public void inst() {
 			this.setName("Aquirable Competences");
 			this.setId("aquireable_competences");
 			this.setMultiple(true);
 		}
 	}
-	
-	
-	//-----------------------------------------
-	//--------------FlexProd Properties
-	//-----------------------------------------
-	
-	
+
+	// -----------------------------------------
+	// --------------FlexProd Properties
+	// -----------------------------------------
+
 	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
 		public MaxGluehtemperaturProperty() {
 			this.setId("maxgluehtemperatur");
 			this.setName("Max. Glühtemperatur");
 		}
 	}
-	
+
 	public static class VerfuegbaresSchutzgasProperty extends TextPropertyDefinition {
 		public VerfuegbaresSchutzgasProperty() {
 			this.setId("verfuegbaresschutzgas");
 			this.setName("Verfügbares Schutzgas");
 		}
 	}
-	
+
 	public static class BauartProperty extends TextPropertyDefinition {
 		public BauartProperty() {
 			this.setId("bauart");
 			this.setName("Bauart");
 		}
 	}
-	
+
 	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
 		public TemperaturhomogenitaetProperty() {
 			this.setId("temperaturhomogenitaet");
 			this.setName("Temperaturhomogenität");
 		}
 	}
-	
+
 	public static class KaltgewalztesMaterialZulaessigProperty extends BooleanPropertyDefinition {
 		public KaltgewalztesMaterialZulaessigProperty() {
 			this.setId("kaltgewalztesmaterialzulaessig");
 			this.setName("Kaltgewalztes Material zulässig");
 		}
 	}
-	
+
 	public static class WarmgewalztesMaterialZulaessigProperty extends BooleanPropertyDefinition {
 		public WarmgewalztesMaterialZulaessigProperty() {
 			this.setId("warmgewalztesmaterialzulaessig");
 			this.setName("Warmgewalztes Material zulässig");
 		}
 	}
-	
+
 	public static class BundEntfettenProperty extends BooleanPropertyDefinition {
 		public BundEntfettenProperty() {
 			this.setId("bundentfetten");
 			this.setName("Bund Entfetten");
 		}
 	}
-	
+
 	public static class InnendurchmesserProperty extends LongPropertyDefinition {
 		public InnendurchmesserProperty() {
 			this.setId("innendurchmesser");
 			this.setName("Innendurchmesser");
 		}
 	}
-	
+
 	public static class AussendurchmesserProperty extends LongPropertyDefinition {
 		public AussendurchmesserProperty() {
 			this.setId("aussendurchmesser");
 			this.setName("Außendurchmesser");
 		}
 	}
-	
+
 	public static class HoeheProperty extends LongPropertyDefinition {
 		public HoeheProperty() {
 			this.setId("hoehe");
 			this.setName("Höhe");
 		}
 	}
-	
+
 	public static class GluehzeitProperty extends LongPropertyDefinition {
 		public GluehzeitProperty() {
 			this.setId("gluehzeit");
 			this.setName("Glühzeit");
 		}
 	}
-	
+
 	public static class DurchsatzProperty extends LongPropertyDefinition {
 		public DurchsatzProperty() {
 			this.setId("durchsatz");
 			this.setName("Durchsatz");
 		}
 	}
-	
+
 	public static class MoeglicheInnendurchmesserProperty extends LongPropertyDefinition {
 		public MoeglicheInnendurchmesserProperty() {
 			this.setId("moeglicheinnendurchmesser");
 			this.setName("Mögliche Innendurchmesser");
 		}
 	}
-	
+
 	public static class MaxAussendurchmesserProperty extends LongPropertyDefinition {
 		public MaxAussendurchmesserProperty() {
 			this.setId("maxaussendurchmesser");
 			this.setName("Max. Außendurchmesser");
 		}
 	}
-	
+
 	public static class MaxChargierhoeheProperty extends LongPropertyDefinition {
 		public MaxChargierhoeheProperty() {
 			this.setId("maxchargierhoehe");
 			this.setName("Max. Chargierhöhe");
 		}
 	}
-	
+
 	public static class CQI9Property extends BooleanPropertyDefinition {
 		public CQI9Property() {
 			this.setId("cqi9");
 			this.setName("CQI-9");
 		}
 	}
-	
+
 	public static class TUSProperty extends BooleanPropertyDefinition {
 		public TUSProperty() {
 			this.setId("tus");
 			this.setName("TUS");
 		}
 	}
-	
+
 	public static class LetzteWartungProperty extends DatePropertyDefinition {
 		public LetzteWartungProperty() {
 			this.setId("letztewartung");
 			this.setName("Letzte Wartung");
 		}
 	}
-	
+
 	public static class WartungsintervallProperty extends DatePropertyDefinition {
 		public WartungsintervallProperty() {
 			this.setId("wartungsintervall");
 			this.setName("Wartungsintervall");
 		}
 	}
-	
+
 	public static class BandbreiteProperty extends LongPropertyDefinition {
 		public BandbreiteProperty() {
 			this.setId("bandbreite");
 			this.setName("Bandbreite");
 		}
 	}
-	
+
 	public static class BandstaerkeProperty extends BooleanPropertyDefinition {
 		public BandstaerkeProperty() {
 			this.setId("bandstaerke");
 			this.setName("Bandstärke");
 		}
 	}
-	
+
 	public static class WarmgewalztProperty extends BooleanPropertyDefinition {
 		public WarmgewalztProperty() {
 			this.setId("warmgewalzt");
 			this.setName("Warmgewalzt");
 		}
 	}
-	
+
 	public static class KaltgewalztProperty extends BooleanPropertyDefinition {
 		public KaltgewalztProperty() {
 			this.setId("kaltgewalzt");
 			this.setName("Kaltgewalzt");
 		}
 	}
-	
+
 	public static class StreckgrenzeProperty extends LongPropertyDefinition {
 		public StreckgrenzeProperty() {
 			this.setId("streckgrenze");
 			this.setName("Streckgrenze");
 		}
 	}
-	
+
 	public static class ZugfestigkeitProperty extends LongPropertyDefinition {
 		public ZugfestigkeitProperty() {
 			this.setId("zugfestigkeit");
 			this.setName("Zugfestigkeit");
 		}
 	}
-	
+
 	public static class DehnungProperty extends LongPropertyDefinition {
 		public DehnungProperty() {
 			this.setId("dehnung");
 			this.setName("Dehnung");
 		}
 	}
-	
+
 	public static class GefuegeProperty extends TextPropertyDefinition {
 		public GefuegeProperty() {
 			this.setId("gefuege");
 			this.setName("Gefüge");
 		}
 	}
-	
-	
+
 	public static class MaterialBereitgestelltProperty extends BooleanPropertyDefinition {
 		public MaterialBereitgestelltProperty() {
 			this.setId("materialbereitgestellt");
 			this.setName("Material bereitgestellt?");
 		}
 	}
-	
 
 	public static class LieferortProperty extends TextPropertyDefinition {
 		public LieferortProperty() {
@@ -914,44 +895,42 @@ public class StandardPropertyDefinitions {
 			this.setName("Lieferort");
 		}
 	}
-	
+
 	public static class VerpackungProperty extends TextPropertyDefinition {
 		public VerpackungProperty() {
 			this.setId("verpackung");
 			this.setName("Verpackung");
 		}
 	}
-	
+
 	public static class TransportartProperty extends TextPropertyDefinition {
 		public TransportartProperty() {
 			this.setId("transportart");
 			this.setName("Transportart");
 		}
 	}
-	
-	
+
 	public static class MengeProperty extends LongPropertyDefinition {
 		public MengeProperty() {
 			this.setId("menge");
 			this.setName("Menge");
 		}
 	}
-	
-	
+
 	public static class LieferdatumProperty extends DatePropertyDefinition {
 		public LieferdatumProperty() {
 			this.setId("lieferdatum");
 			this.setName("Lieferdatum");
 		}
 	}
-	
+
 	public static class IncotermsProperty extends TextPropertyDefinition {
 		public IncotermsProperty() {
 			this.setId("incoterms");
 			this.setName("Inco-Terms");
 		}
 	}
-	
+
 	public static class ZahlungsbedingungenProperty extends LongTextPropertyDefinition {
 		public ZahlungsbedingungenProperty() {
 			this.setId("zahlungsbedingungen");
@@ -959,7 +938,7 @@ public class StandardPropertyDefinitions {
 		}
 	}
 	///////////////////////////////
-	
+
 //	public static class TestMultiWithRules extends MultiProperty {
 //		public TestMultiWithRules() {
 //			this.setId("multi_with_rules");
@@ -979,26 +958,10 @@ public class StandardPropertyDefinitions {
 //		}
 //	}
 
-	
+	// -----------------------------------------
+	// --------------MAP PROPERTY
+	// -----------------------------------------
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//-----------------------------------------
-	//--------------MAP PROPERTY
-	//-----------------------------------------
-	
 //	
 //	public static class MapProperty extends MultiProperty {
 //	
@@ -1208,11 +1171,5 @@ public class StandardPropertyDefinitions {
 //		
 //	}
 //	
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -8,24 +8,45 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 
 @Component
 public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefinition, ClassInstance> {
 
-	@Autowired ClassPropertyToPropertyInstanceMapper cPTPIMapper;
+	@Autowired ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
 
 	@Override
 	public ClassInstance toTarget(ClassDefinition source) {
 		if (source == null) {
 			return null;
 		}
+		ClassInstance classInstance = null;
 
-		ClassInstance classInstance = new ClassInstance();
+		switch (source.getClassArchetype()) {
+		case ACHIEVEMENT:
+			classInstance = new AchievementClassInstance();
+			break;
+		case COMPETENCE:
+			classInstance = new CompetenceClassInstance();
+			break;
+		case FUNCTION:
+			classInstance = new FunctionClassInstance();
+			break;
+		case TASK:
+			classInstance = new TaskClassInstance();
+			break;
+		default:
+			break;
+
+		}
+
 		classInstance.setId(null);
-		classInstance.setClassDefinitionId(source.getId());
-		classInstance.setParentClassInstanceId(null);
+		classInstance.setClassDefinition(source);
 
 		classInstance.setName(source.getName());
 
