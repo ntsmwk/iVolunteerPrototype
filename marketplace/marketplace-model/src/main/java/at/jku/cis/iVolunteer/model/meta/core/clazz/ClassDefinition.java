@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @Document
-public abstract class ClassDefinition extends IVolunteerObject implements IHashObject {
+public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	private String parentId;
 	private String name;

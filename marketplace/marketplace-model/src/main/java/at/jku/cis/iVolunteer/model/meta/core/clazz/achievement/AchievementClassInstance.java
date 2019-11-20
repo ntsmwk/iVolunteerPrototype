@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 
-@Document
+@Document(collection="classInstance")
 public class AchievementClassInstance extends ClassInstance {
 
 	public AchievementClassInstance() {

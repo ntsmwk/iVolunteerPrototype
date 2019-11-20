@@ -6,15 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
 @RestController
 public class CompetenceClassDefinitionController {
 
-	@Autowired private CompetenceClassDefinitionRepository competenceClassDefinitionRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 
 	@GetMapping("/competence")
-	public List<CompetenceClassDefinition> findAll() {
-		return competenceClassDefinitionRepository.findAll();
+	public List<ClassDefinition> findAll() {
+		List<ClassDefinition> findAll = classDefinitionRepository.getByClassArchetype(ClassArchetype.COMPETENCE);
+		return findAll;
 	}
 }
