@@ -140,9 +140,9 @@ public class BlockchainRestClient {
 
 	}
 
-	public void postCompetenceHash(String hash, Date timestamp, String competenceId, String marketplaceId, String volunteerId) {
+	public void postCompetenceHash(String hash, Date timestamp, String competenceDefinitionId, String marketplaceId, String volunteerId) {
 		String requestUrl = MessageFormat.format("{0}/api/competence", url);
-		BcCompetence c = new BcCompetence(hash, timestamp, competenceId, marketplaceId, volunteerId);
+		BcCompetence c = new BcCompetence(hash, timestamp, competenceDefinitionId, marketplaceId, volunteerId);
 
 		try {
 			restTemplate.postForObject(requestUrl, c, Void.class);

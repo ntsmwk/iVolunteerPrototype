@@ -1,10 +1,10 @@
-package at.jku.cis.iVolunteer.model.meta.core.class_;
+package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum ClassArchetype {
 
-	COMPETENCE("COMPETENCE"), TASK("TASK"), FUNCTION("FUNCTION"), ACHIEVEMENT("ACHIEVEMENT"), OTHER("OTHER");
+	COMPETENCE("COMPETENCE"), TASK("TASK"), FUNCTION("FUNCTION"), ACHIEVEMENT("ACHIEVEMENT");
 
 	private final String archetype;
 

@@ -1,16 +1,18 @@
-package at.jku.cis.iVolunteer.model.meta.core.class_;
+package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.google.gson.JsonObject;
+
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @Document
-public class ClassDefinition {
+public abstract class ClassDefinition extends IVolunteerObject implements IHashObject {
 
-	@Id private String id;
 	private String parentId;
 	private String name;
 	private List<ClassProperty<Object>> properties;
@@ -53,20 +55,20 @@ public class ClassDefinition {
 		this.properties = properties;
 	}
 
-	public ClassArchetype getArchetype() {
-		return classArchetype;
-	}
-
-	public void setArchetype(ClassArchetype classArchetype) {
-		this.classArchetype = classArchetype;
-	}
-
 	public boolean isRoot() {
 		return root;
 	}
 
 	public void setRoot(boolean root) {
 		this.root = root;
+	}
+
+	public ClassArchetype getClassArchetype() {
+		return classArchetype;
+	}
+
+	public void setClassArchetype(ClassArchetype classArchetype) {
+		this.classArchetype = classArchetype;
 	}
 
 	@Override
@@ -80,6 +82,18 @@ public class ClassDefinition {
 			return false;
 		}
 		return ((ClassDefinition) obj).id.equals(id);
+	}
+
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("name", name);
+		json.addProperty("marketplaceId", marketplaceId);
+		json.addProperty("parent", parentId);
+		json.addProperty("properties", this.properties.hashCode());
+		json.addProperty("timestamp", timestamp.toString());
+		return json.toString();
 	}
 
 }

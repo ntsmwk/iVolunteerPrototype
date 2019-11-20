@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
@@ -37,8 +37,8 @@ public class Verifier {
 	}
 
 	@PostMapping("/competenceEntry")
-	public boolean verifyCompetence(@RequestBody CompetenceEntry competenceEntry) {
-		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceEntry)) == null) ? false : true;
+	public boolean verifyCompetence(@RequestBody CompetenceClassInstance competenceInstance) {
+		return (blockchainRestClient.getCompetenceHash(hasher.generateHash(competenceInstance)) == null) ? false : true;
 	}
 
 }

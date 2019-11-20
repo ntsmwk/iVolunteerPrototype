@@ -479,7 +479,7 @@ public class UserDefinedTaskTemplateController {
 
 		int[] indexArr = { 0 }; // we want the index of the found subtemplate to get quick access to in order to
 								// replace it
-		SingleUserDefinedTaskTemplate subTemplate;
+		SingleUserDefinedTaskTemplate subTemplate = null;
 
 		try {
 			subTemplate = rootTemplate.getTemplates().stream().filter(sub -> {
