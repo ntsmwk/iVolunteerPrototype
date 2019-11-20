@@ -12,12 +12,16 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 
 @SpringBootApplication
 public class MarketplaceApplication {
 
 	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 
 	@Bean
 	@Primary
@@ -32,6 +36,13 @@ public class MarketplaceApplication {
 	@PostConstruct
 	public void init() {
 		addConfigurators();
+		CompetenceClassDefinition def = new CompetenceClassDefinition();
+		def.setClassArchetype(ClassArchetype.COMPETENCE);
+		def.setMarketplaceId("asdfasdf");
+		def.setName("mycompdf");
+		def.setTimestamp(new Date());
+		classDefinitionRepository.save(def);
+
 	}
 
 	private void addConfigurators() {
