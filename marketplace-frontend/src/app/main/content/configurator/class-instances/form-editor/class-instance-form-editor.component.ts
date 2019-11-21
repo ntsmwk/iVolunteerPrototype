@@ -10,24 +10,23 @@ import { FormControl, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 import { maxOtherNew } from "../../../_validator/custom.validators";
 import { DataTransportService } from 'app/main/content/_service/data-transport/data-transport.service';
+import { FormConfiguration } from 'app/main/content/_model/meta/form';
+import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 
 
 @Component({
   selector: 'app-class-instance-form-editor',
   templateUrl: './class-instance-form-editor.component.html',
   styleUrls: ['./class-instance-form-editor.component.scss'],
-  providers: [QuestionService]
+  providers: [QuestionService, QuestionControlService]
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
-  rootClassDefinitons: ClassDefinition[];
-  classDefinitionStructure: Map<string, Map<string, ClassDefinition>>;
-  questionStructure: Map<string, [string, QuestionBase<any>[]]>;
+  formConfigurations: FormConfiguration[];
 
   isLoaded: boolean = false;
 
-  questions: QuestionBase<any>[];
 
   panelOpenState = false;
 
@@ -72,7 +71,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private classDefinitionService: ClassDefinitionService,
     private questionService: QuestionService,
-    private fb: FormBuilder,
+    private questionControlService: QuestionControlService,
     private dataTransportService: DataTransportService,
   ) {
 
@@ -90,36 +89,39 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       
       // let rootClassIds = this.dataTransportService.data;
       let childClassIds = ['test8', 'test7', 'test9'];
+      
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        
-
-
-
-          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((mappedIds: any) => {
-             console.log(mappedIds);
-            for (let entry of mappedIds) {
-              console.log(entry);
-             
+          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+           
+            this.formConfigurations = formConfigurations
+            
+            for (let config of this.formConfigurations) {
+              for (let entry of config.formEntries) {
+                 entry.questions = this.questionService.getQuestionsFromProperties(entry.classProperties);
+                 entry.formGroup = this.questionControlService.toFormGroup(entry.questions);  
+              }
             }
+
+            this.isLoaded = true;
 
           }).then(() => {
           
-     
-            //create questions
-
-            //create formControl
-
-
-            //display
+  
           });
       });
     });
   }
 
+  handleResultEvent(event: any) {
+    console.log("Result:");
+    console.log(event);
+
+  }
+
   createDemoFormControl() {
-    this.fb = new FormBuilder();
+    let fb = new FormBuilder();
     this.form = new FormGroup({
       "00": new FormControl(''),
       "01": new FormControl(''),

@@ -15,8 +15,8 @@ export class DynamicFormComponent implements OnInit {
  
   @Input() questions: QuestionBase<any>[] = [];
   @Input() formDisabled: boolean;
+  @Input() form: FormGroup;
   
-  form: FormGroup;
   output = '';
   submitPressed: boolean;
 
@@ -29,7 +29,6 @@ export class DynamicFormComponent implements OnInit {
 
 
     if (this.formDisabled) {
-      console.log("Disabling form");
       this.form.disable();
     }
 
@@ -50,10 +49,6 @@ export class DynamicFormComponent implements OnInit {
       this.fireResultEvent();
       
     } else {
-      console.log("not valid - try again");
-
-      let firstKey: string;
-      
       //Mark errornous Fields
       this.markFormAsTouched(this.questions, this.form);
       
@@ -66,9 +61,6 @@ export class DynamicFormComponent implements OnInit {
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
     for (let q of questions) {
-      // console.log("Q: " + q.key);
-      // console.log(q);
-      // console.log("========");
       control.get(q.key).markAsTouched()
       if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
@@ -75,47 +76,57 @@ public class ClassDefinitionService {
 			formConfig.setName(childClassDefinition.getName());
 			formConfig.setFormEntries(new ArrayList<FormEntry>());
 			
-			int i = 0;
+			FormEntry formEntry = new FormEntry();
+			formEntry.setPositionLevel(0 + "");
+			formEntry.setClassDefinitons(new ArrayList<ClassDefinition>());
+			formEntry.setClassProperties(new ArrayList<ClassProperty<Object>>());
+			formEntry.setSubEntries(new ArrayList<FormEntry>());
+
 			ClassDefinition currentClassDefinition = childClassDefinition;
-			do {
-				
-				FormEntry formEntry = new FormEntry();
-				formEntry.setPositionLevel(i+"");
-				formEntry.setClassDefinition(currentClassDefinition);
-				formConfig.getFormEntries().add(formEntry);
-				
-				List<Relationship> relationshipList = relationshipRepository.findByTargetAndRelationshipType(
-						currentClassDefinition.getId(), RelationshipType.INHERITANCE);
+			while (!currentClassDefinition.isRoot()) {
+
+				formEntry.getClassDefinitions().add(currentClassDefinition);
+				for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
+					if (!formEntry.getClassProperties().contains(property)) {
+						formEntry.getClassProperties().add(property);
+					}
+				}
+
+				List<Relationship> relationshipList = relationshipRepository
+						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
 
 				if (relationshipList == null || relationshipList.size() == 0) {
-					throw new NotAcceptableException("getParentById: child has no parent");
+					throw new NotAcceptableException("getParentById: child is not root and has no parent");
 				}
-				
+
 				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getSource());
-				i++;
-				
-			} while (!currentClassDefinition.isRoot());
-			FormEntry formEntry = new FormEntry();
-			formEntry.setPositionLevel(i+"");
-			formEntry.setClassDefinition(currentClassDefinition);
+			}
+
+			formEntry.getClassDefinitions().add(currentClassDefinition);
+			for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
+				if (!formEntry.getClassProperties().contains(property)) {
+					formEntry.getClassProperties().add(property);
+				}
+			}
+			
 			formConfig.getFormEntries().add(formEntry);
 			configList.add(formConfig);
 		}
-		
+
 		return configList;
 	}
-	
-	//TODO @Alex implement
+
+	// TODO @Alex implement
 	List<String> getChildrenById(List<String> rootIds) {
-	
+
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
-	
+
 		List<String> returnIds;
 		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
-	
+
 		}
-	
+
 		return null;
 	}
 

@@ -34,6 +34,14 @@ export class ClassProperty<T> {
     position: number;
 
     propertyConstraints: PropertyConstraint<T>[];
+
+    public static getDefaultValue(templateProperty: TemplateProperty<any>): any {
+        if (!isNullOrUndefined(templateProperty.defaultValues) && templateProperty.defaultValues.length >= 1) {
+            return templateProperty.defaultValues[0];
+        } else {
+            return null;
+        }
+    }
 }
 
 export class TemplateProperty<T> extends ClassProperty<T>{

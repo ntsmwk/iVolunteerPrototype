@@ -5,7 +5,7 @@ import {
   SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion
 } from '../_model/dynamic-forms/questions';
 
-import { PropertyInstance, PropertyType, TemplateProperty } from '../_model/meta/Property';
+import { PropertyType, ClassProperty } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
@@ -28,11 +28,9 @@ export interface SingleValidatorData {
   providedIn: 'root',
 })
 export class QuestionService {
-  //questions: QuestionBase<any>[] = [];
   key: number = 0;
 
-  getQuestionsFromProperties(properties: TemplateProperty<any>[]): any[] {
-    //this.questions = []; //reset questions
+  getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
 
     console.log("Question Service called");
@@ -46,14 +44,13 @@ export class QuestionService {
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestion(property: TemplateProperty<any>): QuestionBase<any> {
+  private createQuestion(property: ClassProperty<any>): QuestionBase<any> {
     let question;
-    console.log(property);
     if (property.type === PropertyType.TEXT) {
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
 
         question = new TextboxQuestion({
-          value: TemplateProperty.getDefaultValue(property),
+          value: ClassProperty.getDefaultValue(property),
         });
 
       } else {
@@ -68,7 +65,7 @@ export class QuestionService {
           });
         } else {
           question = new DropdownQuestion({
-            value: TemplateProperty.getDefaultValue(property),
+            value: ClassProperty.getDefaultValue(property),
             // options: this.setListValues(property.allowedValues),
             options: property.allowedValues
           });
@@ -79,7 +76,7 @@ export class QuestionService {
 
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
         question = new NumberBoxQuestion({
-          value: TemplateProperty.getDefaultValue(property),
+          value: ClassProperty.getDefaultValue(property),
         });
 
       } else {
@@ -96,7 +93,7 @@ export class QuestionService {
 
           question = new NumberDropdownQuestion({
             // options: this.setListValues(property.allowedValues),
-            value: TemplateProperty.getDefaultValue(property),
+            value: ClassProperty.getDefaultValue(property),
             options: property.allowedValues
 
           });
@@ -105,12 +102,12 @@ export class QuestionService {
 
     } else if (property.type === PropertyType.LONG_TEXT) {
       question = new TextAreaQuestion({
-        value: TemplateProperty.getDefaultValue(property),
+        value: ClassProperty.getDefaultValue(property),
       });
 
     } else if (property.type === PropertyType.BOOL) {
       question = new SlideToggleQuestion({
-        value: TemplateProperty.getDefaultValue(property),
+        value: ClassProperty.getDefaultValue(property),
       });
 
     // } else if (property.type === PropertyType.LIST) {
@@ -124,7 +121,7 @@ export class QuestionService {
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({
-        value: this.setDateValue(TemplateProperty.getDefaultValue(property)),
+        value: this.setDateValue(ClassProperty.getDefaultValue(property)),
       });
 
 
@@ -148,20 +145,17 @@ export class QuestionService {
     return question;
   }
 
-  // private setListValues(values: ListEntry<any>[]): any {
   private setAsListValues(values: any[]): { key: any, value: any }[] {
     let ret: any[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
         ret.push({ key: values[i], value: values[i] });
-        // ret.push(values[i]);
       }
     }
     return ret;
   }
 
 
-  // private setValuesWithoutKeys(values: ListEntry<any>[]): any {
   private setValuesWithoutKeys(values: any[]): any {
 
     let ret: any[] = [];
@@ -188,8 +182,6 @@ export class QuestionService {
     return ret;
   }
 
-
-  // private setKeys(values: ListEntry<any>[]): any {
   private setKeys(values: any[]): any {
 
     let ret: string[] = [];
@@ -201,19 +193,15 @@ export class QuestionService {
     return ret;
   }
 
-  private setQuestions(templateProperties: TemplateProperty<any>[]) {
+  private setQuestions(templateProperties: ClassProperty<any>[]) {
     let questions: QuestionBase<any>[] = [];
     for (let property of templateProperties) {
 
-      console.log("Type: " + property.type + " Name: " + property.name + " Value:  " + property.defaultValues);
       let question = this.createQuestion(property);
 
       question.key = property.id;
       question.label = property.name;
-      // question.order = properties.indexOf(property);
       question.order = property.position;
-
-      //Set Validators
 
       let validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
 
@@ -233,7 +221,6 @@ export class QuestionService {
 
     if (!isNullOrUndefined(propertyConstraints)) {
       for (let constraint of propertyConstraints) {
-        //console.log("processing rule: " + rule.id);
 
         let singleValidatorData = this.convertRuleToValidator(constraint, propertyType);
 
@@ -241,9 +228,6 @@ export class QuestionService {
           validators.push(singleValidatorData.validator);
           messages.set(singleValidatorData.key, constraint.message);
 
-          // if (singleValidatorData.key === 'required') {
-          //   required = true;
-          // }
         } else {
           console.log("undefined - done nothing - continue");
         }

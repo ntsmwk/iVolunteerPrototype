@@ -7,6 +7,10 @@ import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 import { DataTransportService } from 'app/main/content/_service/data-transport/data-transport.service';
+import { DynamicFormComponent } from 'app/main/content/_components/dynamic-forms/dynamic-form/dynamic-form.component';
+import { DynamicFormQuestionModule } from 'app/main/content/_components/dynamic-forms/dynamic-form-question/dynamic-form-question.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DynamicFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-form/dynamic-form.module';
 
 const routes = [
   {path: ':marketplaceId', component: ClassInstanceFormEditorComponent}
@@ -37,6 +41,8 @@ const routes = [
 
     FuseSharedModule,
     FuseTruncatePipeModule,
+
+    DynamicFormModule,
 
     DynamicClassInstanceCreationFormModule,
 
