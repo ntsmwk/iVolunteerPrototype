@@ -54,8 +54,6 @@ public class TaskController {
 		}
 
 		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
-			List<Task> test = taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId),
-					TaskStatus.PUBLISHED);
 			return taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
 		}
 		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {

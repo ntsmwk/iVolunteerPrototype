@@ -38,15 +38,11 @@ public class RelationshipController {
 
 	@PutMapping("/meta/core/relationship/add-or-update")
 	List<Relationship> addOrUpdateRelationships(@RequestBody List<Relationship> relationships) {
-		System.out.println("Relationship # " + relationships.size());
 		return relationshipRepository.save(relationships);
 	}
 
 	@PutMapping("/meta/core/relationship/add-inheritance")
 	private Inheritance addInheritance(@RequestBody Inheritance inheritance) {
-		System.out.println(inheritance.getSource() + "--" + inheritance.getTarget());
-		System.out.println(inheritance.getSuperClassId());
-
 		return relationshipRepository.save(inheritance);
 
 	}

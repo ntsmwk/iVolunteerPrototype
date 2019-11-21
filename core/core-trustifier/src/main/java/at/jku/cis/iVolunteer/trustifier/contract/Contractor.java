@@ -14,9 +14,9 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
 import at.jku.cis.iVolunteer.model.contract.TaskReservation;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
-import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerCompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
@@ -146,11 +146,14 @@ public class Contractor {
 	}
 
 	@PostMapping("/competenceEntry")
-	public void publishCompetenceEntry(@RequestBody VolunteerCompetenceEntry vce) {
+	public void publishCompetenceInstance(@RequestBody CompetenceClassInstance competenceInstance) {
 		try {
-
-			blockchainRestClient.postCompetenceHash(hasher.generateHash(vce), vce.getTimestamp(), vce.getCompetenceId(),
-					vce.getMarketplaceId(), vce.getVolunteerId());
+			blockchainRestClient.postCompetenceHash(
+					hasher.generateHash(competenceInstance),
+					competenceInstance.getTimestamp(), 
+					competenceInstance.getClassDefinition().getId(),
+					competenceInstance.getMarketplaceId(), 
+					competenceInstance.getUserId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);

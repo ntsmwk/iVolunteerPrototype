@@ -1,6 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.form;
 
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
 public class FormEntry {
 

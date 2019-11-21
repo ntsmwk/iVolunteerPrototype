@@ -16,8 +16,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;

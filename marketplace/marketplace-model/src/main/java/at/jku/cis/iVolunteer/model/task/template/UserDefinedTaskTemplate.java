@@ -1,9 +1,12 @@
 package at.jku.cis.iVolunteer.model.task.template;
 
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.iVolunteerObject.IVolunteerObject;
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 
 /**
@@ -15,6 +18,7 @@ public class UserDefinedTaskTemplate extends IVolunteerObject {
 
 	String name;
 	String description;
+	private List<PropertyInstance<Object>> propertyInstances;
 	
 	int order;
 	
@@ -79,6 +83,14 @@ public class UserDefinedTaskTemplate extends IVolunteerObject {
 			s = s + ((MultiUserDefinedTaskTemplate)this).templates;
 		}
 		return s;
+	}
+
+	public List<PropertyInstance<Object>> getPropertyInstances() {
+		return propertyInstances;
+	}
+
+	public void setPropertyInstances(List<PropertyInstance<Object>> propertyInstances) {
+		this.propertyInstances = propertyInstances;
 	}
 	
 	

@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController

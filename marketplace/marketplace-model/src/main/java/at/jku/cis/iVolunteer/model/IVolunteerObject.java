@@ -1,18 +1,16 @@
-package at.jku.cis.iVolunteer.model.iVolunteerObject;
+package at.jku.cis.iVolunteer.model;
 
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-
 @Document
-public class IVolunteerObject {
+public abstract class IVolunteerObject {
 
-	@Id public String id;
-
-	private List<PropertyInstance<Object>> propertyInstances;
+	@Id protected String id;
+	protected String marketplaceId;
+	protected Date timestamp;
 
 	public IVolunteerObject() {
 	}
@@ -29,12 +27,20 @@ public class IVolunteerObject {
 		this.id = id;
 	}
 
-	public List<PropertyInstance<Object>> getPropertyInstances() {
-		return propertyInstances;
+	public String getMarketplaceId() {
+		return marketplaceId;
 	}
 
-	public void setPropertyInstances(List<PropertyInstance<Object>> propertyInstances) {
-		this.propertyInstances = propertyInstances;
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override
@@ -48,6 +54,6 @@ public class IVolunteerObject {
 			return false;
 		}
 		return ((IVolunteerObject) obj).id.equals(id);
-	}	
+	}
 
 }

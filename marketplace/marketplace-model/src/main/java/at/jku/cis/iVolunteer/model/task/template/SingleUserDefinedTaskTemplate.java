@@ -20,7 +20,7 @@ public class SingleUserDefinedTaskTemplate extends UserDefinedTaskTemplate {
 	
 	public SingleUserDefinedTaskTemplate(UserDefinedTaskTemplate template) {
 		super();
-		this.id = template.id;
+		this.id = template.getId();
 		this.name = template.name;
 		this.description = template.description;
 	}

@@ -1,10 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.volunteer.profile;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,14 +15,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.competence.CompetenceEntryToCompetenceMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.competence.Competence;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
 import at.jku.cis.iVolunteer.model.exception.ForbiddenException;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.volunteer.profile.CompetenceEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerProfile;
 
@@ -37,7 +32,6 @@ public class VolunteerProfileController {
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private VolunteerProfileRepository volunteerProfileRepository;
 	@Autowired private LoginService loginService;
-	@Autowired private CompetenceEntryToCompetenceMapper competenceEntryToCompetenceMapper;
 
 	@GetMapping("/{volunteerId}/profile")
 	public VolunteerProfile getVolunteerProfile(@PathVariable("volunteerId") String volunteerId) {
@@ -92,47 +86,18 @@ public class VolunteerProfileController {
 		volunteerProfileRepository.save(volunteerProfile);
 	}
 
-	@GetMapping("/{volunteerId}/profile/competenceEntry")
-	public Set<CompetenceEntry> getCompetenceEntryList(@PathVariable("volunteerId") String volunteerId) {
-		Set<CompetenceEntry> competenceList = getVolunteerProfile(volunteerId).getCompetenceList();
-		return competenceList;
-	}
-
 	@GetMapping("/{volunteerId}/profile/competence")
-	public List<Competence> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
-
-		VolunteerProfile volunteerProfile = getVolunteerProfile(volunteerId);
-		if (volunteerProfile != null) {
-			List<Competence> competenceList = volunteerProfile.getCompetenceList().stream()
-					.map((CompetenceEntry competenceEntry) -> competenceEntryToCompetenceMapper
-							.toCompetence(competenceEntry))
-					.collect(Collectors.toList());
-			return competenceList;
-		}
-		return Collections.emptyList();
-	}
-
-	@GetMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
-	public CompetenceEntry getCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@PathVariable("competenceEntryId") String competenceEntryId) {
-		return findCompetenceEntry(volunteerId, competenceEntryId);
-	}
-
-	private CompetenceEntry findCompetenceEntry(String volunteerId, String competenceEntryId) {
-		Stream<CompetenceEntry> competenceEntries = findVolunteerProfile(volunteerId).getCompetenceList().stream();
-		return competenceEntries.filter(filterByCompetenceEntryId(competenceEntryId)).findFirst().orElse(null);
-	}
-
-	private Predicate<CompetenceEntry> filterByCompetenceEntryId(String competenceEntryId) {
-		return competenceEntry -> competenceEntry.getCompetenceId().equals(competenceEntryId);
+	public List<CompetenceClassInstance> getCompetenceList(@PathVariable("volunteerId") String volunteerId) {
+		return getVolunteerProfile(volunteerId).getCompetenceList();
 	}
 
 	@PostMapping("/{volunteerId}/profile/competence")
-	public void addCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@RequestBody CompetenceEntry competenceEntry, @RequestHeader("authorization") String authorization) {
+	public void addCompetence(@PathVariable("volunteerId") String volunteerId,
+			@RequestBody CompetenceClassInstance competenceEntry,
+			@RequestHeader("authorization") String authorization) {
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
 
-		if (verifierRestClient.verifyCompetenceEntry(competenceEntry, authorization)) {
+		if (verifierRestClient.verifyCompetence(competenceEntry, authorization)) {
 			volunteerProfile.getCompetenceList().add(competenceEntry);
 			volunteerProfileRepository.save(volunteerProfile);
 		} else {
@@ -140,15 +105,12 @@ public class VolunteerProfileController {
 		}
 	}
 
-	@DeleteMapping("/{volunteerId}/profile/competence/{competenceEntryId}")
-	public void deleteCompetenceEntry(@PathVariable("volunteerId") String volunteerId,
-			@PathVariable("competenceEntryId") String competenceEntryId) {
-		CompetenceEntry competenceEntry = findCompetenceEntry(volunteerId, competenceEntryId);
-		if (competenceEntry == null) {
-			return;
-		}
+	@DeleteMapping("/{volunteerId}/profile/competence/{competenceInstanceId}")
+	public void deleteCompetence(@PathVariable("volunteerId") String volunteerId,
+			@PathVariable("competenceInstanceId") String competenceInstanceId) {
+
 		VolunteerProfile volunteerProfile = findVolunteerProfile(volunteerId);
-		volunteerProfile.getCompetenceList().remove(competenceEntry);
+		volunteerProfile.getCompetenceList().removeIf(c -> c.getId().equals(competenceInstanceId));
 		volunteerProfileRepository.save(volunteerProfile);
 	}
 

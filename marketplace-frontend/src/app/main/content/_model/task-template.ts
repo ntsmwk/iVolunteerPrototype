@@ -1,5 +1,4 @@
-import {Competence} from './competence';
-
+import { CompetenceClassDefinition } from './meta/Class';
 
 export class TaskTemplate {
   id: string;
@@ -7,8 +6,8 @@ export class TaskTemplate {
   description: string;
   address: Address;
   material: Material;
-  requiredCompetences: Competence[];
-  acquirableCompetences: Competence[];
+  requiredCompetences: CompetenceClassDefinition[];
+  acquirableCompetences: CompetenceClassDefinition[];
   workflowKey: string;
 }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { isArray, isNullOrUndefined } from 'util';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Competence } from '../_model/competence';
 import { Task } from '../_model/task';
 import { TaskTemplate } from '../_model/task-template';
 import { WorkflowType } from '../_model/workflow-type';
@@ -17,6 +16,7 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { Marketplace } from '../_model/marketplace';
 import { Project } from '../_model/project';
 import { ProjectService } from '../_service/project.service';
+import { CompetenceClassDefinition } from '../_model/meta/Class';
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;
@@ -38,7 +38,7 @@ export class FuseTaskFormComponent implements OnInit {
   taskForm: FormGroup;
 
   projects: Array<Project>;
-  competences: Array<Competence>;
+  competences: Array<CompetenceClassDefinition>;
   taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
 
@@ -76,7 +76,7 @@ export class FuseTaskFormComponent implements OnInit {
         if (!isNullOrUndefined(marketplace)) {
           Promise.all([
             this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
-            this.competenceService.findAll(marketplace).toPromise().then((competences: Array<Competence>) => this.competences = competences),
+            this.competenceService.findAll(marketplace).toPromise().then((competences: Array<CompetenceClassDefinition>) => this.competences = competences),
             this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
             this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
           ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
@@ -134,11 +134,11 @@ export class FuseTaskFormComponent implements OnInit {
         workflowType: this.workflowTypes.find((value: WorkflowType) => task.workflowKey === value.key),
         startDate: new Date(task.startDate),
         endDate: new Date(task.endDate),
-        requiredCompetences: this.competences.filter((competence: Competence) => {
-          return task.requiredCompetences.find((requiredCompetence: Competence) => requiredCompetence.id === competence.id);
+        requiredCompetences: this.competences.filter((competence: CompetenceClassDefinition) => {
+          task.requiredCompetences.find((requiredCompetence: CompetenceClassDefinition) => requiredCompetence.id === competence.id);
         }),
-        acquirableCompetences: this.competences.filter((competence: Competence) => {
-          return task.acquirableCompetences.find((acquirableCompetence: Competence) => acquirableCompetence.id === competence.id);
+        acquirableCompetences: this.competences.filter((competence: CompetenceClassDefinition) => {
+          return task.acquirableCompetences.find((acquirableCompetence: CompetenceClassDefinition) => acquirableCompetence.id === competence.id);
         })
       });
     });
@@ -188,16 +188,16 @@ export class FuseTaskFormComponent implements OnInit {
     currentValues.workflowType = this.workflowTypes.find((value: WorkflowType) => value.key === taskTemplate.workflowKey);
 
     if (isArray(taskTemplate.requiredCompetences)) {
-      currentValues.requiredCompetences = this.competences.filter((competence: Competence) => {
-        return taskTemplate.requiredCompetences.find((value: Competence) => value.name === competence.name);
+      currentValues.requiredCompetences = this.competences.filter((competence: CompetenceClassDefinition) => {
+        return taskTemplate.requiredCompetences.find((value: CompetenceClassDefinition) => value.name === competence.name);
       });
     } else {
       currentValues.requiredCompetences = [];
     }
 
     if (isArray(taskTemplate.acquirableCompetences)) {
-      currentValues.acquirableCompetences = this.competences.filter((competence: Competence) => {
-        return taskTemplate.acquirableCompetences.find((value: Competence) => value.name === competence.name);
+      currentValues.acquirableCompetences = this.competences.filter((competence: CompetenceClassDefinition) => {
+        return taskTemplate.acquirableCompetences.find((value: CompetenceClassDefinition) => value.name === competence.name);
       });
     } else {
       currentValues.acquirableCompetences = [];

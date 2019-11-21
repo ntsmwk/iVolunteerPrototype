@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @RestController
@@ -39,7 +39,6 @@ public class ClassPropertyController {
 			return findClassProperty(classDefinition, classPropertyId);
 		}
 		return null;
-
 	}
 
 	@PutMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}/update")
