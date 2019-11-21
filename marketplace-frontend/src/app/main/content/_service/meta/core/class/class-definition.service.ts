@@ -48,7 +48,11 @@ import { of } from "rxjs";
     }
 
     getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/children`, rootClassIds);
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children`, rootClassIds);
+    }
+
+    getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[]) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
     }
 
 

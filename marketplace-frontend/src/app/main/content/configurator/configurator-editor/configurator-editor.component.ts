@@ -244,6 +244,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
     this.graph.getModel().beginUpdate();
     try {
+      console.log("???");
+      console.log(this.configurableClasses.length);
+
       for (let c of this.configurableClasses) {
         this.insertClassIntoGraph(c, new mx.mxGeometry(0, 0, 80, 30), false);
       }
@@ -281,10 +284,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     let vfiller = this.graph.insertVertex(cell, "vfiller", null, 105, 45, 5, 130, "fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;")
     vfiller.setConnectable(false);
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
+    console.log(c);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, c.properties.length * 20 + 25);
 
 
     if (!isNullOrUndefined(c.properties)) {
+
       for (let p of c.properties) {
         // cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 85, 30);
 

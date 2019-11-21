@@ -4,17 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
+import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
+import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 
 @Service
 public class ClassDefinitionService {
@@ -53,39 +60,62 @@ public class ClassDefinitionService {
 		return classDefinitionRepository.save(classDefinitions);
 	}
 
-	List<String> getParentsById(List<String> childIds) {
+	List<FormConfiguration> getParentsById(List<String> childIds) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
 
-		List<Relationship> allRelationships = relationshipRepository.findAll();
-		List<String> returnIds = new ArrayList<>();
+		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
 
 		// Pre-Condition: Graph must be acyclic - a child can only have one parent, one
 		// parent can have multiple children
 		// Work our way up the chain until we are at the root
 
 		for (ClassDefinition childClassDefinition : childClassDefinitions) {
-			Map<String, String> returnIdMap = new HashMap<String, String>();
+			FormConfiguration formConfig = new FormConfiguration();
+			formConfig.setName(childClassDefinition.getName());
+			formConfig.setFormEntries(new ArrayList<FormEntry>());
+			
 			int i = 0;
 			ClassDefinition currentClassDefinition = childClassDefinition;
 			do {
-				// add to map
-				returnIdMap.put(i + "", currentClassDefinition.getId());
-				// find relationship connecting this child with its parents
-				List<Relationship> relationshipList = relationshipRepository.findByClassId1AndRelationshipType(
+				
+				FormEntry formEntry = new FormEntry();
+				formEntry.setPositionLevel(i+"");
+				formEntry.setClassDefinition(currentClassDefinition);
+				formConfig.getFormEntries().add(formEntry);
+				
+				List<Relationship> relationshipList = relationshipRepository.findByTargetAndRelationshipType(
 						currentClassDefinition.getId(), RelationshipType.INHERITANCE);
 
 				if (relationshipList == null || relationshipList.size() == 0) {
 					throw new NotAcceptableException("getParentById: child has no parent");
 				}
-				// traverse - find and assign new currentClassDefinition
-				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getTarget());
-
+				
+				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getSource());
+				i++;
+				
 			} while (!currentClassDefinition.isRoot());
-			// TODO turn map into JSON
-			// TODO append JSON to String List
+			FormEntry formEntry = new FormEntry();
+			formEntry.setPositionLevel(i+"");
+			formEntry.setClassDefinition(currentClassDefinition);
+			formConfig.getFormEntries().add(formEntry);
+			configList.add(formConfig);
 		}
-
+		
+		return configList;
+	}
+	
+	//TODO @Alex implement
+	List<String> getChildrenById(List<String> rootIds) {
+	
+		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
+	
+		List<String> returnIds;
+		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
+	
+		}
+	
 		return null;
 	}
 

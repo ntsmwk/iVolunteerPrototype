@@ -194,14 +194,14 @@ public class MarketplaceApplication implements CommandLineRunner {
 		i4.setId("test_i4");
 		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
 		i5.setId("test_i5");
-		Association i6 = new Association(c6.getId(), c6.getId(), AssociationCardinality.ONE, AssociationCardinality.ZEROSTAR);
-		i6.setId("test_i6");
+//		Inheritance i6 = new Inheritance(c6.getId(), c6.getId(), c6.getId());
+//		i6.setId("test_i6");
 		
-		Association i7 = new Association(c5.getId(), c7.getId(), AssociationCardinality.ONE, AssociationCardinality.ONESTAR);
+		Inheritance i7 = new Inheritance(c5.getId(), c7.getId(),c5.getId());
 		i7.setId("test_i7");
-		Association i8 = new Association(c5.getId(), c8.getId(), AssociationCardinality.ONE, AssociationCardinality.ZEROONE);
+		Inheritance i8 = new Inheritance(c5.getId(), c8.getId(), c5.getId());
 		i8.setId("test_i8");
-		Association i9 = new Association(c4.getId(), c9.getId(), AssociationCardinality.ZEROSTAR, AssociationCardinality.ZEROONE);
+		Inheritance i9 = new Inheritance(c4.getId(), c9.getId(), c4.getId());
 		i9.setId("test_i9");
 		
 		
@@ -221,9 +221,7 @@ public class MarketplaceApplication implements CommandLineRunner {
 		if (!relationshipRepository.exists(i5.getId())) {
 			relationshipRepository.save(i5);
 		}
-		if (!relationshipRepository.exists(i6.getId())) {
-			relationshipRepository.save(i6);
-		}
+
 		if (!relationshipRepository.exists(i7.getId())) {
 			relationshipRepository.save(i7);
 		}

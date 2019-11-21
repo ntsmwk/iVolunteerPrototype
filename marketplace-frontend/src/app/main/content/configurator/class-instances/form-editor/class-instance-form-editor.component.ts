@@ -22,7 +22,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
   rootClassDefinitons: ClassDefinition[];
-  allClassDefinitions: ClassDefinition[];
+  classDefinitionStructure: Map<string, Map<string, ClassDefinition>>;
+  questionStructure: Map<string, [string, QuestionBase<any>[]]>;
 
   isLoaded: boolean = false;
 
@@ -87,23 +88,32 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       console.log("test datatransportservice:")
       console.log(this.dataTransportService.data)
       
-      let rootClassIds = this.dataTransportService.data;
+      // let rootClassIds = this.dataTransportService.data;
+      let childClassIds = ['test8', 'test7', 'test9'];
 
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         
-        Promise.all([
-          this.classDefinitionService.getClassDefinitionsById(this.marketplace, rootClassIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
-            this.rootClassDefinitons = this.rootClassDefinitons;
-            //TODO
-            // this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties)
-            
 
-          }),
-          this.classDefinitionService.getAllChildrenIdMap(this.marketplace, rootClassIds).toPromise().then((childrenIds: String[]) => {
-            console.log(childrenIds);
-          })
-        ]);
+
+
+          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((mappedIds: any) => {
+             console.log(mappedIds);
+            for (let entry of mappedIds) {
+              console.log(entry);
+             
+            }
+
+          }).then(() => {
+          
+     
+            //create questions
+
+            //create formControl
+
+
+            //display
+          });
       });
     });
   }

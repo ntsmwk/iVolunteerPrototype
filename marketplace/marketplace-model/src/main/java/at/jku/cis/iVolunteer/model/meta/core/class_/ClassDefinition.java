@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.core.class_;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -19,6 +20,7 @@ public class ClassDefinition {
 	boolean root;
 
 	public ClassDefinition() {
+		properties = new ArrayList<ClassProperty<Object>>();
 	}
 
 	public String getId() {

@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.class_.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController
 public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
 
 	@Autowired private ClassDefinitionService classDefinitionService;
 
@@ -62,22 +63,13 @@ public class ClassDefinitionController {
 		return classDefinitionService.addOrUpdateClassDefinitions(classDefinitions);
 	}
 
-	// TODO @Alex ????
-//	@PutMapping("meta/core/class/definition/get-children")
-//	private List<String> getChildrenById(@RequestBody List<String> rootIds) {
-//		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
-//		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
-//
-//		List<String> returnIds;
-//		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
-//
-//		}
-//
-//		return null;
-//	}
+	@PutMapping("meta/core/class/definition/get-children")
+	private List<String> getChildrenById(@RequestBody List<String> rootIds) {
+		return classDefinitionService.getChildrenById(rootIds);
+	}
 
-	@PutMapping("meta/core/class/defintiion/get-parents")
-	private List<String> getParentsById(@RequestBody List<String> childIds) {
+	@PutMapping("meta/core/class/definition/get-parents")
+	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds) {
 		return classDefinitionService.getParentsById(childIds);
 	}
 

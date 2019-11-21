@@ -8,41 +8,12 @@ import { isNull, isNullOrUndefined } from 'util';
 export class QuestionControlService {
   constructor() { }
 
-
-  //TODO use Form Builder - might be easier to get support nested FormGroups
-  // toFormGroup(questions: QuestionBase<any>[] ) {
-  //   let group: any = {};
-  //     questions.forEach(question => {
-
-        
-  //       group[question.key] = !isNullOrUndefined(question.validators) ? new FormControl(question.value || '', question.validators) 
-  //       : new FormControl(question.value || '');
-        
-
-        
-  //     });
-
-  //     console.log(group);
-  //   return new FormGroup(group);
-  // }
-
-
   toFormGroup(questions: QuestionBase<any>[] ) {
     const fb: FormBuilder = new FormBuilder();
     const parent = fb.group({});
     const ret = this.addChildToGroup(fb, questions, parent);
 
-    
-    console.log("ROOT created");
-    console.log(ret);
-
-    console.log("Questions");
-    console.log(questions);
-    
-    // this.displayFormGroup(ret);
-
     return ret;
-
   }
 
 
