@@ -12,12 +12,13 @@ import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
-public abstract class ClassInstance extends IVolunteerObject implements IHashObject {
+public class ClassInstance extends IVolunteerObject implements IHashObject {
 
-	@DBRef private ClassDefinition classDefinition;
+	private String classDefinitionId;
 	private String name;
 	private List<PropertyInstance<Object>> properties;
 	private String userId;
+	private ClassArchetype classArchetype;
 
 	public ClassInstance() {
 	}
@@ -46,12 +47,12 @@ public abstract class ClassInstance extends IVolunteerObject implements IHashObj
 		this.properties = properties;
 	}
 
-	public ClassDefinition getClassDefinition() {
-		return classDefinition;
+	public String getClassDefinitionId() {
+		return classDefinitionId;
 	}
 
-	public void setClassDefinition(ClassDefinition classDefinition) {
-		this.classDefinition = classDefinition;
+	public void setClassDefinitionId(String classDefinitionId) {
+		this.classDefinitionId = classDefinitionId;
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public abstract class ClassInstance extends IVolunteerObject implements IHashObj
 		json.addProperty("id", id);
 		json.addProperty("name", name);
 		json.addProperty("marketplaceId", marketplaceId);
-		json.addProperty("classDefinition", classDefinition.toHashObject());
+//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
 		json.addProperty("properties", this.properties.hashCode());
 		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();
@@ -93,4 +94,15 @@ public abstract class ClassInstance extends IVolunteerObject implements IHashObj
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public ClassArchetype getClassArchetype() {
+		return classArchetype;
+	}
+
+	public void setClassArchetype(ClassArchetype classArchetype) {
+		this.classArchetype = classArchetype;
+	}
+	
+	
 }
+

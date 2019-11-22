@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassDefinition } from "app/main/content/_model/meta/Class";
+import { ClassDefinition, ClassInstance } from "app/main/content/_model/meta/Class";
 
 
 @Injectable({
@@ -17,24 +17,24 @@ import { ClassDefinition } from "app/main/content/_model/meta/Class";
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
     }
 
-    getClassInstanceById(marketplace: Marketplace, id: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/${id}`);
+    getClassInstanceById(marketplace: Marketplace, classInstanceId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/${classInstanceId}`);
     }
 
-    createNewClassInstance(marketplace: Marketplace, classDefinition: ClassDefinition) {
-      return this.http.post(`${marketplace.url}/meta/core/class/instance/new`, classDefinition);
+    createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {
+      return this.http.post(`${marketplace.url}/meta/core/class/instance/new`, classInstances);
     }
 
     createNewClassInstanceById(marketplace: Marketplace, classDefinitionId: string) {
       return this.http.post(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/new`, '');
     }
 
-    updateClassInstance(marketplace: Marketplace, classDefinition: ClassDefinition) {
-      return this.http.put(`${marketplace.url}/meta/core/class/instance/${classDefinition.id}/update`, classDefinition);
+    updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`, classInstance);
     }
 
-    deleteClassInstance(marketplace: Marketplace, classDefinitionId: string) {
-      return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/delete`);
+    deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
+      return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
     }
 
 

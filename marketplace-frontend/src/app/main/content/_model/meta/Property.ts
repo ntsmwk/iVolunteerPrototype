@@ -45,13 +45,6 @@ export class ClassProperty<T> {
 }
 
 export class TemplateProperty<T> extends ClassProperty<T>{
-    public static getDefaultValue(templateProperty: TemplateProperty<any>): any {
-        if (!isNullOrUndefined(templateProperty.defaultValues) && templateProperty.defaultValues.length >= 1) {
-            return templateProperty.defaultValues[0];
-        } else {
-            return null;
-        }
-    }
 }
 
 export class PropertyInstance<T> {
@@ -77,15 +70,17 @@ export class PropertyInstance<T> {
         }
     }
 
+    constructor(classProperty: ClassProperty<T>, values: T[]) {
+        this.id = classProperty.id;
+        this.name = classProperty.name;
+        this.values = values;
+        this.allowedValues = classProperty.allowedValues;
+        this.type = classProperty.type;
+        this.required = classProperty.required;
+        this.position = classProperty.position;
+        this.propertyConstraints = classProperty.propertyConstraints;
+    }
 
-
-    // public static getDefaultValue(propertyInstance: PropertyInstance<any>): any {
-    //     if (!isNullOrUndefined(propertyInstance.defaultValues) && propertyInstance.defaultValues.length >= 1) {
-    //         return propertyInstance.defaultValues[0].value;
-    //     } else {
-    //         return null;
-    //     }
-    // }
 }
 
 
@@ -94,56 +89,6 @@ export enum PropertyType {
     DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MAP = "MAP", GRAPH = "GRAPH", MULTI = "MULTI"
 }
 
-
-//Legacy Stuff
-
-// export class Property<T> {
-//     id: string;
-//     name: string;
-
-//     values: ListEntry<T>[];
-
-//     order: number;
-
-//     defaultValues?: ListEntry<T>[];
-//     legalValues?: ListEntry<T>[];
-//     rules?: Rule[];
-
-//     custom: boolean;
-//     show: boolean; //is set from frontend
-
-//     type: PropertyType;
-
-//     properties?: Property<any>[];
-
-
-
-//     public static getValue(property: Property<any>): any {
-//         if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
-//             return property.values[0].value;
-//         } else {
-//             return null;
-//         }
-//     }
-
-//     public static getDefaultValue(property: Property<any>): any {
-//         if (!isNullOrUndefined(property.defaultValues) && property.defaultValues.length >= 1) {
-//             return property.defaultValues[0].value;
-//         } else {
-//             return null;
-//         }
-//     }
-// }
-
-// export class ListEntry<T> {
-//     id: string;
-//     value: T;
-
-//     constructor (id: string, value: T) {
-//         this.id = id;
-//         this.value = value;
-//     }  
-// }
 
 export class PropertyItem {
     id: string;

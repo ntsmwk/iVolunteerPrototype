@@ -18,15 +18,28 @@ export class CompetenceClassDefinition extends ClassDefinition{
 export class ClassInstance {
     id: string;
     name: string;
-    classDefinition: ClassDefinition;
-    properties: PropertyInstance<any>;
+    classDefinitionId: string;
+    properties: PropertyInstance<any>[];
     marketplaceId: string;
     timestamp: Date;
     userId: string;
+    classArchetype: ClassArchetype;
+
+    constructor(classDefinition: ClassDefinition, properties: PropertyInstance<any>[]) {
+        this.name = classDefinition.name;
+        this.classDefinitionId = classDefinition.id;
+        this.properties = properties;
+        this.marketplaceId = classDefinition.marketplaceId;
+        this.timestamp = new Date();
+        this.userId = null;
+    }
 }
 
 export class CompetenceClassInstance extends ClassInstance{
-
+    constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
+        super(classDefintion, properties);
+        this.classArchetype = ClassArchetype.COMPETENCE;
+    }
 }
 
 export enum ClassArchetype {

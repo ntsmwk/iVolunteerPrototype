@@ -78,41 +78,56 @@ public class MarketplaceApplication {
 		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
 		c1.getProperties().add(dcp);
 		
+		c1.setClassArchetype(ClassArchetype.COMPETENCE);
 		
 		CompetenceClassDefinition c2 = new CompetenceClassDefinition();
 		c2.setId("test2");
 		c2.setName("Class 2");
+		c2.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c3 = new CompetenceClassDefinition();
 		c3.setId("test3");
 		c3.setName("Class 3");
-		
+		c3.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c4 = new CompetenceClassDefinition();
 		c4.setId("test4");
 		c4.setName("Class 4");
-		
+		c4.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c5 = new CompetenceClassDefinition();
 		c5.setId("test5");
 		c5.setName("Class 5");
+		c5.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		
 		CompetenceClassDefinition c6 = new CompetenceClassDefinition();
 		c6.setId("test6");
 		c6.setName("Class 6");
+		c6.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c7 = new CompetenceClassDefinition();
 		c7.setId("test7");
 		c7.setName("Class 7");
+		c7.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c8 = new CompetenceClassDefinition();
 		c8.setId("test8");
 		c8.setName("Class 8");
+		c8.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		CompetenceClassDefinition c9 = new CompetenceClassDefinition();
 		c9.setId("test9");
 		c9.setName("Class 9");
+		c9.setClassArchetype(ClassArchetype.COMPETENCE);
+
 		
 		
 		

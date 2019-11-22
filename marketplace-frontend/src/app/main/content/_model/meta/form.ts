@@ -19,3 +19,13 @@ export class FormConfiguration {
     formEntries: FormEntry[] = [];
 }
 
+export class FormEntryReturnEventData {
+    formGroup: FormGroup;
+    formConfigurationId: string;
+
+    constructor(formGroup: FormGroup, formConfigurationId: string) {
+        this.formGroup = formGroup;
+        this.formConfigurationId = formConfigurationId;
+    }
+}
+

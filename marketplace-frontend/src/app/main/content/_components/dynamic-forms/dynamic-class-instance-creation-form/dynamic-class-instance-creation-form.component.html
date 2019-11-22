@@ -8,13 +8,12 @@
     <br>
     <br>
     
-    <div class="form-row" *ngIf="!formDisabled">
+    <div class="form-row" *ngIf="!form.disabled">
       <button type="submit" mat-raised-button color="primary" >
         Save</button>
        
-        &nbsp; &nbsp;
 
-      <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button>
+      <!-- <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button> -->
     </div>
     
     <!-- <div class="form-row" *ngIf="formDisabled">

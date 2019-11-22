@@ -151,7 +151,7 @@ public class Contractor {
 			blockchainRestClient.postCompetenceHash(
 					hasher.generateHash(competenceInstance),
 					competenceInstance.getTimestamp(), 
-					competenceInstance.getClassDefinition().getId(),
+					competenceInstance.getClassDefinitionId(),
 					competenceInstance.getMarketplaceId(), 
 					competenceInstance.getUserId());
 

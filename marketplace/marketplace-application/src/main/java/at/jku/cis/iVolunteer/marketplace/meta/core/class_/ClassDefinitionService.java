@@ -75,6 +75,7 @@ public class ClassDefinitionService {
 			FormConfiguration formConfig = new FormConfiguration();
 			formConfig.setName(childClassDefinition.getName());
 			formConfig.setFormEntries(new ArrayList<FormEntry>());
+			formConfig.setId(childClassDefinition.getId());
 			
 			FormEntry formEntry = new FormEntry();
 			formEntry.setPositionLevel(0 + "");

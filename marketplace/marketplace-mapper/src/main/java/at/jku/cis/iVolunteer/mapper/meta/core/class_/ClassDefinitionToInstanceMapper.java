@@ -46,7 +46,7 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		}
 
 		classInstance.setId(null);
-		classInstance.setClassDefinition(source);
+		classInstance.setClassDefinitionId(source.getId());
 
 		classInstance.setName(source.getName());
 

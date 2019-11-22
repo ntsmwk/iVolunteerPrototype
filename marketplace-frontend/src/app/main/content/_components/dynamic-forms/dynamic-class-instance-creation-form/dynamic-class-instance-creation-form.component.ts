@@ -4,6 +4,7 @@ import { FormGroup, AbstractControl }                 from '@angular/forms';
 import { QuestionBase }              from '../../../_model/dynamic-forms/questions';
 import { QuestionControlService }    from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
+import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 declare var $:JQueryStatic;
 
 @Component({
@@ -15,8 +16,9 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
  
   @Input() questions: QuestionBase<any>[] = [];
   @Input() formDisabled: boolean;
+  @Input() formConfigurationId: string;
+  @Input() form: FormGroup;
   
-  form: FormGroup;
   output = '';
   submitPressed: boolean;
 
@@ -26,8 +28,9 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
  
   ngOnInit() {
     console.log("test");
-    this.form = this.qcs.toFormGroup(this.questions);
-
+    if (!isNullOrUndefined(this.form)) {
+      this.form = this.qcs.toFormGroup(this.questions);
+    }
 
     if (this.formDisabled) {
       console.log("Disabling form");
@@ -45,9 +48,9 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
       this.output = JSON.stringify(this.form.value);
       
 
-      console.log("Values")
       console.log(this.form.value);
   
+      this.form.disable();
       this.fireResultEvent();
       
     } else {
@@ -79,7 +82,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   }
 
   fireResultEvent() {
-    this.resultEvent.emit(this.form);
+    this.resultEvent.emit(new FormEntryReturnEventData(this.form, this.formConfigurationId));
   }
 
   navigateBack() {

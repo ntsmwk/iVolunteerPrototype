@@ -41,9 +41,6 @@ const routes = [
 
     FuseSharedModule,
     FuseTruncatePipeModule,
-
-    DynamicFormModule,
-
     DynamicClassInstanceCreationFormModule,
 
   ],

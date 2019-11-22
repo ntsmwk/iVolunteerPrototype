@@ -33,13 +33,13 @@ export class QuestionService {
   getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
 
-    console.log("Question Service called");
-    console.log(properties);
+    // console.log("Question Service called");
+    // console.log(properties);
 
     questions = this.setQuestions(properties);
 
-    console.log(questions);
-    console.log("-->done with question setup");
+    // console.log(questions);
+    // console.log("-->done with question setup");
 
     return questions.sort((a, b) => a.order - b.order);
   }

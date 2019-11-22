@@ -20,9 +20,9 @@
           </mat-expansion-panel-header>
 
           <div style="padding-top: 12px"></div>
-          <app-dynamic-form [questions]="entry.questions" [formDisabled]="false" [form]="entry.formGroup"
+          <app-dynamic-class-instance-creation-form [questions]="entry.questions" [formDisabled]="false" [formConfigurationId]="config.id" [form]="entry.formGroup"
             (resultEvent)="handleResultEvent($event)">
-          </app-dynamic-form>
+          </app-dynamic-class-instance-creation-form>
 
         </mat-expansion-panel>
       </mat-accordion>

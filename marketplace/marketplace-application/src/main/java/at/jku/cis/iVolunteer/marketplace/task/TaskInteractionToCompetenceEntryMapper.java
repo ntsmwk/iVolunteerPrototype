@@ -31,7 +31,7 @@ public class TaskInteractionToCompetenceEntryMapper
 		taskInteraction.getTask().getAcquirableCompetences().forEach(competenceDefinition -> {
 			CompetenceClassInstance competenceInstance = new CompetenceClassInstance();
 			competenceInstance.setId(UUID.randomUUID().toString());
-			competenceInstance.setClassDefinition(competenceDefinition);
+			competenceInstance.setClassDefinitionId(competenceDefinition.getId());
 			competenceInstance.setName(competenceInstance.getName());
 			competenceInstance.setMarketplaceId(marketplaceId);
 			competenceInstance.setTimestamp(timestamp);
