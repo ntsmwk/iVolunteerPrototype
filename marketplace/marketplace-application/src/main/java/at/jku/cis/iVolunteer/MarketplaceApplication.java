@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -29,7 +31,7 @@ public class MarketplaceApplication {
 
 	@Autowired private ConfiguratorRepository configuratorRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	
+	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
@@ -42,18 +44,32 @@ public class MarketplaceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
 	}
+	
+	@PreDestroy
+	public void onExit() {
+		classDefinitionRepository.deleteAll();
+		relationshipRepository.deleteAll();
+		classInstanceRepository.deleteAll();
+		configuratorRepository.deleteAll();
+		
+	}
 
 	@PostConstruct
 	public void init() {
-		addConfigurators();
 		CompetenceClassDefinition def = new CompetenceClassDefinition();
 		def.setClassArchetype(ClassArchetype.COMPETENCE);
 		def.setMarketplaceId("asdfasdf");
 		def.setName("mycompdf");
+		def.setId("mycompdf");
 		def.setTimestamp(new Date());
-		classDefinitionRepository.save(def);
+		if (!classDefinitionRepository.exists(def.getId())) {
+			classDefinitionRepository.save(def);
+
+		}
 		
 		addTestConfigClasses();
+		addConfigurators();
+
 
 	}
 	

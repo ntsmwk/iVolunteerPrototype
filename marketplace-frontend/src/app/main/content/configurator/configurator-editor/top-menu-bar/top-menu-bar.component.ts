@@ -20,37 +20,37 @@ export interface SubMenuItem {
 }
 
 const rootMenuItems: RootMenuItem[] = [
-  {id: 1, label: 'File'},
-  {id: 2, label: 'Edit'},
-  {id: 3, label: 'View'},
-  {id: 4, label: 'Extras'},
-  {id: 5, label: 'Help'},
+  { id: 1, label: 'File' },
+  { id: 2, label: 'Edit' },
+  { id: 3, label: 'View' },
+  { id: 4, label: 'Extras' },
+  { id: 5, label: 'Help' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
-  {rootId: 1, id: 1, label: 'New Configurator', clickAction: 'newClicked', icon: undefined},
-  {rootId: 1, id: 2, label: 'Open Configurator', clickAction: 'openClicked', icon: undefined},
-  {rootId: 1, id: 3, label: 'Save Configurator', clickAction: 'saveClicked', icon: undefined},
-  {rootId: 1, id: 3, label: 'Save Configurator As', clickAction: 'saveAsClicked', icon: undefined},
+  { rootId: 1, id: 1, label: 'New Configurator', clickAction: 'newClicked', icon: undefined },
+  { rootId: 1, id: 2, label: 'Open Configurator', clickAction: 'openClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Save Configurator', clickAction: 'saveClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Save Configurator As', clickAction: 'saveAsClicked', icon: undefined },
 
-  {rootId: 1, id: 4, label: 'Create Editor', clickAction: 'createEditorClicked', icon: undefined},
+  { rootId: 1, id: 4, label: 'Create Editor', clickAction: 'createEditorClicked', icon: undefined },
 
-  {rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined},
-  {rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined},
-  {rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined},
-  {rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined},
+  { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
+  { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
+  { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
+  { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
 
-  {rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined},
-  {rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined},
-  {rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined},
+  { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
+  { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
+  { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
 
-  {rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined},  
-  {rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined},
-  {rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined},
-  {rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined},
-  {rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined},
+  { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
+  { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
+  { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
+  { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
+  { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
 
-  {rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined},
+  { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
 ];
 
 @Component({
@@ -59,7 +59,7 @@ const subMenuItems: SubMenuItem[] = [
   styleUrls: ['./top-menu-bar.component.scss']
 })
 export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
-  
+
   isLoaded: boolean = false;
   menuOpen: false;
 
@@ -71,7 +71,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   @ViewChild('submenuContainer') submenuContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
-  @Input() responseAction: string;
+  @Input() eventResponseAction: string;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
 
@@ -79,15 +79,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private dialogFactory: DialogFactoryComponent
-  ){
+  ) {
 
-    }
+  }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
- 
+
     this.submenuContainer.nativeElement.style.position = 'absolute';
     this.submenuContainer.nativeElement.style.overflow = 'hidden';
     this.submenuContainer.nativeElement.style.padding = '2px';
@@ -110,7 +110,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
     let outer = this;
-    
+
     document.addEventListener("click", function (event) {
       outer.handleHTMLClickEvent(event);
     });
@@ -126,26 +126,26 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.currentRootId = rootItemId;
     this.submenuContainer.nativeElement.style.display = 'block';
     let leftPosition = this.calculateLeftSpace(event.srcElement.offsetParent, rootItemId);
-    this.submenuContainer.nativeElement.style.left = leftPosition+'px';
+    this.submenuContainer.nativeElement.style.left = leftPosition + 'px';
   }
 
   private calculateLeftSpace(offsetParent: any, rootItemId: number) {
     let space = 10;
     if (!isNullOrUndefined(offsetParent.children)) {
       for (let child of offsetParent.children) {
-        if (rootItemId-1 <= 0) {
+        if (rootItemId - 1 <= 0) {
           return space;
         }
         space += child.clientWidth;
         rootItemId--;
       }
     }
-  } 
+  }
 
   newClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.confirmationDialog("New", "Create New Editor? Unsaved changes will be lost...").then((cont: boolean) => {
       if (cont) {
-        this.menuOptionClickedEvent.emit({id: "editor_new"});
+        this.menuOptionClickedEvent.emit({ id: "editor_new" });
       }
     });
 
@@ -158,7 +158,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
         console.log("open returned");
         console.log(ret);
       }
-      this.menuOptionClickedEvent.emit({id: "editor_open", configurator: ret});
+      this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
 
     });
   }
@@ -169,9 +169,9 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     console.log(item);
 
     this.dialogFactory.confirmationDialog("Save", "Are you sure you want to save? The existing model will be overidden...").then((result: boolean) => {
-      if (result) {
+    if (result) {
         console.log("fire event...");
-        this.menuOptionClickedEvent.emit({id: "editor_save"});
+        this.menuOptionClickedEvent.emit({ id: "editor_save" });
       } else {
         console.log("cancelled");
       }
@@ -180,10 +180,17 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   saveAsClicked(event: any, item: SubMenuItem) {
     console.log("Save as!!!")
-    this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
-      if (ret) {
-        this.menuOptionClickedEvent.emit({id: "editor_save", configurator: ret});
-      }
+   
+    //wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
+    setTimeout(() => {
+      this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
+        if (!isNullOrUndefined(ret)) {
+          this.menuOptionClickedEvent.emit({ id: "editor_save", configurator: ret });
+        } else {
+          console.log("cancelled");
+          
+        }
+      });
     });
   }
 
@@ -192,9 +199,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (!isNullOrUndefined(this.responseAction)) {
-      this[this.responseAction](this.responseAction, undefined);
-      this.responseAction = undefined;
+    if (!isNullOrUndefined(this.eventResponseAction)) {
+      this[this.eventResponseAction](this.eventResponseAction, undefined);
     }
   }
 

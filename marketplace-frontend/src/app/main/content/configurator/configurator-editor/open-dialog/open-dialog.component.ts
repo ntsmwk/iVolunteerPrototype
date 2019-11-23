@@ -33,8 +33,6 @@ export class OpenDialogComponent implements OnInit{
     console.log(this.data.marketplace);
     
     this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-      console.log("init dialog open");
-      console.log(configurators);
       this.configurators = configurators;
       this.recentConfigurators = this.configurators.slice(0, 5);
 
@@ -43,10 +41,7 @@ export class OpenDialogComponent implements OnInit{
   }
 
   itemSelected(event: any, c: Configurator) {
-    console.log(event);
-    console.log(c);
     this.data.configurator = c;
-    // this.data = s;
     this.dialogRef.close(this.data)
     
 

@@ -1,5 +1,5 @@
 <div>
-  <editor-top-menu-bar [marketplace]="marketplace" [responseAction]="eventResponseAction"
+  <editor-top-menu-bar [marketplace]="marketplace" [eventResponseAction]="eventResponseAction"
     (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)"></editor-top-menu-bar>
 </div>
 
@@ -20,7 +20,6 @@
   <div style="padding-top: 20px"></div>
 
   <h2>Tools</h2>
-  <!-- <img src="../../../../../../assets/mxgraph_resources/images/zoomin.gif" (click)="zoomInEvent()" style="cursor: pointer" matTooltip="zoom in"> -->
   <div fxLayout="row" fxLayoutAlign="start start">
     <div
       style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
@@ -56,83 +55,17 @@
     </mat-select>
   </mat-form-field>
 
-
-  <div style="position: absolute; bottom: 10px; left: 5px">
-    <!-- <button mat-raised-button type="button" color="primary" (click)=createClassInstanceClicked()>create new Instance</button>
-    <div style="padding-top: 10px"></div> -->
-
-    <button mat-raised-button type="button" color="primary" (click)="createClassInstanceClicked(null)">New Instance
-      (from root)</button>
-    <div style="padding-top: 5px"></div>
-
-    <button mat-raised-button type="button" color="primary" (click)="showEmptyEditor()">Clear</button>
-    <button mat-raised-button type="button" color="primary" (click)="showServerContent()">Haubenofen</button>
+  <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
+    (from root)</a>
+  <div style="padding-top: 5px"></div>
 
 
-    <button mat-raised-button type="button" color="primary" (click)="doShitWithGraph(graph)">print graph to
-      console</button>
-    <div style="padding-top: 5px"></div>
-    <button mat-raised-button type="button" color="primary" (click)="printModelToConsole()">Print Model to console</button>
-  </div>
+
+  <a (click)="doShitWithGraph(graph)" style="cursor: pointer">print graph to
+    console</a>
+  <div style="padding-top: 5px"></div>
+  <a (click)="printModelToConsole()" style="cursor: pointer">Print Model to console</a>
 </div>
 
-<!-- <div style="border-left: 10px; border-left-color: black"></div> -->
 
 <div #graphContainer id="graphContainer"></div>
-
-<div *ngIf="showWorkInProgressInfo" style="position: absolute; left: 50%; top:50%">
-  <div style="position: relative; left: -50%; border: dotted red 1px;">
-    Adding to or instantiating of newly created classes not yet implemented... :(
-    <br>
-    Please use one of the existing classes
-  </div>
-</div>>
-
-<div #rightSidebarContainer id="rightSidebarContainer" style="border-left: solid 6px rgb(160, 160, 160)">
-  <div [ngSwitch]="rightSidebarContext">
-    <div *ngSwitchCase="'properties'">
-
-      <h2>{{currentClass.name}}</h2>
-      <div style="padding-top: 5px"></div>
-      <h3>> Properties</h3>
-
-      <mat-divider></mat-divider>
-
-      <div style="padding-left: 12px">
-        <table *ngFor="let p of currentClass.properties; let i = index">
-          <!-- <div fxLayout="row" fxLayoutAlign="start center"> -->
-          <tr>
-            <td>{{p.name}}</td>
-            <!-- <div style="padding-right: 3px"></div> -->
-            <!-- <a style="cursor: pointer" (click)="removePropertyClicked(currentClass, i)">> remove</a> -->
-            <td style="width: 10px">
-              <mat-icon style="cursor: pointer; " (click)="removePropertyClicked(currentClass, i)" matTooltip="remove">
-                delete</mat-icon>
-
-            </td>
-          </tr>
-
-          <!-- </div> -->
-        </table>
-      </div>
-
-      <div *ngIf="currentClass.properties.length<=0">
-        No properties added yet.
-      </div>
-
-      <a style="cursor: pointer" (click)="addPropertyClicked(currentClass)">> add Property</a>
-
-      <div style="padding-top: 25px"></div>
-
-
-
-    </div>
-
-    <button *ngIf="propertiesAdded" mat-raised-button type="button" color="primary" (click)="saveAddedProperties()"
-      style="position: absolute; bottom: 10px; left: 5px">Save</button>
-
-    <button mat-raised-button type="button" color="primary" (click)="toggleRightSidebar(false); rightSidebarContext=''"
-      style="position: absolute; bottom: 10px; right: 5px">Close</button>
-
-  </div>
-</div>

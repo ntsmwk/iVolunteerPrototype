@@ -301,7 +301,7 @@ export class DialogFactoryComponent implements OnInit {
       data: {title: title, description: description}
     });
 
-    let ret: boolean = undefined;
+    let ret: boolean = false;
 
     dialogRef.beforeClose().toPromise().then((result: boolean) => {
       if (result) {
@@ -450,7 +450,9 @@ export class DialogFactoryComponent implements OnInit {
 
     let configurator: Configurator = undefined;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      configurator = result.configurator;
+      if(!isNullOrUndefined(result)) {  
+        configurator = result.configurator;
+      }
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {

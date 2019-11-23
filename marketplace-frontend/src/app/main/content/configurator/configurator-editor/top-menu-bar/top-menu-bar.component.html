@@ -11,8 +11,4 @@
   <div *ngFor="let item of subMenuItems">
       <div class="menuitem" *ngIf="currentRootId == item.rootId" (click)="this[item.clickAction]($event, item)">{{item.label}}</div>
   </div>
- 
-  <!-- <div class="menuitem" (click)=undefined>Open Configurator</div>
-  <div class="menuitem" (click)="menuSaveClicked()">Save Configurator</div>
-  <div class="menuitem" (click)=undefined>New Editor</div> -->
 </div>
