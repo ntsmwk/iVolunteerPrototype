@@ -687,18 +687,22 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   updateModel() {
     //store current connections in relationships
-    for (let c of this.configurableClasses) {
-      let cell: myMxCell = this.graph.getModel().getCell("" + c.id) as myMxCell;
+    let allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
+   
+    for (let cd of this.configurableClasses) {
+     
+      let cell: myMxCell = allCells.find((c: mxgraph.mxCell) => {
+        return c.id == cd.id;
+      }) as myMxCell;
 
       if (!isNullOrUndefined(cell)) {
         if ((cell.cellType == 'class')) {
-          c.root = cell.root;
-          c.name = cell.value;
+          cd.root = cell.root;
+          cd.name = cell.value;
         }
       }
     }
 
-    let allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
     for (let r of this.relationships) {
       let cell: myMxCell = allCells.find((c: mxgraph.mxCell) => {
         return c.id == r.id;
