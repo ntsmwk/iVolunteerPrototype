@@ -47,4 +47,17 @@ export enum ClassArchetype {
     TASK='TASK',
     FUNCTION='FUNCTION',
     ACHIEVEMENT='ACHIEVEMENT'
+
 }
+export namespace ClassArchetype {
+
+    export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
+        switch (classArchetype) {
+            case "COMPETENCE": return "Competence";
+            case "TASK": return "Task";
+            case "FUNCTION": return "Function";
+            case "ACHIEVEMENT": return "Achievement";
+        }
+    }
+}
+

@@ -10,6 +10,7 @@ import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_m
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -38,38 +39,43 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    let marketplaceId: string;
+    let childClassIds: string[] = [];
+    
+    Promise.all([
+      this.route.params.subscribe(params => {
+       marketplaceId = params['marketplaceId'];
+      }),
+      this.route.queryParams.subscribe(queryParams => {
+        let i = 0;
+        while(!isNullOrUndefined(queryParams[i])) {
+          childClassIds.push(queryParams[i]);
+          i++;
+        }
+      })
 
-    this.route.params.subscribe(param => {
-      const marketplaceId = param['marketplaceId'];
-
-      console.log("test datatransportservice:")
-      console.log(this.dataTransportService.data)
-      
-      // let rootClassIds = this.dataTransportService.data;
-      let childClassIds = ['test8', 'test7', 'test9'];
-      
-
+    ]).then(() => {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
-           
-            this.formConfigurations = formConfigurations
-            
-            for (let config of this.formConfigurations) {
-              for (let entry of config.formEntries) {
-                 entry.questions = this.questionService.getQuestionsFromProperties(entry.classProperties);
-                 entry.formGroup = this.questionControlService.toFormGroup(entry.questions);  
-              }
+        this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+
+          this.formConfigurations = formConfigurations
+
+          for (let config of this.formConfigurations) {
+            for (let entry of config.formEntries) {
+              entry.questions = this.questionService.getQuestionsFromProperties(entry.classProperties);
+              entry.formGroup = this.questionControlService.toFormGroup(entry.questions);
             }
+          }
 
-            this.isLoaded = true;
+          this.isLoaded = true;
 
-          }).then(() => {
-            
-            console.log(this.formConfigurations);
-            
-  
-          });
+        }).then(() => {
+
+          console.log(this.formConfigurations);
+
+
+        });
       });
     });
   }
@@ -80,7 +86,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     })
 
     let classInstances: ClassInstance[] = [];
-    for(let entry of formConfiguration.formEntries) {
+    for (let entry of formConfiguration.formEntries) {
       entry.formGroup.disable();
       let propertyInstances: PropertyInstance<any>[] = [];
 
@@ -94,16 +100,16 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     }
 
-    
+
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
-    }); 
- 
+    });
+
   }
 
-  
 
-  
+
+
   printAnything(anything: any) {
     console.log(anything);
   }

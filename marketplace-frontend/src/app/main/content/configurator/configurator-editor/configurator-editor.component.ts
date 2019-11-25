@@ -16,7 +16,7 @@ import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 
-declare var require: any
+declare var require: any;
 
 
 const mx: typeof mxgraph = require('mxgraph')({
@@ -26,32 +26,37 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 export class myMxCell extends mx.mxCell {
   cellType?: string;
+  classArchetype?: ClassArchetype;
+
   root?: boolean;
   property: boolean;
   propertyId?: string;
   newlyAdded: boolean;
+
 }
 
-const sidebarPalettes = [
-  {
-    id: 'building_blocks', label: 'Building Blocks',
-    items: [
-      { id: 'class', label: 'Class', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
-      { id: 'competence', label: 'Competence', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
-      { id: 'task', label: 'Task', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'class', archetype: ClassArchetype.TASK, shape: undefined },
-      { id: 'function', label: 'Function', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'class', archetype: ClassArchetype.FUNCTION, shape: undefined },
-      { id: 'achievement', label: 'Achievement', imgPath: '/assets/mxgraph_resources/images/custom/class.svg', type: 'class', archetype: ClassArchetype.ACHIEVEMENT, shape: undefined },
+const sidebarPalettes =
+{
+  id: 'building_blocks', label: 'Building Blocks',
+  rows: [
+    {
+      c0: { id: 'competence', label: 'Competence', imgPath: '/assets/icons/class_editor/competence.png', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
+      c1: { id: 'task', label: 'Task', imgPath: '/assets/icons/class_editor/task.png', type: 'class', archetype: ClassArchetype.TASK, shape: undefined },
+    }, {
+      c0: { id: 'function', label: 'Function', imgPath: '/assets/icons/class_editor/function.png', type: 'class', archetype: ClassArchetype.FUNCTION, shape: undefined },
+      c1: { id: 'achievement', label: 'Achievement', imgPath: '/assets/icons/class_editor/achievement.png', type: 'class', archetype: ClassArchetype.ACHIEVEMENT, shape: undefined },
+    }
+  ]
+}
 
-    ]
-  },
-  {
-    id: 'relationships', label: 'Relationships',
-    items: [
-      { id: 'INHERITANCE', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'inheritance', shape: undefined },
-      { id: 'ASSOCIATION', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'association', shape: undefined },
-    ]
-  }
-];
+const relationshipPalettes = {
+  id: 'relationships', label: 'Relationships',
+  rows: [
+    { id: 'INHERITANCE', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'inheritance', shape: undefined },
+    { id: 'ASSOCIATION', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'association', shape: undefined },
+  ]
+}
+  ;
 
 const mxStyles = {
   classVfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
@@ -62,6 +67,10 @@ const mxStyles = {
   inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1',
   association: 'endArrow=none;html=1;curved=1',
   associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
+
+  addClassSameLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/right_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+  addClassNewLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+
 }
 
 
@@ -87,6 +96,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   isLoaded: boolean = false;
   allPropertyDefinitions: PropertyDefinition<any>[];
   sidebarPalettes = sidebarPalettes;
+  relationshipPalettes = relationshipPalettes;
 
   popupMenu: EditorPopupMenu;
 
@@ -157,7 +167,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove') {
+      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     }
@@ -251,10 +261,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
     //create class cell
-    let cell = new myMxCell(classDefinition.name, geometry, 'shape=swimlane');
+    let cell = new myMxCell(classDefinition.name, geometry, 'shape=swimlane;resizable=0');
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
     cell.cellType = 'class';
+    cell.classArchetype = classDefinition.classArchetype;
     cell.newlyAdded = createNew;
     cell.value = classDefinition.name;
     cell.setVertex(true);
@@ -286,6 +297,15 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     let addIcon: myMxCell = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, mxStyles.addIcon) as myMxCell;
     addIcon.setConnectable(false);
     addIcon.cellType = 'add';
+
+  
+    let downIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_new_level", 65, i + 50, 20, 20, mxStyles.addClassNewLevelIcon) as myMxCell;
+    downIcon.setConnectable(false);
+    downIcon.cellType = 'add_class_new_level';
+
+    let nextIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_same_level", 85, i + 50, 20, 20, mxStyles.addClassSameLevelIcon) as myMxCell;
+    nextIcon.setConnectable(false);
+    nextIcon.cellType = 'add_class_same_level';
 
     //create remove icon
     if (classDefinition.properties.length > 0) {
@@ -380,8 +400,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       });
       return rootCells;
     }
+
+    
     this.resetViewport();
   }
+
+
 
   //TODO @Alex fix issue in regards to saved Geometry
   redrawContent() {
@@ -431,7 +455,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   //Events
   handleMXGraphClickEvent(event: any) {
-    var cell: mxgraph.mxCell = event.getProperty("cell");
+    let cell: myMxCell = event.getProperty("cell");
 
     if (!isNullOrUndefined(cell)) {
       var parent = cell.getParent();
@@ -468,6 +492,60 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
             break;
           }
         }
+      }
+
+      if (cell.value == "add_class_same_level") {
+        let addedClass = new ClassDefinition();
+        addedClass.properties = [];
+        addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+
+        let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
+        cret.id = "new" + cret.id;
+        addedClass.id = cret.id;
+        cret.value = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+
+        this.configurableClasses.push(addedClass);
+
+        let precursor = this.graph.getIncomingEdges(cell.getParent())[0].source;
+
+        let addedRelationship = new Relationship();
+        addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        addedRelationship.source = precursor.id 
+        addedRelationship.target = addedClass.id;
+        let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
+        rret.id = "new" + rret.id;
+        addedRelationship.id = rret.id;
+        this.relationships.push(addedRelationship);
+
+
+
+        this.updateModel();
+        this.redrawContent();
+      }
+
+      if (cell.value == "add_class_new_level") {
+        let addedClass = new ClassDefinition();
+        addedClass.properties = [];
+        addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+
+
+        let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
+        cret.id = "new" + cret.id;
+        addedClass.id = cret.id;
+        cret.value = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        this.configurableClasses.push(addedClass);
+
+        let addedRelationship = new Relationship();
+        addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        addedRelationship.source = cell.getParent().id 
+        addedRelationship.target = cret.id;
+        let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
+        rret.id = "new" + rret.id;
+        addedRelationship.id = rret.id;
+        this.relationships.push(addedRelationship);
+
+        this.updateModel();
+        this.redrawContent();
       }
     }
   }
@@ -686,9 +764,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   updateModel() {
     //store current connections in relationships
     let allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
-   
+
     for (let cd of this.configurableClasses) {
-     
+
       let cell: myMxCell = allCells.find((c: mxgraph.mxCell) => {
         return c.id == cd.id;
       }) as myMxCell;
@@ -734,7 +812,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  
+
 
 
 
@@ -786,7 +864,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       }, 5000);
     } else {
       this.dataTransportService.data = cells;
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`]);
+
+      let params: string[] = ['test8', 'test7', 'test9'];
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
     }
   }
 }

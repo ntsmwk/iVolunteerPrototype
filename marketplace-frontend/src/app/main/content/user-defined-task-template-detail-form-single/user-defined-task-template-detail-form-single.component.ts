@@ -8,7 +8,7 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { PropertyInstance, PropertyType, TemplateProperty } from '../_model/meta/Property';
+import { PropertyType, TemplateProperty } from '../_model/meta/Property';
 import { FormGroup } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 

@@ -5,17 +5,31 @@
 
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 6px rgb(160, 160, 160)">
   <h2>Shapes</h2>
-  <div *ngFor="let p of sidebarPalettes">
-    <h3 style="padding-left: 5px; padding-top: 2px">> {{p.label}}</h3>
-    <div *ngFor="let item of p.items">
-
-      <img class="center-image" draggable="true" src="{{item.imgPath}}" style="cursor: pointer; text-align: center"
-        (mousedown)="handleMousedownEvent($event, p, item, graph)" matTooltip="{{item.label}}">
+  <h3 style="padding-left: 5px; padding-top: 2px">> {{sidebarPalettes.label}}</h3>
+  <div *ngFor="let row of sidebarPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
+    <div style="padding-top: 10px"></div>
+    <div style="width: 75; height: 75;">
+      <img draggable="true" src="{{row.c0.imgPath}}" width="75" height="75" style="cursor: pointer; text-align: center"
+        (mousedown)="handleMousedownEvent($event, p, row.c0, graph)" matTooltip="{{row.c0.label}}">
       <div style="padding-top: 3px"></div>
-
+    </div>
+    <div style="padding-left: 5px"></div>
+    <div style="width: 75; height: 75;">
+      <img draggable="true" src="{{row.c1.imgPath}}" width="75" height="75" style="cursor: pointer; text-align: center"
+        (mousedown)="handleMousedownEvent($event, p, row.c1, graph)" matTooltip="{{row.c1.label}}">
+      <div style="padding-top: 3px"></div>
     </div>
 
   </div>
+
+  <h3 style="padding-left: 5px; padding-top: 2px">> {{relationshipPalettes.label}}</h3>
+
+  <div *ngFor="let row of relationshipPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
+    <img class="center-image" draggable="true" src="{{row.imgPath}}" style="cursor: pointer; text-align: center"
+      (mousedown)="handleMousedownEvent($event, p, row, graph)" matTooltip="{{row.label}}">
+    <div style="padding-top: 3px"></div>
+  </div>
+
 
   <div style="padding-top: 20px"></div>
 

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { ConfiguratorService } from 'app/main/content/_service/meta/core/configurator/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 
@@ -29,9 +28,7 @@ export class OpenDialogComponent implements OnInit{
   recentConfigurators: Configurator[];
   loaded: boolean = false;
   
-  ngOnInit() {
-    console.log(this.data.marketplace);
-    
+  ngOnInit() {    
     this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
       this.configurators = configurators;
       this.recentConfigurators = this.configurators.slice(0, 5);
