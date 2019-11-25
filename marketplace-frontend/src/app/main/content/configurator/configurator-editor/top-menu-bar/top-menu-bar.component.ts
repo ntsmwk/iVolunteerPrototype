@@ -157,38 +157,32 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       if (!isNullOrUndefined(ret)) {
         console.log("open returned");
         console.log(ret);
+        this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: "cancelled"});
       }
-      this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
 
     });
   }
 
   saveClicked(event: any, item: SubMenuItem) {
-    console.log("save!");
-    console.log(event);
-    console.log(item);
-
     this.dialogFactory.confirmationDialog("Save", "Are you sure you want to save? The existing model will be overidden...").then((result: boolean) => {
     if (result) {
-        console.log("fire event...");
         this.menuOptionClickedEvent.emit({ id: "editor_save" });
       } else {
-        console.log("cancelled");
+        this.menuOptionClickedEvent.emit({id: "cancelled"});
       }
     })
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {
-    console.log("Save as!!!")
-   
+  saveAsClicked(event: any, item: SubMenuItem) {   
     //wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {
           this.menuOptionClickedEvent.emit({ id: "editor_save", configurator: ret });
         } else {
-          console.log("cancelled");
-          
+          this.menuOptionClickedEvent.emit({ id: "cancelled"});
         }
       });
     });
@@ -199,7 +193,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (!isNullOrUndefined(this.eventResponseAction)) {
+    if (this.eventResponseAction == "saveAsClicked") {
       this[this.eventResponseAction](this.eventResponseAction, undefined);
     }
   }

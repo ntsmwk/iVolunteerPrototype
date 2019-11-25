@@ -508,7 +508,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
 
           let cell = outer.insertClassIntoGraph(addedClass, new mx.mxGeometry(coords.x, coords.y, 80, 30), true);
-          //TODO create unique objectId on creation of cell/class
+          //TODO set unique objectId on creation of cell/class
           cell.id = "new" + cell.id;
           addedClass.id = cell.id;
           outer.configurableClasses.push(addedClass);
@@ -571,17 +571,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
 
   //Menu functions
-  //TODO fix save as after cancel
   consumeMenuOptionClickedEvent(event: any) {
-    this.eventResponseAction = "undefined";
+    this.eventResponseAction = null;
     switch (event.id) {
       case 'editor_save': {
-        console.log("editor_save received")
         if (isNullOrUndefined(this.currentConfigurator)) {
-          console.log("no currentconfigurator")
           this.eventResponseAction = "saveAsClicked";
         } else {
-          console.log("has currentconfigurator")
           if (!isNullOrUndefined(event.configurator)) {
             this.currentConfigurator = event.configurator;
           }
@@ -593,6 +589,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
         break
       } case 'editor_open': {
         this.openGraph(event.configurator);
+        break;
+      } case 'cancelled': {
         break;
       }
     }
