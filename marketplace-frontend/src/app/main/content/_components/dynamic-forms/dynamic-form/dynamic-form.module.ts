@@ -7,7 +7,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FuseSharedModule } from "@fuse/shared.module";
 import { DynamicFormComponent } from './dynamic-form.component';
 import { DynamicFormQuestionModule } from "../dynamic-form-question/dynamic-form-question.module";
-import { MatButtonModule, MatCommonModule, MatIconModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCommonModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({

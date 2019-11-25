@@ -7,17 +7,15 @@ import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskDetailComponent} from './task-detail.component';
 import {FuseTaskTimelineComponent} from './sidenavs/timeline/task-timeline.component';
 import {FuseTaskAssignComponent} from './assign/task-assign.component';
-import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDividerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatSidenavModule,
-  MatTableModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table';
 
 const routes = [
   {path: ':marketplaceId/:taskId', component: FuseTaskDetailComponent}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { TaskTemplate } from '../_model/task-template';
 import { TaskTemplateService } from '../_service/task-template.service';
 import { LoginService } from '../_service/login.service';

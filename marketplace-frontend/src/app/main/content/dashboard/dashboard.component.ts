@@ -6,7 +6,7 @@ import {Dashboard} from '../_model/dashboard';
 import {isNullOrUndefined} from 'util';
 import {LoginService} from '../_service/login.service';
 import {ParticipantRole} from '../_model/participant';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from '../_service/message.service';
 

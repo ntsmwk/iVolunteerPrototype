@@ -11,7 +11,7 @@ import { PropertyDefinition, PropertyItem, ClassProperty } from 'app/main/conten
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { EditorPopupMenu } from './popup-menu';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';

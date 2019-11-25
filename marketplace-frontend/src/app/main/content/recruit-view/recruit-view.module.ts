@@ -4,7 +4,17 @@ import {RouterModule} from '@angular/router';
 import {FuseSharedModule} from '../../../../@fuse/shared.module';
 
 import {RecruitViewComponent} from './recruit-view.component';
-import { MatCommonModule, MatTabsModule, MatSelectModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatTableModule, MatExpansionModule, MatIconModule, MatProgressBar, MatProgressBarModule, MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCommonModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBar, MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 

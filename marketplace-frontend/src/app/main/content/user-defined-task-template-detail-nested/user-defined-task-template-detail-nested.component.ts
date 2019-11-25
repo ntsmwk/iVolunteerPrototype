@@ -9,7 +9,7 @@ import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { PropertyInstance, PropertyItem, PropertyDefinition, TemplateProperty } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';

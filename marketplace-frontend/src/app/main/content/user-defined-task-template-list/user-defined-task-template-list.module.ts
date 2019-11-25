@@ -3,7 +3,12 @@ import { RouterModule, Route } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { UserDefinedTaskTemplateListComponent } from './user-defined-task-template-list.component';
-import { MatTableModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatTooltipModule, MatMenuModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
 

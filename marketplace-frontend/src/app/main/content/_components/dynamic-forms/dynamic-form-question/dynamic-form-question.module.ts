@@ -11,27 +11,21 @@ import { GermanDateAdapter } from '../../../_adapter/german-date-adapter';
 import { DynamicFormErrorModule } from "../dynamic-form-error/dynamic-form-error.module";
 
 
-import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDividerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatSidenavModule,
-  MatTableModule,
-  MatSelectModule,
-  MatOptionModule,
-  MatRadioModule,
-  MatSlideToggleModule,
-  MatCardModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  DateAdapter,
-
-  
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatOptionModule, MatNativeDateModule, DateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({

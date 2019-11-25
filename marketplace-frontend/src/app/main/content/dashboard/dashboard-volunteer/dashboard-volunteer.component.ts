@@ -3,7 +3,8 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
 import { Chart } from "chart.js";
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ShareDialog } from './share-dialog/share-dialog.component';
 
 

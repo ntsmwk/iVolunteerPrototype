@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { Participant } from '../../_model/participant';
 import { Task } from '../../_model/task';
 import { VolunteerService } from '../../_service/volunteer.service';

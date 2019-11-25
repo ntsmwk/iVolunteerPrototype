@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditorTopMenuBarComponent } from './top-menu-bar.component';
-import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatInputModule, MatMenuModule } from '@angular/material';
+import { MatCommonModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';

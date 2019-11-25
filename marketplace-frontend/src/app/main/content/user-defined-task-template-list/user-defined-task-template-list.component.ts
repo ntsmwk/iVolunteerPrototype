@@ -4,7 +4,8 @@ import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { UserDefinedTaskTemplateService } from "../_service/user-defined-task-template.service";
 
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate, UserDefinedTaskTemplateStub } from "../_model/user-defined-task-template";
 import { Participant } from '../_model/participant';

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {MatSidenavModule} from '@angular/material';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseNavigationModule, FuseSearchBarModule, FuseShortcutsModule, FuseSidebarModule} from '@fuse/components';

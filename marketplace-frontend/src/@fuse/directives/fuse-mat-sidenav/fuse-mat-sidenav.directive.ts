@@ -1,5 +1,5 @@
 import { Directive, Input, OnInit, HostListener, OnDestroy, HostBinding } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 

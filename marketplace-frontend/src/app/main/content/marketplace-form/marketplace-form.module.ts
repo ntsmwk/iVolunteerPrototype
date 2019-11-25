@@ -1,6 +1,10 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseMarketplaceFormComponent} from './marketplace-form.component';
 

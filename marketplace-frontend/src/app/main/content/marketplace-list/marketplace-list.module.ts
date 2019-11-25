@@ -3,7 +3,10 @@ import {RouterModule} from '@angular/router';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {MatButtonModule, MatFormFieldModule, MatIconModule, MatTableModule} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import {FuseMarketplaceListComponent} from './marketplace-list.component';
 
 const routes = [

@@ -7,11 +7,15 @@ import { MatListModule } from '@angular/material/list'
 import { FuseSharedModule } from '@fuse/shared.module';
 
 
-import {
-  MatButtonModule, MatChipsModule, MatFormFieldModule, MatIconModule,
-  MatInputModule, MatSidenavModule, MatDividerModule, MatTableModule, MatCheckboxModule
-}
-  from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table';
 
 import { PropertyDetailComponent } from './property-detail.component';
 // import { MultiPropertyDetailComponent } from './multi-property-detail/multi-property-detail.component';

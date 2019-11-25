@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {MatButtonModule, MatIconModule, MatSidenavModule} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseGroupDetailComponent} from './group-detail.component';
 import {FuseGroupMemberComponent} from './sidenavs/group-member/group-member.component';
