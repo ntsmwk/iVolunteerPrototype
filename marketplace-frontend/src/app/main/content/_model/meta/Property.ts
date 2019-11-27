@@ -86,13 +86,18 @@ export class PropertyInstance<T> {
 
 export enum PropertyType {
     TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL",
-    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", MAP = "MAP", GRAPH = "GRAPH", MULTI = "MULTI"
+    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", LEVEL_LIST = "LEVEL_LIST", MAP = "MAP", GRAPH = "GRAPH", MULTI = "MULTI"
 }
 
 
 export class PropertyItem {
     id: string;
     name: string;
+}
+
+export class LevelPropertyEntry {
+    level: number;
+    value: string;
 }
 
 export class PropertyParentSubTemplate extends PropertyItem { };

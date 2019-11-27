@@ -110,6 +110,59 @@
         generic property - not yet implemented: {{ question.label }}
       </div>
 
+      <mat-form-field class="form-field" *ngSwitchCase="'level-dropdown-single'">
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+          [id]="question.key" [value]="question.value">
+          <mat-option *ngFor="let opt of question.options" [value]="opt.value">
+            <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field>
+
+      <!-- <mat-form-field class="form-field" *ngSwitchCase="'level-dropdown-multiple'">
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+          [id]="question.key" [value]="question.value" multiple>
+          <div *ngFor="let opt of question.options">
+            <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">
+              <mat-option *ngIf="opt.selectable" [value]="opt.value">
+                {{opt.value}}
+              </mat-option>
+
+              <label class="mat-menu-item" disabled style="color: black" *ngIf="!opt.selectable">{{opt.value}}</label>
+            </div>
+          </div>
+        </mat-select>
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+      </mat-form-field> -->
+      <div *ngSwitchCase="'level-dropdown-multiple'">
+        <div *ngIf="!expanded">
+          <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}"
+              [value]="getMultipleValues(question)">
+          </mat-form-field>
+
+          <a (click)="expanded = true">expand</a>
+
+        </div>
+
+      <mat-selection-list #selectionList *ngIf="expanded">
+        <div class="mat-list-item" disabled>{{question.label}}</div>
+
+
+        <div style="margin-left: 25px; margin-right: 25px; background-color: aliceblue">
+          <div *ngFor="let opt of question.options">
+            <mat-list-option *ngIf="opt.selectable">
+              <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
+            </mat-list-option>
+            <mat-list-item *ngIf="!opt.selectable" style="background-color: aqua">
+              <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
+            </mat-list-item>
+          </div>
+        </div>
+      </mat-selection-list>
+    </div>
+
     </div>
   </ng-template>
 

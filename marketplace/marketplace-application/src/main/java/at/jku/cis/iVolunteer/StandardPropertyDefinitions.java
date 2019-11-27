@@ -15,11 +15,13 @@ import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MaximumTextLength;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MinimumTextLength;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.TextPattern;
+import at.jku.cis.iVolunteer.model.meta.core.property.LevelListPropertyEntry;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.BooleanPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DatePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DoublePropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LevelListPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
@@ -92,6 +94,10 @@ public class StandardPropertyDefinitions {
 		props.add(cp2);
 		cp3.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp3);
+		
+		props.add(new TestMultipleLevelProperty());
+		props.add(new TestSingleLevelProperty());
+		props.add(new TaetigkeitsArtProperty());
 
 		return new ArrayList(props);
 
@@ -233,12 +239,12 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> mps = this.getAllMulti();
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
-		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
+//		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
 
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
-		sps.addAll(flexProd);
+//		sps.addAll(flexProd);
 
 		return sps;
 
@@ -686,6 +692,196 @@ public class StandardPropertyDefinitions {
 			this.setName("Aquirable Competences");
 			this.setId("aquireable_competences");
 			this.setMultiple(true);
+		}
+	}
+	
+	
+	public static class TestSingleLevelProperty extends LevelListPropertyDefinition {
+		public TestSingleLevelProperty() {
+			inst();
+		}
+		
+		public void inst() {
+			this.setName("Test Single Level Property");
+			this.setId("test_single_level");
+			this.setAllowedValues(new ArrayList<LevelListPropertyEntry>());
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.1.1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.2"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.3"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.3"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.4"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.4.1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.4.1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(3, "entry 1.4.1.1"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 2"));
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 3"));
+		}
+	}
+	
+	public static class TestMultipleLevelProperty extends LevelListPropertyDefinition {
+		public TestMultipleLevelProperty() {
+			inst();
+		}
+		
+		public void inst() {
+			this.setName("Test Multiple Level Property");
+			this.setId("test_multiple_level");
+			this.setMultiple(true);
+			this.setAllowedValues(new ArrayList<LevelListPropertyEntry>());
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 1", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.1", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.1.1", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.1.2", true));
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.2", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.3", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.3.1", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "entry 1.4", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.4.1", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "entry 1.4.2", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(3, "entry 1.4.2.1", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(3, "entry 1.4.2.2", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(3, "entry 1.4.2.3", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 2", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "entry 3", true));
+		}
+	}
+	
+	public static class TaetigkeitsArtProperty extends LevelListPropertyDefinition {
+		public TaetigkeitsArtProperty() {
+			inst();
+		}
+		
+		public void inst() {
+			this.setName("Tätigkeitsart");
+			this.setId("taetigkeitsart");
+			this.setMultiple(true);
+			this.setAllowedValues(new ArrayList<LevelListPropertyEntry>());
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Einsatz", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Technischer", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Brand", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Verkehrsunfall", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Tauch", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Personen", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Höhenrettung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Vorbereitung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Nachbereitung", true));
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Ausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Grundausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Truppmann", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Truppführer", true));
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Erweiterte Grundausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Funk", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Atemschutz", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Erste Hilfe", true));
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Fach- und Sonderausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Nachrichtendienst", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Geräte- und Fahrzeugkunde", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Atem- und Körperschutz", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Technischer FW-Einsatz", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Gefährliche Stoffe", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Vorbeugender Brandschutz", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Verwaltungsdienst", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Führungsausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Gruppen-Kommandant", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Zugs-Kommandant", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Einsatzleiter", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Kommandant", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Höhere FW-Ausbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Bewerter-Lehrgang", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Fachweiterbildung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Chlorgas / Erdgas", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Stapler / Kranschein", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "IT", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Sanitäter", true));
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Überprüfung Mannschaft", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Atemschutz\nUnterweisung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Stapler\nUnterweisung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Kran\nUnterweisung", true));
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Vorbereitung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Nachbereitung", true));
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Bewerbe", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "FLA", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "WLA", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "FULA", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "FJLA", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "STRMLA", true));
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Leistungsprüfungen", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "THL", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "SPRENGLP", true));
+		
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Veranstaltung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Intern", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Ausflug", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Mitgliederversammlung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Jugendlager", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Extern\n(Öffentlichkeitsarbeit)", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Fest / Ball", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Tag der offenen Tür", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Kirchenausrückung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Landesfeuerwertag", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Friedenslicht", true));
+
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Verwaltung", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Fahrzeug", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Wartung/Reinigung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Bewegungsfahrt", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Geräte", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Wartung/Reinigung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Prüfung/Inspektion", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Gebäude", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Wartung Haustechnik", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Reinigung", true));
+
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "IT", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "EDV", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Sybos", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Sitzungen", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Besprechung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "JourFix", true));
+
+			
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Öffentlichkeits-\nArbeit", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Homepage / Social Media", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Presse", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Repräsentation\nbei Veranstaltungen", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Mitglieder-Werbung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(2, "Haussammlung", true));
+
+
+			this.getAllowedValues().add(new LevelListPropertyEntry(0, "Projekt", false));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Fahrzeuganschaffung", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "FW Hausbau", true));
+			this.getAllowedValues().add(new LevelListPropertyEntry(1, "Landesbewerb", true));
+
+			
+
+			
 		}
 	}
 

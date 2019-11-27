@@ -29,6 +29,7 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   DateAdapter,
+  MatListModule,
 
   
 } from '@angular/material';
@@ -41,6 +42,7 @@ import {
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatChipsModule, 
     MatDividerModule, MatIconModule, MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, 
     MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule,
+    MatListModule,
     
     FuseSharedModule,
     DynamicFormErrorModule

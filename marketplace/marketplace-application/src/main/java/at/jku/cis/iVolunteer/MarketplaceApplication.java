@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,6 +18,7 @@ import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClass
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -33,6 +35,7 @@ public class MarketplaceApplication {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	@Bean
@@ -51,6 +54,7 @@ public class MarketplaceApplication {
 		relationshipRepository.deleteAll();
 		classInstanceRepository.deleteAll();
 		configuratorRepository.deleteAll();
+		propertyDefinitionsRepository.deleteAll();
 		
 	}
 
@@ -68,11 +72,10 @@ public class MarketplaceApplication {
 		}
 		
 		addTestConfigClasses();
-		addConfigurators();
-
+		addConfigurators();		
 
 	}
-	
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void addTestConfigClasses() {
 				

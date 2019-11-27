@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion, LevelDropdownSingleQuestion, LevelDropdownMultipleQuestion
 } from '../_model/dynamic-forms/questions';
 
 import { PropertyType, ClassProperty } from '../_model/meta/Property';
@@ -110,14 +110,30 @@ export class QuestionService {
         value: ClassProperty.getDefaultValue(property),
       });
 
-    // } else if (property.type === PropertyType.LIST) {
-    //   question = new DropdownMultipleQuestion({
-    //     // values: this.setKeys(property.defaultValues),
-    //     // options: this.setListValues(property.allowedValues),
-    //     value: property.defaultValues,
-    //     options: property.allowedValues
+    } else if (property.type === PropertyType.LEVEL_LIST) {
+      if (property.multiple) {
+        question = new LevelDropdownMultipleQuestion({
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      } else {
+      question = new LevelDropdownSingleQuestion({
+        values: property.defaultValues,
+        options: property.allowedValues
+      });
+    }
+      // if (property.multiple) {
+      //   //dropdown multiple
+      // } else {
+      //   //drowdown single
+      // }
+      // question = new DropdownMultipleQuestion({
+      //   values: this.setKeys(property.defaultValues),
+      //   // options: this.setListValues(property.allowedValues),
+      //   value: property.defaultValues,
+      //   options: property.allowedValues
 
-    //   });
+      // });
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({

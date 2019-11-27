@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl }        from '@angular/forms';
  
-import { QuestionBase }     from '../../../_model/dynamic-forms/questions';
+import { QuestionBase, LevelDropdownMultipleQuestion }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 
@@ -20,6 +20,8 @@ export class DynamicFormQuestionComponent implements OnInit{
   requiredMarker: string;
   errorMessage: string;
 
+  expanded: boolean;
+
   get isValid() { 
     return this.form.controls[this.question.key].valid; 
   }
@@ -28,32 +30,7 @@ export class DynamicFormQuestionComponent implements OnInit{
     if (this.question.required) {
       this.requiredMarker = '*';
     }
-    // console.log("=========================================================================================");
-    // console.log(this.form);
-    // console.log("QUESTION");
-    // console.log(this.question);
-
-    
-    // console.log("form controls for" + this.question.label + ":");
-    // console.log(this.form.controls);
-
-    
-
-         //TODO create a shared service
-         //fire a value changed event
-         //register the changed value and the key
-         //add a listener to the validator (or question service)
-         //search if key of validator == key here - update validator
-         //then do this: (re-set the validators)
-         
-        //  this.form.controls[this.question.key].setValidators(null);
-        //  this.form.controls[this.question.key].setValidators(this.question.validators);
-        //  //this.form.controls[this.question.key].updateValueAndValidity();
-  
-
-    
-    //console.log(this.form.controls[this.question.key].errors);
-
+    this.expanded = false;
   }
   
   prepareDatePicker() {
@@ -63,12 +40,26 @@ export class DynamicFormQuestionComponent implements OnInit{
       this.form.setControl(this.question.key, this.date);
     }
   } 
+  calculateSpaces(level: number) {
+    level = 10*level;
+
+    return level+"px";
+  }
+
+  getMultipleValues(question: LevelDropdownMultipleQuestion) {
+    let ret = '';
+    
+    if (!isNullOrUndefined(question.values)) {
+      for (let val of question.values) {
+        ret = ret + ", " + val;
+      }
+    }
+
+    return ret;
+  }
+
   
   displayErrorMessage() {
-
-    // console.log(this.form.controls[this.question.key]);
-    // console.log(this.question);
-
     return this.form.controls[this.question.key].hasError('required') ?  this.getErrorMessage('required'):
       this.form.controls[this.question.key].hasError('requiredtrue') ? this.getErrorMessage('requiredtrue'):
       this.form.controls[this.question.key].hasError('pattern') ? this.getErrorMessage('pattern'):
@@ -150,8 +141,6 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
 
   getNestedFormGroups() {
-    // console.log("----------------" +this.question.key + "---:");
-    // console.log(this.form.get(this.question.key).get('nested1'));
     return this.form.get(this.question.key);
   }
 

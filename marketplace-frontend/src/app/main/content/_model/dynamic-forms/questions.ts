@@ -165,3 +165,25 @@ import { ValidatorFn } from "@angular/forms";
     }
   }
 
+  export class LevelDropdownSingleQuestion extends QuestionBase<any> {
+    controlType = 'level-dropdown-single'
+    options: {key: string, value: string}[] = [];
+
+    //+++ TODO
+    constructor(options: {} = {}) {
+      super(options);
+      this.options = options['options'] || [];
+    }
+  }
+
+  export class LevelDropdownMultipleQuestion extends QuestionBase<any> {
+    controlType = 'level-dropdown-multiple'
+    options: {key: string, value: string}[] = [];
+
+    //+++ TODO
+    constructor(options: {} = {}) {
+      super(options);
+      this.options = options['options'] || [];
+    }
+  }
+
