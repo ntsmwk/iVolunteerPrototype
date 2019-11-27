@@ -1,19 +1,12 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
