@@ -58,9 +58,7 @@ public class InitializationService {
 			functionDefinition.setRoot(true);
 			functionDefinition.setTimestamp(new Date());
 			functionDefinition.setUserId(user.getId());
-
 			addPropertyDefinitions();
-
 		}
 	}
 
@@ -138,15 +136,15 @@ public class InitializationService {
 		c1.setProperties(new ArrayList<ClassProperty<Object>>());
 		c1.setRoot(true);
 
-		PropertyDefinition<Object> npd = new StandardPropertyDefinitions.NameProperty();
+		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty();
 		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
 		c1.getProperties().add(ncp);
 
-		PropertyDefinition<Object> sdpd = new StandardPropertyDefinitions.StartDateProperty();
+		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty();
 		ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
 		c1.getProperties().add(sdcp);
 
-		PropertyDefinition<Object> dpd = new StandardPropertyDefinitions.DescriptionProperty();
+		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty();
 		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
 		c1.getProperties().add(dcp);
 

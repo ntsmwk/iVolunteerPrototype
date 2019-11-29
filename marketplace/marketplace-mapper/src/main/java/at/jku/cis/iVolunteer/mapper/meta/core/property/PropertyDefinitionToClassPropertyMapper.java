@@ -14,7 +14,6 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 public class PropertyDefinitionToClassPropertyMapper
 		implements OneWayMapper<PropertyDefinition<Object>, ClassProperty<Object>> {
 
-	// TODO @mwe remove!
 	@Override
 	public ClassProperty<Object> toTarget(PropertyDefinition<Object> source) {
 		if (source == null) {
