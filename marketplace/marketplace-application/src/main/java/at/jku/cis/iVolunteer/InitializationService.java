@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -9,18 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class InitializationService {
@@ -34,6 +39,8 @@ public class InitializationService {
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private VolunteerRepository volunteerRepository;
 
 	@PostConstruct
 	public void init() {
@@ -43,8 +50,83 @@ public class InitializationService {
 	}
 
 	private void addiVolunteerAPIClassDefinition(String userName) {
-		FunctionClassDefinition functionDefinition = new FunctionClassDefinition();
+		Volunteer user = volunteerRepository.findByUsername(userName);
+		if (user != null) {
+			FunctionClassDefinition functionDefinition = new FunctionClassDefinition();
+			functionDefinition.setClassArchetype(ClassArchetype.FUNCTION);
+			functionDefinition.setMarketplaceId(marketplaceService.getMarketplaceId());
+			functionDefinition.setRoot(true);
+			functionDefinition.setTimestamp(new Date());
+			functionDefinition.setUserId(user.getId());
 
+			addPropertyDefinitions();
+
+		}
+	}
+
+	private List<PropertyDefinition> addPropertyDefinitions() {
+		List<PropertyDefinition> propertyDefinitions = new ArrayList<>();
+		addPersonRoleProperties(propertyDefinitions);
+		addPersonBadgeProperties(propertyDefinitions);
+		addPersonCertificateProperties(propertyDefinitions);
+		addPersonTaskProperties(propertyDefinitions);
+		return propertyDefinitionsRepository.save(propertyDefinitions);
+	}
+
+	private void addPersonTaskProperties(List<PropertyDefinition> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<String>("taskID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskType1", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskType2", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskType3", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskType4", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskRoleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskRole", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicle", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskCountAll", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskDateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskDateTo", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskDuration", PropertyType.FLOAT_NUMBER));
+		propertyDefinitions.add(new PropertyDefinition<String>("taskLocation", PropertyType.TEXT));
+//			TODO task geoinformation to geo object
+		propertyDefinitions.add(new PropertyDefinition<String>("taskGeoInformation", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
+	}
+
+	private void addPersonCertificateProperties(List<PropertyDefinition> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateValidUntil", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("certificateIcon", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
+	}
+
+	private void addPersonBadgeProperties(List<PropertyDefinition> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<String>("badgeID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("badgeName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("badgeDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("badgeIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("badgeIcon", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
+	}
+
+	private void addPersonRoleProperties(List<PropertyDefinition> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<String>("roleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("roleType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("roleName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("roleDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("organisationID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("organisationType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<String>("dateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("dateTo", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -56,15 +138,15 @@ public class InitializationService {
 		c1.setProperties(new ArrayList<ClassProperty<Object>>());
 		c1.setRoot(true);
 
-		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty();
+		PropertyDefinition<Object> npd = new StandardPropertyDefinitions.NameProperty();
 		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
 		c1.getProperties().add(ncp);
 
-		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty();
+		PropertyDefinition<Object> sdpd = new StandardPropertyDefinitions.StartDateProperty();
 		ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
 		c1.getProperties().add(sdcp);
 
-		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty();
+		PropertyDefinition<Object> dpd = new StandardPropertyDefinitions.DescriptionProperty();
 		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
 		c1.getProperties().add(dcp);
 

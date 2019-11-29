@@ -16,13 +16,12 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	private String parentId;
 	private String name;
-	private List<ClassProperty<Object>> properties;
+	private List<ClassProperty<Object>> properties = new ArrayList<>();
 	private ClassArchetype classArchetype;
 
 	boolean root;
 
 	public ClassDefinition() {
-		properties = new ArrayList<ClassProperty<Object>>();
 	}
 
 	public String getId() {

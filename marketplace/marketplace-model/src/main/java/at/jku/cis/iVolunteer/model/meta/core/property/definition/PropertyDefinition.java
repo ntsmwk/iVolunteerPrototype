@@ -29,6 +29,11 @@ public class PropertyDefinition<T> {
 	public PropertyDefinition() {
 	}
 	
+	public PropertyDefinition(String name, PropertyType type) {
+		this.name = name;
+		this.type = type;
+	}
+	
 	public String getId() {
 		return id;
 	}
