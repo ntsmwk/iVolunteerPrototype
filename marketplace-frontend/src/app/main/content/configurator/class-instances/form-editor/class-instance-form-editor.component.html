@@ -1,33 +1,23 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
 
-  <div *ngFor="let config of formConfigurations">
-    <h1>{{config.name}}</h1>
+    <h1>{{currentFormConfiguration.name}}</h1>
 
-    <div *ngFor="let entry of config.formEntries">
-      <mat-accordion multi=true displayMode="flat">
-        <mat-expansion-panel [expanded]="true">
+    <div *ngFor="let entry of currentFormConfiguration.formEntries">
 
-          <mat-expansion-panel-header>
-            <mat-panel-title style="width: 20%">
-              Properties
-            </mat-panel-title>
+        <div style="padding-top: 12px"></div>
+        <app-dynamic-class-instance-creation-form [questions]="entry.questions" [formDisabled]="false"
+            [formConfigurationId]="currentFormConfiguration.id" [form]="entry.formGroup"
+            (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
+        </app-dynamic-class-instance-creation-form>
 
-            <mat-panel-description style="width: 80%; text-align: start">
-              <!-- {{demoClassPaths[0]}} -->
-            </mat-panel-description>
+        <div style="padding-top: 10px"></div>
 
 
-          </mat-expansion-panel-header>
+        <button *ngIf="canFinish" type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
+            Finish</button>
 
-          <div style="padding-top: 12px"></div>
-          <app-dynamic-class-instance-creation-form [questions]="entry.questions" [formDisabled]="false" [formConfigurationId]="config.id" [form]="entry.formGroup"
-            (resultEvent)="handleResultEvent($event)">
-          </app-dynamic-class-instance-creation-form>
 
-        </mat-expansion-panel>
-      </mat-accordion>
     </div>
-  </div>
 
 
 

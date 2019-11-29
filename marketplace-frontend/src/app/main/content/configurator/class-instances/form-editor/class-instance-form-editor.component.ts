@@ -22,6 +22,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
   formConfigurations: FormConfiguration[];
+  currentFormConfiguration: FormConfiguration;
+
+  canContinue: boolean;
+  canFinish: boolean;
 
   isLoaded: boolean = false;
 
@@ -33,7 +37,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
-    private dataTransportService: DataTransportService,
   ) {
 
   }
@@ -68,11 +71,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             }
           }
 
-          this.isLoaded = true;
 
         }).then(() => {
-
+          this.currentFormConfiguration = this.formConfigurations.pop();
+          console.log(this.currentFormConfiguration)
           console.log(this.formConfigurations);
+          this.isLoaded = true;
 
 
         });
@@ -80,13 +84,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
   }
 
+  
+
   handleResultEvent(event: FormEntryReturnEventData) {
     let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
       return fc.id == event.formConfigurationId
     })
 
     let classInstances: ClassInstance[] = [];
-    for (let entry of formConfiguration.formEntries) {
+    for (let entry of this.currentFormConfiguration.formEntries) {
       entry.formGroup.disable();
       let propertyInstances: PropertyInstance<any>[] = [];
 
@@ -103,10 +109,30 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
+      if (!isNullOrUndefined(ret)) {
+        this.canContinue = true;
+        this.handleNextClick();
+      }
     });
-
   }
 
+  handleNextClick() {
+    this.canContinue = false;
+    if (this.formConfigurations.length > 0) {
+      this.currentFormConfiguration = this.formConfigurations.pop();
+    } else {
+      this.canFinish = true
+    }
+  }
+
+  handleFinishClick() {
+    this.navigateBack();
+  }
+
+  handleCancelEvent() {
+    console.log("cancelled");
+    this.navigateBack();
+  }
 
 
 
