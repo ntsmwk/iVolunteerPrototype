@@ -26,6 +26,9 @@ public class PropertyDefinition<T> {
 	private List<PropertyConstraint<Object>> propertyConstraints;
 	
 	
+	public PropertyDefinition() {
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -81,9 +84,5 @@ public class PropertyDefinition<T> {
 	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
-
-	
-	
-	
 	
 }

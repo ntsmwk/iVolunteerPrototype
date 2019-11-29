@@ -21,12 +21,11 @@ public class CoreApplication {
 
 	private static final String MMUSTERMANN = "mmustermann";
 	private static final String MWEISSENBEK = "mweissenbek";
+	private static final String MWEIXLBAUMER = "mweixlbaumer";
 	private static final String PSTARZER = "pstarzer";
 	private static final String BROISER = "broiser";
 	private static final String RECRUITER = "recruiter";
-
 	private static final String FLEXPROD = "flexprod";
-
 	private static final String RAW_PASSWORD = "passme";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -45,6 +44,7 @@ public class CoreApplication {
 		createVolunteer(BROISER, RAW_PASSWORD);
 		createVolunteer(PSTARZER, RAW_PASSWORD);
 		createVolunteer(MWEISSENBEK, RAW_PASSWORD);
+		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD);
 		createRecruiter(RECRUITER, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
