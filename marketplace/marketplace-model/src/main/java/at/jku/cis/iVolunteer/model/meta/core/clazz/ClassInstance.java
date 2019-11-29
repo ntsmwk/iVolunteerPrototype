@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
@@ -102,7 +101,5 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setClassArchetype(ClassArchetype classArchetype) {
 		this.classArchetype = classArchetype;
 	}
-	
-	
-}
 
+}
