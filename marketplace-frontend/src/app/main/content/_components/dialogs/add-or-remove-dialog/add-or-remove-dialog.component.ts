@@ -5,6 +5,7 @@ import { PropertyItem, PropertyDefinition } from '../../../_model/meta/Property'
 export interface AddOrRemoveDialogData {
   checkboxStates: {propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean}[];
   label: string;
+  key: string;
 }
 
 @Component({
@@ -22,6 +23,19 @@ export class AddOrRemoveDialogComponent {
   displayedColumns: string[] = ['label', 'options'];
   
   onNoClick(): void {
+    this.data.key = undefined;
     this.dialogRef.close();
   } 
+
+  applyClicked() {
+    this.data.key = undefined;
+    this.dialogRef.close(this.data);
+  }
+
+  createNewPropertyClicked() {
+    console.log("create new property clicked");
+    this.data.key = "new_property"
+    this.dialogRef.close(this.data);
+  }
+
 }

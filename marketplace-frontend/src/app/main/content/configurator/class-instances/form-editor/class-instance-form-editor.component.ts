@@ -11,6 +11,7 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
+import { config } from 'rxjs';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -65,10 +66,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.formConfigurations = formConfigurations
 
           for (let config of this.formConfigurations) {
-            for (let entry of config.formEntries) {
-              entry.questions = this.questionService.getQuestionsFromProperties(entry.classProperties);
-              entry.formGroup = this.questionControlService.toFormGroup(entry.questions);
-            }
+              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+            
           }
 
 
@@ -92,19 +92,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     })
 
     let classInstances: ClassInstance[] = [];
-    for (let entry of this.currentFormConfiguration.formEntries) {
-      entry.formGroup.disable();
+      this.currentFormConfiguration.formEntry.formGroup.disable();
       let propertyInstances: PropertyInstance<any>[] = [];
 
-      for (let classProperty of entry.classProperties) {
+      for (let classProperty of this.currentFormConfiguration.formEntry.classProperties) {
         let values = [event.formGroup.value[classProperty.id]];
         propertyInstances.push(new PropertyInstance(classProperty, values));
       }
 
-      let classInstance: ClassInstance = new ClassInstance(entry.classDefinitions[0], propertyInstances);
+      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstances.push(classInstance);
 
-    }
+    
 
 
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {

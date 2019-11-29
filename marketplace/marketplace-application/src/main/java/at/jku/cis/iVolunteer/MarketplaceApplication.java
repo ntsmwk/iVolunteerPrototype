@@ -48,11 +48,11 @@ public class MarketplaceApplication {
 
 	@PreDestroy
 	public void onExit() {
-		classDefinitionRepository.deleteAll();
-		relationshipRepository.deleteAll();
-		classInstanceRepository.deleteAll();
-		configuratorRepository.deleteAll();
-		propertyDefinitionsRepository.deleteAll();
+//		classDefinitionRepository.deleteAll();
+//		relationshipRepository.deleteAll();
+//		classInstanceRepository.deleteAll();
+//		configuratorRepository.deleteAll();
+//		propertyDefinitionsRepository.deleteAll();
 
 	}
 

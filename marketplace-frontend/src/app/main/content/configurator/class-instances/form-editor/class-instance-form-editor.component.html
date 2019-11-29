@@ -2,11 +2,11 @@
 
     <h1>{{currentFormConfiguration.name}}</h1>
 
-    <div *ngFor="let entry of currentFormConfiguration.formEntries">
+    <div>
 
         <div style="padding-top: 12px"></div>
-        <app-dynamic-class-instance-creation-form [questions]="entry.questions" [formDisabled]="false"
-            [formConfigurationId]="currentFormConfiguration.id" [form]="entry.formGroup"
+        <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions" [formDisabled]="false"
+            [formConfigurationId]="currentFormConfiguration.id" [form]="currentFormConfiguration.formEntry.formGroup"
             (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
         </app-dynamic-class-instance-creation-form>
 
@@ -14,7 +14,8 @@
 
 
         <button *ngIf="canFinish" type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
-            Finish</button>
+            Finish
+        </button>
 
 
     </div>

@@ -1,7 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 import javax.ws.rs.NotAcceptableException;
 
@@ -14,6 +16,8 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
+import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+import at.jku.cis.iVolunteer.model.meta.form.EnumRepresentation;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 
@@ -67,13 +71,12 @@ public class ClassDefinitionService {
 		for (ClassDefinition childClassDefinition : childClassDefinitions) {
 			FormConfiguration formConfig = new FormConfiguration();
 			formConfig.setName(childClassDefinition.getName());
-			formConfig.setFormEntries(new ArrayList<FormEntry>());
 			formConfig.setId(childClassDefinition.getId());
 			
 			FormEntry formEntry = new FormEntry();
-			formEntry.setPositionLevel(0 + "");
-			formEntry.setClassDefinitons(new ArrayList<ClassDefinition>());
+			formEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
 			formEntry.setClassProperties(new ArrayList<ClassProperty<Object>>());
+			formEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
 			formEntry.setSubEntries(new ArrayList<FormEntry>());
 
 			ClassDefinition currentClassDefinition = childClassDefinition;
@@ -85,15 +88,34 @@ public class ClassDefinitionService {
 						formEntry.getClassProperties().add(property);
 					}
 				}
+				
+				List<Relationship> associationList = relationshipRepository.findBySourceAndRelationshipType(currentClassDefinition.getId(), RelationshipType.ASSOCIATION);
+				
+				
+				if (associationList != null) {
+					
+					
+					for (Relationship r : associationList) {
+						// for each Relationship, Do a DFS to construct dropdown options menu
+						
+						System.out.println(r.getId());
+						System.out.println(associationList.size());
+						
+						ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
+						EnumRepresentation enumRepresentation = createEnumRepresentation(classDefinition);
+						enumRepresentation.setClassDefinition(classDefinition);
+						formEntry.getEnumRepresentations().add(enumRepresentation);
+					}
+				}
 
-				List<Relationship> relationshipList = relationshipRepository
+				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
 
-				if (relationshipList == null || relationshipList.size() == 0) {
+				if (inheritanceList == null || inheritanceList.size() == 0) {
 					throw new NotAcceptableException("getParentById: child is not root and has no parent");
 				}
 
-				currentClassDefinition = classDefinitionRepository.findOne(relationshipList.get(0).getSource());
+				currentClassDefinition = classDefinitionRepository.findOne(inheritanceList.get(0).getSource());
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
@@ -103,11 +125,43 @@ public class ClassDefinitionService {
 				}
 			}
 			
-			formConfig.getFormEntries().add(formEntry);
+			formConfig.setFormEntry(formEntry);
 			configList.add(formConfig);
 		}
 
 		return configList;
+	}
+	
+	private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
+		List<EnumEntry> entries = new ArrayList<EnumEntry>();
+		entries = performDFS(root, 0, entries);
+		
+		EnumRepresentation enumRepresentation = new EnumRepresentation();
+		enumRepresentation.setEnumEntries(entries);
+		enumRepresentation.setId(root.getId());
+		
+		return enumRepresentation;
+	}
+	
+	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list) {
+		Stack<Relationship> stack = new Stack<>();
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
+		Collections.reverse(relationships);
+		stack.addAll(relationships);
+		
+		if (stack == null || stack.size() <= 0) {
+			return list;
+		} else {
+			while (!stack.isEmpty()) {
+				Relationship relationship = stack.pop();
+				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+				EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
+				enumEntry.setPosition(new int[level+1]);
+				list.add(enumEntry);
+				this.performDFS(classDefinition, level+1, list);
+			}
+		}
+		return list;
 	}
 
 	// TODO @Alex implement

@@ -6,7 +6,7 @@ public class FormConfiguration {
 
 	String id;
 	String name;
-	List<FormEntry> formEntries;
+	FormEntry formEntry;
 	
 	
 	public String getId() {
@@ -21,11 +21,11 @@ public class FormConfiguration {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<FormEntry> getFormEntries() {
-		return formEntries;
+	public FormEntry getFormEntry() {
+		return formEntry;
 	}
-	public void setFormEntries(List<FormEntry> formEntries) {
-		this.formEntries = formEntries;
+	public void setFormEntry(FormEntry formEntry) {
+		this.formEntry = formEntry;
 	}
 	
 }

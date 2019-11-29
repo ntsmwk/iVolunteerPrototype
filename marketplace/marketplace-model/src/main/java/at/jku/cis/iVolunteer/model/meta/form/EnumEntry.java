@@ -1,27 +1,28 @@
-package at.jku.cis.iVolunteer.model.meta.core.property;
+package at.jku.cis.iVolunteer.model.meta.form;
 
-public class LevelListPropertyEntry {
+public class EnumEntry {
 	int level;
+	int[] position;
 	String value;
 	boolean selectable;
 	
-	public LevelListPropertyEntry() {
+	public EnumEntry() {
 	
 	}
 	
-	public LevelListPropertyEntry(String value) {
+	public EnumEntry(String value) {
 		this.level = 1;
 		this.value = value;
 		this.selectable = true;
 	}
 	
-	public LevelListPropertyEntry(int level, String value) {
+	public EnumEntry(int level, String value) {
 		this.level = level;
 		this.value = value;
 		this.selectable = true;
 	}
 	
-	public LevelListPropertyEntry(int level, String value, boolean selectable) {
+	public EnumEntry(int level, String value, boolean selectable) {
 		this.level = level;
 		this.value = value;
 		this.selectable = selectable;
@@ -41,6 +42,14 @@ public class LevelListPropertyEntry {
 	
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public int[] getPosition() {
+		return position;
+	}
+	
+	public void setPosition(int[] position) {
+		this.position = position;
 	}
 	
 	public boolean isSelectable() {

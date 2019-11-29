@@ -2,8 +2,8 @@ package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
 import java.util.Date;
 
-import at.jku.cis.iVolunteer.model.meta.core.property.LevelListPropertyEntry;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 
 public class PropertyDefinitionTypes {
 
@@ -45,7 +45,7 @@ public class PropertyDefinitionTypes {
 		}
 	}
 	
-	public static class LevelListPropertyDefinition extends PropertyDefinition<LevelListPropertyEntry> {
+	public static class LevelListPropertyDefinition extends PropertyDefinition<EnumEntry> {
 		public LevelListPropertyDefinition() {
 			this.type = PropertyType.LEVEL_LIST;
 		}

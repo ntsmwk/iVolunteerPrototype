@@ -95,11 +95,6 @@ export class PropertyItem {
     name: string;
 }
 
-export class LevelPropertyEntry {
-    level: number;
-    value: string;
-}
-
 export class PropertyParentSubTemplate extends PropertyItem { };
 export class PropertyParentTemplate extends PropertyItem { };
 
