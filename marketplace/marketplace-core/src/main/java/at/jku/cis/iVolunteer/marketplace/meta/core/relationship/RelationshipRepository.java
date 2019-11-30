@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.relationship;
 
 import java.util.List;
-import java.util.Stack;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +12,7 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 public interface RelationshipRepository extends MongoRepository<Relationship, String> {
 
 	List<Relationship> findBySourceAndRelationshipType(String source, RelationshipType relationshipType);
-	
+
 	List<Relationship> findByTargetAndRelationshipType(String source, RelationshipType relationshipType);
 }
+	

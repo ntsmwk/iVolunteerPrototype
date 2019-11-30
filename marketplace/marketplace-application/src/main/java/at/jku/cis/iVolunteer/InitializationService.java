@@ -14,10 +14,8 @@ import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClass
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
@@ -34,12 +32,10 @@ public class InitializationService {
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
 	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private FinalizationService finalizationService;
 
 	@PostConstruct
@@ -185,6 +181,7 @@ public class InitializationService {
 
 	private List<PropertyDefinition<Object>> addPropertyDefinitions() {
 		List<PropertyDefinition> propertyDefinitions = new ArrayList<>();
+		addCrossCuttingProperties(propertyDefinitions);
 		addPersonRoleProperties(propertyDefinitions);
 		addPersonBadgeProperties(propertyDefinitions);
 		addPersonCertificateProperties(propertyDefinitions);
@@ -224,8 +221,6 @@ public class InitializationService {
 		propertyDefinitions.add(new PropertyDefinition<String>("certificateIssuedOn", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<String>("certificateValidUntil", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<String>("certificateIcon", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
 	}
 
 	private void addPersonTaskProperties(List<PropertyDefinition> propertyDefinitions) {
