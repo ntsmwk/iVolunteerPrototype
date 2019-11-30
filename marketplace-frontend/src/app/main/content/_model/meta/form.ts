@@ -7,6 +7,9 @@ export class FormEntry {
     positionLevel: string;
     classDefinitions: ClassDefinition[];
     classProperties: ClassProperty<any>[];
+
+    enumRepresentations: EnumRepresentation[];
+
     subEntries: FormEntry[];
 
     questions: QuestionBase<any>[] = [];
@@ -16,7 +19,8 @@ export class FormEntry {
 export class FormConfiguration {
     id: string;
     name: string;
-    formEntries: FormEntry[] = [];
+    formEntry: FormEntry;
+
 }
 
 export class FormEntryReturnEventData {
@@ -27,5 +31,18 @@ export class FormEntryReturnEventData {
         this.formGroup = formGroup;
         this.formConfigurationId = formConfigurationId;
     }
+}
+
+export class EnumRepresentation {
+    id: string;
+    enumEntries: EnumEntry[];
+    selectedEntries: EnumEntry[];
+}
+
+export class EnumEntry {
+    level: number;
+    position: number[];
+    value: string;
+    selectable: boolean;
 }
 

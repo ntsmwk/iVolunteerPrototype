@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum ClassArchetype {
 
-	COMPETENCE("COMPETENCE"), TASK("TASK"), FUNCTION("FUNCTION"), ACHIEVEMENT("ACHIEVEMENT");
+	COMPETENCE("COMPETENCE"), TASK("TASK"), FUNCTION("FUNCTION"), ACHIEVEMENT("ACHIEVEMENT"), ENUM_HEAD("ENUM_HEAD"), ENUM_ENTRY("ENUM_ENTRY");
 
 	private final String archetype;
 

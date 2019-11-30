@@ -19,10 +19,12 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
   
+  
   output = '';
   submitPressed: boolean;
 
   @Output() resultEvent: EventEmitter<any> = new EventEmitter();
+  @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
  
   constructor(private qcs: QuestionControlService) {  }
  

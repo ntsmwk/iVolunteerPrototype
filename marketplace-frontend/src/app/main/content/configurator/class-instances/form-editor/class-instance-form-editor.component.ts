@@ -11,6 +11,7 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
+import { config } from 'rxjs';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -22,6 +23,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
   formConfigurations: FormConfiguration[];
+  currentFormConfiguration: FormConfiguration;
+
+  canContinue: boolean;
+  canFinish: boolean;
 
   isLoaded: boolean = false;
 
@@ -33,7 +38,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
-    private dataTransportService: DataTransportService,
   ) {
 
   }
@@ -62,17 +66,17 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.formConfigurations = formConfigurations
 
           for (let config of this.formConfigurations) {
-            for (let entry of config.formEntries) {
-              entry.questions = this.questionService.getQuestionsFromProperties(entry.classProperties);
-              entry.formGroup = this.questionControlService.toFormGroup(entry.questions);
-            }
+              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+            
           }
 
-          this.isLoaded = true;
 
         }).then(() => {
-
+          this.currentFormConfiguration = this.formConfigurations.pop();
+          console.log(this.currentFormConfiguration)
           console.log(this.formConfigurations);
+          this.isLoaded = true;
 
 
         });
@@ -80,33 +84,54 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
   }
 
+  
+
   handleResultEvent(event: FormEntryReturnEventData) {
     let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
       return fc.id == event.formConfigurationId
     })
 
     let classInstances: ClassInstance[] = [];
-    for (let entry of formConfiguration.formEntries) {
-      entry.formGroup.disable();
+      this.currentFormConfiguration.formEntry.formGroup.disable();
       let propertyInstances: PropertyInstance<any>[] = [];
 
-      for (let classProperty of entry.classProperties) {
+      for (let classProperty of this.currentFormConfiguration.formEntry.classProperties) {
         let values = [event.formGroup.value[classProperty.id]];
         propertyInstances.push(new PropertyInstance(classProperty, values));
       }
 
-      let classInstance: ClassInstance = new ClassInstance(entry.classDefinitions[0], propertyInstances);
+      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstances.push(classInstance);
 
-    }
+    
 
 
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
+      if (!isNullOrUndefined(ret)) {
+        this.canContinue = true;
+        this.handleNextClick();
+      }
     });
-
   }
 
+  handleNextClick() {
+    this.canContinue = false;
+    if (this.formConfigurations.length > 0) {
+      this.currentFormConfiguration = this.formConfigurations.pop();
+    } else {
+      this.canFinish = true
+    }
+  }
+
+  handleFinishClick() {
+    this.navigateBack();
+  }
+
+  handleCancelEvent() {
+    console.log("cancelled");
+    this.navigateBack();
+  }
 
 
 

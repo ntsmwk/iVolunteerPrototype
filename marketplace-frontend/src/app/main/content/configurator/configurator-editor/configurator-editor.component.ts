@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
+import { ObjectIdService } from "../../_service/objectid.service.";
 
 declare var require: any;
 
@@ -70,6 +71,7 @@ const mxStyles = {
 
   addClassSameLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/right_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   addClassNewLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+  addClassNewLevelAssociationIcon: 'shape=image;image=/assets/mxgraph_resources/images/letter-a-icon.jpg;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
 }
 
@@ -110,7 +112,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     private dialogFactory: DialogFactoryComponent,
     private snackBar: MatSnackBar,
     private configuratorService: ConfiguratorService,
-    private dataTransportService: DataTransportService) {
+    private dataTransportService: DataTransportService,
+    private objectIdService: ObjectIdService) {
 
   }
 
@@ -293,22 +296,32 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       }
     }
 
-    //create add icon
-    let addIcon: myMxCell = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, mxStyles.addIcon) as myMxCell;
-    addIcon.setConnectable(false);
-    addIcon.cellType = 'add';
+    if(cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY) {
+      //create add icon
+      let addIcon: myMxCell = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, mxStyles.addIcon) as myMxCell;
+      addIcon.setConnectable(false);
+      addIcon.cellType = 'add';
 
+      let downAssociationIcon: myMxCell = this.graph.insertVertex(cell, "add association", "add_association", 45, i+50, 20, 20, mxStyles.addClassNewLevelAssociationIcon) as myMxCell;
+      downAssociationIcon.setConnectable(false);
+      downAssociationIcon.cellType = "add_association";
+
+    }
+       
+    if (cell.classArchetype != ClassArchetype.ENUM_HEAD) {
+      let nextIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_same_level", 85, i + 50, 20, 20, mxStyles.addClassSameLevelIcon) as myMxCell;
+      nextIcon.setConnectable(false);
+      nextIcon.cellType = 'add_class_same_level';
   
+    }
+
     let downIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_new_level", 65, i + 50, 20, 20, mxStyles.addClassNewLevelIcon) as myMxCell;
     downIcon.setConnectable(false);
     downIcon.cellType = 'add_class_new_level';
 
-    let nextIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_same_level", 85, i + 50, 20, 20, mxStyles.addClassSameLevelIcon) as myMxCell;
-    nextIcon.setConnectable(false);
-    nextIcon.cellType = 'add_class_same_level';
-
+   
     //create remove icon
-    if (classDefinition.properties.length > 0) {
+    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY) {
       let removeIcon: myMxCell = this.graph.insertVertex(cell, "remove", 'remove', 25, i + 50, 20, 20, mxStyles.removeIcon) as myMxCell;
       removeIcon.setConnectable(false);
       removeIcon.cellType = 'remove';
@@ -401,7 +414,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       return rootCells;
     }
 
-    
+
     this.resetViewport();
   }
 
@@ -463,14 +476,20 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       if (cell.value == "add") {
         for (let c of this.configurableClasses) {
           if (c.id == parent.id) {
-            this.dialogFactory.addPropertyDialogGeneric(this.allPropertyDefinitions, c.properties).then((props: PropertyItem[]) => {
-              if (!isNullOrUndefined(props)) {
-                this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.marketplace, props.map(props => props.id)).toPromise().then((ret: ClassProperty<any>[]) => {
-                  c.properties.push(...ret);
-                  this.updateModel();
-                  this.redrawContent();
-                });
+            this.dialogFactory.addPropertyDialogGeneric(this.allPropertyDefinitions, c.properties).then((result: { propertyItems: PropertyItem[], key: string }) => {
+              if (!isNullOrUndefined(result)) {
+
+                if (result.key == "new_property") {
+                  console.log("add property")
+                } else {
+                  this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.marketplace, result.propertyItems.map(propertyItems => propertyItems.id)).toPromise().then((ret: ClassProperty<any>[]) => {
+                    c.properties.push(...ret);
+                    this.updateModel();
+                    this.redrawContent();
+                  });
+                }
               }
+
             });
             break;
           }
@@ -497,12 +516,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       if (cell.value == "add_class_same_level") {
         let addedClass = new ClassDefinition();
         addedClass.properties = [];
-        addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
 
+        
+        addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+        addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        
         let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
-        cret.id = "new" + cret.id;
+        cret.id = this.objectIdService.getNewObjectId();
         addedClass.id = cret.id;
-        cret.value = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
 
         this.configurableClasses.push(addedClass);
 
@@ -510,10 +531,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
         let addedRelationship = new Relationship();
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
-        addedRelationship.source = precursor.id 
+        addedRelationship.source = precursor.id
         addedRelationship.target = addedClass.id;
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
-        rret.id = "new" + rret.id;
+        rret.id = this.objectIdService.getNewObjectId();
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
@@ -526,26 +547,59 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       if (cell.value == "add_class_new_level") {
         let addedClass = new ClassDefinition();
         addedClass.properties = [];
+
+        if ((cell.getParent() as myMxCell).classArchetype == ClassArchetype.ENUM_HEAD || (cell.getParent() as myMxCell).classArchetype == ClassArchetype.ENUM_ENTRY) {
+          addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+        } else {
         addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
-
-
+        }
+        addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
         let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
-        cret.id = "new" + cret.id;
+        cret.id = this.objectIdService.getNewObjectId();
         addedClass.id = cret.id;
-        cret.value = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
         this.configurableClasses.push(addedClass);
 
         let addedRelationship = new Relationship();
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
-        addedRelationship.source = cell.getParent().id 
+        addedRelationship.source = cell.getParent().id
         addedRelationship.target = cret.id;
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
-        rret.id = "new" + rret.id;
+        rret.id = this.objectIdService.getNewObjectId();
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
         this.updateModel();
         this.redrawContent();
+      }
+
+      if (cell.value == "add_association") {
+        console.log("add association");
+        let addedClass = new ClassDefinition();
+        addedClass.properties = [];
+        let valueProperty = new ClassProperty();
+        valueProperty.name = "value";
+        valueProperty.id = "value";
+        addedClass.properties.push(valueProperty);
+        addedClass.classArchetype = ClassArchetype.ENUM_HEAD;
+        addedClass.name = "Enter Value";
+
+        let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
+        cret.id = this.objectIdService.getNewObjectId();
+        addedClass.id = cret.id;
+        this.configurableClasses.push(addedClass);
+
+        let addedRelationship = new Relationship();
+        addedRelationship.relationshipType = RelationshipType.ASSOCIATION;
+        addedRelationship.source = cell.getParent().id
+        addedRelationship.target = cret.id;
+        let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
+        rret.id = this.objectIdService.getNewObjectId();
+        addedRelationship.id = rret.id;
+        this.relationships.push(addedRelationship);
+
+        this.updateModel();
+        this.redrawContent();
+        
       }
     }
   }
@@ -587,7 +641,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
           let cell = outer.insertClassIntoGraph(addedClass, new mx.mxGeometry(coords.x, coords.y, 80, 30), true);
           //TODO set unique objectId on creation of cell/class
-          cell.id = "new" + cell.id;
+          cell.id = outer.objectIdService.getNewObjectId();
           addedClass.id = cell.id;
           outer.configurableClasses.push(addedClass);
 
@@ -596,7 +650,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
           r.relationshipType = paletteItem.id;
           let cell = outer.insertRelationshipIntoGraph(r, coords, true);
 
-          cell.id = "new" + cell.id;
+          cell.id = outer.objectIdService.getNewObjectId();
           r.id = cell.id;
           outer.relationships.push(r);
 
@@ -801,6 +855,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
       } else {
         console.error("invalid cellType")
+        console.log(cell);
+        console.log(this.relationships);
       }
 
     }
