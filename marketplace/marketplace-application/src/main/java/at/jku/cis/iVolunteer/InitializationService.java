@@ -14,6 +14,7 @@ import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClass
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
@@ -35,12 +36,14 @@ public class InitializationService {
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private FinalizationService finalizationService;
 
 	@PostConstruct
 	public void init() {
-		finalizationService.finalize();
+		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository, relationshipRepository, propertyDefinitionRepository);
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();

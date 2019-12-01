@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl }        from '@angular/forms';
  
-import { QuestionBase, LevelDropdownMultipleQuestion }     from '../../../_model/dynamic-forms/questions';
+import { QuestionBase, MultipleSelectionEnumQuestion }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 
@@ -46,7 +46,7 @@ export class DynamicFormQuestionComponent implements OnInit{
     return level+"px";
   }
 
-  getMultipleValues(question: LevelDropdownMultipleQuestion) {
+  getMultipleValues(question: MultipleSelectionEnumQuestion) {
     let ret = '';
     
     if (!isNullOrUndefined(question.values)) {

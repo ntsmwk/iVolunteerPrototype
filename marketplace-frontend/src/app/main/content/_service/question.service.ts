@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion, LevelDropdownSingleQuestion, LevelDropdownMultipleQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
 } from '../_model/dynamic-forms/questions';
 
 import { PropertyType, ClassProperty } from '../_model/meta/Property';
@@ -48,6 +48,28 @@ export class QuestionService {
 
   private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
     let questions: QuestionBase<any>[] = [];
+
+    for (let enumRepresentation of enumRepresentations) {
+      let question: MultipleSelectionEnumQuestion | SingleSelectionEnumQuestion;
+
+      if (enumRepresentation.classDefinition.properties[0].multiple) {
+        question = new MultipleSelectionEnumQuestion(
+          //...
+    
+        )
+      } else {
+        question = new SingleSelectionEnumQuestion(
+          
+        )
+      }
+      
+      question.options = enumRepresentation.enumEntries;
+      question.key = enumRepresentation.classDefinition.id;
+      question.label = enumRepresentation.classDefinition.name;
+      question.required = enumRepresentation.classDefinition.properties[0].required;
+
+      questions.push(question);
+    }
 
     return questions;
   }

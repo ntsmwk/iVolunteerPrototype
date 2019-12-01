@@ -45,14 +45,14 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   ngOnInit() {
     let marketplaceId: string;
     let childClassIds: string[] = [];
-    
+
     Promise.all([
       this.route.params.subscribe(params => {
-       marketplaceId = params['marketplaceId'];
+        marketplaceId = params['marketplaceId'];
       }),
       this.route.queryParams.subscribe(queryParams => {
         let i = 0;
-        while(!isNullOrUndefined(queryParams[i])) {
+        while (!isNullOrUndefined(queryParams[i])) {
           childClassIds.push(queryParams[i]);
           i++;
         }
@@ -66,10 +66,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.formConfigurations = formConfigurations
 
           for (let config of this.formConfigurations) {
-              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-              
-              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-            
+            config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+            config.formEntry.questions.push(...this.questionService.getQuestionsFromEnumRepresenations(config.formEntry.enumRepresentations));
+
+            config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
           }
 
 
@@ -85,7 +85,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
   }
 
-  
+
 
   handleResultEvent(event: FormEntryReturnEventData) {
     let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
@@ -93,18 +93,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     })
 
     let classInstances: ClassInstance[] = [];
-      this.currentFormConfiguration.formEntry.formGroup.disable();
-      let propertyInstances: PropertyInstance<any>[] = [];
+    this.currentFormConfiguration.formEntry.formGroup.disable();
+    let propertyInstances: PropertyInstance<any>[] = [];
 
-      for (let classProperty of this.currentFormConfiguration.formEntry.classProperties) {
-        let values = [event.formGroup.value[classProperty.id]];
-        propertyInstances.push(new PropertyInstance(classProperty, values));
-      }
+    for (let classProperty of this.currentFormConfiguration.formEntry.classProperties) {
+      let values = [event.formGroup.value[classProperty.id]];
+      propertyInstances.push(new PropertyInstance(classProperty, values));
+    }
 
-      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-      classInstances.push(classInstance);
+    let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+    classInstances.push(classInstance);
 
-    
+
 
 
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {

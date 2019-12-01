@@ -37,6 +37,7 @@ export class EnumRepresentation {
     id: string;
     enumEntries: EnumEntry[];
     selectedEntries: EnumEntry[];
+    classDefinition: ClassDefinition;
 }
 
 export class EnumEntry {

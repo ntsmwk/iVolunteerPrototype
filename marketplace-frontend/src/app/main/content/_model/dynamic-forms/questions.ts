@@ -1,4 +1,5 @@
 import { ValidatorFn } from "@angular/forms";
+import { EnumEntry } from '../meta/form';
 
   export class QuestionBase<T> {
     value: T;
@@ -165,9 +166,9 @@ import { ValidatorFn } from "@angular/forms";
     }
   }
 
-  export class LevelDropdownSingleQuestion extends QuestionBase<any> {
-    controlType = 'level-dropdown-single'
-    options: {key: string, value: string}[] = [];
+  export class SingleSelectionEnumQuestion extends QuestionBase<any> {
+    controlType = 'enum-single'
+    options: EnumEntry[] = [];
 
     //+++ TODO
     constructor(options: {} = {}) {
@@ -176,9 +177,9 @@ import { ValidatorFn } from "@angular/forms";
     }
   }
 
-  export class LevelDropdownMultipleQuestion extends QuestionBase<any> {
-    controlType = 'level-dropdown-multiple'
-    options: {key: string, value: string}[] = [];
+  export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
+    controlType = 'enum-multiple'
+    options: EnumEntry[] = [];
 
     //+++ TODO
     constructor(options: {} = {}) {
