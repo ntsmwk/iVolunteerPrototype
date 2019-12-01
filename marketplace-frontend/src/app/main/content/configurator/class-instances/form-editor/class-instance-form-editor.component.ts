@@ -67,6 +67,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
           for (let config of this.formConfigurations) {
               config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+              
               config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
             
           }

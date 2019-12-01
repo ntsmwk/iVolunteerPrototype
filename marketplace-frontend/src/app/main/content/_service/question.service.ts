@@ -11,6 +11,7 @@ import { Validators, ValidatorFn } from '@angular/forms';
 
 import { minDate, maxOther, minOther, requiredOther } from "../_validator/custom.validators";
 import { PropertyConstraint, ConstraintType } from '../_model/meta/Constraint';
+import { EnumRepresentation } from '../_model/meta/form';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -30,21 +31,50 @@ export interface SingleValidatorData {
 export class QuestionService {
   key: number = 0;
 
-  getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
+  public getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
-
-    // console.log("Question Service called");
-    // console.log(properties);
-
-    questions = this.setQuestions(properties);
-
-    // console.log(questions);
-    // console.log("-->done with question setup");
+    questions = this.createQuestionsFromProperties(properties);
 
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestion(property: ClassProperty<any>): QuestionBase<any> {
+  //TODO
+  public getQuestionsFromEnumRepresenations(enumRepresentations: EnumRepresentation[]) {
+    let questions: QuestionBase<any>[] = [];
+    questions = this.createQuestionsFromEnumRepresentations(enumRepresentations);
+    
+    return questions.sort((a, b) =>  a.order - b.order);
+  }
+
+  private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
+    let questions: QuestionBase<any>[] = [];
+
+    return questions;
+  }
+
+  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
+    let questions: QuestionBase<any>[] = [];
+    for (let property of templateProperties) {
+
+      let question = this.createQuestionFromProperty(property);
+
+      question.key = property.id;
+      question.label = property.name;
+      question.order = property.position;
+
+      let validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
+
+      if (!isNullOrUndefined(validatorData)) {
+        question.validators = validatorData.validators;
+        question.required = validatorData.required;
+        question.messages = validatorData.messages;
+      }
+      questions.push(question);
+    }
+    return questions;
+  }
+
+  private createQuestionFromProperty(property: ClassProperty<any>): QuestionBase<any> {
     let question;
     if (property.type === PropertyType.TEXT) {
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
@@ -110,30 +140,18 @@ export class QuestionService {
         value: ClassProperty.getDefaultValue(property),
       });
 
-    } else if (property.type === PropertyType.LEVEL_LIST) {
-      if (property.multiple) {
-        question = new LevelDropdownMultipleQuestion({
-          values: property.defaultValues,
-          options: property.allowedValues
-        });
-      } else {
-      question = new LevelDropdownSingleQuestion({
-        values: property.defaultValues,
-        options: property.allowedValues
-      });
-    }
-      // if (property.multiple) {
-      //   //dropdown multiple
-      // } else {
-      //   //drowdown single
-      // }
-      // question = new DropdownMultipleQuestion({
-      //   values: this.setKeys(property.defaultValues),
-      //   // options: this.setListValues(property.allowedValues),
-      //   value: property.defaultValues,
-      //   options: property.allowedValues
-
-      // });
+    // } else if (property.type === PropertyType.LEVEL_LIST) {
+    //   if (property.multiple) {
+    //     question = new LevelDropdownMultipleQuestion({
+    //       values: property.defaultValues,
+    //       options: property.allowedValues
+    //     });
+    //   } else {
+    //   question = new LevelDropdownSingleQuestion({
+    //     values: property.defaultValues,
+    //     options: property.allowedValues
+    //   });
+    // }
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({
@@ -209,27 +227,6 @@ export class QuestionService {
     return ret;
   }
 
-  private setQuestions(templateProperties: ClassProperty<any>[]) {
-    let questions: QuestionBase<any>[] = [];
-    for (let property of templateProperties) {
-
-      let question = this.createQuestion(property);
-
-      question.key = property.id;
-      question.label = property.name;
-      question.order = property.position;
-
-      let validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
-
-      if (!isNullOrUndefined(validatorData)) {
-        question.validators = validatorData.validators;
-        question.required = validatorData.required;
-        question.messages = validatorData.messages;
-      }
-      questions.push(question);
-    }
-    return questions;
-  }
 
   private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType, required: boolean): ValidatorData {
     let validators: ValidatorFn[] = [];
