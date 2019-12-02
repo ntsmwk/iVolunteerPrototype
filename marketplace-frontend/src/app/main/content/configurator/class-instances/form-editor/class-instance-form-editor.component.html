@@ -1,24 +1,53 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
 
-    <h1>{{currentFormConfiguration.name}}</h1>
+    <div *ngIf="!canFinish">
+        <h1>{{currentFormConfiguration.name}}</h1>
 
-    <div>
 
         <div style="padding-top: 12px"></div>
-        <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions" [formDisabled]="false"
-            [formConfigurationId]="currentFormConfiguration.id" [form]="currentFormConfiguration.formEntry.formGroup"
-            (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
+        <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
+            [formDisabled]="false" [formConfigurationId]="currentFormConfiguration.id"
+            [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
+            (cancelEvent)="handleCancelEvent()">
         </app-dynamic-class-instance-creation-form>
+    </div>
+
+    <div *ngIf="canFinish">
+        <h1>Done creating Instances</h1>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 25px">
+            <div></div>
+
+            <div>
+                <div *ngFor="let instance of returnedClassInstances">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+
+                        <mat-icon style="color: green; font-size: 20pt">
+                            check
+                        </mat-icon>
+
+                        <div style="font-size: 12pt; padding-left: 10px">
+                            Saved {{instance.name}} - containing {{instance.properties.length}} Properties
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </div>
 
         <div style="padding-top: 10px"></div>
 
 
-        <button *ngIf="canFinish" type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
-            Finish
-        </button>
-
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
+            <div></div>
+            <button type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
+                Finish
+            </button>
+            <div></div>
+        </div>
 
     </div>
+
 
 
 

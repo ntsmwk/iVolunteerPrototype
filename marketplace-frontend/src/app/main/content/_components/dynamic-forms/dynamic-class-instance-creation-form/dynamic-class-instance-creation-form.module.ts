@@ -16,6 +16,6 @@ import { MatButtonModule, MatCommonModule, MatIconModule } from '@angular/materi
   ],
   declarations: [DynamicClassInstanceCreationFormComponent],
   exports: [DynamicClassInstanceCreationFormComponent]
-  
+
 })
 export class DynamicClassInstanceCreationFormModule { }

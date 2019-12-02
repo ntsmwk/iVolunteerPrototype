@@ -5,13 +5,11 @@ import { ClassDefinitionService } from '../../../_service/meta/core/class/class-
 import { ClassInstance } from '../../../_model/meta/Class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
-import { DataTransportService } from 'app/main/content/_service/data-transport/data-transport.service';
 import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
-import { config } from 'rxjs';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -24,6 +22,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   marketplace: Marketplace;
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
+
+  returnedClassInstances: ClassInstance[];
 
   canContinue: boolean;
   canFinish: boolean;
@@ -45,6 +45,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   ngOnInit() {
     let marketplaceId: string;
     let childClassIds: string[] = [];
+
+    this.returnedClassInstances = [];
 
     Promise.all([
       this.route.params.subscribe(params => {
@@ -101,6 +103,16 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       propertyInstances.push(new PropertyInstance(classProperty, values));
     }
 
+    for (let enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
+      let values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
+      let propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values)
+      propertyInstance.name = enumRepresentation.classDefinition.name;
+      propertyInstance.id = enumRepresentation.id;
+      propertyInstances.push(propertyInstance);
+    }
+
+    
+
     let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
     classInstances.push(classInstance);
 
@@ -110,7 +122,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
       if (!isNullOrUndefined(ret)) {
-        this.canContinue = true;
+        this.returnedClassInstances.push(...ret);
         this.handleNextClick();
       }
     });
