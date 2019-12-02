@@ -20,7 +20,7 @@ public class PersonCertificateService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
 	public void savePersonCertificate(List<PersonCertificate> personCertificates) {
-		ClassDefinition personCertificateClassDefinition = classDefinitionService.getByName("personCertificate");
+		ClassDefinition personCertificateClassDefinition = classDefinitionService.getByName("PersonCertificate");
 		if (personCertificateClassDefinition != null) {
 			for (PersonCertificate personCertificate : personCertificates) {
 				savePersonCertificate(personCertificateClassDefinition, personCertificate);

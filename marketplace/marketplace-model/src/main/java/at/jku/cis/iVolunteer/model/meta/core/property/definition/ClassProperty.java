@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -14,8 +15,8 @@ public class ClassProperty<T> {
 	@Id private String id;
 	private String name;
 
-	private List<T> defaultValues;
-	private List<T> allowedValues;
+	private List<T> defaultValues = new ArrayList<>();
+	private List<T> allowedValues = new ArrayList<>();
 
 	private PropertyType type;
 	private boolean multiple;
@@ -26,7 +27,7 @@ public class ClassProperty<T> {
 
 	private int position;
 
-	private List<PropertyConstraint<Object>> propertyConstraints;
+	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
 	public ClassProperty() {
 	}
