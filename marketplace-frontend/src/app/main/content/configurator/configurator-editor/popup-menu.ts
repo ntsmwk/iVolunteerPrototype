@@ -4,7 +4,8 @@ import { isNullOrUndefined } from "util";
 import { ClassDefinition } from "app/main/content/_model/meta/Class";
 import { PropertyItem } from "app/main/content/_model/meta/Property";
 import { Relationship, AssociationCardinality, Association } from "app/main/content/_model/meta/Relationship";
-import { defaultUrlMatcher } from "@angular/router/src/shared";
+
+declare var require;
 
 const mx: typeof mxgraph = require('mxgraph')({
     // mxDefaultLanguage: 'de',

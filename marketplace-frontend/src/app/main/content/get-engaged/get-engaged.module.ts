@@ -25,8 +25,7 @@ import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 
 const routes: Routes = [
   {path: '', component: FuseGetEngagedComponent},
-  {path: 'task', loadChildren: '../task-detail/task-detail.module#FuseTaskDetailModule'}
-  /*,{path: 'marketplace', loadChildren: '../marketplace-detail/marketplace-detail.module#FuseMarketplaceDetailModule'}*/
+  {path: 'task',   loadChildren: () => import(`../task-detail/task-detail.module`).then(m => m.FuseTaskDetailModule)}
 ];
 
 @NgModule({

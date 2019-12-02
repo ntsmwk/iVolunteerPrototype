@@ -67,8 +67,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   subMenuItems = subMenuItems;
   currentRootId = 1;
 
-  @ViewChild('menubarContainer') menubarContainer: ElementRef;
-  @ViewChild('submenuContainer') submenuContainer: ElementRef;
+  @ViewChild('menubarContainer', {static: true}) menubarContainer: ElementRef;
+  @ViewChild('submenuContainer', {static: true}) submenuContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponseAction: string;

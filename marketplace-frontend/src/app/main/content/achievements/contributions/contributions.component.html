@@ -1,7 +1,26 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-  <p>
-    Engaged By Means Of:
-    Resources / Competences / Time (contributed vs. available) / Distances / …
-  </p>
+
+    <ngx-charts-timeline-filter-bar-chart
+    [view]="view"
+    class="chart-container"
+    [scheme]="colorScheme"
+    [schemeType]="schemeType"
+    [results]="timelineFilterBarData"
+    [animations]="animations"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [showXAxisLabel]="showYAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [showGridLines]="showGridLines"
+    [noBarWhenZero]="noBarWhenZero"
+    (onFilter)="onFilter($event)"
+  >
+  </ngx-charts-timeline-filter-bar-chart>
+
+  <ngx-sunburst-chart [width]="700"
+  [data]="sunburstChartData" colorScheme="cool"></ngx-sunburst-chart>
 
 </div>

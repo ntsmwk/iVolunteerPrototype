@@ -15,6 +15,8 @@ import { FuseModule } from '@fuse/fuse.module';
 import { DragulaModule } from 'ng2-dragula';
 import { DataTransportService } from './main/content/_service/data-transport/data-transport.service';
 
+import { HttpClientModule } from '@angular/common/http'; 
+
 
 const appRoutes: Routes = [
   {
@@ -38,8 +40,12 @@ const appRoutes: Routes = [
     // Fuse Main and Shared modules
     FuseSharedModule,
     FuseModule.forRoot(fuseConfig),
-    FuseMainModule
-  ],
+    FuseMainModule,
+
+    HttpClientModule
+    
+
+    ],
   bootstrap: [
     AppComponent
   ],

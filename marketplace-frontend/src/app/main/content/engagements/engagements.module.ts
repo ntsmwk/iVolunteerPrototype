@@ -24,15 +24,16 @@ import {OpportunitiesComponent} from './opportunities/opportunities.component';
 import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
 import {FuseProjectTaskListModule} from '../_components/project-task-list/project-task-list.module';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
-import {CalendarModule} from 'angular-calendar';
 import {ColorPickerModule} from 'ngx-color-picker';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {FuseConfirmDialogModule, FuseWidgetModule} from '../../../../@fuse/components';
-import {FuseCalendarComponent} from './calendar/calendar.component';
 
 const routes: Routes = [
   {path: '', component: FuseEngagementsComponent},
-  {path: 'task', loadChildren: '../task-detail/task-detail.module#FuseTaskDetailModule'}
+  {path: 'task',   loadChildren: () => import(`../task-detail/task-detail.module`).then(m => m.FuseTaskDetailModule)
+}
+
+  
 ];
 
 @NgModule({
@@ -42,8 +43,7 @@ const routes: Routes = [
     CollaborationsComponent,
     ContributionsComponent,
     EncouragementsComponent,
-    OpportunitiesComponent,
-    FuseCalendarComponent
+    OpportunitiesComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -62,7 +62,6 @@ const routes: Routes = [
     MatToolbarModule,
     MatMenuModule,
 
-    CalendarModule.forRoot(),
     ColorPickerModule,
 
     FuseProjectMembersModule,

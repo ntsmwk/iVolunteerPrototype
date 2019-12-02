@@ -1,17 +1,17 @@
-import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
 
-import {FuseSharedModule} from '@fuse/shared.module';
+import { FuseSharedModule } from '@fuse/shared.module';
 
-import {FuseContentComponent} from 'app/main/content/content.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { FuseContentComponent } from 'app/main/content/content.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import {TokenInterceptor} from './_interceptor/token.interceptor';
-import {Http401Interceptor} from './_interceptor/http-401.interceptor';
+import { TokenInterceptor } from './_interceptor/token.interceptor';
+import { Http401Interceptor } from './_interceptor/http-401.interceptor';
 
-import {TokenGuard} from './_guard/token.guard';
-import {HelpSeekerGuard} from './_guard/help-seeker.guard';
-import {VolunteerGuard} from './_guard/volunteer.guard';
+import { TokenGuard } from './_guard/token.guard';
+import { HelpSeekerGuard } from './_guard/help-seeker.guard';
+import { VolunteerGuard } from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
 import { FlexProdOrHelpseekerGuard } from "./_guard/flexprod-helpseeker.guard";
@@ -24,124 +24,134 @@ import { DataTransportService } from './_service/data-transport/data-transport.s
 const routes: Route[] = [
   {
     path: 'login',
-    loadChildren: './login/login.module#FuseLoginModule'
+    loadChildren: () => import('./login/login.module').then(m => m.FuseLoginModule)
   },
   {
     path: 'main/dashboard',
-    loadChildren: './dashboard/dashboard.module#FuseDashboardModule',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.FuseDashboardModule),
     canActivate: [TokenGuard, LoginGuard]
   },
   {
     path: 'main/engagements',
-    loadChildren: './engagements/engagements.module#FuseEngagementsModule',
+    loadChildren: () => import('./engagements/engagements.module').then(m => m.FuseEngagementsModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
-  {
-    path: 'main/achievements',
-    loadChildren: './achievements/achievements.module#FuseAchievementsModule',
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
+   {
+     path: 'main/achievements',
+     loadChildren: () => import(`./achievements/achievements.module`).then(m => m.FuseAchievementsModule),
+     canActivate: [TokenGuard, VolunteerGuard]
+   },
   {
     path: 'main/get-connected',
-    loadChildren: './get-connected/get-connected.module#FuseGetConnectedModule',
+    loadChildren: () => import('./get-connected/get-connected.module').then(m => m.FuseGetConnectedModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/get-engaged',
-    loadChildren: './get-engaged/get-engaged.module#FuseGetEngagedModule',
+    loadChildren: () => import('./get-engaged/get-engaged.module').then(m => m.FuseGetEngagedModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/project-form',
-    loadChildren: './project-form/project-form.module#FuseProjectFormModule',
+    loadChildren: () => import('./project-form/project-form.module').then(m => m.FuseProjectFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/projects/all',
-    loadChildren: './project-list/project-list.module#FuseProjectListModule',
+    loadChildren: () => import('./project-list/project-list.module').then(m => m.FuseProjectListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task',
-    loadChildren: './task-detail/task-detail.module#FuseTaskDetailModule',
+    loadChildren: () => import('./task-detail/task-detail.module').then(m => m.FuseTaskDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task-form',
-    loadChildren: './task-form/task-form.module#FuseTaskFormModule',
+    loadChildren: () => import('./task-form/task-form.module').then(m => m.FuseTaskFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/tasks/all',
-    loadChildren: './task-list/task-list.module#FuseTaskListModule',
+    loadChildren: () => import('./task-list/task-list.module').then(m => m.FuseTaskListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
   //AK
-  { path: 'main/properties/all',
-    loadChildren: './property-list/property-list.module#PropertyListModule',
+  {
+    path: 'main/properties/all',
+    loadChildren: () => import('./property-list/property-list.module').then(m => m.PropertyListModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
   },
 
-  { path: 'main/property/detail/view',
-    loadChildren: './property-detail/property-detail.module#PropertyDetailModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-  
-
-  { path: 'main/property/detail/edit',
-    loadChildren: './property-build-form/property-build-form.module#PropertyBuildFormModule',
-    canActivate: [TokenGuard, HelpSeekerGuard]
-
-  },
-  { path: 'main/task-templates/user/all',
-    loadChildren: './user-defined-task-template-list/user-defined-task-template-list.module#UserDefinedTaskTemplateListModule',
+  {
+    path: 'main/property/detail/view',
+    loadChildren: () => import('./property-detail/property-detail.module').then(m => m.PropertyDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/task-templates/user/detail/single',
-    loadChildren: './user-defined-task-template-detail-single/user-defined-task-template-detail-single.module#SingleUserDefinedTaskTemplateDetailModule',
+
+  {
+    path: 'main/property/detail/edit',
+    loadChildren: () => import('./property-build-form/property-build-form.module').then(m => m.PropertyBuildFormModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+
+  },
+  {
+    path: 'main/task-templates/user/all',
+    loadChildren: () => import('./user-defined-task-template-list/user-defined-task-template-list.module').then(m => m.UserDefinedTaskTemplateListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/task-templates/user/edit',
-    loadChildren: './user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module#SingleUserDefinedTaskTemplateDetailFormModule',
+  {
+    path: 'main/task-templates/user/detail/single',
+    loadChildren: () => import('./user-defined-task-template-detail-single/user-defined-task-template-detail-single.module').then(m => m.SingleUserDefinedTaskTemplateDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/task-templates/user/detail/nested',
-    loadChildren: './user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module#NestedUserDefinedTaskTemplateDetailModule',
+  {
+    path: 'main/task-templates/user/edit',
+    loadChildren: () => import('./user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module').then(m => m.SingleUserDefinedTaskTemplateDetailFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/test-map-property',
-    loadChildren: './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module#MapPropertyTestModule',
+  {
+    path: 'main/task-templates/user/detail/nested',
+    loadChildren: () => import('./user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module').then(m => m.NestedUserDefinedTaskTemplateDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
-  { path: 'main/configurator',
-    loadChildren: './configurator/configurator.module#ConfiguratorModule',
+  {
+    path: 'main/test-map-property',
+    loadChildren: () => import('./_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module').then(m => m.MapPropertyTestModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
+  {
+    path: 'main/configurator',
+    loadChildren: () => import('./configurator/configurator.module').then(m => m.ConfiguratorModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
   },
 
-  { path: 'main/configurator/instance-editor',
-  loadChildren: './configurator/class-instances/form-editor/class-instance-form-editor.module#ClassInstanceFormEditorModule',
-  canActivate: [TokenGuard, HelpSeekerGuard]
+  {
+    path: 'main/configurator/instance-editor',
+    loadChildren: () => import('./configurator/class-instances/form-editor/class-instance-form-editor.module').then(m => m.ClassInstanceFormEditorModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   //!--AK
   {
     path: 'main/task-template-form',
-    loadChildren: './task-template-form/task-template-form.module#FuseTaskTemplateFormModule',
+    loadChildren: () => import('./task-template-form/task-template-form.module').then(m => m.FuseTaskTemplateFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/task-templates/all',
-    loadChildren: './task-template-list/task-template-list.module#FuseTaskTemplateListModule',
+    loadChildren: () => import('./task-template-list/task-template-list.module').then(m => m.FuseTaskTemplateListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/recruitment',
-    loadChildren: './recruit-view/recruit-view.module#RecruitViewModule',
+    loadChildren: () => import('./recruit-view/recruit-view.module').then(m => m.RecruitViewModule),
     canActivate: [TokenGuard, RecruiterGuard]
   }
 ];
@@ -151,15 +161,13 @@ const routes: Route[] = [
     FuseContentComponent,
   ],
   imports: [
-    HttpClientModule,
-
     RouterModule.forChild(routes),
 
     FuseSharedModule
-  ],
+    ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true },
     DataTransportService
 
   ],

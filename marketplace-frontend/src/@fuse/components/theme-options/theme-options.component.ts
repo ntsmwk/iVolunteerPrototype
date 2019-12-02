@@ -15,9 +15,9 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 export class FuseThemeOptionsComponent implements OnInit, OnDestroy
 {
     @Input() navigation;
-    @ViewChild('openButton') openButton;
-    @ViewChild('panel') panel;
-    @ViewChild('overlay') overlay: ElementRef;
+    @ViewChild('openButton', {static: true}) openButton;
+    @ViewChild('panel', {static: true}) panel;
+    @ViewChild('overlay', {static: true}) overlay: ElementRef;
 
     public player: AnimationPlayer;
     config: any;

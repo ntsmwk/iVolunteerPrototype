@@ -13,6 +13,8 @@ import {FuseToolbarModule} from 'app/main/toolbar/toolbar.module';
 import {FuseMainComponent} from './main.component';
 
 
+
+
 @NgModule({
   declarations: [FuseMainComponent],
   imports: [

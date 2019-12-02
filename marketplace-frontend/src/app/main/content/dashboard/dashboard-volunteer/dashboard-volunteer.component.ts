@@ -174,13 +174,13 @@ const FEEDBACK_DATA_CHANGED_4 = [
 })
 export class DashboardVolunteerComponent implements OnInit {
 
-  @ViewChild('myChart1') private chartRef1;
+  @ViewChild('myChart1', {static: true}) private chartRef1;
   chart1: any;
 
-  @ViewChild('myChart2') private chartRef2;
+  @ViewChild('myChart2', {static: true}) private chartRef2;
   chart2: any;
 
-  @ViewChild('myChart3') private chartRef3;
+  @ViewChild('myChart3', {static: true}) private chartRef3;
   chart3: any;
   chart3meta: any;
 

@@ -30,6 +30,11 @@ export class myMxCell extends mx.mxCell {
   property: boolean;
   propertyId?: string;
   newlyAdded: boolean;
+
+
+  constructor() {
+    super();
+  }
 }
 
 const sidebarPalettes = [
@@ -104,8 +109,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   }
 
-  @ViewChild('graphContainer') graphContainer: ElementRef;
-  @ViewChild('leftSidebarContainer') leftSidebarContainer: ElementRef;
+  @ViewChild('graphContainer', {static: true}) graphContainer: ElementRef;
+  @ViewChild('leftSidebarContainer', {static: true}) leftSidebarContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
 
@@ -251,7 +256,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
     //create class cell
-    let cell = new myMxCell(classDefinition.name, geometry, 'shape=swimlane');
+    let cell: myMxCell = new mx.mxCell(classDefinition.name, geometry, 'shape=swimlane') as myMxCell;
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
     cell.cellType = 'class';
@@ -309,14 +314,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
     let cell: myMxCell;
     if (r.relationshipType == RelationshipType.INHERITANCE) {
-      cell = new myMxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.inheritance);
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.inheritance) as myMxCell;
       cell.cellType = 'inheritance'
 
     } else if (r.relationshipType == RelationshipType.ASSOCIATION) {
-      cell = new myMxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.association);
+      cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.association) as myMxCell;
       cell.cellType = 'association';
 
-      let cell1 = new myMxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), mxStyles.associationCell);
+      let cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), mxStyles.associationCell) as myMxCell;
       cell1.geometry.relative = true;
       cell1.setConnectable(false);
       cell1.vertex = true;
@@ -327,7 +332,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       }
       cell.insert(cell1);
 
-      let cell2 = new myMxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), mxStyles.associationCell);
+      let cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), mxStyles.associationCell) as myMxCell;
       cell2.geometry.relative = true;
       cell2.setConnectable(false);
       cell2.vertex = true;

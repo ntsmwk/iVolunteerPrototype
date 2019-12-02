@@ -11,7 +11,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 const routes: Routes = [
   {path: '', component: FuseGetConnectedComponent},
-  {path: 'group', loadChildren: '../group-detail/group-detail.module#FuseGroupDetailModule'}
+  {path: 'group', loadChildren: () => import(`../group-detail/group-detail.module`).then(m => m.FuseGroupDetailModule)}
+ 
 ];
 
 @NgModule({

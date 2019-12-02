@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FuseDirectivesModule } from '@fuse/directives/directives';
 import { FusePipesModule } from '@fuse/pipes/pipes.module';
 
+
 @NgModule({
     imports  : [
         CommonModule,
@@ -17,6 +18,7 @@ import { FusePipesModule } from '@fuse/pipes/pipes.module';
 
         FuseDirectivesModule,
         FusePipesModule
+        
     ],
     exports  : [
         CommonModule,
