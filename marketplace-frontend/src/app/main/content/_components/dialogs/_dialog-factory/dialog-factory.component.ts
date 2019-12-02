@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { PropertyItem, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';

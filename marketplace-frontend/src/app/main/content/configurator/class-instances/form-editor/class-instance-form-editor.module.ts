@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-form/dynamic-form.module';
 
 const routes = [
-  {path: ':marketplaceId', component: ClassInstanceFormEditorComponent}
+  { path: ':marketplaceId', component: ClassInstanceFormEditorComponent }
 ];
 
 @NgModule({
@@ -21,7 +21,7 @@ const routes = [
     CommonModule,
     RouterModule.forChild(routes),
 
-    
+
     MatCommonModule,
     MatProgressSpinnerModule,
     MatIconModule,

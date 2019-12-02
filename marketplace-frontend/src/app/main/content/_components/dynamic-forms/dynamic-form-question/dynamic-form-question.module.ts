@@ -9,8 +9,6 @@ import { DynamicFormQuestionComponent } from './dynamic-form-question.component'
 //import { DynamicFormModule } from "../dynamic-form/dynamic-form.module";
 import { GermanDateAdapter } from '../../../_adapter/german-date-adapter';
 import { DynamicFormErrorModule } from "../dynamic-form-error/dynamic-form-error.module";
-
-
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -30,27 +28,25 @@ import {
   MatNativeDateModule,
   DateAdapter,
   MatListModule,
-
-  
 } from '@angular/material';
 
 
 @NgModule({
   imports: [
-    CommonModule, ReactiveFormsModule, 
+    CommonModule, ReactiveFormsModule,
 
-    MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatChipsModule, 
-    MatDividerModule, MatIconModule, MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule, 
+    MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatChipsModule,
+    MatDividerModule, MatIconModule, MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule,
     MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule,
     MatListModule,
-    
+
     FuseSharedModule,
     DynamicFormErrorModule
   ],
   declarations: [DynamicFormQuestionComponent],
   exports: [DynamicFormQuestionComponent],
   providers: [
-    {provide: DateAdapter, useClass: GermanDateAdapter},
+    { provide: DateAdapter, useClass: GermanDateAdapter },
   ]
 })
 export class DynamicFormQuestionModule { }

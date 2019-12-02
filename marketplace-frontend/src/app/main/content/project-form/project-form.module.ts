@@ -1,6 +1,10 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {DateAdapter, MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseProjectFormComponent} from './project-form.component';
 import {GermanDateAdapter} from '../_adapter/german-date-adapter';

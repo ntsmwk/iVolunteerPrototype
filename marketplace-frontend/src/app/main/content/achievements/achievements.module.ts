@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
-
 import {FuseSharedModule} from '@fuse/shared.module';
-
 import {
   MatButtonModule,
   MatDividerModule,
@@ -30,6 +28,12 @@ import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
 
+
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TimelineFilterBarChartComponent } from './timeline-filter-bar-chart/timeline-filter-bar-chart.component';
+import { SunburstChartComponent } from './sunburst-chart/sunburst-chart.component';
+
+
 const routes = [
   {path: '**', component: FuseAchievementsComponent}
 ];
@@ -40,7 +44,9 @@ const routes = [
     CollaborationsComponent,
     ContributionsComponent,
     EncouragementsComponent,
-    OpportunitiesComponent
+    OpportunitiesComponent,
+    TimelineFilterBarChartComponent,
+    SunburstChartComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -67,8 +73,12 @@ const routes = [
     FuseConfirmDialogModule,
     FuseWidgetModule,
 
-    NgbModalModule
-  ]
+    NgbModalModule,
+
+    NgxChartsModule
+    
+    
+    ]
 })
 
 export class FuseAchievementsModule {

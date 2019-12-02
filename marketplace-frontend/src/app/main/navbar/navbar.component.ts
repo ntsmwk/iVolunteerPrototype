@@ -23,14 +23,16 @@ import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
   providers: [LoginService],
   encapsulation: ViewEncapsulation.None
 })
+
 export class FuseNavbarComponent implements OnInit, OnDestroy {
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
 
-  @ViewChild(FusePerfectScrollbarDirective) set directive(theDirective: FusePerfectScrollbarDirective) {
+  @ViewChild(FusePerfectScrollbarDirective, { static: true }) set directive(theDirective: FusePerfectScrollbarDirective) {
     if (!theDirective) {
       return;
     }
   }
+
 
   @Input() layout;
   navigation: any;
@@ -84,7 +86,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
   }
 
 
-
   ngOnDestroy() {
     if (this.fusePerfectScrollbarUpdateTimeout) {
       clearTimeout(this.fusePerfectScrollbarUpdateTimeout);
@@ -94,4 +95,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       this.navigationServiceWatcher.unsubscribe();
     }
   }
+
+  toggleSidebarOpened() {
+    this.sidebarService.getSidebar('navbar').toggleOpen();
+  }
+  toggleSidebarFolded() {
+    this.sidebarService.getSidebar('navbar').toggleFold();
+  }
+
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import {fuseAnimations} from '@fuse/animations';
 import {Router} from '@angular/router';
 import {CoreMarketplaceService} from '../_service/core-marketplace.service';

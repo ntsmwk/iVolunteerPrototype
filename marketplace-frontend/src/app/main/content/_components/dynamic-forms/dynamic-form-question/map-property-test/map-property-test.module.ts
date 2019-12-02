@@ -4,7 +4,10 @@ import { MapPropertyTestComponent } from './map-property-test.component';
 import { FuseSharedModule } from "@fuse/shared.module";
 import { RouterModule, Route } from '@angular/router';
 import { AgmCoreModule } from '@agm/core';
-import { MatInputModule, MatButtonModule, MatCommonModule, MatFormFieldModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCommonModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { DragulaModule } from 'ng2-dragula';
 
 
