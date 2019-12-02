@@ -18,6 +18,6 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   declarations: [DynamicClassInstanceCreationFormComponent],
   exports: [DynamicClassInstanceCreationFormComponent]
-  
+
 })
 export class DynamicClassInstanceCreationFormModule { }
