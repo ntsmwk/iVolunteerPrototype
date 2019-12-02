@@ -19,16 +19,14 @@ public class PersonTaskService {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
-	
 	public void savePersonTasks(List<PersonTask> personTasks) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("personTask");
-		if(personTaskClassDefinition != null) {
-			for(PersonTask personTask : personTasks) {
+		if (personTaskClassDefinition != null) {
+			for (PersonTask personTask : personTasks) {
 				savePersonTask(personTaskClassDefinition, personTask);
 			}
 		}
 	}
-
 
 	private void savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
 		// @formatter:off
@@ -52,9 +50,9 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskGeoInformation")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskGeoInformation(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerUUID(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
 		classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on
 	}
 
-	
 }

@@ -40,6 +40,7 @@ public class PersonCertificateService {
 		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("certificateIcon")).forEach(p -> p.setValues(Lists.asList(personCertificate.getCertificateIcon(), new Object[0])));
 		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personCertificate.getiVolunteerUUID(), new Object[0])));
 		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personCertificate.getiVolunteerSource(), new Object[0])));
+		personCertificateClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personCertificate.getPersonID(), new Object[0])));
 		classInstanceRepository.save(personCertificateClassInstance);		 
 		// @formatter:on
 	}

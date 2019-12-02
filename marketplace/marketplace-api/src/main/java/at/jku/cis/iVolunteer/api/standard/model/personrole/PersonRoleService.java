@@ -40,6 +40,7 @@ public class PersonRoleService {
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("dateFrom")).forEach(p -> p.setValues(Lists.asList(personRole.getDateFrom(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("dateTo")).forEach(p -> p.setValues(Lists.asList(personRole.getDateTo(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personRole.getiVolunteerSource(), new Object[0])));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personRole.getPersonID(), new Object[0])));
 		classInstanceRepository.save(personRoleClassInstance); 
 		// @formatter:on
 	}
