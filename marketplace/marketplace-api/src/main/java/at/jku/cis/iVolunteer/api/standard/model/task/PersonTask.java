@@ -9,10 +9,17 @@ public class PersonTask {
 	@Id
 	private String id;
 	private String taskID;
+	private String taskName;
 	private String taskType1;
 	private String taskType2;
-	private String taskName;
+	private String taskType3;
+	private String taskType4;
 	private String taskDescription;
+	private String taskRoleID;
+	private String taskRole;
+	private String taskVehicleID;
+	private String taskVehicle;
+	private String taskCountAll;
 	private String taskDateFrom;
 	private String taskDateTo;
 	private String taskDuration;
@@ -146,6 +153,62 @@ public class PersonTask {
 
 	public void setPersonID(String personID) {
 		this.personID = personID;
+	}
+
+	public String getTaskType3() {
+		return taskType3;
+	}
+
+	public void setTaskType3(String taskType3) {
+		this.taskType3 = taskType3;
+	}
+
+	public String getTaskType4() {
+		return taskType4;
+	}
+
+	public void setTaskType4(String taskType4) {
+		this.taskType4 = taskType4;
+	}
+
+	public String getTaskRoleID() {
+		return taskRoleID;
+	}
+
+	public void setTaskRoleID(String taskRoleID) {
+		this.taskRoleID = taskRoleID;
+	}
+
+	public String getTaskRole() {
+		return taskRole;
+	}
+
+	public void setTaskRole(String taskRole) {
+		this.taskRole = taskRole;
+	}
+
+	public String getTaskVehicleID() {
+		return taskVehicleID;
+	}
+
+	public void setTaskVehicleID(String taskVehicleID) {
+		this.taskVehicleID = taskVehicleID;
+	}
+
+	public String getTaskVehicle() {
+		return taskVehicle;
+	}
+
+	public void setTaskVehicle(String taskVehicle) {
+		this.taskVehicle = taskVehicle;
+	}
+
+	public String getTaskCountAll() {
+		return taskCountAll;
+	}
+
+	public void setTaskCountAll(String taskCountAll) {
+		this.taskCountAll = taskCountAll;
 	}
 
 }

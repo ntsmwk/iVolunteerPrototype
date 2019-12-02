@@ -7,22 +7,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
-
 @RestController
-
 @RequestMapping("/api/standard/PersonBadges")
 public class PersonBadgeController {
 
-	@Autowired private PersonBadgeRepository personBadgeRepository;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-//	@Autowired private ClassDefinitionRe classDefinitionService;
+	@Autowired private PersonBadgeService personBadgeService;
 
 	@PutMapping
 	public void savePersonBadge(List<PersonBadge> badges) {
-		// TODO create class definition & instances...
-//		classDefinition2InstanceMapper.toTarget(source)
-		personBadgeRepository.save(badges);
+		personBadgeService.savePersonBadges(badges);
 	}
 
 }

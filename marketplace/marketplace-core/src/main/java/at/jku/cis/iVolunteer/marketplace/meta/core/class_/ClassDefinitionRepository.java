@@ -13,4 +13,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 public interface ClassDefinitionRepository extends MongoRepository<ClassDefinition, String> {
 	
 	List<ClassDefinition> getByClassArchetype(ClassArchetype classArchetype);
+	
+	ClassDefinition getByName(String name);
 }

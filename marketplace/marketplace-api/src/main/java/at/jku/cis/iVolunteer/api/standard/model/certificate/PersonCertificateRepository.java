@@ -7,8 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonCertificateRepository extends MongoRepository<PersonCertificate, String>{
-
+public interface PersonCertificateRepository extends MongoRepository<PersonCertificate, String> {
 
 	@Query("{personID:?0}")
 	List<PersonCertificate> findByPersonID(String personID);

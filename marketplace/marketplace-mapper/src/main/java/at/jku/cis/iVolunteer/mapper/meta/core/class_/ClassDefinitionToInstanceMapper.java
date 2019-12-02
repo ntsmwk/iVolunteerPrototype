@@ -14,6 +14,8 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassI
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Component
 public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefinition, ClassInstance> {
@@ -50,11 +52,11 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		classInstance.setName(source.getName());
 
-//		List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
-//		for (ClassProperty<Object> classProperty : source.getProperties()) {
-//			properties.add(cPTPIMapper.toTarget(classProperty));
-//		}
-//		classInstance.setProperties(properties);
+		List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
+		for (ClassProperty<Object> classProperty : source.getProperties()) {
+			properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
+		}
+		classInstance.setProperties(properties);
 
 		return classInstance;
 	}

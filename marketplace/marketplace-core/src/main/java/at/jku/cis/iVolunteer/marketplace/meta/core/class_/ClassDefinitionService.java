@@ -27,38 +27,42 @@ public class ClassDefinitionService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 
-	ClassDefinition getClassDefinitionById(String id) {
+	public ClassDefinition getByName(String name) {
+		return classDefinitionRepository.getByName(name);
+	}
+	
+	public ClassDefinition getClassDefinitionById(String id) {
 		return classDefinitionRepository.findOne(id);
 	}
 
-	List<ClassDefinition> getClassDefinitonsById(List<String> ids) {
+	public List<ClassDefinition> getClassDefinitonsById(List<String> ids) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 		return classDefinitions;
 	}
 
-	ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
+	public ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
 		return classDefinitionRepository.save(classDefinitionDTO);
 	}
 
-	ClassDefinition changeClassDefinitionName(String id, String newName) {
+	public ClassDefinition changeClassDefinitionName(String id, String newName) {
 		ClassDefinition clazz = classDefinitionRepository.findOne(id);
 		clazz.setName(newName);
 		return (classDefinitionRepository.save(clazz));
 	}
 
-	List<ClassDefinition> deleteClassDefinition(List<String> idsToRemove) {
+	public List<ClassDefinition> deleteClassDefinition(List<String> idsToRemove) {
 		for (String id : idsToRemove) {
 			classDefinitionRepository.delete(id);
 		}
 		return classDefinitionRepository.findAll();
 	}
 
-	List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
+	public  List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
 		return classDefinitionRepository.save(classDefinitions);
 	}
 
-	List<FormConfiguration> getParentsById(List<String> childIds) {
+	public List<FormConfiguration> getParentsById(List<String> childIds) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
 		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
 
@@ -165,7 +169,7 @@ public class ClassDefinitionService {
 	}
 
 	// TODO @Alex implement
-	List<String> getChildrenById(List<String> rootIds) {
+	public List<String> getChildrenById(List<String> rootIds) {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
