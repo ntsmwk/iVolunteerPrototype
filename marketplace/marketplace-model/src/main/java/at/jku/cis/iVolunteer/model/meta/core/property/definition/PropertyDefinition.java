@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -15,7 +16,7 @@ public class PropertyDefinition<T> {
 	private String id;
 	private String name;
 	
-	private List<T> allowedValues;
+	private List<T> allowedValues = new ArrayList<>();
 	
 	private boolean custom;
 	private boolean multiple;
@@ -23,7 +24,7 @@ public class PropertyDefinition<T> {
 	protected PropertyType type;
 	
 	private boolean required;
-	private List<PropertyConstraint<Object>> propertyConstraints;
+	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 	
 	
 	public PropertyDefinition() {

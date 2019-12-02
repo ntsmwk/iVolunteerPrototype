@@ -20,7 +20,7 @@ public class PersonBadgeService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
 	public void savePersonBadges(List<PersonBadge> personBadges) {
-		ClassDefinition personBadgeClassDefinition = classDefinitionService.getByName("personBadge");
+		ClassDefinition personBadgeClassDefinition = classDefinitionService.getByName("PersonBadge");
 		if (personBadgeClassDefinition != null) {
 			for (PersonBadge personBadge : personBadges) {
 				savePersonBadge(personBadgeClassDefinition, personBadge);

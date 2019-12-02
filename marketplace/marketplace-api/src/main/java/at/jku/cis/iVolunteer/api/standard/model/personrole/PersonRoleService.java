@@ -20,7 +20,7 @@ public class PersonRoleService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
 	public void savePersonRoles(List<PersonRole> personRoles) {
-		ClassDefinition personRoleClassDefinition = classDefinitionService.getByName("personRole");
+		ClassDefinition personRoleClassDefinition = classDefinitionService.getByName("PersonRole");
 		if (personRoleClassDefinition != null) {
 			for (PersonRole personRole : personRoles) {
 				savePersonRole(personRoleClassDefinition, personRole);

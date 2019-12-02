@@ -20,7 +20,7 @@ public class PersonTaskService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
 	public void savePersonTasks(List<PersonTask> personTasks) {
-		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("personTask");
+		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
 				savePersonTask(personTaskClassDefinition, personTask);
