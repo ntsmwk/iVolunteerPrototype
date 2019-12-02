@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
@@ -12,19 +11,19 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 @Service
 public class FinalizationService {
 
-	@Autowired private ConfiguratorRepository configuratorRepository;
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
-
 	
-	public void finalize() {
-		classDefinitionRepository.deleteAll();
-		relationshipRepository.deleteAll();
-		classInstanceRepository.deleteAll();
-		configuratorRepository.deleteAll();
-		propertyDefinitionsRepository.deleteAll();
+	
+	FinalizationService() {
+		
+	}
+
+//TODO 
+	public void destroy(ConfiguratorRepository configuratorRepository, ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository, RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository) {
+//		classDefinitionRepository.deleteAll();
+//		relationshipRepository.deleteAll();
+//		classInstanceRepository.deleteAll();
+//		configuratorRepository.deleteAll();
+//		propertyDefinitionRepository.deleteAll();
 
 	}
 	
