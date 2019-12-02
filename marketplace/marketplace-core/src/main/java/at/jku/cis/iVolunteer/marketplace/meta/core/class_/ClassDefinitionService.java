@@ -14,6 +14,8 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -61,6 +63,10 @@ public class ClassDefinitionService {
 	public  List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
 		return classDefinitionRepository.save(classDefinitions);
 	}
+	
+	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype) {
+		return classDefinitionRepository.getByClassArchetype(archetype);
+	}
 
 	public List<FormConfiguration> getParentsById(List<String> childIds) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
@@ -93,7 +99,7 @@ public class ClassDefinitionService {
 					}
 				}
 				
-				List<Relationship> associationList = relationshipRepository.findBySourceAndRelationshipType(currentClassDefinition.getId(), RelationshipType.ASSOCIATION);
+				List<Relationship> associationList =  (relationshipRepository.findBySourceAndRelationshipType(currentClassDefinition.getId(), RelationshipType.ASSOCIATION));
 				
 				
 				if (associationList != null) {
@@ -108,6 +114,15 @@ public class ClassDefinitionService {
 						ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
 						EnumRepresentation enumRepresentation = createEnumRepresentation(classDefinition);
 						enumRepresentation.setClassDefinition(classDefinition);
+						
+						if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
+							enumRepresentation.getClassDefinition().getProperties().get(0).setMultiple(false);
+							
+						} else if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONESTAR)) {
+							enumRepresentation.getClassDefinition().getProperties().get(0).setMultiple(true);
+						}
+
+						
 						formEntry.getEnumRepresentations().add(enumRepresentation);
 					}
 				}
@@ -182,8 +197,6 @@ public class ClassDefinitionService {
 		return null;
 	}
 
-	public List<ClassDefinition> getClassDefinitionByArchetype(ClassArchetype archetype) {
-		return classDefinitionRepository.getByClassArchetype(archetype);
-	}
+
 
 }

@@ -19,11 +19,11 @@ public class FinalizationService {
 
 //TODO 
 	public void destroy(ConfiguratorRepository configuratorRepository, ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository, RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository) {
-//		classDefinitionRepository.deleteAll();
-//		relationshipRepository.deleteAll();
-//		classInstanceRepository.deleteAll();
-//		configuratorRepository.deleteAll();
-//		propertyDefinitionRepository.deleteAll();
+		classDefinitionRepository.deleteAll();
+		relationshipRepository.deleteAll();
+		classInstanceRepository.deleteAll();
+		configuratorRepository.deleteAll();
+		propertyDefinitionRepository.deleteAll();
 
 	}
 	
