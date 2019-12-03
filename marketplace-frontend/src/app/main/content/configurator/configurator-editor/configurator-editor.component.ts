@@ -119,6 +119,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('leftSidebarContainer', { static: true }) leftSidebarContainer: ElementRef;
+  @ViewChild('rightSidebarContainer', {static: true}) rightSidebarContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
 
@@ -158,7 +159,16 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     this.leftSidebarContainer.nativeElement.style.top = '25px';
     this.leftSidebarContainer.nativeElement.style.width = '200px';
     this.leftSidebarContainer.nativeElement.style.bottom = '0px';
-    this.leftSidebarContainer.nativeElement.style.background = 'lightgrey';
+    this.leftSidebarContainer.nativeElement.style.background = 'ebebeb';
+
+    this.rightSidebarContainer.nativeElement.style.position = 'absolute';
+    this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
+    this.rightSidebarContainer.nativeElement.style.padding = '2px';
+    this.rightSidebarContainer.nativeElement.style.right = '0px';
+    this.rightSidebarContainer.nativeElement.style.top = '25px';
+    this.rightSidebarContainer.nativeElement.style.width = '150px';
+    this.rightSidebarContainer.nativeElement.style.bottom = '0px';
+    this.rightSidebarContainer.nativeElement.style.background = 'ebebeb';
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -170,12 +180,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level") {
+      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     }
 
-    //  this.container.nativeElement.style.background = 'url("editors/images/grid.gif")';
+    //  this.graphContainer.nativeElement.style.background = 'url("assets/mxgraph_resources/images/grid.gif")';
 
     if (!mx.mxClient.isBrowserSupported()) {
       mx.mxUtils.error('Browser is not supported!', 200, false);
@@ -197,7 +207,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
         outer.handleMXGraphClickEvent(evt);
       });
 
-      this.clearEditor();
+      this.showServerContent(true);
     }
   }
 
@@ -206,9 +216,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     return this.popupMenu.createPopupMenuHandler(graph);
   }
 
-  showServerContent() {
+  showServerContent(newGraph: boolean) {
     this.clearEditor();
-    this.parseServerContent();
+    if (newGraph) {
+      this.addStandardObjects();
+    }
+    this.parseGraphContent();
     this.setLayout('vertical');
   }
 
@@ -221,7 +234,78 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private parseServerContent() {
+  private addStandardObjects() {
+    let fwPassEintrag = new ClassDefinition();
+    fwPassEintrag.id = this.objectIdService.getNewObjectId();
+    fwPassEintrag.marketplaceId = this.marketplace.id;
+    fwPassEintrag.name = "Freiwilligenpass-\nEintrag";
+    fwPassEintrag.root = true;
+    fwPassEintrag.classArchetype = ClassArchetype.ROOT;
+    this.configurableClasses.push(fwPassEintrag);
+
+    let task = new ClassDefinition();
+    task.id = this.objectIdService.getNewObjectId();
+    task.marketplaceId = this.marketplace.id;
+    task.name = "Task";
+    task.classArchetype = ClassArchetype.TASK_HEAD;
+    this.configurableClasses.push(task);
+
+    let r1 = new Inheritance();
+    r1.id = this.objectIdService.getNewObjectId();
+    r1.relationshipType = RelationshipType.INHERITANCE;
+    r1.target = task.id;
+    r1.source = fwPassEintrag.id;
+    r1.superClassId = r1.source;
+    this.relationships.push(r1);
+
+    let competence = new ClassDefinition();
+    competence.id = this.objectIdService.getNewObjectId();
+    competence.marketplaceId = this.marketplace.id;
+    competence.name = "Competence";
+    competence.classArchetype = ClassArchetype.COMPETENCE_HEAD;
+    this.configurableClasses.push(competence);
+
+    let r2 = new Inheritance();
+    r2.id = this.objectIdService.getNewObjectId();
+    r2.relationshipType = RelationshipType.INHERITANCE;
+    r2.target = competence.id;
+    r2.source = fwPassEintrag.id;
+    r2.superClassId = r2.source;
+    this.relationships.push(r2);
+
+    let achievement = new ClassDefinition();
+    achievement.id = this.objectIdService.getNewObjectId();
+    achievement.marketplaceId = this.marketplace.id;
+    achievement.name = "Achievement";
+    achievement.classArchetype = ClassArchetype.ACHIEVEMENT_HEAD;
+    this.configurableClasses.push(achievement);
+
+    let r3 = new Inheritance();
+    r3.id = this.objectIdService.getNewObjectId();
+    r3.relationshipType = RelationshipType.INHERITANCE;
+    r3.target = achievement.id;
+    r3.source = fwPassEintrag.id;
+    r3.superClassId = r3.source;
+    this.relationships.push(r3);
+
+    let funktion = new ClassDefinition();
+    funktion.id = this.objectIdService.getNewObjectId();
+    funktion.marketplaceId = this.marketplace.id;
+    funktion.name = "Function";
+    funktion.classArchetype = ClassArchetype.FUNCTION_HEAD;
+    this.configurableClasses.push(funktion);
+
+    let r4 = new Inheritance();
+    r4.id = this.objectIdService.getNewObjectId();
+    r4.relationshipType = RelationshipType.INHERITANCE;
+    r4.target = funktion.id;
+    r4.source = fwPassEintrag.id;
+    r4.superClassId = r4.source;
+    this.relationships.push(r4);
+
+  }
+
+  private parseGraphContent() {
     this.parseIncomingClasses();
     this.parseIncomingRelationships();
   }
@@ -297,32 +381,37 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       }
     }
 
-    if (cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY) {
-      //create add icon
+    //add property icon
+    if (cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ROOT && cell.classArchetype != ClassArchetype.ENUM_ENTRY && !cell.classArchetype.endsWith("_HEAD")) {  
       let addIcon: myMxCell = this.graph.insertVertex(cell, "add", 'add', 5, i + 50, 20, 20, mxStyles.addIcon) as myMxCell;
       addIcon.setConnectable(false);
       addIcon.cellType = 'add';
+    }
 
+    //add association icon
+    if (cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ROOT && cell.classArchetype != ClassArchetype.ENUM_ENTRY && !cell.classArchetype.endsWith("_HEAD")) {
       let downAssociationIcon: myMxCell = this.graph.insertVertex(cell, "add association", "add_association", 45, i + 50, 20, 20, mxStyles.addClassNewLevelAssociationIcon) as myMxCell;
       downAssociationIcon.setConnectable(false);
       downAssociationIcon.cellType = "add_association";
-
     }
 
-    if (cell.classArchetype != ClassArchetype.ENUM_HEAD) {
+    //next icon
+    if (cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ROOT && cell.classArchetype && !cell.classArchetype.endsWith("_HEAD")) {
       let nextIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_same_level", 85, i + 50, 20, 20, mxStyles.addClassSameLevelIcon) as myMxCell;
       nextIcon.setConnectable(false);
       nextIcon.cellType = 'add_class_same_level';
 
     }
 
-    let downIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_new_level", 65, i + 50, 20, 20, mxStyles.addClassNewLevelIcon) as myMxCell;
-    downIcon.setConnectable(false);
-    downIcon.cellType = 'add_class_new_level';
+    //down icon
+    if (cell.classArchetype != ClassArchetype.ROOT) {
+      let downIcon: myMxCell = this.graph.insertVertex(cell, "add another", "add_class_new_level", 65, i + 50, 20, 20, mxStyles.addClassNewLevelIcon) as myMxCell;
+      downIcon.setConnectable(false);
+      downIcon.cellType = 'add_class_new_level';
+    }
 
-
-    //create remove icon
-    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY) {
+    //remove icon
+    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY && cell.classArchetype != ClassArchetype.ROOT && !cell.classArchetype.endsWith("_HEAD")) {
       let removeIcon: myMxCell = this.graph.insertVertex(cell, "remove", 'remove', 25, i + 50, 20, 20, mxStyles.removeIcon) as myMxCell;
       removeIcon.setConnectable(false);
       removeIcon.cellType = 'remove';
@@ -431,7 +520,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
     // let savedGeometry = this.saveGeometry();
     this.clearEditor();
-    this.parseServerContent();
+    this.showServerContent(false);
     // this.restoreGeometry(savedGeometry);
 
     this.setLayout('vertical');
@@ -551,11 +640,15 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
         let addedClass = new ClassDefinition();
         addedClass.properties = [];
 
-        if ((cell.getParent() as myMxCell).classArchetype == ClassArchetype.ENUM_HEAD || (cell.getParent() as myMxCell).classArchetype == ClassArchetype.ENUM_ENTRY) {
+        let parentClassArchetype = (cell.getParent() as myMxCell).classArchetype
+        if (parentClassArchetype == ClassArchetype.ENUM_HEAD || parentClassArchetype == ClassArchetype.ENUM_ENTRY) {
           addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+        } else if (parentClassArchetype.endsWith("_HEAD")) {
+          addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length-5)];
         } else {
           addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         }
+
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
         let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
         cret.id = this.objectIdService.getNewObjectId();
@@ -603,10 +696,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
         rret.id = addedRelationship.id;
         this.relationships.push(addedRelationship);
-
-        console.log("_--------")
-        console.log(rret);
-        console.log("_--------")
 
         this.updateModel();
         this.redrawContent();
@@ -792,10 +881,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   }
 
   newGraph() {
-    this.clearEditor();
     this.configurableClasses = [];
     this.relationships = [];
     this.currentConfigurator = undefined;
+    this.showServerContent(true);
   }
 
   openGraph(configurator: Configurator) {
@@ -821,7 +910,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       })
     ]).then(() => {
       //draw graph
-      this.showServerContent();
+      this.showServerContent(false);
     });
 
   }
@@ -879,20 +968,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
-
-
-
-
-
-
-
   navigateBack() {
     window.history.back();
   }
-
-
 
   //DEBUG 
 
