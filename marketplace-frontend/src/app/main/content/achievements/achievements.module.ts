@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {FuseSharedModule} from '@fuse/shared.module';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { FuseSharedModule } from '@fuse/shared.module';
 import {
   MatButtonModule,
   MatDividerModule,
@@ -17,16 +17,18 @@ import {
   MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
-import {FuseAchievementsComponent} from './achievements.component';
-import {FuseConfirmDialogModule, FuseWidgetModule} from '../../../../@fuse/components';
-import {CollaborationsComponent} from './collaborations/collaborations.component';
-import {ContributionsComponent} from './contributions/contributions.component';
-import {EncouragementsComponent} from './encouragements/encouragements.component';
-import {OpportunitiesComponent} from './opportunities/opportunities.component';
-import {FuseProjectTaskListModule} from '../_components/project-task-list/project-task-list.module';
-import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
-import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
-import {FuseProjectMembersModule} from '../_components/project-members/project-members.module';
+import { FuseAchievementsComponent } from './achievements.component';
+import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
+
+import { ActivitiesComponent } from './activities/activities.component';
+import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
+import { FunctionsComponent } from './functions/functions.component';
+import { CompetenciesComponent } from './competencies/competencies.component';
+
+import { FuseProjectTaskListModule } from '../_components/project-task-list/project-task-list.module';
+import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { FuseProjectMembersModule } from '../_components/project-members/project-members.module';
 
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -35,16 +37,16 @@ import { SunburstChartComponent } from './sunburst-chart/sunburst-chart.componen
 
 
 const routes = [
-  {path: '**', component: FuseAchievementsComponent}
+  { path: '**', component: FuseAchievementsComponent }
 ];
 
 @NgModule({
   declarations: [
     FuseAchievementsComponent,
-    CollaborationsComponent,
-    ContributionsComponent,
-    EncouragementsComponent,
-    OpportunitiesComponent,
+    ActivitiesComponent,
+    AccomplishmentsComponent,
+    FunctionsComponent,
+    CompetenciesComponent,
     TimelineFilterBarChartComponent,
     SunburstChartComponent
   ],
@@ -76,9 +78,9 @@ const routes = [
     NgbModalModule,
 
     NgxChartsModule
-    
-    
-    ]
+
+
+  ]
 })
 
 export class FuseAchievementsModule {

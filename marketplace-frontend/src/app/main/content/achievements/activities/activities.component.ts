@@ -1,16 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { fuseAnimations } from '../../../../../@fuse/animations';
-import * as d3 from "d3";
-
+import { Component, OnInit } from '@angular/core';
+import {fuseAnimations} from '../../../../../@fuse/animations';
 
 @Component({
-  selector: 'fuse-contributions',
-  templateUrl: './contributions.component.html',
-  styleUrls: ['./contributions.component.scss'],
+  selector: 'fuse-activities',
+  templateUrl: './activities.component.html',
+  styleUrls: ['./activities.component.scss'],
   animations: fuseAnimations
 
 })
-export class ContributionsComponent implements OnInit {
+export class ActivitiesComponent implements OnInit {
   width: number = 700;
   height: number = 300;
   view = [this.width, this.height];

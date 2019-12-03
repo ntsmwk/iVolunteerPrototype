@@ -8,27 +8,27 @@
   <div class="content">
 
     <mat-tab-group dynamicHeight="true">
-      <mat-tab label="Opportunities">
+      <mat-tab label="Tätigkeiten">
         <ng-template matTabContent>
-          <fuse-opportunities [projects]="projects"></fuse-opportunities>
+          <fuse-activities></fuse-activities>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Collaborations">
+      <mat-tab label="Kompetenzen">
         <ng-template matTabContent>
-          <fuse-collaborations></fuse-collaborations>
+          <fuse-competencies></fuse-competencies>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Contributions">
+      <mat-tab label="Verdienste">
         <ng-template matTabContent>
-          <fuse-contributions></fuse-contributions>
+          <fuse-accomplishments></fuse-accomplishments>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Encouragements">
+      <mat-tab label="Funktionen">
         <ng-template matTabContent>
-          <fuse-encouragements></fuse-encouragements>
+          <fuse-functions></fuse-functions>
         </ng-template>
       </mat-tab>
     </mat-tab-group>
