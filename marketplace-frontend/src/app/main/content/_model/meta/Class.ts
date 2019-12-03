@@ -48,8 +48,12 @@ export enum ClassArchetype {
     FUNCTION='FUNCTION',
     ACHIEVEMENT='ACHIEVEMENT',
     ENUM_HEAD='ENUM_HEAD',
-    ENUM_ENTRY='ENUM_ENTRY'
-
+    ENUM_ENTRY='ENUM_ENTRY',
+    ROOT='ROOT',
+    COMPETENCE_HEAD='COMPETENCE_HEAD',
+    TASK_HEAD='TASK_HEAD',
+    FUNCTION_HEAD='FUNCTION_HEAD',
+    ACHIEVEMENT_HEAD='ACHIEVEMENT_HEAD',
 }
 export namespace ClassArchetype {
 
@@ -61,6 +65,7 @@ export namespace ClassArchetype {
             case "ACHIEVEMENT": return "Achievement";
             case "ENUM_HEAD": return "Enum head";
             case "ENUM_ENTRY": return "Enum entry";
+            case "ROOT": return "Root";
         }
     }
 }
