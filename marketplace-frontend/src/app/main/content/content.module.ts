@@ -89,8 +89,6 @@ const routes: Route[] = [
     loadChildren: () => import('./property-detail/property-detail.module').then(m => m.PropertyDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-
-
   {
     path: 'main/property/detail/edit',
     loadChildren: () => import('./property-build-form/property-build-form.module').then(m => m.PropertyBuildFormModule),
@@ -139,6 +137,12 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   //!--AK
+  {
+    path: 'main/rule-configurator',
+    loadChildren: () => import('./rule-configurator/rule-configurator.module').then(m => m.FuseRuleConfiguratorModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+
   {
     path: 'main/task-template-form',
     loadChildren: () => import('./task-template-form/task-template-form.module').then(m => m.FuseTaskTemplateFormModule),
