@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
@@ -60,12 +60,19 @@ const relationshipPalettes = {
   ;
 
 const mxStyles = {
+  classNormal: 'shape=swimlane;resizable=0;',
+  classEnum:  'shape=swimlane;resizable=0;'+ 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;',
+
   classVfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden',
   addIcon: 'shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   removeIcon: 'shape=image;image=/assets/mxgraph_resources/images/remove_red.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+ 
   inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1',
+  inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
+
+
   association: 'endArrow=none;html=1;curved=1',
   associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
 
@@ -83,7 +90,7 @@ const mxStyles = {
   providers: [DialogFactoryComponent]
 
 })
-export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
+export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   @Input() marketplace: Marketplace;
 
@@ -103,6 +110,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   popupMenu: EditorPopupMenu;
 
   eventResponseAction: string;
+
+  mx = mx;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -142,11 +151,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'hidden';
     this.graphContainer.nativeElement.style.left = '200px';
-    this.graphContainer.nativeElement.style.top = '25px';
+    this.graphContainer.nativeElement.style.top = '30px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
@@ -156,19 +165,19 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     this.leftSidebarContainer.nativeElement.style.overflow = 'auto';
     this.leftSidebarContainer.nativeElement.style.padding = '2px';
     this.leftSidebarContainer.nativeElement.style.left = '0px';
-    this.leftSidebarContainer.nativeElement.style.top = '25px';
+    this.leftSidebarContainer.nativeElement.style.top = '30px';
     this.leftSidebarContainer.nativeElement.style.width = '200px';
     this.leftSidebarContainer.nativeElement.style.bottom = '0px';
-    this.leftSidebarContainer.nativeElement.style.background = 'ebebeb';
+    this.leftSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
 
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
     this.rightSidebarContainer.nativeElement.style.padding = '2px';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
-    this.rightSidebarContainer.nativeElement.style.top = '25px';
+    this.rightSidebarContainer.nativeElement.style.top = '30px';
     this.rightSidebarContainer.nativeElement.style.width = '150px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
-    this.rightSidebarContainer.nativeElement.style.background = 'ebebeb';
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -180,7 +189,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
+      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || 
+          cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     }
@@ -349,7 +359,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
     //create class cell
 
-    let cell: myMxCell = new mx.mxCell(classDefinition.name, geometry, 'shape=swimlane;resizable=0') as myMxCell;
+    let cell: myMxCell = new mx.mxCell(classDefinition.name, geometry, mxStyles.classNormal) as myMxCell;
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
     cell.cellType = 'class';
@@ -358,6 +368,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     cell.value = classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
+
+    if (cell.classArchetype.startsWith('ENUM')) {
+      cell.setStyle(mxStyles.classEnum);
+    }
 
     if (!isNullOrUndefined(classDefinition.id)) {
       cell.id = classDefinition.id;
@@ -428,18 +442,21 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
     const parent = this.graph.getDefaultParent();
 
-    let source = this.graph.getModel().getCell(r.source);
-    let target = this.graph.getModel().getCell(r.target);
+    let source: myMxCell = this.graph.getModel().getCell(r.source) as myMxCell;
+    let target: myMxCell = this.graph.getModel().getCell(r.target) as myMxCell;
 
     let cell: myMxCell;
     if (r.relationshipType == RelationshipType.INHERITANCE) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.inheritance) as myMxCell;
       cell.cellType = 'inheritance'
 
+      if(source.classArchetype.startsWith("ENUM_")) {
+        cell.setStyle(mxStyles.inheritanceEnum);
+      }
+
     } else if (r.relationshipType == RelationshipType.ASSOCIATION) {
       cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.association) as myMxCell;
       cell.cellType = 'association';
-
 
       let cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), mxStyles.associationCell) as myMxCell;
       cell1.geometry.relative = true;
@@ -971,6 +988,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   navigateBack() {
     window.history.back();
   }
+
 
   //DEBUG 
 
