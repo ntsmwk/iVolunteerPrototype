@@ -1,6 +1,6 @@
 @import "src/@fuse/scss/fuse";
 
-div#leftSidebarContainer, div#rightSidebarContainer{
+div#leftSidebarContainer, div#rightSidebarContainer {
 
   z-index: 200;
 
@@ -32,6 +32,9 @@ div#leftSidebarContainer, div#rightSidebarContainer{
     }
 
   }
+}
+
+div#rightSidebarContainer {
 }
 
 

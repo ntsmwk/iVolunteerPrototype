@@ -88,10 +88,15 @@
 
 <div #graphContainer id="graphContainer"></div>
 
-<div #rightSidebarContainer id="rightSidebarContainer" style="border-left: solid 1px rgb(160, 160, 160)">
+<div #rightSidebarContainer id="rightSidebarContainer"> 
+  <!-- style="border-left: solid 1px rgb(160, 160, 160)"> -->
   <div class="sidebar-content">
 
-    <editor-tree-view [editorInstance]="this"></editor-tree-view>
+    <editor-tree-view *ngIf="rightSidebarVisible" [editorInstance]="this"></editor-tree-view>
+
+    <div *ngIf="!rightSidebarVisible" fxLayout="row" fxLayoutAlign="end center">
+      <a (click)="showSidebar()" style="cursor: pointer">show Sidebar</a>
+    </div>
 
   </div>
     

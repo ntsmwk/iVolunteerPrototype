@@ -111,7 +111,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   eventResponseAction: string;
 
-  mx = mx;
+  modelUpdated: boolean;
+
+  rightSidebarVisible: boolean;
+  
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -138,6 +141,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.deletedClassIds = [];
     this.relationships = [];
     this.deletedRelationshipIds = [];
+    this.rightSidebarVisible = true;
 
     console.log(this.configurableClasses);
     console.log(this.relationships);
@@ -175,9 +179,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.padding = '2px';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
     this.rightSidebarContainer.nativeElement.style.top = '30px';
-    this.rightSidebarContainer.nativeElement.style.width = '150px';
+    this.rightSidebarContainer.nativeElement.style.width = '300px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
     this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 1px rgb(160, 160, 160)";
+
+    // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
+    // this.rightSidebarContainer.nativeElement.style.borderLeft = "none";
+
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -718,6 +727,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.redrawContent();
 
       }
+
+      this.modelUpdated = true;
     }
   }
 
@@ -987,6 +998,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   navigateBack() {
     window.history.back();
+  }
+
+  showSidebar() {
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    this.rightSidebarVisible = true;
+    this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 1px rgb(160, 160, 160)";
   }
 
 
