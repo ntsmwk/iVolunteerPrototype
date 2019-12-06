@@ -138,8 +138,13 @@ const routes: Route[] = [
   },
   //!--AK
   {
-    path: 'main/rule-configurator',
+    path: 'main/rules/all',
     loadChildren: () => import('./rule-view/rule-overview.module').then(m => m.FuseRuleOverviewModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/rule',
+    loadChildren: () => import('./rule-view/rule-configurator/rule-configurator.module').then(m => m.FuseRuleConfiguratorModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 

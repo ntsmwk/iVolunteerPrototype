@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {FuseRuleConfiguratorComponent} from './rule-configurator/rule-configurator.component';
+import {FuseRuleConfiguratorComponent} from './rule-configurator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
@@ -15,19 +15,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule, MatSelectModule } from '@angular/material';
-import { FuseRuleOverviewComponent } from './rule-overview.component';
 
 const routes = [
-  {path: '', component: FuseRuleOverviewComponent}
+    {path: '', component: FuseRuleConfiguratorComponent},
+    {path: ':ruleId', component: FuseRuleConfiguratorComponent}
 ];
 
 @NgModule({
   declarations: [
-    FuseRuleOverviewComponent,
+    FuseRuleConfiguratorComponent,
   ],
   imports: [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+
     MatSelectModule,
     MatTabsModule,
     MatButtonModule,
@@ -42,5 +43,5 @@ const routes = [
     FuseSharedModule
   ]
 })
-export class FuseRuleOverviewModule {
+export class FuseRuleConfiguratorModule {
 }

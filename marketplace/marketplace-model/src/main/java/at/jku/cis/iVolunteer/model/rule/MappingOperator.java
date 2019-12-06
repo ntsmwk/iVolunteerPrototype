@@ -25,5 +25,4 @@ public class MappingOperator {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
 }

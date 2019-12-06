@@ -5,24 +5,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.model.rule.DerivationRule;
+import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 
 @Service
 public class DerivationRuleService {
 
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired private DerivationRuleMapper derivationRuleMapper;
 
-	public List<DerivationRule> getRules() {
-		return derivationRuleRepository.findAll();
+	public List<DerivationRuleDTO> getRules() {
+
+		return derivationRuleMapper.toTargets(derivationRuleRepository.findAll());
 	}
 
-	public void createRule(DerivationRule derivationRule) {
-		derivationRuleRepository.save(derivationRule);
+	public void createRule(DerivationRuleDTO derivationRule) {
+		derivationRuleRepository.save(derivationRuleMapper.toSource(derivationRule));
 	}
 
-	public void updateRule(String id, DerivationRule derivationRule) {
-		derivationRuleRepository.save(derivationRule);
+	public void updateRule(String id, DerivationRuleDTO derivationRule) {
+		derivationRuleRepository.save(derivationRuleMapper.toSource(derivationRule));
 	}
 
-	
 }

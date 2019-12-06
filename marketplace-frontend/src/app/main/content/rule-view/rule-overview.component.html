@@ -1,80 +1,46 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-      <h1>Tasks</h1>
+        <h1>Derivation Rules</h1>
     </div>
     <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-        <button mat-fab class="mat-warn" (click)="addRule()" aria-label="Add rule" *fuseIfOnDom
-          [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-          <mat-icon>add</mat-icon>
+        <button mat-fab class="mat-warn" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom
+            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+            <mat-icon>add</mat-icon>
         </button>
     </div>
-    
-  
+
     <div class="table">
-  
-      <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
-        <!-- <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="description">
-          <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.description | truncate:[20]}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.status}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="project">
-          <mat-header-cell *matHeaderCellDef>Project</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.project.name}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="marketplace">
-          <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{getMarketplaceName(task.marketplaceId)}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="startDate">
-          <mat-header-cell *matHeaderCellDef>StartDate</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.startDate | date: 'dd.MM.yyyy'}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="endDate">
-          <mat-header-cell *matHeaderCellDef>EndDate</mat-header-cell>
-          <mat-cell *matCellDef="let task">{{task.endDate | date: 'dd.MM.yyyy'}}</mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="requiredCompetences">
-          <mat-header-cell *matHeaderCellDef>Required Competences</mat-header-cell>
-          <mat-cell *matCellDef="let task">
-             <span *ngFor="let requiredCompetence of task.requiredCompetences; let last = last">
-              {{requiredCompetence.name}}<span *ngIf="!last">, </span>
-            </span>
-          </mat-cell>
-        </ng-container>
-  
-        <ng-container matColumnDef="acquirableCompetences">
-          <mat-header-cell *matHeaderCellDef>Acquirable Competences</mat-header-cell>
-          <mat-cell *matCellDef="let task">
-            <span *ngFor="let requiredCompetence of task.acquirableCompetences; let last = last">
-              {{requiredCompetence.name}}<span *ngIf="!last">, </span>
-            </span>
-          </mat-cell>
-        </ng-container>
-  
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
-      </mat-table>
-  
-      <div class="no-data" *ngIf="dataSource.data.length === 0">
-        No rules found!
-      </div>
-   -->
+        <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                <mat-cell *matCellDef="let rule">{{rule.name}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sources">
+                <mat-header-cell *matHeaderCellDef>Sources</mat-header-cell>
+                <mat-cell *matCellDef="let rule">
+                    <span *ngFor="let source of rule.sources; let last = last">
+                        {{source.name}}<span *ngIf="!last">, </span>
+                    </span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="targets">
+                <mat-header-cell *matHeaderCellDef>Targets</mat-header-cell>
+                <mat-cell *matCellDef="let rule">
+                    <span *ngFor="let target of rule.targets; let last = last">
+                        {{target.name}}<span *ngIf="!last">, </span>
+                    </span>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+        </mat-table>
+
+        <div class="no-data" *ngIf="dataSource.data.length === 0">
+            No derivation rules found!
+        </div>
     </div>
-  
-  </div>
+
+</div>

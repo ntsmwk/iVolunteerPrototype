@@ -17,6 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -27,6 +28,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.rule.DerivationRule;
+import at.jku.cis.iVolunteer.model.rule.MappingOperator;
+import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class InitializationService {
@@ -41,6 +46,7 @@ public class InitializationService {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private FinalizationService finalizationService;
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
 
 	@PostConstruct
 	public void init() {
@@ -49,6 +55,17 @@ public class InitializationService {
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
+
+		DerivationRule rule = new DerivationRule();
+		rule.setName("myrule");
+
+		SourceRuleEntry source = new SourceRuleEntry();
+		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
+		source.setMappingOperator(new MappingOperator());
+		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
+		rule.setTargets(Lists.asList(classDefinitionRepository.findByName("PersonCertificate").getId(), new String[0]));
+		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
+		derivationRuleRepository.save(rule);
 	}
 
 	private void addiVolunteerAPIClassDefinition() {

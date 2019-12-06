@@ -39,7 +39,7 @@ export const navigation_helpseeker = [
     'id': 'rule-configurator',
     'title': 'Rule Configurator',
     'type': 'item',
-    'url': '/main/rule-configurator'
+    'url': '/main/rules/all'
   },
 
 ];
