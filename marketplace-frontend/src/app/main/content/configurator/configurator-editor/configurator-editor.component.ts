@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
@@ -60,12 +60,19 @@ const relationshipPalettes = {
   ;
 
 const mxStyles = {
+  classNormal: 'shape=swimlane;resizable=0;',
+  classEnum:  'shape=swimlane;resizable=0;'+ 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;',
+
   classVfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden',
   addIcon: 'shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   removeIcon: 'shape=image;image=/assets/mxgraph_resources/images/remove_red.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+ 
   inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1',
+  inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
+
+
   association: 'endArrow=none;html=1;curved=1',
   associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
 
@@ -83,7 +90,7 @@ const mxStyles = {
   providers: [DialogFactoryComponent]
 
 })
-export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
+export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   @Input() marketplace: Marketplace;
 
@@ -103,6 +110,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   popupMenu: EditorPopupMenu;
 
   eventResponseAction: string;
+
+  modelUpdated: boolean;
+
+  rightSidebarVisible: boolean;
+  
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -129,6 +141,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     this.deletedClassIds = [];
     this.relationships = [];
     this.deletedRelationshipIds = [];
+    this.rightSidebarVisible = true;
 
     console.log(this.configurableClasses);
     console.log(this.relationships);
@@ -142,11 +155,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'hidden';
     this.graphContainer.nativeElement.style.left = '200px';
-    this.graphContainer.nativeElement.style.top = '25px';
+    this.graphContainer.nativeElement.style.top = '30px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
@@ -156,19 +169,24 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     this.leftSidebarContainer.nativeElement.style.overflow = 'auto';
     this.leftSidebarContainer.nativeElement.style.padding = '2px';
     this.leftSidebarContainer.nativeElement.style.left = '0px';
-    this.leftSidebarContainer.nativeElement.style.top = '25px';
+    this.leftSidebarContainer.nativeElement.style.top = '30px';
     this.leftSidebarContainer.nativeElement.style.width = '200px';
     this.leftSidebarContainer.nativeElement.style.bottom = '0px';
-    this.leftSidebarContainer.nativeElement.style.background = 'ebebeb';
+    this.leftSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
 
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
     this.rightSidebarContainer.nativeElement.style.padding = '2px';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
-    this.rightSidebarContainer.nativeElement.style.top = '25px';
-    this.rightSidebarContainer.nativeElement.style.width = '150px';
+    this.rightSidebarContainer.nativeElement.style.top = '30px';
+    this.rightSidebarContainer.nativeElement.style.width = '300px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
-    this.rightSidebarContainer.nativeElement.style.background = 'ebebeb';
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 1px rgb(160, 160, 160)";
+
+    // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
+    // this.rightSidebarContainer.nativeElement.style.borderLeft = "none";
+
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -180,10 +198,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
+      if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' || 
+          cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     }
+
 
     //  this.graphContainer.nativeElement.style.background = 'url("assets/mxgraph_resources/images/grid.gif")';
 
@@ -206,6 +226,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         outer.handleMXGraphClickEvent(evt);
       });
+
+      this.graph.addListener(mx.mxEvent.FOLD_CELLS, function(sender, evt) {
+        outer.handleMXGraphFoldEvent(evt);
+      })
 
       this.showServerContent(true);
     }
@@ -349,7 +373,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
     //create class cell
 
-    let cell: myMxCell = new mx.mxCell(classDefinition.name, geometry, 'shape=swimlane;resizable=0') as myMxCell;
+    let cell: myMxCell = new mx.mxCell(classDefinition.name, geometry, mxStyles.classNormal) as myMxCell;
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
     cell.cellType = 'class';
@@ -358,6 +382,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     cell.value = classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
+
+    if (cell.classArchetype.startsWith('ENUM')) {
+      cell.setStyle(mxStyles.classEnum);
+    }
 
     if (!isNullOrUndefined(classDefinition.id)) {
       cell.id = classDefinition.id;
@@ -428,18 +456,21 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
     const parent = this.graph.getDefaultParent();
 
-    let source = this.graph.getModel().getCell(r.source);
-    let target = this.graph.getModel().getCell(r.target);
+    let source: myMxCell = this.graph.getModel().getCell(r.source) as myMxCell;
+    let target: myMxCell = this.graph.getModel().getCell(r.target) as myMxCell;
 
     let cell: myMxCell;
     if (r.relationshipType == RelationshipType.INHERITANCE) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.inheritance) as myMxCell;
       cell.cellType = 'inheritance'
 
+      if(source.classArchetype.startsWith("ENUM_")) {
+        cell.setStyle(mxStyles.inheritanceEnum);
+      }
+
     } else if (r.relationshipType == RelationshipType.ASSOCIATION) {
       cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), mxStyles.association) as myMxCell;
       cell.cellType = 'association';
-
 
       let cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), mxStyles.associationCell) as myMxCell;
       cell1.geometry.relative = true;
@@ -515,6 +546,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   //TODO @Alex fix issue in regards to saved Geometry
   redrawContent() {
     let bounds = this.graph.getView().getGraphBounds();
+    let scale = this.graph.getView().getScale();
     let translate = this.graph.getView().getTranslate();
 
 
@@ -526,7 +558,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
     this.setLayout('vertical');
     bounds.y *= -1;
     bounds.x *= -1;
+    // this.graph.getView().setGraphBounds(bounds);
 
+    this.graph.getView().setScale(scale);
     this.graph.scrollRectToVisible(bounds);
   }
 
@@ -699,10 +733,36 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
 
         this.updateModel();
         this.redrawContent();
-
       }
+
+      this.modelUpdated = true;
     }
   }
+
+  handleMXGraphFoldEvent(event: any) {
+    console.log("Folding")
+    console.log(event);
+
+    let cells: myMxCell[] = event.getProperty("cells");
+    let cell = cells.pop();
+    console.log(cell);
+
+    this.setVisibleRecursive(cell);
+
+    this.modelUpdated = true;
+
+  }
+
+  private setVisibleRecursive(cell: myMxCell) {
+    let edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+    
+    for (let edge of edges) {
+      this.graph.getModel().setVisible(edge.target, !edge.target.isVisible());
+      this.setVisibleRecursive(edge.target as myMxCell);
+    }
+  }
+
+
 
   handleMousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
     const outer = this;
@@ -971,6 +1031,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterViewInit {
   navigateBack() {
     window.history.back();
   }
+
+  showSidebar() {
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    this.rightSidebarVisible = true;
+    this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 1px rgb(160, 160, 160)";
+  }
+
 
   //DEBUG 
 

@@ -4,25 +4,28 @@
 </div>
 
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 1px rgb(160, 160, 160)">
-  <h2>Shapes</h2>
-  <h3 style="padding-left: 5px; padding-top: 2px">> {{sidebarPalettes.label}}</h3>
-  <div *ngFor="let row of sidebarPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
-    <div style="padding-top: 10px"></div>
-    <div style="width: 60; height: 60;">
-      <img draggable="true" src="{{row.c0.imgPath}}" width="60" height="60" style="cursor: pointer; text-align: center"
-        (mousedown)="handleMousedownEvent($event, p, row.c0, graph)" matTooltip="{{row.c0.label}}">
-      <div style="padding-top: 3px"></div>
-    </div>
-    <div style="padding-left: 5px"></div>
-    <div style="width: 60; height: 60;">
-      <img draggable="true" src="{{row.c1.imgPath}}" width="60" height="60" style="cursor: pointer; text-align: center"
-        (mousedown)="handleMousedownEvent($event, p, row.c1, graph)" matTooltip="{{row.c1.label}}">
-      <div style="padding-top: 3px"></div>
+  <div class="sidebar-content">
+    <h2>Shapes</h2>
+    <h3 style="padding-left: 5px; padding-top: 2px">> {{sidebarPalettes.label}}</h3>
+    <div *ngFor="let row of sidebarPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
+      <div style="padding-top: 10px"></div>
+      <div style="width: 60; height: 60;">
+        <img draggable="true" src="{{row.c0.imgPath}}" width="60" height="60"
+          style="cursor: pointer; text-align: center" (mousedown)="handleMousedownEvent($event, p, row.c0, graph)"
+          matTooltip="{{row.c0.label}}">
+        <div style="padding-top: 3px"></div>
+      </div>
+      <div style="padding-left: 5px"></div>
+      <div style="width: 60; height: 60;">
+        <img draggable="true" src="{{row.c1.imgPath}}" width="60" height="60"
+          style="cursor: pointer; text-align: center" (mousedown)="handleMousedownEvent($event, p, row.c1, graph)"
+          matTooltip="{{row.c1.label}}">
+        <div style="padding-top: 3px"></div>
+      </div>
+
     </div>
 
-  </div>
-
-  <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{relationshipPalettes.label}}</h3>
+    <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{relationshipPalettes.label}}</h3>
 
   <div *ngFor="let row of relationshipPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
     <img class="center-image" draggable="true" src="{{row.imgPath}}" style="cursor: pointer; text-align: center"
@@ -31,66 +34,72 @@
   </div> -->
 
 
-  <div style="padding-top: 20px"></div>
+    <div style="padding-top: 20px"></div>
 
-  <h2>Tools</h2>
-  <div fxLayout="row" fxLayoutAlign="start start">
-    <div
-      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
-      <img src="/assets/mxgraph_resources/images/zoomin.gif" width="25" height="25" (click)="zoomInEvent()"
-        style="cursor: pointer" matTooltip="zoom in">
+    <h2>View</h2>
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <div
+        style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+        <img src="/assets/mxgraph_resources/images/zoomin.gif" width="25" height="25" (click)="zoomInEvent()"
+          style="cursor: pointer" matTooltip="zoom in">
+      </div>
+
+      <div style="padding-right: 3px"></div>
+
+      <div
+        style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+        <img src="/assets/mxgraph_resources/images/zoomout.gif" width="25" height="25" (click)="zoomOutEvent()"
+          style="cursor: pointer" matTooltip="zoom out">
+      </div>
+
+      <div style="padding-right: 3px"></div>
+
+      <div
+        style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+        <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="25" height="25" (click)="zoomResetEvent()"
+          style="cursor: pointer" matTooltip="reset view">
+      </div>
+
     </div>
 
-    <div style="padding-right: 3px"></div>
+    <div style="padding-top: 5px"></div>
 
-    <div
-      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
-      <img src="/assets/mxgraph_resources/images/zoomout.gif" width="25" height="25" (click)="zoomOutEvent()"
-        style="cursor: pointer" matTooltip="zoom out">
-    </div>
+    <mat-form-field style="width: 100%">
+      <mat-select placeholder="Automatic Layout">
+        <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option>
+        <mat-option value="Vertical" (click)="setLayout('vertical')">Vertical</mat-option>
+        <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <div style="padding-right: 3px"></div>
+    <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
+      (from root)</a>
+    <div style="padding-top: 5px"></div>
 
-    <div
-      style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
-      <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="25" height="25" (click)="zoomResetEvent()"
-        style="cursor: pointer" matTooltip="reset view">
-    </div>
 
+
+    <a (click)="doShitWithGraph(graph)" style="cursor: pointer">print graph to
+      console</a>
+    <div style="padding-top: 5px"></div>
+    <a (click)="printModelToConsole()" style="cursor: pointer">Print Model to console</a>
   </div>
-
-  <div style="padding-top: 5px"></div>
-
-  <mat-form-field style="width: 100%">
-    <mat-select placeholder="Automatic Layout">
-      <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option>
-      <mat-option value="Vertical" (click)="setLayout('vertical')">Vertical</mat-option>
-      <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
-    (from root)</a>
-  <div style="padding-top: 5px"></div>
-
-
-
-  <a (click)="doShitWithGraph(graph)" style="cursor: pointer">print graph to
-    console</a>
-  <div style="padding-top: 5px"></div>
-  <a (click)="printModelToConsole()" style="cursor: pointer">Print Model to console</a>
 </div>
 
 
 <div #graphContainer id="graphContainer"></div>
 
-<div #rightSidebarContainer id="rightSidebarContainer" style="border-left: solid 1px rgb(160, 160, 160)">
-  test
-  <br>
-  Hier soll eine 
-  <br>
-  Baumansicht
-  <br>
-  angezeigt werden!
+<div #rightSidebarContainer id="rightSidebarContainer"> 
+  <!-- style="border-left: solid 1px rgb(160, 160, 160)"> -->
+  <div class="sidebar-content">
+
+    <editor-tree-view *ngIf="rightSidebarVisible" [editorInstance]="this"></editor-tree-view>
+
+    <div *ngIf="!rightSidebarVisible" fxLayout="row" fxLayoutAlign="end center">
+      <a (click)="showSidebar()" style="cursor: pointer">show Sidebar</a>
+    </div>
+
+  </div>
+    
+
 
 </div>

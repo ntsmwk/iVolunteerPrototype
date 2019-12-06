@@ -23,7 +23,7 @@ public class FinalizationService {
 //		relationshipRepository.deleteAll();
 //		classInstanceRepository.deleteAll();
 //		configuratorRepository.deleteAll();
-//		propertyDefinitionRepository.deleteAll();
+		propertyDefinitionRepository.deleteAll();
 
 	}
 	
