@@ -546,6 +546,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   //TODO @Alex fix issue in regards to saved Geometry
   redrawContent() {
     let bounds = this.graph.getView().getGraphBounds();
+    let scale = this.graph.getView().getScale();
     let translate = this.graph.getView().getTranslate();
 
 
@@ -557,7 +558,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.setLayout('vertical');
     bounds.y *= -1;
     bounds.x *= -1;
+    // this.graph.getView().setGraphBounds(bounds);
 
+    this.graph.getView().setScale(scale);
     this.graph.scrollRectToVisible(bounds);
   }
 
