@@ -204,6 +204,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }
     }
 
+
     //  this.graphContainer.nativeElement.style.background = 'url("assets/mxgraph_resources/images/grid.gif")';
 
     if (!mx.mxClient.isBrowserSupported()) {
@@ -225,6 +226,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         outer.handleMXGraphClickEvent(evt);
       });
+
+      this.graph.addListener(mx.mxEvent.FOLD_CELLS, function(sender, evt) {
+        outer.handleMXGraphFoldEvent(evt);
+      })
 
       this.showServerContent(true);
     }
@@ -725,12 +730,36 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
         this.updateModel();
         this.redrawContent();
-
       }
 
       this.modelUpdated = true;
     }
   }
+
+  handleMXGraphFoldEvent(event: any) {
+    console.log("Folding")
+    console.log(event);
+
+    let cells: myMxCell[] = event.getProperty("cells");
+    let cell = cells.pop();
+    console.log(cell);
+
+    this.setVisibleRecursive(cell);
+
+    this.modelUpdated = true;
+
+  }
+
+  private setVisibleRecursive(cell: myMxCell) {
+    let edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+    
+    for (let edge of edges) {
+      this.graph.getModel().setVisible(edge.target, !edge.target.isVisible());
+      this.setVisibleRecursive(edge.target as myMxCell);
+    }
+  }
+
+
 
   handleMousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
     const outer = this;

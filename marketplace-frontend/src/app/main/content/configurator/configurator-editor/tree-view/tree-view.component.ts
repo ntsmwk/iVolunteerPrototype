@@ -4,12 +4,14 @@ import { ConfiguratorEditorComponent, myMxCell } from '../configurator-editor.co
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
+import { ChildActivationEnd } from '@angular/router';
 
 export interface GraphNode {
   id: string;
   name: string;
   type: string;
   cell: myMxCell;
+  visible: boolean;
 
   children?: GraphNode[];
 }
@@ -64,7 +66,7 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
 
     let graphNodes: GraphNode[] = [];
     for (let root of roots) {
-      let length = graphNodes.push({ id: root.id, name: root.value, type: 'root', cell: root });
+      let length = graphNodes.push({ id: root.id, name: root.value, type: 'root', cell: root, visible: root.isVisible() });
       graphNodes[length - 1].children = this.addChildrenToGraphNode(graphNodes[length - 1], vertices);
     }
 
@@ -87,9 +89,10 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
         let child = vertices.find((cell: myMxCell) => {
           return cell.id == edge.target.id;
         });
-        let length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child });
-        node.children[length - 1].children = this.addChildrenToGraphNode(node.children[length - 1], vertices);
-
+        if (!isNullOrUndefined(child)) {
+          let length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child, visible: child.isVisible()});
+          node.children[length - 1].children = this.addChildrenToGraphNode(node.children[length - 1], vertices);
+        }
       }
     }
     return node.children;
