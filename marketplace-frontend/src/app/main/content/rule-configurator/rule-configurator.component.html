@@ -6,328 +6,316 @@
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
     <mat-icon class="iconButton" (click)="backClicked()" style="margin-left: 20px">keyboard_return</mat-icon>
-    <h1>Configuration - Competence Derivation Rules</h1>
-    <div style="padding-top: 70px; z-index: 255; position: relative"><img
-        src="../../../../assets/images/logos/FF_Altenberg.jpg"></div>
+    <h1>Configuration - Derivation Rules</h1>
+    <div style="padding-top: 70px; z-index: 255; position: relative">
+      <!-- <img src="../../../../assets/images/logos/FF_Altenberg.jpg"> -->
+    </div>
   </div>
 
   <!-- / HEADER -->
 
   <!-- CONTENT -->
-  <div style="padding-top: 12px"></div>
 
+  <div style="padding-top: 12px; padding-left: 40px">
 
+    <!-- <h2 style="text-align: center">Add new Competence Derivation Rule</h2> -->
 
+    <div style="padding-top: 20px"></div>
+    <mat-divider></mat-divider>
+    <div style=" font-size: 30px;" fxLayout="row">
+      <!-- <div></div> -->
+      <div fxFlex=55 fxLayout=row fxLayoutAlign="start start">
+        <div fxLayout=column fxLayoutAlign="space-between center">
 
-  <div class="mat-card">
+          <div style="padding-bottom: 5px"></div>
 
-    <mat-tab-group selectedIndex=1>
-      <mat-tab label="General"> Content 1 </mat-tab>
-      <mat-tab label="Competence Derivation Rules">
-        <div style="padding-top: 12px; padding-left: 40px">
-
-          <!-- <h2 style="text-align: center">Add new Competence Derivation Rule</h2> -->
-
-          <div style="padding-top: 20px"></div>
-          <mat-divider></mat-divider>
-          <div style=" font-size: 30px;" fxLayout="row">
-            <!-- <div></div> -->
-            <div fxFlex=55 fxLayout=row fxLayoutAlign="start start">
-              <div fxLayout=column fxLayoutAlign="space-between center">
-
-                <div style="padding-bottom: 5px"></div>
-
-                <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
-                  <img style="object-fit: contain; max-width: 100%; max-height: 100%;"
-                    src="../../../assets/checklist.jpg">
-                </div>
-
-                <div></div>
-              </div>
-              <div style="padding-left: 15px"></div>
-              <div style=" padding-top: 3px; padding-right: 3px;"> Pre-Conditions for automatic Competence
-                Derivation</div>
-            </div>
-            <div fxFlex=5></div>
-
-            <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
-            <mat-divider fxFlex="0.1" vertical=true></mat-divider>
-
-
-            <div fxFlex=2></div>
-            <div fxFlex fxLayout=row fxLayoutAlign="start start">
-              <div fxLayout=column fxLayoutAlign="space-between center">
-
-                <div style="padding-bottom: 5px"></div>
-
-                <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
-                  <img style="object-fit: contain; max-width: 100%; max-height: 100%;"
-                    src="../../../assets/competence.jpg">
-                </div>
-
-                <div></div>
-              </div>
-              <div style="padding-left: 15px"></div>
-              <div style=" padding-top: 3px; padding-right: 3px;"> Derived Competences</div>
-            </div>
-
-
-            <!-- <div></div> -->
+          <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/checklist.jpg">
           </div>
-          <!-- <div style="padding-top:20px"></div> -->
-          <mat-divider></mat-divider>
 
-          <!--DESCR-->
-          <mat-divider></mat-divider>
-          <div style=" font-size: 14px;" fxLayout="row">
-            <!-- <div></div> -->
-            <div fxFlex="55" fxLayout=column fxLayoutAlign="start start">
-              <div style="margin-top:10px"></div>
-              <div>Define the conditions according to which the desired Competence(s) defined to the right
-                should be derived from
-              </div>
-              <div style="margin-top:10px"></div>
+          <div></div>
+        </div>
+        <div style="padding-left: 15px"></div>
+        <div style=" padding-top: 3px; padding-right: 3px;"> Pre-Conditions for automatic Competence
+          Derivation</div>
+      </div>
+      <div fxFlex=5></div>
 
-            </div>
-            <div fxFlex=5></div>
-
-            <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
-            <mat-divider fxFlex="0.1" vertical=true></mat-divider>
+      <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
+      <mat-divider fxFlex="0.1" vertical=true></mat-divider>
 
 
-            <div fxFlex=2></div>
-            <div fxFlex fxLayout=column fxLayoutAlign="start start">
-              <div style="margin-top:10px"></div>
+      <div fxFlex=2></div>
+      <div fxFlex fxLayout=row fxLayoutAlign="start start">
+        <div fxLayout=column fxLayoutAlign="space-between center">
 
-              <div>Competences that should be attained after completing the Pre-Conditions defined to the
-                left</div>
-              <div style="margin-top:10px"></div>
-            </div>
-            <!-- <div></div> -->
+          <div style="padding-bottom: 5px"></div>
+
+          <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
           </div>
-          <!-- <div style="padding-top:20px"></div> -->
-          <mat-divider></mat-divider>
 
-          <!--DESCR-->
-
-
-          <div fxLayout=row>
-            <div fxFlex="55" fxLayout="column">
-
-              <div style="padding-top: 10px"></div>
-
-              <mat-form-field style="width: 420px">
-                <input matInput placeholder="Derivation Rule Name"
-                  value="Gain Leadership Skills Competence [Level 1]" />
-              </mat-form-field>
+          <div></div>
+        </div>
+        <div style="padding-left: 15px"></div>
+        <div style=" padding-top: 3px; padding-right: 3px;"> Derived Competences</div>
+      </div>
 
 
+      <!-- <div></div> -->
+    </div>
+    <!-- <div style="padding-top:20px"></div> -->
+    <mat-divider></mat-divider>
+
+    <!--DESCR-->
+    <mat-divider></mat-divider>
+    <div style=" font-size: 14px;" fxLayout="row">
+      <!-- <div></div> -->
+      <div fxFlex="55" fxLayout=column fxLayoutAlign="start start">
+        <div style="margin-top:10px"></div>
+        <div>Define the conditions according to which the desired Competence(s) defined to the right
+          should be derived from
+        </div>
+        <div style="margin-top:10px"></div>
+
+      </div>
+      <div fxFlex=5></div>
+
+      <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
+      <mat-divider fxFlex="0.1" vertical=true></mat-divider>
 
 
+      <div fxFlex=2></div>
+      <div fxFlex fxLayout=column fxLayoutAlign="start start">
+        <div style="margin-top:10px"></div>
 
-              <div fxFlex fxLayout=row fxLayoutAlign="start start">
-                <div fxLayout=column fxLayoutAlign="space-between center">
+        <div>Competences that should be attained after completing the Pre-Conditions defined to the
+          left</div>
+        <div style="margin-top:10px"></div>
+      </div>
+      <!-- <div></div> -->
+    </div>
+    <!-- <div style="padding-top:20px"></div> -->
+    <mat-divider></mat-divider>
 
-                  <div style="padding-bottom: 2px"></div>
-
-                  <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
-                    <img style="object-fit: contain; max-width: 100%; max-height: 100%;"
-                      src="../../../assets/education.jpg">
-                  </div>
-
-                  <div></div>
-                </div>
-                <div style="padding-left: 5px"></div>
-                <div style=" padding-top: 3px; padding-right: 3px; font-size: 18px"> Achievement Condition(s)</div>
-              </div>
-
-              <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose</mat-label>
-
-                  <mat-select value=r>
-                    <mat-option value="r">Requires</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <div style="padding-left: 10px"></div>
-
-                <mat-form-field style="width: 75px">
-                  <input matInput type=number placeholder="Count" />
-                </mat-form-field>
-
-                <div style="padding-left: 10px"></div>
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose Achievement Type</mat-label>
-
-                  <mat-select value=l>
-                    <mat-option value="l">Leadership Training</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-              </div>
-
-              <div *ngIf="!achRow2hidden" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 12px">
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose</mat-label>
-
-                  <mat-select>
-                    <mat-option value="r">Requires</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <div style="padding-left: 10px"></div>
+    <!--DESCR-->
 
 
-                <mat-form-field style="width: 75px">
-                  <input matInput type=number placeholder="Count" />
-                </mat-form-field>
+    <div fxLayout=row>
+      <div fxFlex="55" fxLayout="column">
 
-                <div style="padding-left: 10px"></div>
+        <div style="padding-top: 10px"></div>
 
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose Achievement Type</mat-label>
-
-                  <mat-select>
-                    <mat-option value="l">Leadership Training</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <a style="padding-left: 10px; cursor: pointer;" (click)="achRow2hidden=true">remove
-                  row</a>
-              </div>
-
-              <a style="cursor: pointer;" (click)="achRow2hidden=false">add row</a>
+        <mat-form-field style="width: 420px">
+          <input matInput placeholder="Derivation Rule Name" value="Gain Leadership Skills Competence [Level 1]" />
+        </mat-form-field>
 
 
 
-              <div style="padding-top:20px"></div>
 
 
-              <div fxFlex fxLayout=row fxLayoutAlign="start start">
-                <div fxLayout=column fxLayoutAlign="space-between center">
+        <div fxFlex fxLayout=row fxLayoutAlign="start start">
+          <div fxLayout=column fxLayoutAlign="space-between center">
 
-                  <div style="padding-bottom: 2px"></div>
+            <div style="padding-bottom: 2px"></div>
 
-                  <div style=" z-index: 255; position: relative; width: 22px; height: 22px;">
-                    <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/cog.png">
-                  </div>
+            <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
+              <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/education.jpg">
+            </div>
 
-                  <div></div>
-                </div>
-                <div style="padding-left: 5px"></div>
-                <div style=" padding-top: 3px; padding-right: 3px; font-size: 18px"> Task Fulfillment
-                  Condition(s)</div>
-              </div>
+            <div></div>
+          </div>
+          <div style="padding-left: 5px"></div>
+          <div style=" padding-top: 3px; padding-right: 3px; font-size: 18px"> Achievement Condition(s)</div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose</mat-label>
+
+            <mat-select value=r>
+              <mat-option value="r">Requires</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <mat-form-field style="width: 75px">
+            <input matInput type=number placeholder="Count" />
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose Achievement Type</mat-label>
+
+            <mat-select value=l>
+              <mat-option value="l">Leadership Training</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <div *ngIf="!achRow2hidden" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 12px">
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose</mat-label>
+
+            <mat-select>
+              <mat-option value="r">Requires</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
 
 
-              <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
+          <mat-form-field style="width: 75px">
+            <input matInput type=number placeholder="Count" />
+          </mat-form-field>
 
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose</mat-label>
+          <div style="padding-left: 10px"></div>
 
-                  <!-- <mat-select value="r"> -->
-                  <mat-select value=r>
-                    <mat-option value="r">Requires</mat-option>
-                  </mat-select>
-                </mat-form-field>
 
-                <div style="padding-left: 10px"></div>
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose Achievement Type</mat-label>
 
-                <mat-form-field style="width: 75px">
-                  <input matInput type=number placeholder="Count" value=5 />
-                </mat-form-field>
+            <mat-select>
+              <mat-option value="l">Leadership Training</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-                <div style="padding-left: 10px"></div>
+          <a style="padding-left: 10px; cursor: pointer;" (click)="achRow2hidden=true">remove
+            row</a>
+        </div>
 
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose Achievement Type</mat-label>
+        <a style="cursor: pointer;" (click)="achRow2hidden=false">add row</a>
 
-                  <mat-select value=l>
-                    <mat-option value="l">Lead Firebrigade Operation</mat-option>
-                  </mat-select>
-                </mat-form-field>
 
-                <div style="padding-left: 10px"></div>
 
-                <div style="padding-top: 5px" fxLayout="column" fxLayoutAlign="center start">
-                  <div style="padding-left: 3px">Feedback Level</div>
-                  <div fxLayout="row" fxLayoutAlign="start start" *ngIf=!starrated1 style="cursor: pointer">
+        <div style="padding-top:20px"></div>
 
-                    <!-- <mat-icon class="grey-fg">star_rate</mat-icon>
+
+        <div fxFlex fxLayout=row fxLayoutAlign="start start">
+          <div fxLayout=column fxLayoutAlign="space-between center">
+
+            <div style="padding-bottom: 2px"></div>
+
+            <div style=" z-index: 255; position: relative; width: 22px; height: 22px;">
+              <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/cog.png">
+            </div>
+
+            <div></div>
+          </div>
+          <div style="padding-left: 5px"></div>
+          <div style=" padding-top: 3px; padding-right: 3px; font-size: 18px"> Task Fulfillment
+            Condition(s)</div>
+        </div>
+
+
+        <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose</mat-label>
+
+            <!-- <mat-select value="r"> -->
+            <mat-select value=r>
+              <mat-option value="r">Requires</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <mat-form-field style="width: 75px">
+            <input matInput type=number placeholder="Count" value=5 />
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose Achievement Type</mat-label>
+
+            <mat-select value=l>
+              <mat-option value="l">Lead Firebrigade Operation</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <div style="padding-top: 5px" fxLayout="column" fxLayoutAlign="center start">
+            <div style="padding-left: 3px">Feedback Level</div>
+            <div fxLayout="row" fxLayoutAlign="start start" *ngIf=!starrated1 style="cursor: pointer">
+
+              <!-- <mat-icon class="grey-fg">star_rate</mat-icon>
                                         <mat-icon class="grey-fg">star_rate</mat-icon>
                                         <mat-icon class="grey-fg">star_rate</mat-icon>
                                         <mat-icon (click)="starrated1=true" class="grey-fg">star_rate</mat-icon>
                                         <mat-icon class="grey-fg">star_rate</mat-icon> -->
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon (click)="starrated1=true" class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                  </div>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon (click)="starrated1=true" class="red-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+            </div>
 
 
-                  <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated1 style="cursor: pointer">
+            <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated1 style="cursor: pointer">
 
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                  </div>
-                </div>
-
-
-
-              </div>
-
-              <div *ngIf="!taskRow2hidden" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 12px">
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose</mat-label>
-
-                  <mat-select>
-                    <mat-option value="r">Requires</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <div style="padding-left: 10px"></div>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+            </div>
+          </div>
 
 
-                <mat-form-field style="width: 75px">
-                  <input matInput type=number placeholder="Count" />
-                </mat-form-field>
 
-                <div style="padding-left: 10px"></div>
+        </div>
+
+        <div *ngIf="!taskRow2hidden" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 12px">
+
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose</mat-label>
+
+            <mat-select>
+              <mat-option value="r">Requires</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
 
 
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose Task Type</mat-label>
+          <mat-form-field style="width: 75px">
+            <input matInput type=number placeholder="Count" />
+          </mat-form-field>
 
-                  <mat-select>
-                    <mat-option value="l">Lead Firebrigade Operation</mat-option>
-                  </mat-select>
-                </mat-form-field>
+          <div style="padding-left: 10px"></div>
 
-                <div style="padding-left: 10px"></div>
 
-                <div style="padding-top: 5px" fxLayout="column" fxLayoutAlign="center start">
-                  <div style="padding-left: 3px">Feedback Level</div>
-                  <div fxLayout="row" fxLayoutAlign="start start" *ngIf=!starrated2 style="cursor: pointer">
-                    <!-- <img fxFlex=60 src="../../../assets//fivestars_cropped_half.jpg">
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose Task Type</mat-label>
+
+            <mat-select>
+              <mat-option value="l">Lead Firebrigade Operation</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="padding-left: 10px"></div>
+
+          <div style="padding-top: 5px" fxLayout="column" fxLayoutAlign="center start">
+            <div style="padding-left: 3px">Feedback Level</div>
+            <div fxLayout="row" fxLayoutAlign="start start" *ngIf=!starrated2 style="cursor: pointer">
+              <!-- <img fxFlex=60 src="../../../assets//fivestars_cropped_half.jpg">
                                                     <div fxFlex></div> -->
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                    <mat-icon (click)="starrated2=true" class="grey-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                  </div>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+              <mat-icon (click)="starrated2=true" class="grey-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
+            </div>
 
-                  <!-- <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated>
+            <!-- <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated>
                                                
                                                 <mat-icon class="amber-fg">star_rate</mat-icon>
                                                 <mat-icon class="amber-fg">star_rate</mat-icon>
@@ -335,132 +323,120 @@
                                                 <mat-icon class="amber-fg">star_rate</mat-icon>
                                                 <mat-icon class="amber-fg">star_rate</mat-icon>
                                             </div> -->
-                  <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated2 style="cursor: pointer">
-                    <!-- <img fxFlex=60 src="../../../assets//fivestars_cropped_half.jpg">
+            <div fxLayout="row" fxLayoutAlign="start start" *ngIf=starrated2 style="cursor: pointer">
+              <!-- <img fxFlex=60 src="../../../assets//fivestars_cropped_half.jpg">
                                                             <div fxFlex></div> -->
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="red-fg">star_rate</mat-icon>
-                    <mat-icon class="grey-fg">star_rate</mat-icon>
-                  </div>
-                </div>
-
-                <a style="padding-left: 10px; cursor: pointer;" (click)="taskRow2hidden=true">remove
-                  row</a>
-              </div>
-
-              <a style="cursor: pointer;" (click)="taskRow2hidden=false">add row</a>
-
-
-
-
-
-
-
-
-
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="red-fg">star_rate</mat-icon>
+              <mat-icon class="grey-fg">star_rate</mat-icon>
             </div>
-            <div fxFlex=5></div>
-
-            <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
-            <mat-divider fxFlex="0.1" vertical=true></mat-divider>
-
-
-            <div fxFlex=2></div>
-
-            <!-- <div style="padding-left: 10px"></div> -->
-
-            <div fxLayout="column" fxLayoutAlign="start start">
-
-              <div style="padding-top: 10px"></div>
-
-              <div>
-                <div style="font-size: 18px; padding-bottom: 5px; text-align: start">
-                  <!-- Derived Competence(s) -->
-                </div>
-
-                <mat-form-field style="width: 300px">
-                  <mat-label>Choose Competence Types
-                  </mat-label>
-
-                  <mat-select multiple>
-                    <mat-option value="l1">Leadership Skills [Level 1] </mat-option>
-                    <mat-option value="l2">Leadership Skills [Level 2] </mat-option>
-                    <mat-option value="l3">Leadership Skills [Level 3] </mat-option>
-                    <mat-option value="a">Diligence</mat-option>
-                    <mat-option value="b">Teamwork</mat-option>
-                    <mat-option value="c">Communication Skills</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
-            </div>
-
           </div>
 
-          <div style="padding-top:20px"></div>
-          <mat-divider></mat-divider>
-          <div style="padding-top:20px"></div>
-
-
-          <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
-            <button mat-raised-button type="button" color="primary">Create Rule</button>
-            <div style="padding-right: 5px"></div>
-            <button mat-stroked-button type="button" color="primary">Cancel</button>
-            <div style="padding-right: 20px"></div>
-          </div>
+          <a style="padding-left: 10px; cursor: pointer;" (click)="taskRow2hidden=true">remove
+            row</a>
         </div>
 
-        <div style="padding-top: 50px; padding-left: 40px">
+        <a style="cursor: pointer;" (click)="taskRow2hidden=false">add row</a>
 
-          <div fxLayout="row" fxLayoutAlign="start center">
-            <h2>Existing Derivation Rules</h2>
-            <div style="padding-left: 10px;"></div>
-            <a style=" cursor: pointer; padding-top: 8px">show list</a>
+
+
+
+
+
+
+
+
+      </div>
+      <div fxFlex=5></div>
+
+      <!-- <mat-divider fxFlex="0.1" vertical=true style="padding-right: 10px"></mat-divider> -->
+      <mat-divider fxFlex="0.1" vertical=true></mat-divider>
+
+
+      <div fxFlex=2></div>
+
+      <!-- <div style="padding-left: 10px"></div> -->
+
+      <div fxLayout="column" fxLayoutAlign="start start">
+
+        <div style="padding-top: 10px"></div>
+
+        <div>
+          <div style="font-size: 18px; padding-bottom: 5px; text-align: start">
+            <!-- Derived Competence(s) -->
           </div>
 
+          <mat-form-field style="width: 300px">
+            <mat-label>Choose Competence Types
+            </mat-label>
 
-          <mat-table #table [dataSource]="dataSource" *ngIf="showlist">
-            <ng-container matColumnDef="label">
-              <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-              <mat-cell *matCellDef="let entry" style="font-size: 15px">
-                {{entry.label}}
-              </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="pre">
-              <mat-header-cell *matHeaderCellDef>Pre-Condition</mat-header-cell>
-              <mat-cell *matCellDef="let entry" style="font-size: 15px">{{entry.pre}}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="post">
-              <mat-header-cell *matHeaderCellDef>Post-Condition</mat-header-cell>
-              <mat-cell *matCellDef="let entry" style="font-size: 15px">
-                {{entry.post}}
-              </mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-
-          <div *ngIf="!showlist" style="padding-bottom: 50px">
-
-          </div>
-
+            <mat-select multiple>
+              <mat-option value="l1">Leadership Skills [Level 1] </mat-option>
+              <mat-option value="l2">Leadership Skills [Level 2] </mat-option>
+              <mat-option value="l3">Leadership Skills [Level 3] </mat-option>
+              <mat-option value="a">Diligence</mat-option>
+              <mat-option value="b">Teamwork</mat-option>
+              <mat-option value="c">Communication Skills</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
+      </div>
+
+    </div>
+
+    <div style="padding-top:20px"></div>
+    <mat-divider></mat-divider>
+    <div style="padding-top:20px"></div>
 
 
+    <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
+      <button mat-raised-button type="button" color="primary">Create Rule</button>
+      <div style="padding-right: 5px"></div>
+      <button mat-stroked-button type="button" color="primary">Cancel</button>
+      <div style="padding-right: 20px"></div>
+    </div>
+  </div>
+
+  <div style="padding-top: 50px; padding-left: 40px">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <h2>Existing Derivation Rules</h2>
+      <div style="padding-left: 10px;"></div>
+      <a style=" cursor: pointer; padding-top: 8px">show list</a>
+    </div>
 
 
-      </mat-tab>
-      <mat-tab label="Custom Properties"> Content 3 </mat-tab>
-      <mat-tab label="Task Life-Cycle"> Content 3 </mat-tab>
-      <mat-tab label="..."> Content 3 </mat-tab>
+    <mat-table #table [dataSource]="dataSource" *ngIf="showlist">
+      <ng-container matColumnDef="label">
+        <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
+        <mat-cell *matCellDef="let entry" style="font-size: 15px">
+          {{entry.label}}
+        </mat-cell>
+      </ng-container>
 
-    </mat-tab-group>
+      <ng-container matColumnDef="pre">
+        <mat-header-cell *matHeaderCellDef>Pre-Condition</mat-header-cell>
+        <mat-cell *matCellDef="let entry" style="font-size: 15px">{{entry.pre}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="post">
+        <mat-header-cell *matHeaderCellDef>Post-Condition</mat-header-cell>
+        <mat-cell *matCellDef="let entry" style="font-size: 15px">
+          {{entry.post}}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <div *ngIf="!showlist" style="padding-bottom: 50px">
+
+    </div>
+
   </div>
 
 </div>
