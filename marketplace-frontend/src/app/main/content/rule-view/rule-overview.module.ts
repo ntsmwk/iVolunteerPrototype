@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {FuseSharedModule} from '@fuse/shared.module';
 
-import {FuseRuleConfiguratorComponent} from './rule-configurator.component';
+import {FuseRuleConfiguratorComponent} from './rule-configurator/rule-configurator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
@@ -42,5 +42,5 @@ const routes = [
     FuseSharedModule
   ]
 })
-export class FuseRuleConfiguratorModule {
+export class FuseRuleOverviewModule {
 }
