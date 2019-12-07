@@ -116,7 +116,7 @@ export class EditorPopupMenu {
             if (remIndex >= 0) {
               outer.editorInstance.configurableClasses[classIndex].properties.splice(remIndex, 1);
             }
-            outer.editorInstance.redrawContent();
+            outer.editorInstance.redrawContent(undefined);
 
 
             //remove Class from Array
