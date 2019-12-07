@@ -17,7 +17,6 @@ import { ConfiguratorService } from '../../_service/meta/core/configurator/confi
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { ObjectIdService } from "../../_service/objectid.service.";
 import { CConstants, CUtils } from './utils-and-constants';
-import { isNull } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 
@@ -249,7 +248,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       for (let r of this.relationships) {
         let rel: myMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0), false) as myMxCell;
         if (rel.cellType == 'association') {
-          console.log(rel);
           this.addHiddenRelationshipHack(rel);
         }
       }
@@ -274,8 +272,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     cell.value = classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
-
-
 
     if (!isNullOrUndefined(classDefinition.id)) {
       cell.id = classDefinition.id;
@@ -358,10 +354,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     let target: myMxCell = this.graph.getModel().getCell(r.target) as myMxCell;
 
     let cell: myMxCell;
+
     if (r.relationshipType == RelationshipType.INHERITANCE) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as myMxCell;
       cell.cellType = 'inheritance'
-
       if (source.classArchetype.startsWith("ENUM_")) {
         cell.setStyle(CConstants.mxStyles.inheritanceEnum);
       }
@@ -369,10 +365,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     } else if (r.relationshipType == RelationshipType.ASSOCIATION) {
       cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as myMxCell;
       cell.cellType = 'association';
-      // cell.setVisible(!r.hidden)
-      console.log(r);
-      console.log(source);
-      console.log(target);
 
       let cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
       cell1.geometry.relative = true;
@@ -380,8 +372,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       cell1.vertex = true;
       cell1.cellType = 'associationLabel';
       cell1.setVisible(false)
-
-
       if (isNullOrUndefined(cell1.value)) {
         cell1.value = 'start';
       }
@@ -393,8 +383,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       cell2.vertex = true;
       cell2.cellType = 'associationLabel'
       cell2.setVisible(false)
-
-
       if (isNullOrUndefined(cell2.value)) {
         cell2.value = 'end';
       }
@@ -426,64 +414,38 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     let sourceCell = relationship.source.getParent();
     let targetCell = relationship.target;
 
-    console.log("?????")
-    console.log(relationship.source);
-    console.log(sourceCell);
-    console.log("=====0")
     let hack = new Association();
     hack.relationshipType = RelationshipType.ASSOCIATION;
     hack.source = sourceCell.id;
-    // addedRelationship.target = cret.id;
-    // hack.source = enumProperty.id;
     hack.target = targetCell.id;
     hack.sourceCardinality = 'ONE';
     hack.targetCardinality = 'ONE';
     hack.id = this.objectIdService.getNewObjectId();
-    // hack.hidden = true;
 
     let relationshipCell = new mx.mxCell('', new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as myMxCell;
     relationshipCell.cellType = 'association';
     relationshipCell.setVertex(false);
     relationshipCell.setEdge(true);
-    
-    // relationshipCell.setVisible(false);
 
-
-      this.hiddenEdges.push(relationshipCell);
-      // let a = this.graph.addEdge(relationshipCell, this.graph.getDefaultParent(), sourceCell, targetCell);
-      let a = this.graph.addCell(relationshipCell, this.graph.getDefaultParent(), undefined, sourceCell, targetCell);
-    console.log(a);
-
-    // let rhack = this.insertRelationshipIntoGraph(hack, new mx.mxPoint(0, 0), true);
-    // rhack.id = hack.id;
-    
+    this.hiddenEdges.push(relationshipCell);
+    this.graph.addCell(relationshipCell, this.graph.getDefaultParent(), undefined, sourceCell, targetCell);
   }
 
   private setLayout() {
-    // let layout = new mx.mxHierarchicalLayout(this.graph, mx.mxConstants.DIRECTION_NORTH, false);
-    // // layout.edgeStyle=2;
-    // layout.intraCellSpacing=10;
-    // // layout.interRankCellSpacing=40;
-    // layout.maintainParentLocation=false;
-    // layout.fineTuning = false;
-    // layout.edgeStyle=1;
-
-    // console.log(layout);
-    // layout.execute(this.graph.getDefaultParent(), getRootCells(this.graph));
-
     let layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
     let rootCells = getRootCells(this.graph);
+
     layout.levelDistance = 30;
     layout.alignRanks = true;
     layout.minEdgeJetty = 30;
-    layout.prefHozEdgeSep = 5
+    layout.prefHozEdgeSep = 5;
+
     for (let rootCell of rootCells) {
       layout.execute(this.graph.getDefaultParent(), rootCell);
     }
 
     for (let edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
-
     }
 
     function getRootCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
@@ -561,7 +523,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
               if (!isNullOrUndefined(result)) {
 
                 if (result.key == "new_property") {
-                  console.log("add property")
+                  //TODO @Alex
                 } else {
                   this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.marketplace, result.propertyItems.map(propertyItems => propertyItems.id)).toPromise().then((ret: ClassProperty<any>[]) => {
                     c.properties.push(...ret);
@@ -570,7 +532,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
                   });
                 }
               }
-
             });
             break;
           }
@@ -597,8 +558,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       if (cell.value == "add_class_same_level") {
         let addedClass = new ClassDefinition();
         addedClass.properties = [];
-
-
         addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
 
@@ -614,12 +573,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
         addedRelationship.source = precursor.id
         addedRelationship.target = addedClass.id;
+
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
         rret.id = this.objectIdService.getNewObjectId();
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
-
-
 
         this.updateModel();
         this.redrawContent(cret as myMxCell);
@@ -630,15 +588,19 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedClass.properties = [];
 
         let parentClassArchetype = (cell.getParent() as myMxCell).classArchetype
+
         if (parentClassArchetype == ClassArchetype.ENUM_HEAD || parentClassArchetype == ClassArchetype.ENUM_ENTRY) {
           addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+
         } else if (parentClassArchetype.endsWith("_HEAD")) {
           addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
+     
         } else {
           addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+       
         let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
         cret.id = this.objectIdService.getNewObjectId();
         addedClass.id = cret.id;
@@ -648,6 +610,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
         addedRelationship.source = cell.getParent().id
         addedRelationship.target = cret.id;
+     
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
         rret.id = this.objectIdService.getNewObjectId();
         addedRelationship.id = rret.id;
@@ -677,11 +640,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         currentClass.properties.push(enumProperty);
 
         let enumClassHead = new ClassDefinition();
-        // enumClassHead.properties = [];
-        // let valueProperty = new ClassProperty();
-        // valueProperty.name = "value";
-        // valueProperty.id = "value";
-        // enumClassHead.properties.push(valueProperty);
         enumClassHead.classArchetype = ClassArchetype.ENUM_HEAD;
         enumClassHead.name = enumProperty.name;
 
@@ -692,11 +650,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
         enumProperty.allowedValues = [new EnumReference(cret.id)];
 
-
         let addedRelationship = new Association();
         addedRelationship.relationshipType = RelationshipType.ASSOCIATION;
-        // addedRelationship.source = cell.getParent().id
-        // addedRelationship.target = cret.id;
         addedRelationship.source = enumProperty.id;
         addedRelationship.target = cret.id;
         addedRelationship.sourceCardinality = 'ONE';
@@ -707,12 +662,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         rret.id = addedRelationship.id;
         this.relationships.push(addedRelationship);
 
-
-
         this.updateModel();
         this.redrawContent(cret as myMxCell);
       }
-
       this.modelUpdated = true;
     }
   }
@@ -720,7 +672,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   handleMXGraphFoldEvent(event: any) {
     let cells: myMxCell[] = event.getProperty("cells");
     let cell = cells.pop();
-
     let edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
     if (!isNullOrUndefined(edges) && !isNullOrUndefined(edges[0]) && !isNullOrUndefined(edges[0].target)) {
@@ -730,9 +681,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.setCellsVisibility(cell, true, false);
       }
     }
-
     this.modelUpdated = true;
-
   }
 
   private setCellsVisibility(cell: myMxCell, visible: boolean, recursive: boolean) {
@@ -740,7 +689,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     for (let edge of edges) {
       this.graph.getModel().setVisible(edge.target, visible);
-
       if (recursive) {
         this.setCellsVisibility(edge.target as myMxCell, visible, recursive);
       }
@@ -831,6 +779,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       }).then(() => {
         let snackBarMessage: string;
+        
         if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
           snackBarMessage = "save successful!";
         } else {
