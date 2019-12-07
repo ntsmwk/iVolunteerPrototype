@@ -30,7 +30,7 @@ public class ClassDefinitionService {
 	@Autowired private RelationshipRepository relationshipRepository;
 
 	public ClassDefinition getByName(String name) {
-		return classDefinitionRepository.getByName(name);
+		return classDefinitionRepository.findByName(name);
 	}
 	
 	public ClassDefinition getClassDefinitionById(String id) {
@@ -65,7 +65,7 @@ public class ClassDefinitionService {
 	}
 	
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype) {
-		return classDefinitionRepository.getByClassArchetype(archetype);
+		return classDefinitionRepository.findByClassArchetype(archetype);
 	}
 
 	public List<FormConfiguration> getParentsById(List<String> childIds) {

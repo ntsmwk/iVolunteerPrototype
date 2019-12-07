@@ -19,6 +19,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
@@ -43,17 +44,21 @@ public class InitializationService {
 
 	@PostConstruct
 	public void init() {
-		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository, relationshipRepository, propertyDefinitionRepository);
+		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
+				relationshipRepository, propertyDefinitionRepository);
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
-		createiVolunteerAPIPersonRoleClassDefinition();
-		createiVolunteerAPIPersonBadgeClassDefinition();
-		createiVolunteerAPIPersonCertificateClassDefinition();
-		createiVolunteerAPIPersonTaskClassDefinition();
+		ClassDefinition findByName = classDefinitionRepository.findByName("PersonRole");
+		if (findByName == null) {
+			createiVolunteerAPIPersonRoleClassDefinition();
+			createiVolunteerAPIPersonBadgeClassDefinition();
+			createiVolunteerAPIPersonCertificateClassDefinition();
+			createiVolunteerAPIPersonTaskClassDefinition();
+		}
 
 	}
 
@@ -183,7 +188,7 @@ public class InitializationService {
 	}
 
 	private List<PropertyDefinition<Object>> addPropertyDefinitions() {
-		List<PropertyDefinition> propertyDefinitions = new ArrayList<>();
+		List<PropertyDefinition<Object>> propertyDefinitions = new ArrayList<>();
 		addCrossCuttingProperties(propertyDefinitions);
 		addPersonRoleProperties(propertyDefinitions);
 		addPersonBadgeProperties(propertyDefinitions);
@@ -192,59 +197,59 @@ public class InitializationService {
 		return propertyDefinitionsRepository.save(propertyDefinitions);
 	}
 
-	private void addCrossCuttingProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
+	private void addCrossCuttingProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerUUID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerSource", PropertyType.TEXT));
 	}
 
-	private void addPersonRoleProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("roleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleType", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationType", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("dateFrom", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("dateTo", PropertyType.DATE));
+	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("dateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("dateTo", PropertyType.DATE));
 	}
 
-	private void addPersonBadgeProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeIssuedOn", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeIcon", PropertyType.TEXT));
+	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIcon", PropertyType.TEXT));
 	}
 
-	private void addPersonCertificateProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateIssuedOn", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateValidUntil", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateIcon", PropertyType.TEXT));
+	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateValidUntil", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateIcon", PropertyType.TEXT));
 	}
 
-	private void addPersonTaskProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("taskID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType1", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType2", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType3", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType4", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskRoleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskRole", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicle", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskCountAll", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDateFrom", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDateTo", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDuration", PropertyType.FLOAT_NUMBER));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskLocation", PropertyType.TEXT));
+	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskRoleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskRole", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicle", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskCountAll", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateTo", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDuration", PropertyType.FLOAT_NUMBER));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskLocation", PropertyType.TEXT));
 //			TODO task geoinformation to geo object
-		propertyDefinitions.add(new PropertyDefinition<String>("taskGeoInformation", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskGeoInformation", PropertyType.TEXT));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -18,20 +18,18 @@ import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.SingleUserDefinedTaskTemplate;
 import at.jku.cis.iVolunteer.model.task.template.UserDefinedTaskTemplate;
 
-
 @Component
 public class StandardTemplates {
-	
-	
+
 	@Autowired public ClassDefinitionRepository competenceRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
-	
+
 	public StandardTemplates() {
-		
+
 	}
-	
+
 	@PostConstruct
 	public void addTestTemplates() {
 		for (UserDefinedTaskTemplate t : this.createAll()) {
@@ -41,10 +39,9 @@ public class StandardTemplates {
 		}
 	}
 
-	
 	public List<UserDefinedTaskTemplate> createAll() {
 		List<UserDefinedTaskTemplate> list = new ArrayList<>();
-		
+
 		list.add(createTemplateWithAllProperties());
 		list.add(createNestedTemplateWithExamples());
 //		list.add(createGenericDienstTemplate());
@@ -59,71 +56,72 @@ public class StandardTemplates {
 		return list;
 	}
 
-
 	public UserDefinedTaskTemplate createTemplateWithAllProperties() {
 		SingleUserDefinedTaskTemplate t = new SingleUserDefinedTaskTemplate("all");
-		
+
 		t.setName("All Properties");
 		List<PropertyDefinition<Object>> p = propertyDefinitionRepository.findAll();
 		System.out.println(p.size());
 		List<ClassProperty<Object>> a = propertyDefinitionToClassPropertyMapper.toTargets(p);
-		
+
 		t.setTemplateProperties(a);
-		
+
 		int i = 0;
 		for (ClassProperty<Object> classProperty : t.getTemplateProperties()) {
 			classProperty.setPosition(i);
 			i++;
 		}
 		return t;
-		
+
 	}
-	
+
 	public UserDefinedTaskTemplate createNestedTemplateWithExamples() {
 		MultiUserDefinedTaskTemplate nested = new MultiUserDefinedTaskTemplate("SmallExampleTasks");
 		nested.setName("Test nested template");
 		nested.setDescription("This is a description");
 		List<SingleUserDefinedTaskTemplate> nestedTemplates = new ArrayList<>();
-		
+
 		SingleUserDefinedTaskTemplate s1 = new SingleUserDefinedTaskTemplate("CleanFloor");
 		s1.setName("Clean Garage Floor");
 		s1.setDescription("Clean garage floor at the end of the day");
 		List<ClassProperty<Object>> nsp1 = new ArrayList<>();
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("location")));
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("postcode")));
-		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
+		nsp1.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("period_type")));
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("priority")));
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("urgent")));
 		nsp1.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("workshift")));
-		
+
 		int i = 0;
 		for (ClassProperty<Object> prop : nsp1) {
 			prop.setPosition(i);
 			i++;
 		}
-		
-		
+
 		s1.setTemplateProperties(nsp1);
 		nestedTemplates.add(s1);
-		
+
 		SingleUserDefinedTaskTemplate s2 = new SingleUserDefinedTaskTemplate("drivecartoservice");
 		s2.setName("Drive car to service");
-		s2.setDescription("A car is has to be serviced soon, someone has to drive the car described to the service partner");
+		s2.setDescription(
+				"A car is has to be serviced soon, someone has to drive the car described to the service partner");
 		List<ClassProperty<Object>> nsp2 = new ArrayList<>();
 		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("location")));
 		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("postcode")));
-		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
+		nsp2.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
 		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("urgent")));
 		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("priority")));
 		nsp2.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("description")));
-		
+
 		i = 0;
 		for (ClassProperty<Object> prop : nsp2) {
 			prop.setPosition(i);
 			i++;
 		}
-		
+
 		s2.setTemplateProperties(nsp2);
 		nestedTemplates.add(s2);
 
@@ -135,53 +133,57 @@ public class StandardTemplates {
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("postcode")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("location")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("description")));
-		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("starting_date")));
+		nsp3.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("starting_date")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("latitude")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("longitude")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("priority")));
 		nsp3.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("importancy")));
-		
+
 		i = 0;
 		for (ClassProperty<Object> prop : nsp3) {
 			prop.setPosition(i);
 			i++;
 		}
-		
+
 		s3.setTemplateProperties(nsp3);
 		nestedTemplates.add(s3);
-		
+
 		SingleUserDefinedTaskTemplate s4 = new SingleUserDefinedTaskTemplate("genericworktask");
 		s4.setName("Generic Worktask");
 		s4.setDescription("This is a description for the fourth nested template");
 		List<ClassProperty<Object>> nsp4 = new ArrayList<>();
 		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("name")));
 		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("workshift")));
-		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("offered_rewards")));
-		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
+		nsp4.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("offered_rewards")));
+		nsp4.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("number_of_volunteers")));
 		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("location")));
-		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("starting_date")));
+		nsp4.add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("starting_date")));
 		nsp4.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("end_date")));
-		
+
 		i = 0;
 		for (ClassProperty<Object> prop : nsp4) {
 			prop.setPosition(i);
 			i++;
 		}
-		
+
 		s4.setTemplateProperties(nsp4);
 		nestedTemplates.add(s4);
-		
+
 		i = 0;
 		for (UserDefinedTaskTemplate t : nestedTemplates) {
 			t.setOrder(i);
 			i++;
 		}
-		
+
 		nested.setTemplates(nestedTemplates);
-		
+
 		return nested;
 	}
-	
+
 //	public SingleUserDefinedTaskTemplate createGenericDienstTemplate() {
 //		SingleUserDefinedTaskTemplate t = new SingleUserDefinedTaskTemplate("generic_dienst");
 //		t.setName("Generic 'Dienst'");
@@ -206,28 +208,31 @@ public class StandardTemplates {
 //		return t;
 //	
 //	}
-	
+
 	public SingleUserDefinedTaskTemplate createGenericTaskTemplate() {
 		SingleUserDefinedTaskTemplate t = new SingleUserDefinedTaskTemplate("generic_task");
 		t.setName("Simple Generic Task");
 		t.setDescription("How a generic Task could look like");
-		
+
 		t.setTemplateProperties(new ArrayList<ClassProperty<Object>>());
-		t.getTemplateProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("name")));
-		t.getTemplateProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("description")));
-		t.getTemplateProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aquireable_competences")));
+		t.getTemplateProperties()
+				.add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("name")));
+		t.getTemplateProperties().add(
+				propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("description")));
+		t.getTemplateProperties().add(propertyDefinitionToClassPropertyMapper
+				.toTarget(propertyDefinitionRepository.findOne("aquireable_competences")));
 //		t.getProperties().add(propertyRepository.findOne("comments"));
-		
+
 		int i = 0;
 		for (ClassProperty<Object> prop : t.getTemplateProperties()) {
 			prop.setPosition(i);
 			i++;
 		}
-		
+
 		return t;
-	
+
 	}
-	
+
 //	public SingleUserDefinedTaskTemplate createGenericEventTemplate() {
 //		SingleUserDefinedTaskTemplate t = new SingleUserDefinedTaskTemplate("generic_event");
 //		t.setName("Generic Event");
@@ -601,9 +606,4 @@ public class StandardTemplates {
 //	}
 //	
 
-	
-	
-	
-	
-	
 }

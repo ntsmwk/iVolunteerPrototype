@@ -17,7 +17,7 @@ public class CompetenceClassDefinitionController {
 
 	@GetMapping("/competence")
 	public List<ClassDefinition> findAll() {
-		List<ClassDefinition> findAll = classDefinitionRepository.getByClassArchetype(ClassArchetype.COMPETENCE);
+		List<ClassDefinition> findAll = classDefinitionRepository.findByClassArchetype(ClassArchetype.COMPETENCE);
 		return findAll;
 	}
 }
