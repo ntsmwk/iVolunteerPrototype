@@ -29,12 +29,32 @@
       <mat-divider></mat-divider>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
-      <mat-form-field style="width: 300px">
+    <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
+      <mat-form-field style="width: 250px">
         <mat-label>Choose Achievement Type</mat-label>
         <mat-select value=l>
           <mat-option value="l">Leadership Training</mat-option>
         </mat-select>
+      </mat-form-field>
+      <mat-form-field style="width: 250px">
+        <mat-label>Select Attribute</mat-label>
+        <mat-select value=l>
+          <mat-option value="l">Leadership Training</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="width: 80px">
+        <mat-label>Select Operation</mat-label>
+        <mat-select value=l>
+          <mat-option value="l">=</mat-option>
+          <mat-option value="l">&lt;</mat-option>
+          <mat-option value="l">&le;</mat-option>
+          <mat-option value="l">&gt;</mat-option>
+          <mat-option value="l">&ge;</mat-option>
+          <mat-option value="l">&ne;</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="width: 150px">
+        <input matInput placeholder="value" formControlName="value" />
       </mat-form-field>
     </div>
 
