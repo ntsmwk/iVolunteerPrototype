@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.model.rule;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -12,6 +13,7 @@ public class DerivationRuleDTO {
 	private String marketplaceId;
 	private List<SourceRuleEntryDTO> sources = new ArrayList<>();
 	private List<ClassDefinition> targets = new ArrayList<>();
+	private Date timestamp;
 
 	public String getName() {
 		return name;
@@ -51,6 +53,14 @@ public class DerivationRuleDTO {
 
 	public void setTargets(List<ClassDefinition> targets) {
 		this.targets = targets;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }

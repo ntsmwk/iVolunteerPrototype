@@ -10,6 +10,7 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
+import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntryDTO;
 
 @Component
@@ -40,13 +41,21 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 	@Override
 	public DerivationRule toSource(DerivationRuleDTO target) {
 		DerivationRule derivationRule = new DerivationRule();
-		return null;
+		derivationRule.setId(target.getId());
+		derivationRule.setMarketplaceId(target.getMarketplaceId());
+		derivationRule.setName(target.getName());
+		derivationRule.setSources(target.getSources().stream()
+				.map(e -> new SourceRuleEntry(e.getClassDefinition().getId(), e.getMappingOperator()))
+				.collect(Collectors.toList()));
+
+		derivationRule.setTargets(target.getTargets().stream().map(cd -> cd.getId()).collect(Collectors.toList()));
+		derivationRule.setTimestamp(target.getTimestamp());
+		return derivationRule;
 	}
 
 	@Override
 	public List<DerivationRule> toSources(List<DerivationRuleDTO> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		return targets.stream().map(t -> toSource(t)).collect(Collectors.toList());
 	}
 
 }

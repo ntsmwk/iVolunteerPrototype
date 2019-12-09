@@ -11,6 +11,12 @@ public class SourceRuleEntry {
 	public SourceRuleEntry() {
 	}
 
+	public SourceRuleEntry(String classDefinitionId, MappingOperator mappingOperator) {
+		super();
+		this.classDefinitionId = classDefinitionId;
+		this.mappingOperator = mappingOperator;
+	}
+
 	public MappingOperator getMappingOperator() {
 		return mappingOperator;
 	}
