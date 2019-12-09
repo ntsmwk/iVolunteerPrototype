@@ -8,6 +8,7 @@ import { isNullOrUndefined } from 'util';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { MessageService } from '../../_service/message.service';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   templateUrl: './rule-configurator.component.html',
@@ -18,11 +19,21 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   participant: Participant;
   marketplace: Marketplace;
   role: ParticipantRole;
+  ruleForm: FormGroup;
+
 
   constructor(private route: ActivatedRoute,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
+    private formBuilder: FormBuilder,
     private messageService: MessageService) {
+      this.ruleForm = formBuilder.group({
+        'id': new FormControl(undefined),
+        'name': new FormControl(undefined),
+        'source': new FormControl(undefined),
+        'target': new FormControl(undefined),
+      });
+  
   }
 
   ngOnInit() {
