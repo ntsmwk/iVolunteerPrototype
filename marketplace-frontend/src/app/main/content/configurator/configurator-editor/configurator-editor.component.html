@@ -5,7 +5,7 @@
 
 <div #leftSidebarContainer id="leftSidebarContainer" style="border-right: solid 1px rgb(160, 160, 160)">
   <div class="sidebar-content">
-    <h2>Shapes</h2>
+    <!-- <h2>Shapes</h2>
     <h3 style="padding-left: 5px; padding-top: 2px">> {{sidebarPalettes.label}}</h3>
     <div *ngFor="let row of sidebarPalettes.rows; let i = index" fxLayout="row" fxLayoutAlign="center center">
       <div style="padding-top: 10px"></div>
@@ -23,7 +23,7 @@
         <div style="padding-top: 3px"></div>
       </div>
 
-    </div>
+    </div> -->
 
     <!-- <h3 style="padding-left: 5px; padding-top: 2px">> {{relationshipPalettes.label}}</h3>
 
@@ -65,10 +65,10 @@
     <div style="padding-top: 5px"></div>
 
     <mat-form-field style="width: 100%">
-      <mat-select placeholder="Automatic Layout">
-        <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option>
+      <mat-select placeholder="Automatic Layout" value="Vertical">
+        <!-- <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option> -->
         <mat-option value="Vertical" (click)="setLayout('vertical')">Vertical</mat-option>
-        <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option>
+        <!-- <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option> -->
       </mat-select>
     </mat-form-field>
 
