@@ -21,7 +21,7 @@
                 <mat-header-cell *matHeaderCellDef>Sources</mat-header-cell>
                 <mat-cell *matCellDef="let rule">
                     <span *ngFor="let source of rule.sources; let last = last">
-                        {{source.name}}<span *ngIf="!last">, </span>
+                        {{source.classDefinition.name}}<span *ngIf="!last">, </span>
                     </span>
                 </mat-cell>
             </ng-container>

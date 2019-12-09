@@ -340,14 +340,6 @@
 
         <a style="cursor: pointer;" (click)="taskRow2hidden=false">add row</a>
 
-
-
-
-
-
-
-
-
       </div>
       <div fxFlex=5></div>
 
@@ -398,45 +390,6 @@
       <button mat-stroked-button type="button" color="primary">Cancel</button>
       <div style="padding-right: 20px"></div>
     </div>
-  </div>
-
-  <div style="padding-top: 50px; padding-left: 40px">
-
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <h2>Existing Derivation Rules</h2>
-      <div style="padding-left: 10px;"></div>
-      <a style=" cursor: pointer; padding-top: 8px">show list</a>
-    </div>
-
-
-    <mat-table #table [dataSource]="dataSource" *ngIf="showlist">
-      <ng-container matColumnDef="label">
-        <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-        <mat-cell *matCellDef="let entry" style="font-size: 15px">
-          {{entry.label}}
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="pre">
-        <mat-header-cell *matHeaderCellDef>Pre-Condition</mat-header-cell>
-        <mat-cell *matCellDef="let entry" style="font-size: 15px">{{entry.pre}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="post">
-        <mat-header-cell *matHeaderCellDef>Post-Condition</mat-header-cell>
-        <mat-cell *matCellDef="let entry" style="font-size: 15px">
-          {{entry.post}}
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-
-    <div *ngIf="!showlist" style="padding-bottom: 50px">
-
-    </div>
-
   </div>
 
 </div>

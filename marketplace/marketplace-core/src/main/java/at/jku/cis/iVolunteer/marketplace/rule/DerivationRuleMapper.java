@@ -22,8 +22,8 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 	public DerivationRuleDTO toTarget(DerivationRule source) {
 		DerivationRuleDTO dto = new DerivationRuleDTO();
 		dto.setId(source.getId());
-		dto.setMarketplaceId(dto.getMarketplaceId());
-		dto.setName(dto.getName());
+		dto.setMarketplaceId(source.getMarketplaceId());
+		dto.setName(source.getName());
 		dto.setSources(source.getSources().stream()
 				.map(entry -> new SourceRuleEntryDTO(classDefinitionRepository.findOne(entry.getClassDefinitionId()),
 						entry.getMappingOperator()))
