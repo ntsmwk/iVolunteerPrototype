@@ -8,90 +8,81 @@
     </div>
   </div>
 
-  <div style="padding-top: 12px; padding-left: 40px">
+  <form form style="padding-top: 12px; padding-left: 40px" name="form" fxLayout="column" fxLayoutGap="20px"
+    fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
+    <div fxLayout=row>
+      <mat-form-field class="nameInput">
+        <input matInput placeholder="Derivation Rule Name" formControlName="name" />
+      </mat-form-field>
+    </div>
 
-    <form form name="form" fxLayout="column" fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
-      <div fxLayout=row>
-        <div style="padding-top: 10px"></div>
-        <mat-form-field style="width: 420px">
-          <input matInput placeholder="Derivation Rule Name" formControlName="name" />
-        </mat-form-field>
-      </div>
-
-      <div style="padding-top: 20px"></div>
+    <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
-      <div style=" font-size: 20px;" fxLayout="row">
-        <div fxFlex fxLayout=row fxLayoutAlign="start start">
-          <div fxLayout=column fxLayoutAlign="space-between center">
-            <div style="padding-bottom: 5px"></div>
-            <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
-              <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/checklist.jpg">
-            </div>
+      <div fxFlex fxLayout=row fxLayoutAlign="start start">
+        <div fxLayout=column fxLayoutAlign="space-between center">
+          <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/checklist.jpg">
           </div>
-          <div style="padding-left: 15px"></div>
-          <div style=" padding-top: 3px; padding-right: 3px;"> Pre-Conditions for automatic Competence
-            Derivation</div>
         </div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Select Pre-Conditions for automatic Derivation</div>
       </div>
       <mat-divider></mat-divider>
+    </div>
 
-      <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
+    <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px">
+      <mat-form-field style="width: 300px">
+        <mat-label>Choose Achievement Type</mat-label>
+        <mat-select value=l>
+          <mat-option value="l">Leadership Training</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
+
+      <mat-divider></mat-divider>
+      <div fxFlex fxLayout=row fxLayoutAlign="start start">
+        <div fxLayout=column fxLayoutAlign="space-between center">
+          <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
+          </div>
+        </div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Derived Freiwilligenpass-Einträge</div>
+      </div>
+
+      <mat-divider></mat-divider>
+    </div>
+
+    <div fxLayout="column" fxLayoutAlign="start start">
+      <div style="padding-top: 10px"></div>
+      <div>
         <mat-form-field style="width: 300px">
-          <mat-label>Choose Achievement Type</mat-label>
+          <mat-label>Choose Competence Types
+          </mat-label>
 
-          <mat-select value=l>
-            <mat-option value="l">Leadership Training</mat-option>
+          <mat-select multiple>
+            <mat-option value="l1">Leadership Skills [Level 1] </mat-option>
+            <mat-option value="l2">Leadership Skills [Level 2] </mat-option>
+            <mat-option value="l3">Leadership Skills [Level 3] </mat-option>
+            <mat-option value="a">Diligence</mat-option>
+            <mat-option value="b">Teamwork</mat-option>
+            <mat-option value="c">Communication Skills</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-
-
-      <div style="padding-top: 20px"></div>
-      <mat-divider></mat-divider>
-      <div style=" font-size: 20px;" fxLayout="row">
-        <div fxFlex fxLayout=row fxLayoutAlign="start start">
-          <div fxLayout=column fxLayoutAlign="space-between center">
-            <div style="padding-bottom: 5px"></div>
-            <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
-              <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
-            </div>
-          </div>
-          <div style="padding-left: 15px"></div>
-          <div style=" padding-top: 3px; padding-right: 3px;"> Derived Freiwilligenpass-Einträge</div>
-        </div>
-      </div>
-      <mat-divider></mat-divider>
-
-      <div fxLayout="column" fxLayoutAlign="start start">
-        <div style="padding-top: 10px"></div>
-        <div>
-          <mat-form-field style="width: 300px">
-            <mat-label>Choose Competence Types
-            </mat-label>
-
-            <mat-select multiple>
-              <mat-option value="l1">Leadership Skills [Level 1] </mat-option>
-              <mat-option value="l2">Leadership Skills [Level 2] </mat-option>
-              <mat-option value="l3">Leadership Skills [Level 3] </mat-option>
-              <mat-option value="a">Diligence</mat-option>
-              <mat-option value="b">Teamwork</mat-option>
-              <mat-option value="c">Communication Skills</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </form>
-
-    <div style="padding-top:20px"></div>
-    <mat-divider></mat-divider>
-    <div style="padding-top:20px"></div>
-
-    <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
-      <button mat-raised-button type="button" color="primary">Create Rule</button>
-      <div style="padding-right: 5px"></div>
-      <button mat-stroked-button type="button" color="primary">Cancel</button>
-      <div style="padding-right: 20px"></div>
     </div>
+  </form>
+
+  <div style="padding-top:20px"></div>
+  <mat-divider></mat-divider>
+  <div style="padding-top:20px"></div>
+
+  <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
+    <button mat-raised-button type="button" color="primary">Create Rule</button>
+    <div style="padding-right: 5px"></div>
+    <button mat-stroked-button type="button" color="primary">Cancel</button>
+    <div style="padding-right: 20px"></div>
   </div>
+
 
 </div>

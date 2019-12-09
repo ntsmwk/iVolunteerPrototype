@@ -89,32 +89,7 @@ $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 
 
 
-//     img.header-icon {
-//       left: 10px;
-//       padding: 16px;
-//       max-height: 100%;
-//       position: absolute;
-//       filter: brightness(0) invert(1);
-
-//       @include media-breakpoint-down('xs') {
-//         display: none;
-//       }
-//     }
-
-//     .buttons {
-//       right: 0;
-//       position: absolute;
-//     }
-//   }
-
-//   .dashboard-area {
-//     gridster {
-//       min-height: 1000px;
-//       background-color: transparent;
-//     }
-
-//     gridster.display-grid {
-//       background: grey;
-//     }
-//   }
-// }
+  .nameInput{
+      padding-top: 30px;
+      width: 300px;
+  }
