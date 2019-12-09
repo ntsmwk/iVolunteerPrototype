@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
-import { Marketplace } from '../../_model/marketplace';
 
 import { isNullOrUndefined } from 'util';
-import { LoginService } from '../../_service/login.service';
-import { Participant, ParticipantRole } from '../../_model/participant';
-import { MessageService } from '../../_service/message.service';
+import { LoginService } from '../../../_service/login.service';
+import { Participant, ParticipantRole } from '../../../_model/participant';
+import { MessageService } from '../../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { FuseRulePreconditionConfiguratorComponent } from './rule-configurator-precondition/rule-configurator-precondition.component';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 
 @Component({
-  templateUrl: './rule-configurator.component.html',
-  styleUrls: ['./rule-configurator.component.scss'],
-  providers: [],
+  selector: 'rule-precondition',
+  templateUrl: './rule-configurator-precondition.component.html',
+  styleUrls: ['../rule-configurator.component.scss']
 })
-export class FuseRuleConfiguratorComponent implements OnInit {
+export class FuseRulePreconditionConfiguratorComponent implements OnInit {
 
   participant: Participant;
   marketplace: Marketplace;
   role: ParticipantRole;
-  ruleForm: FormGroup;
+  rulePreconditionForm: FormGroup;
 
 
   constructor(private route: ActivatedRoute,
@@ -29,11 +28,12 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private formBuilder: FormBuilder,
     private messageService: MessageService) {
-      this.ruleForm = formBuilder.group({
+      this.rulePreconditionForm = formBuilder.group({
         'id': new FormControl(undefined),
         'name': new FormControl(undefined),
-        'source': new FormControl(undefined),
-        'target': new FormControl(undefined),
+        'attribute': new FormControl(undefined),
+        'operation': new FormControl(undefined),
+        'value': new FormControl(undefined),
       });
   
   }
