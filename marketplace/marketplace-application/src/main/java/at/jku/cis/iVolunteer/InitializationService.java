@@ -29,7 +29,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
-import at.jku.cis.iVolunteer.model.rule.MappingOperator;
+import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -61,7 +61,9 @@ public class InitializationService {
 
 		SourceRuleEntry source = new SourceRuleEntry();
 		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
-		source.setMappingOperator(new MappingOperator());
+		source.setAttributeId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
+		source.setMappingOperatorType(MappingOperatorType.GE);
+		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
 		rule.setTargets(Lists.asList(classDefinitionRepository.findByName("PersonCertificate").getId(), new String[0]));
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());

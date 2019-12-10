@@ -6,23 +6,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SourceRuleEntry {
 
 	private String classDefinitionId;
-	private MappingOperator mappingOperator;
+	private String attributeId;
+	private MappingOperatorType mappingOperatorType;
+	private String value;
 
 	public SourceRuleEntry() {
 	}
 
-	public SourceRuleEntry(String classDefinitionId, MappingOperator mappingOperator) {
+	public SourceRuleEntry(String classDefinitionId, String attributeId, MappingOperatorType mappingOperatorType,
+			String value) {
 		super();
 		this.classDefinitionId = classDefinitionId;
-		this.mappingOperator = mappingOperator;
-	}
-
-	public MappingOperator getMappingOperator() {
-		return mappingOperator;
-	}
-
-	public void setMappingOperator(MappingOperator mappingOperator) {
-		this.mappingOperator = mappingOperator;
+		this.attributeId = attributeId;
+		this.mappingOperatorType = mappingOperatorType;
+		this.value = value;
 	}
 
 	public String getClassDefinitionId() {
@@ -31,6 +28,30 @@ public class SourceRuleEntry {
 
 	public void setClassDefinitionId(String classDefinitionId) {
 		this.classDefinitionId = classDefinitionId;
+	}
+
+	public String getAttributeId() {
+		return attributeId;
+	}
+
+	public void setAttributeId(String attributeId) {
+		this.attributeId = attributeId;
+	}
+
+	public MappingOperatorType getMappingOperatorType() {
+		return mappingOperatorType;
+	}
+
+	public void setMappingOperatorType(MappingOperatorType mappingOperatorType) {
+		this.mappingOperatorType = mappingOperatorType;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }
