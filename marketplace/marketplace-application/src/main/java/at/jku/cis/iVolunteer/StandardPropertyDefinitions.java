@@ -20,7 +20,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.BooleanPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DatePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DoublePropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LevelListPropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.EnumPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
@@ -95,8 +95,6 @@ public class StandardPropertyDefinitions {
 		cp3.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp3);
 		
-		props.add(new TestMultipleLevelProperty());
-		props.add(new TestSingleLevelProperty());
 		props.add(new TaetigkeitsArtProperty());
 
 		return new ArrayList(props);
@@ -696,60 +694,10 @@ public class StandardPropertyDefinitions {
 	}
 	
 	
-	public static class TestSingleLevelProperty extends LevelListPropertyDefinition {
-		public TestSingleLevelProperty() {
-			inst();
-		}
-		
-		public void inst() {
-			this.setName("Test Single Level Property");
-			this.setId("test_single_level");
-			this.setAllowedValues(new ArrayList<EnumEntry>());
-			this.getAllowedValues().add(new EnumEntry(0, "entry 1"));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.1"));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.1.1"));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.2"));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.3"));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.3"));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.4"));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.4.1"));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.4.1"));
-			this.getAllowedValues().add(new EnumEntry(3, "entry 1.4.1.1"));
-			this.getAllowedValues().add(new EnumEntry(0, "entry 2"));
-			this.getAllowedValues().add(new EnumEntry(0, "entry 3"));
-		}
-	}
 	
-	public static class TestMultipleLevelProperty extends LevelListPropertyDefinition {
-		public TestMultipleLevelProperty() {
-			inst();
-		}
-		
-		public void inst() {
-			this.setName("Test Multiple Level Property");
-			this.setId("test_multiple_level");
-			this.setMultiple(true);
-			this.setAllowedValues(new ArrayList<EnumEntry>());
-			this.getAllowedValues().add(new EnumEntry(0, "entry 1", false));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.1", false));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.1.1", true));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.1.2", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.2", true));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.3", false));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.3.1", true));
-			this.getAllowedValues().add(new EnumEntry(1, "entry 1.4", false));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.4.1", true));
-			this.getAllowedValues().add(new EnumEntry(2, "entry 1.4.2", false));
-			this.getAllowedValues().add(new EnumEntry(3, "entry 1.4.2.1", true));
-			this.getAllowedValues().add(new EnumEntry(3, "entry 1.4.2.2", true));
-			this.getAllowedValues().add(new EnumEntry(3, "entry 1.4.2.3", true));
-			this.getAllowedValues().add(new EnumEntry(0, "entry 2", true));
-			this.getAllowedValues().add(new EnumEntry(0, "entry 3", true));
-		}
-	}
 	
-	public static class TaetigkeitsArtProperty extends LevelListPropertyDefinition {
+	
+	public static class TaetigkeitsArtProperty extends EnumPropertyDefinition {
 		public TaetigkeitsArtProperty() {
 			inst();
 		}
@@ -757,7 +705,7 @@ public class StandardPropertyDefinitions {
 		public void inst() {
 			this.setName("Tätigkeitsart");
 			this.setId("taetigkeitsart");
-			this.setMultiple(true);
+			this.setMultiple(false);
 			this.setAllowedValues(new ArrayList<EnumEntry>());
 			this.getAllowedValues().add(new EnumEntry(0, "Einsatz", false));
 			this.getAllowedValues().add(new EnumEntry(1, "Technischer", true));

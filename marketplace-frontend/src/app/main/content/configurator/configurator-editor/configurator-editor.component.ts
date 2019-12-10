@@ -701,12 +701,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       let propertyEdge = edges.find((edge: myMxCell) => {
         return (edge.source as myMxCell).cellType != 'class'
-      })
-      // .find((edge: myMxCell) => {
-      //   return edge.source.id == cell.id;
-      // });
-      console.log(edges);
-      console.log(propertyEdge);
+      });
 
       //Update Cell Value
       this.graph.getModel().setValue(propertyEdge.source, cell.value);
