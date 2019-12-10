@@ -61,7 +61,7 @@ public class InitializationService {
 
 		SourceRuleEntry source = new SourceRuleEntry();
 		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
-		source.setAttributeId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
+		source.setPropertyDefinitionId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
 		source.setMappingOperatorType(MappingOperatorType.GE);
 		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));

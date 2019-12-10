@@ -33,7 +33,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.stream()
 				.map(entry -> new SourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
-						propertyDefinitionRepository.findOne(entry.getAttributeId()),
+						propertyDefinitionRepository.findOne(entry.getPropertyDefinitionId()),
 						entry.getMappingOperatorType(),
 						entry.getValue()))
 				.collect(Collectors.toList()));
