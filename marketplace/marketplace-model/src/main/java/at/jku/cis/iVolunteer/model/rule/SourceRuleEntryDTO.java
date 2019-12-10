@@ -1,19 +1,25 @@
 package at.jku.cis.iVolunteer.model.rule;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 
 public class SourceRuleEntryDTO {
 
 	private ClassDefinition classDefinition;
-	private MappingOperator mappingOperator;
+	private PropertyDefinition<Object> propertyDefinition;
+	private MappingOperatorType mappingOperatorType;
+	private String value;
 
 	public SourceRuleEntryDTO() {
 	}
 
-	public SourceRuleEntryDTO(ClassDefinition classDefinition, MappingOperator mappingOperator) {
+	public SourceRuleEntryDTO(ClassDefinition classDefinition, PropertyDefinition<Object> propertyDefinition,
+			MappingOperatorType mappingOperatorType, String value) {
 		super();
 		this.classDefinition = classDefinition;
-		this.mappingOperator = mappingOperator;
+		this.propertyDefinition = propertyDefinition;
+		this.mappingOperatorType = mappingOperatorType;
+		this.value = value;
 	}
 
 	public ClassDefinition getClassDefinition() {
@@ -24,12 +30,29 @@ public class SourceRuleEntryDTO {
 		this.classDefinition = classDefinition;
 	}
 
-	public MappingOperator getMappingOperator() {
-		return mappingOperator;
+	public PropertyDefinition<Object> getPropertyDefinition() {
+		return propertyDefinition;
 	}
 
-	public void setMappingOperator(MappingOperator mappingOperator) {
-		this.mappingOperator = mappingOperator;
+	public void setPropertyDefinition(PropertyDefinition<Object> propertyDefinition) {
+		this.propertyDefinition = propertyDefinition;
+	}
+
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public MappingOperatorType getMappingOperatorType() {
+		return mappingOperatorType;
+	}
+
+	public void setMappingOperatorType(MappingOperatorType mappingOperatorType) {
+		this.mappingOperatorType = mappingOperatorType;
 	}
 
 }

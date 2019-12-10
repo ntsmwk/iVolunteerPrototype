@@ -1,4 +1,5 @@
 import { ClassDefinition } from './meta/Class';
+import { PropertyDefinition } from './meta/Property';
 
 export class DerivationRule{
     id: string;
@@ -10,14 +11,11 @@ export class DerivationRule{
 
 export class SourceRuleEntry {
     classDefinition: ClassDefinition;
-    mappingOperator: MappingOperator;
-}
-
-export class MappingOperator{ 
+    propertyDefinition: PropertyDefinition<any>;
     mappingOperatorType: MappingOperatorType;
-    value: string;
+    value: any;
 }
 
 export enum MappingOperatorType{
-    COUNT
+    EQ, LT, LE, GT, GE, NE
 }

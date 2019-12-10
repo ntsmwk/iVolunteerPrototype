@@ -14,6 +14,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 
 @SpringBootApplication
 public class MarketplaceApplication {
@@ -28,18 +29,21 @@ public class MarketplaceApplication {
 		SpringApplication.run(MarketplaceApplication.class, args);
 	}
 
-	// does not work - find better solution @Alex -- fixed --- kinda; maybe use array or List of repositories instead
-	
+	// does not work - find better solution @Alex -- fixed --- kinda; maybe use
+	// array or List of repositories instead
+
 	@Autowired private ConfiguratorRepository configuratorRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
+
 	@PreDestroy
 	public void onExit() {
 		FinalizationService finalizationService = new FinalizationService();
-		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository, relationshipRepository, propertyDefinitionRepository);
+		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
+				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
 	}
 
 }

@@ -7,24 +7,27 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 
 @Service
 public class FinalizationService {
 
-	
-	
 	FinalizationService() {
-		
+
 	}
 
 //TODO 
-	public void destroy(ConfiguratorRepository configuratorRepository, ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository, RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository) {
-//		classDefinitionRepository.deleteAll();
-//		relationshipRepository.deleteAll();
-//		classInstanceRepository.deleteAll();
-//		configuratorRepository.deleteAll();
+	public void destroy(ConfiguratorRepository configuratorRepository,
+			ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository,
+			RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository,
+			DerivationRuleRepository derivationRuleRepository) {
+		classDefinitionRepository.deleteAll();
+		relationshipRepository.deleteAll();
+		classInstanceRepository.deleteAll();
+		configuratorRepository.deleteAll();
 		propertyDefinitionRepository.deleteAll();
+		derivationRuleRepository.deleteAll();
 
 	}
-	
+
 }
