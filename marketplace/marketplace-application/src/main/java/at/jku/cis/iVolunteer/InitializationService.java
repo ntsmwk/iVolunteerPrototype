@@ -51,7 +51,7 @@ public class InitializationService {
 	@PostConstruct
 	public void init() {
 		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
-				relationshipRepository, propertyDefinitionRepository);
+				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();

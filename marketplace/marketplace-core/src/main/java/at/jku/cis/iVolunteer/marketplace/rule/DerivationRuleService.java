@@ -28,4 +28,7 @@ public class DerivationRuleService {
 		derivationRuleRepository.save(derivationRuleMapper.toSource(derivationRule));
 	}
 
+	public DerivationRuleDTO getRule(String id) {
+		return derivationRuleMapper.toTarget(derivationRuleRepository.findOne(id));
+	}
 }

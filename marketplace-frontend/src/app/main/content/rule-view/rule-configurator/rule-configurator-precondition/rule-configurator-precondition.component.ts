@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -9,6 +9,7 @@ import { MessageService } from '../../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { SourceRuleEntry, MappingOperatorType } from 'app/main/content/_model/derivation-rule';
 
 @Component({
   selector: 'rule-precondition',
@@ -17,10 +18,15 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 })
 export class FuseRulePreconditionConfiguratorComponent implements OnInit {
 
+  @Input('sourceRuleEntry') sourceRuleEntry: SourceRuleEntry;
+
   participant: Participant;
   marketplace: Marketplace;
   role: ParticipantRole;
   rulePreconditionForm: FormGroup;
+
+  operations: Array<MappingOperatorType>;
+
 
 
   constructor(private route: ActivatedRoute,
@@ -29,17 +35,24 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService) {
       this.rulePreconditionForm = formBuilder.group({
-        'id': new FormControl(undefined),
-        'name': new FormControl(undefined),
-        'attribute': new FormControl(undefined),
-        'operation': new FormControl(undefined),
+        'classDefinition': new FormControl(undefined),
+        'propertyDefinition': new FormControl(undefined),
+        'mappingOperatorType': new FormControl(undefined),
         'value': new FormControl(undefined),
       });
   
   }
 
   ngOnInit() {
+    this.rulePreconditionForm.setValue({
+      classDefinition: this.sourceRuleEntry.classDefinition,
+      propertyDefinition: this.sourceRuleEntry.propertyDefinition,
+      mappingOperatorType:this.sourceRuleEntry.mappingOperatorType,
+      value: this.sourceRuleEntry.value
+    });
 
+    this.operations = [MappingOperatorType.EQ, MappingOperatorType.GE,MappingOperatorType.GT,MappingOperatorType.LE,MappingOperatorType.LT,MappingOperatorType.NE];
+  
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)

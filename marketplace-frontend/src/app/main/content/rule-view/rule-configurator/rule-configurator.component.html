@@ -8,8 +8,8 @@
     </div>
   </div>
 
-  <form form style="padding-top: 12px; padding-left: 40px" name="form" fxLayout="column" fxLayoutGap="20px"
-    fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
+  <form *ngIf="derivationRule" form style="padding-top: 12px; padding-left: 40px" name="form" fxLayout="column"
+    fxLayoutGap="20px" fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
     <div fxLayout=row>
       <mat-form-field class="nameInput">
         <input matInput placeholder="Derivation Rule Name" formControlName="name" />
@@ -29,11 +29,9 @@
       <mat-divider></mat-divider>
     </div>
 
-    <rule-precondition></rule-precondition>
-    <rule-precondition></rule-precondition>
-    <rule-precondition></rule-precondition>
-    <rule-precondition></rule-precondition>
-    <rule-precondition></rule-precondition>
+    <div *ngFor="let entry of derivationRule.sources">
+      <rule-precondition [sourceRuleEntry]="entry"></rule-precondition>
+    </div>
 
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
 
@@ -44,9 +42,8 @@
             <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
           </div>
         </div>
-        <div style=" padding-top: 3px; padding-left: 5px;"> Derived Freiwilligenpass-Einträge</div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Derived FWPE</div>
       </div>
-
       <mat-divider></mat-divider>
     </div>
 
@@ -54,16 +51,9 @@
       <div style="padding-top: 10px"></div>
       <div>
         <mat-form-field style="width: 300px">
-          <mat-label>Choose Competence Types
-          </mat-label>
-
-          <mat-select multiple>
-            <mat-option value="l1">Leadership Skills [Level 1] </mat-option>
-            <mat-option value="l2">Leadership Skills [Level 2] </mat-option>
-            <mat-option value="l3">Leadership Skills [Level 3] </mat-option>
-            <mat-option value="a">Diligence</mat-option>
-            <mat-option value="b">Teamwork</mat-option>
-            <mat-option value="c">Communication Skills</mat-option>
+          <mat-label>Choose derived FWPE Type</mat-label>
+          <mat-select>
+            <mat-option value="derivationRule.targets[0]">{{derivationRule.targets[0].name}} </mat-option>
           </mat-select>
         </mat-form-field>
       </div>

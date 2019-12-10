@@ -14,6 +14,11 @@ export class DerivationRuleService {
   constructor(private http: HttpClient) {
   }
 
+  findById(marketplace: Marketplace, id: string){
+    return this.http.get(`${marketplace.url}/rule/${id}`);
+
+  }
+
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/rule`);
   }

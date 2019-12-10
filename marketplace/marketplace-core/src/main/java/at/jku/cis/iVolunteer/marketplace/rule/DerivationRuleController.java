@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,11 @@ public class DerivationRuleController {
 		return derivationRuleService.getRules();
 	}
 
+	@GetMapping("/{ruleId}")
+	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
+		return derivationRuleService.getRule(ruleId);
+	}
+	
 	@PostMapping
 	public void createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
 		derivationRuleService.createRule(derivationRule);
@@ -33,5 +39,4 @@ public class DerivationRuleController {
 	public void updateRule(@RequestParam String id, @RequestBody DerivationRuleDTO derivationRule) {
 		derivationRuleService.updateRule(id, derivationRule);
 	}
-
 }
