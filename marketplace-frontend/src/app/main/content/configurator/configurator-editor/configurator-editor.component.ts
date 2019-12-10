@@ -700,8 +700,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       let edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
 
       let propertyEdge = edges.find((edge: myMxCell) => {
-        return (edge.source as myMxCell).cellType != 'class';
-      });
+        return (edge.source as myMxCell).cellType != 'class'
+      })
+      // .find((edge: myMxCell) => {
+      //   return edge.source.id == cell.id;
+      // });
+      console.log(edges);
+      console.log(propertyEdge);
 
       //Update Cell Value
       this.graph.getModel().setValue(propertyEdge.source, cell.value);
@@ -710,8 +715,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.configurableClasses.find((classDefinition: ClassDefinition) => {
         return classDefinition.id == propertyEdge.source.parent.id;
       }).properties.find((classProperty: ClassProperty<any>) => {
-        classProperty.name = propertyEdge.source.value;
-      });
+        return classProperty.id == propertyEdge.source.id;
+      }).name = propertyEdge.source.value;
 
       this.modelUpdated = true;
     }
