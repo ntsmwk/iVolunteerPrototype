@@ -1,7 +1,7 @@
 import { ClassDefinition } from './meta/Class';
 import { PropertyDefinition } from './meta/Property';
 
-export class DerivationRule{
+export class DerivationRule {
     id: string;
     marketplaceId: string;
     name: string;
@@ -16,6 +16,6 @@ export class SourceRuleEntry {
     value: any;
 }
 
-export enum MappingOperatorType{
-    EQ, LT, LE, GT, GE, NE
+export enum MappingOperatorType {
+    EQ = "=", LT = "<", LE = "<=", GT = ">", GE = ">=", NE = "!="
 }

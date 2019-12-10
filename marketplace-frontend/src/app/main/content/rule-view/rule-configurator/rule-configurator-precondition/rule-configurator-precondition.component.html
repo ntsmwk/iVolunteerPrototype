@@ -9,26 +9,18 @@
         </mat-form-field>
         <mat-form-field  style="width: 250px">
             <mat-label>Select Attribute</mat-label>
-            <mat-select value=l>
+            <mat-select  formControl="propertyDefinition">
                 <mat-option value="sourceRuleEntry.propertyDefinition">{{sourceRuleEntry.propertyDefinition.name}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field style="width: 80px">
             <mat-label>Select Operation</mat-label>
-            <mat-select placeholder="Operation">
+            <mat-select placeholder="Operation" >
+                <!-- formControl="mappingOperatorType" -->
                 <mat-option *ngFor="let op of operations" [value]="op">
                   {{ op }}
                 </mat-option>
               </mat-select>
-
-            <!-- <mat-select>
-                <mat-option value="EQ">=</mat-option>
-                <mat-option value="LT">&lt;</mat-option>
-                <mat-option value="LE">&le;</mat-option>
-                <mat-option value="GT">&gt;</mat-option>
-                <mat-option value="GE">&ge;</mat-option>
-                <mat-option value="NE">&ne;</mat-option>
-            </mat-select> -->
         </mat-form-field>
         <mat-form-field style="width: 150px" >
             <input matInput placeholder="value" formControlName="value"/>

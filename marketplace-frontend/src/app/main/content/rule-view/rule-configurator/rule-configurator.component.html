@@ -52,7 +52,7 @@
       <div>
         <mat-form-field style="width: 300px">
           <mat-label>Choose derived FWPE Type</mat-label>
-          <mat-select>
+          <mat-select [(value)]="derivationRule.targets[0]">
             <mat-option value="derivationRule.targets[0]">{{derivationRule.targets[0].name}} </mat-option>
           </mat-select>
         </mat-form-field>

@@ -39,8 +39,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.ruleForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
-      'source': new FormControl(undefined),
-      'target': new FormControl(undefined),
+      'sources': new FormControl(undefined),
+      'targets': new FormControl(undefined),
     });
   }
 
@@ -61,7 +61,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.derivationRuleService.findById(marketplace, ruleId).toPromise().then(
         (rule: DerivationRule) => {
           this.derivationRule = rule;
-          console.error(this.derivationRule);
+          this.ruleForm.setValue({
+            id: this.derivationRule.id,
+            name: this.derivationRule.name,
+            sources: this.derivationRule.sources,
+            targets: this.derivationRule.targets
+          });
+
         }
       );
     } else {
