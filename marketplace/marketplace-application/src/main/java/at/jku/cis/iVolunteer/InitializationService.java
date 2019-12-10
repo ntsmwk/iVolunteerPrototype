@@ -349,8 +349,8 @@ public class InitializationService {
 		i3.setId("test_i3");
 		Inheritance i4 = new Inheritance(c2.getId(), c5.getId(), c2.getId());
 		i4.setId("test_i4");
-		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
-		i5.setId("test_i5");
+//		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
+//		i5.setId("test_i5");
 //		Inheritance i6 = new Inheritance(c6.getId(), c6.getId(), c6.getId());
 //		i6.setId("test_i6");
 
@@ -373,9 +373,9 @@ public class InitializationService {
 		if (!relationshipRepository.exists(i4.getId())) {
 			relationshipRepository.save(i4);
 		}
-		if (!relationshipRepository.exists(i5.getId())) {
-			relationshipRepository.save(i5);
-		}
+//		if (!relationshipRepository.exists(i5.getId())) {
+//			relationshipRepository.save(i5);
+//		}
 
 		if (!relationshipRepository.exists(i7.getId())) {
 			relationshipRepository.save(i7);
@@ -426,8 +426,8 @@ public class InitializationService {
 
 	private void addConfigurators() {
 		Configurator c1 = new Configurator();
-		c1.setName("test1");
-		c1.setId("test1");
+		c1.setName("Slot1");
+		c1.setId("slot1");
 		c1.setDate(new Date());
 
 		c1.setRelationshipIds(new ArrayList<>());
@@ -435,8 +435,8 @@ public class InitializationService {
 		c1.getRelationshipIds().add("test_i2");
 		c1.getRelationshipIds().add("test_i3");
 		c1.getRelationshipIds().add("test_i4");
-		c1.getRelationshipIds().add("test_i5");
-		c1.getRelationshipIds().add("test_i6");
+//		c1.getRelationshipIds().add("test_i5");
+//		c1.getRelationshipIds().add("test_i6");
 		c1.getRelationshipIds().add("test_i7");
 		c1.getRelationshipIds().add("test_i8");
 		c1.getRelationshipIds().add("test_i9");
@@ -453,21 +453,26 @@ public class InitializationService {
 		c1.getClassDefinitionIds().add("test9");
 
 		Configurator c2 = new Configurator();
-		c2.setName("test2");
-		c2.setId("test2");
-		c2.setDate(new Date(1289516400000L));
+		c2.setName("Slot2");
+		c2.setId("slot2");
+		c2.setDate(new Date());
 
 		Configurator c3 = new Configurator();
-		c3.setName("test3");
-		c3.setId("test3");
+		c3.setName("Slot3");
+		c3.setId("slot3");
 
 		c3.setDate(new Date());
 
 		Configurator c4 = new Configurator();
-		c4.setName("test4");
-		c4.setId("test4");
+		c4.setName("Slot4");
+		c4.setId("slot4");
 
-		c4.setDate(new Date());
+		c4.setDate(new Date()); 
+		
+		Configurator c5 = new Configurator();
+		c5.setName("Slot5");
+		c5.setId("slot5");
+		c5.setDate(new Date());
 
 		if (!configuratorRepository.exists(c1.getId())) {
 			configuratorRepository.save(c1);
@@ -488,6 +493,10 @@ public class InitializationService {
 		if (!configuratorRepository.exists(c4.getId())) {
 			configuratorRepository.save(c4);
 		}
+		if (!configuratorRepository.exists(c5.getId())) {
+			configuratorRepository.save(c5);
+		}
+
 
 	}
 }

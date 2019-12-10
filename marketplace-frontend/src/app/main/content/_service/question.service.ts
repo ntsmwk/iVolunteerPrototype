@@ -33,46 +33,47 @@ export class QuestionService {
 
   public getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
+    console.log(properties);
     questions = this.createQuestionsFromProperties(properties);
 
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  //TODO
-  public getQuestionsFromEnumRepresenations(enumRepresentations: EnumRepresentation[]) {
-    let questions: QuestionBase<any>[] = [];
-    questions = this.createQuestionsFromEnumRepresentations(enumRepresentations);
+  // //TODO
+  // public getQuestionsFromEnumRepresenations(enumRepresentations: EnumRepresentation[]) {
+  //   let questions: QuestionBase<any>[] = [];
+  //   questions = this.createQuestionsFromEnumRepresentations(enumRepresentations);
     
-    return questions.sort((a, b) =>  a.order - b.order);
-  }
+  //   return questions.sort((a, b) =>  a.order - b.order);
+  // }
 
-  private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
-    let questions: QuestionBase<any>[] = [];
+  // private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
+  //   let questions: QuestionBase<any>[] = [];
 
-    for (let enumRepresentation of enumRepresentations) {
-      let question: MultipleSelectionEnumQuestion | SingleSelectionEnumQuestion;
+  //   for (let enumRepresentation of enumRepresentations) {
+  //     let question: MultipleSelectionEnumQuestion | SingleSelectionEnumQuestion;
 
-      if (enumRepresentation.classDefinition.properties[0].multiple) {
-        question = new MultipleSelectionEnumQuestion(
-          //...
+  //     if (enumRepresentation.classDefinition.properties[0].multiple) {
+  //       question = new MultipleSelectionEnumQuestion(
+  //         //...
     
-        )
-      } else {
-        question = new SingleSelectionEnumQuestion(
+  //       )
+  //     } else {
+  //       question = new SingleSelectionEnumQuestion(
           
-        )
-      }
+  //       )
+  //     }
       
-      question.options = enumRepresentation.enumEntries;
-      question.key = enumRepresentation.classDefinition.id;
-      question.label = enumRepresentation.classDefinition.name;
-      question.required = enumRepresentation.classDefinition.properties[0].required;
+  //     question.options = enumRepresentation.enumEntries;
+  //     question.key = enumRepresentation.classDefinition.id;
+  //     question.label = enumRepresentation.classDefinition.name;
+  //     question.required = enumRepresentation.classDefinition.properties[0].required;
 
-      questions.push(question);
-    }
+  //     questions.push(question);
+  //   }
 
-    return questions;
-  }
+  //   return questions;
+  // }
 
   private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
     let questions: QuestionBase<any>[] = [];
@@ -162,18 +163,20 @@ export class QuestionService {
         value: ClassProperty.getDefaultValue(property),
       });
 
-    // } else if (property.type === PropertyType.LEVEL_LIST) {
-    //   if (property.multiple) {
-    //     question = new LevelDropdownMultipleQuestion({
-    //       values: property.defaultValues,
-    //       options: property.allowedValues
-    //     });
-    //   } else {
-    //   question = new LevelDropdownSingleQuestion({
-    //     values: property.defaultValues,
-    //     options: property.allowedValues
-    //   });
-    // }
+    } else if (property.type === PropertyType.ENUM) {
+      if (property.multiple) {
+        question = new MultipleSelectionEnumQuestion({
+          //TODO
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      } else {
+      question = new SingleSelectionEnumQuestion({
+        //TODO
+        values: property.defaultValues,
+        options: property.allowedValues
+      });
+    }
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({
