@@ -180,7 +180,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: "editor_save", configurator: ret });
+          this.menuOptionClickedEvent.emit({ id: "editor_save_as", configurator: ret });
         } else {
           this.menuOptionClickedEvent.emit({ id: "cancelled"});
         }
@@ -193,8 +193,10 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.eventResponseAction == "saveAsClicked") {
-      this[this.eventResponseAction](this.eventResponseAction, undefined);
+    let eventResponse = this.eventResponseAction;
+    this.eventResponseAction = undefined;
+    if (eventResponse == "saveAsClicked") {
+      this[eventResponse](eventResponse, undefined);
     }
   }
 

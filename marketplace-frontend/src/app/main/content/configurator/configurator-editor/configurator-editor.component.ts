@@ -195,6 +195,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphFoldEvent(evt);
       });
 
+      this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function(sender, evt) {
+        outer.handleMXGraphLabelChangedEvent(evt);
+      });
+
       this.showServerContent(true);
     }
   }
@@ -290,10 +294,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         let propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as myMxCell;
 
         if (p.type == PropertyType.ENUM) {
-          propertyEntry.cellType == 'enum_property'
+          console.log("ptype = enum");
+          propertyEntry.cellType == 'enum_property';
           propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
 
         } else {
+          console.log("ptype = property");
+
           propertyEntry.cellType = 'property';
         }
         propertyEntry.setConnectable(false);
@@ -509,7 +516,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  //Events
+  //Events TODO @Alex Refactor that
   handleMXGraphClickEvent(event: any) {
     let cell: myMxCell = event.getProperty("cell");
 
@@ -594,13 +601,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
         } else if (parentClassArchetype.endsWith("_HEAD")) {
           addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
-     
+
         } else {
           addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
-       
+
         let cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
         cret.id = this.objectIdService.getNewObjectId();
         addedClass.id = cret.id;
@@ -610,7 +617,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
         addedRelationship.source = cell.getParent().id
         addedRelationship.target = cret.id;
-     
+
         let rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
         rret.id = this.objectIdService.getNewObjectId();
         addedRelationship.id = rret.id;
@@ -684,6 +691,28 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.modelUpdated = true;
   }
 
+  handleMXGraphLabelChangedEvent(event: any) {
+    let cell: myMxCell = event.getProperty("cell");
+    if (cell.cellType == 'class' && cell.classArchetype == ClassArchetype.ENUM_HEAD) {
+
+      let edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
+
+      let propertyEdge = edges.find((edge: myMxCell) => {
+        return (edge.source as myMxCell).cellType != 'class';
+      });
+
+      //Update Cell Value
+      this.graph.getModel().setValue(propertyEdge.source, cell.value);
+
+      //Update Property in Model
+      this.configurableClasses.find((classDefinition: ClassDefinition) => {
+        return classDefinition.id == propertyEdge.source.parent.id;
+      }).properties.find((classProperty: ClassProperty<any>) => {
+        classProperty.name = propertyEdge.source.value;
+      });
+    }
+  }
+
   private setCellsVisibility(cell: myMxCell, visible: boolean, recursive: boolean) {
     let edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
@@ -733,6 +762,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
           this.saveGraph();
         }
         break;
+      } case 'editor_save_as': {
+        this.currentConfigurator = event.configurator;
+        this.saveGraph();
+        break;
       } case 'editor_new': {
         this.newGraph();
         break
@@ -747,12 +780,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   saveGraph() {
     this.updateModel();
+    console.log(this.currentConfigurator);
     let relSaveSuccess: boolean;
     let classSaveSuccess: boolean;
     let deletedClassSaveSuccess: boolean;
     let deletedRelSaveSuccess: boolean;
     let configuratorSaveSuccess: boolean;
 
+    let configurator = this.currentConfigurator;
     Promise.all([
       this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
         relSaveSuccess = !isNullOrUndefined(result);
@@ -773,13 +808,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }),
 
     ]).then(() => {
-
-      this.configuratorService.saveConfigurator(this.marketplace, this.currentConfigurator).toPromise().then((result: any) => {
+      this.configuratorService.saveConfigurator(this.marketplace, configurator).toPromise().then((result: any) => {
         configuratorSaveSuccess = !isNullOrUndefined(result);
 
       }).then(() => {
         let snackBarMessage: string;
-        
+
         if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
           snackBarMessage = "save successful!";
         } else {
