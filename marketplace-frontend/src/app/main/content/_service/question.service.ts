@@ -11,7 +11,6 @@ import { Validators, ValidatorFn } from '@angular/forms';
 
 import { minDate, maxOther, minOther, requiredOther } from "../_validator/custom.validators";
 import { PropertyConstraint, ConstraintType } from '../_model/meta/Constraint';
-import { EnumRepresentation } from '../_model/meta/form';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -38,42 +37,6 @@ export class QuestionService {
 
     return questions.sort((a, b) => a.order - b.order);
   }
-
-  // //TODO
-  // public getQuestionsFromEnumRepresenations(enumRepresentations: EnumRepresentation[]) {
-  //   let questions: QuestionBase<any>[] = [];
-  //   questions = this.createQuestionsFromEnumRepresentations(enumRepresentations);
-    
-  //   return questions.sort((a, b) =>  a.order - b.order);
-  // }
-
-  // private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
-  //   let questions: QuestionBase<any>[] = [];
-
-  //   for (let enumRepresentation of enumRepresentations) {
-  //     let question: MultipleSelectionEnumQuestion | SingleSelectionEnumQuestion;
-
-  //     if (enumRepresentation.classDefinition.properties[0].multiple) {
-  //       question = new MultipleSelectionEnumQuestion(
-  //         //...
-    
-  //       )
-  //     } else {
-  //       question = new SingleSelectionEnumQuestion(
-          
-  //       )
-  //     }
-      
-  //     question.options = enumRepresentation.enumEntries;
-  //     question.key = enumRepresentation.classDefinition.id;
-  //     question.label = enumRepresentation.classDefinition.name;
-  //     question.required = enumRepresentation.classDefinition.properties[0].required;
-
-  //     questions.push(question);
-  //   }
-
-  //   return questions;
-  // }
 
   private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
     let questions: QuestionBase<any>[] = [];
@@ -273,8 +236,6 @@ export class QuestionService {
         if (required) {
           validators.push(Validators.required);
         }
-
-
       }
       const ret = { validators: validators, messages: messages, required: required }
       return ret;
@@ -311,8 +272,6 @@ export class QuestionService {
 
       case ConstraintType.MAX:
         //console.log("adding max Validator" + rule.value);
-
-
         validator = Validators.max(propertyConstraint.value);
         key = 'max';
         break;

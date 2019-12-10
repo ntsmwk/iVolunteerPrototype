@@ -153,7 +153,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
       if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' ||
-        cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || cell.cellType == "add_association") {
+        cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || 
+        cell.cellType == "add_association") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     }
@@ -784,7 +785,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   saveGraph() {
     this.updateModel();
-    console.log(this.currentConfigurator);
     let relSaveSuccess: boolean;
     let classSaveSuccess: boolean;
     let deletedClassSaveSuccess: boolean;

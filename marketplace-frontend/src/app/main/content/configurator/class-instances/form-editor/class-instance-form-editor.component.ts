@@ -69,25 +69,16 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
           for (let config of this.formConfigurations) {
             config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-            // config.formEntry.questions.push(...this.questionService.getQuestionsFromEnumRepresenations(config.formEntry.enumRepresentations));
-
             config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
           }
 
-
         }).then(() => {
           this.currentFormConfiguration = this.formConfigurations.pop();
-          console.log(this.currentFormConfiguration)
-          console.log(this.formConfigurations);
           this.isLoaded = true;
-
-
         });
       });
     });
   }
-
-
 
   handleResultEvent(event: FormEntryReturnEventData) {
     let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
@@ -111,13 +102,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       propertyInstances.push(propertyInstance);
     }
 
-    
-
     let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
     classInstances.push(classInstance);
-
-
-
 
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
@@ -142,17 +128,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   handleCancelEvent() {
-    console.log("cancelled");
     this.navigateBack();
   }
-
-
 
   printAnything(anything: any) {
     console.log(anything);
   }
-
-
 
   navigateBack() {
     window.history.back();

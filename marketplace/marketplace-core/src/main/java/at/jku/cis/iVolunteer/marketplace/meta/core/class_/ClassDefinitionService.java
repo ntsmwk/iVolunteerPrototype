@@ -9,7 +9,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.header.writers.frameoptions.AllowFromStrategy;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
