@@ -287,7 +287,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
 
-    //create properties
+    //create properties TODO @Alex Refactor
     let i = 5;
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (let p of classDefinition.properties) {
@@ -340,7 +340,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     }
 
     //remove icon
-    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD && cell.classArchetype != ClassArchetype.ENUM_ENTRY && cell.classArchetype != ClassArchetype.ROOT && !cell.classArchetype.endsWith("_HEAD")) {
+    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD 
+        && cell.classArchetype != ClassArchetype.ENUM_ENTRY && cell.classArchetype != ClassArchetype.ROOT 
+        && !cell.classArchetype.endsWith("_HEAD")) {
       let removeIcon: myMxCell = this.graph.insertVertex(cell, "remove", 'remove', 25, i + 50, 20, 20, CConstants.mxStyles.removeIcon) as myMxCell;
       removeIcon.setConnectable(false);
       removeIcon.cellType = 'remove';
@@ -710,6 +712,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }).properties.find((classProperty: ClassProperty<any>) => {
         classProperty.name = propertyEdge.source.value;
       });
+
+      this.modelUpdated = true;
     }
   }
 
@@ -926,6 +930,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
     this.rightSidebarVisible = true;
     this.rightSidebarContainer.nativeElement.style.borderLeft = "solid 1px rgb(160, 160, 160)";
+    this.rightSidebarContainer.nativeElement.style.bottom = '0px'
+    this.rightSidebarContainer.nativeElement.style.height = 'auto';
   }
 
 
