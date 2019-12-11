@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.property;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,35 +9,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @RestController
 public class ClassPropertyController {
 
-	@Autowired ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private ClassPropertyService classPropertyService;
 
 	@GetMapping("/meta/core/property/class/{classDefinitionId}/all")
 	List<ClassProperty<Object>> getAllClassPropertiesFromClass(
 			@PathVariable("classDefinitionId") String classDefinitionId) {
-
-		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
-		if (classDefinition != null) {
-			return classDefinition.getProperties();
-		}
-		return null;
+		return classPropertyService.getAllClassPropertiesFromClass(classDefinitionId);
 	}
 
 	@GetMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}")
 	ClassProperty<Object> getClassPropertyById(@PathVariable("classDefinitionId") String classDefinitionId,
 			@PathVariable("classPropertyId") String classPropertyId) {
-
-		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
-		if (classDefinition != null) {
-			return findClassProperty(classDefinition, classPropertyId);
-		}
-		return null;
+		return classPropertyService.getClassPropertyById(classDefinitionId, classPropertyId);
 	}
 
 	@PutMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}/update")
@@ -46,35 +33,6 @@ public class ClassPropertyController {
 			@PathVariable("classPropertyId") String classPropertyId,
 			@RequestBody ClassProperty<Object> updatedClassProperty) {
 
-		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
-
-		if (classDefinition != null) {
-			int index = findIndexOfClassProperty(classDefinition, classPropertyId);
-			classDefinition.getProperties().set(index, updatedClassProperty);
-			classDefinitionRepository.save(classDefinition);
-			return classDefinition.getProperties().get(index);
-
-		}
-		return null;
+		return classPropertyService.updateClassProperty(classDefinitionId, classPropertyId, updatedClassProperty);
 	}
-
-	private ClassProperty<Object> findClassProperty(ClassDefinition classDefinition, String classPropertyId) {
-		// @formatter:off
-		return classDefinition
-				.getProperties()
-				.stream()
-				.filter(p -> p.getId().equals(classPropertyId))
-				.findFirst().orElse(null);
-		// @formatter:on
-	}
-
-	private int findIndexOfClassProperty(ClassDefinition classDefinition, String classPropertyId) {
-		// @formatter:off
-		return IntStream.range(0, classDefinition.getProperties().size())
-			     .filter(i -> classPropertyId.equals(classDefinition.getProperties().get(i).getId()))
-			     .findFirst()
-			     .orElse(-1);
-		// @formatter:on		
-	}
-
 }

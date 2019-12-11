@@ -25,8 +25,8 @@ export class DerivationRuleService {
 
   save(marketplace: Marketplace, derivationRule: DerivationRule) {
     if (isNullOrUndefined(derivationRule.id)) {
-      return this.http.post(`${marketplace.url}/derivation-rule`, derivationRule);
+      return this.http.post(`${marketplace.url}/rule`, derivationRule);
     }
-    return this.http.put(`${marketplace.url}/derivation-rule/${derivationRule.id}`, derivationRule);
+    return this.http.put(`${marketplace.url}/rule/${derivationRule.id}`, derivationRule);
   }
 }

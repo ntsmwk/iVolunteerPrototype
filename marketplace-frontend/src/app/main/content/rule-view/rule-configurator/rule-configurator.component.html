@@ -1,7 +1,7 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon class="iconButton" (click)="backClicked()" style="margin-left: 20px">keyboard_return</mat-icon>
+    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px">keyboard_return</mat-icon>
     <h1>Configuration - Derivation Rules</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative">
       <!-- <img src="../../../../assets/images/logos/FF_Altenberg.jpg"> -->
@@ -30,7 +30,7 @@
     </div>
 
     <div *ngFor="let entry of derivationRule.sources">
-      <rule-precondition [sourceRuleEntry]="entry"></rule-precondition>
+      <rule-precondition [(sourceRuleEntry)]="entry"></rule-precondition>
     </div>
 
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
@@ -48,28 +48,23 @@
     </div>
 
     <div fxLayout="column" fxLayoutAlign="start start">
-      <div style="padding-top: 10px"></div>
-      <div>
-        <mat-form-field style="width: 300px">
-          <mat-label>Choose derived FWPE Type</mat-label>
-          <mat-select [(value)]="derivationRule.targets[0]">
-            <mat-option value="derivationRule.targets[0]">{{derivationRule.targets[0].name}} </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+      <mat-form-field style="width: 300px">
+        <mat-label>Choose derived FWPE Type</mat-label>
+        <mat-select formControlName="target" [value]="derivationRule.target">
+          <!-- <mat-option [value]="derivationRule.target">{{derivationRule.target.name}} </mat-option> -->
+          <mat-option *ngFor="let classDefinition of classDefinitions" [value]="classDefinition"> {{classDefinition.name}} </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
+    <mat-divider></mat-divider>
+
+    <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
+      <button mat-raised-button type="submit" color="primary">Save</button>
+      <div style="padding-right: 5px"></div>
+    </div>
+  
   </form>
 
-  <div style="padding-top:20px"></div>
-  <mat-divider></mat-divider>
-  <div style="padding-top:20px"></div>
-
-  <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">
-    <button mat-raised-button type="button" color="primary">Create Rule</button>
-    <div style="padding-right: 5px"></div>
-    <button mat-stroked-button type="button" color="primary">Cancel</button>
-    <div style="padding-right: 20px"></div>
-  </div>
 
 
 </div>

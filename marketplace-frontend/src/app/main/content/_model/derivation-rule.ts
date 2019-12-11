@@ -1,17 +1,17 @@
 import { ClassDefinition } from './meta/Class';
-import { PropertyDefinition } from './meta/Property';
+import { PropertyDefinition, ClassProperty } from './meta/Property';
 
 export class DerivationRule {
     id: string;
     marketplaceId: string;
     name: string;
     sources: SourceRuleEntry[];
-    targets: ClassDefinition[];
+    target: ClassDefinition;
 }
 
 export class SourceRuleEntry {
     classDefinition: ClassDefinition;
-    propertyDefinition: PropertyDefinition<any>;
+    classProperty: ClassProperty<any>;
     mappingOperatorType: MappingOperatorType;
     value: any;
 }

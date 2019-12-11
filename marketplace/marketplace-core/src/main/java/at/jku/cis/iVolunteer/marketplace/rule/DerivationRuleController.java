@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
@@ -29,14 +28,14 @@ public class DerivationRuleController {
 	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
 		return derivationRuleService.getRule(ruleId);
 	}
-	
+
 	@PostMapping
 	public void createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
 		derivationRuleService.createRule(derivationRule);
 	}
 
-	@PutMapping
-	public void updateRule(@RequestParam String id, @RequestBody DerivationRuleDTO derivationRule) {
-		derivationRuleService.updateRule(id, derivationRule);
+	@PutMapping("/{ruleId}")
+	public void updateRule(@PathVariable String ruleId, @RequestBody DerivationRuleDTO derivationRule) {
+		derivationRuleService.updateRule(ruleId, derivationRule);
 	}
 }

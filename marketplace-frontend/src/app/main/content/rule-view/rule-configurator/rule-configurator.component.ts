@@ -10,9 +10,11 @@ import { Participant, ParticipantRole } from '../../_model/participant';
 import { MessageService } from '../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { FuseRulePreconditionConfiguratorComponent } from './rule-configurator-precondition/rule-configurator-precondition.component';
-import { DerivationRule, SourceRuleEntry } from '../../_model/derivation-rule';
+import { DerivationRule, SourceRuleEntry, MappingOperatorType } from '../../_model/derivation-rule';
 import { DerivationRuleService } from '../../_service/derivation-rule.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
+import { ClassDefinitionService } from '../../_service/meta/core/class/class-definition.service';
+import { ClassDefinition } from '../../_model/meta/Class';
 
 @Component({
   templateUrl: './rule-configurator.component.html',
@@ -21,7 +23,6 @@ import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
 
-
   participant: Participant;
   marketplace: Marketplace;
   role: ParticipantRole;
@@ -29,34 +30,37 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   derivationRule: DerivationRule;
 
+  classDefinitions: ClassDefinition[] = [];
 
   constructor(private route: ActivatedRoute,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
+    private classDefinitionService: ClassDefinitionService,
     private messageService: MessageService) {
     this.ruleForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
       'sources': new FormControl(undefined),
-      'targets': new FormControl(undefined),
+      'target': new FormControl(undefined),
     });
   }
 
   ngOnInit() {
-
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.participant = participant;
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.route.params.subscribe(params => this.loadDerivationRule(marketplace, params['ruleId']));
+        this.classDefinitionService.getAllClassDefinitions(marketplace).toPromise().then(
+          (definitions: ClassDefinition[]) => this.classDefinitions = definitions
+        );
       });
     });
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
-    console.log(ruleId);
     if (ruleId) {
       this.derivationRuleService.findById(marketplace, ruleId).toPromise().then(
         (rule: DerivationRule) => {
@@ -65,17 +69,31 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             id: this.derivationRule.id,
             name: this.derivationRule.name,
             sources: this.derivationRule.sources,
-            targets: this.derivationRule.targets
+            target: this.derivationRule.target
           });
 
         }
       );
     } else {
       this.derivationRule = new DerivationRule();
-      this.derivationRule.sources = [];
-      this.derivationRule.targets = [];
+      this.derivationRule.sources = [<SourceRuleEntry>{
+        classDefinition: null, 
+        classProperty: null, 
+        mappingOperatorType: MappingOperatorType.EQ, 
+        value: ""
+      }];
     }
   }
 
+  save() {
+    this.derivationRule.name = this.ruleForm.value.name;
+    this.derivationRule.target = this.ruleForm.value.target;
+    // this.derivationRule.sources = this.ruleForm.value.sources;
 
+    this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
+  }
+
+  navigateBack() {
+    window.history.back();
+  }
 }

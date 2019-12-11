@@ -16,18 +16,16 @@ public class FinalizationService {
 
 	}
 
-//TODO 
 	public void destroy(ConfiguratorRepository configuratorRepository,
 			ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository,
 			RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository,
 			DerivationRuleRepository derivationRuleRepository) {
-//		classDefinitionRepository.deleteAll();
-//		relationshipRepository.deleteAll();
-//		classInstanceRepository.deleteAll();
-//		configuratorRepository.deleteAll();
-		propertyDefinitionRepository.deleteAll();
-		derivationRuleRepository.deleteAll();
+		// classDefinitionRepository.deleteAll();
+		// relationshipRepository.deleteAll();
+		// classInstanceRepository.deleteAll();
+		// configuratorRepository.deleteAll();
+		// propertyDefinitionRepository.deleteAll();
+		// derivationRuleRepository.deleteAll();
 
 	}
-
 }
