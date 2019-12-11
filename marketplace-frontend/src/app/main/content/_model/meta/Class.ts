@@ -9,6 +9,8 @@ export class ClassDefinition {
     properties: ClassProperty<any>[] = [];
     marketplaceId: string;
     timestamp: Date;
+    
+    imagePath: string;
 }
 
 export class CompetenceClassDefinition extends ClassDefinition{

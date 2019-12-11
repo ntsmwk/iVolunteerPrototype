@@ -69,6 +69,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   hiddenEdges: myMxCell[];
 
+  selectionType: string;
+  selectionIndex: number;
+  selectionIndex2: number;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private classDefinitionService: ClassDefinitionService,
@@ -98,6 +102,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.rightSidebarVisible = true;
     this.hiddenEdges = [];
 
+    this.selectionIndex = -1;
+    this.selectionIndex2 = -1;
     console.log(this.configurableClasses);
     console.log(this.relationships);
   }
@@ -153,7 +159,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
       if (cell.cellType == 'property' || cell.cellType == 'add' || cell.cellType == 'remove' ||
-        cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" || 
+        cell.cellType == "add_class_new_level" || cell.cellType == "add_class_same_level" ||
         cell.cellType == "add_association") {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
@@ -196,10 +202,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphFoldEvent(evt);
       });
 
-      this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function(sender, evt) {
+      this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function (sender, evt) {
         outer.handleMXGraphLabelChangedEvent(evt);
       });
 
+      this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
+        outer.handleMXGraphCellSelectEvent(evt);
+      });
       this.showServerContent(true);
     }
   }
@@ -216,6 +225,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.relationships = standardObjects.relationships;
       this.configurableClasses = standardObjects.classDefintions;
     }
+
     this.parseGraphContent();
     this.setLayout();
   }
@@ -277,6 +287,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     cell.value = classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
+
+    let overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), "Overlay", mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
+    this.graph.addCellOverlay(cell, overlay);
 
     if (!isNullOrUndefined(classDefinition.id)) {
       cell.id = classDefinition.id;
@@ -341,9 +354,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     }
 
     //remove icon
-    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD 
-        && cell.classArchetype != ClassArchetype.ENUM_ENTRY && cell.classArchetype != ClassArchetype.ROOT 
-        && !cell.classArchetype.endsWith("_HEAD")) {
+    if (classDefinition.properties.length > 0 && cell.classArchetype != ClassArchetype.ENUM_HEAD
+      && cell.classArchetype != ClassArchetype.ENUM_ENTRY && cell.classArchetype != ClassArchetype.ROOT
+      && !cell.classArchetype.endsWith("_HEAD")) {
       let removeIcon: myMxCell = this.graph.insertVertex(cell, "remove", 'remove', 25, i + 50, 20, 20, CConstants.mxStyles.removeIcon) as myMxCell;
       removeIcon.setConnectable(false);
       removeIcon.cellType = 'remove';
@@ -696,26 +709,73 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   handleMXGraphLabelChangedEvent(event: any) {
     let cell: myMxCell = event.getProperty("cell");
-    if (cell.cellType == 'class' && cell.classArchetype == ClassArchetype.ENUM_HEAD) {
+    if (cell.cellType == 'class') {
 
-      let edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
+      this.configurableClasses.find((classDefiniton: ClassDefinition) => {
+        return classDefiniton.id == cell.id;
+      }).name = cell.value;
 
-      let propertyEdge = edges.find((edge: myMxCell) => {
-        return (edge.source as myMxCell).cellType != 'class'
+      if (cell.classArchetype == ClassArchetype.ENUM_HEAD) {
+
+        let edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
+
+        let propertyEdge = edges.find((edge: myMxCell) => {
+          return (edge.source as myMxCell).cellType != 'class'
+        });
+
+        //Update Cell Value
+        this.graph.getModel().setValue(propertyEdge.source, cell.value);
+
+        //Update Property in Model
+        this.configurableClasses.find((classDefinition: ClassDefinition) => {
+          return classDefinition.id == propertyEdge.source.parent.id;
+        }).properties.find((classProperty: ClassProperty<any>) => {
+          return classProperty.id == propertyEdge.source.id;
+        }).name = propertyEdge.source.value;
+
+        this.modelUpdated = true;
+      }
+    }
+  }
+
+  handleMXGraphCellSelectEvent(event: any) {
+    console.log(event);
+    let cells: myMxCell[] = event.getProperty("removed");
+
+    let cell: myMxCell;
+    if (!isNullOrUndefined(cells) && cells.length == 1) {
+      cell = cells.pop();
+    } else {
+      return;
+    }
+
+    if (cell.cellType == 'class') {
+      this.selectionType == 'class';
+      this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) => {
+        return classDefiniton.id == cell.id;
+      });
+      console.log(this.selectionIndex);
+      console.log(this.configurableClasses[this.selectionIndex]);
+
+    } else if(cell.cellType == 'property') {
+      this.selectionType == 'property';
+      this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
+        return classDefiniton.id == cell.parent.id
+      })
+      
+      this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
+        return property.id == cell.id;
       });
 
-      //Update Cell Value
-      this.graph.getModel().setValue(propertyEdge.source, cell.value);
+      console.log(this.selectionIndex);
+      console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
 
-      //Update Property in Model
-      this.configurableClasses.find((classDefinition: ClassDefinition) => {
-        return classDefinition.id == propertyEdge.source.parent.id;
-      }).properties.find((classProperty: ClassProperty<any>) => {
-        return classProperty.id == propertyEdge.source.id;
-      }).name = propertyEdge.source.value;
-
-      this.modelUpdated = true;
+    } else {
+      this.selectionType = undefined;
+      this.selectionIndex = -1;
     }
+
+    console.log(cell);
   }
 
   private setCellsVisibility(cell: myMxCell, visible: boolean, recursive: boolean) {

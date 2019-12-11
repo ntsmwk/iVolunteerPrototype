@@ -19,6 +19,8 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
 	private ClassArchetype classArchetype;
 
+	private String imagePath;
+	
 	boolean root;
 
 	public ClassDefinition() {
@@ -54,6 +56,15 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setProperties(List<ClassProperty<Object>> properties) {
 		this.properties = properties;
+	}
+	
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public boolean isRoot() {

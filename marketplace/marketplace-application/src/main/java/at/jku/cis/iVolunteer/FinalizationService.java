@@ -25,8 +25,8 @@ public class FinalizationService {
 //		relationshipRepository.deleteAll();
 //		classInstanceRepository.deleteAll();
 //		configuratorRepository.deleteAll();
-//		propertyDefinitionRepository.deleteAll();
-//		derivationRuleRepository.deleteAll();
+		propertyDefinitionRepository.deleteAll();
+		derivationRuleRepository.deleteAll();
 
 	}
 
