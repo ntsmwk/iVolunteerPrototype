@@ -63,7 +63,6 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
 
 
   onChange($event){
-    console.error('change detected!');
     this.sourceRuleEntry.classDefinition = this.rulePreconditionForm.value.classDefinition;
     this.sourceRuleEntry.propertyDefinition = this.rulePreconditionForm.value.propertyDefinition;
     this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
