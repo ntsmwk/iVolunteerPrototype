@@ -1,7 +1,7 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon class="iconButton" (click)="backClicked()" style="margin-left: 20px">keyboard_return</mat-icon>
+    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px">keyboard_return</mat-icon>
     <h1>Configuration - Derivation Rules</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative">
       <!-- <img src="../../../../assets/images/logos/FF_Altenberg.jpg"> -->
@@ -51,7 +51,8 @@
       <mat-form-field style="width: 300px">
         <mat-label>Choose derived FWPE Type</mat-label>
         <mat-select formControlName="target" [value]="derivationRule.target">
-          <mat-option [value]="derivationRule.target">{{derivationRule.target.name}} </mat-option>
+          <!-- <mat-option [value]="derivationRule.target">{{derivationRule.target.name}} </mat-option> -->
+          <mat-option *ngFor="let classDefinition of classDefinitions" [value]="classDefinition"> {{classDefinition.name}} </mat-option>
         </mat-select>
       </mat-form-field>
     </div>

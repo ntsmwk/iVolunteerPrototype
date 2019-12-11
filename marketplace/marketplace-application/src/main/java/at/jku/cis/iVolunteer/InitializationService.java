@@ -47,6 +47,7 @@ public class InitializationService {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private FinalizationService finalizationService;
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired
 
 	@PostConstruct
 	public void init() {
@@ -61,7 +62,7 @@ public class InitializationService {
 
 		SourceRuleEntry source = new SourceRuleEntry();
 		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
-		source.setPropertyDefinitionId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
+		source.setClassPropertyId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
 		source.setMappingOperatorType(MappingOperatorType.GE);
 		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));

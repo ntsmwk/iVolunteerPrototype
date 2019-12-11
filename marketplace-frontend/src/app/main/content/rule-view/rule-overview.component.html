@@ -28,7 +28,7 @@
 
             <ng-container matColumnDef="target">
                 <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
-                <mat-cell *matCellDef="let rule">{{rule.target}}</mat-cell>
+                <mat-cell *matCellDef="let rule">{{rule.target.name}}</mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>

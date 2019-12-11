@@ -6,18 +6,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SourceRuleEntry {
 
 	private String classDefinitionId;
-	private String propertyDefinitionId;
+	private String classPropertyId;
 	private MappingOperatorType mappingOperatorType;
 	private String value;
 
 	public SourceRuleEntry() {
 	}
 
-	public SourceRuleEntry(String classDefinitionId, String attributeId, MappingOperatorType mappingOperatorType,
+	public SourceRuleEntry(String classDefinitionId, String classPropertyId, MappingOperatorType mappingOperatorType,
 			String value) {
 		super();
 		this.classDefinitionId = classDefinitionId;
-		this.setPropertyDefinitionId(attributeId);
+		this.classPropertyId = classPropertyId;
 		this.mappingOperatorType = mappingOperatorType;
 		this.value = value;
 	}
@@ -46,12 +46,13 @@ public class SourceRuleEntry {
 		this.value = value;
 	}
 
-	public String getPropertyDefinitionId() {
-		return propertyDefinitionId;
+	public String getClassPropertyId() {
+		return classPropertyId;
 	}
 
-	public void setPropertyDefinitionId(String propertyDefinitionId) {
-		this.propertyDefinitionId = propertyDefinitionId;
+	public void setClassPropertyId(String classPropertyId) {
+		this.classPropertyId = classPropertyId;
 	}
+
 
 }

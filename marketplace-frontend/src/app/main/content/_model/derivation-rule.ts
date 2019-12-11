@@ -1,5 +1,5 @@
 import { ClassDefinition } from './meta/Class';
-import { PropertyDefinition } from './meta/Property';
+import { PropertyDefinition, ClassProperty } from './meta/Property';
 
 export class DerivationRule {
     id: string;
@@ -11,7 +11,7 @@ export class DerivationRule {
 
 export class SourceRuleEntry {
     classDefinition: ClassDefinition;
-    propertyDefinition: PropertyDefinition<any>;
+    classProperty: ClassProperty<any>;
     mappingOperatorType: MappingOperatorType;
     value: any;
 }

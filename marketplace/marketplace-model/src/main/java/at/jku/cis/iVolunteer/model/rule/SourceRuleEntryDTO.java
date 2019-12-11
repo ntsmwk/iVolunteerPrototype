@@ -1,23 +1,23 @@
 package at.jku.cis.iVolunteer.model.rule;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 public class SourceRuleEntryDTO {
 
 	private ClassDefinition classDefinition;
-	private PropertyDefinition<Object> propertyDefinition;
+	private ClassProperty<Object> classProperty;
 	private MappingOperatorType mappingOperatorType;
 	private String value;
 
 	public SourceRuleEntryDTO() {
 	}
 
-	public SourceRuleEntryDTO(ClassDefinition classDefinition, PropertyDefinition<Object> propertyDefinition,
+	public SourceRuleEntryDTO(ClassDefinition classDefinition, ClassProperty<Object> classProperty,
 			MappingOperatorType mappingOperatorType, String value) {
 		super();
 		this.classDefinition = classDefinition;
-		this.propertyDefinition = propertyDefinition;
+		this.setClassProperty(classProperty);
 		this.mappingOperatorType = mappingOperatorType;
 		this.value = value;
 	}
@@ -29,15 +29,6 @@ public class SourceRuleEntryDTO {
 	public void setClassDefinition(ClassDefinition classDefinition) {
 		this.classDefinition = classDefinition;
 	}
-
-	public PropertyDefinition<Object> getPropertyDefinition() {
-		return propertyDefinition;
-	}
-
-	public void setPropertyDefinition(PropertyDefinition<Object> propertyDefinition) {
-		this.propertyDefinition = propertyDefinition;
-	}
-
 
 	public String getValue() {
 		return value;
@@ -53,6 +44,14 @@ public class SourceRuleEntryDTO {
 
 	public void setMappingOperatorType(MappingOperatorType mappingOperatorType) {
 		this.mappingOperatorType = mappingOperatorType;
+	}
+
+	public ClassProperty<Object> getClassProperty() {
+		return classProperty;
+	}
+
+	public void setClassProperty(ClassProperty<Object> classProperty) {
+		this.classProperty = classProperty;
 	}
 
 }

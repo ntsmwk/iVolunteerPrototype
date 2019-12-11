@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -18,7 +18,7 @@ import at.jku.cis.iVolunteer.model.rule.SourceRuleEntryDTO;
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private ClassPropertyService classPropertyService;
 
 	@Override
 	public DerivationRuleDTO toTarget(DerivationRule source) {
@@ -33,7 +33,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.stream()
 				.map(entry -> new SourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
-						propertyDefinitionRepository.findOne(entry.getPropertyDefinitionId()),
+						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
 						entry.getMappingOperatorType(),
 						entry.getValue()))
 				.collect(Collectors.toList()));
@@ -60,7 +60,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.stream()
 				.map(e -> new SourceRuleEntry(
 						e.getClassDefinition().getId(), 
-						e.getPropertyDefinition().getId(),
+						e.getClassProperty().getId(),
 						e.getMappingOperatorType(),
 						e.getValue()))
 				.collect(Collectors.toList()));
