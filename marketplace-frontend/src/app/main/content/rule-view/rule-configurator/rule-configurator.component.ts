@@ -40,7 +40,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
       'sources': new FormControl(undefined),
-      'targets': new FormControl(undefined),
+      'target': new FormControl(undefined),
     });
   }
 
@@ -65,7 +65,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             id: this.derivationRule.id,
             name: this.derivationRule.name,
             sources: this.derivationRule.sources,
-            targets: this.derivationRule.targets
+            target: this.derivationRule.target
           });
 
         }
@@ -73,7 +73,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     } else {
       this.derivationRule = new DerivationRule();
       this.derivationRule.sources = [];
-      this.derivationRule.targets = [];
     }
   }
 

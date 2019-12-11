@@ -12,7 +12,7 @@ public class DerivationRuleDTO {
 	private String name;
 	private String marketplaceId;
 	private List<SourceRuleEntryDTO> sources = new ArrayList<>();
-	private List<ClassDefinition> targets = new ArrayList<>();
+	private ClassDefinition target;
 	private Date timestamp;
 
 	public String getName() {
@@ -47,20 +47,20 @@ public class DerivationRuleDTO {
 		this.sources = sources;
 	}
 
-	public List<ClassDefinition> getTargets() {
-		return targets;
-	}
-
-	public void setTargets(List<ClassDefinition> targets) {
-		this.targets = targets;
-	}
-
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public ClassDefinition getTarget() {
+		return target;
+	}
+
+	public void setTarget(ClassDefinition target) {
+		this.target = target;
 	}
 
 }

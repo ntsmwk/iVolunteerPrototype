@@ -65,7 +65,7 @@ public class InitializationService {
 		source.setMappingOperatorType(MappingOperatorType.GE);
 		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
-		rule.setTargets(Lists.asList(classDefinitionRepository.findByName("PersonCertificate").getId(), new String[0]));
+		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
 	}

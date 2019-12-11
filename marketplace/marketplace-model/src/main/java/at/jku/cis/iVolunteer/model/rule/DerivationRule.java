@@ -12,8 +12,8 @@ public class DerivationRule extends IVolunteerObject {
 
 	private String name;
 	private List<SourceRuleEntry> sources = new ArrayList<>();
-	private List<String> targets = new ArrayList<>();
-
+	private String target;
+	
 	public DerivationRule() {
 	}
 
@@ -33,11 +33,12 @@ public class DerivationRule extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public List<String> getTargets() {
-		return targets;
+	public String getTarget() {
+		return target;
 	}
 
-	public void setTargets(List<String> targets) {
-		this.targets = targets;
+	public void setTarget(String target) {
+		this.target = target;
 	}
+
 }

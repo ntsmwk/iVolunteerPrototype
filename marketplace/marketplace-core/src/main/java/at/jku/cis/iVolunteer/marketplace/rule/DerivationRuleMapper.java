@@ -37,8 +37,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						entry.getMappingOperatorType(),
 						entry.getValue()))
 				.collect(Collectors.toList()));
-		dto.setTargets(source.getTargets().stream().map(id -> classDefinitionRepository.findOne(id))
-				.collect(Collectors.toList()));
+		dto.setTarget(classDefinitionRepository.findOne(source.getTarget()));
 		return dto;		 
 		// @formatter:on
 	}
@@ -66,7 +65,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						e.getValue()))
 				.collect(Collectors.toList()));
 
-		derivationRule.setTargets(target.getTargets().stream().map(cd -> cd.getId()).collect(Collectors.toList()));
+		derivationRule.setTarget(target.getTarget().getId());
 		derivationRule.setTimestamp(target.getTimestamp());
 		return derivationRule;		 
 		// @formatter:on

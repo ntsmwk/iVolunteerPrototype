@@ -19,7 +19,7 @@
             <mat-label>Select Operation</mat-label>
             <mat-select placeholder="Operation" formControlName="mappingOperatorType" [value]="sourceRuleEntry.mappingOperatorType">
                 <mat-option *ngFor="let op of operations" [value]="op">
-                    {{ op.valueOf() }}
+                    {{ retrieveValueOf(op)}}
                 </mat-option>
             </mat-select>
         </mat-form-field>

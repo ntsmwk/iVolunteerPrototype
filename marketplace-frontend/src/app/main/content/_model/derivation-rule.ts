@@ -6,7 +6,7 @@ export class DerivationRule {
     marketplaceId: string;
     name: string;
     sources: SourceRuleEntry[];
-    targets: ClassDefinition[];
+    target: ClassDefinition;
 }
 
 export class SourceRuleEntry {

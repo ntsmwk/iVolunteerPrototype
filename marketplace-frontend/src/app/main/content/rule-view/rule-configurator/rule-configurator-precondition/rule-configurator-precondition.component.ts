@@ -25,7 +25,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   role: ParticipantRole;
   rulePreconditionForm: FormGroup;
 
-  operations: Array<MappingOperatorType>;
+  operations: any;
 
 
 
@@ -34,25 +34,24 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private formBuilder: FormBuilder,
     private messageService: MessageService) {
-      this.rulePreconditionForm = formBuilder.group({
-        'classDefinition': new FormControl(undefined),
-        'propertyDefinition': new FormControl(undefined),
-        'mappingOperatorType': new FormControl(undefined),
-        'value': new FormControl(undefined),
-      });
-  
+    this.rulePreconditionForm = formBuilder.group({
+      'classDefinition': new FormControl(undefined),
+      'propertyDefinition': new FormControl(undefined),
+      'mappingOperatorType': new FormControl(undefined),
+      'value': new FormControl(undefined),
+    });
+
   }
 
   ngOnInit() {
     this.rulePreconditionForm.setValue({
       classDefinition: this.sourceRuleEntry.classDefinition,
       propertyDefinition: this.sourceRuleEntry.propertyDefinition,
-      mappingOperatorType:this.sourceRuleEntry.mappingOperatorType,
+      mappingOperatorType: this.sourceRuleEntry.mappingOperatorType,
       value: this.sourceRuleEntry.value
     });
-    console.error(MappingOperatorType.EQ.valueOf());
-    this.operations = [MappingOperatorType.EQ, MappingOperatorType.GE,MappingOperatorType.GT,MappingOperatorType.LE,MappingOperatorType.LT,MappingOperatorType.NE];
-  
+    this.operations = Object.keys(MappingOperatorType);
+
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
@@ -61,5 +60,13 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     });
   }
 
-  
+
+
+  private retrieveValueOf(op) {
+    console.log(op);
+    var x: MappingOperatorType = MappingOperatorType[op as keyof typeof MappingOperatorType];
+    console.log(x);
+    return x;
+  }
+
 }
