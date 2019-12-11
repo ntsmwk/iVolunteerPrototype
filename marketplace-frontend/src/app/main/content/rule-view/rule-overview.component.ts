@@ -23,7 +23,7 @@ import { DerivationRuleService } from '../_service/derivation-rule.service';
 export class FuseRuleOverviewComponent implements OnInit {
     marketplaces: Marketplace[];
     dataSource = new MatTableDataSource<DerivationRule>();
-    displayedColumns = ['name', 'sources', 'targets'];
+    displayedColumns = ['name', 'sources', 'target'];
 
     constructor(private router: Router,
         private loginService: LoginService,

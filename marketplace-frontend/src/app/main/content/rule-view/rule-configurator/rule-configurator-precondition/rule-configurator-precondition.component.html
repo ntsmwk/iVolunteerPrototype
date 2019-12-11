@@ -1,24 +1,24 @@
 <form *ngIf="sourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
-    (submit)="save()" [formGroup]="rulePreconditionForm">
+    (change)="onChange($event)" [formGroup]="rulePreconditionForm">
     <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
         <mat-form-field style="width: 250px">
             <mat-label>Choose FWPE Type</mat-label>
             <mat-select formControlName="classDefinition" [value]="sourceRuleEntry.classDefinition">
-                <mat-option [value]="sourceRuleEntry.classDefinition">{{sourceRuleEntry.classDefinition.name}}
+                <mat-option [value]="sourceRuleEntry.classDefinition" (onSelectionChange)="onChange($event)">{{sourceRuleEntry.classDefinition.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field style="width: 250px">
             <mat-label>Select Attribute</mat-label>
             <mat-select formControlName="propertyDefinition" [value]="sourceRuleEntry.propertyDefinition">
-                <mat-option [value]="sourceRuleEntry.propertyDefinition">{{sourceRuleEntry.propertyDefinition.name}}
+                <mat-option [value]="sourceRuleEntry.propertyDefinition" (onSelectionChange)="onChange($event)">{{sourceRuleEntry.propertyDefinition.name}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field style="width: 80px">
             <mat-label>Select Operation</mat-label>
             <mat-select placeholder="Operation" formControlName="mappingOperatorType" [value]="sourceRuleEntry.mappingOperatorType">
-                <mat-option *ngFor="let op of operations" [value]="op">
+                <mat-option *ngFor="let op of operations" [value]="op" (onSelectionChange)="onChange($event)">
                     {{ retrieveValueOf(op)}}
                 </mat-option>
             </mat-select>

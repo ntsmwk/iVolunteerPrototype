@@ -21,14 +21,12 @@ import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
 
-
   participant: Participant;
   marketplace: Marketplace;
   role: ParticipantRole;
   ruleForm: FormGroup;
 
   derivationRule: DerivationRule;
-
 
   constructor(private route: ActivatedRoute,
     private loginService: LoginService,
@@ -56,7 +54,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
-    console.log(ruleId);
     if (ruleId) {
       this.derivationRuleService.findById(marketplace, ruleId).toPromise().then(
         (rule: DerivationRule) => {
@@ -76,5 +73,11 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     }
   }
 
-
+  save() {
+    console.log(this.derivationRule.sources)
+    this.derivationRule.name = this.ruleForm.value.name;
+    this.derivationRule.target = this.ruleForm.value.target;
+    this.derivationRule.sources = this.ruleForm.value.sources;
+    this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
+  }
 }

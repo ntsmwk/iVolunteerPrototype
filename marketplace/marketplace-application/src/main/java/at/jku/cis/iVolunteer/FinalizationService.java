@@ -20,13 +20,11 @@ public class FinalizationService {
 			ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository,
 			RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository,
 			DerivationRuleRepository derivationRuleRepository) {
-//		classDefinitionRepository.deleteAll();
-//		relationshipRepository.deleteAll();
-//		classInstanceRepository.deleteAll();
-//		configuratorRepository.deleteAll();
-//		propertyDefinitionRepository.deleteAll();
-//		derivationRuleRepository.deleteAll();
-
+		classDefinitionRepository.deleteAll();
+		relationshipRepository.deleteAll();
+		classInstanceRepository.deleteAll();
+		configuratorRepository.deleteAll();
+		propertyDefinitionRepository.deleteAll();
+		derivationRuleRepository.deleteAll();
 	}
-
 }

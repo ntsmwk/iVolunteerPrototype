@@ -29,14 +29,14 @@ public class DerivationRuleController {
 	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
 		return derivationRuleService.getRule(ruleId);
 	}
-	
+
 	@PostMapping
 	public void createDerivationRule(@RequestBody DerivationRuleDTO derivationRule) {
 		derivationRuleService.createRule(derivationRule);
 	}
 
-	@PutMapping
-	public void updateRule(@RequestParam String id, @RequestBody DerivationRuleDTO derivationRule) {
-		derivationRuleService.updateRule(id, derivationRule);
+	@PutMapping("/{ruleId}")
+	public void updateRule(@PathVariable String ruleId, @RequestBody DerivationRuleDTO derivationRule) {
+		derivationRuleService.updateRule(ruleId, derivationRule);
 	}
 }

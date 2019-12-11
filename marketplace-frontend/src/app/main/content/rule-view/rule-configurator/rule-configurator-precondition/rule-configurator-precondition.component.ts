@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -19,6 +19,7 @@ import { SourceRuleEntry, MappingOperatorType } from 'app/main/content/_model/de
 export class FuseRulePreconditionConfiguratorComponent implements OnInit {
 
   @Input('sourceRuleEntry') sourceRuleEntry: SourceRuleEntry;
+  @Output('sourceRuleEntry') sourceRuleEntryChange:EventEmitter<SourceRuleEntry> = new EventEmitter<SourceRuleEntry>();
 
   participant: Participant;
   marketplace: Marketplace;
@@ -61,11 +62,18 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
 
+  onChange($event){
+    console.error('change detected!');
+    this.sourceRuleEntry.classDefinition = this.rulePreconditionForm.value.classDefinition;
+    this.sourceRuleEntry.propertyDefinition = this.rulePreconditionForm.value.propertyDefinition;
+    this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
+    this.sourceRuleEntry.value = this.rulePreconditionForm.value.value;
+    this.sourceRuleEntryChange.emit(this.sourceRuleEntry);
+  }
+
 
   private retrieveValueOf(op) {
-    console.log(op);
     var x: MappingOperatorType = MappingOperatorType[op as keyof typeof MappingOperatorType];
-    console.log(x);
     return x;
   }
 
