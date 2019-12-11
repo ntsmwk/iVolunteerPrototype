@@ -32,11 +32,11 @@ public class StandardTemplates {
 
 	@PostConstruct
 	public void addTestTemplates() {
-		for (UserDefinedTaskTemplate t : this.createAll()) {
-			if (!userDefinedTaskTemplateRepository.exists(t.getId())) {
-				userDefinedTaskTemplateRepository.save(t);
-			}
-		}
+//		for (UserDefinedTaskTemplate t : this.createAll()) {
+//			if (!userDefinedTaskTemplateRepository.exists(t.getId())) {
+//				userDefinedTaskTemplateRepository.save(t);
+//			}
+//		}
 	}
 
 	public List<UserDefinedTaskTemplate> createAll() {
