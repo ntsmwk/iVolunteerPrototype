@@ -50,7 +50,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
       mappingOperatorType:this.sourceRuleEntry.mappingOperatorType,
       value: this.sourceRuleEntry.value
     });
-
+    console.error(MappingOperatorType.EQ.valueOf());
     this.operations = [MappingOperatorType.EQ, MappingOperatorType.GE,MappingOperatorType.GT,MappingOperatorType.LE,MappingOperatorType.LT,MappingOperatorType.NE];
   
     Promise.all([
