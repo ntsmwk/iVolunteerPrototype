@@ -35,17 +35,11 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-
     this.oldEditorInstance = Object.assign({}, this.editorInstance);
     this.constructJsonFromGraph();
-
   }
 
-
-
-
   ngDoCheck() {
-
     // if (this.oldEditorInstance.graph.getAllEdges(this.oldEditorInstance.graph.getDefaultParent()) !== this.editorInstance.graph.getAllEdges(this.editorInstance.graph.getDefaultParent())) {
     if (this.editorInstance.modelUpdated) {
       this.constructJsonFromGraph();
@@ -53,7 +47,6 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     } 
 
     this.oldEditorInstance = Object.assign({}, this.editorInstance);
-
   }
 
   //TODO
@@ -62,7 +55,6 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     let roots: myMxCell[] = vertices.filter((cell: myMxCell) => {
       return cell.root;
     }) as myMxCell[];
-
 
     let graphNodes: GraphNode[] = [];
     for (let root of roots) {
@@ -75,7 +67,6 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     this.treeControl.expandAll();
     // console.log(this.treeControl.dataNodes);
     // this.treeControl.expandAll();
-
   }
 
 
@@ -107,12 +98,7 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     this.editorInstance.rightSidebarVisible = false;
     this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = "none";
     this.editorInstance.rightSidebarContainer.nativeElement.style.height = "50px";
-    
   }
-
-
-
-
 
   itemSelected(event: any, c: Configurator) {
 

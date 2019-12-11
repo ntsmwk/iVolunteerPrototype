@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.header.writers.frameoptions.AllowFromStrategy;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
@@ -97,7 +97,8 @@ public class ClassDefinitionService {
 				formEntry.getClassDefinitions().add(currentClassDefinition);
 				
 				int i = 0;
-				for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
+				CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+				for (ClassProperty<Object> property : copyList) {
 					if (!formEntry.getClassProperties().contains(property)) {
 						//TODO refactor into own method (Alex)
 						if (property.getType().equals(PropertyType.ENUM)) {
