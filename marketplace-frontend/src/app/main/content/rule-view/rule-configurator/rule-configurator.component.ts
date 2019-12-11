@@ -86,12 +86,10 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   save() {
-    console.log(this.derivationRule.sources)
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.target = this.ruleForm.value.target;
     // this.derivationRule.sources = this.ruleForm.value.sources;
 
-    console.log(this.derivationRule.sources)
     this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
   }
 
