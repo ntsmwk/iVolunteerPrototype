@@ -33,9 +33,6 @@
     <div style="padding-top: 3px"></div>
   </div> -->
 
-
-    <div style="padding-top: 20px"></div>
-
     <h2>View</h2>
     <div fxLayout="row" fxLayoutAlign="start start">
       <div
@@ -71,6 +68,35 @@
         <!-- <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option> -->
       </mat-select>
     </mat-form-field>
+
+
+
+
+    <!-- <div *ngIf="selectionIndex > -1">
+      <div style="padding-top: 10px">====================</div>
+
+      <h3>Auswahl</h3>
+      <div style="font-size: 20px">Icon</div>
+      <div
+        style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+        <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="65" height="65" (click)=undefined
+          style="cursor: pointer" matTooltip="icon">
+      </div>
+      <div style="padding-top: 10px"></div>
+      <div style="font-size: 10px; color: gray">Bezeichnung</div>
+      <div>{{configurableClasses[selectionIndex].name}}</div>
+      
+      <div style="padding-top: 10px"></div>
+      <div style="font-size: 10px; color: gray">Properties</div>
+      <div *ngFor="let property of configurableClasses[selectionIndex].properties">
+        <div>{{property.name}}</div>
+      </div>
+
+      <div style="padding-top: 10px">====================</div> 
+
+    </div>-->
+
+
 
     <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
       (from root)</a>
