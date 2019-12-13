@@ -6,7 +6,7 @@
 
         <div style="padding-top: 12px"></div>
         <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
-            [formDisabled]="false" [formConfigurationId]="currentFormConfiguration.id"
+            [hideButtons]="false" [formConfigurationId]="currentFormConfiguration.id"
             [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
             (cancelEvent)="handleCancelEvent()">
         </app-dynamic-class-instance-creation-form>

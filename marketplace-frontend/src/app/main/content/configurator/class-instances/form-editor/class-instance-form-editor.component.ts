@@ -39,7 +39,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
   ) {
-
+    console.log("extras");
+    console.log(this.router.getCurrentNavigation().extras.state);
   }
 
   ngOnInit() {
@@ -47,6 +48,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
+
 
     Promise.all([
       this.route.params.subscribe(params => {
@@ -59,8 +61,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           i++;
         }
       })
-
     ]).then(() => {
+
+
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {

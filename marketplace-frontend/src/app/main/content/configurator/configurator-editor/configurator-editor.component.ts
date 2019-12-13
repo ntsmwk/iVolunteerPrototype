@@ -746,6 +746,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(cells) && cells.length == 1) {
       cell = cells.pop();
     } else {
+      this.selectionType = undefined;
+      this.selectionIndex = -1;
       return;
     }
 
@@ -757,18 +759,18 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       console.log(this.selectionIndex);
       console.log(this.configurableClasses[this.selectionIndex]);
 
-    } else if(cell.cellType == 'property') {
-      this.selectionType == 'property';
-      this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
-        return classDefiniton.id == cell.parent.id
-      })
+    // } else if(cell.cellType == 'property') {
+    //   this.selectionType == 'property';
+    //   this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
+    //     return classDefiniton.id == cell.parent.id
+    //   })
       
-      this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
-        return property.id == cell.id;
-      });
+    //   this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
+    //     return property.id == cell.id;
+    //   });
 
-      console.log(this.selectionIndex);
-      console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
+    //   console.log(this.selectionIndex);
+    //   console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
 
     } else {
       this.selectionType = undefined;
@@ -813,6 +815,19 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
   }
 
+  changeIconClicked(selectionIndex: number) {
+    console.log("Change Icon Clicked");
+    console.log(selectionIndex);
+    console.log(this.configurableClasses[selectionIndex]);
+  }
+
+  previewClicked(selectionIndex: number) {
+    this.dialogFactory.openInstanceFormPreviewDialog(this.marketplace, [this.configurableClasses[selectionIndex].id]).then((result: any) => {
+      console.log(result);
+    });
+
+  }
+
   //Menu functions
   consumeMenuOptionClickedEvent(event: any) {
     this.eventResponseAction = null;
@@ -841,6 +856,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         break;
       }
     }
+
+    return;
   }
 
   saveGraph() {
@@ -1034,7 +1051,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.dataTransportService.data = cells;
 
       let params: string[] = ['test8', 'test7', 'test9'];
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
+      // this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], {state: {classDefinitionIds: params}, queryParams: params });
+
     }
   }
 

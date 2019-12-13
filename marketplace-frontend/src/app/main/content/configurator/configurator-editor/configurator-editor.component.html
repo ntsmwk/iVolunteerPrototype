@@ -59,7 +59,7 @@
 
     </div>
 
-    <div style="padding-top: 5px"></div>
+    <div class="pt-4"></div>
 
     <mat-form-field style="width: 100%">
       <mat-select placeholder="Automatic Layout" value="Vertical">
@@ -72,29 +72,36 @@
 
 
 
-    <!-- <div *ngIf="selectionIndex > -1">
-      <div style="padding-top: 10px">====================</div>
-
-      <h3>Auswahl</h3>
-      <div style="font-size: 20px">Icon</div>
-      <div
-        style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
-        <img src="/assets/mxgraph_resources/images/zoomactual.gif" width="65" height="65" (click)=undefined
-          style="cursor: pointer" matTooltip="icon">
-      </div>
-      <div style="padding-top: 10px"></div>
-      <div style="font-size: 10px; color: gray">Bezeichnung</div>
-      <div>{{configurableClasses[selectionIndex].name}}</div>
-      
-      <div style="padding-top: 10px"></div>
-      <div style="font-size: 10px; color: gray">Properties</div>
-      <div *ngFor="let property of configurableClasses[selectionIndex].properties">
-        <div>{{property.name}}</div>
+    <div *ngIf="selectionIndex > -1" style="outline-color: grey; outline-style: solid; outline-width: 1px">
+      <div style="outline-color: grey; outline-style: solid; outline-width: 1px">
+        <div fxLayout="row" fxLayoutAlign="start center" class="m-4">
+          <mat-icon>information</mat-icon>
+          <div class="pl-8"></div>
+          <div>{{configurableClasses[selectionIndex].name}}</div>
+        </div>
       </div>
 
-      <div style="padding-top: 10px">====================</div> 
+      <div class="m-4">
+        <div style="font-size: 15px; color: gray">Icon</div>
+        <div
+          style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+          <img *ngIf="configurableClasses[selectionIndex].imagePath"
+            [src]="configurableClasses[selectionIndex].imagePath" width="65" height="65" (click)=undefined
+            style="cursor: default" matTooltip="icon">
+        </div>
+        <a (click)="changeIconClicked(selectionIndex)" style="cursor: pointer" class="pl-4">change Icon</a>
 
-    </div>-->
+
+        <div class="pt-12"></div>
+        <div style="font-size: 10px; color: gray">Bezeichnung</div>
+        <div>{{configurableClasses[selectionIndex].name}}</div>
+
+        <div class="pt-12"></div>
+
+        <a (click)="previewClicked(selectionIndex)">Vorschau Anzeigen</a>
+      </div>
+
+    </div>
 
 
 

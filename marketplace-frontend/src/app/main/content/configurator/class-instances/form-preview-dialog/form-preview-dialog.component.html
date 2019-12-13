@@ -1,0 +1,27 @@
+<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
+
+    <div>
+        <h1>{{currentFormConfiguration.name}}</h1>
+
+
+        <div style="padding-top: 12px"></div>
+        <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
+            [hideButtons]="true" [formConfigurationId]="currentFormConfiguration.id"
+            [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
+            (cancelEvent)="handleCancelEvent()">
+        </app-dynamic-class-instance-creation-form>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
+        <div></div>
+        <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
+            Close
+        </button>
+        <div></div>
+    </div>
+
+
+</div>
+
+
+
