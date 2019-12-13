@@ -1,7 +1,7 @@
 import { ClassDefinition, ClassArchetype } from '../../_model/meta/Class';
 import { Relationship, Inheritance, RelationshipType } from '../../_model/meta/Relationship';
 import { ObjectIdService } from '../../_service/objectid.service.';
-import { ClassProperty } from '../../_model/meta/Property';
+import { ClassProperty, PropertyType } from '../../_model/meta/Property';
 
 const sidebarPalettes = {
   id: 'building_blocks', label: 'Building Blocks',
@@ -95,27 +95,32 @@ export class CUtils {
     let idProperty = new ClassProperty<string>();
     idProperty.name = 'ID';
     idProperty.id = 'id';
+    idProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(idProperty);
     
 
     let nameProperty = new ClassProperty<string>();
     nameProperty.name = 'Name';
     nameProperty.id = 'name';
+    nameProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(nameProperty);
 
     let vonProperty = new ClassProperty<Date>();
     vonProperty.name = 'Von Datum';
     vonProperty.id = 'fromdate';
+    vonProperty.type = PropertyType.DATE;
     fwPassEintrag.properties.push(vonProperty);
 
     let bisProperty = new ClassProperty<Date>();
     bisProperty.name = 'Bis Datum';
     bisProperty.id = 'todate';
+    bisProperty.type = PropertyType.DATE;
     fwPassEintrag.properties.push(bisProperty);
 
     let evidenceProperty = new ClassProperty<string>();
     evidenceProperty.name = 'Evidence';
     evidenceProperty.id = 'evidence';
+    evidenceProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(evidenceProperty);
 
     configurableClasses.push(fwPassEintrag);

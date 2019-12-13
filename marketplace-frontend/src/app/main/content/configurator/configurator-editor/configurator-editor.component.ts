@@ -759,18 +759,18 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       console.log(this.selectionIndex);
       console.log(this.configurableClasses[this.selectionIndex]);
 
-    // } else if(cell.cellType == 'property') {
-    //   this.selectionType == 'property';
-    //   this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
-    //     return classDefiniton.id == cell.parent.id
-    //   })
-      
-    //   this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
-    //     return property.id == cell.id;
-    //   });
+      // } else if(cell.cellType == 'property') {
+      //   this.selectionType == 'property';
+      //   this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
+      //     return classDefiniton.id == cell.parent.id
+      //   })
 
-    //   console.log(this.selectionIndex);
-    //   console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
+      //   this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
+      //     return property.id == cell.id;
+      //   });
+
+      //   console.log(this.selectionIndex);
+      //   console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
 
     } else {
       this.selectionType = undefined;
@@ -816,20 +816,33 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   changeIconClicked(selectionIndex: number) {
-    console.log("Change Icon Clicked");
-    console.log(selectionIndex);
-    console.log(this.configurableClasses[selectionIndex]);
+    console.log("TODO");    
+
   }
 
-  previewClicked(selectionIndex: number) {
-    this.dialogFactory.openInstanceFormPreviewDialog(this.marketplace, [this.configurableClasses[selectionIndex].id]).then((result: any) => {
-      console.log(result);
-    });
+  saveDone: boolean;
 
+  previewClicked(selectionIndex: number) {
+    this.consumeMenuOptionClickedEvent({ id: 'editor_save' }).then(() => {
+        this.openPreviewDialog(selectionIndex);
+    });
+  }
+
+  openPreviewDialog(selectionIndex: number) {
+    let outer = this;
+    setTimeout(() => {
+      if(this.saveDone) {
+        this.dialogFactory.openInstanceFormPreviewDialog(outer.marketplace, [outer.configurableClasses[selectionIndex].id]).then(() => {
+          
+        });
+      } else {
+        outer.openPreviewDialog(selectionIndex);
+      }
+    }, 500);
   }
 
   //Menu functions
-  consumeMenuOptionClickedEvent(event: any) {
+  async consumeMenuOptionClickedEvent(event: any) {
     this.eventResponseAction = null;
     switch (event.id) {
       case 'editor_save': {
@@ -856,11 +869,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         break;
       }
     }
-
     return;
   }
 
-  saveGraph() {
+  async saveGraph() {
     this.updateModel();
     let relSaveSuccess: boolean;
     let classSaveSuccess: boolean;
@@ -894,6 +906,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       }).then(() => {
         let snackBarMessage: string;
+        this.saveDone = true;
 
         if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
           snackBarMessage = "save successful!";
@@ -1052,7 +1065,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       let params: string[] = ['test8', 'test7', 'test9'];
       // this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], {state: {classDefinitionIds: params}, queryParams: params });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { state: { classDefinitionIds: params }, queryParams: params });
 
     }
   }

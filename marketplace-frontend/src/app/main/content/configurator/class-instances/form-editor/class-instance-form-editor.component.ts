@@ -62,8 +62,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
       })
     ]).then(() => {
-
-
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {

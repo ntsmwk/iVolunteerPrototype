@@ -55,6 +55,10 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
       this.formConfigurations = formConfigurations
 
+      console.log("================");
+      console.log(formConfigurations);
+      console.log("================");
+
       for (let config of this.formConfigurations) {
         config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
         config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
