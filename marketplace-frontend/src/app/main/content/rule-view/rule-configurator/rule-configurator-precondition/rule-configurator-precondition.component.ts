@@ -52,8 +52,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   ngOnInit() {
     console.error(this.sourceRuleEntry);
     this.rulePreconditionForm.setValue({
-      classDefinition: this.sourceRuleEntry.classDefinition || "",
-      classProperty: this.sourceRuleEntry.classProperty || "",
+      classDefinition: JSON.stringify(this.sourceRuleEntry.classDefinition) || "",
+      classProperty: JSON.stringify(this.sourceRuleEntry.classProperty) || "",
       mappingOperatorType: this.sourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
       value: this.sourceRuleEntry.value || ""
     });
@@ -76,8 +76,6 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
 
   onClassChange($event) {
     this.sourceRuleEntry.classDefinition = $event.source.value
-    console.error($event.source.value);
-    console.error(this.rulePreconditionForm.value.classDefinition);
     this.loadClassProperties($event);
   }
 
@@ -92,8 +90,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onChange($event) {
-    this.sourceRuleEntry.classDefinition = this.rulePreconditionForm.value.classDefinition;
-    this.sourceRuleEntry.classProperty = this.rulePreconditionForm.value.classProperty;
+    this.sourceRuleEntry.classDefinition = JSON.parse(this.rulePreconditionForm.value.classDefinition);
+    this.sourceRuleEntry.classProperty = JSON.parse(this.rulePreconditionForm.value.classProperty);
     this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
     this.sourceRuleEntry.value = this.rulePreconditionForm.value.value;
     this.sourceRuleEntryChange.emit(this.sourceRuleEntry);
@@ -105,15 +103,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     return x;
   }
 
-
-  private check(cd, chosenvalue) {
-    if (cd.id === chosenvalue.id) {
-      console.error(JSON.stringify(cd) === JSON.stringify(chosenvalue))
-      console.error("--------------------------")
-      // if (cd === chosenvalue) {
-        // console.error(cd)
-        // console.error(chosenvalue);
-      // }
-    }
+  private stringify(obj){
+    return JSON.stringify(obj);
   }
 }
