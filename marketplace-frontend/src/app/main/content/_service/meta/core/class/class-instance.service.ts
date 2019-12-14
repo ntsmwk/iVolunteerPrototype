@@ -17,6 +17,10 @@ import { ClassDefinition, ClassInstance } from "app/main/content/_model/meta/Cla
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
     }
 
+    getClassInstancesByArcheType(marketplace: Marketplace, archeType: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/byArchetype/${archeType}`);
+    }
+
     getClassInstanceById(marketplace: Marketplace, classInstanceId: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/${classInstanceId}`);
     }

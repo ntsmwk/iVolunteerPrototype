@@ -15,12 +15,15 @@ import {
   MatSelectModule,
   MatSidenavModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTableModule,
+  MatCardModule,
+  MatButtonToggleModule
 } from '@angular/material';
 import { FuseAchievementsComponent } from './achievements.component';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
 
-import { ActivitiesComponent } from './activities/activities.component';
+import { TasksComponent } from './tasks/tasks.component';
 import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
 import { FunctionsComponent } from './functions/functions.component';
 import { CompetenciesComponent } from './competencies/competencies.component';
@@ -43,7 +46,7 @@ const routes = [
 @NgModule({
   declarations: [
     FuseAchievementsComponent,
-    ActivitiesComponent,
+    TasksComponent,
     AccomplishmentsComponent,
     FunctionsComponent,
     CompetenciesComponent,
@@ -67,6 +70,9 @@ const routes = [
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonToggleModule,
 
     FuseProjectMembersModule,
     FuseProjectTaskListModule,

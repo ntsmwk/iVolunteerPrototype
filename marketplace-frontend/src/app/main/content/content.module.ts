@@ -38,7 +38,7 @@ const routes: Route[] = [
   },
    {
      path: 'main/achievements',
-     loadChildren: () => import(`./achievements/achievements.module`).then(m => m.FuseAchievementsModule),
+     loadChildren: () => import('./achievements/achievements.module').then(m => m.FuseAchievementsModule),
      canActivate: [TokenGuard, VolunteerGuard]
    },
   {

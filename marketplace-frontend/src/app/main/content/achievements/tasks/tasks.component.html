@@ -1,16 +1,30 @@
-<!--
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <div class= "content" fxLayout="column" fxLayoutAlign="none">
       <div class="managmentSum" fxLayout="column" fxLayoutAlign="space-between none">
-          <h1>Management Summary</h1>            
+          <h1>Management Summary</h1>  
       </div>
 
       <div class="timeline" fxLayout="column" fxLayoutAlign="none">      
         <h1>Timeline</h1>  
-        <div fxLayout="row">
-            <button mat-raised-button>Anzahl</button>
-            <button mat-raised-button>Dauer</button>
-            <button mat-raised-button>Distanz</button>
+        <div fxLayout="row" fxLayoutAlign="space-around center" >
+            <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis" (change)="onYaxisChange(group.value)">
+                <mat-button-toggle value="Dauer">Dauer
+                </mat-button-toggle>
+                <mat-button-toggle value="Anzahl">Anzahl
+                </mat-button-toggle>
+                <mat-button-toggle value="Distanz">Distanz
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+
+              <mat-form-field>
+                <mat-label>Jahr</mat-label>
+                  <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
+                  <mat-option value="2017">  2017  </mat-option>
+                  <mat-option value="2018">  2018  </mat-option>
+                  <mat-option value="2019">  2019  </mat-option>
+                  <mat-option value="gesamt">  Gesamt  </mat-option>
+               </mat-select>
+              </mat-form-field>         
         </div>
         
           <div class="timeline">
@@ -18,7 +32,7 @@
             class="chart-container"
             [scheme]="colorScheme"
             [schemeType]="schemeType"
-            [results]="timelineFilterBarData"
+            [results]="timelineData"
             [animations]="animations"
             [gradient]="gradient"
             [xAxis]="showXAxis"
@@ -29,7 +43,7 @@
             [yAxisLabel]="yAxisLabel"
             [showGridLines]="showGridLines"
             [noBarWhenZero]="noBarWhenZero"
-            (onFilter)="onFilter($event)">
+            (onFilter)="onTimelineFilter($event)">
           </ngx-charts-timeline-filter-bar-chart>
         </div>
       </div>
@@ -39,7 +53,7 @@
               <h2>Zweck:</h2>
               <ngx-sunburst-chart 
               [width]="700"
-              [data]="zweckData" 
+              [data]="sunburstChartData" 
               colorScheme="cool"
               (click)="onClick($event)"
               (select)="onSelect($event)"
@@ -52,7 +66,7 @@
               <div class="donut-parent">
               <ngx-charts-pie-chart
                 class="chart-container"
-                [view] = "[500, 500]"
+                [view] = "[600, 600]"
                 [results]="arbeitsteilungData"
                 [animations]="animations"
                 [labels]="true"
@@ -74,8 +88,8 @@
                 <div class="donut-parent">
                 <ngx-charts-pie-chart
                 class="chart-container"
-                [view] = "[500, 500]"
-                [results]="ebeneData"
+                [view] = "[600, 600]"
+                [results]="arbeitsteilungData"
                 [animations]="animations"
                 [labels]="true"
                 [tooltipDisabled]="false"
@@ -93,8 +107,8 @@
                 <div class="donut-parent">
                 <ngx-charts-pie-chart
                 class="chart-container"
-                [view] = "[500, 500]"
-                [results]="wochentagData"
+                [view] = "[600, 600]"
+                [results]="arbeitsteilungData"
                 [animations]="animations"
                 [labels]="true"
                 [tooltipDisabled]="false"
@@ -114,8 +128,8 @@
             <div class="donut-parent">
             <ngx-charts-pie-chart
               class="chart-container"
-              [view] = "[500, 500]"
-              [results]="rangData"
+              [view] = "[600, 600]"
+              [results]="arbeitsteilungData"
               [animations]="animations"
               [labels]="true"
               [tooltipDisabled]="false"
@@ -133,8 +147,8 @@
             <div class="donut-parent">
             <ngx-charts-pie-chart
               class="chart-container"
-              [view] = "[500, 500]"
-              [results]="phaseData"
+              [view] = "[600, 600]"
+              [results]="arbeitsteilungData"
               [animations]="animations"
               [labels]="true"
               [tooltipDisabled]="false"
@@ -150,7 +164,6 @@
 
 </div>
 
--->
   
 <!--
   <mat-card class="example-card">
