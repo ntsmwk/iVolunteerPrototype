@@ -10,10 +10,8 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
-import { VolunteerService } from 'app/main/content/_service/volunteer.service';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
-import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -140,7 +138,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   getDisplayedName(volunteer: Volunteer): string {
-
     let result: string = '';
 
     if (!isNullOrUndefined(volunteer.lastname)) {

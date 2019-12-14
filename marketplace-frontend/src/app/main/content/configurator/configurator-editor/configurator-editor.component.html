@@ -82,7 +82,7 @@
       </div>
 
       <div class="m-4">
-        <div style="font-size: 15px; color: gray">Icon</div>
+        <div style="font-size: 10px; color: gray">Icon</div>
         <div
           style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
           <img *ngIf="configurableClasses[selectionIndex].imagePath"
@@ -98,19 +98,28 @@
 
         <div class="pt-12"></div>
 
-        <a (click)="previewClicked(selectionIndex)">Vorschau Anzeigen</a>
+        <div style="font-size: 10px; color: gray">Instanzierung</div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div></div>
+          <button class="preview-button" mat-stroked-button color="accent"
+            (click)="previewClicked(selectionIndex)">Vorschau Anzeigen</button>
+          <div></div>
+        </div>
+        <div class="pb-4"></div>
       </div>
 
     </div>
 
 
 
+
+
+
+    <div class="pt-36"></div>
+
     <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
       (from root)</a>
     <div style="padding-top: 5px"></div>
-
-
-
     <a (click)="doShitWithGraph(graph)" style="cursor: pointer">print graph to
       console</a>
     <div style="padding-top: 5px"></div>
