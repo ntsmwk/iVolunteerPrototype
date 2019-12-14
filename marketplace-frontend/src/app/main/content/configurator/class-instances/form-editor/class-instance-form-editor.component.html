@@ -18,12 +18,20 @@
             <div fxLayout="row" fxLayoutAlign="start start">
                 <div class="pl-4" style="background-color: grey"></div>
                 <div>
-                    <h1>Target User</h1>
-                    <a (click)="toggleList=!toggleList">toggle List</a>
-
-                    <div *ngIf="toggleList">
-                        <div style="height: 5000px"></div>
-                    </div>
+                    <h1>Target Volunteers</h1>
+                    <mat-selection-list #volunteerList>
+                        <mat-list-option *ngFor="let volunteer of volunteers">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <img class="avatar" src="assets/images/avatars/profile.jpg">
+                                <div>
+                                    {{volunteer.firstname}} {{volunteer.lastname}}
+                                </div>
+                            </div>
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <p>
+                        Options selected: {{volunteerList.selectedOptions.selected.length}}
+                    </p>
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private List<PropertyInstance<Object>> properties;
 	private String userId;
 	private ClassArchetype classArchetype;
+	
 
 	public ClassInstance() {
 	}
