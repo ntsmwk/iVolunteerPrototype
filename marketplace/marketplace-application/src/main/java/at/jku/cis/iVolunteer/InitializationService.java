@@ -17,8 +17,10 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
@@ -26,44 +28,57 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.rule.DerivationRule;
+import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
+import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class InitializationService {
 
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
+	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private FinalizationService finalizationService;
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionsRepository;
-	@Autowired
-	private ConfiguratorRepository configuratorRepository;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private FinalizationService finalizationService;
 
 	@PostConstruct
 	public void init() {
 		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
-				relationshipRepository, propertyDefinitionRepository);
+				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
+
+		DerivationRule rule = new DerivationRule();
+		rule.setName("myrule");
+
+		SourceRuleEntry source = new SourceRuleEntry();
+		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
+		source.setClassPropertyId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
+		source.setMappingOperatorType(MappingOperatorType.GE);
+		source.setValue("102");
+		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
+		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
+		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
+		derivationRuleRepository.save(rule);
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
-		createiVolunteerAPIPersonRoleClassDefinition();
-		createiVolunteerAPIPersonBadgeClassDefinition();
-		createiVolunteerAPIPersonCertificateClassDefinition();
-		createiVolunteerAPIPersonTaskClassDefinition();
+		ClassDefinition findByName = classDefinitionRepository.findByName("PersonRole");
+		if (findByName == null) {
+			createiVolunteerAPIPersonRoleClassDefinition();
+			createiVolunteerAPIPersonBadgeClassDefinition();
+			createiVolunteerAPIPersonCertificateClassDefinition();
+			createiVolunteerAPIPersonTaskClassDefinition();
+		}
 
 	}
 
@@ -120,59 +135,80 @@ public class InitializationService {
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonRoleProperties(List<PropertyDefinition<Object>> properties) {
-		// @formatter:off
+		//@formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("roleID") || p.getName().equals("roleType")
-						|| p.getName().equals("roleName") || p.getName().equals("roleDescription")
-						|| p.getName().equals("organisationID") || p.getName().equals("organisationName")
-						|| p.getName().equals("organisationType") || p.getName().equals("dateFrom")
-						|| p.getName().equals("dateTo") || p.getName().equals("iVolunteerSource"))
-				.collect(Collectors.toList());
+				.filter(p -> p.getName().equals("roleID") 
+						|| p.getName().equals("roleType")
+						|| p.getName().equals("roleName") 
+						|| p.getName().equals("roleDescription")
+						|| p.getName().equals("organisationID") 
+						|| p.getName().equals("organisationName") 
+						|| p.getName().equals("organisationType")
+						|| p.getName().equals("dateFrom") 
+						|| p.getName().equals("dateTo")
+						|| p.getName().equals("iVolunteerSource"))
+				.collect(Collectors.toList());		 
 		// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonBadgeProperties(List<PropertyDefinition<Object>> properties) {
-		// @formatter:off
-		return properties.stream()
-				.filter(p -> p.getName().equals("badgeID") || p.getName().equals("badgeName")
-						|| p.getName().equals("badgeDescription") || p.getName().equals("badgeIssuedOn")
-						|| p.getName().equals("badgeIcon") || p.getName().equals("iVolunteerUUID")
-						|| p.getName().equals("iVolunteerSource"))
-				.collect(Collectors.toList());
-		// @formatter:on
+		//@formatter:off
+				return properties.stream()
+						.filter(p -> p.getName().equals("badgeID") 
+								|| p.getName().equals("badgeName")
+								|| p.getName().equals("badgeDescription") 
+								|| p.getName().equals("badgeIssuedOn")
+								|| p.getName().equals("badgeIcon") 
+								|| p.getName().equals("iVolunteerUUID")
+								|| p.getName().equals("iVolunteerSource"))
+						.collect(Collectors.toList());		 
+				// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonCertificateProperties(
 			List<PropertyDefinition<Object>> properties) {
-		// @formatter:off
-		return properties.stream()
-				.filter(p -> p.getName().equals("certificateID") || p.getName().equals("certificateName")
-						|| p.getName().equals("certificateDescription") || p.getName().equals("certificateIssuedOn")
-						|| p.getName().equals("certificateValidUntil") || p.getName().equals("certificateIcon")
-						|| p.getName().equals("iVolunteerUUID") || p.getName().equals("iVolunteerSource"))
-				.collect(Collectors.toList());
-		// @formatter:on
+		//@formatter:off
+				return properties.stream()
+						.filter(p -> p.getName().equals("certificateID") 
+								|| p.getName().equals("certificateName")
+								|| p.getName().equals("certificateDescription") 
+								|| p.getName().equals("certificateIssuedOn")
+								|| p.getName().equals("certificateValidUntil") 
+								|| p.getName().equals("certificateIcon")
+								|| p.getName().equals("iVolunteerUUID")
+								|| p.getName().equals("iVolunteerSource"))
+						.collect(Collectors.toList());		 
+				// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
-		// @formatter:off
-		return properties.stream()
-				.filter(p -> p.getName().equals("taskID") || p.getName().equals("taskName")
-						|| p.getName().equals("taskType1") || p.getName().equals("taskType2")
-						|| p.getName().equals("taskType3") || p.getName().equals("taskType4")
-						|| p.getName().equals("taskDescription") || p.getName().equals("taskRoleID")
-						|| p.getName().equals("taskRole") || p.getName().equals("taskVehicleID")
-						|| p.getName().equals("taskVehicle") || p.getName().equals("taskCountAll")
-						|| p.getName().equals("taskDateFrom") || p.getName().equals("taskDateTo")
-						|| p.getName().equals("taskDuration") || p.getName().equals("taskLocation")
-						|| p.getName().equals("taskGeoInformation") || p.getName().equals("iVolunteerUUID")
-						|| p.getName().equals("iVolunteerSource"))
-				.collect(Collectors.toList());
-		// @formatter:on
+		//@formatter:off
+				return properties.stream()
+						.filter(p -> p.getName().equals("taskID") 
+								|| p.getName().equals("taskName")
+								|| p.getName().equals("taskType1") 
+								|| p.getName().equals("taskType2")
+								|| p.getName().equals("taskType3") 
+								|| p.getName().equals("taskType4")
+								|| p.getName().equals("taskDescription")
+								|| p.getName().equals("taskRoleID") 
+								|| p.getName().equals("taskRole")
+								|| p.getName().equals("taskVehicleID") 
+								|| p.getName().equals("taskVehicle")
+								|| p.getName().equals("taskCountAll")
+								|| p.getName().equals("taskDateFrom") 
+								|| p.getName().equals("taskDateTo")
+								|| p.getName().equals("taskDuration") 
+								|| p.getName().equals("taskLocation")
+								|| p.getName().equals("taskGeoInformation")
+								|| p.getName().equals("iVolunteerUUID")
+								|| p.getName().equals("iVolunteerSource"))
+						.collect(Collectors.toList());		 
+				// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> addPropertyDefinitions() {
-		List<PropertyDefinition> propertyDefinitions = new ArrayList<>();
+		List<PropertyDefinition<Object>> propertyDefinitions = new ArrayList<>();
 		addCrossCuttingProperties(propertyDefinitions);
 		addPersonRoleProperties(propertyDefinitions);
 		addPersonBadgeProperties(propertyDefinitions);
@@ -181,59 +217,59 @@ public class InitializationService {
 		return propertyDefinitionsRepository.save(propertyDefinitions);
 	}
 
-	private void addCrossCuttingProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerUUID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("iVolunteerSource", PropertyType.TEXT));
+	private void addCrossCuttingProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerUUID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerSource", PropertyType.TEXT));
 	}
 
-	private void addPersonRoleProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("roleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleType", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("roleDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("organisationType", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("dateFrom", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("dateTo", PropertyType.DATE));
+	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationType", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("dateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("dateTo", PropertyType.DATE));
 	}
 
-	private void addPersonBadgeProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeIssuedOn", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("badgeIcon", PropertyType.TEXT));
+	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIcon", PropertyType.TEXT));
 	}
 
-	private void addPersonCertificateProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateIssuedOn", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateValidUntil", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("certificateIcon", PropertyType.TEXT));
+	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateIssuedOn", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateValidUntil", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateIcon", PropertyType.TEXT));
 	}
 
-	private void addPersonTaskProperties(List<PropertyDefinition> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<String>("taskID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType1", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType2", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType3", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskType4", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskRoleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskRole", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskVehicle", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskCountAll", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDateFrom", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDateTo", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskDuration", PropertyType.FLOAT_NUMBER));
-		propertyDefinitions.add(new PropertyDefinition<String>("taskLocation", PropertyType.TEXT));
+	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDescription", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskRoleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskRole", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicleID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicle", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskCountAll", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateFrom", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateTo", PropertyType.DATE));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskDuration", PropertyType.FLOAT_NUMBER));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskLocation", PropertyType.TEXT));
 //			TODO task geoinformation to geo object
-		propertyDefinitions.add(new PropertyDefinition<String>("taskGeoInformation", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskGeoInformation", PropertyType.TEXT));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -314,8 +350,8 @@ public class InitializationService {
 		i3.setId("test_i3");
 		Inheritance i4 = new Inheritance(c2.getId(), c5.getId(), c2.getId());
 		i4.setId("test_i4");
-		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
-		i5.setId("test_i5");
+//		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
+//		i5.setId("test_i5");
 //		Inheritance i6 = new Inheritance(c6.getId(), c6.getId(), c6.getId());
 //		i6.setId("test_i6");
 
@@ -338,9 +374,9 @@ public class InitializationService {
 		if (!relationshipRepository.exists(i4.getId())) {
 			relationshipRepository.save(i4);
 		}
-		if (!relationshipRepository.exists(i5.getId())) {
-			relationshipRepository.save(i5);
-		}
+//		if (!relationshipRepository.exists(i5.getId())) {
+//			relationshipRepository.save(i5);
+//		}
 
 		if (!relationshipRepository.exists(i7.getId())) {
 			relationshipRepository.save(i7);
@@ -391,8 +427,8 @@ public class InitializationService {
 
 	private void addConfigurators() {
 		Configurator c1 = new Configurator();
-		c1.setName("test1");
-		c1.setId("test1");
+		c1.setName("Slot1");
+		c1.setId("slot1");
 		c1.setDate(new Date());
 
 		c1.setRelationshipIds(new ArrayList<>());
@@ -400,8 +436,8 @@ public class InitializationService {
 		c1.getRelationshipIds().add("test_i2");
 		c1.getRelationshipIds().add("test_i3");
 		c1.getRelationshipIds().add("test_i4");
-		c1.getRelationshipIds().add("test_i5");
-		c1.getRelationshipIds().add("test_i6");
+//		c1.getRelationshipIds().add("test_i5");
+//		c1.getRelationshipIds().add("test_i6");
 		c1.getRelationshipIds().add("test_i7");
 		c1.getRelationshipIds().add("test_i8");
 		c1.getRelationshipIds().add("test_i9");
@@ -418,21 +454,26 @@ public class InitializationService {
 		c1.getClassDefinitionIds().add("test9");
 
 		Configurator c2 = new Configurator();
-		c2.setName("test2");
-		c2.setId("test2");
-		c2.setDate(new Date(1289516400000L));
+		c2.setName("Slot2");
+		c2.setId("slot2");
+		c2.setDate(new Date());
 
 		Configurator c3 = new Configurator();
-		c3.setName("test3");
-		c3.setId("test3");
+		c3.setName("Slot3");
+		c3.setId("slot3");
 
 		c3.setDate(new Date());
 
 		Configurator c4 = new Configurator();
-		c4.setName("test4");
-		c4.setId("test4");
+		c4.setName("Slot4");
+		c4.setId("slot4");
 
-		c4.setDate(new Date());
+		c4.setDate(new Date()); 
+		
+		Configurator c5 = new Configurator();
+		c5.setName("Slot5");
+		c5.setId("slot5");
+		c5.setDate(new Date());
 
 		if (!configuratorRepository.exists(c1.getId())) {
 			configuratorRepository.save(c1);
@@ -453,6 +494,10 @@ public class InitializationService {
 		if (!configuratorRepository.exists(c4.getId())) {
 			configuratorRepository.save(c4);
 		}
+		if (!configuratorRepository.exists(c5.getId())) {
+			configuratorRepository.save(c5);
+		}
+
 
 	}
 }

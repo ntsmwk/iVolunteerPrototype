@@ -24,14 +24,14 @@ public class ConfiguratorController {
 	@GetMapping("meta/configurator/all")
 	List<Configurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
 		
-		if (sortType.equalsIgnoreCase("asc")) {
-			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
-
-		} else if (sortType.equalsIgnoreCase("desc")) {
-			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
-		} 
+//		if (sortType.equalsIgnoreCase("asc")) {
+//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
+//
+//		} else if (sortType.equalsIgnoreCase("desc")) {
+//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
+//		} 
 		
-		return configuratorRepository.findAll();
+		return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
 	}
 	
 	@GetMapping("meta/configurator/{id}")

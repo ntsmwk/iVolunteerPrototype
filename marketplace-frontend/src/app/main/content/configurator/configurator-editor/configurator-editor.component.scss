@@ -1,6 +1,9 @@
 @import "src/@fuse/scss/fuse";
 
-div#leftSidebarContainer, div#rightSidebarContainer{
+div#leftSidebarContainer, div#rightSidebarContainer {
+
+  z-index: 200;
+
   h2 {
     padding: 0px;
     margin: 0px;
@@ -31,8 +34,13 @@ div#leftSidebarContainer, div#rightSidebarContainer{
   }
 }
 
+
 .subheader{
   margin: 5px 0px 5px 0px
+}
+
+.sidebar-content {
+  margin: 5px 5px 10px 10px;
 }
 
 div#menubarContainer {
@@ -66,4 +74,8 @@ div#fileMenuItemContainer {
     padding-bottom: 5px;
     padding-left: 5px;
   }
+}
+
+div#graphContainer {
+  z-index: 1;
 }

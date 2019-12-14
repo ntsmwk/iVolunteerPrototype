@@ -19,6 +19,7 @@ import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/ad
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
+import { EditorTreeViewModule } from './tree-view/tree-view.module';
 
 
 
@@ -48,6 +49,7 @@ import { DataTransportService } from '../../_service/data-transport/data-transpo
     AddOrRemoveDialogModule,
 
     EditorTopMenuBarModule,
+    EditorTreeViewModule,
 
   ],
   declarations: [ConfiguratorEditorComponent],

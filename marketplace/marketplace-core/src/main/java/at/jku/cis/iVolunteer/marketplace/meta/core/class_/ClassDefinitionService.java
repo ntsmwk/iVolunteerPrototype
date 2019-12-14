@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.ws.rs.NotAcceptableException;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
@@ -30,7 +32,7 @@ public class ClassDefinitionService {
 	@Autowired private RelationshipRepository relationshipRepository;
 
 	public ClassDefinition getByName(String name) {
-		return classDefinitionRepository.getByName(name);
+		return classDefinitionRepository.findByName(name);
 	}
 	
 	public ClassDefinition getClassDefinitionById(String id) {
@@ -65,7 +67,7 @@ public class ClassDefinitionService {
 	}
 	
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype) {
-		return classDefinitionRepository.getByClassArchetype(archetype);
+		return classDefinitionRepository.findByClassArchetype(archetype);
 	}
 
 	public List<FormConfiguration> getParentsById(List<String> childIds) {
@@ -93,39 +95,51 @@ public class ClassDefinitionService {
 			while (!currentClassDefinition.isRoot()) {
 
 				formEntry.getClassDefinitions().add(currentClassDefinition);
-				for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
+				
+				int i = 0;
+				CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+				for (ClassProperty<Object> property : copyList) {
 					if (!formEntry.getClassProperties().contains(property)) {
-						formEntry.getClassProperties().add(property);
-					}
-				}
-				
-				List<Relationship> associationList =  (relationshipRepository.findBySourceAndRelationshipType(currentClassDefinition.getId(), RelationshipType.ASSOCIATION));
-				
-				
-				if (associationList != null) {
-					
-					
-					for (Relationship r : associationList) {
-						// for each Relationship, Do a DFS to construct dropdown options menu
-						
-						System.out.println(r.getId());
-						System.out.println(associationList.size());
-						
-						ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-						EnumRepresentation enumRepresentation = createEnumRepresentation(classDefinition);
-						enumRepresentation.setClassDefinition(classDefinition);
-						
-						if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
-							enumRepresentation.getClassDefinition().getProperties().get(0).setMultiple(false);
+						//TODO refactor into own method (Alex)
+						if (property.getType().equals(PropertyType.ENUM)) {
 							
-						} else if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONESTAR)) {
-							enumRepresentation.getClassDefinition().getProperties().get(0).setMultiple(true);
+							ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
+							enumProperty.setId(property.getId());
+							enumProperty.setName(property.getName());
+							enumProperty.setType(PropertyType.ENUM);
+							enumProperty.setRequired(property.isRequired());
+							
+							List<Relationship> associationList =  (relationshipRepository.findBySourceAndRelationshipType(property.getId(), RelationshipType.ASSOCIATION));
+							
+							if (associationList != null) {
+								for (Relationship r : associationList) {
+									// for each Relationship, Do a DFS to construct dropdown options menu
+									
+									ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
+									enumProperty.setAllowedValues(performDFS(classDefinition, 0, new ArrayList<EnumEntry>()));
+
+									if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
+										enumProperty.setMultiple(false);
+									} else if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONESTAR)) {
+										enumProperty.setMultiple(true);
+									}
+
+									currentClassDefinition.getProperties().remove(i);
+
+									ArrayList temp = new ArrayList();
+									temp.add(enumProperty);
+									currentClassDefinition.getProperties().addAll(i,temp);
+									formEntry.getClassProperties().addAll(temp);
+									i++;
+								}
+							}
 						}
 
-						
-						formEntry.getEnumRepresentations().add(enumRepresentation);
+						if (!property.getType().equals(PropertyType.ENUM)) {
+							formEntry.getClassProperties().add(property);
+						}
 					}
-				}
+				}		
 
 				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
@@ -150,17 +164,18 @@ public class ClassDefinitionService {
 
 		return configList;
 	}
-	
-	private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
-		List<EnumEntry> entries = new ArrayList<EnumEntry>();
-		entries = performDFS(root, 0, entries);
-		
-		EnumRepresentation enumRepresentation = new EnumRepresentation();
-		enumRepresentation.setEnumEntries(entries);
-		enumRepresentation.setId(root.getId());
-		
-		return enumRepresentation;
-	}
+
+// Keep in case of changes of mind :)
+//	private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
+//		List<EnumEntry> entries = new ArrayList<EnumEntry>();
+//		entries = performDFS(root, 0, entries);
+//		
+//		EnumRepresentation enumRepresentation = new EnumRepresentation();
+//		enumRepresentation.setEnumEntries(entries);
+//		enumRepresentation.setId(root.getId());
+//		
+//		return enumRepresentation;
+//	}
 	
 	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list) {
 		Stack<Relationship> stack = new Stack<>();

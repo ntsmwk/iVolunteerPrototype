@@ -91,7 +91,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.submenuContainer.nativeElement.style.position = 'absolute';
     this.submenuContainer.nativeElement.style.overflow = 'hidden';
     this.submenuContainer.nativeElement.style.padding = '2px';
-    this.submenuContainer.nativeElement.style.top = '25px';
+    this.submenuContainer.nativeElement.style.top = '30px';
     this.submenuContainer.nativeElement.style.left = '10px';
     this.submenuContainer.nativeElement.style.height = 'auto';
     this.submenuContainer.nativeElement.style.width = '200px'
@@ -105,7 +105,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.right = '0px';
     this.menubarContainer.nativeElement.style.top = '0px';
     this.menubarContainer.nativeElement.style.left = '0px';
-    this.menubarContainer.nativeElement.style.height = '25px';
+    this.menubarContainer.nativeElement.style.height = '30px';
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
@@ -180,7 +180,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: "editor_save", configurator: ret });
+          this.menuOptionClickedEvent.emit({ id: "editor_save_as", configurator: ret });
         } else {
           this.menuOptionClickedEvent.emit({ id: "cancelled"});
         }
@@ -193,8 +193,10 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.eventResponseAction == "saveAsClicked") {
-      this[this.eventResponseAction](this.eventResponseAction, undefined);
+    let eventResponse = this.eventResponseAction;
+    this.eventResponseAction = undefined;
+    if (eventResponse == "saveAsClicked") {
+      this[eventResponse](eventResponse, undefined);
     }
   }
 

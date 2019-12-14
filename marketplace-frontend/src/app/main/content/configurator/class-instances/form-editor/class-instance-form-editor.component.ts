@@ -10,6 +10,10 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
+import { VolunteerService } from 'app/main/content/_service/volunteer.service';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -25,9 +29,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   returnedClassInstances: ClassInstance[];
 
+  volunteers: Volunteer[];
+  selectedVolunteers: Volunteer[];
+
   canContinue: boolean;
   canFinish: boolean;
-
   isLoaded: boolean = false;
 
 
@@ -38,8 +44,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
+    private volunteerService: CoreVolunteerService
   ) {
-
+    console.log("extras");
+    console.log(this.router.getCurrentNavigation().extras.state);
   }
 
   ngOnInit() {
@@ -47,6 +55,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
+    this.selectedVolunteers = [];
+
 
     Promise.all([
       this.route.params.subscribe(params => {
@@ -59,35 +69,38 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           i++;
         }
       })
-
     ]).then(() => {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-          this.formConfigurations = formConfigurations
+        Promise.all([
+          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-          for (let config of this.formConfigurations) {
-            config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-            config.formEntry.questions.push(...this.questionService.getQuestionsFromEnumRepresenations(config.formEntry.enumRepresentations));
+            this.formConfigurations = formConfigurations
 
-            config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-          }
+            for (let config of this.formConfigurations) {
+              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+            }
 
 
-        }).then(() => {
+          }),
+
+          this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
+            console.log("volunteers");
+            console.log(volunteers);
+            this.volunteers = volunteers;
+          })
+
+        ]).then(() => {
           this.currentFormConfiguration = this.formConfigurations.pop();
-          console.log(this.currentFormConfiguration)
-          console.log(this.formConfigurations);
           this.isLoaded = true;
-
-
         });
-      });
+
+
+      })
     });
   }
-
-
 
   handleResultEvent(event: FormEntryReturnEventData) {
     let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
@@ -111,14 +124,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       propertyInstances.push(propertyInstance);
     }
 
+    for (let selectedVolunteer of this.selectedVolunteers) {
+      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+      classInstance.userId = selectedVolunteer.id;
+      classInstances.push(classInstance);
+    }
     
-
-    let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-    classInstances.push(classInstance);
-
-
-
-
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
       if (!isNullOrUndefined(ret)) {
@@ -126,6 +137,41 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.handleNextClick();
       }
     });
+  }
+
+  getDisplayedName(volunteer: Volunteer): string {
+
+    let result: string = '';
+
+    if (!isNullOrUndefined(volunteer.lastname)) {
+      if (!isNullOrUndefined(volunteer.nickname)) {
+        result = result + volunteer.nickname;
+      } else if (!isNullOrUndefined(volunteer.firstname)) {
+        result = result + volunteer.firstname;
+      }
+      if (!isNullOrUndefined(volunteer.middlename)) {
+        result = result + ' ' + volunteer.middlename;
+      }
+      result = result + ' ' + volunteer.lastname;
+    } else {
+      result = result + volunteer.username;
+    }
+
+    return result;
+  }
+
+  addToSelection(event: any) {
+    let volunteer = this.selectedVolunteers.find((v: Volunteer) => {
+      return v.id == event.option.value.id;
+    });
+
+    if (!isNullOrUndefined(volunteer)) {
+      this.selectedVolunteers = this.selectedVolunteers.filter((v: Volunteer) => {
+        return v.id != volunteer.id;
+      });
+    } else {
+      this.selectedVolunteers.push(event.option.value);
+    }
   }
 
   handleNextClick() {
@@ -142,17 +188,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   handleCancelEvent() {
-    console.log("cancelled");
     this.navigateBack();
   }
-
-
 
   printAnything(anything: any) {
     console.log(anything);
   }
-
-
 
   navigateBack() {
     window.history.back();

@@ -4,8 +4,6 @@ import { FormGroup, FormControl }        from '@angular/forms';
 import { QuestionBase, MultipleSelectionEnumQuestion }     from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
-
-
 @Component({
   selector: 'app-question',
   templateUrl: './dynamic-form-question.component.html',
@@ -34,15 +32,14 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
   
   prepareDatePicker() {
-
     if (this.question.controlType === 'datepicker' && !isNullOrUndefined(this.question.value)) {
       this.date = new FormControl(this.question.value);
       this.form.setControl(this.question.key, this.date);
     }
   } 
+
   calculateSpaces(level: number) {
     level = 10*level;
-
     return level+"px";
   }
 
@@ -72,7 +69,6 @@ export class DynamicFormQuestionComponent implements OnInit{
       this.form.controls[this.question.key].hasError('maxother') ? this.getErrorMessage('maxother'):
       this.form.controls[this.question.key].hasError('minother') ? this.getErrorMessage('minother'):
       '';
-
   }
 
   private getRemainingLength(errorName: string) {
@@ -145,9 +141,6 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
 
   public getQuestionValue(question: QuestionBase<any>) {
-    console.log("getQurstionvValue");
-    console.log(question.values[0]);
-
     let ret = question.values[0];
     return ret
   }

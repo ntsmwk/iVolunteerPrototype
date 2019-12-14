@@ -34,10 +34,9 @@ declare var $: JQueryStatic;
 export class DynamicClassInstanceCreationFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
-  @Input() formDisabled: boolean;
+  @Input() hideButtons: boolean;
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
-
 
   submitPressed: boolean;
 
@@ -49,11 +48,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   ngOnInit() {
     if (!isNullOrUndefined(this.form)) {
       this.form = this.qcs.toFormGroup(this.questions);
-    }
-
-    if (this.formDisabled) {
-      console.log("Disabling form");
-      this.form.disable();
     }
 
     this.submitPressed = false;
@@ -68,8 +62,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
       this.fireResultEvent();
 
     } else {
-      console.log("not valid - try again");
-
       let firstKey: string;
 
       //Mark errornous Fields
@@ -84,9 +76,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
     for (let q of questions) {
-      // console.log("Q: " + q.key);
-      // console.log(q);
-      // console.log("========");
       control.get(q.key).markAsTouched()
       if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));

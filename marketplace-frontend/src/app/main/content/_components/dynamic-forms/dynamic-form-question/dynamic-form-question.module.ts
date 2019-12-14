@@ -29,6 +29,7 @@ import {
   DateAdapter,
   MatListModule,
 } from '@angular/material';
+import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
 
 
 @NgModule({
@@ -39,6 +40,8 @@ import {
     MatDividerModule, MatIconModule, MatInputModule, MatSidenavModule, MatTableModule, MatSelectModule,
     MatOptionModule, MatRadioModule, MatSlideToggleModule, MatCardModule, MatDatepickerModule, MatNativeDateModule,
     MatListModule,
+
+    MultipleEnumModule,
 
     FuseSharedModule,
     DynamicFormErrorModule

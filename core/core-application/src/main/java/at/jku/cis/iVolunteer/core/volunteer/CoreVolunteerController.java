@@ -24,7 +24,12 @@ public class CoreVolunteerController {
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
-
+	
+	@GetMapping("/all")
+	public List<CoreVolunteer> getAllCoreVolunteers() {
+		return this.coreVolunteerRepository.findAll();
+	}
+	
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteer getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
 		return coreVolunteerRepository.findOne(volunteerId);

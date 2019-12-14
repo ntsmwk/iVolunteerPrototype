@@ -45,9 +45,9 @@ public class PropertyDefinitionTypes {
 		}
 	}
 	
-	public static class LevelListPropertyDefinition extends PropertyDefinition<EnumEntry> {
-		public LevelListPropertyDefinition() {
-			this.type = PropertyType.LEVEL_LIST;
+	public static class EnumPropertyDefinition extends PropertyDefinition<EnumEntry> {
+		public EnumPropertyDefinition() {
+			this.type = PropertyType.ENUM;
 		}
 	}
 }

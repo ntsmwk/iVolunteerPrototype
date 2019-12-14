@@ -9,6 +9,10 @@ export class CoreVolunteerService {
   constructor(private http: HttpClient) {
   }
 
+  findAll() {
+    return this.http.get(`/core/volunteer/all`);
+  }
+
   findById(volunteerId: string) {
     return this.http.get(`/core/volunteer/${volunteerId}`);
   }

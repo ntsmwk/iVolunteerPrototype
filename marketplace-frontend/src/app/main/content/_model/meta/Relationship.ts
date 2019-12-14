@@ -6,6 +6,8 @@ export class Relationship {
     target: string;
 
     relationshipType: RelationshipType;
+
+    hidden: boolean;
 }
 
 export class Inheritance extends Relationship {

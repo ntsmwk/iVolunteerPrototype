@@ -46,6 +46,8 @@ export class ConfiguratorService {
     }
 
     saveConfigurator(marketplace: Marketplace, configurator: Configurator) {
+      console.log("Save configurator");
+      console.log(configurator);
       return this.http.put(`${marketplace.url}/meta/configurator/save`, configurator);
     }
 

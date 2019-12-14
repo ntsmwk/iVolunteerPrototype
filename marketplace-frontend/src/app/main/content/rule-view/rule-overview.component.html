@@ -1,0 +1,42 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+        <h1>Derivation Rules</h1>
+    </div>
+    <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+        <button mat-fab class="mat-warn" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom
+            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+
+    <div class="table">
+        <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                <mat-cell *matCellDef="let rule">{{rule.name}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sources">
+                <mat-header-cell *matHeaderCellDef>Sources</mat-header-cell>
+                <mat-cell *matCellDef="let rule">
+                    <span *ngFor="let source of rule.sources; let last = last">
+                        {{source.classDefinition.name}}<span *ngIf="!last">, </span>
+                    </span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="target">
+                <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
+                <mat-cell *matCellDef="let rule">{{rule.target.name}}</mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+        </mat-table>
+
+        <div class="no-data" *ngIf="dataSource.data.length === 0">
+            No derivation rules found!
+        </div>
+    </div>
+
+</div>

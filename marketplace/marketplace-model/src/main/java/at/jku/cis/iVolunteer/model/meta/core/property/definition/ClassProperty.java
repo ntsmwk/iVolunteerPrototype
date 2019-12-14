@@ -24,8 +24,10 @@ public class ClassProperty<T> {
 	private boolean immutable;
 	private boolean updateable;
 	private boolean required;
-
+	
 	private int position;
+	
+	
 
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
@@ -111,6 +113,7 @@ public class ClassProperty<T> {
 	public void setPosition(int position) {
 		this.position = position;
 	}
+
 
 	public List<PropertyConstraint<Object>> getPropertyConstraints() {
 		return propertyConstraints;

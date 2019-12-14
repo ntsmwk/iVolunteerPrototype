@@ -107,7 +107,7 @@
       </div>
 
       <div *ngSwitchCase="'generic'">
-        generic property - not yet implemented: {{ question.label }}
+        generic property - not yet implemented: {{ question.label }} 
       </div>
 
       <mat-form-field class="form-field" *ngSwitchCase="'enum-single'">
@@ -136,32 +136,9 @@
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field> -->
       <div *ngSwitchCase="'enum-multiple'">
-        <div *ngIf="!expanded">
-          <mat-form-field>
-              <input matInput placeholder="{{question.label}} {{requiredMarker}}"
-              [value]="getMultipleValues(question)">
-          </mat-form-field>
+        <app-multiple-enum [question]="question"></app-multiple-enum>
+      </div>
 
-          <a (click)="expanded = true">expand</a>
-
-        </div>
-
-      <mat-selection-list #selectionList *ngIf="expanded">
-        <div class="mat-list-item" disabled>{{question.label}}</div>
-
-
-        <div style="margin-left: 25px; margin-right: 25px; background-color: aliceblue">
-          <div *ngFor="let opt of question.options">
-            <mat-list-option *ngIf="opt.selectable">
-              <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
-            </mat-list-option>
-            <mat-list-item *ngIf="!opt.selectable" style="background-color: aqua">
-              <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
-            </mat-list-item>
-          </div>
-        </div>
-      </mat-selection-list>
-    </div>
 
     </div>
   </ng-template>

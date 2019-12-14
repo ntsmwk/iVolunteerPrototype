@@ -15,6 +15,7 @@ import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
 import { isNull } from '@angular/compiler/src/output/output_ast';
+import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 
 @Component({
   selector: 'app-dialog-factory',
@@ -462,6 +463,28 @@ export class DialogFactoryComponent implements OnInit {
       height: '400px',
       minHeight: '400px',
       data: { marketplace: marketplace, configurator: undefined },
+      disableClose: true
+    });
+
+    let configurator: Configurator = undefined;
+    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        configurator = result.configurator;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return configurator;
+    });
+  }
+
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+    const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds},
       disableClose: true
     });
 

@@ -11,7 +11,6 @@ import { Validators, ValidatorFn } from '@angular/forms';
 
 import { minDate, maxOther, minOther, requiredOther } from "../_validator/custom.validators";
 import { PropertyConstraint, ConstraintType } from '../_model/meta/Constraint';
-import { EnumRepresentation } from '../_model/meta/form';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
@@ -33,45 +32,10 @@ export class QuestionService {
 
   public getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
+    console.log(properties);
     questions = this.createQuestionsFromProperties(properties);
 
     return questions.sort((a, b) => a.order - b.order);
-  }
-
-  //TODO
-  public getQuestionsFromEnumRepresenations(enumRepresentations: EnumRepresentation[]) {
-    let questions: QuestionBase<any>[] = [];
-    questions = this.createQuestionsFromEnumRepresentations(enumRepresentations);
-    
-    return questions.sort((a, b) =>  a.order - b.order);
-  }
-
-  private createQuestionsFromEnumRepresentations(enumRepresentations: EnumRepresentation[]) {
-    let questions: QuestionBase<any>[] = [];
-
-    for (let enumRepresentation of enumRepresentations) {
-      let question: MultipleSelectionEnumQuestion | SingleSelectionEnumQuestion;
-
-      if (enumRepresentation.classDefinition.properties[0].multiple) {
-        question = new MultipleSelectionEnumQuestion(
-          //...
-    
-        )
-      } else {
-        question = new SingleSelectionEnumQuestion(
-          
-        )
-      }
-      
-      question.options = enumRepresentation.enumEntries;
-      question.key = enumRepresentation.classDefinition.id;
-      question.label = enumRepresentation.classDefinition.name;
-      question.required = enumRepresentation.classDefinition.properties[0].required;
-
-      questions.push(question);
-    }
-
-    return questions;
   }
 
   private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
@@ -162,18 +126,20 @@ export class QuestionService {
         value: ClassProperty.getDefaultValue(property),
       });
 
-    // } else if (property.type === PropertyType.LEVEL_LIST) {
-    //   if (property.multiple) {
-    //     question = new LevelDropdownMultipleQuestion({
-    //       values: property.defaultValues,
-    //       options: property.allowedValues
-    //     });
-    //   } else {
-    //   question = new LevelDropdownSingleQuestion({
-    //     values: property.defaultValues,
-    //     options: property.allowedValues
-    //   });
-    // }
+    } else if (property.type === PropertyType.ENUM) {
+      if (property.multiple) {
+        question = new MultipleSelectionEnumQuestion({
+          //TODO
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      } else {
+      question = new SingleSelectionEnumQuestion({
+        //TODO
+        values: property.defaultValues,
+        options: property.allowedValues
+      });
+    }
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({
@@ -270,8 +236,6 @@ export class QuestionService {
         if (required) {
           validators.push(Validators.required);
         }
-
-
       }
       const ret = { validators: validators, messages: messages, required: required }
       return ret;
@@ -308,8 +272,6 @@ export class QuestionService {
 
       case ConstraintType.MAX:
         //console.log("adding max Validator" + rule.value);
-
-
         validator = Validators.max(propertyConstraint.value);
         key = 'max';
         break;
