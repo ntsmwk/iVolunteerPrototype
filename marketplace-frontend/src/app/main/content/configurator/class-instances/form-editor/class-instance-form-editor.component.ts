@@ -13,6 +13,7 @@ import { isNullOrUndefined } from 'util';
 import { VolunteerService } from 'app/main/content/_service/volunteer.service';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -29,10 +30,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   returnedClassInstances: ClassInstance[];
 
   volunteers: Volunteer[];
+  selectedVolunteers: Volunteer[];
 
   canContinue: boolean;
   canFinish: boolean;
-
   isLoaded: boolean = false;
 
 
@@ -54,6 +55,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
+    this.selectedVolunteers = [];
 
 
     Promise.all([
@@ -84,7 +86,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
           }),
 
-          this.volunteerService.findAll().toPromise().then((volunteers: Volunteer []) => {
+          this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
             console.log("volunteers");
             console.log(volunteers);
             this.volunteers = volunteers;
@@ -122,9 +124,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       propertyInstances.push(propertyInstance);
     }
 
-    let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-    classInstances.push(classInstance);
-
+    for (let selectedVolunteer of this.selectedVolunteers) {
+      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+      classInstance.userId = selectedVolunteer.id;
+      classInstances.push(classInstance);
+    }
+    
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
       if (!isNullOrUndefined(ret)) {
@@ -132,6 +137,41 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.handleNextClick();
       }
     });
+  }
+
+  getDisplayedName(volunteer: Volunteer): string {
+
+    let result: string = '';
+
+    if (!isNullOrUndefined(volunteer.lastname)) {
+      if (!isNullOrUndefined(volunteer.nickname)) {
+        result = result + volunteer.nickname;
+      } else if (!isNullOrUndefined(volunteer.firstname)) {
+        result = result + volunteer.firstname;
+      }
+      if (!isNullOrUndefined(volunteer.middlename)) {
+        result = result + ' ' + volunteer.middlename;
+      }
+      result = result + ' ' + volunteer.lastname;
+    } else {
+      result = result + volunteer.username;
+    }
+
+    return result;
+  }
+
+  addToSelection(event: any) {
+    let volunteer = this.selectedVolunteers.find((v: Volunteer) => {
+      return v.id == event.option.value.id;
+    });
+
+    if (!isNullOrUndefined(volunteer)) {
+      this.selectedVolunteers = this.selectedVolunteers.filter((v: Volunteer) => {
+        return v.id != volunteer.id;
+      });
+    } else {
+      this.selectedVolunteers.push(event.option.value);
+    }
   }
 
   handleNextClick() {
