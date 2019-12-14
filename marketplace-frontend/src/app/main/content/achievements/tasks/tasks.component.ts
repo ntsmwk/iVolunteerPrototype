@@ -65,7 +65,7 @@ export class TasksComponent implements OnInit {
 
 
   ngOnInit() {
-    this.selectedYaxis = 'Anzahl';
+    this.selectedYaxis = 'Dauer';
     this.selectedYear = 'gesamt';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
@@ -195,62 +195,65 @@ export class TasksComponent implements OnInit {
 
   sunburstChartData = [
     {
-      name: 'Calcutta',
+      name: 'Einsatz',
       children: [
-        { name: 'Gariahat', value: 120 },
         {
-          name: 'Salt Lake', children: [
-            { name: 'Sector 1', value: 50 },
-            { name: 'Sector 2', value: 60 },
-            { name: 'Sector 3', value: 20 }
+          name: 'Technisch', children: [
+            { name: 'T1', value: 50 },
+            { name: 'T2', value: 60 },
+            { name: 'T3', value: 20 }
           ]
         },
-        { name: 'Tollygunge', value: 60 }
+        {
+          name: 'Brand', children: [
+            { name: 'B1', value: 50 },
+            { name: 'B2', value: 60 },
+            { name: 'B3', value: 20 },
+            { name: 'B4', value: 20 }
+          ]
+        },
+        {
+          name: 'Schadstoff', children: [
+            { name: 'S1', value: 50 },
+            { name: 'S2', value: 60 },
+            { name: 'S3', value: 20 }
+          ]
+        }
       ]
     },
     {
-      name: 'Madras',
+      name: 'Übung',
       children: [
-        { name: 'Adyar', value: 120 },
-        {
-          name: 'Anna Nagar', children: [
-            { name: 'Sector 1', value: 50 },
-            { name: 'Sector 2', value: 60 },
-            { name: 'Sector 3', value: 20 }
-          ]
-        },
-        { name: 'T Nagar', value: 60 }
+        { name: 'Schulung', value: 120 },
+        { name: 'Übung', value: 120 }
       ]
     },
     {
-      name: 'Bombay',
+      name: 'Bewerb',
       children: [
-        { name: 'Andheri', value: 120 },
-        {
-          name: 'Bandra', children: [
-            { name: 'West', value: 50 },
-            { name: 'East', value: 60 }
-          ]
-        },
-        { name: 'Colaba', value: 60 }
+        { name: 'Prüfung', value: 120 },
+        { name: 'Vorbereitung', children: [
+          { name: 'APAS', value: 120 },
+          { name: 'APTE', value: 120 }
+        ]
+      }
       ]
     },
-    {
-      name: 'Delhi',
-      value: 150
-    },
-    {
-      name: 'Bangalore',
+    { name: 'Ausbildung', value: 120 },
+
+    { 
+      name: 'Veranstaltung',
       children: [
-        { name: 'Koramangala', value: 120 },
+        { name: 'Feuerwehrfest', value: 120 },
+        { name: 'Ausflug', value: 120 },
+        { name: 'Kirchgang', value: 120 },
+      ]
+    },
         {
-          name: 'Indira Nagar', children: [
-            { name: 'Sector 1', value: 50 },
-            { name: 'Sector 2', value: 60 },
-            { name: 'Sector 3', value: 20 }
-          ]
-        },
-        { name: 'Marathahalli', value: 60 }
+      name: 'Verwaltung',
+      children: [ 
+        { name: 'Inspektion', value: 120 },
+        { name: 'Besprechung', value: 120 },
       ]
     }
   ];
