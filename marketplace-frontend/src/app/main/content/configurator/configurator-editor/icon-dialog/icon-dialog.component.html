@@ -13,9 +13,9 @@
 <mat-dialog-content>
 
   <mat-grid-list cols="8" rowHeight="1:1">
-    <mat-grid-tile *ngFor="let number of numbers">
+    <mat-grid-tile *ngFor="let imagePath of imagePaths" #tile>
       <div style="width: 65px; height: 65px;">
-        <img [src]="imagePaths[0].path" width="45" height="45" (click)=undefined matTooltip="icon">
+        <img [src]="imagePath.path" width="45" height="45" (click)="onSelectionClick($event, tile, imagePath)" matTooltip="icon">
       </div>
     </mat-grid-tile>
   </mat-grid-list>
