@@ -1,12 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/meta/core/configurator/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 
-export interface IconDialogData {
-  configurator: Configurator;
+export interface ChangeIconDialogData {
   marketplace: Marketplace;
+  imagePath: string;
 }
 
 @Component({
@@ -14,11 +13,11 @@ export interface IconDialogData {
   templateUrl: './icon-dialog.component.html',
   styleUrls:['./icon-dialog.component.scss']
 })
-export class IconDialogComponent implements OnInit{
+export class ChangeIconDialogComponent implements OnInit{
   
   constructor(
-    public dialogRef: MatDialogRef<IconDialogComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: IconDialogData,
+    public dialogRef: MatDialogRef<ChangeIconDialogComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: ChangeIconDialogData,
     ) {
   }
 
@@ -26,8 +25,22 @@ export class IconDialogComponent implements OnInit{
   configurators: Configurator[];
   recentConfigurators: Configurator[];
   loaded: boolean = false;
+
+  numbers: number[];
+
+  imagePaths = [
+    {label: "", path: "/assets/icons/class_editor/user/assembly.png"},
+
+
   
-  ngOnInit() {    
+  ]
+  
+  ngOnInit() {  
+    this.numbers = [];  
+
+    for (let i = 0; i < 36; i++) {
+      this.numbers.push(i);
+    }
 
   }
 

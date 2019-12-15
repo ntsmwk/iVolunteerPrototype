@@ -1,48 +1,35 @@
 
+mat-dialog-title {
+  margin: 0 0 0 0 !important;
+}
+
 mat-dialog-content {
 
-  h1, h2 {
-    padding: 0;
-    margin: 0;
-  }
+  height: 250px;
+  overflow: scroll;
+  margin: 0;
+  padding: 0;
+}
 
-  tr.entry:hover {
-    margin: 5px;
-    background-color: rgb(62, 125, 219);
-    color: white;
+mat-grid-tile {
+  background: rgb(240, 240, 240);
+  cursor: pointer;
+}
 
-    td.entrybutton {
-      display: block;
-      cursor: pointer;
+img {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 
-    }
-  }
-  tr.entry {
-    // padding: 25px;
-    // margin: 25px;
-    cursor: default;
-    background-color: rgb(230, 228, 228)
-    
-  }
+mat-grid-tile:hover {
+ background: rgb(62, 125, 219);
 
-  td.entrybutton {
-    display: none;
-    div {
-      outline-style: solid;
-      outline-color: white;
-      color: white;
-    }
-  }
+}
 
-  td {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  td.right {
-    padding-top: 25px;
-    padding-bottom: 25px;
-  }
-
-  
+mat-grid-list {
+  overflow: scroll;
 }

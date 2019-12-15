@@ -1,4 +1,4 @@
-<div mat-dialog-title>
+<div mat-dialog-title style="margin: 0">
   <table>
     <tr>
       <td>
@@ -12,8 +12,16 @@
 </div>
 <mat-dialog-content>
 
+  <mat-grid-list cols="8" rowHeight="1:1">
+    <mat-grid-tile *ngFor="let number of numbers">
+      <div style="width: 65px; height: 65px;">
+        <img [src]="imagePaths[0].path" width="45" height="45" (click)=undefined matTooltip="icon">
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+
 </mat-dialog-content>
 <mat-dialog-actions>
+  <button mat-button color="primary" [mat-dialog-close]="data">Confirm</button>
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>

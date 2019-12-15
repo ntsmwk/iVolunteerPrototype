@@ -83,21 +83,22 @@
 
       <div class="m-4">
         <div style="font-size: 10px; color: gray">Icon</div>
-        <div
-          style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
-          <img *ngIf="configurableClasses[selectionIndex].imagePath"
-            [src]="configurableClasses[selectionIndex].imagePath" width="65" height="65" (click)=undefined
-            style="cursor: default" matTooltip="icon">
+        
+        <div fxLayout="row" fxLayoutAlign="start end">
+          <div
+            style="width: 65px; height: 65px; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
+            <img *ngIf="configurableClasses[selectionIndex].imagePath"
+              [src]="configurableClasses[selectionIndex].imagePath" width="65" height="65" (click)=undefined
+              style="cursor: default" matTooltip="icon">
+          </div>
+          <a style="cursor: pointer; line-height: 0.7;" class="pl-4" (click)="changeIconClicked(selectionIndex)">ändern</a>
         </div>
-        <a (click)="changeIconClicked(selectionIndex)" style="cursor: pointer" class="pl-4">change Icon</a>
-
 
         <div class="pt-12"></div>
         <div style="font-size: 10px; color: gray">Bezeichnung</div>
         <div>{{configurableClasses[selectionIndex].name}}</div>
 
         <div class="pt-12"></div>
-
         <div style="font-size: 10px; color: gray">Instanzierung</div>
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <div></div>
