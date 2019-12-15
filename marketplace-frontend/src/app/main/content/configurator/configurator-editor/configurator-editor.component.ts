@@ -820,8 +820,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.dialogFactory.openChangeIconDialog(this.marketplace, this.configurableClasses[selectionIndex].imagePath).then((result: any) => {
       console.log(result);
       this.configurableClasses[selectionIndex].imagePath = result;
+      this.showServerContent(false);
     });
-
+    
     
 
   }
