@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.model.feedback;
 
-import java.util.Date;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
@@ -13,12 +12,10 @@ public class Feedback extends IVolunteerObject implements IHashObject {
 	
 	FeedbackType feedbackType;
 	int feedbackValue;
-	
-	Date date; //Wann
-	
+		
 	List<String> iVolunteerObjecIds; //Für was
 	
-	String receipientId; //Für wen
+	String recipientId; //Für wen
 	String issuerId; //Von wem
 	
 
@@ -54,14 +51,6 @@ public class Feedback extends IVolunteerObject implements IHashObject {
 		this.feedbackValue = feedbackValue;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	public List<String> getiVolunteerObjecIds() {
 		return iVolunteerObjecIds;
 	}
@@ -70,12 +59,12 @@ public class Feedback extends IVolunteerObject implements IHashObject {
 		this.iVolunteerObjecIds = iVolunteerObjecIds;
 	}
 
-	public String getReceipientId() {
-		return receipientId;
+	public String getRecipientId() {
+		return recipientId;
 	}
 
-	public void setReceipientId(String receipientId) {
-		this.receipientId = receipientId;
+	public void setRecipientId(String recipientId) {
+		this.recipientId = recipientId;
 	}
 
 	public String getIssuerId() {

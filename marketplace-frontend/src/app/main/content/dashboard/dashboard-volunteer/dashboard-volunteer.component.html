@@ -47,12 +47,12 @@
         <div></div>
     </div>
 
+    <!--Asset Inbox-->
     <div *ngIf=showInbox>
         <asset-inbox (showInbox)="showInbox=$event"></asset-inbox>
-        <button mat-stroked-button type="button" color="accent" (click)="showInbox=false">Hide Inbox</button>
     </div>
     <div style="padding-top: 25px"></div>
-
+    <!--END Asset Inbox-->
 
     <div class="mat-card" fxLayout="column">
 
