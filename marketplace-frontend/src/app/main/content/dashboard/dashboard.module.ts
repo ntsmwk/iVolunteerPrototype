@@ -22,7 +22,7 @@ import { ShareDialog } from './dashboard-volunteer/share-dialog/share-dialog.com
 import { DashboardVolunteerComponent } from './dashboard-volunteer/dashboard-volunteer.component';
 import { DashboardHelpSeekerComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
 import { AssetInboxModule } from './dashboard-volunteer/asset-inbox/asset-inbox.module';
-import { MatBadgeModule } from '@angular/material';
+import { MatBadgeModule, MatCardModule } from '@angular/material';
 
 
 

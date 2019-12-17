@@ -22,6 +22,7 @@ import { ClassInstance } from "app/main/content/_model/meta/Class";
     }
 
     getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
+      console.log("User"); console.log(userId);
       return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`)
     }
 

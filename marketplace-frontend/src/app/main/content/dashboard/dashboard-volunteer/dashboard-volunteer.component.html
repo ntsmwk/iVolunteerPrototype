@@ -80,6 +80,8 @@
                 </button>
 
                 <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                    <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+
                     <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
@@ -163,7 +165,7 @@
             </div>
         </div>
 
-        <!---FILTER BY ORGANIZATION ROW-->
+        <!--END -FILTER BY ORGANIZATION ROW-->
 
         <div style="padding-top: 10px"></div>
 
@@ -227,7 +229,7 @@
                     <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         <div fxLayout="column" fxLayoutAlign="start start">
-                            <div>{{entry.label}}</div>
+                            <div>{{entry.name}}</div>
                         </div>
                     </mat-cell>
                 </ng-container>
@@ -250,7 +252,7 @@
                 <ng-container matColumnDef="date1">
                     <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        {{entry.date1}}
+                        {{getDateString(entry.timestamp)}}
                     </mat-cell>
                 </ng-container>
 
@@ -298,23 +300,23 @@
                 <ng-container matColumnDef="label_feedback">
                     <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        <div *ngIf="entry.type == 'star'" fxLayout="column" fxLayoutAlign="start start">
-                            <div>{{entry.label}}</div>
+                        <div *ngIf="entry.feedbackType == 'STARRATING'" fxLayout="column" fxLayoutAlign="start start">
+                            <div>{{entry.name}}</div>
                             <!-- <div style="padding-top: 4px"></div> -->
                             <div fxLayout="row" fyLayoutAlign="start center">
                                 <div style="padding-left: 5px"></div>
-                                <mat-icon class="amber-fg">star_rate</mat-icon>
-                                <mat-icon class="amber-fg">star_rate</mat-icon>
-                                <mat-icon class="amber-fg">star_rate</mat-icon>
-                                <mat-icon class="amber-fg">star_rate</mat-icon>
-                                <mat-icon class="amber-fg">star_rate</mat-icon>
+                                <mat-icon *ngIf="entry.feedbackValue >= 1" class="amber-fg">star_rate</mat-icon>
+                                <mat-icon *ngIf="entry.feedbackValue >= 2" class="amber-fg">star_rate</mat-icon>
+                                <mat-icon *ngIf="entry.feedbackValue >= 3" class="amber-fg">star_rate</mat-icon>
+                                <mat-icon *ngIf="entry.feedbackValue >= 4" class="amber-fg">star_rate</mat-icon>
+                                <mat-icon *ngIf="entry.feedbackValue >= 5" class="amber-fg">star_rate</mat-icon>
                             </div>
                         </div>
 
-                        <div *ngIf="entry.type =='kudos'" fxLayout="column" fxLayoutAlign="start center">
-                            <div>{{entry.label}}</div>
-                            <mat-icon *ngIf="entry.status!='new'" class="green-fg">thumb_up</mat-icon>
-                            <mat-icon *ngIf="entry.status=='new'" class="white-fg">thumb_up</mat-icon>
+                        <div *ngIf="entry.feedbackType =='KUDOS'" fxLayout="column" fxLayoutAlign="start center">
+                            <div>{{entry.name}}</div>
+                            <mat-icon *ngIf="entry.feedbackValue > 0" class="green-fg">thumb_up</mat-icon>
+                            <mat-icon *ngIf="entry.feedbackValue <= 0" class="red-fg">thumb_down</mat-icon>
                         </div>
                     </mat-cell>
                 </ng-container>
@@ -322,7 +324,7 @@
                 <ng-container matColumnDef="date1">
                     <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        {{entry.date1}}
+                        {{getDateString(entry.timestamp)}}
                     </mat-cell>
                 </ng-container>
 
@@ -357,7 +359,7 @@
                 <ng-container matColumnDef="label_competence">
                     <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        {{entry.label}}
+                        {{entry.name}}
                     </mat-cell>
                 </ng-container>
 
@@ -377,7 +379,7 @@
                 <ng-container matColumnDef="date1">
                     <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        {{entry.date1}}
+                        {{getDateString(entry.timestamp)}}
                     </mat-cell>
                 </ng-container>
 

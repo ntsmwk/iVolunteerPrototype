@@ -12,7 +12,7 @@ import { Marketplace } from '../_model/marketplace';
     ) { }
 
     getFeedbackByRecipientId(marketplace: Marketplace, recipientId: string) {
-      return this.http.get(`${marketplace.url}/meta//meta/feedback/by-recipient/${recipientId}`);
+      return this.http.get(`${marketplace.url}/meta/feedback/by-recipient/${recipientId}`);
     }
 
     
