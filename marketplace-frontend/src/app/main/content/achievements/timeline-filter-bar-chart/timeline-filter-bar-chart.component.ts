@@ -4,7 +4,7 @@ import { brushX } from 'd3-brush';
 import { select, event as d3event } from 'd3-selection';
 
 import { calculateViewDimensions, ViewDimensions, BaseChartComponent, ColorHelper } from '@swimlane/ngx-charts';
-import { id } from '@swimlane/ngx-charts/release/utils';
+import { id } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'ngx-charts-timeline-filter-bar-chart',

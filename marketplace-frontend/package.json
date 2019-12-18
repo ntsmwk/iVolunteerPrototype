@@ -40,7 +40,7 @@
     "@ngrx/store": "8.5.2",
     "@ngrx/store-devtools": "8.5.2",
     "@ngx-translate/core": "11.0.1",
-    "@swimlane/ngx-charts": "12.1.0",
+    "@swimlane/ngx-charts": "13.0.0",
     "@swimlane/ngx-datatable": "16.0.2",
     "@swimlane/ngx-dnd": "8.1.0",
     "@types/mxgraph": "github:lgleim/mxgraph-typings",

@@ -18,7 +18,9 @@ import {
   MatToolbarModule,
   MatTableModule,
   MatCardModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatPaginatorModule,
+  MatSortModule
 } from '@angular/material';
 import { FuseAchievementsComponent } from './achievements.component';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
@@ -37,6 +39,7 @@ import { FuseProjectMembersModule } from '../_components/project-members/project
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TimelineFilterBarChartComponent } from './timeline-filter-bar-chart/timeline-filter-bar-chart.component';
 import { SunburstChartComponent } from './sunburst-chart/sunburst-chart.component';
+import { CommonModule } from '@angular/common';
 
 
 const routes = [
@@ -55,6 +58,7 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
 
     MatProgressBarModule,
     MatIconModule,
@@ -73,6 +77,8 @@ const routes = [
     MatTableModule,
     MatCardModule,
     MatButtonToggleModule,
+    MatPaginatorModule,
+    MatSortModule,
 
     FuseProjectMembersModule,
     FuseProjectTaskListModule,

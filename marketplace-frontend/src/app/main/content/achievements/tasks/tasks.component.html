@@ -12,13 +12,20 @@
                 </mat-button-toggle>
                 <mat-button-toggle value="Anzahl">Anzahl
                 </mat-button-toggle>
+                <!-- 
                 <mat-button-toggle value="Distanz">Distanz
                 </mat-button-toggle>
+                -->
               </mat-button-toggle-group>
 
               <mat-form-field>
                 <mat-label>Jahr</mat-label>
                   <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
+                    <mat-option value="2012">  2012  </mat-option>
+                    <mat-option value="2013">  2013  </mat-option>
+                    <mat-option value="2014">  2014  </mat-option>
+                    <mat-option value="2015">  2015  </mat-option>
+                    <mat-option value="2016">  2016  </mat-option>
                   <mat-option value="2017">  2017  </mat-option>
                   <mat-option value="2018">  2018  </mat-option>
                   <mat-option value="2019">  2019  </mat-option>
@@ -26,7 +33,8 @@
                </mat-select>
               </mat-form-field>         
         </div>
-        
+
+        <!--
           <div class="timeline">
           <ngx-charts-timeline-filter-bar-chart
             class="chart-container"
@@ -43,9 +51,39 @@
             [yAxisLabel]="yAxisLabel"
             [showGridLines]="showGridLines"
             [noBarWhenZero]="noBarWhenZero"
-            (onFilter)="onTimelineFilter($event)">
+            (mousedown)="onMouseDown($event)"
+            (mouseup)="onMouseUp($event)">
+            >
           </ngx-charts-timeline-filter-bar-chart>
         </div>
+        -->
+        <div class="timeline">
+          <ngx-charts-line-chart #lineChart
+          [results]="newTimelineChartData"
+          [scheme]="colorScheme"
+          [schemeType]="schemeType"
+          [legend]="legend"
+          [legendTitle]="Legende"
+          [legendPosition]="legendPosition"
+          [showGridLines]="showGridLines"
+          [tooltipDisabled]="tooltipDisabled"
+          [xAxis]="true"
+          [yAxis]="true"
+          [showXAxisLabel]="showYAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [animations]="true"
+          [autoScale]="autoScale"
+          [timeline]="true"
+          [curve]="curve"
+          (onDomainChange)="updateDomain($event)"
+          (select)="timelineSelect($event)"
+          (activate)="timelineActivate($event)">
+          </ngx-charts-line-chart>
+          </div> 
+          
+          <a (click)="dostuff()">test</a>
       </div>
         
       <div class="firstRow" fxLayout="row" fxLayoutAlign="space-between none">
@@ -53,7 +91,7 @@
               <h2>Zweck:</h2>
               <ngx-sunburst-chart 
               [width]="700"
-              [data]="sunburstChartData" 
+              [data]="sunburstData" 
               colorScheme="cool"
               (click)="onClick($event)"
               (select)="onSelect($event)"
@@ -62,53 +100,19 @@
           </div>
 
           <div fxLayout="column" fxLayoutAlign="start none" >
-              <h2>Arbeitsteilung:</h2>
-              <div class="donut-parent">
-              <ngx-charts-pie-chart
-                class="chart-container"
-                [view] = "[600, 600]"
-                [results]="arbeitsteilungData"
-                [animations]="animations"
-                [labels]="true"
-                [tooltipDisabled]="false"
-                [legend]="false"
-                [explodeSlices]="true"
-                [doughnut]="true"
-                arcWidth="0.6"
-                scheme="cool">
-              </ngx-charts-pie-chart>
-              </div>
+              
           </div>
 
           
       </div>
       <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between none">
-            <div fxLayout="column" fxLayoutAlign="start none" >
-                <h2>Ebene:</h2>
-                <div class="donut-parent">
-                <ngx-charts-pie-chart
-                class="chart-container"
-                [view] = "[600, 600]"
-                [results]="arbeitsteilungData"
-                [animations]="animations"
-                [labels]="true"
-                [tooltipDisabled]="false"
-                [legend]="false"
-                [explodeSlices]="true"
-                [doughnut]="true"
-                arcWidth="0.6"
-                scheme="cool">
-              </ngx-charts-pie-chart>
-              </div>
-            </div>
-
-            <div fxLayout="column" fxLayoutAlign="start none" >
+             <div fxLayout="row" fxLayoutAlign="start none" >
                 <h2>Wochentag:</h2>
                 <div class="donut-parent">
                 <ngx-charts-pie-chart
                 class="chart-container"
                 [view] = "[600, 600]"
-                [results]="arbeitsteilungData"
+                [results]="weekdayData"
                 [animations]="animations"
                 [labels]="true"
                 [tooltipDisabled]="false"
@@ -120,9 +124,80 @@
                 (select)="onSelect($event)">
               </ngx-charts-pie-chart>
               </div>
+
+              <h2>Tageszeit:</h2>
+              <div class="donut-parent">
+              <ngx-charts-pie-chart
+                class="chart-container"
+                [view] = "[600, 600]"
+                [results]="dayNightData"
+                [animations]="animations"
+                [labels]="true"
+                [tooltipDisabled]="false"
+                [legend]="false"
+                [explodeSlices]="true"
+                [doughnut]="true"
+                arcWidth="0.6"
+                scheme="cool">
+              </ngx-charts-pie-chart>
+              </div>
             </div>
+
+            <!-- 
+            <div fxLayout="column" fxLayoutAlign="start none" >
+              <h2>Ebene:</h2>
+              <div class="donut-parent">
+              <ngx-charts-pie-chart
+              class="chart-container"
+              [view] = "[600, 600]"
+              [results]="arbeitsteilungData"
+              [animations]="animations"
+              [labels]="true"
+              [tooltipDisabled]="false"
+              [legend]="false"
+              [explodeSlices]="true"
+              [doughnut]="true"
+              arcWidth="0.6"
+              scheme="cool">
+            </ngx-charts-pie-chart>
+            </div>
+            -->
+          </div>
     </div>
-    <div class="thirdRow" fxLayout="row" fxLayoutAlign="space-between none">
+
+    <div class="thirdRow" fxLayout="column" fxLayoutAlign="none">
+      <h2>Tätigkeiten:</h2>
+      <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
+        <ng-container matColumnDef="taskName">
+          <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
+          <td mat-cell *matCellDef="let element"> {{element.properties[3].values[0]}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="taskType1">
+          <th mat-header-cell *matHeaderCellDef> Typ </th>
+          <td mat-cell *matCellDef="let element"> {{element.properties[4].values[0]}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="taskDateFrom">
+          <th mat-header-cell *matHeaderCellDef> Beginn </th>
+          <td mat-cell *matCellDef="let element"> {{element.properties[14].values[0] | date:'dd.MM.yyyy   hh:mm'}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="taskDuration">
+          <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
+          <td mat-cell *matCellDef="let element"> {{element.properties[16].values[0]}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+
+
+    </div>
+          <!--
+
         <div fxLayout="column" fxLayoutAlign="start none" >
             <h2>Rang:</h2>
             <div class="donut-parent">
@@ -161,6 +236,7 @@
             </div>
         </div>
   </div>
+-->
 
 </div>
 
