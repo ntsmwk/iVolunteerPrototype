@@ -16,7 +16,10 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private String classDefinitionId;
 	private String name;
 	private List<PropertyInstance<Object>> properties;
+	
 	private String userId;
+	private String issuerId;
+	
 	private ClassArchetype classArchetype;
 	
 
@@ -102,5 +105,15 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setClassArchetype(ClassArchetype classArchetype) {
 		this.classArchetype = classArchetype;
 	}
+
+	public String getIssuerId() {
+		return issuerId;
+	}
+
+	public void setIssuerId(String issuerId) {
+		this.issuerId = issuerId;
+	}
+	
+	
 
 }

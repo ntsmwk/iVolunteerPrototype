@@ -39,8 +39,8 @@ public class ClassInstanceController {
 		return classInstanceRepository.findOne(id);
 	}
 	
-	@GetMapping("/meta/core/class/instance/all/byArchetype/{archeType}")
-	private List<ClassInstance> getClassInstancesByClassDefinitionId(@PathVariable("archeType") ClassArchetype archeType) {
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
+	private List<ClassInstance> getClassInstancesByClassDefinitionId(@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();;
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);		
 		
@@ -50,6 +50,11 @@ public class ClassInstanceController {
 		
 		return classInstances;
 	}	
+	
+	@GetMapping("/meta/core/class/instance/by-userid/{userId}")
+	private List<ClassInstance> getClassInstanceByUserId(@PathVariable("userId") String userId) {
+		return classInstanceRepository.getByUserId(userId);
+	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

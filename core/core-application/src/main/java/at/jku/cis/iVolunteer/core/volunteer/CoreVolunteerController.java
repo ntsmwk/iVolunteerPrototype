@@ -64,6 +64,11 @@ public class CoreVolunteerController {
 		Volunteer volunteer = new Volunteer();
 		volunteer.setId(coreVolunteer.getId());
 		volunteer.setUsername(coreVolunteer.getUsername());
+		volunteer.setFirstname(coreVolunteer.getFirstname());
+		volunteer.setLastname(coreVolunteer.getLastname());
+		volunteer.setMiddlename(coreVolunteer.getMiddlename());
+		volunteer.setNickname(coreVolunteer.getNickname());
+		volunteer.setProfileImagePath(coreVolunteer.getProfileImagePath());
 		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
 	}
 

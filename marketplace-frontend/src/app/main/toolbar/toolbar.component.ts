@@ -24,6 +24,7 @@ export class FuseToolbarComponent {
   horizontalNav: boolean;
   noNav: boolean;
   navigation: any;
+  icons: string;
 
   constructor(private router: Router,
     private fuseConfig: FuseConfigService,
@@ -92,9 +93,11 @@ export class FuseToolbarComponent {
       switch (role) {
         case 'HELP_SEEKER':
           this.navigation = navigation_helpseeker;
+          this.icons = 'HELP_SEEKER';
           break;
         case 'VOLUNTEER':
           this.navigation = navigation_volunteer;
+          this.icons = 'VOLUNTEER';
           break;
       }
     }).catch(e => {

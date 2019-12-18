@@ -12,18 +12,27 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.feedback.Feedback;
+import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
@@ -31,6 +40,8 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
+import at.jku.cis.iVolunteer.model.user.HelpSeeker;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -47,7 +58,11 @@ public class InitializationService {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private FinalizationService finalizationService;
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
-	@Autowired
+	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private HelpSeekerRepository helpSeekerRepository;
+	@Autowired private FeedbackRepository feedbackRepository;
+
+	
 
 	@PostConstruct
 	public void init() {
@@ -69,6 +84,9 @@ public class InitializationService {
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
+	
+	
+		this.addTestClassInstances();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
@@ -497,7 +515,115 @@ public class InitializationService {
 		if (!configuratorRepository.exists(c5.getId())) {
 			configuratorRepository.save(c5);
 		}
-
-
+	}
+	
+	private void addTestClassInstances() {
+		TaskClassInstance ti1 = new TaskClassInstance();
+		ti1.setId("ti1");
+		ti1.setName("Shopping Elementaries");
+		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
+		HelpSeeker helpseeker = helpSeekerRepository.findByUsername("mmustermann");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		ti1.setId("ti2");
+		ti1.setName("Equipment Service");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		ti1.setId("ti3");
+		ti1.setName("Shopping Elementaries");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		ti1.setId("ti4");
+		ti1.setName("Shopping Elementaries");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		ti1.setId("ti5");
+		ti1.setName("Donation Collection");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		ti1.setId("ti6");
+		ti1.setName("Medical Care Transport");
+		ti1.setUserId(volunteer.getId());
+		ti1.setIssuerId(helpseeker.getId());
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		
+		classInstanceRepository.save(ti1);
+		
+		Feedback f1 = new Feedback();
+		f1.setId("f1");
+		f1.setName("Firetruck Driver Renewed");
+		f1.setFeedbackType(FeedbackType.KUDOS);
+		f1.setRecipientId(volunteer.getId());
+		f1.setIssuerId(helpseeker.getId());
+		f1.setTimestamp(new Date(System.currentTimeMillis()));
+		f1.setFeedbackValue(1);
+		
+		feedbackRepository.save(f1);
+		
+		f1.setId("f2");
+		f1.setName("Yearly Feedback");
+		f1.setFeedbackType(FeedbackType.STARRATING);
+		f1.setRecipientId(volunteer.getId());
+		f1.setIssuerId(helpseeker.getId());
+		f1.setTimestamp(new Date(System.currentTimeMillis()));
+		f1.setFeedbackValue(5);
+		
+		feedbackRepository.save(f1);
+		
+		CompetenceClassInstance ci1 = new CompetenceClassInstance();
+		ci1.setId("ci1");
+		ci1.setName("Diligence");
+		ci1.setUserId(volunteer.getId());
+		ci1.setIssuerId(helpseeker.getId());
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+		
+		ci1.setId("ci2");
+		ci1.setName("Teamwork");
+		ci1.setUserId(volunteer.getId());
+		ci1.setIssuerId(helpseeker.getId());
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+		
+		ci1.setId("ci3");
+		ci1.setName("Communication Skills");
+		ci1.setUserId(volunteer.getId());
+		ci1.setIssuerId(helpseeker.getId());
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+		
+		ci1.setId("ci4");
+		ci1.setName("Project Management");
+		ci1.setUserId(volunteer.getId());
+		ci1.setIssuerId(helpseeker.getId());
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+		
+		ci1.setId("ci5");
+		ci1.setName("Firetruck Driver");
+		ci1.setUserId(volunteer.getId());
+		ci1.setIssuerId(helpseeker.getId());
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
 	}
 }

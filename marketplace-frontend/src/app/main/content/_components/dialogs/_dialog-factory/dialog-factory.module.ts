@@ -19,6 +19,8 @@ import { SaveAsDialogComponent } from 'app/main/content/configurator/configurato
 import { SaveAsDialogModule } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.module';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
+import { ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { ChangeIconDialogModule } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.module';
 
 @NgModule({
   imports: [
@@ -32,10 +34,12 @@ import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/configura
     OpenDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
+    ChangeIconDialogModule
   ],
   declarations: [DialogFactoryComponent],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, 
                     SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
-                    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent]
+                    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
+                    ChangeIconDialogComponent]
 })
 export class DialogFactoryModule { }

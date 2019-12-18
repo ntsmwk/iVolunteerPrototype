@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassDefinition, ClassInstance } from "app/main/content/_model/meta/Class";
+import { ClassInstance } from "app/main/content/_model/meta/Class";
 
 
 @Injectable({
@@ -17,8 +17,13 @@ import { ClassDefinition, ClassInstance } from "app/main/content/_model/meta/Cla
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
     }
 
-    getClassInstancesByArcheType(marketplace: Marketplace, archeType: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/byArchetype/${archeType}`);
+    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}`);
+    }
+
+    getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
+      console.log("User"); console.log(userId);
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`)
     }
 
     getClassInstanceById(marketplace: Marketplace, classInstanceId: string) {

@@ -817,7 +817,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   changeIconClicked(selectionIndex: number) {
     console.log("TODO");    
-
+    this.dialogFactory.openChangeIconDialog(this.marketplace, this.configurableClasses[selectionIndex].imagePath).then((result: any) => {
+      console.log(result);
+      this.configurableClasses[selectionIndex].imagePath = result;
+      this.showServerContent(false);
+    });
   }
 
   saveDone: boolean;
@@ -885,16 +889,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
         relSaveSuccess = !isNullOrUndefined(result);
       }),
-
       this.classDefinitionService.addOrUpdateClassDefintions(this.marketplace, this.configurableClasses).toPromise().then((result: any) => {
         classSaveSuccess = !isNullOrUndefined(result);
-
       }),
       this.classDefinitionService.deleteClassDefinitions(this.marketplace, this.deletedClassIds).toPromise().then((result: any) => {
         this.deletedClassIds = [];
         deletedClassSaveSuccess = true;
       }),
-
       this.relationshipService.deleteRelationships(this.marketplace, this.deletedRelationshipIds).toPromise().then((result: any) => {
         this.deletedRelationshipIds = [];
         deletedRelSaveSuccess = true;

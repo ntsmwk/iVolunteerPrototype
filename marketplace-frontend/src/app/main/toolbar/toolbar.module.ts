@@ -13,6 +13,7 @@ import {FuseToolbarComponent} from 'app/main/toolbar/toolbar.component';
 import {FuseSearchBarModule, FuseShortcutsModule} from '@fuse/components';
 import {FuseUserMenuComponent} from './user-menu/user-menu.component';
 import {FuseMarketplaceSelectionComponent} from './marketplace-selection/marketplace-selection.component';
+import { MatBadgeModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,8 @@ import {FuseMarketplaceSelectionComponent} from './marketplace-selection/marketp
     MatMenuModule,
     MatProgressBarModule,
     MatToolbarModule,
+
+    MatBadgeModule,
 
     FuseSharedModule,
     FuseSearchBarModule,
