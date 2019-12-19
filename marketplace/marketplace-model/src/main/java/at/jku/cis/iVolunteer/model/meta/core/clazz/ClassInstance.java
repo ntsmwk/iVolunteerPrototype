@@ -20,6 +20,10 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private String userId;
 	private String issuerId;
 	
+	//Temp flags for dashboard presentation
+	private boolean published; // flag if published
+	private boolean inRepository; //flag if in inbox or in repository
+	
 	private ClassArchetype classArchetype;
 	
 
@@ -96,6 +100,22 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+
+	public boolean isInRepository() {
+		return inRepository;
+	}
+
+	public void setInRepository(boolean inRepository) {
+		this.inRepository = inRepository;
 	}
 
 	public ClassArchetype getClassArchetype() {

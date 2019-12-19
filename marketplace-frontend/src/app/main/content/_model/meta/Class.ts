@@ -25,6 +25,11 @@ export class ClassInstance {
     marketplaceId: string;
     timestamp: Date;
     userId: string;
+    issuerId: string
+
+    published: boolean;
+    inRepository: boolean;
+
     classArchetype: ClassArchetype;
 
     constructor(classDefinition: ClassDefinition, properties: PropertyInstance<any>[]) {
@@ -42,6 +47,27 @@ export class CompetenceClassInstance extends ClassInstance{
         super(classDefintion, properties);
         this.classArchetype = ClassArchetype.COMPETENCE;
     }
+}
+
+export class TaskClassInstance extends ClassInstance {
+    constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
+        super(classDefintion, properties);
+        this.classArchetype = ClassArchetype.TASK;
+    }
+}
+
+export class FunctionClassInstance extends ClassInstance {
+    constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
+        super(classDefintion, properties);
+        this.classArchetype = ClassArchetype.FUNCTION;
+    } 
+}
+
+export class AchievementClassInstance extends ClassInstance {
+    constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
+        super(classDefintion, properties);
+        this.classArchetype = ClassArchetype.ACHIEVEMENT;
+    } 
 }
 
 export enum ClassArchetype {

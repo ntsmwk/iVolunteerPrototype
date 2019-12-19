@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -25,6 +25,9 @@ export class FuseToolbarComponent {
   noNav: boolean;
   navigation: any;
   icons: string;
+
+  @ViewChild('inboxIcon', {static: true}) inboxIcon: ElementRef;
+  displayInboxOverlay: boolean;
 
   constructor(private router: Router,
     private fuseConfig: FuseConfigService,
@@ -113,6 +116,15 @@ export class FuseToolbarComponent {
     // Do your search here...
     console.log(value);
   }
+
+
+  toggleInboxOverlay(event: any, inboxIcon: any) {
+    console.log(event);
+    this.displayInboxOverlay = !this.displayInboxOverlay;
+    console.log();
+    
+  }
+
 
   setLanguage(lang) {
     // Set the selected language for toolbar
