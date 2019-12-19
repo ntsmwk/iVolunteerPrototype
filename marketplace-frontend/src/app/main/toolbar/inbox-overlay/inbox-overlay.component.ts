@@ -8,6 +8,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from "util";
+import { ClassInstance } from 'app/main/content/_model/meta/Class';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class InboxOverlayComponent implements OnInit {
 
   marketplace: Marketplace;
   volunteer: Volunteer;
+  classInstances: ClassInstance[];
+  dataSource = new MatTableDataSource<ClassInstance>();
 
 
   ngOnInit() {
@@ -40,9 +43,9 @@ export class InboxOverlayComponent implements OnInit {
       })
 
     ]).then(() => {
-      this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: any) => {
-        console.log(this.marketplace);
-        console.log(this.volunteer);
+      this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
+        this.dataSource.data = ret;
+        this.classInstances = ret;
         console.log(ret);
       })
     });

@@ -39,6 +39,7 @@ export class ClassInstance {
         this.marketplaceId = classDefinition.marketplaceId;
         this.timestamp = new Date();
         this.userId = null;
+        this.classArchetype = classDefinition.classArchetype;
     }
 }
 

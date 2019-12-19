@@ -85,13 +85,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
               config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
               config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
             }
-
-
           }),
 
           this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
-            console.log("volunteers");
-            console.log(volunteers);
             this.volunteers = volunteers;
           }),
 
@@ -110,10 +106,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
-    let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
-      return fc.id == event.formConfigurationId
-    })
-
     let classInstances: ClassInstance[] = [];
     this.currentFormConfiguration.formEntry.formGroup.disable();
     let propertyInstances: PropertyInstance<any>[] = [];
