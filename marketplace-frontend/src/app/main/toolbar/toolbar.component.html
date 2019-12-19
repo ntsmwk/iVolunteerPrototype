@@ -6,9 +6,8 @@
 
     <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
 
-      <button mat-icon-button class="toggle-button-navbar"
-              *ngIf="!noNav"
-              (click)="toggleSidebarOpened('navbar')" fxHide.gt-md>
+      <button mat-icon-button class="toggle-button-navbar" *ngIf="!noNav" (click)="toggleSidebarOpened('navbar')"
+        fxHide.gt-md>
         <mat-icon>menu</mat-icon>
       </button>
 
@@ -30,9 +29,17 @@
 
     </div>
 
-    <div fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center"  *ngIf="icons=='VOLUNTEER'">
-        <mat-icon class="mr-12" matBadge="8" matBadgePosition="before" matBadgeColor="warn" style="cursor: pointer">inbox</mat-icon>
+    <div  fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center" *ngIf="icons=='VOLUNTEER'">
+      <mat-icon #inboxIcon class="mr-12" matBadge="8" matBadgePosition="before" matBadgeColor="warn" style="cursor: pointer"
+        (click)="toggleInboxOverlay($event, inboxIcon)">inbox</mat-icon>
     </div>
+
+    <inbox-overlay *ngIf="displayInboxOverlay"
+      style="position: absolute; width: 300px; height: 200px; background: white; right:30px; top: 50px; border-color: black; border-style: solid; border-width: 1px; z-index: 255;">
+    </inbox-overlay>
+
+
+
 
     <div fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
       <fuse-user-menu></fuse-user-menu>
