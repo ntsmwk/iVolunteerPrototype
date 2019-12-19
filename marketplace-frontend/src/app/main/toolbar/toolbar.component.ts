@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -26,14 +26,15 @@ export class FuseToolbarComponent {
   navigation: any;
   icons: string;
 
-  @ViewChild('inboxIcon', {static: true}) inboxIcon: ElementRef;
+  @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
   displayInboxOverlay: boolean;
 
   constructor(private router: Router,
     private fuseConfig: FuseConfigService,
     private loginService: LoginService,
     private sidebarService: FuseSidebarService,
-    private translate: TranslateService) {
+    private translate: TranslateService,
+    private changeDetector: ChangeDetectorRef) {
     this.userStatusOptions = [
       {
         'title': 'Online',
@@ -117,13 +118,36 @@ export class FuseToolbarComponent {
     console.log(value);
   }
 
+  @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
+  @ViewChild('overlayArrow', { static: false }) overlayArrowDiv: ElementRef;
+
 
   toggleInboxOverlay(event: any, inboxIcon: any) {
-    console.log(event);
     this.displayInboxOverlay = !this.displayInboxOverlay;
-    console.log();
-    
+    this.changeDetector.detectChanges();
+
+    if (this.displayInboxOverlay) {
+      const { x, y } = inboxIcon._elementRef.nativeElement.getBoundingClientRect();
+
+      console.log("x: " + x + " y: " + y);
+      console.log(this.overlayDiv);
+      this.overlayDiv.nativeElement.style.top = (y + 35) + 'px';
+      this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
+      this.overlayDiv.nativeElement.style.position = 'fixed';
+      this.overlayDiv.nativeElement.style.width = '300px';
+      this.overlayDiv.nativeElement.style.height = '200px';
+
+      this.overlayArrowDiv.nativeElement.style.top = (y+20)+'px';
+      this.overlayArrowDiv.nativeElement.style.left = (x-8)+'px';
+      this.overlayArrowDiv.nativeElement.style.position = 'fixed';
+
+
+      console.log(this.overlayDiv.nativeElement.style);
+    }
+
   }
+
+
 
 
   setLanguage(lang) {

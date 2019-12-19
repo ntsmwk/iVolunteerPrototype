@@ -55,6 +55,16 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstanceByUserId(@PathVariable("userId") String userId) {
 		return classInstanceRepository.getByUserId(userId);
 	}
+	
+	@GetMapping("/meta/core/class/instance/by-userid/{userId}/inbox")
+	private List<ClassInstance> getClassInstanceByUserIdInInbox(@PathVariable("userId") String userId) {
+		return classInstanceRepository.getByUserIdAndInRepository(userId, false);
+	}
+	
+	@GetMapping("/meta/core/class/instance/by-userid/{userId}/repository")
+	private List<ClassInstance> getClassInstanceByUserIdInRepostory(@PathVariable("userId") String userId) {
+		return classInstanceRepository.getByUserIdAndInRepository(userId, true);
+	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

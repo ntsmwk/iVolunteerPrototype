@@ -12,6 +12,8 @@ import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/
 import { isNullOrUndefined } from 'util';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Participant } from 'app/main/content/_model/participant';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -22,6 +24,8 @@ import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.s
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
+  helpseeker: Participant;
+
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
 
@@ -42,7 +46,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
-    private volunteerService: CoreVolunteerService
+    private volunteerService: CoreVolunteerService,
+    private loginService: LoginService
   ) {
     console.log("extras");
     console.log(this.router.getCurrentNavigation().extras.state);
@@ -88,6 +93,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             console.log("volunteers");
             console.log(volunteers);
             this.volunteers = volunteers;
+          }),
+
+          this.loginService.getLoggedIn().toPromise().then((helpseeker: Participant) => {
+            this.helpseeker = helpseeker;
           })
 
         ]).then(() => {
@@ -125,6 +134,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     for (let selectedVolunteer of this.selectedVolunteers) {
       let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstance.userId = selectedVolunteer.id;
+      classInstance.issuerId = this.helpseeker.id;
       classInstances.push(classInstance);
     }
     
