@@ -7,12 +7,6 @@
     vertical-align: bottom;    
 }   
 }
-  
-table {
-    font-size: larger;
-    width: 400pt;
-    margin-bottom: 30pt;
-  }
 
 .donut-parent{
     margin-top: -50px;
@@ -21,7 +15,7 @@ table {
 }
 
 .timeline {
-    height: 600px;
+    height: 550px;
 }
 
 table {
@@ -30,4 +24,11 @@ table {
 
 th.mat-sort-header-sorted {
   color: black;
+}
+
+button {
+  margin-left: 75px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 130px;
 }

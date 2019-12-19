@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, HostListener } from '@angular/core';
 import { fuseAnimations } from '../../../../../@fuse/animations';
 import { Participant } from '../../_model/participant';
 import { LoginService } from '../../_service/login.service';
@@ -31,7 +31,7 @@ export class TasksComponent implements OnInit {
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskName', 'taskType1', 'taskDateFrom', 'taskDuration'];
+  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDateTo', 'taskDuration'];
 
   private timelineData: any[] = [];
   private sunburstData: any[] = [];
@@ -46,7 +46,7 @@ export class TasksComponent implements OnInit {
   colorScheme = 'cool';
   schemeType = 'ordinal';
   showGridLines = true;
-  animations = false  ;
+  animations = true;
   gradient = false;
   showXAxis = true;
   showYAxis = true;
@@ -57,17 +57,12 @@ export class TasksComponent implements OnInit {
   noBarWhenZero = true;
   showLabels = true;
   curve = shape.curveStep;
-  autoScale = false;
+  autoScale = true;
   legend = false;
   legendPosition = 'below';
   tooltipDisabled = false;
 
   @ViewChild('lineChart', { static: false }) lineChart: any;
-
-
-  @Output()
-  activeEntries = [];
-
 
   // sunburst
   // dounut
@@ -75,8 +70,11 @@ export class TasksComponent implements OnInit {
   selectedYaxis: string;
   selectedYear: string;
 
+  timelineFilterFrom: Date;
+  timelineFilterTo: Date
 
-  public newTimelineChartData: {name: string, series: {name: Date, value: number}[]}[];
+
+  public newTimelineChartData: { name: string, series: { name: Date, value: number }[] }[];
 
 
   constructor(private loginService: LoginService,
@@ -85,11 +83,21 @@ export class TasksComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService
-  ) { 
-    this.newTimelineChartData = [{name: 'Tätigkeit', series: []}];
+  ) {
+    this.newTimelineChartData = [{ name: 'Tätigkeit', series: [] }];
 
   }
-
+  /*
+    @HostListener("mouseup", ["$event"]) onMouseUp(event: Event) {
+      console.log(event.type);
+      console.log(event.target)
+    }
+  
+    @HostListener('lineChart: mouseleave', ['$event'])
+    onDragStart(ev:Event) {
+        console.log(ev);
+    }
+  */
 
   ngOnInit() {
     this.selectedYaxis = 'Dauer';
@@ -116,31 +124,28 @@ export class TasksComponent implements OnInit {
             this.filteredClassInstances = [...this.classInstances];
             this.generateTimelineData();
             this.generateOtherChartsData();
+
           }
         });
       });
     });
   }
 
-/*
-  onTimelineFilter(event) {
-    console.error(event);
-
-    this.filteredClassInstances = this.classInstances.filter(c => {
-      moment(c.properties[14].values[0]).isAfter(moment(event[0])) &&
-        moment(c.properties[14].values[0]).isBefore(moment(event[1]))
-    });
-
-    this.generateOtherChartsData();
-    console.error(this.filteredClassInstances);
-
-    // visualize selected area
-  }
-*/
-  updateDomain(event) {
-    console.error(event);
-  }
- 
+  /*
+    onTimelineFilter(event) {
+      console.error(event);
+  
+      this.filteredClassInstances = this.classInstances.filter(c => {
+        moment(c.properties[14].values[0]).isAfter(moment(event[0])) &&
+          moment(c.properties[14].values[0]).isBefore(moment(event[1]))
+      });
+  
+      this.generateOtherChartsData();
+      console.error(this.filteredClassInstances);
+  
+      // visualize selected area
+    }
+  */
 
   onYaxisChange(val: string) {
     this.selectedYaxis = val;
@@ -162,9 +167,6 @@ export class TasksComponent implements OnInit {
     this.generateTimelineData();
     this.generateOtherChartsData();
 
-    this.tableDataSource.data = this.filteredClassInstances;
-    this.paginator._changePageSize(this.paginator.pageSize);
-
   }
 
   generateTimelineData() {
@@ -172,10 +174,10 @@ export class TasksComponent implements OnInit {
 
     // timeline
     let timelineList = this.filteredClassInstances.map(ci => {
-        let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[16].values[0];
-        return ({ date: new Date(ci.properties[14].values[0]).setHours(0, 0, 0, 0), value: value })
-      });
+      let value;
+      (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[16].values[0];
+      return ({ date: new Date(ci.properties[14].values[0]).setHours(0, 0, 0, 0), value: value })
+    });
 
 
     let timelineMap: Map<number, number> = new Map<number, number>();
@@ -189,22 +191,27 @@ export class TasksComponent implements OnInit {
 
     Array.from(timelineMap.entries()).forEach(entry => {
       if (entry[0] != null && entry[1] != null) {
-       //data1.push({ name: entry[0], value: Number(entry[1]) })
         data1.push({ name: new Date(entry[0]), value: Number(entry[1]) });
       }
     });
-    // this.timelineData = [...data1];
 
     this.newTimelineChartData[0].series = data1;
     this.newTimelineChartData = [...this.newTimelineChartData];
 
-    //console.error('newTimelineChartData', this.newTimelineChartData);
-      console.error('lineChart', this.lineChart);
-
   }
 
-  dostuff() {
-    console.log(this.lineChart);
+  filterApply() {
+    this.timelineFilterFrom = new Date(this.lineChart.xDomain[0]);
+    this.timelineFilterTo = new Date(this.lineChart.xDomain[1]);
+
+
+    this.filteredClassInstances = this.classInstances.filter(c => {
+      return (moment(c.properties[14].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
+        moment(c.properties[14].values[0]).isBefore(moment(this.timelineFilterTo)));
+    });
+
+    this.generateOtherChartsData();
+
   }
 
   generateOtherChartsData() {
@@ -267,7 +274,8 @@ export class TasksComponent implements OnInit {
 
     this.dayNightData = [...data3];
 
-
+    this.tableDataSource.data = this.filteredClassInstances;
+    this.paginator._changePageSize(this.paginator.pageSize);
   }
 
 
@@ -278,7 +286,7 @@ export class TasksComponent implements OnInit {
     switch (this.selectedYaxis) {
       case 'Dauer':
 
-        
+
 
 
         // sunburst chart

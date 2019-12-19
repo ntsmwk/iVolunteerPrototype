@@ -86,7 +86,7 @@ public class InitializationService {
 		derivationRuleRepository.save(rule);
 	
 	
-		this.addTestClassInstances();
+//		this.addTestClassInstances();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
