@@ -7,126 +7,33 @@ $custom-typography: mat-typography-config(
 );
 @include mat-core($custom-typography);
 
-.page-layout {
-
+.content-section {
     font-family: "Muli","Helvetica Neue",Arial,sans-serif;
     overflow: scroll;
-
-    .header {
-        position: relative;
-        flex: 1 0 auto;
-        height: 90px;
-        max-height: 90px;
-        background: #1A237E;
-        background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
-        text-align: center;
-
-        @include media-breakpoint('xs') {
-            height: 240px;
-            padding: 16px;
-        }
-
-
-        h1 {
-            color: white;
-            font-size: 40px;
-            font-weight: 300;
-            letter-spacing: 0.01em;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 0px;
-
-            @include media-breakpoint-down('xs') {
-            font-size: 24px;
-            }
-        }
+    .table-row {
+        min-height: 0px;
+        cursor: pointer;
     }
 
-    .mat-column-details {
-        padding-right: 0;
-        flex: 0 0 20px;
-    }
+    mat-row:hover {
+        background-color: rgb(62, 125, 219);
 
-
-
-    // .mat-column-date1 {
-    //     font-size: 12px;
-    // }
-
-    // .mat-column-date2 {
-    //     font-size: 12px;
-
-    // }
-
-    .mat-column-label_competence {
-        // padding-left: 3px;
-        flex: 0 0 200px;
-    }
-
-    .mat-column-label_feedback {
-        // padding-left: 5px;
-        flex: 0 0 200px;
-    }
-    .mat-column-label_tasks {
-        // padding-left: 5px;
-        // flex: 0 0 135px;
-        flex: 0 0 200px;
-
-    }
-
-    .mat-column-issuer {
-        padding-left: 5px;
-        flex: 0 0 50px;
-    }
-
-    // .mat-column-status {
-    //     flex: 0 0 45px;
-    // }
-
-
-      
-
-
-      .highlighted_new {
-        // background-color: rgb(255, 246, 195);
-        // background-color: rgb(252, 232, 207);
-        // background-color: #FFECB3;
-
-        // background-color: rgb(94, 192, 37);
-        background-color: #008000;
-        font-weight: 800;
-        .mat-cell {
+        mat-cell {
             color: white;
         }
-        .a {
-            color: white;
-        }
-
-      }
-
-      
-      .highlighted_increased {
-        background-color: rgb(214, 252, 199);
-      }
     }
 
-// ::ng-deep .mat-progress-bar-fill::after {
-//     background-color: green;
-// }
+  
+}
 
-// ::ng-deep .mat-progress-bar-buffer {
-//     background: red;
-// }
+.link {
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 12px;
+}
+ 
 
-// ::ng-deep .mat-expansion-panel-body {
-//     padding: 0;
-// }
-// .share-radio-group {
-// display: flex;
-//   flex-direction: row;
-//   margin: 15px 0;
-//   margin-right: 10px;
-// }
+
 
 
 // ::ng-deep .mat-ink-bar {

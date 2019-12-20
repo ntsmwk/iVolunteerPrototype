@@ -135,7 +135,7 @@ export class FuseToolbarComponent {
       this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
-      this.overlayDiv.nativeElement.style.height = '200px';
+      this.overlayDiv.nativeElement.style.height = '240px';
 
       this.overlayArrowDiv.nativeElement.style.top = (y+20)+'px';
       this.overlayArrowDiv.nativeElement.style.left = (x-8)+'px';

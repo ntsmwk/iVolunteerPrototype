@@ -1,9 +1,64 @@
-<div style="margin: 2px">
-    <div style="border-color: black; border-style: solid; border-width: 1px; border-radius: 5px;">
-        
-        <div *ngFor="let instance of classInstances" class="m-8">
-            <div>{{instance.name}}</div>
+<link type="text/css" rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
+<div #titleDiv
+    style="background-color: rgb(62, 125, 219); color: white; line-height: 1.5; margin: -2px; font-size: 20px">
+    <div style="padding-left: 12px">Inbox</div>
+</div>
+
+<div style="margin: 2px">
+    <!-- <div style="border-color: black; border-style: solid; border-width: 1px; border-radius: 5px;"> -->
+    <div>
+
+
+        <div #innerDiv style="overflow: scroll">
+            <div class="content-section" *ngIf="dataSource.data.length > 0">
+                <mat-table #inboxTable [dataSource]="dataSource">
+                    <ng-container matColumnDef="label">
+                        <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
+                        <mat-cell *matCellDef="let entry">
+                            <div fxLayout="column" fxLayoutAlign="start start">
+                                <div>{{entry.name}}</div>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="issuer">
+                    <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
+                    <mat-cell *matCellDef="let entry">
+
+                        <img *ngIf="entry.issuer == 'ÖRK'" class="avatar"
+                            src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                        <img *ngIf="entry.issuer == 'FF Altenberg'" class="avatar"
+                            src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                        <img *ngIf="entry.issuer == 'HelpYourNeighbor'" class="avatar"
+                            src="../../../../assets/images/logos/neighborhelp.jpg">
+
+                    </mat-cell>
+                </ng-container> -->
+
+                    <ng-container matColumnDef="date">
+                        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                        <mat-cell *matCellDef="let entry">
+                            {{getDateString(entry.timestamp)}}
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> -->
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"
+                        [ngClass]="{ 'highlighted_new': row.status == 'new' }" class="table-row"></mat-row>
+                </mat-table>
+            </div>
+
+            <div *ngIf="classInstances.length <= 0">
+                <div style="text-align: center">inbox empty</div>
+            </div>
+
+        </div>
+
+        <div #actionDiv fxLayout="row" fxLayoutAlign="end center">
+            <a class="link" (click)="undefined">zur Inbox</a>
         </div>
     </div>
 
