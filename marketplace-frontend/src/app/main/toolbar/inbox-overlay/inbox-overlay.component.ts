@@ -91,7 +91,7 @@ export class InboxOverlayComponent implements OnInit {
 
   showInboxClicked() {
     this.closeOverlay.emit(true);
-    this.router.navigate(['/main/asset-inbox']);
+    this.router.navigate(['/main/asset-inbox'], {state: {marketplace: this.marketplace, participant: this.volunteer}});
   }
 
 
