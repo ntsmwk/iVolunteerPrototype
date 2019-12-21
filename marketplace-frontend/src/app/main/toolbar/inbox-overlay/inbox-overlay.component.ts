@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, ElementRef, ViewChild, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { FeedbackService } from 'app/main/content/_service/feedback.service';
@@ -9,7 +9,7 @@ import { Participant } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from "util";
 import { ClassInstance } from 'app/main/content/_model/meta/Class';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'inbox-overlay',
@@ -19,6 +19,7 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
 export class InboxOverlayComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private marketplaceService: CoreMarketplaceService,
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
@@ -27,27 +28,20 @@ export class InboxOverlayComponent implements OnInit {
 
   }
 
-
+  isLoaded: boolean;
   @ViewChild('innerDiv', { static: false }) innerDiv: ElementRef;
   @ViewChild('actionDiv', { static: false }) actionDiv: ElementRef;
+
+  @Output() closeOverlay: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
   marketplace: Marketplace;
   volunteer: Volunteer;
   classInstances: ClassInstance[] = [];
   dataSource = new MatTableDataSource<ClassInstance>();
-  displayedColumns = [/*'issuer', */'label', 'date'];
-
-
-
-
-
-
+  displayedColumns = ['archetype', 'label', 'date'];
 
   ngOnInit() {
-
-
-
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
         if (!isNullOrUndefined(marketplaces))
@@ -60,6 +54,13 @@ export class InboxOverlayComponent implements OnInit {
     ]).then(() => {
       this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
         if (!isNullOrUndefined(ret)) {
+
+          console.log(ret);
+          ret = ret.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf())
+          if (ret.length > 5) {
+            ret = ret.slice(0, 5);
+          }
+
           this.dataSource.data = ret;
           this.classInstances = ret;
           console.log(ret);
@@ -71,27 +72,27 @@ export class InboxOverlayComponent implements OnInit {
 
           this.innerDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
           this.innerDiv.nativeElement.style.height = (this.element.nativeElement.parentElement.offsetHeight - 58) + 'px';
-
+          this.innerDiv.nativeElement.style.overflow = 'hidden';
           // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
           this.actionDiv.nativeElement.style.height = '18px';
 
 
         }
 
+        this.isLoaded = true;
+
       })
     });
-
-
   }
 
   getDateString(date: number) {
     return new Date(date).toLocaleDateString();
   }
 
-  close() {
-
+  showInboxClicked() {
+    this.closeOverlay.emit(true);
+    this.router.navigate(['/main/asset-inbox']);
   }
-
 
 
 }

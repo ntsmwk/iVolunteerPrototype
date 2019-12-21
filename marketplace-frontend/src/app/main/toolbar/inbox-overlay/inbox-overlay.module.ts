@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { InboxOverlayComponent } from './inbox-overlay.component';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatTableModule, MatTooltipModule } from '@angular/material';
 
 
 @NgModule({
@@ -15,6 +15,7 @@ import { MatButtonModule, MatTableModule } from '@angular/material';
     MatButtonModule,
 
     MatTableModule,
+    MatTooltipModule,
         
   
   ],

@@ -145,6 +145,12 @@ export class FuseToolbarComponent {
       console.log(this.overlayDiv.nativeElement.style);
     }
 
+
+
+  }
+
+  closeOverlay($event) {
+    this.displayInboxOverlay = false;
   }
 
 

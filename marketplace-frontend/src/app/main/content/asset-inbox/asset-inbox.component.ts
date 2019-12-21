@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 
@@ -12,7 +12,7 @@ export class AssetInboxComponent implements OnInit {
   dataSourceInbox = new MatTableDataSource<any>();
   dispalyedColumnsInbox = ['data', 'issuer', 'label', 'details'];
 
-  @Output() showInbox: EventEmitter<any> = new EventEmitter();
+  isLoaded: boolean;
 
 
 
@@ -21,12 +21,11 @@ export class AssetInboxComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.isLoaded = true;
 
   }
 
   close() {
-    this.showInbox.emit(false);
   }
 
 

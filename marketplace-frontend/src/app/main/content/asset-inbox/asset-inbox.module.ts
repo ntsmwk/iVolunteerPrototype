@@ -3,7 +3,11 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { AssetInboxComponent } from './asset-inbox.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
+const routes = [
+  { path: '', component: AssetInboxComponent }
+];
 
 @NgModule({
   declarations: [
@@ -11,6 +15,7 @@ import { MatButtonModule } from '@angular/material';
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),       
     FuseSharedModule,
     MatButtonModule,
   

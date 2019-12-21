@@ -27,6 +27,11 @@ const routes: Route[] = [
     loadChildren: () => import('./login/login.module').then(m => m.FuseLoginModule)
   },
   {
+    path: 'main/asset-inbox',
+    loadChildren: () => import('./asset-inbox/asset-inbox.module').then(m => m.AssetInboxModule),
+    canActivate: [TokenGuard, LoginGuard]
+  },
+  {
     path: 'main/dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.FuseDashboardModule),
     canActivate: [TokenGuard, LoginGuard]

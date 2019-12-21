@@ -32,7 +32,7 @@
     <div #overlayArrow class="arrow-up" *ngIf="displayInboxOverlay"></div>
     <div #overlayDiv *ngIf="displayInboxOverlay" class="mat-elevation-z4"
       style="background: white; border-color: white; border-style: solid; border-width: 2px; border-radius: 5px; z-index: 2;">
-      <inbox-overlay>
+      <inbox-overlay (closeOverlay)="closeOverlay($event)">
       </inbox-overlay>
     </div>
 
