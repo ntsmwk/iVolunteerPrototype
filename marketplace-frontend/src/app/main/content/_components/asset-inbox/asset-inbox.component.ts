@@ -15,7 +15,7 @@ export class AssetInboxComponent implements OnInit {
 
 
   dataSource = new MatTableDataSource<ClassInstance>();
-  displayedColumns = ['archetype', 'label', 'date'];
+  displayedColumns = ['archetype', 'label', 'issuer', 'date'];
 
 
   @Input() classInstances: ClassInstance[];
@@ -27,6 +27,7 @@ export class AssetInboxComponent implements OnInit {
     console.log("Asset Inbox");
     console.log(this.classInstances);
     this.dataSource.data = this.classInstances;
+    this.dataSource.data = [];
     
   }
  

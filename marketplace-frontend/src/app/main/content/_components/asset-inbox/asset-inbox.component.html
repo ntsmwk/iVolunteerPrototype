@@ -1,14 +1,25 @@
-<div>
-  <mat-table #inboxTable [dataSource]="dataSource">
+<div class="inbox-content">
+  <mat-table #inboxTable class="inbox-table" [dataSource]="dataSource" *ngIf="dataSource.data.length > 0">
 
     <ng-container matColumnDef="archetype">
       <mat-header-cell *matHeaderCellDef>Archetype</mat-header-cell>
       <mat-cell *matCellDef="let entry">
-        <!-- <div *ngIf="entry.archetype == 'COMPETENCE'"
-          style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence"> -->
-          <!-- <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-            src="../../../../assets/competence.jpg"> -->
-        <!-- </div> -->
+        <div 
+          style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+          <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+            src="../../../../assets/competence.jpg">
+        </div>
+
+        <div>
+          Competence
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="issuer">
+      <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
+      <mat-cell *matCellDef="let entry">
+        {{entry.issuerId}}
       </mat-cell>
     </ng-container>
 
@@ -29,10 +40,14 @@
     </ng-container>
 
 
-    <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
       class="table-row"></mat-row>
   </mat-table>
+
+  <div *ngIf="dataSource.data.length <= 0" class="inbox-empty-message">
+    keine Einträge vorhanden, die Inbox ist leer
+  </div>
 
 
 </div>
