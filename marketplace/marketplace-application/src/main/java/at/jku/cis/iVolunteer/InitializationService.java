@@ -656,6 +656,7 @@ public class InitializationService {
 			ci1.setIssuerId(helpseeker.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		ci1.setInRepository(false);
 		classInstanceRepository.save(ci1);
 	}
 }

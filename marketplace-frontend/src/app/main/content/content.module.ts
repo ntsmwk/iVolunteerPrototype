@@ -28,7 +28,7 @@ const routes: Route[] = [
   },
   {
     path: 'main/asset-inbox',
-    loadChildren: () => import('./asset-inbox/asset-inbox.module').then(m => m.AssetInboxModule),
+    loadChildren: () => import('./asset-inbox-volunteer/asset-inbox-volunteer.module').then(m => m.AssetInboxVolunteerModule),
     canActivate: [TokenGuard, LoginGuard]
   },
   {

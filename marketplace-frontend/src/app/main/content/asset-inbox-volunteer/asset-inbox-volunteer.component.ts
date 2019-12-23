@@ -11,11 +11,11 @@ import { LoginService } from '../_service/login.service';
 
 
 @Component({
-  selector: 'asset-inbox',
-  templateUrl: './asset-inbox.component.html',
-  styleUrls: ['./asset-inbox.component.scss'],
+  selector: 'asset-inbox-volunteer',
+  templateUrl: './asset-inbox-volunteer.component.html',
+  styleUrls: ['./asset-inbox-volunteer.component.scss'],
 })
-export class AssetInboxComponent implements OnInit {
+export class AssetInboxVolunteerComponent implements OnInit {
 
   // dataSource = new MatTableDataSource<any>();
   // displayedColumns = ['data', 'issuer', 'label', 'details'];
@@ -23,7 +23,7 @@ export class AssetInboxComponent implements OnInit {
   isLoaded: boolean;
   marketplace: Marketplace;
   participant: Participant;
-
+  classInstances: ClassInstance[];
 
 
   constructor(
@@ -70,6 +70,7 @@ export class AssetInboxComponent implements OnInit {
     this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
       console.log(ret);
+      this.classInstances = ret;
       this.isLoaded = true;
 
     });

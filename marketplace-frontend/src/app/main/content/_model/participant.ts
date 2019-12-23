@@ -9,3 +9,9 @@ export class Participant {
 }
 
 export type ParticipantRole = "VOLUNTEER" | "HELP_SEEKER" | "ADMIN" | "RECRUITER" | "FLEXPROD";
+
+
+export class UserImagePath {
+  userId: string;
+  imagePath: string;
+}

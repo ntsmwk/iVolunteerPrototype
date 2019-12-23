@@ -21,7 +21,7 @@ import { FuseWidgetModule } from '@fuse/components';
 import { ShareDialog } from './dashboard-volunteer/share-dialog/share-dialog.component';
 import { DashboardVolunteerComponent } from './dashboard-volunteer/dashboard-volunteer.component';
 import { DashboardHelpSeekerComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
-import { AssetInboxModule } from '../asset-inbox/asset-inbox.module';
+import { AssetInboxVolunteerModule } from '../asset-inbox-volunteer/asset-inbox-volunteer.module';
 import { MatBadgeModule, MatCardModule } from '@angular/material';
 
 

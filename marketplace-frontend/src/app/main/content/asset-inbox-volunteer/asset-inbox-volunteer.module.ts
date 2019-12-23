@@ -1,29 +1,32 @@
 import { NgModule } from '@angular/core';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { AssetInboxComponent } from './asset-inbox.component';
+import { AssetInboxVolunteerComponent } from './asset-inbox-volunteer.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { AssetInboxModule } from '../_components/asset-inbox/asset-inbox.module';
 
 const routes = [
-  { path: '', component: AssetInboxComponent }
+  { path: '', component: AssetInboxVolunteerComponent }
 ];
 
 @NgModule({
   declarations: [
-    AssetInboxComponent
+    AssetInboxVolunteerComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),       
     FuseSharedModule,
     MatButtonModule,
+
+    AssetInboxModule
   
   ],
   exports: [
-    AssetInboxComponent
+    AssetInboxVolunteerComponent
   ]
 })
 
-export class AssetInboxModule {
+export class AssetInboxVolunteerModule {
 }
