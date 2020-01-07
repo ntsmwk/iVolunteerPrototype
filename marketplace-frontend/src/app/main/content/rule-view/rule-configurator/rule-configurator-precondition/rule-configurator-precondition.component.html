@@ -1,17 +1,18 @@
 <form *ngIf="sourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
     (change)="onChange($event)" [formGroup]="rulePreconditionForm">
     <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
-        <mat-form-field style="width: 250px">
+        <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 250px">
             <mat-label>Choose FWPE Type</mat-label>
-            <mat-select *ngIf="classDefinitions" formControlName="classDefinition" [value]="stringify(sourceRuleEntry.classDefinition)">
-                <mat-option *ngFor="let cd of classDefinitions" [value]="stringify(cd)"
+            <mat-select formControlName="classDefinitionId" [value]="sourceRuleEntry.classDefinition?.id">
+                <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
                     (onSelectionChange)="onClassChange($event)"> {{cd.name}} </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field style="width: 250px">
+        <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 250px">
             <mat-label>Select Attribute</mat-label>
-            <mat-select formControlName="classProperty" [value]="sourceRuleEntry.classProperty">
-                <mat-option *ngFor="let cp of classProperties" [value]="cp" (onSelectionChange)="onChange($event)">
+            <mat-select formControlName="classPropertyId" [value]="sourceRuleEntry.classProperty?.id">
+                <mat-option *ngFor="let cp of classProperties" [value]="cp?.id"
+                    (onSelectionChange)="onPropertyChange($event)">
                     {{cp.name}} </mat-option>
             </mat-select>
         </mat-form-field>

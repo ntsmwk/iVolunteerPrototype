@@ -34,6 +34,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   classProperties: ClassProperty<any>[] = [];
   operations: any;
 
+  classDefinitionCache: ClassDefinition[] = [];
+
   constructor(private route: ActivatedRoute,
     private loginService: LoginService,
     private formBuilder: FormBuilder,
@@ -41,8 +43,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     private classPropertyService: ClassPropertyService,
     private helpSeekerService: CoreHelpSeekerService) {
     this.rulePreconditionForm = formBuilder.group({
-      'classDefinition': new FormControl(undefined),
-      'classProperty': new FormControl(undefined),
+      'classDefinitionId': new FormControl(undefined),
+      'classPropertyId': new FormControl(undefined),
       'mappingOperatorType': new FormControl(undefined),
       'value': new FormControl(undefined),
     });
@@ -52,8 +54,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   ngOnInit() {
     console.error(this.sourceRuleEntry);
     this.rulePreconditionForm.setValue({
-      classDefinition: JSON.stringify(this.sourceRuleEntry.classDefinition) || "",
-      classProperty: JSON.stringify(this.sourceRuleEntry.classProperty) || "",
+      classDefinitionId: (this.sourceRuleEntry.classDefinition.id) || "",
+      classPropertyId: (this.sourceRuleEntry.classProperty.id) || "",
       mappingOperatorType: this.sourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
       value: this.sourceRuleEntry.value || ""
     });
@@ -75,12 +77,17 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onClassChange($event) {
-    this.sourceRuleEntry.classDefinition = $event.source.value
+    this.sourceRuleEntry.classDefinition.id = $event.source.value;
     this.loadClassProperties($event);
   }
 
+  onPropertyChange($event){
+    this.sourceRuleEntry.classProperty.id = $event.source.value;
+    this.onChange($event);
+  }
+
   private loadClassProperties($event) {
-    if (this.sourceRuleEntry.classDefinition) {
+    if (this.sourceRuleEntry.classDefinition.id) {
       this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.sourceRuleEntry.classDefinition.id).toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
@@ -90,20 +97,17 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onChange($event) {
-    this.sourceRuleEntry.classDefinition = JSON.parse(this.rulePreconditionForm.value.classDefinition);
-    this.sourceRuleEntry.classProperty = JSON.parse(this.rulePreconditionForm.value.classProperty);
-    this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
-    this.sourceRuleEntry.value = this.rulePreconditionForm.value.value;
-    this.sourceRuleEntryChange.emit(this.sourceRuleEntry);
+    if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
+      this.sourceRuleEntry.classDefinition = this.classDefinitions.find(cd => cd.id === this.rulePreconditionForm.value.classDefinitionId);
+      this.sourceRuleEntry.classProperty = this.classProperties.find(cp => cp.id === this.rulePreconditionForm.value.classPropertyId);
+      this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
+      this.sourceRuleEntry.value = this.rulePreconditionForm.value.value;
+      this.sourceRuleEntryChange.emit(this.sourceRuleEntry);
+    }
   }
-
 
   private retrieveValueOf(op) {
     var x: MappingOperatorType = MappingOperatorType[op as keyof typeof MappingOperatorType];
     return x;
-  }
-
-  private stringify(obj){
-    return JSON.stringify(obj);
   }
 }
