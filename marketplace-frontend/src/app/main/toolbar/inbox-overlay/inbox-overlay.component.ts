@@ -44,8 +44,9 @@ export class InboxOverlayComponent implements OnInit {
   ngOnInit() {
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
-        if (!isNullOrUndefined(marketplaces))
+        if (!isNullOrUndefined(marketplaces)) {
           this.marketplace = marketplaces[0]
+        }
       }),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
         this.volunteer = participant;
@@ -55,7 +56,6 @@ export class InboxOverlayComponent implements OnInit {
       this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
         if (!isNullOrUndefined(ret)) {
 
-          console.log(ret);
           ret = ret.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf())
           if (ret.length > 5) {
             ret = ret.slice(0, 5);
@@ -63,12 +63,12 @@ export class InboxOverlayComponent implements OnInit {
 
           this.dataSource.data = ret;
           this.classInstances = ret;
-          console.log(ret);
-          console.log("=====");
-          console.log(this.element);
-          console.log(this.element.nativeElement.parentElement);//offsetWidth ; offsetHeight
-          console.log(this.element.nativeElement.parentElement.offsetWidth);
-          console.log(this.element.nativeElement.parentElement.offsetHeight);
+          // console.log(ret);
+          // console.log("=====");
+          // console.log(this.element);
+          // console.log(this.element.nativeElement.parentElement);//offsetWidth ; offsetHeight
+          // console.log(this.element.nativeElement.parentElement.offsetWidth);
+          // console.log(this.element.nativeElement.parentElement.offsetHeight);
 
           this.innerDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
           this.innerDiv.nativeElement.style.height = (this.element.nativeElement.parentElement.offsetHeight - 58) + 'px';
@@ -91,7 +91,7 @@ export class InboxOverlayComponent implements OnInit {
 
   showInboxClicked() {
     this.closeOverlay.emit(true);
-    this.router.navigate(['/main/asset-inbox'], {state: {marketplace: this.marketplace, participant: this.volunteer}});
+    this.router.navigate(['/main/volunteer/asset-inbox'], {state: {marketplace: this.marketplace, participant: this.volunteer}});
   }
 
 

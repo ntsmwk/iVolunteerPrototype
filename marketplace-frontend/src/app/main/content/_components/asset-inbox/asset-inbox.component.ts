@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter }  from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ClassInstance } from '../../_model/meta/Class';
 import { MatTable, MatTableDataSource } from '@angular/material';
 
@@ -19,20 +19,22 @@ export class AssetInboxComponent implements OnInit {
 
 
   @Input() classInstances: ClassInstance[];
+  @Output() submit = new EventEmitter();
 
  
   constructor() {  }
  
   ngOnInit() {
-    console.log("Asset Inbox");
+    console.log('Asset Inbox');
     console.log(this.classInstances);
     this.dataSource.data = this.classInstances;
-    this.dataSource.data = [];
+    // TESTING
+    // this.dataSource.data = [];
     
   }
  
   onSubmit() {
-   
+    this.submit.emit(this.classInstances);
   }
 
   getDateString(date: number) {

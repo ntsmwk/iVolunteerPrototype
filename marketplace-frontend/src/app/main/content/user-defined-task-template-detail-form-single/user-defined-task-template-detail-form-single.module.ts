@@ -7,7 +7,7 @@ import { QuestionService } from '../_service/question.service';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormModule } from "../_components/dynamic-forms/dynamic-form/dynamic-form.module";
+import { DynamicFormModule } from '../_components/dynamic-forms/dynamic-form/dynamic-form.module';
 import { DynamicFormQuestionModule } from '../_components/dynamic-forms/dynamic-form-question/dynamic-form-question.module';
 
 
