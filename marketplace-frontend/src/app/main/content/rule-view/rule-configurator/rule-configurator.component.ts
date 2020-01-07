@@ -15,6 +15,7 @@ import { DerivationRuleService } from '../../_service/derivation-rule.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { ClassDefinitionService } from '../../_service/meta/core/class/class-definition.service';
 import { ClassDefinition } from '../../_model/meta/Class';
+import { ClassProperty } from '../../_model/meta/Property';
 
 @Component({
   templateUrl: './rule-configurator.component.html',
@@ -77,8 +78,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     } else {
       this.derivationRule = new DerivationRule();
       this.derivationRule.sources = [<SourceRuleEntry>{
-        classDefinition: null, 
-        classProperty: null, 
+        classDefinition: new ClassDefinition(), 
+        classProperty: new ClassProperty(), 
         mappingOperatorType: MappingOperatorType.EQ, 
         value: ""
       }];

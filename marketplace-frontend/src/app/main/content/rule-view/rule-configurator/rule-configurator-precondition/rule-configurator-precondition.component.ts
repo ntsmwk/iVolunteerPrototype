@@ -87,7 +87,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   private loadClassProperties($event) {
-    if (this.sourceRuleEntry.classDefinition.id) {
+    if (this.sourceRuleEntry && this.sourceRuleEntry.classDefinition && this.sourceRuleEntry.classDefinition.id) {
       this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.sourceRuleEntry.classDefinition.id).toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
@@ -99,7 +99,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   onChange($event) {
     if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
       this.sourceRuleEntry.classDefinition = this.classDefinitions.find(cd => cd.id === this.rulePreconditionForm.value.classDefinitionId);
-      this.sourceRuleEntry.classProperty = this.classProperties.find(cp => cp.id === this.rulePreconditionForm.value.classPropertyId);
+      this.sourceRuleEntry.classProperty = this.classProperties.find(cp => cp.id === this.rulePreconditionForm.value.classPropertyId) || new ClassProperty();
       this.sourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
       this.sourceRuleEntry.value = this.rulePreconditionForm.value.value;
       this.sourceRuleEntryChange.emit(this.sourceRuleEntry);

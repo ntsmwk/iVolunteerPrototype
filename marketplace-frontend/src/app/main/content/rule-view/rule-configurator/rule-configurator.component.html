@@ -52,7 +52,7 @@
         <mat-label>Choose derived FWPE Type</mat-label>
         <mat-select formControlName="target" [value]="derivationRule.target">
           <!-- <mat-option [value]="derivationRule.target">{{derivationRule.target.name}} </mat-option> -->
-          <mat-option *ngFor="let classDefinition of classDefinitions" [value]="classDefinition"> {{classDefinition.name}} </mat-option>
+          <mat-option *ngFor="let cd of classDefinitions" [value]="cd"> {{cd.name}} </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
