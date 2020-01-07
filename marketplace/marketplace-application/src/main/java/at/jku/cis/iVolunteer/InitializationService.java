@@ -21,14 +21,12 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
@@ -152,11 +150,16 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonRoleProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("roleID") || p.getName().equals("roleType")
-						|| p.getName().equals("roleName") || p.getName().equals("roleDescription")
-						|| p.getName().equals("organisationID") || p.getName().equals("organisationName")
-						|| p.getName().equals("organisationType") || p.getName().equals("dateFrom")
-						|| p.getName().equals("dateTo") || p.getName().equals("iVolunteerSource"))
+				.filter(p -> p.getName().equals("roleID") 
+						|| p.getName().equals("roleType")
+						|| p.getName().equals("roleName") 
+						|| p.getName().equals("roleDescription")
+						|| p.getName().equals("organisationID") 
+						|| p.getName().equals("organisationName")
+						|| p.getName().equals("organisationType") 
+						|| p.getName().equals("dateFrom")
+						|| p.getName().equals("dateTo") 
+						|| p.getName().equals("iVolunteerSource"))
 				.collect(Collectors.toList());
 		// @formatter:on
 	}
@@ -164,9 +167,12 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonBadgeProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("badgeID") || p.getName().equals("badgeName")
-						|| p.getName().equals("badgeDescription") || p.getName().equals("badgeIssuedOn")
-						|| p.getName().equals("badgeIcon") || p.getName().equals("iVolunteerUUID")
+				.filter(p -> p.getName().equals("badgeID") 
+						|| p.getName().equals("badgeName")
+						|| p.getName().equals("badgeDescription") 
+						|| p.getName().equals("badgeIssuedOn")
+						|| p.getName().equals("badgeIcon")
+						|| p.getName().equals("iVolunteerUUID")
 						|| p.getName().equals("iVolunteerSource"))
 				.collect(Collectors.toList());
 		// @formatter:on
@@ -176,10 +182,14 @@ public class InitializationService {
 			List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("certificateID") || p.getName().equals("certificateName")
-						|| p.getName().equals("certificateDescription") || p.getName().equals("certificateIssuedOn")
-						|| p.getName().equals("certificateValidUntil") || p.getName().equals("certificateIcon")
-						|| p.getName().equals("iVolunteerUUID") || p.getName().equals("iVolunteerSource"))
+				.filter(p -> p.getName().equals("certificateID") 
+						|| p.getName().equals("certificateName")
+						|| p.getName().equals("certificateDescription") 
+						|| p.getName().equals("certificateIssuedOn")
+						|| p.getName().equals("certificateValidUntil") 
+						|| p.getName().equals("certificateIcon")
+						|| p.getName().equals("iVolunteerUUID") 
+						|| p.getName().equals("iVolunteerSource"))
 				.collect(Collectors.toList());
 		// @formatter:on
 	}
@@ -187,15 +197,26 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("taskID") || p.getName().equals("taskName")
-						|| p.getName().equals("taskType1") || p.getName().equals("taskType2")
-						|| p.getName().equals("taskType3") || p.getName().equals("taskType4")
-						|| p.getName().equals("taskDescription") || p.getName().equals("taskRoleID")
-						|| p.getName().equals("taskRole") || p.getName().equals("taskVehicleID")
-						|| p.getName().equals("taskVehicle") || p.getName().equals("taskCountAll")
-						|| p.getName().equals("taskDateFrom") || p.getName().equals("taskDateTo")
-						|| p.getName().equals("taskDuration") || p.getName().equals("taskLocation")
-						|| p.getName().equals("taskGeoInformation") || p.getName().equals("iVolunteerUUID")
+				.filter(p -> p.getName().equals("taskID") 
+						|| p.getName().equals("taskName")
+						|| p.getName().equals("taskType1") 
+						|| p.getName().equals("taskType2")
+						|| p.getName().equals("taskType3") 
+						|| p.getName().equals("taskType4")
+						|| p.getName().equals("taskDescription") 
+						|| p.getName().equals("Zweck")
+						|| p.getName().equals("Rolle")
+						|| p.getName().equals("Rang")
+						|| p.getName().equals("Phase")
+						|| p.getName().equals("Arbeitsteilung")
+						|| p.getName().equals("Ebene")
+						|| p.getName().equals("taskCountAll")
+						|| p.getName().equals("taskDateFrom") 
+						|| p.getName().equals("taskDateTo")
+						|| p.getName().equals("taskDuration") 
+						|| p.getName().equals("taskLocation")
+						|| p.getName().equals("taskGeoInformation")
+						|| p.getName().equals("iVolunteerUUID")
 						|| p.getName().equals("iVolunteerSource"))
 				.collect(Collectors.toList());
 		// @formatter:on
@@ -253,11 +274,12 @@ public class InitializationService {
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskDescription", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskRoleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskRole", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskVehicle", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskCountAll", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Zweck", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Rolle", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Rang", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Phase", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Arbeitsteilung", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("Ebene", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateFrom", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskDateTo", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskDuration", PropertyType.FLOAT_NUMBER));
@@ -507,7 +529,7 @@ public class InitializationService {
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 		ti1.setInRepository(true);
-		
+
 		classInstanceRepository.save(ti1);
 
 		ti1.setId("ti2");

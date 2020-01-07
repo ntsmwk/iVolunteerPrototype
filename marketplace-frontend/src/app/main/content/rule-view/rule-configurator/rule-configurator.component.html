@@ -42,17 +42,16 @@
             <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
           </div>
         </div>
-        <div style=" padding-top: 3px; padding-left: 5px;"> Derived FWPE</div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Derived Volunteer Asset</div>
       </div>
       <mat-divider></mat-divider>
     </div>
 
     <div fxLayout="column" fxLayoutAlign="start start">
       <mat-form-field style="width: 300px">
-        <mat-label>Choose derived FWPE Type</mat-label>
-        <mat-select formControlName="target" [value]="derivationRule.target">
-          <!-- <mat-option [value]="derivationRule.target">{{derivationRule.target.name}} </mat-option> -->
-          <mat-option *ngFor="let classDefinition of classDefinitions" [value]="classDefinition"> {{classDefinition.name}} </mat-option>
+        <mat-label>Choose derived Volunteer Asset</mat-label>
+        <mat-select formControlName="target" [value]="derivationRule.target?.id">
+          <mat-option *ngFor="let cd of classDefinitions" [value]="cd?.id"> {{cd.name}} </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
