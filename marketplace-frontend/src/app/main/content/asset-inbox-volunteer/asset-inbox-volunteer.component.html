@@ -17,8 +17,9 @@
 
 
     <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" *ngIf="isLoaded">
-        <app-asset-inbox [classInstances]="classInstances"></app-asset-inbox>
+        <app-asset-inbox [classInstances]="classInstances" (submit)=onAssetInboxSubmit($event)></app-asset-inbox>
     </div>
+    
 
 
 </div>
