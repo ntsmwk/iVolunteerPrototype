@@ -38,11 +38,12 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType3")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType3(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType4")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType4(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskDescription")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDescription(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskRoleID")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskRoleID(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskRole")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskRole(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskVehicleID")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskVehicleID(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskVehicle")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskVehicle(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskCountAll")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskCountAll(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Zweck")).forEach(p -> p.setValues(Lists.asList(personTask.getZweck(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Rolle")).forEach(p -> p.setValues(Lists.asList(personTask.getRolle(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Rang")).forEach(p -> p.setValues(Lists.asList(personTask.getRang(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Phase")).forEach(p -> p.setValues(Lists.asList(personTask.getPhase(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Arbeitsteilung")).forEach(p -> p.setValues(Lists.asList(personTask.getArbeitsteilung(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Ebene")).forEach(p -> p.setValues(Lists.asList(personTask.getEbene(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskDateFrom")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDateFrom(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskDateTo")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDateTo(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskDuration")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDuration(), new Object[0])));
