@@ -9,7 +9,8 @@ $custom-typography: mat-typography-config(
 
 .page-layout {
 
-    font-family: Muli,"Helvetica Neue",Arial,sans-serif;
+    font-family: "Muli","Helvetica Neue",Arial,sans-serif;
+    overflow: scroll;
 
     .header {
         position: relative;
@@ -41,46 +42,47 @@ $custom-typography: mat-typography-config(
         }
     }
 
-    // .mat-column-details {
-    //     flex: 0 0 56px;
+    .mat-column-details {
+        padding-right: 0;
+        flex: 0 0 20px;
+    }
+
+
+
+    // .mat-column-date1 {
+    //     font-size: 12px;
     // }
 
-    .mat-column-date1 {
-        font-size: 12px;
-    }
+    // .mat-column-date2 {
+    //     font-size: 12px;
 
-    .mat-column-date2 {
-        font-size: 12px;
-
-    }
+    // }
 
     .mat-column-label_competence {
-        padding-left: 3px;
-        flex: 0 0 105px;
+        // padding-left: 3px;
+        flex: 0 0 200px;
     }
 
     .mat-column-label_feedback {
-        padding-left: 5px;
-        flex: 0 0 135px;
+        // padding-left: 5px;
+        flex: 0 0 200px;
     }
     .mat-column-label_tasks {
-        padding-left: 5px;
-        flex: 0 0 135px;
+        // padding-left: 5px;
+        // flex: 0 0 135px;
+        flex: 0 0 200px;
+
     }
 
     .mat-column-issuer {
+        padding-left: 5px;
         flex: 0 0 50px;
     }
 
-    .mat-column-status {
-        flex: 0 0 45px;
-    }
+    // .mat-column-status {
+    //     flex: 0 0 45px;
+    // }
 
-    .progressBar {
-        height: 8px !important;
-        padding-left: 10px;
-        margin-right: 20px;
-      }
 
       
 
@@ -108,24 +110,23 @@ $custom-typography: mat-typography-config(
       }
     }
 
+// ::ng-deep .mat-progress-bar-fill::after {
+//     background-color: green;
+// }
 
-::ng-deep .mat-progress-bar-fill::after {
-    background-color: green;
-}
+// ::ng-deep .mat-progress-bar-buffer {
+//     background: red;
+// }
 
-::ng-deep .mat-progress-bar-buffer {
-    background: red;
-}
-
-::ng-deep .mat-expansion-panel-body {
-    padding: 0;
-}
-.share-radio-group {
-display: flex;
-  flex-direction: row;
-  margin: 15px 0;
-  margin-right: 10px;
-}
+// ::ng-deep .mat-expansion-panel-body {
+//     padding: 0;
+// }
+// .share-radio-group {
+// display: flex;
+//   flex-direction: row;
+//   margin: 15px 0;
+//   margin-right: 10px;
+// }
 
 
 // ::ng-deep .mat-ink-bar {

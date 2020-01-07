@@ -1,7 +1,7 @@
 @import "src/@fuse/scss/fuse";
 @import '~@angular/material/theming';
 
-:host {
+.page-layout {
 
     .header {
       position: relative;
@@ -42,20 +42,20 @@
         }
       }
   
-      .buttons {
-        right: 0;
-        position: absolute;
-      }
+      // .buttons {
+      //   right: 0;
+      //   position: absolute;
+      // }
     }
   
-    .dashboard-area {
-      gridster {
-        min-height: 1000px;
-        background-color: transparent;
-      }
+    // .dashboard-area {
+    //   gridster {
+    //     min-height: 1000px;
+    //     background-color: transparent;
+    //   }
   
-      gridster.display-grid {
-        background: grey;
-      }
-    }
+    //   gridster.display-grid {
+    //     background: grey;
+    //   }
+    // }
   }

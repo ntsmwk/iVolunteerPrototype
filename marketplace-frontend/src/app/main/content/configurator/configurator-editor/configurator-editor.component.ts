@@ -746,6 +746,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(cells) && cells.length == 1) {
       cell = cells.pop();
     } else {
+      this.selectionType = undefined;
+      this.selectionIndex = -1;
       return;
     }
 
@@ -757,18 +759,18 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       console.log(this.selectionIndex);
       console.log(this.configurableClasses[this.selectionIndex]);
 
-    } else if(cell.cellType == 'property') {
-      this.selectionType == 'property';
-      this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
-        return classDefiniton.id == cell.parent.id
-      })
-      
-      this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
-        return property.id == cell.id;
-      });
+      // } else if(cell.cellType == 'property') {
+      //   this.selectionType == 'property';
+      //   this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) =>  {
+      //     return classDefiniton.id == cell.parent.id
+      //   })
 
-      console.log(this.selectionIndex);
-      console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
+      //   this.selectionIndex2 = this.configurableClasses[this.selectionIndex].properties.findIndex((property: ClassProperty<any>) => {
+      //     return property.id == cell.id;
+      //   });
+
+      //   console.log(this.selectionIndex);
+      //   console.log(this.configurableClasses[this.selectionIndex].properties[this.selectionIndex2]);
 
     } else {
       this.selectionType = undefined;
@@ -813,8 +815,38 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
   }
 
+  changeIconClicked(selectionIndex: number) {
+    console.log("TODO");    
+    this.dialogFactory.openChangeIconDialog(this.marketplace, this.configurableClasses[selectionIndex].imagePath).then((result: any) => {
+      console.log(result);
+      this.configurableClasses[selectionIndex].imagePath = result;
+      this.showServerContent(false);
+    });
+  }
+
+  saveDone: boolean;
+
+  previewClicked(selectionIndex: number) {
+    this.consumeMenuOptionClickedEvent({ id: 'editor_save' }).then(() => {
+        this.openPreviewDialog(selectionIndex);
+    });
+  }
+
+  openPreviewDialog(selectionIndex: number) {
+    let outer = this;
+    setTimeout(() => {
+      if(this.saveDone) {
+        this.dialogFactory.openInstanceFormPreviewDialog(outer.marketplace, [outer.configurableClasses[selectionIndex].id]).then(() => {
+          
+        });
+      } else {
+        outer.openPreviewDialog(selectionIndex);
+      }
+    }, 500);
+  }
+
   //Menu functions
-  consumeMenuOptionClickedEvent(event: any) {
+  async consumeMenuOptionClickedEvent(event: any) {
     this.eventResponseAction = null;
     switch (event.id) {
       case 'editor_save': {
@@ -841,9 +873,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         break;
       }
     }
+    return;
   }
 
-  saveGraph() {
+  async saveGraph() {
     this.updateModel();
     let relSaveSuccess: boolean;
     let classSaveSuccess: boolean;
@@ -856,16 +889,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
         relSaveSuccess = !isNullOrUndefined(result);
       }),
-
       this.classDefinitionService.addOrUpdateClassDefintions(this.marketplace, this.configurableClasses).toPromise().then((result: any) => {
         classSaveSuccess = !isNullOrUndefined(result);
-
       }),
       this.classDefinitionService.deleteClassDefinitions(this.marketplace, this.deletedClassIds).toPromise().then((result: any) => {
         this.deletedClassIds = [];
         deletedClassSaveSuccess = true;
       }),
-
       this.relationshipService.deleteRelationships(this.marketplace, this.deletedRelationshipIds).toPromise().then((result: any) => {
         this.deletedRelationshipIds = [];
         deletedRelSaveSuccess = true;
@@ -877,6 +907,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       }).then(() => {
         let snackBarMessage: string;
+        this.saveDone = true;
 
         if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
           snackBarMessage = "save successful!";
@@ -1034,7 +1065,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.dataTransportService.data = cells;
 
       let params: string[] = ['test8', 'test7', 'test9'];
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
+      // this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { state: { classDefinitionIds: params }, queryParams: params });
+
     }
   }
 

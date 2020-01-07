@@ -12,18 +12,27 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.feedback.Feedback;
+import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
@@ -31,6 +40,8 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
+import at.jku.cis.iVolunteer.model.user.HelpSeeker;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -47,7 +58,9 @@ public class InitializationService {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private FinalizationService finalizationService;
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
-	@Autowired
+	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private HelpSeekerRepository helpSeekerRepository;
+	@Autowired private FeedbackRepository feedbackRepository;
 
 	@PostConstruct
 	public void init() {
@@ -69,6 +82,8 @@ public class InitializationService {
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
+
+		this.addTestClassInstances();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
@@ -135,76 +150,55 @@ public class InitializationService {
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonRoleProperties(List<PropertyDefinition<Object>> properties) {
-		//@formatter:off
+		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("roleID") 
-						|| p.getName().equals("roleType")
-						|| p.getName().equals("roleName") 
-						|| p.getName().equals("roleDescription")
-						|| p.getName().equals("organisationID") 
-						|| p.getName().equals("organisationName") 
-						|| p.getName().equals("organisationType")
-						|| p.getName().equals("dateFrom") 
-						|| p.getName().equals("dateTo")
-						|| p.getName().equals("iVolunteerSource"))
-				.collect(Collectors.toList());		 
+				.filter(p -> p.getName().equals("roleID") || p.getName().equals("roleType")
+						|| p.getName().equals("roleName") || p.getName().equals("roleDescription")
+						|| p.getName().equals("organisationID") || p.getName().equals("organisationName")
+						|| p.getName().equals("organisationType") || p.getName().equals("dateFrom")
+						|| p.getName().equals("dateTo") || p.getName().equals("iVolunteerSource"))
+				.collect(Collectors.toList());
 		// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonBadgeProperties(List<PropertyDefinition<Object>> properties) {
-		//@formatter:off
-				return properties.stream()
-						.filter(p -> p.getName().equals("badgeID") 
-								|| p.getName().equals("badgeName")
-								|| p.getName().equals("badgeDescription") 
-								|| p.getName().equals("badgeIssuedOn")
-								|| p.getName().equals("badgeIcon") 
-								|| p.getName().equals("iVolunteerUUID")
-								|| p.getName().equals("iVolunteerSource"))
-						.collect(Collectors.toList());		 
-				// @formatter:on
+		// @formatter:off
+		return properties.stream()
+				.filter(p -> p.getName().equals("badgeID") || p.getName().equals("badgeName")
+						|| p.getName().equals("badgeDescription") || p.getName().equals("badgeIssuedOn")
+						|| p.getName().equals("badgeIcon") || p.getName().equals("iVolunteerUUID")
+						|| p.getName().equals("iVolunteerSource"))
+				.collect(Collectors.toList());
+		// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonCertificateProperties(
 			List<PropertyDefinition<Object>> properties) {
-		//@formatter:off
-				return properties.stream()
-						.filter(p -> p.getName().equals("certificateID") 
-								|| p.getName().equals("certificateName")
-								|| p.getName().equals("certificateDescription") 
-								|| p.getName().equals("certificateIssuedOn")
-								|| p.getName().equals("certificateValidUntil") 
-								|| p.getName().equals("certificateIcon")
-								|| p.getName().equals("iVolunteerUUID")
-								|| p.getName().equals("iVolunteerSource"))
-						.collect(Collectors.toList());		 
-				// @formatter:on
+		// @formatter:off
+		return properties.stream()
+				.filter(p -> p.getName().equals("certificateID") || p.getName().equals("certificateName")
+						|| p.getName().equals("certificateDescription") || p.getName().equals("certificateIssuedOn")
+						|| p.getName().equals("certificateValidUntil") || p.getName().equals("certificateIcon")
+						|| p.getName().equals("iVolunteerUUID") || p.getName().equals("iVolunteerSource"))
+				.collect(Collectors.toList());
+		// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
-		//@formatter:off
-				return properties.stream()
-						.filter(p -> p.getName().equals("taskID") 
-								|| p.getName().equals("taskName")
-								|| p.getName().equals("taskType1") 
-								|| p.getName().equals("taskType2")
-								|| p.getName().equals("taskType3") 
-								|| p.getName().equals("taskType4")
-								|| p.getName().equals("taskDescription")
-								|| p.getName().equals("taskRoleID") 
-								|| p.getName().equals("taskRole")
-								|| p.getName().equals("taskVehicleID") 
-								|| p.getName().equals("taskVehicle")
-								|| p.getName().equals("taskCountAll")
-								|| p.getName().equals("taskDateFrom") 
-								|| p.getName().equals("taskDateTo")
-								|| p.getName().equals("taskDuration") 
-								|| p.getName().equals("taskLocation")
-								|| p.getName().equals("taskGeoInformation")
-								|| p.getName().equals("iVolunteerUUID")
-								|| p.getName().equals("iVolunteerSource"))
-						.collect(Collectors.toList());		 
-				// @formatter:on
+		// @formatter:off
+		return properties.stream()
+				.filter(p -> p.getName().equals("taskID") || p.getName().equals("taskName")
+						|| p.getName().equals("taskType1") || p.getName().equals("taskType2")
+						|| p.getName().equals("taskType3") || p.getName().equals("taskType4")
+						|| p.getName().equals("taskDescription") || p.getName().equals("taskRoleID")
+						|| p.getName().equals("taskRole") || p.getName().equals("taskVehicleID")
+						|| p.getName().equals("taskVehicle") || p.getName().equals("taskCountAll")
+						|| p.getName().equals("taskDateFrom") || p.getName().equals("taskDateTo")
+						|| p.getName().equals("taskDuration") || p.getName().equals("taskLocation")
+						|| p.getName().equals("taskGeoInformation") || p.getName().equals("iVolunteerUUID")
+						|| p.getName().equals("iVolunteerSource"))
+				.collect(Collectors.toList());
+		// @formatter:on
 	}
 
 	private List<PropertyDefinition<Object>> addPropertyDefinitions() {
@@ -468,8 +462,8 @@ public class InitializationService {
 		c4.setName("Slot4");
 		c4.setId("slot4");
 
-		c4.setDate(new Date()); 
-		
+		c4.setDate(new Date());
+
 		Configurator c5 = new Configurator();
 		c5.setName("Slot5");
 		c5.setId("slot5");
@@ -497,7 +491,172 @@ public class InitializationService {
 		if (!configuratorRepository.exists(c5.getId())) {
 			configuratorRepository.save(c5);
 		}
+	}
 
+	private void addTestClassInstances() {
+		TaskClassInstance ti1 = new TaskClassInstance();
+		ti1.setId("ti1");
+		ti1.setName("Shopping Elementaries");
+		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
+		HelpSeeker helpseeker = helpSeekerRepository.findByUsername("mmustermann");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+		ti1.setInRepository(true);
+		
+		classInstanceRepository.save(ti1);
 
+		ti1.setId("ti2");
+		ti1.setName("Equipment Service");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+
+		classInstanceRepository.save(ti1);
+
+		ti1.setId("ti3");
+		ti1.setName("Shopping Elementaries");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+
+		classInstanceRepository.save(ti1);
+
+		ti1.setId("ti4");
+		ti1.setName("Shopping Elementaries");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+
+		classInstanceRepository.save(ti1);
+
+		ti1.setId("ti5");
+		ti1.setName("Donation Collection");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+
+		classInstanceRepository.save(ti1);
+
+		ti1.setId("ti6");
+		ti1.setName("Medical Care Transport");
+		if (volunteer != null) {
+			ti1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ti1.setIssuerId(helpseeker.getId());
+		}
+		ti1.setTimestamp(new Date(System.currentTimeMillis()));
+
+		classInstanceRepository.save(ti1);
+
+		Feedback f1 = new Feedback();
+		f1.setId("f1");
+		f1.setName("Firetruck Driver Renewed");
+		f1.setFeedbackType(FeedbackType.KUDOS);
+		if (volunteer != null) {
+			f1.setRecipientId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			f1.setIssuerId(helpseeker.getId());
+		}
+		f1.setTimestamp(new Date(System.currentTimeMillis()));
+		f1.setFeedbackValue(1);
+//		f1.setInRepository(true);
+
+		feedbackRepository.save(f1);
+
+		f1.setId("f2");
+		f1.setName("Yearly Feedback");
+		f1.setFeedbackType(FeedbackType.STARRATING);
+		if (volunteer != null) {
+			f1.setRecipientId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			f1.setIssuerId(helpseeker.getId());
+		}
+		f1.setTimestamp(new Date(System.currentTimeMillis()));
+		f1.setFeedbackValue(5);
+
+		feedbackRepository.save(f1);
+
+		CompetenceClassInstance ci1 = new CompetenceClassInstance();
+		ci1.setId("ci1");
+		ci1.setName("Diligence");
+		if (volunteer != null) {
+			ci1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ci1.setIssuerId(helpseeker.getId());
+		}
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		ci1.setInRepository(true);
+
+		classInstanceRepository.save(ci1);
+
+		ci1.setId("ci2");
+		ci1.setName("Teamwork");
+		if (volunteer != null) {
+			ci1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ci1.setIssuerId(helpseeker.getId());
+		}
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+
+		ci1.setId("ci3");
+		ci1.setName("Communication Skills");
+		if (volunteer != null) {
+			ci1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ci1.setIssuerId(helpseeker.getId());
+		}
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+
+		ci1.setId("ci4");
+		ci1.setName("Project Management");
+		if (volunteer != null) {
+			ci1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ci1.setIssuerId(helpseeker.getId());
+		}
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		classInstanceRepository.save(ci1);
+
+		ci1.setId("ci5");
+		ci1.setName("Firetruck Driver");
+		if (volunteer != null) {
+			ci1.setUserId(volunteer.getId());
+		}
+		if (helpseeker != null) {
+			ci1.setIssuerId(helpseeker.getId());
+		}
+		ci1.setTimestamp(new Date(System.currentTimeMillis()));
+		ci1.setInRepository(false);
+		classInstanceRepository.save(ci1);
 	}
 }

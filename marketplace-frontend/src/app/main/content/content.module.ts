@@ -27,6 +27,11 @@ const routes: Route[] = [
     loadChildren: () => import('./login/login.module').then(m => m.FuseLoginModule)
   },
   {
+    path: 'main/asset-inbox',
+    loadChildren: () => import('./asset-inbox-volunteer/asset-inbox-volunteer.module').then(m => m.AssetInboxVolunteerModule),
+    canActivate: [TokenGuard, LoginGuard]
+  },
+  {
     path: 'main/dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.FuseDashboardModule),
     canActivate: [TokenGuard, LoginGuard]
@@ -38,7 +43,7 @@ const routes: Route[] = [
   },
    {
      path: 'main/achievements',
-     loadChildren: () => import(`./achievements/achievements.module`).then(m => m.FuseAchievementsModule),
+     loadChildren: () => import('./achievements/achievements.module').then(m => m.FuseAchievementsModule),
      canActivate: [TokenGuard, VolunteerGuard]
    },
   {

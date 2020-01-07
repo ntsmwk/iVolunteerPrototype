@@ -15,12 +15,17 @@ import {
   MatSelectModule,
   MatSidenavModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTableModule,
+  MatCardModule,
+  MatButtonToggleModule,
+  MatPaginatorModule,
+  MatSortModule
 } from '@angular/material';
 import { FuseAchievementsComponent } from './achievements.component';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
 
-import { ActivitiesComponent } from './activities/activities.component';
+import { TasksComponent } from './tasks/tasks.component';
 import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
 import { FunctionsComponent } from './functions/functions.component';
 import { CompetenciesComponent } from './competencies/competencies.component';
@@ -34,6 +39,7 @@ import { FuseProjectMembersModule } from '../_components/project-members/project
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TimelineFilterBarChartComponent } from './timeline-filter-bar-chart/timeline-filter-bar-chart.component';
 import { SunburstChartComponent } from './sunburst-chart/sunburst-chart.component';
+import { CommonModule } from '@angular/common';
 
 
 const routes = [
@@ -43,7 +49,7 @@ const routes = [
 @NgModule({
   declarations: [
     FuseAchievementsComponent,
-    ActivitiesComponent,
+    TasksComponent,
     AccomplishmentsComponent,
     FunctionsComponent,
     CompetenciesComponent,
@@ -52,6 +58,7 @@ const routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
 
     MatProgressBarModule,
     MatIconModule,
@@ -67,6 +74,11 @@ const routes = [
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonToggleModule,
+    MatPaginatorModule,
+    MatSortModule,
 
     FuseProjectMembersModule,
     FuseProjectTaskListModule,

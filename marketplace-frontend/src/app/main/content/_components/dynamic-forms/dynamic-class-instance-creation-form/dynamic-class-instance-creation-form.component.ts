@@ -34,7 +34,7 @@ declare var $: JQueryStatic;
 export class DynamicClassInstanceCreationFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
-  @Input() formDisabled: boolean;
+  @Input() hideButtons: boolean;
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
 
@@ -48,10 +48,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   ngOnInit() {
     if (!isNullOrUndefined(this.form)) {
       this.form = this.qcs.toFormGroup(this.questions);
-    }
-
-    if (this.formDisabled) {
-      this.form.disable();
     }
 
     this.submitPressed = false;

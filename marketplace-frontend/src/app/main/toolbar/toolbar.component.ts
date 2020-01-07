@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -24,12 +24,17 @@ export class FuseToolbarComponent {
   horizontalNav: boolean;
   noNav: boolean;
   navigation: any;
+  icons: string;
+
+  @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
+  displayInboxOverlay: boolean;
 
   constructor(private router: Router,
     private fuseConfig: FuseConfigService,
     private loginService: LoginService,
     private sidebarService: FuseSidebarService,
-    private translate: TranslateService) {
+    private translate: TranslateService,
+    private changeDetector: ChangeDetectorRef) {
     this.userStatusOptions = [
       {
         'title': 'Online',
@@ -92,9 +97,11 @@ export class FuseToolbarComponent {
       switch (role) {
         case 'HELP_SEEKER':
           this.navigation = navigation_helpseeker;
+          this.icons = 'HELP_SEEKER';
           break;
         case 'VOLUNTEER':
           this.navigation = navigation_volunteer;
+          this.icons = 'VOLUNTEER';
           break;
       }
     }).catch(e => {
@@ -110,6 +117,44 @@ export class FuseToolbarComponent {
     // Do your search here...
     console.log(value);
   }
+
+  @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
+  @ViewChild('overlayArrow', { static: false }) overlayArrowDiv: ElementRef;
+
+
+  toggleInboxOverlay(event: any, inboxIcon: any) {
+    this.displayInboxOverlay = !this.displayInboxOverlay;
+    this.changeDetector.detectChanges();
+
+    if (this.displayInboxOverlay) {
+      const { x, y } = inboxIcon._elementRef.nativeElement.getBoundingClientRect();
+
+      console.log("x: " + x + " y: " + y);
+      console.log(this.overlayDiv);
+      this.overlayDiv.nativeElement.style.top = (y + 35) + 'px';
+      this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
+      this.overlayDiv.nativeElement.style.position = 'fixed';
+      this.overlayDiv.nativeElement.style.width = '300px';
+      this.overlayDiv.nativeElement.style.height = '240px';
+
+      this.overlayArrowDiv.nativeElement.style.top = (y+20)+'px';
+      this.overlayArrowDiv.nativeElement.style.left = (x-8)+'px';
+      this.overlayArrowDiv.nativeElement.style.position = 'fixed';
+
+
+      console.log(this.overlayDiv.nativeElement.style);
+    }
+
+
+
+  }
+
+  closeOverlay($event) {
+    this.displayInboxOverlay = false;
+  }
+
+
+
 
   setLanguage(lang) {
     // Set the selected language for toolbar

@@ -10,7 +10,13 @@ export class VolunteerService {
   constructor(private http: HttpClient) {
   }
 
+  findAll(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/volunteer/`);
+  }
+
   findById(marketplace: Marketplace, id: string) {
     return this.http.get(`${marketplace.url}/volunteer/${id}`);
   }
+
+  
 }

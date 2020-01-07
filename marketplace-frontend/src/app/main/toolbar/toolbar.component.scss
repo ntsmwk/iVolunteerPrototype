@@ -59,4 +59,19 @@
             height: 56px;
         }
     }
+
+    .arrow-up {
+        width: 0; 
+        height: 0; 
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        z-index: 1;
+        border-bottom: 20px solid rgb(62, 125, 219);
+        
+      }
+
+   
+
 }
+
+

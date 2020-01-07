@@ -21,6 +21,8 @@ import { FuseWidgetModule } from '@fuse/components';
 import { ShareDialog } from './dashboard-volunteer/share-dialog/share-dialog.component';
 import { DashboardVolunteerComponent } from './dashboard-volunteer/dashboard-volunteer.component';
 import { DashboardHelpSeekerComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
+import { AssetInboxVolunteerModule } from '../asset-inbox-volunteer/asset-inbox-volunteer.module';
+import { MatBadgeModule, MatCardModule } from '@angular/material';
 
 
 
@@ -57,8 +59,8 @@ const routes = [
     MatDialogModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-
-
+    MatBadgeModule,
+    
     FuseSharedModule,
     FuseWidgetModule
   ],

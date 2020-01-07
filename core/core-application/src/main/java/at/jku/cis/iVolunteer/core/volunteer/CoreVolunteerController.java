@@ -24,7 +24,12 @@ public class CoreVolunteerController {
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
-
+	
+	@GetMapping("/all")
+	public List<CoreVolunteer> getAllCoreVolunteers() {
+		return this.coreVolunteerRepository.findAll();
+	}
+	
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteer getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
 		return coreVolunteerRepository.findOne(volunteerId);
@@ -59,6 +64,11 @@ public class CoreVolunteerController {
 		Volunteer volunteer = new Volunteer();
 		volunteer.setId(coreVolunteer.getId());
 		volunteer.setUsername(coreVolunteer.getUsername());
+		volunteer.setFirstname(coreVolunteer.getFirstname());
+		volunteer.setLastname(coreVolunteer.getLastname());
+		volunteer.setMiddlename(coreVolunteer.getMiddlename());
+		volunteer.setNickname(coreVolunteer.getNickname());
+		volunteer.setProfileImagePath(coreVolunteer.getProfileImagePath());
 		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
 	}
 

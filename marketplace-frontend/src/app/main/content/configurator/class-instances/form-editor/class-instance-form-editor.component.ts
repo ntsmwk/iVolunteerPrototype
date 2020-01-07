@@ -10,6 +10,10 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Participant } from 'app/main/content/_model/participant';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -20,14 +24,18 @@ import { isNullOrUndefined } from 'util';
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
+  helpseeker: Participant;
+
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
 
   returnedClassInstances: ClassInstance[];
 
+  volunteers: Volunteer[];
+  selectedVolunteers: Volunteer[];
+
   canContinue: boolean;
   canFinish: boolean;
-
   isLoaded: boolean = false;
 
 
@@ -38,8 +46,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
+    private volunteerService: CoreVolunteerService,
+    private loginService: LoginService
   ) {
-
+    console.log("extras");
+    console.log(this.router.getCurrentNavigation().extras.state);
   }
 
   ngOnInit() {
@@ -47,6 +58,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
+    this.selectedVolunteers = [];
+
 
     Promise.all([
       this.route.params.subscribe(params => {
@@ -59,32 +72,40 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           i++;
         }
       })
-
     ]).then(() => {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-          this.formConfigurations = formConfigurations
+        Promise.all([
+          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-          for (let config of this.formConfigurations) {
-            config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-            config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-          }
+            this.formConfigurations = formConfigurations
 
-        }).then(() => {
+            for (let config of this.formConfigurations) {
+              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+            }
+          }),
+
+          this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
+            this.volunteers = volunteers;
+          }),
+
+          this.loginService.getLoggedIn().toPromise().then((helpseeker: Participant) => {
+            this.helpseeker = helpseeker;
+          })
+
+        ]).then(() => {
           this.currentFormConfiguration = this.formConfigurations.pop();
           this.isLoaded = true;
         });
-      });
+
+
+      })
     });
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
-    let formConfiguration = this.formConfigurations.find((fc: FormConfiguration) => {
-      return fc.id == event.formConfigurationId
-    })
-
     let classInstances: ClassInstance[] = [];
     this.currentFormConfiguration.formEntry.formGroup.disable();
     let propertyInstances: PropertyInstance<any>[] = [];
@@ -102,9 +123,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       propertyInstances.push(propertyInstance);
     }
 
-    let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-    classInstances.push(classInstance);
-
+    for (let selectedVolunteer of this.selectedVolunteers) {
+      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+      classInstance.userId = selectedVolunteer.id;
+      classInstance.issuerId = this.helpseeker.id;
+      classInstances.push(classInstance);
+    }
+    
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
       //handle returned value if necessary
       if (!isNullOrUndefined(ret)) {
@@ -112,6 +137,40 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         this.handleNextClick();
       }
     });
+  }
+
+  getDisplayedName(volunteer: Volunteer): string {
+    let result: string = '';
+
+    if (!isNullOrUndefined(volunteer.lastname)) {
+      if (!isNullOrUndefined(volunteer.nickname)) {
+        result = result + volunteer.nickname;
+      } else if (!isNullOrUndefined(volunteer.firstname)) {
+        result = result + volunteer.firstname;
+      }
+      if (!isNullOrUndefined(volunteer.middlename)) {
+        result = result + ' ' + volunteer.middlename;
+      }
+      result = result + ' ' + volunteer.lastname;
+    } else {
+      result = result + volunteer.username;
+    }
+
+    return result;
+  }
+
+  addToSelection(event: any) {
+    let volunteer = this.selectedVolunteers.find((v: Volunteer) => {
+      return v.id == event.option.value.id;
+    });
+
+    if (!isNullOrUndefined(volunteer)) {
+      this.selectedVolunteers = this.selectedVolunteers.filter((v: Volunteer) => {
+        return v.id != volunteer.id;
+      });
+    } else {
+      this.selectedVolunteers.push(event.option.value);
+    }
   }
 
   handleNextClick() {

@@ -8,7 +8,7 @@
   <br>
 
 
-  <div *ngIf="!form.disabled" fxLayout="row" fxLayoutAlign="space-around center">
+  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center">
 
     <button type="button" mat-raised-button color="secondary" (click)="navigateBack()">
       Cancel</button>

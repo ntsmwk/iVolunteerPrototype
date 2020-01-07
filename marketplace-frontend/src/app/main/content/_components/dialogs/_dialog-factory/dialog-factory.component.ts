@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
-import { PropertyItem, PropertyDefinition, ClassProperty } from 'app/main/content/_model/meta/Property';
+import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
-import { RelationshipDialogComponent } from "../relationship-dialog/relationship-dialog.component";
 import { OpenDialogComponent, OpenDialogData } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.component';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { isNull } from '@angular/compiler/src/output/output_ast';
+import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 
 @Component({
   selector: 'app-dialog-factory',
@@ -474,6 +473,50 @@ export class DialogFactoryComponent implements OnInit {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return configurator;
+    });
+  }
+
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+    const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds},
+      disableClose: true
+    });
+
+    let configurator: Configurator = undefined;
+    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        configurator = result.configurator;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return configurator;
+    });
+  }
+
+  openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
+    const dialogRef = this.dialog.open(ChangeIconDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, imagePath: currentImagePath},
+      disableClose: true
+    });
+
+    let imagePath: string = undefined;
+    dialogRef.beforeClose().toPromise().then((result: ChangeIconDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        imagePath = result.imagePath;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return imagePath;
     });
   }
 

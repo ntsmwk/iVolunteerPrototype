@@ -1,15 +1,39 @@
-<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
+<div class="page-layout blank" fusePerfectScrollbar *ngIf="isLoaded">
 
     <div *ngIf="!canFinish">
-        <h1>{{currentFormConfiguration.name}}</h1>
+        <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 300px; display: block; z-index: 1;">
+            <div class="m-24">
+                <h1>{{currentFormConfiguration.name}}</h1>
 
+                <div style="padding-top: 12px"></div>
+                <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
+                    [hideButtons]="false" [formConfigurationId]="currentFormConfiguration.id"
+                    [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
+                    (cancelEvent)="handleCancelEvent()">
+                </app-dynamic-class-instance-creation-form>
+            </div>
+        </div>
 
-        <div style="padding-top: 12px"></div>
-        <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
-            [formDisabled]="false" [formConfigurationId]="currentFormConfiguration.id"
-            [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
-            (cancelEvent)="handleCancelEvent()">
-        </app-dynamic-class-instance-creation-form>
+        <div
+            style="position: fixed; top: 64px; right: 0px; bottom: 0px; width: 300px; height: auto; display: block; overflow: scroll; z-index: 2; outline-color: black; outline-style: solid; outline-width: 1px">
+            <div class="m-8">
+
+                <h1>Target Volunteers</h1>
+                <mat-selection-list #volunteerList (selectionChange)="addToSelection($event)">
+                    <mat-list-option checkboxPosition="before" *ngFor="let volunteer of volunteers" [value]="volunteer">
+                        <div fxLayout="row" fxLayoutAlign="start center">
+                            <img class="avatar" src="assets/images/avatars/profile.jpg">
+                            <div>
+                                {{getDisplayedName(volunteer)}}
+                            </div>
+                        </div>
+                    </mat-list-option>
+                </mat-selection-list>
+                <p>
+                    Options selected: {{volunteerList.selectedOptions.selected.length}}
+                </p>
+            </div>
+        </div>
     </div>
 
     <div *ngIf="canFinish">
