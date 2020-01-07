@@ -33,8 +33,11 @@
       <rule-precondition [(sourceRuleEntry)]="entry"></rule-precondition>
     </div>
 
-    <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
+    <div>
+      <button type='button' mat-raised-button color="secondary" (click)="addRule()">Add Rule</button>
+    </div>
 
+    <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout=row fxLayoutAlign="start start">
         <div fxLayout=column fxLayoutAlign="space-between center">
@@ -61,7 +64,7 @@
       <button mat-raised-button type="submit" color="primary">Save</button>
       <div style="padding-right: 5px"></div>
     </div>
-  
+
   </form>
 
 

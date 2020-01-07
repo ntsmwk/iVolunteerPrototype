@@ -77,11 +77,17 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onClassChange($event) {
+    if(!this.sourceRuleEntry.classDefinition){
+      this.sourceRuleEntry.classDefinition = new ClassDefinition();
+    }
     this.sourceRuleEntry.classDefinition.id = $event.source.value;
     this.loadClassProperties($event);
   }
 
   onPropertyChange($event){
+    if(!this.sourceRuleEntry.classProperty){
+      this.sourceRuleEntry.classProperty = new ClassProperty();
+    }
     this.sourceRuleEntry.classProperty.id = $event.source.value;
     this.onChange($event);
   }

@@ -96,4 +96,9 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   navigateBack() {
     window.history.back();
   }
+
+  addRule(){
+    console.error("asdfasdfasfd");
+    this.derivationRule.sources.push(new SourceRuleEntry());
+  }
 }
