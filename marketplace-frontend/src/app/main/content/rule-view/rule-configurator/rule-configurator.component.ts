@@ -72,7 +72,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             sources: this.derivationRule.sources,
             target: this.derivationRule.target
           });
-
         }
       );
     } else {

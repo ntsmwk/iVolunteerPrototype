@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class PersonTask {
 
-	@Id
-	private String id;
+	@Id private String id;
 	private String taskID;
 	private String taskName;
 	private String taskType1;
@@ -15,15 +14,18 @@ public class PersonTask {
 	private String taskType3;
 	private String taskType4;
 	private String taskDescription;
-	private String taskRoleID;
-	private String taskRole;
-	private String taskVehicleID;
-	private String taskVehicle;
-	private String taskCountAll;
 	private String taskDateFrom;
 	private String taskDateTo;
 	private String taskDuration;
 	private String taskLocation;
+
+	private String Zweck;
+	private String Rolle;
+	private String Rang;
+	private String Phase;
+	private String Arbeitsteilung;
+	private String Ebene;
+
 	private GeoInformation taskGeoInformation;
 	private String iVolunteerUUID;
 	private String iVolunteerSource;
@@ -32,19 +34,30 @@ public class PersonTask {
 	public PersonTask() {
 	}
 
-	public PersonTask(String taskID, String taskType1, String taskType2, String taskName, String taskDescription,
-			String taskDateFrom, String taskDateTo, String taskDuration, String taskLocation,
-			GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource, String personID) {
+	public PersonTask(String id, String taskID, String taskName, String taskType1, String taskType2, String taskType3,
+			String taskType4, String taskDescription, String taskDateFrom, String taskDateTo, String taskDuration,
+			String taskLocation, String zweck, String rolle, String rang, String phase, String arbeitsteilung,
+			String ebene, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
+			String personID) {
 		super();
+		this.id = id;
 		this.taskID = taskID;
+		this.taskName = taskName;
 		this.taskType1 = taskType1;
 		this.taskType2 = taskType2;
-		this.taskName = taskName;
+		this.taskType3 = taskType3;
+		this.taskType4 = taskType4;
 		this.taskDescription = taskDescription;
 		this.taskDateFrom = taskDateFrom;
 		this.taskDateTo = taskDateTo;
 		this.taskDuration = taskDuration;
 		this.taskLocation = taskLocation;
+		this.Zweck = zweck;
+		this.Rolle = rolle;
+		this.Rang = rang;
+		this.Phase = phase;
+		this.Arbeitsteilung = arbeitsteilung;
+		this.Ebene = ebene;
 		this.taskGeoInformation = taskGeoInformation;
 		this.iVolunteerUUID = iVolunteerUUID;
 		this.iVolunteerSource = iVolunteerSource;
@@ -171,44 +184,60 @@ public class PersonTask {
 		this.taskType4 = taskType4;
 	}
 
-	public String getTaskRoleID() {
-		return taskRoleID;
+	public String getId() {
+		return id;
 	}
 
-	public void setTaskRoleID(String taskRoleID) {
-		this.taskRoleID = taskRoleID;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getTaskRole() {
-		return taskRole;
+	public String getZweck() {
+		return Zweck;
 	}
 
-	public void setTaskRole(String taskRole) {
-		this.taskRole = taskRole;
+	public void setZweck(String zweck) {
+		Zweck = zweck;
 	}
 
-	public String getTaskVehicleID() {
-		return taskVehicleID;
+	public String getRolle() {
+		return Rolle;
 	}
 
-	public void setTaskVehicleID(String taskVehicleID) {
-		this.taskVehicleID = taskVehicleID;
+	public void setRolle(String rolle) {
+		Rolle = rolle;
 	}
 
-	public String getTaskVehicle() {
-		return taskVehicle;
+	public String getRang() {
+		return Rang;
 	}
 
-	public void setTaskVehicle(String taskVehicle) {
-		this.taskVehicle = taskVehicle;
+	public void setRang(String rang) {
+		Rang = rang;
 	}
 
-	public String getTaskCountAll() {
-		return taskCountAll;
+	public String getPhase() {
+		return Phase;
 	}
 
-	public void setTaskCountAll(String taskCountAll) {
-		this.taskCountAll = taskCountAll;
+	public void setPhase(String phase) {
+		Phase = phase;
+	}
+
+	public String getArbeitsteilung() {
+		return Arbeitsteilung;
+	}
+
+	public void setArbeitsteilung(String arbeitsteilung) {
+		Arbeitsteilung = arbeitsteilung;
+	}
+
+	public String getEbene() {
+		return Ebene;
+	}
+
+	public void setEbene(String ebene) {
+		Ebene = ebene;
 	}
 
 }
