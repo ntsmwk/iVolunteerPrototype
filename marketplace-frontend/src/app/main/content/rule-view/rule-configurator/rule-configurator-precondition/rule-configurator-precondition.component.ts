@@ -54,8 +54,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   ngOnInit() {
     console.error(this.sourceRuleEntry);
     this.rulePreconditionForm.setValue({
-      classDefinitionId: (this.sourceRuleEntry.classDefinition.id) || "",
-      classPropertyId: (this.sourceRuleEntry.classProperty.id) || "",
+      classDefinitionId: (this.sourceRuleEntry.classDefinition ? this.sourceRuleEntry.classDefinition.id : "") || "",
+      classPropertyId: (this.sourceRuleEntry.classProperty ? this.sourceRuleEntry.classProperty.id : "") || "",
       mappingOperatorType: this.sourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
       value: this.sourceRuleEntry.value || ""
     });

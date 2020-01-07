@@ -21,14 +21,12 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
@@ -507,7 +505,7 @@ public class InitializationService {
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 		ti1.setInRepository(true);
-		
+
 		classInstanceRepository.save(ti1);
 
 		ti1.setId("ti2");
