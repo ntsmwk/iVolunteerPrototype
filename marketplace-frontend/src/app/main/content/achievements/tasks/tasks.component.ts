@@ -13,17 +13,24 @@ import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { Volunteer } from '../../_model/volunteer';
 import { ArrayService } from '../../_service/array.service';
 import * as moment from 'moment';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import * as shape from 'd3-shape';
+import * as Highcharts from 'highcharts';
+import HC_sunburst from 'highcharts/modules/sunburst';
+HC_sunburst(Highcharts);
 
+/*
+timer(0, 500)
+  .subscribe(() => this.filterApply())
+*/
 
 @Component({
   selector: 'fuse-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss'],
   animations: fuseAnimations
-
 })
+
 export class TasksComponent implements OnInit {
   private volunteer: Participant;
   private marketplace: Marketplace;
@@ -34,9 +41,10 @@ export class TasksComponent implements OnInit {
   private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDateTo', 'taskDuration'];
 
   private timelineData: any[] = [];
-  private sunburstData: any[] = [];
+  // private sunburstData: any[] = [];
   private weekdayData: any[] = [];
   private dayNightData: any[][];
+  private comparisonData: any[] = [];
   private filteredClassInstances: ClassInstance[] = [];
 
   update$: Subject<any> = new Subject();
@@ -62,20 +70,62 @@ export class TasksComponent implements OnInit {
   legendPosition = 'below';
   tooltipDisabled = false;
 
-  @ViewChild('lineChart', { static: false }) lineChart: any;
+  // sunburst chart
+  sunburstData = [];
+  ngxColorsCool = ['#a8385d',
+  '#7aa3e5',
+  '#a27ea8',
+  '#aae3f5',
+  '#adcded',
+  '#a95963',
+  '#8796c0',
+  '#7ed3ed',
+  '#50abcc',
+  '#ad6886'];
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: Highcharts.Options = {
+    chart: {
+      height: 700
+    },
+    title: {
+      text: undefined
+    },
+    tooltip: {
+      valueDecimals: 2
+    },
+    credits: {
+      enabled: false
+    },
+    series: [
+      {
+        type: "sunburst",
+        allowTraversingTree: true,
+        cursor: 'pointer',
+        data: this.sunburstData
+      }
+    ]
+  };
 
-  // sunburst
-  // dounut
+  // ----
+
+  // comparison chart
+  comparisonXlabel = 'Jahr';
+  comparisonYlabel = 'Anzahl Tätigkeiten';
+
+
+  @ViewChild('lineChart', { static: false }) lineChart: any;
 
   selectedYaxis: string;
   selectedYear: string;
 
+  comparisonYear: string;
+  yearsMap: Map<string, number>;
+
+
   timelineFilterFrom: Date;
   timelineFilterTo: Date
 
-
   public newTimelineChartData: { name: string, series: { name: Date, value: number }[] }[];
-
 
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
@@ -85,8 +135,9 @@ export class TasksComponent implements OnInit {
     private volunteerService: CoreVolunteerService
   ) {
     this.newTimelineChartData = [{ name: 'Tätigkeit', series: [] }];
-
   }
+
+
   /*
     @HostListener("mouseup", ["$event"]) onMouseUp(event: Event) {
       console.log(event.type);
@@ -100,8 +151,12 @@ export class TasksComponent implements OnInit {
   */
 
   ngOnInit() {
+    // Splice in transparent for the center circle
+    Highcharts.getOptions().colors.splice(0, 0, 'transparent');
+
     this.selectedYaxis = 'Dauer';
     this.selectedYear = 'gesamt';
+    this.comparisonYear = '2015';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -124,12 +179,15 @@ export class TasksComponent implements OnInit {
             this.filteredClassInstances = [...this.classInstances];
             this.generateTimelineData();
             this.generateOtherChartsData();
+            this.generateStaticChartData();
 
           }
         });
       });
     });
-  }
+
+    Highcharts.chart('sunburstChart', this.chartOptions);
+    }
 
   /*
     onTimelineFilter(event) {
@@ -200,17 +258,26 @@ export class TasksComponent implements OnInit {
 
   }
 
+
+
+
   filterApply() {
-    this.timelineFilterFrom = new Date(this.lineChart.xDomain[0]);
-    this.timelineFilterTo = new Date(this.lineChart.xDomain[1]);
+    let a = new Date(this.lineChart.xDomain[0]);
+    let b = new Date(this.lineChart.xDomain[1]);
+
+    if (a != this.timelineFilterFrom || b != this.timelineFilterTo) {
+      this.timelineFilterFrom = a;
+      this.timelineFilterTo = b;
 
 
-    this.filteredClassInstances = this.classInstances.filter(c => {
-      return (moment(c.properties[14].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
-        moment(c.properties[14].values[0]).isBefore(moment(this.timelineFilterTo)));
-    });
+      this.filteredClassInstances = this.classInstances.filter(c => {
+        return (moment(c.properties[14].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
+          moment(c.properties[14].values[0]).isBefore(moment(this.timelineFilterTo)));
+      });
 
-    this.generateOtherChartsData();
+      this.generateOtherChartsData();
+    }
+
 
   }
 
@@ -274,166 +341,126 @@ export class TasksComponent implements OnInit {
 
     this.dayNightData = [...data3];
 
+    // sunburst data
+    let list = this.filteredClassInstances
+      .map(ci => {
+        let value;
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[16].values[0];
+
+        return ({ tt1: ci.properties[4].values[0], tt2: ci.properties[5].values[0], value: value })
+      });
+
+    let distinctSet1 = new Set();
+
+    list.forEach(l => {
+      distinctSet1.add(l.tt1);
+
+    });
+    let distinctTaskType1 = Array.from(distinctSet1);
+
+    let sunburst = [];
+    // insert 0 entry
+    sunburst.push({ id: '0', parent: '', name: 'Einsatzarten' });
+
+
+    // insert tt1 entries
+    distinctTaskType1.forEach((tt1, index) => {
+      sunburst.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
+    });
+
+    // insert tt2 entries (for each tt1 separetly)
+    distinctTaskType1.forEach(tt1 => {
+
+      let tt1List = list.filter(l => {
+        return (tt1 === l.tt1)
+      });
+
+      let tt2Map: Map<string, number> = new Map<string, number>();
+      tt1List.forEach(entry => {
+        if (tt2Map.get(entry.tt2)) {
+          tt2Map.set(entry.tt2, Number(tt2Map.get(entry.tt2)) + Number(entry.value))
+        } else {
+          tt2Map.set(entry.tt2, entry.value);
+        }
+      });
+
+      let indexTt1 = distinctTaskType1.indexOf(tt1) + 1;
+
+      Array.from(tt2Map.entries()).forEach((entry, index) => {
+        if (entry[0] != null && entry[1] != null) {
+          sunburst.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
+        }
+      });
+    });
+
+    this.sunburstData = [...sunburst];
+
+    this.chartOptions.series = [
+      {
+        type: "sunburst",
+        allowTraversingTree: true,
+        cursor: 'pointer',
+        data: this.sunburstData
+      }
+    ];
+
+    Highcharts.chart('sunburstChart', this.chartOptions);
+
+    // ---
+
+
+
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
+  generateStaticChartData() {
+    // yearComparison
 
-  generateChartData() {
-    let data1 = []
-    let data2 = []
+    let yearsList = this.classInstances.map(ci => {
+      return ({ year: (new Date(ci.properties[14].values[0]).getFullYear()).toString(), value: 1 });
+    });
 
-    switch (this.selectedYaxis) {
-      case 'Dauer':
+    this.yearsMap = new Map<string, number>();
+    yearsList.forEach(t => {
+      if (this.yearsMap.get(t.year)) {
+        this.yearsMap.set(t.year, Number(this.yearsMap.get(t.year)) + Number(t.value))
+      } else {
+        this.yearsMap.set(t.year, t.value);
+      }
+    });
 
+    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
 
+    let data4 = [];
+    Array.from(this.yearsMap.entries()).forEach(entry => {
+      if (entry[0] != null && entry[1] != null && entry[1] > 5) {
+        data4.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
+      }
+    });
 
-
-        // sunburst chart
-        /*
-        let stringData = '[';
-
-        let list = this.filteredClassInstances
-          .map(ci => {
-            return ({ tt1: ci.properties[4].values[0], tt2: ci.properties[5].values[0], duration: ci.properties[16].values[0] })
-          });
-
-        let distinctTaskType1 = new Set();
-        list.forEach(l => {
-          distinctTaskType1.add(l.tt1);
-        });
-        console.error('distinct tt1', distinctTaskType1);
-
-        distinctTaskType1.forEach(tt1 => {
-          let tt1List = list.filter(l => {
-            return (tt1 === l.tt1)
-          });
-
-          let tasktype2cnt: Map<string, number> = new Map<string, number>();
-          tt1List.forEach(l => {
-            if (tasktype2cnt.get(l.tt2)) {
-              tasktype2cnt.set(l.tt2, Number(tasktype2cnt.get(l.tt2)) + Number(l.duration));
-            } else {
-              tasktype2cnt.set(l.tt2, l.duration);
-            }
-          });
-
-          data2.push({name: tt1, children: 4})
-          stringData.concat('{"name":"');
-          stringData.concat(String(tt1));
-          stringData.concat('","children":')
-          Array.from(tasktype2cnt.entries()).forEach(entry => {
-            if (entry[0] != null && entry[1] != null) {
-              stringData.concat('{"name:""');
-              stringData.concat(String(entry[0]));
-              stringData.concat('","value:"');
-              stringData.concat(String(entry[1]));
-              stringData.concat('},')
-             // data2.push({ name: tt1, children: { name: entry[0], value: entry[1] } })
-            }
-          });
-
-          stringData.concat('},')
-
-        });
-
-        console.error('stringData', stringData);
-        //console.error('data2', JSON.stringify(data2));
-        // end sunburst
-        */
-
-        // 
-        break;
+    this.comparisonData = [...data4];
 
 
+    // ----
+  }
 
+  onComparisonYearChanged(value) {
+    this.comparisonYear = value;
 
-    }
+    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
+    let data = [];
 
-    // this.sunburstData = [...data2];
+    Array.from(this.yearsMap.entries()).forEach(entry => {
+      if (entry[0] != null && entry[1] != null && entry[1] > 5) {
+        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
+      }
+    });
+
+    this.comparisonData = [...data];
   }
 
 
 
-  arbeitsteilungData = [
-    {
-      "name": "Einzeln",
-      "value": 38
-    },
-    {
-      "name": "Team",
-      "value": 86
-    }
-  ]
 
-  /*
-  sunburstData = [
-    {
-      name: 'Einsatz',
-      children: [
-        {
-          name: 'Technisch', children: [
-            { name: 'T1', value: 50 },
-            { name: 'T2', value: 60 },
-            { name: 'T3', value: 20 }
-          ]
-        },
-        {
-          name: 'Brand', children: [
-            { name: 'B1', value: 50 },
-            { name: 'B2', value: 60 },
-            { name: 'B3', value: 20 },
-            { name: 'B4', value: 20 }
-          ]
-        },
-        {
-          name: 'Schadstoff', children: [
-            { name: 'S1', value: 50 },
-            { name: 'S2', value: 60 },
-            { name: 'S3', value: 20 }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Übung',
-      children: [
-        { name: 'Schulung', value: 120 },
-        { name: 'Übung', value: 120 }
-      ]
-    },
-    {
-      name: 'Bewerb',
-      children: [
-        { name: 'Prüfung', value: 120 },
-        {
-          name: 'Vorbereitung', children: [
-            { name: 'APAS', value: 120 },
-            { name: 'APTE', value: 120 }
-          ]
-        }
-      ]
-    },
-    { name: 'Ausbildung', value: 120 },
-
-    {
-      name: 'Veranstaltung',
-      children: [
-        { name: 'Feuerwehrfest', value: 120 },
-        { name: 'Ausflug', value: 120 },
-        { name: 'Kirchgang', value: 120 },
-      ]
-    },
-    {
-      name: 'Verwaltung',
-      children: [
-        { name: 'Inspektion', value: 120 },
-        { name: 'Besprechung', value: 120 },
-      ]
-    }
-  ];
-
-
-*/
 }
-

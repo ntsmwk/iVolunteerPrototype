@@ -27,8 +27,27 @@ th.mat-sort-header-sorted {
 }
 
 button {
-  margin-left: 75px;
+  margin-left: 60px;
   margin-right: 10px;
   margin-bottom: 20px;
+  margin-top: 5px;
   width: 130px;
+}
+
+.comparisonParent {
+height: 400px;
+width: 500px;
+}
+
+.matFormField {
+  margin-left: 50px;
+  width: 100px;
+}
+
+.sunburstParent {
+width: 50%
+}
+
+.tasksTable {
+width: 50%;
 }

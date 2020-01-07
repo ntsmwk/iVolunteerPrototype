@@ -1,277 +1,250 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-  <div class= "content" fxLayout="column" fxLayoutAlign="none">
+  <div class="content" fxLayout="column" fxLayoutAlign="none">
     <!--
       <div class="managmentSum" fxLayout="column" fxLayoutAlign="space-between none">
           <h1>Management Summary</h1>  
       </div>
 -->
-      <div class="timeline" fxLayout="column" fxLayoutAlign="none">   
-        <h1>Timeline</h1>    
-        <div fxLayout="row" fxLayoutAlign="space-around center" >
-            <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis" (change)="onYaxisChange(group.value)">
-                <mat-button-toggle value="Dauer">Dauer
-                </mat-button-toggle>
-                <mat-button-toggle value="Anzahl">Anzahl
-                </mat-button-toggle>
-                <!-- 
+    <div class="timeline" fxLayout="column" fxLayoutAlign="none">
+      <h1>Timeline</h1>
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
+          (change)="onYaxisChange(group.value)">
+          <mat-button-toggle value="Dauer">Dauer
+          </mat-button-toggle>
+          <mat-button-toggle value="Anzahl">Anzahl
+          </mat-button-toggle>
+          <!-- 
                 <mat-button-toggle value="Distanz">Distanz
                 </mat-button-toggle>
                 -->
-              </mat-button-toggle-group>
+        </mat-button-toggle-group>
 
-              <mat-form-field>
-                <mat-label>Jahr</mat-label>
-                  <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
-                    <mat-option value="2012">  2012  </mat-option>
-                    <mat-option value="2013">  2013  </mat-option>
-                    <mat-option value="2014">  2014  </mat-option>
-                    <mat-option value="2015">  2015  </mat-option>
-                    <mat-option value="2016">  2016  </mat-option>
-                  <mat-option value="2017">  2017  </mat-option>
-                  <mat-option value="2018">  2018  </mat-option>
-                  <mat-option value="2019">  2019  </mat-option>
-                  <mat-option value="gesamt">  Gesamt  </mat-option>
-               </mat-select>
-              </mat-form-field>         
+        <mat-form-field>
+          <mat-label>Jahr</mat-label>
+          <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
+            <mat-option value="2012"> 2012 </mat-option>
+            <mat-option value="2013"> 2013 </mat-option>
+            <mat-option value="2014"> 2014 </mat-option>
+            <mat-option value="2015"> 2015 </mat-option>
+            <mat-option value="2016"> 2016 </mat-option>
+            <mat-option value="2017"> 2017 </mat-option>
+            <mat-option value="2018"> 2018 </mat-option>
+            <mat-option value="2019"> 2019 </mat-option>
+            <mat-option value="gesamt"> Gesamt </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="timeline">
+        <ngx-charts-line-chart #lineChart [results]="newTimelineChartData" [scheme]="colorScheme"
+          [schemeType]="schemeType" [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition"
+          [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true"
+          [showXAxisLabel]="showYAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve"
+          (select)="timelineSelect($event)">
+        </ngx-charts-line-chart>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="left">
+        <button mat-raised-button (click)="filterApply()">Apply</button>
+        <div *ngIf="!!timelineFilterFrom">
+          <h3>(Applied Data: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
+        </div>
+      </div>
+    </div>
+
+
+    <mat-accordion multi="true">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Zweck
+          </mat-panel-title>
+          <mat-panel-description>
+            Übersicht über die geleisteten Tätigkeiten
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!--  
+        <highcharts-chart 
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        [(update)]="updateFlag"
+
+        style="width: 100%; height: 400px; display: block;"
+      ></highcharts-chart>
+
+        -->
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="sunburstParent" id="sunburstChart"></div>
+
+
+          <div class="tasksTable" fxLayout="column" fxLayoutAlign="none">
+            <h1>Tätigkeiten</h1>
+            <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
+              <ng-container matColumnDef="taskName">
+                <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[3].values[0]}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskType1">
+                <th mat-header-cell *matHeaderCellDef> Typ </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[4].values[0]}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskType2">
+                <th mat-header-cell *matHeaderCellDef> Untertyp </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[5].values[0]}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskDescription">
+                <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[8].values[0]}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskDateFrom">
+                <th mat-header-cell *matHeaderCellDef> Beginn </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[14].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskDateTo">
+                <th mat-header-cell *matHeaderCellDef> Beginn </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[15].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="taskDuration">
+                <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
+                <td mat-cell *matCellDef="let element"> {{element.properties[16].values[0]}} </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSize]="12" showFirstLastButtons></mat-paginator>
+          </div>
+  
+        </div>
+
+
+
+
+
+
+
+
+        <!--
+        <div class="firstRow" fxLayout="column" fxLayoutAlign="space-between center">
+          <h2>Zweck:</h2>
+          <ngx-sunburst-chart [data]="sunburstData" [width]="700" colorScheme="cool" (click)="onClick($event)"
+            (select)="onSelect($event)" (deactivate)="onSelect()">
+          </ngx-sunburst-chart>
+        </div>
+        -->
+
+
+        <!--
+          vergleich zweier jahre
+            aktuelle auswahl, mit dem selben zeitraum, des anderen jahrs
+        -->
+        <div fxLayout="row">
+          <h2>Vergleich der Anzahl an Tätigkeiten</h2>
+          <mat-form-field class="matFormField">
+            <mat-label>Vergleichsjahr</mat-label>
+            <mat-select [value]="comparisonYear" (selectionChange)="onComparisonYearChanged($event.value)">
+              <mat-option value="2012"> 2012 </mat-option>
+              <mat-option value="2013"> 2013 </mat-option>
+              <mat-option value="2014"> 2014 </mat-option>
+              <mat-option value="2015"> 2015 </mat-option>
+              <mat-option value="2016"> 2016 </mat-option>
+              <mat-option value="2017"> 2017 </mat-option>
+              <mat-option value="2018"> 2018 </mat-option>
+              <mat-option value="2019"> 2019 </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="comparisonParent">
+          <ngx-charts-bar-vertical [results]="comparisonData" [scheme]="colorScheme" [animations]="animations"
+            [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
+            [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel" [roundEdges]="false">
+          </ngx-charts-bar-vertical>
         </div>
 
         <!--
-          <div class="timeline">
-          <ngx-charts-timeline-filter-bar-chart
-            class="chart-container"
-            [scheme]="colorScheme"
-            [schemeType]="schemeType"
-            [results]="timelineData"
-            [animations]="animations"
-            [gradient]="gradient"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [showXAxisLabel]="showYAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel"
-            [showGridLines]="showGridLines"
-            [noBarWhenZero]="noBarWhenZero"
-            (mousedown)="onMouseDown($event)"
-            (mouseup)="onMouseUp($event)">
-            >
-          </ngx-charts-timeline-filter-bar-chart>
-        </div>
-        -->
-        <div class="timeline">
-          <ngx-charts-line-chart #lineChart
-          [results]="newTimelineChartData"
-          [scheme]="colorScheme"
-          [schemeType]="schemeType"
-          [legend]="legend"
-          [legendTitle]="Legende"
-          [legendPosition]="legendPosition"
-          [showGridLines]="showGridLines"
-          [tooltipDisabled]="tooltipDisabled"
-          [xAxis]="true"
-          [yAxis]="true"
-          [showXAxisLabel]="showYAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          [animations]="true"
-          [autoScale]="autoScale"
-          [timeline]="true"
-          [curve]="curve"
-          (select)="timelineSelect($event)">
-          </ngx-charts-line-chart>
-          </div> 
-          
-          <div fxLayout="row" fxLayoutAlign="left">
-          <button mat-raised-button (click)="filterApply()">Apply</button>
-          <div *ngIf="!!timelineFilterFrom">
-            <h3>(Applied Data: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
-        </div>
-        </div>
+        <ngx-charts-bar-vertical
+        [scheme]="colorScheme"
+        [schemeType]="schemeType"
+        [results]="comparisonData"
+        [animations]="animations"
+        [gradient]="false"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [tooltipDisabled]="tooltipDisabled"
+        [xAxisLabel]="comparisonXlabel"
+        [yAxisLabel]="comparisonYlabel"
+        [showGridLines]="showGridLines"
+        [barPadding]="barPadding"
+        [roundDomains]="false"
+        [roundEdges]="true"
+        [noBarWhenZero]="true"
+        [showDataLabel]="true"
+      >
+      </ngx-charts-bar-vertical>
+      -->
 
-      </div>
-  <!--      
-      <div class="firstRow" fxLayout="row" fxLayoutAlign="space-between none">
-          <div fxLayout="column" fxLayoutAlign="start none" >
-              <h2>Zweck:</h2>
-              <ngx-sunburst-chart 
-              [width]="700"
-              [data]="sunburstData" 
-              colorScheme="cool"
-              (click)="onClick($event)"
-              (select)="onSelect($event)"
-              (deactivate)="onSelect()"> 
-              </ngx-sunburst-chart>
-          </div>
+      </mat-expansion-panel>
 
-          <div fxLayout="column" fxLayoutAlign="start none" >
-              
-          </div>
-      </div>
-  -->
-      <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center" >
-             <div fxLayout="row"   >
-                <h2>Wochentag:</h2>
-                <div class="donut-parent">
-                <ngx-charts-pie-chart
-                class="chart-container"
-                [view] = "[600, 600]"
-                [results]="weekdayData"
-                [animations]="animations"
-                [labels]="true"
-                [tooltipDisabled]="false"
-                [legend]="false"
-                [explodeSlices]="false"
-                [doughnut]="true"
-                arcWidth="0.6"
-                scheme="cool"
-                (select)="onSelect($event)">
-              </ngx-charts-pie-chart>
-              </div>
+      <mat-expansion-panel [expanded]="false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Detailgrafiken
+          </mat-panel-title>
+          <mat-panel-description>
+            Details zu den geleisteten Tätigkeiten
+          </mat-panel-description>
+        </mat-expansion-panel-header>
 
-              <h2>Tageszeit:</h2>
-              <div class="donut-parent">
-              <ngx-charts-pie-chart
-              class="chart-container"
-              [view] = "[600, 600]"
-              [results]="dayNightData"
-              [animations]="animations"
-              [labels]="true"
-              [tooltipDisabled]="false"
-              [legend]="false"
-              [explodeSlices]="false"
-              [doughnut]="true"
-              arcWidth="0.6"
-              scheme="cool"
-              (select)="onSelect($event)">
-              </ngx-charts-pie-chart>
-              </div>
-            </div>
-
-            <!-- 
-            <div fxLayout="column" fxLayoutAlign="start none" >
-              <h2>Ebene:</h2>
-              <div class="donut-parent">
-              <ngx-charts-pie-chart
-              class="chart-container"
-              [view] = "[600, 600]"
-              [results]="arbeitsteilungData"
-              [animations]="animations"
-              [labels]="true"
-              [tooltipDisabled]="false"
-              [legend]="false"
-              [explodeSlices]="true"
-              [doughnut]="true"
-              arcWidth="0.6"
-              scheme="cool">
-            </ngx-charts-pie-chart>
-            </div>
-            -->
-          </div>
-    </div>
-
-    <div class="thirdRow" fxLayout="column" fxLayoutAlign="none">
-      <h1 >Tätigkeiten</h1>
-      <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
-        <ng-container matColumnDef="taskName">
-          <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[3].values[0]}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="taskType1">
-          <th mat-header-cell *matHeaderCellDef> Typ </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[4].values[0]}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="taskType2">
-          <th mat-header-cell *matHeaderCellDef> Untertyp </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[5].values[0]}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="taskDescription">
-          <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[8].values[0]}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="taskDateFrom">
-          <th mat-header-cell *matHeaderCellDef> Beginn </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[14].values[0] | date:'dd.MM.yyyy   hh:mm'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="taskDateTo">
-          <th mat-header-cell *matHeaderCellDef> Beginn </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[15].values[0] | date:'dd.MM.yyyy   hh:mm'}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="taskDuration">
-          <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
-          <td mat-cell *matCellDef="let element"> {{element.properties[16].values[0]}} </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
-
-
-
-    </div>
-          <!--
-
-        <div fxLayout="column" fxLayoutAlign="start none" >
-            <h2>Rang:</h2>
+        <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row">
+            <h2>Wochentag:</h2>
             <div class="donut-parent">
-            <ngx-charts-pie-chart
-              class="chart-container"
-              [view] = "[600, 600]"
-              [results]="arbeitsteilungData"
-              [animations]="animations"
-              [labels]="true"
-              [tooltipDisabled]="false"
-              [legend]="false"
-              [explodeSlices]="true"
-              [doughnut]="true"
-              arcWidth="0.6"
-              scheme="cool">
-          </ngx-charts-pie-chart>
-        </div>
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
+                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+              </ngx-charts-pie-chart>
+            </div>
+
+            <h2>Tageszeit:</h2>
+            <div class="donut-parent">
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
+                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+              </ngx-charts-pie-chart>
+            </div>
+          </div>
         </div>
 
-        <div fxLayout="column" fxLayoutAlign="start none" >
-            <h2>Phase:</h2>
-            <div class="donut-parent">
-            <ngx-charts-pie-chart
-              class="chart-container"
-              [view] = "[600, 600]"
-              [results]="arbeitsteilungData"
-              [animations]="animations"
-              [labels]="true"
-              [tooltipDisabled]="false"
-              [legend]="false"
-              [explodeSlices]="true"
-              [doughnut]="true"
-              arcWidth="0.6"
-              scheme="cool">
-            </ngx-charts-pie-chart>
-            </div>
-        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Detailliste
+          </mat-panel-title>
+          <mat-panel-description>
+            Liste der geleisteten Tätigkeiten
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+       
+      </mat-expansion-panel>
+    </mat-accordion>
+
   </div>
--->
-
 </div>
-
-  
-<!--
-  <mat-card class="example-card">
-              <mat-card-header>
-                <mat-card-title>Zweck:</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <ngx-sunburst-chart 
-                [width]="600"
-                [data]="sunburstChartData" 
-                colorScheme="cool">
-                </ngx-sunburst-chart>
-              </mat-card-content>
-          </mat-card>
--->
