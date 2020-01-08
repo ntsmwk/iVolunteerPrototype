@@ -597,14 +597,14 @@ public class InitializationService {
 		f1.setName("Firetruck Driver Renewed");
 		f1.setFeedbackType(FeedbackType.KUDOS);
 		if (volunteer != null) {
-			f1.setRecipientId(volunteer.getId());
+			f1.setUserId(volunteer.getId());
 		}
 		if (helpseeker != null) {
 			f1.setIssuerId(helpseeker.getId());
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(1);
-//		f1.setInRepository(true);
+		f1.setInRepository(false);
 
 		feedbackRepository.save(f1);
 
@@ -612,7 +612,7 @@ public class InitializationService {
 		f1.setName("Yearly Feedback");
 		f1.setFeedbackType(FeedbackType.STARRATING);
 		if (volunteer != null) {
-			f1.setRecipientId(volunteer.getId());
+			f1.setUserId(volunteer.getId());
 		}
 		if (helpseeker != null) {
 			f1.setIssuerId(helpseeker.getId());
