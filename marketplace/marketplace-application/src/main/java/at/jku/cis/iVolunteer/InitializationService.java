@@ -21,6 +21,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
@@ -41,6 +42,7 @@ import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -60,6 +62,7 @@ public class InitializationService {
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
 	@Autowired private FeedbackRepository feedbackRepository;
+	@Autowired private UserMappingRepository userMappingRepository;
 
 	@PostConstruct
 	public void init() {
@@ -69,6 +72,22 @@ public class InitializationService {
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
 
+		addTestDerivationRule();
+
+		addFireBrigadeUserMapping();
+
+		this.addTestClassInstances();
+	}
+
+	private void addFireBrigadeUserMapping() {
+		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
+		UserMapping mapping = new UserMapping();
+		mapping.setiVolunteerUserId(volunteer.getId());
+		mapping.setExternalUserId("5dc2a215399af");
+		userMappingRepository.save(mapping);
+	}
+
+	private void addTestDerivationRule() {
 		DerivationRule rule = new DerivationRule();
 		rule.setName("myrule");
 
@@ -82,8 +101,6 @@ public class InitializationService {
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
-
-		this.addTestClassInstances();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
