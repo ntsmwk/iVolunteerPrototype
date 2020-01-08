@@ -17,11 +17,20 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field style="width: 80px">
-            <mat-label>Select Operation</mat-label>
+            <mat-label>Aggregationsoperator</mat-label>
+            <mat-select placeholder="Operation" formControlName="aggregationOperatorType"
+                [value]="sourceRuleEntry.aggregationOperatorType">
+                <mat-option *ngFor="let op of aggregationOperators" [value]="op" (onSelectionChange)="onChange($event)">
+                    {{ retrieveAggregationOperatorValueOf(op)}} 
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 80px">
+            <mat-label>Vergleichsoperator</mat-label>
             <mat-select placeholder="Operation" formControlName="mappingOperatorType"
                 [value]="sourceRuleEntry.mappingOperatorType">
-                <mat-option *ngFor="let op of operations" [value]="op" (onSelectionChange)="onChange($event)">
-                    {{ retrieveValueOf(op)}}
+                <mat-option *ngFor="let op of comparisonOperators" [value]="op" (onSelectionChange)="onChange($event)">
+                    {{ retrieveMappingOperatorValueOf(op)}}
                 </mat-option>
             </mat-select>
         </mat-form-field>

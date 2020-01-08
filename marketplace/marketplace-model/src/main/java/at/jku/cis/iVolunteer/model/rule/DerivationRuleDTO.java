@@ -15,6 +15,9 @@ public class DerivationRuleDTO {
 	private ClassDefinition target;
 	private Date timestamp;
 
+	public DerivationRuleDTO() {
+	}
+	
 	public String getName() {
 		return name;
 	}

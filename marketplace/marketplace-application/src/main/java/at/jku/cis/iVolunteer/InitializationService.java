@@ -35,6 +35,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.rule.AggregationOperatorType;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -75,6 +76,7 @@ public class InitializationService {
 		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
 		source.setClassPropertyId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
 		source.setMappingOperatorType(MappingOperatorType.GE);
+		source.setAggregationOperatorType(AggregationOperatorType.COUNT);
 		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
