@@ -31,7 +31,7 @@ public class PersonTaskService {
 	private void savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
 		// @formatter:off
 		ClassInstance personTaskClassInstance = classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskID")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskID(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskName")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType1(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType2")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType2(), new Object[0])));
