@@ -82,10 +82,16 @@ export class AssetInboxVolunteerComponent implements OnInit {
   close() {
   }
 
-  onAssetInboxSubmit(event: ClassInstance[]) {
+  onAssetInboxSubmit(classInstances: ClassInstance[]) {
     console.log('submitted - returned');
     console.log(event);
-    this.router.navigate(['/main/volunteer/asset-inbox/confirm']);
+
+    this.classInstanceService.updateClassInstancesInRepositoryState(this.marketplace, this.classInstances.map(c => c.id), true).toPromise().then(() => {
+
+      this.router.navigate(['/main/volunteer/asset-inbox/confirm']);
+
+    });
+
   }
 
 

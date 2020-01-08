@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassInstance } from "app/main/content/_model/meta/Class";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstance } from 'app/main/content/_model/meta/Class';
 
 
 @Injectable({
@@ -53,6 +53,9 @@ import { ClassInstance } from "app/main/content/_model/meta/Class";
       return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
     }
 
+    updateClassInstancesInRepositoryState(marketplace: Marketplace, classInstanceIds: string[], inRepository: boolean) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-inRepository-state/${inRepository}`, classInstanceIds);
+    }
+
 
   }
-  
