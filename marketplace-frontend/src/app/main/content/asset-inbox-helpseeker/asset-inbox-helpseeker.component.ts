@@ -63,7 +63,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       console.log(ret);
       this.classInstances = ret;
       this.isLoaded = true;
-    })
+    });
 
   }
 

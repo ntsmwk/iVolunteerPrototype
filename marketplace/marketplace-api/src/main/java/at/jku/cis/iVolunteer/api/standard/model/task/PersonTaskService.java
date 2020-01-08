@@ -55,8 +55,8 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
 		
-		personTaskClassInstance.setInIssuerRepository(true);
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
+		personTaskClassInstance.setInIssuerInbox(true);
 		
 		classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on

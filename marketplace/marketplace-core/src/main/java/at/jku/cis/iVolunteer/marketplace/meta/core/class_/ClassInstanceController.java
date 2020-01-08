@@ -65,8 +65,8 @@ public class ClassInstanceController {
 		return classInstanceRepository.getByUserIdAndInUserRepository(userId, true);
 	}
 	
-	@GetMapping("/meta/core/class/instance/in-issuer-repository/{userId}")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("userId") String issuerId) {
+	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
+	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
 		System.out.println("TODO");
 		return null;
 	}
@@ -84,15 +84,15 @@ public class ClassInstanceController {
 		return classInstanceRepository.save(classInstances);
 	}
 	
-	@PutMapping("/meta/core/class/instance/set-in-issuer-repository/{inIssuerRepository}")
-	private List<ClassInstance> setClassInstancesInIssuerRepository(@PathVariable("inIssuerRepository") boolean inIssuerRepository,
+	@PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
+	private List<ClassInstance> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
 			@RequestBody List<String> classInstanceIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
 
 		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInIssuerRepository(inIssuerRepository);
-			classInstance.setInUserRepository(!inIssuerRepository);
+			classInstance.setInIssuerInbox(inIssuerInbox);
+			classInstance.setInUserRepository(!inIssuerInbox);
 		}
 
 		return classInstanceRepository.save(classInstances);
