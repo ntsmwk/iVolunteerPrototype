@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.user;
 
+import java.util.List;
+
 import javax.ws.rs.BadRequestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,11 @@ public class HelpSeekerController {
 	@GetMapping("/helpseeker/{id}")
 	public HelpSeeker findById(@PathVariable("id") String id) {
 		return helpSeekerRepository.findOne(id);
+	}
+	
+	@GetMapping("/helpseeker")
+	public List<HelpSeeker> findAll() {
+		return helpSeekerRepository.findAll();
 	}
 
 	@PostMapping("/helpseeker")
