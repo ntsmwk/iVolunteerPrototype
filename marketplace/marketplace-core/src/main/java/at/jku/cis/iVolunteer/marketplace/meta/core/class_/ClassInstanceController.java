@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -64,6 +65,18 @@ public class ClassInstanceController {
 	@GetMapping("/meta/core/class/instance/by-userid/{userId}/repository")
 	private List<ClassInstance> getClassInstanceByUserIdInRepostory(@PathVariable("userId") String userId) {
 		return classInstanceRepository.getByUserIdAndInRepository(userId, true);
+	}
+	
+	@PutMapping("/meta/core/class/instance/set-inRepository-state/{inRepository}")
+	private List<ClassInstance> setClassInstancesInRepository(@PathVariable("inRepository") boolean inRepository, @RequestBody List<String> classInstanceIds) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+		
+		for (ClassInstance classInstance : classInstances) {
+			classInstance.setInRepository(true);
+		}
+		
+		return classInstanceRepository.save(classInstances);
 	}
 
 	@PostMapping("/meta/core/class/instance/new")

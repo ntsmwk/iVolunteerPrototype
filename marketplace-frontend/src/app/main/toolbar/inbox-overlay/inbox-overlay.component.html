@@ -1,10 +1,11 @@
-
-<link type="text/css" rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Muli|Google+Sans">
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Google+Sans">
 
 <div #titleDiv class="title-section"
     style="background-color: rgb(62, 125, 219); color: white; line-height: 1.5; margin: -2px; font-size: 20px">
-    <div style="padding-left: 12px">Inbox - Letzte {{dataSource.data.length}} Eingänge</div>
+    <div style="padding-left: 12px" *ngIf="dataSource.data.length <= 0">Inbox - Keine Eingänge</div>
+    <div style="padding-left: 12px" *ngIf="dataSource.data.length == 1">Inbox - Letzter Eingang</div>
+    <div style="padding-left: 12px" *ngIf="dataSource.data.length > 1">Inbox - Letzte {{dataSource.data.length}}
+        Eingänge</div>
 </div>
 
 <div style="padding-top: 1px">
@@ -14,8 +15,6 @@
 <div style="margin: 2px">
     <!-- <div style="border-color: black; border-style: solid; border-width: 1px; border-radius: 5px;"> -->
     <div>
-
-
         <div #innerDiv style="overflow: scroll">
             <div class="content-section" *ngIf="dataSource.data.length > 0">
                 <mat-table #inboxTable [dataSource]="dataSource">
@@ -23,9 +22,46 @@
                     <ng-container matColumnDef="archetype">
                         <mat-header-cell *matHeaderCellDef>Archetype</mat-header-cell>
                         <mat-cell *matCellDef="let entry">
-                            <div *ngIf="entry.archetype == 'COMPETENCE'" style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+                            <div *ngIf="entry.classArchetype=='COMPETENCE'"
+                                style=" z-index: 255; position: relative; width: 20px; height: 20px;"
+                                mat-tooltip="Competence">
                                 <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-                                    src="../../../../assets/competence.jpg">
+                                    src="/assets/competence.jpg">
+                            </div>
+
+                            <div *ngIf="entry.classArchetype=='FUNCTION'"
+                                style=" z-index: 255; position: relative; width: 20px; height: 20px;"
+                                mat-tooltip="Competence">
+                                <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                    src="/assets/TODO">
+                            </div>
+
+                            <div *ngIf="entry.classArchetype=='TASK'"
+                                style=" z-index: 255; position: relative; width: 20px; height: 20px;"
+                                mat-tooltip="Competence">
+                                <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                    src="/assets/cog.jpg">
+                            </div>
+
+
+
+                            <div *ngIf="entry.classArchetype=='ACHIEVEMENT'">
+
+                                <div *ngIf="entry.feedbackType==null"
+                                    style=" z-index: 255; position: relative; width: 20px; height: 20px;"
+                                    mat-tooltip="Competence">
+                                    <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                        src="/assets/TODO">
+                                </div>
+
+
+                                <div *ngIf="entry.feedbackType!=null"
+                                    style=" z-index: 255; position: relative; width: 20px; height: 20px;"
+                                    mat-tooltip="Competence">
+                                    <mat-icon inline="true" style="font-size: 20px; line-height: normal">feedback
+                                    </mat-icon>
+                                </div>
+
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -53,14 +89,15 @@
                 </mat-table>
             </div>
 
-            <div *ngIf="classInstances.length <= 0" class="content-section" >
+            <div *ngIf="classInstances.length <= 0" class="content-section">
                 <div *ngIf="isLoaded" style="text-align: center; padding-top: 12px">keine Einträge vorhanden</div>
             </div>
 
         </div>
 
         <div #actionDiv fxLayout="row" fxLayoutAlign="end center">
-            <button *ngIf="isLoaded" class="preview-button" mat-stroked-button color="accent" (click)="showInboxClicked()">Inbox
+            <button *ngIf="isLoaded" class="preview-button" mat-stroked-button color="accent"
+                (click)="showInboxClicked()">Inbox
                 anzeigen</button>
         </div>
     </div>

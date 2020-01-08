@@ -9,10 +9,10 @@ export class Feedback {
     feedbackValue: number;    
     iVolunteerObjectIds: string[];
     
-    recipientId: string;
+    userid: string;
     issuerId: string;
 }
 
 export enum FeedbackType {
-    KUDOS="KUDOS", STARRATING="STARRATING"
+    KUDOS = 'KUDOS', STARRATING = 'STARRATING'
 }

@@ -7,9 +7,10 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from 'util';
 import { ClassInstance } from 'app/main/content/_model/meta/Class';
 import { Router } from '@angular/router';
+import { Feedback } from 'app/main/content/_model/feedback';
 
 @Component({
   selector: 'inbox-overlay',
@@ -23,7 +24,6 @@ export class InboxOverlayComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
-    private feedbackService: FeedbackService,
     private element: ElementRef) {
 
   }
@@ -38,14 +38,15 @@ export class InboxOverlayComponent implements OnInit {
   marketplace: Marketplace;
   volunteer: Volunteer;
   classInstances: ClassInstance[] = [];
-  dataSource = new MatTableDataSource<ClassInstance>();
+
+  dataSource = new MatTableDataSource<ClassInstance | Feedback>();
   displayedColumns = ['archetype', 'label', 'date'];
 
   ngOnInit() {
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
         if (!isNullOrUndefined(marketplaces)) {
-          this.marketplace = marketplaces[0]
+          this.marketplace = marketplaces[0];
         }
       }),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
@@ -54,15 +55,16 @@ export class InboxOverlayComponent implements OnInit {
 
     ]).then(() => {
       this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
+       
         if (!isNullOrUndefined(ret)) {
-
-          ret = ret.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf())
+          ret.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
+         
           if (ret.length > 5) {
             ret = ret.slice(0, 5);
           }
 
-          this.dataSource.data = ret;
           this.classInstances = ret;
+          this.dataSource.data = ret;
           // console.log(ret);
           // console.log("=====");
           // console.log(this.element);
@@ -75,14 +77,13 @@ export class InboxOverlayComponent implements OnInit {
           this.innerDiv.nativeElement.style.overflow = 'hidden';
           // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
           this.actionDiv.nativeElement.style.height = '18px';
-
-
         }
 
-        this.isLoaded = true;
 
-      })
+        this.isLoaded = true;
+      });
     });
+
   }
 
   getDateString(date: number) {
@@ -91,7 +92,7 @@ export class InboxOverlayComponent implements OnInit {
 
   showInboxClicked() {
     this.closeOverlay.emit(true);
-    this.router.navigate(['/main/volunteer/asset-inbox'], {state: {marketplace: this.marketplace, participant: this.volunteer}});
+    this.router.navigate(['/main/volunteer/asset-inbox'], { state: { marketplace: this.marketplace, participant: this.volunteer } });
   }
 
 

@@ -1,25 +1,90 @@
 <div class="inbox-content">
-  <mat-table #inboxTable class="inbox-table" [dataSource]="dataSource" *ngIf="dataSource.data.length > 0">
+
+  <mat-table #inboxTable class="inbox-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
+
+    <ng-container matColumnDef="checkboxes">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="archetype">
       <mat-header-cell *matHeaderCellDef>Archetype</mat-header-cell>
       <mat-cell *matCellDef="let entry">
-        <div 
-          style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
-          <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-            src="../../../../assets/competence.jpg">
+        <div *ngIf="entry.classArchetype=='COMPETENCE'" fxLayout="row" fxLayoutAlign="start center">
+          <div style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+            <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+              src="/assets/competence.jpg">
+          </div>
+
+          <div style="padding-left: 10px">
+            Kompetenz
+          </div>
         </div>
 
-        <div style="padding-left: 10px">
-          Kompetenz
+        <div *ngIf="entry.classArchetype=='FUNCTION'" fxLayout="row" fxLayoutAlign="start center">
+          <div style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+            <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+              src="/assets/TODO">
+          </div>
+
+          <div style="padding-left: 10px">
+            Funktion
+          </div>
+        </div>
+
+        <div *ngIf="entry.classArchetype=='TASK'" fxLayout="row" fxLayoutAlign="start center">
+          <div style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+            <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+              src="/assets/cog.jpg">
+          </div>
+
+          <div style="padding-left: 10px">
+            Tätigkeit
+          </div>
+        </div>
+
+        <div *ngIf="entry.classArchetype=='ACHIEVEMENT'">
+
+          <div *ngIf="entry.feedbackType==null" fxLayout="row" fxLayoutAlign="start center">
+            <div style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+              <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                src="/assets/TODO">
+            </div>
+
+            <div style="padding-left: 10px">
+              Achievement
+            </div>
+          </div>
+
+          <div *ngIf="entry.feedbackType!=null" fxLayout="row" fxLayoutAlign="start center">
+            <div style=" z-index: 255; position: relative; width: 25px; height: 25px;" mat-tooltip="Competence">
+                <mat-icon inline="true" style="font-size: 25px; line-height: normal">feedback</mat-icon>
+            </div>
+
+            <div style="padding-left: 10px">
+              Feedback
+            </div>
+          </div>
         </div>
       </mat-cell>
     </ng-container>
 
+
     <ng-container matColumnDef="issuer">
       <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
-      <mat-cell *matCellDef="let entry">
-        {{entry.issuerId}}
+      <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
+
+        <img class="avatar" src="/assets/images/avatars/profile.jpg">
+        <div>{{getNameForEntry(entry.issuerId)}}</div>
+
       </mat-cell>
     </ng-container>
 
@@ -45,13 +110,15 @@
       class="table-row"></mat-row>
   </mat-table>
 
-  <div *ngIf="dataSource.data.length <= 0" class="inbox-empty-message">
+  <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
     keine Einträge vorhanden, die Inbox ist leer
   </div>
 
 
 </div>
 
-<div class="button-row">
-  <button mat-raised-button color="primary" (click)="onSubmit()">Bestätigen</button>
+<div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
+  <button mat-raised-button color="secondary" (click)="navigateBack()">Zurück</button>
+  <div></div>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()">Weiter</button>
 </div>

@@ -10,6 +10,6 @@ import at.jku.cis.iVolunteer.model.feedback.Feedback;
 @Repository
 public interface FeedbackRepository extends MongoRepository<Feedback, String>{
 
-	List<Feedback> getByRecipientId(String recipientId);
+	List<Feedback> getByUserId(String userId);
 
 }
