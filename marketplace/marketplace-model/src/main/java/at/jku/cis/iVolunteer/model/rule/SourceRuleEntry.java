@@ -14,11 +14,12 @@ public class SourceRuleEntry {
 	public SourceRuleEntry() {
 	}
 
-	public SourceRuleEntry(String classDefinitionId, String classPropertyId, MappingOperatorType mappingOperatorType,
+	public SourceRuleEntry(String classDefinitionId, String classPropertyId, AggregationOperatorType aggregationOperatorType, MappingOperatorType mappingOperatorType,
 			String value) {
 		super();
 		this.classDefinitionId = classDefinitionId;
 		this.classPropertyId = classPropertyId;
+		this.aggregationOperatorType = aggregationOperatorType;
 		this.mappingOperatorType = mappingOperatorType;
 		this.value = value;
 	}
@@ -53,6 +54,14 @@ public class SourceRuleEntry {
 
 	public void setClassPropertyId(String classPropertyId) {
 		this.classPropertyId = classPropertyId;
+	}
+
+	public AggregationOperatorType getAggregationOperatorType() {
+		return aggregationOperatorType;
+	}
+
+	public void setAggregationOperatorType(AggregationOperatorType aggregationOperatorType) {
+		this.aggregationOperatorType = aggregationOperatorType;
 	}
 
 
