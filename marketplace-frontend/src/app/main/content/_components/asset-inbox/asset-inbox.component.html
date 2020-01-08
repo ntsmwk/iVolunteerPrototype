@@ -1,6 +1,19 @@
 <div class="inbox-content">
 
-  <mat-table #inboxTable class="inbox-table" [dataSource]="dataSource" *ngIf="dataSource.data.length > 0">
+  <mat-table #inboxTable class="inbox-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
+
+    <ng-container matColumnDef="checkboxes">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="archetype">
       <mat-header-cell *matHeaderCellDef>Archetype</mat-header-cell>
@@ -98,7 +111,7 @@
       class="table-row"></mat-row>
   </mat-table>
 
-  <div *ngIf="dataSource.data.length <= 0" class="inbox-empty-message">
+  <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
     keine Einträge vorhanden, die Inbox ist leer
   </div>
 
