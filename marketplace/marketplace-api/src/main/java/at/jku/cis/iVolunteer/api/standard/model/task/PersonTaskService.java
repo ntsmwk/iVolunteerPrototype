@@ -52,6 +52,9 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerUUID(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
+		
+		personTaskClassInstance.setViaAPI(true);
+		
 		classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on
 	}
