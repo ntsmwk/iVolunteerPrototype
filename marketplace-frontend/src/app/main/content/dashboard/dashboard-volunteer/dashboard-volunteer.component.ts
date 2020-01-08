@@ -6,7 +6,7 @@ import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { LoginService } from '../../_service/login.service';
 import { Participant } from '../../_model/participant';
 import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
-import { isNullOrUndefined } from 'util'
+import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../../_model/marketplace';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
 import { FeedbackService } from '../../_service/feedback.service';
@@ -77,13 +77,13 @@ export class DashboardVolunteerComponent implements OnInit {
   loadDashboardContent() {
     Promise.all([
       this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
-        console.log("Instances");
+        console.log('Instances');
         console.log(ret);
 
         let tasks = ret.filter((classInstance: ClassInstance) => {
-          return classInstance.classArchetype == ClassArchetype.TASK;
+          return classInstance.classArchetype === ClassArchetype.TASK;
         });
-        console.log("Tasks");
+        console.log('Tasks');
         console.log(tasks);
         tasks = tasks.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (tasks.length > 5) {
@@ -93,9 +93,9 @@ export class DashboardVolunteerComponent implements OnInit {
         this.dataSourceTasks.data = tasks;
 
         let competences = ret.filter((classInstance: ClassInstance) => {
-          return classInstance.classArchetype == ClassArchetype.COMPETENCE;
+          return classInstance.classArchetype === ClassArchetype.COMPETENCE;
         });
-        console.log("Competences");
+        console.log('Competences');
         console.log(competences);
         competences = competences.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (competences.length > 5) {
@@ -105,8 +105,9 @@ export class DashboardVolunteerComponent implements OnInit {
 
         let feedback = ret.filter((classInstance: Feedback) => {
           return !isNullOrUndefined(classInstance.feedbackType);
-        })
-        console.log("Feedback");
+        });
+        
+        console.log('Feedback');
         console.log(feedback);
         feedback = feedback.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (feedback.length > 5) {
@@ -139,7 +140,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The dialog was closed');
-      console.log("done")
+      console.log('done');
     });
   }
 
@@ -155,7 +156,7 @@ export class DashboardVolunteerComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The dialog was closed');
       this.toggleShareInRep();
-      console.log("done")
+      console.log('done');
     });
   }
 
