@@ -98,7 +98,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   addRule(){
-    console.error("asdfasdfasfd");
     this.derivationRule.sources.push(new SourceRuleEntry());
   }
 }

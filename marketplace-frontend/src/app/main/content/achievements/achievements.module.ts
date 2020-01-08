@@ -38,8 +38,9 @@ import { FuseProjectMembersModule } from '../_components/project-members/project
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TimelineFilterBarChartComponent } from './timeline-filter-bar-chart/timeline-filter-bar-chart.component';
-import { SunburstChartComponent } from './sunburst-chart/sunburst-chart.component';
 import { CommonModule } from '@angular/common';
+import { HighchartsChartModule } from 'highcharts-angular';
+
 
 
 const routes = [
@@ -54,7 +55,6 @@ const routes = [
     FunctionsComponent,
     CompetenciesComponent,
     TimelineFilterBarChartComponent,
-    SunburstChartComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -89,7 +89,8 @@ const routes = [
 
     NgbModalModule,
 
-    NgxChartsModule
+    NgxChartsModule,
+    HighchartsChartModule
 
 
   ]

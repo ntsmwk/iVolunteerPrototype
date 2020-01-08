@@ -9,7 +9,7 @@ import { MessageService } from '../../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { SourceRuleEntry, MappingOperatorType } from 'app/main/content/_model/derivation-rule';
+import { SourceRuleEntry, MappingOperatorType, AggregationOperatorType } from 'app/main/content/_model/derivation-rule';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
@@ -32,7 +32,8 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
-  operations: any;
+  comparisonOperators: any;
+  aggregationOperators: any;
 
   classDefinitionCache: ClassDefinition[] = [];
 
@@ -45,6 +46,7 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     this.rulePreconditionForm = formBuilder.group({
       'classDefinitionId': new FormControl(undefined),
       'classPropertyId': new FormControl(undefined),
+      'aggregationOperatorType': new FormControl(undefined),
       'mappingOperatorType': new FormControl(undefined),
       'value': new FormControl(undefined),
     });
@@ -52,15 +54,17 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.error(this.sourceRuleEntry);
     this.rulePreconditionForm.setValue({
       classDefinitionId: (this.sourceRuleEntry.classDefinition ? this.sourceRuleEntry.classDefinition.id : "") || "",
       classPropertyId: (this.sourceRuleEntry.classProperty ? this.sourceRuleEntry.classProperty.id : "") || "",
+      aggregationOperatorType: this.sourceRuleEntry.aggregationOperatorType || AggregationOperatorType.SUM,
       mappingOperatorType: this.sourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
       value: this.sourceRuleEntry.value || ""
     });
 
-    this.operations = Object.keys(MappingOperatorType);
+    this.comparisonOperators = Object.keys(MappingOperatorType);
+    this.aggregationOperators = Object.keys(AggregationOperatorType);
+
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.participant = participant;
@@ -77,15 +81,15 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   onClassChange($event) {
-    if(!this.sourceRuleEntry.classDefinition){
+    if (!this.sourceRuleEntry.classDefinition) {
       this.sourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.sourceRuleEntry.classDefinition.id = $event.source.value;
     this.loadClassProperties($event);
   }
 
-  onPropertyChange($event){
-    if(!this.sourceRuleEntry.classProperty){
+  onPropertyChange($event) {
+    if (!this.sourceRuleEntry.classProperty) {
       this.sourceRuleEntry.classProperty = new ClassProperty();
     }
     this.sourceRuleEntry.classProperty.id = $event.source.value;
@@ -112,8 +116,13 @@ export class FuseRulePreconditionConfiguratorComponent implements OnInit {
     }
   }
 
-  private retrieveValueOf(op) {
+  private retrieveMappingOperatorValueOf(op) {
     var x: MappingOperatorType = MappingOperatorType[op as keyof typeof MappingOperatorType];
+    return x;
+  }
+
+  private retrieveAggregationOperatorValueOf(op) {
+    var x: AggregationOperatorType = AggregationOperatorType[op as keyof typeof AggregationOperatorType];
     return x;
   }
 }

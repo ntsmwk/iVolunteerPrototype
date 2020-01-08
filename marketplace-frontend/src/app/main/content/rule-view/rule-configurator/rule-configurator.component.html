@@ -1,10 +1,9 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px">keyboard_return</mat-icon>
-    <h1>Configuration - Derivation Rules</h1>
+    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return</mat-icon>
+    <h1>Konfiguration - Ableitungsregeln</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative">
-      <!-- <img src="../../../../assets/images/logos/FF_Altenberg.jpg"> -->
     </div>
   </div>
 
@@ -12,7 +11,7 @@
     fxLayoutGap="20px" fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
     <div fxLayout=row>
       <mat-form-field class="nameInput">
-        <input matInput placeholder="Derivation Rule Name" formControlName="name" />
+        <input matInput placeholder="Regelname" formControlName="name" />
       </mat-form-field>
     </div>
 
@@ -24,7 +23,7 @@
             <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/checklist.jpg">
           </div>
         </div>
-        <div style=" padding-top: 3px; padding-left: 5px;"> Select Pre-Conditions for automatic Derivation</div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Vorbedingungen für Ableitung</div>
       </div>
       <mat-divider></mat-divider>
     </div>
@@ -34,7 +33,7 @@
     </div>
 
     <div>
-      <button type='button' mat-raised-button color="secondary" (click)="addRule()">Add Rule</button>
+      <button type='button' mat-raised-button color="secondary" (click)="addRule()">Regel hinzufügen</button>
     </div>
 
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
@@ -45,16 +44,16 @@
             <img style="object-fit: contain; max-width: 100%; max-height: 100%;" src="../../../assets/competence.jpg">
           </div>
         </div>
-        <div style=" padding-top: 3px; padding-left: 5px;"> Derived Volunteer Asset</div>
+        <div style=" padding-top: 3px; padding-left: 5px;"> Abgeleiteter Freiwilligenpasseintrag</div>
       </div>
       <mat-divider></mat-divider>
     </div>
 
     <div fxLayout="column" fxLayoutAlign="start start">
       <mat-form-field style="width: 300px">
-        <mat-label>Choose derived Volunteer Asset</mat-label>
-        <mat-select formControlName="target" [value]="derivationRule.target?.id">
-          <mat-option *ngFor="let cd of classDefinitions" [value]="cd?.id"> {{cd.name}} </mat-option>
+        <mat-label>Freiwilligenpasseintrag</mat-label>
+        <mat-select formControlName="target" [value]="derivationRule.target">
+          <mat-option *ngFor="let cd of classDefinitions" [value]="cd"> {{cd.name}} </mat-option>
         </mat-select>
       </mat-form-field>
     </div>

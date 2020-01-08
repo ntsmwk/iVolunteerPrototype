@@ -34,6 +34,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.map(entry -> new SourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
 						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
+						entry.getAggregationOperatorType(),
 						entry.getMappingOperatorType(),
 						entry.getValue()))
 				.collect(Collectors.toList()));
@@ -61,6 +62,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.map(e -> new SourceRuleEntry(
 						e.getClassDefinition().getId(), 
 						e.getClassProperty().getId(),
+						e.getAggregationOperatorType(),
 						e.getMappingOperatorType(),
 						e.getValue()))
 				.collect(Collectors.toList()));

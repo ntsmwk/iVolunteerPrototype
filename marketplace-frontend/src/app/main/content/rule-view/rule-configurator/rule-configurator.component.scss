@@ -2,29 +2,23 @@
 @import "src/@fuse/scss/fuse";
 @import '~@angular/material/theming';
 
-$custom-typography: mat-typography-config(
-  $font-family: 'Muli'
-);
-@include mat-core($custom-typography);
 
 .page-layout {
 
-    font-family: Muli,"Helvetica Neue",Arial,sans-serif;
-
+    
     .header {
         position: relative;
         flex: 1 0 auto;
         height: 90px;
         max-height: 90px;
-        background: red;
-        // background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+        background: #1A237E;
+        background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
         text-align: center;
 
-        @include media-breakpoint('xs') {
+        @include media-breakpoint("xs") {
             height: 240px;
             padding: 16px;
         }
-
 
         h1 {
             color: white;
@@ -35,8 +29,8 @@ $custom-typography: mat-typography-config(
             margin-top: 0;
             margin-bottom: 0px;
 
-            @include media-breakpoint-down('xs') {
-            font-size: 24px;
+            @include media-breakpoint-down("xs") {
+                font-siaccentze: 24px;
             }
         }
     }
@@ -53,43 +47,12 @@ $custom-typography: mat-typography-config(
         font-size: 20px;
     }
 
- 
-
-
+    .nameInput{
+        padding-top: 30px;
+        width: 300px;
+    }
 }
 
-
-@import '~@angular/material/theming';
-@include mat-core();
-
-$my-app-primary: mat-palette($mat-red, 900);
-$my-app-accent: mat-palette($mat-red, 50);
-
-$my-app-warn:    mat-palette($mat-deep-orange);
-
-$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
-
-@include angular-material-theme($my-app-theme);
-
-::ng-deep .mat-tab-label.mat-tab-label-active {
-    // min-width: 25px !important;
-    // padding: 5px;
-    background-color: mat-color($my-app-primary);
-    opacity: 1 !important;
-    
-    color: white;
-    // font-weight: 700;
+.iconButton:hover{
+    cursor: pointer;
 }
-
-::ng-deep .mat-ink-bar {
-  background-color: mat-color($my-app-primary) !important;}
-
-
-
-
-
-
-  .nameInput{
-      padding-top: 30px;
-      width: 300px;
-  }
