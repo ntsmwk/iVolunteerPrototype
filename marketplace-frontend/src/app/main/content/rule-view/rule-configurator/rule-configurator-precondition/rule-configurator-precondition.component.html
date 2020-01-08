@@ -1,22 +1,22 @@
 <form *ngIf="sourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
     (change)="onChange($event)" [formGroup]="rulePreconditionForm">
     <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
-        <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 250px">
-            <mat-label>Choose FWPE Type</mat-label>
+        <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 225px">
+            <mat-label>Benötigter Freiwillenpasseintrag</mat-label>
             <mat-select formControlName="classDefinitionId" [value]="sourceRuleEntry.classDefinition?.id">
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
                     (onSelectionChange)="onClassChange($event)"> {{cd.name}} </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 250px">
-            <mat-label>Select Attribute</mat-label>
+        <mat-form-field *ngIf="classProperties && classProperties.length > 0" style="width: 225px">
+            <mat-label>Attribut</mat-label>
             <mat-select formControlName="classPropertyId" [value]="sourceRuleEntry?.classProperty?.id">
                 <mat-option *ngFor="let cp of classProperties" [value]="cp?.id"
                     (onSelectionChange)="onPropertyChange($event)">
                     {{cp.name}} </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field style="width: 80px">
+        <mat-form-field style="width: 115px">
             <mat-label>Aggregationsoperator</mat-label>
             <mat-select placeholder="Operation" formControlName="aggregationOperatorType"
                 [value]="sourceRuleEntry.aggregationOperatorType">
@@ -25,7 +25,7 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field style="width: 80px">
+        <mat-form-field style="width: 100px">
             <mat-label>Vergleichsoperator</mat-label>
             <mat-select placeholder="Operation" formControlName="mappingOperatorType"
                 [value]="sourceRuleEntry.mappingOperatorType">
