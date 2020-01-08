@@ -1,0 +1,84 @@
+<mat-accordion multi="true">
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Personale Kompetenzen
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-card-title>Lernbereitschaft</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="chartParent" fxLayout="row">
+                    <div class = "half">
+                        <h2 class="title">Gesamtstunden an geileisteten Ausbildungen</h2>
+                        <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
+                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                            [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
+                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                            [animations]="animations" (select)="onSelect($event)">
+                        </ngx-charts-bar-vertical-stacked>
+                    </div>
+                    <div class = "half">
+                        <h2 class="title">Gesamtstunden an geileisteten Ausbildungen</h2>
+                        <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
+                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                            [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
+                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                            [animations]="animations" (select)="onSelect($event)">
+                        </ngx-charts-bar-vertical-stacked>
+                    </div>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="card">
+            <mat-card-header>
+                <mat-card-title>Eigenverantwortung</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>
+                    The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                    A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                    bred for hunting.
+                </p>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Sozial-kommunikative Kompetenzen
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Aktivitäts und Handlungskompetenzen
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Fach- und Methodenkompetenzen
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+    </mat-expansion-panel>
+</mat-accordion>
