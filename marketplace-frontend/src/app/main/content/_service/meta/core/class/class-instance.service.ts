@@ -61,8 +61,8 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.put(`${marketplace.url}/meta/core/class/instance/set-in-user-repository/${inUserRepository}`, classInstanceIds);
     }
 
-    setClassInstanceInIssuerRepository(marketplace: Marketplace, classInstanceIds: string[], inIssuerRepository: boolean) {
-      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-in-issuer-repository/${inIssuerRepository}`, classInstanceIds);
+    setClassInstanceInIssuerInbox(marketplace: Marketplace, classInstanceIds: string[], inIssuerInbox: boolean) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-in-issuer-inbox/${inIssuerInbox}`, classInstanceIds);
     }
 
   }
