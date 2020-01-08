@@ -23,6 +23,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	//Temp flags for dashboard presentation
 	private boolean published; // flag if published
 	private boolean inRepository; //flag if in inbox or in repository
+	private boolean viaAPI; //flag für Properties Imported via API
 	
 	private ClassArchetype classArchetype;
 	
@@ -132,6 +133,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setIssuerId(String issuerId) {
 		this.issuerId = issuerId;
+	}
+
+	public boolean isViaAPI() {
+		return viaAPI;
+	}
+
+	public void setViaAPI(boolean viaAPI) {
+		this.viaAPI = viaAPI;
 	}
 	
 	

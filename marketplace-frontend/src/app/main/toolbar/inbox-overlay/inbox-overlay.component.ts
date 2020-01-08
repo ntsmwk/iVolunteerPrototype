@@ -5,7 +5,7 @@ import { FeedbackService } from 'app/main/content/_service/feedback.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { LoginService } from 'app/main/content/_service/login.service';
-import { Participant } from 'app/main/content/_model/participant';
+import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from 'util';
 import { ClassInstance } from 'app/main/content/_model/meta/Class';
@@ -36,7 +36,8 @@ export class InboxOverlayComponent implements OnInit {
 
 
   marketplace: Marketplace;
-  volunteer: Volunteer;
+  participant: Participant;
+  participantRole: ParticipantRole;
   classInstances: ClassInstance[] = [];
 
   dataSource = new MatTableDataSource<ClassInstance | Feedback>();
@@ -50,40 +51,55 @@ export class InboxOverlayComponent implements OnInit {
         }
       }),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-        this.volunteer = participant;
+        this.participant = participant;
       })
 
     ]).then(() => {
-      this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
-       
-        if (!isNullOrUndefined(ret)) {
-          ret.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
-         
-          if (ret.length > 5) {
-            ret = ret.slice(0, 5);
-          }
+      this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
+        this.participantRole = role;
 
-          this.classInstances = ret;
-          this.dataSource.data = ret;
-          // console.log(ret);
-          // console.log("=====");
-          // console.log(this.element);
-          // console.log(this.element.nativeElement.parentElement);//offsetWidth ; offsetHeight
-          // console.log(this.element.nativeElement.parentElement.offsetWidth);
-          // console.log(this.element.nativeElement.parentElement.offsetHeight);
+        if (role === 'VOLUNTEER') {
+          this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
-          this.innerDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
-          this.innerDiv.nativeElement.style.height = (this.element.nativeElement.parentElement.offsetHeight - 58) + 'px';
-          this.innerDiv.nativeElement.style.overflow = 'hidden';
-          // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
-          this.actionDiv.nativeElement.style.height = '18px';
+            this.drawInboxElements(ret);
+
+            this.isLoaded = true;
+          });
+        } else if (role === 'HELP_SEEKER') {
+          this.classInstanceService.getClassInstancesByIssuerIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+
+              this.drawInboxElements(ret);
+              this.isLoaded = true;
+          });
         }
-
-
-        this.isLoaded = true;
       });
     });
 
+  }
+
+  drawInboxElements(classInstances: ClassInstance[]) {
+    if (!isNullOrUndefined(classInstances)) {
+      classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
+
+      if (classInstances.length > 5) {
+        classInstances = classInstances.slice(0, 5);
+      }
+
+      this.classInstances = classInstances;
+      this.dataSource.data = classInstances;
+      // console.log(ret);
+      // console.log("=====");
+      // console.log(this.element);
+      // console.log(this.element.nativeElement.parentElement);//offsetWidth ; offsetHeight
+      // console.log(this.element.nativeElement.parentElement.offsetWidth);
+      // console.log(this.element.nativeElement.parentElement.offsetHeight);
+
+      this.innerDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
+      this.innerDiv.nativeElement.style.height = (this.element.nativeElement.parentElement.offsetHeight - 58) + 'px';
+      this.innerDiv.nativeElement.style.overflow = 'hidden';
+      // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
+      this.actionDiv.nativeElement.style.height = '18px';
+    }
   }
 
   getDateString(date: number) {
@@ -92,7 +108,7 @@ export class InboxOverlayComponent implements OnInit {
 
   showInboxClicked() {
     this.closeOverlay.emit(true);
-    this.router.navigate(['/main/volunteer/asset-inbox'], { state: { marketplace: this.marketplace, participant: this.volunteer } });
+    this.router.navigate(['/main/volunteer/asset-inbox'], { state: { marketplace: this.marketplace, participant: this.participant } });
   }
 
 

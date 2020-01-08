@@ -37,6 +37,10 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/repository`);
     }
 
+    getClassInstancesByIssuerIdInInbox(marketplace: Marketplace, issuerId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-issuerId/${issuerId}/inbox`);
+    }
+
     createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {
       return this.http.post(`${marketplace.url}/meta/core/class/instance/new`, classInstances);
     }

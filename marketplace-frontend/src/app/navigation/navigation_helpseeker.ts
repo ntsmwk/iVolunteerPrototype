@@ -6,6 +6,12 @@ export const navigation_helpseeker = [
     'url': '/main/dashboard',
   },
   {
+    'id': 'inbox',
+    'title': 'Inbox',
+    'type': 'item',
+    'url': '/main/helpseeker/asset-inbox',
+  },
+  {
     'id': 'projects',
     'title': 'Project',
     'type': 'item',
