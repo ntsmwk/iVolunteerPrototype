@@ -1,4 +1,6 @@
-export class Feedback {   
+import { AchievementClassInstance } from './meta/Class';
+
+export class Feedback extends AchievementClassInstance {   
     id: string;
     marketplaceId: string;
     timestamp: Date;
