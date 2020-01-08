@@ -118,6 +118,8 @@
 
 </div>
 
-<div class="button-row" fxLayout="row" fxLayoutAlign="end center">
-  <button mat-raised-button color="primary" (click)="onSubmit()">Weiter</button>
+<div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
+  <button mat-raised-button color="secondary" (click)="navigateBack()">Zurück</button>
+  <div></div>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()">Weiter</button>
 </div>

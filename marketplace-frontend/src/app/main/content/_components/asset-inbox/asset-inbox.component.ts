@@ -58,9 +58,7 @@ export class AssetInboxComponent implements OnInit {
 
   onSubmit() {
     console.log(this.selection);
-    if (this.selection.isEmpty()) {
- 
-    } else {
+    if (!this.selection.isEmpty()) {
       this.submit.emit(this.selection.selected);
     }
 
