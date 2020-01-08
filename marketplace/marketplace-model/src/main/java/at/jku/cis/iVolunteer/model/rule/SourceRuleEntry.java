@@ -7,6 +7,7 @@ public class SourceRuleEntry {
 
 	private String classDefinitionId;
 	private String classPropertyId;
+	private AggregationOperatorType aggregationOperatorType;
 	private MappingOperatorType mappingOperatorType;
 	private String value;
 
