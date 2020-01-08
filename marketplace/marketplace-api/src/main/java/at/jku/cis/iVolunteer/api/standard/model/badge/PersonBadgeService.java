@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import jersey.repackaged.com.google.common.collect.Lists;
@@ -18,6 +19,7 @@ public class PersonBadgeService {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private UserMappingService userMappingService;
 
 	public void savePersonBadges(List<PersonBadge> personBadges) {
 		ClassDefinition personBadgeClassDefinition = classDefinitionService.getByName("PersonBadge");
@@ -39,6 +41,9 @@ public class PersonBadgeService {
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerUUID(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerSource(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personBadge.getPersonID(), new Object[0])));
+		
+		personBadgeClassInstance.setUserId(userMappingService.getByExternalUserId(personBadge.getPersonID()).getiVolunteerUserId());
+
 		classInstanceRepository.save(personBadgeClassInstance);		 
 		// @formatter:on
 	}
