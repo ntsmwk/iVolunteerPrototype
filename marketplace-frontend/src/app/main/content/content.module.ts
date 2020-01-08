@@ -14,7 +14,7 @@ import { HelpSeekerGuard } from './_guard/help-seeker.guard';
 import { VolunteerGuard } from './_guard/volunteer.guard';
 import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
-import { FlexProdOrHelpseekerGuard } from "./_guard/flexprod-helpseeker.guard";
+import { FlexProdOrHelpseekerGuard } from './_guard/flexprod-helpseeker.guard';
 import { RecruiterGuard } from './_guard/recruiter.guard';
 import { DataTransportService } from './_service/data-transport/data-transport.service';
 
@@ -27,8 +27,13 @@ const routes: Route[] = [
     loadChildren: () => import('./login/login.module').then(m => m.FuseLoginModule)
   },
   {
-    path: 'main/asset-inbox',
+    path: 'main/volunteer/asset-inbox',
     loadChildren: () => import('./asset-inbox-volunteer/asset-inbox-volunteer.module').then(m => m.AssetInboxVolunteerModule),
+    canActivate: [TokenGuard, LoginGuard]
+  },
+  {
+    path: 'main/volunteer/asset-inbox/confirm',
+    loadChildren: () => import('./asset-inbox-volunteer/confirmation-screen/confirmation-screen.module').then(m => m.VolunteerConfirmationScreenModule),
     canActivate: [TokenGuard, LoginGuard]
   },
   {
@@ -81,8 +86,6 @@ const routes: Route[] = [
     loadChildren: () => import('./task-list/task-list.module').then(m => m.FuseTaskListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-
-  //AK
   {
     path: 'main/properties/all',
     loadChildren: () => import('./property-list/property-list.module').then(m => m.PropertyListModule),
@@ -114,19 +117,25 @@ const routes: Route[] = [
 
   {
     path: 'main/task-templates/user/edit',
-    loadChildren: () => import('./user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module').then(m => m.SingleUserDefinedTaskTemplateDetailFormModule),
+    loadChildren: () => import(
+      './user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module'
+      ).then(m => m.SingleUserDefinedTaskTemplateDetailFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
   {
     path: 'main/task-templates/user/detail/nested',
-    loadChildren: () => import('./user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module').then(m => m.NestedUserDefinedTaskTemplateDetailModule),
+    loadChildren: () => import(
+      './user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module'
+      ).then(m => m.NestedUserDefinedTaskTemplateDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
   {
     path: 'main/test-map-property',
-    loadChildren: () => import('./_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module').then(m => m.MapPropertyTestModule),
+    loadChildren: () => import(
+      './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module'
+      ).then(m => m.MapPropertyTestModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
@@ -138,10 +147,11 @@ const routes: Route[] = [
 
   {
     path: 'main/configurator/instance-editor',
-    loadChildren: () => import('./configurator/class-instances/form-editor/class-instance-form-editor.module').then(m => m.ClassInstanceFormEditorModule),
+    loadChildren: () => import(
+      './configurator/class-instances/form-editor/class-instance-form-editor.module'
+      ).then(m => m.ClassInstanceFormEditorModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-  //!--AK
   {
     path: 'main/rules/all',
     loadChildren: () => import('./rule-view/rule-overview.module').then(m => m.FuseRuleOverviewModule),

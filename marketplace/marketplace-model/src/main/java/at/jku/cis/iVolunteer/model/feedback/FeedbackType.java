@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 
 public enum FeedbackType {
-	
+
 	KUDOS("KUDOS"), STARRATING("STARRATING");
-	
+
 	private final String feedbackType;
 
 	private FeedbackType(String feedbackType) {

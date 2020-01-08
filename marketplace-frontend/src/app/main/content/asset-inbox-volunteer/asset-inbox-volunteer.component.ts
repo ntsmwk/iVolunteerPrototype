@@ -25,6 +25,8 @@ export class AssetInboxVolunteerComponent implements OnInit {
   participant: Participant;
   classInstances: ClassInstance[];
 
+  submitPressed: boolean;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -48,14 +50,15 @@ export class AssetInboxVolunteerComponent implements OnInit {
     console.log(this.participant);
 
     if (!isNullOrUndefined(this.marketplace) && !isNullOrUndefined(this.participant)) {
-      console.log("if branch");
+      console.log('if branch');
       this.loadInboxEntries();
     } else {
-      console.log("else branch");
+      console.log('else branch');
       Promise.all([
         this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
-          if (!isNullOrUndefined(marketplaces))
-            this.marketplace = marketplaces[0]
+          if (!isNullOrUndefined(marketplaces)) {
+            this.marketplace = marketplaces[0];
+          }
         }),
         this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
           this.participant = participant;
@@ -77,6 +80,17 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   close() {
+  }
+
+  onAssetInboxSubmit(classInstances: ClassInstance[]) {
+    console.log('submitted - returned');
+
+    this.classInstanceService.updateClassInstancesInRepositoryState(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
+
+      this.router.navigate(['/main/volunteer/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
+
+    });
+
   }
 
 

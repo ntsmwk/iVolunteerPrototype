@@ -15,7 +15,6 @@ import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @SpringBootApplication
 public class CoreApplication {
@@ -41,27 +40,27 @@ public class CoreApplication {
 
 	@PostConstruct
 	private void init() {
-		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);	
+		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
 		createRecruiter(RECRUITER, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-		
+
 		createVolunteer(BROISER, RAW_PASSWORD);
 		CoreVolunteer volunteer = createVolunteer(PSTARZER, RAW_PASSWORD);
 		volunteer.setFirstname("Philipp");
 		volunteer.setLastname("Starzer");
 		saveVolunteer(volunteer);
-		
+
 		volunteer = createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 		volunteer.setFirstname("Markus");
 		volunteer.setLastname("Weißenbek");
 		saveVolunteer(volunteer);
-		
+
 		volunteer = createVolunteer(MWEIXLBAUMER, RAW_PASSWORD);
 		volunteer.setFirstname("Markus");
 		volunteer.setLastname("Weixlbaumer");
 		saveVolunteer(volunteer);
 
-		//Test Users for Instantiation
+		// Test Users for Instantiation
 		volunteer = createVolunteer("AKop", "passme");
 		volunteer.setFirstname("Alexander");
 		volunteer.setLastname("Kopp");
@@ -82,13 +81,13 @@ public class CoreApplication {
 		volunteer.setFirstname("Birgit");
 		volunteer.setLastname("Pröll");
 		saveVolunteer(volunteer);
-		
+
 		volunteer = createVolunteer("JSch", "passme");
 		volunteer.setFirstname("Johannes");
 		volunteer.setLastname("Schönböck");
 		volunteer.setNickname("Hannes");
 		saveVolunteer(volunteer);
-		
+
 		volunteer = createVolunteer("KKof", "passme");
 		volunteer.setFirstname("Katharina");
 		volunteer.setLastname("Kofler");
@@ -107,7 +106,7 @@ public class CoreApplication {
 		}
 		return helpSeeker;
 	}
-	
+
 	private CoreVolunteer saveVolunteer(CoreVolunteer coreVolunteer) {
 		return coreVolunteerRepository.save(coreVolunteer);
 	}

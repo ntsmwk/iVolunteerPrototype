@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 
 @RestController
 public class ClassInstanceController {
@@ -26,9 +24,8 @@ public class ClassInstanceController {
 	@Autowired ClassInstanceRepository classInstanceRepository;
 
 	@Autowired ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-	
-	@Autowired private ClassDefinitionService classDefinitionService;
 
+	@Autowired private ClassDefinitionService classDefinitionService;
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
@@ -39,32 +36,46 @@ public class ClassInstanceController {
 	private ClassInstance getClassInstanceById(@PathVariable("id") String id) {
 		return classInstanceRepository.findOne(id);
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
-	private List<ClassInstance> getClassInstancesByClassDefinitionId(@PathVariable("archetype") ClassArchetype archeType) {
-		List<ClassInstance> classInstances = new ArrayList<>();;
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);		
-		
-		for (ClassDefinition cd : classDefinitions) {		
+	private List<ClassInstance> getClassInstancesByClassDefinitionId(
+			@PathVariable("archetype") ClassArchetype archeType) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+
+		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
 		}
-		
+
 		return classInstances;
-	}	
-	
+	}
+
 	@GetMapping("/meta/core/class/instance/by-userid/{userId}")
 	private List<ClassInstance> getClassInstanceByUserId(@PathVariable("userId") String userId) {
 		return classInstanceRepository.getByUserId(userId);
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/by-userid/{userId}/inbox")
 	private List<ClassInstance> getClassInstanceByUserIdInInbox(@PathVariable("userId") String userId) {
 		return classInstanceRepository.getByUserIdAndInRepository(userId, false);
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/by-userid/{userId}/repository")
 	private List<ClassInstance> getClassInstanceByUserIdInRepostory(@PathVariable("userId") String userId) {
 		return classInstanceRepository.getByUserIdAndInRepository(userId, true);
+	}
+
+	@PutMapping("/meta/core/class/instance/set-inRepository-state/{inRepository}")
+	private List<ClassInstance> setClassInstancesInRepository(@PathVariable("inRepository") boolean inRepository,
+			@RequestBody List<String> classInstanceIds) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+
+		for (ClassInstance classInstance : classInstances) {
+			classInstance.setInRepository(true);
+		}
+
+		return classInstanceRepository.save(classInstances);
 	}
 
 	@PostMapping("/meta/core/class/instance/new")

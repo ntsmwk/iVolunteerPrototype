@@ -2,12 +2,14 @@ package at.jku.cis.iVolunteer.model.feedback;
 
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.IVolunteerObject;
-import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Feedback extends IVolunteerObject implements IHashObject {
+import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
+
+
+public class Feedback extends AchievementClassInstance implements IHashObject {
 	
-	String name;
 	String description;
 	
 	FeedbackType feedbackType;
@@ -15,18 +17,6 @@ public class Feedback extends IVolunteerObject implements IHashObject {
 		
 	List<String> iVolunteerObjecIds; //Für was
 	
-	String recipientId; //Für wen
-	String issuerId; //Von wem
-	
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -59,26 +49,5 @@ public class Feedback extends IVolunteerObject implements IHashObject {
 		this.iVolunteerObjecIds = iVolunteerObjecIds;
 	}
 
-	public String getRecipientId() {
-		return recipientId;
-	}
-
-	public void setRecipientId(String recipientId) {
-		this.recipientId = recipientId;
-	}
-
-	public String getIssuerId() {
-		return issuerId;
-	}
-
-	public void setIssuerId(String issuerId) {
-		this.issuerId = issuerId;
-	}
-
-	@Override
-	public String toHashObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassInstance } from "app/main/content/_model/meta/Class";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstance } from 'app/main/content/_model/meta/Class';
 
 
 @Injectable({
@@ -22,7 +22,7 @@ import { ClassInstance } from "app/main/content/_model/meta/Class";
     }
 
     getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`)
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`);
     }
 
     getClassInstanceById(marketplace: Marketplace, classInstanceId: string) {
@@ -30,11 +30,11 @@ import { ClassInstance } from "app/main/content/_model/meta/Class";
     }
 
     getClassInstancesByUserIdInInbox(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/inbox`)
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/inbox`);
     }
 
     getClassInstancesByUserIdInRepository(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/repository`)
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/repository`);
     }
 
     createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {
@@ -53,6 +53,9 @@ import { ClassInstance } from "app/main/content/_model/meta/Class";
       return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
     }
 
+    updateClassInstancesInRepositoryState(marketplace: Marketplace, classInstanceIds: string[], inRepository: boolean) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-inRepository-state/${inRepository}`, classInstanceIds);
+    }
+
 
   }
-  
