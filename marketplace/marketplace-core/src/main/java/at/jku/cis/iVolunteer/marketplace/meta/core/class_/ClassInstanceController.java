@@ -78,7 +78,21 @@ public class ClassInstanceController {
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
 
 		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInUserRepository(true);
+			classInstance.setInUserRepository(inUserRepository);
+		}
+
+		return classInstanceRepository.save(classInstances);
+	}
+	
+	@PutMapping("/meta/core/class/instance/set-in-issuer-repository/{inIssuerRepository}")
+	private List<ClassInstance> setClassInstancesInIssuerRepository(@PathVariable("inIssuerRepository") boolean inIssuerRepository,
+			@RequestBody List<String> classInstanceIds) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+
+		for (ClassInstance classInstance : classInstances) {
+			classInstance.setInIssuerRepository(inIssuerRepository);
+			classInstance.setInUserRepository(!inIssuerRepository);
 		}
 
 		return classInstanceRepository.save(classInstances);
