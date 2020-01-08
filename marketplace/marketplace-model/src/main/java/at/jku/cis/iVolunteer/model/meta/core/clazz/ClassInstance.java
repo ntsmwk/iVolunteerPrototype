@@ -16,16 +16,16 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private String classDefinitionId;
 	private String name;
 	private List<PropertyInstance<Object>> properties;
-	
+
 	private String userId;
 	private String issuerId;
-	
-	//Temp flags for dashboard presentation
+
+	// Temp flags for dashboard presentation
 	private boolean published; // flag if published
-	private boolean inRepository; //flag if in inbox or in repository
+	private boolean inUserRepository; //flag if in inbox or in repository of user
+	private boolean inIssuerInbox; //flag if in inbox of issuer
 	
 	private ClassArchetype classArchetype;
-	
 
 	public ClassInstance() {
 	}
@@ -82,6 +82,46 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.marketplaceId = marketplaceId;
 	}
 
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+
+	public ClassArchetype getClassArchetype() {
+		return classArchetype;
+	}
+
+	public void setClassArchetype(ClassArchetype classArchetype) {
+		this.classArchetype = classArchetype;
+	}
+
+	public String getIssuerId() {
+		return issuerId;
+	}
+
+	public void setIssuerId(String issuerId) {
+		this.issuerId = issuerId;
+	}
+
+	public boolean isInUserRepository() {
+		return inUserRepository;
+	}
+
+	public void setInUserRepository(boolean inUserRepository) {
+		this.inUserRepository = inUserRepository;
+	}
+
+	public boolean isInIssuerInbox() {
+		return inIssuerInbox;
+	}
+
+	public void setInIssuerInbox(boolean inIssuerInbox) {
+		this.inIssuerInbox = inIssuerInbox;
+	}
+
 	@Override
 	public String toHashObject() {
 		JsonObject json = new JsonObject();
@@ -101,39 +141,5 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
-	public boolean isInRepository() {
-		return inRepository;
-	}
-
-	public void setInRepository(boolean inRepository) {
-		this.inRepository = inRepository;
-	}
-
-	public ClassArchetype getClassArchetype() {
-		return classArchetype;
-	}
-
-	public void setClassArchetype(ClassArchetype classArchetype) {
-		this.classArchetype = classArchetype;
-	}
-
-	public String getIssuerId() {
-		return issuerId;
-	}
-
-	public void setIssuerId(String issuerId) {
-		this.issuerId = issuerId;
-	}
-	
-	
 
 }

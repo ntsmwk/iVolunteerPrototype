@@ -21,6 +21,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
@@ -41,6 +42,7 @@ import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -60,6 +62,7 @@ public class InitializationService {
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
 	@Autowired private FeedbackRepository feedbackRepository;
+	@Autowired private UserMappingRepository userMappingRepository;
 
 	@PostConstruct
 	public void init() {
@@ -69,6 +72,22 @@ public class InitializationService {
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
 
+		addTestDerivationRule();
+
+		addFireBrigadeUserMapping();
+
+		this.addTestClassInstances();
+	}
+
+	private void addFireBrigadeUserMapping() {
+		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
+		UserMapping mapping = new UserMapping();
+		mapping.setiVolunteerUserId(volunteer.getId());
+		mapping.setExternalUserId("5dc2a215399af");
+		userMappingRepository.save(mapping);
+	}
+
+	private void addTestDerivationRule() {
 		DerivationRule rule = new DerivationRule();
 		rule.setName("myrule");
 
@@ -82,8 +101,6 @@ public class InitializationService {
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
-
-		this.addTestClassInstances();
 	}
 
 	private void addiVolunteerAPIClassDefinition() {
@@ -199,7 +216,7 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("taskID") 
+				.filter(p -> p.getName().equals("taskId") 
 						|| p.getName().equals("taskName")
 						|| p.getName().equals("taskType1") 
 						|| p.getName().equals("taskType2")
@@ -269,7 +286,7 @@ public class InitializationService {
 	}
 
 	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
@@ -530,7 +547,7 @@ public class InitializationService {
 			ti1.setIssuerId(helpseeker.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
-		ti1.setInRepository(true);
+		ti1.setInUserRepository(true);
 
 		classInstanceRepository.save(ti1);
 
@@ -606,7 +623,7 @@ public class InitializationService {
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(1);
-		f1.setInRepository(false);
+		f1.setInUserRepository(false);
 
 		feedbackRepository.save(f1);
 
@@ -634,7 +651,7 @@ public class InitializationService {
 			ci1.setIssuerId(helpseeker.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInRepository(true);
+		ci1.setInUserRepository(true);
 
 		classInstanceRepository.save(ci1);
 
@@ -680,7 +697,7 @@ public class InitializationService {
 			ci1.setIssuerId(helpseeker.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInRepository(false);
+		ci1.setInUserRepository(false);
 		classInstanceRepository.save(ci1);
 	}
 }

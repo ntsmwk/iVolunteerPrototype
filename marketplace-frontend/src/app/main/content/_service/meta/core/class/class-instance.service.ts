@@ -29,12 +29,16 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/${classInstanceId}`);
     }
 
-    getClassInstancesByUserIdInInbox(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/inbox`);
+    getClassInstancesInUserRepository(marketplace: Marketplace, userId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-user-repository/${userId}`);
     }
 
-    getClassInstancesByUserIdInRepository(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}/repository`);
+    getClassInstancesInUserInbox(marketplace: Marketplace, issuerId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-user-inbox/${issuerId}`);
+    }
+
+    getClassInstancesInIssuerInbox(marketplace: Marketplace, issuerId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}`);
     }
 
     createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {
@@ -53,9 +57,12 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
     }
 
-    updateClassInstancesInRepositoryState(marketplace: Marketplace, classInstanceIds: string[], inRepository: boolean) {
-      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-inRepository-state/${inRepository}`, classInstanceIds);
+    setClassInstanceInUserRepository(marketplace: Marketplace, classInstanceIds: string[], inUserRepository: boolean) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-in-user-repository/${inUserRepository}`, classInstanceIds);
     }
 
+    setClassInstanceInIssuerInbox(marketplace: Marketplace, classInstanceIds: string[], inIssuerInbox: boolean) {
+      return this.http.put(`${marketplace.url}/meta/core/class/instance/set-in-issuer-inbox/${inIssuerInbox}`, classInstanceIds);
+    }
 
   }

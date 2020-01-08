@@ -29,12 +29,17 @@ const routes: Route[] = [
   {
     path: 'main/volunteer/asset-inbox',
     loadChildren: () => import('./asset-inbox-volunteer/asset-inbox-volunteer.module').then(m => m.AssetInboxVolunteerModule),
-    canActivate: [TokenGuard, LoginGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
+    path: 'main/helpseeker/asset-inbox',
+    loadChildren: () => import('./asset-inbox-helpseeker/asset-inbox-helpseeker.module').then(m => m.AssetInboxHelpseekerModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/volunteer/asset-inbox/confirm',
     loadChildren: () => import('./asset-inbox-volunteer/confirmation-screen/confirmation-screen.module').then(m => m.VolunteerConfirmationScreenModule),
-    canActivate: [TokenGuard, LoginGuard]
+    canActivate: [TokenGuard, VolunteerGuard]
   },
   {
     path: 'main/dashboard',

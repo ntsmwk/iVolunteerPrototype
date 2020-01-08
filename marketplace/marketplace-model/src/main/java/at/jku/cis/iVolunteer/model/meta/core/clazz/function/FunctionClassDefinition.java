@@ -5,11 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-
-@Document(collection="classDefinition")
+@Document(collection = "classDefinition")
 public class FunctionClassDefinition extends ClassDefinition {
 
-	
 	public FunctionClassDefinition() {
 		this.setClassArchetype(ClassArchetype.FUNCTION);
 	}

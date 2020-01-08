@@ -13,21 +13,21 @@
     <div class="table">
         <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
             <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Regelname</mat-header-cell>
                 <mat-cell *matCellDef="let rule">{{rule.name}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="sources">
-                <mat-header-cell *matHeaderCellDef>Sources</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Vorbedingungen</mat-header-cell>
                 <mat-cell *matCellDef="let rule">
                     <span *ngFor="let source of rule.sources; let last = last">
                         {{source.classDefinition.name}}<span *ngIf="!last">, </span>
                     </span>
                 </mat-cell>
             </ng-container>
-
+            
             <ng-container matColumnDef="target">
-                <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Freiwilligenpasseintrag</mat-header-cell>
                 <mat-cell *matCellDef="let rule">{{rule.target.name}}</mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

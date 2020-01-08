@@ -1,11 +1,17 @@
-
 @import "src/@fuse/scss/fuse";
 @import '~@angular/material/theming';
+@include mat-core();
 
+$custom-typography: mat-typography-config(
+  $font-family: 'Muli'
+);
+@include mat-core($custom-typography);
 
 .page-layout {
 
-    
+    font-family: "Muli","Helvetica Neue",Arial,sans-serif;
+    overflow: scroll;
+
     .header {
         position: relative;
         flex: 1 0 auto;
@@ -15,10 +21,11 @@
         background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
         text-align: center;
 
-        @include media-breakpoint("xs") {
+        @include media-breakpoint('xs') {
             height: 240px;
             padding: 16px;
         }
+
 
         h1 {
             color: white;
@@ -29,30 +36,10 @@
             margin-top: 0;
             margin-bottom: 0px;
 
-            @include media-breakpoint-down("xs") {
-                font-siaccentze: 24px;
+            @include media-breakpoint-down('xs') {
+            font-size: 24px;
             }
         }
     }
 
-    .mat-column-actions {
-        flex: 0 0 55px;
-    }
-
-    .mat-column-image {
-        flex: 0 0 100px;
-    }
-
-    .mat-column-name {
-        font-size: 20px;
-    }
-
-    .nameInput{
-        padding-top: 30px;
-        width: 300px;
-    }
-}
-
-.iconButton:hover{
-    cursor: pointer;
 }
