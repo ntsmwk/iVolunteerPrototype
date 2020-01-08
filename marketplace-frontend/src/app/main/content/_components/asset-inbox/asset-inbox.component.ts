@@ -57,7 +57,13 @@ export class AssetInboxComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submit.emit(this.classInstances);
+    console.log(this.selection);
+    if (this.selection.isEmpty()) {
+ 
+    } else {
+      this.submit.emit(this.selection.selected);
+    }
+
   }
 
   getDateString(date: number) {

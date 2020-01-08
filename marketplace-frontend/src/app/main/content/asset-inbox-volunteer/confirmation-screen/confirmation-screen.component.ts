@@ -37,6 +37,7 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;
       this.participant = this.router.getCurrentNavigation().extras.state.participant;
+      this.classInstances = this.router.getCurrentNavigation().extras.state.classInstances;
     }
 
   }

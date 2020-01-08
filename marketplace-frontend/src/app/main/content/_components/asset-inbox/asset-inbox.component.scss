@@ -1,10 +1,17 @@
 .inbox-content {
     .inbox-table {
+        .inbox-empty-message {
+            font-size: 20px;
+            text-align: center;
+        }
 
+        .mat-column-checkboxes {
+            // padding-left: 3px;
+            flex: 0 0 70px;
+        }
     }
+}
 
-    .inbox-empty-message {
-        font-size: 20px;
-        text-align: center;
-    }
+.button-row {
+    padding-top: 24px;
 }
