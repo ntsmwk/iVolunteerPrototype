@@ -2,7 +2,7 @@
     href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
 
-<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll">
+<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll" *ngIf="isLoaded">
 
     <div style="padding-top: 12px"></div>
 
@@ -26,7 +26,7 @@
 
 
     <!--TOP WIDGET ROW-->
-    
+
     <!--TODO ReInsert Widget row-->
 
     <!--END TOP WIDGET ROW-->
@@ -40,7 +40,7 @@
         <mat-tab label="Recent"> -->
 
     <div style="padding-top: 10px"></div>
-    
+
 
 
     <div class="mat-card" fxLayout="column">
@@ -227,12 +227,8 @@
                     <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
 
-                        <img *ngIf="entry.issuer == 'ÖRK'" class="avatar"
-                            src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                        <img *ngIf="entry.issuer == 'FF Altenberg'" class="avatar"
-                            src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                        <img *ngIf="entry.issuer == 'HelpYourNeighbor'" class="avatar"
-                            src="../../../../assets/images/logos/neighborhelp.jpg">
+                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+
 
                         <!-- <div>{{entry.issuer}}</div>  -->
                     </mat-cell>
@@ -277,10 +273,8 @@
                     <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
 
-                        <img *ngIf="entry.issuer == 'ÖRK'" class="avatar"
-                            src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                        <img *ngIf="entry.issuer == 'FF Altenberg'" class="avatar"
-                            src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+
 
                         <!-- <div>{{entry.issuer}}</div>  -->
                     </mat-cell>
@@ -356,10 +350,8 @@
                     <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
 
-                        <img *ngIf="entry.issuer == 'ÖRK'" class="avatar"
-                            src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                        <img *ngIf="entry.issuer == 'FF Altenberg'" class="avatar"
-                            src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+
 
                         <!-- <div>{{entry.issuer}}</div>  -->
                     </mat-cell>

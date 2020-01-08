@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormControl }        from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
  
-import { QuestionBase, MultipleSelectionEnumQuestion }     from '../../../_model/dynamic-forms/questions';
+import { QuestionBase, MultipleSelectionEnumQuestion } from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -39,16 +39,16 @@ export class DynamicFormQuestionComponent implements OnInit{
   } 
 
   calculateSpaces(level: number) {
-    level = 10*level;
-    return level+"px";
+    level = 10 * level;
+    return level + 'px';
   }
 
   getMultipleValues(question: MultipleSelectionEnumQuestion) {
     let ret = '';
     
     if (!isNullOrUndefined(question.values)) {
-      for (let val of question.values) {
-        ret = ret + ", " + val;
+      for (const val of question.values) {
+        ret = ret + ', ' + val;
       }
     }
 
@@ -57,22 +57,22 @@ export class DynamicFormQuestionComponent implements OnInit{
 
   
   displayErrorMessage() {
-    return this.form.controls[this.question.key].hasError('required') ?  this.getErrorMessage('required'):
-      this.form.controls[this.question.key].hasError('requiredtrue') ? this.getErrorMessage('requiredtrue'):
-      this.form.controls[this.question.key].hasError('pattern') ? this.getErrorMessage('pattern'):
-      this.form.controls[this.question.key].hasError('minlength') ? this.getErrorMessage('minlength'):
-      this.form.controls[this.question.key].hasError('maxlength') ? this.getErrorMessage('maxlength'):
-      this.form.controls[this.question.key].hasError('max') ? this.getErrorMessage('max'):
-      this.form.controls[this.question.key].hasError('min') ? this.getErrorMessage('min'):
-      this.form.controls[this.question.key].hasError('mindate') ? this.getErrorMessage('mindate'):
-      this.form.controls[this.question.key].hasError('requiredother') ? this.getErrorMessage('requiredother'):
-      this.form.controls[this.question.key].hasError('maxother') ? this.getErrorMessage('maxother'):
-      this.form.controls[this.question.key].hasError('minother') ? this.getErrorMessage('minother'):
+    return this.form.controls[this.question.key].hasError('required') ?  this.getErrorMessage('required') :
+      this.form.controls[this.question.key].hasError('requiredtrue') ? this.getErrorMessage('requiredtrue') :
+      this.form.controls[this.question.key].hasError('pattern') ? this.getErrorMessage('pattern') :
+      this.form.controls[this.question.key].hasError('minlength') ? this.getErrorMessage('minlength') :
+      this.form.controls[this.question.key].hasError('maxlength') ? this.getErrorMessage('maxlength') :
+      this.form.controls[this.question.key].hasError('max') ? this.getErrorMessage('max') :
+      this.form.controls[this.question.key].hasError('min') ? this.getErrorMessage('min') :
+      this.form.controls[this.question.key].hasError('mindate') ? this.getErrorMessage('mindate') :
+      this.form.controls[this.question.key].hasError('requiredother') ? this.getErrorMessage('requiredother') :
+      this.form.controls[this.question.key].hasError('maxother') ? this.getErrorMessage('maxother') :
+      this.form.controls[this.question.key].hasError('minother') ? this.getErrorMessage('minother') :
       '';
   }
 
   private getRemainingLength(errorName: string) {
-    return this.getRequiredLength(errorName)-this.getActualLength(errorName);
+    return this.getRequiredLength(errorName) - this.getActualLength(errorName);
   }
 
   private getRequiredLength(errorName: string) {
@@ -91,10 +91,10 @@ export class DynamicFormQuestionComponent implements OnInit{
     if (isNullOrUndefined(this.question.messages)) {
       return this.getStandardMessage(errorName);
     }
-    let msg = this.question.messages.get(errorName);
+    const msg = this.question.messages.get(errorName);
    
     if (!isNullOrUndefined(msg)) {
-      return msg
+      return msg;
     } else {
       return this.getStandardMessage(errorName);
     }
@@ -102,17 +102,17 @@ export class DynamicFormQuestionComponent implements OnInit{
   
   private getStandardMessage(errorName: string) {
     
-    switch(errorName) {
+    switch (errorName) {
       case 'required': 
-        return "You must enter a value";
+        return 'You must enter a value';
       case 'requiredtrue':
-        return this.question.label + " has to be true";
+        return this.question.label + ' has to be true';
       case 'pattern':
         return 'Not a valid ' + this.question.label + ' -- Requried Pattern: ' + this.getPattern();
       case 'minlength':
         return 'String not long enough - minimum length: ' + this.getRequiredLength('minlength') + ' characters required: ' + this.getRemainingLength('minlength');
       case 'maxlength':
-        return 'String too long - maximum length: ' +  this.getRequiredLength('maxlength') + 'characters to remove: ' + (this.getRemainingLength('maxlength')*-1);
+        return 'String too long - maximum length: ' +  this.getRequiredLength('maxlength') + 'characters to remove: ' + (this.getRemainingLength('maxlength') * -1);
       case 'min':
         return 'Value below minimum';
       case 'max':
@@ -121,14 +121,19 @@ export class DynamicFormQuestionComponent implements OnInit{
         return 'Invalid Date';
       case 'requiredother':
         // console.log(this.form.controls[this.question.key].getError('requiredother').keyThis);
-        return `Field '` +  this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyThis) + `' requires '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyOther) + `' to be filled in`;
+        return `Field '` +  this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyThis) + 
+          `' requires '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('requiredother').keyOther) + `' to be filled in`;
       case 'maxother':
-        return `Value ` + this.form.controls[this.question.key].getError('maxother').valueOther + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyOther) + 
-              `' exceeds ` + this.form.controls[this.question.key].getError('maxother').valueThis + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyThis) +
-              `' `; 
+        return `Value ` + this.form.controls[this.question.key].getError('maxother').valueOther + 
+          ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyOther) + 
+          `' exceeds ` + this.form.controls[this.question.key].getError('maxother').valueThis + 
+          ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('maxother').keyThis) +
+          `' `; 
       case 'minother':
-          return `Value ` + this.form.controls[this.question.key].getError('minother').valueOther + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyOther) + 
-          `' is below ` + this.form.controls[this.question.key].getError('minother').valueThis + ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyThis) +
+        return `Value ` + this.form.controls[this.question.key].getError('minother').valueOther + 
+          ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyOther) + 
+          `' is below ` + this.form.controls[this.question.key].getError('minother').valueThis + 
+          ` in Field '` + this.getQuestionLabel(this.form.controls[this.question.key].getError('minother').keyThis) +
           `' `; 
       default:
         return '';
@@ -141,12 +146,12 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
 
   public getQuestionValue(question: QuestionBase<any>) {
-    let ret = question.values[0];
-    return ret
+    const ret = question.values[0];
+    return ret;
   }
 
   private getQuestionLabel(key: string): string {
-    let ret: string = this.question.subQuestions.find((q: QuestionBase<any> ) => {
+    const ret: string = this.question.subQuestions.find((q: QuestionBase<any> ) => {
       return q.key == key;
     }).label;
 

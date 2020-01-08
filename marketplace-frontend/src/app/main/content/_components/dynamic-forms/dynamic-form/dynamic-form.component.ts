@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, Output, EventEmitter }  from '@angular/core';
-import { FormGroup, AbstractControl }                 from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, AbstractControl } from '@angular/forms';
  
-import { QuestionBase }              from '../../../_model/dynamic-forms/questions';
-import { QuestionControlService }    from '../../../_service/question-control.service';
+import { QuestionBase } from '../../../_model/dynamic-forms/questions';
+import { QuestionControlService } from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
-declare var $:JQueryStatic;
+declare var $: JQueryStatic;
 
 @Component({
   selector: 'app-dynamic-form',
@@ -43,26 +43,26 @@ export class DynamicFormComponent implements OnInit {
       this.output = JSON.stringify(this.form.value);
       
 
-      console.log("Values")
+      console.log('Values');
       console.log(this.form.value);
   
       this.fireResultEvent();
       
     } else {
-      //Mark errornous Fields
+      // Mark errornous Fields
       this.markFormAsTouched(this.questions, this.form);
       
 
-      //focus on first error using jQuery
+      // focus on first error using jQuery
       $('input.ng-invalid').first().focus();
 
     }
   }
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
-    for (let q of questions) {
-      control.get(q.key).markAsTouched()
-      if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
+    for (const q of questions) {
+      control.get(q.key).markAsTouched();
+      if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));
       }
     }    
@@ -78,6 +78,6 @@ export class DynamicFormComponent implements OnInit {
   }
 
   removeProperty(question: QuestionBase<any>) {
-    console.log("clicked Remove Property")
+    console.log('clicked Remove Property');
   }
 }

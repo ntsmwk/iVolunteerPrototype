@@ -62,22 +62,20 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
       this.fireResultEvent();
 
     } else {
-      let firstKey: string;
-
-      //Mark errornous Fields
+      // Mark errornous Fields
       this.markFormAsTouched(this.questions, this.form);
 
 
-      //focus on first error using jQuery
+      // focus on first error using jQuery
       $('input.ng-invalid').first().focus();
 
     }
   }
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
-    for (let q of questions) {
-      control.get(q.key).markAsTouched()
-      if (q.controlType == 'multiple' && !isNullOrUndefined(q.subQuestions)) {
+    for (const q of questions) {
+      control.get(q.key).markAsTouched();
+      if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));
       }
     }
@@ -93,6 +91,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   }
 
   removeProperty(question: QuestionBase<any>) {
-    console.log("clicked Remove Property")
+    console.log('clicked Remove Property');
   }
 }

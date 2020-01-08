@@ -10,11 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserImagePathController;
+import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.user.UserImagePath;
 
 @SpringBootApplication
 public class CoreApplication {
@@ -33,6 +36,7 @@ public class CoreApplication {
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
+	@Autowired private UserImagePathRepository userImagePathRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
@@ -93,13 +97,58 @@ public class CoreApplication {
 		volunteer.setLastname("Kofler");
 		volunteer.setNickname("Kati");
 		saveVolunteer(volunteer);
+		
+		
+		//Helpseekers
+		CoreHelpSeeker helpseeker = createHelpSeekerFixedId("FFA", "passme");
+		helpseeker.setNickname("FF Altenberg");
+		helpseeker.setId("FFA");
+		saveHelpseeker(helpseeker);
+		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/FF_Altenberg.jpg"));
 
+		
+		helpseeker = createHelpSeekerFixedId("OERK", "passme");
+		helpseeker.setNickname("Rotes Kreuz");
+		helpseeker.setId("OERK");
+		helpseeker = saveHelpseeker(helpseeker);
+		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg"));
+		
+		helpseeker = createHelpSeekerFixedId("MVS", "passme");
+		helpseeker.setNickname("Musikverein Schwertberg");
+		helpseeker.setId("MVS");
+		saveHelpseeker(helpseeker);
+		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
+
+		
+		helpseeker = createHelpSeekerFixedId("EFA", "passme");
+		helpseeker.setNickname("Forum Alpbach");
+		helpseeker.setId("EFA");
+		saveHelpseeker(helpseeker);
+		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
+
+
+	}
+	
+	private CoreHelpSeeker saveHelpseeker(CoreHelpSeeker coreHelpseeker) {
+		return coreHelpSeekerRepository.save(coreHelpseeker);
 	}
 
 	private CoreHelpSeeker createHelpSeeker(String username, String password) {
 		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
 		if (helpSeeker == null) {
 			helpSeeker = new CoreHelpSeeker();
+			helpSeeker.setUsername(username);
+			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
+			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);
+		}
+		return helpSeeker;
+	}
+	
+	private CoreHelpSeeker createHelpSeekerFixedId(String username, String password) {
+		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
+		if (helpSeeker == null) {
+			helpSeeker = new CoreHelpSeeker();
+			helpSeeker.setId(username);
 			helpSeeker.setUsername(username);
 			helpSeeker.setPassword(bCryptPasswordEncoder.encode(password));
 			helpSeeker = coreHelpSeekerRepository.insert(helpSeeker);

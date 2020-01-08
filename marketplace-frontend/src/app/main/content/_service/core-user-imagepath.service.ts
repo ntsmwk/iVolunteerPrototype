@@ -15,19 +15,19 @@ export class CoreUserImagePathService {
   }
 
   getImagePathById(userId: string) {
-    return this.http.get(`/user/image/${userId}`);
+    return this.http.get(`/core/user/image/${userId}`);
   }
 
   getImagePathsById(userIds: string[]) {
-    return this.http.put(`/user/image/get-multiple`, userIds);
+    return this.http.put(`/core/user/image/get-multiple`, userIds);
   }
 
   saveImagePath(userImagePath: UserImagePath) {
-    return this.http.post(`user/image/save`, userImagePath);
+    return this.http.post(`/core/user/image/save`, userImagePath);
   }
 
   deleteImagePath(userId: string) {
-    return this.http.delete(`/user/image/${userId}`);
+    return this.http.delete(`/core/user/image/${userId}`);
   }
 
 

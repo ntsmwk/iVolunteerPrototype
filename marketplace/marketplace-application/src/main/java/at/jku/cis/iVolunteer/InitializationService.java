@@ -522,12 +522,17 @@ public class InitializationService {
 		ti1.setId("ti1");
 		ti1.setName("Shopping Elementaries");
 		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
-		HelpSeeker helpseeker = helpSeekerRepository.findByUsername("mmustermann");
+		HelpSeeker oerk = helpSeekerRepository.findByUsername("OERK");
+		HelpSeeker mvs = helpSeekerRepository.findByUsername("MVS");
+		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
+		HelpSeeker efa = helpSeekerRepository.findByUsername("EFA");
+
+		
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if (oerk != null) {
+			ti1.setIssuerId(oerk.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 		ti1.setInUserRepository(true);
@@ -539,8 +544,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if (mvs != null) {
+			ti1.setIssuerId(mvs.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -551,8 +556,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if ( efa != null) {
+			ti1.setIssuerId(efa.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -563,8 +568,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if (oerk != null) {
+			ti1.setIssuerId(oerk.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -575,8 +580,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if (efa != null) {
+			ti1.setIssuerId(efa.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -587,8 +592,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ti1.setIssuerId(helpseeker.getId());
+		if (oerk != null) {
+			ti1.setIssuerId(oerk.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
 
@@ -601,8 +606,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			f1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			f1.setIssuerId(helpseeker.getId());
+		if (oerk != null) {
+			f1.setIssuerId(oerk.getId());
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(1);
@@ -616,8 +621,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			f1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			f1.setIssuerId(helpseeker.getId());
+		if (ffa != null) {
+			f1.setIssuerId(ffa.getId());
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(5);
@@ -630,8 +635,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ci1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ci1.setIssuerId(helpseeker.getId());
+		if (mvs != null) {
+			ci1.setIssuerId(mvs.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		ci1.setInUserRepository(true);
@@ -643,8 +648,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ci1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ci1.setIssuerId(helpseeker.getId());
+		if (ffa != null) {
+			ci1.setIssuerId(ffa.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		classInstanceRepository.save(ci1);
@@ -654,8 +659,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ci1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ci1.setIssuerId(helpseeker.getId());
+		if (efa != null) {
+			ci1.setIssuerId(efa.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		classInstanceRepository.save(ci1);
@@ -665,8 +670,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ci1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ci1.setIssuerId(helpseeker.getId());
+		if (ffa != null) {
+			ci1.setIssuerId(ffa.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		classInstanceRepository.save(ci1);
@@ -676,8 +681,8 @@ public class InitializationService {
 		if (volunteer != null) {
 			ci1.setUserId(volunteer.getId());
 		}
-		if (helpseeker != null) {
-			ci1.setIssuerId(helpseeker.getId());
+		if (ffa != null) {
+			ci1.setIssuerId(ffa.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		ci1.setInUserRepository(false);

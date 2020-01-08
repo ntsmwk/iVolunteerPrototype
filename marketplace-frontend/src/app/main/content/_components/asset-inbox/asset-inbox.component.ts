@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ClassInstance } from '../../_model/meta/Class';
-import { MatTable, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { Feedback } from '../../_model/feedback';
 import { HelpseekerService } from '../../_service/helpseeker.service';
 import { Helpseeker } from '../../_model/helpseeker';
@@ -19,12 +19,9 @@ export class AssetInboxComponent implements OnInit {
   output = '';
   submitPressed: boolean;
 
-
   datasource = new MatTableDataSource<ClassInstance | Feedback>();
   displayedColumns = ['checkboxes', 'archetype', 'label', 'issuer', 'date'];
   selection = new SelectionModel<ClassInstance | Feedback>(true, []);
-
-
 
   @Input() classInstances: ClassInstance[];
   @Input() feedbackInstances: Feedback[];
@@ -39,21 +36,15 @@ export class AssetInboxComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('Asset Inbox');
-    console.log(this.classInstances);
     this.allInstances.push(...this.classInstances);
     this.allInstances.push(...this.feedbackInstances);
     this.allInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
     this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
-      console.log(issuers);
       this.issuers = issuers;
     });
 
     this.datasource.data = this.allInstances;
-    // TESTING
-    // this.dataSource.data = [];
-
   }
 
   onSubmit() {
@@ -61,7 +52,6 @@ export class AssetInboxComponent implements OnInit {
     if (!this.selection.isEmpty()) {
       this.submit.emit(this.selection.selected);
     }
-
   }
 
   getDateString(date: number) {
@@ -75,7 +65,7 @@ export class AssetInboxComponent implements OnInit {
       return '';
     }
 
-    let result: string = '';
+    let result = '';
 
     if (!isNullOrUndefined(issuer.lastname)) {
       if (!isNullOrUndefined(issuer.nickname)) {

@@ -12,6 +12,7 @@ import { ClassInstanceService } from '../../_service/meta/core/class/class-insta
 import { FeedbackService } from '../../_service/feedback.service';
 import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
 import { Feedback } from '../../_model/feedback';
+import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 
 @Component({
   selector: 'dashboard-volunteer',
@@ -38,6 +39,9 @@ export class DashboardVolunteerComponent implements OnInit {
   displayedColumnsFeedback = ['issuer', 'label_feedback', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
   displayedColumnsTasks = ['issuer', 'label_tasks', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
 
+  issuerIds: string[] = [];
+  userImagePaths: any[];
+
 
   constructor(public dialog: MatDialog,
     private coreVolunteerService: CoreVolunteerService,
@@ -45,7 +49,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
 
     private classInstanceService: ClassInstanceService,
-    private feedbackService: FeedbackService
+    private userImagePathService: CoreUserImagePathService
   ) {
 
   }
@@ -56,12 +60,12 @@ export class DashboardVolunteerComponent implements OnInit {
       Promise.all([
         this.marketplaceService.findAll().toPromise().then((ret: Marketplace[]) => {
           this.marketplace = ret.pop();
-
         }),
+
         this.coreVolunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise().then((ret: Marketplace[]) => {
           this.registeredMarketplaces = ret;
 
-        })
+        }),
       ]).then(() => {
         if (isNullOrUndefined(this.registeredMarketplaces) || this.registeredMarketplaces.length <= 0) {
           this.coreVolunteerService.registerMarketplace(this.volunteer.id, this.marketplace.id).toPromise().then(() => {
@@ -77,49 +81,57 @@ export class DashboardVolunteerComponent implements OnInit {
   loadDashboardContent() {
     Promise.all([
       this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
-        console.log('Instances');
-        console.log(ret);
 
         let tasks = ret.filter((classInstance: ClassInstance) => {
           return classInstance.classArchetype === ClassArchetype.TASK;
         });
-        console.log('Tasks');
-        console.log(tasks);
+
         tasks = tasks.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (tasks.length > 5) {
           tasks = tasks.slice(0, 5);
         }
 
         this.dataSourceTasks.data = tasks;
+        this.issuerIds.push(...tasks.map(t => t.issuerId));
 
         let competences = ret.filter((classInstance: ClassInstance) => {
           return classInstance.classArchetype === ClassArchetype.COMPETENCE;
         });
-        console.log('Competences');
-        console.log(competences);
+
         competences = competences.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (competences.length > 5) {
           competences = competences.slice(0, 5);
         }
         this.dataSourceComp.data = competences;
+        this.issuerIds.push(...competences.map(t => t.issuerId));
+
 
         let feedback = ret.filter((classInstance: Feedback) => {
           return !isNullOrUndefined(classInstance.feedbackType);
         });
-        
-        console.log('Feedback');
-        console.log(feedback);
+
         feedback = feedback.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
         if (feedback.length > 5) {
           feedback = feedback.slice(0, 5);
         }
         this.dataSourceFeedback.data = feedback;
+        this.issuerIds.push(...feedback.map(t => t.issuerId));
 
 
       })
 
     ]).then(() => {
-      this.isLoaded = true;
+      this.issuerIds = this.issuerIds.filter((elem, index, self) => {
+        return index === self.indexOf(elem);
+      });
+      console.log(this.issuerIds);
+      this.userImagePathService.getImagePathsById(this.issuerIds).toPromise().then((ret: any) => {
+        console.log(ret);
+        this.userImagePaths = ret;
+
+      }).then(() => {
+        this.isLoaded = true;
+      });
     });
   }
 
@@ -127,8 +139,16 @@ export class DashboardVolunteerComponent implements OnInit {
     return new Date(date).toLocaleDateString();
   }
 
-  test(event: any) {
-    console.log(event);
+  getImagePathById(id: string) {
+    const ret = this.userImagePaths.find((userImagePath) => {
+      return userImagePath.userId === id;
+    });
+
+    if (isNullOrUndefined(ret)) {
+      return '/assets/images/avatars/profile.jpg';
+    } else {
+      return ret.imagePath;
+    }
   }
 
   triggerShareDialog() {
