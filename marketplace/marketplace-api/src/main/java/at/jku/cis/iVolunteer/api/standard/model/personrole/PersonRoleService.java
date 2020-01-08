@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import jersey.repackaged.com.google.common.collect.Lists;
@@ -18,6 +19,7 @@ public class PersonRoleService {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private UserMappingService userMappingService;
 
 	public void savePersonRoles(List<PersonRole> personRoles) {
 		ClassDefinition personRoleClassDefinition = classDefinitionService.getByName("PersonRole");
@@ -41,6 +43,9 @@ public class PersonRoleService {
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("dateTo")).forEach(p -> p.setValues(Lists.asList(personRole.getDateTo(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personRole.getiVolunteerSource(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personRole.getPersonID(), new Object[0])));
+		
+		personRoleClassInstance.setUserId(userMappingService.getByExternalUserId(personRole.getPersonID()).getiVolunteerUserId());
+
 		classInstanceRepository.save(personRoleClassInstance); 
 		// @formatter:on
 	}

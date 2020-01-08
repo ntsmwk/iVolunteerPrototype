@@ -49,9 +49,9 @@
 
 
       <div fxLayout="row" fxLayoutAlign="left">
-        <button mat-raised-button (click)="filterApply()">Apply</button>
+        <button mat-raised-button (click)="filterApply()">Filtern</button>
         <div *ngIf="!!timelineFilterFrom">
-          <h3>(Applied Data: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
+          <h3>(Ausgewählte Daten: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
         </div>
       </div>
     </div>
@@ -78,39 +78,39 @@
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
               <ng-container matColumnDef="taskName">
                 <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[3].values[0]}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </td>
               </ng-container>
   
               <ng-container matColumnDef="taskType1">
                 <th mat-header-cell *matHeaderCellDef> Typ </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[4].values[0]}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </td>
               </ng-container>
   
               <ng-container matColumnDef="taskType2">
                 <th mat-header-cell *matHeaderCellDef> Untertyp </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[5].values[0]}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </td>
               </ng-container>
   
               <ng-container matColumnDef="taskDescription">
                 <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[8].values[0]}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </td>
               </ng-container>
   
               <ng-container matColumnDef="taskDateFrom">
                 <th mat-header-cell *matHeaderCellDef> Datum </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[15].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy   hh:mm'}}
                 </td>
               </ng-container>
   
               <ng-container matColumnDef="taskDateTo">
                 <th mat-header-cell *matHeaderCellDef> Ende </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[16].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy   hh:mm'}}
                 </td>
               </ng-container>
   
               <ng-container matColumnDef="taskDuration">
                 <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[17].values[0]}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </td>
               </ng-container>
   
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -1,0 +1,22 @@
+export abstract class CIP {
+    static readonly IVOLUNTEER_UUID = "0";
+    static readonly IVOLUNTEER_SOURCE = "1";
+    static readonly TASK_ID = "2";
+    static readonly TASK_NAME = "3";
+    static readonly TASK_TYPE_1 = "4";
+    static readonly TASK_TYPE_2 = "5";
+    static readonly TASK_TYPE_3 = "6";
+    static readonly TASK_TYPE_4 = "7";
+    static readonly TASK_DESCRIPTION = "8";
+    static readonly ZWECK = "9";
+    static readonly ROLLE = "1O";
+    static readonly RANG = "11";
+    static readonly PHASE = "12";
+    static readonly ARBEITSTEILUNG = "13";
+    static readonly EBENE = "14";
+    static readonly TASK_DATE_FROM = "15";
+    static readonly TASK_DATE_TO = "16";
+    static readonly TASK_DURATION = "17";
+    static readonly TASK_LOCATION = "18";
+    static readonly TASK_GEO_INFORMATION = "19";
+  }

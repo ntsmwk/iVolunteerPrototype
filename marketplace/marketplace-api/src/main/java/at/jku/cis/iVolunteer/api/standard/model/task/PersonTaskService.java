@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -18,6 +19,7 @@ public class PersonTaskService {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private UserMappingService userMappingService;
 
 	public void savePersonTasks(List<PersonTask> personTasks) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
@@ -30,7 +32,7 @@ public class PersonTaskService {
 
 	private void savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
 		// @formatter:off
-		ClassInstance personTaskClassInstance = classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
+		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskName")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType1(), new Object[0])));
@@ -53,6 +55,7 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
 		
+		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(true);
 		
 		classInstanceRepository.save(personTaskClassInstance);		 
