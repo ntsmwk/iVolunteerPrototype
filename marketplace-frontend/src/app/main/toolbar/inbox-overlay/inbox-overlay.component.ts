@@ -59,14 +59,14 @@ export class InboxOverlayComponent implements OnInit {
         this.participantRole = role;
 
         if (role === 'VOLUNTEER') {
-          this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
             this.drawInboxElements(ret);
 
             this.isLoaded = true;
           });
         } else if (role === 'HELP_SEEKER') {
-          this.classInstanceService.getClassInstancesByIssuerIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
               this.drawInboxElements(ret);
               this.isLoaded = true;

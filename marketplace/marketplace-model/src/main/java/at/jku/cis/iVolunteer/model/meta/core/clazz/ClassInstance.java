@@ -22,8 +22,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	//Temp flags for dashboard presentation
 	private boolean published; // flag if published
-	private boolean inRepository; //flag if in inbox or in repository
-	private boolean viaAPI; //flag für Properties Imported via API
+	private boolean inUserRepository; //flag if in inbox or in repository
+	private boolean inIssuerRepository; //flag für Properties Imported via API
 	
 	private ClassArchetype classArchetype;
 	
@@ -111,14 +111,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.published = published;
 	}
 
-	public boolean isInRepository() {
-		return inRepository;
-	}
-
-	public void setInRepository(boolean inRepository) {
-		this.inRepository = inRepository;
-	}
-
 	public ClassArchetype getClassArchetype() {
 		return classArchetype;
 	}
@@ -135,13 +127,23 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.issuerId = issuerId;
 	}
 
-	public boolean isViaAPI() {
-		return viaAPI;
+	public boolean isInUserRepository() {
+		return inUserRepository;
 	}
 
-	public void setViaAPI(boolean viaAPI) {
-		this.viaAPI = viaAPI;
+	public void setInUserRepository(boolean inUserRepository) {
+		this.inUserRepository = inUserRepository;
 	}
+
+	public boolean isInIssuerRepository() {
+		return inIssuerRepository;
+	}
+
+	public void setInIssuerRepository(boolean inIssuerRepository) {
+		this.inIssuerRepository = inIssuerRepository;
+	}
+
+	
 	
 	
 

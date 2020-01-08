@@ -70,7 +70,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   loadInboxEntries() {
-    this.classInstanceService.getClassInstancesByUserIdInInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+    this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
       console.log(ret);
       this.classInstances = ret;
@@ -85,7 +85,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
   onAssetInboxSubmit(classInstances: ClassInstance[]) {
     console.log('submitted - returned');
 
-    this.classInstanceService.updateClassInstancesInRepositoryState(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
+    this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
 
       this.router.navigate(['/main/volunteer/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
 

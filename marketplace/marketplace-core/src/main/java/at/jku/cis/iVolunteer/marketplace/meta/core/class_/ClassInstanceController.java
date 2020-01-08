@@ -55,24 +55,30 @@ public class ClassInstanceController {
 		return classInstanceRepository.getByUserId(userId);
 	}
 
-	@GetMapping("/meta/core/class/instance/by-userid/{userId}/inbox")
-	private List<ClassInstance> getClassInstanceByUserIdInInbox(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInRepository(userId, false);
+	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
+	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId) {
+		return classInstanceRepository.getByUserIdAndInUserRepository(userId, false);
 	}
 
-	@GetMapping("/meta/core/class/instance/by-userid/{userId}/repository")
-	private List<ClassInstance> getClassInstanceByUserIdInRepostory(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInRepository(userId, true);
+	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
+	private List<ClassInstance> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
+		return classInstanceRepository.getByUserIdAndInUserRepository(userId, true);
+	}
+	
+	@GetMapping("/meta/core/class/instance/in-issuer-repository/{userId}")
+	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("userId") String issuerId) {
+		System.out.println("TODO");
+		return null;
 	}
 
-	@PutMapping("/meta/core/class/instance/set-inRepository-state/{inRepository}")
-	private List<ClassInstance> setClassInstancesInRepository(@PathVariable("inRepository") boolean inRepository,
+	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
+	private List<ClassInstance> setClassInstancesInUserRepository(@PathVariable("inUserRepository") boolean inUserRepository,
 			@RequestBody List<String> classInstanceIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
 
 		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInRepository(true);
+			classInstance.setInUserRepository(true);
 		}
 
 		return classInstanceRepository.save(classInstances);
