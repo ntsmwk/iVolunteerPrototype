@@ -199,7 +199,7 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("taskID") 
+				.filter(p -> p.getName().equals("taskId") 
 						|| p.getName().equals("taskName")
 						|| p.getName().equals("taskType1") 
 						|| p.getName().equals("taskType2")
@@ -269,7 +269,7 @@ public class InitializationService {
 	}
 
 	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskID", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
