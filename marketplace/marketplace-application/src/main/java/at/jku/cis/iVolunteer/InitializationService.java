@@ -530,7 +530,7 @@ public class InitializationService {
 			ti1.setIssuerId(helpseeker.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
-		ti1.setInRepository(true);
+		ti1.setInUserRepository(true);
 
 		classInstanceRepository.save(ti1);
 
@@ -606,7 +606,7 @@ public class InitializationService {
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(1);
-		f1.setInRepository(false);
+		f1.setInUserRepository(false);
 
 		feedbackRepository.save(f1);
 
@@ -634,7 +634,7 @@ public class InitializationService {
 			ci1.setIssuerId(helpseeker.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInRepository(true);
+		ci1.setInUserRepository(true);
 
 		classInstanceRepository.save(ci1);
 
@@ -680,7 +680,7 @@ public class InitializationService {
 			ci1.setIssuerId(helpseeker.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInRepository(false);
+		ci1.setInUserRepository(false);
 		classInstanceRepository.save(ci1);
 	}
 }
