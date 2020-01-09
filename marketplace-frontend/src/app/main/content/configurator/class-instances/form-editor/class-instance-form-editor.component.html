@@ -37,7 +37,7 @@
     </div>
 
     <div *ngIf="canFinish">
-        <h1>Done creating Instances</h1>
+        <h1 style="text-align: center">Create Instances</h1>
 
         <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 25px">
             <div></div>
@@ -51,7 +51,7 @@
                         </mat-icon>
 
                         <div style="font-size: 12pt; padding-left: 10px">
-                            Saved {{instance.name}} - containing {{instance.properties.length}} Properties
+                            Saving {{instance.name}} for {{getDisplayedNameFromUserId(instance.userId)}} - containing {{instance.properties.length}} Properties
                         </div>
                     </div>
                 </div>

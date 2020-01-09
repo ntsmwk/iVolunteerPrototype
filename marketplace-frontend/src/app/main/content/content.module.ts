@@ -42,6 +42,11 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
+    path: 'main/helpseeker/asset-inbox/confirm',
+    loadChildren: () => import('./asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module').then(m => m.VolunteerConfirmationScreenModule),
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
     path: 'main/dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.FuseDashboardModule),
     canActivate: [TokenGuard, LoginGuard]

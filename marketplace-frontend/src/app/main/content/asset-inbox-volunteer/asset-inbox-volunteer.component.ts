@@ -17,9 +17,6 @@ import { LoginService } from '../_service/login.service';
 })
 export class AssetInboxVolunteerComponent implements OnInit {
 
-  // dataSource = new MatTableDataSource<any>();
-  // displayedColumns = ['data', 'issuer', 'label', 'details'];
-
   isLoaded: boolean;
   marketplace: Marketplace;
   participant: Participant;

@@ -67,8 +67,12 @@ public class ClassInstanceController {
 	
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
 	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
-		System.out.println("TODO");
-		return null;
+		System.out.println(issuerId);
+		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInbox(issuerId, true);
+		System.out.println(instances);
+		System.out.println(instances.size());
+		
+		return instances;
 	}
 
 	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
@@ -101,7 +105,10 @@ public class ClassInstanceController {
 	@PostMapping("/meta/core/class/instance/new")
 	List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
 
-		// TODO split into different archetypes
+		for (ClassInstance classInstance : classInstances) {
+			classInstance.setInIssuerInbox(true);
+			classInstance.setInUserRepository(false);
+		}
 		return classInstanceRepository.save(classInstances);
 
 	}

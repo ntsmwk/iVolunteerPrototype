@@ -11,7 +11,7 @@ import { LoginService } from '../../_service/login.service';
 
 
 @Component({
-  selector: 'volunteer-inbox-confirmation-screen',
+  selector: 'helpseeker-inbox-confirmation-screen',
   templateUrl: './confirmation-screen.component.html',
   styleUrls: ['./confirmation-screen.component.scss'],
 })

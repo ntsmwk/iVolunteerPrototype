@@ -36,7 +36,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   canContinue: boolean;
   canFinish: boolean;
-  isLoaded: boolean = false;
+  isLoaded = false;
 
 
   constructor(private router: Router,
@@ -49,13 +49,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private loginService: LoginService
   ) {
-    console.log("extras");
+    console.log('extras');
     console.log(this.router.getCurrentNavigation().extras.state);
   }
 
   ngOnInit() {
     let marketplaceId: string;
-    let childClassIds: string[] = [];
+    const childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
     this.selectedVolunteers = [];
@@ -79,9 +79,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         Promise.all([
           this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-            this.formConfigurations = formConfigurations
+            this.formConfigurations = formConfigurations;
 
-            for (let config of this.formConfigurations) {
+            for (const config of this.formConfigurations) {
               config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
               config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
             }
@@ -101,37 +101,37 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         });
 
 
-      })
+      });
     });
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
-    let classInstances: ClassInstance[] = [];
+    const classInstances: ClassInstance[] = [];
     this.currentFormConfiguration.formEntry.formGroup.disable();
-    let propertyInstances: PropertyInstance<any>[] = [];
+    const propertyInstances: PropertyInstance<any>[] = [];
 
-    for (let classProperty of this.currentFormConfiguration.formEntry.classProperties) {
-      let values = [event.formGroup.value[classProperty.id]];
+    for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
+      const values = [event.formGroup.value[classProperty.id]];
       propertyInstances.push(new PropertyInstance(classProperty, values));
     }
 
-    for (let enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
-      let values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
-      let propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values)
+    for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
+      const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
+      const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
       propertyInstance.name = enumRepresentation.classDefinition.name;
       propertyInstance.id = enumRepresentation.id;
       propertyInstances.push(propertyInstance);
     }
 
-    for (let selectedVolunteer of this.selectedVolunteers) {
-      let classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+    for (const selectedVolunteer of this.selectedVolunteers) {
+      const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstance.userId = selectedVolunteer.id;
       classInstance.issuerId = this.helpseeker.id;
       classInstances.push(classInstance);
     }
     
     this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
-      //handle returned value if necessary
+      // handle returned value if necessary
       if (!isNullOrUndefined(ret)) {
         this.returnedClassInstances.push(...ret);
         this.handleNextClick();
@@ -140,7 +140,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   getDisplayedName(volunteer: Volunteer): string {
-    let result: string = '';
+    let result = '';
 
     if (!isNullOrUndefined(volunteer.lastname)) {
       if (!isNullOrUndefined(volunteer.nickname)) {
@@ -159,14 +159,24 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return result;
   }
 
+  getDisplayedNameFromUserId(userId: string) {
+    const volunteer = this.volunteers.find(v => v.id === userId);
+
+    if (isNullOrUndefined(volunteer)) {
+      return 'a volunteer';
+    } else {
+      return this.getDisplayedName(volunteer);
+    }
+  }
+
   addToSelection(event: any) {
-    let volunteer = this.selectedVolunteers.find((v: Volunteer) => {
-      return v.id == event.option.value.id;
+    const volunteer = this.selectedVolunteers.find((v: Volunteer) => {
+      return v.id === event.option.value.id;
     });
 
     if (!isNullOrUndefined(volunteer)) {
       this.selectedVolunteers = this.selectedVolunteers.filter((v: Volunteer) => {
-        return v.id != volunteer.id;
+        return v.id !== volunteer.id;
       });
     } else {
       this.selectedVolunteers.push(event.option.value);
@@ -178,12 +188,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     if (this.formConfigurations.length > 0) {
       this.currentFormConfiguration = this.formConfigurations.pop();
     } else {
-      this.canFinish = true
+      this.canFinish = true;
     }
   }
 
   handleFinishClick() {
-    this.navigateBack();
+    this.router.navigate(['/main/helpseeker/asset-inbox']);
   }
 
   handleCancelEvent() {
@@ -193,6 +203,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   printAnything(anything: any) {
     console.log(anything);
   }
+
 
   navigateBack() {
     window.history.back();

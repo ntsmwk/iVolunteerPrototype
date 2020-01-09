@@ -20,15 +20,13 @@ export class AssetInboxComponent implements OnInit {
   submitPressed: boolean;
 
   datasource = new MatTableDataSource<ClassInstance | Feedback>();
-  displayedColumns = ['checkboxes', 'archetype', 'label', 'issuer', 'date'];
+  displayedColumns = ['checkboxes', 'archetype', 'label', 'issuer', 'user', 'date'];
   selection = new SelectionModel<ClassInstance | Feedback>(true, []);
 
   @Input() classInstances: ClassInstance[];
-  @Input() feedbackInstances: Feedback[];
   @Input() marketplace: Marketplace;
   @Output() submit = new EventEmitter();
 
-  allInstances: (ClassInstance | Feedback)[] = [];
   issuers: Helpseeker[] = [];
 
   constructor(
@@ -36,15 +34,17 @@ export class AssetInboxComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.allInstances.push(...this.classInstances);
-    this.allInstances.push(...this.feedbackInstances);
-    this.allInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
-    this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
-      this.issuers = issuers;
-    });
+    if (!isNullOrUndefined(this.classInstances)) {
+      this.classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
-    this.datasource.data = this.allInstances;
+      this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
+        this.issuers = issuers;
+      });
+    } else {
+      this.classInstances = [];
+    }
+    this.datasource.data = this.classInstances;
   }
 
   onSubmit() {

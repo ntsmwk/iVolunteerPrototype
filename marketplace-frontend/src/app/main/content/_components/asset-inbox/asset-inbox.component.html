@@ -88,6 +88,16 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="user">
+      <mat-header-cell *matHeaderCellDef>Volunteer</mat-header-cell>
+      <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
+
+        <img class="avatar" src="/assets/images/avatars/profile.jpg">
+        <div>{{getNameForEntry(entry.userId)}}</div>
+
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="label">
       <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
       <mat-cell *matCellDef="let entry">
@@ -111,7 +121,7 @@
   </mat-table>
 
   <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
-    keine Einträge vorhanden, die Inbox ist leer
+    keine Einträge vorhanden - die Inbox ist leer
   </div>
 
 
