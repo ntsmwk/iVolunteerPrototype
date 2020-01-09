@@ -81,10 +81,14 @@ public class InitializationService {
 
 	private void addFireBrigadeUserMapping() {
 		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
-		UserMapping mapping = new UserMapping();
-		mapping.setiVolunteerUserId(volunteer.getId());
-		mapping.setExternalUserId("5dc2a215399af");
-		userMappingRepository.save(mapping);
+		//@Alex fixed nullpointer issue Philipp encountered (I assume)
+		if (volunteer != null) {
+			UserMapping mapping = new UserMapping();
+			mapping.setiVolunteerUserId(volunteer.getId());
+			mapping.setExternalUserId("5dc2a215399af");
+			userMappingRepository.save(mapping);
+		}
+
 	}
 
 	private void addTestDerivationRule() {
