@@ -8,7 +8,7 @@
                 <div style="padding-top: 12px"></div>
                 <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
                     [hideButtons]="false" [formConfigurationId]="currentFormConfiguration.id"
-                    [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
+                    [form]="currentFormConfiguration.formEntry.formGroup" [lastEntry]="lastEntry" (resultEvent)="handleResultEvent($event)"
                     (cancelEvent)="handleCancelEvent()">
                 </app-dynamic-class-instance-creation-form>
             </div>

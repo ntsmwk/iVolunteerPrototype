@@ -15,8 +15,11 @@
 
     <div></div>
 
-    <button type="submit" mat-raised-button color="primary">
+    <button *ngIf="!lastEntry" type="submit" mat-raised-button color="primary">
       Next</button>
-  </div>
+      <button *ngIf="lastEntry" type="submit" mat-raised-button color="primary">
+        Freiwillgenpass-Eintrag erstellen</button>
+  
+    </div>
 
 </form>

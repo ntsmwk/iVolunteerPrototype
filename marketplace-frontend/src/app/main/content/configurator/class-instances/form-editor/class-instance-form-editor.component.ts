@@ -36,6 +36,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   canContinue: boolean;
   canFinish: boolean;
+  lastEntry: boolean;
+
   isLoaded = false;
 
 
@@ -97,6 +99,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         ]).then(() => {
           this.currentFormConfiguration = this.formConfigurations.pop();
+
+          console.log(this.formConfigurations);
+          if (this.formConfigurations.length === 0) {
+            this.lastEntry = true;
+          }
+
           this.isLoaded = true;
         });
 
@@ -187,8 +195,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     this.canContinue = false;
     if (this.formConfigurations.length > 0) {
       this.currentFormConfiguration = this.formConfigurations.pop();
+      if (this.formConfigurations.length === 0) {
+        this.lastEntry = true;
+      }
     } else {
-      this.canFinish = true;
+      this.handleFinishClick();
     }
   }
 
