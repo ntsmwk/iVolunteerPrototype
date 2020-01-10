@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
+import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -34,9 +35,9 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.map(entry -> new SourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
 						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
-						entry.getAggregationOperatorType(),
 						entry.getMappingOperatorType(),
-						entry.getValue()))
+						entry.getValue(),
+						entry.getAggregationOperatorType()))
 				.collect(Collectors.toList()));
 		dto.setTarget(classDefinitionRepository.findOne(source.getTarget()));
 		return dto;		 
@@ -59,12 +60,12 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 			target
 				.getSources()
 				.stream()
-				.map(e -> new SourceRuleEntry(
+				.map(e -> new AttributeSourceRuleEntry(
 						e.getClassDefinition().getId(), 
 						e.getClassProperty().getId(),
-						e.getAggregationOperatorType(),
 						e.getMappingOperatorType(),
-						e.getValue()))
+						e.getValue(),
+						e.getAggregationOperatorType()))
 				.collect(Collectors.toList()));
 
 		derivationRule.setTarget(target.getTarget().getId());

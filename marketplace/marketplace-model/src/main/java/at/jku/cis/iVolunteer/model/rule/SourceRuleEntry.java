@@ -8,18 +8,18 @@ public class SourceRuleEntry {
 	private String classDefinitionId;
 	private String classPropertyId;
 	private MappingOperatorType mappingOperatorType;
-	private String value;
+	private Object value;
 
 	public SourceRuleEntry() {
 	}
 
 	public SourceRuleEntry(String classDefinitionId, String classPropertyId, MappingOperatorType mappingOperatorType,
-			String value) {
+			Object value) {
 		super();
 		this.classDefinitionId = classDefinitionId;
 		this.classPropertyId = classPropertyId;
 		this.mappingOperatorType = mappingOperatorType;
-		this.value = value;
+		this.setValue(value);
 	}
 
 	public String getClassDefinitionId() {
@@ -38,13 +38,6 @@ public class SourceRuleEntry {
 		this.mappingOperatorType = mappingOperatorType;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 
 	public String getClassPropertyId() {
 		return classPropertyId;
@@ -52,6 +45,14 @@ public class SourceRuleEntry {
 
 	public void setClassPropertyId(String classPropertyId) {
 		this.classPropertyId = classPropertyId;
+	}
+
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
 	}
 
 }

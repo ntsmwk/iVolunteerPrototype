@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
-import at.jku.cis.iVolunteer.core.user.CoreUserImagePathController;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
@@ -56,8 +55,7 @@ public class CoreApplication {
 
 		volunteer = createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 		volunteer.setFirstname("Markus");
-		volunteer.
-		setLastname("Weißenbek");
+		volunteer.setLastname("Weißenbek");
 		saveVolunteer(volunteer);
 
 		volunteer = createVolunteer(MWEIXLBAUMER, RAW_PASSWORD);
@@ -98,27 +96,27 @@ public class CoreApplication {
 		volunteer.setLastname("Kofler");
 		volunteer.setNickname("Kati");
 		saveVolunteer(volunteer);
-		
-		
-		//Helpseekers
+
+		// Helpseekers
 		CoreHelpSeeker helpseeker = createHelpSeekerFixedId("FFA", "passme");
 		helpseeker.setNickname("FF Altenberg");
 		helpseeker.setId("FFA");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/FF_Altenberg.jpg"));
 
-		
 		helpseeker = createHelpSeekerFixedId("OERK", "passme");
 		helpseeker.setNickname("Rotes Kreuz");
 		helpseeker.setId("OERK");
 		helpseeker = saveHelpseeker(helpseeker);
-		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg"));
-		
+		userImagePathRepository
+				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg"));
+
 		helpseeker = createHelpSeekerFixedId("MVS", "passme");
 		helpseeker.setNickname("Musikverein Schwertberg");
 		helpseeker.setId("MVS");
 		saveHelpseeker(helpseeker);
-		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
+		userImagePathRepository
+				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
 
 		helpseeker = createHelpSeekerFixedId("EFA", "passme");
 		helpseeker.setNickname("Forum Alpbach");
@@ -127,7 +125,7 @@ public class CoreApplication {
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
 
 	}
-	
+
 	private CoreHelpSeeker saveHelpseeker(CoreHelpSeeker coreHelpseeker) {
 		return coreHelpSeekerRepository.save(coreHelpseeker);
 	}
@@ -142,7 +140,7 @@ public class CoreApplication {
 		}
 		return helpSeeker;
 	}
-	
+
 	private CoreHelpSeeker createHelpSeekerFixedId(String username, String password) {
 		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findByUsername(username);
 		if (helpSeeker == null) {

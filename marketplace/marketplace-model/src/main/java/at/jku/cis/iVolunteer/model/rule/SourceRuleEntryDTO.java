@@ -8,18 +8,16 @@ public class SourceRuleEntryDTO {
 	private ClassDefinition classDefinition;
 	private ClassProperty<Object> classProperty;
 	private MappingOperatorType mappingOperatorType;
-	private AttributeAggregationOperatorType aggregationOperatorType;
-	private String value;
+	private Object value;
 
 	public SourceRuleEntryDTO() {
 	}
 
 	public SourceRuleEntryDTO(ClassDefinition classDefinition, ClassProperty<Object> classProperty,
-			AttributeAggregationOperatorType aggregationOperatorType, MappingOperatorType mappingOperatorType, String value) {
+			MappingOperatorType mappingOperatorType, String value) {
 		super();
 		this.classDefinition = classDefinition;
 		this.classProperty = classProperty;
-		this.aggregationOperatorType = aggregationOperatorType;
 		this.mappingOperatorType = mappingOperatorType;
 		this.value = value;
 	}
@@ -32,13 +30,6 @@ public class SourceRuleEntryDTO {
 		this.classDefinition = classDefinition;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 
 	public MappingOperatorType getMappingOperatorType() {
 		return mappingOperatorType;
@@ -56,12 +47,12 @@ public class SourceRuleEntryDTO {
 		this.classProperty = classProperty;
 	}
 
-	public AttributeAggregationOperatorType getAggregationOperatorType() {
-		return aggregationOperatorType;
+	public Object getValue() {
+		return value;
 	}
 
-	public void setAggregationOperatorType(AttributeAggregationOperatorType aggregationOperatorType) {
-		this.aggregationOperatorType = aggregationOperatorType;
+	public void setValue(Object value) {
+		this.value = value;
 	}
 
 }

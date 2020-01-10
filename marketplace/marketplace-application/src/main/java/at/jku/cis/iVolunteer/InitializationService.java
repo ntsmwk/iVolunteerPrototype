@@ -37,6 +37,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.rule.AttributeAggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -95,11 +96,11 @@ public class InitializationService {
 		DerivationRule rule = new DerivationRule();
 		rule.setName("myrule");
 
-		SourceRuleEntry source = new SourceRuleEntry();
+		AttributeSourceRuleEntry source = new AttributeSourceRuleEntry();
 		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
 		source.setClassPropertyId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
 		source.setMappingOperatorType(MappingOperatorType.GE);
-		source.setAggregationOperatorType(AttributeAggregationOperatorType.COUNT);
+		source.setAggregationOperatorType(AttributeAggregationOperatorType.SUM);
 		source.setValue("102");
 		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
