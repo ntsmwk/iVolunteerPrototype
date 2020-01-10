@@ -56,7 +56,8 @@ public class CoreApplication {
 
 		volunteer = createVolunteer(MWEISSENBEK, RAW_PASSWORD);
 		volunteer.setFirstname("Markus");
-		volunteer.setLastname("Weißenbek");
+		volunteer.
+		setLastname("Weißenbek");
 		saveVolunteer(volunteer);
 
 		volunteer = createVolunteer(MWEIXLBAUMER, RAW_PASSWORD);
@@ -119,13 +120,11 @@ public class CoreApplication {
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
 
-		
 		helpseeker = createHelpSeekerFixedId("EFA", "passme");
 		helpseeker.setNickname("Forum Alpbach");
 		helpseeker.setId("EFA");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
-
 
 	}
 	
