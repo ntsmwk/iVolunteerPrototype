@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.model.rule;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+
 public class ClassSourceRuleEntryDTO extends SourceRuleEntryDTO {
 
 	private MappingOperatorType mappingOperatorType;
@@ -8,7 +10,15 @@ public class ClassSourceRuleEntryDTO extends SourceRuleEntryDTO {
 
 	public ClassSourceRuleEntryDTO() {
 	}
-	
+
+	public ClassSourceRuleEntryDTO(ClassDefinition classDefinition, MappingOperatorType mappingOperatorType,
+			Object value, ClassAggregationOperatorType aggregationOperatorType) {
+		super(classDefinition);
+		this.mappingOperatorType = mappingOperatorType;
+		this.value = value;
+		this.aggregationOperatorType = aggregationOperatorType;
+	}
+
 	public MappingOperatorType getMappingOperatorType() {
 		return mappingOperatorType;
 	}

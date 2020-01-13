@@ -110,6 +110,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
     if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
       this.attributeSourceRuleEntry.classDefinition = this.classDefinitions.find(cd => cd.id === this.rulePreconditionForm.value.classDefinitionId);
       this.attributeSourceRuleEntry.classProperty = this.classProperties.find(cp => cp.id === this.rulePreconditionForm.value.classPropertyId) || new ClassProperty();
+      this.attributeSourceRuleEntry.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
       this.attributeSourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
       this.attributeSourceRuleEntry.value = this.rulePreconditionForm.value.value;
       this.attributeSourceRuleEntryChange.emit(this.attributeSourceRuleEntry);

@@ -11,6 +11,8 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntryDTO;
+import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntryDTO;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -40,6 +42,18 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						entry.getValue(),
 						entry.getAggregationOperatorType()))
 				.collect(Collectors.toList()));
+		
+		dto.setClassSourceRules(
+			source
+				.getClassSourceRules()
+				.stream()
+				.map(entry -> new ClassSourceRuleEntryDTO(
+						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
+						entry.getMappingOperatorType(),
+						entry.getValue(),
+						entry.getAggregationOperatorType()))
+				.collect(Collectors.toList()));
+		
 		dto.setTarget(classDefinitionRepository.findOne(source.getTarget()));
 		return dto;		 
 		// @formatter:on
@@ -68,6 +82,17 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						e.getMappingOperatorType(),
 						e.getAggregationOperatorType()))
 				.collect(Collectors.toList()));
+
+		derivationRule.setClassSourceRules(
+				target
+					.getClassSourceRules()
+					.stream()
+					.map(e -> new ClassSourceRuleEntry(
+							e.getClassDefinition().getId(), 
+							e.getValue(),
+							e.getMappingOperatorType(),
+							e.getAggregationOperatorType()))
+					.collect(Collectors.toList()));
 
 		derivationRule.setTarget(target.getTarget().getId());
 		derivationRule.setTimestamp(target.getTimestamp());

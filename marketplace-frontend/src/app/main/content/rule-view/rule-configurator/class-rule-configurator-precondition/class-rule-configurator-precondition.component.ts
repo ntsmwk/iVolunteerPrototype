@@ -100,6 +100,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
       this.classSourceRuleEntry.classDefinition = this.classDefinitions.find(cd => cd.id === this.rulePreconditionForm.value.classDefinitionId);
       this.classSourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
+      this.classSourceRuleEntry.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
       this.classSourceRuleEntry.value = this.rulePreconditionForm.value.value;
       this.classSourceRuleEntryChange.emit(this.classSourceRuleEntry);
     }
