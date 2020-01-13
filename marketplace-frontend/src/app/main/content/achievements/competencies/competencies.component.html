@@ -13,7 +13,7 @@
             </mat-card-header>
             <mat-card-content>
                 <div class="chartParent" fxLayout="row">
-                    <div class = "half">
+                    <div class="half">
                         <h2 class="title">Gesamtstunden an geileisteten Ausbildungen</h2>
                         <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
                             [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
@@ -22,14 +22,40 @@
                             [animations]="animations" (select)="onSelect($event)">
                         </ngx-charts-bar-vertical-stacked>
                     </div>
-                    <div class = "half">
+                    <div class="half">
                         <h2 class="title">Gesamtstunden an geileisteten Ausbildungen</h2>
-                        <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
+                        <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2"
                             [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                             [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
                             [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
                             [animations]="animations" (select)="onSelect($event)">
-                        </ngx-charts-bar-vertical-stacked>
+                        </ngx-charts-line-chart>
+                    </div>
+                </div>
+
+                <div>
+                    <!-- <p>Du hast in diesem Jahr an {{}} Schulungen, {{}} Ausbildungen und {{}} Kursen teilgenommen.
+                    </p> -->
+                </div>
+
+                <div class="chartParent" fxLayout="column">
+                    <div class="chartParent" fxLayout="column">
+                        <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+                        <ngx-charts-area-chart [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
+                            [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations"
+                            (select)="onSelect($event)">
+                        </ngx-charts-area-chart>
+                    </div>
+                    <div class="chartParent" fxLayout="column">
+                        <h2 class="title">Gesamtstunden (normalisiert) nach Tätigkeitsarten</h2>
+                        <ngx-charts-area-chart-normalized [scheme]="colorScheme" [results]="taskData"
+                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                            [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
+                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                            [animations]="animations" (select)="onSelect($event)">
+                        </ngx-charts-area-chart-normalized>
                     </div>
                 </div>
 
@@ -37,7 +63,7 @@
             </mat-card-content>
         </mat-card>
 
-        <mat-card class="card">
+        <!-- <mat-card class="card">
             <mat-card-header>
                 <mat-card-title>Eigenverantwortung</mat-card-title>
             </mat-card-header>
@@ -48,7 +74,7 @@
                     bred for hunting.
                 </p>
             </mat-card-content>
-        </mat-card>
+        </mat-card> -->
 
     </mat-expansion-panel>
 

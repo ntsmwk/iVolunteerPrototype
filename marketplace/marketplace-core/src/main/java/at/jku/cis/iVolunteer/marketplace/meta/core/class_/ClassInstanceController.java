@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -25,6 +26,8 @@ public class ClassInstanceController {
 	@Autowired ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 
 	@Autowired private ClassDefinitionService classDefinitionService;
+	
+	@Autowired private LoginService loginService;
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
@@ -43,7 +46,7 @@ public class ClassInstanceController {
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
 
 		for (ClassDefinition cd : classDefinitions) {
-			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+			classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(),cd.getId()));
 		}
 
 		return classInstances;
