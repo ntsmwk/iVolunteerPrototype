@@ -37,6 +37,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
   @Input() hideButtons: boolean;
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
+  @Input() lastEntry: boolean;
 
   submitPressed: boolean;
 

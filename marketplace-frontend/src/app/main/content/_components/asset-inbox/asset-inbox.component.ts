@@ -7,6 +7,9 @@ import { Helpseeker } from '../../_model/helpseeker';
 import { Marketplace } from '../../_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Volunteer } from '../../_model/volunteer';
+import { VolunteerService } from '../../_service/volunteer.service';
+import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 
 
 @Component({
@@ -28,9 +31,11 @@ export class AssetInboxComponent implements OnInit {
   @Output() submit = new EventEmitter();
 
   issuers: Helpseeker[] = [];
+  volunteers: Volunteer[] = [];
 
   constructor(
-    private helpseekerService: HelpseekerService
+    private helpseekerService: HelpseekerService,
+    private volunteerService: CoreVolunteerService
   ) { }
 
   ngOnInit() {
@@ -40,6 +45,10 @@ export class AssetInboxComponent implements OnInit {
 
       this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
         this.issuers = issuers;
+      });
+      
+      this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
+        this.volunteers = volunteers;
       });
     } else {
       this.classInstances = [];
@@ -58,27 +67,31 @@ export class AssetInboxComponent implements OnInit {
     return new Date(date).toLocaleDateString();
   }
 
-  getNameForEntry(issuerId: string) {
-    const issuer = this.issuers.find((i) => i.id === issuerId);
-
-    if (isNullOrUndefined(issuer)) {
+  getNameForEntry(personId: string, type: string) {
+    let person: Volunteer | Helpseeker;
+    if (type === 'issuer') {
+    person = this.issuers.find((i) => i.id === personId);
+    } else {
+      person = this.volunteers.find((i) => i.id === personId);
+    }
+    if (isNullOrUndefined(person)) {
       return '';
     }
 
     let result = '';
 
-    if (!isNullOrUndefined(issuer.lastname)) {
-      if (!isNullOrUndefined(issuer.nickname)) {
-        result = result + issuer.nickname;
-      } else if (!isNullOrUndefined(issuer.firstname)) {
-        result = result + issuer.firstname;
+    if (!isNullOrUndefined(person.lastname)) {
+      if (!isNullOrUndefined(person.nickname)) {
+        result = result + person.nickname;
+      } else if (!isNullOrUndefined(person.firstname)) {
+        result = result + person.firstname;
       }
-      if (!isNullOrUndefined(issuer.middlename)) {
-        result = result + ' ' + issuer.middlename;
+      if (!isNullOrUndefined(person.middlename)) {
+        result = result + ' ' + person.middlename;
       }
-      result = result + ' ' + issuer.lastname;
+      result = result + ' ' + person.lastname;
     } else {
-      result = result + issuer.username;
+      result = result + person.username;
     }
 
     return result;

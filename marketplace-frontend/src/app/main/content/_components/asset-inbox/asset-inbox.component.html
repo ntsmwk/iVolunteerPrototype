@@ -83,7 +83,7 @@
       <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
 
         <img class="avatar" src="/assets/images/avatars/profile.jpg">
-        <div>{{getNameForEntry(entry.issuerId)}}</div>
+        <div>{{getNameForEntry(entry.issuerId,'issuer')}}</div>
 
       </mat-cell>
     </ng-container>
@@ -93,7 +93,7 @@
       <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
 
         <img class="avatar" src="/assets/images/avatars/profile.jpg">
-        <div>{{getNameForEntry(entry.userId)}}</div>
+        <div>{{getNameForEntry(entry.userId,'volunteer')}}</div>
 
       </mat-cell>
     </ng-container>
