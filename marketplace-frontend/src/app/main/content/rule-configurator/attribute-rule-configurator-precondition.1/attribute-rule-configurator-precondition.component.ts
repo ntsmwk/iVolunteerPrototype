@@ -13,8 +13,9 @@ import { MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry, At
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassProperty } from 'app/main/content/_model/meta/Property';
+import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/Property';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+import { PropertyDefinitionService } from '../../_service/meta/core/property/property-definition.service';
 
 @Component({
   selector: 'attribute-rule-precondition',
@@ -34,6 +35,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
   classProperties: ClassProperty<any>[] = [];
   comparisonOperators: any;
   aggregationOperators: any;
+  test = true;
+
+  propertyDefinition: PropertyDefinition<any>;
 
   classDefinitionCache: ClassDefinition[] = [];
 
@@ -42,6 +46,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
     private formBuilder: FormBuilder,
     private classDefinitionService: ClassDefinitionService,
     private classPropertyService: ClassPropertyService,
+    private propertyDefinitionService: PropertyDefinitionService,
     private helpSeekerService: CoreHelpSeekerService) {
     this.rulePreconditionForm = formBuilder.group({
       'classDefinitionId': new FormControl(undefined),
@@ -104,6 +109,21 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
           this.onChange($event);
         });
     }
+  }
+
+  findEnumValues() {
+    if (this.attributeSourceRuleEntry.classProperty.type === 'ENUM') {
+      if (this.test) {
+        this.propertyDefinitionService
+          .getPropertyDefinitionById(this.marketplace, this.attributeSourceRuleEntry.classProperty.allowedValues)
+          .toPromise().then(p => {
+            // this.propertyDefinition = p;
+            console.error(p);
+          });
+        this.test = false;
+      }
+    }
+    return ['A', 'V', 'C'];
   }
 
   onChange($event) {

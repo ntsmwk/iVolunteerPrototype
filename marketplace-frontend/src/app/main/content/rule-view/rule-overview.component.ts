@@ -44,7 +44,6 @@ export class FuseRuleOverviewComponent implements OnInit {
             this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
                 if (!isNullOrUndefined(marketplace)) {
                     this.derivationRuleService.findAll(marketplace).toPromise().then((rules:DerivationRule[]) => this.dataSource.data = rules);
-                    console.log(this.dataSource.data);
                 }
             });
         });

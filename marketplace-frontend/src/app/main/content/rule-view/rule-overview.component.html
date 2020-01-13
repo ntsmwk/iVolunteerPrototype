@@ -20,9 +20,13 @@
             <ng-container matColumnDef="sources">
                 <mat-header-cell *matHeaderCellDef>Vorbedingungen</mat-header-cell>
                 <mat-cell *matCellDef="let rule">
-                    <span *ngFor="let source of rule.sources; let last = last">
+                    <span *ngFor="let source of rule.attributeSourceRules; let last = last">
                         {{source.classDefinition.name}}<span *ngIf="!last">, </span>
                     </span>
+                    <span> &nbsp;  | &nbsp; </span>
+                    <span *ngFor="let source of rule.classSourceRules; let last = last">
+                      {{source.classDefinition.name}}<span *ngIf="!last">, </span>
+                  </span>
                 </mat-cell>
             </ng-container>
             
@@ -35,7 +39,7 @@
         </mat-table>
 
         <div class="no-data" *ngIf="dataSource.data.length === 0">
-            No derivation rules found!
+            Keine Ableigungsregeln gefunden.
         </div>
     </div>
 
