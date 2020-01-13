@@ -169,7 +169,7 @@ const routes: Route[] = [
   },
   {
     path: 'main/rule',
-    loadChildren: () => import('./rule-view/rule-configurator/rule-configurator.module').then(m => m.FuseRuleConfiguratorModule),
+    loadChildren: () => import('./rule-configurator/rule-configurator.module').then(m => m.FuseRuleConfiguratorModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 

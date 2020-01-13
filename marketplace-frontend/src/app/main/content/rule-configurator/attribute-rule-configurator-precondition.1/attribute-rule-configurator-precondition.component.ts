@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 
 import { isNullOrUndefined } from 'util';
-import { LoginService } from '../../../_service/login.service';
-import { Participant, ParticipantRole } from '../../../_model/participant';
-import { MessageService } from '../../../_service/message.service';
+import { LoginService } from '../../_service/login.service';
+import { Participant, ParticipantRole } from '../../_model/participant';
+import { MessageService } from '../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';

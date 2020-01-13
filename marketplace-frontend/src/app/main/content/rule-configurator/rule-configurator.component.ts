@@ -1,20 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
-import { Marketplace } from '../../_model/marketplace';
+import { CoreMarketplaceService } from '../_service/core-marketplace.service';
+import { Marketplace } from '../_model/marketplace';
 
 import { isNullOrUndefined } from 'util';
-import { LoginService } from '../../_service/login.service';
-import { Participant, ParticipantRole } from '../../_model/participant';
-import { MessageService } from '../../_service/message.service';
+import { LoginService } from '../_service/login.service';
+import { Participant, ParticipantRole } from '../_model/participant';
+import { MessageService } from '../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { DerivationRule, MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry } from '../../_model/derivation-rule';
-import { DerivationRuleService } from '../../_service/derivation-rule.service';
-import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
-import { ClassDefinitionService } from '../../_service/meta/core/class/class-definition.service';
-import { ClassDefinition } from '../../_model/meta/Class';
-import { ClassProperty } from '../../_model/meta/Property';
+import { DerivationRule, MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry } from '../_model/derivation-rule';
+import { DerivationRuleService } from '../_service/derivation-rule.service';
+import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
+import { ClassDefinition } from '../_model/meta/Class';
+import { ClassProperty } from '../_model/meta/Property';
 
 @Component({
   templateUrl: './rule-configurator.component.html',

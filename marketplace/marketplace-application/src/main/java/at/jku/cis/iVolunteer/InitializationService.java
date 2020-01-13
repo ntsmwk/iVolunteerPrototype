@@ -83,7 +83,6 @@ public class InitializationService {
 
 	private void addFireBrigadeUserMapping() {
 		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
-		// @Alex fixed nullpointer issue Philipp encountered (I assume)
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());

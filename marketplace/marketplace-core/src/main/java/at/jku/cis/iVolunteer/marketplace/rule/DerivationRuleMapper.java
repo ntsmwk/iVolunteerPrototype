@@ -15,8 +15,6 @@ import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntryDTO;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
-import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.SourceRuleEntryDTO;
 
 @Component
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
