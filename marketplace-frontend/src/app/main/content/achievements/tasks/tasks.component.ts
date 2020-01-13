@@ -15,7 +15,7 @@ import { ArrayService } from '../../_service/array.service';
 import * as moment from 'moment';
 import { Subject, timer } from 'rxjs';
 import * as shape from 'd3-shape';
-import {CIP} from '../../_model//classInstancePropertyConstants';
+import { CIP } from '../../_model//classInstancePropertyConstants';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
 HC_sunburst(Highcharts);
@@ -34,26 +34,26 @@ timer(0, 500)
 })
 
 export class TasksComponent implements OnInit {
-    IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-    IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-    TASK_ID = CIP.TASK_ID;
-    TASK_NAME = CIP.TASK_NAME;
-    TASK_TYPE_1 = CIP.TASK_TYPE_1;
-    TASK_TYPE_2 = CIP.TASK_TYPE_2;
-    TASK_TYPE_3 = CIP.TASK_TYPE_3;
-    TASK_TYPE_4 = CIP.TASK_TYPE_4;
-    TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-    ZWECK = CIP.ZWECK;
-    ROLLE = CIP.ROLLE;
-    RANG = CIP.RANG;
-    PHASE = CIP.PHASE;
-    ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-    EBENE = CIP.EBENE;
-    TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-    TASK_DATE_TO = CIP.TASK_DATE_TO;
-    TASK_DURATION = CIP.TASK_DURATION;
-    TASK_LOCATION = CIP.TASK_LOCATION;
-    TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
+  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
+  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
+  TASK_ID = CIP.TASK_ID;
+  TASK_NAME = CIP.TASK_NAME;
+  TASK_TYPE_1 = CIP.TASK_TYPE_1;
+  TASK_TYPE_2 = CIP.TASK_TYPE_2;
+  TASK_TYPE_3 = CIP.TASK_TYPE_3;
+  TASK_TYPE_4 = CIP.TASK_TYPE_4;
+  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
+  ZWECK = CIP.ZWECK;
+  ROLLE = CIP.ROLLE;
+  RANG = CIP.RANG;
+  PHASE = CIP.PHASE;
+  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
+  EBENE = CIP.EBENE;
+  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
+  TASK_DATE_TO = CIP.TASK_DATE_TO;
+  TASK_DURATION = CIP.TASK_DURATION;
+  TASK_LOCATION = CIP.TASK_LOCATION;
+  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
   private volunteer: Participant;
   private marketplace: Marketplace;
@@ -123,7 +123,7 @@ export class TasksComponent implements OnInit {
         allowTraversingTree: true,
         cursor: 'pointer',
         data: this.sunburstData
-        
+
       }
     ]
   };
@@ -174,11 +174,12 @@ export class TasksComponent implements OnInit {
         this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
+            this.removeDurationNulls();
+            this.filteredClassInstances = [...this.classInstances];
 
             this.tableDataSource.data = this.classInstances;
             this.tableDataSource.paginator = this.paginator;
 
-            this.filteredClassInstances = [...this.classInstances];
             this.generateTimelineData();
             this.generateOtherChartsData();
             this.generateStaticChartData();
@@ -189,6 +190,14 @@ export class TasksComponent implements OnInit {
     });
 
     Highcharts.chart('sunburstChart', this.chartOptions);
+  }
+
+  removeDurationNulls() {
+    this.classInstances.forEach((ci, index, object) => {
+      if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+        object.splice(index,1);
+      }
+    });
   }
 
   onYaxisChange(val: string) {
@@ -210,6 +219,39 @@ export class TasksComponent implements OnInit {
     }
     this.generateTimelineData();
     this.generateOtherChartsData();
+  }
+
+  filterTimelineApply() {
+    let a = new Date(this.lineChart.xDomain[0]);
+    let b = new Date(this.lineChart.xDomain[1]);
+
+    if (a != this.timelineFilterFrom || b != this.timelineFilterTo) {
+      this.timelineFilterFrom = a;
+      this.timelineFilterTo = b;
+
+
+      this.filteredClassInstances = this.classInstances.filter(c => {
+        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
+          moment(c.properties[this.TASK_DATE_FROM].values[0]).isBefore(moment(this.timelineFilterTo)));
+      });
+
+      this.generateOtherChartsData();
+    }
+  }
+
+  onComparisonYearChanged(value) {
+    this.comparisonYear = value;
+
+    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
+    let data = [];
+
+    Array.from(this.yearsMap.entries()).forEach(entry => {
+      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
+        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
+      }
+    });
+
+    this.comparisonData = [...data];
   }
 
   generateTimelineData() {
@@ -238,26 +280,6 @@ export class TasksComponent implements OnInit {
 
     this.newTimelineChartData[0].series = data1;
     this.newTimelineChartData = [...this.newTimelineChartData];
-
-  }
-
-  filterApply() {
-    let a = new Date(this.lineChart.xDomain[0]);
-    let b = new Date(this.lineChart.xDomain[1]);
-
-    if (a != this.timelineFilterFrom || b != this.timelineFilterTo) {
-      this.timelineFilterFrom = a;
-      this.timelineFilterTo = b;
-
-
-      this.filteredClassInstances = this.classInstances.filter(c => {
-        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
-          moment(c.properties[this.TASK_DATE_FROM].values[0]).isBefore(moment(this.timelineFilterTo)));
-      });
-
-      this.generateOtherChartsData();
-    }
-
 
   }
 
@@ -330,26 +352,20 @@ export class TasksComponent implements OnInit {
         return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], value: value })
       });
 
-    let distinctSet1 = new Set();
 
-    list.forEach(l => {
-      distinctSet1.add(l.tt1);
+    let data = [];
 
-    });
-    let distinctTaskType1 = Array.from(distinctSet1);
-
-    let sunburst = [];
     // insert 0 entry
-    sunburst.push({ id: '0', parent: '', name: ' ' });
-
+    data.push({ id: '0', parent: '', name: 'Tätigkeitsart' });
 
     // insert tt1 entries
-    distinctTaskType1.forEach((tt1, index) => {
-      sunburst.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
+    let uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+    uniqueTt1.forEach((tt1, index) => {
+      data.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
     });
 
     // insert tt2 entries (for each tt1 separetly)
-    distinctTaskType1.forEach(tt1 => {
+    uniqueTt1.forEach(tt1 => {
 
       let tt1List = list.filter(l => {
         return (tt1 === l.tt1)
@@ -364,16 +380,16 @@ export class TasksComponent implements OnInit {
         }
       });
 
-      let indexTt1 = distinctTaskType1.indexOf(tt1) + 1;
+      let indexTt1 = uniqueTt1.indexOf(tt1) + 1;
 
       Array.from(tt2Map.entries()).forEach((entry, index) => {
         if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-          sunburst.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
+          data.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
         }
       });
     });
 
-    this.sunburstData = [...sunburst];
+    this.sunburstData = [...data];
 
     this.chartOptions.series = [
       {
@@ -404,21 +420,6 @@ export class TasksComponent implements OnInit {
         this.yearsMap.set(t.year, t.value);
       }
     });
-
-    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
-    let data = [];
-
-    Array.from(this.yearsMap.entries()).forEach(entry => {
-      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
-        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
-      }
-    });
-
-    this.comparisonData = [...data];
-  }
-
-  onComparisonYearChanged(value) {
-    this.comparisonYear = value;
 
     let comparisonYearData = this.yearsMap.get(this.comparisonYear);
     let data = [];

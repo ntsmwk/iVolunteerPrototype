@@ -49,7 +49,7 @@
 
 
       <div fxLayout="row" fxLayoutAlign="left">
-        <button mat-raised-button (click)="filterApply()">Filtern</button>
+        <button mat-raised-button (click)="filterTimelineApply()">Filtern</button>
         <div *ngIf="!!timelineFilterFrom">
           <h3>(Ausgewählte Daten: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
         </div>

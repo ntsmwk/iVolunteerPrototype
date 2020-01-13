@@ -12,12 +12,13 @@ import { Volunteer } from '../../_model/volunteer';
 import * as moment from 'moment';
 import { CIP } from '../../_model//classInstancePropertyConstants';
 
-
 @Component({
   selector: 'fuse-competencies',
   templateUrl: './competencies.component.html',
   styleUrls: ['./competencies.component.scss'],
   animations: fuseAnimations
+
+
 
 })
 export class CompetenciesComponent implements OnInit {
@@ -26,6 +27,8 @@ export class CompetenciesComponent implements OnInit {
   classInstances: ClassInstance[];
 
   trainingData: any[];
+  trainingData2: any[];
+  taskData: any[];
 
   // chart options
   colorScheme = 'cool';
@@ -60,6 +63,8 @@ export class CompetenciesComponent implements OnInit {
   TASK_LOCATION = CIP.TASK_LOCATION;
   TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
+
+
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
@@ -83,9 +88,9 @@ export class CompetenciesComponent implements OnInit {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
-
             this.generateChartData();
 
+            
           }
         });
       });
@@ -102,44 +107,127 @@ export class CompetenciesComponent implements OnInit {
         year: (new Date(ci.properties[this.TASK_DATE_FROM].values[0]).getFullYear()).toString(),
         duration: ci.properties[this.TASK_DURATION].values[0],
         tt1: ci.properties[this.TASK_TYPE_1].values[0],
-        tt2: ci.properties[this.TASK_TYPE_2].values[0]
+        tt2: ci.properties[this.TASK_TYPE_2].values[0],
+        tt3: ci.properties[this.TASK_TYPE_3].values[0]
       });
-    }).filter(entry => {
+    });
+
+
+    // Ausbildung 
+    let filteredList = list.filter(entry => {
       return entry.tt1 == 'Ausbildung (aktiv)';
     });
 
-    let uniqueYears = [...new Set(list.map(item => item.year))];
-    let data = [];
+    let uniqueYears = [...new Set(filteredList.map(item => item.year))];
+    let dataA1 = [];
 
     uniqueYears.forEach(year => {
-      let oneYear = list.filter(entry => {
+      let currentYearList = filteredList.filter(entry => {
         return entry.year == year;
       });
 
-      let map = new Map<string, number>();
+      let map = new Map<string, number[]>(); // 0: number, 1: duration
       let data2 = [];
 
-      oneYear.forEach(t => {
-        if (map.get(t.tt2)) {
-          map.set(t.tt2, Number(map.get(t.tt2)) + Number(t.duration))
-        } else {
-          map.set(t.tt2, Number(t.duration));
-        }
-
-        data2 = [];
-        Array.from(map.entries()).forEach(entry => {
-          if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-            data2.push({ name: entry[0], value: Number(entry[1]) });
+      currentYearList.forEach(t => {
+        if (t.duration != 'null') {
+          if (map.get(t.tt2)) {
+            map.set(t.tt2, [Number(map.get(t.tt2)[0]) + 1, Number(map.get(t.tt2)[1]) + Number(t.duration)]);
+          } else {
+            map.set(t.tt2, [1, Number(t.duration)]);
           }
-        });
+        }
       });
-      data.push({ name: year, series: data2 });
+
+      data2 = [];
+      Array.from(map.entries()).forEach(entry => {
+        data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+      });
+      dataA1.push({ name: year, series: data2 });      
 
     });
 
-    this.trainingData = [...data];
+    this.trainingData = [...dataA1];
+    // /Ausbildung
+
+    // Ausbildung2
+    let dataA2 = [];
+
+    let uniqueTt2 = [...new Set(filteredList.map(item => item.tt2))];
+
+
+    uniqueTt2.forEach(tt2 => {
+      let oneTt2 = list.filter(entry => {
+        return entry.tt2 == tt2;
+      });
+
+      let map = new Map<string, number[]>(); // 0: number, 1: duration
+      let data2 = [];
+
+      oneTt2.forEach(t => {
+        if (t.duration != 'null') {
+
+          if (map.get(t.year)) {
+            map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
+          } else {
+            map.set(t.year, [1, Number(t.duration)]);
+          }
+
+        }
+      });
+
+      data2 = [];
+      Array.from(map.entries()).forEach(entry => {
+        data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+      });
+      dataA2.push({ name: tt2, series: data2 });
+
+    });
+
+    this.trainingData2 = [...dataA2];
+    // /Ausbildung2
+
+    // Verschiedene Tätigkeiten (TT2)
+    uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+    let tt2Data = [];
+
+    uniqueTt2.forEach(tt2 => {
+      let oneTt2 = list.filter(entry => {
+        return entry.tt2 == tt2;
+      });
+
+      let map = new Map<string, number[]>(); // 0: number, 1: duration
+      let data2 = [];
+
+      oneTt2.forEach(t => {
+        if (t.duration != 'null') {
+          if (map.get(t.year)) {
+            map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
+
+          } else {
+            map.set(t.year, [1, Number(t.duration)]);
+          }
+        }
+      });
+
+      data2 = [];
+      Array.from(map.entries()).forEach(entry => {
+        data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+      });
+      tt2Data.push({ name: tt2, series: data2 });
+
+    });
+
+    this.taskData = [...tt2Data];
+    // /Verschiedene Tätigkeiten (TT2)
+
+
   }
 
 
-  
+
+
+
+
+
 }
