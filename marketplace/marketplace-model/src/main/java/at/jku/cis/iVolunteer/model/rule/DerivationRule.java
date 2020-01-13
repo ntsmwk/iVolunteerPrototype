@@ -11,18 +11,11 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class DerivationRule extends IVolunteerObject {
 
 	private String name;
-	private List<SourceRuleEntry> sources = new ArrayList<>();
+	private List<ClassSourceRuleEntry> classSourceRules = new ArrayList<>();
+	private List<AttributeSourceRuleEntry> attributeSourceRules = new ArrayList<>();
 	private String target;
-	
+
 	public DerivationRule() {
-	}
-
-	public List<SourceRuleEntry> getSources() {
-		return sources;
-	}
-
-	public void setSources(List<SourceRuleEntry> sources) {
-		this.sources = sources;
 	}
 
 	public String getName() {
@@ -39,6 +32,22 @@ public class DerivationRule extends IVolunteerObject {
 
 	public void setTarget(String target) {
 		this.target = target;
+	}
+
+	public List<ClassSourceRuleEntry> getClassSourceRules() {
+		return classSourceRules;
+	}
+
+	public void setClassSourceRules(List<ClassSourceRuleEntry> classSourceRules) {
+		this.classSourceRules = classSourceRules;
+	}
+
+	public List<AttributeSourceRuleEntry> getAttributeSourceRules() {
+		return attributeSourceRules;
+	}
+
+	public void setAttributeSourceRules(List<AttributeSourceRuleEntry> attributeSourceRules) {
+		this.attributeSourceRules = attributeSourceRules;
 	}
 
 }

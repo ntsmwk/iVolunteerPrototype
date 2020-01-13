@@ -38,9 +38,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.rule.AttributeAggregationOperatorType;
 import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.ClassAggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
-import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
@@ -82,7 +83,7 @@ public class InitializationService {
 
 	private void addFireBrigadeUserMapping() {
 		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
-		//@Alex fixed nullpointer issue Philipp encountered (I assume)
+		// @Alex fixed nullpointer issue Philipp encountered (I assume)
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());
@@ -102,7 +103,15 @@ public class InitializationService {
 		source.setMappingOperatorType(MappingOperatorType.GE);
 		source.setAggregationOperatorType(AttributeAggregationOperatorType.SUM);
 		source.setValue("102");
-		rule.setSources(Lists.asList(source, new SourceRuleEntry[0]));
+		rule.setAttributeSourceRules(Lists.asList(source, new AttributeSourceRuleEntry[0]));
+
+		ClassSourceRuleEntry cSource = new ClassSourceRuleEntry();
+		cSource.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
+		cSource.setMappingOperatorType(MappingOperatorType.GE);
+		cSource.setAggregationOperatorType(ClassAggregationOperatorType.COUNT);
+		cSource.setValue("102");
+		rule.setClassSourceRules(Lists.asList(cSource, new ClassSourceRuleEntry[0]));
+
 		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
 		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
 		derivationRuleRepository.save(rule);
@@ -549,7 +558,6 @@ public class InitializationService {
 		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
 		HelpSeeker efa = helpSeekerRepository.findByUsername("EFA");
 
-		
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
@@ -578,7 +586,7 @@ public class InitializationService {
 		if (volunteer != null) {
 			ti1.setUserId(volunteer.getId());
 		}
-		if ( efa != null) {
+		if (efa != null) {
 			ti1.setIssuerId(efa.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));

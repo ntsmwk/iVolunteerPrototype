@@ -1,5 +1,5 @@
 package at.jku.cis.iVolunteer.model.rule;
 
-public enum ClassAggregationOperatorType {
+public enum ClassAggregationOperatorType implements AggregationOperatorType {
 	COUNT;
 }

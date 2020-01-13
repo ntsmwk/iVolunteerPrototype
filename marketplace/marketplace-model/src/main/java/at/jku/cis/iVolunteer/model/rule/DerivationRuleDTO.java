@@ -11,7 +11,8 @@ public class DerivationRuleDTO {
 	private String id;
 	private String name;
 	private String marketplaceId;
-	private List<SourceRuleEntryDTO> sources = new ArrayList<>();
+	private List<ClassSourceRuleEntryDTO> classSourceRules = new ArrayList<>();
+	private List<AttributeSourceRuleEntryDTO> attributeSourceRules = new ArrayList<>();
 	private ClassDefinition target;
 	private Date timestamp;
 
@@ -42,14 +43,6 @@ public class DerivationRuleDTO {
 		this.marketplaceId = marketplaceId;
 	}
 
-	public List<SourceRuleEntryDTO> getSources() {
-		return sources;
-	}
-
-	public void setSources(List<SourceRuleEntryDTO> sources) {
-		this.sources = sources;
-	}
-
 	public Date getTimestamp() {
 		return timestamp;
 	}
@@ -64,6 +57,22 @@ public class DerivationRuleDTO {
 
 	public void setTarget(ClassDefinition target) {
 		this.target = target;
+	}
+
+	public List<ClassSourceRuleEntryDTO> getClassSourceRules() {
+		return classSourceRules;
+	}
+
+	public void setClassSourceRules(List<ClassSourceRuleEntryDTO> classSourceRules) {
+		this.classSourceRules = classSourceRules;
+	}
+
+	public List<AttributeSourceRuleEntryDTO> getAttributeSourceRules() {
+		return attributeSourceRules;
+	}
+
+	public void setAttributeSourceRules(List<AttributeSourceRuleEntryDTO> attributeSourceRules) {
+		this.attributeSourceRules = attributeSourceRules;
 	}
 
 }

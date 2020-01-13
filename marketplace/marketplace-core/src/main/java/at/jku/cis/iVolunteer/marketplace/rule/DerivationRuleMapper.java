@@ -10,6 +10,7 @@ import at.jku.cis.iVolunteer.mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntryDTO;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 import at.jku.cis.iVolunteer.model.rule.SourceRuleEntry;
@@ -28,11 +29,11 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		dto.setId(source.getId());
 		dto.setMarketplaceId(source.getMarketplaceId());
 		dto.setName(source.getName());
-		dto.setSources(
+		dto.setAttributeSourceRules(
 			source
-				.getSources()
+				.getAttributeSourceRules()
 				.stream()
-				.map(entry -> new SourceRuleEntryDTO(
+				.map(entry -> new AttributeSourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
 						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
 						entry.getMappingOperatorType(),
@@ -56,15 +57,15 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		derivationRule.setId(target.getId());
 		derivationRule.setMarketplaceId(target.getMarketplaceId());
 		derivationRule.setName(target.getName());
-		derivationRule.setSources(
+		derivationRule.setAttributeSourceRules(
 			target
-				.getSources()
+				.getAttributeSourceRules()
 				.stream()
 				.map(e -> new AttributeSourceRuleEntry(
 						e.getClassDefinition().getId(), 
+						e.getValue(),
 						e.getClassProperty().getId(),
 						e.getMappingOperatorType(),
-						e.getValue(),
 						e.getAggregationOperatorType()))
 				.collect(Collectors.toList()));
 
