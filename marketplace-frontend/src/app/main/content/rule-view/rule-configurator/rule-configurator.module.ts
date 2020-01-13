@@ -15,7 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule, MatSelectModule } from '@angular/material';
-import { FuseRulePreconditionConfiguratorComponent } from './rule-configurator-precondition/rule-configurator-precondition.component';
+import { FuseClassRulePreconditionConfiguratorComponent } from './class-rule-configurator-precondition/class-rule-configurator-precondition.component';
+import { FuseAttributeRulePreconditionConfiguratorComponent } from './attribute-rule-configurator-precondition.1/attribute-rule-configurator-precondition.component';
 
 const routes = [
     {path: '', component: FuseRuleConfiguratorComponent},
@@ -25,7 +26,8 @@ const routes = [
 @NgModule({
   declarations: [
     FuseRuleConfiguratorComponent,
-    FuseRulePreconditionConfiguratorComponent
+    FuseAttributeRulePreconditionConfiguratorComponent,
+    FuseClassRulePreconditionConfiguratorComponent
   ],
   imports: [
     ReactiveFormsModule,

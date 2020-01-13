@@ -9,8 +9,7 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { MessageService } from '../../_service/message.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { FuseRulePreconditionConfiguratorComponent } from './rule-configurator-precondition/rule-configurator-precondition.component';
-import { DerivationRule, SourceRuleEntry, MappingOperatorType } from '../../_model/derivation-rule';
+import { DerivationRule, MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry } from '../../_model/derivation-rule';
 import { DerivationRuleService } from '../../_service/derivation-rule.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { ClassDefinitionService } from '../../_service/meta/core/class/class-definition.service';
@@ -43,7 +42,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.ruleForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
-      'sources': new FormControl(undefined),
+      'attributeSources': new FormControl(undefined),
+      'classSources': new FormControl(undefined),
       'target': new FormControl(undefined),
     });
   }
@@ -69,17 +69,23 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           this.ruleForm.setValue({
             id: this.derivationRule.id,
             name: this.derivationRule.name,
-            sources: this.derivationRule.sources,
+            attributeSources: this.derivationRule.attributeSourceRules,
+            classSources: this.derivationRule.classSourceRules,
             target: this.derivationRule.target
           });
         }
       );
     } else {
       this.derivationRule = new DerivationRule();
-      this.derivationRule.sources = [<SourceRuleEntry>{
-        classDefinition: new ClassDefinition(), 
-        classProperty: new ClassProperty(), 
-        mappingOperatorType: MappingOperatorType.EQ, 
+      this.derivationRule.attributeSourceRules = [<AttributeSourceRuleEntry>{
+        classDefinition: new ClassDefinition(),
+        classProperty: new ClassProperty(),
+        mappingOperatorType: MappingOperatorType.EQ,
+        value: ""
+      }];
+      this.derivationRule.classSourceRules = [<ClassSourceRuleEntry>{
+        classDefinition: new ClassDefinition(),
+        mappingOperatorType: MappingOperatorType.EQ,
         value: ""
       }];
     }
@@ -97,7 +103,11 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     window.history.back();
   }
 
-  addRule(){
-    this.derivationRule.sources.push(new SourceRuleEntry());
+  addAttributeRule() {
+    this.derivationRule.attributeSourceRules.push(new AttributeSourceRuleEntry());
+  }
+
+  addClassRule() {
+    this.derivationRule.classSourceRules.push(new ClassSourceRuleEntry());
   }
 }

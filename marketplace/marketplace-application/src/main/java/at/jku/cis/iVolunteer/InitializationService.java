@@ -90,7 +90,6 @@ public class InitializationService {
 			mapping.setExternalUserId("5dc2a215399af");
 			userMappingRepository.save(mapping);
 		}
-
 	}
 
 	private void addTestDerivationRule() {

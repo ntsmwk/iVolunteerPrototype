@@ -1,7 +1,8 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return</mat-icon>
+    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
+    </mat-icon>
     <h1>Konfiguration - Ableitungsregeln</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative">
     </div>
@@ -28,12 +29,22 @@
       <mat-divider></mat-divider>
     </div>
 
-    <div *ngFor="let entry of derivationRule.sources">
-      <rule-precondition [(sourceRuleEntry)]="entry"></rule-precondition>
+    <div *ngFor="let entry of derivationRule.attributeSourceRules">
+      <attribute-rule-precondition [(attributeSourceRuleEntry)]="entry"></attribute-rule-precondition>
     </div>
 
     <div>
-      <button type='button' mat-raised-button color="secondary" (click)="addRule()">Regel hinzufügen</button>
+      <button type='button' mat-raised-button color="secondary" (click)="addAttributeRule()">Attribut-Regel
+        hinzufügen</button>
+    </div>
+
+    <div *ngFor="let entry of derivationRule.classSourceRules">
+      <class-rule-precondition [(classSourceRuleEntry)]="entry"></class-rule-precondition>
+    </div>
+
+    <div>
+      <button type='button' mat-raised-button color="secondary" (click)="addClassRule()">Klassen-Regel
+        hinzufügen</button>
     </div>
 
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
