@@ -43,8 +43,8 @@ const routes: Route[] = [
   },
   {
     path: 'main/helpseeker/asset-inbox/confirm',
-    loadChildren: () => import('./asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module').then(m => m.VolunteerConfirmationScreenModule),
-    canActivate: [TokenGuard, VolunteerGuard]
+    loadChildren: () => import('./asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module').then(m => m.HelpseekerConfirmationScreenModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/dashboard',

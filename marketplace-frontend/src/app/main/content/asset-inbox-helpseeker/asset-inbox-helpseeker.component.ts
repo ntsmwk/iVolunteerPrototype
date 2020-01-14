@@ -72,8 +72,8 @@ export class AssetInboxHelpseekerComponent implements OnInit {
 
   onAssetInboxSubmit(classInstances: ClassInstance[]) {
     this.classInstanceService.setClassInstanceInIssuerInbox(this.marketplace, classInstances.map(c => c.id), false).toPromise().then(() => {
-
-      this.router.navigate(['/main/helpseeker/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
+      console.log("confirm");
+      this.router.navigate(['main/helpseeker/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
 
     });
 

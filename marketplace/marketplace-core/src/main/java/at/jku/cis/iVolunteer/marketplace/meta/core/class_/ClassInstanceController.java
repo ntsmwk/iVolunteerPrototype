@@ -59,18 +59,18 @@ public class ClassInstanceController {
 
 	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
 	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepository(userId, false);
+		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false);
 	}
 
 	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
 	private List<ClassInstance> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepository(userId, true);
+		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false);
 	}
 	
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
 	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
 		System.out.println(issuerId);
-		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInbox(issuerId, true);
+		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false);
 		System.out.println(instances);
 		System.out.println(instances.size());
 		
@@ -98,7 +98,7 @@ public class ClassInstanceController {
 
 		for (ClassInstance classInstance : classInstances) {
 			classInstance.setInIssuerInbox(inIssuerInbox);
-			classInstance.setInUserRepository(!inIssuerInbox);
+			classInstance.setInUserRepository(false);
 		}
 
 		return classInstanceRepository.save(classInstances);
