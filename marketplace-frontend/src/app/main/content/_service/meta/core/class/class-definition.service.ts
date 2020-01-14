@@ -55,11 +55,9 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
     }
 
-
     getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id`, propIds);
     }
-
 
     addPropertiesToClassDefinitionById(marketplace: Marketplace, id: string, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
@@ -73,4 +71,7 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/remove-properties`, propIds);
     }
 
+    getEnumValuesFromEnumHeadClassDefinition(marketplace: Marketplace, classDefinitionId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}`);
+    }
   }

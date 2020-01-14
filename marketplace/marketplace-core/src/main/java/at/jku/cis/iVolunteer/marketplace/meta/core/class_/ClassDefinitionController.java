@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController
@@ -69,6 +70,11 @@ public class ClassDefinitionController {
 	@PutMapping("meta/core/class/definition/get-parents")
 	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds) {
 		return classDefinitionService.getParentsById(childIds);
+	}
+	
+	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
+	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId){
+		return classDefinitionService.getEnumValues(classDefinitionId);
 	}
 
 }

@@ -177,6 +177,10 @@ public class ClassDefinitionService {
 //		return enumRepresentation;
 //	}
 	
+	
+	
+	
+	
 	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list) {
 		Stack<Relationship> stack = new Stack<>();
 		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
@@ -212,6 +216,9 @@ public class ClassDefinitionService {
 		return null;
 	}
 
-
+	public List<EnumEntry> getEnumValues(String classDefinitionId) {
+		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
+		return performDFS(enumHead, 0, new ArrayList<>());
+	}
 
 }

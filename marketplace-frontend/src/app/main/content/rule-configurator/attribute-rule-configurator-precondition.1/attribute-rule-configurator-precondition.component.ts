@@ -35,7 +35,8 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
   classProperties: ClassProperty<any>[] = [];
   comparisonOperators: any;
   aggregationOperators: any;
-  test = true;
+
+  enumValues = [];
 
   propertyDefinition: PropertyDefinition<any>;
 
@@ -90,6 +91,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
       this.attributeSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.attributeSourceRuleEntry.classDefinition.id = $event.source.value;
+    this.enumValues = [];
     this.loadClassProperties($event);
   }
 
@@ -106,24 +108,20 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
       this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.attributeSourceRuleEntry.classDefinition.id).toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
+          this.enumValues = [];
           this.onChange($event);
         });
     }
   }
 
   findEnumValues() {
-    if (this.attributeSourceRuleEntry.classProperty.type === 'ENUM') {
-      if (this.test) {
-        // this.propertyDefinitionService
-        //   .getPropertyDefinitionById(this.marketplace, this.attributeSourceRuleEntry.classProperty.allowedValues)
-        //   .toPromise().then(p => {
-        //     // this.propertyDefinition = p;
-        //     console.error(p);
-        //   });
-        // this.test = false;
-      }
+    if (this.attributeSourceRuleEntry.classProperty.type === 'ENUM' && this.enumValues.length == 0) {
+        this.classDefinitionService.getEnumValuesFromEnumHeadClassDefinition(this.marketplace,
+          this.attributeSourceRuleEntry.classProperty.allowedValues[0].enumClassId).toPromise().then((list:any[]) => {
+            this.enumValues = list.map(e => e.value);
+          })
     }
-    return ['A', 'V', 'C'];
+    return this.enumValues;
   }
 
   onChange($event) {
