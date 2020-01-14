@@ -41,7 +41,7 @@ export class InboxOverlayComponent implements OnInit {
   classInstances: ClassInstance[] = [];
 
   dataSource = new MatTableDataSource<ClassInstance | Feedback>();
-  displayedColumns = ['archetype', 'label', 'date'];
+  displayedColumns = ['archetype', 'label'];
 
   ngOnInit() {
     Promise.all([

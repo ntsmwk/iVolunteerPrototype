@@ -1,9 +1,14 @@
 package at.jku.cis.iVolunteer.core.helpseeker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 
 @RestController
@@ -22,6 +29,20 @@ public class CoreHelpSeekerController {
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;
 	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	
+	@GetMapping("/all")
+	public List<CoreHelpSeeker> getAllCoreVolunteers() {
+		return this.coreHelpSeekerRepository.findAll();
+	}
+	
+	@PutMapping("/find-by-ids")
+	public List<CoreHelpSeeker> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
+		List<CoreHelpSeeker> coreHelpseekers = new ArrayList<>();
+
+		coreHelpSeekerRepository.findAll(coreHelpseekerIds).forEach(coreHelpseekers::add);
+		
+		return coreHelpseekers;
+	}
 
 	@GetMapping("/{coreHelpSeekerId}")
 	public CoreHelpSeeker getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {

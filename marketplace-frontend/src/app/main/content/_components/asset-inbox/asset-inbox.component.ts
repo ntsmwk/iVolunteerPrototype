@@ -63,8 +63,9 @@ export class AssetInboxComponent implements OnInit {
     }
   }
 
-  getDateString(date: number) {
-    return new Date(date).toLocaleDateString();
+  getDateString(dateNumber: number) {
+    const date = new Date(dateNumber);
+    return 'am ' + date.toLocaleDateString() + ', um ' + date.toLocaleTimeString();
   }
 
   getNameForEntry(personId: string, type: string) {
@@ -90,11 +91,27 @@ export class AssetInboxComponent implements OnInit {
         result = result + ' ' + person.middlename;
       }
       result = result + ' ' + person.lastname;
+    } else if (!isNullOrUndefined(person.nickname)) {
+      result = result + person.nickname;
     } else {
       result = result + person.username;
     }
 
     return result;
+  }
+
+  findNameProperty(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.properties)) {
+      return '';
+    }
+
+    const name =  entry.properties.find(p => p.id === 'name');
+
+    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+      return '';
+    } else {
+      return name.values[0];
+    }
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

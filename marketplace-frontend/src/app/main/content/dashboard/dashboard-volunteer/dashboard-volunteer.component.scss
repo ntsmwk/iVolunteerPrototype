@@ -42,9 +42,9 @@ $custom-typography: mat-typography-config(
         }
     }
 
-    .mat-column-details {
+    .mat-column-actions {
         padding-right: 0;
-        flex: 0 0 20px;
+        flex: 0 0 75px;
     }
 
 
@@ -58,26 +58,26 @@ $custom-typography: mat-typography-config(
 
     // }
 
-    .mat-column-label_competence {
-        // padding-left: 3px;
-        flex: 0 0 200px;
-    }
+    // .mat-column-label_competence {
+    //     // padding-left: 3px;
+    //     flex: 0 0 200px;
+    // }
 
-    .mat-column-label_feedback {
-        // padding-left: 5px;
-        flex: 0 0 200px;
-    }
-    .mat-column-label_tasks {
-        // padding-left: 5px;
-        // flex: 0 0 135px;
-        flex: 0 0 200px;
+    // .mat-column-label_feedback {
+    //     // padding-left: 5px;
+    //     flex: 0 0 200px;
+    // }
+    // .mat-column-label_tasks {
+    //     // padding-left: 5px;
+    //     // flex: 0 0 135px;
+    //     flex: 0 0 200px;
 
-    }
+    // }
 
-    .mat-column-issuer {
-        padding-left: 5px;
-        flex: 0 0 50px;
-    }
+    // .mat-column-issuer {
+    //     padding-left: 5px;
+    //     flex: 0 0 50px;
+    // }
 
     // .mat-column-status {
     //     flex: 0 0 45px;

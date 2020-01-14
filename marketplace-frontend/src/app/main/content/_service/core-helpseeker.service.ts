@@ -9,6 +9,18 @@ export class CoreHelpSeekerService {
   constructor(private http: HttpClient) {
   }
 
+  findAll() {
+    return this.http.get(`/core/helpseeker/all`);
+  }
+
+  findById(helpSeekerId: string) {
+    return this.http.get(`/core/helpseeker/${helpSeekerId}`);
+  }
+
+  findByIds(helpSeekerIds: string[]) {
+    return this.http.put(`/core/helpseeker/find-by-ids`, helpSeekerIds);
+  }
+
   findRegisteredMarketplaces(helpSeekerId: string) {
     return this.http.get(`/core/helpseeker/${helpSeekerId}/marketplace`);
   }
