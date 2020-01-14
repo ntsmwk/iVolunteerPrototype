@@ -32,7 +32,7 @@ public class ClassDefinitionController {
 		return classDefinitionService.getClassDefinitionById(id);
 	}
 
-	@GetMapping("/meta/core/class/definition/{archetype}")
+	@GetMapping("/meta/core/class/definition/archetype/{archetype}")
 	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype) {
 		return classDefinitionService.getClassDefinitionsByArchetype(archetype);
 	}

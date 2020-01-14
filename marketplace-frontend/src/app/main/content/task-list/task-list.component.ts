@@ -23,7 +23,7 @@ import { isNullOrUndefined } from 'util';
 export class FuseTaskListComponent implements OnInit {
   marketplaces: Marketplace[];
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'project', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  displayedColumns = ['name', 'startDate', 'endDate'];
 
   constructor(private router: Router,
     private loginService: LoginService,
@@ -36,10 +36,13 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   onRowSelect(task: Task) {
-    this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
+    // todo...
+    // TODO @ALEX if edit of classInstances works ...
+    // this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadAllTasks() {
+    // TODO @MWE select Class Instances..
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
@@ -56,6 +59,6 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   addTask() {
-    this.router.navigate(['/main/task-form']);
+    this.router.navigate(['/main/task-select']);
   }
 }

@@ -92,6 +92,11 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
+    path: 'main/task-select',
+    loadChildren: () => import('./task-select/task-select.module').then(m => m.FuseTaskSelectModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
     path: 'main/tasks/all',
     loadChildren: () => import('./task-list/task-list.module').then(m => m.FuseTaskListModule),
     canActivate: [TokenGuard, HelpSeekerGuard]

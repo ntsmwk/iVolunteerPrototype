@@ -116,10 +116,10 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
 
   findEnumValues() {
     if (this.attributeSourceRuleEntry.classProperty.type === 'ENUM' && this.enumValues.length == 0) {
-        this.classDefinitionService.getEnumValuesFromEnumHeadClassDefinition(this.marketplace,
-          this.attributeSourceRuleEntry.classProperty.allowedValues[0].enumClassId).toPromise().then((list:any[]) => {
-            this.enumValues = list.map(e => e.value);
-          })
+      this.classDefinitionService.getEnumValuesFromEnumHeadClassDefinition(this.marketplace,
+        this.attributeSourceRuleEntry.classProperty.allowedValues[0].enumClassId).toPromise().then((list: any[]) => {
+          this.enumValues = list.map(e => e.value);
+        })
     }
     return this.enumValues;
   }

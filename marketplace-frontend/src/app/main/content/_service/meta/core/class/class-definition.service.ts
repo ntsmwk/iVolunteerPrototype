@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "../../../../_model/marketplace";
-import { ClassDefinition } from "../../../../_model/meta/Class";
+import { ClassDefinition, ClassArchetype } from "../../../../_model/meta/Class";
 import { PropertyDefinition } from "../../../../_model/meta/Property";
 import { isNullOrUndefined } from "util";
 import { of } from "rxjs";
@@ -73,5 +73,9 @@ import { of } from "rxjs";
 
     getEnumValuesFromEnumHeadClassDefinition(marketplace: Marketplace, classDefinitionId: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}`);
+    }
+
+    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype){
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}`); 
     }
   }
