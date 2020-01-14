@@ -15,7 +15,7 @@ import { ArrayService } from '../../_service/array.service';
 import * as moment from 'moment';
 import { Subject, timer } from 'rxjs';
 import * as shape from 'd3-shape';
-import { CIP } from '../../_model//classInstancePropertyConstants';
+import { CIP } from '../../_model/classInstancePropertyConstants';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
 HC_sunburst(Highcharts);
@@ -171,7 +171,7 @@ export class TasksComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
             this.removeDurationNulls();

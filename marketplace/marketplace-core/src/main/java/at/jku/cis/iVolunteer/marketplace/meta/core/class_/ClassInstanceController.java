@@ -46,6 +46,19 @@ public class ClassInstanceController {
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
 
 		for (ClassDefinition cd : classDefinitions) {
+			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+		}
+
+		return classInstances;
+	}
+	
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user")
+	private List<ClassInstance> getClassInstancesByClassDefinitionIdFake(
+			@PathVariable("archetype") ClassArchetype archeType) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+
+		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(),cd.getId()));
 		}
 

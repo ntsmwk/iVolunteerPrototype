@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskListComponent} from './task-list.component';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
+import { MatPaginatorModule, MatSortModule } from '@angular/material';
 
 const routes: Route[] = [
   {path: '', component: FuseTaskListComponent}
@@ -20,7 +21,11 @@ const routes: Route[] = [
 
     MatTableModule,
     MatIconModule,
-    MatButtonModule,
+    MatButtonModule,    
+    MatPaginatorModule,
+    MatSortModule,
+
+
 
     FuseSharedModule,
     FuseTruncatePipeModule
