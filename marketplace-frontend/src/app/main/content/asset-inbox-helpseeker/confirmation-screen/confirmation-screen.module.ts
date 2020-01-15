@@ -18,6 +18,8 @@ const routes = [
     RouterModule.forChild(routes),       
     FuseSharedModule,
     MatButtonModule,
+    FuseSharedModule,
+    
   
   ],
   exports: [
