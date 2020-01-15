@@ -8,82 +8,87 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { navigation_helpseeker } from 'app/navigation/navigation_helpseeker';
 import { LoginService } from './content/_service/login.service';
-import { ParticipantRole } from './content/_model/participant';
+import { ParticipantRole, Participant } from './content/_model/participant';
 import { navigation_flexprod } from 'app/navigation/navigation_flexprod';
 import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
 import { Router } from '@angular/router';
+import { navigation_mvs } from 'app/navigation/navigation_mvs';
+import { navigation_ffa } from 'app/navigation/navigation_ffa';
 
 @Component({
-    selector     : 'fuse-main',
-    templateUrl  : './main.component.html',
-    styleUrls    : ['./main.component.scss'],
-    providers    : [LoginService],
-    encapsulation: ViewEncapsulation.None
+  selector: 'fuse-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss'],
+  providers: [LoginService],
+  encapsulation: ViewEncapsulation.None
 })
-export class FuseMainComponent implements OnDestroy
-{
-    onConfigChanged: Subscription;
-    fuseSettings: any;
-    navigation: any;
+export class FuseMainComponent implements OnDestroy {
+  onConfigChanged: Subscription;
+  fuseSettings: any;
+  navigation: any;
 
-    @HostBinding('attr.fuse-layout-mode') layoutMode;
+  @HostBinding('attr.fuse-layout-mode') layoutMode;
 
-    constructor(
-        private _renderer: Renderer2,
-        private _elementRef: ElementRef,
-        private fuseConfig: FuseConfigService,
-        private loginService: LoginService,
-        private platform: Platform,
-        private router: Router,
-        @Inject(DOCUMENT) private document: any
-    )
-    {
-        this.onConfigChanged =
-            this.fuseConfig.onConfigChanged
-                .subscribe(
-                    (newSettings) => {
-                        this.fuseSettings = newSettings;
-                        this.layoutMode = this.fuseSettings.layout.mode;
-                    }
-                );
+  constructor(
+    private _renderer: Renderer2,
+    private _elementRef: ElementRef,
+    private fuseConfig: FuseConfigService,
+    private loginService: LoginService,
+    private platform: Platform,
+    private router: Router,
+    @Inject(DOCUMENT) private document: any
+  ) {
+    this.onConfigChanged =
+      this.fuseConfig.onConfigChanged
+        .subscribe(
+          (newSettings) => {
+            this.fuseSettings = newSettings;
+            this.layoutMode = this.fuseSettings.layout.mode;
+          }
+        );
 
-        if ( this.platform.ANDROID || this.platform.IOS )
-        {
-            this.document.body.className += ' is-mobile';
-        }
+    if (this.platform.ANDROID || this.platform.IOS) {
+      this.document.body.className += ' is-mobile';
+    }
 
-        this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-            switch(role){
-                case 'HELP_SEEKER':
-                this.navigation = navigation_helpseeker;
-                break;
-                case 'VOLUNTEER': 
-                this.navigation = navigation_volunteer;
-                break;
-                case 'FLEXPROD':
-                this.navigation = navigation_flexprod;
-                break;
-                case 'RECRUITER':
-                this.navigation = navigation_recruiter;
-                break;
+    this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
+      switch (role) {
+        case 'HELP_SEEKER':
+          // TODO FAKE
+          this.loginService.getLoggedIn().toPromise().then((user: Participant) => {
+            if (user.username === 'MVS') {
+              this.navigation = navigation_mvs;
+            } else if (user.username === 'FFA') {
+              this.navigation = navigation_ffa;
+            } else {
+              this.navigation = navigation_helpseeker;
             }
-        }).catch(e => {
-            console.warn(e);
-        });
-    }
+          });
+          break;
+        case 'VOLUNTEER':
+          this.navigation = navigation_volunteer;
+          break;
+        case 'FLEXPROD':
+          this.navigation = navigation_flexprod;
+          break;
+        case 'RECRUITER':
+          this.navigation = navigation_recruiter;
+          break;
+      }
+    }).catch(e => {
+      console.warn(e);
+    });
+  }
 
-    ngOnDestroy()
-    {
-        this.onConfigChanged.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.onConfigChanged.unsubscribe();
+  }
 
-    addClass(className: string)
-    {
-        this._renderer.addClass(this._elementRef.nativeElement, className);
-    }
+  addClass(className: string) {
+    this._renderer.addClass(this._elementRef.nativeElement, className);
+  }
 
-    removeClass(className: string)
-    {
-        this._renderer.removeClass(this._elementRef.nativeElement, className);
-    }
+  removeClass(className: string) {
+    this._renderer.removeClass(this._elementRef.nativeElement, className);
+  }
 }
