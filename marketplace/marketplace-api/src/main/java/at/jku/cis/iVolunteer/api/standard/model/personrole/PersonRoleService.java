@@ -35,12 +35,12 @@ public class PersonRoleService {
 		ClassInstance personRoleClassInstance = classDefinition2InstanceMapper.toTarget(personRoleClassDefinition);
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleID")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleID(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleType")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleType(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleName")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleName(), new Object[0])));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleName(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("roleDescription")).forEach(p -> p.setValues(Lists.asList(personRole.getRoleDescription(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationID")).forEach(p -> p.setValues(Lists.asList(personRole.getOrganisationID(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("organisationName")).forEach(p -> p.setValues(Lists.asList(personRole.getOrganisationName(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("dateFrom")).forEach(p -> p.setValues(Lists.asList(personRole.getDateFrom(), new Object[0])));
-		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("dateTo")).forEach(p -> p.setValues(Lists.asList(personRole.getDateTo(), new Object[0])));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Lists.asList(personRole.getDateFrom(), new Object[0])));
+		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> p.setValues(Lists.asList(personRole.getDateTo(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personRole.getiVolunteerSource(), new Object[0])));
 		personRoleClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personRole.getPersonID(), new Object[0])));
 		

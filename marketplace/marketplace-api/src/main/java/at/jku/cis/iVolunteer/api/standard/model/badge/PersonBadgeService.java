@@ -34,9 +34,9 @@ public class PersonBadgeService {
 		// @formatter:off
 		ClassInstance personBadgeClassInstance = classDefinition2InstanceMapper.toTarget(personBadgeClassDefinition);
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeID")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeID(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeName")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeName(), new Object[0])));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeName(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeDescription")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeDescription(), new Object[0])));
-		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeIssuedOn")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeIssuedOn(), new Object[0])));
+		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeIssuedOn(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("badgeIcon")).forEach(p -> p.setValues(Lists.asList(personBadge.getBadgeIcon(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerUUID(), new Object[0])));
 		personBadgeClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personBadge.getiVolunteerSource(), new Object[0])));

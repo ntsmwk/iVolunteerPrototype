@@ -8,7 +8,7 @@ public class PersonTask {
 
 	@Id private String id;
 	private String taskId;
-	private String taskName;
+	private String name;
 	private String taskType1;
 	private String taskType2;
 	private String taskType3;
@@ -34,7 +34,7 @@ public class PersonTask {
 	public PersonTask() {
 	}
 
-	public PersonTask(String id, String taskId, String taskName, String taskType1, String taskType2, String taskType3,
+	public PersonTask(String id, String taskId, String name, String taskType1, String taskType2, String taskType3,
 			String taskType4, String taskDescription, String taskDateFrom, String taskDateTo, String taskDuration,
 			String taskLocation, String zweck, String rolle, String rang, String phase, String arbeitsteilung,
 			String ebene, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
@@ -42,7 +42,7 @@ public class PersonTask {
 		super();
 		this.id = id;
 		this.taskId = taskId;
-		this.taskName = taskName;
+		this.setName(name);
 		this.taskType1 = taskType1;
 		this.taskType2 = taskType2;
 		this.taskType3 = taskType3;
@@ -86,14 +86,6 @@ public class PersonTask {
 
 	public void setTaskType2(String taskType2) {
 		this.taskType2 = taskType2;
-	}
-
-	public String getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
 	}
 
 	public String getTaskDescription() {
@@ -238,6 +230,14 @@ public class PersonTask {
 
 	public void setEbene(String ebene) {
 		Ebene = ebene;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

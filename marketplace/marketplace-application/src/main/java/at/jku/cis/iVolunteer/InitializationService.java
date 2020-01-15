@@ -277,7 +277,7 @@ public class InitializationService {
 	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("roleType", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("roleName", PropertyType.TEXT));
+//		propertyDefinitions.add(new PropertyDefinition<Object>("roleName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("roleDescription", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT));
@@ -288,7 +288,7 @@ public class InitializationService {
 
 	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("badgeName", PropertyType.TEXT));
+//		propertyDefinitions.add(new PropertyDefinition<Object>("badgeName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeDescription", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIssuedOn", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeIcon", PropertyType.TEXT));
@@ -296,7 +296,7 @@ public class InitializationService {
 
 	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("certificateName", PropertyType.TEXT));
+//		propertyDefinitions.add(new PropertyDefinition<Object>("certificateName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateDescription", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateIssuedOn", PropertyType.DATE));
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateValidUntil", PropertyType.DATE));
@@ -305,7 +305,7 @@ public class InitializationService {
 
 	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
+//		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));
