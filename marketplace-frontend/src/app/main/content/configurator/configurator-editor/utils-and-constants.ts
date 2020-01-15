@@ -105,17 +105,6 @@ export class CUtils {
     nameProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(nameProperty);
 
-    let vonProperty = new ClassProperty<Date>();
-    vonProperty.name = 'Von Datum';
-    vonProperty.id = 'fromdate';
-    vonProperty.type = PropertyType.DATE;
-    fwPassEintrag.properties.push(vonProperty);
-
-    let bisProperty = new ClassProperty<Date>();
-    bisProperty.name = 'Bis Datum';
-    bisProperty.id = 'todate';
-    bisProperty.type = PropertyType.DATE;
-    fwPassEintrag.properties.push(bisProperty);
 
     let evidenceProperty = new ClassProperty<string>();
     evidenceProperty.name = 'Evidence';
@@ -133,6 +122,18 @@ export class CUtils {
     task.classArchetype = ClassArchetype.TASK_HEAD;
     configurableClasses.push(task);
 
+    let vonProperty = new ClassProperty<Date>();
+    vonProperty.name = 'taskDateFrom';
+    vonProperty.id = 'taskDateFrom';
+    vonProperty.type = PropertyType.DATE;
+    task.properties.push(vonProperty);
+
+    let bisProperty = new ClassProperty<Date>();
+    bisProperty.name = 'taskDateTo';
+    bisProperty.id = 'taskDateTo';
+    bisProperty.type = PropertyType.DATE;
+    task.properties.push(bisProperty);
+
     let r1 = new Inheritance();
     r1.id = objectIdService.getNewObjectId();
     r1.relationshipType = RelationshipType.INHERITANCE;
@@ -144,7 +145,7 @@ export class CUtils {
     let competence = new ClassDefinition();
     competence.id = objectIdService.getNewObjectId();
     competence.marketplaceId = marketplaceId;
-    competence.name = "Competence";
+    competence.name = 'Competence';
     competence.root = false;
     competence.classArchetype = ClassArchetype.COMPETENCE_HEAD;
     configurableClasses.push(competence);
@@ -160,7 +161,7 @@ export class CUtils {
     let achievement = new ClassDefinition();
     achievement.id = objectIdService.getNewObjectId();
     achievement.marketplaceId = marketplaceId;
-    achievement.name = "Achievement";
+    achievement.name = 'Achievement';
     achievement.root = false;
     achievement.classArchetype = ClassArchetype.ACHIEVEMENT_HEAD;
     configurableClasses.push(achievement);
@@ -176,7 +177,7 @@ export class CUtils {
     let funktion = new ClassDefinition();
     funktion.id = objectIdService.getNewObjectId();
     funktion.marketplaceId = marketplaceId;
-    funktion.name = "Function";
+    funktion.name = 'Function';
     funktion.root = false;
     funktion.classArchetype = ClassArchetype.FUNCTION_HEAD;
     configurableClasses.push(funktion);

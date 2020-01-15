@@ -1,9 +1,20 @@
 <link type="text/css" rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
-<div class="page-layout blank p-24" fusePerfectScrollbar >
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
 
-    "Great Success!"
-    <img src="https://steamuserimages-a.akamaihd.net/ugc/307738670230847301/02FCBC35FC39EC8A78464A4CB62F049987C44892/">
+        <div></div>
+
+        <div fxLayout="column" fxLayoutAlign="start center">
+
+            <div style="text-align: center; font-size: 28px;">Blockchainified</div>
+            <img class="pt-24 pb-24" src="/assets/images/blockchainify.gif">
+            <button mat-raised-button type="button" color="primary" (click)="onBackClick()">Zurück zur Inbox</button>
+        </div>
+
+        <div></div>
+
+    </div>
 
 </div>
