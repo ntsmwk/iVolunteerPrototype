@@ -44,10 +44,11 @@ public class VolunteerController {
 
 	@PostMapping("/volunteer")
 	public Volunteer registerVolunteer(@RequestBody Volunteer volunteer) {
-		if (volunteerRepository.findOne(volunteer.getId()) != null) {
-			throw new BadRequestException("Volunteer already registed");
+		if (volunteerRepository.findOne(volunteer.getId()) == null) {
+			return volunteerRepository.insert(volunteer);
 		}
-		return volunteerRepository.insert(volunteer);
+//		throw new BadRequestException("Volunteer already registed");
+		return null;
 	}
 
 }

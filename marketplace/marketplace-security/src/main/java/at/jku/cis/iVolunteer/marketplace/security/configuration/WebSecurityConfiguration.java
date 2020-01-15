@@ -33,6 +33,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
 		    .antMatchers("/api/**").permitAll()
+		    .antMatchers("/meta/core/class/instance/new").permitAll()
+		    .antMatchers("/reset").permitAll()
+		    .antMatchers("/volunteer").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
@@ -50,7 +53,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.applyPermitDefaultValues();
-		corsConfiguration.setAllowedMethods(Arrays.asList(HEAD.name(), GET.name(), DELETE.name(), POST.name(), PUT.name()));
+		corsConfiguration
+				.setAllowedMethods(Arrays.asList(HEAD.name(), GET.name(), DELETE.name(), POST.name(), PUT.name()));
 		source.registerCorsConfiguration("/**", corsConfiguration);
 		return source;
 	}

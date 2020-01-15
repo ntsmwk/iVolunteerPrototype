@@ -9,10 +9,9 @@ import { CoreMarketplaceService } from '../../_service/core-marketplace.service'
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../../_model/marketplace';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
-import { FeedbackService } from '../../_service/feedback.service';
-import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
-import { Feedback } from '../../_model/feedback';
+import { ClassInstance } from '../../_model/meta/Class';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
+import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 
 @Component({
   selector: 'dashboard-volunteer',
@@ -33,18 +32,22 @@ export class DashboardVolunteerComponent implements OnInit {
 
   dataSourceComp = new MatTableDataSource<ClassInstance>();
   dataSourceFeedback = new MatTableDataSource<ClassInstance>();
-  dataSourceTasks = new MatTableDataSource<ClassInstance>();
+  dataSourceRepository = new MatTableDataSource<ClassInstance>();
 
-  displayedColumnsCompetence = ['issuer', 'label_competence', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
-  displayedColumnsFeedback = ['issuer', 'label_feedback', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
-  displayedColumnsTasks = ['issuer', 'label_tasks', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
+  // displayedColumnsCompetence = ['issuer', 'label_competence', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
+  // displayedColumnsFeedback = ['issuer', 'label_feedback', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
+  // displayedColumnsTasks = ['issuer', 'label_tasks', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
+
+  displayedColumnsRepository = ['issuer', 'asset', 'date', 'actions'];
 
   issuerIds: string[] = [];
+  issuers: Participant[] = [];
   userImagePaths: any[];
 
 
   constructor(public dialog: MatDialog,
     private coreVolunteerService: CoreVolunteerService,
+    private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
 
@@ -80,44 +83,15 @@ export class DashboardVolunteerComponent implements OnInit {
 
   loadDashboardContent() {
     Promise.all([
-      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((ret: ClassInstance[]) => {
+      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((instances: ClassInstance[]) => {
 
-        let tasks = ret.filter((classInstance: ClassInstance) => {
-          return classInstance.classArchetype === ClassArchetype.TASK;
-        });
-
-        tasks = tasks.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
-        if (tasks.length > 5) {
-          tasks = tasks.slice(0, 5);
+        instances = instances.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+        if (instances.length > 25) {
+          instances = instances.slice(0, 25);
         }
 
-        this.dataSourceTasks.data = tasks;
-        this.issuerIds.push(...tasks.map(t => t.issuerId));
-
-        let competences = ret.filter((classInstance: ClassInstance) => {
-          return classInstance.classArchetype === ClassArchetype.COMPETENCE;
-        });
-
-        competences = competences.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
-        if (competences.length > 5) {
-          competences = competences.slice(0, 5);
-        }
-        this.dataSourceComp.data = competences;
-        this.issuerIds.push(...competences.map(t => t.issuerId));
-
-
-        let feedback = ret.filter((classInstance: Feedback) => {
-          return !isNullOrUndefined(classInstance.feedbackType);
-        });
-
-        feedback = feedback.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
-        if (feedback.length > 5) {
-          feedback = feedback.slice(0, 5);
-        }
-        this.dataSourceFeedback.data = feedback;
-        this.issuerIds.push(...feedback.map(t => t.issuerId));
-
-
+        this.dataSourceRepository.data = instances;
+        this.issuerIds.push(...instances.map(t => t.issuerId));
       })
 
     ]).then(() => {
@@ -125,18 +99,24 @@ export class DashboardVolunteerComponent implements OnInit {
         return index === self.indexOf(elem);
       });
       console.log(this.issuerIds);
+      Promise.all([
       this.userImagePathService.getImagePathsById(this.issuerIds).toPromise().then((ret: any) => {
         console.log(ret);
         this.userImagePaths = ret;
-
-      }).then(() => {
+      }),
+      this.coreHelpseekerService.findByIds(this.issuerIds).toPromise().then((ret: any) => {
+        this.issuers = ret;
+      })
+      
+      ]).then(() => {
         this.isLoaded = true;
       });
     });
   }
 
-  getDateString(date: number) {
-    return new Date(date).toLocaleDateString();
+  getDateString(dateNumber: number) {
+    const date = new Date(dateNumber);
+    return 'am ' + date.toLocaleDateString() + ', um ' + date.toLocaleTimeString();
   }
 
   getImagePathById(id: string) {
@@ -149,6 +129,58 @@ export class DashboardVolunteerComponent implements OnInit {
     } else {
       return ret.imagePath;
     }
+  }
+
+  getIssuerById(id: string) {
+   return this.issuers.find((issuer) => {
+      return issuer.id === id;
+    });
+  }
+
+  getIssuerName(issuerId: string) {
+    
+    const person = this.issuers.find((i) => i.id === issuerId);
+   
+    let result = '';
+
+    if (isNullOrUndefined(person)) {
+      return result;
+    }
+
+
+    if (!isNullOrUndefined(person.lastname)) {
+      if (!isNullOrUndefined(person.nickname)) {
+        result = result + person.nickname;
+      } else if (!isNullOrUndefined(person.firstname)) {
+        result = result + person.firstname;
+      }
+      if (!isNullOrUndefined(person.middlename)) {
+        result = result + ' ' + person.middlename;
+      }
+      result = result + ' ' + person.lastname;
+    } else if (!isNullOrUndefined(person.nickname)){
+      result = result + person.nickname;
+    } else {
+      result = result + person.username;
+    }
+
+    return result;
+  }
+
+  findNameProperty(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.properties)) {
+      return '';
+    }
+
+    const name =  entry.properties.find(p => p.id === 'name');
+
+    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+      return '';
+    } else {
+      return ': ' + name.values[0];
+    }
+
+
   }
 
   triggerShareDialog() {

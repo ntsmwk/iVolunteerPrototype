@@ -54,7 +54,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.route.params.subscribe(params => this.loadDerivationRule(marketplace, params['ruleId']));
-        this.classDefinitionService.getAllClassDefinitions(marketplace).toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace).toPromise().then(
           (definitions: ClassDefinition[]) => this.classDefinitions = definitions
         );
       });

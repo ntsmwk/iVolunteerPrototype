@@ -158,90 +158,96 @@
 
         <div style="padding-top: 10px"></div>
 
-        <!--TABLE HEADERS-->
-        <div fxLayout="row" style="width: 100%">
-            <div fxFlex="2"></div>
-            <div fxFlex=31>
-                <div fxLayout="row" fxLayoutAlign="start start">
-                    <div style=" z-index: 255; position: relative; width: 22px; height: 22px; padding-top: 7px">
-                        <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                            src="../../../../assets/cog.png">
-                    </div>
-                    <div style="font-size: 18px">Recent Tasks</div>
-                </div>
-            </div>
+        <div fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
+            <div class="p-32"></div>
 
-            <div fxFlex="0.5"></div>
-            <mat-divider fxFlex=0.01 vertical="true"></mat-divider>
-            <div fxFlex="0.5"></div>
+            <!--ASSET TABLE-->
+            <mat-table #tableRepository [dataSource]="dataSourceRepository" style="width: 100%">
 
-            <div fxFlex=31 style="font-size: 18px">
-                <div fxLayout=row fxLayoutAlign="start center">
-                    <mat-icon inline="true" style="font-size: 18px;">feedback</mat-icon>
-                    <div style="font-size: 18px">Recent Feedback</div>
-                </div>
-            </div>
-
-
-            <div fxFlex="0.5"></div>
-            <mat-divider fxFlex=0.01 vertical="true"></mat-divider>
-            <div fxFlex="0.5"></div>
-
-            <div fxFlex=31 style="font-size: 18px">
-                <div fxLayout=row fxLayoutAlign="start start">
-                    <div style=" z-index: 255; position: relative; width: 22px; height: 22px; padding-top: 7px">
-                        <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                            src="../../../../assets/competence.jpg">
-                    </div>
-                    <div style="font-size: 18px">Recent Competences</div>
-                </div>
-            </div>
-            <div fxFlex="2"></div>
-        </div>
-        <!--END TABLE HEADERS-->
-
-
-        <!--DIVIDER-->
-        <div fxLayout="row" style="width: 100%">
-            <div fxFlex="3"></div>
-            <mat-divider fxFlex></mat-divider>
-            <div fxFlex="3"></div>
-        </div>
-        <!--END DIVIDER-->
-
-        <div fxLayout="row" style="width: 100%">
-            <div fxFlex="2"></div>
-
-            <!--TASK COLUMN-->
-            <mat-table fxFlex="31" #tableTasks [dataSource]="dataSourceTasks">
-                <ng-container matColumnDef="label_tasks">
-                    <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
+                <ng-container matColumnDef="issuer">
+                    <mat-header-cell *matHeaderCellDef>Organisation</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        <div fxLayout="column" fxLayoutAlign="start start">
-                            <div>{{entry.name}}</div>
+                        <div fxLayout="row" fxLayoutAligne="start center">
+                            <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+                            <div>{{getIssuerName(entry.issuerId)}}</div>
                         </div>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
+                <ng-container matColumnDef="asset">
+                    <mat-header-cell *matHeaderCellDef>Asset</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
+                        <div fxLayout="row" fxLayoutAlign="start center">
+                            <div *ngIf="entry.classArchetype=='COMPETENCE'" fxLayout="row" fxLayoutAlign="start center">
+                                <div style=" z-index: 255; position: relative; width: 25px; height: 25px;"
+                                    mat-tooltip="Competence">
+                                    <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                        src="/assets/competence.jpg">
+                                </div>
 
-                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+
+                            </div>
+
+                            <div *ngIf="entry.classArchetype=='FUNCTION'" fxLayout="row" fxLayoutAlign="start center">
+                                <div style=" z-index: 255; position: relative; width: 25px; height: 25px;"
+                                    mat-tooltip="Competence">
+                                    <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                        src="/assets/TODO">
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="entry.classArchetype=='TASK'" fxLayout="row" fxLayoutAlign="start center">
+                                <div style=" z-index: 255; position: relative; width: 25px; height: 25px;"
+                                    mat-tooltip="Competence">
+                                    <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                        src="/assets/cog.png">
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="entry.classArchetype=='ACHIEVEMENT'">
+
+                                <div *ngIf="entry.feedbackType==null" fxLayout="row" fxLayoutAlign="start center">
+                                    <div style=" z-index: 255; position: relative; width: 25px; height: 25px;"
+                                        mat-tooltip="Competence">
+                                        <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
+                                            src="/assets/icons/achievements_black.png">
+                                    </div>
 
 
-                        <!-- <div>{{entry.issuer}}</div>  -->
+                                </div>
+
+                                <div *ngIf="entry.feedbackType!=null" fxLayout="row" fxLayoutAlign="start center">
+                                    <div style=" z-index: 255; position: relative; width: 25px; height: 25px;"
+                                        mat-tooltip="Competence">
+                                        <mat-icon inline="true" style="font-size: 25px; line-height: normal">feedback
+                                        </mat-icon>
+                                    </div>
+
+
+                                </div>
+
+                              
+
+                            </div>
+
+                            <div class="pr-4"></div>
+
+                            <div>{{entry.name}} </div>
+                            <div>{{findNameProperty(entry)}}</div>
+                        </div>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="date1">
-                    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                <ng-container matColumnDef="date">
+                    <mat-header-cell *matHeaderCellDef>Datum bekommen</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         {{getDateString(entry.timestamp)}}
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="details">
+                <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
 
@@ -254,159 +260,24 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> -->
-                <mat-row *matRowDef="let row; columns: displayedColumnsTasks;"
+                <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsRepository;"
                     [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
             </mat-table>
-            <!--END TASK COLUMN-->
 
-            <!--MID DIVIDER-->
-            <div fxFlex="0.5"></div>
-            <mat-divider fxFlex=0.01 vertical="true"></mat-divider>
-            <div fxFlex="0.5"></div>
-            <!--END MID DIVIDER-->
+            <div class="p-32"></div>
 
-            <!--FEEDBACK COLUMN-->
-            <mat-table fxFlex="31" #tableFeedback [dataSource]="dataSourceFeedback">
-
-                <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
-
-
-                        <!-- <div>{{entry.issuer}}</div>  -->
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="label_feedback">
-                    <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        <div *ngIf="entry.feedbackType == 'STARRATING'" fxLayout="column" fxLayoutAlign="start start">
-                            <div>{{entry.name}}</div>
-                            <!-- <div style="padding-top: 4px"></div> -->
-                            <div fxLayout="row" fyLayoutAlign="start center">
-                                <div style="padding-left: 5px"></div>
-                                <mat-icon *ngIf="entry.feedbackValue >= 1" class="amber-fg">star_rate</mat-icon>
-                                <mat-icon *ngIf="entry.feedbackValue >= 2" class="amber-fg">star_rate</mat-icon>
-                                <mat-icon *ngIf="entry.feedbackValue >= 3" class="amber-fg">star_rate</mat-icon>
-                                <mat-icon *ngIf="entry.feedbackValue >= 4" class="amber-fg">star_rate</mat-icon>
-                                <mat-icon *ngIf="entry.feedbackValue >= 5" class="amber-fg">star_rate</mat-icon>
-                            </div>
-                        </div>
-
-                        <div *ngIf="entry.feedbackType =='KUDOS'" fxLayout="column" fxLayoutAlign="start center">
-                            <div>{{entry.name}}</div>
-                            <mat-icon *ngIf="entry.feedbackValue > 0" class="green-fg">thumb_up</mat-icon>
-                            <mat-icon *ngIf="entry.feedbackValue <= 0" class="red-fg">thumb_down</mat-icon>
-                        </div>
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="date1">
-                    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        {{getDateString(entry.timestamp)}}
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="details">
-                    <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                        <mat-icon [matMenuTriggerFor]="newMenu" style="cursor: pointer">more_vert</mat-icon>
-
-                        <mat-menu #newMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                            <button mat-menu-item routerLink="/task/add">Details</button>
-                            <button mat-menu-item>Evidence</button>
-                        </mat-menu>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> -->
-                <mat-row *matRowDef="let row; columns: displayedColumnsFeedback;"
-                    [ngClass]="{ 'highlighted_new': row.status == 'new', 'highlighted_increased': row.status == 'increased'}">
-                </mat-row>
-            </mat-table>
-            <!--END FEEDBACK COLUMN-->
-
-            <!--MID DIVIDER-->
-            <div fxFlex="0.5"></div>
-            <mat-divider fxFlex=0.01 vertical="true"></mat-divider>
-            <div fxFlex="0.5"></div>
-            <!--END MID DIVIDER-->
-
-            <!--COMPETENCE COLUMN-->
-            <mat-table fxFlex="31" #tableComp [dataSource]="dataSourceComp">
-                <ng-container matColumnDef="label_competence">
-                    <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        {{entry.name}}
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
-
-
-                        <!-- <div>{{entry.issuer}}</div>  -->
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="date1">
-                    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        {{getDateString(entry.timestamp)}}
-                    </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="details">
-                    <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                        <mat-icon [matMenuTriggerFor]="newMenu" style="cursor: pointer">more_vert</mat-icon>
-
-
-                        <mat-menu #newMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                            <button mat-menu-item routerLink="/task/add">Details</button>
-                            <button mat-menu-item>Evidence</button>
-                        </mat-menu>
-                    </mat-cell>
-                </ng-container>
-
-
-                <!-- <mat-header-row *matHeaderRowDef="displayedColumnsAll"></mat-header-row> -->
-                <mat-row *matRowDef="let row; columns: displayedColumnsCompetence;"
-                    [ngClass]="{ 'highlighted_new': row.status == 'new', 'highlighted_increased': row.status == 'increased'}">
-                </mat-row>
-            </mat-table>
-            <!--END COMPETENCE COLUMN-->
-
-            <div fxFlex="2"></div>
         </div>
-
-        <!--DIVIDER-->
-        <div fxLayout="row" style="width: 100%; padding-top: 2px">
-            <div fxFlex="2"></div>
-            <mat-divider fxFlex></mat-divider>
-            <div fxFlex="2"></div>
-        </div>
-        <!--END DIVIDER-->
 
         <button mat-stroked-button type="button" color="accent">More in History</button>
 
-    </div>
 
 
 
-    <!-- </mat-tab>
+        <!-- </mat-tab>
         <mat-tab label="History">
             content
         </mat-tab>
     </mat-tab-group> -->
 
-</div>
+    </div>

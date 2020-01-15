@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController
@@ -26,12 +28,28 @@ public class ClassDefinitionController {
 		return classDefinitionRepository.findAll();
 	}
 
+	@GetMapping("meta/core/class/definition/all/no-enum")
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums() {
+		List<ClassDefinition> filtered = classDefinitionRepository.findAll().stream().filter(cd -> filterEnumsAndHeadClasses(cd))
+				.collect(Collectors.toList());
+		return filtered;
+	}
+
+	private boolean filterEnumsAndHeadClasses(ClassDefinition cd) {
+		// @formatter:off
+		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
+				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
+				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
+				|| cd.getClassArchetype() == ClassArchetype.TASK;		 
+		// @formatter:on
+	}
+
 	@GetMapping("/meta/core/class/definition/{id}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
 		return classDefinitionService.getClassDefinitionById(id);
 	}
 
-	@GetMapping("/meta/core/class/definition/{archetype}")
+	@GetMapping("/meta/core/class/definition/archetype/{archetype}")
 	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype) {
 		return classDefinitionService.getClassDefinitionsByArchetype(archetype);
 	}
@@ -69,6 +87,11 @@ public class ClassDefinitionController {
 	@PutMapping("meta/core/class/definition/get-parents")
 	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds) {
 		return classDefinitionService.getParentsById(childIds);
+	}
+
+	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
+	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {
+		return classDefinitionService.getEnumValues(classDefinitionId);
 	}
 
 }

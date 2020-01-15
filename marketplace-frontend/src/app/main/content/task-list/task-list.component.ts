@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -11,6 +11,10 @@ import { LoginService } from '../_service/login.service';
 import { TaskService } from '../_service/task.service';
 import { fuseAnimations } from '@fuse/animations';
 import { isNullOrUndefined } from 'util';
+import { ClassInstance } from '../_model/meta/Class';
+import { MatPaginator, MatSort } from '@angular/material';
+import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
+import { CIP } from '../_model/classInstancePropertyConstants';
 
 
 @Component({
@@ -21,14 +25,41 @@ import { isNullOrUndefined } from 'util';
 
 })
 export class FuseTaskListComponent implements OnInit {
-  marketplaces: Marketplace[];
-  dataSource = new MatTableDataSource<Task>();
-  displayedColumns = ['name', 'project', 'marketplace', 'startDate', 'endDate', 'requiredCompetences', 'acquirableCompetences'];
+  marketplace: Marketplace;
+
+  private classInstances: ClassInstance[] = [];
+  private tableDataSource = new MatTableDataSource<ClassInstance>();
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;  
+  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
+
+
+  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
+  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
+  TASK_ID = CIP.TASK_ID;
+  TASK_NAME = CIP.TASK_NAME;
+  TASK_TYPE_1 = CIP.TASK_TYPE_1;
+  TASK_TYPE_2 = CIP.TASK_TYPE_2;
+  TASK_TYPE_3 = CIP.TASK_TYPE_3;
+  TASK_TYPE_4 = CIP.TASK_TYPE_4;
+  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
+  ZWECK = CIP.ZWECK;
+  ROLLE = CIP.ROLLE;
+  RANG = CIP.RANG;
+  PHASE = CIP.PHASE;
+  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
+  EBENE = CIP.EBENE;
+  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
+  TASK_DATE_TO = CIP.TASK_DATE_TO;
+  TASK_DURATION = CIP.TASK_DURATION;
+  TASK_LOCATION = CIP.TASK_LOCATION;
+  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
+
 
   constructor(private router: Router,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private taskService: TaskService) {
+    private classInstanceService: ClassInstanceService) {
   }
 
   ngOnInit() {
@@ -36,26 +67,35 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   onRowSelect(task: Task) {
-    this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
+    // todo...
+    // TODO @ALEX if edit of classInstances works ...
+    // this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadAllTasks() {
+    // TODO @MWE select Class Instances..
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
-          this.marketplaces = [].concat(marketplace);
-          this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.dataSource.data = tasks);
+          this.marketplace = marketplace;
+
+          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+            if (!isNullOrUndefined(ret)) {
+              this.classInstances = ret;
+  
+              this.tableDataSource.data = this.classInstances;
+              this.tableDataSource.paginator = this.paginator;
+  
+            }
+          });
+
+          // this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.tableDataSource.data = tasks);
         }
       });
     });
   }
 
-
-  getMarketplaceName(id: string) {
-    return this.marketplaces.filter((marketplace:Marketplace) => {return marketplace.id === id})[0].name;
-  }
-
   addTask() {
-    this.router.navigate(['/main/task-form']);
+    this.router.navigate(['/main/task-select']);
   }
 }

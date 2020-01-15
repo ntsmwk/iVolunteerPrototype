@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Marketplace } from "../../../../_model/marketplace";
-import { ClassDefinition } from "../../../../_model/meta/Class";
+import { ClassDefinition, ClassArchetype } from "../../../../_model/meta/Class";
 import { PropertyDefinition } from "../../../../_model/meta/Property";
 import { isNullOrUndefined } from "util";
 import { of } from "rxjs";
@@ -17,6 +17,10 @@ import { of } from "rxjs";
 
     getAllClassDefinitions(marketplace: Marketplace) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/all`);
+    }
+
+    getAllClassDefinitionsWithoutHeadAndEnums(marketplace: Marketplace) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum`);
     }
 
     getClassDefinitionById(marketplace: Marketplace, id: string) {
@@ -55,11 +59,9 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
     }
 
-
     getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id`, propIds);
     }
-
 
     addPropertiesToClassDefinitionById(marketplace: Marketplace, id: string, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
@@ -73,4 +75,11 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/remove-properties`, propIds);
     }
 
+    getEnumValuesFromEnumHeadClassDefinition(marketplace: Marketplace, classDefinitionId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}`);
+    }
+
+    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype){
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}`); 
+    }
   }

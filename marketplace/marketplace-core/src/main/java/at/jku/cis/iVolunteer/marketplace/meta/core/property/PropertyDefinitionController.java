@@ -25,7 +25,10 @@ public class PropertyDefinitionController {
 
 	@GetMapping("/meta/core/property/definition/{id}")
 	private PropertyDefinition<Object> getPropertyDefinitionById(@PathVariable("id") String id) {
-		return propertyDefinitionRepository.findOne(id);
+		
+		PropertyDefinition<Object> findOne = propertyDefinitionRepository.findOne(id);
+		return findOne;
+		
 	}
 
 	@PostMapping("/meta/core/property/definition/new")

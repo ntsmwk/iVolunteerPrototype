@@ -1,29 +1,31 @@
 import { NgModule } from '@angular/core';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { VolunteerConfirmationScreenComponent } from './confirmation-screen.component';
+import { HelpseekerConfirmationScreenComponent } from './confirmation-screen.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
 const routes = [
-  { path: '', component: VolunteerConfirmationScreenComponent }
+  { path: '', component: HelpseekerConfirmationScreenComponent }
 ];
 
 @NgModule({
   declarations: [
-    VolunteerConfirmationScreenComponent
+    HelpseekerConfirmationScreenComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),       
     FuseSharedModule,
     MatButtonModule,
+    FuseSharedModule,
+    
   
   ],
   exports: [
-    VolunteerConfirmationScreenComponent
+    HelpseekerConfirmationScreenComponent
   ]
 })
 
-export class VolunteerConfirmationScreenModule {
+export class HelpseekerConfirmationScreenModule {
 }

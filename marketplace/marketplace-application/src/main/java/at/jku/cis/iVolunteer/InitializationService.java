@@ -82,7 +82,13 @@ public class InitializationService {
 	}
 
 	private void addFireBrigadeUserMapping() {
-		Volunteer volunteer = volunteerRepository.findByUsername("mweissenbek");
+		UserMapping userMapping = userMappingRepository.findByExternalUserId("5dc2a215399af");
+
+		if (userMapping != null) {
+			userMappingRepository.deleteAll();
+		}
+		
+		Volunteer volunteer = volunteerRepository.findByUsername("mweixlbaumer");
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());

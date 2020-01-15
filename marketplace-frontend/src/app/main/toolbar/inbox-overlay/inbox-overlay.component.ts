@@ -41,7 +41,7 @@ export class InboxOverlayComponent implements OnInit {
   classInstances: ClassInstance[] = [];
 
   dataSource = new MatTableDataSource<ClassInstance | Feedback>();
-  displayedColumns = ['archetype', 'label', 'date'];
+  displayedColumns = ['archetype', 'label'];
 
   ngOnInit() {
     Promise.all([
@@ -99,6 +99,20 @@ export class InboxOverlayComponent implements OnInit {
       this.innerDiv.nativeElement.style.overflow = 'hidden';
       // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
       this.actionDiv.nativeElement.style.height = '18px';
+    }
+  }
+
+  findNameProperty(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.properties)) {
+      return '';
+    }
+
+    const name =  entry.properties.find(p => p.id === 'name');
+
+    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+      return '';
+    } else {
+      return name.values[0];
     }
   }
 

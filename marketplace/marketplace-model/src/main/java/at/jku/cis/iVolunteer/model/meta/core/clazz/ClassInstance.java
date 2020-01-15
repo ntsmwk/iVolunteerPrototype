@@ -22,7 +22,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	// Temp flags for dashboard presentation
 	private boolean published; // flag if published
-	private boolean inUserRepository; //flag if in inbox or in repository of user
+	private boolean inUserRepository;//flag if in inbox or in repository of user
 	private boolean inIssuerInbox; //flag if in inbox of issuer
 	
 	private ClassArchetype classArchetype;

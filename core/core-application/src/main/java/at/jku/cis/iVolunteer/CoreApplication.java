@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer;
 
+import java.util.stream.Stream;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +11,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
+import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerController;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserImagePath;
 
 @SpringBootApplication
@@ -36,6 +42,8 @@ public class CoreApplication {
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 	@Autowired private UserImagePathRepository userImagePathRepository;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private CoreVolunteerService coreVolunteerService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
@@ -154,7 +162,17 @@ public class CoreApplication {
 	}
 
 	private CoreVolunteer saveVolunteer(CoreVolunteer coreVolunteer) {
-		return coreVolunteerRepository.save(coreVolunteer);
+		CoreVolunteer volunteer = coreVolunteerRepository.save(coreVolunteer);
+		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
+				.findFirst().orElse(null);
+		if (mp != null) {
+			try {
+				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), "");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return volunteer;
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password) {

@@ -1,0 +1,25 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Tätigkeiten - Erstellen</h1>
+  </div>
+
+  <div class="table">
+
+    <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+    </mat-table>
+
+    <div class="no-data" *ngIf="dataSource.data.length === 0">
+      Keine Tätigkeits-Definitionen gefunden.
+    </div>
+
+  </div>
+
+</div>

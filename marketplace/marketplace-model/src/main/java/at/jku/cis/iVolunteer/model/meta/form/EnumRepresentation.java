@@ -11,7 +11,6 @@ public class EnumRepresentation {
 	List<EnumEntry> selectedEntries;
 	ClassDefinition classDefinition;
 	
-	
 	public String getId() {
 		return id;
 	}

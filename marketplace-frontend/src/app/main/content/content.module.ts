@@ -43,8 +43,8 @@ const routes: Route[] = [
   },
   {
     path: 'main/helpseeker/asset-inbox/confirm',
-    loadChildren: () => import('./asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module').then(m => m.VolunteerConfirmationScreenModule),
-    canActivate: [TokenGuard, VolunteerGuard]
+    loadChildren: () => import('./asset-inbox-helpseeker/confirmation-screen/confirmation-screen.module').then(m => m.HelpseekerConfirmationScreenModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/dashboard',
@@ -89,6 +89,11 @@ const routes: Route[] = [
   {
     path: 'main/task-form',
     loadChildren: () => import('./task-form/task-form.module').then(m => m.FuseTaskFormModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
+    path: 'main/task-select',
+    loadChildren: () => import('./task-select/task-select.module').then(m => m.FuseTaskSelectModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {

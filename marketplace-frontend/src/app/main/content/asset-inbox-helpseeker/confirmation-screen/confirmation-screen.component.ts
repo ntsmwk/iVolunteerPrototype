@@ -15,7 +15,7 @@ import { LoginService } from '../../_service/login.service';
   templateUrl: './confirmation-screen.component.html',
   styleUrls: ['./confirmation-screen.component.scss'],
 })
-export class VolunteerConfirmationScreenComponent implements OnInit {
+export class HelpseekerConfirmationScreenComponent implements OnInit {
 
   // dataSource = new MatTableDataSource<any>();
   // displayedColumns = ['data', 'issuer', 'label', 'details'];

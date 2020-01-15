@@ -22,8 +22,7 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 public class CoreVolunteerController {
 
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired private CoreVolunteerService coreVolunteerService;
 	
 	@GetMapping("/all")
 	public List<CoreVolunteer> getAllCoreVolunteers() {
@@ -44,32 +43,7 @@ public class CoreVolunteerController {
 	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreVolunteer coreVolunteer = coreVolunteerRepository.findOne(coreVolunteerId);
-		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		if (coreVolunteer == null || marketplace == null) {
-			throw new NotFoundException();
-		}
-
-		coreVolunteer = updateCoreVolunteer(coreVolunteer, marketplace);
-		registerVolunteer(authorization, coreVolunteer, marketplace);
+		coreVolunteerService.registerMarketplace(coreVolunteerId, marketplaceId, authorization);
 	}
-
-	private CoreVolunteer updateCoreVolunteer(CoreVolunteer coreVolunteer, Marketplace marketplace) {
-		coreVolunteer.getRegisteredMarketplaces().add(marketplace);
-		coreVolunteer = coreVolunteerRepository.save(coreVolunteer);
-		return coreVolunteer;
-	}
-
-	private void registerVolunteer(String authorization, CoreVolunteer coreVolunteer, Marketplace marketplace) {
-		Volunteer volunteer = new Volunteer();
-		volunteer.setId(coreVolunteer.getId());
-		volunteer.setUsername(coreVolunteer.getUsername());
-		volunteer.setFirstname(coreVolunteer.getFirstname());
-		volunteer.setLastname(coreVolunteer.getLastname());
-		volunteer.setMiddlename(coreVolunteer.getMiddlename());
-		volunteer.setNickname(coreVolunteer.getNickname());
-		volunteer.setProfileImagePath(coreVolunteer.getProfileImagePath());
-		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
-	}
-
+	
 }

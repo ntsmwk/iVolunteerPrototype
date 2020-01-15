@@ -134,12 +134,12 @@ export class QuestionService {
           options: property.allowedValues
         });
       } else {
-      question = new SingleSelectionEnumQuestion({
-        //TODO
-        values: property.defaultValues,
-        options: property.allowedValues
-      });
-    }
+        question = new SingleSelectionEnumQuestion({
+          //TODO
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      }
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({

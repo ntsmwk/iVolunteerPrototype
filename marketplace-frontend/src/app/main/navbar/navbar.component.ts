@@ -12,9 +12,11 @@ import { FuseSidebarComponent } from '@fuse/components/sidebar/sidebar.component
 import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
 import { navigation_flexprod } from '../../navigation/navigation_flexprod';
 import { LoginService } from '../content/_service/login.service';
-import { ParticipantRole } from '../content/_model/participant';
+import { ParticipantRole, Participant } from '../content/_model/participant';
 import { MessageService } from '../content/_service/message.service';
 import { navigation_recruiter } from 'app/navigation/navigation_recruiter';
+import { navigation_mvs } from 'app/navigation/navigation_mvs';
+import { navigation_ffa } from 'app/navigation/navigation_ffa';
 
 @Component({
   selector: 'fuse-navbar',
@@ -50,7 +52,16 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
       switch (role) {
         case 'HELP_SEEKER':
-          this.navigation = navigation_helpseeker;
+          // TODO FAKE
+          this.loginService.getLoggedIn().toPromise().then((user: Participant) => {
+            if (user.username === 'MVS') {
+              this.navigation = navigation_mvs;
+            } else if (user.username === 'FFA') {
+              this.navigation = navigation_ffa;
+            } else {
+              this.navigation = navigation_helpseeker;
+            }
+          });
           break;
         case 'VOLUNTEER':
           this.navigation = navigation_volunteer;

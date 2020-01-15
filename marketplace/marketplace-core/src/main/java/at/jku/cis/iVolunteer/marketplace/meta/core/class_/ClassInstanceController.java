@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,6 +46,19 @@ public class ClassInstanceController {
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
 
 		for (ClassDefinition cd : classDefinitions) {
+			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+		}
+
+		return classInstances;
+	}
+	
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user")
+	private List<ClassInstance> getClassInstancesByClassDefinitionIdFake(
+			@PathVariable("archetype") ClassArchetype archeType) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+
+		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(),cd.getId()));
 		}
 
@@ -60,21 +72,17 @@ public class ClassInstanceController {
 
 	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
 	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepository(userId, false);
+		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false);
 	}
 
 	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
 	private List<ClassInstance> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepository(userId, true);
+		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false);
 	}
 	
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
 	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
-		System.out.println(issuerId);
-		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInbox(issuerId, true);
-		System.out.println(instances);
-		System.out.println(instances.size());
-		
+		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false);
 		return instances;
 	}
 
@@ -99,7 +107,7 @@ public class ClassInstanceController {
 
 		for (ClassInstance classInstance : classInstances) {
 			classInstance.setInIssuerInbox(inIssuerInbox);
-			classInstance.setInUserRepository(!inIssuerInbox);
+			classInstance.setInUserRepository(false);
 		}
 
 		return classInstanceRepository.save(classInstances);
