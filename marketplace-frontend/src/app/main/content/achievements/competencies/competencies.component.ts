@@ -30,6 +30,11 @@ export class CompetenciesComponent implements OnInit {
   trainingData2: any[];
   taskData: any[];
 
+  allData: any[];
+  currYearData: any[];
+  lastYearData: any[];
+  meanYearData: any[];
+
   // chart options
   colorScheme = 'cool';
   showXAxis: boolean = true;
@@ -63,8 +68,6 @@ export class CompetenciesComponent implements OnInit {
   TASK_LOCATION = CIP.TASK_LOCATION;
   TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
-
-
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
@@ -90,7 +93,8 @@ export class CompetenciesComponent implements OnInit {
 
             this.generateChartData();
 
-            
+
+
           }
         });
       });
@@ -99,6 +103,50 @@ export class CompetenciesComponent implements OnInit {
 
   onSelect(event) {
     console.log(event);
+  }
+
+  calcMean() {
+    let mean = new Map<string, number[]>(); // name -> [duration, number]
+    let cntYears = 0;
+
+    this.trainingData.forEach(td => {
+      if (td.name != '2019') { // minus current year: String(new Date().getFullYear()-1)
+        ++cntYears;
+        td.series.forEach(s => {
+          if (mean.get(s.name)) {
+            mean.set(s.name, [mean.get(s.name)[0] + s.value, mean.get(s.name)[1] + s.extra.number]);
+          } else {
+            mean.set(s.name, [s.value, s.extra.number]);
+          }
+        });
+      }
+    });
+
+    Array.from(mean.keys()).forEach(e => {
+      mean.set(e, [mean.get(e)[0] / cntYears, mean.get(e)[1] / cntYears]);
+    });
+
+
+    let data = [];
+    Array.from(mean.entries()).forEach(entry => {
+      data.push({ name: entry[0], value: entry[1][0], extra: { number: entry[1][1] } });
+    });
+
+    this.allData = [...this.trainingData];
+    this.allData.push({ name: 'mean', series: data });
+  }
+
+  getYearData(year: string) {
+    return this.allData.filter(a=>{
+      return a.name === year
+    }).map(b => {
+      let data = [];
+      b.series.forEach(c => {
+        data.push({ name: c.name, duration: c.value, number: c.extra.number});
+      });
+      console.error('data', data);
+      return data;
+    }); 
   }
 
   generateChartData() {
@@ -143,7 +191,7 @@ export class CompetenciesComponent implements OnInit {
       Array.from(map.entries()).forEach(entry => {
         data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
       });
-      dataA1.push({ name: year, series: data2 });      
+      dataA1.push({ name: year, series: data2 });
 
     });
 

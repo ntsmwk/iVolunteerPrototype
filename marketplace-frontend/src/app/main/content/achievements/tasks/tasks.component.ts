@@ -18,6 +18,8 @@ import * as shape from 'd3-shape';
 import { CIP } from '../../_model/classInstancePropertyConstants';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
+import { StoredChartService } from '../../_service/stored-chart.service';
+import { StoredChart } from '../../_model/stored-chart';
 HC_sunburst(Highcharts);
 
 /*
@@ -148,7 +150,8 @@ export class TasksComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private route: ActivatedRoute,
-    private volunteerService: CoreVolunteerService
+    private volunteerService: CoreVolunteerService,
+    private storedChartService: StoredChartService
   ) {
     this.newTimelineChartData = [{ name: 'Tätigkeit', series: [] }];
   }
@@ -183,13 +186,15 @@ export class TasksComponent implements OnInit {
             this.generateTimelineData();
             this.generateOtherChartsData();
             this.generateStaticChartData();
-
           }
         });
       });
     });
 
     Highcharts.chart('sunburstChart', this.chartOptions);
+
+
+
   }
 
   removeDurationNulls() {
@@ -431,5 +436,25 @@ export class TasksComponent implements OnInit {
     });
 
     this.comparisonData = [...data];
+  }
+
+  exportChart(event, source:string) {
+    console.error('source', source);
+    let storedChart: StoredChart;
+
+    switch (source) {
+      case 'Wochentag':
+        storedChart = new StoredChart('Wochentag', 'ngx-charts-pie-chart', JSON.stringify(this.weekdayData));
+        console.error('wochentag storedChart', storedChart);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+        
+        case 'Tageszeit':
+          storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData));
+          console.error('tageszeit storedChart', storedChart);
+
+          this.storedChartService.save(this.marketplace, storedChart).toPromise();
+          break;
+    }
   }
 }
