@@ -68,7 +68,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.participant = participant;
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllClassDefinitions(marketplace).toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace).toPromise().then(
           (definitions: ClassDefinition[]) => {
             console.error(definitions);
             this.classDefinitions = definitions;
