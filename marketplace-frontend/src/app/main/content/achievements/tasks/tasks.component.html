@@ -36,8 +36,8 @@
         </mat-form-field>
       </div>
 
-      
-       <div class="timeline">
+
+      <div class="timeline">
         <ngx-charts-line-chart #lineChart [results]="newTimelineChartData" [scheme]="colorScheme"
           [schemeType]="schemeType" [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition"
           [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true"
@@ -45,13 +45,14 @@
           [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve"
           (select)="timelineSelect($event)">
         </ngx-charts-line-chart>
-      </div> 
+      </div>
 
 
       <div fxLayout="row" fxLayoutAlign="left">
-        <button mat-raised-button (click)="filterTimelineApply()">Filtern</button>
+        <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
         <div *ngIf="!!timelineFilterFrom">
-          <h3>(Ausgewählte Daten: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})</h3>
+          <h3>(Ausgewählte Daten: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})
+          </h3>
         </div>
       </div>
     </div>
@@ -80,45 +81,47 @@
                 <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
                 <td mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskType1">
                 <th mat-header-cell *matHeaderCellDef> Typ </th>
                 <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskType2">
                 <th mat-header-cell *matHeaderCellDef> Untertyp </th>
                 <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskDescription">
                 <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
                 <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskDateFrom">
                 <th mat-header-cell *matHeaderCellDef> Datum </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                <td mat-cell *matCellDef="let element">
+                  {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy   hh:mm'}}
                 </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskDateTo">
                 <th mat-header-cell *matHeaderCellDef> Ende </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                <td mat-cell *matCellDef="let element">
+                  {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy   hh:mm'}}
                 </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="taskDuration">
                 <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
                 <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </td>
               </ng-container>
-  
+
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
             <mat-paginator [pageSize]="12" showFirstLastButtons></mat-paginator>
           </div>
-  
+
         </div>
       </mat-expansion-panel>
 
@@ -134,15 +137,86 @@
 
         <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row">
-            <h2>Wochentag:</h2>
+            <div fxLayout="column">
+              <h2>Wochentag:</h2>
+              <!--Share Icon and Menu-->
+              <div>
+                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu1">
+                  <mat-icon>share</mat-icon>
+                </button>
+                <mat-menu #shareMenu1="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                      <div>ÖRK</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                      <div>FF Altenberg</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+                      <div>Forum Alpbach</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="exportChart($event, 'Wochentag')" matTooltip="Recruiter: 'Best Jobs'">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+                      <div>Recruiter: 'Best Jobs'</div>
+                    </div>
+                  </button>
+                </mat-menu>
+              </div>
+              <!--END Share Icon and Menu-->
+            </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
                 [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
               </ngx-charts-pie-chart>
             </div>
-
-            <h2>Tageszeit:</h2>
+            <div fxLayout="column">
+              <h2>Tageszeit:</h2>
+              <!--Share Icon and Menu-->
+              <div>
+                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu2">
+                  <mat-icon>share</mat-icon>
+                </button>
+                <mat-menu #shareMenu2="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                      <div>ÖRK</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                      <div>FF Altenberg</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+                      <div>Forum Alpbach</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="exportChart($event, 'Tageszeit')" matTooltip="Recruiter: 'Best Jobs'">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+                      <div>Recruiter: 'Best Jobs'</div>
+                    </div>
+                  </button>
+                </mat-menu>
+              </div>
+              <!--END Share Icon and Menu-->
+            </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
@@ -180,7 +254,7 @@
             Details
           </mat-panel-title>
           <mat-panel-description>
-            Text 
+            Text
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -201,14 +275,14 @@
           </mat-form-field>
         </div>
 
-         <div class="comparisonParent">
+        <div class="comparisonParent">
           <ngx-charts-bar-vertical [results]="comparisonData" [scheme]="colorScheme" [animations]="animations"
             [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
             [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel" [roundEdges]="false">
           </ngx-charts-bar-vertical>
-        </div> 
+        </div>
 
-       
+
       </mat-expansion-panel>
     </mat-accordion>
 
