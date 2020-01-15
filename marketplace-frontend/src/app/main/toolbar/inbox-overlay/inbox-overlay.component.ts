@@ -102,6 +102,20 @@ export class InboxOverlayComponent implements OnInit {
     }
   }
 
+  findNameProperty(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.properties)) {
+      return '';
+    }
+
+    const name =  entry.properties.find(p => p.id === 'name');
+
+    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+      return '';
+    } else {
+      return name.values[0];
+    }
+  }
+
   getDateString(date: number) {
     return new Date(date).toLocaleDateString();
   }
