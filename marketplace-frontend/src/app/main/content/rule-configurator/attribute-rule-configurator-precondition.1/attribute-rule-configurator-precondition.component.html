@@ -15,7 +15,7 @@
           {{cp.name}} </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field style="width: 115px">
+    <mat-form-field *ngIf="attributeSourceRuleEntry?.classProperty?.type != 'ENUM'" style="width: 115px">
       <mat-label>Aggregationsoperator</mat-label>
       <mat-select placeholder="Operation" formControlName="aggregationOperatorType"
         [value]="attributeSourceRuleEntry.aggregationOperatorType">

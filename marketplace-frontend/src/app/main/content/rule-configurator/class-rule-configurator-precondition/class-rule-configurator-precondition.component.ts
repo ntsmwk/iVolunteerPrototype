@@ -70,7 +70,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         this.marketplace = marketplace;
         this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace).toPromise().then(
           (definitions: ClassDefinition[]) => {
-            console.error(definitions);
             this.classDefinitions = definitions;
             this.loadClassProperties(null);
           }

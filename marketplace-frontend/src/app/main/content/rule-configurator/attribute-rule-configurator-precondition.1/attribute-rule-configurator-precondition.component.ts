@@ -100,6 +100,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
       this.attributeSourceRuleEntry.classProperty = new ClassProperty();
     }
     this.attributeSourceRuleEntry.classProperty.id = $event.source.value;
+    this.rulePreconditionForm.value.classPropertyId = $event.source.value;
     this.onChange($event);
   }
 
