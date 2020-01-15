@@ -69,8 +69,10 @@
                     <ng-container matColumnDef="label">
                         <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
                         <mat-cell *matCellDef="let entry">
-                            <div fxLayout="column" fxLayoutAlign="start start">
+                            <div fxLayout="row" fxLayoutAlign="start start">
                                 <div>{{entry.name}}</div>
+                                <div class="pl-4 pr-4">-</div>
+                                <div>{{findNameProperty(entry)}}</div>
                             </div>
                         </mat-cell>
                     </ng-container>
