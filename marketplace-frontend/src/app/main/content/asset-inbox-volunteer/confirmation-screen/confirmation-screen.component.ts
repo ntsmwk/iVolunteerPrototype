@@ -62,6 +62,15 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
     }
   }
 
+  onBackClickInbox() {
+    this.router.navigate(['main/volunteer/asset-inbox'], {state: {'instances': undefined, 'marketplace': this.marketplace, 'participant': this.participant}});
+  }
+
+  onBackClickDashboard() {
+    this.router.navigate(['main/dashboard']);
+
+  }
+
 }
 
 

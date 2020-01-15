@@ -10,6 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Volunteer } from '../../_model/volunteer';
 import { VolunteerService } from '../../_service/volunteer.service';
 import { CoreVolunteerService } from '../../_service/core-volunteer.service';
+import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 
 
 @Component({
@@ -32,10 +33,13 @@ export class AssetInboxComponent implements OnInit {
 
   issuers: Helpseeker[] = [];
   volunteers: Volunteer[] = [];
+  userImagePaths: any[];
 
   constructor(
     private helpseekerService: HelpseekerService,
-    private volunteerService: CoreVolunteerService
+    private volunteerService: CoreVolunteerService,
+    private userImagePathService: CoreUserImagePathService
+
   ) { }
 
   ngOnInit() {
@@ -43,18 +47,35 @@ export class AssetInboxComponent implements OnInit {
     if (!isNullOrUndefined(this.classInstances)) {
       this.classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
+      Promise.all([
       this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
         this.issuers = issuers;
-      });
+      }),
       
       this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
         this.volunteers = volunteers;
-      });
+      })
+    ]).then(() => {
+      this.fetchImagePaths();
+    })
     } else {
+      this.fetchImagePaths();
       this.classInstances = [];
     }
     this.datasource.data = this.classInstances;
+
   }
+
+  fetchImagePaths() {   
+    const users: (Volunteer | Helpseeker) [] = [];
+    users.push(...this.issuers);
+    users.push(...this.volunteers);
+    this.userImagePathService.getImagePathsById(users.map(u => u.id)).toPromise().then((ret: any) => {
+      console.log(ret);
+      this.userImagePaths = ret;
+    });
+  }
+  
 
   onSubmit() {
     console.log(this.selection);
@@ -111,6 +132,23 @@ export class AssetInboxComponent implements OnInit {
       return '';
     } else {
       return name.values[0];
+    }
+  }
+
+  getImagePathById(id: string) {
+
+    if (isNullOrUndefined(this.userImagePaths)) {
+      return '/assets/images/avatars/profile.jpg';
+    }
+
+    const ret = this.userImagePaths.find((userImagePath) => {
+      return userImagePath.userId === id;
+    });
+
+    if (isNullOrUndefined(ret)) {
+      return '/assets/images/avatars/profile.jpg';
+    } else {
+      return ret.imagePath;
     }
   }
 
