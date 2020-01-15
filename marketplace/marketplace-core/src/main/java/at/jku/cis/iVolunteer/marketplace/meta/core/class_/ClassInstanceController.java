@@ -82,11 +82,7 @@ public class ClassInstanceController {
 	
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
 	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
-		System.out.println(issuerId);
 		List<ClassInstance> instances = classInstanceRepository.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false);
-		System.out.println(instances);
-		System.out.println(instances.size());
-		
 		return instances;
 	}
 
