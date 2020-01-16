@@ -23,6 +23,7 @@ import { DashboardVolunteerComponent } from './dashboard-volunteer/dashboard-vol
 import { DashboardHelpSeekerComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
 import { AssetInboxVolunteerModule } from '../asset-inbox-volunteer/asset-inbox-volunteer.module';
 import { MatBadgeModule, MatCardModule } from '@angular/material';
+import { AssetInboxModule } from '../_components/asset-inbox/asset-inbox.module';
 
 
 
@@ -45,6 +46,8 @@ const routes = [
     RouterModule.forChild(routes),
 
     MatIconModule,
+    AssetInboxModule,
+
 
     MatButtonModule,
     MatTableModule,
