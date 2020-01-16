@@ -51,7 +51,12 @@ public class CoreRecruiterController {
 
 		Recruiter recruiter = new Recruiter();
 		recruiter.setId(coreRecruiter.getId());
+		recruiter.setPosition(coreRecruiter.getPosition());
 		recruiter.setUsername(coreRecruiter.getUsername());
+		recruiter.setFirstname(coreRecruiter.getFirstname());
+		recruiter.setLastname(coreRecruiter.getLastname());
+		recruiter.setMiddlename(coreRecruiter.getMiddlename());
+
 		coreMarketplaceRestClient.registerRecruiter(marketplace.getUrl(), authorization, recruiter);
 	}
 

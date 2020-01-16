@@ -6,9 +6,11 @@ export class Participant {
   lastname: string;
   middlename: string;
   nickname: string;
+
+  position: string;
 }
 
-export type ParticipantRole = "VOLUNTEER" | "HELP_SEEKER" | "ADMIN" | "RECRUITER" | "FLEXPROD";
+export type ParticipantRole = 'VOLUNTEER' | 'HELP_SEEKER' | 'ADMIN' | 'RECRUITER' | 'FLEXPROD';
 
 
 export class UserImagePath {

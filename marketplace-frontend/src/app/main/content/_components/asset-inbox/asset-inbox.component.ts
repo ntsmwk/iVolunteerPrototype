@@ -8,9 +8,9 @@ import { Marketplace } from '../../_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Volunteer } from '../../_model/volunteer';
-import { VolunteerService } from '../../_service/volunteer.service';
 import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
+import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 
 
 @Component({
@@ -24,11 +24,15 @@ export class AssetInboxComponent implements OnInit {
   submitPressed: boolean;
 
   datasource = new MatTableDataSource<ClassInstance | Feedback>();
-  displayedColumns = ['checkboxes', 'archetype', 'label', 'issuer', 'user', 'date'];
+  displayedColumns;
+  displayedColumnsVolunteer = ['checkboxes', 'archetype', 'label', 'issuer', 'user', 'date'];
+  displayedColumnsHelpseeker = ['checkboxes', 'archetype', 'label', 'user', 'issuer', 'date'];
+
   selection = new SelectionModel<ClassInstance | Feedback>(true, []);
 
   @Input() classInstances: ClassInstance[];
   @Input() marketplace: Marketplace;
+  @Input() inboxOwner: string;
   @Output() submit = new EventEmitter();
 
   issuers: Helpseeker[] = [];
@@ -36,7 +40,7 @@ export class AssetInboxComponent implements OnInit {
   userImagePaths: any[];
 
   constructor(
-    private helpseekerService: HelpseekerService,
+    private helpseekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
     private userImagePathService: CoreUserImagePathService
 
@@ -48,7 +52,7 @@ export class AssetInboxComponent implements OnInit {
       this.classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
       Promise.all([
-      this.helpseekerService.findAll(this.marketplace).toPromise().then((issuers: Helpseeker[]) => {
+      this.helpseekerService.findAll().toPromise().then((issuers: Helpseeker[]) => {
         this.issuers = issuers;
       }),
       
@@ -61,6 +65,12 @@ export class AssetInboxComponent implements OnInit {
     } else {
       this.fetchImagePaths();
       this.classInstances = [];
+    }
+
+    if (this.inboxOwner === 'volunteer') {
+      this.displayedColumns = this.displayedColumnsVolunteer;
+    } else {
+      this.displayedColumns = this.displayedColumnsHelpseeker;
     }
     this.datasource.data = this.classInstances;
 
@@ -92,33 +102,26 @@ export class AssetInboxComponent implements OnInit {
   getNameForEntry(personId: string, type: string) {
     let person: Volunteer | Helpseeker;
     if (type === 'issuer') {
-    person = this.issuers.find((i) => i.id === personId);
+    person = this.issuers.find(i => i.id === personId);
     } else {
-      person = this.volunteers.find((i) => i.id === personId);
+      person = this.volunteers.find(i => i.id === personId);
     }
     if (isNullOrUndefined(person)) {
       return '';
     }
 
-    let result = '';
+    return person.firstname + ' ' + person.lastname;
+  }
 
-    if (!isNullOrUndefined(person.lastname)) {
-      if (!isNullOrUndefined(person.nickname)) {
-        result = result + person.nickname;
-      } else if (!isNullOrUndefined(person.firstname)) {
-        result = result + person.firstname;
-      }
-      if (!isNullOrUndefined(person.middlename)) {
-        result = result + ' ' + person.middlename;
-      }
-      result = result + ' ' + person.lastname;
-    } else if (!isNullOrUndefined(person.nickname)) {
-      result = result + person.nickname;
+  getIssuerPositionForEntry(personId: string) {
+    const helpseeker = this.issuers.find(p => p.id === personId);
+
+    if (isNullOrUndefined(helpseeker) || isNullOrUndefined(helpseeker.position)) {
+      return '';
     } else {
-      result = result + person.username;
+      return '(' + helpseeker.position + ')';
     }
 
-    return result;
   }
 
   findNameProperty(entry: ClassInstance) {
@@ -126,7 +129,10 @@ export class AssetInboxComponent implements OnInit {
       return '';
     }
 
-    const name =  entry.properties.find(p => p.id === 'name');
+    let name =  entry.properties.find(p => p.id === 'name');
+    if (isNullOrUndefined(name)) {
+      name = entry.properties.find(p => p.name === 'taskName');
+    }
 
     if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
       return '';

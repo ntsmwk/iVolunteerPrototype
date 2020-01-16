@@ -1,8 +1,8 @@
 <div *ngIf="participant">
   <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
     <div fxLayout="row" fxLayoutAlign="center center">
-      <span class="username mr-12" fxHide fxShow.gt-sm>{{participant.username}}</span>
-      <img class="avatar" src="assets/images/avatars/profile.jpg">
+      <span class="username mr-12" fxHide fxShow.gt-sm>{{getUserNameString()}}</span>
+      <img class="avatar" [src]="getImagePath()">
       <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
     </div>
 

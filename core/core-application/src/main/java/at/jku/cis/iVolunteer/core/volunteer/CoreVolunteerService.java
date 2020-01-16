@@ -43,6 +43,7 @@ public class CoreVolunteerService {
 		volunteer.setFirstname(coreVolunteer.getFirstname());
 		volunteer.setLastname(coreVolunteer.getLastname());
 		volunteer.setMiddlename(coreVolunteer.getMiddlename());
+		volunteer.setPosition(coreVolunteer.getPosition());
 		volunteer.setNickname(coreVolunteer.getNickname());
 		volunteer.setProfileImagePath(coreVolunteer.getProfileImagePath());
 		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);

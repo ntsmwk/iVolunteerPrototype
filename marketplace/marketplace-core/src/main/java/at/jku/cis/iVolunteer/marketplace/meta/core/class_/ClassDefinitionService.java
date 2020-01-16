@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,7 +35,7 @@ public class ClassDefinitionService {
 	public ClassDefinition getByName(String name) {
 		return classDefinitionRepository.findByName(name);
 	}
-	
+
 	public ClassDefinition getClassDefinitionById(String id) {
 		return classDefinitionRepository.findOne(id);
 	}
@@ -62,10 +63,10 @@ public class ClassDefinitionService {
 		return classDefinitionRepository.findAll();
 	}
 
-	public  List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
+	public List<ClassDefinition> addOrUpdateClassDefinitions(List<ClassDefinition> classDefinitions) {
 		return classDefinitionRepository.save(classDefinitions);
 	}
-	
+
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype) {
 		return classDefinitionRepository.findByClassArchetype(archetype);
 	}
@@ -84,10 +85,10 @@ public class ClassDefinitionService {
 			FormConfiguration formConfig = new FormConfiguration();
 			formConfig.setName(childClassDefinition.getName());
 			formConfig.setId(childClassDefinition.getId());
-			
+
 			FormEntry formEntry = new FormEntry();
 			formEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
-			formEntry.setClassProperties(new ArrayList<ClassProperty<Object>>());
+			formEntry.setClassProperties(new LinkedList<ClassProperty<Object>>());
 			formEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
 			formEntry.setSubEntries(new ArrayList<FormEntry>());
 
@@ -95,51 +96,8 @@ public class ClassDefinitionService {
 			while (!currentClassDefinition.isRoot()) {
 
 				formEntry.getClassDefinitions().add(currentClassDefinition);
-				
-				int i = 0;
-				CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
-				for (ClassProperty<Object> property : copyList) {
-					if (!formEntry.getClassProperties().contains(property)) {
-						//TODO refactor into own method (Alex)
-						if (property.getType().equals(PropertyType.ENUM)) {
-							
-							ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
-							enumProperty.setId(property.getId());
-							enumProperty.setName(property.getName());
-							enumProperty.setType(PropertyType.ENUM);
-							enumProperty.setRequired(property.isRequired());
-							
-							List<Relationship> associationList =  (relationshipRepository.findBySourceAndRelationshipType(property.getId(), RelationshipType.ASSOCIATION));
-							
-							if (associationList != null) {
-								for (Relationship r : associationList) {
-									// for each Relationship, Do a DFS to construct dropdown options menu
-									
-									ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-									enumProperty.setAllowedValues(performDFS(classDefinition, 0, new ArrayList<EnumEntry>()));
 
-									if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
-										enumProperty.setMultiple(false);
-									} else if (((Association)r).getTargetCardinality().equals(AssociationCardinality.ONESTAR)) {
-										enumProperty.setMultiple(true);
-									}
-
-									currentClassDefinition.getProperties().remove(i);
-
-									ArrayList temp = new ArrayList();
-									temp.add(enumProperty);
-									currentClassDefinition.getProperties().addAll(i,temp);
-									formEntry.getClassProperties().addAll(temp);
-									i++;
-								}
-							}
-						}
-
-						if (!property.getType().equals(PropertyType.ENUM)) {
-							formEntry.getClassProperties().add(property);
-						}
-					}
-				}		
+				formEntry.getClassProperties().addAll(0,getPropertiesInClassDefinition(formEntry, currentClassDefinition));
 
 				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
@@ -152,17 +110,73 @@ public class ClassDefinitionService {
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
+			List<ClassProperty<Object>> properties = new LinkedList<>();
 			for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
 				if (!formEntry.getClassProperties().contains(property)) {
-					formEntry.getClassProperties().add(property);
+					properties.add(property);
 				}
 			}
-			
+
+			formEntry.getClassProperties().addAll(0, properties);
 			formConfig.setFormEntry(formEntry);
 			configList.add(formConfig);
 		}
 
 		return configList;
+	}
+
+	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition) {
+		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
+		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+		for (ClassProperty<Object> property : copyList) {
+			int i = 0;
+
+			if (!formEntry.getClassProperties().contains(property)) {
+				// TODO refactor into own method (Alex)
+				if (property.getType().equals(PropertyType.ENUM)) {
+
+					ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
+					enumProperty.setId(property.getId());
+					enumProperty.setName(property.getName());
+					enumProperty.setType(PropertyType.ENUM);
+					enumProperty.setRequired(property.isRequired());
+
+					List<Relationship> associationList = (relationshipRepository
+							.findBySourceAndRelationshipType(property.getId(), RelationshipType.ASSOCIATION));
+
+					if (associationList != null) {
+						for (Relationship r : associationList) {
+							// for each Relationship, Do a DFS to construct dropdown options menu
+
+							ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
+							enumProperty.setAllowedValues(performDFS(classDefinition, 0, new ArrayList<EnumEntry>()));
+
+							if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
+								enumProperty.setMultiple(false);
+							} else if (((Association) r).getTargetCardinality()
+									.equals(AssociationCardinality.ONESTAR)) {
+								enumProperty.setMultiple(true);
+							}
+
+							currentClassDefinition.getProperties().remove(i);
+
+							ArrayList temp = new ArrayList();
+							temp.add(enumProperty);
+							currentClassDefinition.getProperties().addAll(i, temp);
+							properties.addAll(temp);
+							i++;
+						}
+					}
+				}
+
+				if (!property.getType().equals(PropertyType.ENUM)) {
+					properties.add(property);
+				}
+			}
+
+		}
+		
+		return properties;
 	}
 
 // Keep in case of changes of mind :)
@@ -176,17 +190,14 @@ public class ClassDefinitionService {
 //		
 //		return enumRepresentation;
 //	}
-	
-	
-	
-	
-	
+
 	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list) {
 		Stack<Relationship> stack = new Stack<>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
+				RelationshipType.INHERITANCE);
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
-		
+
 		if (stack == null || stack.size() <= 0) {
 			return list;
 		} else {
@@ -194,9 +205,9 @@ public class ClassDefinitionService {
 				Relationship relationship = stack.pop();
 				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 				EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
-				enumEntry.setPosition(new int[level+1]);
+				enumEntry.setPosition(new int[level + 1]);
 				list.add(enumEntry);
-				this.performDFS(classDefinition, level+1, list);
+				this.performDFS(classDefinition, level + 1, list);
 			}
 		}
 		return list;
