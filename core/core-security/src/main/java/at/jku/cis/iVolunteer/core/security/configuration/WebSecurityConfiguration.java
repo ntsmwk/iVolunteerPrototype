@@ -29,21 +29,22 @@ import at.jku.cis.iVolunteer.core.service.ParticipantDetailsService;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private ParticipantDetailsService participantDetailsService;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired
-	private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired private ParticipantDetailsService participantDetailsService;
+	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
 		http.cors().and().csrf().disable();
-		http.authorizeRequests().anyRequest().authenticated();
+		http.authorizeRequests()
+			.antMatchers("/init/**").permitAll()
+			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 				.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);		 
+		// @formatter:on
 	}
 
 	@Override
