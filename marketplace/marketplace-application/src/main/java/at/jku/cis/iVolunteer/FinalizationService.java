@@ -22,10 +22,10 @@ public class FinalizationService {
 			DerivationRuleRepository derivationRuleRepository) {
 //		 classDefinitionRepository.deleteAll();
 //		 relationshipRepository.deleteAll();
-		 classInstanceRepository.deleteAll();
+//		 classInstanceRepository.deleteAll();
 //		 configuratorRepository.deleteAll();
 //		 propertyDefinitionRepository.deleteAll();
-		 derivationRuleRepository.deleteAll();
+//		 derivationRuleRepository.deleteAll();
 
 	}
 }
