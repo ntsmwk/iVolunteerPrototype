@@ -87,7 +87,7 @@
       <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
       <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
 
-        <img class="avatar" src="/assets/images/avatars/profile.jpg">
+        <img class="avatar" [src]="getImagePathById(entry.issuerId)">
         <div>{{getNameForEntry(entry.issuerId,'issuer')}}</div>
 
       </mat-cell>
@@ -97,7 +97,7 @@
       <mat-header-cell *matHeaderCellDef>Volunteer</mat-header-cell>
       <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
 
-        <img class="avatar" src="/assets/images/avatars/profile.jpg">
+        <img class="avatar" [src]="getImagePathById(entry.userId)">
         <div>{{getNameForEntry(entry.userId,'volunteer')}}</div>
 
       </mat-cell>
@@ -136,5 +136,5 @@
 <div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
   <button mat-raised-button color="secondary" (click)="navigateBack()">Zurück</button>
   <div></div>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()">Weiter</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()">Blockchainify</button>
 </div>
