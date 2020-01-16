@@ -163,15 +163,15 @@ public class CoreApplication {
 
 	private CoreVolunteer saveVolunteer(CoreVolunteer coreVolunteer) {
 		CoreVolunteer volunteer = coreVolunteerRepository.save(coreVolunteer);
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
-		if (mp != null) {
-			try {
-				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), "");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+//		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
+//				.findFirst().orElse(null);
+//		if (mp != null) {
+//			try {
+//				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), "");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		return volunteer;
 	}
 
