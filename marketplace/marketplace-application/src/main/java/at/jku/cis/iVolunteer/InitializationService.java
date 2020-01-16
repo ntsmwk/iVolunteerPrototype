@@ -44,7 +44,6 @@ import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -73,14 +72,9 @@ public class InitializationService {
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
-
 		addTestDerivationRule();
-
-
 		this.addTestClassInstances();
 	}
-
-	
 
 	private void addTestDerivationRule() {
 		DerivationRule rule = new DerivationRule();
