@@ -94,7 +94,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.submenuContainer.nativeElement.style.top = '30px';
     this.submenuContainer.nativeElement.style.left = '10px';
     this.submenuContainer.nativeElement.style.height = 'auto';
-    this.submenuContainer.nativeElement.style.width = '200px'
+    this.submenuContainer.nativeElement.style.width = '200px';
     this.submenuContainer.nativeElement.style.background = 'white';
     this.submenuContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
     this.submenuContainer.nativeElement.style.display = 'none';
@@ -172,7 +172,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       } else {
         this.menuOptionClickedEvent.emit({id: "cancelled"});
       }
-    })
+    });
   }
 
   saveAsClicked(event: any, item: SubMenuItem) {   

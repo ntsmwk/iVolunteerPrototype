@@ -5,5 +5,6 @@ export class Configurator {
     classDefinitionIds: string[];
     relationshipIds: string[];
     date: Date;
+    userId: String;
 
 }

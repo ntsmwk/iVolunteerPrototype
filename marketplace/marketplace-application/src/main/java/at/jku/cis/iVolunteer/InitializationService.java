@@ -486,15 +486,17 @@ public class InitializationService {
 		c1.getClassDefinitionIds().add("test9");
 
 		Configurator c2 = new Configurator();
-		c2.setName("Slot2");
+		c2.setName("Feuerwehr Konfiguration");
 		c2.setId("slot2");
 		c2.setDate(new Date());
+		c2.setUserId("FFA");
 
 		Configurator c3 = new Configurator();
-		c3.setName("Slot3");
+		c3.setName("Musiverein Modell");
 		c3.setId("slot3");
 
 		c3.setDate(new Date());
+		c3.setUserId("MVS");
 
 		Configurator c4 = new Configurator();
 		c4.setName("Slot4");

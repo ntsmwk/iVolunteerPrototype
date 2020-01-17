@@ -18,6 +18,8 @@ public class Configurator {
 	private List<String> relationshipIds;
 
 	private Date date;
+	
+	private String userId;
 
 	private ConfiguratorArcheType configuratorArcheType;
 
@@ -91,5 +93,13 @@ public class Configurator {
 
 	public void setConfiguratorArcheType(ConfiguratorArcheType configuratorArcheType) {
 		this.configuratorArcheType = configuratorArcheType;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

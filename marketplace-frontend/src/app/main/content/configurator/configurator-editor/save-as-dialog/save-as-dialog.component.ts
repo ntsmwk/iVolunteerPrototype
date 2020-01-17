@@ -1,12 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from 'app/main/content/_service/meta/core/configurator/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { isNullOrUndefined } from 'util';
 
 export interface SaveAsDialogData {
   configurator: Configurator;
   marketplace: Marketplace;
+  userId: string;
 }
 
 @Component({
@@ -26,17 +28,23 @@ export class SaveAsDialogComponent implements OnInit{
   selected: string;
   configurators: Configurator[];
   recentConfigurators: Configurator[];
-  loaded: boolean = false;
+  loaded = false;
   
   ngOnInit() {
     console.log(this.data.marketplace);
     
     this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-      console.log("init dialog open");
+      console.log('init dialog open');
       console.log(configurators);
-      this.configurators = configurators;
-      this.recentConfigurators = this.configurators.slice(0, 5);
+      
+      this.configurators = configurators.filter(c => {
+       return c.userId === this.data.userId || isNullOrUndefined(c.userId);
+      });
 
+    
+      if (this.configurators.length < 5) {
+        this.recentConfigurators = this.configurators.slice(0, 5);
+      }
       this.loaded = true;
     });
   }
