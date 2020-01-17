@@ -89,7 +89,7 @@ export class AssetInboxComponent implements OnInit {
 
   onSubmit() {
     console.log(this.selection);
-    if (!this.selection.isEmpty()) {
+    if (!this.selection.isEmpty() || this.inboxOwner === 'helpseeker-dashboard') {
       this.submit.emit(this.selection.selected);
     }
   }
