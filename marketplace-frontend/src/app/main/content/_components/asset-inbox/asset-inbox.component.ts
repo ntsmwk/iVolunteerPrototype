@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
 import { MatTableDataSource } from '@angular/material';
 import { Feedback } from '../../_model/feedback';
 import { HelpseekerService } from '../../_service/helpseeker.service';
@@ -52,16 +52,16 @@ export class AssetInboxComponent implements OnInit {
       this.classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
 
       Promise.all([
-      this.helpseekerService.findAll().toPromise().then((issuers: Helpseeker[]) => {
-        this.issuers = issuers;
-      }),
-      
-      this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
-        this.volunteers = volunteers;
-      })
-    ]).then(() => {
-      this.fetchImagePaths();
-    })
+        this.helpseekerService.findAll().toPromise().then((issuers: Helpseeker[]) => {
+          this.issuers = issuers;
+        }),
+
+        this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
+          this.volunteers = volunteers;
+        })
+      ]).then(() => {
+        this.fetchImagePaths();
+      });
     } else {
       this.fetchImagePaths();
       this.classInstances = [];
@@ -76,8 +76,8 @@ export class AssetInboxComponent implements OnInit {
 
   }
 
-  fetchImagePaths() {   
-    const users: (Volunteer | Helpseeker) [] = [];
+  fetchImagePaths() {
+    const users: (Volunteer | Helpseeker)[] = [];
     users.push(...this.issuers);
     users.push(...this.volunteers);
     this.userImagePathService.getImagePathsById(users.map(u => u.id)).toPromise().then((ret: any) => {
@@ -85,7 +85,7 @@ export class AssetInboxComponent implements OnInit {
       this.userImagePaths = ret;
     });
   }
-  
+
 
   onSubmit() {
     console.log(this.selection);
@@ -102,7 +102,7 @@ export class AssetInboxComponent implements OnInit {
   getNameForEntry(personId: string, type: string) {
     let person: Volunteer | Helpseeker;
     if (type === 'issuer') {
-    person = this.issuers.find(i => i.id === personId);
+      person = this.issuers.find(i => i.id === personId);
     } else {
       person = this.volunteers.find(i => i.id === personId);
     }
@@ -129,7 +129,7 @@ export class AssetInboxComponent implements OnInit {
       return '';
     }
 
-    let name =  entry.properties.find(p => p.id === 'name');
+    let name = entry.properties.find(p => p.id === 'name');
     if (isNullOrUndefined(name)) {
       name = entry.properties.find(p => p.name === 'taskName');
     }
@@ -155,6 +155,40 @@ export class AssetInboxComponent implements OnInit {
       return '/assets/images/avatars/profile.jpg';
     } else {
       return ret.imagePath;
+    }
+  }
+
+  getArchetypeIcon(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.imagePath)) {
+
+      if (entry.classArchetype === ClassArchetype.COMPETENCE) {
+        return '/assets/competence.jpg';
+      } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
+        return '/assets/icons/achievements_black.png';
+      } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
+        return '/assets/TODO';
+      } else if (entry.classArchetype === ClassArchetype.TASK) {
+        return '/assets/cog.png';
+      } else {
+        return '/assets/NONE';
+      }
+    } else {
+      return entry.imagePath;
+    }
+
+  }
+
+  getArchetypeName(entry: ClassInstance) {
+    if (entry.classArchetype === ClassArchetype.COMPETENCE) {
+      return 'Kompetenz';
+    } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
+      return 'Errungenschaft';
+    } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
+      return 'Funktion';
+    } else if (entry.classArchetype === ClassArchetype.TASK) {
+      return 'Tätigkeit';
+    } else {
+      return '';
     }
   }
 

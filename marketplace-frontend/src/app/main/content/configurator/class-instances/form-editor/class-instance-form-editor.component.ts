@@ -135,6 +135,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstance.userId = selectedVolunteer.id;
       classInstance.issuerId = this.helpseeker.id;
+      classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
       classInstances.push(classInstance);
     }
     

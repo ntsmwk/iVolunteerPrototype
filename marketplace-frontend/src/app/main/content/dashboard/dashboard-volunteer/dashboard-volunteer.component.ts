@@ -9,7 +9,7 @@ import { CoreMarketplaceService } from '../../_service/core-marketplace.service'
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../../_model/marketplace';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 
@@ -177,6 +177,26 @@ export class DashboardVolunteerComponent implements OnInit {
       return ': ' + name.values[0];
     }
 
+
+  }
+
+  getArchetypeIcon(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.imagePath)) {
+
+      if (entry.classArchetype === ClassArchetype.COMPETENCE) {
+        return '/assets/competence.jpg';
+      } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
+        return '/assets/icons/achievements_black.png';
+      } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
+        return '/assets/TODO';
+      } else if (entry.classArchetype === ClassArchetype.TASK) {
+        return '/assets/cog.png';
+      } else {
+        return '/assets/NONE';
+      }
+    } else {
+      return entry.imagePath;
+    }
 
   }
 
