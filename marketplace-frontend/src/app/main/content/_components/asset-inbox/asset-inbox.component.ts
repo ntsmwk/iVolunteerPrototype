@@ -25,8 +25,8 @@ export class AssetInboxComponent implements OnInit {
 
   datasource = new MatTableDataSource<ClassInstance | Feedback>();
   displayedColumns;
-  displayedColumnsVolunteer = ['checkboxes', 'archetype', 'label', 'issuer', 'user', 'date'];
-  displayedColumnsHelpseeker = ['checkboxes', 'archetype', 'label', 'user', 'issuer', 'date'];
+  displayedColumnsVolunteer = ['checkboxes', 'archetype', 'label', 'issuer', 'date'];
+  displayedColumnsHelpseeker = ['checkboxes', 'archetype', 'label', 'user', 'date'];
 
   selection = new SelectionModel<ClassInstance | Feedback>(true, []);
 
