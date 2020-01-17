@@ -14,6 +14,8 @@ export class FormEntry {
 
     questions: QuestionBase<any>[] = [];
     formGroup: FormGroup;
+
+    imagePath: string;
 }
 
 export class FormConfiguration {

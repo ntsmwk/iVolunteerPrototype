@@ -93,12 +93,6 @@ public class CoreApplication {
 		volunteer.setLastname("Pröll");
 		saveVolunteer(volunteer);
 
-		volunteer = createVolunteer("JSch", "passme");
-		volunteer.setFirstname("Johannes");
-		volunteer.setLastname("Schönböck");
-		volunteer.setNickname("Hannes");
-		saveVolunteer(volunteer);
-
 		volunteer = createVolunteer("KKof", "passme");
 		volunteer.setFirstname("Katharina");
 		volunteer.setLastname("Kofler");
@@ -107,7 +101,9 @@ public class CoreApplication {
 
 		// Helpseekers
 		CoreHelpSeeker helpseeker = createHelpSeekerFixedId("FFA", "passme");
-		helpseeker.setNickname("FF Altenberg");
+		helpseeker.setFirstname("Wolfgang");
+		helpseeker.setLastname("Kronsteiner");
+		helpseeker.setPosition("Feuerwehr Kommandant");
 		helpseeker.setId("FFA");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/FF_Altenberg.jpg"));
@@ -120,7 +116,9 @@ public class CoreApplication {
 				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg"));
 
 		helpseeker = createHelpSeekerFixedId("MVS", "passme");
-		helpseeker.setNickname("Musikverein Schwertberg");
+		helpseeker.setFirstname("Johannes");
+		helpseeker.setLastname("Schönböck");
+		helpseeker.setPosition("Musikverein Obmann");
 		helpseeker.setId("MVS");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository
@@ -131,6 +129,13 @@ public class CoreApplication {
 		helpseeker.setId("EFA");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
+		
+		CoreRecruiter recruiter = createRecruiter("recruiter", "passme");
+		recruiter.setFirstname("Daniel");
+		recruiter.setLastname("Huber");
+		recruiter.setPosition("Recruiter");
+		saveRecruiter(recruiter);
+		
 
 	}
 
@@ -163,15 +168,6 @@ public class CoreApplication {
 
 	private CoreVolunteer saveVolunteer(CoreVolunteer coreVolunteer) {
 		CoreVolunteer volunteer = coreVolunteerRepository.save(coreVolunteer);
-		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
-				.findFirst().orElse(null);
-		if (mp != null) {
-			try {
-				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), "");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		return volunteer;
 	}
 
@@ -194,6 +190,11 @@ public class CoreApplication {
 			recruiter.setPassword(bCryptPasswordEncoder.encode(password));
 			recruiter = coreRecruiterRepository.insert(recruiter);
 		}
+		return recruiter;
+	}
+	
+	private CoreRecruiter saveRecruiter(CoreRecruiter coreRecruiter) {
+		CoreRecruiter recruiter = coreRecruiterRepository.save(coreRecruiter);
 		return recruiter;
 	}
 

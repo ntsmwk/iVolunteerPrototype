@@ -71,14 +71,14 @@
                 <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
                     <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
 
-                    <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
+                    <!-- <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
                             <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
                             <div style="padding-left: 10px"></div>
                             <div>ÖRK</div>
                         </div>
-                    </button>
+                    </button> -->
                     <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
@@ -90,9 +90,9 @@
                     <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
-                            <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+                            <img class="avatar" src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
                             <div style="padding-left: 10px"></div>
-                            <div>Forum Alpbach</div>
+                            <div>Musikverein Schwertberg</div>
                         </div>
                     </button>
                     <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px"
@@ -115,16 +115,16 @@
 
         <!---FILTER BY ORGANIZATION ROW-->
         <div style="font-size: 16px; padding-left: 10px">
-            <div>Filter by Organization</div>
+            <div>Nach Organisation Filtern</div>
             <div fxLayout="row" fxLayoutAlign="start start">
 
-                <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
+                <!-- <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
                     fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg">
                     </div>
-                </button>
+                </button> -->
 
                 <div style="padding:1px"></div>
                 <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
@@ -140,7 +140,7 @@
                     fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                            src="../../../../assets/images/logos/neighborhelp.jpg">
+                            src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
                     </div>
                 </button>
 
@@ -148,7 +148,7 @@
                 <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;"
                     fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 7px;">
-                        All
+                        Alle
                     </div>
                 </button>
             </div>
@@ -165,11 +165,14 @@
             <mat-table #tableRepository [dataSource]="dataSourceRepository" style="width: 100%">
 
                 <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Organisation</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         <div fxLayout="row" fxLayoutAligne="start center">
                             <img class="avatar" [src]="getImagePathById(entry.issuerId)">
-                            <div>{{getIssuerName(entry.issuerId)}}</div>
+                            <div fxLayout="column">
+                                <div>{{getIssuerName(entry.issuerId)}}</div>
+                                <div class="pl-8">{{getIssuerPosition(entry.issuerId)}}</div>
+                            </div>
                         </div>
                     </mat-cell>
                 </ng-container>
@@ -228,7 +231,7 @@
 
                                 </div>
 
-                              
+
 
                             </div>
 

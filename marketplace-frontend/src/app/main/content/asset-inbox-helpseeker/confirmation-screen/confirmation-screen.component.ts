@@ -62,6 +62,20 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
     }
   }
 
+  onBackClickInbox() {
+    this.router.navigate(['main/helpseeker/asset-inbox'], {state: {'instances': undefined, 'marketplace': this.marketplace, 'participant': this.participant}});
+  }
+
+  onBackClickDashboard() {
+    this.router.navigate(['main/dashboard']);
+  }
+
+  onBackClickNewTask() {
+    this.router.navigate(['main/tasks/all']);
+
+  }
+
+
 }
 
 

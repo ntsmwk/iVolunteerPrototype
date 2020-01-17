@@ -1,7 +1,26 @@
-<div class="page-layout blank p-12" fusePerfectScrollbar>
-    <div class="layout1" fxLayout="row wrap" fxLayoutAlign="center">
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
-        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+    <div></div>
+    <h1>Asset Inbox</h1>
+    <div></div>
+  </div>
+
+  <div class="p-12"></div>
+
+  <div *ngIf="!isLoaded">
+    //TODO loading circle
+  </div>
+  <div class="pt-8 pb-12">Assets auswählen, welche übernommen werden sollen</div>
+
+  <app-asset-inbox [classInstances]="classInstances" [marketplace]="marketplace" (submit)=onAssetInboxSubmit($event)></app-asset-inbox>
+
+
+
+
+  <!-- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
             fxFlex.gt-sm="50" *ngIf="marketplaces.length > 0">
             <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                 <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
@@ -25,6 +44,5 @@
                     </div>
                 </div>
             </div>  
-        </fuse-widget>
-    </div>
+        </fuse-widget> -->
 </div>

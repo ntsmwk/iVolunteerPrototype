@@ -75,6 +75,7 @@ public class CoreHelpSeekerController {
 		helpSeeker.setUsername(coreHelpSeeker.getUsername());
 		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
 		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());
+		helpSeeker.setPosition(coreHelpSeeker.getPosition());
 		helpSeeker.setLastname(coreHelpSeeker.getLastname());
 		helpSeeker.setNickname(coreHelpSeeker.getNickname());
 		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeeker);

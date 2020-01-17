@@ -8,9 +8,15 @@
 
         <div fxLayout="column" fxLayoutAlign="start center">
 
-            <div style="text-align: center; font-size: 28px;">Blockchainified</div>
+            <div style="text-align: center; font-size: 28px;">Blockchainified!</div>
             <img class="pt-24 pb-24" src="/assets/images/blockchainify.gif">
-            <button mat-raised-button type="button" color="primary" (click)="onBackClick()">Zurück zur Inbox</button>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button type="button" color="primary" (click)="onBackClickInbox()">Zurück zur Inbox</button>
+                <div class="pr-8"></div>
+                <button mat-raised-button type="button" color="primary" (click)="onBackClickDashboard()">Zurück zum Dashboard</button>
+                <div class="pr-8"></div>
+                <button mat-raised-button type="button" color="primary" (click)="onBackClickNewTask()">Neue Tätigkeit erstellen</button>
+            </div>
         </div>
 
         <div></div>

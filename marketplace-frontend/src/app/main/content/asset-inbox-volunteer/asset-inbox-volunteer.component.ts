@@ -84,8 +84,8 @@ export class AssetInboxVolunteerComponent implements OnInit {
 
     this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
 
-      this.router.navigate(['/main/volunteer/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
-
+      // this.router.navigate(['/main/volunteer/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
+      this.router.navigate(['/main/dashboard']);
     });
 
   }

@@ -44,7 +44,6 @@ import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.model.usermapping.UserMapping;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
@@ -68,33 +67,13 @@ public class InitializationService {
 
 	@PostConstruct
 	public void init() {
-		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
-				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
+//		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
+//				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
-
 		addTestDerivationRule();
-
-		addFireBrigadeUserMapping();
-
 		this.addTestClassInstances();
-	}
-
-	private void addFireBrigadeUserMapping() {
-		UserMapping userMapping = userMappingRepository.findByExternalUserId("5dc2a215399af");
-
-		if (userMapping != null) {
-			userMappingRepository.deleteAll();
-		}
-		
-		Volunteer volunteer = volunteerRepository.findByUsername("mweixlbaumer");
-		if (volunteer != null) {
-			UserMapping mapping = new UserMapping();
-			mapping.setiVolunteerUserId(volunteer.getId());
-			mapping.setExternalUserId("5dc2a215399af");
-			userMappingRepository.save(mapping);
-		}
 	}
 
 	private void addTestDerivationRule() {
@@ -305,7 +284,7 @@ public class InitializationService {
 
 	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT));
-//		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskName", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));

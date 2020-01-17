@@ -8,7 +8,7 @@ public class PersonTask {
 
 	@Id private String id;
 	private String taskId;
-	private String name;
+	private String taskName;
 	private String taskType1;
 	private String taskType2;
 	private String taskType3;
@@ -34,7 +34,7 @@ public class PersonTask {
 	public PersonTask() {
 	}
 
-	public PersonTask(String id, String taskId, String name, String taskType1, String taskType2, String taskType3,
+	public PersonTask(String id, String taskId, String taskName, String taskType1, String taskType2, String taskType3,
 			String taskType4, String taskDescription, String taskDateFrom, String taskDateTo, String taskDuration,
 			String taskLocation, String zweck, String rolle, String rang, String phase, String arbeitsteilung,
 			String ebene, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
@@ -42,7 +42,7 @@ public class PersonTask {
 		super();
 		this.id = id;
 		this.taskId = taskId;
-		this.setName(name);
+		this.taskName = taskName;
 		this.taskType1 = taskType1;
 		this.taskType2 = taskType2;
 		this.taskType3 = taskType3;
@@ -232,12 +232,12 @@ public class PersonTask {
 		Ebene = ebene;
 	}
 
-	public String getName() {
-		return name;
+	public String getTaskName() {
+		return taskName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
 }

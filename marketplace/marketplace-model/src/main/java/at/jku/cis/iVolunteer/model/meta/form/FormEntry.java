@@ -14,6 +14,7 @@ public class FormEntry {
 	
 	private List<FormEntry> subEntries;
 
+	private String imagePath;
 
 	public List<ClassProperty<Object>> getClassProperties() {
 		return classProperties;
@@ -45,6 +46,15 @@ public class FormEntry {
 
 	public void setSubEntries(List<FormEntry> subEntries) {
 		this.subEntries = subEntries;
+	}
+
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 	
 	

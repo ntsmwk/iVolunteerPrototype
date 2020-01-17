@@ -16,6 +16,8 @@ public abstract class User {
 	
 	private String nickname;
 	
+	private String position;
+	
 	private String profileImagePath;
 	
 	@JsonIgnore
@@ -96,6 +98,14 @@ public abstract class User {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 }

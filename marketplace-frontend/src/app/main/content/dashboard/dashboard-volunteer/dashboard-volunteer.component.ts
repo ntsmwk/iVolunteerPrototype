@@ -147,24 +147,17 @@ export class DashboardVolunteerComponent implements OnInit {
       return result;
     }
 
-
-    if (!isNullOrUndefined(person.lastname)) {
-      if (!isNullOrUndefined(person.nickname)) {
-        result = result + person.nickname;
-      } else if (!isNullOrUndefined(person.firstname)) {
-        result = result + person.firstname;
-      }
-      if (!isNullOrUndefined(person.middlename)) {
-        result = result + ' ' + person.middlename;
-      }
-      result = result + ' ' + person.lastname;
-    } else if (!isNullOrUndefined(person.nickname)){
-      result = result + person.nickname;
-    } else {
-      result = result + person.username;
-    }
-
+    result = person.firstname + ' ' + person.lastname;
     return result;
+  }
+
+  getIssuerPosition(issuerId: string) {
+    const person = this.issuers.find((i) => i.id === issuerId);
+    if (isNullOrUndefined(person) || isNullOrUndefined(person.position)) {
+      return '';
+    } else {
+      return '(' + person.position + ')';
+    }
   }
 
   findNameProperty(entry: ClassInstance) {
@@ -172,7 +165,11 @@ export class DashboardVolunteerComponent implements OnInit {
       return '';
     }
 
-    const name =  entry.properties.find(p => p.id === 'name');
+    let name =  entry.properties.find(p => p.id === 'name');
+
+    if (isNullOrUndefined(name)) {
+      name = entry.properties.find(p => p.name === 'taskName');
+    }
 
     if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
       return '';
