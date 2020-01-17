@@ -844,7 +844,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.graph.getModel().setCollapsed(edge.target, true);
       }
       this.graph.getModel().setVisible(edge.target, false);
-      this.setAllCellsInvisibleRec(edge.target as myMxCell); 
+      this.setAllCellsInvisibleRec(edge.target as myMxCell);
     }
 
     let children = this.graph.getChildCells(cell) as myMxCell[];
@@ -879,15 +879,15 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().setVisible(edge.target, true);
 
       let children = this.graph.getChildCells(cell) as myMxCell[];
-    children = children.filter(c => c.cellType === 'enum_property');
-    console.log(children);
-    for (const child of children) {
-      const childEdges = this.graph.getOutgoingEdges(child);
-      console.log(childEdges);
-      for (const childEdge of childEdges) {
-        this.graph.getModel().setVisible(childEdge.target, true);
+      children = children.filter(c => c.cellType === 'enum_property');
+      console.log(children);
+      for (const child of children) {
+        const childEdges = this.graph.getOutgoingEdges(child);
+        console.log(childEdges);
+        for (const childEdge of childEdges) {
+          this.graph.getModel().setVisible(childEdge.target, true);
+        }
       }
-    }
 
     }
   }
