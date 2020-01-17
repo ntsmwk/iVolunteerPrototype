@@ -39,6 +39,7 @@ import { FuseProjectMembersModule } from '../_components/project-members/project
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { ManagementSummaryComponent } from './management-summary/management-summary.component';
 
 const routes = [
   { path: '**', component: FuseAchievementsComponent }
@@ -51,6 +52,7 @@ const routes = [
     AccomplishmentsComponent,
     FunctionsComponent,
     CompetenciesComponent,
+    ManagementSummaryComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

@@ -18,63 +18,73 @@
                         <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
                             [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                             [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
-                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1"
                             [animations]="animations" (select)="onSelect($event)">
                         </ngx-charts-bar-vertical-stacked>
                     </div>
-                    <div class="half">
-                        <h2 class="title">Gesamtstunden an geileisteten Ausbildungen</h2>
-                        <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2"
-                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                            [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
-                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                            [animations]="animations" (select)="onSelect($event)">
+
+                     <div class="half">
+                        <h2 class="title">Gesamtanzahl an geileisteten Ausbildungen</h2>
+                        <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient"
+                            [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel2" [animations]="animations"
+                            (select)="onSelect($event)">
                         </ngx-charts-line-chart>
                     </div>
                 </div>
 
-                <!-- <div [ngModel]="currYearData[0]?.number">
-                    <p>Du hast in diesem Jahr an {{currYearData[0].number}} Schulungen und {{currYearData[1].number}} Übungen teilgenommen.
-                    </p> 
-                </div> -->
-
-                <div class="chartParent" fxLayout="column">
-                    <div class="chartParent" fxLayout="column">
-                        <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
-                        <ngx-charts-area-chart [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
-                            [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
-                            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations"
-                            (select)="onSelect($event)">
-                        </ngx-charts-area-chart>
-                    </div>
-                    <div class="chartParent" fxLayout="column">
-                        <h2 class="title">Gesamtstunden (normalisiert) nach Tätigkeitsarten</h2>
-                        <ngx-charts-area-chart-normalized [scheme]="colorScheme" [results]="taskData"
-                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                            [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
-                            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                            [animations]="animations" (select)="onSelect($event)">
-                        </ngx-charts-area-chart-normalized>
-                    </div>
+                <div *ngIf="meanYearData">
+                <table class="paleBlueRows">
+                    <thead>
+                    <tr>
+                    <th rowspan="2">Ausbildungsart</th>
+                    <th rowspan="2">2019</th>
+                    <th colspan="2">im Vergleich zu</th>
+                    </tr>
+                    <tr>
+                    <th>2018</th>
+                    <th>Durchschnitt</th>   
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    <td>{{meanYearData[0][0].name}}</td><td>{{currYearData[0][0].number}}</td><td>{{currYearData[0][0].number-lastYearData[0][0].number}}</td><td>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</td></tr>
+                    <tr>
+                    <td>{{meanYearData[0][1].name}}</td><td>{{currYearData[0][1].number}}</td><td>{{currYearData[0][1].number-lastYearData[0][1].number}}</td><td>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</td></tr>
+                    <tr>
+                    <td>{{meanYearData[0][2].name}}</td><td>0</td><td>0</td><td>{{0-meanYearData[0][2].number | number : '1.2-2'}}</td></tr>
+                    <tr>
+                    </tbody>
+                    </table>
                 </div>
+
+                
+
+
 
 
             </mat-card-content>
         </mat-card>
 
-        <!-- <mat-card class="card">
+        <mat-card class="card">
             <mat-card-header>
-                <mat-card-title>Eigenverantwortung</mat-card-title>
+                <mat-card-title>Diversität</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <p>
-                    The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                    A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                    bred for hunting.
-                </p>
+
+                <div class="chartParent" fxLayout="column">
+                    <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+                    <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
+                        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                        [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel" [animations]="animations" (select)="onSelect($event)">
+                    </ngx-charts-area-chart-stacked>
+                </div>
+
+
             </mat-card-content>
-        </mat-card> -->
+        </mat-card>
 
     </mat-expansion-panel>
 

@@ -8,6 +8,12 @@
   <div class="content">
 
     <mat-tab-group dynamicHeight="true">
+      <mat-tab label="Management Summary">
+        <ng-template matTabContent>
+          <fuse-management-summary></fuse-management-summary>
+        </ng-template>
+      </mat-tab>
+
       <mat-tab label="Kompetenzen">
         <ng-template matTabContent>
           <fuse-competencies></fuse-competencies>

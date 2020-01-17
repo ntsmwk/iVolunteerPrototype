@@ -68,7 +68,6 @@ export class TasksComponent implements OnInit {
   private timelineData: any[] = [];
   private weekdayData: any[] = [];
   private dayNightData: any[][];
-  private comparisonData: any[] = [];
   private filteredClassInstances: ClassInstance[] = [];
 
   // Todo: set chart properties for each type separately
@@ -117,6 +116,16 @@ export class TasksComponent implements OnInit {
     },
     credits: {
       enabled: false
+    },   
+    plotOptions: {
+      series: {
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: '15px'
+          }
+        }
+      }
     },
     series: [
       <Highcharts.SeriesSunburstOptions>
@@ -125,20 +134,16 @@ export class TasksComponent implements OnInit {
         allowTraversingTree: true,
         cursor: 'pointer',
         data: this.sunburstData
-
       }
     ]
   };
 
-  // comparison chart
-  comparisonXlabel = 'Jahr';
-  comparisonYlabel = 'Anzahl Tätigkeiten';
+
 
   @ViewChild('lineChart', { static: false }) lineChart: any;
 
   selectedYaxis: string;
   selectedYear: string;
-  comparisonYear: string;
   yearsMap: Map<string, number>;
   timelineFilterFrom: Date;
   timelineFilterTo: Date
@@ -161,7 +166,6 @@ export class TasksComponent implements OnInit {
 
     this.selectedYaxis = 'Dauer';
     this.selectedYear = 'total';
-    this.comparisonYear = '2015';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -177,7 +181,13 @@ export class TasksComponent implements OnInit {
         this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
-            this.removeDurationNulls();
+
+            this.classInstances.forEach((ci, index, object) => {
+              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+                object.splice(index, 1);
+              }
+            });
+
             this.filteredClassInstances = [...this.classInstances];
 
             this.tableDataSource.data = this.classInstances;
@@ -185,7 +195,6 @@ export class TasksComponent implements OnInit {
 
             this.generateTimelineData();
             this.generateOtherChartsData();
-            this.generateStaticChartData();
           }
         });
       });
@@ -195,14 +204,6 @@ export class TasksComponent implements OnInit {
 
 
 
-  }
-
-  removeDurationNulls() {
-    this.classInstances.forEach((ci, index, object) => {
-      if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
-        object.splice(index,1);
-      }
-    });
   }
 
   onYaxisChange(val: string) {
@@ -242,21 +243,6 @@ export class TasksComponent implements OnInit {
 
       this.generateOtherChartsData();
     }
-  }
-
-  onComparisonYearChanged(value) {
-    this.comparisonYear = value;
-
-    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
-    let data = [];
-
-    Array.from(this.yearsMap.entries()).forEach(entry => {
-      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
-        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
-      }
-    });
-
-    this.comparisonData = [...data];
   }
 
   generateTimelineData() {
@@ -411,50 +397,19 @@ export class TasksComponent implements OnInit {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
-  generateStaticChartData() {
-    // yearComparison
-    let yearsList = this.classInstances.map(ci => {
-      return ({ year: (new Date(ci.properties[this.TASK_DATE_FROM].values[0]).getFullYear()).toString(), value: 1 });
-    });
-
-    this.yearsMap = new Map<string, number>();
-    yearsList.forEach(t => {
-      if (this.yearsMap.get(t.year)) {
-        this.yearsMap.set(t.year, Number(this.yearsMap.get(t.year)) + Number(t.value))
-      } else {
-        this.yearsMap.set(t.year, t.value);
-      }
-    });
-
-    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
-    let data = [];
-
-    Array.from(this.yearsMap.entries()).forEach(entry => {
-      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
-        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
-      }
-    });
-
-    this.comparisonData = [...data];
-  }
-
-  exportChart(event, source:string) {
-    console.error('source', source);
+  exportChart(event, source: string) {
     let storedChart: StoredChart;
 
     switch (source) {
       case 'Wochentag':
         storedChart = new StoredChart('Wochentag', 'ngx-charts-pie-chart', JSON.stringify(this.weekdayData));
-        console.error('wochentag storedChart', storedChart);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
-        
-        case 'Tageszeit':
-          storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData));
-          console.error('tageszeit storedChart', storedChart);
 
-          this.storedChartService.save(this.marketplace, storedChart).toPromise();
-          break;
+      case 'Tageszeit':
+        storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData));
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
     }
   }
 }
