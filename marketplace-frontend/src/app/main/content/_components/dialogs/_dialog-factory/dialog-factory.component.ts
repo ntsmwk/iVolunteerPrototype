@@ -31,7 +31,7 @@ export class DialogFactoryComponent implements OnInit {
   }
 
 
-  ////TODO EXPAND DIALOG FACTORY
+  //// TODO EXPAND DIALOG FACTORY
 
 
   /**
@@ -49,13 +49,13 @@ export class DialogFactoryComponent implements OnInit {
       data: this.prepareDataForAdd('Add Properties', template, properties)
     });
 
-    let propIds: string[] = undefined;
+    let propIds: string[];
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
         propIds = [];
 
-        for (let s of result.checkboxStates) {
+        for (const s of result.checkboxStates) {
           if (s.dirty) {
             propIds.push(s.propertyItem.id);
 
@@ -77,20 +77,20 @@ export class DialogFactoryComponent implements OnInit {
       data: this.prepareDataForGenericAdd('Add Properties', addedProperties, properties)
     });
 
-    let returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
+    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
 
         returnValue.key = result.key;
 
-        if (result.key == "new_property") {
+        if (result.key == 'new_property') {
           return;
         }
 
         if (!isNullOrUndefined(result.checkboxStates)) {
           returnValue.propertyItems = [];
-          for (let s of result.checkboxStates) {
+          for (const s of result.checkboxStates) {
             if (s.dirty) {
               returnValue.propertyItems.push(s.propertyItem);
             }
@@ -106,11 +106,11 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   private prepareDataForGenericAdd(label: string, addedPropertyItems: PropertyItem[], propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    let states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (let p of propertyItems) {
+    for (const p of propertyItems) {
       states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (let ap of addedPropertyItems) {
+      for (const ap of addedPropertyItems) {
         if (p.id === ap.id) {
           states[states.length - 1].disabled = true;
           states[states.length - 1].checked = true;
@@ -118,28 +118,28 @@ export class DialogFactoryComponent implements OnInit {
       }
     }
 
-    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
+    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
     return data;
 
   }
 
   private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    console.log("entered prepareDataForAdd");
+    console.log('entered prepareDataForAdd');
 
-    let states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (let p of propertyItems) {
+    for (const p of propertyItems) {
       states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (let tp of template.templateProperties) {
+      for (const tp of template.templateProperties) {
         if (p.id === tp.id) {
           states[states.length - 1].disabled = true;
           states[states.length - 1].checked = true;
         }
       }
     }
-    console.log("finished");
+    console.log('finished');
 
-    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
+    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
     console.log(data);
     return data;
   }
@@ -150,12 +150,12 @@ export class DialogFactoryComponent implements OnInit {
       data: this.prepareDataForGenericRemove('Remove Properties', addedProperties)
     });
 
-    let returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
+    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
 
         if (!isNullOrUndefined(result.checkboxStates)) {
-          for (let s of result.checkboxStates) {
+          for (const s of result.checkboxStates) {
             if (s.dirty) {
               returnValue.propertyItems.push(s.propertyItem);
             }
@@ -171,13 +171,13 @@ export class DialogFactoryComponent implements OnInit {
 
   prepareDataForGenericRemove(label: string, addedProperties: PropertyItem[]) {
 
-    let states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (let property of addedProperties) {
+    for (const property of addedProperties) {
       states.push({ propertyItem: property, disabled: false, checked: false, dirty: false });
     }
 
-    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
+    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
     return data;
   }
 
@@ -187,13 +187,13 @@ export class DialogFactoryComponent implements OnInit {
       data: this.prepareDataForRemove('Remove Properties', template)
     });
 
-    let propIds: string[] = undefined;
+    let propIds: string[];
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
 
         propIds = [];
-        for (let s of result.checkboxStates) {
+        for (const s of result.checkboxStates) {
           if (s.dirty) {
             propIds.push(s.propertyItem.id);
           }
@@ -203,17 +203,17 @@ export class DialogFactoryComponent implements OnInit {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return propIds;
-    })
+    });
   }
 
   private prepareDataForRemove(label: string, template: UserDefinedTaskTemplate): AddOrRemoveDialogData {
-    let states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (let tp of template.templateProperties) {
+    for (const tp of template.templateProperties) {
       states.push({ propertyItem: tp, disabled: false, checked: false, dirty: false });
     }
 
-    let data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
+    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
     return data;
   }
 
@@ -227,7 +227,7 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-    console.log("entered edit Description Dialog");
+    console.log('entered edit Description Dialog');
 
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
@@ -237,11 +237,11 @@ export class DialogFactoryComponent implements OnInit {
       }
     });
 
-    let ret: string = undefined;
+    let ret: string;
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log("Result: " + result.fields[0].value);
+        console.log('Result: ' + result.fields[0].value);
         console.log(result);
         ret = result.fields[0].value;
       }
@@ -249,11 +249,11 @@ export class DialogFactoryComponent implements OnInit {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return ret;
-    })
+    });
   }
 
   editTemplateNameDialog(template: UserDefinedTaskTemplate) {
-    console.log("Entered edit Name Dialog");
+    console.log('Entered edit Name Dialog');
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -262,7 +262,7 @@ export class DialogFactoryComponent implements OnInit {
       }
     });
 
-    let ret: string = undefined;
+    let ret: string;
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
 
@@ -277,7 +277,7 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-    console.log("clicked new nested Task Template");
+    console.log('clicked new nested Task Template');
 
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
@@ -288,13 +288,13 @@ export class DialogFactoryComponent implements OnInit {
       }
     });
 
-    let ret: string[] = undefined;
+    let ret: string[];
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
       ret = [];
       if (!isNullOrUndefined(result)) {
 
-        for (let val of result.fields) {
+        for (const val of result.fields) {
           console.log(val);
           ret.push(val.value);
         }
@@ -308,14 +308,14 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   confirmationDialog(title: string, description: string) {
-    console.log("clicked delete template");
+    console.log('clicked delete template');
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       data: { title: title, description: description }
     });
 
-    let ret: boolean = false;
+    let ret = false;
 
     dialogRef.beforeClose().toPromise().then((result: boolean) => {
       if (result) {
@@ -329,18 +329,18 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changePropertyOrderDialog(properties: PropertyItem[]) {
-    console.log("clicked order properties");
+    console.log('clicked order properties');
 
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
-      data: { list: properties, label: "Change Property Order" }
+      data: { list: properties, label: 'Change Property Order' }
     });
 
-    let ret: any = undefined;
+    let ret: any;
 
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
+      console.log('Dialog closed - displayed result');
       console.log(result);
       ret = result;
     });
@@ -351,18 +351,18 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changeSubtemplatesOrderDialog(template: UserDefinedTaskTemplate) {
-    console.log("clicked order properties");
+    console.log('clicked order properties');
 
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
-      data: { list: template.templates, label: "Change Sub-Template Order" }
+      data: { list: template.templates, label: 'Change Sub-Template Order' }
     });
 
-    let ret: any = undefined;
+    let ret: any;
 
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log("Dialog closed - displayed result");
+      console.log('Dialog closed - displayed result');
       console.log(result);
       ret = result;
     });
@@ -380,9 +380,9 @@ export class DialogFactoryComponent implements OnInit {
 
     });
 
-    let ret: { copyId: string, newName: string, newDescription: string } = undefined;
+    let ret: { copyId: string, newName: string, newDescription: string };
     dialogRef.beforeClose().toPromise().then((result: ChooseTemplateToCopyDialogData) => {
-      console.log("result = ");
+      console.log('result = ');
       ret = { copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription };
       console.log(ret);
     });
@@ -419,7 +419,7 @@ export class DialogFactoryComponent implements OnInit {
       }
     });
 
-    let ret: string = undefined;
+    let ret: string;
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
 
@@ -444,7 +444,7 @@ export class DialogFactoryComponent implements OnInit {
 
     });
 
-    let configurator: Configurator = undefined;
+    let configurator: Configurator;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
       configurator = result.configurator;
     });
@@ -464,7 +464,7 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
-    let configurator: Configurator = undefined;
+    let configurator: Configurator;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
       if (!isNullOrUndefined(result)) {
         configurator = result.configurator;
@@ -486,7 +486,7 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
-    let configurator: Configurator = undefined;
+    let configurator: Configurator;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
       if (!isNullOrUndefined(result)) {
         configurator = result.configurator;
@@ -508,7 +508,7 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
-    let imagePath: string = undefined;
+    let imagePath: string;
     dialogRef.beforeClose().toPromise().then((result: ChangeIconDialogData) => {
       if (!isNullOrUndefined(result)) {
         imagePath = result.imagePath;

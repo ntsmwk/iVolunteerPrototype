@@ -37,7 +37,9 @@
     </div>
 
     <div fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center" *ngIf="icons=='VOLUNTEER'">
-      <mat-icon #inboxIcon class="mr-12" matBadge="8" matBadgePosition="before" matBadgeColor="warn"
+      <!-- <mat-icon #inboxIcon class="mr-12" matBadge="8" matBadgePosition="before" matBadgeColor="warn"
+        style="cursor: pointer" (click)="toggleInboxOverlay($event, inboxIcon)">inbox</mat-icon> -->
+        <mat-icon #inboxIcon class="mr-12" matBadge="!" matBadgePosition="before" matBadgeColor="warn"
         style="cursor: pointer" (click)="toggleInboxOverlay($event, inboxIcon)">inbox</mat-icon>
     </div>
 
