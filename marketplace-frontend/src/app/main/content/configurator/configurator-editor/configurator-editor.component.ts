@@ -34,6 +34,7 @@ export class myMxCell extends mx.mxCell {
   property: boolean;
   propertyId?: string;
   newlyAdded: boolean;
+
 }
 
 @Component({
@@ -93,6 +94,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
+  folding: boolean;
 
   saveDone: boolean;
 
@@ -206,8 +208,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       });
 
       this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender, evt) {
+
         outer.handleMXGraphFoldEvent(evt);
       });
+
 
       this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function (sender, evt) {
         outer.handleMXGraphLabelChangedEvent(evt);
@@ -555,6 +559,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   handleMXGraphClickEvent(event: any) {
     const cell: myMxCell = event.getProperty('cell');
 
+    console.log("outgoing Edges");
+    console.log(this.graph.getModel().getOutgoingEdges(cell));
+    console.log("incoming edges");
+    console.log(this.graph.getModel().getIncomingEdges(cell));
+
     if (!isNullOrUndefined(cell)) {
       const parent = cell.getParent();
 
@@ -718,13 +727,36 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     const cell = cells.pop();
     const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
-    if (!isNullOrUndefined(edges) && !isNullOrUndefined(edges[0]) && !isNullOrUndefined(edges[0].target)) {
-      if (edges[0].target.isVisible()) {
-        this.setCellsVisibility(cell, false, true);
-      } else {
-        this.setCellsVisibility(cell, true, false);
+    console.log(cell);
+    if (!isNullOrUndefined(edges)) {
+      for (let edge of edges) {
+        if (!isNullOrUndefined(edge) && !isNullOrUndefined(edge.target)) {
+          if (!edge.target.isCollapsed()) {
+            // this.graph.foldCells(true, false, [edge.target]);
+            if (cell.isCollapsed()) {
+
+
+              this.setAllCellsInvisibleRec(cell);
+            }
+          } else {
+            // this.graph.foldCells(false, false, [edge.target]);
+            if (!cell.isCollapsed()) {
+
+              // this.setAllCellsVisibleRec(cell);
+              this.setNextCellVisible(cell);
+            }
+          }
+        }
       }
     }
+    // if (!isNullOrUndefined(edges) && !isNullOrUndefined(edges[0]) && !isNullOrUndefined(edges[0].target)) {
+    //   if (edges[0].target.isVisible()) {
+    //     this.setAllCellsInvisibleRec(cell);
+    //   } else {
+    //     // this.setAllCellsVisibleRec(cell);
+    //     this.setNextCellVisible(cell);
+    //   }
+    // }
     this.modelUpdated = true;
   }
 
@@ -801,16 +833,75 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     console.log(cell);
   }
 
-  private setCellsVisibility(cell: myMxCell, visible: boolean, recursive: boolean) {
+  private setAllCellsInvisibleRec(cell: myMxCell) {
     const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
-
+    // console.log(cell);
     for (const edge of edges) {
-      this.graph.getModel().setVisible(edge.target, visible);
-      if (recursive) {
-        this.setCellsVisibility(edge.target as myMxCell, visible, recursive);
+      // this.graph.foldCells(true, false, [edge.target]);
+      // this.graph.getModel().setVisible(edge.target, false);
+      if (!edge.target.isCollapsed()) {
+        this.graph.swapBounds(edge.target, true);
+        this.graph.getModel().setCollapsed(edge.target, true);
+      }
+      this.graph.getModel().setVisible(edge.target, false);
+      this.setAllCellsInvisibleRec(edge.target as myMxCell); 
+    }
+
+    let children = this.graph.getChildCells(cell) as myMxCell[];
+    children = children.filter(c => c.cellType === 'enum_property');
+    console.log(children);
+    for (const child of children) {
+      const childEdges = this.graph.getOutgoingEdges(child);
+      console.log(childEdges);
+      for (const childEdge of childEdges) {
+        this.graph.getModel().setVisible(childEdge.target, false);
+        this.setAllCellsInvisibleRec(childEdge.target as myMxCell)
       }
     }
   }
+  private setAllCellsVisibleRec(cell: myMxCell) {
+    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+    for (const edge of edges) {
+      this.graph.getModel().setVisible(edge.target, true);
+
+      this.setAllCellsVisibleRec(edge.target as myMxCell);
+
+    }
+  }
+
+  private setNextCellVisible(cell: myMxCell) {
+    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+    for (const edge of edges) {
+      // this.graph.getModel().setVisible(edge.target, true);
+      // this.setAllCellsInvisibleRec(edge.target as myMxCell);
+      // this.graph.swapBounds(edge.target, true);
+      // this.graph.getModel().setCollapsed(edge.target, false);
+      this.graph.getModel().setVisible(edge.target, true);
+
+      let children = this.graph.getChildCells(cell) as myMxCell[];
+    children = children.filter(c => c.cellType === 'enum_property');
+    console.log(children);
+    for (const child of children) {
+      const childEdges = this.graph.getOutgoingEdges(child);
+      console.log(childEdges);
+      for (const childEdge of childEdges) {
+        this.graph.getModel().setVisible(childEdge.target, true);
+      }
+    }
+
+    }
+  }
+
+  // private setCellsVisibility(cell: myMxCell, visible: boolean, recursive: boolean) {
+  //   const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+
+  //   for (const edge of edges) {      
+  //     this.graph.getModel().setVisible(edge.target, visible);
+  //     if (recursive) {
+  //       this.setCellsVisibility(edge.target as myMxCell, visible, recursive);
+  //     }
+  //   }
+  // }
 
   // Functions for Views/Viewing
   zoomInEvent() {
