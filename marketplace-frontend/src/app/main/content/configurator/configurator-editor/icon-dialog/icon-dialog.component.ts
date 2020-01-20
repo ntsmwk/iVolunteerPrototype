@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { MatGridTile } from '@angular/material';
@@ -13,7 +13,7 @@ export interface ChangeIconDialogData {
 @Component({
   selector: 'icon-dialog',
   templateUrl: './icon-dialog.component.html',
-  styleUrls:['./icon-dialog.component.scss']
+  styleUrls: ['./icon-dialog.component.scss']
 })
 export class ChangeIconDialogComponent implements OnInit{
   
@@ -26,26 +26,28 @@ export class ChangeIconDialogComponent implements OnInit{
   selected: string;
   configurators: Configurator[];
   recentConfigurators: Configurator[];
-  loaded: boolean = false;
+  loaded = false;
 
   numbers: number[];
 
   imagePaths = [
-    {label: "", path: "/assets/icons/class_editor/user/assembly.png"},
-    {label: "", path: "/assets/icons/class_editor/user/geometric.png"},
-    {label: "", path: "/assets/icons/class_editor/user/haubenofen.png"},
-    {label: "", path: "/assets/icons/class_editor/user/incoming.png"},
-    {label: "", path: "/assets/icons/class_editor/user/output.png"},
-    {label: "", path: "/assets/icons/class_editor/user/logistic.png"},
-    {label: "", path: "/assets/icons/class_editor/user/operational.png"},
-    {label: "", path: "/assets/icons/class_editor/user/price.png"},
-    {label: "", path: "/assets/icons/class_editor/user/qualitative.png"},
-    {label: "", path: "/assets/icons/class_editor/user/technical.png"},
+    {label: '', path: '/assets/icons/class_editor/user/assembly.png'},
+    {label: '', path: '/assets/icons/class_editor/user/geometric.png'},
+    {label: '', path: '/assets/icons/class_editor/user/haubenofen.png'},
+    {label: '', path: '/assets/icons/class_editor/user/incoming.png'},
+    {label: '', path: '/assets/icons/class_editor/user/output.png'},
+    {label: '', path: '/assets/icons/class_editor/user/logistic.png'},
+    {label: '', path: '/assets/icons/class_editor/user/operational.png'},
+    {label: '', path: '/assets/icons/class_editor/user/price.png'},
+    {label: '', path: '/assets/icons/class_editor/user/qualitative.png'},
+    {label: '', path: '/assets/icons/class_editor/user/technical.png'},
 
 
 
   
-  ]
+  ];
+
+  prevTile = undefined;
   
   ngOnInit() {  
     this.numbers = [];  
@@ -55,14 +57,12 @@ export class ChangeIconDialogComponent implements OnInit{
     }
 
   }
-
-  prevTile = undefined;
   onSelectionClick(event: any, tile: any, imagePath: any) {
-    console.log("selected");
-    console.log(event);
-    console.log("tile");
-    console.log(tile);
-    console.log();
+    // console.log('selected');
+    // console.log(event);
+    // console.log('tile');
+    // console.log(tile);
+    // console.log();
     if (!isNullOrUndefined(this.prevTile)) {
       this.prevTile._element.nativeElement.style.background = 'rgb(240, 240, 240)';
     }

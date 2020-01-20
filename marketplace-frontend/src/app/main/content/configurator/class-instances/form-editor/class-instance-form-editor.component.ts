@@ -100,11 +100,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         ]).then(() => {
           this.currentFormConfiguration = this.formConfigurations.pop();
 
-          console.log(this.formConfigurations);
           if (this.formConfigurations.length === 0) {
             this.lastEntry = true;
           }
 
+          console.log(this.currentFormConfiguration);
           this.isLoaded = true;
         });
 
@@ -135,6 +135,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstance.userId = selectedVolunteer.id;
       classInstance.issuerId = this.helpseeker.id;
+      classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
       classInstances.push(classInstance);
     }
     
@@ -174,6 +175,14 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       return 'a volunteer';
     } else {
       return this.getDisplayedName(volunteer);
+    }
+  }
+
+  getIcon() {
+    if (isNullOrUndefined(this.currentFormConfiguration.formEntry.imagePath)) {
+      return '/assets/cog.png';
+    } else {
+      return this.currentFormConfiguration.formEntry.imagePath;
     }
   }
 

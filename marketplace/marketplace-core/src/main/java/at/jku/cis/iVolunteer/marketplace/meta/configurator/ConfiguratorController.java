@@ -31,7 +31,10 @@ public class ConfiguratorController {
 //			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
 //		} 
 		
-		return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
+		
+		
+		List<Configurator> configurators =  configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
+		return configurators;
 	}
 	
 	@GetMapping("meta/configurator/{id}")

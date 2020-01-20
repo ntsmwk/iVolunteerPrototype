@@ -114,7 +114,7 @@ public class ClassInstanceController {
 	}
 
 	@PostMapping("/meta/core/class/instance/new")
-	List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
+	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
 
 		for (ClassInstance classInstance : classInstances) {
 			classInstance.setInIssuerInbox(true);

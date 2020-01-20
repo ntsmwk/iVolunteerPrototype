@@ -8,7 +8,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from 'app/main/content/_model/meta/Class';
+import { ClassInstance, ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { Router } from '@angular/router';
 import { Feedback } from 'app/main/content/_model/feedback';
 
@@ -116,8 +116,28 @@ export class InboxOverlayComponent implements OnInit {
     }
   }
 
-  getDateString(date: number) {
-    return new Date(date).toLocaleDateString();
+  // getDateString(date: number) {
+  //   return new Date(date).toLocaleDateString();
+  // }
+
+  getArchetypeIcon(entry: ClassInstance) {
+    if (isNullOrUndefined(entry.imagePath)) {
+
+      if (entry.classArchetype === ClassArchetype.COMPETENCE) {
+        return '/assets/competence.jpg';
+      } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
+        return '/assets/icons/achievements_black.png';
+      } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
+        return '/assets/TODO';
+      } else if (entry.classArchetype === ClassArchetype.TASK) {
+        return '/assets/cog.png';
+      } else {
+        return '/assets/NONE';
+      }
+    } else {
+      return entry.imagePath;
+    }
+
   }
 
   showInboxClicked() {

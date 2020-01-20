@@ -25,6 +25,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private boolean inUserRepository;//flag if in inbox or in repository of user
 	private boolean inIssuerInbox; //flag if in inbox of issuer
 	
+	private String imagePath;
+	
 	private ClassArchetype classArchetype;
 
 	public ClassInstance() {
@@ -140,6 +142,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 }

@@ -25,10 +25,12 @@ export class ClassInstance {
     marketplaceId: string;
     timestamp: Date;
     userId: string;
-    issuerId: string
+    issuerId: string;
 
     published: boolean;
     inRepository: boolean;
+
+    imagePath: string;
 
     classArchetype: ClassArchetype;
 
@@ -88,13 +90,13 @@ export namespace ClassArchetype {
 
     export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
         switch (classArchetype) {
-            case "COMPETENCE": return "Competence";
-            case "TASK": return "Task";
-            case "FUNCTION": return "Function";
-            case "ACHIEVEMENT": return "Achievement";
-            case "ENUM_HEAD": return "Enum head";
-            case "ENUM_ENTRY": return "Enum entry";
-            case "ROOT": return "Root";
+            case 'COMPETENCE': return 'Competence';
+            case 'TASK': return 'Task';
+            case 'FUNCTION': return 'Function';
+            case 'ACHIEVEMENT': return 'Achievement';
+            case 'ENUM_HEAD': return 'Enum head';
+            case 'ENUM_ENTRY': return 'Enum entry';
+            case 'ROOT': return 'Root';
         }
     }
 }

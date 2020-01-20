@@ -106,10 +106,19 @@ public class ClassDefinitionService {
 					throw new NotAcceptableException("getParentById: child is not root and has no parent");
 				}
 
+				if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
+					formEntry.setImagePath(currentClassDefinition.getImagePath());
+				}
+				
 				currentClassDefinition = classDefinitionRepository.findOne(inheritanceList.get(0).getSource());
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
+			
+			if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
+				formEntry.setImagePath(currentClassDefinition.getImagePath());
+			}
+			
 			List<ClassProperty<Object>> properties = new LinkedList<>();
 			for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
 				if (!formEntry.getClassProperties().contains(property)) {

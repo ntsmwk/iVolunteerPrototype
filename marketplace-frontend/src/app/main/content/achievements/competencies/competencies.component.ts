@@ -44,7 +44,8 @@ export class CompetenciesComponent implements OnInit {
   legendTitle: string = ' ';
   showXAxisLabel: boolean = false;
   showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Stunden';
+  yAxisLabel1: string = 'Stunden';
+  yAxisLabel2: string = 'Anzahl';
   animations: boolean = true;
 
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
@@ -87,14 +88,16 @@ export class CompetenciesComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
             this.generateChartData();
 
-
-
+            this.calcMean();
+            this.currYearData = [... this.getYearData('2019')];
+            this.lastYearData = this.getYearData('2018');
+            this.meanYearData = this.getYearData('mean');
           }
         });
       });
@@ -137,16 +140,15 @@ export class CompetenciesComponent implements OnInit {
   }
 
   getYearData(year: string) {
-    return this.allData.filter(a=>{
+    return this.allData.filter(a => {
       return a.name === year
     }).map(b => {
       let data = [];
       b.series.forEach(c => {
-        data.push({ name: c.name, duration: c.value, number: c.extra.number});
+        data.push({ name: c.name, duration: c.value, number: c.extra.number });
       });
-      console.error('data', data);
       return data;
-    }); 
+    });
   }
 
   generateChartData() {
@@ -226,7 +228,7 @@ export class CompetenciesComponent implements OnInit {
 
       data2 = [];
       Array.from(map.entries()).forEach(entry => {
-        data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+        data2.push({ name: entry[0], value: Number(entry[1][0]), extra: { duration: Number(entry[1][1]) } });
       });
       dataA2.push({ name: tt2, series: data2 });
 
