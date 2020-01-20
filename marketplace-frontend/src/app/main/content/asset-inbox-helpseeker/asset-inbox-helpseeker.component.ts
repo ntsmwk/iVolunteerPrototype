@@ -40,10 +40,6 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.marketplace);
-    console.log(this.participant);
-
-
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
         if (!isNullOrUndefined(marketplaces)) {
