@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
@@ -64,13 +65,17 @@ public class InitializationService {
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
 	@Autowired private FeedbackRepository feedbackRepository;
 	@Autowired private UserMappingRepository userMappingRepository;
+	@Autowired private Environment environment;
 
 	@PostConstruct
 	public void init() {
 //		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
 //				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
+		
+//		if(environment.acceptsProfiles("dev")) {}
 		addTestConfigClasses();
 		addConfigurators();
+		
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		this.addTestClassInstances();
