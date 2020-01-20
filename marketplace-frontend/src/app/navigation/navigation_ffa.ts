@@ -6,22 +6,10 @@ export const navigation_ffa = [
     'url': '/main/dashboard',
   },
   {
-    'id': 'inbox',
-    'title': 'Inbox',
-    'type': 'item',
-    'url': '/main/helpseeker/asset-inbox',
-  },
-  {
     'id': 'tasks',
     'title': 'Task',
     'type': 'item',
     'url': '/main/tasks/all',
-  },
-  {
-    'id': 'properties',
-    'title': 'Property Definitions',
-    'type': 'item',
-    'url': '/main/properties/all'
   },
   {
     'id': 'configurator',

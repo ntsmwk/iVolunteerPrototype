@@ -6,18 +6,6 @@ export const navigation_mvs = [
     'url': '/main/dashboard',
   },
   {
-    'id': 'inbox',
-    'title': 'Inbox',
-    'type': 'item',
-    'url': '/main/helpseeker/asset-inbox',
-  },
-  {
-    'id': 'projects',
-    'title': 'Project',
-    'type': 'item',
-    'url': '/main/projects/all',
-  },
-  {
     'id': 'tasks',
     'title': 'Task',
     'type': 'item',
