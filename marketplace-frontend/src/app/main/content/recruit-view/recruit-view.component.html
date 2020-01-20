@@ -55,7 +55,7 @@
             <mat-expansion-panel-header>
               <mat-panel-title fxLayout=row fxLayoutAlign="space-between center">
                 <div fxLayout=row fxLayoutAlign="start start">
-                  <img class="avatar" src="../../../../assets//images/avatars/joyce.jpg">
+                  <img class="avatar" src="../../../../assets/images/avatars/weixlbaumer_small.png">
                   <div style="padding-left: 10px"></div>
                   <div style="padding-top: 7px; font-size: 19px">Markus Weixlbaumer</div>
                 </div>
@@ -85,21 +85,20 @@
                   <div style="font-size: 30px">Markus Weixlbaumer</div>
                   <!-- <div style="font-size: 22px; padding-top:5px">Born 22. August 1993</div> -->
                   <div style="padding-top: 20px"></div>
-                  <div style="font-size: 20px">Freiwillig seit: 2000</div>
+                  <div style="font-size: 18px">Freiwillig seit: 2000</div>
                   <div style="font-size: 18px">Freiwilligentätigkeit: FF Altenberg und Musikverein Schwertberg</div>
-                  <a style="font-size: 17px; cursor: pointer">mehr</a>
+                  <a style="font-size: 15px; cursor: pointer">mehr</a>
                 </div>
 
               </div>
 
-              <div style="padding-top: 0px" fxLayout=row fxLayoutAlign="end center">
-                <button mat-raised-button type="button" (click)=pressedVerifyAll() color=primary> Verify
-                                    all
+              <div style="padding-top: 0px pr-20" fxLayout=row fxLayoutAlign="end center">
+                <button class="mr-20" mat-raised-button type="button" (click)=pressedVerifyAll() color=primary> Verifiziere alle
                                 </button>
               </div>
 
 
-              <h2>Competence</h2>
+              <h2 class="pl-20">Tätigkeiten</h2>
 
               <div fxLayout="row">
 
@@ -207,171 +206,9 @@
                 <div fxFlex></div>
               </div>
 
-
-              <h2>Feedback</h2>
-
-              <div fxLayout="row">
-
-                <div fxFlex=3></div>
-
-                <mat-table #table2 [dataSource]="dataSourceFeedback" fxFlex=90>
-                  <ng-container matColumnDef="label">
-                    <mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                      <div fxLayout="column" fxLayoutAlign="start start">
-                        <div>{{entry.label}}</div>
-                        <div style="padding-top: 4px"></div>
-                        <!-- <div fxLayout="row">
-                                                <img fxFlex=60 src="../../../../assets///fivestars_cropped_half.jpg">
-                                                <div fxFlex></div>
-                                                
-                                            
-                                            
-                                            </div> -->
-                        <div fxLayout="row" fxLayoutAlign="start start">
-                          <!-- <img fxFlex=60 src="../../../../assets///fivestars_cropped_half.jpg">
-                                                    <div fxFlex></div> -->
-                          <mat-icon class="blue-fg">star_rate</mat-icon>
-                          <mat-icon class="blue-fg">star_rate</mat-icon>
-                          <mat-icon class="blue-fg">star_rate</mat-icon>
-                          <mat-icon class="blue-fg">star_rate</mat-icon>
-                          <mat-icon class="blue-fg">star_rate</mat-icon>
-                        </div>
-                      </div>
-                    </mat-cell>
-                  </ng-container>
-
-                  <!-- <ng-container matColumnDef="assetType">
-                                    <mat-header-cell *matHeaderCellDef>Asset Type</mat-header-cell>
-                                    <mat-cell *matCellDef="let entry">
-                                            {{entry.assetType}}
-                                    </mat-cell>
-                                </ng-container> -->
-
-                  <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Issuer</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                      <img *ngIf="entry.issuer == 'ÖRK'" class="avatar" src="../../../../assets//images/logos/OERK_Sonderlogo_rgb.jpg">
-                      <img *ngIf="entry.issuer == 'FF Altenberg'" class="avatar" src="../../../../assets//images/logos/FF_Altenberg.jpg">
-
-                      <div>{{entry.issuer}}</div>
-                    </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="date1">
-                    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                      {{entry.date1}}
-                    </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="evidence">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                      <a style="cursor: pointer">View Evidence</a>
-                    </mat-cell>
-                  </ng-container>
-
-
-
-
-                  <ng-container matColumnDef="details">
-                    <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                      <a style="cursor: pointer">View Details</a>
-                    </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="date2">
-                    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                      {{entry.date2}}
-                    </mat-cell>
-                  </ng-container>
-
-                  <ng-container matColumnDef="status">
-                    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-
-                      <!-- <div *ngIf="entry.status=='clear'" fxLayout="row"
-                                                fxLayoutAlign="start center">
-                                                <mat-icon class="red-fg">{{entry.status}}</mat-icon>
-                                                <div style="padding: 3px"></div>
-                                                <div>Not Verified</div>
-                                                <div style="padding-right: 15px"></div>
-
-                                                <a>verify</a>
-                                            </div>
-
-                                            <div *ngIf="entry.status=='access_time'" fxLayout="row"
-                                                fxLayoutAlign="start center">
-                                                <mat-icon class="orange-fg">{{entry.status}}</mat-icon>
-                                                <div style="padding: 3px"></div>
-                                                <div>Outdated</div>
-                                                <div style="padding-right: 15px"></div>
-
-                                                <a>verify</a>
-                                            </div>
-
-                                            <div *ngIf="entry.status=='check'" fxLayout="row"
-                                                fxLayoutAlign="start center">
-                                                <mat-icon class="green-fg">{{entry.status}}</mat-icon>
-                                                <div style="padding: 3px"></div>
-                                                <div>Verified</div>
-                                            </div> -->
-                      <div *ngIf="entry.status=='clear'" fxLayout="row" fxLayoutAlign="start center">
-                        <!-- <mat-icon class="white-fg">{{entry.status}}</mat-icon>
-                                                <div style="padding: 3px"></div>
-                                                <div class="white-fg">Not Verified</div>
-                                                <div style="padding-right: 15px"></div> -->
-                        <a>verify</a>
-                      </div>
-
-                      <div *ngIf="entry.status=='access_time'" fxLayout="row" fxLayoutAlign="start center">
-                        <mat-icon class="orange-fg">{{entry.status}}</mat-icon>
-                        <div style="padding: 3px"></div>
-                        <div>Outdated</div>
-                        <div style="padding-right: 15px"></div>
-                        <a>verify</a>
-                      </div>
-
-                      <div *ngIf="entry.status=='check'" fxLayout="row" fxLayoutAlign="start center">
-                        <mat-icon class="green-fg">{{entry.status}}</mat-icon>
-                        <div style="padding: 3px"></div>
-                        <div>Verified</div>
-                        <div style="padding-right: 15px"></div>
-                        <a>verify</a>
-
-                      </div>
-
-                      <div *ngIf="entry.status=='verifying'">
-                        <mat-spinner diameter="20"></mat-spinner>
-
-                      </div>
-
-                    </mat-cell>
-                  </ng-container>
-
-                  <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> -->
-                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                </mat-table>
-
-                <div fxFlex></div>
-              </div>
-
-
-
-
-
             </div>
-
-
-
           </mat-expansion-panel>
           <mat-expansion-panel>
-
-
 
             <mat-expansion-panel-header>
               <mat-panel-title fxLayout=row fxLayoutAlign="space-between center">
@@ -380,10 +217,7 @@
                   <div style="padding-left: 10px"></div>
                   <div style="padding-top: 7px; font-size: 19px">Max Müller</div>
                 </div>
-                <!-- <mat-progress-bar style="width:250px" class="progressBar" value=75></mat-progress-bar> -->
-                <!-- <div style="padding-top: 7px; padding-right: 150px">Engagement Status: [Progress Bar]</div> -->
                 <div fxLayout=row fxLayoutAlign="end center">
-                  <!-- <div>Verified Status </div> -->
                   <div fxLayout=column fxLayoutAlign="center center">
                     <mat-progress-bar style="width:250px" class="green-red-progress" value=85>
                     </mat-progress-bar>
@@ -393,9 +227,7 @@
 
               </mat-panel-title>
             </mat-expansion-panel-header>
-
           </mat-expansion-panel>
-
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title fxLayout=row fxLayoutAlign="space-between center">
@@ -412,14 +244,10 @@
                     <div>Completely Verified</div>
                   </div>
                 </div>
-
               </mat-panel-title>
             </mat-expansion-panel-header>
-
           </mat-expansion-panel>
         </mat-accordion>
       </div>
-
     </div>
-
   </div>
