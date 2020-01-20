@@ -45,8 +45,8 @@ export class DashboardHelpSeekerComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-        this.helpseeker = participant;
-        this.loadSuggestedMarketplaces();
+      this.helpseeker = participant;
+      this.loadSuggestedMarketplaces();
     });
 
     Promise.all([
@@ -61,8 +61,19 @@ export class DashboardHelpSeekerComponent implements OnInit {
     ]).then(() => {
       this.loadInboxEntries();
     });
-  
 
+
+  }
+
+  private isFF() {
+    return this.participant.username== 'FFA';
+  }
+
+  private isMV(){
+    return this.participant.username==='MVS';
+  }
+  private isOther(){
+    return !this.isFF()&& !this.isMV();
   }
 
 
@@ -83,20 +94,20 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private loadSuggestedMarketplaces() {
-      Promise.all([
-          this.marketplaceService.findAll().toPromise(),
-          this.helpSeekerService.findRegisteredMarketplaces(this.helpseeker.id).toPromise()
-      ]).then((values: any[]) => {
-          this.marketplaces = values[0];
-          if (values[1]) {
-              this.marketplaces = this.arrayService.removeAll(values[0], [values[1]]);
-          }
-      });
+    Promise.all([
+      this.marketplaceService.findAll().toPromise(),
+      this.helpSeekerService.findRegisteredMarketplaces(this.helpseeker.id).toPromise()
+    ]).then((values: any[]) => {
+      this.marketplaces = values[0];
+      if (values[1]) {
+        this.marketplaces = this.arrayService.removeAll(values[0], [values[1]]);
+      }
+    });
   }
 
   registerMarketplace(marketplace) {
-      this.helpSeekerService.registerMarketplace(this.helpseeker.id, marketplace.id).toPromise().then(() => {
-          this.loadSuggestedMarketplaces();
-      });
+    this.helpSeekerService.registerMarketplace(this.helpseeker.id, marketplace.id).toPromise().then(() => {
+      this.loadSuggestedMarketplaces();
+    });
   }
 }
