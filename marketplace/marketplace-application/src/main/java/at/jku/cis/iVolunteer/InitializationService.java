@@ -72,7 +72,7 @@ public class InitializationService {
 		addTestConfigClasses();
 		addConfigurators();
 		addiVolunteerAPIClassDefinition();
-		addTestDerivationRule();
+//		addTestDerivationRule();
 		this.addTestClassInstances();
 	}
 
