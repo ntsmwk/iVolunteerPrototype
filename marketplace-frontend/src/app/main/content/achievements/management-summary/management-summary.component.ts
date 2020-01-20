@@ -173,7 +173,6 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
     this.comparisonData = [...dataFinal];
-    console.error('comparisonData', this.comparisonData);
 
   }
 
@@ -214,7 +213,6 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
     this.comparisonData = [...dataFinal];
-    console.error('comparisonData', this.comparisonData);
     // /yearComparision
 
   }

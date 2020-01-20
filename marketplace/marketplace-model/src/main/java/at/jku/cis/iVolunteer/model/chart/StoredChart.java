@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class StoredChart {
 	private String id;
+	private String userId;
 	private String title;
 	private String type;
 	private String data;
@@ -15,6 +16,14 @@ public class StoredChart {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getUserId() {
+		return id;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getTitle() {

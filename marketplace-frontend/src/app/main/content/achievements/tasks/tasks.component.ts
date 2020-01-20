@@ -104,9 +104,15 @@ export class TasksComponent implements OnInit {
     '#50abcc',
     '#ad6886'];
   Highcharts: typeof Highcharts = Highcharts;
+
   chartOptions: Highcharts.Options = {
     chart: {
-      height: 700
+      height: 1000,
+      events: {
+        drilldown: (event) => {
+          console.error(event);
+        }
+      }
     },
     title: {
       text: undefined
@@ -116,26 +122,63 @@ export class TasksComponent implements OnInit {
     },
     credits: {
       enabled: false
-    },   
+    },
     plotOptions: {
       series: {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '15px'
+            fontSize: '20px'
           }
         }
       }
     },
-    series: [
-      <Highcharts.SeriesSunburstOptions>
-      {
-        type: 'sunburst',
-        allowTraversingTree: true,
-        cursor: 'pointer',
-        data: this.sunburstData
+    series: [{
+      type: "sunburst",
+      data: this.sunburstData,
+      allowTraversingTree: true,
+      cursor: 'pointer',
+      events: {
+        click: (event) => {
+          console.error(event);
+        }
       }
-    ]
+      //   levels: [{
+      //     level: 1,
+      //     levelIsConstant: false,
+      //     dataLabels: {
+      //         filter: {
+      //             property: 'outerArcLength',
+      //             operator: '>',
+      //             value: 64
+      //         }
+      //     }
+      // }, {
+      //     level: 2,
+      //     colorByPoint: true
+      // },
+      // {
+      //     level: 3,
+      //     colorVariation: {
+      //         key: 'brightness',
+      //         to: -0.5
+      //     }
+      // }, {
+      //     level: 4,
+      //     colorVariation: {
+      //         key: 'brightness',
+      //         to: 0.5
+      //     }
+      // }],
+      //   dataLabels: {
+      //     format: '{point.name}',
+      //     filter: {
+      //       property: 'innerArcLength',
+      //       operator: '>',
+      //       value: 16
+      //     }
+      //   }
+    }]
   };
 
 
@@ -200,7 +243,18 @@ export class TasksComponent implements OnInit {
       });
     });
 
-    Highcharts.chart('sunburstChart', this.chartOptions);
+
+    Highcharts.chart('sunburstChart', this.chartOptions).update({
+      plotOptions: {
+        series: {
+          events: {
+            click: (event) => {
+             // console.error(event.point);
+            },
+          },
+        },
+      }
+    });
 
 
 
@@ -402,12 +456,12 @@ export class TasksComponent implements OnInit {
 
     switch (source) {
       case 'Wochentag':
-        storedChart = new StoredChart('Wochentag', 'ngx-charts-pie-chart', JSON.stringify(this.weekdayData));
+        storedChart = new StoredChart('Wochentag', 'ngx-charts-pie-chart', JSON.stringify(this.weekdayData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
       case 'Tageszeit':
-        storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData));
+        storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
