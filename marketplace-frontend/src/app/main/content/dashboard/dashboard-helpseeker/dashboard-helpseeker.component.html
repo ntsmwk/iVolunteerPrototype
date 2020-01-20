@@ -11,9 +11,14 @@
   <!-- / HEADER -->
 
 
-  <div *ngIf="isLoaded">
-    <app-asset-inbox [classInstances]="classInstances" [marketplace]="marketplace" inboxOwner="helpseeker-dashboard" (submit)=onAssetInboxSubmit()></app-asset-inbox>
-  </div>
+  <!-- <div class="p-12"></div> -->
+
+  <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24 mt-12" *ngIf="isLoaded">
+
+    <div class="pt-8 pb-12">Assets auswählen, welche übernommen werden sollen</div>
+
+    <app-asset-inbox [classInstances]="classInstances" [marketplace]="marketplace" inboxOwner="helpseeker" (submit)=onAssetInboxSubmit($event)></app-asset-inbox>
+</div>
 
 
 
