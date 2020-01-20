@@ -3,6 +3,7 @@
 @include mat-core();
 $custom-typography: mat-typography-config( $font-family: 'Muli');
 @include mat-core($custom-typography);
+
 .page-layout {
   font-family: "Muli", "Helvetica Neue", Arial, sans-serif;
   overflow: scroll;
@@ -94,7 +95,7 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
     max-height: 90px;
     color: white;
     // background: #cc0000;
-    background: linear-gradient(to right, #b20000 0%, #cc0000 100%);
+    background: linear-gradient(to right, #005900 0%, #006600 100%);
     text-align: center;
     @include media-breakpoint('xs') {
       height: 240px;
