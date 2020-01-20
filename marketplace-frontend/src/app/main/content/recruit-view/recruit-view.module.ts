@@ -15,6 +15,7 @@ import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 
@@ -45,7 +46,8 @@ const routes = [
     MatProgressSpinnerModule,
 
     MatExpansionModule,
-  
+    NgxChartsModule,
+
 
     FuseSharedModule
   ],
