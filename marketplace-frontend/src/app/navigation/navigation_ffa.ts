@@ -18,12 +18,6 @@ export const navigation_ffa = [
     'url': '/main/tasks/all',
   },
   {
-    'id': 'properties',
-    'title': 'Property Definitions',
-    'type': 'item',
-    'url': '/main/properties/all'
-  },
-  {
     'id': 'configurator',
     'title': 'Configurator',
     'type': 'item',
