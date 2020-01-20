@@ -46,3 +46,22 @@ width: 30%;
   width: 100px;
   margin-left: 50px;
 }
+
+tr.is-Veranstaltung {
+  background: rgba(168, 56, 93, $alpha: 0.7);
+}
+tr.is-Ausbildung {
+  background: rgba(122, 163, 229, $alpha: 0.7);
+}
+tr.is-Jugendarbeit {
+  background: rgba(162, 126, 168, $alpha: 0.7);
+}
+tr.is-Taetigkeit {
+  background: rgba(170, 227, 245, $alpha: 0.7);
+}
+tr.is-Bewerb {
+  background: rgba(173, 205, 237, $alpha: 0.7);
+}
+tr.is-Einsatz {
+  background: rgba(169, 89, 99, $alpha: 0.7);
+}

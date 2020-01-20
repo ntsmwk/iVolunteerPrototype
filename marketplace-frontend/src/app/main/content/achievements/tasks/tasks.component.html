@@ -73,7 +73,7 @@
 
           <div class="sunburstParent" id="sunburstChart"></div>
           
-          <div class="tasksTable" fxLayout="column" style="flex:4" fxLayoutAlign="none">
+          <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <h1>Tätigkeiten</h1>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
               <ng-container matColumnDef="taskName">
@@ -116,7 +116,16 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;"
+              [ngClass]="{
+                'is-Veranstaltung': element.properties[TASK_TYPE_1].values[0] === 'Veranstaltung',
+                'is-Ausbildung': element.properties[TASK_TYPE_1].values[0] === 'Ausbildung (aktiv)',
+                'is-Jugendarbeit': element.properties[TASK_TYPE_1].values[0] === 'Jugendarbeit',
+                'is-Taetigkeit': element.properties[TASK_TYPE_1].values[0] === 'Tätigkeit',
+                'is-Bewerb': element.properties[TASK_TYPE_1].values[0] === 'Bewerb',
+                'is-Einsatz': element.properties[TASK_TYPE_1].values[0] === 'Einsatz'
+              }"
+              ></tr>
             </table>
             <mat-paginator [pageSize]="20" showFirstLastButtons></mat-paginator>
           </div>
