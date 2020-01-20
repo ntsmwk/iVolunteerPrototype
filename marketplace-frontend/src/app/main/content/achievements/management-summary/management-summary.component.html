@@ -19,9 +19,12 @@
     </mat-form-field>
 </div>
 
-<div>
-    <ngx-charts-bar-vertical [results]="comparisonData" [scheme]="colorScheme" [animations]="animations" [xAxis]="true"
+<div class="chartParrent">
+    <ngx-charts-bar-vertical-2d
+    [results]="comparisonData" [scheme]="colorScheme" [animations]="animations" [xAxis]="true"
         [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="comparisonXlabel"
-        [yAxisLabel]="comparisonYlabel" [roundEdges]="false">
-    </ngx-charts-bar-vertical>
+        [yAxisLabel]="comparisonYlabel" [roundEdges]="false" [legend] ="true" [legendTitle]="Legende"
+        [showDataLabel]="true" [noBarWhenZero]="false">
+    </ngx-charts-bar-vertical-2d
+    >
 </div>

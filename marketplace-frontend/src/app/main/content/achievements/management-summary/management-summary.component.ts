@@ -68,6 +68,44 @@ export class ManagementSummaryComponent implements OnInit {
   filteredClassInstances: any[];
   yearsMap: any;
 
+  fakeDataMap: any;
+  fakeData = [
+    {
+      "name": "2012",
+      "value": 0,
+    },
+    {
+      "name": "2013",
+      "value": 0,
+    },
+    {
+      "name": "2014",
+      "value": 0,
+    },
+    {
+      "name": "2015",
+      "value": 13,
+    },
+    {
+      "name": "2016",
+      "value": 22,
+    },
+    {
+      "name": "2017",
+      "value": 19,
+    },
+    {
+      "name": "2018",
+      "value": 34,
+    },
+    {
+      "name": "2019",
+      "value": 28,
+    },
+  ];
+  uniqueYears: any[];
+
+
 
   constructor(
     private loginService: LoginService,
@@ -104,6 +142,7 @@ export class ManagementSummaryComponent implements OnInit {
 
             this.filteredClassInstances = [...this.classInstances];
             this.generateStaticChartData();
+
           }
         });
       });
@@ -114,16 +153,28 @@ export class ManagementSummaryComponent implements OnInit {
   onComparisonYearChanged(value) {
     this.comparisonYear = value;
 
-    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
+    let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
+    let comparisonYearDataMusikverein = this.fakeData.find(d => {
+      return d.name === this.comparisonYear;
+    }).value;
     let data = [];
+    let dataFinal = [];
 
-    Array.from(this.yearsMap.entries()).forEach(entry => {
-      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
-        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
-      }
+    this.uniqueYears.forEach(curYear => {
+      let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
+      let currentYearDataMusikverein = this.fakeData.find(d => {
+        return d.name === curYear;
+      }).value;
+
+      data = [];
+      data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
+      data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
+      dataFinal.push({ name: curYear, series: data });
     });
 
-    this.comparisonData = [...data];
+    this.comparisonData = [...dataFinal];
+    console.error('comparisonData', this.comparisonData);
+
   }
 
   generateStaticChartData() {
@@ -141,16 +192,31 @@ export class ManagementSummaryComponent implements OnInit {
       }
     });
 
-    let comparisonYearData = this.yearsMap.get(this.comparisonYear);
+    let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
+    let comparisonYearDataMusikverein = this.fakeData.find(d => {
+      return d.name === this.comparisonYear;
+    }).value;
     let data = [];
+    let dataFinal = [];
 
-    Array.from(this.yearsMap.entries()).forEach(entry => {
-      if (entry[0] != null && entry[1] != null && entry[1] > 5 && !isNaN(entry[1])) {
-        data.push({ name: entry[0], value: Number(entry[1]) - comparisonYearData });
-      }
+    this.uniqueYears = [...new Set(yearsList.map(item => item.year))];
+    this.uniqueYears.forEach(curYear => {
+
+      let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
+      let currentYearDataMusikverein = this.fakeData.find(d => {
+        return d.name === curYear;
+      }).value;
+
+      data = [];
+      data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
+      data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
+      dataFinal.push({ name: curYear, series: data });
     });
 
-    this.comparisonData = [...data];
+    this.comparisonData = [...dataFinal];
+    console.error('comparisonData', this.comparisonData);
+    // /yearComparision
+
   }
 
 }

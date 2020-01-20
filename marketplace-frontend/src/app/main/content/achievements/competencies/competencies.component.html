@@ -23,7 +23,7 @@
                         </ngx-charts-bar-vertical-stacked>
                     </div>
 
-                     <div class="half">
+                    <div class="half">
                         <h2 class="title">Gesamtanzahl an geileisteten Ausbildungen</h2>
                         <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient"
                             [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
@@ -35,31 +35,45 @@
                 </div>
 
                 <div *ngIf="meanYearData">
-                <table class="paleBlueRows">
-                    <thead>
-                    <tr>
-                    <th rowspan="2">Ausbildungsart</th>
-                    <th rowspan="2">2019</th>
-                    <th colspan="2">im Vergleich zu</th>
-                    </tr>
-                    <tr>
-                    <th>2018</th>
-                    <th>Durchschnitt</th>   
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    <td>{{meanYearData[0][0].name}}</td><td>{{currYearData[0][0].number}}</td><td>{{currYearData[0][0].number-lastYearData[0][0].number}}</td><td>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</td></tr>
-                    <tr>
-                    <td>{{meanYearData[0][1].name}}</td><td>{{currYearData[0][1].number}}</td><td>{{currYearData[0][1].number-lastYearData[0][1].number}}</td><td>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</td></tr>
-                    <tr>
-                    <td>{{meanYearData[0][2].name}}</td><td>0</td><td>0</td><td>{{0-meanYearData[0][2].number | number : '1.2-2'}}</td></tr>
-                    <tr>
-                    </tbody>
+                    <table class="paleBlueRows">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Ausbildungsart</th>
+                                <th rowspan="2">2019</th>
+                                <th colspan="2">im Vergleich zu</th>
+                            </tr>
+                            <tr>
+                                <th>2018</th>
+                                <th>Durchschnitt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{meanYearData[0][0].name}}</td>
+                                <td>{{currYearData[0][0].number}}</td>
+                                <td><b>{{currYearData[0][0].number-lastYearData[0][0].number}}</b></td>
+                                <td><b>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</b></td>
+                            </tr>
+                            <tr>
+                                <td>{{meanYearData[0][1].name}}</td>
+                                <td>{{currYearData[0][1].number}}</td>
+                                <td><b>{{currYearData[0][1].number-lastYearData[0][1].number}}</b></td>
+                                <td><b>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</b></td>
+                            </tr>
+                            <tr>
+                                <td>{{meanYearData[0][2].name}}</td>
+                                <!-- TODO: rework hardcoded "0": check for existence of currYearData[0][2] ("Kurs"), if undefined use 0  -->
+                                <!-- TODO: always show sign, eg "+4" or "-3" -->
+                                <td>0</td>
+                                <td><b>0</b></td>
+                                <td><b>{{0-meanYearData[0][2].number | number : '1.2-2'}}</b></td>
+                            </tr>
+                            <tr>
+                        </tbody>
                     </table>
                 </div>
 
-                
+
 
 
 

@@ -274,10 +274,4 @@ export class CompetenciesComponent implements OnInit {
 
   }
 
-
-
-
-
-
-
 }
