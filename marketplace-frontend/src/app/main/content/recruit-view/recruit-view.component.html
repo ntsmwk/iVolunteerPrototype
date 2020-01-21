@@ -188,22 +188,24 @@
 
             <h2>Freigegebene Statistiken</h2>
             <div style="display:flex;" flexLayout="row">
-              <div *ngIf="weekdayData" style="display:inline-block; width: 50%; text-align: center;" class="mt-20">
-                <span>Wochentag</span>
+              <div *ngIf="weekdayData" style="display:inline-block; width: 50%; " class="mt-20">
+                <span style="padding-left: 10%; font-size: 20px;">Wochentag</span>
               </div>
-              <div *ngIf="dayNightData" style="display:inline-block; width: 50%; text-align: center;" class="mt-20">
-                <span>Tageszeit</span>
+              <div *ngIf="dayNightData" style="display:inline-block; width: 50%;" class="mt-20">
+                <span style="padding-left: 10%; font-size: 20px;">Tageszeit</span>
               </div>
             </div>
             <div style="display:flex;" flexLayout="row">
-              <div *ngIf="weekdayData" class="mt-20" style="display:inline-block; width: 50%;">
+              <div *ngIf="weekdayData" class="mt-20" style="display:inline-block; width: 33%; background:#ccc;">
                 <div class="donut-parent">
                   <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
                 </div>
               </div>
+              <div  style="display:inline-block; width: 10%; background:#fff;">
+              </div>
 
-              <div *ngIf="dayNightData" class="mt-20" style="display:inline-block; width: 50%;">
+              <div *ngIf="dayNightData" class="mt-20" style="display:inline-block; width: 33%; background:#ccc;">
                 <div class="donut-parent">
                   <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
