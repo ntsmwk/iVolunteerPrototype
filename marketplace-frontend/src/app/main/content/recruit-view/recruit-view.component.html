@@ -91,8 +91,8 @@
                                 </button>
             </div>
 
-
             <h2>Tätigkeiten</h2>
+            TODO load ??
 
             <div fxLayout="row">
 
@@ -187,19 +187,25 @@
             </div>
 
             <h2>Freigegebene Graphen</h2>
+            <div flexLayout="row">
+              <div *ngIf="weekdayData" class="mt-20" flex=1>
+                <h3>Wochentag</h3>
 
-            <div *ngIf="weekdayData" class="mt-20">
-              <h3>Wochentag</h3>
-
-              <div class="donut-parent">
-                <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
-                </ngx-charts-pie-chart>
+                <div class="donut-parent">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  </ngx-charts-pie-chart>
+                </div>
               </div>
-              <!-- </div> -->
 
-
-
+              <div *ngIf="dayNightData"  flex=1>
+                <h3>Tageszeit</h3>
+                <div class="donut-parent">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  </ngx-charts-pie-chart>
+                </div>
+              </div>
             </div>
+
           </mat-expansion-panel>
           <mat-expansion-panel>
 
