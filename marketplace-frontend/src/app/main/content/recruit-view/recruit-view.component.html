@@ -186,19 +186,24 @@
                 <div fxFlex></div> -->
             </div>
 
-            <h2>Freigegebene Graphen</h2>
+            <h2>Freigegebene Statistiken</h2>
+            <div flexLayout="row">
+              <div *ngIf="weekdayData" style="display:inline;" class="mt-20" flex=1>
+                <span>Wochentag</span>
+              </div>
+              <div *ngIf="dayNightData" style="display:inline;" flex=1>
+                <span>Tageszeit</span>
+              </div>
+            </div>
             <div flexLayout="row">
               <div *ngIf="weekdayData" class="mt-20" flex=1>
-                <h3>Wochentag</h3>
-
                 <div class="donut-parent">
                   <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
                 </div>
               </div>
 
-              <div *ngIf="dayNightData"  flex=1>
-                <h3>Tageszeit</h3>
+              <div *ngIf="dayNightData" flex=1>
                 <div class="donut-parent">
                   <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
