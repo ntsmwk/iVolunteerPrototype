@@ -63,7 +63,7 @@ export class TasksComponent implements OnInit {
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
+  private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
 
   private timelineData: any[] = [];
   private weekdayData: any[] = [];
@@ -181,6 +181,11 @@ export class TasksComponent implements OnInit {
     }]
   };
 
+  clickedItem: any = null;
+  prevFilteredClassInstances: any[];
+  uniqueTt1: any[];
+  uniqueTt2: any[];
+
 
 
   @ViewChild('lineChart', { static: false }) lineChart: any;
@@ -237,6 +242,7 @@ export class TasksComponent implements OnInit {
             this.tableDataSource.paginator = this.paginator;
 
             this.generateTimelineData();
+            this.generateSunburstData();
             this.generateOtherChartsData();
           }
         });
@@ -249,15 +255,34 @@ export class TasksComponent implements OnInit {
         series: {
           events: {
             click: (event) => {
-             // console.error(event.point);
+              this.onSunburstChanged(event);
+              console.error(event.point);
             },
           },
         },
       }
     });
+  }
+
+  onSunburstChanged(event) {
+    if (this.clickedItem === event.point.name) {
+      this.clickedItem = event.point.name;
+      this.filteredClassInstances = this.prevFilteredClassInstances;
 
 
+    } else {
+      this.clickedItem = event.point.name;
 
+      this.prevFilteredClassInstances = this.filteredClassInstances;
+      if (this.uniqueTt1.indexOf(this.clickedItem) > -1) {
+        this.filteredClassInstances = this.classInstances.filter(c => {
+          return c.properties[this.TASK_TYPE_1].values[0] === this.clickedItem;
+        });
+      }
+    }
+
+    this.generateTimelineData();
+    this.generateOtherChartsData();
   }
 
   onYaxisChange(val: string) {
@@ -265,6 +290,7 @@ export class TasksComponent implements OnInit {
     this.yAxisLabel = val;
     this.generateTimelineData();
     this.generateOtherChartsData();
+    this.generateSunburstData();
   }
 
   onYearChange(value) {
@@ -279,6 +305,7 @@ export class TasksComponent implements OnInit {
     }
     this.generateTimelineData();
     this.generateOtherChartsData();
+    this.generateSunburstData();
   }
 
   filterTimelineApply() {
@@ -296,6 +323,8 @@ export class TasksComponent implements OnInit {
       });
 
       this.generateOtherChartsData();
+      this.generateSunburstData();
+
     }
   }
 
@@ -326,6 +355,69 @@ export class TasksComponent implements OnInit {
     this.newTimelineChartData[0].series = data1;
     this.newTimelineChartData = [...this.newTimelineChartData];
 
+  }
+
+  generateSunburstData() {
+    // sunburst data
+    let list = this.filteredClassInstances
+      .map(ci => {
+        let value;
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
+
+        return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], value: value })
+      });
+
+
+    let data = [];
+
+    // insert 0 entry
+    data.push({ id: '0', parent: '', name: 'Tätigkeitsart' });
+
+    // insert tt1 entries
+    this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+    this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+
+    this.uniqueTt1.forEach((tt1, index) => {
+      data.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
+    });
+
+    // insert tt2 entries (for each tt1 separetly)
+    this.uniqueTt1.forEach(tt1 => {
+
+      let tt1List = list.filter(l => {
+        return (tt1 === l.tt1)
+      });
+
+      let tt2Map: Map<string, number> = new Map<string, number>();
+      tt1List.forEach(entry => {
+        if (tt2Map.get(entry.tt2)) {
+          tt2Map.set(entry.tt2, Number(tt2Map.get(entry.tt2)) + Number(entry.value))
+        } else {
+          tt2Map.set(entry.tt2, entry.value);
+        }
+      });
+
+      let indexTt1 = this.uniqueTt1.indexOf(tt1) + 1;
+
+      Array.from(tt2Map.entries()).forEach((entry, index) => {
+        if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
+          data.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
+        }
+      });
+    });
+
+    this.sunburstData = [...data];
+
+    this.chartOptions.series = [
+      {
+        type: 'sunburst',
+        allowTraversingTree: true,
+        cursor: 'pointer',
+        data: this.sunburstData
+      }
+    ];
+
+    Highcharts.chart('sunburstChart', this.chartOptions);
   }
 
   generateOtherChartsData() {
@@ -388,64 +480,7 @@ export class TasksComponent implements OnInit {
 
     this.dayNightData = [...data3];
 
-    // sunburst data
-    let list = this.filteredClassInstances
-      .map(ci => {
-        let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
 
-        return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], value: value })
-      });
-
-
-    let data = [];
-
-    // insert 0 entry
-    data.push({ id: '0', parent: '', name: 'Tätigkeitsart' });
-
-    // insert tt1 entries
-    let uniqueTt1 = [...new Set(list.map(item => item.tt1))];
-    uniqueTt1.forEach((tt1, index) => {
-      data.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
-    });
-
-    // insert tt2 entries (for each tt1 separetly)
-    uniqueTt1.forEach(tt1 => {
-
-      let tt1List = list.filter(l => {
-        return (tt1 === l.tt1)
-      });
-
-      let tt2Map: Map<string, number> = new Map<string, number>();
-      tt1List.forEach(entry => {
-        if (tt2Map.get(entry.tt2)) {
-          tt2Map.set(entry.tt2, Number(tt2Map.get(entry.tt2)) + Number(entry.value))
-        } else {
-          tt2Map.set(entry.tt2, entry.value);
-        }
-      });
-
-      let indexTt1 = uniqueTt1.indexOf(tt1) + 1;
-
-      Array.from(tt2Map.entries()).forEach((entry, index) => {
-        if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-          data.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
-        }
-      });
-    });
-
-    this.sunburstData = [...data];
-
-    this.chartOptions.series = [
-      {
-        type: 'sunburst',
-        allowTraversingTree: true,
-        cursor: 'pointer',
-        data: this.sunburstData
-      }
-    ];
-
-    Highcharts.chart('sunburstChart', this.chartOptions);
 
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator._changePageSize(this.paginator.pageSize);
