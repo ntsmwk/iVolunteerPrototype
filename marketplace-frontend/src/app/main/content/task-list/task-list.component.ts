@@ -30,7 +30,7 @@ export class FuseTaskListComponent implements OnInit {
   private classInstances: ClassInstance[] = [];
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;  
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
 
 
@@ -67,13 +67,11 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   onRowSelect(task: Task) {
-    // todo...
     // TODO @ALEX if edit of classInstances works ...
     // this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadAllTasks() {
-    // TODO @MWE select Class Instances..
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
@@ -82,14 +80,12 @@ export class FuseTaskListComponent implements OnInit {
           this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
-  
+              this.paginator.length = this.classInstances.length;
               this.tableDataSource.data = this.classInstances;
               this.tableDataSource.paginator = this.paginator;
-  
+
             }
           });
-
-          // this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.tableDataSource.data = tasks);
         }
       });
     });
