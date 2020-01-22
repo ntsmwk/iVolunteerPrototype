@@ -569,7 +569,6 @@ export class TasksComponent implements OnInit {
 
   exportChart(event, source: string) {
     let storedChart: StoredChart;
-    console.error(event);
 
     switch (source) {
       case 'Wochentag':
@@ -582,7 +581,7 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
-      case 'Ort':
+      case 'Orte':
         storedChart = new StoredChart('Meistbesuchte Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;

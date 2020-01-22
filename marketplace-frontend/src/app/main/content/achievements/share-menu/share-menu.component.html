@@ -1,0 +1,34 @@
+<!--Share Icon and Menu-->
+<div>
+    <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
+      <mat-icon>share</mat-icon>
+    </button>
+    <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+      <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+      <button mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+          <div>ÖRK</div>
+        </div>
+      </button>
+      <button mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+          <div>FF Altenberg</div>
+        </div>
+      </button>
+      <button mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+          <div>Forum Alpbach</div>
+        </div>
+      </button>
+      <button mat-menu-item (click)="exportChart($event, label)" matTooltip="Recruiter: 'Best Jobs'">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+          <div>Recruiter: 'Best Jobs'</div>
+        </div>
+      </button>
+    </mat-menu>
+  </div>
+  <!--END Share Icon and Menu-->
