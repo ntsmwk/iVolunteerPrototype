@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -24,13 +24,14 @@ import { CIP } from '../_model/classInstancePropertyConstants';
   animations: fuseAnimations
 
 })
-export class FuseTaskListComponent implements OnInit {
+export class FuseTaskListComponent implements OnInit, AfterViewInit {
+ 
   marketplace: Marketplace;
 
   private classInstances: ClassInstance[] = [];
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;  
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
 
 
@@ -63,17 +64,18 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
     this.loadAllTasks();
   }
 
   onRowSelect(task: Task) {
-    // todo...
     // TODO @ALEX if edit of classInstances works ...
     // this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
   }
 
   private loadAllTasks() {
-    // TODO @MWE select Class Instances..
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
@@ -82,14 +84,12 @@ export class FuseTaskListComponent implements OnInit {
           this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
-  
+              this.paginator.length = this.classInstances.length;
               this.tableDataSource.data = this.classInstances;
               this.tableDataSource.paginator = this.paginator;
-  
+
             }
           });
-
-          // this.taskService.findAll(marketplace).toPromise().then((tasks: Task[]) => this.tableDataSource.data = tasks);
         }
       });
     });

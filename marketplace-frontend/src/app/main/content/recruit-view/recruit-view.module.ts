@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatPaginatorModule, MatSortModule } from '@angular/material';
 
 
 
@@ -47,7 +48,8 @@ const routes = [
 
     MatExpansionModule,
     NgxChartsModule,
-
+    MatPaginatorModule,
+    MatSortModule,
 
     FuseSharedModule
   ],

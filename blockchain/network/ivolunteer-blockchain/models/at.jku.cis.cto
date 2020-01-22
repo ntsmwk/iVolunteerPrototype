@@ -38,3 +38,12 @@ asset competence identified by hash {
   o String marketplaceId
   o String volunteerId
 }
+
+asset classInstance identified by hash {
+ o String hash
+ o DateTime timestamp
+ o String marketplaceId
+ o String volunteerId
+}
+
+
