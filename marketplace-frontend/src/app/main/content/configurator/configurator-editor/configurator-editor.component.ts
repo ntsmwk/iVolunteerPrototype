@@ -756,6 +756,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }
 
       //  this.redrawContent(cell);
+      for (const he of this.hiddenEdges) {
+        he.setVisible(true);
+      }
       this.setLayout();
       this.focusOnCell(cell);
     }
