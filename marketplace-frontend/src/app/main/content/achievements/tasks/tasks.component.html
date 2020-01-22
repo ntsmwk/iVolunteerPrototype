@@ -1,23 +1,16 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <div class="content" fxLayout="column" fxLayoutAlign="none">
-    <!--
-      <div class="managmentSum" fxLayout="column" fxLayoutAlign="space-between none">
-          <h1>Management Summary</h1>  
-      </div>
--->
+
     <div class="timeline" fxLayout="column" fxLayoutAlign="none">
-      <h1>Timeline</h1>
-      <div fxLayout="row" fxLayoutAlign="space-around center">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h1>Timeline</h1>
+
         <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
           (change)="onYaxisChange(group.value)">
           <mat-button-toggle value="Dauer">Dauer
           </mat-button-toggle>
           <mat-button-toggle value="Anzahl">Anzahl
           </mat-button-toggle>
-          <!-- 
-                <mat-button-toggle value="Distanz">Distanz
-                </mat-button-toggle>
-                -->
         </mat-button-toggle-group>
 
         <mat-form-field>
@@ -31,7 +24,7 @@
             <mat-option value="2017"> 2017 </mat-option>
             <mat-option value="2018"> 2018 </mat-option>
             <mat-option value="2019"> 2019 </mat-option>
-            <mat-option value="total"> Gesamt </mat-option>
+            <mat-option value="Gesamt"> Gesamt </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -50,10 +43,14 @@
 
       <div fxLayout="row" fxLayoutAlign="left">
         <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
-        <div *ngIf="!!timelineFilterFrom">
-          <h3>(Ausgewählte Daten: {{timelineFilterFrom | date:'dd.MM.yyyy'}} - {{timelineFilterTo | date:'dd.MM.yyyy'}})
-          </h3>
-        </div>
+
+        <mat-chip-list class="filterChip">
+          <mat-chip color="primary" *ngIf="chipTimelineFilterFrom">{{chipTimelineFilterFrom | date:'dd.MM.yyyy'}} -
+            {{chipTimelineFilterTo | date:'dd.MM.yyyy'}}</mat-chip>
+          <mat-chip color="primary" *ngIf="chipSelectedYear">{{chipSelectedYear}}</mat-chip>
+          <mat-chip color="primary" *ngIf="chipTaskType">{{chipTaskType}}</mat-chip>
+        </mat-chip-list>
+
       </div>
     </div>
 
@@ -72,7 +69,7 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
 
           <div class="sunburstParent" id="sunburstChart"></div>
-          
+
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <h1>Tätigkeiten</h1>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
@@ -99,35 +96,34 @@
               <ng-container matColumnDef="taskDateFrom">
                 <th mat-header-cell *matHeaderCellDef> Datum </th>
                 <td mat-cell *matCellDef="let element">
-                  {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                  {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy'}}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDateTo">
                 <th mat-header-cell *matHeaderCellDef> Ende </th>
                 <td mat-cell *matCellDef="let element">
-                  {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy   hh:mm'}}
+                  {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy'}}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDuration">
-                <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
-                <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </td>
+                <th mat-header-cell *matHeaderCellDef> Dauer </th>
+                <td class="right" mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}}h
+                </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;"
-              [ngClass]="{
+              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" [ngClass]="{
                 'is-Veranstaltung': element.properties[TASK_TYPE_1].values[0] === 'Veranstaltung',
                 'is-Ausbildung': element.properties[TASK_TYPE_1].values[0] === 'Ausbildung (aktiv)',
                 'is-Jugendarbeit': element.properties[TASK_TYPE_1].values[0] === 'Jugendarbeit',
                 'is-Taetigkeit': element.properties[TASK_TYPE_1].values[0] === 'Tätigkeit',
                 'is-Bewerb': element.properties[TASK_TYPE_1].values[0] === 'Bewerb',
                 'is-Einsatz': element.properties[TASK_TYPE_1].values[0] === 'Einsatz'
-              }"
-              ></tr>
+              }"></tr>
             </table>
-            <mat-paginator [pageSize]="20" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
           </div>
 
         </div>
@@ -185,7 +181,7 @@
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
             <div fxLayout="column">
@@ -228,46 +224,102 @@
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
         </div>
 
-        <!-- <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="row">
-            <h2>Wochentag:</h2>
+            <div fxLayout="column">
+              <h2>Meistbesuchte Orte:</h2>
+              <!--Share Icon and Menu-->
+              <div>
+                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu3">
+                  <mat-icon>share</mat-icon>
+                </button>
+                <mat-menu #shareMenu3="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                      <div>ÖRK</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                      <div>FF Altenberg</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+                      <div>Forum Alpbach</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="exportChart($event, 'Ort')" matTooltip="Recruiter: 'Best Jobs'">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+                      <div>Recruiter: 'Best Jobs'</div>
+                    </div>
+                  </button>
+                </mat-menu>
+              </div>
+              <!--END Share Icon and Menu-->
+            </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="locationData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
-
-            <h2>Tageszeit:</h2>
+            <div fxLayout="column">
+              <h2>Rang:</h2>
+              <!--Share Icon and Menu-->
+              <div>
+                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu4">
+                  <mat-icon>share</mat-icon>
+                </button>
+                <mat-menu #shareMenu4="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                      <div>ÖRK</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+                      <div>FF Altenberg</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
+                      <div>Forum Alpbach</div>
+                    </div>
+                  </button>
+                  <button mat-menu-item (click)="exportChart($event, 'Rang')" matTooltip="Recruiter: 'Best Jobs'">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+                      <div>Recruiter: 'Best Jobs'</div>
+                    </div>
+                  </button>
+                </mat-menu>
+              </div>
+              <!--END Share Icon and Menu-->
+            </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="rangData"
                 [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onSelect($event)">
+                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
-        </div> -->
-
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Details
-          </mat-panel-title>
-          <mat-panel-description>
-            Text
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        
-
+        </div>
 
       </mat-expansion-panel>
     </mat-accordion>

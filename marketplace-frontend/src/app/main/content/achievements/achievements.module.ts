@@ -20,7 +20,8 @@ import {
   MatCardModule,
   MatButtonToggleModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatChipsModule
 } from '@angular/material';
 import { FuseAchievementsComponent } from './achievements.component';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
@@ -77,6 +78,7 @@ const routes = [
     MatButtonToggleModule,
     MatPaginatorModule,
     MatSortModule,
+    MatChipsModule,
 
     FuseProjectMembersModule,
     FuseProjectTaskListModule,

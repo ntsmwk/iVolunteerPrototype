@@ -197,7 +197,11 @@ export class CompetenciesComponent implements OnInit {
 
     });
 
+    for (let i = 0; i < dataA1.length; i++) {
+      dataA1[i].series.sort((a,b) => b.name.localeCompare(a.name));   
+    }
     this.trainingData = [...dataA1];
+
     // /Ausbildung
 
     // Ausbildung2

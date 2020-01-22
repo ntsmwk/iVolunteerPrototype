@@ -22,12 +22,6 @@ import { StoredChartService } from '../../_service/stored-chart.service';
 import { StoredChart } from '../../_model/stored-chart';
 HC_sunburst(Highcharts);
 
-/*
-// TODO: statt apply button, polling 
-timer(0, 500)
-  .subscribe(() => this.filterApply())
-*/
-
 @Component({
   selector: 'fuse-tasks',
   templateUrl: './tasks.component.html',
@@ -65,9 +59,11 @@ export class TasksComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
 
-  private timelineData: any[] = [];
-  private weekdayData: any[] = [];
-  private dayNightData: any[][];
+  private timelineData: any[];
+  private weekdayData: any[];
+  private dayNightData: any[];
+  private locationData: any[];
+  private rangData: any[];
   private filteredClassInstances: ClassInstance[] = [];
 
   // Todo: set chart properties for each type separately
@@ -107,12 +103,7 @@ export class TasksComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     chart: {
-      height: 1000,
-      events: {
-        drilldown: (event) => {
-          console.error(event);
-        }
-      }
+      height: 900,
     },
     title: {
       text: undefined
@@ -128,7 +119,7 @@ export class TasksComponent implements OnInit {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '20px'
+            fontSize: '18px'
           }
         }
       }
@@ -138,11 +129,6 @@ export class TasksComponent implements OnInit {
       data: this.sunburstData,
       allowTraversingTree: true,
       cursor: 'pointer',
-      events: {
-        click: (event) => {
-          console.error(event);
-        }
-      }
       //   levels: [{
       //     level: 1,
       //     levelIsConstant: false,
@@ -181,12 +167,17 @@ export class TasksComponent implements OnInit {
     }]
   };
 
-  clickedItem: any = null;
+  lastClickedItem: any = null;
   prevFilteredClassInstances: any[];
   uniqueTt1: any[];
   uniqueTt2: any[];
 
 
+  // filter chips
+  chipTimelineFilterFrom: Date = null;
+  chipTimelineFilterTo: Date = null;
+  chipTaskType: string = null;
+  chipSelectedYear: string = null;
 
   @ViewChild('lineChart', { static: false }) lineChart: any;
 
@@ -213,7 +204,8 @@ export class TasksComponent implements OnInit {
     Highcharts.getOptions().colors.splice(0, 0, 'transparent');
 
     this.selectedYaxis = 'Dauer';
-    this.selectedYear = 'total';
+    this.selectedYear = 'Gesamt';
+   // this.chipSelectedYear = 'Gesamt';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -256,7 +248,6 @@ export class TasksComponent implements OnInit {
           events: {
             click: (event) => {
               this.onSunburstChanged(event);
-              console.error(event.point);
             },
           },
         },
@@ -265,18 +256,22 @@ export class TasksComponent implements OnInit {
   }
 
   onSunburstChanged(event) {
-    if (this.clickedItem === event.point.name) {
-      this.clickedItem = event.point.name;
+    if (this.lastClickedItem === event.point.name) {
+      this.lastClickedItem = event.point.name;
       this.filteredClassInstances = this.prevFilteredClassInstances;
+
+      this.chipTaskType = null;
 
 
     } else {
-      this.clickedItem = event.point.name;
+      this.lastClickedItem = event.point.name;
+
+      this.chipTaskType = this.lastClickedItem;
 
       this.prevFilteredClassInstances = this.filteredClassInstances;
-      if (this.uniqueTt1.indexOf(this.clickedItem) > -1) {
+      if (this.uniqueTt1.indexOf(this.lastClickedItem) > -1) {
         this.filteredClassInstances = this.classInstances.filter(c => {
-          return c.properties[this.TASK_TYPE_1].values[0] === this.clickedItem;
+          return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
         });
       }
     }
@@ -295,14 +290,21 @@ export class TasksComponent implements OnInit {
 
   onYearChange(value) {
     this.selectedYear = value;
+    this.chipSelectedYear = this.selectedYear;
 
-    if (this.selectedYear === 'total') {
+    this.chipTimelineFilterFrom = null;
+    this.chipTimelineFilterTo = null;
+
+    if (this.selectedYear === 'Gesamt') {
       this.filteredClassInstances = [...this.classInstances];
     } else {
       this.filteredClassInstances = this.classInstances.filter(c => {
         return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
       });
     }
+    
+    this.lineChart.filteredDomain = null; this.lineChart.update();
+
     this.generateTimelineData();
     this.generateOtherChartsData();
     this.generateSunburstData();
@@ -312,10 +314,14 @@ export class TasksComponent implements OnInit {
     let a = new Date(this.lineChart.xDomain[0]);
     let b = new Date(this.lineChart.xDomain[1]);
 
+    this.chipSelectedYear = null;
+
     if (a != this.timelineFilterFrom || b != this.timelineFilterTo) {
       this.timelineFilterFrom = a;
       this.timelineFilterTo = b;
 
+      this.chipTimelineFilterFrom = this.timelineFilterFrom;
+      this.chipTimelineFilterTo = this.timelineFilterTo;
 
       this.filteredClassInstances = this.classInstances.filter(c => {
         return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
@@ -342,7 +348,7 @@ export class TasksComponent implements OnInit {
       if (timelineMap.get(t.date)) {
         timelineMap.set(t.date, Number(timelineMap.get(t.date)) + Number(t.value));
       } else {
-        timelineMap.set(t.date, t.value);
+        timelineMap.set(t.date, Number(t.value));
       }
     });
 
@@ -421,33 +427,34 @@ export class TasksComponent implements OnInit {
   }
 
   generateOtherChartsData() {
-    let data2 = [];
-    let data3 = [];
-    // sunburst
+    let data = [];
 
     // donut: Wochentag
     let weekdayList = this.filteredClassInstances
       .map(ci => {
         let value;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-        return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).format('dddd'), value: value })
+        return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).lang("de").format('dddd'), value: value })
       });
+
+     // console.error('weekdayList', weekdayList);
 
     let weekdayMap: Map<string, number> = new Map<string, number>();
     weekdayList.forEach(t => {
       if (weekdayMap.get(t.weekday)) {
         weekdayMap.set(t.weekday, Number(weekdayMap.get(t.weekday)) + Number(t.value))
       } else {
-        weekdayMap.set(t.weekday, t.value);
+        weekdayMap.set(t.weekday, Number(t.value));
       }
     });
 
+    data = [];
     Array.from(weekdayMap.entries()).forEach(entry => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-        data2.push({ name: entry[0], value: entry[1] })
+        data.push({ name: entry[0], value: entry[1] })
       }
     });
-    this.weekdayData = [...data2];
+    this.weekdayData = [...data];
 
 
     // donut: day night
@@ -468,19 +475,93 @@ export class TasksComponent implements OnInit {
       if (dayNightMap.get(t.dayNight)) {
         dayNightMap.set(t.dayNight, Number(dayNightMap.get(t.dayNight)) + Number(t.value))
       } else {
-        dayNightMap.set(t.dayNight, t.value);
+        dayNightMap.set(t.dayNight, Number(t.value));
       }
     });
 
+    data = [];
     Array.from(dayNightMap.entries()).forEach(entry => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-        data3.push({ name: entry[0], value: entry[1] })
+        data.push({ name: entry[0], value: entry[1] })
       }
     });
 
-    this.dayNightData = [...data3];
+    this.dayNightData = [...data];
+
+    // donut: taskLocation
+    let locationList = this.filteredClassInstances
+      .map(ci => {
+        let value;
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
+        return ({ location: ci.properties[this.TASK_LOCATION].values[0], value: value })
+      });
+
+    let locationMap: Map<string, number> = new Map<string, number>();
+    locationList.forEach(t => {
+      if (locationMap.get(t.location)) {
+        locationMap.set(t.location, Number(locationMap.get(t.location)) + Number(t.value))
+      } else {
+        locationMap.set(t.location, Number(t.value));
+      }
+    });
+
+    data = [];
+    Array.from(locationMap.entries()).forEach(entry => {
+      if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
+        if (entry[0] === '') {
+          data.push({ name: 'keine Angabe', value: Number(entry[1]) });
+
+        } else {
+          data.push({ name: entry[0], value: Number(entry[1]) });
+
+        }
+      }
+    });
+    data.sort((a, b) => b.value - a.value);
+    let data2 = data.slice(0, 12);
+    this.locationData = [...data2];
+
+    // donut: rang
+    // console.error('this.filteredClassInstances', this.filteredClassInstances);
+    let rangList = this.filteredClassInstances
+      .map(ci => {
+        let value;
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
+        return ({ rang: ci.properties[this.RANG].values[0], value: value })
+      });
+
+    // console.error('rangList', rangList);
+
+    let uniqueRang = [...new Set(rangList.map(item => item.rang))];
+    // console.error('uniqueRang', uniqueRang);
 
 
+    let rangMap: Map<string, number> = new Map<string, number>();
+    rangList.forEach(t => {
+      if (rangMap.get(t.rang)) {
+        rangMap.set(t.rang, Number(rangMap.get(t.rang)) + Number(t.value))
+      } else {
+        rangMap.set(t.rang, Number(t.value));
+      }
+    });
+
+    // console.error('rangMap', rangMap);
+
+
+    data = [];
+    Array.from(rangMap.entries()).forEach(entry => {
+      if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
+        if (entry[0] === '') {
+          data.push({ name: 'keine Angabe', value: Number(entry[1]) });
+
+        } else {
+          data.push({ name: entry[0], value: Number(entry[1]) });
+
+        }
+      }
+    });
+    this.rangData = [...data];
+    // console.error('rangData', this.rangData);
 
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator._changePageSize(this.paginator.pageSize);
@@ -488,6 +569,7 @@ export class TasksComponent implements OnInit {
 
   exportChart(event, source: string) {
     let storedChart: StoredChart;
+    console.error(event);
 
     switch (source) {
       case 'Wochentag':
@@ -499,6 +581,20 @@ export class TasksComponent implements OnInit {
         storedChart = new StoredChart('Tageszeit', 'ngx-charts-pie-chart', JSON.stringify(this.dayNightData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
+
+      case 'Ort':
+        storedChart = new StoredChart('Meistbesuchte Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+
+      case 'Rang':
+        storedChart = new StoredChart('Rang', 'ngx-charts-pie-chart', JSON.stringify(this.rangData), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
     }
+  }
+
+  onDonutSelect(event) {
+
   }
 }
