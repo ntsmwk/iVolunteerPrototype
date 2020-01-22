@@ -27,6 +27,7 @@ export class RecruitViewComponent implements OnInit {
   charts: StoredChart[];
 
   weekdayData;
+  dayNightData;
 
 
   constructor(
@@ -53,6 +54,10 @@ export class RecruitViewComponent implements OnInit {
 
         if (this.charts.findIndex(c => c.title === "Wochentag") >= 0) {
           this.weekdayData = JSON.parse(this.charts.find(c => c.title === "Wochentag").data);
+        }
+
+        if(this.charts.findIndex(c => c.title == "Tageszeit") >= 0){
+          this.dayNightData = JSON.parse(this.charts.find(c => c.title ==="Tageszeit").data);
         }
       });
     });

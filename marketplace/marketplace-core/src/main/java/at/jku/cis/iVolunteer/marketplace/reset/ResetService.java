@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.chart.StoredChartRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -28,6 +29,7 @@ public class ResetService {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private PropertyDefinitionToPropertyInstanceMapper propertyDefinitionToPropertyInstanceMapper;
 	@Autowired private ClassInstanceController classInstanceController;
+	@Autowired private StoredChartRepository storedChartRepository;
 	
 	public void reset() {
 
@@ -40,7 +42,11 @@ public class ResetService {
 		
 //		Reset Sybos Fake
 		
-//		Reset
+		deleteSharedChart();
+	}
+
+	private void deleteSharedChart() {
+		this.storedChartRepository.deleteAll();
 	}
 
 	private void resetFahrtenspangeFake() {

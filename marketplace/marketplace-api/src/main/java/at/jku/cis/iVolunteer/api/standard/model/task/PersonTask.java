@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.api.standard.model.task;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.google.gson.annotations.SerializedName;
+
 @Document
 public class PersonTask {
 
@@ -19,8 +21,10 @@ public class PersonTask {
 	private String taskDuration;
 	private String taskLocation;
 
+	@SerializedName(value = "Zweck")
 	private String Zweck;
 	private String Rolle;
+	@SerializedName(value = "Rang")
 	private String Rang;
 	private String Phase;
 	private String Arbeitsteilung;

@@ -91,8 +91,8 @@
                                 </button>
             </div>
 
-
             <h2>Tätigkeiten</h2>
+            TODO load ??
 
             <div fxLayout="row">
 
@@ -186,20 +186,36 @@
                 <div fxFlex></div> -->
             </div>
 
-            <h2>Freigegebene Graphen</h2>
-
-            <div *ngIf="weekdayData" class="mt-20">
-              <h3>Wochentag</h3>
-
-              <div class="donut-parent">
-                <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
-                </ngx-charts-pie-chart>
+            <h2>Freigegebene Statistiken</h2>
+            <div style="display:flex;" flexLayout="row">
+              <div *ngIf="weekdayData" style="display:inline-block; width: 33%; " class="mt-20">
+                <span style="padding-left: 10%; font-size: 18px;">Wochentag</span>
               </div>
-              <!-- </div> -->
+              <div *ngIf="weekdayData" style="display:inline-block; width: 10%;" class="mt-20">
+              </div>
 
-
-
+              <div *ngIf="dayNightData" style="display:inline-block; width: 33%;" class="mt-20">
+                <span style="padding-left: 10%; font-size: 18px;">Tageszeit</span>
+              </div>
             </div>
+            <div style="display:flex;" flexLayout="row">
+              <div *ngIf="weekdayData" class="mt-20" style="display:inline-block; width: 33%; background:#F4F4F4; border-radius: 10px;">
+                <div class="donut-parent">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  </ngx-charts-pie-chart>
+                </div>
+              </div>
+              <div  style="display:inline-block; width: 10%; background:#fff;">
+              </div>
+
+              <div *ngIf="dayNightData" class="mt-20" style="display:inline-block; width: 33%; background:#F4F4F4;  border-radius: 10px;">
+                <div class="donut-parent">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  </ngx-charts-pie-chart>
+                </div>
+              </div>
+            </div>
+
           </mat-expansion-panel>
           <mat-expansion-panel>
 
