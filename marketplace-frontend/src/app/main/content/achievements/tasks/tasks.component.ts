@@ -567,7 +567,7 @@ export class TasksComponent implements OnInit {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
-  exportChart(event, source: string) {
+  exportChart(source: string) {
     let storedChart: StoredChart;
 
     switch (source) {
