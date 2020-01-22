@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -24,7 +24,8 @@ import { CIP } from '../_model/classInstancePropertyConstants';
   animations: fuseAnimations
 
 })
-export class FuseTaskListComponent implements OnInit {
+export class FuseTaskListComponent implements OnInit, AfterViewInit {
+ 
   marketplace: Marketplace;
 
   private classInstances: ClassInstance[] = [];
@@ -63,6 +64,9 @@ export class FuseTaskListComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
     this.loadAllTasks();
   }
 

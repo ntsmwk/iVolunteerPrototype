@@ -114,8 +114,9 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator [pageSize]="12" showFirstLastButtons></mat-paginator>
     </div>
+    <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
+
 
     <div class="no-data" *ngIf="tableDataSource.data.length === 0">
       Keine Tätigkeiten gefunden!
