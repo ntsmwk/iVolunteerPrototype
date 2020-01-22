@@ -143,40 +143,8 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Wochentag:</h2>
-              <!--Share Icon and Menu-->
-              <div>
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu1">
-                  <mat-icon>share</mat-icon>
-                </button>
-                <mat-menu #shareMenu1="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                      <div>ÖRK</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                      <div>FF Altenberg</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
-                      <div>Forum Alpbach</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item (click)="exportChart($event, 'Wochentag')" matTooltip="Recruiter: 'Best Jobs'">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
-                      <div>Recruiter: 'Best Jobs'</div>
-                    </div>
-                  </button>
-                </mat-menu>
-              </div>
-              <!--END Share Icon and Menu-->
+              <app-share-menu [label]="Wochentag">
+              </app-share-menu>
             </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
@@ -186,40 +154,8 @@
             </div>
             <div fxLayout="column">
               <h2>Tageszeit:</h2>
-              <!--Share Icon and Menu-->
-              <div>
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu2">
-                  <mat-icon>share</mat-icon>
-                </button>
-                <mat-menu #shareMenu2="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                      <div>ÖRK</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                      <div>FF Altenberg</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
-                      <div>Forum Alpbach</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item (click)="exportChart($event, 'Tageszeit')" matTooltip="Recruiter: 'Best Jobs'">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
-                      <div>Recruiter: 'Best Jobs'</div>
-                    </div>
-                  </button>
-                </mat-menu>
-              </div>
-              <!--END Share Icon and Menu-->
+              <app-share-menu [label]="Tageszeit">
+              </app-share-menu>
             </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
@@ -234,40 +170,8 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Meistbesuchte Orte:</h2>
-              <!--Share Icon and Menu-->
-              <div>
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu3">
-                  <mat-icon>share</mat-icon>
-                </button>
-                <mat-menu #shareMenu3="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                      <div>ÖRK</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                      <div>FF Altenberg</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
-                      <div>Forum Alpbach</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item (click)="exportChart($event, 'Ort')" matTooltip="Recruiter: 'Best Jobs'">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
-                      <div>Recruiter: 'Best Jobs'</div>
-                    </div>
-                  </button>
-                </mat-menu>
-              </div>
-              <!--END Share Icon and Menu-->
+              <app-share-menu [label]="Orte">
+              </app-share-menu>
             </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="locationData"
@@ -277,40 +181,8 @@
             </div>
             <div fxLayout="column">
               <h2>Rang:</h2>
-              <!--Share Icon and Menu-->
-              <div>
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu4">
-                  <mat-icon>share</mat-icon>
-                </button>
-                <mat-menu #shareMenu4="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                  <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                      <div>ÖRK</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                      <div>FF Altenberg</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/neighborhelp.jpg">
-                      <div>Forum Alpbach</div>
-                    </div>
-                  </button>
-                  <button mat-menu-item (click)="exportChart($event, 'Rang')" matTooltip="Recruiter: 'Best Jobs'">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
-                      <div>Recruiter: 'Best Jobs'</div>
-                    </div>
-                  </button>
-                </mat-menu>
-              </div>
-              <!--END Share Icon and Menu-->
+              <app-share-menu [label]="Rang">
+              </app-share-menu>
             </div>
             <div class="donut-parent">
               <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="rangData"

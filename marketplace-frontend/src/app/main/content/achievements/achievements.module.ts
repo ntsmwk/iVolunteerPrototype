@@ -41,6 +41,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ManagementSummaryComponent } from './management-summary/management-summary.component';
+import { ShareMenuComponent } from './share-menu/share-menu.component';
 
 const routes = [
   { path: '**', component: FuseAchievementsComponent }
@@ -54,6 +55,7 @@ const routes = [
     FunctionsComponent,
     CompetenciesComponent,
     ManagementSummaryComponent,
+    ShareMenuComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
