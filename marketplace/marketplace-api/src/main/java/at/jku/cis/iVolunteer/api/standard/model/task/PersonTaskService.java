@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.api.standard.model.task;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,7 @@ public class PersonTaskService {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
-	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
-	
-	
+
 	public void savePersonTasks(List<PersonTask> personTasks) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
@@ -35,8 +32,6 @@ public class PersonTaskService {
 			for (PersonTask personTask : personTasks) {
 				classInstances.add(savePersonTask(personTaskClassDefinition, personTask));
 			}
-
-			contractorPublishingRestClient.publishClassInstances(classInstances.stream().limit(10).collect(Collectors.toList()), "");
 		}
 	}
 

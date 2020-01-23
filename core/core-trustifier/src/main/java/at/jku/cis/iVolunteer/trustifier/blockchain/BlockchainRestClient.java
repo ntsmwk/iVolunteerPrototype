@@ -172,14 +172,14 @@ public class BlockchainRestClient {
 
 			}
 		}	
-		
 	}
 	
 	public void postClassInstanceArray(List<BcClassInstance> classInstances) {
 		String requestUrl = MessageFormat.format("{0}/api/StoreVerificationObjects", url);
 		try {
 			
-			restTemplate.postForObject(requestUrl, new BcClassInstances(classInstances.toArray(new BcClassInstance[0])), Void.class);
+			BcClassInstances bcClassInstances = new BcClassInstances(classInstances.toArray(new BcClassInstance[0]));
+			restTemplate.postForObject(requestUrl, bcClassInstances, Void.class);
 		} catch (Exception e) {
 			if (e instanceof HttpStatusCodeException) {
 				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());

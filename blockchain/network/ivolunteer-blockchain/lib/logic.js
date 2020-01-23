@@ -11,11 +11,16 @@ var NS = 'at.jku.cis';
 * @transaction
 */
 
-function storeVerificationObjects(tx) {
+async function storeVerificationObjects(tx) {
   getAssetRegistry('at.jku.cis.verificationObject')
     .then(function(assetRegistry){
-      tx.verificationObjects.forEach(vo => assetRegistry.add(vo));
-      // .then(function(ret){})
-      // assetRegistry.addAll(tx.verificationObjects).then(function(ret){});  
+      var factory = getFactory();
+      var ls = [];
+      tx.verificationObjects.forEach(vo => {
+        var resource = factory.newResource('at.jku.cis', 'verificationObject', vo.hash);
+        resource.volunteerId = vo.volunteerId;
+        ls.push(resource);
+      });
+      assetRegistry.addAll(ls).then(ret => {});
     });
 }
