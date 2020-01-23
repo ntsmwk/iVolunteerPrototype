@@ -47,7 +47,6 @@ public class VolunteerController {
 		if (volunteerRepository.findOne(volunteer.getId()) == null) {
 			return volunteerRepository.insert(volunteer);
 		}
-//		throw new BadRequestException("Volunteer already registed");
 		return null;
 	}
 

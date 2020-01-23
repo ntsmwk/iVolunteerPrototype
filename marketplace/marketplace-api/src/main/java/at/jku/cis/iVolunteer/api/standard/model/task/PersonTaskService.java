@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.api.standard.model.task;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.task.ContractorPublishingRestClient;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -20,17 +23,20 @@ public class PersonTaskService {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
-
+	@Autowired private ContractorPublishingRestClient contractorPublishingRestClient;
+	
+	
 	public void savePersonTasks(List<PersonTask> personTasks) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				savePersonTask(personTaskClassDefinition, personTask);
+				ClassInstance ci = savePersonTask(personTaskClassDefinition, personTask);
+				contractorPublishingRestClient.publishClassInstance(ci, "");
 			}
 		}
 	}
 
-	private void savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
+	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
@@ -57,8 +63,9 @@ public class PersonTaskService {
 		
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(true);
+		personTaskClassInstance.setTimestamp(new Date());
 		
-		classInstanceRepository.save(personTaskClassInstance);		 
+		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on
 	}
 

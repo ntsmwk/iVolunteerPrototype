@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
@@ -21,6 +22,8 @@ public class ContractorPublishingRestClient {
 	private static final String TASK = "task";
 	private static final String FINISHED_TASK_ENTRY = "finishedTaskEntry";
 	private static final String COMPETENCE_ENTRY = "competenceEntry";
+	private static final String CLASS_INSTANCE = "classInstance";
+	
 	private static final String CONTRACTOR_URI = "{0}/trustifier/contractor/{1}";
 
 	private static final String AUTHORIZATION = "Authorization";
@@ -44,6 +47,12 @@ public class ContractorPublishingRestClient {
 		return restTemplate.postForObject(requestURI, buildEntity(competenceInstance, authorization), String.class);
 	}
 
+	public String publishClassInstance(ClassInstance classInstance, String authorization) {
+		String requestURI = buildContractorRequestURI(CLASS_INSTANCE);
+		return restTemplate.postForObject(requestURI, buildEntity(classInstance, authorization), String.class);
+
+	}
+	
 	private String buildContractorRequestURI(String requestPath) {
 		return format(CONTRACTOR_URI, trustifierUri, requestPath);
 	}

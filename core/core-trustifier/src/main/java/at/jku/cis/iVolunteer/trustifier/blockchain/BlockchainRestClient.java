@@ -156,4 +156,20 @@ public class BlockchainRestClient {
 		}
 
 	}
+
+	public void postClassInstance(String hash, String marketplaceId, String userId) {
+		String requestUrl = MessageFormat.format("{0}/api/verificationObject", url);
+		BcClassInstance c = new BcClassInstance(hash, userId);
+		try {
+			restTemplate.postForObject(requestUrl, c, Void.class);
+		} catch (Exception e) {
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
+		}	
+		
+	}
 }
