@@ -14,7 +14,13 @@
             <mat-card-content>
                 <div class="chartParent" fxLayout="row">
                     <div class="half">
-                        <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
+                            <app-share-menu 
+                            [label]="'Stunden'"
+                            (export)="exportChart($event)">
+                            </app-share-menu>
+                        </div>
                         <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
                             [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                             [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel"
@@ -24,7 +30,12 @@
                     </div>
 
                     <div class="half">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
                         <h2 class="title">ANZAHL an absolvierten Ausbildungen</h2>
+                        <app-share-menu [label]="'Anzahl'"
+                        (export)="exportChart($event)">
+                        </app-share-menu>
+                        </div>
                         <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient"
                             [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
                             [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
@@ -52,13 +63,15 @@
                                 <td>{{meanYearData[0][0].name}}</td>
                                 <td>{{currYearData[0][0].number}}</td>
                                 <td><b>{{currYearData[0][0].number-lastYearData[0][0].number}}</b></td>
-                                <td><b>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</b></td>
+                                <td><b>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</b>
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{meanYearData[0][1].name}}</td>
                                 <td>{{currYearData[0][1].number}}</td>
                                 <td><b>{{currYearData[0][1].number-lastYearData[0][1].number}}</b></td>
-                                <td><b>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</b></td>
+                                <td><b>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</b>
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{meanYearData[0][2].name}}</td>

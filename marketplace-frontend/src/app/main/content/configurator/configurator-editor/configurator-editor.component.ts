@@ -505,9 +505,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   // TODO @Alex fix issue in regards to saved Geometry
   redrawContent(focusCell: myMxCell) {
-    const bounds = this.graph.getView().getGraphBounds();
-    const scale = this.graph.getView().getScale();
-    const translate = this.graph.getView().getTranslate();
+    
 
 
     // let savedGeometry = this.saveGeometry();
@@ -516,6 +514,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     // this.restoreGeometry(savedGeometry);
 
     this.setLayout();
+    this.focusOnCell(focusCell);
+  }
+
+  private focusOnCell(focusCell: myMxCell) {
+    const bounds = this.graph.getView().getGraphBounds();
+    const scale = this.graph.getView().getScale();
+    const translate = this.graph.getView().getTranslate();
+
     bounds.y *= -1;
     bounds.x *= -1;
     // this.graph.getView().setGraphBounds(bounds);
@@ -748,15 +754,15 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
           }
         }
       }
+
+      //  this.redrawContent(cell);
+      for (const he of this.hiddenEdges) {
+        he.setVisible(true);
+      }
+      this.setLayout();
+      this.focusOnCell(cell);
     }
-    // if (!isNullOrUndefined(edges) && !isNullOrUndefined(edges[0]) && !isNullOrUndefined(edges[0].target)) {
-    //   if (edges[0].target.isVisible()) {
-    //     this.setAllCellsInvisibleRec(cell);
-    //   } else {
-    //     // this.setAllCellsVisibleRec(cell);
-    //     this.setNextCellVisible(cell);
-    //   }
-    // }
+
     this.modelUpdated = true;
   }
 
@@ -1095,6 +1101,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         return c.id === r.id;
       }) as myMxCell;
 
+      if (isNullOrUndefined(cell)) {
+        console.log(r);
+      }
+
       if (!isNullOrUndefined(cell.source)) {
         r.source = cell.source.id;
       }
@@ -1152,25 +1162,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     console.log('create class instance clicked');
     console.log(cells);
 
-    // const allCells: myMxCell[] = this.graph.getModel().getChildCells(this.graph.getDefaultParent()) as myMxCell[];
-    // if (isNullOrUndefined(cells) || cells.length === 0) {
-    //   // get all cells in graph
-    //   // find first root cell
-    //   cells = allCells.filter((c: myMxCell) => {
-    //     return c.root;
-    //   });
-    // }
-
-    // if (allCells.filter((c: myMxCell) => c.newlyAdded).length > 0) {
-    //   console.log('you have to save first');
-
-    //   // TODO
-    //   this.showWorkInProgressInfo = true;
-    //   const outer = this;
-    //   setTimeout(function () {
-    //     outer.showWorkInProgressInfo = false;
-    //   }, 5000);
-    // } else {
     this.dataTransportService.data = cells;
 
     let params: string[];

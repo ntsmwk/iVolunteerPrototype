@@ -10,6 +10,7 @@ import { Participant } from '../../_model/participant';
 import { CIP } from '../../_model/classInstancePropertyConstants';
 import { isNullOrUndefined } from 'util';
 import { ClassInstance } from '../../_model/meta/Class';
+import { StoredChart } from '../../_model/stored-chart';
 
 
 @Component({
@@ -215,6 +216,17 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonData = [...dataFinal];
     // /yearComparision
 
+  }
+
+  exportChart(source: string) {
+    let storedChart: StoredChart;
+
+    switch (source) {
+      case 'Vergleich':
+        storedChart = new StoredChart('Vergleich der Anzahl an Tätigkeiten', 'ngx-charts-bar-vertical-2d', JSON.stringify(this.comparisonData), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+    }
   }
 
 }

@@ -65,11 +65,12 @@
             Übersicht über die geleisteten Tätigkeiten
           </mat-panel-description>
         </mat-expansion-panel-header>
-
+        <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
+        </app-share-menu>
         <div fxLayout="row" fxLayoutAlign="space-between center">
-
+          
           <div class="sunburstParent" id="sunburstChart"></div>
-
+          
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <h1>Tätigkeiten</h1>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
@@ -125,8 +126,8 @@
             </table>
             <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
           </div>
-
         </div>
+
       </mat-expansion-panel>
 
       <mat-expansion-panel [expanded]="false">
@@ -143,7 +144,7 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Wochentag:</h2>
-              <app-share-menu [label]="Wochentag">
+              <app-share-menu [label]="'Wochentag'" (export)="exportChart($event)">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -154,7 +155,7 @@
             </div>
             <div fxLayout="column">
               <h2>Tageszeit:</h2>
-              <app-share-menu [label]="Tageszeit">
+              <app-share-menu [label]="'Tageszeit'" (export)="exportChart($event)">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -170,7 +171,7 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Meistbesuchte Orte:</h2>
-              <app-share-menu [label]="Orte">
+              <app-share-menu [label]="'Orte'" (export)="exportChart($event)">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -181,7 +182,7 @@
             </div>
             <div fxLayout="column">
               <h2>Rang:</h2>
-              <app-share-menu [label]="Rang">
+              <app-share-menu [label]="'Rang'" (export)="exportChart($event)">
               </app-share-menu>
             </div>
             <div class="donut-parent">

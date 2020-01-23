@@ -2,8 +2,9 @@
 
 <p>Work in Progress</p>
 
-<div fxLayout="row">
+<div fxLayout="row" fxLayoutAlign="space-between center">
     <h2>Vergleich der Anzahl an Tätigkeiten</h2>
+
     <mat-form-field class="matFormField">
         <mat-label>Vergleichsjahr</mat-label>
         <mat-select  [value]="comparisonYear" (selectionChange)="onComparisonYearChanged($event.value)">
@@ -17,6 +18,10 @@
             <mat-option value="2019"> 2019 </mat-option>
         </mat-select>
     </mat-form-field>
+
+    <app-share-menu class="shareMenu" [label]="'Vergleich'"
+        (export)="exportChart($event)">
+        </app-share-menu>
 </div>
 
 <div class="chartParrent">

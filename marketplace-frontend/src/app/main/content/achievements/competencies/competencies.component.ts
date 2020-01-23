@@ -11,6 +11,8 @@ import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { Volunteer } from '../../_model/volunteer';
 import * as moment from 'moment';
 import { CIP } from '../../_model//classInstancePropertyConstants';
+import { StoredChart } from '../../_model/stored-chart';
+import { StoredChartService } from '../../_service/stored-chart.service';
 
 @Component({
   selector: 'fuse-competencies',
@@ -69,10 +71,13 @@ export class CompetenciesComponent implements OnInit {
   TASK_LOCATION = CIP.TASK_LOCATION;
   TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
+  test123 = "Stunden"
+
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
-    private volunteerService: CoreVolunteerService
+    private volunteerService: CoreVolunteerService,
+    private storedChartService: StoredChartService
   ) { }
 
 
@@ -275,7 +280,22 @@ export class CompetenciesComponent implements OnInit {
     this.taskData = [...tt2Data];
     // /Verschiedene Tätigkeiten (TT2)
 
+  }
 
+  exportChart(source: string) {
+    let storedChart: StoredChart;
+
+    switch (source) {
+      case 'Stunden':
+        storedChart = new StoredChart('STUNDEN absolvierter Ausbildungen', 'ngx-charts-bar-vertical-stacked', JSON.stringify(this.trainingData), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+
+      case 'Anzahl':
+        storedChart = new StoredChart('ANZAHL an absolvierten Ausbildungen', 'ngx-charts-line-chart', JSON.stringify(this.trainingData2), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+    }
   }
 
 }
