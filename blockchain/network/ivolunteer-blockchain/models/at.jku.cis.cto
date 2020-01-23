@@ -48,8 +48,3 @@ asset verificationObject identified by hash {
 transaction StoreVerificationObjects {
   o verificationObject[] verificationObjects
 }
-
-
-transaction TestTransaction {
-  o String test
-}
