@@ -2,7 +2,9 @@
 package at.jku.cis.iVolunteer.trustifier.blockchain;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,6 +164,22 @@ public class BlockchainRestClient {
 		BcClassInstance c = new BcClassInstance(hash, userId);
 		try {
 			restTemplate.postForObject(requestUrl, c, Void.class);
+		} catch (Exception e) {
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
+		}	
+		
+	}
+	
+	public void postClassInstanceArray(List<BcClassInstance> classInstances) {
+		String requestUrl = MessageFormat.format("{0}/api/StoreVerificationObjects", url);
+		try {
+			
+			restTemplate.postForObject(requestUrl, new BcClassInstances(classInstances.toArray(new BcClassInstance[0])), Void.class);
 		} catch (Exception e) {
 			if (e instanceof HttpStatusCodeException) {
 				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());

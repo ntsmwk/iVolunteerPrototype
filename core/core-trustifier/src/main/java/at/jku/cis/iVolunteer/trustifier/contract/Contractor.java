@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.trustifier.contract;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassIns
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
+import at.jku.cis.iVolunteer.trustifier.blockchain.BcClassInstance;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 import at.jku.cis.iVolunteer.trustifier.marketplace.TrustifierMarketplaceRestClient;
@@ -178,6 +181,22 @@ public class Contractor {
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
 
+		}
+	}
+	
+	@PostMapping("/classInstances")
+	public void publishClassInstances(@RequestBody List<ClassInstance> classInstances) {
+		try {
+			// @formatter:off
+			List<BcClassInstance> list = classInstances
+				.stream()
+				.map(ci -> new BcClassInstance(hasher.generateHash(ci), ci.getUserId()))
+				.collect(Collectors.toList());
+			// @formatter:on
+			
+			blockchainRestClient.postClassInstanceArray(list);
+		}catch(RestClientException e) {
+			throw new BadRequestException(e);
 		}
 	}
 
