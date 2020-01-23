@@ -205,7 +205,7 @@ export class TasksComponent implements OnInit {
 
     this.selectedYaxis = 'Dauer';
     this.selectedYear = 'Gesamt';
-    // this.chipSelectedYear = 'Gesamt';
+   // this.chipSelectedYear = 'Gesamt';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -302,7 +302,7 @@ export class TasksComponent implements OnInit {
         return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
       });
     }
-
+    
     this.lineChart.filteredDomain = null; this.lineChart.update();
 
     this.generateTimelineData();
@@ -437,7 +437,7 @@ export class TasksComponent implements OnInit {
         return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).lang("de").format('dddd'), value: value })
       });
 
-    // console.error('weekdayList', weekdayList);
+     // console.error('weekdayList', weekdayList);
 
     let weekdayMap: Map<string, number> = new Map<string, number>();
     weekdayList.forEach(t => {
@@ -567,8 +567,9 @@ export class TasksComponent implements OnInit {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
-  exportChart(source: string) {
+  exportChart(event, source: string) {
     let storedChart: StoredChart;
+    console.error(event);
 
     switch (source) {
       case 'Wochentag':
@@ -581,18 +582,13 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
-      case 'Orte':
+      case 'Ort':
         storedChart = new StoredChart('Meistbesuchte Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
       case 'Rang':
         storedChart = new StoredChart('Rang', 'ngx-charts-pie-chart', JSON.stringify(this.rangData), this.volunteer.id);
-        this.storedChartService.save(this.marketplace, storedChart).toPromise();
-        break;
-
-      case 'Zweck':
-        storedChart = new StoredChart('Zweck', 'highcharts-sunburst', JSON.stringify(this.sunburstData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
