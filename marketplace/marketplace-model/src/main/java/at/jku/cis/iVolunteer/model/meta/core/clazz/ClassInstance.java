@@ -132,7 +132,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		json.addProperty("marketplaceId", marketplaceId);
 //TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
 		json.addProperty("properties", this.properties.hashCode());
-		json.addProperty("timestamp", timestamp.toString());
+//		json.addProperty("timestamp", timestamp.toString());
 		return json.toString();
 	}
 
