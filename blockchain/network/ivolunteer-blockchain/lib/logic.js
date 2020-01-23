@@ -14,6 +14,8 @@ var NS = 'at.jku.cis';
 function storeVerificationObjects(tx) {
   getAssetRegistry('at.jku.cis.verificationObject')
     .then(function(assetRegistry){
-      return assetRegistry.addAll(tx.verificationObjects).then(function(ret){});  
+      tx.verificationObjects.forEach(vo => assetRegistry.add(vo));
+      // .then(function(ret){})
+      // assetRegistry.addAll(tx.verificationObjects).then(function(ret){});  
     });
 }

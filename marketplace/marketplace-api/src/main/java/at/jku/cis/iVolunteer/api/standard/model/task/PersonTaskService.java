@@ -36,7 +36,7 @@ public class PersonTaskService {
 				classInstances.add(savePersonTask(personTaskClassDefinition, personTask));
 			}
 
-			contractorPublishingRestClient.publishClassInstances(classInstances.stream().limit(500).collect(Collectors.toList()), "");
+			contractorPublishingRestClient.publishClassInstances(classInstances.stream().limit(10).collect(Collectors.toList()), "");
 		}
 	}
 
