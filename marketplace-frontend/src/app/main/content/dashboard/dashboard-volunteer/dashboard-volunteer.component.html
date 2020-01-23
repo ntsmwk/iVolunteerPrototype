@@ -7,23 +7,17 @@
     <div style="padding-top: 12px"></div>
 
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-        <h1>Dashboard</h1>
-        <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome
-            Back</h1>
+        <h1>Übersicht</h1>
+        <!-- <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome -->
+            <!-- Back</h1> -->
 
         <div style=" position: relative; width: 120px; height: 120px; padding-top: 0px;">
             <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                src="../../../../assets/images/avatars/joyce.jpg">
+                src="../../../../assets/images/avatars/weixlbaumer.jpg">
         </div>
     </div>
 
-    <div style="padding-top: 20px"></div>
-
-    <div></div>
-
-    <div style="padding-top: 10px"></div>
-
-
+    <div style="padding-top: 30px"></div>
 
     <!--TOP WIDGET ROW-->
 
@@ -57,7 +51,7 @@
                 <div style="padding-left: 5px"></div>
                 <div
                     style="font-size: 20px; padding-top: 3px; padding-right: 3px; font-weight: 300px; font-variant:small-caps">
-                    Your Private Engagement Asset Repository</div>
+                    Dein Digitaler Freiwilligenpass</div>
             </div>
 
             <div></div>
@@ -69,7 +63,7 @@
                 </button>
 
                 <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                    <mat-label mat-menu-item disabled style="color: black">Share with...</mat-label>
+                    <mat-label mat-menu-item disabled style="color: black">Freigeben an...</mat-label>
 
                     <!-- <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
@@ -101,7 +95,7 @@
 
                             <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
                             <div style="padding-left: 10px"></div>
-                            <div>Recruiter: 'Best Jobs'</div>
+                            <div>Best Jobs</div>
                         </div>
                     </button>
                 </mat-menu>
@@ -178,7 +172,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="asset">
-                    <mat-header-cell *matHeaderCellDef>Asset</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Freiwilligenpass-Eintrag</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
@@ -251,7 +245,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="date">
-                    <mat-header-cell *matHeaderCellDef>Datum bekommen</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Datum</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         {{getDateString(entry.timestamp)}}
                     </mat-cell>
@@ -279,15 +273,7 @@
 
         </div>
 
-        <button mat-stroked-button type="button" color="accent">More in History</button>
+        <button mat-stroked-button type="button" color="accent">Weitere Laden</button>
 
-
-
-
-        <!-- </mat-tab>
-        <mat-tab label="History">
-            content
-        </mat-tab>
-    </mat-tab-group> -->
 
     </div>

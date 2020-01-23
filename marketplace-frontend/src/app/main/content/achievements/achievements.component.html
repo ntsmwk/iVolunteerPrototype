@@ -6,21 +6,21 @@
   </div>
 
   <div class="content">
-
-    <mat-tab label="Übersicht">
-      <ng-template matTabContent>
-        <fuse-management-summary></fuse-management-summary>t
-      </ng-template>
-    </mat-tab>
-
     <mat-tab-group dynamicHeight="true">
+
+      <mat-tab label="Übersicht">
+        <ng-template matTabContent>
+          <fuse-management-summary></fuse-management-summary>
+        </ng-template>
+      </mat-tab>
+
       <mat-tab label="Tätigkeiten">
         <ng-template matTabContent>
           <fuse-tasks></fuse-tasks>
         </ng-template>
       </mat-tab>
-      
-  
+
+
       <mat-tab label="Kompetenzen">
         <ng-template matTabContent>
           <fuse-competencies></fuse-competencies>
