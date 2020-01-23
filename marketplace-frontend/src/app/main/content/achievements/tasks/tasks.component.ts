@@ -569,8 +569,6 @@ export class TasksComponent implements OnInit {
 
   exportChart(event, source: string) {
     let storedChart: StoredChart;
-    console.error(event);
-
     switch (source) {
       case 'Wochentag':
         storedChart = new StoredChart('Wochentag', 'ngx-charts-pie-chart', JSON.stringify(this.weekdayData), this.volunteer.id);
