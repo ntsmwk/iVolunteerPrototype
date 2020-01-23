@@ -11,7 +11,7 @@ public class StandardAPIController {
 
 	@Autowired private StandardAPIService apiService;
 
-	@PutMapping("blockchainify")
+	@PutMapping("/blockchainify")
 	public void blockchainify() {
 		apiService.blockchainify();
 	}
