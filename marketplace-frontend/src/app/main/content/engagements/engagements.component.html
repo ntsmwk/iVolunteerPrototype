@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your Engagements</h1>
+    <h1>Dein Engagement</h1>
     <img class="header-icon" src="assets/icons/engagements.svg">
   </div>
   <!-- / HEADER -->
@@ -12,19 +12,19 @@
 
     <mat-tab-group dynamicHeight="true">
 
-      <mat-tab label="Opportunities">
+      <mat-tab label="Engagementmöglichkeiten">
         <fuse-opportunities [projects]="projects"></fuse-opportunities>
       </mat-tab>
 
-      <mat-tab label="Collaborations">
+      <mat-tab label="Zusammenarbeit">
         <fuse-collaborations [projects]="projects"></fuse-collaborations>
       </mat-tab>
 
-      <mat-tab label="Contributions">
+      <mat-tab label="Eigenleistungen">
         <fuse-contributions [projects]="projects"></fuse-contributions>
       </mat-tab>
 
-      <mat-tab label="Encouragements">
+      <mat-tab label="Anreize">
         <fuse-encouragements></fuse-encouragements>
       </mat-tab>
 

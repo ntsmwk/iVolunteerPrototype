@@ -1,7 +1,7 @@
 export const navigation_volunteer = [
   {
     'id': 'dashboard',
-    'title': 'Dashboard',
+    'title': 'Übersicht',
     'type': 'item',
     'icon': 'dashboard',
     'url': '/main/dashboard'
@@ -15,7 +15,7 @@ export const navigation_volunteer = [
   },
   {
     'id': 'achievements',
-    'title': 'Achievements',
+    'title': 'Erfolge',
     'type': 'item',
     'icon': 'achievements',
     'url': '/main/achievements'

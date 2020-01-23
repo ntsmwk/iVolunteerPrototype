@@ -91,7 +91,7 @@
                                 </button>
             </div>
 
-            <h2>Tätigkeiten</h2>
+            <h2 style="font-weight: bold;">Tätigkeiten</h2>
 
             <div *ngIf="tableDataSource.data.length > 0" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
               <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
@@ -154,7 +154,7 @@
               Keine Tätigkeiten freigegeben!
             </div>
 
-            <h2>Freigegebene Statistiken</h2>
+            <h2 style="font-weight: bold;">Freigegebene Statistiken</h2>
             <div style="display:flex;" flexLayout="row">
               <div *ngIf="weekdayData" style="display:inline-block; width: 600px; text-align: center; " class="mt-20">
                 <span style="font-size: 18px;">Wochentag</span>
