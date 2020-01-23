@@ -13,13 +13,13 @@ export const navigation_ffa = [
   },
   {
     'id': 'configurator',
-    'title': 'Configurator',
+    'title': 'iVolunteer Asset Konfigurator',
     'type': 'item',
     'url': '/main/configurator'
   },
   {
     'id': 'rule-configurator',
-    'title': 'Rule Configurator',
+    'title': 'iVolunteer Regel Konfigurator',
     'type': 'item',
     'url': '/main/rules/all'
   },

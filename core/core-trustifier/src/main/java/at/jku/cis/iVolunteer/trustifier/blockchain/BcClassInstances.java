@@ -2,22 +2,22 @@ package at.jku.cis.iVolunteer.trustifier.blockchain;
 
 public class BcClassInstances {
 
-	private BcClassInstance[] classInstances;
+	private BcClassInstance[] verificationObjects;
 
 	public BcClassInstances() {
 	}
 
-	public BcClassInstances(BcClassInstance[] classInstances) {
+	public BcClassInstances(BcClassInstance[] verificationObjects) {
 		super();
-		this.classInstances = classInstances;
+		this.setVerificationObjects(verificationObjects);
 	}
 
-	public BcClassInstance[] getClassInstances() {
-		return classInstances;
+	public BcClassInstance[] getVerificationObjects() {
+		return verificationObjects;
 	}
 
-	public void setClassInstances(BcClassInstance[] classInstances) {
-		this.classInstances = classInstances;
+	public void setVerificationObjects(BcClassInstance[] verificationObjects) {
+		this.verificationObjects = verificationObjects;
 	}
 
 }
