@@ -412,6 +412,8 @@ export class TasksComponent implements OnInit {
       });
     });
 
+    console.error(data);
+
     this.sunburstData = [...data];
 
     this.chartOptions.series = [
