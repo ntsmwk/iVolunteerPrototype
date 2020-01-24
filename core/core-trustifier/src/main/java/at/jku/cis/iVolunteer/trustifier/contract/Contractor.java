@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.trustifier.contract;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +16,12 @@ import at.jku.cis.iVolunteer.model.contract.TaskAssignment;
 import at.jku.cis.iVolunteer.model.contract.TaskCompletation;
 import at.jku.cis.iVolunteer.model.contract.TaskReservation;
 import at.jku.cis.iVolunteer.model.exception.BadRequestException;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.interaction.TaskInteraction;
 import at.jku.cis.iVolunteer.model.volunteer.profile.VolunteerTaskEntry;
+import at.jku.cis.iVolunteer.trustifier.blockchain.BcClassInstance;
 import at.jku.cis.iVolunteer.trustifier.blockchain.BlockchainRestClient;
 import at.jku.cis.iVolunteer.trustifier.hash.Hasher;
 import at.jku.cis.iVolunteer.trustifier.marketplace.TrustifierMarketplaceRestClient;
@@ -148,12 +152,9 @@ public class Contractor {
 	@PostMapping("/competenceEntry")
 	public void publishCompetenceInstance(@RequestBody CompetenceClassInstance competenceInstance) {
 		try {
-			blockchainRestClient.postCompetenceHash(
-					hasher.generateHash(competenceInstance),
-					competenceInstance.getTimestamp(), 
-					competenceInstance.getClassDefinitionId(),
-					competenceInstance.getMarketplaceId(), 
-					competenceInstance.getUserId());
+			blockchainRestClient.postCompetenceHash(hasher.generateHash(competenceInstance),
+					competenceInstance.getTimestamp(), competenceInstance.getClassDefinitionId(),
+					competenceInstance.getMarketplaceId(), competenceInstance.getUserId());
 
 		} catch (RestClientException ex) {
 			throw new BadRequestException(ex);
@@ -171,4 +172,32 @@ public class Contractor {
 
 		}
 	}
+
+	@PostMapping("/classInstance")
+	public void publishClassInstance(@RequestBody ClassInstance classInstance) {
+		try {
+			blockchainRestClient.postClassInstance(hasher.generateHash(classInstance), classInstance.getMarketplaceId(),
+					classInstance.getUserId());
+		} catch (RestClientException ex) {
+			throw new BadRequestException(ex);
+
+		}
+	}
+	
+	@PostMapping("/classInstances")
+	public void publishClassInstances(@RequestBody List<ClassInstance> classInstances) {
+		try {
+			// @formatter:off
+			List<BcClassInstance> list = classInstances
+				.stream()
+				.map(ci -> new BcClassInstance(hasher.generateHash(ci), ci.getUserId()))
+				.collect(Collectors.toList());
+			// @formatter:on
+			
+			blockchainRestClient.postClassInstanceArray(list);
+		}catch(RestClientException e) {
+			throw new BadRequestException(e);
+		}
+	}
+
 }

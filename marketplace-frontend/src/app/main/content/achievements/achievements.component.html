@@ -1,24 +1,25 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
 
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Your Achievements</h1>
+    <h1>Erfolge</h1>
     <img class="header-icon" src="assets/icons/achievements.svg">
   </div>
 
   <div class="content">
-
     <mat-tab-group dynamicHeight="true">
+
+      <mat-tab label="Übersicht">
+        <ng-template matTabContent>
+          <fuse-management-summary></fuse-management-summary>
+        </ng-template>
+      </mat-tab>
+
       <mat-tab label="Tätigkeiten">
         <ng-template matTabContent>
           <fuse-tasks></fuse-tasks>
         </ng-template>
       </mat-tab>
-      
-      <mat-tab label="Management Summary">
-        <ng-template matTabContent>
-          <fuse-management-summary></fuse-management-summary>t
-        </ng-template>
-      </mat-tab>
+
 
       <mat-tab label="Kompetenzen">
         <ng-template matTabContent>

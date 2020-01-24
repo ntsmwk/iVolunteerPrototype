@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Get Connected</h1>
+    <h1>Community</h1>
     <img class="header-icon" src="assets/icons/get-connected.svg">
   </div>
   <!-- / HEADER -->
@@ -17,7 +17,7 @@
         <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
-            <div class="h1">Worked With</div>
+            <div class="h1">Zusammengearbeitet mit</div>
           </div>
 
           <div *ngFor="let project of about.workedWith">
@@ -86,11 +86,11 @@
           <div class="px-16 py-8 border-bottom" fxLayout="row"
                fxLayoutAlign="space-between center">
             <div class="wrap margin">
-              <div class="h1">Groups</div>
+              <div class="h1">Gruppen</div>
               <div>
                 <button mat-raised-button color="accent" class="newGroup-button">
                   <mat-icon>playlist_add</mat-icon>
-                  New Group
+                  Neue Gruppe anlegen
                 </button>
               </div>
             </div>
@@ -98,7 +98,7 @@
 
           <mat-tab-group dynamicHeight="true">
 
-            <mat-tab label="Discover">
+            <mat-tab label="Finde Gruppen">
               <div *ngFor="let group of groups.discover">
                 <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start"
                      style="cursor: pointer;" routerLink="/main/get-connected/group/ad4e47e80b80e9ba">
@@ -114,15 +114,15 @@
                   </div>
 
                   <div class="actions" fxLayout="row" fxLayoutAlign="end center">
-                    <button mat-raised-button color="primary">Join</button>
-                    <button mat-raised-button color="primary">Hide</button>
+                    <button mat-raised-button color="primary">Beitreten</button>
+                    <button mat-raised-button color="primary">Ausblenden</button>
                   </div>
 
                 </div>
               </div>
             </mat-tab>
 
-            <mat-tab label="Your Groups">
+            <mat-tab label="Deine Gruppen">
               <div *ngFor="let group of groups.yourGroups">
                 <div fxLayout="row" class="workedWith-header" fxLayoutAlign="space-between start"
                      style="cursor: pointer" routerLink="/main/get-connected/group/a9f04fec753a4577">

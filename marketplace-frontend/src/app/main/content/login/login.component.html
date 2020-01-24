@@ -26,19 +26,19 @@
         <span>F</span>
       </div>
 
-      <div class="title">LOGIN TO YOUR ACCOUNT</div>
+      <div class="title">Anmeldung</div>
 
       <form name="loginForm" (submit)="login()" [formGroup]="loginForm" novalidate>
 
         <mat-form-field>
-          <input matInput placeholder="Username" formControlName="username">
+          <input matInput placeholder="Benutzername" formControlName="username">
           <mat-error *ngIf="loginFormErrors.username && loginFormErrors.username.required">
             Username is required
           </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="password" placeholder="Password" formControlName="password">
+          <input matInput type="password" placeholder="Passwort" formControlName="password">
           <mat-error *ngIf="loginFormErrors.password && loginFormErrors.password.required">
             Password is required
           </mat-error>
@@ -52,8 +52,8 @@
       </form>
 
       <div class="register" fxLayout="column" fxLayoutAlign="center center">
-        <span class="text">Don't have an account?</span>
-        <a class="link" [routerLink]="'/pages/auth/register-2'">Create an account</a>
+        <span class="text">Noch nicht registriert?</span>
+        <a class="link" [routerLink]="'/pages/auth/register-2'">Neues Konto erstellen</a>
       </div>
     </div>
   </div>

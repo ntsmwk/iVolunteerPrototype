@@ -21,6 +21,9 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}`);
     }
 
+    getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
+    }
 
     getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user`);

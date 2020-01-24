@@ -1,21 +1,21 @@
 export const navigation_volunteer = [
   {
     'id': 'dashboard',
-    'title': 'Dashboard',
+    'title': 'Übersicht',
     'type': 'item',
     'icon': 'dashboard',
     'url': '/main/dashboard'
   },
-  {
-    'id': 'engagements',
-    'title': 'Engagements',
-    'type': 'item',
-    'icon': 'engagements',
-    'url': '/main/engagements'
-  },
+  // {
+  //   'id': 'engagements',
+  //   'title': 'Engagements',
+  //   'type': 'item',
+  //   'icon': 'engagements',
+  //   'url': '/main/engagements'
+  // },
   {
     'id': 'achievements',
-    'title': 'Achievements',
+    'title': 'Erfolge',
     'type': 'item',
     'icon': 'achievements',
     'url': '/main/achievements'

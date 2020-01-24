@@ -3,7 +3,7 @@
 
     <div class="timeline" fxLayout="column" fxLayoutAlign="none">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h1>Timeline</h1>
+        <h1>Zeitverlauf</h1>
 
         <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
           (change)="onYaxisChange(group.value)">
@@ -144,7 +144,7 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Wochentag:</h2>
-              <app-share-menu [label]="'Wochentag'" (export)="exportChart($event)">
+              <app-share-menu [label]="'Wochentag'" (export)="exportChart($event, 'Wochentag')">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -155,7 +155,7 @@
             </div>
             <div fxLayout="column">
               <h2>Tageszeit:</h2>
-              <app-share-menu [label]="'Tageszeit'" (export)="exportChart($event)">
+              <app-share-menu [label]="'Tageszeit'" (export)="exportChart($event, 'Tageszeit')">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -171,7 +171,7 @@
           <div fxLayout="row">
             <div fxLayout="column">
               <h2>Meistbesuchte Orte:</h2>
-              <app-share-menu [label]="'Orte'" (export)="exportChart($event)">
+              <app-share-menu [label]="'Orte'" (export)="exportChart($event, 'Orte')">
               </app-share-menu>
             </div>
             <div class="donut-parent">
@@ -182,7 +182,7 @@
             </div>
             <div fxLayout="column">
               <h2>Rang:</h2>
-              <app-share-menu [label]="'Rang'" (export)="exportChart($event)">
+              <app-share-menu [label]="'Rang'" (export)="exportChart($event, 'Rang')">
               </app-share-menu>
             </div>
             <div class="donut-parent">

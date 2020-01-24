@@ -1,7 +1,5 @@
 package at.jku.cis.iVolunteer;
 
-import java.util.stream.Stream;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +12,12 @@ import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerController;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserImagePath;
 
 @SpringBootApplication
@@ -129,13 +125,12 @@ public class CoreApplication {
 		helpseeker.setId("EFA");
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
-		
+
 		CoreRecruiter recruiter = createRecruiter("recruiter", "passme");
 		recruiter.setFirstname("Daniel");
 		recruiter.setLastname("Huber");
 		recruiter.setPosition("Recruiter");
 		saveRecruiter(recruiter);
-		
 
 	}
 
@@ -192,7 +187,7 @@ public class CoreApplication {
 		}
 		return recruiter;
 	}
-	
+
 	private CoreRecruiter saveRecruiter(CoreRecruiter coreRecruiter) {
 		CoreRecruiter recruiter = coreRecruiterRepository.save(coreRecruiter);
 		return recruiter;

@@ -26,7 +26,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   // @ViewChild('paginator', {static:false}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
+  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration', 'hash', 'verificationStatus'];
   marketplace: Marketplace;
   participant: Participant;
   duringVerify: boolean;
@@ -89,7 +89,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
 
   private loadTasks() {
-    this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+    this.classInstanceService.getClassInstancesByArcheTypeWithHash(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
       if (!isNullOrUndefined(ret)) {
         this.classInstances = ret;
         this.tableDataSource.data = this.classInstances;
