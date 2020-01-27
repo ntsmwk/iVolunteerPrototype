@@ -19,6 +19,7 @@ export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinition>();
   displayedColumns = ['name'];
+  participant: Participant;
 
   constructor(formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -30,6 +31,7 @@ export class FuseTaskSelectComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.participant = participant;
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
@@ -44,4 +46,17 @@ export class FuseTaskSelectComponent implements OnInit {
   onRowSelect(row) {
     this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: {0: row.id} });
   }
+
+  private isFF() {
+    return this.participant.username== 'FFA';
+  }
+
+  private isMV(){
+    return this.participant.username==='MVS';
+  }
+  private isOther(){
+    return !this.isFF()&& !this.isMV();
+  }
+
+
 }

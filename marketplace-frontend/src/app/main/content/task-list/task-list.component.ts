@@ -83,7 +83,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
 
-          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', this.participant.username==='MVS'?'MV':'FF').toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then((ret: ClassInstance[]) => {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
               this.paginator.length = this.classInstances.length;
@@ -100,4 +100,16 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   addTask() {
     this.router.navigate(['/main/task-select']);
   }
+
+  private isFF() {
+    return this.participant.username == 'FFA';
+  }
+
+  private isMV() {
+    return this.participant.username === 'MVS';
+  }
+  private isOther() {
+    return !this.isFF() && !this.isMV();
+  }
+
 }

@@ -61,6 +61,17 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     });
   }
 
+  private isFF() {
+    return this.participant.username== 'FFA';
+  }
+
+  private isMV(){
+    return this.participant.username==='MVS';
+  }
+  private isOther(){
+    return !this.isFF()&& !this.isMV();
+  }
+
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
     if (ruleId) {
       this.derivationRuleService.findById(marketplace, ruleId).toPromise().then(
