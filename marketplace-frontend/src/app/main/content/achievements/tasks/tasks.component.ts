@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { fuseAnimations } from '../../../../../@fuse/animations';
 import { Participant } from '../../_model/participant';
 import { LoginService } from '../../_service/login.service';
@@ -13,13 +13,15 @@ import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { Volunteer } from '../../_model/volunteer';
 import { ArrayService } from '../../_service/array.service';
 import * as moment from 'moment';
-import { Subject, timer } from 'rxjs';
 import * as shape from 'd3-shape';
 import { CIP } from '../../_model/classInstancePropertyConstants';
-import * as Highcharts from 'highcharts';
-import HC_sunburst from 'highcharts/modules/sunburst';
 import { StoredChartService } from '../../_service/stored-chart.service';
 import { StoredChart } from '../../_model/stored-chart';
+
+import * as Highcharts from 'highcharts';
+import HC_drilldown from 'highcharts/modules/drilldown.js';
+import HC_sunburst from 'highcharts/modules/sunburst';
+HC_drilldown(Highcharts);
 HC_sunburst(Highcharts);
 
 @Component({
@@ -86,6 +88,11 @@ export class TasksComponent implements OnInit {
   legend = false;
   legendPosition = 'below';
   tooltipDisabled = false;
+  // dateTickFormatting(val: any): string {
+  //    if (val instanceof Date) {
+  //      return (<Date>val).toLocaleDateString('de-DE');
+  //    }
+  // }
 
   // sunburst chart
   sunburstData = [];
@@ -103,7 +110,7 @@ export class TasksComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     chart: {
-      height: 900,
+      height: 900
     },
     title: {
       text: undefined
@@ -185,9 +192,11 @@ export class TasksComponent implements OnInit {
   selectedYear: string;
   yearsMap: Map<string, number>;
   timelineFilterFrom: Date;
-  timelineFilterTo: Date
+  timelineFilterTo: Date;
 
   public newTimelineChartData: { name: string, series: { name: Date, value: number }[] }[];
+
+  sunburstCenterName: string = 'Tätigkeitsart';
 
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
@@ -205,7 +214,7 @@ export class TasksComponent implements OnInit {
 
     this.selectedYaxis = 'Dauer';
     this.selectedYear = 'Gesamt';
-   // this.chipSelectedYear = 'Gesamt';
+    this.chipSelectedYear = 'Gesamt';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -241,43 +250,19 @@ export class TasksComponent implements OnInit {
       });
     });
 
-
     Highcharts.chart('sunburstChart', this.chartOptions).update({
       plotOptions: {
         series: {
           events: {
             click: (event) => {
+              console.error('click event');
               this.onSunburstChanged(event);
             },
           },
         },
       }
     });
-  }
 
-  onSunburstChanged(event) {
-    if (this.lastClickedItem === event.point.name) {
-      this.lastClickedItem = event.point.name;
-      this.filteredClassInstances = this.prevFilteredClassInstances;
-
-      this.chipTaskType = null;
-
-
-    } else {
-      this.lastClickedItem = event.point.name;
-
-      this.chipTaskType = this.lastClickedItem;
-
-      this.prevFilteredClassInstances = this.filteredClassInstances;
-      if (this.uniqueTt1.indexOf(this.lastClickedItem) > -1) {
-        this.filteredClassInstances = this.classInstances.filter(c => {
-          return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
-        });
-      }
-    }
-
-    this.generateTimelineData();
-    this.generateOtherChartsData();
   }
 
   onYaxisChange(val: string) {
@@ -286,6 +271,109 @@ export class TasksComponent implements OnInit {
     this.generateTimelineData();
     this.generateOtherChartsData();
     this.generateSunburstData();
+  }
+
+  onSunburstChanged(event) {
+    console.error('event', event.point);
+    // TODO: broken
+    // wenn man von tt2 zu tt1 zurückgeht....
+    // fix: bei klick immer neu filtern, prüfen ob tt1, oder tt2, schauen ob und welcher time filter aktiv
+
+    if(event.point.id = '') {
+      this.lastClickedItem = null;
+    }
+
+    if (event.point.name === this.lastClickedItem) {
+      // same taskType pressed again: going back
+      this.lastClickedItem = event.point.name;
+
+      let parent = null;
+      this.sunburstData.forEach(d => {
+        if (d.id === event.point.parent) {
+          parent = d;
+        }
+      });
+
+      if (parent.id === '0') {
+        // Tätigkeitsarten, level 0
+        // filter
+        this.filteredClassInstances = [...this.classInstances];
+        this.chipTaskType = null;
+
+      } else {
+        // tt1
+        // filter for parent [tt1]
+        this.chipTaskType = parent.name;
+        this.filteredClassInstances = this.classInstances.filter(c => {
+          return c.properties[this.TASK_TYPE_1].values[0] === parent.name;
+        });
+      }
+
+
+
+    } else {
+      // other taskType pressed: drilldown
+
+      if (this.uniqueTt1.indexOf(event.point.name) > -1) {
+        this.lastClickedItem = event.point.name;
+        // filter for tt1
+        this.chipTaskType = event.point.name;
+        this.filteredClassInstances = this.classInstances.filter(c => {
+          return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
+        });
+
+      } else if (this.uniqueTt2.indexOf(event.point.name) > -1) {
+        // filter for tt2
+        this.lastClickedItem = event.point.name;
+        this.filteredClassInstances = this.classInstances.filter(c => {
+          return c.properties[this.TASK_TYPE_2].values[0] === this.lastClickedItem;
+        });
+
+        this.chipTaskType = event.point.name;
+      } else if (event.point.name === this.sunburstCenterName) {
+        // center pressed
+        // filter for all
+        this.filteredClassInstances = [...this.classInstances];
+      }
+
+    }
+
+    // TIME FILTERN
+
+
+
+
+    // // old
+    // if (event.point.name === this.lastClickedItem) {
+    //   // same taskType pressed again: going back
+    //   this.lastClickedItem = event.point.name;
+    //   this.filteredClassInstances = this.prevFilteredClassInstances;
+
+    //   this.chipTaskType = null;
+
+
+    // } else {
+    //   // other taskType pressed: drilldown
+    //   this.lastClickedItem = event.point.name;
+    //   this.chipTaskType = this.lastClickedItem;
+    //   this.prevFilteredClassInstances = this.filteredClassInstances;
+
+    //   if (this.uniqueTt1.indexOf(this.lastClickedItem) > -1) {
+    //     // tt1 pressed
+    //     this.filteredClassInstances = this.classInstances.filter(c => {
+    //       return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
+    //     });
+    //   }
+    //   else if (this.uniqueTt2.indexOf(this.lastClickedItem) > -1) {
+    //     // tt2 pressed
+    //     this.filteredClassInstances = this.classInstances.filter(c => {
+    //       return c.properties[this.TASK_TYPE_2].values[0] === this.lastClickedItem;
+    //     });
+    //   }
+    // }
+
+    this.generateTimelineData();
+    this.generateOtherChartsData();
   }
 
   onYearChange(value) {
@@ -302,8 +390,9 @@ export class TasksComponent implements OnInit {
         return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
       });
     }
-    
-    this.lineChart.filteredDomain = null; this.lineChart.update();
+
+    this.lineChart.filteredDomain = null;
+    this.lineChart.update();
 
     this.generateTimelineData();
     this.generateOtherChartsData();
@@ -364,34 +453,35 @@ export class TasksComponent implements OnInit {
   }
 
   generateSunburstData() {
+    this.chipTaskType = null;
+
     // sunburst data
     let list = this.filteredClassInstances
       .map(ci => {
         let value;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
 
-        return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], value: value })
+        return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0], value: value })
       });
 
 
     let data = [];
 
     // insert 0 entry
-    data.push({ id: '0', parent: '', name: 'Tätigkeitsart' });
+    data.push({ id: '0', parent: '', name: this.sunburstCenterName });
 
-    // insert tt1 entries
     this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
     this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
 
+    // insert tt1 entries
     this.uniqueTt1.forEach((tt1, index) => {
       data.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
     });
 
     // insert tt2 entries (for each tt1 separetly)
     this.uniqueTt1.forEach(tt1 => {
-
       let tt1List = list.filter(l => {
-        return (tt1 === l.tt1)
+        return (tt1 === l.tt1);
       });
 
       let tt2Map: Map<string, number> = new Map<string, number>();
@@ -403,18 +493,51 @@ export class TasksComponent implements OnInit {
         }
       });
 
-      let indexTt1 = this.uniqueTt1.indexOf(tt1) + 1;
+      let indexParent = this.uniqueTt1.indexOf(tt1) + 1;
 
       Array.from(tt2Map.entries()).forEach((entry, index) => {
         if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
-          data.push({ id: indexTt1 + '-' + (index + 1).toString(), parent: indexTt1.toString(), name: entry[0], value: Number(entry[1]) });
+          data.push({ id: indexParent + '-' + (index + 1).toString(), parent: indexParent.toString(), name: entry[0], value: Number(entry[1]) });
         }
       });
     });
 
-    console.error(data);
+    // snapshot before any tt3 data is added
+    let dataTt2 = [...data];
+
+    // insert tt3 entries (for each tt2 separetly)
+    this.uniqueTt2.forEach(tt2 => {
+      let tt2List = list.filter(l => {
+        return (tt2 === l.tt2);
+      });
+
+      let tt3Map: Map<string, number> = new Map<string, number>();
+      tt2List.forEach(entry => {
+        if (tt3Map.get(entry.tt3)) {
+          tt3Map.set(entry.tt3, Number(tt3Map.get(entry.tt3)) + Number(entry.value))
+        } else {
+          tt3Map.set(entry.tt3, entry.value);
+        }
+      });
+
+      let indexParent: string = null;
+      dataTt2.forEach(d => {
+        if (d.name === tt2) {
+          indexParent = d.id;
+        }
+      });
+
+      Array.from(tt3Map.entries()).forEach((entry, index) => {
+        if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
+          data.push({ id: indexParent + '-' + (index + 1).toString(), parent: indexParent.toString(), name: entry[0], value: Number(entry[1]) });
+        }
+      });
+
+
+    });
 
     this.sunburstData = [...data];
+    console.error('sunburstData', this.sunburstData);
 
     this.chartOptions.series = [
       {
@@ -426,7 +549,9 @@ export class TasksComponent implements OnInit {
     ];
 
     Highcharts.chart('sunburstChart', this.chartOptions);
+
   }
+
 
   generateOtherChartsData() {
     let data = [];
@@ -436,10 +561,10 @@ export class TasksComponent implements OnInit {
       .map(ci => {
         let value;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-        return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).lang("de").format('dddd'), value: value })
+        return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).locale("de").format('dddd'), value: value })
       });
 
-     // console.error('weekdayList', weekdayList);
+    // console.error('weekdayList', weekdayList);
 
     let weekdayMap: Map<string, number> = new Map<string, number>();
     weekdayList.forEach(t => {
@@ -592,9 +717,5 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
-  }
-
-  onDonutSelect(event) {
-
   }
 }

@@ -93,9 +93,9 @@ const routes = [
 
     NgxChartsModule,
     HighchartsChartModule
-
-
-  ]
+  ],
+  providers   : [
+]
 })
 
 export class FuseAchievementsModule {

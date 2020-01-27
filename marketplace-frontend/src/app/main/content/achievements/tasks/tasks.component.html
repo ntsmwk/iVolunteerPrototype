@@ -36,7 +36,7 @@
           [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true"
           [showXAxisLabel]="showYAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
           [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve"
-          (select)="timelineSelect($event)">
+          (select)="timelineSelect($event)"[xAxisTickFormatting]="dateTickFormatting">
         </ngx-charts-line-chart>
       </div>
 
@@ -68,9 +68,11 @@
         <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
         </app-share-menu>
         <div fxLayout="row" fxLayoutAlign="space-between center">
+
+           <div class="sunburstParent" id="sunburstChart"></div>
           
-          <div class="sunburstParent" id="sunburstChart"></div>
-          
+
+
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <h1>Tätigkeiten</h1>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
