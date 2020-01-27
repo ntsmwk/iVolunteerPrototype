@@ -32,6 +32,9 @@ HC_sunburst(Highcharts);
 })
 
 export class TasksComponent implements OnInit {
+  fakeChecked: boolean = false;
+
+
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
   TASK_ID = CIP.TASK_ID;
@@ -227,7 +230,7 @@ export class TasksComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
@@ -726,5 +729,64 @@ export class TasksComponent implements OnInit {
   onDrillUp() {
     console.error('drillup event');
 
+  }
+
+  onToggleChanged(event) {
+    if(this.fakeChecked) {
+      this.fakeChecked = false;
+
+      this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        if (!isNullOrUndefined(ret)) {
+          this.classInstances = ret;
+
+          this.classInstances.forEach((ci, index, object) => {
+            if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+              object.splice(index, 1);
+            }
+          });
+
+          console.error('before', this.classInstances);
+
+          this.filteredClassInstances = [...this.classInstances];
+
+          this.tableDataSource.data = this.classInstances;
+          this.tableDataSource.paginator = this.paginator;
+
+          this.generateTimelineData();
+          this.generateSunburstData();
+          this.generateOtherChartsData();
+        }
+      });
+
+    } else {
+      this.fakeChecked = true;
+
+      this.classInstanceService.getClassInstancesByArcheTypeAfter(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        if (!isNullOrUndefined(ret)) {
+          this.classInstances = ret;
+
+          this.classInstances.forEach((ci, index, object) => {
+            if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+              object.splice(index, 1);
+            }
+          });
+
+          console.error('after',this.classInstances);
+
+
+          this.filteredClassInstances = [...this.classInstances];
+
+          this.tableDataSource.data = this.classInstances;
+          this.tableDataSource.paginator = this.paginator;
+
+          this.generateTimelineData();
+          this.generateSunburstData();
+          this.generateOtherChartsData();
+        }
+      });
+
+
+
+    }
   }
 }

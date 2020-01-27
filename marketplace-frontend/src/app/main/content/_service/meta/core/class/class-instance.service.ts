@@ -21,6 +21,14 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}`);
     }
 
+    getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
+    }
+
+    getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
+    }
+
     getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
     }

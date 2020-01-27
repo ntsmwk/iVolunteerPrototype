@@ -36,7 +36,7 @@
           [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true"
           [showXAxisLabel]="showYAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
           [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve"
-          (select)="timelineSelect($event)"[xAxisTickFormatting]="dateTickFormatting">
+          (select)="timelineSelect($event)" [xAxisTickFormatting]="dateTickFormatting">
         </ngx-charts-line-chart>
       </div>
 
@@ -65,19 +65,25 @@
             Übersicht über die geleisteten Tätigkeiten
           </mat-panel-description>
         </mat-expansion-panel-header>
+        <div fxLayout="row">
         <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
         </app-share-menu>
+        <mat-slide-toggle [checked]="fakeChecked" (change)="onToggleChanged($event)" style="margin-left: 30px;">
+          Use fake data
+        </mat-slide-toggle>
+      </div>
+
         <div fxLayout="row" fxLayoutAlign="space-between center">
 
-           <div class="sunburstParent" id="sunburstChart"></div>
+          <div class="sunburstParent" id="sunburstChart"></div>
 
-           <!-- <highcharts-chart class="sunburstParent" id="sunburstChart"
+          <!-- <highcharts-chart class="sunburstParent" id="sunburstChart"
            [Highcharts]="Highcharts"
            [options]="chartOptions"
            (drilldown)="onDrilldown()"
            (drillup)="onDrilldown()"
            ></highcharts-chart> -->
-          
+
 
 
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">

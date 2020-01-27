@@ -21,7 +21,8 @@ import {
   MatButtonToggleModule,
   MatPaginatorModule,
   MatSortModule,
-  MatChipsModule
+  MatChipsModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { FuseAchievementsComponent } from './achievements.component';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
@@ -42,6 +43,7 @@ import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ManagementSummaryComponent } from './management-summary/management-summary.component';
 import { ShareMenuComponent } from './share-menu/share-menu.component';
+
 
 const routes = [
   { path: '**', component: FuseAchievementsComponent }
@@ -81,6 +83,7 @@ const routes = [
     MatPaginatorModule,
     MatSortModule,
     MatChipsModule,
+    MatSlideToggleModule,
 
     FuseProjectMembersModule,
     FuseProjectTaskListModule,
