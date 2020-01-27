@@ -106,8 +106,8 @@ export class TasksComponent implements OnInit {
     '#7ed3ed',
     '#50abcc',
     '#ad6886'];
-  Highcharts: typeof Highcharts = Highcharts;
 
+  Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
       height: 900
@@ -250,18 +250,18 @@ export class TasksComponent implements OnInit {
       });
     });
 
-    Highcharts.chart('sunburstChart', this.chartOptions).update({
-      plotOptions: {
-        series: {
-          events: {
-            click: (event) => {
-              console.error('click event');
-              this.onSunburstChanged(event);
-            },
-          },
-        },
-      }
-    });
+    // Highcharts.chart('sunburstChart', this.chartOptions).update({
+    //   plotOptions: {
+    //     series: {
+    //       events: {
+    //         click: (event) => {
+    //           console.error('click event');
+    //           this.onSunburstChanged(event);
+    //         },
+    //       },
+    //     },
+    //   }
+    // });
 
   }
 
@@ -274,7 +274,7 @@ export class TasksComponent implements OnInit {
   }
 
   onSunburstChanged(event) {
-    console.error('event', event.point);
+   // console.error('event', event.point);
     // TODO: broken
     // wenn man von tt2 zu tt1 zurückgeht....
     // fix: bei klick immer neu filtern, prüfen ob tt1, oder tt2, schauen ob und welcher time filter aktiv
@@ -353,7 +353,7 @@ export class TasksComponent implements OnInit {
 
 
     // } else {
-    //   // other taskType pressed: drilldown
+    //   // other taskType pressed: drilldownf
     //   this.lastClickedItem = event.point.name;
     //   this.chipTaskType = this.lastClickedItem;
     //   this.prevFilteredClassInstances = this.filteredClassInstances;
@@ -537,7 +537,7 @@ export class TasksComponent implements OnInit {
     });
 
     this.sunburstData = [...data];
-    console.error('sunburstData', this.sunburstData);
+    //console.error('sunburstData', this.sunburstData);
 
     this.chartOptions.series = [
       {
@@ -688,6 +688,7 @@ export class TasksComponent implements OnInit {
       }
     });
     this.rangData = [...data];
+    // console.error('rangData', this.rangData);
 
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator._changePageSize(this.paginator.pageSize);
@@ -716,5 +717,14 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
+  }
+
+  onDrilldown() {
+    console.error('drilldown event');
+  }
+
+  onDrillUp() {
+    console.error('drillup event');
+
   }
 }
