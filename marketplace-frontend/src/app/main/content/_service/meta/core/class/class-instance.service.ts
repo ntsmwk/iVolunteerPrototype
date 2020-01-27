@@ -22,6 +22,14 @@ import { Participant } from 'app/main/content/_model/participant';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
     }
 
+    getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
+    }
+
+    getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
+    }
+
     getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
     }
