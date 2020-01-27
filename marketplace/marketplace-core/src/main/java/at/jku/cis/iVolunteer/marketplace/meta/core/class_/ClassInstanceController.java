@@ -51,6 +51,11 @@ public class ClassInstanceController {
 			for (ClassDefinition cd : classDefinitions) {
 				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
 			}
+		} else {
+			for (ClassDefinition cd : classDefinitions) {
+				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()).stream()
+						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
+			}
 		}
 		return classInstances;
 	}
@@ -83,7 +88,7 @@ public class ClassInstanceController {
 
 		return classInstances;
 	}
-
+	
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/hashed")
 	private List<ClassInstance> getClassInstancesByArchetypeWithHash(
 			@PathVariable("archetype") ClassArchetype archeType) {

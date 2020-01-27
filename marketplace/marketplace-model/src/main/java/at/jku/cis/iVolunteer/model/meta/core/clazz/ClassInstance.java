@@ -30,6 +30,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private ClassArchetype classArchetype;
 	
 	private boolean isNewFakeData;
+	private boolean isMV;
 
 	public ClassInstance() {
 	}
@@ -160,6 +161,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setNewFakeData(boolean isNewFakeData) {
 		this.isNewFakeData = isNewFakeData;
+	}
+
+	public boolean isMV() {
+		return isMV;
+	}
+
+	public void setMV(boolean isMV) {
+		this.isMV = isMV;
 	}
 
 }
