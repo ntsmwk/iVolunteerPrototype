@@ -97,7 +97,8 @@ public class ClassDefinitionService {
 
 				formEntry.getClassDefinitions().add(currentClassDefinition);
 
-				formEntry.getClassProperties().addAll(0,getPropertiesInClassDefinition(formEntry, currentClassDefinition));
+				formEntry.getClassProperties().addAll(0,
+						getPropertiesInClassDefinition(formEntry, currentClassDefinition));
 
 				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
@@ -109,16 +110,16 @@ public class ClassDefinitionService {
 				if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
 					formEntry.setImagePath(currentClassDefinition.getImagePath());
 				}
-				
+
 				currentClassDefinition = classDefinitionRepository.findOne(inheritanceList.get(0).getSource());
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
-			
+
 			if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
 				formEntry.setImagePath(currentClassDefinition.getImagePath());
 			}
-			
+
 			List<ClassProperty<Object>> properties = new LinkedList<>();
 			for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
 				if (!formEntry.getClassProperties().contains(property)) {
@@ -134,9 +135,11 @@ public class ClassDefinitionService {
 		return configList;
 	}
 
-	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition) {
+	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry,
+			ClassDefinition currentClassDefinition) {
 		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
-		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(
+				currentClassDefinition.getProperties());
 		for (ClassProperty<Object> property : copyList) {
 			int i = 0;
 
@@ -184,7 +187,7 @@ public class ClassDefinitionService {
 			}
 
 		}
-		
+
 		return properties;
 	}
 

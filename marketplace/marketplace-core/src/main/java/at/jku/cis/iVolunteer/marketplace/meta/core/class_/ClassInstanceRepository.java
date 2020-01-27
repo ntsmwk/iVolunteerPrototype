@@ -19,4 +19,7 @@ public interface ClassInstanceRepository extends MongoRepository<ClassInstance, 
 
 	List<ClassInstance> getByIssuerIdAndInIssuerInboxAndInUserRepository(String issuerId, boolean inIssuerInbox, boolean inUserRepository);
 
+	
+	
+	
 }
