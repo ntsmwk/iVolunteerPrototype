@@ -6,13 +6,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
@@ -31,6 +34,7 @@ public class ClassDefinitionService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private ConfiguratorRepository configuratorRepository;
 
 	public ClassDefinition getByName(String name) {
 		return classDefinitionRepository.findByName(name);
@@ -67,8 +71,22 @@ public class ClassDefinitionService {
 		return classDefinitionRepository.save(classDefinitions);
 	}
 
-	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype) {
-		return classDefinitionRepository.findByClassArchetype(archetype);
+	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype, String organisation) {
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByClassArchetype(archetype);
+		if (organisation == null) {
+			return classDefinitions;
+		}
+		if (organisation.equals("FF")) {
+			Configurator configurator = configuratorRepository.findOne("slot2");
+			return classDefinitions.stream().filter(cd -> configurator.getClassDefinitionIds().contains(cd.getId())|| cd.getName().equals("PersonTask"))
+					.collect(Collectors.toList());
+		}
+		if (organisation.equals("MV")) {
+			Configurator configurator = configuratorRepository.findOne("slot4");
+			return classDefinitions.stream().filter(cd -> configurator.getClassDefinitionIds().contains(cd.getId())|| cd.getName().equals("PersonTask"))
+					.collect(Collectors.toList());
+		}
+		return new ArrayList<>();
 	}
 
 	public List<FormConfiguration> getParentsById(List<String> childIds) {

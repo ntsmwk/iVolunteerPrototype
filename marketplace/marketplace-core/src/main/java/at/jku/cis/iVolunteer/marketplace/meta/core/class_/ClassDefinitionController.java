@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -30,8 +31,8 @@ public class ClassDefinitionController {
 
 	@GetMapping("meta/core/class/definition/all/no-enum")
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums() {
-		List<ClassDefinition> filtered = classDefinitionRepository.findAll().stream().filter(cd -> filterEnumsAndHeadClasses(cd))
-				.collect(Collectors.toList());
+		List<ClassDefinition> filtered = classDefinitionRepository.findAll().stream()
+				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
 		return filtered;
 	}
 
@@ -50,8 +51,9 @@ public class ClassDefinitionController {
 	}
 
 	@GetMapping("/meta/core/class/definition/archetype/{archetype}")
-	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype) {
-		return classDefinitionService.getClassDefinitionsByArchetype(archetype);
+	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype,
+			@RequestParam(value = "org", required = false) String organisation) {
+		return classDefinitionService.getClassDefinitionsByArchetype(archetype, organisation);
 	}
 
 	@PutMapping("/meta/core/class/definition/multiple")

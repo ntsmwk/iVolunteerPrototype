@@ -79,7 +79,7 @@ import { of } from "rxjs";
       return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}`);
     }
 
-    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype){
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}`); 
+    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype, organisation: string){
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}?org=${organisation}`); 
     }
   }

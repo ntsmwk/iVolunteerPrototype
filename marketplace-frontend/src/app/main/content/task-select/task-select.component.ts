@@ -35,7 +35,7 @@ export class FuseTaskSelectComponent implements OnInit {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
-          this.classDefinitionService.getByArchetype(marketplace, ClassArchetype.TASK).toPromise().then((tasks: ClassDefinition[]) => {
+          this.classDefinitionService.getByArchetype(marketplace, ClassArchetype.TASK, this.participant.username==='FFA'?'FF':'MV').toPromise().then((tasks: ClassDefinition[]) => {
             this.dataSource.data = tasks;
           });
         }

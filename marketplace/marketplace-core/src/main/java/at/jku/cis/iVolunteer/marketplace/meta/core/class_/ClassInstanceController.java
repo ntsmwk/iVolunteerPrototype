@@ -46,7 +46,8 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@RequestParam(value = "org", required = false) String organisation) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
+				organisation == null ? "FF" : organisation);
 		if (!organisation.equals("MV")) {
 			for (ClassDefinition cd : classDefinitions) {
 				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
@@ -64,7 +65,7 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByArchetypeBeforeSunburstFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
 
 		for (ClassDefinition cd : classDefinitions) {
 			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
@@ -78,7 +79,7 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByArchetypeAfterSunburstFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
 
 		for (ClassDefinition cd : classDefinitions) {
 			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
@@ -88,12 +89,12 @@ public class ClassInstanceController {
 
 		return classInstances;
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/hashed")
 	private List<ClassInstance> getClassInstancesByArchetypeWithHash(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
 
 		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
@@ -113,7 +114,7 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstancesByClassDefinitionIdFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
 
 		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository
