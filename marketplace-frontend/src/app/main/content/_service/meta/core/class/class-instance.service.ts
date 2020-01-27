@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassInstance } from 'app/main/content/_model/meta/Class';
+import { Participant } from 'app/main/content/_model/participant';
 
 
 @Injectable({
@@ -17,8 +18,8 @@ import { ClassInstance } from 'app/main/content/_model/meta/Class';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
     }
 
-    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}`);
+    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
     }
 
     getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {

@@ -25,7 +25,7 @@ import { CIP } from '../_model/classInstancePropertyConstants';
 
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
- 
+
   marketplace: Marketplace;
 
   private classInstances: ClassInstance[] = [];
@@ -34,6 +34,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
 
+  private participant: Participant;
 
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
@@ -77,11 +78,12 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
 
   private loadAllTasks() {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.participant = participant;
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
 
-          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', this.participant.username==='MVS'?'MV':'FF').toPromise().then((ret: ClassInstance[]) => {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
               this.paginator.length = this.classInstances.length;
