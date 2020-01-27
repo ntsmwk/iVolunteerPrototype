@@ -14,42 +14,56 @@ import { DerivationRuleService } from '../_service/derivation-rule.service';
 
 
 @Component({
-    selector: 'fuse-rule-overview',
-    templateUrl: './rule-overview.component.html',
-    styleUrls: ['./rule-overview.component.scss'],
-    animations: fuseAnimations
+  selector: 'fuse-rule-overview',
+  templateUrl: './rule-overview.component.html',
+  styleUrls: ['./rule-overview.component.scss'],
+  animations: fuseAnimations
 
 })
 export class FuseRuleOverviewComponent implements OnInit {
-    marketplaces: Marketplace[];
-    dataSource = new MatTableDataSource<DerivationRule>();
-    displayedColumns = ['name', 'sources', 'target'];
+  marketplaces: Marketplace[];
+  dataSource = new MatTableDataSource<DerivationRule>();
+  displayedColumns = ['name', 'sources', 'target'];
+  participant: Participant;
 
-    constructor(private router: Router,
-        private loginService: LoginService,
-        private helpSeekerService: CoreHelpSeekerService,
-        private derivationRuleService: DerivationRuleService) {
-    }
 
-    ngOnInit() {
-        this.loadAllDerivationRules();
-    }
+  constructor(private router: Router,
+    private loginService: LoginService,
+    private helpSeekerService: CoreHelpSeekerService,
+    private derivationRuleService: DerivationRuleService) {
+  }
 
-    onRowSelect(derivationRule: DerivationRule) {
-        this.router.navigate(['/main/rule/' + derivationRule.id]);
-    }
+  ngOnInit() {
+    this.loadAllDerivationRules();
+  }
 
-    private loadAllDerivationRules() {
-        this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-            this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-                if (!isNullOrUndefined(marketplace)) {
-                    this.derivationRuleService.findAll(marketplace).toPromise().then((rules:DerivationRule[]) => this.dataSource.data = rules);
-                }
-            });
-        });
-    }
+  onRowSelect(derivationRule: DerivationRule) {
+    this.router.navigate(['/main/rule/' + derivationRule.id]);
+  }
 
-    addDerivationRule() {
-        this.router.navigate(['/main/rule']);
-    }
+  private isFF() {
+    return this.participant.username == 'FFA';
+  }
+
+  private isMV() {
+    return this.participant.username === 'MVS';
+  }
+  private isOther() {
+    return !this.isFF() && !this.isMV();
+  }
+
+  private loadAllDerivationRules() {
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.participant = participant;
+      this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+        if (!isNullOrUndefined(marketplace)) {
+          this.derivationRuleService.findAll(marketplace).toPromise().then((rules: DerivationRule[]) => this.dataSource.data = rules);
+        }
+      });
+    });
+  }
+
+  addDerivationRule() {
+    this.router.navigate(['/main/rule']);
+  }
 }

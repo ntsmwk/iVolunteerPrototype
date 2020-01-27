@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
@@ -42,14 +43,15 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
-	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType) {
+	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+			@RequestParam(value = "org", required = false) String organisation) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
-
-		for (ClassDefinition cd : classDefinitions) {
-			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+		if (!organisation.equals("MV")) {
+			for (ClassDefinition cd : classDefinitions) {
+				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+			}
 		}
-
 		return classInstances;
 	}
 

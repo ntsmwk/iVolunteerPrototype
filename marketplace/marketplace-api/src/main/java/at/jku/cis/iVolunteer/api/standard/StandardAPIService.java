@@ -19,7 +19,5 @@ public class StandardAPIService {
 	public void blockchainify() {
 		List<ClassInstance> findAll = classInstanceRepository.findAll();
 		findAll.parallelStream().forEach(ci -> contractorPublishingRestClient.publishClassInstance(ci, ""));
-
 	}
-
 }

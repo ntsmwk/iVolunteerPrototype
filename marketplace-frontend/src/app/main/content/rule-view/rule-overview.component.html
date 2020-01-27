@@ -1,8 +1,31 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
-    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <!-- <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
         <h1>Freiwilligenpasseintrag - Regeln</h1>
+    </div> -->
+
+    <div *ngIf="this.participant && isFF()">
+      <div class="header-ff p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+        <h1 class="l-heading">Freiwilligenpasseintrag - Regeln</h1>
+        <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg">
+      </div>
     </div>
+  
+    <div *ngIf="this.participant &&  isMV()">
+      <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+        <h1 class="l-heading">Freiwilligenpasseintrag - Regeln</h1>
+        <img class="header-icon" src="assets/images/avatars/musikvereinschwertberg.jpeg">
+      </div>
+    </div>
+  
+    <div *ngIf="this.participant && isOther()">
+      <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+        <h1 class="l-heading">Freiwilligenpasseintrag - Regeln</h1>
+        <!-- <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg"> -->
+      </div>
+    </div>
+  
+  
     <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
         <button mat-fab class="mat-warn" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom
             [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">

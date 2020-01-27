@@ -1,27 +1,28 @@
 export const navigation_mvs = [
   {
     'id': 'dashboard',
-    'title': 'Dashboard',
+    'title': 'Tätigkeiten Bestätigen',
     'type': 'item',
     'url': '/main/dashboard',
   },
   {
     'id': 'tasks',
-    'title': 'Task',
+    'title': 'Bestätigte Tätigkeiten',
     'type': 'item',
     // TODO own task page!
     'url': '/main/tasks/all',
   },
   {
     'id': 'configurator',
-    'title': 'iVolunteer Asset Konfigurator',
+    'title': 'Freiwilligenpass Konfigurator',
     'type': 'item',
     'url': '/main/configurator'
   },
   {
     'id': 'rule-configurator',
-    'title': 'iVolunteer Regel Konfigurator',
+    'title': 'Regel Konfigurator',
     'type': 'item',
     'url': '/main/rules/all'
   },
 ];
+
