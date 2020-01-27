@@ -14,10 +14,15 @@ public class PersonTaskController {
 
 	@Autowired private PersonTaskService personTaskService;
 
-	@PutMapping
+	@PutMapping("/1")
 	public void savePersonTask(@RequestBody List<PersonTask> tasks) {
-		personTaskService.savePersonTasks(tasks);
+		personTaskService.savePersonTasks(tasks, false);
 	}
 	
+
+	@PutMapping("/2")
+	public void savePersonTask2(@RequestBody List<PersonTask> tasks) {
+		personTaskService.savePersonTasks(tasks, true);
+	}
 	
 }

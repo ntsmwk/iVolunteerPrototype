@@ -25,17 +25,17 @@ public class PersonTaskService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
 
-	public void savePersonTasks(List<PersonTask> personTasks) {
+	public void savePersonTasks(List<PersonTask> personTasks, boolean isNew) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				classInstances.add(savePersonTask(personTaskClassDefinition, personTask));
+				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, isNew));
 			}
 		}
 	}
 
-	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask) {
+	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask, boolean isNew) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
@@ -63,6 +63,7 @@ public class PersonTaskService {
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(true);
 		personTaskClassInstance.setTimestamp(new Date());
+		personTaskClassInstance.setNewFakeData(isNew);
 		
 		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on

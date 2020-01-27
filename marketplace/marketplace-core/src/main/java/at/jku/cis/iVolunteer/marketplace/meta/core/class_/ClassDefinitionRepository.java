@@ -15,6 +15,8 @@ public interface ClassDefinitionRepository extends MongoRepository<ClassDefiniti
 	
 	List<ClassDefinition> findByClassArchetype(ClassArchetype classArchetype);
 	
+	
+	
 	ClassDefinition findByName(String name);
 
 }

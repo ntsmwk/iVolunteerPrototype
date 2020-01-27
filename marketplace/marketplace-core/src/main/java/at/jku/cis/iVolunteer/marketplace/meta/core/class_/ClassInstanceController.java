@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,6 +53,35 @@ public class ClassInstanceController {
 		return classInstances;
 	}
 
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/before")
+	private List<ClassInstance> getClassInstancesByArchetypeBeforeSunburstFake(
+			@PathVariable("archetype") ClassArchetype archeType) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+
+		for (ClassDefinition cd : classDefinitions) {
+			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
+			classInstances.addAll(cis.stream().filter(ci -> !ci.isNewFakeData()).collect(Collectors.toList()));
+		}
+
+		return classInstances;
+	}
+
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/after")
+	private List<ClassInstance> getClassInstancesByArchetypeAfterSunburstFake(
+			@PathVariable("archetype") ClassArchetype archeType) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType);
+
+		for (ClassDefinition cd : classDefinitions) {
+			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
+			classInstances.addAll(cis.stream().filter(ci -> ci.isNewFakeData()).collect(Collectors.toList()));
+
+		}
+
+		return classInstances;
+	}
+
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/hashed")
 	private List<ClassInstance> getClassInstancesByArchetypeWithHash(
 			@PathVariable("archetype") ClassArchetype archeType) {
@@ -61,7 +91,7 @@ public class ClassInstanceController {
 		for (ClassDefinition cd : classDefinitions) {
 			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
 		}
-		
+
 		classInstances.forEach(ci -> {
 			PropertyInstance<Object> hash = new PropertyInstance<Object>();
 			hash.setName("hash");

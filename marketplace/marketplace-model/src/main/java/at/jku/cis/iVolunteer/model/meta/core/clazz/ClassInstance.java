@@ -28,6 +28,8 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	private String imagePath;
 	
 	private ClassArchetype classArchetype;
+	
+	private boolean isNewFakeData;
 
 	public ClassInstance() {
 	}
@@ -150,6 +152,14 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+
+	public boolean isNewFakeData() {
+		return isNewFakeData;
+	}
+
+	public void setNewFakeData(boolean isNewFakeData) {
+		this.isNewFakeData = isNewFakeData;
 	}
 
 }

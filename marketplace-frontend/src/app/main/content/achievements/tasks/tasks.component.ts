@@ -688,7 +688,6 @@ export class TasksComponent implements OnInit {
       }
     });
     this.rangData = [...data];
-    // console.error('rangData', this.rangData);
 
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator._changePageSize(this.paginator.pageSize);
