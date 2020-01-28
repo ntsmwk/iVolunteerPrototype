@@ -34,6 +34,8 @@ HC_sunburst(Highcharts);
 export class TasksComponent implements OnInit {
   fakeChecked: boolean = false;
 
+  prevNodeLevel: number = null;
+
 
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
@@ -70,6 +72,7 @@ export class TasksComponent implements OnInit {
   private locationData: any[];
   private rangData: any[];
   private filteredClassInstances: ClassInstance[] = [];
+
 
   // Todo: set chart properties for each type separately
   // timeline
@@ -177,7 +180,7 @@ export class TasksComponent implements OnInit {
     }]
   };
 
-  lastClickedItem: any = null;
+  prevClickedNode: any = null;
   prevFilteredClassInstances: any[];
   uniqueTt1: any[];
   uniqueTt2: any[];
@@ -188,6 +191,7 @@ export class TasksComponent implements OnInit {
   chipTimelineFilterTo: Date = null;
   chipTaskType: string = null;
   chipSelectedYear: string = null;
+  removable = true;
 
   @ViewChild('lineChart', { static: false }) lineChart: any;
 
@@ -197,7 +201,7 @@ export class TasksComponent implements OnInit {
   timelineFilterFrom: Date;
   timelineFilterTo: Date;
 
-  public newTimelineChartData: { name: string, series: { name: Date, value: number }[] }[];
+  public timelineChartData: { name: string, series: { name: Date, value: number }[] }[];
 
   sunburstCenterName: string = 'Tätigkeitsart';
 
@@ -209,7 +213,7 @@ export class TasksComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService
   ) {
-    this.newTimelineChartData = [{ name: 'Tätigkeit', series: [] }];
+    this.timelineChartData = [{ name: 'Tätigkeit', series: [] }];
   }
 
   ngOnInit() {
@@ -253,18 +257,17 @@ export class TasksComponent implements OnInit {
       });
     });
 
-    // Highcharts.chart('sunburstChart', this.chartOptions).update({
-    //   plotOptions: {
-    //     series: {
-    //       events: {
-    //         click: (event) => {
-    //           console.error('click event');
-    //           this.onSunburstChanged(event);
-    //         },
-    //       },
-    //     },
-    //   }
-    // });
+    Highcharts.chart('sunburstChart', this.chartOptions).update({
+      plotOptions: {
+        series: {
+          events: {
+            click: (event) => {
+              this.onSunburstChanged(event);
+            },
+          },
+        },
+      }
+    });
 
   }
 
@@ -277,103 +280,88 @@ export class TasksComponent implements OnInit {
   }
 
   onSunburstChanged(event) {
-   // console.error('event', event.point);
-    // TODO: broken
-    // wenn man von tt2 zu tt1 zurückgeht....
-    // fix: bei klick immer neu filtern, prüfen ob tt1, oder tt2, schauen ob und welcher time filter aktiv
+    if (event.point.id === '0') {
+      // Tätigkeitsart clicked
+      this.prevClickedNode = null;
+      this.chipTaskType = null;
 
-    if(event.point.id = '') {
-      this.lastClickedItem = null;
-    }
-
-    if (event.point.name === this.lastClickedItem) {
-      // same taskType pressed again: going back
-      this.lastClickedItem = event.point.name;
-
-      let parent = null;
-      this.sunburstData.forEach(d => {
-        if (d.id === event.point.parent) {
-          parent = d;
-        }
-      });
-
-      if (parent.id === '0') {
-        // Tätigkeitsarten, level 0
-        // filter
-        this.filteredClassInstances = [...this.classInstances];
-        this.chipTaskType = null;
-
-      } else {
-        // tt1
-        // filter for parent [tt1]
-        this.chipTaskType = parent.name;
-        this.filteredClassInstances = this.classInstances.filter(c => {
-          return c.properties[this.TASK_TYPE_1].values[0] === parent.name;
-        });
-      }
-
-
+      this.filteredClassInstances = [...this.classInstances];
 
     } else {
-      // other taskType pressed: drilldown
+      if (event.point.node.level < 4) {
+        if (event.point.node.level <= this.prevNodeLevel) {
+          // drillup
 
-      if (this.uniqueTt1.indexOf(event.point.name) > -1) {
-        this.lastClickedItem = event.point.name;
-        // filter for tt1
-        this.chipTaskType = event.point.name;
-        this.filteredClassInstances = this.classInstances.filter(c => {
-          return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
-        });
+          let parent = null;
+          this.sunburstData.forEach(d => {
+            if (d.id === event.point.parent) {
+              parent = d;
+            }
+          });
 
-      } else if (this.uniqueTt2.indexOf(event.point.name) > -1) {
-        // filter for tt2
-        this.lastClickedItem = event.point.name;
-        this.filteredClassInstances = this.classInstances.filter(c => {
-          return c.properties[this.TASK_TYPE_2].values[0] === this.lastClickedItem;
-        });
+          if (parent.name === this.sunburstCenterName) {
+            this.chipTaskType = null;
+            this.prevClickedNode = null;
+            this.prevNodeLevel = 1;
+            this.filteredClassInstances = [...this.classInstances];
 
-        this.chipTaskType = event.point.name;
-      } else if (event.point.name === this.sunburstCenterName) {
-        // center pressed
-        // filter for all
-        this.filteredClassInstances = [...this.classInstances];
+          } else {
+            this.chipTaskType = parent.name;
+            this.prevClickedNode = event.point.name;
+            this.prevNodeLevel = event.point.node.level;
+            this.filteredClassInstances = this.classInstances.filter(c => {
+              return c.properties[this.TASK_TYPE_1].values[0] === parent.name;
+            });
+          }
+
+
+        } else {
+          // drilldown
+          this.prevClickedNode = event.point.name;
+          this.prevNodeLevel = event.point.node.level;
+
+
+          if (this.uniqueTt1.indexOf(event.point.name) > -1) {
+            // filter for tt1
+            this.chipTaskType = event.point.name;
+            this.filteredClassInstances = this.classInstances.filter(c => {
+              return c.properties[this.TASK_TYPE_1].values[0] === event.point.name;
+            });
+
+          } else if (this.uniqueTt2.indexOf(event.point.name) > -1) {
+            // filter for tt2
+            this.filteredClassInstances = this.classInstances.filter(c => {
+              return c.properties[this.TASK_TYPE_2].values[0] === event.point.name;
+            });
+
+            this.chipTaskType = event.point.name;
+          }
+        }
       }
-
     }
 
     // TIME FILTERN
 
+    if (this.chipSelectedYear != null) {
+      // nach jahr filtern
 
+      if (this.selectedYear === 'Gesamt') {
+        this.filteredClassInstances = [...this.filteredClassInstances];
+      } else {
+        this.filteredClassInstances = this.filteredClassInstances.filter(c => {
+          return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
+        });
+      }
 
+    } else {
+      // nach timeline filtern
 
-    // // old
-    // if (event.point.name === this.lastClickedItem) {
-    //   // same taskType pressed again: going back
-    //   this.lastClickedItem = event.point.name;
-    //   this.filteredClassInstances = this.prevFilteredClassInstances;
+      this.filteredClassInstances = this.filteredClassInstances.filter(c => {
+        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
+          moment(c.properties[this.TASK_DATE_FROM].values[0]).isBefore(moment(this.timelineFilterTo)));
+      });
+    }
 
-    //   this.chipTaskType = null;
-
-
-    // } else {
-    //   // other taskType pressed: drilldownf
-    //   this.lastClickedItem = event.point.name;
-    //   this.chipTaskType = this.lastClickedItem;
-    //   this.prevFilteredClassInstances = this.filteredClassInstances;
-
-    //   if (this.uniqueTt1.indexOf(this.lastClickedItem) > -1) {
-    //     // tt1 pressed
-    //     this.filteredClassInstances = this.classInstances.filter(c => {
-    //       return c.properties[this.TASK_TYPE_1].values[0] === this.lastClickedItem;
-    //     });
-    //   }
-    //   else if (this.uniqueTt2.indexOf(this.lastClickedItem) > -1) {
-    //     // tt2 pressed
-    //     this.filteredClassInstances = this.classInstances.filter(c => {
-    //       return c.properties[this.TASK_TYPE_2].values[0] === this.lastClickedItem;
-    //     });
-    //   }
-    // }
 
     this.generateTimelineData();
     this.generateOtherChartsData();
@@ -450,8 +438,8 @@ export class TasksComponent implements OnInit {
       }
     });
 
-    this.newTimelineChartData[0].series = data1;
-    this.newTimelineChartData = [...this.newTimelineChartData];
+    this.timelineChartData[0].series = data1;
+    this.timelineChartData = [...this.timelineChartData];
 
   }
 
@@ -722,17 +710,8 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  onDrilldown() {
-    console.error('drilldown event');
-  }
-
-  onDrillUp() {
-    console.error('drillup event');
-
-  }
-
   onToggleChanged(event) {
-    if(this.fakeChecked) {
+    if (this.fakeChecked) {
       this.fakeChecked = false;
 
       this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
@@ -771,7 +750,7 @@ export class TasksComponent implements OnInit {
             }
           });
 
-          console.error('after',this.classInstances);
+          console.error('after', this.classInstances);
 
 
           this.filteredClassInstances = [...this.classInstances];
