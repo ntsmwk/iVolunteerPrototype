@@ -62,7 +62,7 @@
         <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
         </mat-cell>
       </ng-container>
-<!-- 
+      <!-- 
       <ng-container matColumnDef="taskDateTo">
         <mat-header-cell *matHeaderCellDef> Ende </mat-header-cell>
         <mat-cell matCellDef="let element"> {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy hh:mm'}}
@@ -70,8 +70,12 @@
       </ng-container> -->
 
       <ng-container matColumnDef="taskDuration">
-        <mat-header-cell *matHeaderCellDef> Dauer [h] </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}}&nbsp;h </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="verified">
+        <mat-header-cell *matHeaderCellDef> Verifiziert </mat-header-cell>
+        <mat-cell *matCellDef="let element"><i class="fas fa-check-circle" style="color:green;"></i></mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
