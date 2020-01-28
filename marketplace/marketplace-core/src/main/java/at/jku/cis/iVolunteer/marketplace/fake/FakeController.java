@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.reset;
+package at.jku.cis.iVolunteer.marketplace.fake;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -6,17 +6,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ResetController {
+public class FakeController {
 
-	@Autowired private ResetService resetService;
+	@Autowired private FakeService fakeService;
 
 	@DeleteMapping("/reset")
 	public void reset() {
-		resetService.reset();
+		fakeService.reset();
 	}
-	
+
 	@PostMapping("/push-task-from-api")
 	public void pushTaskFromAPI() {
-		resetService.pushTaskFromAPI();
+		fakeService.pushTaskFromAPI();
 	}
+
+	@PostMapping("/fahrtenspange-fake")
+	public void addFahrtenspangeFake() {
+		fakeService.addFahrtenspangeFake();
+	}
+
 }

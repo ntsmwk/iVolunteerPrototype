@@ -73,6 +73,10 @@ public class ClassDefinitionService {
 
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype, String organisation) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByClassArchetype(archetype);
+		return filterOrg(organisation, classDefinitions);
+	}
+
+	private List<ClassDefinition> filterOrg(String organisation, List<ClassDefinition> classDefinitions) {
 		if (organisation == null) {
 			return classDefinitions;
 		}
@@ -88,6 +92,22 @@ public class ClassDefinitionService {
 		}
 		return new ArrayList<>();
 	}
+
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String organisation) {
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.findAll().stream()
+				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
+		return filterOrg(organisation, classDefinitions);
+	}
+
+	private boolean filterEnumsAndHeadClasses(ClassDefinition cd) {
+		// @formatter:off
+		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
+				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
+				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
+				|| cd.getClassArchetype() == ClassArchetype.TASK;		 
+		// @formatter:on
+	}
+
 
 	public List<FormConfiguration> getParentsById(List<String> childIds) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
