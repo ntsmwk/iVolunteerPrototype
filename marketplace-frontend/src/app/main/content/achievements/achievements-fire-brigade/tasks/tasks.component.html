@@ -31,12 +31,12 @@
 
 
       <div class="timeline">
-        <ngx-charts-line-chart #lineChart [results]="newTimelineChartData" [scheme]="colorScheme"
-          [schemeType]="schemeType" [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition"
-          [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true"
-          [showXAxisLabel]="showYAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve"
-          (select)="timelineSelect($event)" [xAxisTickFormatting]="dateTickFormatting">
+        <ngx-charts-line-chart #lineChart [results]="timelineChartData" [scheme]="colorScheme" [schemeType]="schemeType"
+          [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
+          [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true" [showXAxisLabel]="false"
+          [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="true"
+          [autoScale]="autoScale" [timeline]="true" [curve]="curve" (select)="timelineSelect($event)"
+          [xAxisTickFormatting]="dateTickFormatting">
         </ngx-charts-line-chart>
       </div>
 
@@ -45,10 +45,16 @@
         <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
 
         <mat-chip-list class="filterChip">
-          <mat-chip color="primary" *ngIf="chipTimelineFilterFrom">{{chipTimelineFilterFrom | date:'dd.MM.yyyy'}} -
-            {{chipTimelineFilterTo | date:'dd.MM.yyyy'}}</mat-chip>
-          <mat-chip color="primary" *ngIf="chipSelectedYear">{{chipSelectedYear}}</mat-chip>
-          <mat-chip color="primary" *ngIf="chipTaskType">{{chipTaskType}}</mat-chip>
+          <mat-chip color="primary" [removable]="removable" *ngIf="chipTimelineFilterFrom">
+            {{chipTimelineFilterFrom | date:'dd.MM.yyyy'}} -
+            {{chipTimelineFilterTo | date:'dd.MM.yyyy'}}<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <mat-chip color="primary" [removable]="removable" *ngIf="chipSelectedYear">{{chipSelectedYear}}<mat-icon
+              matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <mat-chip color="primary" [removable]="removable" *ngIf="chipTaskType">{{chipTaskType}}<mat-icon matChipRemove
+              *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
         </mat-chip-list>
 
       </div>
@@ -61,19 +67,9 @@
           <mat-panel-title>
             Zweck
           </mat-panel-title>
-          <mat-panel-description>
-            Übersicht über die geleisteten Tätigkeiten
-          </mat-panel-description>
         </mat-expansion-panel-header>
-        <div fxLayout="row">
-        <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
-        </app-share-menu>
-        <mat-slide-toggle [checked]="fakeChecked" (change)="onToggleChanged($event)" style="margin-left: 30px;">
-          Use fake data
-        </mat-slide-toggle>
-      </div>
 
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="space-between start">
 
           <div class="sunburstParent" id="sunburstChart"></div>
 
@@ -85,7 +81,11 @@
            ></highcharts-chart> -->
 
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
-            <h1>Tätigkeiten</h1>
+            <div fxLayout="row" fxLayoutAlign="space-between center" >
+              <h1>Tätigkeiten</h1> 
+            <app-share-menu [label]="'null'">
+            </app-share-menu>
+          </div>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
               <ng-container matColumnDef="taskName">
                 <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
@@ -128,7 +128,8 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" [ngClass]="{
+              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
+              [ngClass]="{
                 'is-Veranstaltung': element.properties[TASK_TYPE_1].values[0] === 'Veranstaltung',
                 'is-Ausbildung': element.properties[TASK_TYPE_1].values[0] === 'Ausbildung (aktiv)',
                 'is-Jugendarbeit': element.properties[TASK_TYPE_1].values[0] === 'Jugendarbeit',
@@ -137,8 +138,16 @@
                 'is-Einsatz': element.properties[TASK_TYPE_1].values[0] === 'Einsatz'
               }"></tr>
             </table>
-            <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSize]="15" showFirstLastButtons></mat-paginator>
           </div>
+        </div>
+
+        <div fxLayout="row">
+          <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
+          </app-share-menu>
+          <mat-slide-toggle [checked]="fakeChecked" (change)="onToggleChanged($event)" style="margin-left: 30px;">
+            Use fake data
+          </mat-slide-toggle>
         </div>
 
       </mat-expansion-panel>
@@ -148,9 +157,6 @@
           <mat-panel-title>
             Detailgrafiken
           </mat-panel-title>
-          <mat-panel-description>
-            Details zu den geleisteten Tätigkeiten
-          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
@@ -214,5 +220,5 @@
 
   <div class="no-data" *ngIf="classInstances.length === 0">
     Keine Ableitungsregeln gefunden.
-</div>
+  </div>
 </div>

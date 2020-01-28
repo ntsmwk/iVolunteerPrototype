@@ -60,7 +60,7 @@
 }
 
 .third {
-  width: 33%;
+  width: 30%;
   text-align: center;
 }
 
@@ -81,8 +81,10 @@
 .banner {
   margin-top: 20px;
   font-family: roboto;
-  margin-left: 5px;
-  margin-right: auto;}
+  font-size: 20px;
+  // margin-left: 5px;
+  // margin-right: auto;
+}
 
 
 .matFormField {
@@ -92,7 +94,7 @@
 
 .chartParrent {
   height: 500px;
-  widows: 100%;
+  width: 100%;
 }
 
 .shareMenu {

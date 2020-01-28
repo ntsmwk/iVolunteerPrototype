@@ -1,112 +1,103 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-      <h1>Erfolge</h1>
-      <img class="header-icon" src="assets/icons/achievements.svg">
+        <h1>Erfolge</h1>
+        <img class="header-icon" src="assets/icons/achievements.svg">
     </div>
-  
+
     <div class="content">
 
-<div fxLayout="column" fxLayoutAlign="center center" class="summary">
+        <div fxLayout="column" fxLayoutAlign="center center" class="summary">
 
-    <div fxLayout="row" fxLayoutAlign="center" style="width: 100%;">
-        <div class="third">
-            <h2>FF Altenberg</h2>
-            <img src="../../../../assets/images/logos/FF_Altenberg.jpg" class="img">
+            <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
+                <div class="third">
+                    <h2>FF Altenberg</h2>
+                    <img src="../../../../assets/images/logos/FF_Altenberg.jpg" class="img">
+                </div>
+                <div class="third">
+                    <h2>Rotes Kreuz Wilhering</h2>
+                    <img src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg" class="img">
+                </div>
+                <div class="third">
+                    <h2>Musikverein Schwertberg</h2>
+                    <img src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg" class="img">
+                </div>
+            </div>
+
+            <div style="height: 20px;"></div>
+
+            <div class="banner">Leistungen deiner gesamten Laufbahn</div>
+            <hr size="1" color="#232837" width="100%">
+
+            <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFfTotal" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRkTotal" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusicTotal" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+            </div>
+
+            <div class="banner">Leistungen 2019</div>
+            <hr size="1" color="#232837" width="100%">
+
+            <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFf2019" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRk2019" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+                <div class="third cardsParent">
+                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusic2019" [cardColor]="cardColor">
+                    </ngx-charts-number-card>
+                </div>
+            </div>
+
+            <div style="height: 50px;"></div>
+
+
+            <div style="width: 100%;">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <h2>Vergleich der Anzahl an Tätigkeiten</h2>
+
+                    <mat-form-field class="matFormField">
+                        <mat-label>Vergleichsjahr</mat-label>
+                        <mat-select [value]="comparisonYear" (selectionChange)="onComparisonYearChanged($event.value)">
+                            <mat-option value="2012"> 2012 </mat-option>
+                            <mat-option value="2013"> 2013 </mat-option>
+                            <mat-option value="2014"> 2014 </mat-option>
+                            <mat-option value="2015"> 2015 </mat-option>
+                            <mat-option value="2016"> 2016 </mat-option>
+                            <mat-option value="2017"> 2017 </mat-option>
+                            <mat-option value="2018"> 2018 </mat-option>
+                            <mat-option value="2019"> 2019 </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <app-share-menu class="shareMenu" [label]="'Vergleich'" (export)="exportChart($event)">
+                    </app-share-menu>
+                </div>
+
+                <div class="chartParrent">
+                    <ngx-charts-bar-vertical-2d [results]="comparisonData" [customColors]="colors"
+                        [animations]="animations" [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true"
+                        [showYAxisLabel]="true" [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel"
+                        [roundEdges]="false" [legend]="true" [legendTitle]="Legende" [showDataLabel]="true"
+                        [noBarWhenZero]="false">
+                    </ngx-charts-bar-vertical-2d>
+                </div>
+            </div>
+
+
         </div>
-        <div class="third">
-            <h2 >Rotes Kreuz Wilhering</h2>
-            <img src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg" class="img">
-        </div>
-        <div class="third">
-            <h2 >Musikverein Schwertberg</h2>
-            <img src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg" class="img">
-        </div>
+
     </div>
-
-    <div class="banner">Leistungen deiner gesamten Laufbahn</div>
-    <hr size="1" color="#232837" width="100%">
-
-    <div fxLayout="row" fxLayoutAlign=" center" style="width: 100%;">
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFfTotal" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRkTotal" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusicTotal" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-    </div>
-
-    <div class="banner">Leistungen 2019</div>
-    <hr size="1" color="#232837" width="100%">
-
-    <div fxLayout="row" fxLayoutAlign=" center" style="width: 100%;">
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFf2019" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRk2019" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-        <div class="third">
-            <div class="cardsParent">
-                <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusic2019" [cardColor]="cardColor">
-                </ngx-charts-number-card>
-            </div>
-        </div>
-    </div>
-
-    <div style="height: 50px;"></div>
-
-
-    <div style="width: 100%;">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-            <h2>Vergleich der Anzahl an Tätigkeiten</h2>
-
-            <mat-form-field class="matFormField">
-                <mat-label>Vergleichsjahr</mat-label>
-                <mat-select [value]="comparisonYear" (selectionChange)="onComparisonYearChanged($event.value)">
-                    <mat-option value="2012"> 2012 </mat-option>
-                    <mat-option value="2013"> 2013 </mat-option>
-                    <mat-option value="2014"> 2014 </mat-option>
-                    <mat-option value="2015"> 2015 </mat-option>
-                    <mat-option value="2016"> 2016 </mat-option>
-                    <mat-option value="2017"> 2017 </mat-option>
-                    <mat-option value="2018"> 2018 </mat-option>
-                    <mat-option value="2019"> 2019 </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <app-share-menu class="shareMenu" [label]="'Vergleich'" (export)="exportChart($event)">
-            </app-share-menu>
-        </div>
-
-        <div class="chartParrent">
-            <ngx-charts-bar-vertical-2d [results]="comparisonData" [customColors]="colors" [animations]="animations"
-                [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
-                [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel" [roundEdges]="false" [legend]="true"
-                [legendTitle]="Legende" [showDataLabel]="true" [noBarWhenZero]="false">
-            </ngx-charts-bar-vertical-2d>
-        </div>
-    </div>
-
-
-</div>
-
-</div>
