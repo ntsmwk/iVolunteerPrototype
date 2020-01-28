@@ -204,7 +204,7 @@ export class DashboardVolunteerComponent implements OnInit {
     const dialogRef = this.dialog.open(ShareDialog, {
       width: '700px',
       height: '255px',
-      data: { name: 'Freigabe' }
+      data: { name: 'share' }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {

@@ -4,13 +4,11 @@
 <div mat-dialog-content>
 
 
-  sadfasfasf {{shareDone}} {{data.name}}
   <div *ngIf="data.name=='share' && !duringShare" fxLayout=row fxLayoutAlign="start center">
     <div style=" z-index: 255; position: relative; width: 80px; height: 80px;">
       <img style="object-fit: contain; max-width: 100%; max-height: 100%" src="assets/images/logos/recruiter.jpg">
     </div>
     <div style="padding-right: 10px"></div>
-    sadfasfasf {{shareDone}}
     <h1 *ngIf="!shareDone">Welche Einträge möchten Sie an 'Best Jobs' freigeben?</h1>
     <h1 *ngIf="shareDone">Freigabe der Einträge erfolgreich</h1>
 
@@ -36,8 +34,6 @@
       <mat-radio-button value="5" style="padding-right: 10px">Alle Kompetenzen </mat-radio-button>
 
       <mat-radio-button value="2" style="padding-right: 10px">Alle Erfolge</mat-radio-button>
-      <mat-radio-button value="4" style="padding-right: 10px">Wähle</mat-radio-button>
-
     </mat-radio-group>
 
     <div>
