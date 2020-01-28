@@ -138,20 +138,18 @@
   </mat-table>
 
   <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
-    Inbox ist leer
+    Keine ausstehenden Freiwilligenpasseinträge
   </div>
 
 
 </div>
 
 <div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
-  <button *ngIf="inboxOwner=='helpseeker'||inboxOwner=='volunteer'" mat-raised-button color="secondary"
-    (click)="navigateBack()">Zurück</button>
   <div></div>
   <button *ngIf="inboxOwner=='helpseeker'" mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="selection.isEmpty()">Blockchainifizieren</button>
+    [disabled]="selection.isEmpty()" >Bestätigen</button>
   <button *ngIf="inboxOwner=='volunteer'" mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="selection.isEmpty()">Bestätigen</button>
+    [disabled]="selection.isEmpty()">Importieren</button>
   <button *ngIf="inboxOwner=='helpseeker-dashboard'" mat-raised-button color="primary" (click)="onSubmit()">Zur
     Inbox</button>
 

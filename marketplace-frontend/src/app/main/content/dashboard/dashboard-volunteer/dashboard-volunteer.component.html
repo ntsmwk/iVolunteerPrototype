@@ -7,7 +7,8 @@
     <div style="padding-top: 12px"></div>
 
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-        <h1>Übersicht</h1>
+        <h1>Digitaler Freiwilligenpass
+          </h1>
         <!-- <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome -->
             <!-- Back</h1> -->
 
@@ -23,16 +24,7 @@
 
     <!--TODO ReInsert Widget row-->
 
-    <!--END TOP WIDGET ROW-->
-
     <mat-divider></mat-divider>
-    <!-- <mat-tab-group selectedIndex=4 color="primary">
-        <mat-tab label="Fulfilled Tasks">Content 1 </mat-tab>
-        <mat-tab label="Competences"> Content 1 </mat-tab>
-        <mat-tab label="Accomplishments"> Content 1 </mat-tab>
-        <mat-tab label="Feedback"> Content 1 </mat-tab>
-        <mat-tab label="Recent"> -->
-
     <div style="padding-top: 10px"></div>
 
 
@@ -44,23 +36,15 @@
         <!-- First row -->
         <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-left: 5px">
             <div fxLayout=row fxLayoutAlign="start center">
-                <div style=" z-index: 255; position: relative; width: 35px; height: 35px;">
-                    <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                        src="../../../../assets/Vault.png">
-                </div>
-                <div style="padding-left: 5px"></div>
-                <div
-                    style="font-size: 20px; padding-top: 3px; padding-right: 3px; font-weight: 300px; font-variant:small-caps">
-                    Dein Digitaler Freiwilligenpass</div>
             </div>
 
             <div></div>
 
             <!--Share Icon and Menu-->
             <div style="padding-right: 20px; padding-top: 5px">
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
+                <!-- <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
                     <mat-icon>share</mat-icon>
-                </button>
+                </button> -->
 
                 <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
                     <mat-label mat-menu-item disabled style="color: black">Freigeben an...</mat-label>

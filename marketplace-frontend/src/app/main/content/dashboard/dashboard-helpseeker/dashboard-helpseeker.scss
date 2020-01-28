@@ -23,7 +23,7 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
     }
     h1 {
       color: white;
-      font-size: 40px;
+      font-size: 50px;
       font-weight: 300;
       flex: 1;
       letter-spacing: 0.01em;
@@ -63,7 +63,7 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
     }
     h1 {
       color: white;
-      font-size: 40px;
+      font-size: 50px;
       font-weight: 300;
       flex: 1;
       letter-spacing: 0.01em;
@@ -103,7 +103,7 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
     }
     h1 {
       color: white;
-      font-size: 40px;
+      font-size: 50px;
       font-weight: 300;
       flex: 1;
       letter-spacing: 0.01em;
@@ -135,4 +135,10 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
       flex: 0 0 50px;
     }
   }
+}
+
+
+.verein-heading{
+  font-size: 40px;
+  text-align: center;
 }
