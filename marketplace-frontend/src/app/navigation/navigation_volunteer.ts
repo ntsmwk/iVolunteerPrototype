@@ -6,20 +6,64 @@ export const navigation_volunteer = [
     'icon': 'dashboard',
     'url': '/main/dashboard'
   },
-  // {
-  //   'id': 'engagements',
-  //   'title': 'Engagements',
-  //   'type': 'item',
-  //   'icon': 'engagements',
-  //   'url': '/main/engagements'
-  // },
+
+
+
   {
     'id': 'achievements',
     'title': 'Erfolge',
-    'type': 'item',
+    'type': 'group',
     'icon': 'achievements',
-    'url': '/main/achievements'
+    'children': [
+      {
+        'id': 'achievements-feuerwehr',
+        'title': 'Freiwillige Feuerwehr',
+        'icon': 'engagements',
+        'type': 'item',
+        'url': 'main/achievements/fireBrigade'
+      },
+      {
+        'id': 'achievements-musikverein',
+        'title': 'Musikverein',
+        'icon': 'engagements',
+        'type': 'item',
+        'url': '/main/achievements/music'
+      },
+      {
+        'id': 'achievements-management-summary',
+        'title': 'Zusammenfassung',
+        'icon': 'engagements',
+        'type': 'item',
+        'url': 'main/achievements/summary'
+      }
+    ]
   },
+
+
+  // {
+  //   'id': 'achievements',
+  //   'title': 'Erfolge',
+  //   'type': 'collapsable',
+  //   //'icon': 'achievements',
+  //   //'url': '/main/achievements',
+  //   'children': [
+  //     {
+  //       'id': 'achievements-feuerwehr',
+  //       'title': 'Freiwillige Feuerwehr',
+  //       'icon': 'engagements',
+  //       'type': 'item',
+  //       'url': '/main/achievements/fireBrigade'
+  //     },
+  //     {
+  //       'id': 'achievements-musikverein',
+  //       'title': 'Musikverein',
+  //       'icon': 'engagements',
+  //       'type': 'item',
+  //       'url': '/main/achievements/music'
+  //     }
+  //   ]
+  // },
+
   {
     'id': 'get-connected',
     'title': 'Community',
@@ -27,4 +71,6 @@ export const navigation_volunteer = [
     'icon': 'get-connected',
     'url': '/main/get-connected'
   }
+
+
 ];

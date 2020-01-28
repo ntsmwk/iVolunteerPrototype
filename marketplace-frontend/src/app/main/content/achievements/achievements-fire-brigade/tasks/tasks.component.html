@@ -84,8 +84,6 @@
            (drillup)="onDrilldown()"
            ></highcharts-chart> -->
 
-
-
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <h1>Tätigkeiten</h1>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
@@ -213,4 +211,8 @@
     </mat-accordion>
 
   </div>
+
+  <div class="no-data" *ngIf="classInstances.length === 0">
+    Keine Ableitungsregeln gefunden.
+</div>
 </div>

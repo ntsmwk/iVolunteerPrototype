@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { fuseAnimations } from '../../../../../@fuse/animations';
-import { Participant } from '../../_model/participant';
-import { LoginService } from '../../_service/login.service';
-import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
-import { Marketplace } from '../../_model/marketplace';
-import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
-import { ClassInstance } from '../../_model/meta/Class';
+import { fuseAnimations } from '../../../../../../@fuse/animations';
+import { Participant } from '../../../_model/participant';
+import { LoginService } from '../../../_service/login.service';
+import { ClassInstanceService } from '../../../_service/meta/core/class/class-instance.service';
+import { Marketplace } from '../../../_model/marketplace';
+import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
+import { ClassInstance } from '../../../_model/meta/Class';
 import { isNullOrUndefined } from 'util';
-import { CoreVolunteerService } from '../../_service/core-volunteer.service';
-import { Volunteer } from '../../_model/volunteer';
+import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
+import { Volunteer } from '../../../_model/volunteer';
 import * as moment from 'moment';
-import { CIP } from '../../_model//classInstancePropertyConstants';
-import { StoredChart } from '../../_model/stored-chart';
-import { StoredChartService } from '../../_service/stored-chart.service';
+import { CIP } from '../../../_model/classInstancePropertyConstants';
+import { StoredChart } from '../../../_model/stored-chart';
+import { StoredChartService } from '../../../_service/stored-chart.service';
 
 @Component({
   selector: 'fuse-competencies',
