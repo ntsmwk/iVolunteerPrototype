@@ -32,7 +32,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration'];
+  private displayedColumns: string[] = [ 'taskName','taskType1', 'taskType2', 'taskDateFrom', 'taskDuration'];
 
   private participant: Participant;
 
