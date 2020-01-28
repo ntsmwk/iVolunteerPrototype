@@ -75,7 +75,7 @@ tr.is-Einsatz {
   background: rgba(rgb(169, 89, 99), $alpha: 0.7);
 }
 
-.highcharts-drillup-button {
+::ng-deep .highcharts-drillup-button {
   display: none !important;
 }
 

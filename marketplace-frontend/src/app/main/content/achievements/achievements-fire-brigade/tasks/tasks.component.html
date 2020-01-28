@@ -33,7 +33,7 @@
       <div class="timeline">
         <ngx-charts-line-chart #lineChart [results]="timelineChartData" [scheme]="colorScheme" [schemeType]="schemeType"
           [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
-          [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true" [showXAxisLabel]="showYAxisLabel"
+          [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true" [showXAxisLabel]="false"
           [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="true"
           [autoScale]="autoScale" [timeline]="true" [curve]="curve" (select)="timelineSelect($event)"
           [xAxisTickFormatting]="dateTickFormatting">
@@ -81,7 +81,11 @@
            ></highcharts-chart> -->
 
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
-            <h1>Tätigkeiten</h1>
+            <div fxLayout="row" fxLayoutAlign="space-between center" >
+              <h1>Tätigkeiten</h1> 
+            <app-share-menu [label]="'null'">
+            </app-share-menu>
+          </div>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
               <ng-container matColumnDef="taskName">
                 <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
@@ -124,7 +128,8 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" [ngClass]="{
+              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
+              [ngClass]="{
                 'is-Veranstaltung': element.properties[TASK_TYPE_1].values[0] === 'Veranstaltung',
                 'is-Ausbildung': element.properties[TASK_TYPE_1].values[0] === 'Ausbildung (aktiv)',
                 'is-Jugendarbeit': element.properties[TASK_TYPE_1].values[0] === 'Jugendarbeit',

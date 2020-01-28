@@ -132,7 +132,7 @@ export class TasksComponent implements OnInit {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '18px'
+            fontSize: '16px'
           }
         }
       }
@@ -184,6 +184,7 @@ export class TasksComponent implements OnInit {
   prevFilteredClassInstances: any[];
   uniqueTt1: any[];
   uniqueTt2: any[];
+  uniqueTt3: any[];
 
 
   // filter chips
@@ -245,6 +246,15 @@ export class TasksComponent implements OnInit {
             });
 
             this.filteredClassInstances = [...this.classInstances];
+
+            let list = this.filteredClassInstances
+              .map(ci => {
+                return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0] })
+              });
+            this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+            this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+            this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
+
 
             this.tableDataSource.data = this.classInstances;
             this.tableDataSource.paginator = this.paginator;
@@ -460,9 +470,6 @@ export class TasksComponent implements OnInit {
 
     // insert 0 entry
     data.push({ id: '0', parent: '', name: this.sunburstCenterName });
-
-    this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
-    this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
 
     // insert tt1 entries
     this.uniqueTt1.forEach((tt1, index) => {
