@@ -19,23 +19,27 @@ import jersey.repackaged.com.google.common.collect.Lists;
 @Service
 public class PersonTaskService {
 
+	private static final int FF_NEW = 2;
+	private static final int MV = 3;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
+	
+	
 
-	public void savePersonTasks(List<PersonTask> personTasks, boolean isNew) {
+	public void savePersonTasks(List<PersonTask> personTasks, int level) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, isNew));
+				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, level));
 			}
 		}
 	}
 
 	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
-			boolean isNew) {
+			int level) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
@@ -63,7 +67,8 @@ public class PersonTaskService {
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(true);
 		personTaskClassInstance.setTimestamp(new Date());
-		personTaskClassInstance.setNewFakeData(isNew);
+		personTaskClassInstance.setNewFakeData(level==FF_NEW);
+		personTaskClassInstance.setMV(level == MV);
 		
 		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on

@@ -1,7 +1,5 @@
 @import "src/@fuse/scss/fuse";
-
 .page-layout {
-
   .header {
     position: relative;
     flex: 1 0 auto;
@@ -10,12 +8,10 @@
     background: #1A237E;
     background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
     text-align: center;
-
     @include media-breakpoint('xs') {
       height: 240px;
       padding: 16px;
     }
-
     h1 {
       color: white;
       font-size: 40px;
@@ -24,38 +20,34 @@
       text-align: center;
       margin-top: 0;
       margin-bottom: 0px;
-
       @include media-breakpoint-down('xs') {
         font-size: 24px;
       }
     }
   }
-
   .table {
     mat-row:nth-child(even) {
       background-color: #afcbe6;
     }
-
     mat-row:nth-child(odd) {
       background-color: white;
     }
-
     mat-row {
       cursor: pointer;
+      font-size: 25px;
     }
-
     mat-row:hover {
       opacity: 0.5;
     }
-
+    mat-header-row {
+      font-size: 30px;
+    }
   }
-
   .no-data {
     font-size: 20px;
     margin: 24px 0;
     text-align: center;
   }
-
   .header-ff {
     position: relative;
     display: flex;
@@ -135,14 +127,13 @@
         display: none;
       }
     }
-    .mat-column-details {
-      padding-right: 0;
-      flex: 0 0 20px;
-    }
-    .mat-column-issuer {
-      padding-left: 5px;
-      flex: 0 0 50px;
-    }
   }
+}
 
+.mat-header-cell{
+  font-size: 20px;
+}
+
+.mat-cell{
+  font-size: 16px;
 }

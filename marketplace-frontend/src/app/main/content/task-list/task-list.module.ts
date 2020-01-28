@@ -6,7 +6,8 @@ import { MatTableModule } from '@angular/material/table';
 import {FuseSharedModule} from '@fuse/shared.module';
 import {FuseTaskListComponent} from './task-list.component';
 import {FuseTruncatePipeModule} from '../_pipe/truncate-pipe.module';
-import { MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatPaginatorModule, MatSortModule, MatSelectModule, MatTabsModule, MatChipsModule, MatFormFieldModule, MatInputModule, MatSidenavModule, MatDividerModule, MatCheckboxModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Route[] = [
   {path: '', component: FuseTaskListComponent}
@@ -19,9 +20,20 @@ const routes: Route[] = [
   imports: [
     RouterModule.forChild(routes),
 
-    MatTableModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    MatSelectModule,
+    MatTabsModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatFormFieldModule,
     MatIconModule,
-    MatButtonModule,    
+    MatInputModule,
+    MatSidenavModule,
+    MatDividerModule,
+    MatTableModule,
+    MatCheckboxModule,
+    FuseSharedModule,
     MatPaginatorModule,
     MatSortModule,
 

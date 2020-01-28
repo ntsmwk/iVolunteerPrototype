@@ -8,6 +8,9 @@ import { ClassInstanceService } from '../_service/meta/core/class/class-instance
 import { isNullOrUndefined } from 'util';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { LoginService } from '../_service/login.service';
+import { Helpseeker } from '../_model/helpseeker';
+import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { ArrayService } from '../_service/array.service';
 
 
 @Component({
@@ -17,29 +20,28 @@ import { LoginService } from '../_service/login.service';
 })
 export class AssetInboxHelpseekerComponent implements OnInit {
 
-  // dataSource = new MatTableDataSource<any>();
-  // displayedColumns = ['data', 'issuer', 'label', 'details'];
 
-  isLoaded: boolean;
+  public marketplaces = new Array<Marketplace>();
   marketplace: Marketplace;
   participant: Participant;
   classInstances: ClassInstance[];
+  isLoaded: boolean;
+  helpseeker: Helpseeker;
 
-  submitPressed: boolean;
 
-
-  constructor(
-    private route: ActivatedRoute,
+  constructor(private arrayService: ArrayService,
+    private loginService: LoginService,
     private router: Router,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
-    private loginService: LoginService,
-
-  ) {
-
+    private helpSeekerService: CoreHelpSeekerService) {
   }
 
   ngOnInit() {
+    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+      this.helpseeker = participant;
+    });
+
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
         if (!isNullOrUndefined(marketplaces)) {
@@ -52,11 +54,24 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     ]).then(() => {
       this.loadInboxEntries();
     });
+
+
   }
+
+  private isFF() {
+    return this.participant.username == 'FFA';
+  }
+
+  private isMV() {
+    return this.participant.username === 'MVS';
+  }
+  private isOther() {
+    return !this.isFF() && !this.isMV();
+  }
+
 
   loadInboxEntries() {
     this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
-      console.log(ret);
       this.classInstances = ret;
       this.isLoaded = true;
     });
@@ -66,16 +81,13 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   close() {
   }
 
-  onAssetInboxSubmit(classInstances: ClassInstance[]) {
-    this.classInstanceService.setClassInstanceInIssuerInbox(this.marketplace, classInstances.map(c => c.id), false).toPromise().then(() => {
+  onAssetInboxSubmit() {
+    this.classInstanceService.setClassInstanceInIssuerInbox(this.marketplace, this.classInstances.map(c => c.id), false).toPromise().then(() => {
       console.log("confirm");
-      this.router.navigate(['main/helpseeker/asset-inbox/confirm'], {state: {'instances': classInstances, 'marketplace': this.marketplace, 'participant': this.participant}});
+      this.router.navigate(['main/helpseeker/asset-inbox/confirm'], { state: { 'instances': this.classInstances, 'marketplace': this.marketplace, 'participant': this.participant } });
 
     });
-
   }
-
-
 
 }
 

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShareMenuComponent } from './share-menu.component';
-import { MatMenuModule, MatIconModule, MatInputModule, MatFormFieldModule } from '@angular/material';
+import { MatMenuModule, MatIconModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, MatOptionModule, MatProgressBarModule, MatExpansionModule, MatSelectModule } from '@angular/material';
+import { FuseSharedModule } from '@fuse/shared.module';
 
 
 @NgModule({
@@ -10,10 +11,21 @@ import { MatMenuModule, MatIconModule, MatInputModule, MatFormFieldModule } from
   ],
   imports: [
     CommonModule,
-    MatMenuModule,
+    
+    MatProgressBarModule,
     MatIconModule,
-    MatInputModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatListModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatExpansionModule,
     MatFormFieldModule,
+    MatInputModule,
+
+    FuseSharedModule
+
+
   ],
   exports: [
     ShareMenuComponent,
