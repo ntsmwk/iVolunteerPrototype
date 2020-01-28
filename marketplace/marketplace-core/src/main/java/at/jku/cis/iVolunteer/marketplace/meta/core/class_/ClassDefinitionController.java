@@ -30,19 +30,9 @@ public class ClassDefinitionController {
 	}
 
 	@GetMapping("meta/core/class/definition/all/no-enum")
-	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums() {
-		List<ClassDefinition> filtered = classDefinitionRepository.findAll().stream()
-				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
-		return filtered;
-	}
-
-	private boolean filterEnumsAndHeadClasses(ClassDefinition cd) {
-		// @formatter:off
-		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
-				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
-				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
-				|| cd.getClassArchetype() == ClassArchetype.TASK;		 
-		// @formatter:on
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(
+			@RequestParam(value = "org", required = false) String organisation) {
+		return classDefinitionService.getAllClassDefinitionsWithoutEnums(organisation);
 	}
 
 	@GetMapping("/meta/core/class/definition/{id}")

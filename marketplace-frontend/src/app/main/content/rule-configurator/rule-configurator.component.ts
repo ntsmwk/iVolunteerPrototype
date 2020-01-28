@@ -15,6 +15,7 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
 import { ClassDefinition } from '../_model/meta/Class';
 import { ClassProperty } from '../_model/meta/Property';
+import { FakeService } from '../_service/fake.service';
 
 @Component({
   templateUrl: './rule-configurator.component.html',
@@ -38,6 +39,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
     private classDefinitionService: ClassDefinitionService,
+    private fakeService: FakeService,
     private messageService: MessageService) {
     this.ruleForm = formBuilder.group({
       'id': new FormControl(undefined),
@@ -54,7 +56,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.route.params.subscribe(params => this.loadDerivationRule(marketplace, params['ruleId']));
-        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace).toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then(
           (definitions: ClassDefinition[]) => this.classDefinitions = definitions
         );
       });
@@ -62,14 +64,14 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   private isFF() {
-    return this.participant.username== 'FFA';
+    return this.participant.username == 'FFA';
   }
 
-  private isMV(){
-    return this.participant.username==='MVS';
+  private isMV() {
+    return this.participant.username === 'MVS';
   }
-  private isOther(){
-    return !this.isFF()&& !this.isMV();
+  private isOther() {
+    return !this.isFF() && !this.isMV();
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
@@ -108,6 +110,11 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     // this.derivationRule.sources = this.ruleForm.value.sources;
 
     this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
+  
+    if(this.derivationRule.name === "Fahrtenspange 1000"){
+      this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(()=> {});
+      // TODO Fake
+    }
   }
 
   navigateBack() {

@@ -34,6 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		    .antMatchers("/api/**").permitAll()
 		    .antMatchers("/push-task-from-api").permitAll()
+		    .antMatchers("/fahrtenspange-fake").permitAll()
 		    .antMatchers("/reset").permitAll()
 		    .antMatchers("/init/**").permitAll()
 		    .antMatchers("/volunteer").permitAll()

@@ -1,0 +1,81 @@
+<link type="text/css" rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+
+<!-- <h1 mat-dialog-title></h1> -->
+<div mat-dialog-content>
+
+
+    <div *ngIf="data.name=='share' && !duringShare" fxLayout=row fxLayoutAlign="start center">
+        <div style=" z-index: 255; position: relative; width: 80px; height: 80px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+                src="../../../assets/images/logos/recruiter.jpg">
+        </div>
+        <div style="padding-right: 10px"></div>
+
+        <h1 *ngIf="!shareDone">Which Assets would you like to share with Recruiter 'Best Jobs'</h1>
+        <h1 *ngIf="shareDone">Sharing of all your Assets with Recruiter 'Best Jobs' successful</h1>
+
+
+    </div>
+    <div *ngIf="data.name=='store'" fxLayout=row fxLayoutAlign="start center">
+            <div style=" z-index: 255; position: relative; width: 80px; height: 80px;">
+                <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+                    src="../../../assets/cloud-download-2.png">
+            </div>
+
+            <div style="padding-right: 10px"></div>
+        
+        <h1>Which Assets would you like to store in your Private Repository</h1>
+    </div>
+
+    <div class="mat-card" fxLayout="row" fxLayoutAlign="space-between center">
+        <div></div>
+
+        <mat-radio-group *ngIf="!duringShare && !shareDone" class="share-radio-group"
+            aria-label="What do you want to Share?" value=1>
+            <mat-radio-button value="1" style="padding-right: 10px">All Assets</mat-radio-button>
+            <mat-radio-button value="3" style="padding-right: 10px">All Tasks</mat-radio-button>
+
+            <mat-radio-button value="5" style="padding-right: 10px">All Feedback</mat-radio-button>
+
+            <mat-radio-button value="2" style="padding-right: 10px">All Competences</mat-radio-button>
+
+            <mat-radio-button value="4">Choose</mat-radio-button>
+
+        </mat-radio-group>
+
+        <div>
+
+            <div *ngIf="data.name=='store'" style="padding-top: 70px"></div>
+
+            <div *ngIf="duringShare || shareDone" style="padding-top: 50px"></div>
+
+            <div *ngIf="data.name=='share' && duringShare">
+
+                <mat-spinner></mat-spinner>
+
+            </div>
+
+        </div>
+
+        <div></div>
+
+
+    </div>
+
+
+</div>
+
+<div *ngIf="data.name=='store'" mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Store</button>
+    <button mat-raised-button (click)="onNoClick()">Cancel</button>
+
+</div>
+
+<div *ngIf="data.name=='share' && !duringShare" mat-dialog-actions>
+    <button *ngIf="shareDone" mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Done</button>
+    <button *ngIf="!shareDone" mat-raised-button (click)="triggeredShare()" color=primary>Share</button>
+
+    <button *ngIf="!shareDone" mat-raised-button (click)="onNoClick()">Cancel</button>
+
+</div>

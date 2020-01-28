@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.reset;
+package at.jku.cis.iVolunteer.marketplace.fake;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +22,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
-public class ResetService {
+public class FakeService {
 
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
@@ -108,5 +108,39 @@ public class ResetService {
 		classInstanceController.createNewClassInstances(instances);
 				
 				
+	}
+
+	public void addFahrtenspangeFake() {
+
+		TaskClassInstance instance = new TaskClassInstance();
+		instance.setId("fahrtenspange"+new Date().hashCode());
+		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+		instance.setName("Fahrtenspange 1000");
+		instance.setIssuerId("FFA");
+		
+		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
+		instance.setUserId(user.getId());
+		
+		instance.setPublished(false);
+		instance.setInUserRepository(false);
+		instance.setInIssuerInbox(false);
+		
+		instance.setTimestamp(new Date());
+		
+		List<PropertyInstance<Object>> properties = new ArrayList<>();
+		
+		PropertyDefinition<Object> nameDefinition= propertyDefinitionRepository.findOne("name");
+		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
+		nameInstance.setValues(new ArrayList<>());
+		nameInstance.getValues().add("Fahrtenspange 1000");
+		
+		properties.add(nameInstance);
+		
+		instance.setProperties(properties);
+		
+		List<ClassInstance> instances = new ArrayList<>();
+		instances.add(instance);
+		
+		classInstanceController.createNewClassInstances(instances);
 	}
 }
