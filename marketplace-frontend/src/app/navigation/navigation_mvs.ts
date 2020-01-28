@@ -4,6 +4,7 @@ export const navigation_mvs = [
     'id': 'welcome',
     'title': 'Übersicht',
     'type': 'item',
+    'icon': 'door-open',
     'url': '/main/dashboard',
   },
   {
@@ -15,32 +16,33 @@ export const navigation_mvs = [
     'id': 'tasks',
     'title': 'Einträge Erfassen',
     'type': 'item',
+    'icon': 'pencil',
     'url': '/main/tasks/all',
   },
   {
     'id': 'inbox',
     'title': 'Einträge Bestätigen',
     'type': 'item',
+    'icon': 'unlock',
     'url': '/main/helpseeker/asset-inbox',
   },
-
   {
     'id': 'config',
     'title': 'Konfigurieren',
     'type': 'group',
-    // TODO own task page!
-    // 'url': '/main/tasks/all',
   },
   {
     'id': 'configurator',
     'title': 'Einträge Konfigurieren',
     'type': 'item',
+    'icon':'cogs',
     'url': '/main/configurator'
   },
   {
     'id': 'rule-configurator',
     'title': 'Einträge Ableiten',
     'type': 'item',
+    'icon': 'share-square',
     'url': '/main/rules/all'
   },
 ];
