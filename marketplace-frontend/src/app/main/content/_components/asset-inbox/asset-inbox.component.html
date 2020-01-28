@@ -4,13 +4,11 @@
 
     <ng-container matColumnDef="checkboxes">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-          [checked]="selection.isSelected(row)">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -30,8 +28,7 @@
 
         <div fxLayout="row" fxLayoutAlign="start center">
           <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
-            <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-              [src]="getArchetypeIcon(entry)">
+            <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;" [src]="getArchetypeIcon(entry)">
           </div>
 
           <div style="padding-left: 10px">
@@ -133,8 +130,7 @@
 
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
-      class="table-row"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }" class="table-row"></mat-row>
   </mat-table>
 
   <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
@@ -146,10 +142,9 @@
 
 <div class="button-row" fxLayout="row" fxLayoutAlign="space-between center">
   <div></div>
-  <button *ngIf="inboxOwner=='helpseeker'" mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="selection.isEmpty()" >Bestätigen</button>
-  <button *ngIf="inboxOwner=='volunteer'" mat-raised-button color="primary" (click)="onSubmit()"
-    [disabled]="selection.isEmpty()">Importieren</button>
+  <button *ngIf="inboxOwner=='helpseeker'" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()" matTooltip="Mit dieser Aktion wird der Eintrag in der Blockchain persistiert." aria-label="Button that displays a tooltip when focused or hovered over">
+    Bestätigen</button>
+  <button *ngIf="inboxOwner=='volunteer'" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selection.isEmpty()">Importieren</button>
   <button *ngIf="inboxOwner=='helpseeker-dashboard'" mat-raised-button color="primary" (click)="onSubmit()">Zur
     Inbox</button>
 
