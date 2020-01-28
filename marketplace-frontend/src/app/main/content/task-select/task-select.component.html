@@ -6,28 +6,28 @@
 
   <div *ngIf="this.participant && isFF()">
     <div class="header-ff p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Tätigkeit erstellen</h1>
+      <h1 class="l-heading">Einträge erfassen</h1>
       <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg">
     </div>
   </div>
 
   <div *ngIf="this.participant &&  isMV()">
     <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Tätigkeit erstellen</h1>
+      <h1 class="l-heading">Einträge erfassen</h1>
       <img class="header-icon" src="assets/images/avatars/musikvereinschwertberg.jpeg">
     </div>
   </div>
 
   <div *ngIf="this.participant && isOther()">
     <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Tätigkeit erstellen</h1>
+      <h1 class="l-heading">Einträge erfassen</h1>
       <!-- <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg"> -->
     </div>
   </div>
 
 
 
-<p class="mt-24">Wähle eine vorgegebene Definition einer Tätigkeit aus.</p>
+<p class="mt-24 fs-25">Wähle eine vorgegebene Definition einer Tätigkeit aus.</p>
 
   <div class="table">
 
@@ -42,7 +42,7 @@
     </mat-table>
 
     <div class="no-data" *ngIf="dataSource.data.length === 0">
-      Keine Tätigkeits-Definitionen gefunden.
+      Keine Eintrags-Definitionen gefunden.
     </div>
 
   </div>

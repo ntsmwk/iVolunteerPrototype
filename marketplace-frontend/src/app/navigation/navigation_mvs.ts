@@ -1,5 +1,4 @@
 export const navigation_mvs = [
-  
   {
     'id': 'welcome',
     'title': 'Übersicht',
@@ -14,14 +13,14 @@ export const navigation_mvs = [
   },
   {
     'id': 'tasks',
-    'title': 'Einträge Erfassen',
+    'title': 'Einträge erfassen',
     'type': 'item',
     'icon': 'pencil',
     'url': '/main/tasks/all',
   },
   {
     'id': 'inbox',
-    'title': 'Einträge Bestätigen',
+    'title': 'Einträge bestätigen',
     'type': 'item',
     'icon': 'unlock',
     'url': '/main/helpseeker/asset-inbox',
@@ -33,14 +32,14 @@ export const navigation_mvs = [
   },
   {
     'id': 'configurator',
-    'title': 'Einträge Konfigurieren',
+    'title': 'Einträge konfigurieren',
     'type': 'item',
     'icon':'cogs',
     'url': '/main/configurator'
   },
   {
     'id': 'rule-configurator',
-    'title': 'Einträge Ableiten',
+    'title': 'Einträge ableiten',
     'type': 'item',
     'icon': 'share-square',
     'url': '/main/rules/all'

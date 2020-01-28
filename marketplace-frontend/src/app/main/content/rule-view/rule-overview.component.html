@@ -6,30 +6,29 @@
 
     <div *ngIf="this.participant && isFF()">
       <div class="header-ff p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-        <h1 class="l-heading">Einträge ableiten - Regeln</h1>
+        <h1 class="l-heading">Einträge ableiten</h1>
         <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg">
       </div>
     </div>
   
     <div *ngIf="this.participant &&  isMV()">
       <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-        <h1 class="l-heading">Einträge ableiten - Regeln</h1>
+        <h1 class="l-heading">Einträge ableiten</h1>
         <img class="header-icon" src="assets/images/avatars/musikvereinschwertberg.jpeg">
       </div>
     </div>
   
     <div *ngIf="this.participant && isOther()">
       <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-        <h1 class="l-heading">Einträge ableiten - Regeln</h1>
+        <h1 class="l-heading">Einträge ableiten</h1>
         <!-- <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg"> -->
       </div>
     </div>
-  
-  
+
     <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-        <button mat-fab class="mat-warn" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom
+        <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom
             [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-            <mat-icon>add</mat-icon>
+            <mat-icon class="add-btn-icon">add</mat-icon>
         </button>
     </div>
 
@@ -54,8 +53,8 @@
             </ng-container>
             
             <ng-container matColumnDef="target">
-                <mat-header-cell *matHeaderCellDef>Einträge ableiten
-      
+                <mat-header-cell *matHeaderCellDef>Abgeleiteter Eintrag 
+  
                 </mat-header-cell>
                 <mat-cell *matCellDef="let rule">{{rule.target.name}}</mat-cell>
             </ng-container>

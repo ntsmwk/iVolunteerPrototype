@@ -3,12 +3,19 @@
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
     <h1>Marketplaces</h1>
   </div>
-
+<!-- 
   <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
     <button mat-fab class="mat-warn" (click)="addMarketplace()" aria-label="Add marketplace" *fuseIfOnDom
             [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
       <mat-icon>add</mat-icon>
     </button>
+  </div> -->
+
+  <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+      <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addMarketplace()" aria-label="Add rule" *fuseIfOnDom
+          [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+          <mat-icon class="add-btn-icon">add</mat-icon>
+      </button>
   </div>
 
   <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">

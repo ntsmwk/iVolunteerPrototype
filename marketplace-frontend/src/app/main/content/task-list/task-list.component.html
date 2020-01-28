@@ -25,16 +25,13 @@
     </div>
   </div>
 
-
-
   <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-fab class="mat-warn" (click)="addTask()" aria-label="Add task" *fuseIfOnDom [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-        <mat-icon>add</mat-icon>
+      <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addTask()" aria-label="Add rule" *fuseIfOnDom
+          [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+          <mat-icon class="add-btn-icon">add</mat-icon>
       </button>
   </div>
-
-
-
+  
   <div class="table">
     <mat-table #table [dataSource]="tableDataSource" matSort *ngIf="tableDataSource.data.length > 0">
       <ng-container matColumnDef="taskName">
@@ -85,7 +82,7 @@
   <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
 
   <div class="no-data" *ngIf="tableDataSource.data.length === 0">
-    Keine Tätigkeiten gefunden!
+    Keine Einträge gefunden!
   </div>
 
 

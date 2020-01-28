@@ -80,78 +80,72 @@
                 <div style="font-size: 30px">Markus Weixlbaumer</div>
                 <div style="padding-top: 20px"></div>
                 <div style="font-size: 18px">Freiwillig seit: 2000</div>
-                <div style="font-size: 18px"><strong>FF Altenberg</strong> und <strong>Schwertberg</strong></div>
+                <div style="font-size: 18px"><strong>FF Altenberg</strong> und <strong>Musikverein Schwertberg</strong></div>
                 <a style="font-size: 15px; cursor: pointer">mehr</a>
               </div>
 
             </div>
 
             <div style="padding-top: 0px pr-20" fxLayout=row fxLayoutAlign="end center">
-              <button class="mr-20" mat-raised-button type="button" (click)=pressedVerifyAll() color=primary> Verifiziere alle
+              <button class="mr-20" mat-raised-button color="primary" (click)=pressedVerifyAll()> Verifiziere alle
                                 </button>
             </div>
 
             <h2 style="font-weight: bold;">Tätigkeiten</h2>
 
-            <div *ngIf="tableDataSource.data.length > 0" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
-              <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
+            <div class="table">
+              <mat-table #table *ngIf="tableDataSource.data.length > 0" [dataSource]="tableDataSource" matSort>
                 <ng-container matColumnDef="taskName">
-                  <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskType1">
-                  <th mat-header-cell *matHeaderCellDef> Typ </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskType2">
-                  <th mat-header-cell *matHeaderCellDef> Untertyp </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDescription">
-                  <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Beschreibung </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDateFrom">
-                  <th mat-header-cell *matHeaderCellDef> Datum </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="taskDateTo">
-                  <th mat-header-cell *matHeaderCellDef> Ende </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_TO].values[0] | date:'dd.MM.yyyy hh:mm'}}
-                  </td>
+                  <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+                  </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDuration">
-                  <th mat-header-cell *matHeaderCellDef> Dauer [h] </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Dauer [h] </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} </mat-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="hash">
-                  <th mat-header-cell *matHeaderCellDef> Hash </th>
-                  <td mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </td>
+                  <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="verificationStatus">
-                  <th mat-header-cell *matHeaderCellDef> Verfifiziert </th>
-                  <td mat-cell *matCellDef="let element"> <i class="fas fa-check-circle" style="color:green;"></i> </td>
+                  <mat-header-cell *matHeaderCellDef> Verfifiziert </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> <i class="fas fa-check-circle" style="color:green;"></i> </mat-cell>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
             </div>
             <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
 
 
             <div class="no-data" *ngIf="tableDataSource.data.length === 0">
-              Keine Tätigkeiten freigegeben!
+              Keine Einträge freigegeben!
             </div>
 
             <h2 style="font-weight: bold;">Freigegebene Statistiken</h2>
