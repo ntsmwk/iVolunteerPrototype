@@ -24,40 +24,37 @@ import {
   MatChipsModule,
   MatSlideToggleModule
 } from '@angular/material';
-import { FuseAchievementsComponent } from './achievements.component';
-import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../@fuse/components';
+import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../../@fuse/components';
 
-import { TasksComponent } from './tasks/tasks.component';
-import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
-import { FunctionsComponent } from './functions/functions.component';
-import { CompetenciesComponent } from './competencies/competencies.component';
 
-import { FuseProjectTaskListModule } from '../_components/project-task-list/project-task-list.module';
-import { FuseTruncatePipeModule } from '../_pipe/truncate-pipe.module';
+import { FuseProjectTaskListModule } from '../../_components/project-task-list/project-task-list.module';
+import { FuseTruncatePipeModule } from '../../_pipe/truncate-pipe.module';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { FuseProjectMembersModule } from '../_components/project-members/project-members.module';
-
+import { FuseProjectMembersModule } from '../../_components/project-members/project-members.module';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
-import { ManagementSummaryComponent } from './management-summary/management-summary.component';
-import { ShareMenuComponent } from './share-menu/share-menu.component';
-
+import { CommonModule } from '@angular/common';
+import { AchievementsFireBrigadeComponent } from './achievement-fire-brigade.component';
+import { TasksComponent } from './tasks/tasks.component';
+import { FunctionsComponent } from './functions/functions.component';
+import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
+import { CompetenciesComponent } from './competencies/competencies.component';
+import { ShareMenuComponent } from '../share-menu/share-menu.component';
+import { ShareMenuModule } from '../share-menu/share-menu.module';
 
 const routes = [
-  { path: '**', component: FuseAchievementsComponent }
+  { path: '', component: AchievementsFireBrigadeComponent }
 ];
 
 @NgModule({
   declarations: [
-    FuseAchievementsComponent,
+    AchievementsFireBrigadeComponent,
     TasksComponent,
-    AccomplishmentsComponent,
     FunctionsComponent,
+    AccomplishmentsComponent,
     CompetenciesComponent,
-    ManagementSummaryComponent,
-    ShareMenuComponent,
+
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -95,11 +92,9 @@ const routes = [
     NgbModalModule,
 
     NgxChartsModule,
-    HighchartsChartModule
-  ],
-  providers   : [
-]
+    HighchartsChartModule,
+    ShareMenuModule
+  ]
+  
 })
-
-export class FuseAchievementsModule {
-}
+export class AchievementsFireBrigadeModule { }

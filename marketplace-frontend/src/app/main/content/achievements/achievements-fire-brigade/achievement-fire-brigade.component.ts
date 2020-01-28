@@ -1,24 +1,21 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {fuseAnimations} from '../../../../@fuse/animations';
-import {Project} from '../_model/project';
+import {fuseAnimations} from '../../../../../@fuse/animations';
+import {Project} from '../../_model/project';
 import {Subscription} from 'rxjs';
-import {Participant} from '../_model/participant';
-import {Marketplace} from '../_model/marketplace';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CoreVolunteerService} from '../_service/core-volunteer.service';
-import {ProjectService} from '../_service/project.service';
-import {LoginService} from '../_service/login.service';
-import {MessageService} from '../_service/message.service';
-import {isArray} from 'util';
+import {CoreVolunteerService} from '../../_service/core-volunteer.service';
+import {ProjectService} from '../../_service/project.service';
+import {LoginService} from '../../_service/login.service';
+import {MessageService} from '../../_service/message.service';
 
 @Component({
-  selector: 'fuse-achievements',
-  templateUrl: './achievements.component.html',
-  styleUrls: ['./achievements.component.scss'],
+  selector: 'fuse-achievements-fire-brigade',
+  templateUrl: './achievement-fire-brigade.component.html',
+  styleUrls: ['./achievement-fire-brigade.component.scss'],
   animations: fuseAnimations
 
 })
-export class FuseAchievementsComponent implements OnInit, OnDestroy {
+export class AchievementsFireBrigadeComponent implements OnInit, OnDestroy {
   public projects: Array<Project>;
   private marketplaceChangeSubscription: Subscription;
 

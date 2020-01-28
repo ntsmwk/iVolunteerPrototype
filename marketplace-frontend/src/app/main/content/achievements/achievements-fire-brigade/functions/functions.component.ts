@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { fuseAnimations } from '../../../../../@fuse/animations';
+import { fuseAnimations } from '../../../../../../@fuse/animations';
 
 
 @Component({

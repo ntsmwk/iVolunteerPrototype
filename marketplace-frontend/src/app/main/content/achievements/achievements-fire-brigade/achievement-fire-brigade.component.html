@@ -1,0 +1,38 @@
+<div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <div class="header p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+      <h1>Erfolge</h1>
+      <img class="header-icon" src="assets/icons/achievements.svg">
+    </div>
+  
+    <div class="content">
+      <mat-tab-group dynamicHeight="true">
+  
+        <mat-tab label="Tätigkeiten">
+          <ng-template matTabContent>
+            <fuse-tasks></fuse-tasks>
+          </ng-template>
+        </mat-tab>
+  
+        <mat-tab label="Kompetenzen">
+          <ng-template matTabContent>
+            <fuse-competencies></fuse-competencies>
+          </ng-template>
+        </mat-tab>
+  
+        <mat-tab label="Verdienste">
+          <ng-template matTabContent>
+            <fuse-accomplishments></fuse-accomplishments>
+          </ng-template>
+        </mat-tab>
+  
+        <mat-tab label="Funktionen">
+          <ng-template matTabContent>
+            <fuse-functions></fuse-functions>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+  
+    </div>
+  
+  </div>

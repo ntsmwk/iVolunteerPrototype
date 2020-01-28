@@ -15,27 +15,42 @@ export const navigation_volunteer = [
     'icon': 'dashboard',
     'url': '/main/dashboard'
   },
-  // {
-  //   'id': 'engagements',
-  //   'title': 'Engagements',
-  //   'type': 'item',
-  //   'icon': 'engagements',
-  //   'url': '/main/engagements'
-  // },
+
+
+
   {
     'id': 'achievements',
-    'title': 'Einträge Visualisieren',
-    'type': 'item',
+    'title': 'Erfolge',
+    'type': 'group',
     'icon': 'achievements',
-    'url': '/main/achievements'
+    
   },
-
+  {
+    'id': 'achievements-management-summary',
+    'title': 'Übersicht',
+    'icon': 'engagements',
+    'type': 'item',
+    'url': 'main/achievements/summary'
+  },
+  {
+    'id': 'achievements-feuerwehr',
+    'title': 'Freiwillige Feuerwehr',
+    'icon': 'engagements',
+    'type': 'item',
+    'url': 'main/achievements/fireBrigade'
+  },
+  {
+    'id': 'achievements-musikverein',
+    'title': 'Musikverein',
+    'icon': 'engagements',
+    'type': 'item',
+    'url': '/main/achievements/music'
+  },
+  
   {
     'id': 'digi',
     'title': 'Soziales Netzwerk',
     'type': 'group',
-    // TODO own task page!
-    // 'url': '/main/tasks/all',
   },
   {
     'id': 'get-connected',
@@ -44,4 +59,6 @@ export const navigation_volunteer = [
     'icon': 'get-connected',
     'url': '/main/get-connected'
   }
+
+
 ];

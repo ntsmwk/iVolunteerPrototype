@@ -15,10 +15,10 @@ import { StoredChart } from '../../_model/stored-chart';
 
 @Component({
   selector: 'fuse-management-summary',
-  templateUrl: './management-summary.component.html',
-  styleUrls: ['./management-summary.component.scss']
+  templateUrl: './achievements-management-summary.component.html',
+  styleUrls: ['./achievements-management-summary.component.scss']
 })
-export class ManagementSummaryComponent implements OnInit {
+export class AchievementsManagementSummaryComponent implements OnInit {
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
   TASK_ID = CIP.TASK_ID;
@@ -44,6 +44,21 @@ export class ManagementSummaryComponent implements OnInit {
   comparisonXlabel = 'Jahr';
   comparisonYlabel = 'Anzahl Tätigkeiten';
   colorScheme = 'cool';
+  colors = [
+    {
+      name: 'Feuerwehr',
+      value: '#cc0000'
+    },
+    {
+      name: 'Rotes Kreuz',
+      value: '#808080'
+    },
+    {
+      name: 'Musikverein',
+      value: '#05913A'
+    }
+  ];
+
   schemeType = 'ordinal';
   showGridLines = true;
   animations = true;
@@ -69,8 +84,108 @@ export class ManagementSummaryComponent implements OnInit {
   filteredClassInstances: any[];
   yearsMap: any;
 
-  fakeDataMap: any;
-  fakeData = [
+  // ---- 
+  // cards 
+  cardColor: string = '#232837';
+  dataFfTotal = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+  dataRkTotal = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+  dataMusicTotal = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+
+  dataFf2019 = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+  dataRk2019 = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+  dataMusic2019 = [
+    {
+      "name": "Stunden",
+      "value": 34562
+    },
+    {
+      "name": "Tätigkeiten",
+      "value": 345
+    }
+  ];
+  // -----
+
+  fakeDataMusic = [
+    {
+      "name": "2012",
+      "value": 0,
+    },
+    {
+      "name": "2013",
+      "value": 0,
+    },
+    {
+      "name": "2014",
+      "value": 0,
+    },
+    {
+      "name": "2015",
+      "value": 13,
+    },
+    {
+      "name": "2016",
+      "value": 22,
+    },
+    {
+      "name": "2017",
+      "value": 19,
+    },
+    {
+      "name": "2018",
+      "value": 34,
+    },
+    {
+      "name": "2019",
+      "value": 28,
+    },
+  ];
+
+  fakeDataRk = [
     {
       "name": "2012",
       "value": 0,
@@ -118,7 +233,7 @@ export class ManagementSummaryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.comparisonYear = '2015';
+    this.comparisonYear = '2012';
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant as Volunteer;
@@ -155,20 +270,30 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = value;
 
     let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
-    let comparisonYearDataMusikverein = this.fakeData.find(d => {
+    let comparisonYearDataMusikverein = this.fakeDataMusic.find(d => {
       return d.name === this.comparisonYear;
     }).value;
+
+    let comparisonYearDataRk = this.fakeDataRk.find(d => {
+      return d.name === this.comparisonYear;
+    }).value;
+
     let data = [];
     let dataFinal = [];
 
     this.uniqueYears.forEach(curYear => {
       let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
-      let currentYearDataMusikverein = this.fakeData.find(d => {
+      let currentYearDataMusikverein = this.fakeDataMusic.find(d => {
+        return d.name === curYear;
+      }).value;
+
+      let currentYearDataRk = this.fakeDataRk.find(d => {
         return d.name === curYear;
       }).value;
 
       data = [];
       data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
+      data.push({ name: 'Rotes Kreuz', value: currentYearDataRk - comparisonYearDataRk });
       data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
       dataFinal.push({ name: curYear, series: data });
     });
@@ -193,7 +318,10 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
     let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
-    let comparisonYearDataMusikverein = this.fakeData.find(d => {
+    let comparisonYearDataMusikverein = this.fakeDataMusic.find(d => {
+      return d.name === this.comparisonYear;
+    }).value;
+    let comparisonYearDataRk = this.fakeDataRk.find(d => {
       return d.name === this.comparisonYear;
     }).value;
     let data = [];
@@ -203,12 +331,16 @@ export class ManagementSummaryComponent implements OnInit {
     this.uniqueYears.forEach(curYear => {
 
       let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
-      let currentYearDataMusikverein = this.fakeData.find(d => {
+      let currentYearDataMusikverein = this.fakeDataMusic.find(d => {
+        return d.name === curYear;
+      }).value;
+      let currentYearDataRk = this.fakeDataRk.find(d => {
         return d.name === curYear;
       }).value;
 
       data = [];
       data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
+      data.push({ name: 'Rotes Kreuz', value: currentYearDataRk - comparisonYearDataRk });
       data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
       dataFinal.push({ name: curYear, series: data });
     });
