@@ -34,7 +34,6 @@ export class AssetInboxVolunteerComponent implements OnInit {
 
   ) {
 
-    console.log(this.router.getCurrentNavigation().extras.state);
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;
       this.participant = this.router.getCurrentNavigation().extras.state.participant;
@@ -43,14 +42,9 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.marketplace);
-    console.log(this.participant);
-
     if (!isNullOrUndefined(this.marketplace) && !isNullOrUndefined(this.participant)) {
-      console.log('if branch');
       this.loadInboxEntries();
     } else {
-      console.log('else branch');
       Promise.all([
         this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
           if (!isNullOrUndefined(marketplaces)) {
@@ -69,7 +63,6 @@ export class AssetInboxVolunteerComponent implements OnInit {
   loadInboxEntries() {
     this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
 
-      console.log(ret);
       this.classInstances = ret;
       this.isLoaded = true;
 
@@ -77,10 +70,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   onAssetInboxSubmit(classInstances: ClassInstance[]) {
-    console.log('submitted - returned');
-
     this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
-
       this.router.navigate(['/main/dashboard']);
     });
 
