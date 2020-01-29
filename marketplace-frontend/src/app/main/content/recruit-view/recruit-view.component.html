@@ -149,6 +149,7 @@
             </div>
 
             <h2 style="font-weight: bold;">Freigegebene Statistiken</h2>
+
             <div style="display:flex;" flexLayout="row">
               <div *ngIf="weekdayData" style="display:inline-block; width: 600px; text-align: center; " class="mt-20">
                 <span style="font-size: 18px;">Wochentag</span>
@@ -178,6 +179,17 @@
               </div>
             </div>
 
+            <div style="display:flex; flex-direction: column;" *ngIf="trainingData">
+              <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
+              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+
+            <div style="display:flex; flex-direction: column;" flexLayout="column">
+              <h2 class="title">TODO Diversity chart</h2>
+             
+            </div>
           </mat-expansion-panel>
           <mat-expansion-panel>
 

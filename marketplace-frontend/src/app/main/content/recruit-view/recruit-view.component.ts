@@ -24,7 +24,6 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
   private tableDataSource = new MatTableDataSource<ClassInstance>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  // @ViewChild('paginator', {static:false}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration', 'hash', 'verificationStatus'];
   marketplace: Marketplace;
@@ -35,8 +34,24 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private classInstances: ClassInstance[] = [];
 
 
+   // chart options
+   colorScheme = 'cool';
+   showXAxis: boolean = true;
+   showYAxis: boolean = true;
+   gradient: boolean = false;
+   showLegend: boolean = true;
+   legendTitle: string = ' ';
+   showXAxisLabel: boolean = false;
+   showYAxisLabel: boolean = true;
+   yAxisLabel1: string = 'Stunden';
+   yAxisLabel2: string = 'Anzahl';
+   animations: boolean = true;
+
+
   weekdayData;
   dayNightData;
+  trainingData: any[];
+  
 
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
@@ -108,6 +123,9 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       }
       if (this.charts.findIndex(c => c.title == "Tageszeit") >= 0) {
         this.dayNightData = JSON.parse(this.charts.find(c => c.title === "Tageszeit").data);
+      }
+      if(this.charts.findIndex(c => c.title == "STUNDEN absolvierter Ausbildungen") >= 0){
+        this.trainingData = JSON.parse(this.charts.find(c => c.title=="STUNDEN absolvierter Ausbildungen").data);
       }
     });
   }
