@@ -26,7 +26,7 @@
 
             <div style="height: 20px;"></div>
 
-            <div class="banner">Leistungen deiner gesamten Laufbahn</div>
+            <div class="banner">Engagement gesamt</div>
             <hr size="1" color="#232837" width="100%">
 
             <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="banner">Leistungen 2019</div>
+            <div class="banner">Engagement 2019</div>
             <hr size="1" color="#232837" width="100%">
 
             <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
@@ -62,8 +62,27 @@
                 </div>
             </div>
 
+
+            <hr size="1" color="#232837" width="100%">
+            <hr size="1" color="#232837" width="100%">
             <div style="height: 50px;"></div>
 
+
+            <div class="banner">Engagement gesamt</div>
+            <hr size="1" color="#232837" width="100%">
+            <div class="treeParent">
+            <ngx-charts-tree-map
+            [customColors]="colors"
+            [results]="totalStunden"
+            [gradient]="gradient"
+            [animations]="animations"
+            [valueFormatting]="valueFormatting"
+            (select)="onSelect($event)">
+            </ngx-charts-tree-map>
+        </div>
+
+            <hr size="1" color="#232837" width="100%">
+            <hr size="1" color="#232837" width="100%">
 
             <div style="width: 100%;">
                 <div fxLayout="row" fxLayoutAlign="space-between center">

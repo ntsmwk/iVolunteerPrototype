@@ -1,7 +1,8 @@
 <mat-accordion multi="true">
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="false">
     <mat-expansion-panel-header>
       <mat-panel-title>
+        <img class="icon iconSquare" src="assets/icons/personale.png">
         Personelle Kompetenzen
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -28,7 +29,7 @@
 
           <div class="half">
             <div fxLayout="row" fxLayoutAlign="space-between center">
-              <h2 class="title">ANZAHL an absolvierten Ausbildungen</h2>
+              <h2 class="title">ANZAHL absolvierter Ausbildungen</h2>
               <app-share-menu [label]="'Anzahl'" (export)="exportChart($event)">
               </app-share-menu>
             </div>
@@ -79,28 +80,31 @@
           </table>
         </div>
 
-
-
-
-
-
       </mat-card-content>
     </mat-card>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <img class="icon" src="assets/icons/sozial.png">
+        Sozial-kommunikative Kompetenzen
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
     <mat-card class="card">
       <mat-card-header>
-        <mat-card-title>Diversität</mat-card-title>
+        <mat-card-title>Anpassungsfähigkeit</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+        <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p>
 
-        <div class="chartParent" fxLayout="column">
-          <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+        <div class="chartParent2" fxLayout="column">
+          <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
           <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations" (select)="onSelect($event)">
+            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
           </ngx-charts-area-chart-stacked>
         </div>
-
-
       </mat-card-content>
     </mat-card>
 
@@ -109,16 +113,7 @@
   <mat-expansion-panel [expanded]="false">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Sozial-kommunikative Kompetenzen
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
+        <img class="icon iconSquare" src="assets/icons/aktivitaets.png">
         Aktivitäts und Handlungskompetenzen
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -126,9 +121,10 @@
 
   </mat-expansion-panel>
 
-  <mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false">
     <mat-expansion-panel-header>
       <mat-panel-title>
+        <img class="icon" src="assets/icons/fach.png">
         Fach- und Methodenkompetenzen
       </mat-panel-title>
     </mat-expansion-panel-header>

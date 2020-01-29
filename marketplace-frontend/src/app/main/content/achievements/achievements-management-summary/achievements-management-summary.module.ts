@@ -34,7 +34,6 @@ import { FuseProjectMembersModule } from '../../_components/project-members/proj
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CommonModule } from '@angular/common';
-import { HighchartsChartModule } from 'highcharts-angular';
 import { AchievementsManagementSummaryComponent } from './achievements-management-summary.component';
 import { ShareMenuComponent } from '../share-menu/share-menu.component';
 import { ShareMenuModule } from '../share-menu/share-menu.module';
@@ -83,7 +82,6 @@ const routes = [
     NgbModalModule,
 
     NgxChartsModule,
-    HighchartsChartModule,
     ShareMenuModule,
     
   ],

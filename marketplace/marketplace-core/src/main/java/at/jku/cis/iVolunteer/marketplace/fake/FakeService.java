@@ -2,6 +2,7 @@ package at.jku.cis.iVolunteer.marketplace.fake;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +10,24 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.chart.StoredChartRepository;
+import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
+import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
@@ -30,21 +39,30 @@ public class FakeService {
 	@Autowired private PropertyDefinitionToPropertyInstanceMapper propertyDefinitionToPropertyInstanceMapper;
 	@Autowired private ClassInstanceController classInstanceController;
 	@Autowired private StoredChartRepository storedChartRepository;
+	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
+	@Autowired private ClassesAndRelationshipsToResetRepository classesAndRelationshipsToResetRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private ConfiguratorRepository configuratorRepository;
+
 	
 	public void reset() {
 
 		resetFahrtenspangeFake();
 		
 		resetSunburstFake();
+		
 //		Reset Sunburst Fake
 			//Reset ClassDefinitions
+			resetClassDefinitionsRelationshipsAndConfigurators();
 //			//Reset Flag for retrieval
 		
 //		Reset Sybos Fake
 		
 		deleteSharedChart();
 	}
-
+	
+	
 	private void deleteSharedChart() {
 		this.storedChartRepository.deleteAll();
 	}
@@ -54,13 +72,31 @@ public class FakeService {
 		derivationRuleRepository.deleteAll();
 
 		// Reset Fahrtenspange Task
+		
 
 		// Reset Fahrtenspange Badge
 	}
 	
 	private void resetSunburstFake() {
-		//TODO
+		this.isSunburstFakeRepository.deleteAll();
 	}
+	
+	private void resetClassDefinitionsRelationshipsAndConfigurators() {
+		List<ClassesAndRelationshipsToReset> list = classesAndRelationshipsToResetRepository.findAll();
+		ClassesAndRelationshipsToReset reset = list.get(0);
+		
+		classDefinitionRepository.deleteAll();
+		classDefinitionRepository.save(reset.getClassDefinitions());
+		
+		relationshipRepository.deleteAll();
+		relationshipRepository.save(reset.getRelationships());
+		
+		configuratorRepository.deleteAll();
+		configuratorRepository.save(reset.getConfigurators());
+				
+	}
+	
+
 	
 	public void pushTaskFromAPI() {
 //		[{
@@ -143,4 +179,19 @@ public class FakeService {
 		
 		classInstanceController.createNewClassInstances(instances);
 	}
+	
+	public void createResetState() {
+		classesAndRelationshipsToResetRepository.deleteAll();
+		
+		ClassesAndRelationshipsToReset classesAndRelationshipsToReset = new ClassesAndRelationshipsToReset();
+		classesAndRelationshipsToReset.getClassDefinitions().addAll(classDefinitionRepository.findAll());
+		classesAndRelationshipsToReset.getRelationships().addAll(relationshipRepository.findAll());
+		classesAndRelationshipsToReset.getConfigurators().addAll(configuratorRepository.findAll());
+		
+		
+		classesAndRelationshipsToResetRepository.save(classesAndRelationshipsToReset);
+		
+		
+	}
+
 }
