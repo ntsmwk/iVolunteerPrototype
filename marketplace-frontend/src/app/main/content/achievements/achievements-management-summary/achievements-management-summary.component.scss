@@ -68,17 +68,22 @@
   height: 130px;
 }
 
-.treeParent {
-  height: 400px;
-  width: 700px;
+.treeParent1 {
+  height: 200px;
+  width: 600px;
+}
+
+.treeParent2 {
+  height: 200px;
+  width: 600px;
 }
 
 .img {
-  height: 150px;
+  height: 130px;
   width: auto;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  //margin-left: auto;
+  //margin-right: auto;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -104,4 +109,20 @@
 
 .shareMenu {
   margin-right: 10px;
+}
+
+h2 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.total {
+  margin-left: 20px;
+}
+
+td{
+text-align: left;
+}
+
+.table {
+  margin-top: 20px;
 }
