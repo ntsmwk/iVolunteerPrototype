@@ -21,14 +21,12 @@ public class PersonTask {
 	private String taskDuration;
 	private String taskLocation;
 
-	@SerializedName(value = "Zweck")
-	private String Zweck;
-	private String Rolle;
-	@SerializedName(value = "Rang")
-	private String Rang;
-	private String Phase;
-	private String Arbeitsteilung;
-	private String Ebene;
+	private String purpose;
+	private String role;
+	private String rank;
+	private String phase;
+	private String unit;
+	private String level;
 
 	private GeoInformation taskGeoInformation;
 	private String iVolunteerUUID;
@@ -40,8 +38,8 @@ public class PersonTask {
 
 	public PersonTask(String id, String taskId, String taskName, String taskType1, String taskType2, String taskType3,
 			String taskType4, String taskDescription, String taskDateFrom, String taskDateTo, String taskDuration,
-			String taskLocation, String zweck, String rolle, String rang, String phase, String arbeitsteilung,
-			String ebene, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
+			String taskLocation, String purpose, String role, String rank, String phase, String unit,
+			String level, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
 			String personID) {
 		super();
 		this.id = id;
@@ -56,12 +54,12 @@ public class PersonTask {
 		this.taskDateTo = taskDateTo;
 		this.taskDuration = taskDuration;
 		this.taskLocation = taskLocation;
-		this.Zweck = zweck;
-		this.Rolle = rolle;
-		this.Rang = rang;
-		this.Phase = phase;
-		this.Arbeitsteilung = arbeitsteilung;
-		this.Ebene = ebene;
+		this.purpose = purpose;
+		this.role = role;
+		this.rank = rank;
+		this.phase = phase;
+		this.unit = unit;
+		this.level = level;
 		this.taskGeoInformation = taskGeoInformation;
 		this.iVolunteerUUID = iVolunteerUUID;
 		this.iVolunteerSource = iVolunteerSource;
@@ -188,60 +186,60 @@ public class PersonTask {
 		this.id = id;
 	}
 
-	public String getZweck() {
-		return Zweck;
-	}
-
-	public void setZweck(String zweck) {
-		Zweck = zweck;
-	}
-
-	public String getRolle() {
-		return Rolle;
-	}
-
-	public void setRolle(String rolle) {
-		Rolle = rolle;
-	}
-
-	public String getRang() {
-		return Rang;
-	}
-
-	public void setRang(String rang) {
-		Rang = rang;
-	}
-
-	public String getPhase() {
-		return Phase;
-	}
-
-	public void setPhase(String phase) {
-		Phase = phase;
-	}
-
-	public String getArbeitsteilung() {
-		return Arbeitsteilung;
-	}
-
-	public void setArbeitsteilung(String arbeitsteilung) {
-		Arbeitsteilung = arbeitsteilung;
-	}
-
-	public String getEbene() {
-		return Ebene;
-	}
-
-	public void setEbene(String ebene) {
-		Ebene = ebene;
-	}
-
 	public String getTaskName() {
 		return taskName;
 	}
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getPhase() {
+		return phase;
+	}
+
+	public void setPhase(String phase) {
+		this.phase = phase;
 	}
 
 }

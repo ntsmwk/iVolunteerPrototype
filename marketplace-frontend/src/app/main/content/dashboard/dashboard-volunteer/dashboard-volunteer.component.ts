@@ -116,7 +116,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   getDateString(dateNumber: number) {
     const date = new Date(dateNumber);
-    return 'am ' + date.toLocaleDateString() + ', um ' + date.toLocaleTimeString();
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   }
 
   getImagePathById(id: string) {
