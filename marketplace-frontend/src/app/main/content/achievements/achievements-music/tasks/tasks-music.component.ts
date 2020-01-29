@@ -240,8 +240,6 @@ export class TasksMusicComponent implements OnInit {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
 
-              console.error('classInstances',this.classInstances);
-
               this.classInstances.forEach((ci, index, object) => {
                 if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
                   object.splice(index, 1);
@@ -433,7 +431,6 @@ export class TasksMusicComponent implements OnInit {
     let timelineList = this.filteredClassInstances.map(ci => {
       let value;
       (this.selectedYaxis === 'Anzahl') ? value = 1 : value = Number(ci.properties[this.TASK_DURATION].values[0]);
-      console.error('value', value);
       return ({ date: new Date(ci.properties[this.TASK_DATE_FROM].values[0]).setHours(0, 0, 0, 0), value: Number(value) });
     });
 
@@ -736,8 +733,6 @@ export class TasksMusicComponent implements OnInit {
               }
             });
 
-            console.error('before', this.classInstances);
-
             this.filteredClassInstances = [...this.classInstances];
 
             this.tableDataSource.data = this.classInstances;
@@ -762,9 +757,6 @@ export class TasksMusicComponent implements OnInit {
                 object.splice(index, 1);
               }
             });
-
-            console.error('after', this.classInstances);
-
 
             this.filteredClassInstances = [...this.classInstances];
 
