@@ -116,7 +116,9 @@ export class TasksMusicComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
-      height: 900
+      height: 900,
+      margin: [0, 0, 0, 0]
+
     },
     title: {
       text: undefined
@@ -132,7 +134,8 @@ export class TasksMusicComponent implements OnInit {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '16px'
+            fontSize: '17px',
+            color: '#ffffff'
           }
         }
       }
@@ -204,7 +207,7 @@ export class TasksMusicComponent implements OnInit {
 
   public timelineChartData: { name: string, series: { name: Date, value: number }[] }[];
 
-  sunburstCenterName: string = 'Tätigkeitsart';
+  sunburstCenterName: string = 'Tätigkeiten';
 
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
@@ -236,35 +239,35 @@ export class TasksMusicComponent implements OnInit {
         this.marketplace = values[0][0];
 
         this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
-          .toPromise().then((ret: ClassInstance[]) => {
-            if (!isNullOrUndefined(ret)) {
-              this.classInstances = ret;
+        .toPromise().then((ret: ClassInstance[]) => {
+          if (!isNullOrUndefined(ret)) {
+            this.classInstances = ret;
 
-              this.classInstances.forEach((ci, index, object) => {
-                if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
-                  object.splice(index, 1);
-                }
+            this.classInstances.forEach((ci, index, object) => {
+              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+                object.splice(index, 1);
+              }
+            });
+
+            this.filteredClassInstances = [...this.classInstances];
+
+            let list = this.filteredClassInstances
+              .map(ci => {
+                return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0] })
               });
-
-              this.filteredClassInstances = [...this.classInstances];
-
-              let list = this.filteredClassInstances
-                .map(ci => {
-                  return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0] })
-                });
-              this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
-              this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
-              this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
+            this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+            this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+            this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
 
-              this.tableDataSource.data = this.classInstances;
-              this.tableDataSource.paginator = this.paginator;
+            this.tableDataSource.data = this.classInstances;
+            this.tableDataSource.paginator = this.paginator;
 
-              this.generateTimelineData();
-              this.generateSunburstData();
-              this.generateOtherChartsData();
-            }
-          });
+            this.generateTimelineData();
+            this.generateSunburstData();
+            this.generateOtherChartsData();
+          }
+        });
       });
     });
 
@@ -430,7 +433,7 @@ export class TasksMusicComponent implements OnInit {
 
     let timelineList = this.filteredClassInstances.map(ci => {
       let value;
-      (this.selectedYaxis === 'Anzahl') ? value = 1 : value = Number(ci.properties[this.TASK_DURATION].values[0]);
+      (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
       return ({ date: new Date(ci.properties[this.TASK_DATE_FROM].values[0]).setHours(0, 0, 0, 0), value: Number(value) });
     });
 
@@ -715,62 +718,6 @@ export class TasksMusicComponent implements OnInit {
         storedChart = new StoredChart('Rang', 'ngx-charts-pie-chart', JSON.stringify(this.rangData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
-    }
-  }
-
-  onToggleChanged(event) {
-    if (this.fakeChecked) {
-      this.fakeChecked = false;
-
-      this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
-        .toPromise().then((ret: ClassInstance[]) => {
-          if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret;
-
-            this.classInstances.forEach((ci, index, object) => {
-              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
-                object.splice(index, 1);
-              }
-            });
-
-            this.filteredClassInstances = [...this.classInstances];
-
-            this.tableDataSource.data = this.classInstances;
-            this.tableDataSource.paginator = this.paginator;
-
-            this.generateTimelineData();
-            this.generateSunburstData();
-            this.generateOtherChartsData();
-          }
-        });
-
-    } else {
-      this.fakeChecked = true;
-
-      this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
-        .toPromise().then((ret: ClassInstance[]) => {
-          if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret;
-
-            this.classInstances.forEach((ci, index, object) => {
-              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
-                object.splice(index, 1);
-              }
-            });
-
-            this.filteredClassInstances = [...this.classInstances];
-
-            this.tableDataSource.data = this.classInstances;
-            this.tableDataSource.paginator = this.paginator;
-
-            this.generateTimelineData();
-            this.generateSunburstData();
-            this.generateOtherChartsData();
-          }
-        });
-
-
-
     }
   }
 }
