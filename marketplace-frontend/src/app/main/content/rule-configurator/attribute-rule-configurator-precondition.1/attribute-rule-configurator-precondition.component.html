@@ -36,7 +36,7 @@
     <mat-form-field style="width: 150px">
       <input *ngIf="attributeSourceRuleEntry?.classProperty?.type != 'ENUM'" matInput placeholder="value"
         formControlName="value" />
-      <mat-select *ngIf="attributeSourceRuleEntry?.classProperty?.type == 'ENUM'" placeholder="value"
+      <mat-select *ngIf="attributeSourceRuleEntry?.classProperty?.type == 'ENUM'" placeholder="Wert"
         formControlName="value" [value]="attributeSourceRuleEntry.mappingOperatorType">
         <mat-option *ngFor="let enumVal of findEnumValues()" [value]="enumVal" (onSelectionChange)="onChange($event)">
           {{ enumVal }}

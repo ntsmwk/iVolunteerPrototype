@@ -100,7 +100,11 @@
         <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p>
 
         <div class="chartParent2" fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
+          <app-share-menu [label]="'Taetigkeitsart'" (export)="exportChart($event)">
+          </app-share-menu>
+          </div>
           <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
             [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
           </ngx-charts-area-chart-stacked>
