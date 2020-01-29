@@ -24,5 +24,10 @@ public class FakeController {
 	public void addFahrtenspangeFake() {
 		fakeService.addFahrtenspangeFake();
 	}
+	
+	@PostMapping("/create-reset-state")
+	public void createResetState() {
+		fakeService.createResetState();
+	}
 
 }

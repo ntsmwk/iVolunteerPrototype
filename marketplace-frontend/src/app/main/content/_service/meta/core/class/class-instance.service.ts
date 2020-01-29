@@ -30,6 +30,10 @@ import { Participant } from 'app/main/content/_model/participant';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
     }
 
+    getClassInstancesByArcheTypeFake(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/fake`);
+    }
+
     getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
     }
