@@ -15,15 +15,15 @@ import { StoredChart } from '../../../_model/stored-chart';
 import { StoredChartService } from '../../../_service/stored-chart.service';
 
 @Component({
-  selector: 'fuse-competencies',
-  templateUrl: './competencies.component.html',
-  styleUrls: ['./competencies.component.scss'],
+  selector: 'fuse-competencies-music',
+  templateUrl: './competencies-music.component.html',
+  styleUrls: ['./competencies-music.component.scss'],
   animations: fuseAnimations
 
 
 
 })
-export class CompetenciesComponent implements OnInit {
+export class CompetenciesMusicComponent implements OnInit {
   private volunteer: Participant;
   private marketplace: Marketplace;
   classInstances: ClassInstance[];
@@ -93,7 +93,8 @@ export class CompetenciesComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
+        .toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 

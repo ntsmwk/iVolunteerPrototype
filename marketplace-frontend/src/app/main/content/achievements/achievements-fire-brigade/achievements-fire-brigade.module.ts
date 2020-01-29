@@ -40,7 +40,6 @@ import { TasksComponent } from './tasks/tasks.component';
 import { FunctionsComponent } from './functions/functions.component';
 import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
 import { CompetenciesComponent } from './competencies/competencies.component';
-import { ShareMenuComponent } from '../share-menu/share-menu.component';
 import { ShareMenuModule } from '../share-menu/share-menu.module';
 
 const routes = [
