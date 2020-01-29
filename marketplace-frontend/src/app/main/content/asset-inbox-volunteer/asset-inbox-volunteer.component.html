@@ -14,51 +14,6 @@
     //TODO loading circle
   </div>
 
-  <div fxLayout="column" fxLayoutAlign="start center" style="font-size: 16px">
-    <div></div>
-    <div fxLayout="row" fxLayoutAlign="start center">
-
-      <div style="padding: 5px"></div>
-
-
-      <mat-menu xPosition="after" yPosition="below">
-        <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-  
-                        <img class="avatar" src="assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                        <div style="padding-left: 10px"></div>
-                        <div>ÖRK</div>
-                    </div>
-                </button>
-        <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-  
-                        <img class="avatar" src="assets/images/logos/FF_Altenberg.jpg">
-                        <div style="padding-left: 10px"></div>
-                        <div>FF Eidenberg</div>
-                    </div>
-                </button>
-        <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-  
-                        <img class="avatar" src="assets/images/logos/neighborhelp.jpg">
-                        <div style="padding-left: 10px"></div>
-                        <div>Forum Alpbach</div>
-                    </div>
-                </button>
-        <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px" matTooltip="Recruiter: 'Best Jobs'">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-  
-                        <img class="avatar" src="assets/images/logos/recruiter.jpg">
-                        <div style="padding-left: 10px"></div>
-                        <div>Recruiter: 'Best Jobs'</div>
-                    </div>
-                </button>
-      </mat-menu>
-    </div>
-  </div>
-
-
   <div class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" *ngIf="isLoaded">
 
     <div class="pt-8 pb-12">Wähle die Einträge aus, die du in deinen lokalen Freiwilligenpass hinzufügen willst:</div>

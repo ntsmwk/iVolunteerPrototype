@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { AssetInboxVolunteerComponent } from './asset-inbox-volunteer.component';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material';
+import { MatButtonModule, MatMenuModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AssetInboxModule } from '../_components/asset-inbox/asset-inbox.module';
 
@@ -19,6 +19,7 @@ const routes = [
     RouterModule.forChild(routes),       
     FuseSharedModule,
     MatButtonModule,
+    MatMenuModule,
 
     AssetInboxModule
   
