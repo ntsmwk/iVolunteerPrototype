@@ -40,12 +40,7 @@ export class DashboardVolunteerComponent implements OnInit {
   dataSourceFeedback = new MatTableDataSource<ClassInstance>();
   dataSourceRepository = new MatTableDataSource<ClassInstance>();
 
-  // displayedColumnsCompetence = ['issuer', 'label_competence', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
-  // displayedColumnsFeedback = ['issuer', 'label_feedback', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
-  // displayedColumnsTasks = ['issuer', 'label_tasks', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
-
-  // displayedColumnsRepository = [ 'asset', 'date'];
-  private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1',  'date', 'verificationStatus'];
+  private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1',  'date'];
 
 
   issuerIds: string[] = [];
