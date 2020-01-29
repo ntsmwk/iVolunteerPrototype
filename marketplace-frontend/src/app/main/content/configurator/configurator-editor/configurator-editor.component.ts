@@ -112,8 +112,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.selectionIndex = -1;
     this.selectionIndex2 = -1;
-    console.log(this.configurableClasses);
-    console.log(this.relationships);
+    // console.log(this.configurableClasses);
+    // console.log(this.relationships);
   }
 
   fetchPropertyDefinitions() {
@@ -243,8 +243,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.parseGraphContent();
     this.setLayout();
 
-    console.log("TEST");
-    console.log();
     let allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
     let rootVertice = allVertices.find((v: myMxCell) => v.root);
     let rootEdges = this.graph.getOutgoingEdges(rootVertice);
@@ -336,12 +334,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
-          console.log('ptype = enum');
           propertyEntry.cellType = 'enum_property';
           propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
 
         } else {
-          console.log('ptype = property');
 
           propertyEntry.cellType = 'property';
         }
@@ -582,11 +578,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   handleMXGraphClickEvent(event: any) {
     const cell: myMxCell = event.getProperty('cell');
 
-    console.log("outgoing Edges");
-    console.log(this.graph.getModel().getOutgoingEdges(cell));
-    console.log("incoming edges");
-    console.log(this.graph.getModel().getIncomingEdges(cell));
-
     if (!isNullOrUndefined(cell)) {
       const parent = cell.getParent();
 
@@ -697,7 +688,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }
 
       if (cell.value === 'add_association') {
-        console.log('add association');
 
         const enumProperty = new ClassProperty<EnumReference>();
         enumProperty.name = '<new Enum>';
@@ -748,7 +738,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   handleMXGraphFoldEvent(cell: myMxCell) {
     const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
-    console.log(cell);
     if (!isNullOrUndefined(edges)) {
       for (let edge of edges) {
         if (!isNullOrUndefined(edge) && !isNullOrUndefined(edge.target)) {
@@ -851,7 +840,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.selectionIndex = -1;
     }
 
-    console.log(cell);
   }
 
   private setAllCellsInvisibleRec(cell: myMxCell) {
@@ -870,10 +858,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     let children = this.graph.getChildCells(cell) as myMxCell[];
     children = children.filter(c => c.cellType === 'enum_property');
-    console.log(children);
+
     for (const child of children) {
       const childEdges = this.graph.getOutgoingEdges(child);
-      console.log(childEdges);
+
       for (const childEdge of childEdges) {
         this.graph.getModel().setVisible(childEdge.target, false);
         this.setAllCellsInvisibleRec(childEdge.target as myMxCell)
@@ -901,10 +889,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       let children = this.graph.getChildCells(cell) as myMxCell[];
       children = children.filter(c => c.cellType === 'enum_property');
-      console.log(children);
+
       for (const child of children) {
         const childEdges = this.graph.getOutgoingEdges(child);
-        console.log(childEdges);
+
         for (const childEdge of childEdges) {
           this.graph.getModel().setVisible(childEdge.target, true);
         }
@@ -949,9 +937,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   changeIconClicked(selectionIndex: number) {
-    console.log('TODO');
+
     this.dialogFactory.openChangeIconDialog(this.marketplace, this.configurableClasses[selectionIndex].imagePath).then((result: any) => {
-      console.log(result);
+
       this.configurableClasses[selectionIndex].imagePath = result;
       this.showServerContent(false);
     });
@@ -1136,9 +1124,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         (<Association>r).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
 
       } else {
-        console.error('invalid cellType');
-        console.log(cell);
-        console.log(this.relationships);
+        // console.error('invalid cellType');
+        // console.log(cell);
+        // console.log(this.relationships);
       }
 
     }

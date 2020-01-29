@@ -39,7 +39,6 @@ export class FuseUserMenuComponent implements OnInit {
     const users: Participant[] = [];
     users.push(this.participant);
     this.userImagePathService.getImagePathsById(users.map(u => u.id)).toPromise().then((ret: UserImagePath[]) => {
-      console.log(ret);
       if (!isNullOrUndefined(ret) && ret.length <= 1) {
         this.participantImagepath = ret[0];
       }
@@ -60,7 +59,6 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getUserNameString() {
-    console.log(this.router.url);
     if (this.router.url === '/main/rules/all' || this.router.url === '/main/rule') {
       return "Sandra Wolkerstorfer (Rotes Kreuz)";
     } else {
