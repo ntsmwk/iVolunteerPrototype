@@ -74,6 +74,13 @@ tr.is-Bewerb {
 tr.is-Einsatz {
   background: rgba(rgb(169, 89, 99), $alpha: 0.7);
 }
+tr.is-Probe {
+  background: rgba(rgb(122, 163, 229), $alpha: 0.7);
+}
+tr.is-Ausrueckung {
+  background: rgba(rgb(162, 126, 168), $alpha: 0.7);
+}
+
 
 ::ng-deep .highcharts-drillup-button {
   display: none !important;
