@@ -62,7 +62,7 @@
 
 
     <mat-accordion multi="true">
-      <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel [expanded]="false">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Zweck
@@ -216,9 +216,5 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-  </div>
-
-  <div class="no-data" *ngIf="classInstances.length === 0">
-    Keine Ableitungsregeln gefunden.
   </div>
 </div>

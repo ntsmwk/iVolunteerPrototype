@@ -93,7 +93,7 @@ export class CompetenciesComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'FF').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
@@ -203,7 +203,7 @@ export class CompetenciesComponent implements OnInit {
     });
 
     for (let i = 0; i < dataA1.length; i++) {
-      dataA1[i].series.sort((a,b) => b.name.localeCompare(a.name));   
+      dataA1[i].series.sort((a, b) => b.name.localeCompare(a.name));
     }
     this.trainingData = [...dataA1];
 
@@ -295,6 +295,13 @@ export class CompetenciesComponent implements OnInit {
         storedChart = new StoredChart('ANZAHL an absolvierten Ausbildungen', 'ngx-charts-line-chart', JSON.stringify(this.trainingData2), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
+
+
+      case 'Taetigkeitsart':
+        storedChart = new StoredChart('Gesamtstunden nach Tätigkeitsarten', 'ngx-charts-bar-vertical-stacked', JSON.stringify(this.taskData), this.volunteer.id);
+        this.storedChartService.save(this.marketplace, storedChart).toPromise();
+        break;
+
     }
   }
 

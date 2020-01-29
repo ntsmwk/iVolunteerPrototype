@@ -18,9 +18,7 @@
                     <div class="half">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
-                            <app-share-menu 
-                            [label]="'Stunden'"
-                            (export)="exportChart($event)">
+                            <app-share-menu [label]="'Stunden'" (export)="exportChart($event)">
                             </app-share-menu>
                         </div>
                         <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData"
@@ -33,10 +31,9 @@
 
                     <div class="half">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                        <h2 class="title">ANZAHL an absolvierten Ausbildungen</h2>
-                        <app-share-menu [label]="'Anzahl'"
-                        (export)="exportChart($event)">
-                        </app-share-menu>
+                            <h2 class="title">ANZAHL an absolvierten Ausbildungen</h2>
+                            <app-share-menu [label]="'Anzahl'" (export)="exportChart($event)">
+                            </app-share-menu>
                         </div>
                         <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient"
                             [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
@@ -98,12 +95,19 @@
 
         <mat-card class="card">
             <mat-card-header>
-                <mat-card-title>Diversität</mat-card-title>
+                <mat-card-title>Anpassungsfähigkeit</mat-card-title>
             </mat-card-header>
             <mat-card-content>
+                <p style="margin-left: 20px;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p>
+
 
                 <div class="chartParent" fxLayout="column">
-                    <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+
+                        <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+                        <app-share-menu [label]="'Taetigkeitsart'" (export)="exportChart($event)">
+                        </app-share-menu>
+                    </div>
                     <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
                         [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
                         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
