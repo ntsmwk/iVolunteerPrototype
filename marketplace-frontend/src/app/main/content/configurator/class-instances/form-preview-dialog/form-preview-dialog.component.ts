@@ -53,11 +53,7 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     this.classDefinitionService.getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-      this.formConfigurations = formConfigurations
-
-      console.log("================");
-      console.log(formConfigurations);
-      console.log("================");
+      this.formConfigurations = formConfigurations;
 
       for (let config of this.formConfigurations) {
         config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);

@@ -132,7 +132,7 @@ public class FakeService {
 		PropertyDefinition<Object> nameDefinition= propertyDefinitionRepository.findOne("name");
 		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
 		nameInstance.setValues(new ArrayList<>());
-		nameInstance.getValues().add("NAME - TBD");
+		nameInstance.getValues().add("Brandeinsatz");
 		
 		properties.add(nameInstance);
 		

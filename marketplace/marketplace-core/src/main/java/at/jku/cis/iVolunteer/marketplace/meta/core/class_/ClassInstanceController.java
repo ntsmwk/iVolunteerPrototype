@@ -68,9 +68,7 @@ public class ClassInstanceController {
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/fake")
 	private List<ClassInstance> getClassinstancesByArchetypeFake(@PathVariable("archetype") ClassArchetype archeType) {
 		boolean returnFake = isSunburstFakeRepository.findAll().size() > 0;
-		
-		System.out.println(returnFake);
-		
+				
 		if (returnFake) {
 			return getClassInstancesByArchetypeAfterSunburstFake(archeType);
 		} else {

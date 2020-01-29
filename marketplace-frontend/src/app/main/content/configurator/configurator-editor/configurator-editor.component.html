@@ -118,13 +118,13 @@
 
     <div class="pt-36"></div>
 
-    <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
+    <!-- <a (click)="createClassInstanceClicked(null)" style="cursor: pointer">New Instance
       (from root)</a>
     <div style="padding-top: 5px"></div>
     <a (click)="doShitWithGraph(graph)" style="cursor: pointer">print graph to
       console</a>
     <div style="padding-top: 5px"></div>
-    <a (click)="printModelToConsole()" style="cursor: pointer">Print Model to console</a>
+    <a (click)="printModelToConsole()" style="cursor: pointer">Print Model to console</a> -->
   </div>
 </div>
 
@@ -138,7 +138,7 @@
     <editor-tree-view *ngIf="rightSidebarVisible" [editorInstance]="this"></editor-tree-view>
 
     <div *ngIf="!rightSidebarVisible" fxLayout="row" fxLayoutAlign="end center">
-      <a (click)="showSidebar()" style="cursor: pointer">show Sidebar</a>
+      <a (click)="showSidebar()" style="cursor: pointer">Textansicht aufklappen</a>
     </div>
 
   </div>

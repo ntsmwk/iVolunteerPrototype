@@ -124,8 +124,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    console.log('entered prepareDataForAdd');
-
     const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
     for (const p of propertyItems) {
@@ -137,10 +135,8 @@ export class DialogFactoryComponent implements OnInit {
         }
       }
     }
-    console.log('finished');
 
     const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
-    console.log(data);
     return data;
   }
 
@@ -227,7 +223,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-    console.log('entered edit Description Dialog');
 
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
@@ -241,8 +236,6 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: TextFieldDialogData) => {
       if (!isNullOrUndefined(result)) {
-        console.log('Result: ' + result.fields[0].value);
-        console.log(result);
         ret = result.fields[0].value;
       }
     });
@@ -253,7 +246,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   editTemplateNameDialog(template: UserDefinedTaskTemplate) {
-    console.log('Entered edit Name Dialog');
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -277,7 +269,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-    console.log('clicked new nested Task Template');
 
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
@@ -295,7 +286,6 @@ export class DialogFactoryComponent implements OnInit {
       if (!isNullOrUndefined(result)) {
 
         for (const val of result.fields) {
-          console.log(val);
           ret.push(val.value);
         }
       }
@@ -308,8 +298,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   confirmationDialog(title: string, description: string) {
-    console.log('clicked delete template');
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       data: { title: title, description: description }
@@ -329,8 +317,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changePropertyOrderDialog(properties: PropertyItem[]) {
-    console.log('clicked order properties');
-
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
@@ -340,8 +326,6 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any;
 
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log('Dialog closed - displayed result');
-      console.log(result);
       ret = result;
     });
 
@@ -351,8 +335,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   changeSubtemplatesOrderDialog(template: UserDefinedTaskTemplate) {
-    console.log('clicked order properties');
-
     const dialogRef = this.dialog.open(SortDialogComponent, {
       width: '500px',
       // height: '80%',
@@ -362,8 +344,6 @@ export class DialogFactoryComponent implements OnInit {
     let ret: any;
 
     dialogRef.beforeClose().toPromise().then((result: SortDialogData) => {
-      console.log('Dialog closed - displayed result');
-      console.log(result);
       ret = result;
     });
 
@@ -382,9 +362,7 @@ export class DialogFactoryComponent implements OnInit {
 
     let ret: { copyId: string, newName: string, newDescription: string };
     dialogRef.beforeClose().toPromise().then((result: ChooseTemplateToCopyDialogData) => {
-      console.log('result = ');
       ret = { copyId: result.returnId, newName: result.newLabel, newDescription: result.newDescription };
-      console.log(ret);
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {

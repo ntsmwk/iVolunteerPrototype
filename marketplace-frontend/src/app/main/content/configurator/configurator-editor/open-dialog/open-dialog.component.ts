@@ -35,12 +35,10 @@ export class OpenDialogComponent implements OnInit {
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-        console.log(configurators);
         this.configurators = configurators.filter(c => {
           return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
         });
 
-        console.log(this.configurators)
         if (this.configurators.length > 5) {
           this.recentConfigurators = this.configurators.slice(0, 5);
         }

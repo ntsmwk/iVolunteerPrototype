@@ -4,6 +4,7 @@ import { Participant, UserImagePath } from '../../content/_model/participant';
 import { LoginService } from '../../content/_service/login.service';
 import { CoreUserImagePathService } from 'app/main/content/_service/core-user-imagepath.service';
 import { isNullOrUndefined } from 'util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'fuse-user-menu',
@@ -17,7 +18,8 @@ export class FuseUserMenuComponent implements OnInit {
   participantImagepath: UserImagePath;
 
   constructor(private loginService: LoginService,
-    private userImagePathService: CoreUserImagePathService) {
+    private userImagePathService: CoreUserImagePathService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -37,7 +39,6 @@ export class FuseUserMenuComponent implements OnInit {
     const users: Participant[] = [];
     users.push(this.participant);
     this.userImagePathService.getImagePathsById(users.map(u => u.id)).toPromise().then((ret: UserImagePath[]) => {
-      console.log(ret);
       if (!isNullOrUndefined(ret) && ret.length <= 1) {
         this.participantImagepath = ret[0];
       }
@@ -45,21 +46,29 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getImagePath() {
-    if (isNullOrUndefined(this.participantImagepath)) {
-      return '/assets/images/avatars/profile.jpg';
+
+    if (this.router.url === '/main/rules/all' || this.router.url === '/main/rule') {
+      return '/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg';
     } else {
-      return this.participantImagepath.imagePath;
+      if (isNullOrUndefined(this.participantImagepath)) {
+        return '/assets/images/avatars/profile.jpg';
+      } else {
+        return this.participantImagepath.imagePath;
+      }
     }
   }
 
   getUserNameString() {
+    if (this.router.url === '/main/rules/all' || this.router.url === '/main/rule') {
+      return "Sandra Wolkerstorfer (Rotes Kreuz)";
+    } else {
+      let ret = this.participant.firstname + ' ' + this.participant.lastname;
 
-    let ret = this.participant.firstname + ' ' + this.participant.lastname;
-    
-    if (!isNullOrUndefined(this.participant.position)) {
-      ret = ret + ' (' + this.participant.position + ')';
-    } 
-    return ret;
+      if (!isNullOrUndefined(this.participant.position)) {
+        ret = ret + ' (' + this.participant.position + ')';
+      }
+      return ret;
+    }
   }
 
 }

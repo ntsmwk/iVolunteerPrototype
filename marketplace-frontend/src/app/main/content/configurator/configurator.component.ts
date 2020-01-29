@@ -12,10 +12,6 @@ import { RelationshipService } from '../_service/meta/core/relationship/relation
 import { Relationship } from '../_model/meta/Relationship';
 import { CoreFlexProdService } from '../_service/core-flexprod.service';
 
-
-
-
-
 @Component({
   selector: 'app-configurator',
   templateUrl: './configurator.component.html',
@@ -49,10 +45,7 @@ export class ConfiguratorComponent implements OnInit {
           service = this.helpSeekerService;
         }
 
-        console.log("logged in")
         service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
-          console.log("finding marketplaces")
-          console.log(marketplace);
           if (!isNullOrUndefined(marketplace)) {
             this.marketplace = marketplace;
             this.isLoaded = true;
@@ -62,10 +55,6 @@ export class ConfiguratorComponent implements OnInit {
       });
     });
   }
-
-
-
-
 
   navigateBack() {
     window.history.back();
