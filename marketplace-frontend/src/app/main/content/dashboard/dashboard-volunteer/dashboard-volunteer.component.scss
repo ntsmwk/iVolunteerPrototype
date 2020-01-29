@@ -1,198 +1,57 @@
 @import "src/@fuse/scss/fuse";
 @import '~@angular/material/theming';
 @include mat-core();
-
-$custom-typography: mat-typography-config(
-  $font-family: 'Muli'
-);
+$custom-typography: mat-typography-config( $font-family: 'Muli');
 @include mat-core($custom-typography);
-
 .page-layout {
-
-    font-family: "Muli","Helvetica Neue",Arial,sans-serif;
-    overflow: scroll;
-
-    .header {
-        position: relative;
-        flex: 1 0 auto;
-        height: 90px;
-        max-height: 90px;
-        background: #1A237E;
-        background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
-        text-align: center;
-
-        @include media-breakpoint('xs') {
-            height: 240px;
-            padding: 16px;
-        }
-
-
-        h1 {
-            color: white;
-            font-size: 50px;
-            font-weight: 300;
-            letter-spacing: 0.01em;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 0px;
-
-            @include media-breakpoint-down('xs') {
-            font-size: 24px;
-            }
-        }
+  font-family: "Muli", "Helvetica Neue", Arial, sans-serif;
+  overflow: scroll;
+  .header {
+    position: relative;
+    flex: 1 0 auto;
+    height: 90px;
+    max-height: 90px;
+    background: #1A237E;
+    background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+    text-align: center;
+    @include media-breakpoint('xs') {
+      height: 240px;
+      padding: 16px;
     }
-
-    .mat-column-actions {
-        padding-right: 0;
-        flex: 0 0 75px;
-    }
-
-
-
-    // .mat-column-date1 {
-    //     font-size: 12px;
-    // }
-
-    // .mat-column-date2 {
-    //     font-size: 12px;
-
-    // }
-
-    // .mat-column-label_competence {
-    //     // padding-left: 3px;
-    //     flex: 0 0 200px;
-    // }
-
-    // .mat-column-label_feedback {
-    //     // padding-left: 5px;
-    //     flex: 0 0 200px;
-    // }
-    // .mat-column-label_tasks {
-    //     // padding-left: 5px;
-    //     // flex: 0 0 135px;
-    //     flex: 0 0 200px;
-
-    // }
-
-    // .mat-column-issuer {
-    //     padding-left: 5px;
-    //     flex: 0 0 50px;
-    // }
-
-    // .mat-column-status {
-    //     flex: 0 0 45px;
-    // }
-
-
-      
-
-
-      .highlighted_new {
-        // background-color: rgb(255, 246, 195);
-        // background-color: rgb(252, 232, 207);
-        // background-color: #FFECB3;
-
-        // background-color: rgb(94, 192, 37);
-        background-color: #008000;
-        font-weight: 800;
-        .mat-cell {
-            color: white;
-        }
-        .a {
-            color: white;
-        }
-
-      }
-
-      
-      .highlighted_increased {
-        background-color: rgb(214, 252, 199);
+    h1 {
+      color: white;
+      font-size: 50px;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0px;
+      @include media-breakpoint-down('xs') {
+        font-size: 24px;
       }
     }
-
-// ::ng-deep .mat-progress-bar-fill::after {
-//     background-color: green;
-// }
-
-// ::ng-deep .mat-progress-bar-buffer {
-//     background: red;
-// }
-
-// ::ng-deep .mat-expansion-panel-body {
-//     padding: 0;
-// }
-// .share-radio-group {
-// display: flex;
-//   flex-direction: row;
-//   margin: 15px 0;
-//   margin-right: 10px;
-// }
-
-
-// ::ng-deep .mat-ink-bar {
-//   background-color: white !important;}
-
-::ng-deep .mat-tab-label.mat-tab-label-active {
-    // min-width: 25px !important;
-    // padding: 5px;
-    background-color: mat-color($primary);
-    opacity: 1 !important;
-    
-    color: white;
-    // font-weight: 700;
+  }
 }
 
 
-// // ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
-// //     background: mat-color($primary);
-// //     height: 35px;
-// //     // border-radius: 100px;
-// //     // margin-bottom: 5px;
-// //     opacity: 1 !important;
-// // }
+.table {
+  mat-row:nth-child(even) {
+    background-color: #afcbe6;
+  }
+  mat-row:nth-child(odd) {
+    background-color: white;
+  }
+  mat-row {
+    cursor: pointer;
+  }
+  mat-row:hover {
+    opacity: 0.5;
+  }
+  mat-header-cell {
+    font-size: 20px;
+  }
 
-// ::ng-deep .mat-tab-label {
-//     // min-width: 25px !important;
-//     // padding: 5px;
-//     opacity: 1 !important;
-//     background-color: white;
-//     color: mat-color($accent);
-    
- 
-    
-    
-//     // font-weight: 700;
-// }
-
-
-
-
-//     img.header-icon {
-//       left: 10px;
-//       padding: 16px;
-//       max-height: 100%;
-//       position: absolute;
-//       filter: brightness(0) invert(1);
-
-//       @include media-breakpoint-down('xs') {
-//         display: none;
-//       }
-//     }
-
-//     .buttons {
-//       right: 0;
-//       position: absolute;
-//     }
-//   }
-
-//   .dashboard-area {
-//     gridster {
-//       min-height: 1000px;
-//       background-color: transparent;
-//     }
-
-//     gridster.display-grid {
-//       background: grey;
-//     }
-//   }
-// }
+  mat-cell{
+    font-size: 16px;
+  }
+}

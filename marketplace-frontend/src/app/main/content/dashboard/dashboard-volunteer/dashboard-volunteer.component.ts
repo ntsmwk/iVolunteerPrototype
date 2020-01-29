@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ShareDialog } from './share-dialog/share-dialog.component';
@@ -12,6 +12,8 @@ import { ClassInstanceService } from '../../_service/meta/core/class/class-insta
 import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
+import { MatSort, MatPaginator } from '@angular/material';
+import { CIP } from '../../_model/classInstancePropertyConstants';
 
 @Component({
   selector: 'dashboard-volunteer',
@@ -28,6 +30,10 @@ export class DashboardVolunteerComponent implements OnInit {
   marketplace: Marketplace;
   registeredMarketplaces: Marketplace[];
 
+
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+
   isLoaded: boolean;
 
   dataSourceComp = new MatTableDataSource<ClassInstance>();
@@ -38,12 +44,34 @@ export class DashboardVolunteerComponent implements OnInit {
   // displayedColumnsFeedback = ['issuer', 'label_feedback', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
   // displayedColumnsTasks = ['issuer', 'label_tasks', 'date1'/*, 'evidence', 'date2', 'status'*/, 'details'];
 
-  displayedColumnsRepository = ['issuer', 'asset', 'date', 'actions'];
+  // displayedColumnsRepository = [ 'asset', 'date'];
+  private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1',  'date', 'verificationStatus'];
+
 
   issuerIds: string[] = [];
   issuers: Participant[] = [];
   userImagePaths: any[];
 
+  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
+  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
+  TASK_ID = CIP.TASK_ID;
+  TASK_NAME = CIP.TASK_NAME;
+  TASK_TYPE_1 = CIP.TASK_TYPE_1;
+  TASK_TYPE_2 = CIP.TASK_TYPE_2;
+  TASK_TYPE_3 = CIP.TASK_TYPE_3;
+  TASK_TYPE_4 = CIP.TASK_TYPE_4;
+  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
+  ZWECK = CIP.ZWECK;
+  ROLLE = CIP.ROLLE;
+  RANG = CIP.RANG;
+  PHASE = CIP.PHASE;
+  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
+  EBENE = CIP.EBENE;
+  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
+  TASK_DATE_TO = CIP.TASK_DATE_TO;
+  TASK_DURATION = CIP.TASK_DURATION;
+  TASK_LOCATION = CIP.TASK_LOCATION;
+  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
   constructor(public dialog: MatDialog,
     private coreVolunteerService: CoreVolunteerService,
@@ -86,11 +114,13 @@ export class DashboardVolunteerComponent implements OnInit {
       this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((instances: ClassInstance[]) => {
 
         instances = instances.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
-        if (instances.length > 25) {
-          instances = instances.slice(0, 25);
-        }
+        // if (instances.length > 25) {
+        //   instances = instances.slice(0, 25);
+        // }
 
         this.dataSourceRepository.data = instances;
+        this.paginator.length = instances.length;
+        this.dataSourceRepository.paginator = this.paginator;
         this.issuerIds.push(...instances.map(t => t.issuerId));
       })
 

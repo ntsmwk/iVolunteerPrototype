@@ -1,55 +1,53 @@
-<link type="text/css" rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
 
 <div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll" *ngIf="isLoaded">
 
-    <div style="padding-top: 12px"></div>
+  <div style="padding-top: 12px"></div>
 
-    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-        <h1>Digitaler Freiwilligenpass
-          </h1>
-        <!-- <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome -->
-            <!-- Back</h1> -->
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1>Digitaler Freiwilligenpass
+    </h1>
+    <!-- <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome -->
+    <!-- Back</h1> -->
 
-        <div style=" position: relative; width: 120px; height: 120px; padding-top: 0px;">
-            <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                src="../../../../assets/images/avatars/weixlbaumer.jpg">
-        </div>
+    <div style=" position: relative; width: 120px; height: 120px; padding-top: 0px;">
+      <img style="object-fit: contain; max-width: 100%; max-height: 100%" src="../../../../assets/images/avatars/weixlbaumer.jpg">
     </div>
+  </div>
 
-    <div style="padding-top: 30px"></div>
+  <div style="padding-top: 30px"></div>
 
-    <!--TOP WIDGET ROW-->
+  <!--TOP WIDGET ROW-->
 
-    <!--TODO ReInsert Widget row-->
+  <!--TODO ReInsert Widget row-->
 
-    <mat-divider></mat-divider>
-    <div style="padding-top: 10px"></div>
+  <mat-divider></mat-divider>
+  <div style="padding-top: 10px"></div>
 
 
 
-    <div class="mat-card p-20" fxLayout="column">
+  <div class="mat-card p-20" fxLayout="column">
 
-        <div style="padding-top: 10px;"></div>
+    <div style="padding-top: 10px;"></div>
 
-        <!-- First row -->
-        <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-left: 5px">
-            <div fxLayout=row fxLayoutAlign="start center">
-            </div>
+    <!-- First row -->
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-left: 5px">
+      <div fxLayout=row fxLayoutAlign="start center">
+      </div>
 
-            <div></div>
+      <div></div>
 
-            <!--Share Icon and Menu-->
-            <div style="padding-right: 20px; padding-top: 5px">
-                <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
+      <!--Share Icon and Menu-->
+      <div style="padding-right: 20px; padding-top: 5px">
+        <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
                     <mat-icon>share</mat-icon>
                 </button>
 
-                <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                    <mat-label mat-menu-item disabled style="color: black">Freigeben an...</mat-label>
+        <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+          <mat-label mat-menu-item disabled style="color: black">Freigeben an...</mat-label>
 
-                    <!-- <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
+          <!-- <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
                             <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
@@ -57,7 +55,7 @@
                             <div>ÖRK</div>
                         </div>
                     </button> -->
-                    <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
+          <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
                             <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
@@ -65,7 +63,7 @@
                             <div>FF Altenberg</div>
                         </div>
                     </button>
-                    <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
+          <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
                             <img class="avatar" src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
@@ -73,8 +71,7 @@
                             <div>Musikverein Schwertberg</div>
                         </div>
                     </button>
-                    <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px"
-                        matTooltip="Recruiter: 'Best Jobs'">
+          <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px" matTooltip="Recruiter: 'Best Jobs'">
                         <div fxLayout="row" fxLayoutAlign="start center">
 
                             <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
@@ -82,127 +79,153 @@
                             <div>Best Jobs</div>
                         </div>
                     </button>
-                </mat-menu>
-            </div>
-        </div>
-        <!--END Share Icon and Menu-->
+        </mat-menu>
+      </div>
+    </div>
+    <!--END Share Icon and Menu-->
 
-        <!-- END First row -->
+    <!-- END First row -->
 
-        <div style="padding-top: 10px"></div>
+    <div style="padding-top: 10px"></div>
 
-        <!---FILTER BY ORGANIZATION ROW-->
-        <div style="font-size: 18px; padding-left: 10px">
-            <div>Nach Organisation filtern</div>
-            <div fxLayout="row" fxLayoutAlign="start start">
+    <!---FILTER BY ORGANIZATION ROW-->
+    <div style="font-size: 18px; padding-left: 10px">
+      <div>Nach Organisation filtern</div>
+      <div fxLayout="row" fxLayoutAlign="start start">
 
-                <!-- <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
+        <!-- <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
                     fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg">
                     </div>
                 </button> -->
-                <div style="padding:3px"></div>
-                <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;"
-                    fxLayout="row" fxLayoutAlign="start center">
+        <div style="padding:3px"></div>
+        <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 7px;">
                         Alle
                     </div>
                 </button>
-                <div style="padding:3px"></div>
-                <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
-                    fxLayout="row" fxLayoutAlign="start center">
+        <div style="padding:3px"></div>
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/logos/FF_Altenberg.jpg">
                     </div>
                 </button>
 
-                <div style="padding:3px"></div>
-                <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
-                    fxLayout="row" fxLayoutAlign="start center">
+        <div style="padding:3px"></div>
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
                     </div>
                 </button>
+      </div>
+    </div>
 
-               
+
+    <div style="padding-top: 10px"></div>
+
+    <div class="table" fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
+      <div class="pt-32"></div>
+
+      <mat-table #table matSort [dataSource]="dataSourceRepository" style="width: 100%">
+
+        <ng-container matColumnDef="issuer">
+          <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <div fxLayout="row" fxLayoutAligne="start center">
+              <img class="avatar" [src]="getImagePathById(entry.issuerId)">
+              <div fxLayout="column">
+                <div>{{getIssuerName(entry.issuerId)}}</div>
+                <div class="pl-8">{{getIssuerPosition(entry.issuerId)}}</div>
+              </div>
             </div>
-        </div>
+          </mat-cell>
+        </ng-container>
 
-        <!--END -FILTER BY ORGANIZATION ROW-->
+        <ng-container matColumnDef="taskName">
+          <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </mat-cell>
+        </ng-container>
 
-        <div style="padding-top: 10px"></div>
+        <ng-container matColumnDef="taskType1">
+          <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </mat-cell>
+        </ng-container>
 
-        <div fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
-            <div class="pt-32"></div>
+        <ng-container matColumnDef="taskType2">
+          <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </mat-cell>
+        </ng-container>
 
-            <!--ASSET TABLE-->
-            <mat-table #tableRepository [dataSource]="dataSourceRepository" style="width: 100%">
+     
 
-                <ng-container matColumnDef="issuer">
-                    <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        <div fxLayout="row" fxLayoutAligne="start center">
-                            <img class="avatar" [src]="getImagePathById(entry.issuerId)">
-                            <div fxLayout="column">
-                                <div>{{getIssuerName(entry.issuerId)}}</div>
-                                <div class="pl-8">{{getIssuerPosition(entry.issuerId)}}</div>
-                            </div>
-                        </div>
-                    </mat-cell>
-                </ng-container>
+        <ng-container matColumnDef="taskDateFrom">
+          <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+          </mat-cell>
+        </ng-container>
 
-                <ng-container matColumnDef="asset">
-                    <mat-header-cell *matHeaderCellDef>Freiwilligenpass-Eintrag</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        <div fxLayout="row" fxLayoutAlign="start center">
+         <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef>Datum</mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            {{getDateString(entry.timestamp)}}
+          </mat-cell>
+        </ng-container>
 
-                                <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
-                                    <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;"
-                                        [src]="getArchetypeIcon(entry)">
-                                </div>
+        <ng-container matColumnDef="taskDuration">
+          <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h </mat-cell>
+        </ng-container>
 
-                            <div class="pr-4"></div>
 
-                            <div>{{entry.name}} </div>
-                            <div>{{findNameProperty(entry)}}</div>
-                        </div>
-                    </mat-cell>
-                </ng-container>
+        <ng-container matColumnDef="hash">
+          <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </mat-cell>
+        </ng-container>
 
-                <ng-container matColumnDef="date">
-                    <mat-header-cell *matHeaderCellDef>Datum</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
-                        {{getDateString(entry.timestamp)}}
-                    </mat-cell>
-                </ng-container>
+        <!-- <ng-container matColumnDef="asset">
+          <mat-header-cell *matHeaderCellDef>Freiwilligenpass-Eintrag</mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <div style=" z-index: 255; position: relative; width: 25px; height: 25px;">
+                <img style="object-fit: contain; max-width: 100%; width: 100%; max-height: 100%; height: 100%;" [src]="getArchetypeIcon(entry)">
+              </div>
+              <div class="pr-4"></div>
+              <div>{{entry.name}} </div>
+              <div>{{findNameProperty(entry)}}</div>
+            </div>
+          </mat-cell>
+        </ng-container> -->
 
-                <ng-container matColumnDef="actions">
-                    <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
-                    <mat-cell *matCellDef="let entry">
+       
 
-                        <mat-icon [matMenuTriggerFor]="newMenu" style="cursor: pointer">more_vert</mat-icon>
+        <!-- <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>&nbsp;</mat-header-cell>
+          <mat-cell *matCellDef="let entry">
 
-                        <mat-menu #newMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
-                            <button mat-menu-item routerLink="/task/add">Details</button>
-                            <button mat-menu-item>Evidence</button>
-                        </mat-menu>
-                    </mat-cell>
-                </ng-container>
+            <mat-icon [matMenuTriggerFor]="newMenu" style="cursor: pointer">more_vert</mat-icon>
 
-                <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsRepository;"
-                    [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
-            </mat-table>
+            <mat-menu #newMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+              <button mat-menu-item routerLink="/task/add">Details</button>
+              <button mat-menu-item>Evidence</button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container> -->
 
-            <div class="p-32"></div>
+        <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsRepository;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
+      </mat-table>
+      <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
 
-        </div>
 
-        <button mat-stroked-button type="button" color="accent">Weitere laden</button>
-
+      <div class="p-32"></div>
 
     </div>
+
+    <button mat-stroked-button type="button" color="accent">Weitere laden</button>
+
+
+  </div>
