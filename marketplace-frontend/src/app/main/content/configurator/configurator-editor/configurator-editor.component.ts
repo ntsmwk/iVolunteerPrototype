@@ -208,8 +208,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       });
 
       this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender, evt) {
-
-        outer.handleMXGraphFoldEvent(evt);
+        const cells: myMxCell[] = evt.getProperty('cells');
+        const cell = cells.pop();
+        outer.handleMXGraphFoldEvent(cell);
       });
 
 
@@ -221,6 +222,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphCellSelectEvent(evt);
       });
       this.showServerContent(true);
+
+ 
     }
   }
 
@@ -239,6 +242,20 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.parseGraphContent();
     this.setLayout();
+
+    console.log("TEST");
+    console.log();
+    let allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
+    let rootVertice = allVertices.find((v: myMxCell) => v.root);
+    let rootEdges = this.graph.getOutgoingEdges(rootVertice);
+    let headVertices: myMxCell[] = [];
+
+    for (let edge of rootEdges) {
+      headVertices.push(edge.target);
+    }
+
+    this.graph.foldCells(true, false, [rootVertice]);
+    this.graph.foldCells(false, false, [rootVertice]);
   }
 
   clearEditor() {
@@ -728,9 +745,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleMXGraphFoldEvent(event: any) {
-    const cells: myMxCell[] = event.getProperty('cells');
-    const cell = cells.pop();
+  handleMXGraphFoldEvent(cell: myMxCell) {
     const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
     console.log(cell);
