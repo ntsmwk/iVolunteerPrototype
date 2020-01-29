@@ -69,7 +69,8 @@ public class ClassInstanceController {
 
 		for (ClassDefinition cd : classDefinitions) {
 			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
-			classInstances.addAll(cis.stream().filter(ci -> !ci.isNewFakeData()).collect(Collectors.toList()));
+			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> !ci.isNewFakeData())
+					.collect(Collectors.toList()));
 		}
 
 		return classInstances;
@@ -83,8 +84,8 @@ public class ClassInstanceController {
 
 		for (ClassDefinition cd : classDefinitions) {
 			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
-			classInstances.addAll(cis.stream().filter(ci -> ci.isNewFakeData()).collect(Collectors.toList()));
-
+			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> ci.isNewFakeData())
+					.collect(Collectors.toList()));
 		}
 
 		return classInstances;
