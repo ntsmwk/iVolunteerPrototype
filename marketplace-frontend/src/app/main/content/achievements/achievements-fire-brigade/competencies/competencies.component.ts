@@ -297,7 +297,7 @@ export class CompetenciesComponent implements OnInit {
         break;
 
       case 'Taetigkeitsart':
-        storedChart = new StoredChart('Gesamtstunden nach Tätigkeitsarten', 'ngx-charts-bar-vertical-stacked', JSON.stringify(this.taskData), this.volunteer.id);
+        storedChart = new StoredChart('Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf', 'ngx-charts-bar-vertical-stacked', JSON.stringify(this.taskData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }

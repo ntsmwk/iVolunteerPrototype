@@ -67,6 +67,9 @@
           <mat-panel-title>
             Zweck
           </mat-panel-title>
+          <mat-panel-description>
+            Tätigkeitskategoriesierung nach Zweck
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div fxLayout="row" fxLayoutAlign="space-between start">
@@ -81,11 +84,6 @@
            ></highcharts-chart> -->
 
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
-            <div fxLayout="row" fxLayoutAlign="space-between center" >
-              <h1>Tätigkeiten</h1> 
-            <app-share-menu [label]="'null'">
-            </app-share-menu>
-          </div>
             <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="mat-elevation-z8">
               <ng-container matColumnDef="taskName">
                 <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
@@ -128,8 +126,7 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
-              [ngClass]="{
+              <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" [ngClass]="{
                 'is-Veranstaltung': element.properties[TASK_TYPE_1].values[0] === 'Veranstaltung',
                 'is-Ausbildung': element.properties[TASK_TYPE_1].values[0] === 'Ausbildung (aktiv)',
                 'is-Jugendarbeit': element.properties[TASK_TYPE_1].values[0] === 'Jugendarbeit',
@@ -138,7 +135,7 @@
                 'is-Einsatz': element.properties[TASK_TYPE_1].values[0] === 'Einsatz'
               }"></tr>
             </table>
-            <mat-paginator [pageSize]="15" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
           </div>
         </div>
 
@@ -155,13 +152,16 @@
       <mat-expansion-panel [expanded]="false">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Detailgrafiken
+            Zeit, Ort und Rang
           </mat-panel-title>
+          <mat-panel-description>
+            Tätigkeitskategoriesierung nach Zeit, Ort und Rang
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
-          <div fxLayout="row">
-            <div fxLayout="column">
+          <div fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
               <h2>Wochentag:</h2>
               <app-share-menu [label]="'Wochentag'" (export)="exportChart($event, 'Wochentag')">
               </app-share-menu>
@@ -172,7 +172,10 @@
                 [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
-            <div fxLayout="column">
+          </div>
+
+          <div fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
               <h2>Tageszeit:</h2>
               <app-share-menu [label]="'Tageszeit'" (export)="exportChart($event, 'Tageszeit')">
               </app-share-menu>
@@ -187,8 +190,8 @@
         </div>
 
         <div class="secondRow" fxLayout="row" fxLayoutAlign="space-between center">
-          <div fxLayout="row">
-            <div fxLayout="column">
+          <div fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
               <h2>Meistbesuchte Orte:</h2>
               <app-share-menu [label]="'Orte'" (export)="exportChart($event, 'Orte')">
               </app-share-menu>
@@ -199,7 +202,10 @@
                 [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
-            <div fxLayout="column">
+          </div>
+
+          <div fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
               <h2>Rang:</h2>
               <app-share-menu [label]="'Rang'" (export)="exportChart($event, 'Rang')">
               </app-share-menu>

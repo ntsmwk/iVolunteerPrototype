@@ -116,7 +116,9 @@ export class TasksComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
-      height: 900
+      height: 900,
+      margin: [0, 0, 0, 0]
+
     },
     title: {
       text: undefined
@@ -132,7 +134,8 @@ export class TasksComponent implements OnInit {
         dataLabels: {
           enabled: true,
           style: {
-            fontSize: '16px'
+            fontSize: '17px',
+            color: '#ffffff'
           }
         }
       }
@@ -204,7 +207,7 @@ export class TasksComponent implements OnInit {
 
   public timelineChartData: { name: string, series: { name: Date, value: number }[] }[];
 
-  sunburstCenterName: string = 'Tätigkeitsart';
+  sunburstCenterName: string = 'Tätigkeiten';
 
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
@@ -731,8 +734,6 @@ export class TasksComponent implements OnInit {
             }
           });
 
-          console.error('before', this.classInstances);
-
           this.filteredClassInstances = [...this.classInstances];
 
           this.tableDataSource.data = this.classInstances;
@@ -756,8 +757,6 @@ export class TasksComponent implements OnInit {
               object.splice(index, 1);
             }
           });
-
-          console.error('after', this.classInstances);
 
 
           this.filteredClassInstances = [...this.classInstances];

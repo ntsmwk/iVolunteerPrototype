@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {fuseAnimations} from '../../../../../@fuse/animations';
 import {Project} from '../../_model/project';
 import {Subscription} from 'rxjs';
@@ -12,8 +12,8 @@ import {MessageService} from '../../_service/message.service';
   selector: 'fuse-achievements-fire-brigade',
   templateUrl: './achievement-fire-brigade.component.html',
   styleUrls: ['./achievement-fire-brigade.component.scss'],
-  animations: fuseAnimations
-
+  animations: fuseAnimations,
+  // encapsulation: ViewEncapsulation.None
 })
 export class AchievementsFireBrigadeComponent implements OnInit, OnDestroy {
   public projects: Array<Project>;
@@ -28,35 +28,11 @@ export class AchievementsFireBrigadeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadProjects();
-    this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadProjects.bind(this));
+    // this.marketplaceChangeSubscription = this.messageService.subscribe('marketplaceSelectionChanged', this.loadProjects.bind(this));
   }
 
   ngOnDestroy() {
-    this.marketplaceChangeSubscription.unsubscribe();
-  }
-
-
-  private loadProjects() {
-    /*
-    this.projects = [];
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Participant) => {
-      const selected_marketplaces = JSON.parse(localStorage.getItem('marketplaces'));
-      if (!isArray(selected_marketplaces)) {
-        return;
-      }
-      this.coreVolunteerService.findRegisteredMarketplaces(volunteer.id)
-        .toPromise()
-        .then((marketplaces: Marketplace[]) => {
-          marketplaces
-            .filter(mp => selected_marketplaces.find(selected_mp => selected_mp.id === mp.id))
-            .forEach(marketplace => {
-              this.projectService.findFinished(marketplace)
-                .toPromise().then((projects: Project[]) => this.projects = this.projects.concat(projects));
-            });
-        });
-    });
-    */
+    // this.marketplaceChangeSubscription.unsubscribe();
   }
 }
 
