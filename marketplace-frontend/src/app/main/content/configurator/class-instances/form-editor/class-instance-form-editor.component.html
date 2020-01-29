@@ -27,7 +27,7 @@
             style="position: fixed; top: 64px; right: 0px; bottom: 0px; width: 300px; height: auto; display: block; overflow: scroll; z-index: 2; outline-color: black; outline-style: solid; outline-width: 1px">
             <div class="m-8">
 
-                <h1>Target Volunteers</h1>
+                <h1>Freiwillige</h1>
                 <mat-selection-list #volunteerList (selectionChange)="addToSelection($event)">
                     <mat-list-option checkboxPosition="before" *ngFor="let volunteer of volunteers" [value]="volunteer">
                         <div fxLayout="row" fxLayoutAlign="start center">

@@ -11,14 +11,14 @@
   <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center">
 
     <button type="button" mat-raised-button color="secondary" (click)="navigateBack()">
-      Cancel</button>
+      Abbrechen</button>
 
     <div></div>
 
     <button *ngIf="!lastEntry" type="submit" mat-raised-button color="primary">
-      Next</button>
+      Weiter</button>
       <button *ngIf="lastEntry" type="submit" mat-raised-button color="primary">
-        Freiwillgenpass-Eintrag erstellen</button>
+        Speichern</button>
   
     </div>
 

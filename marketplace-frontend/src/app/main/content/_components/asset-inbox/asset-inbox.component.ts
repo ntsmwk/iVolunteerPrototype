@@ -96,7 +96,7 @@ export class AssetInboxComponent implements OnInit {
 
   getDateString(dateNumber: number) {
     const date = new Date(dateNumber);
-    return 'am ' + date.toLocaleDateString() + ', um ' + date.toLocaleTimeString();
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   }
 
   getNameForEntry(personId: string, type: string) {
