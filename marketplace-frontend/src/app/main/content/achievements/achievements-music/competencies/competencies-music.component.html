@@ -1,0 +1,138 @@
+<mat-accordion multi="true">
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Personelle Kompetenzen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+  
+      <mat-card class="card">
+        <mat-card-header>
+          <mat-card-title>Lernbereitschaft</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, gern und erfolgreich zu lernen"</p>
+  
+          <div class="chartParent" fxLayout="row">
+            <div class="half">
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
+                <app-share-menu [label]="'Stunden'" (export)="exportChart($event)">
+                </app-share-menu>
+              </div>
+              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+  
+            <div class="half">
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <h2 class="title">ANZAHL an absolvierten Ausbildungen</h2>
+                <app-share-menu [label]="'Anzahl'" (export)="exportChart($event)">
+                </app-share-menu>
+              </div>
+              <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel2" [animations]="animations" (select)="onSelect($event)">
+              </ngx-charts-line-chart>
+            </div>
+          </div>
+  
+          <div *ngIf="meanYearData">
+            <table class="paleBlueRows">
+              <thead>
+                <tr>
+                  <th rowspan="2">Ausbildungsart</th>
+                  <th rowspan="2">2019</th>
+                  <th colspan="2">im Vergleich zu</th>
+                </tr>
+                <tr>
+                  <th>2018</th>
+                  <th>Durchschnitt (2012-2018)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{meanYearData[0][0].name}}</td>
+                  <td>{{currYearData[0][0].number}}</td>
+                  <td><b>{{currYearData[0][0].number-lastYearData[0][0].number}}</b></td>
+                  <td><b>{{currYearData[0][0].number-meanYearData[0][0].number | number : '1.2-2'}}</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td>{{meanYearData[0][1].name}}</td>
+                  <td>{{currYearData[0][1].number}}</td>
+                  <td><b>{{currYearData[0][1].number-lastYearData[0][1].number}}</b></td>
+                  <td><b>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td>{{meanYearData[0][2].name}}</td>
+                  <!-- TODO: rework hardcoded "0": check for existence of currYearData[0][2] ("Kurs"), if undefined use 0  -->
+                  <!-- TODO: always show sign, eg "+4" or "-3" -->
+                  <td>0</td>
+                  <td><b>0</b></td>
+                  <td><b>{{0-meanYearData[0][2].number | number : '1.2-2'}}</b></td>
+                </tr>
+                <tr>
+              </tbody>
+            </table>
+          </div>
+  
+  
+  
+  
+  
+  
+        </mat-card-content>
+      </mat-card>
+  
+      <mat-card class="card">
+        <mat-card-header>
+          <mat-card-title>Diversität</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+  
+          <div class="chartParent" fxLayout="column">
+            <h2 class="title">Gesamtstunden nach Tätigkeitsarten</h2>
+            <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations" (select)="onSelect($event)">
+            </ngx-charts-area-chart-stacked>
+          </div>
+  
+  
+        </mat-card-content>
+      </mat-card>
+  
+    </mat-expansion-panel>
+  
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Sozial-kommunikative Kompetenzen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+  
+    </mat-expansion-panel>
+  
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Aktivitäts und Handlungskompetenzen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+  
+    </mat-expansion-panel>
+  
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Fach- und Methodenkompetenzen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+  
+    </mat-expansion-panel>
+  </mat-accordion>

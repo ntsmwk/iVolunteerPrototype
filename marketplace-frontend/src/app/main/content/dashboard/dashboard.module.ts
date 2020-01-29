@@ -20,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseWidgetModule } from '@fuse/components';
 import { ShareDialog } from './dashboard-volunteer/share-dialog/share-dialog.component';
 import { DashboardVolunteerComponent } from './dashboard-volunteer/dashboard-volunteer.component';
-import { MatBadgeModule } from '@angular/material';
+import { MatBadgeModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { AssetInboxHelpseekerModule } from '../asset-inbox-helpseeker/asset-inbox-helpseeker.module';
 import { AssetInboxModule } from '../_components/asset-inbox/asset-inbox.module';
 import { DashboardHelpSeekerComponent } from './dashboard-helpseeker/dashboard-helpseeker.component';
@@ -62,7 +62,9 @@ const routes = [
     MatRadioModule,
     MatProgressSpinnerModule,
     MatBadgeModule,
-    
+    MatPaginatorModule,
+    MatSortModule,
+
     FuseSharedModule,
     FuseWidgetModule
   ],

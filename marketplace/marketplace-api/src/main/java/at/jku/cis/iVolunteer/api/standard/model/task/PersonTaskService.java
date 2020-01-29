@@ -65,7 +65,9 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
 		
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
-		personTaskClassInstance.setInIssuerInbox(true);
+		personTaskClassInstance.setInIssuerInbox(false);
+		personTaskClassInstance.setInUserRepository(true);
+		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
 		personTaskClassInstance.setTimestamp(new Date());
 		personTaskClassInstance.setNewFakeData(level==FF_NEW);
 		personTaskClassInstance.setMV(level == MV);

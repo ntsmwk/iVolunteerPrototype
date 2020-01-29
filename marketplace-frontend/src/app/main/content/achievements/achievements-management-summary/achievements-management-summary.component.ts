@@ -47,7 +47,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   colors = [
     {
       name: 'Feuerwehr',
-      value: '#cc0000'
+      value: '#a72920'
     },
     {
       name: 'Rotes Kreuz',
@@ -87,65 +87,81 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   // ---- 
   // cards 
   cardColor: string = '#232837';
+
+  totalStunden = [
+    {
+      "name": "Feuerwehr",
+      "value": 3552
+    },
+    {
+      "name": "Rotes Kreuz",
+      "value": 1632
+    },
+    {
+      "name": "Musikverein",
+      "value": 483
+    },
+  ];
+
   dataFfTotal = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 3552
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 1266
     }
   ];
   dataRkTotal = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 1632
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 425
     }
   ];
   dataMusicTotal = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 483
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 201
     }
   ];
 
   dataFf2019 = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 346
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 104
     }
   ];
   dataRk2019 = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 173
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 49
     }
   ];
   dataMusic2019 = [
     {
       "name": "Stunden",
-      "value": 34562
+      "value": 83
     },
     {
       "name": "Tätigkeiten",
-      "value": 345
+      "value": 31
     }
   ];
   // -----
@@ -165,11 +181,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "2015",
-      "value": 13,
+      "value": 19,
     },
     {
       "name": "2016",
-      "value": 22,
+      "value": 18,
     },
     {
       "name": "2017",
@@ -177,46 +193,46 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "2018",
-      "value": 34,
+      "value": 29,
     },
     {
       "name": "2019",
-      "value": 28,
+      "value": 31,
     },
   ];
 
   fakeDataRk = [
     {
       "name": "2012",
-      "value": 0,
+      "value": 20,
     },
     {
       "name": "2013",
-      "value": 0,
-    },
-    {
-      "name": "2014",
-      "value": 0,
-    },
-    {
-      "name": "2015",
       "value": 13,
     },
     {
+      "name": "2014",
+      "value": 4,
+    },
+    {
+      "name": "2015",
+      "value": 3,
+    },
+    {
       "name": "2016",
-      "value": 22,
+      "value": 1,
     },
     {
       "name": "2017",
-      "value": 19,
+      "value": 36,
     },
     {
       "name": "2018",
-      "value": 34,
+      "value": 41,
     },
     {
       "name": "2019",
-      "value": 28,
+      "value": 49,
     },
   ];
   uniqueYears: any[];
@@ -258,6 +274,12 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
             this.filteredClassInstances = [...this.classInstances];
             this.generateStaticChartData();
+
+
+            let sumDuration = this.dataFfTotal[0].value + this.dataRkTotal[0].value + this.dataMusicTotal[0].value;
+            let sumNumber = this.dataFfTotal[1].value + this.dataRkTotal[1].value + this.dataMusicTotal[1].value;
+            console.error(sumDuration);
+            console.error(sumNumber);
 
           }
         });
@@ -359,6 +381,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
+  }
+
+  valueFormatting(c) {
+    return `${(c)}  Stunden`;
+
   }
 
 }
