@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
+import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
@@ -79,7 +81,13 @@ public class InitializationService {
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		this.addTestClassInstances();
+		
+
+		
+		
 	}
+	
+	
 
 	private void addTestDerivationRule() {
 		DerivationRule rule = new DerivationRule();

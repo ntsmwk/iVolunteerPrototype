@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
+import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.hash.Hasher;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -31,6 +33,8 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private LoginService loginService;
 	@Autowired private Hasher hasher;
+	
+	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
@@ -59,6 +63,19 @@ public class ClassInstanceController {
 			}
 		}
 		return classInstances;
+	}
+	
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/fake")
+	private List<ClassInstance> getClassinstancesByArchetypeFake(@PathVariable("archetype") ClassArchetype archeType) {
+		boolean returnFake = isSunburstFakeRepository.findAll().size() > 0;
+		
+		System.out.println(returnFake);
+		
+		if (returnFake) {
+			return getClassInstancesByArchetypeAfterSunburstFake(archeType);
+		} else {
+			return getClassInstancesByArchetypeBeforeSunburstFake(archeType);
+		}
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/before")

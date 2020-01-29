@@ -235,7 +235,7 @@ export class TasksComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheTypeBefore(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheTypeFake(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
