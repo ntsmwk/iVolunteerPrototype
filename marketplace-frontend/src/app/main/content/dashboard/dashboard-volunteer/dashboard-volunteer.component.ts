@@ -28,7 +28,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
   volunteer: Participant;
   marketplace: Marketplace;
-  registeredMarketplaces: Marketplace[];
 
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -40,7 +39,7 @@ export class DashboardVolunteerComponent implements OnInit {
   dataSourceFeedback = new MatTableDataSource<ClassInstance>();
   dataSourceRepository = new MatTableDataSource<ClassInstance>();
 
-  private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1',  'date'];
+  private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1', 'date'];
 
 
   issuerIds: string[] = [];
@@ -84,22 +83,12 @@ export class DashboardVolunteerComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.volunteer = participant;
       Promise.all([
-        this.marketplaceService.findAll().toPromise().then((ret: Marketplace[]) => {
-          this.marketplace = ret.pop();
-        }),
-
         this.coreVolunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise().then((ret: Marketplace[]) => {
-          this.registeredMarketplaces = ret;
-
+          this.marketplace = ret.filter(m => m.name = "Marketplace 1")[0];
+          console.error(this.marketplace);
         }),
       ]).then(() => {
-        if (isNullOrUndefined(this.registeredMarketplaces) || this.registeredMarketplaces.length <= 0) {
-          this.coreVolunteerService.registerMarketplace(this.volunteer.id, this.marketplace.id).toPromise().then(() => {
-            this.loadDashboardContent();
-          });
-        } else {
-          this.loadDashboardContent();
-        }
+        this.loadDashboardContent();
       });
     });
   }
@@ -125,14 +114,14 @@ export class DashboardVolunteerComponent implements OnInit {
       });
       console.log(this.issuerIds);
       Promise.all([
-      this.userImagePathService.getImagePathsById(this.issuerIds).toPromise().then((ret: any) => {
-        console.log(ret);
-        this.userImagePaths = ret;
-      }),
-      this.coreHelpseekerService.findByIds(this.issuerIds).toPromise().then((ret: any) => {
-        this.issuers = ret;
-      })
-      
+        this.userImagePathService.getImagePathsById(this.issuerIds).toPromise().then((ret: any) => {
+          console.log(ret);
+          this.userImagePaths = ret;
+        }),
+        this.coreHelpseekerService.findByIds(this.issuerIds).toPromise().then((ret: any) => {
+          this.issuers = ret;
+        })
+
       ]).then(() => {
         this.isLoaded = true;
       });
@@ -157,15 +146,15 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   getIssuerById(id: string) {
-   return this.issuers.find((issuer) => {
+    return this.issuers.find((issuer) => {
       return issuer.id === id;
     });
   }
 
   getIssuerName(issuerId: string) {
-    
+
     const person = this.issuers.find((i) => i.id === issuerId);
-   
+
     let result = '';
 
     if (isNullOrUndefined(person)) {
@@ -190,7 +179,7 @@ export class DashboardVolunteerComponent implements OnInit {
       return '';
     }
 
-    let name =  entry.properties.find(p => p.id === 'name');
+    let name = entry.properties.find(p => p.id === 'name');
 
     if (isNullOrUndefined(name)) {
       name = entry.properties.find(p => p.name === 'taskName');
