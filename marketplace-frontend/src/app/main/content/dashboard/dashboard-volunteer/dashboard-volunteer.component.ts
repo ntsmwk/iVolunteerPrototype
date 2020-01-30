@@ -72,7 +72,6 @@ export class DashboardVolunteerComponent implements OnInit {
     private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
-
     private classInstanceService: ClassInstanceService,
     private userImagePathService: CoreUserImagePathService
   ) {
