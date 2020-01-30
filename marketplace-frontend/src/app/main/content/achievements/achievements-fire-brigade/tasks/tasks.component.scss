@@ -18,10 +18,6 @@
     height: 550px;
 }
 
-table {
-  width: 100%;
-}
-
 .right {
   text-align: right
 }
@@ -83,31 +79,35 @@ tr.is-Ausrueckung {
   background: rgba(rgb(162, 126, 168), $alpha: 0.7);
 }
 
+tr.mat-row {
+  cursor: pointer;
+}
+tr.mat-row:hover {
+  opacity: 0.8;
+}
+th.mat-header-cell {
+  font-size: 18px;
+}
+
+td.mat-cell{
+  font-size: 14px;
+}
+
+
 ::ng-deep .highcharts-drillup-button {
   display: none !important;
-}
-
-
-.no-data {
-  font-size: 20px;
-  margin: 24px 0;
-  text-align: center;
-}
-
-
-
-
-// ------
-.ngx-charts {
-  font-size: 15px;
-
-  .text {
-    font-size: 15px;
-  }
 }
 
 mat-panel-title{
   font-size: 20px;
 }
+
+::ng-deep .pie-label {
+  font-size: 13px !important;
+}
+
+  
+
+
 
 

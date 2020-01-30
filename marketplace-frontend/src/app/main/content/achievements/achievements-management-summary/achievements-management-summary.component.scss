@@ -78,16 +78,21 @@
   width: 600px;
 }
 
-.donut-parent-number {
-  height: 200px;
-  width: 900px;
-}
+// .donut-parent-number {
+//   height: 200px;
+//   width: 860px;
+// }
 .donut-parent-duration {
   height: 200px;
-  width: 750px;
+  width: 860px;
+  margin-bottom: 10px;
 }
 
 .engagement {
+  padding-left: 30px; 
+  align-self: flex-start;
+  // width: 100%;
+  text-align: left;
 font-size: 35px;
 }
 
@@ -142,4 +147,13 @@ font-size: 15px;
 
 .table {
   margin-top: 20px;
+}
+
+ngx-charts-advanced-pie-chart {
+   .total-value {
+font-size: 10px;
+ }
+ .item-value {
+font-size: 10px;
+ }
 }
