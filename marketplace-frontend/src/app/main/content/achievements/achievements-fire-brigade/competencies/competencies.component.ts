@@ -292,12 +292,12 @@ export class CompetenciesComponent implements OnInit {
         break;
 
       case 'Anzahl':
-        storedChart = new StoredChart('ANZAHL an absolvierten Ausbildungen', 'ngx-charts-line-chart', JSON.stringify(this.trainingData2), this.volunteer.id);
+        storedChart = new StoredChart('ANZAHL absolvierter Ausbildungen', 'ngx-charts-line-chart', JSON.stringify(this.trainingData2), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
       case 'Taetigkeitsart':
-        storedChart = new StoredChart('Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf', 'ngx-charts-bar-vertical-stacked', JSON.stringify(this.taskData), this.volunteer.id);
+        storedChart = new StoredChart('Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf', 'ngx-charts-area-chart-stacked', JSON.stringify(this.taskData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }

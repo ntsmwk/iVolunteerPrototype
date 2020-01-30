@@ -7,7 +7,7 @@
   <div style="padding-top: 12px"></div>
 
   <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <h1>Digitaler Freiwilligenpass
+    <h1>Mein FreiwilligenPASS
     </h1>
     <!-- <h1 style="margin-top: 0; font-size: 18px; padding-top:50px; padding-left:220px; text-align: left;">Welcome -->
     <!-- Back</h1> -->
@@ -159,6 +159,7 @@
           <mat-header-cell *matHeaderCellDef> Eintrag </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_NAME].values[0]}} </span>
+            <span *ngIf="element.name=='Musikverein Tätigkeit'">{{element.properties[1].values[0]}} </span>
             <span *ngIf="element.name=='Tätigkeiten MV'">{{element.properties[1].values[0]}} </span>
             <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.properties[0].values[0]}} </span>
             <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.properties[0].values[0]}} </span>
@@ -169,6 +170,7 @@
           <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_TYPE_1].values[0]}} </span>
+            <span *ngIf="element.name=='Musikverein Tätigkeit'">Ausrückung </span>
             <span *ngIf="element.name=='Tätigkeiten MV'">Ausrückung </span>
             <span *ngIf="element.name=='Sybos Tätigkeit'">Einsatz </span>
             <span *ngIf="element.name=='Fahrtenspange 1000'">Abzeichen </span>

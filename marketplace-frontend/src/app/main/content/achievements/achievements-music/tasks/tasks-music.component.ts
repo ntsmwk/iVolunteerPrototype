@@ -710,7 +710,7 @@ export class TasksMusicComponent implements OnInit {
         break;
 
       case 'Ort':
-        storedChart = new StoredChart('Meistbesuchte Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
+        storedChart = new StoredChart('Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
