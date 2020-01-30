@@ -35,8 +35,8 @@ export class FuseTaskSelectComponent implements OnInit {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
-          this.classDefinitionService.getByArchetype(marketplace, ClassArchetype.TASK, this.participant.username==='FFA'?'FF':'MV').toPromise().then((tasks: ClassDefinition[]) => {
-            this.dataSource.data = tasks;
+          this.classDefinitionService.getByArchetype(marketplace, ClassArchetype.TASK, this.participant.username === 'FFA' ? 'FF' : 'MV').toPromise().then((tasks: ClassDefinition[]) => {
+            this.dataSource.data = tasks.filter(t => t.name != 'PersonTask');
           });
         }
       });
@@ -44,18 +44,18 @@ export class FuseTaskSelectComponent implements OnInit {
   }
 
   onRowSelect(row) {
-    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: {0: row.id} });
+    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: { 0: row.id } });
   }
 
   private isFF() {
-    return this.participant.username== 'FFA';
+    return this.participant.username == 'FFA';
   }
 
-  private isMV(){
-    return this.participant.username==='MVS';
+  private isMV() {
+    return this.participant.username === 'MVS';
   }
-  private isOther(){
-    return !this.isFF()&& !this.isMV();
+  private isOther() {
+    return !this.isFF() && !this.isMV();
   }
 
 
