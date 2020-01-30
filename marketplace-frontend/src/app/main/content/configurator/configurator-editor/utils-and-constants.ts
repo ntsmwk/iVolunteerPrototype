@@ -107,7 +107,7 @@ export class CUtils {
 
 
     let evidenceProperty = new ClassProperty<string>();
-    evidenceProperty.name = 'Evidence';
+    evidenceProperty.name = 'Evidenz';
     evidenceProperty.id = 'evidence';
     evidenceProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(evidenceProperty);
@@ -117,7 +117,7 @@ export class CUtils {
     let task = new ClassDefinition();
     task.id = objectIdService.getNewObjectId();
     task.marketplaceId = marketplaceId;
-    task.name = "Task";
+    task.name = "Tätigkeit";
     task.root = false;
     task.classArchetype = ClassArchetype.TASK_HEAD;
     configurableClasses.push(task);
@@ -145,7 +145,7 @@ export class CUtils {
     let competence = new ClassDefinition();
     competence.id = objectIdService.getNewObjectId();
     competence.marketplaceId = marketplaceId;
-    competence.name = 'Competence';
+    competence.name = 'Kompetenz';
     competence.root = false;
     competence.classArchetype = ClassArchetype.COMPETENCE_HEAD;
     configurableClasses.push(competence);
@@ -161,7 +161,7 @@ export class CUtils {
     let achievement = new ClassDefinition();
     achievement.id = objectIdService.getNewObjectId();
     achievement.marketplaceId = marketplaceId;
-    achievement.name = 'Achievement';
+    achievement.name = 'Verdienst';
     achievement.root = false;
     achievement.classArchetype = ClassArchetype.ACHIEVEMENT_HEAD;
     configurableClasses.push(achievement);
@@ -177,7 +177,7 @@ export class CUtils {
     let funktion = new ClassDefinition();
     funktion.id = objectIdService.getNewObjectId();
     funktion.marketplaceId = marketplaceId;
-    funktion.name = 'Function';
+    funktion.name = 'Funktion';
     funktion.root = false;
     funktion.classArchetype = ClassArchetype.FUNCTION_HEAD;
     configurableClasses.push(funktion);

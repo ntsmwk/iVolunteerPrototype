@@ -222,6 +222,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphCellSelectEvent(evt);
       });
       this.showServerContent(true);
+      this.collapseGraph();
 
  
     }
@@ -242,7 +243,19 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.parseGraphContent();
     this.setLayout();
+  }
 
+  clearEditor() {
+    this.graph.getModel().beginUpdate();
+    try {
+      this.graph.getModel().clear();
+      this.hiddenEdges = [];
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+  }
+
+  private collapseGraph() {
     let allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
     let rootVertice = allVertices.find((v: myMxCell) => v.root);
     let rootEdges = this.graph.getOutgoingEdges(rootVertice);
@@ -254,16 +267,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.graph.foldCells(true, false, [rootVertice]);
     this.graph.foldCells(false, false, [rootVertice]);
-  }
-
-  clearEditor() {
-    this.graph.getModel().beginUpdate();
-    try {
-      this.graph.getModel().clear();
-      this.hiddenEdges = [];
-    } finally {
-      this.graph.getModel().endUpdate();
-    }
   }
 
   private parseGraphContent() {
@@ -528,7 +531,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     this.setLayout();
     this.focusOnCell(focusCell);
+
   }
+
 
   private focusOnCell(focusCell: myMxCell) {
     const bounds = this.graph.getView().getGraphBounds();
@@ -683,8 +688,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
-        this.updateModel();
+         this.updateModel();
         this.redrawContent(cret as myMxCell);
+     
       }
 
       if (cell.value === 'add_association') {
@@ -731,6 +737,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.updateModel();
         this.redrawContent(cret as myMxCell);
       }
+
       this.modelUpdated = true;
     }
   }
@@ -802,7 +809,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   handleMXGraphCellSelectEvent(event: any) {
-    console.log(event);
+    // console.log(event);
     const cells: myMxCell[] = event.getProperty('removed');
 
     let cell: myMxCell;
@@ -819,8 +826,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.selectionIndex = this.configurableClasses.findIndex((classDefiniton: ClassDefinition) => {
         return classDefiniton.id === cell.id;
       });
-      console.log(this.selectionIndex);
-      console.log(this.configurableClasses[this.selectionIndex]);
+      // console.log(this.selectionIndex);
+      // console.log(this.configurableClasses[this.selectionIndex]);
 
       // } else if(cell.cellType == 'property') {
       //   this.selectionType == 'property';
@@ -1077,6 +1084,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     ]).then(() => {
       // draw graph
       this.showServerContent(false);
+      this.collapseGraph();
     });
 
   }

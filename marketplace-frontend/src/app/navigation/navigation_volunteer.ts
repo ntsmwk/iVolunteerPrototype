@@ -36,6 +36,13 @@ export const navigation_volunteer = [
         'url': 'main/achievements/fireBrigade'
       },
       {
+        'id': 'achievements-rotesKreuz',
+        'title': 'Rotes Kreuz',
+        'icon': 'engagements',
+        'type': 'item',
+        'url': 'main/achievements/dummy'
+      },
+      {
         'id': 'achievements-musikverein',
         'title': 'Musikverein',
         'icon': 'engagements',

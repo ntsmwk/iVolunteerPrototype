@@ -8,81 +8,132 @@
     <div class="content">
 
         <div fxLayout="column" fxLayoutAlign="center center" class="summary">
-
+            <div style="margin-top: 10px;"></div>
             <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
-                <div class="third">
+                <div class="third" fxLayout="column">
                     <h2>FF Eidenberg</h2>
-                    <img src="../../../../assets/images/logos/FF_Altenberg.jpg" class="img">
+                    <div fxLayout=row>
+                        <img src="../../../../assets/images/logos/FF_Altenberg.jpg" class="img">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Mitglied seit: </td>
+                                    <td>2003 </td>
+                                </tr>
+                                <tr>
+                                    <td>Homepage: </td>
+                                    <td>ff-eidenberg.at </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Dienstgrad: </td>
+                                    <td>Hauptbrandinspektor </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="third">
-                    <h2>Rotes Kreuz Wilhering</h2>
-                    <img src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg" class="img">
-                </div>
-                <div class="third">
+
+                <div class="third" fxLayout="column">
                     <h2>Musikverein Schwertberg</h2>
-                    <img src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg" class="img">
+                    <div fxLayout=row>
+                        <img src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg" class="img">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Mitglied seit: </td>
+                                    <td>2012 </td>
+                                </tr>
+                                <tr>
+                                    <td>Homepage: </td>
+                                    <td>roteskreuz.at/ooe/dienststellen/wilhering</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Dienstgrad: </td>
+                                    <td>Haupthelfer</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="third" fxLayout="column">
+                    <h2>Musikverein Schwertberg</h2>
+                    <div fxLayout=row>
+                        <img src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg" class="img">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Mitglied seit: </td>
+                                    <td>2015 </td>
+                                </tr>
+                                <tr>
+                                    <td>Homepage: </td>
+                                    <td>musikverein-schwertberg.at</td>
+                                </tr>
+                                <tr>
+                                    <td>Dienstgrad: </td>
+                                    <td>einfaches Mitglied </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div style="height: 20px;"></div>
 
-            <div class="banner">Engagement gesamt</div>
-            <hr size="1" color="#232837" width="100%">
+            <div fxLayout="column" fxLayoutAlign="space-between center" style="width: 100%;">
+                <h1>Engagement gesamt</h1>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <div>
+                        <div class="treeParent1">
+                            <ngx-charts-tree-map [customColors]="colors" [results]="durationTotal" [gradient]="gradient"
+                                [animations]="animations" [valueFormatting]="valueFormattingDuration"
+                                (select)="onSelect($event)">
+                            </ngx-charts-tree-map>
+                        </div>
+                        <h2 class="total">Gesamt: {{sumDurationTotal}} Stunden</h2>
+                    </div>
+                    <div>
+                        <div class="treeParent1">
+                            <ngx-charts-tree-map [customColors]="colors" [results]="numberTotal" [gradient]="gradient"
+                                [animations]="animations" [valueFormatting]="valueFormattingNumber"
+                                (select)="onSelect($event)">
+                            </ngx-charts-tree-map>
+                        </div>
+                        <h2 class="total">Gesamt: {{sumNumberTotal}} Tätigkeiten</h2>
+                    </div>
+                </div>
 
-            <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFfTotal" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
-                </div>
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRkTotal" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
-                </div>
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusicTotal" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
+                <div style="height: 30px;"></div>
+
+                <h1>Engagement 2019</h1>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <div>
+                        <div class="treeParent2">
+                            <ngx-charts-tree-map [customColors]="colors" [results]="duration2019" [gradient]="gradient"
+                                [animations]="animations" [valueFormatting]="valueFormattingDuration"
+                                (select)="onSelect($event)">
+                            </ngx-charts-tree-map>
+                        </div>
+                        <h2 class="total">Gesamt: {{sumDuration2019}} Stunden</h2>
+                    </div>
+                    <div>
+                        <div class="treeParent2">
+                            <ngx-charts-tree-map [customColors]="colors" [results]="number2019" [gradient]="gradient"
+                                [animations]="animations" [valueFormatting]="valueFormattingNumber"
+                                (select)="onSelect($event)">
+                            </ngx-charts-tree-map>
+                        </div>
+                        <h2 class="total">Gesamt: {{sumNumber2019}} Tätigkeiten</h2>
+                    </div>
                 </div>
             </div>
 
-            <div class="banner">Engagement 2019</div>
-            <hr size="1" color="#232837" width="100%">
-
-            <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataFf2019" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
-                </div>
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataRk2019" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
-                </div>
-                <div class="third cardsParent">
-                    <ngx-charts-number-card [scheme]="colorScheme" [results]="dataMusic2019" [cardColor]="cardColor">
-                    </ngx-charts-number-card>
-                </div>
-            </div>
-
-
-            <hr size="1" color="#232837" width="100%">
-            <hr size="1" color="#232837" width="100%">
             <div style="height: 50px;"></div>
 
-
-            <div class="banner">Engagement gesamt</div>
-            <hr size="1" color="#232837" width="100%">
-            <div class="treeParent">
-            <ngx-charts-tree-map
-            [customColors]="colors"
-            [results]="totalStunden"
-            [gradient]="gradient"
-            [animations]="animations"
-            [valueFormatting]="valueFormatting"
-            (select)="onSelect($event)">
-            </ngx-charts-tree-map>
-        </div>
-
-            <hr size="1" color="#232837" width="100%">
-            <hr size="1" color="#232837" width="100%">
 
             <div style="width: 100%;">
                 <div fxLayout="row" fxLayoutAlign="space-between center">

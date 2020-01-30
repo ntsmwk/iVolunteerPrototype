@@ -36,10 +36,12 @@ th.mat-sort-header-sorted {
   margin-bottom: 20px;
   margin-top: 5px;
   width: 130px;
+  font-size: 20px;
 }
 
 .filterChip {
   margin-top: 8px;
+  font-size: 20px;
 }
 
 .sunburstParent {
@@ -81,10 +83,10 @@ tr.is-Ausrueckung {
   background: rgba(rgb(162, 126, 168), $alpha: 0.7);
 }
 
-
 ::ng-deep .highcharts-drillup-button {
   display: none !important;
 }
+
 
 .no-data {
   font-size: 20px;
@@ -93,8 +95,19 @@ tr.is-Ausrueckung {
 }
 
 
-.ngx-charts { 
-  text { font-size: 14px  !important; } 
+
+
+// ------
+.ngx-charts {
+  font-size: 15px;
+
+  .text {
+    font-size: 15px;
+  }
+}
+
+mat-panel-title{
+  font-size: 20px;
 }
 
 

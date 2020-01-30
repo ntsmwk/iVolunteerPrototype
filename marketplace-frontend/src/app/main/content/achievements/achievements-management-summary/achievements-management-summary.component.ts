@@ -84,11 +84,12 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   filteredClassInstances: any[];
   yearsMap: any;
 
+
   // ---- 
   // cards 
   cardColor: string = '#232837';
 
-  totalStunden = [
+  durationTotal = [
     {
       "name": "Feuerwehr",
       "value": 3552
@@ -99,71 +100,121 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "Musikverein",
-      "value": 483
+      "value": 883
     },
   ];
 
-  dataFfTotal = [
+  numberTotal = [
     {
-      "name": "Stunden",
-      "value": 3552
+      "name": "Feuerwehr",
+      "value": 1208
     },
     {
-      "name": "Tätigkeiten",
-      "value": 1266
-    }
-  ];
-  dataRkTotal = [
-    {
-      "name": "Stunden",
-      "value": 1632
-    },
-    {
-      "name": "Tätigkeiten",
+      "name": "Rotes Kreuz",
       "value": 425
-    }
-  ];
-  dataMusicTotal = [
-    {
-      "name": "Stunden",
-      "value": 483
     },
     {
-      "name": "Tätigkeiten",
-      "value": 201
-    }
+      "name": "Musikverein",
+      "value": 401
+    },
   ];
 
-  dataFf2019 = [
+  duration2019 = [
     {
-      "name": "Stunden",
+      "name": "Feuerwehr",
       "value": 346
     },
     {
-      "name": "Tätigkeiten",
-      "value": 104
-    }
-  ];
-  dataRk2019 = [
-    {
-      "name": "Stunden",
+      "name": "Rotes Kreuz",
       "value": 173
     },
     {
-      "name": "Tätigkeiten",
-      "value": 49
-    }
-  ];
-  dataMusic2019 = [
-    {
-      "name": "Stunden",
+      "name": "Musikverein",
       "value": 83
     },
-    {
-      "name": "Tätigkeiten",
-      "value": 31
-    }
   ];
+
+  number2019 = [
+    {
+      "name": "Feuerwehr",
+      "value": 104
+    },
+    {
+      "name": "Rotes Kreuz",
+      "value": 49
+    },
+    {
+      "name": "Musikverein",
+      "value": 31
+    },
+  ];
+
+  sumDurationTotal: number;
+  sumNumberTotal: number;
+  sumDuration2019: number;
+  sumNumber2019: number;
+
+  // dataFfTotal = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 3552
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 1266
+  //   }
+  // ];
+  // dataRkTotal = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 1632
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 425
+  //   }
+  // ];
+  // dataMusicTotal = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 483
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 201
+  //   }
+  // ];
+
+  // dataFf2019 = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 346
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 104
+  //   }
+  // ];
+  // dataRk2019 = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 173
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 49
+  //   }
+  // ];
+  // dataMusic2019 = [
+  //   {
+  //     "name": "Stunden",
+  //     "value": 83
+  //   },
+  //   {
+  //     "name": "Tätigkeiten",
+  //     "value": 31
+  //   }
+  // ];
   // -----
 
   fakeDataMusic = [
@@ -276,11 +327,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
             this.generateStaticChartData();
 
 
-            let sumDuration = this.dataFfTotal[0].value + this.dataRkTotal[0].value + this.dataMusicTotal[0].value;
-            let sumNumber = this.dataFfTotal[1].value + this.dataRkTotal[1].value + this.dataMusicTotal[1].value;
-            console.error(sumDuration);
-            console.error(sumNumber);
 
+            this.sumDurationTotal = this.durationTotal.reduce((a, c) => a+c.value, 0);
+            this.sumNumberTotal = this.numberTotal.reduce((a, c) => a+c.value, 0);
+            this.sumDuration2019 = this.duration2019.reduce((a, c) => a+c.value, 0);
+            this.sumNumber2019 = this.number2019.reduce((a, c) => a+c.value, 0);
           }
         });
       });
@@ -383,9 +434,12 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     }
   }
 
-  valueFormatting(c) {
-    return `${(c)}  Stunden`;
+   valueFormattingDuration(c) {
+    return `${(c)} Stunden`;
+  }
 
+  valueFormattingNumber(c) {
+    return `${(c)} Tätigkeiten`;
   }
 
 }
