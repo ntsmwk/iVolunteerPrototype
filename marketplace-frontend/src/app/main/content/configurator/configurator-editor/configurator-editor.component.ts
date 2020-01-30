@@ -590,6 +590,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     const translate = this.graph.view.getTranslate();
 
+    const bounds = this.graph.getGraphBounds();
+
+
 
 
     if (!isNullOrUndefined(cell)) {
@@ -747,6 +750,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.redrawContent(cret as myMxCell);
       }
       this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
+      bounds.x = bounds.x-20;
+      this.graph.view.setGraphBounds(bounds);
 
       this.modelUpdated = true;
     }

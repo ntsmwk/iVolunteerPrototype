@@ -25,8 +25,8 @@ export class AssetInboxComponent implements OnInit {
 
   datasource = new MatTableDataSource<ClassInstance | Feedback>();
   displayedColumns;
-  displayedColumnsVolunteer = ['checkboxes', 'archetype', 'label', 'issuer', 'date'];
-  displayedColumnsHelpseeker = ['checkboxes', 'archetype', 'label', 'user', 'date'];
+  displayedColumnsVolunteer = ['checkboxes', 'label', 'archetype', 'issuer', 'date'];
+  displayedColumnsHelpseeker = ['checkboxes', 'label', 'archetype', 'user', 'date'];
 
   selection = new SelectionModel<ClassInstance | Feedback>(true, []);
 
@@ -164,7 +164,7 @@ export class AssetInboxComponent implements OnInit {
       if (entry.classArchetype === ClassArchetype.COMPETENCE) {
         return '/assets/competence.jpg';
       } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
-        return '/assets/icons/achievements_black.png';
+        return '/assets/icons/award.svg';
       } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
         return '/assets/TODO';
       } else if (entry.classArchetype === ClassArchetype.TASK) {
@@ -182,7 +182,7 @@ export class AssetInboxComponent implements OnInit {
     if (entry.classArchetype === ClassArchetype.COMPETENCE) {
       return 'Kompetenz';
     } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
-      return 'Errungenschaft';
+      return 'Verdienst';
     } else if (entry.classArchetype === ClassArchetype.FUNCTION) {
       return 'Funktion';
     } else if (entry.classArchetype === ClassArchetype.TASK) {
