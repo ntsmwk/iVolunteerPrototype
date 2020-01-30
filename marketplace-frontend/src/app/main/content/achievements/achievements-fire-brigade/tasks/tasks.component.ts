@@ -63,7 +63,7 @@ export class TasksComponent implements OnInit {
   private classInstances: ClassInstance[] = [];
   private tableDataSource = new MatTableDataSource<ClassInstance>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
 
   private timelineData: any[];
@@ -259,8 +259,12 @@ export class TasksComponent implements OnInit {
             this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
 
+            this.classInstances.sort((a, b) => {
+             return Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0])
+            });
             this.tableDataSource.data = this.classInstances;
             this.tableDataSource.paginator = this.paginator;
+
 
             this.generateTimelineData();
             this.generateSunburstData();
@@ -538,7 +542,6 @@ export class TasksComponent implements OnInit {
     });
 
     this.sunburstData = [...data];
-    //console.error('sunburstData', this.sunburstData);
 
     this.chartOptions.series = [
       {
@@ -650,19 +653,12 @@ export class TasksComponent implements OnInit {
     this.locationData = [...data2];
 
     // donut: rang
-    // console.error('this.filteredClassInstances', this.filteredClassInstances);
     let rangList = this.filteredClassInstances
       .map(ci => {
         let value;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
         return ({ rang: ci.properties[this.RANG].values[0], value: value })
       });
-
-    // console.error('rangList', rangList);
-
-    let uniqueRang = [...new Set(rangList.map(item => item.rang))];
-    // console.error('uniqueRang', uniqueRang);
-
 
     let rangMap: Map<string, number> = new Map<string, number>();
     rangList.forEach(t => {
@@ -672,9 +668,6 @@ export class TasksComponent implements OnInit {
         rangMap.set(t.rang, Number(t.value));
       }
     });
-
-    // console.error('rangMap', rangMap);
-
 
     data = [];
     Array.from(rangMap.entries()).forEach(entry => {
@@ -689,11 +682,16 @@ export class TasksComponent implements OnInit {
       }
     });
     this.rangData = [...data];
-    // console.error('rangData', this.rangData);
 
+    this.filteredClassInstances.sort((a, b) => {
+      return Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0])
+     });
     this.tableDataSource.data = this.filteredClassInstances;
+    this.tableDataSource.data.sort((a, b) => Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0]));
     this.paginator._changePageSize(this.paginator.pageSize);
   }
+
+  
 
   exportChart(event, source: string) {
     let storedChart: StoredChart;
@@ -708,8 +706,8 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
-      case 'Ort':
-        storedChart = new StoredChart('Meistbesuchte Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
+      case 'Orte':
+        storedChart = new StoredChart('Orte', 'ngx-charts-pie-chart', JSON.stringify(this.locationData), this.volunteer.id);
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
 
@@ -718,5 +716,7 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
-  }
+  } 
+  
+
 }

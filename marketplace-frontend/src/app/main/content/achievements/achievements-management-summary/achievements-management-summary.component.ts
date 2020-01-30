@@ -92,7 +92,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   durationTotal = [
     {
       "name": "Feuerwehr",
-      "value": 3552
+      "value": 3549
     },
     {
       "name": "Rotes Kreuz",
@@ -107,7 +107,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   numberTotal = [
     {
       "name": "Feuerwehr",
-      "value": 1208
+      "value": 1207
     },
     {
       "name": "Rotes Kreuz",

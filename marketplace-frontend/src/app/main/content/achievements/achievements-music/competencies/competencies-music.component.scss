@@ -10,6 +10,10 @@
     margin-bottom: 80px;
 }
 
+chartParent2 {
+  height: 500px;
+}
+
 .title {
     margin-left: 50px;
 }
@@ -53,5 +57,25 @@ table.paleBlueRows {
     font-size: 16px;
   }
 
-  .ngx-charts 
-  { text { font-size: 14px  !important; } }
+
+  mat-panel-title{
+    font-size: 25px;
+  }
+
+  mat-card-title{
+    font-size: 22px;
+  }
+
+  .icon {
+    margin-right: 10px;
+    height: 40px;
+  }
+
+  .iconSquare {
+    margin-right: 14px;
+    margin-left: 14px;
+  }
+
+  ::ng-deep.legend-label-text {
+    color: #4C4C4C;
+  }
