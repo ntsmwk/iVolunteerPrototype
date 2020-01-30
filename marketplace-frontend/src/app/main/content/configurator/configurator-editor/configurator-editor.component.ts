@@ -90,7 +90,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   selectionIndex2: number;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  @ViewChild('leftSidebarContainer', { static: true }) leftSidebarContainer: ElementRef;
+  // @ViewChild('leftSidebarContainer', { static: true }) leftSidebarContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
@@ -127,21 +127,22 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   ngAfterContentInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'hidden';
-    this.graphContainer.nativeElement.style.left = '200px';
+    // this.graphContainer.nativeElement.style.left = '200px';
+    this.graphContainer.nativeElement.style.left = '0px';
     this.graphContainer.nativeElement.style.top = '30px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
     // this.graphContainer.nativeElement.style.margin = '5px';
 
-    this.leftSidebarContainer.nativeElement.style.position = 'absolute';
-    this.leftSidebarContainer.nativeElement.style.overflow = 'auto';
-    this.leftSidebarContainer.nativeElement.style.padding = '2px';
-    this.leftSidebarContainer.nativeElement.style.left = '0px';
-    this.leftSidebarContainer.nativeElement.style.top = '30px';
-    this.leftSidebarContainer.nativeElement.style.width = '200px';
-    this.leftSidebarContainer.nativeElement.style.bottom = '0px';
-    this.leftSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    // this.leftSidebarContainer.nativeElement.style.position = 'absolute';
+    // this.leftSidebarContainer.nativeElement.style.overflow = 'auto';
+    // this.leftSidebarContainer.nativeElement.style.padding = '2px';
+    // this.leftSidebarContainer.nativeElement.style.left = '0px';
+    // this.leftSidebarContainer.nativeElement.style.top = '30px';
+    // this.leftSidebarContainer.nativeElement.style.width = '200px';
+    // this.leftSidebarContainer.nativeElement.style.bottom = '0px';
+    // this.leftSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
 
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
@@ -529,6 +530,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.showServerContent(false);
     // this.restoreGeometry(savedGeometry);
 
+    
     this.setLayout();
     this.focusOnCell(focusCell);
 
@@ -582,6 +584,16 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   // Events TODO @Alex Refactor that
   handleMXGraphClickEvent(event: any) {
     const cell: myMxCell = event.getProperty('cell');
+
+    //ZOOMSCALE
+    const scale = this.graph.view.getScale();
+
+    const translate = this.graph.view.getTranslate();
+
+    const bounds = this.graph.getGraphBounds();
+
+
+
 
     if (!isNullOrUndefined(cell)) {
       const parent = cell.getParent();
@@ -737,6 +749,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.updateModel();
         this.redrawContent(cret as myMxCell);
       }
+      this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
+      bounds.x = bounds.x-20;
+      this.graph.view.setGraphBounds(bounds);
 
       this.modelUpdated = true;
     }
@@ -1160,6 +1175,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
 
   // DEBUG 
+
+  showZoomLevel() {
+    let scale = this.graph.view.getScale();
+    console.log(this.graph.view.getScale());
+    this.graph.zoomActual();
+    console.log(this.graph.view.getScale());
+    this.graph.view.setScale(scale);
+  }
 
   doShitWithGraph(graph: mxgraph.mxGraph) {
     console.log(graph);

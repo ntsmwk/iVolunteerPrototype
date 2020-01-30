@@ -100,3 +100,17 @@ mat-expansion-panel-header {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.mat-column-taskDuration {
+  padding-right: 0;
+  flex: 0 0 100px;
+}
+
+// .mat-column-hash {
+//   padding-right: 0;
+//   flex: 0 0 300px;
+// }
+
+.mat-column-verificationStatus {
+  justify-content:center;
+}

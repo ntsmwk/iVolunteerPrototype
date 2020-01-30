@@ -20,20 +20,20 @@ export interface SubMenuItem {
 }
 
 const rootMenuItems: RootMenuItem[] = [
-  { id: 1, label: 'File' },
-  { id: 2, label: 'Edit' },
-  { id: 3, label: 'View' },
+  { id: 1, label: 'Datei' },
+  { id: 2, label: 'Bearbeiten' },
+  { id: 3, label: 'Ansicht' },
   { id: 4, label: 'Extras' },
-  { id: 5, label: 'Help' },
+  { id: 5, label: 'Hilfe' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
-  { rootId: 1, id: 1, label: 'New Configurator', clickAction: 'newClicked', icon: undefined },
-  { rootId: 1, id: 2, label: 'Open Configurator', clickAction: 'openClicked', icon: undefined },
-  { rootId: 1, id: 3, label: 'Save Configurator', clickAction: 'saveClicked', icon: undefined },
-  { rootId: 1, id: 3, label: 'Save Configurator As', clickAction: 'saveAsClicked', icon: undefined },
+  { rootId: 1, id: 1, label: 'Neue Konfiguration', clickAction: 'newClicked', icon: undefined },
+  { rootId: 1, id: 2, label: 'Konfiguration öffnen', clickAction: 'openClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
 
-  { rootId: 1, id: 4, label: 'Create Editor', clickAction: 'createEditorClicked', icon: undefined },
+  { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
 
   { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
   { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
@@ -155,8 +155,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
-        console.log("open returned");
-        console.log(ret);
         this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: "cancelled"});

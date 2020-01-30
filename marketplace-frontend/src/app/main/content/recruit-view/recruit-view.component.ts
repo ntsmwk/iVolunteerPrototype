@@ -25,7 +25,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private tableDataSource = new MatTableDataSource<ClassInstance>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskType1', 'taskName', 'taskDateFrom', 'taskDuration', 'hash', 'verificationStatus'];
+  private displayedColumns: string[] = ['taskName', 'taskType1', 'taskDateFrom', 'taskDuration', 'hash', 'verificationStatus'];
   marketplace: Marketplace;
   participant: Participant;
   duringVerify: boolean;
@@ -140,7 +140,40 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     return !isNullOrUndefined(this.weekdayData);
   }
 
-  pressedVerifyAll() {
+  verify1 = false;
+  verify2 = false;
+  verify3 = false;
+  verify5 = false;
 
+  pressedVerifyAll() {
+    const outer = this;
+    setTimeout(function(){ 
+      outer.verify2 = true;
+    }, 3000);
+    setTimeout(function(){ 
+      outer.verify3 = true;
+    }, 5000);
+    setTimeout(function(){ 
+      outer.verify5 = true;
+    }, 1000);
+    setTimeout(function(){ 
+      outer.verify1 = true;
+    }, 2000);
+
+
+  }
+
+
+
+  getVerifyState(index: number) {
+    if (index % 2 === 0) {
+      return this.verify2;
+    } else if (index % 3 === 0) {
+      return this.verify3;
+    } else if (index % 5 === 0) {
+      return this.verify5;
+    } else {
+      return this.verify1;
+    }
   }
 }

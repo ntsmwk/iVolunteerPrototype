@@ -153,7 +153,6 @@ public class FakeService {
 		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		instance.setName("Fahrtenspange Bronze");
 		instance.setIssuerId("FFA");
-		instance.setImagePath("");
 
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());

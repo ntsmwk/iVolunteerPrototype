@@ -1,4 +1,5 @@
-<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+<link type="text/css" rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
 
 <div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll">
@@ -12,7 +13,8 @@
     <!-- Back</h1> -->
 
     <div style=" position: relative; width: 120px; height: 120px; padding-top: 0px;">
-      <img style="object-fit: contain; max-width: 100%; max-height: 100%" src="../../../../assets/images/avatars/weixlbaumer.jpg">
+      <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+        src="../../../../assets/images/avatars/weixlbaumer.jpg">
     </div>
   </div>
 
@@ -41,44 +43,45 @@
       <!--Share Icon and Menu-->
       <div style="padding-right: 20px; padding-top: 5px">
         <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
-                    <mat-icon>share</mat-icon>
-                </button>
+          <mat-icon>share</mat-icon>
+        </button>
 
         <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
           <mat-label mat-menu-item disabled style="color: black">Freigeben an...</mat-label>
 
-          <!-- <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                        <div fxLayout="row" fxLayoutAlign="start center">
-
-                            <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
-                            <div style="padding-left: 10px"></div>
-                            <div>ÖRK</div>
-                        </div>
-                    </button> -->
+        
           <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="start center">
 
-                            <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                            <div style="padding-left: 10px"></div>
-                            <div>FF Altenberg</div>
-                        </div>
-                    </button>
+              <img class="avatar" src="../../../../assets/images/logos/FF_Altenberg.jpg">
+              <div style="padding-left: 10px"></div>
+              <div>FF Altenberg</div>
+            </div>
+          </button>
           <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
-                        <div fxLayout="row" fxLayoutAlign="start center">
+              <div fxLayout="row" fxLayoutAlign="start center">
 
-                            <img class="avatar" src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
-                            <div style="padding-left: 10px"></div>
-                            <div>Musikverein Schwertberg</div>
-                        </div>
-                    </button>
+                  <img class="avatar" src="../../../../assets/images/logos/OERK_Sonderlogo_rgb.jpg">
+                  <div style="padding-left: 10px"></div>
+                  <div>ÖRK</div>
+              </div>
+          </button>
+          <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px">
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+              <img class="avatar" src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
+              <div style="padding-left: 10px"></div>
+              <div>Musikverein Schwertberg</div>
+            </div>
+          </button>
           <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px" matTooltip="Recruiter: 'Best Jobs'">
-                        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="start center">
 
-                            <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
-                            <div style="padding-left: 10px"></div>
-                            <div>Best Jobs</div>
-                        </div>
-                    </button>
+              <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg">
+              <div style="padding-left: 10px"></div>
+              <div>Best Jobs</div>
+            </div>
+          </button>
         </mat-menu>
       </div>
     </div>
@@ -93,41 +96,48 @@
       <div>Nach Organisation filtern</div>
       <div fxLayout="row" fxLayoutAlign="start start">
 
-        <!-- <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
+    
+        <div style="padding:3px"></div>
+        <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
+          fxLayoutAlign="start center">
+          <div style=" position: relative; width: 50px; height: 50px; padding-top: 7px; font-size: 18px; font-weight: 900">
+            Alle
+          </div>
+        </button>
+        <div style="padding:3px"></div>
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
+          fxLayoutAlign="start center">
+          <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+              src="../../../../assets/images/logos/FF_Altenberg.jpg">
+          </div>
+        </button>
+        <div style="padding:3px"></div>
+
+            <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
                     fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg">
                     </div>
-                </button> -->
-        <div style="padding:3px"></div>
-        <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
-                    <div style=" position: relative; width: 50px; height: 50px; padding-top: 7px;">
-                        Alle
-                    </div>
-                </button>
-        <div style="padding:3px"></div>
-        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
-                    <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
-                        <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                            src="../../../../assets/images/logos/FF_Altenberg.jpg">
-                    </div>
                 </button>
 
         <div style="padding:3px"></div>
-        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
-                    <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
-                        <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-                            src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
-                    </div>
-                </button>
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
+          fxLayoutAlign="start center">
+          <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
+            <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+              src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
+          </div>
+        </button>
       </div>
     </div>
 
 
     <div style="padding-top: 10px"></div>
 
-    <div *ngIf="userImagePaths && userImagePaths.length>0" class="table" fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
+    <div *ngIf="userImagePaths && userImagePaths.length>0" class="table" fxLayout="row" style="width: 100%"
+      fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
       <mat-table #table matSort [dataSource]="dataSourceRepository" style="width: 100%">
@@ -169,7 +179,7 @@
           <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </mat-cell>
         </ng-container> -->
-<!-- 
+        <!-- 
         <ng-container matColumnDef="taskDateFrom">
           <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
           <mat-cell *matCellDef="let element">
@@ -186,7 +196,7 @@
             {{getDateString(entry.timestamp)}}
           </mat-cell>
         </ng-container>
-<!-- 
+        <!-- 
         <ng-container matColumnDef="taskDuration">
           <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h </mat-cell>
@@ -198,7 +208,8 @@
         </ng-container> -->
 
         <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumnsRepository;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsRepository;"
+          [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
       </mat-table>
     </div>
     <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>

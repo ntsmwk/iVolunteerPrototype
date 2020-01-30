@@ -80,15 +80,16 @@
                 <div style="font-size: 30px">Markus Weixlbaumer</div>
                 <div style="padding-top: 20px"></div>
                 <div style="font-size: 18px">Freiwillig seit: 2000</div>
-                <div style="font-size: 18px"><strong>FF Eidenberg</strong> und <strong>Musikverein Schwertberg</strong></div>
+                <div style="font-size: 18px">
+                  <strong>FF Eidenberg</strong>, <strong>RK Wilhering</strong> und <strong>Musikverein Schwertberg</strong>
+                </div>
                 <a style="font-size: 15px; cursor: pointer">mehr</a>
               </div>
-
             </div>
 
             <div style="padding-top: 0px pr-20" fxLayout=row fxLayoutAlign="end center">
-              <button class="mr-20" mat-raised-button color="primary" (click)=pressedVerifyAll()> Verifiziere alle
-                                </button>
+              <button class="mr-20" mat-raised-button color="primary" (click)=pressedVerifyAll()> Verifizieren
+              </button>
             </div>
 
             <h2 style="font-weight: bold;">Freiwilligenpasseinträge</h2>
@@ -117,24 +118,34 @@
 
                 <ng-container matColumnDef="taskDateFrom">
                   <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+                  <mat-cell *matCellDef="let element">
+                    {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDuration">
                   <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} h
+                  </mat-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="hash">
                   <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="verificationStatus">
-                  <mat-header-cell *matHeaderCellDef> Verfifiziert </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> <i class="fas fa-check-circle" style="color:green;"></i> </mat-cell>
+                  <mat-header-cell *matHeaderCellDef> Verifiziert </mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                      <div></div>
+                      <div *ngIf="getVerifyState(i)" class="pl-4">
+                        <i class="fas fa-check-circle" style="color:green;"></i>
+                      </div>
+                      <div></div>
+                    </div>
+                  </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -144,9 +155,9 @@
             <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
 
 
-            <div class="no-data" *ngIf="tableDataSource.data.length === 0">
+            <!-- <div class="no-data" *ngIf="tableDataSource.data.length === 0">
               Keine Einträge freigegeben!
-            </div>
+            </div> -->
 
             <h2 style="font-weight: bold;">Freigegebene Statistiken</h2>
 

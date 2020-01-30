@@ -102,7 +102,7 @@
     </ng-container>
 
     <ng-container matColumnDef="user">
-      <mat-header-cell *matHeaderCellDef>Freiwilige</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Freiwilliger</mat-header-cell>
       <mat-cell *matCellDef="let entry" fxLayout="row" fxLayoutAlign="start center">
 
         <img class="avatar" [src]="getImagePathById(entry.userId)">
@@ -133,9 +133,9 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }" class="table-row"></mat-row>
   </mat-table>
 
-  <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
+  <!-- <div *ngIf="datasource.data.length <= 0" class="inbox-empty-message">
     Keine unbestätigten Freiwilligenpasseinträge
-  </div>
+  </div> -->
 
 
 </div>
