@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,25 +46,24 @@ public class FakeService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
 
-	
 	public void reset() {
 
 		resetFahrtenspangeFake();
-		
+
 		resetSunburstFake();
-		
+
 //		Reset Sunburst Fake
-			//Reset ClassDefinitions
-			resetClassDefinitionsRelationshipsAndConfigurators();
+		// Reset ClassDefinitions
+		resetClassDefinitionsRelationshipsAndConfigurators();
 //			//Reset Flag for retrieval
-		
+
 //		Reset Sybos Fake
-		
+
 		deleteSharedChart();
 	}
-	
-	
+
 	private void deleteSharedChart() {
 		this.storedChartRepository.deleteAll();
 	}
@@ -72,32 +73,32 @@ public class FakeService {
 		derivationRuleRepository.deleteAll();
 
 		// Reset Fahrtenspange Task
-		
 
 		// Reset Fahrtenspange Badge
+		List<ClassInstance> list = classInstanceRepository.findAll().stream()
+				.filter(ci -> ci.getName().equals("Fahrtenspange Bronze")).collect(Collectors.toList());
+		classInstanceRepository.delete(list);
 	}
-	
+
 	private void resetSunburstFake() {
 		this.isSunburstFakeRepository.deleteAll();
 	}
-	
+
 	private void resetClassDefinitionsRelationshipsAndConfigurators() {
 		List<ClassesAndRelationshipsToReset> list = classesAndRelationshipsToResetRepository.findAll();
 		ClassesAndRelationshipsToReset reset = list.get(0);
-		
+
 		classDefinitionRepository.deleteAll();
 		classDefinitionRepository.save(reset.getClassDefinitions());
-		
+
 		relationshipRepository.deleteAll();
 		relationshipRepository.save(reset.getRelationships());
-		
+
 		configuratorRepository.deleteAll();
 		configuratorRepository.save(reset.getConfigurators());
-				
-	}
-	
 
-	
+	}
+
 	public void pushTaskFromAPI() {
 //		[{
 //		    "_id": "test_2222",
@@ -111,86 +112,85 @@ public class FakeService {
 //		    "classArchetype": "TASK",
 //		    "timestamp": "2020-01-15T10:02:39.834Z"
 //		}]
-		
+
 		TaskClassInstance instance = new TaskClassInstance();
 		instance.setId("task_from_api");
 		instance.setClassArchetype(ClassArchetype.TASK);
 		instance.setName("Sybos Tätigkeit");
 		instance.setIssuerId("FFA");
-		
+
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());
-		
+
 		instance.setPublished(false);
 		instance.setInUserRepository(false);
 		instance.setInIssuerInbox(false);
-		
+
 		instance.setTimestamp(new Date());
-		
+
 		List<PropertyInstance<Object>> properties = new ArrayList<>();
-		
-		PropertyDefinition<Object> nameDefinition= propertyDefinitionRepository.findOne("name");
+
+		PropertyDefinition<Object> nameDefinition = propertyDefinitionRepository.findOne("name");
 		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
 		nameInstance.setValues(new ArrayList<>());
 		nameInstance.getValues().add("Brandeinsatz");
-		
+
 		properties.add(nameInstance);
-		
+
 		instance.setProperties(properties);
-		
+
 		List<ClassInstance> instances = new ArrayList<>();
 		instances.add(instance);
-		
+
 		classInstanceController.createNewClassInstances(instances);
-				
+
 	}
 
 	public void addFahrtenspangeFake() {
 
 		TaskClassInstance instance = new TaskClassInstance();
-		instance.setId("fahrtenspange"+new Date().hashCode());
+		instance.setId("fahrtenspange" + new Date().hashCode());
 		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		instance.setName("Fahrtenspange Bronze");
 		instance.setIssuerId("FFA");
-		
+		instance.setImagePath("");
+
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());
-		
+
 		instance.setPublished(false);
 		instance.setInUserRepository(false);
 		instance.setInIssuerInbox(false);
-		
+
 		instance.setTimestamp(new Date());
-		
+
 		List<PropertyInstance<Object>> properties = new ArrayList<>();
-		
-		PropertyDefinition<Object> nameDefinition= propertyDefinitionRepository.findOne("name");
+
+		PropertyDefinition<Object> nameDefinition = propertyDefinitionRepository.findOne("name");
 		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
 		nameInstance.setValues(new ArrayList<>());
 		nameInstance.getValues().add("Fahrtenspange Bronze");
-		
+
 		properties.add(nameInstance);
-		
+
 		instance.setProperties(properties);
-		
+
 		List<ClassInstance> instances = new ArrayList<>();
 		instances.add(instance);
-		
+
 		classInstanceController.createNewClassInstances(instances);
 	}
-	
+
 	public void createResetState() {
 		classesAndRelationshipsToResetRepository.deleteAll();
-		
+
 		ClassesAndRelationshipsToReset classesAndRelationshipsToReset = new ClassesAndRelationshipsToReset();
 		classesAndRelationshipsToReset.getClassDefinitions().addAll(classDefinitionRepository.findAll());
 		classesAndRelationshipsToReset.getRelationships().addAll(relationshipRepository.findAll());
 		classesAndRelationshipsToReset.getConfigurators().addAll(configuratorRepository.findAll());
-		
-		
+
 		classesAndRelationshipsToResetRepository.save(classesAndRelationshipsToReset);
-		
-		
+
 	}
 
 }

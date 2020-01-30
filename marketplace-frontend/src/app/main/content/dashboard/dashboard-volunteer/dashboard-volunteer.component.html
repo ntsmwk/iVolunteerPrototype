@@ -127,7 +127,7 @@
 
     <div style="padding-top: 10px"></div>
 
-    <div class="table" fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
+    <div *ngIf="userImagePaths && userImagePaths.length>0" class="table" fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
       <mat-table #table matSort [dataSource]="dataSourceRepository" style="width: 100%">
@@ -146,25 +146,39 @@
         </ng-container>
 
         <ng-container matColumnDef="taskName">
-          <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Eintrag </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_NAME].values[0]}} </span>
+            <span *ngIf="element.name=='Tätigkeiten MV'">{{element.properties[1].values[0]}} </span>
+            <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.properties[0].values[0]}} </span>
+            <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.properties[0].values[0]}} </span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="taskType1">
           <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </mat-cell>
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_TYPE_1].values[0]}} </span>
+            <span *ngIf="element.name=='Tätigkeiten MV'">Ausrückung </span>
+            <span *ngIf="element.name=='Sybos Tätigkeit'">Einsatz </span>
+            <span *ngIf="element.name=='Fahrtenspange 1000'">Abzeichen </span>
+          </mat-cell>
         </ng-container>
-
+        <!-- 
         <ng-container matColumnDef="taskType2">
           <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </mat-cell>
-        </ng-container>
-
+        </ng-container> -->
+<!-- 
         <ng-container matColumnDef="taskDateFrom">
           <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+          <mat-cell *matCellDef="let element">
+            <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}} </span>
+            <span *ngIf="element.name=='Tätigkeiten MV'"> </span>
+            <span *ngIf="element.name=='Sybos Tätigkeit'"> </span>
+            <span *ngIf="element.name=='Fahrtenspange 1000'"> </span>
           </mat-cell>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="date">
           <mat-header-cell *matHeaderCellDef>Datum</mat-header-cell>
@@ -172,7 +186,7 @@
             {{getDateString(entry.timestamp)}}
           </mat-cell>
         </ng-container>
-
+<!-- 
         <ng-container matColumnDef="taskDuration">
           <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h </mat-cell>
@@ -181,7 +195,7 @@
         <ng-container matColumnDef="hash">
           <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </mat-cell>
-        </ng-container>
+        </ng-container> -->
 
         <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumnsRepository;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
