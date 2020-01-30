@@ -51,7 +51,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       name: 'Rotes Kreuz',
-      value: '#808080'
+      value: '#b2b2b2'
     },
     {
       name: 'Musikverein',

@@ -11,7 +11,7 @@
             <div style="margin-top: 10px;"></div>
             <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%;">
                 <div class="third" fxLayout="column">
-                    <h2>FF Eidenberg</h2>
+                    <h2 style="font-size: 30px;">FF Eidenberg</h2>
                     <div fxLayout=row>
                         <img src="../../../../assets/images/logos/FF_Altenberg.jpg" class="img">
                         <table class="table">
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="third" fxLayout="column">
-                    <h2>Musikverein Schwertberg</h2>
+                    <h2 style="font-size: 30px;">Musikverein Schwertberg</h2>
                     <div fxLayout=row>
                         <img src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg" class="img">
                         <table class="table">
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="third" fxLayout="column">
-                    <h2>Musikverein Schwertberg</h2>
+                    <h2 style="font-size: 30px;">Musikverein Schwertberg</h2>
                     <div fxLayout=row>
                         <img src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg" class="img">
                         <table class="table">
@@ -85,60 +85,90 @@
             <div style="height: 20px;"></div>
 
             <div fxLayout="column" fxLayoutAlign="space-between center" style="width: 100%;">
-                <h1>Engagement gesamt</h1>
-                <div fxLayout="row" fxLayoutAlign="space-around center">
+                <h1 class="engagement">Engagement gesamt</h1>
+
+                <div fxLayout="row" fxLayoutAlign="start center">
                     <div>
-                        <div class="treeParent1">
+                        <!-- <div class="treeParent1">
                             <ngx-charts-tree-map [customColors]="colors" [results]="durationTotal" [gradient]="gradient"
                                 [animations]="animations" [valueFormatting]="valueFormattingDuration"
                                 (select)="onSelect($event)">
                             </ngx-charts-tree-map>
                         </div>
-                        <h2 class="total">Gesamt: {{sumDurationTotal}} Stunden</h2>
+                        <h2 class="total">Gesamt: {{sumDurationTotal}} Stunden</h2> -->
+                        <div class="donut-parent-duration">
+                            <ngx-charts-advanced-pie-chart class="chart-container" [results]="durationTotal"
+                                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
+                                [valueFormatting]="valueFormattingDuration">
+                            </ngx-charts-advanced-pie-chart>
+                        </div>
                     </div>
                     <div>
-                        <div class="treeParent1">
+                        <!-- <div class="treeParent1">
                             <ngx-charts-tree-map [customColors]="colors" [results]="numberTotal" [gradient]="gradient"
                                 [animations]="animations" [valueFormatting]="valueFormattingNumber"
                                 (select)="onSelect($event)">
                             </ngx-charts-tree-map>
                         </div>
-                        <h2 class="total">Gesamt: {{sumNumberTotal}} Tätigkeiten</h2>
+                        <h2 class="total">Gesamt: {{sumNumberTotal}} Tätigkeiten</h2> -->
+                        <div class="donut-parent-number">
+                            <ngx-charts-advanced-pie-chart class="chart-container" [results]="numberTotal"
+                                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
+                                [valueFormatting]="valueFormattingNumber">
+                            </ngx-charts-advanced-pie-chart>
+                        </div>
                     </div>
                 </div>
 
                 <div style="height: 30px;"></div>
 
-                <h1>Engagement 2019</h1>
-                <div fxLayout="row" fxLayoutAlign="space-around center">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <h1 class="engagement">Engagement 2019</h1>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center">
                     <div>
-                        <div class="treeParent2">
+                        <!-- <div class="treeParent2">
                             <ngx-charts-tree-map [customColors]="colors" [results]="duration2019" [gradient]="gradient"
                                 [animations]="animations" [valueFormatting]="valueFormattingDuration"
                                 (select)="onSelect($event)">
                             </ngx-charts-tree-map>
+                        </div> 
+                        <h2 class="total">Gesamt: {{sumDuration2019}} Stunden</h2> -->
+
+                        <div class="donut-parent-duration">
+                            <ngx-charts-advanced-pie-chart class="chart-container" [results]="duration2019"
+                                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
+                                [valueFormatting]="valueFormattingDuration">
+                            </ngx-charts-advanced-pie-chart>
                         </div>
-                        <h2 class="total">Gesamt: {{sumDuration2019}} Stunden</h2>
                     </div>
                     <div>
-                        <div class="treeParent2">
+                        <!-- <div class="treeParent2">
                             <ngx-charts-tree-map [customColors]="colors" [results]="number2019" [gradient]="gradient"
                                 [animations]="animations" [valueFormatting]="valueFormattingNumber"
                                 (select)="onSelect($event)">
                             </ngx-charts-tree-map>
+                        </div> 
+                        <h2 class="total">Gesamt: {{sumNumber2019}} Stunden</h2> -->
+
+                        <div class="donut-parent-number">
+                            <ngx-charts-advanced-pie-chart class="chart-container" [results]="number2019"
+                                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
+                                [valueFormatting]="valueFormattingNumber">
+                            </ngx-charts-advanced-pie-chart>
                         </div>
-                        <h2 class="total">Gesamt: {{sumNumber2019}} Tätigkeiten</h2>
                     </div>
                 </div>
             </div>
 
-            <div style="height: 50px;"></div>
+            <div style="height: 80px;"></div>
+
 
 
             <div style="width: 100%;">
-                <div fxLayout="row" fxLayoutAlign="space-between center">
-                    <h2>Jahresvergleich Tätigkeiten</h2>
-
+                <h1 class="engagement" style="text-align: center;">Jahresvergleich Tätigkeiten</h1>
+                <div fxLayout="row" fxLayoutAlign="start center">
                     <mat-form-field class="matFormField">
                         <mat-label>Vergleichsjahr</mat-label>
                         <mat-select [value]="comparisonYear" (selectionChange)="onComparisonYearChanged($event.value)">
@@ -152,7 +182,7 @@
                             <mat-option value="2019"> 2019 </mat-option>
                         </mat-select>
                     </mat-form-field>
-
+                    <div style="width: 50px;"></div>
                     <app-share-menu class="shareMenu" [label]="'Vergleich'" (export)="exportChart($event)">
                     </app-share-menu>
                 </div>
