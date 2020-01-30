@@ -108,7 +108,9 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private loadTasks() {
     this.classInstanceService.getClassInstancesByArcheTypeWithHash(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
       if (!isNullOrUndefined(ret)) {
-        this.classInstances = ret;
+        this.classInstances = ret.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+        console.log(this.classInstances)
+
         this.tableDataSource.data = this.classInstances;
         this.paginator.length = this.classInstances.length;
         this.tableDataSource.paginator = this.paginator;

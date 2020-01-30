@@ -12,7 +12,7 @@
       </div>
 
       <h1 style="padding-left: 5px; font-size: 22px; color: white; padding-top: 50px">
-        Personaldientsleister: 'Best Jobs'</h1>
+        Personaldienstleister: 'Best Jobs'</h1>
     </div>
     <!-- <div style="padding-left: 80px"></div> -->
 
@@ -98,12 +98,27 @@
               <mat-table #table *ngIf="tableDataSource.data.length > 0" [dataSource]="tableDataSource" matSort>
                 <ng-container matColumnDef="taskName">
                   <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_NAME].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> 
+                      <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_NAME].values[0]}} </span>
+                      <span *ngIf="element.name=='Tätigkeiten MV'">{{element.properties[1].values[0]}} </span>
+                      <span *ngIf="element.name=='Tätigkeiten FF'">{{element.properties[1].values[0]}} </span>
+                      <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.properties[0].values[0]}} </span>
+                      <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.properties[0].values[0]}} </span>
+                  
+                  </mat-cell>
+           
                 </ng-container>
 
                 <ng-container matColumnDef="taskType1">
                   <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_1].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> 
+                      <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_TYPE_1].values[0]}} </span>
+                      <span *ngIf="element.name=='Tätigkeiten MV'">Ausrückung </span>
+                      <span *ngIf="element.name=='Tätigkeiten FF'">Brandeinsatz </span>
+                      <span *ngIf="element.name=='Sybos Tätigkeit'">Einsatz </span>
+                      <span *ngIf="element.name=='Fahrtenspange 1000'">Abzeichen </span>
+                  </mat-cell>
+
                 </ng-container>
 
                 <ng-container matColumnDef="taskType2">
@@ -119,20 +134,35 @@
                 <ng-container matColumnDef="taskDateFrom">
                   <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+                      <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}} </span>
+                      <span *ngIf="element.name=='Tätigkeiten MV'"> </span>
+                      <span *ngIf="element.name=='Tätigkeiten FF'">{{element.timestamp}}</span>
+                      <span *ngIf="element.name=='Sybos Tätigkeit'"> </span>
+                      <span *ngIf="element.name=='Fahrtenspange 1000'"> </span>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDuration">
                   <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} h
+                  <mat-cell *matCellDef="let element"> 
+                    
+                      <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_DURATION].values[0]}} h</span>
+                    <span *ngIf="element.name=='Tätigkeiten MV'"> </span>
+                    <span *ngIf="element.name=='Tätigkeiten FF'">2 h </span>
+
+                    <span *ngIf="element.name=='Sybos Tätigkeit'"> </span>
+                    <span *ngIf="element.name=='Fahrtenspange 1000'"> </span>
                   </mat-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="hash">
                   <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}}</mat-cell>
+                  <mat-cell *matCellDef="let element"> 
+                      <span *ngIf="element.name=='PersonTask'">{{element.properties[20].values[0]}}</span>
+                      <span *ngIf="element.name=='Tätigkeiten FF'">3ac75e0016abae2d9ab29c362ac43a386b80b10ac75b3f266b745a3c59788845 </span>
+
+                  </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="verificationStatus">
