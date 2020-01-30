@@ -51,7 +51,9 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   weekdayData;
   dayNightData;
   trainingData: any[];
-  
+  taskData: any[];
+
+
 
   IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
   IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
@@ -127,6 +129,10 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       if(this.charts.findIndex(c => c.title == "STUNDEN absolvierter Ausbildungen") >= 0){
         this.trainingData = JSON.parse(this.charts.find(c => c.title=="STUNDEN absolvierter Ausbildungen").data);
       }
+      if(this.charts.findIndex(c => c.title == "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf") >= 0){
+        this.taskData = JSON.parse(this.charts.find(c => c.title=="Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf").data);
+      }
+      // Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf
     });
   }
 

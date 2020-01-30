@@ -150,7 +150,7 @@ public class FakeService {
 		TaskClassInstance instance = new TaskClassInstance();
 		instance.setId("fahrtenspange"+new Date().hashCode());
 		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-		instance.setName("Fahrtenspange 1000");
+		instance.setName("Fahrtenspange Bronze");
 		instance.setIssuerId("FFA");
 		
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
@@ -167,7 +167,7 @@ public class FakeService {
 		PropertyDefinition<Object> nameDefinition= propertyDefinitionRepository.findOne("name");
 		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
 		nameInstance.setValues(new ArrayList<>());
-		nameInstance.getValues().add("Fahrtenspange 1000");
+		nameInstance.getValues().add("Fahrtenspange Bronze");
 		
 		properties.add(nameInstance);
 		

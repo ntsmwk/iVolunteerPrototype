@@ -185,14 +185,23 @@
                 [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
               </ngx-charts-bar-vertical-stacked>
             </div>
-
+            <div class="mt-20"></div>
             <div style="display:flex; flex-direction: column;" flexLayout="column">
-              <h2 class="title">TODO Diversity chart</h2>
-             
+              <!-- <h2 class="title">Anpassungsfähigkeit</h2>
+              <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p> -->
+
+              <div class="chartParent2" fxLayout="column">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
+                </div>
+                <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                  [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+                </ngx-charts-area-chart-stacked>
+              </div>
             </div>
           </mat-expansion-panel>
-          <mat-expansion-panel>
 
+          <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title fxLayout=row fxLayoutAlign="space-between center">
                 <div fxLayout=row fxLayoutAlign="start start">

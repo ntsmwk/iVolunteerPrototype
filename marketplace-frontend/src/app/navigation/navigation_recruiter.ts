@@ -4,7 +4,7 @@ export const navigation_recruiter = [
     'title': 'Jobangebote',
     'type': 'item',
     'icon': 'dashboard',
-    // 'url': '/main/recruitment'
+    'url': '/main/jobs'
   },
   {
     'id': 'recruitment',

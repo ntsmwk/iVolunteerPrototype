@@ -23,12 +23,14 @@
         font-size: 24px;
       }
     }
-    img.header-icon {
+    .header-icon {
       left: 10px;
       padding: 16px;
-      max-height: 100%;
-      position: absolute;
-      filter: brightness(0) invert(1);
+      flex: 1;
+      max-width: 110px;
+      // max-width: 50px;
+      // position: absolute;
+      // filter: brightness(0) invert(1);
       @include media-breakpoint-down('xs') {
         display: none;
       }

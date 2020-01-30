@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { Marketplace } from '../_model/marketplace';
@@ -31,11 +31,12 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   derivationRule: DerivationRule;
 
-  fahrtenspangeImg=null;
+  fahrtenspangeImg = null;
 
   classDefinitions: ClassDefinition[] = [];
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private formBuilder: FormBuilder,
@@ -107,12 +108,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   save() {
+    //  DO NOT DELETE!! ONLY FOR FAKE
     // this.derivationRule.name = this.ruleForm.value.name;
     // this.derivationRule.target = this.ruleForm.value.target;
 
     // this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
 
-    this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(() => { });
+    this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(() => { this.router.navigate(["/main/helpseeker/asset-inbox"]) });
   }
 
   navigateBack() {
@@ -127,21 +129,21 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.derivationRule.classSourceRules.push(new ClassSourceRuleEntry());
   }
 
-  onFahrtenspangeBronzeChanged($event){
-    this.fahrtenspangeImg='bronze';
+  onFahrtenspangeBronzeChanged($event) {
+    this.fahrtenspangeImg = 'bronze';
   }
 
 
-  onFahrtenspangeSilberChanged($event){
-    this.fahrtenspangeImg='silber';
+  onFahrtenspangeSilberChanged($event) {
+    this.fahrtenspangeImg = 'silber';
   }
 
 
-  onFahrtenspangeGoldChanged($event){
-    this.fahrtenspangeImg='gold';
+  onFahrtenspangeGoldChanged($event) {
+    this.fahrtenspangeImg = 'gold';
   }
 
-  onFahrtenspangeNoneChanged($event){
-    this.fahrtenspangeImg=null;
+  onFahrtenspangeNoneChanged($event) {
+    this.fahrtenspangeImg = null;
   }
 }
