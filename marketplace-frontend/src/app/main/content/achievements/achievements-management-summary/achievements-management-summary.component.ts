@@ -96,11 +96,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "Rotes Kreuz",
-      "value": 1632
+      "value": 883
     },
     {
       "name": "Musikverein",
-      "value": 883
+      "value": 1632
     },
   ];
 
@@ -111,11 +111,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "Rotes Kreuz",
-      "value": 425
+      "value": 401
     },
     {
       "name": "Musikverein",
-      "value": 401
+      "value": 425
     },
   ];
 
@@ -126,11 +126,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "Rotes Kreuz",
-      "value": 173
+      "value": 83
     },
     {
       "name": "Musikverein",
-      "value": 83
+      "value": 173
     },
   ];
 
@@ -141,11 +141,11 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "Rotes Kreuz",
-      "value": 49
+      "value": 31
     },
     {
       "name": "Musikverein",
-      "value": 31
+      "value": 49
     },
   ];
 
@@ -153,69 +153,6 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   sumNumberTotal: number;
   sumDuration2019: number;
   sumNumber2019: number;
-
-  // dataFfTotal = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 3552
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 1266
-  //   }
-  // ];
-  // dataRkTotal = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 1632
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 425
-  //   }
-  // ];
-  // dataMusicTotal = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 483
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 201
-  //   }
-  // ];
-
-  // dataFf2019 = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 346
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 104
-  //   }
-  // ];
-  // dataRk2019 = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 173
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 49
-  //   }
-  // ];
-  // dataMusic2019 = [
-  //   {
-  //     "name": "Stunden",
-  //     "value": 83
-  //   },
-  //   {
-  //     "name": "Tätigkeiten",
-  //     "value": 31
-  //   }
-  // ];
-  // -----
 
   fakeDataMusic = [
     {
@@ -248,7 +185,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "2019",
-      "value": 31,
+      "value": 49,
     },
   ];
 
@@ -283,7 +220,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     },
     {
       "name": "2019",
-      "value": 49,
+      "value": 31,
     },
   ];
   uniqueYears: any[];
