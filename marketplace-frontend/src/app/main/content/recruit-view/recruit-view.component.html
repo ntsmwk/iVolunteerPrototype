@@ -1,4 +1,5 @@
-<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+<link type="text/css" rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
@@ -8,7 +9,8 @@
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center" style="margin-left: 0px">
     <div fxLayout="row" fxLayoutAlign="start center">
       <div style="padding-top: 0px; z-index: 255; position: relative; width: 85px; height: 85px;">
-        <img style="object-fit: contain; max-width: 100%; max-height: 100%" src="../../../../assets//images/logos/recruiter.jpg">
+        <img style="object-fit: contain; max-width: 100%; max-height: 100%"
+          src="../../../../assets//images/logos/recruiter.jpg">
       </div>
 
       <h1 style="padding-left: 5px; font-size: 22px; color: white; padding-top: 50px">
@@ -80,15 +82,16 @@
                 <div style="font-size: 30px">Markus Weixlbaumer</div>
                 <div style="padding-top: 20px"></div>
                 <div style="font-size: 18px">Freiwillig seit: 2000</div>
-                <div style="font-size: 18px"><strong>FF Eidenberg</strong> und <strong>Musikverein Schwertberg</strong></div>
+                <div style="font-size: 18px"><strong>FF Eidenberg</strong> und <strong>Musikverein Schwertberg</strong>
+                </div>
                 <a style="font-size: 15px; cursor: pointer">mehr</a>
               </div>
 
             </div>
 
             <div style="padding-top: 0px pr-20" fxLayout=row fxLayoutAlign="end center">
-              <button class="mr-20" mat-raised-button color="primary" (click)=pressedVerifyAll()> Verifiziere alle
-                                </button>
+              <button class="mr-20" mat-raised-button color="primary" (click)=pressedVerifyAll()> Verifizieren
+              </button>
             </div>
 
             <h2 style="font-weight: bold;">Freiwilligenpasseinträge</h2>
@@ -117,24 +120,34 @@
 
                 <ng-container matColumnDef="taskDateFrom">
                   <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
+                  <mat-cell *matCellDef="let element">
+                    {{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}}
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDuration">
                   <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DURATION].values[0]}} &nbsp; h
+                  </mat-cell>
                 </ng-container>
 
 
                 <ng-container matColumnDef="hash">
                   <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.properties[20].values[0]}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="verificationStatus">
-                  <mat-header-cell *matHeaderCellDef> Verfifiziert </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> <i class="fas fa-check-circle" style="color:green;"></i> </mat-cell>
+                  <mat-header-cell *matHeaderCellDef> Verifiziert </mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                      <div></div>
+                      <div *ngIf="getVerifyState(i)" class="pl-4">
+                        <i class="fas fa-check-circle" style="color:green;"></i>
+                      </div>
+                      <div></div>
+                    </div>
+                  </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -162,18 +175,24 @@
               </div>
             </div>
             <div style="display:flex;" flexLayout="row">
-              <div *ngIf="weekdayData" class="mt-20" style="display:inline-block; width: 600px; background:#F4F4F4; border-radius: 10px;">
+              <div *ngIf="weekdayData" class="mt-20"
+                style="display:inline-block; width: 600px; background:#F4F4F4; border-radius: 10px;">
                 <div class="donut-parent">
-                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="weekdayData"
+                    [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
+                    [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
                 </div>
               </div>
               <div style="display:inline-block; width: 10%; background:#fff;">
               </div>
 
-              <div *ngIf="dayNightData" class="mt-20" style="display:inline-block; width: 600px; background:#F4F4F4;  border-radius: 10px;">
+              <div *ngIf="dayNightData" class="mt-20"
+                style="display:inline-block; width: 600px; background:#F4F4F4;  border-radius: 10px;">
                 <div class="donut-parent">
-                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
+                  <ngx-charts-pie-chart class="chart-container" [view]="[550, 550]" [results]="dayNightData"
+                    [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
+                    [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool">
                   </ngx-charts-pie-chart>
                 </div>
               </div>
@@ -181,8 +200,10 @@
 
             <div style="display:flex; flex-direction: column;" *ngIf="trainingData">
               <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
-              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+              <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient"
+                [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
               </ngx-charts-bar-vertical-stacked>
             </div>
             <div class="mt-20"></div>
@@ -194,8 +215,10 @@
                 <div fxLayout="row" fxLayoutAlign="space-between center">
                   <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
                 </div>
-                <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                  [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+                <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
+                  [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                  [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                  [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
                 </ngx-charts-area-chart-stacked>
               </div>
             </div>
