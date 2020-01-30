@@ -12,40 +12,40 @@ export const navigation_volunteer = [
     'id': 'dashboard',
     'title': 'Mein FreiwilligenPASS',
     'type': 'item',
-    'icon': 'dashboard',
+    'icon': 'dashboard2',
     'url': '/main/dashboard'
   },
   {
     'id': 'achievements',
     'title': 'Mein FreiwilligenLEBEN',
     'type': 'collapse',
-    'icon': 'achievements',
+    'icon': 'award2',
     'children' : [
       {
         'id': 'achievements-management-summary',
         'title': 'Überblick',
-        'icon': 'engagements',
+        'icon': 'home',
         'type': 'item',
         'url': 'main/achievements/summary'
       },
       {
         'id': 'achievements-feuerwehr',
         'title': 'Freiwillige Feuerwehr',
-        'icon': 'engagements',
+        'icon': 'home2',
         'type': 'item',
         'url': 'main/achievements/fireBrigade'
       },
       {
         'id': 'achievements-rotesKreuz',
         'title': 'Rotes Kreuz',
-        'icon': 'engagements',
+        'icon': 'home2',
         'type': 'item',
         'url': 'main/achievements/dummy'
       },
       {
         'id': 'achievements-musikverein',
         'title': 'Musikverein',
-        'icon': 'engagements',
+        'icon': 'home2',
         'type': 'item',
         'url': '/main/achievements/music'
       },
@@ -64,7 +64,7 @@ export const navigation_volunteer = [
     'id': 'get-connected',
     'title': 'Mein FreiwilligenNETZWERK',
     'type': 'item',
-    'icon': 'get-connected',
+    'icon': 'people',
     'url': '/main/get-connected'
   }
 
