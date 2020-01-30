@@ -259,9 +259,10 @@ export class TasksComponent implements OnInit {
             this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
 
-            this.classInstances.sort((a, b) => {
-             return Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0])
+            this.classInstances = this.classInstances.sort((a, b) => {              
+             return new Date(b.properties[this.TASK_DATE_FROM].values[0]).getTime() - new Date(a.properties[this.TASK_DATE_FROM].values[0]).getTime();
             });
+
             this.tableDataSource.data = this.classInstances;
             this.tableDataSource.paginator = this.paginator;
 
@@ -568,8 +569,6 @@ export class TasksComponent implements OnInit {
         return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).locale("de").format('dddd'), value: value })
       });
 
-    // console.error('weekdayList', weekdayList);
-
     let weekdayMap: Map<string, number> = new Map<string, number>();
     weekdayList.forEach(t => {
       if (weekdayMap.get(t.weekday)) {
@@ -686,8 +685,11 @@ export class TasksComponent implements OnInit {
     this.filteredClassInstances.sort((a, b) => {
       return Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0])
      });
+
+     this.filteredClassInstances = this.filteredClassInstances.sort((a, b) => {
+      return new Date(b.properties[this.TASK_DATE_FROM].values[0]).getTime() - new Date(a.properties[this.TASK_DATE_FROM].values[0]).getTime();
+     });
     this.tableDataSource.data = this.filteredClassInstances;
-    this.tableDataSource.data.sort((a, b) => Number(b.properties[this.TASK_DATE_FROM].values[0]) - Number(a.properties[this.TASK_DATE_FROM].values[0]));
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
