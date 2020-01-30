@@ -143,7 +143,6 @@ public class FakeService {
 		
 		classInstanceController.createNewClassInstances(instances);
 				
-				
 	}
 
 	public void addFahrtenspangeFake() {

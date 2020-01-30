@@ -31,6 +31,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   derivationRule: DerivationRule;
 
+  fahrtenspangeImg=null;
+
   classDefinitions: ClassDefinition[] = [];
 
   constructor(private route: ActivatedRoute,
@@ -105,16 +107,12 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   save() {
-    this.derivationRule.name = this.ruleForm.value.name;
-    this.derivationRule.target = this.ruleForm.value.target;
-    // this.derivationRule.sources = this.ruleForm.value.sources;
+    // this.derivationRule.name = this.ruleForm.value.name;
+    // this.derivationRule.target = this.ruleForm.value.target;
 
-    this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
-  
-    if(this.derivationRule.name === "Fahrtenspange 1000"){
-      this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(()=> {});
-      // TODO Fake
-    }
+    // this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
+
+    this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(() => { });
   }
 
   navigateBack() {
@@ -127,5 +125,23 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   addClassRule() {
     this.derivationRule.classSourceRules.push(new ClassSourceRuleEntry());
+  }
+
+  onFahrtenspangeBronzeChanged($event){
+    this.fahrtenspangeImg='bronze';
+  }
+
+
+  onFahrtenspangeSilberChanged($event){
+    this.fahrtenspangeImg='silber';
+  }
+
+
+  onFahrtenspangeGoldChanged($event){
+    this.fahrtenspangeImg='gold';
+  }
+
+  onFahrtenspangeNoneChanged($event){
+    this.fahrtenspangeImg=null;
   }
 }

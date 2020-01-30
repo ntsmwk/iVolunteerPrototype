@@ -90,13 +90,23 @@
       <mat-divider></mat-divider>
     </div>
 
-    <div fxLayout="column" fxLayoutAlign="start start">
+    <div fxLayout="row" fxLayoutAlign="start start">
       <mat-form-field style="width: 300px">
         <mat-label>Freiwilligenpasseintrag</mat-label>
-        <mat-select formControlName="target" [value]="derivationRule.target">
+        <mat-select formControlName="target" [value]="-1">
+            <mat-option [value]="1" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> Fahrtenspange Bronze </mat-option>
+            <mat-option [value]="2" (onSelectionChange)="onFahrtenspangeSilberChanged($event)"> Fahrtenspange Silber </mat-option>
+            <mat-option [value]="3" (onSelectionChange)="onFahrtenspangeGoldChanged($event)"> Fahrtenspange Gold </mat-option>
+            <mat-option [value]="4" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> Jugendabzeichen Gold</mat-option>
+            <mat-option [value]="5" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> Lehrgangsleiter </mat-option>
+          </mat-select>
+        <!-- <mat-select formControlName="target" [value]="derivationRule.target">
           <mat-option *ngFor="let cd of classDefinitions" [value]="cd"> {{cd.name}} </mat-option>
-        </mat-select>
+        </mat-select> -->
       </mat-form-field>
+      <img *ngIf="fahrtenspangeImg=='bronze'" src="/assets/images/FahrtenspangeBronze.png" alt="Fahrtenspange" class="fakeImg">
+      <img *ngIf="fahrtenspangeImg=='silber'" src="/assets/images/FahrtenspangeSilber.png" alt="Fahrtenspange" class="fakeImg">
+      <img *ngIf="fahrtenspangeImg=='gold'" src="/assets/images/FahrtenspangeGold.png" alt="Fahrtenspange" class="fakeImg">
     </div>
     <mat-divider></mat-divider>
 

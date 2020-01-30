@@ -47,7 +47,7 @@ export class FuseUserMenuComponent implements OnInit {
 
   getImagePath() {
 
-    if (this.router.url === '/main/rules/all' || this.router.url === '/main/rule') {
+    if (this.router.url === '/main/rules/all' || this.router.url.startsWith('/main/rule')) {
       return '/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg';
     } else {
       if (isNullOrUndefined(this.participantImagepath)) {
@@ -59,7 +59,7 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getUserNameString() {
-    if (this.router.url === '/main/rules/all' || this.router.url === '/main/rule') {
+    if (this.router.url === '/main/rules/all' || this.router.url.startsWith('/main/rule')) {
       return "Sandra Wolkerstorfer (Rotes Kreuz)";
     } else {
       let ret = this.participant.firstname + ' ' + this.participant.lastname;
