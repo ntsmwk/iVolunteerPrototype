@@ -242,7 +242,7 @@ export class TasksComponent implements OnInit {
           if (!isNullOrUndefined(ret)) {
             this.classInstances = ret;
 
-            this.classInstances.forEach((ci, index, object) => {
+            this.classInstances.filter(ci => ci.name=='PersonTask').forEach((ci, index, object) => {
               if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
                 object.splice(index, 1);
               }

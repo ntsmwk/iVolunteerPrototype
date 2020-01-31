@@ -252,7 +252,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
         this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret;
+            this.classInstances = ret.filter(ci => ci.name=='PersonTask');
 
             this.classInstances.forEach((ci, index, object) => {
               if (ci.properties[this.TASK_DURATION].values[0] == 'null') {

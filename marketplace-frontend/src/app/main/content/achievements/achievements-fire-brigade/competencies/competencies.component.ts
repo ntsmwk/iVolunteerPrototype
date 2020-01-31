@@ -95,7 +95,7 @@ export class CompetenciesComponent implements OnInit {
 
         this.classInstanceService.getClassInstancesByArcheTypeFake(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret;
+            this.classInstances = ret.filter(ci => ci.name == 'PersonTask');
 
             this.generateChartData();
 
