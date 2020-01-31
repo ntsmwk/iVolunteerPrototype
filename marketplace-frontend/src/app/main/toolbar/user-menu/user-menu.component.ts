@@ -60,7 +60,7 @@ export class FuseUserMenuComponent implements OnInit {
 
   getUserNameString() {
     if (this.router.url === '/main/rules/all' || this.router.url.startsWith('/main/rule')) {
-      return "Sandra Wolkerstorfer (Rotes Kreuz)";
+      return "Sandra Horvatits (Leiterin Freiwilligenmanagement)";
     } else {
       let ret = this.participant.firstname + ' ' + this.participant.lastname;
 
