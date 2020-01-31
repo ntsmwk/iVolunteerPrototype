@@ -58,16 +58,16 @@
         <mat-label>Freiwilligenpasseintrag</mat-label>
         <mat-select formControlName="target" [value]="-1">          
           
-          <mat-option [value]="1" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> Verdienst </mat-option>
+          <mat-option [value]="1" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> <strong>Verdienst</strong> </mat-option>
           <mat-option [value]="2" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> &nbsp; Fahrtenspange Bronze </mat-option>
           <mat-option [value]="3" (onSelectionChange)="onFahrtenspangeSilberChanged($event)"> &nbsp; Fahrtenspange Silber </mat-option>
           <mat-option [value]="4" (onSelectionChange)="onFahrtenspangeGoldChanged($event)"> &nbsp; Fahrtenspange Gold </mat-option>
           <mat-option [value]="5" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Jugendabzeichen Gold</mat-option>
+          <mat-option [value]="7" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"><strong>Funktion</strong> </mat-option>
           <mat-option [value]="6" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Lehrgangsleiter </mat-option>
-          <mat-option [value]="7" (onSelectionChange)="onFahrtenspangeNoneChanged($event)">Funktion </mat-option>
           <mat-option [value]="8" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp;Rettungssanitäter </mat-option>
           <mat-option [value]="9" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp;Einsatzlenker </mat-option>
-          <mat-option [value]="10" (onSelectionChange)="onFahrtenspangeNoneChanged($event)">Kompetenz </mat-option>
+          <mat-option [value]="10" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"><strong>Kompetenz</strong> </mat-option>
           <mat-option [value]="11" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Anpassungsfähigkeit </mat-option>
           <mat-option [value]="12" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Lernbereitschaft </mat-option>
         </mat-select>
