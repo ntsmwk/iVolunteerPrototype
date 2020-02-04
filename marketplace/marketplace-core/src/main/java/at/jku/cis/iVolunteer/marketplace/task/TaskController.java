@@ -39,7 +39,7 @@ public class TaskController {
 	@Autowired private LoginService loginService;
 
 	@GetMapping("/task")
-	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+	public List<Task> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
 			@RequestParam(value = "status", required = false) String status) {
 		return taskService.findAll(projectId, participantId, status);

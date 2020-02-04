@@ -4,7 +4,6 @@ export const navigation_helpseeker = [
     'title': 'Dashboard',
     'type': 'item',
     'url': '/main/dashboard',
-<<<<<<< HEAD
   },
   {
     'id': 'inbox',
@@ -13,10 +12,6 @@ export const navigation_helpseeker = [
     'url': '/main/helpseeker/asset-inbox',
   },
   {
-=======
-  }, */
-/*   {
->>>>>>> flexProd_Changes
     'id': 'projects',
     'title': 'Project',
     'type': 'item',
@@ -29,19 +24,8 @@ export const navigation_helpseeker = [
     'url': '/main/tasks/all',
   },
   {
-<<<<<<< HEAD
     'id': 'properties',
     'title': 'Property Definitions',
-=======
-    'id': 'taskTemplates',
-    'title': 'Task Templates',
-    'type': 'item',
-    'url': '/main/task-templates/all'
-  }, */
-  {
-    'id': 'properties',
-    'title': 'Properties',
->>>>>>> flexProd_Changes
     'type': 'item',
     'url': '/main/properties/all'
   },
@@ -52,15 +36,6 @@ export const navigation_helpseeker = [
     'url': '/main/task-templates/user/all'
   },
   {
-<<<<<<< HEAD
-=======
-    'id': 'testMapProperty',
-    'title': 'Test Map Property',
-    'type': 'item',
-    'url': '/main/test-map-property'
-  }, */
-  {
->>>>>>> flexProd_Changes
     'id': 'configurator',
     'title': 'Configurator',
     'type': 'item',
@@ -72,5 +47,5 @@ export const navigation_helpseeker = [
     'type': 'item',
     'url': '/main/rules/all'
   },
-
+*/
 ];

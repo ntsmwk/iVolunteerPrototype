@@ -64,17 +64,10 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
      
       })
       .then(() => {
-<<<<<<< HEAD
         this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
           this.allPropertiesList = propertyDefinitions;
-          console.log("loaded Properties: ")
-          console.log(this.allPropertiesList);
         
         
-=======
-        this.propertyService.getProperties(this.marketplace).toPromise().then((properties: Property<any>[]) => {
-          this.properties = properties;
->>>>>>> flexProd_Changes
         })
         .then(() => {
           if (!isNullOrUndefined(this.template)) {
@@ -117,13 +110,8 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     
 
   addPropertyDialog() {
-<<<<<<< HEAD
-    console.log("clicked add property");
 
     this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {   
-=======
-    this.dialogFactory.addPropertyDialog(this.template, this.properties).then((propIds: string[]) => {   
->>>>>>> flexProd_Changes
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
           this.refresh();

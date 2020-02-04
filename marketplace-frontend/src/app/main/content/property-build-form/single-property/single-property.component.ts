@@ -5,14 +5,9 @@ import { PropertyType, Rule, RuleKind, PropertyDefinition } from '../../_model/m
 import { Marketplace } from '../../_model/marketplace';
 import { propertyNameUniqueValidator } from '../../_validator/property-name-unique.validator';
 import { listNotEmptyValidator } from "../../_validator/list-not-empty.validator";
-<<<<<<< HEAD
 import { PropertyDefinitionService } from '../../_service/meta/core/property/property-definition.service';
 import { PropertyConstraint } from '../../_model/meta/Constraint';
-=======
 import { Router } from '@angular/router';
-
-
->>>>>>> flexProd_Changes
 
 export class PropertyKindOption {
   kind: string;
@@ -64,12 +59,8 @@ export class SinglePropertyComponent implements OnInit {
   };
 
   constructor(private formBuilder: FormBuilder,
-<<<<<<< HEAD
+    private router: Router,
     private propertyDefinitionService: PropertyDefinitionService) { }
-=======
-    private propertyService: PropertyService,
-    private router: Router) { }
->>>>>>> flexProd_Changes
 
   ngOnInit() {
     this.preparePropertyKindOptions();
@@ -513,21 +504,8 @@ export class SinglePropertyComponent implements OnInit {
 
       let property = this.createPropertyFromForm();
 
-<<<<<<< HEAD
-      console.log(property);
-
-      console.log("call propertyService...");
-
       // TODO call service to send to server (and save in db)
       this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then(() => {
-=======
-      this.propertyService.addSingleProperty(this.marketplace, property).toPromise().then(() => {
->>>>>>> flexProd_Changes
-        console.log("PropertyService called, property added");
-        console.log(property);
-       
-       
-        // this.navigateBack();
 
         this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
       
@@ -570,12 +548,7 @@ export class SinglePropertyComponent implements OnInit {
     // }
 
 
-<<<<<<< HEAD
     property.allowedValues = [];
-=======
-    property.legalValues = [];
-   
->>>>>>> flexProd_Changes
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
       for (let value of (this.form.get('legalValues') as FormArray).value) {
         property.allowedValues.push(value.value);

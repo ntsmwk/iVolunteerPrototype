@@ -6,12 +6,8 @@ import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
 import { PropertyDefinition, PropertyItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/Property';
 import { Marketplace } from '../_model/marketplace';
-<<<<<<< HEAD
 import { isNullOrUndefined } from 'util';
 import { async } from '@angular/core/testing';
-=======
-import { PropertyService } from '../_service/property.service';
->>>>>>> flexProd_Changes
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
@@ -75,10 +71,6 @@ export class PropertyDetailComponent implements OnInit {
         this.propertyDefinitionService.getPropertyDefinitionById(marketplace, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
           this.propertyDefintion = propertyDefintion;    
         }).then(() => {
-<<<<<<< HEAD
-          console.log(this.propertyDefintion);
-=======
->>>>>>> flexProd_Changes
           this.isLoaded = true;
         });
        
@@ -88,7 +80,6 @@ export class PropertyDetailComponent implements OnInit {
         this.userDefinedTaskTemplateService.getPropertyFromSubTemplate(this.marketplace, templateId, subtemplateId, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
           this.propertyDefintion = propertyDefintion;
 
-<<<<<<< HEAD
           // this.propertyDefinitionService.getPropertyParentItems(this.marketplace, propertyDefintion.id, templateId, subtemplateId).toPromise().then((parents: PropertyItem[]) => {
           //   console.log("Recheived PropertyParentItem");
           //   console.log(parents);
@@ -100,16 +91,6 @@ export class PropertyDetailComponent implements OnInit {
           //   this.isLoaded = true;
           // });
 
-=======
-          this.propertyService.getPropertyParentItems(this.marketplace, property.id, templateId, subtemplateId).toPromise().then((parents: PropertyParentItem[]) => {
-            this.templateItem = parents[0];
-
-            if (parents.length >= 2) {
-              this.subtemplateItem = parents[0];
-            }
-            this.isLoaded = true;
-          });
->>>>>>> flexProd_Changes
         });
       }
     }); 

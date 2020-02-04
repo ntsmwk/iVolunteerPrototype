@@ -46,21 +46,13 @@ export class PropertyListComponent implements OnInit {
 
   }
 
-<<<<<<< HEAD
   onRowSelect(p: PropertyDefinition<any>) {
-    console.log("Property Clicked: " + p.name);
-    console.log("CURRENT URL: " + this.router.url)
-=======
-  onRowSelect(p: Property<any>) {
->>>>>>> flexProd_Changes
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
   }
 
 
 
   loadAllProperties() {
-<<<<<<< HEAD
-    console.log("load props from Server...");
 
     let service: CoreHelpSeekerService | CoreFlexProdService;
 
@@ -85,29 +77,6 @@ export class PropertyListComponent implements OnInit {
           }
         });
       });
-=======
-    this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
-      this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-        if (!isNullOrUndefined(marketplace)) {
-          this.marketplace = marketplace;
-          this.propertyService.getProperties(marketplace).toPromise().then((pArr: Property<any>[]) => {
-
-
-            let i = 0;
-            for (let p of pArr) {
-              if (p.id =="maxgluehtemperatur") {
-                pArr.splice(i,1);
-              }
-              i++;
-            }
-
-
-            this.propertyArray = pArr;
-            this.updateDataSource();
-            this.isLoaded = true;
-        })}
-      })
->>>>>>> flexProd_Changes
     });
 
       
@@ -127,7 +96,6 @@ export class PropertyListComponent implements OnInit {
   }
 
 
-<<<<<<< HEAD
 
   viewPropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked view Property")
@@ -142,35 +110,18 @@ export class PropertyListComponent implements OnInit {
 
   editPropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked edit Property: ");
-=======
-  viewPropertyAction(property: Property<any>) {
-    this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id],{queryParams: {ref: 'list'}});
-  }
-
-  newPropertyAction() {
-    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/'] );
-  }
-
-  editPropertyAction(property: Property<any>) { 
->>>>>>> flexProd_Changes
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
   }
 
-<<<<<<< HEAD
   deletePropertyAction(property: PropertyDefinition<any>) {
     console.log("clicked delete Property: ");
     console.log(property)
 
     this.propertyDefinitionService.deletePropertyDefinition(this.marketplace, property.id).toPromise().then(() => {
-=======
-  deletePropertyAction(property: Property<any>) {
-    this.propertyService.deleteProperty(this.marketplace, property.id).toPromise().then(() => {
->>>>>>> flexProd_Changes
       this.ngOnInit();
     });
   }
 
-<<<<<<< HEAD
 
   // updateProperty(item: PropertyListItem) {
   // console.log("clicked to update property " + item.id + " " + item.name + " TODO - link to detail page");
@@ -193,6 +144,4 @@ export class PropertyListComponent implements OnInit {
   // displayPropertyValue(property: PropertyListItem): string {    
   //   return PropertyListItem.getValue(property);
   // }
-=======
->>>>>>> flexProd_Changes
 }

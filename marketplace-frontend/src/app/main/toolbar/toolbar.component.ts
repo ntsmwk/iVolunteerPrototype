@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-=======
-import {Component, OnChanges, OnInit} from '@angular/core';
-import {NavigationEnd, NavigationStart, Router, Route, ActivatedRoute} from '@angular/router';
-import {TranslateService} from '@ngx-translate/core';
->>>>>>> flexProd_Changes
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
@@ -40,19 +34,11 @@ export class FuseToolbarComponent{
 
 
   constructor(private router: Router,
-<<<<<<< HEAD
     private fuseConfig: FuseConfigService,
     private loginService: LoginService,
     private sidebarService: FuseSidebarService,
     private translate: TranslateService,
     private changeDetector: ChangeDetectorRef) {
-=======
-              private route: ActivatedRoute,
-              private fuseConfig: FuseConfigService,
-              private loginService: LoginService,
-              private sidebarService: FuseSidebarService,
-              private translate: TranslateService) {
->>>>>>> flexProd_Changes
     this.userStatusOptions = [
       {
         'title': 'Online',

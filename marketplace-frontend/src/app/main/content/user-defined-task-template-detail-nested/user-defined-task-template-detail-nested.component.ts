@@ -214,12 +214,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
           this.template = updatedTemplate;
-<<<<<<< HEAD
           this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
           // this.refresh();
-=======
-          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].properties;
->>>>>>> flexProd_Changes
         });
       }
     });
@@ -260,7 +256,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
   // actions on each row of each subtemplate
-<<<<<<< HEAD
   viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
     console.log("View Property " + templateProperty.name + " from subtemplate " + subtemplate.name + " at index " + subTemplateIndex + "...");
     console.log(templateProperty);
@@ -268,10 +263,6 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
     console.log("route: " + `main/task-templates/user/detail/viewproperty/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`);
 
     this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`], { queryParams: { ref: 'subtemplate' } })
-=======
-  viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, property: Property<any>, subTemplateIndex: number) {
-    this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${property.id}`], { queryParams: { ref: 'subtemplate' } })
->>>>>>> flexProd_Changes
   }
 
   removeProperty(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
