@@ -36,42 +36,13 @@ public class TaskController {
 	@Autowired private TaskInteractionRepository taskInteractionRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private TaskService taskService;
-
 	@Autowired private LoginService loginService;
 
 	@GetMapping("/task")
-	public List<Task> findAll(@RequestParam(value = "projectId", required = false) String projectId,
+	public List<TaskDTO> findAll(@RequestParam(value = "projectId", required = false) String projectId,
 			@RequestParam(value = "participantId", required = false) String participantId,
-			@RequestParam(value = "availableOnly", defaultValue = "false", required = false) boolean availableOnly,
-			@RequestParam(value = "engagedOnly", defaultValue = "false", required = false) boolean engagedOnly) {
-
-		if (StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId)) {
-			return taskService.findByVolunteer(volunteerRepository.findOne(participantId));
-		}
-		if (!StringUtils.isEmpty(projectId) && !availableOnly && !engagedOnly) {
-			Project project = projectRepository.findOne(projectId);
-			return taskRepository.findByProject(project);
-		}
-
-		if (!StringUtils.isEmpty(projectId) && availableOnly && !engagedOnly) {
-			return taskRepository.findByProjectAndStatus(projectRepository.findOne(projectId), TaskStatus.PUBLISHED);
-		}
-		if (!StringUtils.isEmpty(projectId) && !StringUtils.isEmpty(participantId) && engagedOnly) {
-			// @formatter:off
-			return taskService
-					.findByVolunteer(volunteerRepository.findOne(participantId))
-					.stream()
-					.filter(task -> task.getStatus().equals(TaskStatus.PUBLISHED)
-							|| task.getStatus().equals(TaskStatus.RUNNING))
-					.filter(task -> task.getProject().getId().equals(projectId))
-					.collect(Collectors.toList());			 
-			// @formatter:on
-		}
-		if (!StringUtils.isEmpty(projectId)) {
-			return taskRepository.findByProject(projectRepository.findOne(projectId));
-		}
-
-		return taskRepository.findAll();
+			@RequestParam(value = "status", required = false) String status) {
+		return taskService.findAll(projectId, participantId, status);
 	}
 
 	@GetMapping("/task/{id}")

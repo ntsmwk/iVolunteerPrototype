@@ -18,6 +18,7 @@
     
 //   }
 
+<<<<<<< HEAD
 //   displayPropertyValue(property: Property<any>): string {    
 //     // if (!isNullOrUndefined(property.values) && property.values.length >= 1) {
 //     //   return property.values[0].value;
@@ -27,5 +28,10 @@
 
 //     return Property.getValue(property);
 //   }
+=======
+  displayPropertyValue(property: Property<any>): string {    
+    return Property.getValue(property);
+  }
+>>>>>>> flexProd_Changes
 
 // }

@@ -23,7 +23,6 @@ export interface SingleValidatorData {
   validator: ValidatorFn;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -161,9 +160,7 @@ export class QuestionService {
       question = new GenericQuestion({
 
       });
-
     }
-
     return question;
   }
 

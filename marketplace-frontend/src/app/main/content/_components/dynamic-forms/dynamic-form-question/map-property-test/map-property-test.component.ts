@@ -44,13 +44,9 @@ export class MapPropertyTestComponent implements OnInit {
             return property.type == PropertyType.MAP;
           });
 
-          console.log(this.mapPropertyDefinitions);
-
           this.prepareMap();
       });
     });
-
-
     });
   }
 

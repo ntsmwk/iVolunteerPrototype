@@ -1,8 +1,7 @@
 import { Injectable }   from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { QuestionBase } from '../_model/dynamic-forms/questions';
-import { isNull, isNullOrUndefined } from 'util';
 
 @Injectable()
 export class QuestionControlService {
@@ -37,20 +36,10 @@ export class QuestionControlService {
       if (question.controlType == 'multiple') {
         //do nested stuff
         const nested = fb.group({});
-        // question.subQuestions.forEach((question: QuestionBase<any>) => {
-        //   nested.addControl(question.key, fb.control('', question.validators));
-        // });
         const ret = this.addChildToGroup(fb, question.subQuestions, nested);
-
-        console.log("RET");
-        console.log(ret);
 
         ret.setValidators(question.validators);
         parent.addControl(question.key, ret);
-        
-        
-        // console.log("NESTED");
-        // console.log(ret);
 
       } else {
         parent.addControl(question.key, fb.control(question.value, question.validators));

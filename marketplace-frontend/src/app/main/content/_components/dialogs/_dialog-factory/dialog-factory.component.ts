@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// TODO MWE evtl. only @angular/material
 import { MatDialog } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
@@ -20,8 +21,7 @@ import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/conten
   templateUrl: './dialog-factory.component.html',
   styleUrls: ['./dialog-factory.component.scss']
 })
-export class DialogFactoryComponent implements OnInit {
-
+export class DialogFactoryComponent {
 
   constructor(public dialog: MatDialog) { }
 
@@ -34,6 +34,9 @@ export class DialogFactoryComponent implements OnInit {
   //// TODO EXPAND DIALOG FACTORY
 
 
+  
+  //TODO EXPAND DIALOG FACTORY
+  
   /**
    * ADD PROPERTY DIALOG
    * 
@@ -95,6 +98,7 @@ export class DialogFactoryComponent implements OnInit {
               returnValue.propertyItems.push(s.propertyItem);
             }
           }
+
         }
       }
     });
@@ -187,7 +191,6 @@ export class DialogFactoryComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
       if (!isNullOrUndefined(result)) {
-
         propIds = [];
         for (const s of result.checkboxStates) {
           if (s.dirty) {
@@ -223,7 +226,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -269,7 +271,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {

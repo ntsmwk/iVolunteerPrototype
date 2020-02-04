@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.model.task.template;
 
 import java.util.List;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**

@@ -1,13 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
-
-
 export interface ConfirmDialogData {
   title: string;
   description: string;
 }
-
 
 @Component({
   selector: 'confirm-dialog',
@@ -22,7 +19,6 @@ export class ConfirmDialogComponent {
     ) {
   }
 
-  
   onNoClick(): void {
     this.dialogRef.close();
   }

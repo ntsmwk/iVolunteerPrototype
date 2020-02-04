@@ -76,7 +76,6 @@ public class PropertyValueConverter {
 			}
 		}
 	}
-
 	private long convertObjectToInteger(Object source) {
 		try {
 			return (int) source;

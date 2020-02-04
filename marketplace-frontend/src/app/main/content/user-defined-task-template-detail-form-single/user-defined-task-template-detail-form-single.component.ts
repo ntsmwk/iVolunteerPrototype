@@ -30,9 +30,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
   templateId: string;
   subtemplateId: string;
 
- 
-
-  constructor(private router: Router,
+  constructor(
     private route: ActivatedRoute,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
@@ -53,31 +51,39 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
 
       Promise.all([
         this.route.queryParams.subscribe(params => {
+<<<<<<< HEAD
           // console.log(params);
           queryParameters = params;
         }),
         this.route.params.subscribe(params => {
           // console.log(params);
+=======
+          queryParameters = params;
+        }),
+        this.route.params.subscribe(params => {
+>>>>>>> flexProd_Changes
           urlParameters = params;
         })
       ]).then(() => {
         this.loadProperty(urlParameters['marketplaceId'], urlParameters['templateId'], urlParameters['subtemplateId'], queryParameters['ref']);
-      });
-      
-      // this.route.params.subscribe(params => this.loadProperty(params['marketplaceId'], params['templateId']));
+      });  
     });
   
   }
 
   private loadProperty(marketplaceId: string, templateId: string, subtemplateId: string, ref: string): void {
 
+<<<<<<< HEAD
     // console.log(ref);
+=======
+>>>>>>> flexProd_Changes
     this.templateId = templateId;
     this.subtemplateId = subtemplateId;
 
     if (ref == 'single') {
       this.loadFromSingleTemplate(marketplaceId, templateId);
     } else if (ref == 'nested') {
+<<<<<<< HEAD
       // console.log("entered nested");
       this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
     } else {
@@ -87,6 +93,13 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
         this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
       } else {
         // console.log("load single");
+=======
+      this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
+    } else {
+      if (!isNullOrUndefined(subtemplateId)) {
+        this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
+      } else {
+>>>>>>> flexProd_Changes
         this.loadFromSingleTemplate(marketplaceId, templateId);
       }
     }
@@ -98,6 +111,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
       this.userDefinedTaskTemplateService.getTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
         this.template = template;    
       }).then(() => {
+<<<<<<< HEAD
         // console.log("DETAIL PAGE FOR PROPERTY " + this.template.id);
         // console.log(this.template.name + ": ");
 
@@ -108,6 +122,10 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
         // }
 
         this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
+=======
+
+        this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
+>>>>>>> flexProd_Changes
         this.isLoaded = true;
       });
     }); 
@@ -119,8 +137,12 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
       this.userDefinedTaskTemplateService.getSubTemplate(marketplace, templateId, subtemplateId).toPromise().then((subtemplate: UserDefinedTaskTemplate) => {
         this.template = subtemplate;
       }).then(() => {
+<<<<<<< HEAD
         // console.log(this.template);
         this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
+=======
+        this.questions = this.questionService.getQuestionsFromProperties(this.template.properties);
+>>>>>>> flexProd_Changes
         this.isLoaded = true;
       });
     });
@@ -131,6 +153,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
   }
 
   consumeResultEvent(form: FormGroup) {
+<<<<<<< HEAD
     // console.log("EVENT RECEIVED");
     // //console.log(value);
     // console.log("attempt to update properties of template");
@@ -146,22 +169,18 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     
     
     props = this.traverseResultAndUpdateProperties(form.value, this.template.templateProperties);
-
-   
-    
-    // console.log("====================================================");
-    // console.log("Properties:");
-    // console.log(props);
-    // console.log("Form Values:");
-    // console.log(form.value);
-    // console.log("====================================================");
-
+=======
+    let props: Property<any>[] = [];
+    props = this.traverseResultAndUpdateProperties(form.value, this.template.properties);
+>>>>>>> flexProd_Changes
 
     this.userDefinedTaskTemplateService.updateProperties(this.marketplace, this.templateId, this.subtemplateId, props).toPromise().then(() => {
+<<<<<<< HEAD
       // console.log("finished - returning to previous page");
+=======
+>>>>>>> flexProd_Changes
       this.navigateBack();
     });
-
   }
 
 
@@ -169,6 +188,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     
     for (let prop of templateProperties) {
       if (prop.type == PropertyType.MULTI) {
+<<<<<<< HEAD
         //TODO DO NESTED
         // this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
       } else {
@@ -193,6 +213,29 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
             if (isNullOrUndefined(prop.defaultValues) || isNullOrUndefined(prop.defaultValues[0])) {
               prop.defaultValues = []
               prop.defaultValues.push(values[prop.id]);
+=======
+        this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
+
+      } else {
+        if (!isNullOrUndefined(values[prop.id]) && values[prop.id] != '') {
+          if (prop.type === PropertyType.LIST) {
+            const result: ListEntry<any>[] = [];
+            let arr = values[prop.id];
+
+            for (let val of prop.legalValues) {
+              for (let i = 0; i < arr.length; i++) { 
+                if (val.id === arr[i]) {
+                  result.push(new ListEntry<any>(val.id, val.value));
+                }
+              } 
+            }
+            prop.values = result;
+
+          } else {
+            if (isNullOrUndefined(prop.values) || isNullOrUndefined(prop.values[0])) {
+              prop.values = []
+              prop.values.push(new ListEntry<any>(null, values[prop.id]));
+>>>>>>> flexProd_Changes
             } else {
               prop.defaultValues[0] = values[prop.id];
             }

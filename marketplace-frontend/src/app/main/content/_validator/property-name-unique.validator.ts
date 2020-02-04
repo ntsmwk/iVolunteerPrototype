@@ -11,6 +11,10 @@ export function propertyNameUniqueValidator(properties: PropertyItem[], currentP
 
         if (isNullOrUndefined(properties)) {
             return null;
+        } 
+        //TODO REMOVE OR ELSE IT DOESNT WORK
+        else {
+            return null;
         }
       
         let item = undefined;
@@ -19,11 +23,11 @@ export function propertyNameUniqueValidator(properties: PropertyItem[], currentP
         });
 
         
-        if (!isNullOrUndefined(item) && !isNullOrUndefined(currentProperty) && currentProperty.id == item.id) {
-            item = undefined;
-        }
+        // if (!isNullOrUndefined(item) && !isNullOrUndefined(currentProperty) && currentProperty.id == item.id) {
+        //     item = undefined;
+        // }
 
-        return !isNullOrUndefined(item) ? {'propertynameunique': {'propertynameunique': item, 'actual': control.value}} : null;
+        // return !isNullOrUndefined(item) ? {'propertynameunique': {'propertynameunique': item, 'actual': control.value}} : null;
     }
 }
 

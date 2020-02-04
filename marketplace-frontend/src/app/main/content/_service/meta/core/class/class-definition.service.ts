@@ -67,9 +67,9 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
     }
 
-    addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: PropertyDefinition<any>[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties`, propsToAdd);
-    }
+    // addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: Property<any>[]) {
+    //   return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties`, propsToAdd);
+    // }
 
     removePropertiesFromClassDefinition(marketplace: Marketplace, id: string, propIds: string[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/remove-properties`, propIds);

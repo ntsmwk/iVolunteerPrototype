@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+=======
+import {Component, OnChanges, OnInit} from '@angular/core';
+import {NavigationEnd, NavigationStart, Router, Route, ActivatedRoute} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+>>>>>>> flexProd_Changes
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
@@ -16,7 +22,7 @@ import { Participant, ParticipantRole } from '../content/_model/participant';
   styleUrls: ['./toolbar.component.scss']
 })
 
-export class FuseToolbarComponent {
+export class FuseToolbarComponent{
   userStatusOptions: any[];
   languages: any;
   selectedLanguage: any;
@@ -29,12 +35,24 @@ export class FuseToolbarComponent {
   @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
   displayInboxOverlay: boolean;
 
+  showEditor: boolean = false;
+
+
+
   constructor(private router: Router,
+<<<<<<< HEAD
     private fuseConfig: FuseConfigService,
     private loginService: LoginService,
     private sidebarService: FuseSidebarService,
     private translate: TranslateService,
     private changeDetector: ChangeDetectorRef) {
+=======
+              private route: ActivatedRoute,
+              private fuseConfig: FuseConfigService,
+              private loginService: LoginService,
+              private sidebarService: FuseSidebarService,
+              private translate: TranslateService) {
+>>>>>>> flexProd_Changes
     this.userStatusOptions = [
       {
         'title': 'Online',
@@ -107,7 +125,23 @@ export class FuseToolbarComponent {
     }).catch(e => {
       console.warn(e);
     });
+
+    setInterval(() => { this.setHeading(this); } , 100);
   }
+
+  private setHeading(self ){
+
+    if(self.router && self.router.url && self.router.url.indexOf('instance-editor') === -1){
+      self.showEditor = false;
+    }
+    else{
+      self.showEditor = true;
+    }
+
+    setInterval(() => { self.setHeading(self); } , 100);
+  }
+
+
 
   toggleSidebarOpened(key) {
     this.sidebarService.getSidebar(key).toggleOpen();

@@ -28,6 +28,26 @@ public class MarketplaceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);
 	}
+	
+	@PreDestroy
+	public void onShutdown() {
+		
+		List<Property> props = propertyRepository.findAll();
+		for (Property p : props) {
+			propertyRepository.delete(p.getId());
+		}
+		
+		List<Relationship> rels = relationshipRepository.findAll();
+		for (Relationship r : rels) {
+			relationshipRepository.delete(r.getId());
+		}
+		
+		List<ClassDefinition> clss = classDefinitionRepository.findAll();
+		for (ClassDefinition c : clss) {
+			classDefinitionRepository.delete(c.getId());
+		}
+		
+	}
 
 	// does not work - find better solution @Alex -- fixed --- kinda; maybe use
 	// array or List of repositories instead
