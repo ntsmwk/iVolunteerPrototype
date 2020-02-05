@@ -112,20 +112,20 @@ export class FuseToolbarComponent{
       console.warn(e);
     });
 
-    setInterval(() => { this.setHeading(this); } , 100);
+    // setInterval(() => { this.setHeading(this); } , 100);
   }
 
-  private setHeading(self ){
+  // private setHeading(self ){
 
-    if(self.router && self.router.url && self.router.url.indexOf('instance-editor') === -1){
-      self.showEditor = false;
-    }
-    else{
-      self.showEditor = true;
-    }
+  //   if(self.router && self.router.url && self.router.url.indexOf('instance-editor') === -1){
+  //     self.showEditor = false;
+  //   }
+  //   else{
+  //     self.showEditor = true;
+  //   }
 
-    setInterval(() => { self.setHeading(self); } , 100);
-  }
+  //   setInterval(() => { self.setHeading(self); } , 100);
+  // }
 
 
 
@@ -149,20 +149,17 @@ export class FuseToolbarComponent{
     if (this.displayInboxOverlay) {
       const { x, y } = inboxIcon._elementRef.nativeElement.getBoundingClientRect();
 
-      console.log("x: " + x + " y: " + y);
-      console.log(this.overlayDiv);
       this.overlayDiv.nativeElement.style.top = (y + 35) + 'px';
       this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '240px';
 
-      this.overlayArrowDiv.nativeElement.style.top = (y+20)+'px';
-      this.overlayArrowDiv.nativeElement.style.left = (x-8)+'px';
+      this.overlayArrowDiv.nativeElement.style.top = (y + 20) + 'px';
+      this.overlayArrowDiv.nativeElement.style.left = (x - 8) + 'px';
       this.overlayArrowDiv.nativeElement.style.position = 'fixed';
 
 
-      console.log(this.overlayDiv.nativeElement.style);
     }
 
 

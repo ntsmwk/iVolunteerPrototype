@@ -10,13 +10,13 @@ import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_di
 import { PropertyDefinition, PropertyItem, ClassProperty, PropertyType, EnumReference } from 'app/main/content/_model/meta/Property';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
-import { EditorPopupMenu } from './popup-menu';
+import { EditorPopupMenu } from '../configurator-editor/popup-menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
-import { CConstants, CUtils } from './utils-and-constants';
+import { CConstants, CUtils } from '../configurator-editor/utils-and-constants';
 
 declare var require: any;
 
@@ -38,13 +38,13 @@ export class myMxCell extends mx.mxCell {
 }
 
 @Component({
-  selector: 'app-configurator-editor',
-  templateUrl: './configurator-editor.component.html',
-  styleUrls: ['./configurator-editor.component.scss'],
+  selector: 'app-matching-configurator',
+  templateUrl: './matching-configurator.component.html',
+  styleUrls: ['./matching-configurator.component.scss'],
   providers: [DialogFactoryComponent]
 
 })
-export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
+export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -230,7 +230,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   private createPopupMenu(graph) {
-    this.popupMenu = new EditorPopupMenu(graph, this);
+    // this.popupMenu = new EditorPopupMenu(graph, this);
     return this.popupMenu.createPopupMenuHandler(graph);
   }
 

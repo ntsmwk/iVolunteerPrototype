@@ -85,6 +85,8 @@ export enum ClassArchetype {
     TASK_HEAD = 'TASK_HEAD',
     FUNCTION_HEAD = 'FUNCTION_HEAD',
     ACHIEVEMENT_HEAD = 'ACHIEVEMENT_HEAD',
+
+    FLEXPROD = 'FLEXPROD'
 }
 export namespace ClassArchetype {
 
@@ -97,6 +99,7 @@ export namespace ClassArchetype {
             case 'ENUM_HEAD': return 'Enum head';
             case 'ENUM_ENTRY': return 'Enum entry';
             case 'ROOT': return 'Root';
+            case 'FLEXPROD': return 'Flexprod';
         }
     }
 }
