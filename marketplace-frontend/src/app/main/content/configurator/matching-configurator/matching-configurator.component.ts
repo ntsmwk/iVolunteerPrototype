@@ -147,15 +147,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       // Enables rubberband selection
       // tslint:disable-next-line: no-unused-expression
-      new mx.mxRubberband(this.graph);
+      // new mx.mxRubberband(this.graph);
 
       this.graph.setPanning(true);
+      this.graph.useScrollbarsForPanning = true;
 
       // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
       const outer = this; // preserve outer scope
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
+        console.log(evt);
+        
       });
 
       this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
@@ -179,12 +182,23 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     
     let y = 20;
     for (const c of this.producerClassDefinitions) {
-      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y , 0, 0));
+      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y , 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
   }
 
   private insertClassDefinitionsConsumer() {
+    console.log(this.graphContainer);
+    console.log(this.graphContainer.nativeElement);
+  
+
+    let x = this.graphContainer.nativeElement.offsetWidth - 220;
+    let y = 20;
+
+    for (const c of this.consumerClassDefinitions) {
+     const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(x, y , 200, 0));
+      y = cell.geometry.y + cell.geometry.height + 20;
+    }
 
   }
 
@@ -205,6 +219,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setVertex(true);
     cell.setConnectable(true);
 
+    cell.setStyle(cell.getStyle() + 'foldable=0;movable=0;resizable=0;editable=0;deletable=0;');
+
     // const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
     // this.graph.addCellOverlay(cell, overlay);
 
@@ -217,12 +233,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     vfiller.setConnectable(false);
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
-
     // create properties TODO @Alex Refactor
     let i = 5;
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as myMxCell;
+        const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 190, 20, CConstants.mxStyles.property) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = 'enum_property';
@@ -232,7 +247,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
           propertyEntry.cellType = 'property';
         }
-        propertyEntry.setConnectable(false);
+        propertyEntry.setConnectable(true);
 
         propertyEntry.propertyId = p.id;
         i = i + 20;
@@ -240,7 +255,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     // create horizonal filler in front of properties
-    const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50 + 20, 85, 5, CConstants.mxStyles.classHfiller);
+    const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50 , 85, 5, CConstants.mxStyles.classHfiller);
     hfiller.setConnectable(false);
 
     return this.graph.addCell(cell) as myMxCell;

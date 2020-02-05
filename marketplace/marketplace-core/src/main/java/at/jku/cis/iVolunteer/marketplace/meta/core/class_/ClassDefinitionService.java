@@ -83,7 +83,7 @@ public class ClassDefinitionService {
 		});
 		
 		for (ClassDefinition collector : collectors) {
-			collector.getProperties().addAll(this.performDFSOnProperties(collector, 0, new ArrayList<ClassProperty<Object>>()));
+			collector.setProperties(this.performDFSOnProperties(collector, 0, collector.getProperties()));
 		}
 		
 		return collectors;
@@ -320,7 +320,11 @@ public class ClassDefinitionService {
 			while (!stack.isEmpty()) {
 				Relationship relationship = stack.pop();
 				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				list.addAll(classDefinition.getProperties());
+				for (ClassProperty<Object> property: classDefinition.getProperties()) {
+					if (!list.stream().filter(p -> p.getId().contentEquals(property.getId())).findFirst().isPresent()) {
+						list.add(property);
+					}
+				}
 				this.performDFSOnProperties(classDefinition, level + 1, list);
 			}
 		}
