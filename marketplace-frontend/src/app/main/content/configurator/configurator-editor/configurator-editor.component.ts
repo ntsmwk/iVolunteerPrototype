@@ -195,6 +195,11 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
+      this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
+      
+
+
+
       const outer = this; // preserve outer scope
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         outer.handleMXGraphClickEvent(evt);
@@ -298,6 +303,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     let cell: myMxCell;
     if (classDefinition.classArchetype.startsWith('ENUM')) {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
+    } else if (classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
+      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classFlexprodCollector) as myMxCell;
     } else {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as myMxCell;
     }
@@ -634,7 +641,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       if (cell.value === 'add_class_same_level') {
         const addedClass = new ClassDefinition();
         addedClass.properties = [];
-        addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+
+        if ((cell.getParent() as myMxCell).classArchetype.startsWith('FLEXPROD')) {
+          addedClass.classArchetype = ClassArchetype.FLEXPROD;
+        } else {
+          addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+        }
+
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
 
         const cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
@@ -671,6 +684,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         } else if (parentClassArchetype.endsWith('_HEAD')) {
           addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
 
+        } else if (parentClassArchetype.startsWith('FLEXPROD')) {
+          addedClass.classArchetype = ClassArchetype.FLEXPROD;
         } else {
           addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         }

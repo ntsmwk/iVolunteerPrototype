@@ -713,7 +713,7 @@ public class InitializationService {
 		technischeBeschreibung.setId("technische_beschreibung_producer");
 		technischeBeschreibung.setName("Technische\nBeschreibung");
 		technischeBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
-		technischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		technischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		
 		classDefinitions.add(technischeBeschreibung);
 
@@ -1148,7 +1148,7 @@ public class InitializationService {
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("menge")));
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("incoterms")));
-		logistischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		logistischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		
 		classDefinitions.add(logistischeBeschreibung);
 
@@ -1157,7 +1157,7 @@ public class InitializationService {
 		preislicheBeschreibung.setName("Preisliche\nBeschreibung");
 		preislicheBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
 		preislicheBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zahlungsbedingungen")));
-		preislicheBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		preislicheBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		classDefinitions.add(preislicheBeschreibung);
 
 		ClassDefinition root = new ClassDefinition();
@@ -1212,7 +1212,7 @@ public class InitializationService {
 		technischeBeschreibung.setId("technische_beschreibung_consumer");
 		technischeBeschreibung.setName("Technische\nBeschreibung");
 		technischeBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
-		technischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		technischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		
 		classDefinitions.add(technischeBeschreibung);
 
@@ -1647,7 +1647,7 @@ public class InitializationService {
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("menge")));
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
 		logistischeBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("incoterms")));
-		logistischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		logistischeBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		
 		classDefinitions.add(logistischeBeschreibung);
 
@@ -1656,7 +1656,7 @@ public class InitializationService {
 		preislicheBeschreibung.setName("Preisliche\nBeschreibung");
 		preislicheBeschreibung.setProperties(new ArrayList<ClassProperty<Object>>());
 		preislicheBeschreibung.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zahlungsbedingungen")));
-		preislicheBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD);
+		preislicheBeschreibung.setClassArchetype(ClassArchetype.FLEXPROD_COLLECTOR);
 		classDefinitions.add(preislicheBeschreibung);
 
 		ClassDefinition root = new ClassDefinition();

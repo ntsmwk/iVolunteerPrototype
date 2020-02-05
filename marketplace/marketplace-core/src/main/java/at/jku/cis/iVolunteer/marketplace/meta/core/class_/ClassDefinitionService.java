@@ -49,6 +49,25 @@ public class ClassDefinitionService {
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 		return classDefinitions;
 	}
+	
+	public List<ClassDefinition> getAllClassDefinitionsWithProperties(String slotId) {
+		Configurator configurator = configuratorRepository.findOne(slotId);
+		
+		if (configurator == null) {
+			return null;
+		}
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
+			if (c.getProperties() != null && c.getProperties().size() > 0 ) {
+				classDefinitions.add(c);
+			}
+		});
+		
+		
+		
+		return classDefinitions;
+	}
 
 	public ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
 		return classDefinitionRepository.save(classDefinitionDTO);

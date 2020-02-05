@@ -62,8 +62,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerConfigurator: Configurator;
   consumerConfigurator: Configurator;
 
-  producerClassDefinitions: ClassDefinition;
-  consumerClassDefinitions: ClassDefinition;
+  producerClassDefinitions: ClassDefinition[];
+  consumerClassDefinitions: ClassDefinition[];
 
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
@@ -83,27 +83,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }).then(() => {
           Promise.all([
 
-            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot1').toPromise().then((classDefintions: ClassDefinition[]) => {
-
-
-
-
+            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot1').toPromise().then((classDefinitions: ClassDefinition[]) => {
+              this.producerClassDefinitions = classDefinitions;
+              this.insertClassDefinitionsProducer();
             }),
-            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot2').toPromise().then((classDefintions: ClassDefinition[]) => {
-
-              
+            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot2').toPromise().then((classDefinitions: ClassDefinition[]) => {
+              this.consumerClassDefinitions = classDefinitions;
+              this.insertClassDefinitionsConsumer();
             })
           ]);
         });
       });
-
-
     });
-
-
-
-    // console.log(this.configurableClasses);
-    // console.log(this.relationships);
   }
 
 
@@ -171,8 +162,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         // Handle Select
       });
 
-
-
     }
   }
 
@@ -186,11 +175,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitions() {
+  private insertClassDefinitionsProducer() {
+    
+    let y = 20;
+    for (const c of this.producerClassDefinitions) {
+      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y , 0, 0));
+      y = cell.geometry.y + cell.geometry.height + 20;
+    }
+  }
+
+  private insertClassDefinitionsConsumer() {
 
   }
 
-  private insertClassDefinitionIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry) {
+  private insertClassDefinitionIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry): myMxCell {
     // create class cell
     let cell: myMxCell;
     if (classDefinition.classArchetype.startsWith('ENUM')) {
@@ -245,7 +243,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50 + 20, 85, 5, CConstants.mxStyles.classHfiller);
     hfiller.setConnectable(false);
 
-    return this.graph.addCell(cell);
+    return this.graph.addCell(cell) as myMxCell;
   }
 
   // private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
