@@ -8,6 +8,7 @@ import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import javax.management.relation.Relation;
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +65,32 @@ public class ClassDefinitionService {
 			}
 		});
 		
-		
-		
 		return classDefinitions;
 	}
+	
+	public List<ClassDefinition> collectAllClassDefinitionsWithProperties(String slotId) {
+		Configurator configurator = configuratorRepository.findOne(slotId);
+		
+		if (configurator == null) {
+			return null;
+		}
+		
+		List<ClassDefinition> collectors = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
+			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
+				collectors.add(c);
+			}
+		});
+		
+		for (ClassDefinition collector : collectors) {
+			collector.getProperties().addAll(this.performDFSOnProperties(collector, 0, new ArrayList<ClassProperty<Object>>()));
+		}
+		
+		return collectors;
+		
+	}
+	
+	
 
 	public ClassDefinition newClassDefinition(ClassDefinition classDefinitionDTO) {
 		return classDefinitionRepository.save(classDefinitionDTO);
@@ -218,7 +241,7 @@ public class ClassDefinitionService {
 							// for each Relationship, Do a DFS to construct dropdown options menu
 
 							ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-							enumProperty.setAllowedValues(performDFS(classDefinition, 0, new ArrayList<EnumEntry>()));
+							enumProperty.setAllowedValues(performDFSOnEnums(classDefinition, 0, new ArrayList<EnumEntry>()));
 
 							if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
 								enumProperty.setMultiple(false);
@@ -260,7 +283,7 @@ public class ClassDefinitionService {
 //		return enumRepresentation;
 //	}
 
-	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list) {
+	private List<EnumEntry> performDFSOnEnums(ClassDefinition root, int level, List<EnumEntry> list) {
 		Stack<Relationship> stack = new Stack<>();
 		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
 				RelationshipType.INHERITANCE);
@@ -276,7 +299,29 @@ public class ClassDefinitionService {
 				EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
 				enumEntry.setPosition(new int[level + 1]);
 				list.add(enumEntry);
-				this.performDFS(classDefinition, level + 1, list);
+				this.performDFSOnEnums(classDefinition, level + 1, list);
+			}
+		}
+		return list;
+	}
+	
+	private List<ClassProperty<Object>> performDFSOnProperties(ClassDefinition root, int level, List<ClassProperty<Object>> list) {
+		Stack<Relationship> stack = new Stack<Relationship>();
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
+		
+		System.out.println(relationships.size());
+		
+		Collections.reverse(relationships);
+		stack.addAll(relationships);
+		
+		if (stack == null || stack.size() <= 0) {
+			return list;
+		} else {
+			while (!stack.isEmpty()) {
+				Relationship relationship = stack.pop();
+				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+				list.addAll(classDefinition.getProperties());
+				this.performDFSOnProperties(classDefinition, level + 1, list);
 			}
 		}
 		return list;
@@ -298,7 +343,7 @@ public class ClassDefinitionService {
 
 	public List<EnumEntry> getEnumValues(String classDefinitionId) {
 		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
-		return performDFS(enumHead, 0, new ArrayList<>());
+		return performDFSOnEnums(enumHead, 0, new ArrayList<>());
 	}
 
 }

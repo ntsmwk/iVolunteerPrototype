@@ -83,11 +83,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         }).then(() => {
           Promise.all([
 
-            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot1').toPromise().then((classDefinitions: ClassDefinition[]) => {
+            this.classDefinitionService.collectAllClassDefinitionsWithProperties(this.marketplace, 'slot1').toPromise().then((classDefinitions: ClassDefinition[]) => {
               this.producerClassDefinitions = classDefinitions;
               this.insertClassDefinitionsProducer();
             }),
-            this.classDefinitionService.getAllClassDefinitionsWithProperties(this.marketplace, 'slot2').toPromise().then((classDefinitions: ClassDefinition[]) => {
+            this.classDefinitionService.collectAllClassDefinitionsWithProperties(this.marketplace, 'slot2').toPromise().then((classDefinitions: ClassDefinition[]) => {
               this.consumerClassDefinitions = classDefinitions;
               this.insertClassDefinitionsConsumer();
             })

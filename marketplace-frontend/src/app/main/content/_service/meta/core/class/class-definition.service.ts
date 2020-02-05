@@ -27,6 +27,10 @@ import { of } from "rxjs";
       return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/with-properties`);
     }
 
+    collectAllClassDefinitionsWithProperties(marketplace: Marketplace, configuratorId) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/collect-with-properties`);
+    }
+
     getClassDefinitionById(marketplace: Marketplace, id: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/${id}`);
     }

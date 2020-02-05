@@ -39,6 +39,11 @@ public class ClassDefinitionController {
 	private List<ClassDefinition> getClassDefinitionswithProperties(@PathVariable("slotId") String slotId) {
 		return  classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
 	}
+	
+	@GetMapping("meta/core/class/definition/{slotId}/collect-with-properties")
+	private List<ClassDefinition> collectClassDefinitionswithProperties(@PathVariable("slotId") String slotId) {
+		return  classDefinitionService.collectAllClassDefinitionsWithProperties(slotId);
+	}
 
 	@GetMapping("/meta/core/class/definition/{id}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
