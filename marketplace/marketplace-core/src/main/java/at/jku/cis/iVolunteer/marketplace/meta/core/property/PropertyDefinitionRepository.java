@@ -11,5 +11,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 public interface PropertyDefinitionRepository extends MongoRepository<PropertyDefinition<Object>, String> {
 
 	List<PropertyDefinition<Object>> findAll();
+	
+	List<PropertyDefinition<Object>> findByName(String name);
 
 }

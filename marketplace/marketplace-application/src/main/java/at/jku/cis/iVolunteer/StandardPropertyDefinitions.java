@@ -10,6 +10,35 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.AquireableCompetencesProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.ContentProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.DescriptionProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.EndDateProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.FeedbackRequestedProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.HighlightedProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.ImportancyProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.KeywordsProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LatitudeProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LocationProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LongitudeProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.NameProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.NumberOfVolunteersProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.OptionalCompetencesProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PostcodeProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PriorityProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PromotedProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RemindParticipantsProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RequiredCompetencesProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RequiredEquipmentProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RewardsProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RoleProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.StartDateProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaetigkeitsArtProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaskPeriodTypeProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaskPeriodValueProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.UrgentProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.WorkflowKeyProperty;
+import at.jku.cis.iVolunteer.StandardPropertyDefinitions.WorkshiftProperty;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MaximumTextLength;
@@ -40,66 +69,7 @@ public class StandardPropertyDefinitions {
 
 	}
 	
-	@PostConstruct
-	public void addStandardPropertyDefinitions() {
-		for (PropertyDefinition<Object> pd : this.getAll()) {
-			if (!propertyDefinitionRepository.exists(pd.getId())) {
-				propertyDefinitionRepository.save(pd);
-			}
-		}
-	}
-
-	public List<PropertyDefinition<Object>> getAllSingle() {
-		List<PropertyDefinition<?>> props = new LinkedList<>();
-
-		NameProperty np = new NameProperty();
-		np.inst();
-		props.add(np);
-
-		DescriptionProperty dp = new DescriptionProperty();
-		np.inst();
-		props.add(dp);
-
-		props.add(new WorkflowKeyProperty());
-		props.add(new ContentProperty());
-		props.add(new PriorityProperty());
-		props.add(new ImportancyProperty());
-		props.add(new RoleProperty());
-		props.add(new LocationProperty());
-		props.add(new RequiredEquipmentProperty());
-		props.add(new WorkshiftProperty());
-		props.add(new TaskPeriodTypeProperty());
-		props.add(new KeywordsProperty());
-		props.add(new RewardsProperty());
-		props.add(new PostcodeProperty());
-		props.add(new NumberOfVolunteersProperty());
-		props.add(new TaskPeriodValueProperty());
-		props.add(new StartDateProperty());
-		props.add(new EndDateProperty());
-		props.add(new UrgentProperty());
-		props.add(new HighlightedProperty());
-		props.add(new PromotedProperty());
-		props.add(new FeedbackRequestedProperty());
-		props.add(new RemindParticipantsProperty());
-		props.add(new LatitudeProperty());
-		props.add(new LongitudeProperty());
-
-		RequiredCompetencesProperty cp1 = new RequiredCompetencesProperty();
-		OptionalCompetencesProperty cp2 = new OptionalCompetencesProperty();
-		AquireableCompetencesProperty cp3 = new AquireableCompetencesProperty();
-
-		cp1.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp1);
-		cp2.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp2);
-		cp3.setAllowedValues(addCompetenceLegalValues());
-		props.add(cp3);
-		
-		props.add(new TaetigkeitsArtProperty());
-
-		return new ArrayList(props);
-
-	}
+	
 
 //	public List<PropertyDefinition<Object>> getAllMulti() {
 //		List<PropertyDefinition<Object>> props = new LinkedList<>();
@@ -248,6 +218,59 @@ public class StandardPropertyDefinitions {
 
 	}
 
+	public List<PropertyDefinition<Object>> getAllSingle() {
+		List<PropertyDefinition<?>> props = new LinkedList<>();
+
+		NameProperty np = new NameProperty();
+		np.inst();
+		props.add(np);
+
+		DescriptionProperty dp = new DescriptionProperty();
+		np.inst();
+		props.add(dp);
+
+		props.add(new WorkflowKeyProperty());
+		props.add(new ContentProperty());
+		props.add(new PriorityProperty());
+		props.add(new ImportancyProperty());
+		props.add(new RoleProperty());
+		props.add(new LocationProperty());
+		props.add(new RequiredEquipmentProperty());
+		props.add(new WorkshiftProperty());
+		props.add(new TaskPeriodTypeProperty());
+		props.add(new KeywordsProperty());
+		props.add(new RewardsProperty());
+		props.add(new PostcodeProperty());
+		props.add(new NumberOfVolunteersProperty());
+		props.add(new TaskPeriodValueProperty());
+		props.add(new StartDateProperty());
+		props.add(new EndDateProperty());
+		props.add(new UrgentProperty());
+		props.add(new HighlightedProperty());
+		props.add(new PromotedProperty());
+		props.add(new FeedbackRequestedProperty());
+		props.add(new RemindParticipantsProperty());
+		props.add(new LatitudeProperty());
+		props.add(new LongitudeProperty());
+
+		RequiredCompetencesProperty cp1 = new RequiredCompetencesProperty();
+		OptionalCompetencesProperty cp2 = new OptionalCompetencesProperty();
+		AquireableCompetencesProperty cp3 = new AquireableCompetencesProperty();
+
+		cp1.setAllowedValues(addCompetenceLegalValues());
+		props.add(cp1);
+		cp2.setAllowedValues(addCompetenceLegalValues());
+		props.add(cp2);
+		cp3.setAllowedValues(addCompetenceLegalValues());
+		props.add(cp3);
+		
+		props.add(new TaetigkeitsArtProperty());
+
+		return new ArrayList(props);
+
+	}
+
+	
 	public List<String> addCompetenceLegalValues() {
 
 		List<String> legalValues = new LinkedList<>();
@@ -286,7 +309,7 @@ public class StandardPropertyDefinitions {
 		public void inst() {
 			this.setId("name");
 			this.setType(PropertyType.TEXT);
-			this.setName("Name");
+			this.setName("name");
 			this.setRequired(true);
 
 			List<PropertyConstraint<?>> constraints = new ArrayList<>();

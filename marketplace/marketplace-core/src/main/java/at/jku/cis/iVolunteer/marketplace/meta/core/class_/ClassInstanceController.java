@@ -35,6 +35,8 @@ public class ClassInstanceController {
 	@Autowired private Hasher hasher;
 	
 	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
+	
+	@Autowired private ClassInstanceMapper classInstanceMapper;
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
@@ -62,13 +64,14 @@ public class ClassInstanceController {
 						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
 			}
 		}
+		
 		return classInstances;
 	}
 	
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/fake")
 	private List<ClassInstance> getClassinstancesByArchetypeFake(@PathVariable("archetype") ClassArchetype archeType) {
 		boolean returnFake = isSunburstFakeRepository.findAll().size() > 0;
-				
+					
 		if (returnFake) {
 			return getClassInstancesByArchetypeAfterSunburstFake(archeType);
 		} else {
@@ -87,7 +90,8 @@ public class ClassInstanceController {
 			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> !ci.isNewFakeData())
 					.collect(Collectors.toList()));
 		}
-
+		
+		System.out.println(classInstanceMapper.mapToDTO(classInstances).toString());
 		return classInstances;
 	}
 
