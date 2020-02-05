@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, RootRenderer, DoCheck } from '@angular/core';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorEditorComponent, myMxCell } from '../configurator-editor.component';
+import { ConfiguratorEditorComponent } from '../configurator-editor.component';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
 import { ChildActivationEnd } from '@angular/router';
+import { myMxCell } from '../../MyMxCell';
 
 export interface GraphNode {
   id: string;

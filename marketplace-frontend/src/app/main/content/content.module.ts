@@ -175,6 +175,12 @@ const routes: Route[] = [
   },
 
   {
+    path: 'main/matching-configurator',
+    loadChildren: () => import('./configurator/matching-configurator/matching-configurator.module').then(m => m.MatchingConfiguratorModule),
+    canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
+  },
+
+  {
     path: 'main/configurator/instance-editor',
     loadChildren: () => import(
       './configurator/class-instances/form-editor/class-instance-form-editor.module'

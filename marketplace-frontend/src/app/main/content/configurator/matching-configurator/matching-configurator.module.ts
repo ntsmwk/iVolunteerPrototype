@@ -21,12 +21,15 @@ import { EditorTopMenuBarModule } from '../configurator-editor/top-menu-bar/top-
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { EditorTreeViewModule } from '../configurator-editor/tree-view/tree-view.module';
 
-
+const routes = [
+  {path: '', component: MatchingConfiguratorComponent}
+];
 
 @NgModule({
   imports: [
     CommonModule,
-    
+    RouterModule.forChild(routes),
+
     MatCommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -53,8 +56,6 @@ import { EditorTreeViewModule } from '../configurator-editor/tree-view/tree-view
 
   ],
   declarations: [MatchingConfiguratorComponent],
-  exports: [MatchingConfiguratorComponent],
-  entryComponents:[MatchingConfiguratorComponent],
 
 
 

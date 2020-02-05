@@ -23,6 +23,10 @@ import { of } from "rxjs";
       return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum?org=${org}`);
     }
 
+    getAllClassDefinitionsWithProperties(marketplace: Marketplace, configuratorId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/with-properties`);
+    }
+
     getClassDefinitionById(marketplace: Marketplace, id: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/${id}`);
     }

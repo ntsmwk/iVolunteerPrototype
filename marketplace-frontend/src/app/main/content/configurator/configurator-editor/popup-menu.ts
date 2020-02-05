@@ -1,9 +1,10 @@
 import { mxgraph } from 'mxgraph';
-import { myMxCell, ConfiguratorEditorComponent } from './configurator-editor.component';
+import { ConfiguratorEditorComponent } from './configurator-editor.component';
 import { isNullOrUndefined } from 'util';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
+import { myMxCell } from '../MyMxCell';
 
 declare var require: any;
 

@@ -37,6 +37,7 @@ export class ConfiguratorComponent implements OnInit {
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
+
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
         if (role == "FLEXPROD") {

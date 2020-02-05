@@ -17,6 +17,7 @@ import { ConfiguratorService } from '../../_service/meta/core/configurator/confi
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
+import { myMxCell } from '../MyMxCell';
 
 declare var require: any;
 
@@ -26,16 +27,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 });
 
 // tslint:disable-next-line: class-name
-export class myMxCell extends mx.mxCell {
-  cellType?: string;
-  classArchetype?: ClassArchetype;
 
-  root?: boolean;
-  property: boolean;
-  propertyId?: string;
-  newlyAdded: boolean;
-
-}
 
 @Component({
   selector: 'app-configurator-editor',
