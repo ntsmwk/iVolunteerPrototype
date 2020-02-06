@@ -57,7 +57,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   eventResponseAction: string;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  @ViewChild('paletteContainer', {static: true}) paletteContainer: ElementRef;
+  @ViewChild('paletteContainer', { static: true }) paletteContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
 
@@ -509,7 +509,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
 
   // OLD STUFF - might still be needed later
-  handleMousedownEvent(event: any, item: any) {
+  handleMousedownEvent(event: any, item: any, graph: mxgraph.mxGraph) {
     const outer = this;
     let positionEvent: MouseEvent;
 
@@ -528,18 +528,22 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       try {
         addObjectToGraph(evt, item);
       } finally {
-        outer.graph.getModel().endUpdate();
+        graph.getModel().endUpdate();
         removeEventListeners(outer);
       }
 
       function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any) {
 
-        const coords: mxgraph.mxPoint = outer.graph.getPointForEvent(positionEvent, false);
-        outer.graph.getModel().beginUpdate();
-        outer.graph.insertVertex(outer.graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`)
-        outer.graph.getModel().endUpdate();
-        console.log("finished drag");
-        console.log(paletteItem);
+        const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
+        console.log(coords);
+          graph.getModel().beginUpdate();
+          let cell = graph.insertVertex(graph.getDefaultParent(), null , null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`);
+          console.log("finished drag");
+          console.log(paletteItem);
+          console.log(cell);
+    
+     
+       
 
       }
     };
