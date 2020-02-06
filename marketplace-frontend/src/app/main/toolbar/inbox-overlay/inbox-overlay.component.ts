@@ -8,7 +8,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance, ClassArchetype } from 'app/main/content/_model/meta/Class';
+import { ClassInstance, ClassArchetype, ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
 import { Router } from '@angular/router';
 import { Feedback } from 'app/main/content/_model/feedback';
 
@@ -38,9 +38,9 @@ export class InboxOverlayComponent implements OnInit {
   marketplace: Marketplace;
   participant: Participant;
   participantRole: ParticipantRole;
-  classInstances: ClassInstance[] = [];
+  classInstanceDTOs: ClassInstanceDTO[] = [];
 
-  dataSource = new MatTableDataSource<ClassInstance | Feedback>();
+  dataSource = new MatTableDataSource<ClassInstanceDTO | Feedback>();
   displayedColumns = ['archetype', 'label'];
 
   ngOnInit() {
@@ -59,14 +59,14 @@ export class InboxOverlayComponent implements OnInit {
         this.participantRole = role;
 
         if (role === 'VOLUNTEER') {
-          this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
 
             this.drawInboxElements(ret);
 
             this.isLoaded = true;
           });
         } else if (role === 'HELP_SEEKER') {
-          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
+          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
 
               this.drawInboxElements(ret);
               this.isLoaded = true;
@@ -77,16 +77,16 @@ export class InboxOverlayComponent implements OnInit {
 
   }
 
-  drawInboxElements(classInstances: ClassInstance[]) {
-    if (!isNullOrUndefined(classInstances)) {
-      classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
+  drawInboxElements(classInstanceDTOs: ClassInstanceDTO[]) {
+    if (!isNullOrUndefined(classInstanceDTOs)) {
+      classInstanceDTOs.sort((a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf());
 
-      if (classInstances.length > 5) {
-        classInstances = classInstances.slice(0, 5);
+      if (classInstanceDTOs.length > 5) {
+        classInstanceDTOs = classInstanceDTOs.slice(0, 5);
       }
 
-      this.classInstances = classInstances;
-      this.dataSource.data = classInstances;
+      this.classInstanceDTOs = classInstanceDTOs;
+      this.dataSource.data = classInstanceDTOs;
       // console.log(ret);
       // console.log("=====");
       // console.log(this.element);

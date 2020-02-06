@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Marketplace } from '../../_model/marketplace';
 import { Participant } from '../../_model/participant';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstanceDTO } from '../../_model/meta/Class';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
 import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
 import { LoginService } from '../../_service/login.service';
@@ -23,7 +23,7 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
   isLoaded: boolean;
   marketplace: Marketplace;
   participant: Participant;
-  classInstances: ClassInstance[];
+  classInstanceDTOs: ClassInstanceDTO[];
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +37,7 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;
       this.participant = this.router.getCurrentNavigation().extras.state.participant;
-      this.classInstances = this.router.getCurrentNavigation().extras.state.classInstances;
+      this.classInstanceDTOs = this.router.getCurrentNavigation().extras.state.classInstances;
     }
 
   }

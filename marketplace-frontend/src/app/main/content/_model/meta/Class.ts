@@ -45,6 +45,33 @@ export class ClassInstance {
     }
 }
 
+export class ClassInstanceDTO {
+    name: string;
+    id: string;
+    issuerId: string;
+    blockchainDate: Date;
+    classArchetype: ClassArchetype;
+    purpose: string;
+    dateFrom: Date;
+    dateTo: Date;
+    location: string;
+    description: string;
+    duration: number;
+    rank: string;
+    taskType1: string;
+    taskType2: string;
+    taskType3: string;
+    hash: string;
+    imagePath: string;
+
+    published: boolean; 
+	inUserRepository: boolean;
+	inIssuerInbox: boolean;
+
+	isNewFakeData: boolean;
+	isMV: boolean;
+}
+
 export class CompetenceClassInstance extends ClassInstance{
     constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
         super(classDefintion, properties);

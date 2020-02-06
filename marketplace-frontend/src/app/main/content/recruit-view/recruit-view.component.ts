@@ -7,10 +7,9 @@ import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { Marketplace } from '../_model/marketplace';
 import { StoredChart } from '../_model/stored-chart';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../_model/meta/Class';
+import { ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { MatPaginator, MatSort } from '@angular/material';
-import { CIP } from '../_model/classInstancePropertyConstants';
 
 
 
@@ -22,7 +21,7 @@ import { CIP } from '../_model/classInstancePropertyConstants';
 export class RecruitViewComponent implements OnInit, AfterViewInit {
 
 
-  private tableDataSource = new MatTableDataSource<ClassInstance>([]);
+  private tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskName', 'taskType1', 'taskDateFrom', 'taskDuration', 'hash', 'verificationStatus'];
@@ -31,7 +30,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   duringVerify: boolean;
   verifyStage: number;
   charts: StoredChart[];
-  private classInstances: ClassInstance[] = [];
+  private classInstanceDTOs: ClassInstanceDTO[] = [];
 
 
    // chart options
@@ -52,30 +51,6 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   dayNightData;
   trainingData: any[];
   taskData: any[];
-
-
-
-  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-  TASK_ID = CIP.TASK_ID;
-  TASK_NAME = CIP.TASK_NAME;
-  TASK_TYPE_1 = CIP.TASK_TYPE_1;
-  TASK_TYPE_2 = CIP.TASK_TYPE_2;
-  TASK_TYPE_3 = CIP.TASK_TYPE_3;
-  TASK_TYPE_4 = CIP.TASK_TYPE_4;
-  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-  ZWECK = CIP.ZWECK;
-  ROLLE = CIP.ROLLE;
-  RANG = CIP.RANG;
-  PHASE = CIP.PHASE;
-  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-  EBENE = CIP.EBENE;
-  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-  TASK_DATE_TO = CIP.TASK_DATE_TO;
-  TASK_DURATION = CIP.TASK_DURATION;
-  TASK_LOCATION = CIP.TASK_LOCATION;
-  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
-
 
   constructor(
     private storedChartService: StoredChartService,
@@ -106,13 +81,13 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
 
   private loadTasks() {
-    this.classInstanceService.getClassInstancesByArcheTypeWithHash(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+    this.classInstanceService.getClassInstancesByArcheTypeWithHash(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
       if (!isNullOrUndefined(ret)) {
-        this.classInstances = ret.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
-        console.log(this.classInstances)
+        this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
+        console.log(this.classInstanceDTOs)
 
-        this.tableDataSource.data = this.classInstances;
-        this.paginator.length = this.classInstances.length;
+        this.tableDataSource.data = this.classInstanceDTOs;
+        this.paginator.length = this.classInstanceDTOs.length;
         this.tableDataSource.paginator = this.paginator;
         // this.tableDataSource.paginator.length= this.classInstances.length;
       }

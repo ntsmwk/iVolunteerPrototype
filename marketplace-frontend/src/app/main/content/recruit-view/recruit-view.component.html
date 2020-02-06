@@ -99,12 +99,12 @@
                 <ng-container matColumnDef="taskName">
                   <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_NAME].values[0]}} </span>
-                    <span *ngIf="element.name=='Tätigkeiten MV'">{{element.properties[1].values[0]}} </span>
-                    <span *ngIf="element.name=='Feuerwehr Tätigkeit'">{{element.properties[1].values[0]}} </span>
-                    <span *ngIf="element.name=='Tätigkeiten FF'">{{element.properties[1].values[0]}} </span>
-                    <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.properties[0].values[0]}} </span>
-                    <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.properties[0].values[0]}} </span>
+                    <span *ngIf="element.name=='PersonTask'">{{element.name}} </span>
+                    <span *ngIf="element.name=='Tätigkeiten MV'">{{element.name}} </span>
+                    <span *ngIf="element.name=='Feuerwehr Tätigkeit'">{{element.name}} </span>
+                    <span *ngIf="element.name=='Tätigkeiten FF'">{{element.name}} </span>
+                    <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.name}} </span>
+                    <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.name}} </span>
 
                   </mat-cell>
 
@@ -113,7 +113,7 @@
                 <ng-container matColumnDef="taskType1">
                   <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_TYPE_1].values[0]}} </span>
+                    <span *ngIf="element.name=='PersonTask'">{{element.taskType1}} </span>
                     <span *ngIf="element.name=='Tätigkeiten MV'">Ausrückung </span>
                     <span *ngIf="element.name=='Tätigkeiten FF'">Brandeinsatz </span>
                     <span *ngIf="element.name=='Feuerwehr Tätigkeit'">Brandeinsatz </span>
@@ -125,18 +125,18 @@
 
                 <ng-container matColumnDef="taskType2">
                   <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_TYPE_2].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.taskType2}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDescription">
                   <mat-header-cell *matHeaderCellDef> Beschreibung </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="taskDateFrom">
                   <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_DATE_FROM].values[0] | date:'dd.MM.yyyy hh:mm'}} </span>
+                    <span *ngIf="element.name=='PersonTask'">{{element.dateFrom | date:'dd.MM.yyyy hh:mm'}} </span>
                     <span *ngIf="element.name=='Tätigkeiten MV'"> </span>
                     <span *ngIf="element.name=='Tätigkeiten FF'">{{element.timestamp}}</span>
                     <span *ngIf="element.name=='Feuerwehr Tätigkeit'">{{element.timestamp}}</span>
@@ -149,7 +149,7 @@
                   <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
                   <mat-cell *matCellDef="let element">
 
-                    <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_DURATION].values[0]}} h</span>
+                    <span *ngIf="element.name=='PersonTask'">{{element.duration}} h</span>
                     <span *ngIf="element.name=='Tätigkeiten MV'"> </span>
                     <span *ngIf="element.name=='Tätigkeiten FF'">2 h </span>
                     <span *ngIf="element.name=='Feuerwehr Tätigkeit'">2 h </span>
@@ -162,7 +162,7 @@
                 <ng-container matColumnDef="hash">
                   <mat-header-cell *matHeaderCellDef> Hash </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <span *ngIf="element.name=='PersonTask'">{{element.properties[20].values[0]}}</span>
+                    <span *ngIf="element.name=='PersonTask'">{{element.hash}}</span>
                     <span *ngIf="element.name=='Tätigkeiten FF'">3ac75e0016abae2d9ab29c362ac43a386b80b10ac75b3f266b745a3c59788845 </span>
                     <span *ngIf="element.name=='Feuerwehr Tätigkeit'">3ac75e0016abae2d9ab29c362ac43a386b80b10ac75b3f266b745a3c59788845 </span>
 

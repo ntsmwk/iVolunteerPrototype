@@ -7,9 +7,8 @@ import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { StoredChartService } from '../../_service/stored-chart.service';
 import { Volunteer } from '../../_model/volunteer';
 import { Participant } from '../../_model/participant';
-import { CIP } from '../../_model/classInstancePropertyConstants';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstance, ClassInstanceDTO } from '../../_model/meta/Class';
 import { StoredChart } from '../../_model/stored-chart';
 
 
@@ -19,26 +18,6 @@ import { StoredChart } from '../../_model/stored-chart';
   styleUrls: ['./achievements-management-summary.component.scss']
 })
 export class AchievementsManagementSummaryComponent implements OnInit {
-  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-  TASK_ID = CIP.TASK_ID;
-  TASK_NAME = CIP.TASK_NAME;
-  TASK_TYPE_1 = CIP.TASK_TYPE_1;
-  TASK_TYPE_2 = CIP.TASK_TYPE_2;
-  TASK_TYPE_3 = CIP.TASK_TYPE_3;
-  TASK_TYPE_4 = CIP.TASK_TYPE_4;
-  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-  ZWECK = CIP.ZWECK;
-  ROLLE = CIP.ROLLE;
-  RANG = CIP.RANG;
-  PHASE = CIP.PHASE;
-  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-  EBENE = CIP.EBENE;
-  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-  TASK_DATE_TO = CIP.TASK_DATE_TO;
-  TASK_DURATION = CIP.TASK_DURATION;
-  TASK_LOCATION = CIP.TASK_LOCATION;
-  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
   // comparison chart
   comparisonXlabel = 'Jahr';
@@ -80,8 +59,8 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   comparisonYear: string;
   volunteer: any;
   marketplace: any;
-  classInstances: any[];
-  filteredClassInstances: any[];
+  classInstanceDTOs: ClassInstanceDTO[];
+  filteredClassInstanceDTOs: ClassInstanceDTO[];
   yearsMap: any;
 
 
@@ -250,17 +229,18 @@ export class AchievementsManagementSummaryComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret.filter(ci => ci.name=='PersonTask');
+            //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');
+            this.classInstanceDTOs = ret;
 
-            this.classInstances.forEach((ci, index, object) => {
-              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+            this.classInstanceDTOs.forEach((ci, index, object) => {
+              if (ci.duration == null) {
                 object.splice(index, 1);
               }
             });
 
-            this.filteredClassInstances = [...this.classInstances];
+            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
             this.generateStaticChartData();
 
 
@@ -314,8 +294,8 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
   generateStaticChartData() {
     // yearComparison
-    let yearsList = this.classInstances.map(ci => {
-      return ({ year: (new Date(ci.properties[this.TASK_DATE_FROM].values[0]).getFullYear()).toString(), value: 1 });
+    let yearsList = this.classInstanceDTOs.map(ci => {
+      return ({ year: (new Date(ci.dateFrom).getFullYear()).toString(), value: 1 });
     });
 
     this.yearsMap = new Map<string, number>();

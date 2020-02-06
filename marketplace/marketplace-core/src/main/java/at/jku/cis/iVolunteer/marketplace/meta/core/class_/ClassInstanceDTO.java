@@ -2,12 +2,20 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.Date;
 
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+
 public class ClassInstanceDTO {
 	private String name;
+	private String id;
+	private ClassArchetype classArchetype;
+	private String issuerId;
+	private String userId;
 	private Date blockchainDate;
+	private String imagePath;
+
 	private String purpose;
-	private String dateFrom;
-	private String dateTo;
+	private Date dateFrom;
+	private Date dateTo;
 	private String location;
 	private String description;
 	private String duration;
@@ -15,6 +23,105 @@ public class ClassInstanceDTO {
 	private String taskType1;
 	private String taskType2;
 	private String taskType3;
+	private String hash;
+
+	// Temp flags for dashboard presentation
+	private boolean published; // flag if published
+	private boolean inUserRepository;// flag if in inbox or in repository of user
+	private boolean inIssuerInbox; // flag if in inbox of issuer
+
+	private boolean isNewFakeData;
+	private boolean isMV;
+
+	
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+
+	public boolean isInUserRepository() {
+		return inUserRepository;
+	}
+
+	public void setInUserRepository(boolean inUserRepository) {
+		this.inUserRepository = inUserRepository;
+	}
+
+	public boolean isInIssuerInbox() {
+		return inIssuerInbox;
+	}
+
+	public void setInIssuerInbox(boolean inIssuerInbox) {
+		this.inIssuerInbox = inIssuerInbox;
+	}
+
+	public boolean isNewFakeData() {
+		return isNewFakeData;
+	}
+
+	public void setNewFakeData(boolean isNewFakeData) {
+		this.isNewFakeData = isNewFakeData;
+	}
+
+	public boolean isMV() {
+		return isMV;
+	}
+
+	public void setMV(boolean isMV) {
+		this.isMV = isMV;
+	}
+
+	public ClassArchetype getClassArchetype() {
+		return classArchetype;
+	}
+
+	public void setClassArchetype(ClassArchetype classArchetype) {
+		this.classArchetype = classArchetype;
+	}
+
+	public String getIssuerId() {
+		return issuerId;
+	}
+
+	public void setIssuerId(String issuerId) {
+		this.issuerId = issuerId;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
 	public String getName() {
 		return name;
@@ -40,19 +147,19 @@ public class ClassInstanceDTO {
 		this.purpose = purpose;
 	}
 
-	public String getDateFrom() {
+	public Date getDateFrom() {
 		return dateFrom;
 	}
 
-	public void setDateFrom(String dateFrom) {
+	public void setDateFrom(Date dateFrom) {
 		this.dateFrom = dateFrom;
 	}
 
-	public String getDateTo() {
+	public Date getDateTo() {
 		return dateTo;
 	}
 
-	public void setDateTo(String dateTo) {
+	public void setDateTo(Date dateTo) {
 		this.dateTo = dateTo;
 	}
 

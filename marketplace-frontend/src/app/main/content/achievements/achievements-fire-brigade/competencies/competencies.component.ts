@@ -5,12 +5,11 @@ import { LoginService } from '../../../_service/login.service';
 import { ClassInstanceService } from '../../../_service/meta/core/class/class-instance.service';
 import { Marketplace } from '../../../_model/marketplace';
 import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
-import { ClassInstance } from '../../../_model/meta/Class';
+import { ClassInstance, ClassInstanceDTO } from '../../../_model/meta/Class';
 import { isNullOrUndefined } from 'util';
 import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
 import { Volunteer } from '../../../_model/volunteer';
 import * as moment from 'moment';
-import { CIP } from '../../../_model/classInstancePropertyConstants';
 import { StoredChart } from '../../../_model/stored-chart';
 import { StoredChartService } from '../../../_service/stored-chart.service';
 
@@ -26,7 +25,7 @@ import { StoredChartService } from '../../../_service/stored-chart.service';
 export class CompetenciesComponent implements OnInit {
   private volunteer: Participant;
   private marketplace: Marketplace;
-  classInstances: ClassInstance[];
+  classInstanceDTOs: ClassInstanceDTO[];
 
   trainingData: any[];
   trainingData2: any[];
@@ -50,27 +49,6 @@ export class CompetenciesComponent implements OnInit {
   yAxisLabel2: string = 'Anzahl';
   animations: boolean = true;
 
-  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-  TASK_ID = CIP.TASK_ID;
-  TASK_NAME = CIP.TASK_NAME;
-  TASK_TYPE_1 = CIP.TASK_TYPE_1;
-  TASK_TYPE_2 = CIP.TASK_TYPE_2;
-  TASK_TYPE_3 = CIP.TASK_TYPE_3;
-  TASK_TYPE_4 = CIP.TASK_TYPE_4;
-  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-  ZWECK = CIP.ZWECK;
-  ROLLE = CIP.ROLLE;
-  RANG = CIP.RANG;
-  PHASE = CIP.PHASE;
-  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-  EBENE = CIP.EBENE;
-  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-  TASK_DATE_TO = CIP.TASK_DATE_TO;
-  TASK_DURATION = CIP.TASK_DURATION;
-  TASK_LOCATION = CIP.TASK_LOCATION;
-  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
-
   test123 = "Stunden"
 
   constructor(private loginService: LoginService,
@@ -93,9 +71,10 @@ export class CompetenciesComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheTypeFake(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
+        this.classInstanceService.getClassInstancesByArcheTypeFake(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret.filter(ci => ci.name == 'PersonTask');
+            //this.classInstanceDTOs = ret.filter(ci => ci.name == 'PersonTask');
+            this.classInstanceDTOs = ret;
 
             this.generateChartData();
 
@@ -157,13 +136,13 @@ export class CompetenciesComponent implements OnInit {
   }
 
   generateChartData() {
-    let list = this.classInstances.map(ci => {
+    let list = this.classInstanceDTOs.map(ci => {
       return ({
-        year: (new Date(ci.properties[this.TASK_DATE_FROM].values[0]).getFullYear()).toString(),
-        duration: ci.properties[this.TASK_DURATION].values[0],
-        tt1: ci.properties[this.TASK_TYPE_1].values[0],
-        tt2: ci.properties[this.TASK_TYPE_2].values[0],
-        tt3: ci.properties[this.TASK_TYPE_3].values[0]
+        year: (new Date(ci.dateFrom).getFullYear()).toString(),
+        duration: ci.duration,
+        tt1: ci.taskType1,
+        tt2: ci.taskType2,
+        tt3: ci.taskType3
       });
     });
 
@@ -185,7 +164,7 @@ export class CompetenciesComponent implements OnInit {
       let data2 = [];
 
       currentYearList.forEach(t => {
-        if (t.duration != 'null') {
+        if (t.duration != null) {
           if (map.get(t.tt2)) {
             map.set(t.tt2, [Number(map.get(t.tt2)[0]) + 1, Number(map.get(t.tt2)[1]) + Number(t.duration)]);
           } else {
@@ -224,7 +203,7 @@ export class CompetenciesComponent implements OnInit {
       let data2 = [];
 
       oneTt2.forEach(t => {
-        if (t.duration != 'null') {
+        if (t.duration != null) {
 
           if (map.get(t.year)) {
             map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
@@ -259,7 +238,7 @@ export class CompetenciesComponent implements OnInit {
       let data2 = [];
 
       oneTt2.forEach(t => {
-        if (t.duration != 'null') {
+        if (t.duration != null) {
           if (map.get(t.year)) {
             map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
 

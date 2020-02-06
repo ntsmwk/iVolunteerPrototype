@@ -28,15 +28,22 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired ClassInstanceRepository classInstanceRepository;
-	@Autowired ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private LoginService loginService;
-	@Autowired private Hasher hasher;
-	
-	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
-	
-	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private LoginService loginService;
+	@Autowired
+	private Hasher hasher;
+
+	@Autowired
+	private IsSunburstFakeRepository isSunburstFakeRepository;
+
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
@@ -49,7 +56,7 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
-	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@RequestParam(value = "org", required = false) String organisation) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
@@ -64,14 +71,15 @@ public class ClassInstanceController {
 						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
 			}
 		}
-		
-		return classInstances;
+
+		return classInstanceMapper.mapToDTO(classInstances);
 	}
-	
+
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/fake")
-	private List<ClassInstance> getClassinstancesByArchetypeFake(@PathVariable("archetype") ClassArchetype archeType) {
+	private List<ClassInstanceDTO> getClassinstancesByArchetypeFake(
+			@PathVariable("archetype") ClassArchetype archeType) {
 		boolean returnFake = isSunburstFakeRepository.findAll().size() > 0;
-					
+
 		if (returnFake) {
 			return getClassInstancesByArchetypeAfterSunburstFake(archeType);
 		} else {
@@ -80,7 +88,7 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/before")
-	private List<ClassInstance> getClassInstancesByArchetypeBeforeSunburstFake(
+	private List<ClassInstanceDTO> getClassInstancesByArchetypeBeforeSunburstFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
@@ -90,13 +98,12 @@ public class ClassInstanceController {
 			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> !ci.isNewFakeData())
 					.collect(Collectors.toList()));
 		}
-		
-		System.out.println(classInstanceMapper.mapToDTO(classInstances).toString());
-		return classInstances;
+
+		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/after")
-	private List<ClassInstance> getClassInstancesByArchetypeAfterSunburstFake(
+	private List<ClassInstanceDTO> getClassInstancesByArchetypeAfterSunburstFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
@@ -107,11 +114,11 @@ public class ClassInstanceController {
 					.collect(Collectors.toList()));
 		}
 
-		return classInstances;
+		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/hashed")
-	private List<ClassInstance> getClassInstancesByArchetypeWithHash(
+	private List<ClassInstanceDTO> getClassInstancesByArchetypeWithHash(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
@@ -127,11 +134,11 @@ public class ClassInstanceController {
 			ci.getProperties().add(hash);
 		});
 
-		return classInstances;
+		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user")
-	private List<ClassInstance> getClassInstancesByClassDefinitionIdFake(
+	private List<ClassInstanceDTO> getClassInstancesByClassDefinitionIdFake(
 			@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
@@ -141,7 +148,7 @@ public class ClassInstanceController {
 					.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(), cd.getId()));
 		}
 
-		return classInstances;
+		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
 	@GetMapping("/meta/core/class/instance/by-userid/{userId}")
@@ -155,8 +162,9 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
-	private List<ClassInstance> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false);
+	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
+		return classInstanceMapper
+				.mapToDTO(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false));
 	}
 
 	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
@@ -180,7 +188,7 @@ public class ClassInstanceController {
 	}
 
 	@PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
-	private List<ClassInstance> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
+	private List<ClassInstanceDTO> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
 			@RequestBody List<String> classInstanceIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
@@ -190,7 +198,7 @@ public class ClassInstanceController {
 			classInstance.setInUserRepository(false);
 		}
 
-		return classInstanceRepository.save(classInstances);
+		return classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
 	}
 
 	@PostMapping("/meta/core/class/instance/new")

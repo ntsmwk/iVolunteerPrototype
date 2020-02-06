@@ -132,22 +132,14 @@
         <ng-container matColumnDef="taskName">
           <mat-header-cell *matHeaderCellDef> Eintrag </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_NAME].values[0]}} </span>
-            <span *ngIf="element.name=='Musikverein Tätigkeit'">{{element.properties[1].values[0]}} </span>
-            <span *ngIf="element.name=='Tätigkeiten MV'">{{element.properties[1].values[0]}} </span>
-            <span *ngIf="element.name=='Sybos Tätigkeit'">{{element.properties[0].values[0]}} </span>
-            <span *ngIf="element.name=='Fahrtenspange 1000'">{{element.properties[0].values[0]}} </span>
+            <span>{{element.name}} </span>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="taskType1">
           <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <span *ngIf="element.name=='PersonTask'">{{element.properties[TASK_TYPE_1].values[0]}} </span>
-            <span *ngIf="element.name=='Musikverein Tätigkeit'">Ausrückung </span>
-            <span *ngIf="element.name=='Tätigkeiten MV'">Ausrückung </span>
-            <span *ngIf="element.name=='Sybos Tätigkeit'">Einsatz </span>
-            <span *ngIf="element.name=='Fahrtenspange 1000'">Abzeichen </span>
+            <span >{{element.taskType1}} </span>
           </mat-cell>
         </ng-container>
         <!-- 

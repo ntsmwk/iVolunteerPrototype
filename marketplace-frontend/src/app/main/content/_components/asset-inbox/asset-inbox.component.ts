@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
+import { ClassArchetype, ClassInstanceDTO } from '../../_model/meta/Class';
 import { MatTableDataSource } from '@angular/material';
 import { Feedback } from '../../_model/feedback';
 import { HelpseekerService } from '../../_service/helpseeker.service';
@@ -23,14 +23,14 @@ export class AssetInboxComponent implements OnInit {
   output = '';
   submitPressed: boolean;
 
-  datasource = new MatTableDataSource<ClassInstance | Feedback>();
+  datasource = new MatTableDataSource<ClassInstanceDTO | Feedback>();
   displayedColumns;
   displayedColumnsVolunteer = ['checkboxes', 'label', 'archetype', 'issuer', 'date'];
   displayedColumnsHelpseeker = ['checkboxes', 'label', 'archetype', 'user', 'date'];
 
-  selection = new SelectionModel<ClassInstance | Feedback>(true, []);
+  selection = new SelectionModel<ClassInstanceDTO | Feedback>(true, []);
 
-  @Input() classInstances: ClassInstance[];
+  @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() marketplace: Marketplace;
   @Input() inboxOwner: string;
   @Output() submit = new EventEmitter();
@@ -48,8 +48,8 @@ export class AssetInboxComponent implements OnInit {
 
   ngOnInit() {
 
-    if (!isNullOrUndefined(this.classInstances)) {
-      this.classInstances.sort((a, b) => a.timestamp.valueOf() - b.timestamp.valueOf());
+    if (!isNullOrUndefined(this.classInstanceDTOs)) {
+      this.classInstanceDTOs.sort((a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf());
 
       Promise.all([
         this.helpseekerService.findAll().toPromise().then((issuers: Helpseeker[]) => {
@@ -64,7 +64,7 @@ export class AssetInboxComponent implements OnInit {
       });
     } else {
       this.fetchImagePaths();
-      this.classInstances = [];
+      this.classInstanceDTOs = [];
     }
 
     if (this.inboxOwner === 'volunteer') {
@@ -72,7 +72,7 @@ export class AssetInboxComponent implements OnInit {
     } else {
       this.displayedColumns = this.displayedColumnsHelpseeker;
     }
-    this.datasource.data = this.classInstances;
+    this.datasource.data = this.classInstanceDTOs;
 
   }
 
@@ -124,20 +124,11 @@ export class AssetInboxComponent implements OnInit {
 
   }
 
-  findNameProperty(entry: ClassInstance) {
-    if (isNullOrUndefined(entry.properties)) {
-      return '';
-    }
-
-    let name = entry.properties.find(p => p.id === 'name');
-    if (isNullOrUndefined(name)) {
-      name = entry.properties.find(p => p.name === 'taskName');
-    }
-
-    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+  findNameProperty(entry: ClassInstanceDTO) {
+    if (isNullOrUndefined(entry.name)) {
       return '';
     } else {
-      return name.values[0];
+      return entry.name;
     }
   }
 
@@ -158,7 +149,7 @@ export class AssetInboxComponent implements OnInit {
     }
   }
 
-  getArchetypeIcon(entry: ClassInstance) {
+  getArchetypeIcon(entry: ClassInstanceDTO) {
     if (isNullOrUndefined(entry.imagePath)) {
 
       if (entry.classArchetype === ClassArchetype.COMPETENCE) {
@@ -178,7 +169,7 @@ export class AssetInboxComponent implements OnInit {
 
   }
 
-  getArchetypeName(entry: ClassInstance) {
+  getArchetypeName(entry: ClassInstanceDTO) {
     if (entry.classArchetype === ClassArchetype.COMPETENCE) {
       return 'Kompetenz';
     } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {

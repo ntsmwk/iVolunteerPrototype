@@ -9,11 +9,10 @@ import { CoreMarketplaceService } from '../../_service/core-marketplace.service'
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../../_model/marketplace';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
-import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
+import { ClassInstance, ClassArchetype, ClassInstanceDTO } from '../../_model/meta/Class';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { MatSort, MatPaginator } from '@angular/material';
-import { CIP } from '../../_model/classInstancePropertyConstants';
 
 @Component({
   selector: 'dashboard-volunteer',
@@ -35,9 +34,9 @@ export class DashboardVolunteerComponent implements OnInit {
 
   isLoaded: boolean;
 
-  dataSourceComp = new MatTableDataSource<ClassInstance>();
-  dataSourceFeedback = new MatTableDataSource<ClassInstance>();
-  dataSourceRepository = new MatTableDataSource<ClassInstance>();
+  dataSourceComp = new MatTableDataSource<ClassInstanceDTO>();
+  dataSourceFeedback = new MatTableDataSource<ClassInstanceDTO>();
+  dataSourceRepository = new MatTableDataSource<ClassInstanceDTO>();
 
   private displayedColumnsRepository: string[] = ['issuer', 'taskName', 'taskType1', 'date'];
 
@@ -45,27 +44,6 @@ export class DashboardVolunteerComponent implements OnInit {
   issuerIds: string[] = [];
   issuers: Participant[] = [];
   userImagePaths: any[];
-
-  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-  TASK_ID = CIP.TASK_ID;
-  TASK_NAME = CIP.TASK_NAME;
-  TASK_TYPE_1 = CIP.TASK_TYPE_1;
-  TASK_TYPE_2 = CIP.TASK_TYPE_2;
-  TASK_TYPE_3 = CIP.TASK_TYPE_3;
-  TASK_TYPE_4 = CIP.TASK_TYPE_4;
-  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-  ZWECK = CIP.ZWECK;
-  ROLLE = CIP.ROLLE;
-  RANG = CIP.RANG;
-  PHASE = CIP.PHASE;
-  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-  EBENE = CIP.EBENE;
-  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-  TASK_DATE_TO = CIP.TASK_DATE_TO;
-  TASK_DURATION = CIP.TASK_DURATION;
-  TASK_LOCATION = CIP.TASK_LOCATION;
-  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
 
   constructor(public dialog: MatDialog,
     private coreVolunteerService: CoreVolunteerService,
@@ -94,9 +72,9 @@ export class DashboardVolunteerComponent implements OnInit {
 
   loadDashboardContent() {
     Promise.all([
-      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((instances: ClassInstance[]) => {
+      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((instances: ClassInstanceDTO[]) => {
 
-        instances = instances.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+        instances = instances.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
         // if (instances.length > 25) {
         //   instances = instances.slice(0, 25);
         // }

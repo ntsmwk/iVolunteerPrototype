@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Marketplace } from '../_model/marketplace';
 import { Participant } from '../_model/participant';
-import { ClassInstance } from '../_model/meta/Class';
+import { ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
@@ -20,7 +20,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
   isLoaded: boolean;
   marketplace: Marketplace;
   participant: Participant;
-  classInstances: ClassInstance[];
+  classInstanceDTOs: ClassInstanceDTO[];
 
   submitPressed: boolean;
 
@@ -61,16 +61,15 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   loadInboxEntries() {
-    this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstance[]) => {
-
-      this.classInstances = ret;
+    this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
+      this.classInstanceDTOs = ret;
       this.isLoaded = true;
 
     });
   }
 
-  onAssetInboxSubmit(classInstances: ClassInstance[]) {
-    this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstances.map(c => c.id), true).toPromise().then(() => {
+  onAssetInboxSubmit(classInstanceDTOs: ClassInstanceDTO[]) {
+    this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstanceDTOs.map(c => c.id), true).toPromise().then(() => {
       this.router.navigate(['/main/dashboard']);
     });
 

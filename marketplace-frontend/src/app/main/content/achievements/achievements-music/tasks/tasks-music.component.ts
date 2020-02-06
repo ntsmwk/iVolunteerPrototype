@@ -6,7 +6,7 @@ import { ClassInstanceService } from '../../../_service/meta/core/class/class-in
 import { Marketplace } from '../../../_model/marketplace';
 import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
 import { ActivatedRoute } from '@angular/router';
-import { ClassInstance } from '../../../_model/meta/Class';
+import { ClassInstance, ClassInstanceDTO } from '../../../_model/meta/Class';
 import { isNullOrUndefined } from 'util';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
@@ -14,7 +14,6 @@ import { Volunteer } from '../../../_model/volunteer';
 import { ArrayService } from '../../../_service/array.service';
 import * as moment from 'moment';
 import * as shape from 'd3-shape';
-import { CIP } from '../../../_model/classInstancePropertyConstants';
 import { StoredChartService } from '../../../_service/stored-chart.service';
 import { StoredChart } from '../../../_model/stored-chart';
 
@@ -36,32 +35,10 @@ export class TasksMusicComponent implements OnInit {
 
   prevNodeLevel: number = null;
 
-
-  IVOLUNTEER_UUID = CIP.IVOLUNTEER_UUID;
-  IVOLUNTEER_SOURCE = CIP.IVOLUNTEER_SOURCE;
-  TASK_ID = CIP.TASK_ID;
-  TASK_NAME = CIP.TASK_NAME;
-  TASK_TYPE_1 = CIP.TASK_TYPE_1;
-  TASK_TYPE_2 = CIP.TASK_TYPE_2;
-  TASK_TYPE_3 = CIP.TASK_TYPE_3;
-  TASK_TYPE_4 = CIP.TASK_TYPE_4;
-  TASK_DESCRIPTION = CIP.TASK_DESCRIPTION;
-  ZWECK = CIP.ZWECK;
-  ROLLE = CIP.ROLLE;
-  RANG = CIP.RANG;
-  PHASE = CIP.PHASE;
-  ARBEITSTEILUNG = CIP.ARBEITSTEILUNG;
-  EBENE = CIP.EBENE;
-  TASK_DATE_FROM = CIP.TASK_DATE_FROM;
-  TASK_DATE_TO = CIP.TASK_DATE_TO;
-  TASK_DURATION = CIP.TASK_DURATION;
-  TASK_LOCATION = CIP.TASK_LOCATION;
-  TASK_GEO_INFORMATION = CIP.TASK_GEO_INFORMATION;
-
   private volunteer: Participant;
   private marketplace: Marketplace;
-  private classInstances: ClassInstance[] = [];
-  private tableDataSource = new MatTableDataSource<ClassInstance>();
+  private classInstanceDTOs: ClassInstanceDTO[] = [];
+  private tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
@@ -71,7 +48,7 @@ export class TasksMusicComponent implements OnInit {
   private dayNightData: any[];
   private locationData: any[];
   private rangData: any[];
-  private filteredClassInstances: ClassInstance[] = [];
+  private filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
 
   // Todo: set chart properties for each type separately
@@ -184,7 +161,6 @@ export class TasksMusicComponent implements OnInit {
   };
 
   prevClickedNode: any = null;
-  prevFilteredClassInstances: any[];
   uniqueTt1: any[];
   uniqueTt2: any[];
   uniqueTt3: any[];
@@ -239,28 +215,28 @@ export class TasksMusicComponent implements OnInit {
         this.marketplace = values[0][0];
 
         this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
-        .toPromise().then((ret: ClassInstance[]) => {
+        .toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret;
+            this.classInstanceDTOs = ret;
 
-            this.classInstances.forEach((ci, index, object) => {
-              if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
+            this.classInstanceDTOs.forEach((ci, index, object) => {
+              if (ci.duration == null) {
                 object.splice(index, 1);
               }
             });
 
-            this.filteredClassInstances = [...this.classInstances];
+            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
 
-            let list = this.filteredClassInstances
+            let list = this.filteredClassInstanceDTOs
               .map(ci => {
-                return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0] })
+                return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
               });
             this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
             this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
             this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
 
-            this.tableDataSource.data = this.classInstances;
+            this.tableDataSource.data = this.classInstanceDTOs;
             this.tableDataSource.paginator = this.paginator;
 
             this.generateTimelineData();
@@ -299,7 +275,7 @@ export class TasksMusicComponent implements OnInit {
       this.prevClickedNode = null;
       this.chipTaskType = null;
 
-      this.filteredClassInstances = [...this.classInstances];
+      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
 
     } else {
       if (event.point.node.level < 4) {
@@ -317,14 +293,14 @@ export class TasksMusicComponent implements OnInit {
             this.chipTaskType = null;
             this.prevClickedNode = null;
             this.prevNodeLevel = 1;
-            this.filteredClassInstances = [...this.classInstances];
+            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
 
           } else {
             this.chipTaskType = parent.name;
             this.prevClickedNode = event.point.name;
             this.prevNodeLevel = event.point.node.level;
-            this.filteredClassInstances = this.classInstances.filter(c => {
-              return c.properties[this.TASK_TYPE_1].values[0] === parent.name;
+            this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+              return c.taskType1 === parent.name;
             });
           }
 
@@ -338,14 +314,14 @@ export class TasksMusicComponent implements OnInit {
           if (this.uniqueTt1.indexOf(event.point.name) > -1) {
             // filter for tt1
             this.chipTaskType = event.point.name;
-            this.filteredClassInstances = this.classInstances.filter(c => {
-              return c.properties[this.TASK_TYPE_1].values[0] === event.point.name;
+            this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+              return c.taskType1 === event.point.name;
             });
 
           } else if (this.uniqueTt2.indexOf(event.point.name) > -1) {
             // filter for tt2
-            this.filteredClassInstances = this.classInstances.filter(c => {
-              return c.properties[this.TASK_TYPE_2].values[0] === event.point.name;
+            this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+              return c.taskType2 === event.point.name;
             });
 
             this.chipTaskType = event.point.name;
@@ -360,19 +336,19 @@ export class TasksMusicComponent implements OnInit {
       // nach jahr filtern
 
       if (this.selectedYear === 'Gesamt') {
-        this.filteredClassInstances = [...this.filteredClassInstances];
+        this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
       } else {
-        this.filteredClassInstances = this.filteredClassInstances.filter(c => {
-          return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+          return (moment(c.dateFrom).isSame(moment(this.selectedYear), 'year'));
         });
       }
 
     } else {
       // nach timeline filtern
 
-      this.filteredClassInstances = this.filteredClassInstances.filter(c => {
-        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
-          moment(c.properties[this.TASK_DATE_FROM].values[0]).isBefore(moment(this.timelineFilterTo)));
+      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+        return (moment(c.dateFrom).isAfter(moment(this.timelineFilterFrom)) &&
+          moment(c.dateFrom).isBefore(moment(this.timelineFilterTo)));
       });
     }
 
@@ -389,10 +365,10 @@ export class TasksMusicComponent implements OnInit {
     this.chipTimelineFilterTo = null;
 
     if (this.selectedYear === 'Gesamt') {
-      this.filteredClassInstances = [...this.classInstances];
+      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     } else {
-      this.filteredClassInstances = this.classInstances.filter(c => {
-        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isSame(moment(this.selectedYear), 'year'));
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+        return (moment(c.dateFrom).isSame(moment(this.selectedYear), 'year'));
       });
     }
 
@@ -417,9 +393,9 @@ export class TasksMusicComponent implements OnInit {
       this.chipTimelineFilterFrom = this.timelineFilterFrom;
       this.chipTimelineFilterTo = this.timelineFilterTo;
 
-      this.filteredClassInstances = this.classInstances.filter(c => {
-        return (moment(c.properties[this.TASK_DATE_FROM].values[0]).isAfter(moment(this.timelineFilterFrom)) &&
-          moment(c.properties[this.TASK_DATE_FROM].values[0]).isBefore(moment(this.timelineFilterTo)));
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+        return (moment(c.dateFrom).isAfter(moment(this.timelineFilterFrom)) &&
+          moment(c.dateFrom).isBefore(moment(this.timelineFilterTo)));
       });
 
       this.generateOtherChartsData();
@@ -431,10 +407,10 @@ export class TasksMusicComponent implements OnInit {
   generateTimelineData() {
     let data1 = [];
 
-    let timelineList = this.filteredClassInstances.map(ci => {
+    let timelineList = this.filteredClassInstanceDTOs.map(ci => {
       let value;
-      (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-      return ({ date: new Date(ci.properties[this.TASK_DATE_FROM].values[0]).setHours(0, 0, 0, 0), value: Number(value) });
+      (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
+      return ({ date: new Date(ci.dateFrom).setHours(0, 0, 0, 0), value: Number(value) });
     });
 
     let timelineMap: Map<number, number> = new Map<number, number>();
@@ -461,12 +437,12 @@ export class TasksMusicComponent implements OnInit {
     this.chipTaskType = null;
 
     // sunburst data
-    let list = this.filteredClassInstances
+    let list = this.filteredClassInstanceDTOs
       .map(ci => {
         let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
 
-        return ({ tt1: ci.properties[this.TASK_TYPE_1].values[0], tt2: ci.properties[this.TASK_TYPE_2].values[0], tt3: ci.properties[this.TASK_TYPE_3].values[0], value: value })
+        return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3, value: value })
       });
 
 
@@ -559,11 +535,11 @@ export class TasksMusicComponent implements OnInit {
     let data = [];
 
     // donut: Wochentag
-    let weekdayList = this.filteredClassInstances
+    let weekdayList = this.filteredClassInstanceDTOs
       .map(ci => {
         let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-        return ({ weekday: moment(ci.properties[this.TASK_DATE_FROM].values[0]).locale("de").format('dddd'), value: value })
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
+        return ({ weekday: moment(ci.dateFrom).locale("de").format('dddd'), value: value })
       });
 
     // console.error('weekdayList', weekdayList);
@@ -587,13 +563,13 @@ export class TasksMusicComponent implements OnInit {
 
 
     // donut: day night
-    let dayNightList = this.filteredClassInstances
+    let dayNightList = this.filteredClassInstanceDTOs
       .map(ci => {
         let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
 
         let key;
-        let hours = new Date(ci.properties[this.TASK_DATE_FROM].values[0]).getHours();
+        let hours = new Date(ci.dateFrom).getHours();
         (hours >= 7 && hours <= 18) ? key = 'Tag' : key = 'Nacht';
 
         return ({ dayNight: key, value: value })
@@ -618,11 +594,11 @@ export class TasksMusicComponent implements OnInit {
     this.dayNightData = [...data];
 
     // donut: taskLocation
-    let locationList = this.filteredClassInstances
+    let locationList = this.filteredClassInstanceDTOs
       .map(ci => {
         let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-        return ({ location: ci.properties[this.TASK_LOCATION].values[0], value: value })
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
+        return ({ location: ci.location, value: value })
       });
 
     let locationMap: Map<string, number> = new Map<string, number>();
@@ -652,11 +628,11 @@ export class TasksMusicComponent implements OnInit {
 
     // donut: rang
     // console.error('this.filteredClassInstances', this.filteredClassInstances);
-    let rangList = this.filteredClassInstances
+    let rangList = this.filteredClassInstanceDTOs
       .map(ci => {
         let value;
-        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.properties[this.TASK_DURATION].values[0];
-        return ({ rang: ci.properties[this.RANG].values[0], value: value })
+        (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
+        return ({ rang: ci.rank, value: value })
       });
 
     // console.error('rangList', rangList);
@@ -692,7 +668,7 @@ export class TasksMusicComponent implements OnInit {
     this.rangData = [...data];
     // console.error('rangData', this.rangData);
 
-    this.tableDataSource.data = this.filteredClassInstances;
+    this.tableDataSource.data = this.filteredClassInstanceDTOs;
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
