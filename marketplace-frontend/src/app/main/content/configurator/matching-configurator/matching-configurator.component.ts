@@ -18,6 +18,7 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { config } from 'rxjs';
+import { MatchingConfiguratorClassDefinitionCollection } from '../../_model/meta/matching';
 
 declare var require: any;
 
@@ -65,6 +66,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerClassDefinitions: ClassDefinition[];
   consumerClassDefinitions: ClassDefinition[];
 
+  producerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
+  consumerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
+
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
@@ -85,12 +89,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
             this.classDefinitionService.collectAllClassDefinitionsWithProperties(this.marketplace, 'slot1').toPromise().then((classDefinitions: ClassDefinition[]) => {
               this.producerClassDefinitions = classDefinitions;
-              this.insertClassDefinitionsProducer();
+              // this.insertClassDefinitionsProducer();
             }),
             this.classDefinitionService.collectAllClassDefinitionsWithProperties(this.marketplace, 'slot2').toPromise().then((classDefinitions: ClassDefinition[]) => {
               this.consumerClassDefinitions = classDefinitions;
-              this.insertClassDefinitionsConsumer();
+              // this.insertClassDefinitionsConsumer();
+            }),
+            this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, 'slot1').toPromise().then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+              this.producerClassDefinitionCollections = collections;
+              this.insertClassDefinitionsProducerFromCollection();
+            }),
+            this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, 'slot2').toPromise().then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+              this.consumerClassDefinitionCollections = collections;
+              this.insertClassDefinitionsConsumerFromCollection();
             })
+
           ]);
         });
       });
@@ -101,12 +114,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     this.graphContainer.nativeElement.style.position = 'absolute';
-    this.graphContainer.nativeElement.style.overflow = 'hidden';
+    this.graphContainer.nativeElement.style.overflow = 'scroll';
     this.graphContainer.nativeElement.style.left = '0px';
     this.graphContainer.nativeElement.style.top = '30px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
+    this.graphContainer.nativeElement.style.width = '100%';
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -149,16 +163,25 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       // tslint:disable-next-line: no-unused-expression
       // new mx.mxRubberband(this.graph);
 
+            // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
+
+
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
 
-      // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
-
       const outer = this; // preserve outer scope
+      // this.graph.addListener(mx.mxEvent.PAN_START, function(sender, evt) {
+      //   console.log("PAN START");
+      //   console.log(evt);
+      // });
+
+      // this.graph.addListener(mx.mxEvent.PAN, function(sender, evt) {
+      //   console.log("PAN");
+      //   console.log(evt);
+      //});
+
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        console.log(evt);
-        
       });
 
       this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
@@ -179,24 +202,38 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertClassDefinitionsProducer() {
-    
+
     let y = 20;
     for (const c of this.producerClassDefinitions) {
-      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y , 200, 0));
+      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y, 200, 0));
+      y = cell.geometry.y + cell.geometry.height + 20;
+    }
+  }
+
+  private insertClassDefinitionsProducerFromCollection() {
+    let y = 20;
+    for (const c of this.producerClassDefinitionCollections) {
+      const cell = this.insertClassDefinitionCollectionsIntoGraph(c, new mx.mxGeometry(20, y, 200, 0));
+      y = cell.geometry.y + cell.geometry.height + 20;
+    }
+  }
+
+  private insertClassDefinitionsConsumerFromCollection() {
+    let x = this.graphContainer.nativeElement.offsetWidth - 220;
+    let y = 20;
+
+    for (const c of this.consumerClassDefinitionCollections) {
+      const cell = this.insertClassDefinitionCollectionsIntoGraph(c, new mx.mxGeometry(x, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
   }
 
   private insertClassDefinitionsConsumer() {
-    console.log(this.graphContainer);
-    console.log(this.graphContainer.nativeElement);
-  
-
     let x = this.graphContainer.nativeElement.offsetWidth - 220;
     let y = 20;
 
     for (const c of this.consumerClassDefinitions) {
-     const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(x, y , 200, 0));
+      const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(x, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
 
@@ -255,10 +292,91 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     // create horizonal filler in front of properties
-    const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50 , 85, 5, CConstants.mxStyles.classHfiller);
+    const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50, 85, 5, CConstants.mxStyles.classHfiller);
     hfiller.setConnectable(false);
 
     return this.graph.addCell(cell) as myMxCell;
+  }
+
+
+  private insertClassDefinitionCollectionsIntoGraph(collection: MatchingConfiguratorClassDefinitionCollection, geometry: mxgraph.mxGeometry): myMxCell {
+    // create class cell
+    let cell: myMxCell;
+    if (collection.collector.classArchetype.startsWith('ENUM')) {
+      cell = new mx.mxCell(collection.collector.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
+    } else if (collection.collector.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
+      cell = new mx.mxCell(collection.collector.name, geometry, CConstants.mxStyles.classFlexprodCollector) as myMxCell;
+    } else {
+      cell = new mx.mxCell(collection.collector.name, geometry, CConstants.mxStyles.classNormal) as myMxCell;
+    }
+    cell.setCollapsed(false);
+    cell.classArchetype = collection.collector.classArchetype;
+    cell.newlyAdded = false;
+    cell.value = collection.collector.name;
+    cell.setVertex(true);
+    cell.setConnectable(true);
+
+    cell.setStyle(cell.getStyle() + 'foldable=0;movable=0;resizable=0;editable=0;deletable=0;');
+
+    // const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
+    // this.graph.addCellOverlay(cell, overlay);
+
+    if (!isNullOrUndefined(collection.collector.id)) {
+      cell.id = collection.collector.id;
+    }
+
+    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, 20);
+
+    let addPropertiesReturn = this.addPropertiesToCell(cell, collection.collector, 5, 45);
+    cell = addPropertiesReturn.cell;
+
+    for (const classDefinition of collection.classDefinitions) {
+      const boundaryHeight = classDefinition.name.split(/\r?\n/).length * 25;
+      const boundary = this.graph.insertVertex(cell, classDefinition.id, classDefinition.name, 0, addPropertiesReturn.lastPropertyGeometry.y + addPropertiesReturn.lastPropertyGeometry.height + 2, 200, boundaryHeight, CConstants.mxStyles.classSeparator);
+      boundary.setConnectable(true);
+      addPropertiesReturn = this.addPropertiesToCell(cell, classDefinition, boundary.geometry.x + 5, boundary.geometry.y + boundary.geometry.height + 5);
+   
+    }
+    
+
+
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height + 5);
+    return this.graph.addCell(cell) as myMxCell;
+  }
+
+  private addPropertiesToCell(cell: myMxCell, classDefinition: ClassDefinition, startX: number, startY: number) {
+    // // create vertical space before properties
+
+   
+    // create properties TODO @Alex Refactor
+    let lastPropertyGeometry = new mx.mxGeometry(40, 40);
+    if (!isNullOrUndefined(classDefinition.properties)) {
+      for (const p of classDefinition.properties) {
+        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY  + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.property) as myMxCell;
+
+        if (p.type === PropertyType.ENUM) {
+          propertyEntry.cellType = 'enum_property';
+          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
+
+        } else {
+
+          propertyEntry.cellType = 'property';
+        }
+        propertyEntry.setConnectable(true);
+
+        propertyEntry.propertyId = p.id;
+        lastPropertyGeometry = propertyEntry.geometry;
+        startX = lastPropertyGeometry.x;
+        startY = lastPropertyGeometry.y;
+      }
+    }
+
+        // create horizonal filler in front of properties
+        // const hfiller = this.graph.insertVertex(cell, 'hfiller', null, startX + 0, startY + i + 50, 85, 5, CConstants.mxStyles.classHfiller);
+        // hfiller.setConnectable(false);
+
+    return {cell: cell, lastPropertyGeometry: lastPropertyGeometry};
   }
 
   // private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {

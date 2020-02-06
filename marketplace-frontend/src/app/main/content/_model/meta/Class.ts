@@ -73,6 +73,7 @@ export class AchievementClassInstance extends ClassInstance {
     } 
 }
 
+
 export enum ClassArchetype {
     COMPETENCE = 'COMPETENCE',
     TASK = 'TASK',

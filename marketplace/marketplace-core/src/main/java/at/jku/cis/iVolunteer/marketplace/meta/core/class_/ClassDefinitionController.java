@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.matching.MatchingConfiguratorClassDefinitionCollection;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -36,13 +37,18 @@ public class ClassDefinitionController {
 	}
 	
 	@GetMapping("meta/core/class/definition/{slotId}/with-properties")
-	private List<ClassDefinition> getClassDefinitionswithProperties(@PathVariable("slotId") String slotId) {
+	private List<ClassDefinition> getClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
 		return  classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
 	}
 	
 	@GetMapping("meta/core/class/definition/{slotId}/collect-with-properties")
-	private List<ClassDefinition> collectClassDefinitionswithProperties(@PathVariable("slotId") String slotId) {
+	private List<ClassDefinition> collectClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
 		return  classDefinitionService.collectAllClassDefinitionsWithProperties(slotId);
+	}
+	
+	@GetMapping("meta/core/class/definition/{slotId}/collections-with-properties")
+	private List<MatchingConfiguratorClassDefinitionCollection> getClassDefinitionsWithPropertiesCollections(@PathVariable("slotId") String slotId) {
+		return  classDefinitionService.getAllClassDefinitionsWithPropertiesCollections(slotId);
 	}
 
 	@GetMapping("/meta/core/class/definition/{id}")

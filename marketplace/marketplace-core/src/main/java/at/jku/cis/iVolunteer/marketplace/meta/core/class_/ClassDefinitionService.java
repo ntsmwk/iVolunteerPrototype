@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.model.matching.MatchingConfiguratorClassDefinitionCollection;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -89,6 +90,40 @@ public class ClassDefinitionService {
 		return collectors;
 		
 	}
+	
+	public List<MatchingConfiguratorClassDefinitionCollection> getAllClassDefinitionsWithPropertiesCollections(String slotId) {
+		Configurator configurator = configuratorRepository.findOne(slotId);
+		
+		if (configurator == null) {
+			return null;
+		}
+		
+		List<MatchingConfiguratorClassDefinitionCollection> collections = new ArrayList<>();
+		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
+			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
+				MatchingConfiguratorClassDefinitionCollection collection = new MatchingConfiguratorClassDefinitionCollection();
+				collection.setCollector(c);
+				collection.setNumberOfProperties(c.getProperties().size());
+				collections.add(collection);
+			}
+		});
+		
+		for (MatchingConfiguratorClassDefinitionCollection collection : collections) {
+			collection.setClassDefinitions(this.performDFSOnClassDefinitons(collection.getCollector(), 0, new ArrayList<ClassDefinition>()));
+		
+			for (ClassDefinition classDefinition : collection.getClassDefinitions()) {
+				collection.setNumberOfProperties(collection.getNumberOfProperties() + classDefinition.getProperties().size());
+			}
+			
+			collection.setNumberOfDefinitions(collection.getClassDefinitions().size());
+		
+		}
+		
+		return collections;
+		
+	}
+	
+	
 	
 	
 
@@ -330,6 +365,32 @@ public class ClassDefinitionService {
 		}
 		return list;
 	}
+	
+	private List<ClassDefinition> performDFSOnClassDefinitons(ClassDefinition root, int level, List<ClassDefinition> list) {
+		Stack<Relationship> stack = new Stack<Relationship>();
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
+		
+		System.out.println(relationships.size());
+		
+		Collections.reverse(relationships);
+		stack.addAll(relationships);
+		
+		if (stack == null || stack.size() <= 0) {
+			return list;
+		} else {
+			while (!stack.isEmpty()) {
+				Relationship relationship = stack.pop();
+				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+				if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
+					list.add(classDefinition);
+				}
+				this.performDFSOnClassDefinitons(classDefinition, level + 1, list);
+			}
+		}
+		return list;
+	}
+	
+	
 
 	// TODO @Alex implement
 	public List<String> getChildrenById(List<String> rootIds) {

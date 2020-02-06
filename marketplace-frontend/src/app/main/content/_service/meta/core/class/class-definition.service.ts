@@ -23,11 +23,15 @@ import { of } from "rxjs";
       return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum?org=${org}`);
     }
 
+    getAllClassDefinitionsWithPropertiesCollection(marketplace: Marketplace, configuratorId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/collections-with-properties`);
+    }
+
     getAllClassDefinitionsWithProperties(marketplace: Marketplace, configuratorId: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/with-properties`);
     }
 
-    collectAllClassDefinitionsWithProperties(marketplace: Marketplace, configuratorId) {
+    collectAllClassDefinitionsWithProperties(marketplace: Marketplace, configuratorId: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/definition/${configuratorId}/collect-with-properties`);
     }
 
