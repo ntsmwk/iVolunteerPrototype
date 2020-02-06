@@ -5,6 +5,18 @@
       (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)"></editor-top-menu-bar>
   </div>
 
+  <div #paletteContainer id="paletteContainer" style="border-bottom: solid 1px rgb(160, 160, 160)" fxLayout="row"
+    fxLayoutAlign="start center">
+    <div class="pr-4 pl-4">Matching-Operatoren</div>
+
+    <div *ngFor="let item of matchingPalettes">
+      <img [src]="item.imgPath" width="30" height="30" style="cursor: pointer" [matTooltip]="item.label" (mousedown)="handleMousedownEvent($event, item)">
+      <div class="pr-4"></div>
+    </div>
+
+
+  </div>
+
 
   <div #graphContainer id="graphContainer"></div>
 

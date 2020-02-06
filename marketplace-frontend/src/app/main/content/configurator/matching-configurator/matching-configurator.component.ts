@@ -57,6 +57,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   eventResponseAction: string;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
+  @ViewChild('paletteContainer', {static: true}) paletteContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
 
@@ -68,6 +69,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   producerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
   consumerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
+
+  matchingPalettes = CConstants.matchingPalettes;
+
 
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
@@ -116,11 +120,21 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.graphContainer.nativeElement.style.position = 'absolute';
     this.graphContainer.nativeElement.style.overflow = 'scroll';
     this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '30px';
+    this.graphContainer.nativeElement.style.top = '60px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
     this.graphContainer.nativeElement.style.width = '100%';
+
+    this.paletteContainer.nativeElement.style.position = 'absolute';
+    this.paletteContainer.nativeElement.style.overflow = 'hidden';
+    this.paletteContainer.nativeElement.style.padding = '2px';
+    this.paletteContainer.nativeElement.style.right = '0px';
+    this.paletteContainer.nativeElement.style.top = '30px';
+    this.paletteContainer.nativeElement.style.left = '0px';
+    this.paletteContainer.nativeElement.style.height = '30px';
+    this.paletteContainer.nativeElement.style.background = 'white';
+    this.paletteContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
@@ -163,7 +177,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       // tslint:disable-next-line: no-unused-expression
       // new mx.mxRubberband(this.graph);
 
-            // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
+      // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
 
       this.graph.setPanning(true);
@@ -180,8 +194,24 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       //   console.log(evt);
       //});
 
+      let addRels = true;
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
+        // if (addRels) {
+
+
+        //   let cells = outer.graph.getChildCells(outer.graph.getDefaultParent());
+        //   let consumer = cells.find(c => c.id === 'logistischeBeschreibung_consumer');
+        //   let producer = cells.find(c => c.id === 'logistischeBeschreibung_producer');
+
+        //   let target = consumer.getChildAt(1);
+        //   let source = producer.getChildAt(3);
+
+        //   outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, producer, consumer);
+        //   outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, source, target);
+        //   addRels = false;
+        // }
+
       });
 
       this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
@@ -189,6 +219,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       });
 
     }
+
+
   }
 
 
@@ -296,6 +328,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     hfiller.setConnectable(false);
 
     return this.graph.addCell(cell) as myMxCell;
+
   }
 
 
@@ -336,9 +369,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       const boundary = this.graph.insertVertex(cell, classDefinition.id, classDefinition.name, 0, addPropertiesReturn.lastPropertyGeometry.y + addPropertiesReturn.lastPropertyGeometry.height + 2, 200, boundaryHeight, CConstants.mxStyles.classSeparator);
       boundary.setConnectable(true);
       addPropertiesReturn = this.addPropertiesToCell(cell, classDefinition, boundary.geometry.x + 5, boundary.geometry.y + boundary.geometry.height + 5);
-   
+
     }
-    
+
 
 
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height + 5);
@@ -348,12 +381,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   private addPropertiesToCell(cell: myMxCell, classDefinition: ClassDefinition, startX: number, startY: number) {
     // // create vertical space before properties
 
-   
+
     // create properties TODO @Alex Refactor
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY  + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.property) as myMxCell;
+        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.property) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = 'enum_property';
@@ -372,11 +405,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     }
 
-        // create horizonal filler in front of properties
-        // const hfiller = this.graph.insertVertex(cell, 'hfiller', null, startX + 0, startY + i + 50, 85, 5, CConstants.mxStyles.classHfiller);
-        // hfiller.setConnectable(false);
+    // create horizonal filler in front of properties
+    // const hfiller = this.graph.insertVertex(cell, 'hfiller', null, startX + 0, startY + i + 50, 85, 5, CConstants.mxStyles.classHfiller);
+    // hfiller.setConnectable(false);
 
-    return {cell: cell, lastPropertyGeometry: lastPropertyGeometry};
+    return { cell: cell, lastPropertyGeometry: lastPropertyGeometry };
   }
 
   // private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
@@ -476,7 +509,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
 
   // OLD STUFF - might still be needed later
-  handleMousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
+  handleMousedownEvent(event: any, item: any) {
     const outer = this;
     let positionEvent: MouseEvent;
 
@@ -495,15 +528,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       try {
         addObjectToGraph(evt, item);
       } finally {
-        graph.getModel().endUpdate();
+        outer.graph.getModel().endUpdate();
         removeEventListeners(outer);
       }
 
       function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any) {
 
-        const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
-        graph.getModel().beginUpdate();
-        graph.getModel().endUpdate();
+        const coords: mxgraph.mxPoint = outer.graph.getPointForEvent(positionEvent, false);
+        outer.graph.getModel().beginUpdate();
+        outer.graph.insertVertex(outer.graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`)
+        outer.graph.getModel().endUpdate();
+        console.log("finished drag");
+        console.log(paletteItem);
 
       }
     };

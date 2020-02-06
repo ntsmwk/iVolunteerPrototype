@@ -24,6 +24,16 @@ const relationshipPalettes = {
   ]
 };
 
+const matchingPalettes = [
+  {id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'equal'},
+  {id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'less'},
+  {id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'greater'},
+  {id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'lessEqual'},
+  {id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'greaterEqual'},
+  {id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'exists'},
+  {id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'all'},
+];
+
 const mxStyles = {
   // classNormal: 'shape=swimlane;resizable=0;' + 'fontColor=#000e8a;strokeColor=#000e8a;',
   // classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;' + 'portConstraint=north',
@@ -81,6 +91,7 @@ const cellTypes = {
 export class CConstants {
   public static sidebarPalettes = sidebarPalettes;
   public static relationshipPalettes = relationshipPalettes;
+  public static matchingPalettes = matchingPalettes;
   public static mxStyles = mxStyles;
   public static cellTypes = cellTypes;
 }
