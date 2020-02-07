@@ -146,6 +146,10 @@
 
       <editor-tree-view [editorInstance]="this"></editor-tree-view>
 
+      <div>
+        <a (click)="showInstanceForm()" style="cursor: pointer">Instanz erstellen</a>
+      </div>
+
     </div>
 
     <div *ngIf="!rightSidebarVisible" fxLayout="row" fxLayoutAlign="end center">

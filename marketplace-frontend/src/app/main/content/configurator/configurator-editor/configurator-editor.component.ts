@@ -1183,6 +1183,14 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   // DEBUG 
 
+  showInstanceForm() {
+
+    const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: myMxCell) => c.classArchetype === ClassArchetype.ROOT);
+    if (!isNullOrUndefined(rootCell)) {
+      this.router.navigate([`main/configurator/instance-editor-m/${this.marketplace.id}/`], { queryParams: [rootCell.id] });
+    }
+  }
+
   showZoomLevel() {
     let scale = this.graph.view.getScale();
     console.log(this.graph.view.getScale());
@@ -1202,8 +1210,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   createClassInstanceClicked(cells: myMxCell[]) {
     console.log('create class instance clicked');
     console.log(cells);
-
-    this.dataTransportService.data = cells;
 
     let params: string[];
     console.log(cells);

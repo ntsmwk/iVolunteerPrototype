@@ -51,4 +51,6 @@ export const navigation_ffa = [
     'icon': 'cogs',
     'url': '/main/matching-configurator/'
   },
+
+  
 ];

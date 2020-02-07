@@ -161,14 +161,6 @@ const routes: Route[] = [
   },
 
   {
-    path: 'main/test-map-property',
-    loadChildren: () => import(
-      './_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module'
-      ).then(m => m.MapPropertyTestModule),
-    canActivate: [TokenGuard, HelpSeekerGuard]
-  },
-
-  {
     path: 'main/configurator',
     loadChildren: () => import('./configurator/configurator.module').then(m => m.ConfiguratorModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard]
@@ -181,10 +173,10 @@ const routes: Route[] = [
   },
 
   {
-    path: 'main/configurator/instance-editor',
+    path: 'main/configurator/instance-editor-m',
     loadChildren: () => import(
-      './configurator/class-instances/form-editor/class-instance-form-editor.module'
-      ).then(m => m.ClassInstanceFormEditorModule),
+      './configurator/class-instances/form-editor/class-instance-form-editor-mockup.component.module'
+      ).then(m => m.ClassInstanceFormEditorMockupModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {

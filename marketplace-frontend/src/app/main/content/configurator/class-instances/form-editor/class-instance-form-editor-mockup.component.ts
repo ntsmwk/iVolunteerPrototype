@@ -8,16 +8,16 @@ import { QuestionService } from 'app/main/content/_service/question.service';
 import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
 import { FormControl, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
-import { maxOtherNew } from "../../../_validator/custom.validators";
+import { maxOtherNew } from '../../../_validator/custom.validators';
 
 
 @Component({
-  selector: 'app-class-instance-form-editor',
-  templateUrl: './class-instance-form-editor.component.html',
-  styleUrls: ['./class-instance-form-editor.component.scss'],
+  selector: 'app-class-instance-form-editor-mockup',
+  templateUrl: './class-instance-form-editor-mockup.component.html',
+  styleUrls: ['./class-instance-form-editor-mockup.component.scss'],
   providers: [QuestionService]
 })
-export class ClassInstanceFormEditorComponent implements OnInit {
+export class ClassInstanceFormEditorMockupComponent implements OnInit {
 
   marketplace: Marketplace;
   configurableClass: ClassDefinition;
@@ -33,11 +33,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   flexProdDemoMode: boolean = false;
   demoClasses: ClassDefinition[] = [];
   demoClassIds: string[] = [
-    'oteAllgemein', 'oteMoeglicheVorbehandlung', 'otecKonvektoren', 'otecTragerahmen',
-    'otecZwischenrahmen', 'otecKronenstoecke', 'otecChargierkoerbe', 'ofenBetrieblicheEigenschaften',
-    'ogeBaugroesse', 'oqeQualitätsnormen', 'oqeWartungen', 'ingeBundabmessungen', 'inqeMaterialart',
-    'outteMechanischeEigenschaften', 'outteGefuege', 'outgeMoeglicheBundabmessungen',
-    'outqeMaterialart', 'logistischeBeschreibung', 'preislicheBeschreibung'
+    'oteAllgemein_producer', 'oteMoeglicheVorbehandlung_producer', 'otecKonvektoren_producer', 'otecTragerahmen_producer',
+    'otecZwischenrahmen_producer', 'otecKronenstoecke_producer', 'otecChargierkoerbe_producer', 'ofenBetrieblicheEigenschaften_producer',
+    'ogeBaugroesse_producer', 'oqeQualitätsnormen_producer', 'oqeWartungen_producer', 'ingeBundabmessungen_producer', 'inqeMaterialart_producer',
+    'outteMechanischeEigenschaften_producer', 'outteGefuege_producer', 'outgeMoeglicheBundabmessungen_producer',
+    'outqeMaterialart_producer', 'logistischeBeschreibung_producer', 'preislicheBeschreibung_producer'
   ]
   demoClassPaths: string[] = [
     'Technische Beschreibung > Ofen > Technische Eigenschaften > Allgemein',
@@ -76,22 +76,32 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    let marketplaceId: string;
+    let classId: string;
+    Promise.all([
+      this.route.params.subscribe(param => {
+        console.log(param);
+        console.log(param['marketplaceId']);
 
-    this.route.params.subscribe(param => {
-      console.log(param);
-      console.log(param['marketplaceId']);
+        marketplaceId = param['marketplaceId'];
+        // this.showMaxGluehtemperatur = param['showMaxGluehtemperatur'];
+        this.showMaxGluehtemperatur = true;
+      }),
+      this.route.queryParams.subscribe(queryParams => {
+        console.log(queryParams);
+        if (!isNullOrUndefined(queryParams[0])) {
+          classId = queryParams[0];
+        }
+      })
 
-      const marketplaceId = param['marketplaceId'];
-      const classId = param['classId'];
-      this.showMaxGluehtemperatur = param['showMaxGluehtemperatur'];
-
+    ]).then(() => {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.classDefinitionService.getClassDefinitionById(this.marketplace, classId).toPromise().then((configurableClass: ClassDefinition) => {
           this.configurableClass = configurableClass;
           //TODO
           // this.questions = this.questionService.getQuestionsFromProperties(this.configurableClass.properties);
-          if (classId == 'root') {
+          if (classId === 'root_producer' || classId === 'root_consumer') {
             this.flexProdDemoMode = true;
 
             let finishedNumber = 0;
@@ -164,8 +174,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       "100": new FormControl(''),
       "101": new FormControl(''),
 
-      "110": new FormControl({value: ''}),
-      "111": new FormControl({value: ''}),
+      "110": new FormControl({ value: '' }),
+      "111": new FormControl({ value: '' }),
       "112": new FormControl(''),
       "113": new FormControl(''),
 
@@ -203,11 +213,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     this.form.controls['120'].setValue(true);
     this.form.controls['160'].setValue(true);
 
-    this.form.setValidators( [maxOtherNew(this.form, "110", 'aussen'),
-                              maxOtherNew(this.form, "111", 'innen'),
-                              maxOtherNew(this.form, "150", 'aussen'),
-                              maxOtherNew(this.form, "151", 'innen')]);
-    
+    this.form.setValidators([maxOtherNew(this.form, "110", 'aussen'),
+    maxOtherNew(this.form, "111", 'innen'),
+    maxOtherNew(this.form, "150", 'aussen'),
+    maxOtherNew(this.form, "151", 'innen')]);
+
 
 
     this.addBaugroesseInnenDurchmesserRow();
@@ -297,9 +307,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       this.form.controls['81'].disable();
       this.form.controls['81'].reset();
       this.form.controls['82'].disable();
-          this.form.controls['81'].reset();
+      this.form.controls['81'].reset();
 
-        }
+    }
 
   }
 
@@ -359,7 +369,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     for (let v of this.form.controls['80'].value) {
       choices.push(v);
     }
-    
+
     return (Math.max(...choices));
 
   }
@@ -389,21 +399,21 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let a = this.calculateLargestAussen();
     console.log(a);
     if (this.form.value['110'] > 100) {
-      this.form.controls['110'].setErrors({'incorrect': true});
+      this.form.controls['110'].setErrors({ 'incorrect': true });
       this.inputBundabmessungenAussenError = true
       this.form.controls['110'].markAsTouched();
 
     }
   }
 
-  
+
 
   checkInputBundabmessungenInnen() {
     if (this.form.value['111'] > this.calculateLargestInnen()) {
-      this.form.controls['111'].setErrors({'incorrect': true});
+      this.form.controls['111'].setErrors({ 'incorrect': true });
       this.inputBundabmessungenInnenError = true
       this.form.controls['111'].markAsTouched();
- 
+
     } else {
       this.inputBundabmessungenInnenError = false;
     }
@@ -417,18 +427,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   displayErrorMessage(formControlName: string, key: string) {
     if (this.form.controls[formControlName].hasError('maxothernew') || this.form.controls[formControlName].hasError('incorrect_max')) {
-     
-     if (key == 'aussen') {
-      return 'Außendurchmesser größer als Spezifikation (Baugröße / Chargierhilfe)';
-     } else if (key == 'innen') {
-      return 'Innendurchmesser größer als Spezifikation (Baugröße / Chargierhilfe)';
-     }
-     
+
+      if (key == 'aussen') {
+        return 'Außendurchmesser größer als Spezifikation (Baugröße / Chargierhilfe)';
+      } else if (key == 'innen') {
+        return 'Innendurchmesser größer als Spezifikation (Baugröße / Chargierhilfe)';
+      }
+
     } else if (this.form.controls[formControlName].hasError('required')) {
       return 'This field is required';
     }
   }
-  
+
   printAnything(anything: any) {
     console.log(anything);
   }

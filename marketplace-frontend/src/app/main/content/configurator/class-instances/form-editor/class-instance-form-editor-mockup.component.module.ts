@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClassInstanceFormEditorComponent } from './class-instance-form-editor.component';
+import { ClassInstanceFormEditorMockupComponent } from './class-instance-form-editor-mockup.component';
 import { RouterModule } from '@angular/router';
 import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatTableModule, MatExpansionModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, MatCardModule, MatSlideToggleModule, MatDatepicker, MatDatepickerModule, MatDividerModule } from '@angular/material';
 import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
@@ -8,7 +8,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 
 const routes = [
-  {path: ':marketplaceId/:classId/:showMaxGluehtemperatur', component: ClassInstanceFormEditorComponent}
+  {path: ':marketplaceId', component: ClassInstanceFormEditorMockupComponent}
 ];
 
 @NgModule({
@@ -40,11 +40,11 @@ const routes = [
     DynamicClassInstanceCreationFormModule,
 
   ],
-  declarations: [ClassInstanceFormEditorComponent],
+  declarations: [ClassInstanceFormEditorMockupComponent],
   // exports: [ClassInstanceFormEditorComponent]
 
 })
 
 
 
-export class ClassInstanceFormEditorModule { }
+export class ClassInstanceFormEditorMockupModule { }
