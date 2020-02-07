@@ -197,20 +197,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let addRels = true;
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        // if (addRels) {
+        if (addRels) {
 
 
-        //   let cells = outer.graph.getChildCells(outer.graph.getDefaultParent());
-        //   let consumer = cells.find(c => c.id === 'logistischeBeschreibung_consumer');
-        //   let producer = cells.find(c => c.id === 'logistischeBeschreibung_producer');
+          let cells = outer.graph.getChildCells(outer.graph.getDefaultParent());
+          let consumer = cells.find(c => c.id === 'logistischeBeschreibung_consumer');
+          let producer = cells.find(c => c.id === 'logistischeBeschreibung_producer');
 
-        //   let target = consumer.getChildAt(1);
-        //   let source = producer.getChildAt(3);
+          let target = consumer.getChildAt(1);
+          let source = producer.getChildAt(3);
 
-        //   outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, producer, consumer);
-        //   outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, source, target);
-        //   addRels = false;
-        // }
+          outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, producer, consumer, CConstants.mxStyles.aggregation);
+          outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, source, target, CConstants.mxStyles.aggregation);
+          addRels = false;
+        }
 
       });
 
@@ -386,7 +386,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.property) as myMxCell;
+        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.propertyMatching) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = 'enum_property';

@@ -38,7 +38,8 @@ export class ClassInstanceFormEditorMockupComponent implements OnInit {
     'ogeBaugroesse_producer', 'oqeQualitätsnormen_producer', 'oqeWartungen_producer', 'ingeBundabmessungen_producer', 'inqeMaterialart_producer',
     'outteMechanischeEigenschaften_producer', 'outteGefuege_producer', 'outgeMoeglicheBundabmessungen_producer',
     'outqeMaterialart_producer', 'logistischeBeschreibung_producer', 'preislicheBeschreibung_producer'
-  ]
+  ];
+
   demoClassPaths: string[] = [
     'Technische Beschreibung > Ofen > Technische Eigenschaften > Allgemein',
     'Technische Beschreibung > Ofen > Technische Eigenschaften > Mögliche Vorbehandlung',
@@ -59,7 +60,7 @@ export class ClassInstanceFormEditorMockupComponent implements OnInit {
     'Technische Beschreibung > Output > Qualitative Eigenschaften > Materialart',
     'Logistische Beschreibung',
     'Preisliche Beschreibung'
-  ]
+  ];
 
   form: FormGroup;
   showMaxGluehtemperatur: boolean;
