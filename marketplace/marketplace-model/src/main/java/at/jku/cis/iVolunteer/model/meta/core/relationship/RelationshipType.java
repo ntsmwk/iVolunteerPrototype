@@ -3,7 +3,7 @@ package at.jku.cis.iVolunteer.model.meta.core.relationship;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum RelationshipType {
-	INHERITANCE("INHERITANCE"), ASSOCIATION("ASSOCIATION");
+	INHERITANCE("INHERITANCE"), ASSOCIATION("ASSOCIATION"), AGGREGATION("AGGREGATION"), COMPOSITION("COMPOSITION");
 
 	private final String relationshipType;
 

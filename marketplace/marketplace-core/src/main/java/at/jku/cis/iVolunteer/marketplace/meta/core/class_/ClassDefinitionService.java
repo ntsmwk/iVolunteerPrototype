@@ -368,10 +368,8 @@ public class ClassDefinitionService {
 	
 	private List<ClassDefinition> performDFSOnClassDefinitons(ClassDefinition root, int level, List<ClassDefinition> list) {
 		Stack<Relationship> stack = new Stack<Relationship>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
-		
-		System.out.println(relationships.size());
-		
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.AGGREGATION);
+				
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 		

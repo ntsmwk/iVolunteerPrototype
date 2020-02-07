@@ -196,7 +196,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
       this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
-      
+
 
 
 
@@ -222,7 +222,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.showServerContent(true);
       // this.collapseGraph();
 
- 
+
     }
   }
 
@@ -450,6 +450,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }
       cell.insert(cell2);
 
+    } else if (r.relationshipType === RelationshipType.AGGREGATION) {
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as myMxCell;
+      cell.cellType = 'aggregation';
+
+    } else if (r.relationshipType === RelationshipType.COMPOSITION) {
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as myMxCell;
+      cell.cellType = 'composition';
     } else {
       console.error('invalid RelationshipType');
     }
@@ -497,10 +504,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
     const rootCells = getRootCells(this.graph);
 
-    layout.levelDistance = 30;
+    layout.levelDistance = 50;
     layout.alignRanks = true;
-    layout.minEdgeJetty = 30;
+    layout.minEdgeJetty = 50;
     layout.prefHozEdgeSep = 5;
+    layout.resetEdges = true;
+
 
     for (const rootCell of rootCells) {
       layout.execute(this.graph.getDefaultParent(), rootCell);
@@ -509,6 +518,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     for (const edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
     }
+
+    const edges = this.graph.getChildEdges(this.graph.getDefaultParent());
+    this.graph.setCellStyles('noEdgeStyle', null, edges);
 
     function getRootCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
       return graph.getModel().getChildCells(graph.getDefaultParent()).filter((cell: myMxCell) => {
@@ -521,7 +533,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   // TODO @Alex fix issue in regards to saved Geometry
   redrawContent(focusCell: myMxCell) {
-    
+
 
 
     // let savedGeometry = this.saveGeometry();
@@ -529,7 +541,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.showServerContent(false);
     // this.restoreGeometry(savedGeometry);
 
-    
+
     this.setLayout();
     this.focusOnCell(focusCell);
 
@@ -707,9 +719,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
-         this.updateModel();
+        this.updateModel();
         this.redrawContent(cret as myMxCell);
-     
+
       }
 
       if (cell.value === 'add_association') {
@@ -757,7 +769,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.redrawContent(cret as myMxCell);
       }
       this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
-      bounds.x = bounds.x-20;
+      bounds.x = bounds.x - 20;
       this.graph.view.setGraphBounds(bounds);
 
       this.modelUpdated = true;
@@ -1153,6 +1165,8 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         (<Association>r).sourceCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(0).value);
         (<Association>r).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
 
+      } else if (cell.cellType === 'composition' || cell.cellType === 'aggregation') {
+        //TODO
       } else {
         // console.error('invalid cellType');
         // console.log(cell);

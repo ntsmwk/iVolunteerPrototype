@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
@@ -38,6 +37,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.rule.AttributeAggregationOperatorType;
@@ -68,7 +68,6 @@ public class InitializationService {
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
 	@Autowired private FeedbackRepository feedbackRepository;
 	@Autowired private UserMappingRepository userMappingRepository;
-	@Autowired private Environment environment;
 
 	@PostConstruct
 	public void init() {
@@ -724,7 +723,7 @@ public class InitializationService {
 		ofen.setClassArchetype(ClassArchetype.FLEXPROD);
 		classDefinitions.add(ofen);
 
-		Inheritance i1 = new Inheritance(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
+		Aggregation i1 = new Aggregation(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
 		i1.setId("i1_producer");
 		relationships.add(i1);
 
@@ -735,7 +734,7 @@ public class InitializationService {
 		ofenTechnischeEigenschaften.setClassArchetype(ClassArchetype.FLEXPROD);
 		classDefinitions.add(ofenTechnischeEigenschaften);
 
-		Inheritance i11 = new Inheritance(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
+		Aggregation i11 = new Aggregation(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
 		i11.setId("i11_producer");
 
 		relationships.add(i11);
@@ -754,7 +753,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteAllgemein);
 
-		Inheritance i111 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteAllgemein.getId(),
+		Aggregation i111 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteAllgemein.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i111.setId("i111_producer");
 		relationships.add(i111);
@@ -768,7 +767,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteMoeglicheVorbehandlung);
 
-		Inheritance i112 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteMoeglicheVorbehandlung.getId(),
+		Aggregation i112 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteMoeglicheVorbehandlung.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i112.setId("i112_producer");
 		relationships.add(i112);
@@ -781,7 +780,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteChargierhilfe);
 
-		Inheritance i113 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(),
+		Aggregation i113 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i113.setId("i113_producer");
 		relationships.add(i113);
@@ -797,7 +796,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecKonvektoren);
 
-		Inheritance i1131 = new Inheritance(oteChargierhilfe.getId(), otecKonvektoren.getId(),
+		Aggregation i1131 = new Aggregation(oteChargierhilfe.getId(), otecKonvektoren.getId(),
 				oteChargierhilfe.getId());
 		i1131.setId("i1131_producer");
 		relationships.add(i1131);
@@ -813,7 +812,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecTragerahmen);
 
-		Inheritance i1132 = new Inheritance(oteChargierhilfe.getId(), otecTragerahmen.getId(),
+		Aggregation i1132 = new Aggregation(oteChargierhilfe.getId(), otecTragerahmen.getId(),
 				oteChargierhilfe.getId());
 		i1132.setId("i1132_producer");
 		relationships.add(i1132);
@@ -829,7 +828,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecZwischenrahmen);
 
-		Inheritance i1133 = new Inheritance(oteChargierhilfe.getId(), otecZwischenrahmen.getId(),
+		Aggregation i1133 = new Aggregation(oteChargierhilfe.getId(), otecZwischenrahmen.getId(),
 				oteChargierhilfe.getId());
 		i1133.setId("i1133_producer");
 		relationships.add(i1133);
@@ -845,7 +844,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecKronenstoecke);
 
-		Inheritance i1134 = new Inheritance(oteChargierhilfe.getId(), otecKronenstoecke.getId(),
+		Aggregation i1134 = new Aggregation(oteChargierhilfe.getId(), otecKronenstoecke.getId(),
 				oteChargierhilfe.getId());
 		i1134.setId("i1134_producer");
 		relationships.add(i1134);
@@ -862,7 +861,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecChargierkoerbe);
 
-		Inheritance i1135 = new Inheritance(oteChargierhilfe.getId(), otecChargierkoerbe.getId(),
+		Aggregation i1135 = new Aggregation(oteChargierhilfe.getId(), otecChargierkoerbe.getId(),
 				oteChargierhilfe.getId());
 		i1135.setId("i1135_producer");
 		relationships.add(i1135);
@@ -877,7 +876,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenBetrieblicheEigenschaften);
 
-		Inheritance i12 = new Inheritance(ofen.getId(), ofenBetrieblicheEigenschaften.getId(), ofen.getId());
+		Aggregation i12 = new Aggregation(ofen.getId(), ofenBetrieblicheEigenschaften.getId(), ofen.getId());
 		i12.setId("i12_producer");
 		relationships.add(i12);
 
@@ -889,7 +888,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenGeometrischeEigenschaften);
 
-		Inheritance i13 = new Inheritance(ofen.getId(), ofenGeometrischeEigenschaften.getId(), ofen.getId());
+		Aggregation i13 = new Aggregation(ofen.getId(), ofenGeometrischeEigenschaften.getId(), ofen.getId());
 		i13.setId("i13_producer");
 		relationships.add(i13);
 
@@ -904,7 +903,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ogeBaugroesse);
 
-		Inheritance i131 = new Inheritance(ofenGeometrischeEigenschaften.getId(), ogeBaugroesse.getId(),
+		Aggregation i131 = new Aggregation(ofenGeometrischeEigenschaften.getId(), ogeBaugroesse.getId(),
 				ofenGeometrischeEigenschaften.getId());
 		i131.setId("i131_producer");
 		relationships.add(i131);
@@ -917,7 +916,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenQualitativeEigenschaften);
 
-		Inheritance i14 = new Inheritance(ofen.getId(), ofenQualitativeEigenschaften.getId(), ofen.getId());
+		Aggregation i14 = new Aggregation(ofen.getId(), ofenQualitativeEigenschaften.getId(), ofen.getId());
 		i14.setId("i14_producer");
 		relationships.add(i14);
 
@@ -931,7 +930,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oqeQualitätsnormen);
 
-		Inheritance i141 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeQualitätsnormen.getId(),
+		Aggregation i141 = new Aggregation(ofenQualitativeEigenschaften.getId(), oqeQualitätsnormen.getId(),
 				ofenQualitativeEigenschaften.getId());
 		i141.setId("i141_producer");
 		relationships.add(i141);
@@ -947,7 +946,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oqeWartungen);
 
-		Inheritance i142 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeWartungen.getId(),
+		Aggregation i142 = new Aggregation(ofenQualitativeEigenschaften.getId(), oqeWartungen.getId(),
 				ofenQualitativeEigenschaften.getId());
 		i142.setId("i142_producer");
 		relationships.add(i142);
@@ -962,7 +961,7 @@ public class InitializationService {
 		
 		classDefinitions.add(input);
 
-		Inheritance i2 = new Inheritance(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
+		Aggregation i2 = new Aggregation(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
 		i2.setId("i2_producer");
 		relationships.add(i2);
 
@@ -974,7 +973,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inGeometrischeEigenschaften);
 
-		Inheritance i21 = new Inheritance(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
+		Aggregation i21 = new Aggregation(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
 		i21.setId("i21_producer");
 		relationships.add(i21);
 
@@ -990,7 +989,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ingeBundabmessungen);
 
-		Inheritance i211 = new Inheritance(inGeometrischeEigenschaften.getId(), ingeBundabmessungen.getId(),
+		Aggregation i211 = new Aggregation(inGeometrischeEigenschaften.getId(), ingeBundabmessungen.getId(),
 				inGeometrischeEigenschaften.getId());
 		i211.setId("i211_producer");
 		relationships.add(i211);
@@ -1003,7 +1002,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inQualitativeEigenschaften);
 
-		Inheritance i22 = new Inheritance(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
+		Aggregation i22 = new Aggregation(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
 		i22.setId("i22_producer");
 		relationships.add(i22);
 
@@ -1017,7 +1016,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inqeMaterialart);
 
-		Inheritance i221 = new Inheritance(inQualitativeEigenschaften.getId(), inqeMaterialart.getId(),
+		Aggregation i221 = new Aggregation(inQualitativeEigenschaften.getId(), inqeMaterialart.getId(),
 				inQualitativeEigenschaften.getId());
 		i221.setId("i221_producer");
 		relationships.add(i221);
@@ -1032,7 +1031,7 @@ public class InitializationService {
 		
 		classDefinitions.add(output);
 
-		Inheritance i3 = new Inheritance(technischeBeschreibung.getId(), output.getId(),
+		Aggregation i3 = new Aggregation(technischeBeschreibung.getId(), output.getId(),
 				technischeBeschreibung.getId());
 		i3.setId("i3_producer");
 		relationships.add(i3);
@@ -1045,7 +1044,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outTechnischeEigenschaften);
 
-		Inheritance i31 = new Inheritance(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
+		Aggregation i31 = new Aggregation(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
 		i31.setId("i31_producer");
 		relationships.add(i31);
 
@@ -1060,7 +1059,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outteMechanischeEigenschaften);
 
-		Inheritance i311 = new Inheritance(outTechnischeEigenschaften.getId(), outteMechanischeEigenschaften.getId(),
+		Aggregation i311 = new Aggregation(outTechnischeEigenschaften.getId(), outteMechanischeEigenschaften.getId(),
 				outTechnischeEigenschaften.getId());
 		i311.setId("i311_producer");
 		relationships.add(i311);
@@ -1074,7 +1073,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outteGefuege);
 
-		Inheritance i312 = new Inheritance(outTechnischeEigenschaften.getId(), outteGefuege.getId(),
+		Aggregation i312 = new Aggregation(outTechnischeEigenschaften.getId(), outteGefuege.getId(),
 				outTechnischeEigenschaften.getId());
 		i312.setId("i312_producer");
 		relationships.add(i312);
@@ -1087,7 +1086,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outGeometrischeEigenschaften);
 
-		Inheritance i32 = new Inheritance(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
+		Aggregation i32 = new Aggregation(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
 		i32.setId("i32_producer");
 		relationships.add(i32);
 
@@ -1103,7 +1102,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outgeMoeglicheBundabmessungen);
 
-		Inheritance i321 = new Inheritance(outGeometrischeEigenschaften.getId(), outgeMoeglicheBundabmessungen.getId(),
+		Aggregation i321 = new Aggregation(outGeometrischeEigenschaften.getId(), outgeMoeglicheBundabmessungen.getId(),
 				outGeometrischeEigenschaften.getId());
 		i321.setId("i321_producer");
 		relationships.add(i321);
@@ -1116,7 +1115,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outQualitativeEigenschaften);
 
-		Inheritance i33 = new Inheritance(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
+		Aggregation i33 = new Aggregation(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
 		i33.setId("i33_producer");
 		relationships.add(i33);
 
@@ -1130,7 +1129,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outqeMaterialart);
 
-		Inheritance i331 = new Inheritance(outQualitativeEigenschaften.getId(), outqeMaterialart.getId(),
+		Aggregation i331 = new Aggregation(outQualitativeEigenschaften.getId(), outqeMaterialart.getId(),
 				outQualitativeEigenschaften.getId());
 		i331.setId("i331_producer");
 		relationships.add(i331);
@@ -1168,11 +1167,11 @@ public class InitializationService {
 		root.setClassArchetype(ClassArchetype.ROOT);
 		classDefinitions.add(root);
 
-		Inheritance r1 = new Inheritance(root.getId(), technischeBeschreibung.getId(), root.getId());
+		Aggregation r1 = new Aggregation(root.getId(), technischeBeschreibung.getId(), root.getId());
 		r1.setId("r1_producer");
-		Inheritance r2 = new Inheritance(root.getId(), logistischeBeschreibung.getId(), root.getId());
+		Aggregation r2 = new Aggregation(root.getId(), logistischeBeschreibung.getId(), root.getId());
 		r2.setId("r2_producer");
-		Inheritance r3 = new Inheritance(root.getId(), preislicheBeschreibung.getId(), root.getId());
+		Aggregation r3 = new Aggregation(root.getId(), preislicheBeschreibung.getId(), root.getId());
 		r3.setId("r3_producer");
 
 		relationships.add(r1);
@@ -1223,7 +1222,7 @@ public class InitializationService {
 		ofen.setClassArchetype(ClassArchetype.FLEXPROD);
 		classDefinitions.add(ofen);
 
-		Inheritance i1 = new Inheritance(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
+		Aggregation i1 = new Aggregation(technischeBeschreibung.getId(), ofen.getId(), technischeBeschreibung.getId());
 		i1.setId("i1_consumer");
 		relationships.add(i1);
 
@@ -1234,7 +1233,7 @@ public class InitializationService {
 		ofenTechnischeEigenschaften.setClassArchetype(ClassArchetype.FLEXPROD);
 		classDefinitions.add(ofenTechnischeEigenschaften);
 
-		Inheritance i11 = new Inheritance(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
+		Aggregation i11 = new Aggregation(ofen.getId(), ofenTechnischeEigenschaften.getId(), ofen.getId());
 		i11.setId("i11_consumer");
 
 		relationships.add(i11);
@@ -1253,7 +1252,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteAllgemein);
 
-		Inheritance i111 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteAllgemein.getId(),
+		Aggregation i111 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteAllgemein.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i111.setId("i111_consumer");
 		relationships.add(i111);
@@ -1267,7 +1266,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteMoeglicheVorbehandlung);
 
-		Inheritance i112 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteMoeglicheVorbehandlung.getId(),
+		Aggregation i112 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteMoeglicheVorbehandlung.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i112.setId("i112_consumer");
 		relationships.add(i112);
@@ -1280,7 +1279,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oteChargierhilfe);
 
-		Inheritance i113 = new Inheritance(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(),
+		Aggregation i113 = new Aggregation(ofenTechnischeEigenschaften.getId(), oteChargierhilfe.getId(),
 				ofenTechnischeEigenschaften.getId());
 		i113.setId("i113_consumer");
 		relationships.add(i113);
@@ -1296,7 +1295,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecKonvektoren);
 
-		Inheritance i1131 = new Inheritance(oteChargierhilfe.getId(), otecKonvektoren.getId(),
+		Aggregation i1131 = new Aggregation(oteChargierhilfe.getId(), otecKonvektoren.getId(),
 				oteChargierhilfe.getId());
 		i1131.setId("i1131_consumer");
 		relationships.add(i1131);
@@ -1312,7 +1311,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecTragerahmen);
 
-		Inheritance i1132 = new Inheritance(oteChargierhilfe.getId(), otecTragerahmen.getId(),
+		Aggregation i1132 = new Aggregation(oteChargierhilfe.getId(), otecTragerahmen.getId(),
 				oteChargierhilfe.getId());
 		i1132.setId("i1132_consumer");
 		relationships.add(i1132);
@@ -1328,7 +1327,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecZwischenrahmen);
 
-		Inheritance i1133 = new Inheritance(oteChargierhilfe.getId(), otecZwischenrahmen.getId(),
+		Aggregation i1133 = new Aggregation(oteChargierhilfe.getId(), otecZwischenrahmen.getId(),
 				oteChargierhilfe.getId());
 		i1133.setId("i1133_consumer");
 		relationships.add(i1133);
@@ -1344,7 +1343,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecKronenstoecke);
 
-		Inheritance i1134 = new Inheritance(oteChargierhilfe.getId(), otecKronenstoecke.getId(),
+		Aggregation i1134 = new Aggregation(oteChargierhilfe.getId(), otecKronenstoecke.getId(),
 				oteChargierhilfe.getId());
 		i1134.setId("i1134_consumer");
 		relationships.add(i1134);
@@ -1361,7 +1360,7 @@ public class InitializationService {
 		
 		classDefinitions.add(otecChargierkoerbe);
 
-		Inheritance i1135 = new Inheritance(oteChargierhilfe.getId(), otecChargierkoerbe.getId(),
+		Aggregation i1135 = new Aggregation(oteChargierhilfe.getId(), otecChargierkoerbe.getId(),
 				oteChargierhilfe.getId());
 		i1135.setId("i1135_consumer");
 		relationships.add(i1135);
@@ -1376,7 +1375,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenBetrieblicheEigenschaften);
 
-		Inheritance i12 = new Inheritance(ofen.getId(), ofenBetrieblicheEigenschaften.getId(), ofen.getId());
+		Aggregation i12 = new Aggregation(ofen.getId(), ofenBetrieblicheEigenschaften.getId(), ofen.getId());
 		i12.setId("i12_consumer");
 		relationships.add(i12);
 
@@ -1388,7 +1387,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenGeometrischeEigenschaften);
 
-		Inheritance i13 = new Inheritance(ofen.getId(), ofenGeometrischeEigenschaften.getId(), ofen.getId());
+		Aggregation i13 = new Aggregation(ofen.getId(), ofenGeometrischeEigenschaften.getId(), ofen.getId());
 		i13.setId("i13_consumer");
 		relationships.add(i13);
 
@@ -1403,7 +1402,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ogeBaugroesse);
 
-		Inheritance i131 = new Inheritance(ofenGeometrischeEigenschaften.getId(), ogeBaugroesse.getId(),
+		Aggregation i131 = new Aggregation(ofenGeometrischeEigenschaften.getId(), ogeBaugroesse.getId(),
 				ofenGeometrischeEigenschaften.getId());
 		i131.setId("i131_consumer");
 		relationships.add(i131);
@@ -1416,7 +1415,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ofenQualitativeEigenschaften);
 
-		Inheritance i14 = new Inheritance(ofen.getId(), ofenQualitativeEigenschaften.getId(), ofen.getId());
+		Aggregation i14 = new Aggregation(ofen.getId(), ofenQualitativeEigenschaften.getId(), ofen.getId());
 		i14.setId("i14_consumer");
 		relationships.add(i14);
 
@@ -1430,7 +1429,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oqeQualitätsnormen);
 
-		Inheritance i141 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeQualitätsnormen.getId(),
+		Aggregation i141 = new Aggregation(ofenQualitativeEigenschaften.getId(), oqeQualitätsnormen.getId(),
 				ofenQualitativeEigenschaften.getId());
 		i141.setId("i141_consumer");
 		relationships.add(i141);
@@ -1446,7 +1445,7 @@ public class InitializationService {
 		
 		classDefinitions.add(oqeWartungen);
 
-		Inheritance i142 = new Inheritance(ofenQualitativeEigenschaften.getId(), oqeWartungen.getId(),
+		Aggregation i142 = new Aggregation(ofenQualitativeEigenschaften.getId(), oqeWartungen.getId(),
 				ofenQualitativeEigenschaften.getId());
 		i142.setId("i142_consumer");
 		relationships.add(i142);
@@ -1461,7 +1460,7 @@ public class InitializationService {
 		
 		classDefinitions.add(input);
 
-		Inheritance i2 = new Inheritance(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
+		Aggregation i2 = new Aggregation(technischeBeschreibung.getId(), input.getId(), technischeBeschreibung.getId());
 		i2.setId("i2_consumer");
 		relationships.add(i2);
 
@@ -1473,7 +1472,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inGeometrischeEigenschaften);
 
-		Inheritance i21 = new Inheritance(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
+		Aggregation i21 = new Aggregation(input.getId(), inGeometrischeEigenschaften.getId(), input.getId());
 		i21.setId("i21_consumer");
 		relationships.add(i21);
 
@@ -1489,7 +1488,7 @@ public class InitializationService {
 		
 		classDefinitions.add(ingeBundabmessungen);
 
-		Inheritance i211 = new Inheritance(inGeometrischeEigenschaften.getId(), ingeBundabmessungen.getId(),
+		Aggregation i211 = new Aggregation(inGeometrischeEigenschaften.getId(), ingeBundabmessungen.getId(),
 				inGeometrischeEigenschaften.getId());
 		i211.setId("i211_consumer");
 		relationships.add(i211);
@@ -1502,7 +1501,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inQualitativeEigenschaften);
 
-		Inheritance i22 = new Inheritance(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
+		Aggregation i22 = new Aggregation(input.getId(), inQualitativeEigenschaften.getId(), input.getId());
 		i22.setId("i22_consumer");
 		relationships.add(i22);
 
@@ -1516,7 +1515,7 @@ public class InitializationService {
 		
 		classDefinitions.add(inqeMaterialart);
 
-		Inheritance i221 = new Inheritance(inQualitativeEigenschaften.getId(), inqeMaterialart.getId(),
+		Aggregation i221 = new Aggregation(inQualitativeEigenschaften.getId(), inqeMaterialart.getId(),
 				inQualitativeEigenschaften.getId());
 		i221.setId("i221_consumer");
 		relationships.add(i221);
@@ -1531,7 +1530,7 @@ public class InitializationService {
 		
 		classDefinitions.add(output);
 
-		Inheritance i3 = new Inheritance(technischeBeschreibung.getId(), output.getId(),
+		Aggregation i3 = new Aggregation(technischeBeschreibung.getId(), output.getId(),
 				technischeBeschreibung.getId());
 		i3.setId("i3_consumer");
 		relationships.add(i3);
@@ -1544,7 +1543,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outTechnischeEigenschaften);
 
-		Inheritance i31 = new Inheritance(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
+		Aggregation i31 = new Aggregation(output.getId(), outTechnischeEigenschaften.getId(), output.getId());
 		i31.setId("i31_consumer");
 		relationships.add(i31);
 
@@ -1559,7 +1558,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outteMechanischeEigenschaften);
 
-		Inheritance i311 = new Inheritance(outTechnischeEigenschaften.getId(), outteMechanischeEigenschaften.getId(),
+		Aggregation i311 = new Aggregation(outTechnischeEigenschaften.getId(), outteMechanischeEigenschaften.getId(),
 				outTechnischeEigenschaften.getId());
 		i311.setId("i311_consumer");
 		relationships.add(i311);
@@ -1573,7 +1572,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outteGefuege);
 
-		Inheritance i312 = new Inheritance(outTechnischeEigenschaften.getId(), outteGefuege.getId(),
+		Aggregation i312 = new Aggregation(outTechnischeEigenschaften.getId(), outteGefuege.getId(),
 				outTechnischeEigenschaften.getId());
 		i312.setId("i312_consumer");
 		relationships.add(i312);
@@ -1586,7 +1585,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outGeometrischeEigenschaften);
 
-		Inheritance i32 = new Inheritance(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
+		Aggregation i32 = new Aggregation(output.getId(), outGeometrischeEigenschaften.getId(), output.getId());
 		i32.setId("i32_consumer");
 		relationships.add(i32);
 
@@ -1602,7 +1601,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outgeMoeglicheBundabmessungen);
 
-		Inheritance i321 = new Inheritance(outGeometrischeEigenschaften.getId(), outgeMoeglicheBundabmessungen.getId(),
+		Aggregation i321 = new Aggregation(outGeometrischeEigenschaften.getId(), outgeMoeglicheBundabmessungen.getId(),
 				outGeometrischeEigenschaften.getId());
 		i321.setId("i321_consumer");
 		relationships.add(i321);
@@ -1615,7 +1614,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outQualitativeEigenschaften);
 
-		Inheritance i33 = new Inheritance(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
+		Aggregation i33 = new Aggregation(output.getId(), outQualitativeEigenschaften.getId(), output.getId());
 		i33.setId("i33_consumer");
 		relationships.add(i33);
 
@@ -1629,7 +1628,7 @@ public class InitializationService {
 		
 		classDefinitions.add(outqeMaterialart);
 
-		Inheritance i331 = new Inheritance(outQualitativeEigenschaften.getId(), outqeMaterialart.getId(),
+		Aggregation i331 = new Aggregation(outQualitativeEigenschaften.getId(), outqeMaterialart.getId(),
 				outQualitativeEigenschaften.getId());
 		i331.setId("i331_consumer");
 		relationships.add(i331);
@@ -1667,11 +1666,11 @@ public class InitializationService {
 		root.setClassArchetype(ClassArchetype.ROOT);
 		classDefinitions.add(root);
 
-		Inheritance r1 = new Inheritance(root.getId(), technischeBeschreibung.getId(), root.getId());
+		Aggregation r1 = new Aggregation(root.getId(), technischeBeschreibung.getId(), root.getId());
 		r1.setId("r1_consumer");
-		Inheritance r2 = new Inheritance(root.getId(), logistischeBeschreibung.getId(), root.getId());
+		Aggregation r2 = new Aggregation(root.getId(), logistischeBeschreibung.getId(), root.getId());
 		r2.setId("r2_consumer");
-		Inheritance r3 = new Inheritance(root.getId(), preislicheBeschreibung.getId(), root.getId());
+		Aggregation r3 = new Aggregation(root.getId(), preislicheBeschreibung.getId(), root.getId());
 		r3.setId("r3_consumer");
 
 		relationships.add(r1);

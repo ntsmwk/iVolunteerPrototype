@@ -21,7 +21,9 @@ export class Association extends Relationship {
 
 export enum RelationshipType {
     INHERITANCE = 'INHERITANCE',
-    ASSOCIATION = 'ASSOCIATION'
+    ASSOCIATION = 'ASSOCIATION',
+    AGGREGATION = 'AGGREGATION',
+    COMPOSITION = 'COMPOSITION'
 }
 
 export enum AssociationCardinality {
