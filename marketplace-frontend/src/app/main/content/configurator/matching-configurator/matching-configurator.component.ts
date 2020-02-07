@@ -530,7 +530,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (paletteItem.type === 'matchingOperator') {
 
 
-          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`);
+          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator);
        
        } else if (paletteItem.type === 'connector') {
           let cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
@@ -540,6 +540,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
           cell.geometry.relative = true;
+          
           graph.addCell(cell);
         }
         console.log("finished drag");
