@@ -71,6 +71,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   consumerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
 
   matchingPalettes = CConstants.matchingPalettes;
+  matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
 
 
   ngOnInit() {
@@ -197,20 +198,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let addRels = true;
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        if (addRels) {
-
-
-          let cells = outer.graph.getChildCells(outer.graph.getDefaultParent());
-          let consumer = cells.find(c => c.id === 'logistischeBeschreibung_consumer');
-          let producer = cells.find(c => c.id === 'logistischeBeschreibung_producer');
-
-          let target = consumer.getChildAt(1);
-          let source = producer.getChildAt(3);
-
-          outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, producer, consumer, CConstants.mxStyles.aggregation);
-          outer.graph.insertEdge(outer.graph.getDefaultParent(), null, null, source, target, CConstants.mxStyles.aggregation);
-          addRels = false;
-        }
+        
 
       });
 

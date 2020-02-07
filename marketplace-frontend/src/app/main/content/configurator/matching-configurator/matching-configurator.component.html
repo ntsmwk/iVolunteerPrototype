@@ -14,6 +14,12 @@
       <div class="pr-4"></div>
     </div>
 
+    <div class="pr-8 pl-8">|</div>
+
+    <div *ngFor="let item of matchingConnectorPalettes">
+      <img [src]="item.imgPath" width="30" height="30" style="cursor: pointer" [matTooltip]="item.label" (mousedown)="handleMousedownEvent($event, item, graph)">
+      <div class="pr-4"></div>
+    </div>
 
   </div>
 

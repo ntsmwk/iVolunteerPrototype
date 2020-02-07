@@ -21,7 +21,7 @@ const relationshipPalettes = {
   rows: [
     { id: 'INHERITANCE', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'inheritance', shape: undefined },
     { id: 'ASSOCIATION', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'association', shape: undefined },
-    { id: 'AGGREGATION', label: 'Aggregation', impPath: '', type: 'aggregation', shape: undefined}
+    { id: 'AGGREGATION', label: 'Aggregation', imgPath: '', type: 'aggregation', shape: undefined}
   ]
 };
 
@@ -34,6 +34,11 @@ const matchingPalettes = [
   {id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'exists'},
   {id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'all'},
 ];
+
+const matchingConnectorPalettes = [
+  {id: 'connector', label: 'verbinder', imgPath: '/assets/mxgraph_resources/images/connect.gif', type: 'connector'},
+
+]
 
 const mxStyles = {
   // classNormal: 'shape=swimlane;resizable=0;' + 'fontColor=#000e8a;strokeColor=#000e8a;',
@@ -74,6 +79,8 @@ const mxStyles = {
   composition: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=1;exitPerimeter=1;' + 
     'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
 
+  matchingConnector: 'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+
 
   addClassSameLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/right_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   addClassNewLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
@@ -103,6 +110,7 @@ export class CConstants {
   public static sidebarPalettes = sidebarPalettes;
   public static relationshipPalettes = relationshipPalettes;
   public static matchingPalettes = matchingPalettes;
+  public static matchingConnectorPalettes = matchingConnectorPalettes;
   public static mxStyles = mxStyles;
   public static cellTypes = cellTypes;
 }
