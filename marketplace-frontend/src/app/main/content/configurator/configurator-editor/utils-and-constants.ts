@@ -68,8 +68,8 @@ const mxStyles = {
   association: 'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
   associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
 
-  aggregation: 'endArrow=none;html=1;endSize=12;startArrow=diamondThin;startSize=15;startFill=1' + 
-    'fillColor=#FFFFFF;fontColor=#FFFFFF;strokeColor=#000e8a;' + 'edgeStyle=orthogonalEdgeStyle;',
+  aggregation: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=0;' + 
+    'fontColor=#FFFFFF;strokeColor=#000e8a;' + 'edgeStyle=orthogonalEdgeStyle;',
 
 
   addClassSameLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/right_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',

@@ -386,7 +386,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 190, 20, CConstants.mxStyles.propertyMatching) as myMxCell;
+        const propertyEntry: myMxCell = this.graph.insertVertex(
+          cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 
+          190, 20, CConstants.mxStyles.propertyMatching) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = 'enum_property';
