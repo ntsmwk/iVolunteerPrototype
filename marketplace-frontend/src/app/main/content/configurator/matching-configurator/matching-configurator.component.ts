@@ -198,7 +198,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       let addRels = true;
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        
+
 
       });
 
@@ -375,7 +375,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
         const propertyEntry: myMxCell = this.graph.insertVertex(
-          cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height, 
+          cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height,
           190, 20, CConstants.mxStyles.propertyMatching) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
@@ -526,14 +526,27 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
         const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
         console.log(coords);
-          graph.getModel().beginUpdate();
-          let cell = graph.insertVertex(graph.getDefaultParent(), null , null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`);
-          console.log("finished drag");
-          console.log(paletteItem);
-          console.log(cell);
-    
-     
+        graph.getModel().beginUpdate();
+        if (paletteItem.type === 'matchingOperator') {
+
+
+          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};`);
        
+       } else if (paletteItem.type === 'connector') {
+          let cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
+          cell.cellType = 'matchingConnector';
+          cell.setEdge(true);
+          cell.setVertex(false);
+          cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
+          cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
+          cell.geometry.relative = true;
+          graph.addCell(cell);
+        }
+        console.log("finished drag");
+        console.log(paletteItem);
+
+
+
 
       }
     };

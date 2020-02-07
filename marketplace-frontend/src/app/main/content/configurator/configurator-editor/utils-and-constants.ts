@@ -26,13 +26,13 @@ const relationshipPalettes = {
 };
 
 const matchingPalettes = [
-  {id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'equal'},
-  {id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'less'},
-  {id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'greater'},
-  {id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'lessEqual'},
-  {id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'greaterEqual'},
-  {id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'exists'},
-  {id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'all'},
+  {id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator'},
+  {id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator'},
+  {id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator'},
+  {id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator'},
+  {id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator'},
+  {id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator'},
+  {id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator'},
 ];
 
 const matchingConnectorPalettes = [
