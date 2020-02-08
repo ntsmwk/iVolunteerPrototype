@@ -18,7 +18,7 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { config } from 'rxjs';
-import { MatchingConfiguratorClassDefinitionCollection } from '../../_model/meta/matching';
+import { MatchingConfiguratorClassDefinitionCollection } from '../../_model/matching';
 
 declare var require: any;
 
