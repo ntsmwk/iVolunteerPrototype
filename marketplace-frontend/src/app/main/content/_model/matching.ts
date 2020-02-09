@@ -21,4 +21,7 @@ export class MatchingOperatorRelationship {
     producerId: string;
     consumerId: string;
     matchingOperatorType: string;
+
+    coordX: number;
+    coordY: number;
 }
