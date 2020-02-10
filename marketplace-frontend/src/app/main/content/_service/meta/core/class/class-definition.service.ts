@@ -19,8 +19,8 @@ import { of } from "rxjs";
       return this.http.get(`${marketplace.url}/meta/core/class/definition/all`);
     }
 
-    getAllClassDefinitionsWithoutHeadAndEnums(marketplace: Marketplace, org: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum?org=${org}`);
+    getAllClassDefinitionsWithoutHeadAndEnums(marketplace: Marketplace) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum`);
     }
 
     getClassDefinitionById(marketplace: Marketplace, id: string) {

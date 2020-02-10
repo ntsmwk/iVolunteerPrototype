@@ -9,11 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
@@ -38,8 +36,6 @@ public class CoreApplication {
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 	@Autowired private UserImagePathRepository userImagePathRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreVolunteerService coreVolunteerService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);

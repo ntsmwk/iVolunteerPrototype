@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.JsonObject;
 
-import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.task.Task;
 import at.jku.cis.iVolunteer.model.task.TaskOperation;
@@ -17,12 +16,9 @@ import at.jku.cis.iVolunteer.model.user.User;
 @Document
 public class TaskInteraction implements IHashObject {
 
-	@Id
-	private String id;
-	@DBRef
-	private Task task;
-	@DBRef
-	private User participant;
+	@Id private String id;
+	@DBRef private Task task;
+	@DBRef private User participant;
 	private TaskOperation operation;
 	private Date timestamp;
 	private String comment;
@@ -106,6 +102,6 @@ public class TaskInteraction implements IHashObject {
 		json.addProperty("timestamp", timestamp.toString());
 		json.addProperty("comment", comment);
 		return json.toString();
-}
+	}
 
 }

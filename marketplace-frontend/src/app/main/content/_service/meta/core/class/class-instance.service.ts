@@ -14,8 +14,8 @@ import { Participant } from 'app/main/content/_model/participant';
       private http: HttpClient
     ) { }
 
-    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org?: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org===null?'FF':org}`);
+    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}}`);
     }
 
     getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {

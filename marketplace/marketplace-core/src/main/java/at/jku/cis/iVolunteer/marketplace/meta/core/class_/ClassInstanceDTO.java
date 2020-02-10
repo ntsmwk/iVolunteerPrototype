@@ -30,11 +30,6 @@ public class ClassInstanceDTO {
 	private boolean inUserRepository;// flag if in inbox or in repository of user
 	private boolean inIssuerInbox; // flag if in inbox of issuer
 
-	private boolean isNewFakeData;
-	private boolean isMV;
-
-	
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -73,22 +68,6 @@ public class ClassInstanceDTO {
 
 	public void setInIssuerInbox(boolean inIssuerInbox) {
 		this.inIssuerInbox = inIssuerInbox;
-	}
-
-	public boolean isNewFakeData() {
-		return isNewFakeData;
-	}
-
-	public void setNewFakeData(boolean isNewFakeData) {
-		this.isNewFakeData = isNewFakeData;
-	}
-
-	public boolean isMV() {
-		return isMV;
-	}
-
-	public void setMV(boolean isMV) {
-		this.isMV = isMV;
 	}
 
 	public ClassArchetype getClassArchetype() {

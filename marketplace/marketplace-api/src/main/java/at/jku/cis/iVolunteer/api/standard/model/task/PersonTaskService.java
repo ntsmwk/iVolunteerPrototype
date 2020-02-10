@@ -82,11 +82,9 @@ public class PersonTaskService {
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(false);
 		personTaskClassInstance.setInUserRepository(true);
+//		TODO MWE set issuerId to tenantId!
 		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
 		personTaskClassInstance.setTimestamp(new Date());
-		personTaskClassInstance.setNewFakeData(level==FF_NEW);
-		personTaskClassInstance.setMV(level == MV);
-		
 		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on
 	}

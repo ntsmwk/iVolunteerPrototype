@@ -214,7 +214,7 @@ export class TasksMusicComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
+        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK')
         .toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
             this.classInstanceDTOs = ret;

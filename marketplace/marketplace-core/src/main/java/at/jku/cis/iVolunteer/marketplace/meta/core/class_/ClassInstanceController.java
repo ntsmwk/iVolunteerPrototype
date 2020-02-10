@@ -2,7 +2,6 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,22 +26,14 @@ public class ClassInstanceController {
 	@Autowired private ClassInstanceMapper classInstanceMapper;
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
-	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
-			@RequestParam(value = "org", required = false) String organisation) {
+	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
-				organisation == null ? "FF" : organisation);
-		if (!organisation.equals("MV")) {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
-			}
-		} else {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()).stream()
-						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
-			}
-		}
+//		TODO MWE change to tenantId instead of "FF"
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,"FF");
 
+		for (ClassDefinition cd : classDefinitions) {
+			classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+		}
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 

@@ -57,7 +57,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
         this.route.params.subscribe(params => this.loadDerivationRule(marketplace, params['ruleId']));
-        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then(
+        // TODO MWE set tenantId
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace).toPromise().then(
           (definitions: ClassDefinition[]) => this.classDefinitions = definitions
         );
       });
@@ -108,9 +109,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   save() {
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.target = this.ruleForm.value.target;
-
     this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
-
   }
 
   navigateBack() {
@@ -123,23 +122,5 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   addClassRule() {
     this.derivationRule.classSourceRules.push(new ClassSourceRuleEntry());
-  }
-
-  onFahrtenspangeBronzeChanged($event) {
-    this.fahrtenspangeImg = 'bronze';
-  }
-
-
-  onFahrtenspangeSilberChanged($event) {
-    this.fahrtenspangeImg = 'silber';
-  }
-
-
-  onFahrtenspangeGoldChanged($event) {
-    this.fahrtenspangeImg = 'gold';
-  }
-
-  onFahrtenspangeNoneChanged($event) {
-    this.fahrtenspangeImg = null;
   }
 }
