@@ -13,28 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
-import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 
 @RestController
 public class ConfiguratorController {
 
 	@Autowired private ConfiguratorRepository configuratorRepository;
-	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
 	
 	@GetMapping("meta/configurator/all")
-	List<Configurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
-		
-//		if (sortType.equalsIgnoreCase("asc")) {
-//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
-//
-//		} else if (sortType.equalsIgnoreCase("desc")) {
-//			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.DESC, "date"));
-//		} 
-		
-		
-		
+	List<Configurator> getAllConfigurators() {
 		List<Configurator> configurators =  configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
 		return configurators;
 	}
@@ -69,8 +56,6 @@ public class ConfiguratorController {
 	
 	@PutMapping("meta/configurator/save")
 	Configurator saveConfigurator(@RequestBody Configurator updatedConfigurator) {
-		isSunburstFakeRepository.save(new IsSunburstFakeDocument());
-		
 		return configuratorRepository.save(updatedConfigurator);
 	}
 	

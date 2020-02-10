@@ -27,15 +27,6 @@ export class ConfiguratorService {
       return this.http.get(`${marketplace.url}/meta/configurator/by-name/${name}`);
     }
 
-    getAllConfiguratorsSortedAsc(marketplace: Marketplace) {
-      return this.http.get(`${marketplace.url}/meta/configurator/all?sorted=asc`);
-    }
-
-    getAllConfiguratorsSortedDesc(marketplace: Marketplace) {
-      return this.http.get(`${marketplace.url}/meta/configurator/all?sorted=desc`);
-
-    }
-
     createNewEmptyConfigurator(marketplace: Marketplace, name: string, description: string) {
       let params: string[] = [name, description];
       return this.http.post(`${marketplace.url}/meta/configurator/new-empty`, params);

@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.fake;
+package at.jku.cis.iVolunteer.api.reset;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +33,7 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
-public class FakeService {
+public class ResetService {
 
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
@@ -41,7 +41,6 @@ public class FakeService {
 	@Autowired private PropertyDefinitionToPropertyInstanceMapper propertyDefinitionToPropertyInstanceMapper;
 	@Autowired private ClassInstanceController classInstanceController;
 	@Autowired private StoredChartRepository storedChartRepository;
-	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
 	@Autowired private ClassesAndRelationshipsToResetRepository classesAndRelationshipsToResetRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
@@ -50,38 +49,13 @@ public class FakeService {
 
 	public void reset() {
 
-		resetFahrtenspangeFake();
-
-		resetSunburstFake();
-
-//		Reset Sunburst Fake
-		// Reset ClassDefinitions
 		resetClassDefinitionsRelationshipsAndConfigurators();
-//			//Reset Flag for retrieval
-
-//		Reset Sybos Fake
 
 		deleteSharedChart();
 	}
 
 	private void deleteSharedChart() {
 		this.storedChartRepository.deleteAll();
-	}
-
-	private void resetFahrtenspangeFake() {
-		// Reset Fahrtenspange Derivation-Rule
-		derivationRuleRepository.deleteAll();
-
-		// Reset Fahrtenspange Task
-
-		// Reset Fahrtenspange Badge
-		List<ClassInstance> list = classInstanceRepository.findAll().stream()
-				.filter(ci -> ci.getName().equals("Fahrtenspange Bronze")).collect(Collectors.toList());
-		classInstanceRepository.delete(list);
-	}
-
-	private void resetSunburstFake() {
-		this.isSunburstFakeRepository.deleteAll();
 	}
 
 	private void resetClassDefinitionsRelationshipsAndConfigurators() {
@@ -96,7 +70,6 @@ public class FakeService {
 
 		configuratorRepository.deleteAll();
 		configuratorRepository.save(reset.getConfigurators());
-
 	}
 
 	public void pushTaskFromAPI() {
@@ -144,40 +117,6 @@ public class FakeService {
 
 		classInstanceController.createNewClassInstances(instances);
 
-	}
-
-	public void addFahrtenspangeFake() {
-
-		TaskClassInstance instance = new TaskClassInstance();
-		instance.setId("fahrtenspange" + new Date().hashCode());
-		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-		instance.setName("Fahrtenspange Bronze");
-		instance.setIssuerId("FFA");
-
-		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
-		instance.setUserId(user.getId());
-
-		instance.setPublished(false);
-		instance.setInUserRepository(false);
-		instance.setInIssuerInbox(false);
-
-		instance.setTimestamp(new Date());
-
-		List<PropertyInstance<Object>> properties = new ArrayList<>();
-
-		PropertyDefinition<Object> nameDefinition = propertyDefinitionRepository.findOne("name");
-		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
-		nameInstance.setValues(new ArrayList<>());
-		nameInstance.getValues().add("Fahrtenspange Bronze");
-
-		properties.add(nameInstance);
-
-		instance.setProperties(properties);
-
-		List<ClassInstance> instances = new ArrayList<>();
-		instances.add(instance);
-
-		classInstanceController.createNewClassInstances(instances);
 	}
 
 	public void createResetState() {

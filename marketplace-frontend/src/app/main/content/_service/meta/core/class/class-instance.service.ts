@@ -18,24 +18,8 @@ import { Participant } from 'app/main/content/_model/participant';
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
     }
 
-    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
-    }
-
-    getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
-    }
-
-    getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
-    }
-
-    getClassInstancesByArcheTypeFake(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/fake`);
-    }
-
-    getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
+    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org?: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org===null?'FF':org}`);
     }
 
     getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {

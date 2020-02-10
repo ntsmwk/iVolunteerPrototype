@@ -71,7 +71,7 @@ export class CompetenciesComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheTypeFake(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
+        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
             //this.classInstanceDTOs = ret.filter(ci => ci.name == 'PersonTask');
             this.classInstanceDTOs = ret;
