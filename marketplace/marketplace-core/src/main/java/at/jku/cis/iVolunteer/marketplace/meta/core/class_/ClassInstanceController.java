@@ -129,6 +129,7 @@ public class ClassInstanceController {
 
 		classInstances.forEach(ci -> {
 			PropertyInstance<Object> hash = new PropertyInstance<Object>();
+			hash.setId("hash");
 			hash.setName("hash");
 			hash.setValues(Collections.singletonList(hasher.generateHash(ci)));
 			ci.getProperties().add(hash);
