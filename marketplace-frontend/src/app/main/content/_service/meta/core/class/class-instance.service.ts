@@ -15,7 +15,7 @@ import { Participant } from 'app/main/content/_model/participant';
     ) { }
 
     getClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}}`);
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}`);
     }
 
     getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
