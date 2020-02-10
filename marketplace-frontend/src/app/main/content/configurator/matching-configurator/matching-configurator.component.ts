@@ -1,24 +1,24 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
-import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { PropertyDefinition, PropertyItem, ClassProperty, PropertyType, EnumReference } from 'app/main/content/_model/meta/Property';
+import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
-import { CConstants, CUtils } from '../configurator-editor/utils-and-constants';
+import { CConstants } from '../configurator-editor/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
-import { config } from 'rxjs';
-import { MatchingConfiguratorClassDefinitionCollection } from '../../_model/matching';
+import { MatchingConfiguratorClassDefinitionCollection, MatchingOperatorRelationshipStorage } from '../../_model/matching';
+import { MatchingConfiguratorPopupMenu } from './popup-menu';
+import { MatchingOperatorRelationshipStorageService } from '../../_service/matchingoperator-relationship-storage.service';
 
 declare var require: any;
 
@@ -48,6 +48,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private loginService: LoginService,
     private flexProdService: CoreFlexProdService,
     private helpSeekerService: CoreHelpSeekerService,
+    private matchingOperatorRelationshipService: MatchingOperatorRelationshipStorageService
   ) {
 
   }
@@ -73,6 +74,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   matchingPalettes = CConstants.matchingPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
 
+  matchingOperatorRelationshipStorage: MatchingOperatorRelationshipStorage;
 
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
@@ -107,6 +109,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, 'slot2').toPromise().then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
               this.consumerClassDefinitionCollections = collections;
               this.insertClassDefinitionsConsumerFromCollection();
+            }),
+            this.matchingOperatorRelationshipService.getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, 'slot1', 'slot2').toPromise().then((storage: MatchingOperatorRelationshipStorage) => {
+              this.matchingOperatorRelationshipStorage = storage;
+              console.log(storage);
             })
 
           ]);
@@ -178,7 +184,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       // tslint:disable-next-line: no-unused-expression
       // new mx.mxRubberband(this.graph);
 
-      // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
+      this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
 
       this.graph.setPanning(true);
@@ -209,6 +215,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
 
+  }
+
+  private createPopupMenu(graph) {
+    const popupMenu = new MatchingConfiguratorPopupMenu(graph, this);
+    return popupMenu.createPopupMenuHandler(graph);
   }
 
 
@@ -530,9 +541,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (paletteItem.type === 'matchingOperator') {
 
 
-          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator);
-       
-       } else if (paletteItem.type === 'connector') {
+          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as myMxCell;
+          cell.cellType = 'matchingOperator';
+
+        } else if (paletteItem.type === 'connector') {
           let cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
           cell.cellType = 'matchingConnector';
           cell.setEdge(true);
@@ -540,7 +552,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
           cell.geometry.relative = true;
-          
+
           graph.addCell(cell);
         }
         console.log("finished drag");
