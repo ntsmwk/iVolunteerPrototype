@@ -2,7 +2,6 @@
 package at.jku.cis.iVolunteer.trustifier.blockchain;
 
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class BlockchainRestClient {
 
-	@Value("${spring.data.blockchain.uri}") 
-	private String url;
+	@Value("${spring.data.blockchain.uri}") private String url;
 
 	@Autowired private RestTemplate restTemplate;
 
@@ -125,7 +123,8 @@ public class BlockchainRestClient {
 		}
 	}
 
-	public void postFinishedTaskHash(String hash, Date timestamp, String taskId, String marketplaceId, String volunteerId) {
+	public void postFinishedTaskHash(String hash, Date timestamp, String taskId, String marketplaceId,
+			String volunteerId) {
 		String requestUrl = MessageFormat.format("{0}/api/finishedTask", url);
 		BcFinishedTask ft = new BcFinishedTask(hash, timestamp, taskId, marketplaceId, volunteerId);
 
@@ -142,7 +141,8 @@ public class BlockchainRestClient {
 
 	}
 
-	public void postCompetenceHash(String hash, Date timestamp, String competenceDefinitionId, String marketplaceId, String volunteerId) {
+	public void postCompetenceHash(String hash, Date timestamp, String competenceDefinitionId, String marketplaceId,
+			String volunteerId) {
 		String requestUrl = MessageFormat.format("{0}/api/competence", url);
 		BcCompetence c = new BcCompetence(hash, timestamp, competenceDefinitionId, marketplaceId, volunteerId);
 
@@ -171,13 +171,13 @@ public class BlockchainRestClient {
 				logger.error(e.getMessage());
 
 			}
-		}	
+		}
 	}
-	
+
 	public void postClassInstanceArray(List<BcClassInstance> classInstances) {
 		String requestUrl = MessageFormat.format("{0}/api/StoreVerificationObjects", url);
 		try {
-			
+
 			BcClassInstances bcClassInstances = new BcClassInstances(classInstances.toArray(new BcClassInstance[0]));
 			restTemplate.postForObject(requestUrl, bcClassInstances, Void.class);
 		} catch (Exception e) {
@@ -187,7 +187,7 @@ public class BlockchainRestClient {
 				logger.error(e.getMessage());
 
 			}
-		}	
-		
+		}
+
 	}
 }

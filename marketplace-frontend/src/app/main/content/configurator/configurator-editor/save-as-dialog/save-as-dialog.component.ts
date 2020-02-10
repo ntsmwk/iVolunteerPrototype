@@ -37,15 +37,11 @@ export class SaveAsDialogComponent implements OnInit {
     console.log(this.data.marketplace);
     this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
 
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-        console.log('init dialog open');
-        console.log(configurators);
-
+      this.configuratorService.getAllConfigurators(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
         this.configurators = configurators.filter(c => {
           return c.userId === volunteer.id || isNullOrUndefined(c.userId);
         });
 
-        console.log(this.configurators);
         if (this.configurators.length > 5) {
           this.recentConfigurators = this.configurators.slice(0, 5);
         }
@@ -58,25 +54,12 @@ export class SaveAsDialogComponent implements OnInit {
   }
 
   itemSelected(event: any, c: Configurator) {
-    console.log(event);
-    console.log(c);
     this.data.configurator = c;
     // this.data = s;
     this.dialogRef.close(this.data)
-
-
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-
-
-
-
-
-
 }
-
-

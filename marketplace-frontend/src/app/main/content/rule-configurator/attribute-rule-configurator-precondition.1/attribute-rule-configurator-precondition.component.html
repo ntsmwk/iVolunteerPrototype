@@ -1,4 +1,4 @@
-<!-- <form *ngIf="attributeSourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
+<form *ngIf="attributeSourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
   (change)="onChange($event)" [formGroup]="rulePreconditionForm">
   <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
     <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 225px">
@@ -42,60 +42,6 @@
           {{ enumVal }}
         </mat-option>
       </mat-select>
-    </mat-form-field>
-  </div>
-</form> -->
-
-
-<form form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start" [formGroup]="rulePreconditionForm">
-  <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
-    <mat-form-field style="width: 225px">
-      <mat-label>Benötigter Freiwillenpasseintrag</mat-label>
-      <mat-select formControlName="classDefinitionId" [value]="-1">
-        <mat-option [value]="1"> <strong>Tätigkeit</strong> </mat-option>
-        <mat-option [value]="2"> &nbsp; Jugendarbeit </mat-option>
-        <mat-option [value]="3"> &nbsp; Rettungseinsatz </mat-option>
-        <mat-option [value]="4"> &nbsp; Transport </mat-option>
-        <mat-option [value]="7"><strong>Funktion</strong> </mat-option>
-        <mat-option [value]="8"> &nbsp;Rettungssanitäter </mat-option>
-        <mat-option [value]="9"> &nbsp;Einsatzlenker </mat-option>
-        <mat-option [value]="10"><strong>Kompetenz</strong> </mat-option>
-        <mat-option [value]="11"> &nbsp; Anpassungsfähigkeit </mat-option>
-        <mat-option [value]="12"> &nbsp; Lernbereitschaft </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 225px">
-      <mat-label>Attribut</mat-label>
-      <mat-select formControlName="classPropertyId" [value]="-1">
-        <mat-option value="1">Name</mat-option>
-        <mat-option value="2">Beifahrer</mat-option>
-        <mat-option value="3">Zurückgelegte Distanz</mat-option>
-        <mat-option value="4">Ort</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 115px">
-      <mat-label>Aggregationsoperator</mat-label>
-      <mat-select placeholder="Operation" formControlName="aggregationOperatorType" [value]="-1">
-        <mat-option value="1">Summe</mat-option>
-        <mat-option value="2">Minimum</mat-option>
-        <mat-option value="3">Maximum</mat-option>
-        <mat-option value="4">Existiert (&exist;)</mat-option>
-        <mat-option value="5">Für alle gilt (&forall;)</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 100px">
-      <mat-label>Vergleichsoperator</mat-label>
-      <mat-select placeholder="Operation" formControlName="mappingOperatorType" [value]="-1">
-        <mat-option value="1">=</mat-option>
-        <mat-option value="2">&ne;</mat-option>
-        <mat-option value="3">&gt;</mat-option>
-        <mat-option value="4">&ge;</mat-option>
-        <mat-option value="5">&lt;</mat-option>
-        <mat-option value="6">&le;</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field style="width: 150px">
-      <input matInput placeholder="Wert" formControlName="value" />
     </mat-form-field>
   </div>
 </form>

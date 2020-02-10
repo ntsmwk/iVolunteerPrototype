@@ -14,40 +14,12 @@ import { Participant } from 'app/main/content/_model/participant';
       private http: HttpClient
     ) { }
 
-    getAllClassInstances(marketplace: Marketplace) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
-    }
-
-    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
-    }
-
-    getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
-    }
-
-    getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
-    }
-
-    getClassInstancesByArcheTypeFake(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/fake`);
-    }
-
-    getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
+    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org?: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org===null?'FF':org}`);
     }
 
     getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
       return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user`);
-    }
-
-    getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`);
-    }
-
-    getClassInstanceById(marketplace: Marketplace, classInstanceId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/${classInstanceId}`);
     }
 
     getClassInstancesInUserRepository(marketplace: Marketplace, userId: string) {
@@ -64,18 +36,6 @@ import { Participant } from 'app/main/content/_model/participant';
 
     createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {
       return this.http.post(`${marketplace.url}/meta/core/class/instance/new`, classInstances);
-    }
-
-    createNewClassInstanceById(marketplace: Marketplace, classDefinitionId: string) {
-      return this.http.post(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/new`, '');
-    }
-
-    updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
-      return this.http.put(`${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`, classInstance);
-    }
-
-    deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
-      return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
     }
 
     setClassInstanceInUserRepository(marketplace: Marketplace, classInstanceIds: string[], inUserRepository: boolean) {

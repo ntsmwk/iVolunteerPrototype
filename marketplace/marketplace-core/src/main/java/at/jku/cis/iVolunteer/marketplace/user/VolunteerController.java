@@ -3,8 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.user;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ws.rs.BadRequestException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

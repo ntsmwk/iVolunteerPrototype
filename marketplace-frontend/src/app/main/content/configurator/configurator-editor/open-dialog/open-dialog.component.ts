@@ -34,7 +34,7 @@ export class OpenDialogComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
+      this.configuratorService.getAllConfigurators(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
         this.configurators = configurators.filter(c => {
           return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
         });
@@ -51,20 +51,9 @@ export class OpenDialogComponent implements OnInit {
   itemSelected(event: any, c: Configurator) {
     this.data.configurator = c;
     this.dialogRef.close(this.data)
-
-
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-
-
-
-
-
-
 }
-
-

@@ -10,11 +10,10 @@
 
   <div *ngIf="this.participant && isFF()">
     <div class="header-rk p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-      <!-- DO NOT DELETE -->
-      <!-- <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
-      </mat-icon> -->
+      <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
+      </mat-icon>
       <h1 class="l-heading">Einträge ableiten</h1>
-      <img class="header-icon" src="assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg">
+      <img class="header-icon" src="assets/images/avatars/FF_Altenberg.jpg">
     </div>
   </div>
 
@@ -39,7 +38,6 @@
   </div>
 
   <form *ngIf="derivationRule" form style="padding-top: 12px; padding-left: 40px" name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
-
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout=row fxLayoutAlign="start start">
@@ -56,35 +54,17 @@
     <div fxLayout="row" fxLayoutAlign="start start">
       <mat-form-field style="width: 300px">
         <mat-label>Freiwilligenpasseintrag</mat-label>
-        <mat-select formControlName="target" [value]="-1">          
-          
-          <mat-option [value]="1" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> <strong>Verdienst</strong> </mat-option>
-          <mat-option [value]="2" (onSelectionChange)="onFahrtenspangeBronzeChanged($event)"> &nbsp; Fahrtenspange Bronze </mat-option>
-          <mat-option [value]="3" (onSelectionChange)="onFahrtenspangeSilberChanged($event)"> &nbsp; Fahrtenspange Silber </mat-option>
-          <mat-option [value]="4" (onSelectionChange)="onFahrtenspangeGoldChanged($event)"> &nbsp; Fahrtenspange Gold </mat-option>
-          <mat-option [value]="5" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Jugendabzeichen Gold</mat-option>
-          <mat-option [value]="7" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"><strong>Funktion</strong> </mat-option>
-          <mat-option [value]="6" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Lehrgangsleiter </mat-option>
-          <mat-option [value]="8" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp;Rettungssanitäter </mat-option>
-          <mat-option [value]="9" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp;Einsatzlenker </mat-option>
-          <mat-option [value]="10" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"><strong>Kompetenz</strong> </mat-option>
-          <mat-option [value]="11" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Anpassungsfähigkeit </mat-option>
-          <mat-option [value]="12" (onSelectionChange)="onFahrtenspangeNoneChanged($event)"> &nbsp; Lernbereitschaft </mat-option>
-        </mat-select>
-        <!-- <mat-select formControlName="target" [value]="derivationRule.target">
+        <mat-select formControlName="target" [value]="derivationRule.target">
         <mat-option *ngFor="let cd of classDefinitions" [value]="cd"> {{cd.name}} </mat-option>
-      </mat-select> -->
+      </mat-select>
       </mat-form-field>
-      <img *ngIf="fahrtenspangeImg=='bronze'" src="/assets/images/FahrtenspangeBronze.png" alt="Fahrtenspange" class="fakeImg">
-      <img *ngIf="fahrtenspangeImg=='silber'" src="/assets/images/FahrtenspangeSilber.png" alt="Fahrtenspange" class="fakeImg">
-      <img *ngIf="fahrtenspangeImg=='gold'" src="/assets/images/FahrtenspangeGold.png" alt="Fahrtenspange" class="fakeImg">
     </div>
 
-    <!-- <div fxLayout=row>
+    <div fxLayout=row>
       <mat-form-field class="nameInput">
         <input matInput placeholder="Regelname" formControlName="name" />
       </mat-form-field>
-    </div> -->
+    </div>
 
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
@@ -109,14 +89,14 @@
     </div>
 
     <!-- DO NOT DELETE! - JUST FOR PRESENTATION COMMENTED OUT!!!!! -->
-    <!-- <div *ngFor="let entry of derivationRule.classSourceRules">
+    <div *ngFor="let entry of derivationRule.classSourceRules">
       <class-rule-precondition [(classSourceRuleEntry)]="entry"></class-rule-precondition>
     </div>
 
     <div>
       <button type='button' mat-raised-button color="secondary" (click)="addClassRule()">Klassen-Regel
         hinzufügen</button>
-    </div> -->
+    </div>
 
 
     <div fxLayout=row fxLayoutAlign="end start" style="padding-top:25px">

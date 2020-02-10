@@ -81,7 +81,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
 
   private loadTasks() {
-    this.classInstanceService.getClassInstancesByArcheTypeWithHash(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
+    this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
       if (!isNullOrUndefined(ret)) {
         this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
         console.log('classInstanceDTOs',this.classInstanceDTOs)
@@ -113,44 +113,38 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showWochentagDiagram() {
-    return !isNullOrUndefined(this.weekdayData);
-  }
+  // verify1 = false;
+  // verify2 = false;
+  // verify3 = false;
+  // verify5 = false;
 
-  verify1 = false;
-  verify2 = false;
-  verify3 = false;
-  verify5 = false;
-
-  pressedVerifyAll() {
-    const outer = this;
-    setTimeout(function(){ 
-      outer.verify2 = true;
-    }, 3000);
-    setTimeout(function(){ 
-      outer.verify3 = true;
-    }, 5000);
-    setTimeout(function(){ 
-      outer.verify5 = true;
-    }, 1000);
-    setTimeout(function(){ 
-      outer.verify1 = true;
-    }, 2000);
-
-
-  }
+  // pressedVerifyAll() {
+  //   const outer = this;
+  //   setTimeout(function(){ 
+  //     outer.verify2 = true;
+  //   }, 3000);
+  //   setTimeout(function(){ 
+  //     outer.verify3 = true;
+  //   }, 5000);
+  //   setTimeout(function(){ 
+  //     outer.verify5 = true;
+  //   }, 1000);
+  //   setTimeout(function(){ 
+  //     outer.verify1 = true;
+  //   }, 2000);
+  // }
 
 
 
-  getVerifyState(index: number) {
-    if (index % 2 === 0) {
-      return this.verify2;
-    } else if (index % 3 === 0) {
-      return this.verify3;
-    } else if (index % 5 === 0) {
-      return this.verify5;
-    } else {
-      return this.verify1;
-    }
-  }
+  // getVerifyState(index: number) {
+  //   if (index % 2 === 0) {
+  //     return this.verify2;
+  //   } else if (index % 3 === 0) {
+  //     return this.verify3;
+  //   } else if (index % 5 === 0) {
+  //     return this.verify5;
+  //   } else {
+  //     return this.verify1;
+  //   }
+  // }
 }

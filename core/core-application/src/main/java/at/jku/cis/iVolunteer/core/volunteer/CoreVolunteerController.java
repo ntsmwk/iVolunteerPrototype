@@ -10,12 +10,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
-import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -23,12 +19,12 @@ public class CoreVolunteerController {
 
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private CoreVolunteerService coreVolunteerService;
-	
+
 	@GetMapping("/all")
 	public List<CoreVolunteer> getAllCoreVolunteers() {
 		return this.coreVolunteerRepository.findAll();
 	}
-	
+
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteer getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
 		return coreVolunteerRepository.findOne(volunteerId);
@@ -45,5 +41,5 @@ public class CoreVolunteerController {
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
 		coreVolunteerService.registerMarketplace(coreVolunteerId, marketplaceId, authorization);
 	}
-	
+
 }
