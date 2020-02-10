@@ -79,7 +79,7 @@ const mxStyles = {
   composition: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=1;exitPerimeter=1;' + 
     'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
 
-  matchingConnector: 'endArrow=none;html=1;curved=1;' + 'editable=0;selectable=1;deletable=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+  matchingConnector: 'endArrow=classic;startArrow=none;html=1;curved=1;' + 'editable=0;selectable=1;deletable=1;' + 'edgeStyle=orthogonalEdgeStyle;',
 
   matchingOperator: 'resizable=0;editable=0;deletable=1;selectable=1;' + 'portConstraint=eastwest',
 
