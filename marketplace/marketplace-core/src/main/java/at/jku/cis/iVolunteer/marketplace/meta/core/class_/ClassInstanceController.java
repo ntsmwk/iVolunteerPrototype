@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -24,21 +23,9 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 public class ClassInstanceController {
 
 	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private LoginService loginService;
-
 	@Autowired private ClassInstanceMapper classInstanceMapper;
-
-	@GetMapping("/meta/core/class/instance/all")
-	private List<ClassInstance> getAllClassInstances() {
-		return classInstanceRepository.findAll();
-	}
-
-	@GetMapping("/meta/core/class/instance/{id}")
-	private ClassInstance getClassInstanceById(@PathVariable("id") String id) {
-		return classInstanceRepository.findOne(id);
-	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -70,13 +57,7 @@ public class ClassInstanceController {
 			classInstances.addAll(classInstanceRepository
 					.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(), cd.getId()));
 		}
-
 		return classInstanceMapper.mapToDTO(classInstances);
-	}
-
-	@GetMapping("/meta/core/class/instance/by-userid/{userId}")
-	private List<ClassInstance> getClassInstanceByUserId(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserId(userId);
 	}
 
 	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
@@ -133,23 +114,6 @@ public class ClassInstanceController {
 		}
 		return classInstanceRepository.save(classInstances);
 
-	}
-
-	@PostMapping("/meta/core/class/instance/{id}/new")
-	private ClassInstance createNewClassInstanceById() {
-		// TODO
-		return null;
-	}
-
-	@PutMapping("/meta/core/class/instance/{id}/update")
-	private ClassInstance updateClassInstance() {
-		// TODO
-		return null;
-	}
-
-	@DeleteMapping("/meta/core/class/instance/delete")
-	private void deleteClassInstance() {
-		// TODO
 	}
 
 }
