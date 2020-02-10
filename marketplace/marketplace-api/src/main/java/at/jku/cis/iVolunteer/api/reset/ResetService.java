@@ -2,10 +2,7 @@ package at.jku.cis.iVolunteer.api.reset;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +19,11 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service

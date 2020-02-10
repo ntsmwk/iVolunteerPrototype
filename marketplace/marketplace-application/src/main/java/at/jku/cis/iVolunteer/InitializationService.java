@@ -37,51 +37,29 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
-import at.jku.cis.iVolunteer.model.rule.AttributeAggregationOperatorType;
-import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.ClassAggregationOperatorType;
-import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.DerivationRule;
-import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class InitializationService {
 
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private ConfiguratorRepository configuratorRepository;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private FinalizationService finalizationService;
-	@Autowired
-	private DerivationRuleRepository derivationRuleRepository;
-	@Autowired
-	private VolunteerRepository volunteerRepository;
-	@Autowired
-	private HelpSeekerRepository helpSeekerRepository;
-	@Autowired
-	private FeedbackRepository feedbackRepository;
-	@Autowired
-	private UserMappingRepository userMappingRepository;
-	@Autowired
-	private Environment environment;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private FinalizationService finalizationService;
+	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private HelpSeekerRepository helpSeekerRepository;
+	@Autowired private FeedbackRepository feedbackRepository;
+	@Autowired private UserMappingRepository userMappingRepository;
+	@Autowired private Environment environment;
 
-	@Autowired
-	public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
 	@PostConstruct
 	public void init() {
@@ -108,43 +86,16 @@ public class InitializationService {
 		}
 	}
 
-	private void addTestDerivationRule() {
-		DerivationRule rule = new DerivationRule();
-		rule.setName("myrule");
-
-		AttributeSourceRuleEntry source = new AttributeSourceRuleEntry();
-		source.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
-		source.setClassPropertyId(classDefinitionRepository.findByName("PersonBadge").getProperties().get(0).getId());
-		source.setMappingOperatorType(MappingOperatorType.GE);
-		source.setAggregationOperatorType(AttributeAggregationOperatorType.SUM);
-		source.setValue("102");
-		rule.setAttributeSourceRules(Lists.asList(source, new AttributeSourceRuleEntry[0]));
-
-		ClassSourceRuleEntry cSource = new ClassSourceRuleEntry();
-		cSource.setClassDefinitionId(classDefinitionRepository.findByName("PersonBadge").getId());
-		cSource.setMappingOperatorType(MappingOperatorType.GE);
-		cSource.setAggregationOperatorType(ClassAggregationOperatorType.COUNT);
-		cSource.setValue("102");
-		rule.setClassSourceRules(Lists.asList(cSource, new ClassSourceRuleEntry[0]));
-
-		rule.setTarget(classDefinitionRepository.findByName("PersonCertificate").getId());
-		rule.setMarketplaceId(marketplaceService.getMarketplaceId());
-		derivationRuleRepository.save(rule);
-	}
-
 	private void addiVolunteerAPIClassDefinition() {
 		ClassDefinition findByName = classDefinitionRepository.findByName("PersonRole");
 		if (findByName == null) {
-
 			createiVolunteerAPIPersonRoleClassDefinition();
 			createiVolunteerAPIPersonBadgeClassDefinition();
 			createiVolunteerAPIPersonCertificateClassDefinition();
 			createiVolunteerAPIPersonTaskClassDefinition();
 		}
-		
+
 		addPropertyDefinitions();
-
-
 	}
 
 	private void createiVolunteerAPIPersonRoleClassDefinition() {
@@ -255,9 +206,9 @@ public class InitializationService {
 		addPersonBadgeProperties(propertyDefinitions);
 		addPersonCertificateProperties(propertyDefinitions);
 		addPersonTaskProperties(propertyDefinitions);
-		
+
 		propertyDefinitions.forEach(pd -> {
-			if(propertyDefinitionRepository.findByName(pd.getName()).size() == 0) {
+			if (propertyDefinitionRepository.findByName(pd.getName()).size() == 0) {
 				propertyDefinitionRepository.save(pd);
 			}
 		});

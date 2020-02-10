@@ -2,21 +2,18 @@ package at.jku.cis.iVolunteer.model.feedback;
 
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
 
-
 public class Feedback extends AchievementClassInstance implements IHashObject {
-	
+
 	String description;
-	
+
 	FeedbackType feedbackType;
 	int feedbackValue;
-		
-	List<String> iVolunteerObjecIds; //Für was
-	
+
+	List<String> iVolunteerObjecIds; // Für was
+
 	public String getDescription() {
 		return description;
 	}
@@ -48,6 +45,5 @@ public class Feedback extends AchievementClassInstance implements IHashObject {
 	public void setiVolunteerObjecIds(List<String> iVolunteerObjecIds) {
 		this.iVolunteerObjecIds = iVolunteerObjecIds;
 	}
-
 
 }

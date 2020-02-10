@@ -10,35 +10,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.AquireableCompetencesProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.ContentProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.DescriptionProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.EndDateProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.FeedbackRequestedProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.HighlightedProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.ImportancyProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.KeywordsProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LatitudeProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LocationProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.LongitudeProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.NameProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.NumberOfVolunteersProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.OptionalCompetencesProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PostcodeProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PriorityProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.PromotedProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RemindParticipantsProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RequiredCompetencesProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RequiredEquipmentProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RewardsProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.RoleProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.StartDateProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaetigkeitsArtProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaskPeriodTypeProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.TaskPeriodValueProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.UrgentProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.WorkflowKeyProperty;
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.WorkshiftProperty;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MaximumTextLength;
@@ -68,8 +39,6 @@ public class StandardPropertyDefinitions {
 	public StandardPropertyDefinitions() {
 
 	}
-	
-	
 
 //	public List<PropertyDefinition<Object>> getAllMulti() {
 //		List<PropertyDefinition<Object>> props = new LinkedList<>();
@@ -263,14 +232,13 @@ public class StandardPropertyDefinitions {
 		props.add(cp2);
 		cp3.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp3);
-		
+
 		props.add(new TaetigkeitsArtProperty());
 
 		return new ArrayList(props);
 
 	}
 
-	
 	public List<String> addCompetenceLegalValues() {
 
 		List<String> legalValues = new LinkedList<>();
@@ -715,16 +683,12 @@ public class StandardPropertyDefinitions {
 			this.setMultiple(true);
 		}
 	}
-	
-	
-	
-	
-	
+
 	public static class TaetigkeitsArtProperty extends EnumPropertyDefinition {
 		public TaetigkeitsArtProperty() {
 			inst();
 		}
-		
+
 		public void inst() {
 			this.setName("Tätigkeitsart");
 			this.setId("taetigkeitsart");
@@ -744,7 +708,7 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add(new EnumEntry(1, "Grundausbildung", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Truppmann", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Truppführer", true));
-			
+
 			this.getAllowedValues().add(new EnumEntry(1, "Erweiterte Grundausbildung", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Funk", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz", true));
@@ -759,24 +723,21 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add(new EnumEntry(2, "Vorbeugender Brandschutz", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Verwaltungsdienst", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Führungsausbildung", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Gruppen-Kommandant", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Zugs-Kommandant", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Einsatzleiter", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Kommandant", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Höhere FW-Ausbildung", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Bewerter-Lehrgang", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Fachweiterbildung", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Chlorgas / Erdgas", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Stapler / Kranschein", true));
 			this.getAllowedValues().add(new EnumEntry(2, "IT", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Sanitäter", true));
-			
+
 			this.getAllowedValues().add(new EnumEntry(1, "Überprüfung Mannschaft", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz\nUnterweisung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Stapler\nUnterweisung", true));
@@ -791,18 +752,17 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add(new EnumEntry(1, "FULA", true));
 			this.getAllowedValues().add(new EnumEntry(1, "FJLA", true));
 			this.getAllowedValues().add(new EnumEntry(1, "STRMLA", true));
-			
+
 			this.getAllowedValues().add(new EnumEntry(0, "Leistungsprüfungen", false));
 			this.getAllowedValues().add(new EnumEntry(1, "THL", true));
 			this.getAllowedValues().add(new EnumEntry(1, "SPRENGLP", true));
-		
+
 			this.getAllowedValues().add(new EnumEntry(0, "Veranstaltung", false));
 			this.getAllowedValues().add(new EnumEntry(1, "Intern", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Ausflug", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Mitgliederversammlung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Jugendlager", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Extern\n(Öffentlichkeitsarbeit)", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Fest / Ball", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Tag der offenen Tür", true));
@@ -810,33 +770,27 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add(new EnumEntry(2, "Landesfeuerwertag", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Friedenslicht", true));
 
-
 			this.getAllowedValues().add(new EnumEntry(0, "Verwaltung", false));
 			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeug", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Bewegungsfahrt", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Geräte", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Prüfung/Inspektion", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Gebäude", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Wartung Haustechnik", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Reinigung", true));
-
 
 			this.getAllowedValues().add(new EnumEntry(1, "IT", false));
 			this.getAllowedValues().add(new EnumEntry(2, "EDV", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Sybos", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Sitzungen", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Besprechung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "JourFix", true));
 
-			
 			this.getAllowedValues().add(new EnumEntry(1, "Öffentlichkeits-\nArbeit", false));
 			this.getAllowedValues().add(new EnumEntry(2, "Homepage / Social Media", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Presse", true));
@@ -844,15 +798,11 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add(new EnumEntry(2, "Mitglieder-Werbung", true));
 			this.getAllowedValues().add(new EnumEntry(2, "Haussammlung", true));
 
-
 			this.getAllowedValues().add(new EnumEntry(0, "Projekt", false));
 			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeuganschaffung", true));
 			this.getAllowedValues().add(new EnumEntry(1, "FW Hausbau", true));
 			this.getAllowedValues().add(new EnumEntry(1, "Landesbewerb", true));
 
-			
-
-			
 		}
 	}
 
