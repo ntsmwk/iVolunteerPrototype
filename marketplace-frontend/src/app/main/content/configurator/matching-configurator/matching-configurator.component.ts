@@ -108,7 +108,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
               .then((storage: MatchingOperatorRelationshipStorage) => {
                 this.matchingOperatorRelationshipStorage = storage;
                 this.insertMatchingOperatorsAndRelationships();
-                console.log(storage);
               })
           });
         });
@@ -217,15 +216,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  // private insertClassDefinitionsProducer() {
-
-  //   let y = 20;
-  //   for (const c of this.producerClassDefinitions) {
-  //     const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(20, y, 200, 0));
-  //     y = cell.geometry.y + cell.geometry.height + 20;
-  //   }
-  // }
-
   private insertClassDefinitionsProducerFromCollection() {
     let y = 20;
     for (const c of this.producerClassDefinitionCollections) {
@@ -243,78 +233,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       y = cell.geometry.y + cell.geometry.height + 20;
     }
   }
-
-  // private insertClassDefinitionsConsumer() {
-  //   let x = this.graphContainer.nativeElement.offsetWidth - 220;
-  //   let y = 20;
-
-  //   for (const c of this.consumerClassDefinitions) {
-  //     const cell = this.insertClassDefinitionIntoGraph(c, new mx.mxGeometry(x, y, 200, 0));
-  //     y = cell.geometry.y + cell.geometry.height + 20;
-  //   }
-
-  // }
-
-  // private insertClassDefinitionIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry): myMxCell {
-  //   // create class cell
-  //   let cell: myMxCell;
-  //   if (classDefinition.classArchetype.startsWith('ENUM')) {
-  //     cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
-  //   } else {
-  //     cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as myMxCell;
-  //   }
-  //   cell.root = classDefinition.root;
-  //   cell.setCollapsed(false);
-  //   cell.cellType = 'class';
-  //   cell.classArchetype = classDefinition.classArchetype;
-  //   cell.newlyAdded = false;
-  //   cell.value = classDefinition.name;
-  //   cell.setVertex(true);
-  //   cell.setConnectable(true);
-
-  //   cell.setStyle(cell.getStyle() + 'foldable=0;movable=0;resizable=0;editable=0;deletable=0;');
-
-  //   // const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
-  //   // this.graph.addCellOverlay(cell, overlay);
-
-  //   if (!isNullOrUndefined(classDefinition.id)) {
-  //     cell.id = classDefinition.id;
-  //   }
-
-  //   // create vertical space before properties
-  //   const vfiller = this.graph.insertVertex(cell, 'vfiller', null, 105, 45, 5, 130, CConstants.mxStyles.classVfiller);
-  //   vfiller.setConnectable(false);
-  //   cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
-  //   cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
-  //   // create properties TODO @Alex Refactor
-  //   let i = 5;
-  //   if (!isNullOrUndefined(classDefinition.properties)) {
-  //     for (const p of classDefinition.properties) {
-  //       const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 190, 20, CConstants.mxStyles.property) as myMxCell;
-
-  //       if (p.type === PropertyType.ENUM) {
-  //         propertyEntry.cellType = 'enum_property';
-  //         propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
-
-  //       } else {
-
-  //         propertyEntry.cellType = 'property';
-  //       }
-  //       propertyEntry.setConnectable(true);
-
-  //       propertyEntry.propertyId = p.id;
-  //       i = i + 20;
-  //     }
-  //   }
-
-  //   // create horizonal filler in front of properties
-  //   const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50, 85, 5, CConstants.mxStyles.classHfiller);
-  //   hfiller.setConnectable(false);
-
-  //   return this.graph.addCell(cell) as myMxCell;
-
-  // }
-
 
   private insertClassDefinitionCollectionsIntoGraph(collection: MatchingConfiguratorClassDefinitionCollection, geometry: mxgraph.mxGeometry): myMxCell {
     // create class cell
@@ -360,8 +278,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       addPropertiesReturn = this.addPropertiesToCell(cell, classDefinition, boundary.geometry.x + 5, boundary.geometry.y + boundary.geometry.height + 5);
 
     }
-
-
 
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height + 5);
     return this.graph.addCell(cell) as myMxCell;
@@ -441,72 +357,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     return paletteItem.imgPath;
   }
 
-  // private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
-
-  //   const parent = this.graph.getDefaultParent();
-
-  //   let source: myMxCell = this.graph.getModel().getCell(r.source) as myMxCell;
-  //   let target: myMxCell = this.graph.getModel().getCell(r.target) as myMxCell;
-
-  //   let cell: myMxCell;
-
-  //   if (r.relationshipType === RelationshipType.INHERITANCE) {
-  //     cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as myMxCell;
-  //     cell.cellType = 'inheritance';
-
-  //     if (source.classArchetype.startsWith('ENUM_')) {
-  //       cell.setStyle(CConstants.mxStyles.inheritanceEnum);
-  //     }
-
-  //   } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
-  //     cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as myMxCell;
-  //     cell.cellType = 'association';
-
-  //     const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
-  //     cell1.geometry.relative = true;
-  //     cell1.setConnectable(false);
-  //     cell1.vertex = true;
-  //     cell1.cellType = 'associationLabel';
-  //     cell1.setVisible(false);
-
-  //     if (isNullOrUndefined(cell1.value)) {
-  //       cell1.value = 'start';
-  //     }
-  //     cell.insert(cell1);
-
-  //     const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
-  //     cell2.geometry.relative = true;
-  //     cell2.setConnectable(false);
-  //     cell2.vertex = true;
-  //     cell2.cellType = 'associationLabel';
-  //     cell2.setVisible(false);
-
-  //     if (isNullOrUndefined(cell2.value)) {
-  //       cell2.value = 'end';
-  //     }
-  //     cell.insert(cell2);
-
-  //   } else {
-  //     console.error('invalid RelationshipType');
-  //   }
-
-  //   if (!createNew) {
-  //     cell.id = r.id;
-  //   } else {
-  //     cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
-  //     cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
-
-  //     source = undefined;
-  //     target = undefined;
-  //   }
-
-  //   cell.newlyAdded = createNew;
-  //   cell.geometry.relative = true;
-  //   cell.edge = true;
-
-  //   return this.graph.addEdge(cell, parent, source, target);
-  // }
-
   // Functions for Views/Viewing
   zoomInEvent() {
     this.graph.zoomIn();
@@ -536,18 +386,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   consumeMenuOptionClickedEvent(event: any) {
-    console.log(event);
     if (event.id === 'editor_save') {
       const cells = this.graph.getChildCells(this.graph.getDefaultParent());
       const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
 
       const newRelationships: MatchingOperatorRelationship[] = [];
 
-      console.log(matchingOperatorCells);
       for (const operatorCell of matchingOperatorCells) {
-        console.log(operatorCell);
-
-
         const relationship = new MatchingOperatorRelationship();
         relationship.matchingOperatorType = (operatorCell as myMxCell).operatorType;
         relationship.coordX = operatorCell.geometry.x;
@@ -557,6 +402,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         let consumerSet = false;
 
         for (const edge of operatorCell.edges) {
+
           if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
             if (edge.target.id === operatorCell.id) {
               relationship.producerId = edge.source.id;
@@ -565,7 +411,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
               relationship.consumerId = edge.target.id;
               consumerSet = true;
             }
-
           }
 
           if (producerSet && consumerSet) {
@@ -578,11 +423,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
 
       this.matchingOperatorRelationshipStorage.relationships = newRelationships;
-      console.log(newRelationships);
-      console.log(this.matchingOperatorRelationshipStorage);
+
       this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingOperatorRelationshipStorage).toPromise()
         .then((ret: MatchingOperatorRelationshipStorage) => {
-          console.log(ret);
+          // do stuff
         });
     }
   }
@@ -617,17 +461,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       function addObjectToGraph(dragEndEvent: MouseEvent, paletteItem: any) {
 
         const coords: mxgraph.mxPoint = graph.getPointForEvent(positionEvent, false);
-        console.log(coords);
         graph.getModel().beginUpdate();
         if (paletteItem.type === 'matchingOperator') {
 
 
-          let cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50, `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as myMxCell;
+          const cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50,
+            `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as myMxCell;
+
           cell.cellType = 'matchingOperator';
           cell.operatorType = paletteItem.id;
 
         } else if (paletteItem.type === 'connector') {
-          let cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
+          const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
           cell.cellType = 'matchingConnector';
           cell.setEdge(true);
           cell.setVertex(false);
@@ -637,12 +482,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
           graph.addCell(cell);
         }
-        console.log("finished drag");
-        console.log(paletteItem);
-
-
-
-
       }
     };
 

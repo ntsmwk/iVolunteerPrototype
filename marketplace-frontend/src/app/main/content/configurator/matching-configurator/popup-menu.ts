@@ -38,8 +38,7 @@ export class MatchingConfiguratorPopupMenu {
 
       if (cell.cellType === 'matchingOperator' || cell.cellType === 'matchingConnector') {
         const deleteItem = menu.addItem('Delete', null, function () {
-          console.log('Todo delete');
-
+         
           try {
             graph.getModel().beginUpdate();
 
