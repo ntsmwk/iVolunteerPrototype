@@ -43,7 +43,7 @@ export class MatchingConfiguratorPopupMenu {
           try {
             graph.getModel().beginUpdate();
 
-
+            graph.removeCells([cell]);
 
 
           } finally {
