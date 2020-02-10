@@ -9,7 +9,7 @@
   </div> -->
 
   <div *ngIf="this.participant && isFF()">
-    <div class="header-rk p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="header-ff p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
       <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
       </mat-icon>
       <h1 class="l-heading">Einträge ableiten</h1>
@@ -21,7 +21,6 @@
     <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
       <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
       </mat-icon>
-
       <h1 class="l-heading">Einträge ableiten</h1>
       <img class="header-icon" src="assets/images/avatars/musikvereinschwertberg.jpeg">
     </div>
@@ -38,6 +37,13 @@
   </div>
 
   <form *ngIf="derivationRule" form style="padding-top: 12px; padding-left: 40px" name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start" (submit)="save()" [formGroup]="ruleForm">
+    <div fxLayout=row>
+      <mat-form-field class="nameInput">
+        <input matInput placeholder="Regelname" formControlName="name" />
+      </mat-form-field>
+    </div>
+
+    
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout=row fxLayoutAlign="start start">
@@ -60,12 +66,7 @@
       </mat-form-field>
     </div>
 
-    <div fxLayout=row>
-      <mat-form-field class="nameInput">
-        <input matInput placeholder="Regelname" formControlName="name" />
-      </mat-form-field>
-    </div>
-
+    
     <div style=" font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout=row fxLayoutAlign="start start">
