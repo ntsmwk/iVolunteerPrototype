@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public abstract class IVolunteerObject {
 
 	@Id protected String id;
+	protected String tenantId;
 	protected String marketplaceId;
 	protected Date timestamp;
 
@@ -25,6 +26,14 @@ public abstract class IVolunteerObject {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 	public String getMarketplaceId() {
