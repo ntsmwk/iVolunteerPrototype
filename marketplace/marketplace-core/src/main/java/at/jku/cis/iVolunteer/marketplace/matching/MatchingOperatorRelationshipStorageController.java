@@ -46,10 +46,6 @@ public class MatchingOperatorRelationshipStorageController {
 	
 	@PostMapping("matching/operator-relationship/save")
 	MatchingOperatorRelationshipStorage saveMatchingOperatorRelationships(@RequestBody MatchingOperatorRelationshipStorage storage) {
-		
-		System.out.println(storage);
-		System.out.println(storage.getRelationships().size());
-		
 		return matchingOperatorRelationshipStorageRepository.save(storage);
 	}
 	

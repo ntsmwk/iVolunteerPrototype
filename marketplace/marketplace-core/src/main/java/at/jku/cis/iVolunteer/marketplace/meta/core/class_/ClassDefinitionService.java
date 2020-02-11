@@ -385,25 +385,66 @@ public class ClassDefinitionService {
 		return list;
 	}
 	
-	
-
-	// TODO @Alex implement
-	public List<String> getChildrenById(List<String> rootIds) {
-
-		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
-		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
-
-		List<String> returnIds;
-		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
-
-		}
-
-		return null;
-	}
-
 	public List<EnumEntry> getEnumValues(String classDefinitionId) {
 		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
 		return performDFSOnEnums(enumHead, 0, new ArrayList<>());
 	}
+	
+
+	// TODO @Alex implement
+	public List<FormConfiguration> getChildrenById(List<String> rootIds) {
+
+		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
+
+		
+		List<FormConfiguration> formConfigurations = new ArrayList<>();
+		for (ClassDefinition rootClassDefinition : rootClassDefintions) {
+			FormEntry formEntry = aggregateClassDefinitions(rootClassDefinition, new FormEntry());
+			FormConfiguration formConfiguration = new FormConfiguration();
+			formConfiguration.setId(rootClassDefinition.getId());
+			formConfiguration.setName(rootClassDefinition.getName());
+			formConfiguration.setFormEntry(formEntry);
+			formConfigurations.add(formConfiguration);
+		
+		}
+
+		return formConfigurations;
+	}
+	
+	private FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry) {
+		
+		rootFormEntry.setClassDefinitions(new LinkedList<>());
+		rootFormEntry.getClassDefinitions().add(rootClassDefinition);
+		
+		rootFormEntry.setClassProperties(rootClassDefinition.getProperties());
+		
+		List<Relationship> relationships = relationshipRepository.findBySourceAndRelationshipType(rootClassDefinition.getId(), RelationshipType.AGGREGATION);		
+		
+		Collections.reverse(relationships);
+		
+		Stack<Relationship> stack = new Stack<Relationship>();
+		stack.addAll(relationships);
+		
+		List<FormEntry> subFormEntries = new ArrayList<>();
+		
+		if (stack == null || stack.size() <= 0) {
+			return rootFormEntry;
+		} else {
+			while (!stack.isEmpty()) {
+				Relationship relationship = stack.pop();
+				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+								
+				FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry());
+				subFormEntries.add(subFormEntry);
+			}
+			
+			rootFormEntry.setSubEntries(subFormEntries);
+		}
+		return rootFormEntry;
+	
+	}
+
+
 
 }

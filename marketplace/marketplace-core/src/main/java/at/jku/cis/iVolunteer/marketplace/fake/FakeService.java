@@ -122,9 +122,6 @@ public class FakeService {
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());
 
-		instance.setPublished(false);
-		instance.setInUserRepository(false);
-		instance.setInIssuerInbox(false);
 
 		instance.setTimestamp(new Date());
 
@@ -157,9 +154,6 @@ public class FakeService {
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());
 
-		instance.setPublished(false);
-		instance.setInUserRepository(false);
-		instance.setInIssuerInbox(false);
 
 		instance.setTimestamp(new Date());
 

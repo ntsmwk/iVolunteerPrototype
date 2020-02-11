@@ -88,7 +88,7 @@ public class ClassDefinitionController {
 	}
 
 	@PutMapping("meta/core/class/definition/get-children")
-	private List<String> getChildrenById(@RequestBody List<String> rootIds) {
+	private List<FormConfiguration> getChildrenById(@RequestBody List<String> rootIds) {
 		return classDefinitionService.getChildrenById(rootIds);
 	}
 

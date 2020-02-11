@@ -56,55 +56,10 @@ public class ClassInstanceController {
 			for (ClassDefinition cd : classDefinitions) {
 				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
 			}
-		} else {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()).stream()
-						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
-			}
 		}
 		return classInstances;
 	}
 	
-	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/fake")
-	private List<ClassInstance> getClassinstancesByArchetypeFake(@PathVariable("archetype") ClassArchetype archeType) {
-		boolean returnFake = isSunburstFakeRepository.findAll().size() > 0;
-				
-		if (returnFake) {
-			return getClassInstancesByArchetypeAfterSunburstFake(archeType);
-		} else {
-			return getClassInstancesByArchetypeBeforeSunburstFake(archeType);
-		}
-	}
-
-	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/before")
-	private List<ClassInstance> getClassInstancesByArchetypeBeforeSunburstFake(
-			@PathVariable("archetype") ClassArchetype archeType) {
-		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
-
-		for (ClassDefinition cd : classDefinitions) {
-			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
-			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> !ci.isNewFakeData())
-					.collect(Collectors.toList()));
-		}
-
-		return classInstances;
-	}
-
-	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/after")
-	private List<ClassInstance> getClassInstancesByArchetypeAfterSunburstFake(
-			@PathVariable("archetype") ClassArchetype archeType) {
-		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
-
-		for (ClassDefinition cd : classDefinitions) {
-			List<ClassInstance> cis = classInstanceRepository.getByClassDefinitionId(cd.getId());
-			classInstances.addAll(cis.stream().filter(ci -> !ci.isMV()).filter(ci -> ci.isNewFakeData())
-					.collect(Collectors.toList()));
-		}
-
-		return classInstances;
-	}
 
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/hashed")
 	private List<ClassInstance> getClassInstancesByArchetypeWithHash(
@@ -145,32 +100,11 @@ public class ClassInstanceController {
 		return classInstanceRepository.getByUserId(userId);
 	}
 
-	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
-	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false);
-	}
-
-	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
-	private List<ClassInstance> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false);
-	}
-
-	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
-		List<ClassInstance> instances = classInstanceRepository
-				.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false);
-		return instances;
-	}
-
 	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
 	private List<ClassInstance> setClassInstancesInUserRepository(
 			@PathVariable("inUserRepository") boolean inUserRepository, @RequestBody List<String> classInstanceIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInUserRepository(inUserRepository);
-		}
 
 		return classInstanceRepository.save(classInstances);
 	}
@@ -181,21 +115,12 @@ public class ClassInstanceController {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
 
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInIssuerInbox(inIssuerInbox);
-			classInstance.setInUserRepository(false);
-		}
-
 		return classInstanceRepository.save(classInstances);
 	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
 
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInIssuerInbox(true);
-			classInstance.setInUserRepository(false);
-		}
 		return classInstanceRepository.save(classInstances);
 
 	}

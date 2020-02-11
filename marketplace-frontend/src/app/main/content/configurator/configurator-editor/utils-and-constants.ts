@@ -21,82 +21,92 @@ const relationshipPalettes = {
   rows: [
     { id: 'INHERITANCE', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'inheritance', shape: undefined },
     { id: 'ASSOCIATION', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'association', shape: undefined },
-    { id: 'AGGREGATION', label: 'Aggregation', imgPath: '', type: 'aggregation', shape: undefined}
+    { id: 'AGGREGATION', label: 'Aggregation', imgPath: '', type: 'aggregation', shape: undefined }
   ]
 };
 
 const matchingPalettes = [
-  {id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator'},
-  {id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator'},
-  {id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator'},
-  {id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator'},
-  {id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator'},
-  {id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator'},
-  {id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator'},
+  { id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
+  { id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
+  { id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
+  { id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
+  { id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
+  { id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
+  { id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator' },
 ];
 
 const matchingConnectorPalettes = [
-  {id: 'connector', label: 'verbinder', imgPath: '/assets/mxgraph_resources/images/connect.gif', type: 'connector'},
+  { id: 'connector', label: 'verbinder', imgPath: '/assets/mxgraph_resources/images/connect.gif', type: 'connector' },
 
 ]
 
 const mxStyles = {
+
+  // Classes
   // classNormal: 'shape=swimlane;resizable=0;' + 'fontColor=#000e8a;strokeColor=#000e8a;',
   // classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;' + 'portConstraint=north',
   // classFlexprodCollector: 'shape=swimlane;resizable=0;' + 'fillColor=#ffbdbd;fontColor=#700000;strokeColor=#700000;',
   classNormal: 'shape=swimlane;resizable=0;' + 'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
-  classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' + 'portConstraint=north',
+  classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' + 'portConstraint=north;',
   classFlexprodCollector: 'shape=swimlane;resizable=0;' + 'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
- 
-  classSeparator: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=#000e8a;fontColor=#FFFFFF;strokeColor=#000e8a;align=center;html=1;overflow=hidden;fontSize=14',
 
-
-
+  // Fillers
   classVfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+  classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
   // property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=1;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden',
   property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=1;fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
   propertyEnum: 'movable=0;resizable=0;editable=0;deletable=0;selectable=1;fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;align=left;html=1;overflow=hidden;' + 'portConstraint=eastwest',
 
-  propertyMatching: 'movable=0;resizable=0;editable=0;deletable=0;selectable=1;fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;' + 
-    'portConstraint=eastwest',
-
-
+  // Icons
   addIcon: 'shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   removeIcon: 'shape=image;image=/assets/mxgraph_resources/images/remove_red.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
-  classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
-
-  inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;' ,
-  inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
-
-
-  association: 'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
-  associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
-
-  aggregation: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=0;exitPerimeter=1;' + 
-    'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
-    
-  composition: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=1;exitPerimeter=1;' + 
-    'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
-
-  matchingConnector: 'endArrow=classic;startArrow=none;html=1;curved=1;' + 'editable=0;selectable=1;deletable=1;' + 'edgeStyle=orthogonalEdgeStyle;',
-
-  matchingOperator: 'resizable=0;editable=0;deletable=1;selectable=1;' + 'portConstraint=eastwest',
-
-
-
   addClassSameLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/right_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   addClassNewLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   addClassNewLevelAssociationIcon: 'shape=image;image=/assets/mxgraph_resources/images/letter-a-icon.jpg;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
+  
+  // Relationships
+  inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;',
+  inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
+
+  association: 'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+  associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',
+
+  aggregation: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=0;exitPerimeter=1;' +
+    'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+
+  composition: 'endArrow=none;html=1;startArrow=diamondThin;startSize=15;startFill=1;exitPerimeter=1;' +
+    'strokeColor=#000e8a;' + 'curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+
+  // Matching
+
+  matchingRowHeader: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' + 
+      'fillColor=#000000;fontColor=#FFFFFF;strokeColor=#000000;' + 
+      'align=center;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;',
+
+  matchingConnector: 'endArrow=classic;startArrow=none;html=1;curved=1;' + 'editable=0;selectable=1;deletable=1;' + 'edgeStyle=orthogonalEdgeStyle;',
+  matchingOperator: 'resizable=0;editable=0;deletable=1;selectable=1;' + 'portConstraint=eastwest',
+  matchingClassSeparator:
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;foldable=0;' +
+    'fillColor=#000e8a;fontColor=#FFFFFF;strokeColor=#000e8a;align=center;html=1;overflow=hidden;fontSize=14;' + 'portConstraint=eastwest;',
+  matchingProperty:
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;foldable=0;' +
+    'fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;' + 'portConstraint=eastwest',
+  matchingClassNormal:
+    'shape=swimlane;movable=0;resizable=0;editable=0;deletable=0;selectable=0;foldable=0;' +
+    'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;' + 'portConstraint=eastwest',
+  matchingClassFlexprodCollector:
+    'shape=swimlane;movable=0;resizable=0;editable=0;deletable=0;selectable=0;foldable=0;' +
+    'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;' + 'portConstraint=eastwest',
 };
 
 const cellTypes = {
-  property: {label: 'property', icon:''},
-  property_enum: {label: 'property_enum', icon:''},
+  property: { label: 'property', icon: '' },
+  property_enum: { label: 'property_enum', icon: '' },
 
-  add: {label: 'add', icon:''},
-  add_association: {label: 'property', icon:''},
+  add: { label: 'add', icon: '' },
+  add_association: { label: 'property', icon: '' },
   add_class_new_level: {},
   add_class_same_level: {},
   remove: {},
@@ -120,119 +130,42 @@ export class CConstants {
 
 export class CUtils {
 
-  public static addStandardObjects(marketplaceId: string, objectIdService: ObjectIdService): {classDefintions: ClassDefinition[], relationships: Relationship[]} {
-    let configurableClasses: ClassDefinition[] = [];
-    let relationships: Relationship[] = [];
-   
-   
-    let fwPassEintrag = new ClassDefinition();
-    fwPassEintrag.id = objectIdService.getNewObjectId();
-    fwPassEintrag.marketplaceId = marketplaceId;
-    fwPassEintrag.name = "Freiwilligenpass-\nEintrag";
-    fwPassEintrag.root = true;
-    fwPassEintrag.classArchetype = ClassArchetype.ROOT;
-
-    fwPassEintrag.properties = [];
-
-    let idProperty = new ClassProperty<string>();
-    idProperty.name = 'ID';
-    idProperty.id = 'id';
-    idProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(idProperty);
-    
-
-    let nameProperty = new ClassProperty<string>();
-    nameProperty.name = 'Name';
-    nameProperty.id = 'name';
-    nameProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(nameProperty);
+  public static addStandardObjects(marketplaceId: string, objectIdService: ObjectIdService): { classDefintions: ClassDefinition[], relationships: Relationship[] } {
+    const classDefintions: ClassDefinition[] = [];
+    const relationships: Relationship[] = [];
 
 
-    let evidenceProperty = new ClassProperty<string>();
-    evidenceProperty.name = 'Evidenz';
-    evidenceProperty.id = 'evidence';
-    evidenceProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(evidenceProperty);
+    const root = new ClassDefinition();
+    root.id = objectIdService.getNewObjectId();
+    root.marketplaceId = marketplaceId;
+    root.name = '<Maschninen-\nname>';
+    root.root = true;
+    root.classArchetype = ClassArchetype.ROOT;
 
-    configurableClasses.push(fwPassEintrag);
+    root.properties = [];
 
-    let task = new ClassDefinition();
-    task.id = objectIdService.getNewObjectId();
-    task.marketplaceId = marketplaceId;
-    task.name = "Tätigkeit";
-    task.root = false;
-    task.classArchetype = ClassArchetype.TASK_HEAD;
-    configurableClasses.push(task);
+    classDefintions.push(root);
 
-    let vonProperty = new ClassProperty<Date>();
-    vonProperty.name = 'taskDateFrom';
-    vonProperty.id = 'taskDateFrom';
-    vonProperty.type = PropertyType.DATE;
-    task.properties.push(vonProperty);
+    const flexProdclass = new ClassDefinition();
+    flexProdclass.id = objectIdService.getNewObjectId();
+    flexProdclass.marketplaceId = marketplaceId;
+    flexProdclass.name = '<Komponenten-\nName>';
+    flexProdclass.root = false;
+    flexProdclass.classArchetype = ClassArchetype.FLEXPROD;
 
-    let bisProperty = new ClassProperty<Date>();
-    bisProperty.name = 'taskDateTo';
-    bisProperty.id = 'taskDateTo';
-    bisProperty.type = PropertyType.DATE;
-    task.properties.push(bisProperty);
+    flexProdclass.properties = [];
 
-    let r1 = new Inheritance();
+    classDefintions.push(flexProdclass);
+
+    const r1 = new Relationship();
     r1.id = objectIdService.getNewObjectId();
-    r1.relationshipType = RelationshipType.INHERITANCE;
-    r1.target = task.id;
-    r1.source = fwPassEintrag.id;
-    r1.superClassId = r1.source;
+    r1.relationshipType = RelationshipType.AGGREGATION;
+    r1.source = root.id;
+    r1.target = flexProdclass.id;
+
     relationships.push(r1);
 
-    let competence = new ClassDefinition();
-    competence.id = objectIdService.getNewObjectId();
-    competence.marketplaceId = marketplaceId;
-    competence.name = 'Kompetenz';
-    competence.root = false;
-    competence.classArchetype = ClassArchetype.COMPETENCE_HEAD;
-    configurableClasses.push(competence);
-
-    let r2 = new Inheritance();
-    r2.id = objectIdService.getNewObjectId();
-    r2.relationshipType = RelationshipType.INHERITANCE;
-    r2.target = competence.id;
-    r2.source = fwPassEintrag.id;
-    r2.superClassId = r2.source;
-    relationships.push(r2);
-
-    let achievement = new ClassDefinition();
-    achievement.id = objectIdService.getNewObjectId();
-    achievement.marketplaceId = marketplaceId;
-    achievement.name = 'Verdienst';
-    achievement.root = false;
-    achievement.classArchetype = ClassArchetype.ACHIEVEMENT_HEAD;
-    configurableClasses.push(achievement);
-
-    let r3 = new Inheritance();
-    r3.id = objectIdService.getNewObjectId();
-    r3.relationshipType = RelationshipType.INHERITANCE;
-    r3.target = achievement.id;
-    r3.source = fwPassEintrag.id;
-    r3.superClassId = r3.source;
-    relationships.push(r3);
-
-    let funktion = new ClassDefinition();
-    funktion.id = objectIdService.getNewObjectId();
-    funktion.marketplaceId = marketplaceId;
-    funktion.name = 'Funktion';
-    funktion.root = false;
-    funktion.classArchetype = ClassArchetype.FUNCTION_HEAD;
-    configurableClasses.push(funktion);
-
-    let r4 = new Inheritance();
-    r4.id = objectIdService.getNewObjectId();
-    r4.relationshipType = RelationshipType.INHERITANCE;
-    r4.target = funktion.id;
-    r4.source = fwPassEintrag.id;
-    r4.superClassId = r4.source;
-    relationships.push(r4);
-
-    return {classDefintions: configurableClasses, relationships: relationships};
+    return { classDefintions: classDefintions, relationships: relationships };
 
   }
 }

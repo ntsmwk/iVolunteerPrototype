@@ -19,18 +19,13 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	private String userId;
 	private String issuerId;
-
-	// Temp flags for dashboard presentation
-	private boolean published; // flag if published
-	private boolean inUserRepository;//flag if in inbox or in repository of user
-	private boolean inIssuerInbox; //flag if in inbox of issuer
 	
 	private String imagePath;
 	
 	private ClassArchetype classArchetype;
 	
-	private boolean isNewFakeData;
-	private boolean isMV;
+	private List<ClassInstance> subClassInstances;
+
 
 	public ClassInstance() {
 	}
@@ -87,14 +82,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.marketplaceId = marketplaceId;
 	}
 
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
 	public ClassArchetype getClassArchetype() {
 		return classArchetype;
 	}
@@ -110,34 +97,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setIssuerId(String issuerId) {
 		this.issuerId = issuerId;
 	}
-
-	public boolean isInUserRepository() {
-		return inUserRepository;
-	}
-
-	public void setInUserRepository(boolean inUserRepository) {
-		this.inUserRepository = inUserRepository;
-	}
-
-	public boolean isInIssuerInbox() {
-		return inIssuerInbox;
-	}
-
-	public void setInIssuerInbox(boolean inIssuerInbox) {
-		this.inIssuerInbox = inIssuerInbox;
-	}
-
-	@Override
-	public String toHashObject() {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
-		json.addProperty("name", name);
-		json.addProperty("marketplaceId", marketplaceId);
-//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
-		json.addProperty("properties", this.properties.hashCode());
-//		json.addProperty("timestamp", timestamp.toString());
-		return json.toString();
-	}
+	
 
 	public String getUserId() {
 		return userId;
@@ -155,20 +115,25 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.imagePath = imagePath;
 	}
 
-	public boolean isNewFakeData() {
-		return isNewFakeData;
+	public List<ClassInstance> getSubClassInstances() {
+		return subClassInstances;
 	}
 
-	public void setNewFakeData(boolean isNewFakeData) {
-		this.isNewFakeData = isNewFakeData;
+	public void setSubClassInstances(List<ClassInstance> subClassInstances) {
+		this.subClassInstances = subClassInstances;
 	}
 
-	public boolean isMV() {
-		return isMV;
-	}
-
-	public void setMV(boolean isMV) {
-		this.isMV = isMV;
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("name", name);
+		json.addProperty("marketplaceId", marketplaceId);
+//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
+		json.addProperty("properties", this.properties.hashCode());
+//		json.addProperty("timestamp", timestamp.toString());
+		return json.toString();
 	}
 
 }
+

@@ -180,6 +180,13 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
+    path: 'main/configurator/instance-editor',
+    loadChildren: () => import(
+      './configurator/class-instances/form-editor/class-instance-form-editor.module'
+      ).then(m => m.ClassInstanceFormEditorModule),
+    canActivate: [TokenGuard, HelpSeekerGuard]
+  },
+  {
     path: 'main/rules/all',
     loadChildren: () => import('./rule-view/rule-overview.module').then(m => m.FuseRuleOverviewModule),
     canActivate: [TokenGuard, HelpSeekerGuard]

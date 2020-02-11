@@ -543,7 +543,6 @@ public class InitializationService {
 			ti1.setIssuerId(oerk.getId());
 		}
 		ti1.setTimestamp(new Date(System.currentTimeMillis()));
-		ti1.setInUserRepository(true);
 
 		classInstanceRepository.save(ti1);
 
@@ -619,7 +618,6 @@ public class InitializationService {
 		}
 		f1.setTimestamp(new Date(System.currentTimeMillis()));
 		f1.setFeedbackValue(1);
-		f1.setInUserRepository(false);
 
 		feedbackRepository.save(f1);
 
@@ -647,7 +645,6 @@ public class InitializationService {
 			ci1.setIssuerId(mvs.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInUserRepository(true);
 
 		classInstanceRepository.save(ci1);
 
@@ -693,7 +690,6 @@ public class InitializationService {
 			ci1.setIssuerId(ffa.getId());
 		}
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
-		ci1.setInUserRepository(false);
 		classInstanceRepository.save(ci1);
 	}
 
