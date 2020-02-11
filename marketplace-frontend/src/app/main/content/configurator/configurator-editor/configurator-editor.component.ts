@@ -1201,7 +1201,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: myMxCell) => c.classArchetype === ClassArchetype.ROOT);
     if (!isNullOrUndefined(rootCell)) {
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/`], { queryParams: [rootCell.id] });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/top-down`], { queryParams: [rootCell.id] });
     }
   }
 

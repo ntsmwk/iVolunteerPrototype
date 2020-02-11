@@ -51,7 +51,7 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     this.returnedClassInstances = [];
 
-    this.classDefinitionService.getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+    this.classDefinitionService.getFormConfiguratorsBottomUp(this.data.marketplace, this.data.classConfigurationIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
       this.formConfigurations = formConfigurations;
 

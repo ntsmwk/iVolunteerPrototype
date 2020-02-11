@@ -14,7 +14,7 @@ import {
 
 
 const routes = [
-  { path: ':marketplaceId', component: ClassInstanceFormEditorComponent }
+  { path: ':marketplaceId/:type', component: ClassInstanceFormEditorComponent }
   // {path: ':marketplaceId/:classId/:showMaxGluehtemperatur', component: ClassInstanceFormEditorComponent}
 ];
 

@@ -63,13 +63,26 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/delete`, ids);
     }
 
-    getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children`, rootClassIds);
+    // getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
+    //   return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children`, rootClassIds);
+    // }
+
+    // getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[]) {
+    //   return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
+    // }
+
+    getFormConfiguratorsBottomUp(marketplace: Marketplace, ids: string[]) {
+      return this.getFormConfigurations(marketplace, ids, 'bottom-up');
     }
 
-    getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
+    getFormConfiguratorsTopDown(marketplace: Marketplace, ids: string[]) {
+      return this.getFormConfigurations(marketplace, ids, 'top-down');
     }
+
+    getFormConfigurations(marketplace: Marketplace, ids: string[], type: string) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration?type=${type}`, ids);
+    }
+    
 
     getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id`, propIds);
