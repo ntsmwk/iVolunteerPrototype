@@ -5,7 +5,7 @@ import { ClassDefinitionService } from '../../../_service/meta/core/class/class-
 import { ClassInstance } from '../../../_model/meta/Class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
-import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
+import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
@@ -86,26 +86,39 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
             console.log(formConfigurations);
 
-          //   for (const config of this.formConfigurations) {
-          //     config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-          //     config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-          //   }
-          // })
 
-          // .then(() => {
-          //   this.currentFormConfiguration = this.formConfigurations.pop();
+            for (const config of this.formConfigurations) {
+              config.formEntry = this.addQuestionsAndFormGroup(config.formEntry);
+            }
 
-          //   if (this.formConfigurations.length === 0) {
-          //     this.lastEntry = true;
-          //   }
+            console.log(this.formConfigurations);
+          })
 
-          //   console.log(this.currentFormConfiguration);
-          //   this.isLoaded = true;
-          });
+        // .then(() => {
+        //   this.currentFormConfiguration = this.formConfigurations.pop();
 
+        //   if (this.formConfigurations.length === 0) {
+        //     this.lastEntry = true;
+        //   }
 
+        //   console.log(this.currentFormConfiguration);
+        //   this.isLoaded = true;
       });
+
+
     });
+  }
+
+  private addQuestionsAndFormGroup(formEntry: FormEntry) {
+    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties);
+    formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
+
+    if (!isNullOrUndefined(formEntry.subEntries)) {
+      for (let subEntry of formEntry.subEntries) {
+        subEntry = this.addQuestionsAndFormGroup(subEntry);
+      }
+    }
+    return formEntry;
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
