@@ -2,8 +2,8 @@
 
     <h1 class="h1-nospace">{{ formEntry.classDefinitions[0].name }}</h1>
 
-    <app-dynamic-class-instance-creation-form [questions]="formEntry.questions" hideButtons="true"
-        [formConfigurationId]="formConfiguration.id" [form]="formEntry.formGroup" lastEntry="false"
+    <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0" [questions]="formEntry.questions"
+        hideButtons="true" [formConfigurationId]="formConfiguration.id" [form]="formEntry.formGroup" lastEntry="false"
         (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
     </app-dynamic-class-instance-creation-form>
 
