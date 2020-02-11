@@ -92,20 +92,21 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             }
 
             console.log(this.formConfigurations);
+
           })
 
-        // .then(() => {
-        //   this.currentFormConfiguration = this.formConfigurations.pop();
+          .then(() => {
+            this.currentFormConfiguration = this.formConfigurations.pop();
 
-        //   if (this.formConfigurations.length === 0) {
-        //     this.lastEntry = true;
-        //   }
+            if (this.formConfigurations.length === 0) {
+              this.lastEntry = true;
+            }
 
-        //   console.log(this.currentFormConfiguration);
-        //   this.isLoaded = true;
+            console.log(this.currentFormConfiguration);
+            this.isLoaded = true;
+          });
+
       });
-
-
     });
   }
 

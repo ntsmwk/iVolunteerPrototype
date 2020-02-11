@@ -1,0 +1,11 @@
+<div class="page-layout blank" fusePerfectScrollbar *ngIf="isLoaded">
+
+    <app-dynamic-class-instance-creation-form [questions]="formEntry.questions" hideButtons="true"
+        [formConfigurationId]="formConfiguration.id" [form]="formEntry.formGroup" lastEntry="false"
+        (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
+    </app-dynamic-class-instance-creation-form>
+
+    <div *ngFor="let entry of formEntry.subEntries">
+        <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
+    </div>
+</div>
