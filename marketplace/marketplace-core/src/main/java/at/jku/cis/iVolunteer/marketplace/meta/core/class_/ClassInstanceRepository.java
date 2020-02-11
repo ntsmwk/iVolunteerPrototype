@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 
 @Repository
-public interface ClassInstanceRepository extends MongoRepository<ClassInstance, String> {
+public interface ClassInstanceRepository extends HasTenantRepository<ClassInstance, String> {
 		
 	List<ClassInstance> getByClassDefinitionId(String classDefinitionId);
 	

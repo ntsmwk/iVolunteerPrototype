@@ -9,14 +9,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
-import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
+import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
+import at.jku.cis.iVolunteer.model.core.user.CoreTenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.user.UserImagePath;
 
@@ -31,6 +31,12 @@ public class CoreApplication {
 	private static final String RECRUITER = "recruiter";
 	private static final String FLEXPROD = "flexprod";
 	private static final String RAW_PASSWORD = "passme";
+	
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein Schwertberg";
+	private static final String RKWILHERING = "RK Wilhering";
+	
+
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
@@ -38,8 +44,7 @@ public class CoreApplication {
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
 	@Autowired private UserImagePathRepository userImagePathRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreVolunteerService coreVolunteerService;
+	@Autowired private CoreTenantRepository coreTenantRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
@@ -47,6 +52,10 @@ public class CoreApplication {
 
 	@PostConstruct
 	private void init() {
+		createTenant(FFEIDENBERG);
+		createTenant(MUSIKVEREINSCHWERTBERG);
+		createTenant(RKWILHERING);
+		
 		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
 		createRecruiter(RECRUITER, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
@@ -101,12 +110,14 @@ public class CoreApplication {
 		helpseeker.setLastname("Kronsteiner");
 		helpseeker.setPosition("Feuerwehr Kommandant");
 		helpseeker.setId("FFA");
+		helpseeker.setTenantId(coreTenantRepository.findByName(FFEIDENBERG).getId());
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/FF_Altenberg.jpg"));
 
 		helpseeker = createHelpSeekerFixedId("OERK", "passme");
 		helpseeker.setNickname("Rotes Kreuz");
 		helpseeker.setId("OERK");
+		helpseeker.setTenantId(coreTenantRepository.findByName(RKWILHERING).getId());
 		helpseeker = saveHelpseeker(helpseeker);
 		userImagePathRepository
 				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg"));
@@ -116,6 +127,7 @@ public class CoreApplication {
 		helpseeker.setLastname("Schönböck");
 		helpseeker.setPosition("Musikverein Obmann");
 		helpseeker.setId("MVS");
+		helpseeker.setTenantId(coreTenantRepository.findByName(MUSIKVEREINSCHWERTBERG).getId());
 		saveHelpseeker(helpseeker);
 		userImagePathRepository
 				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
@@ -205,5 +217,17 @@ public class CoreApplication {
 		}
 
 		return fpUser;
+	}
+	
+	private CoreTenant createTenant(String name) {
+		CoreTenant tenant = coreTenantRepository.findByName(name);
+		
+		if(tenant == null) {
+			tenant = new CoreTenant();
+			tenant.setName(name);
+			tenant = coreTenantRepository.insert(tenant);
+		}
+		return tenant;
+		
 	}
 }

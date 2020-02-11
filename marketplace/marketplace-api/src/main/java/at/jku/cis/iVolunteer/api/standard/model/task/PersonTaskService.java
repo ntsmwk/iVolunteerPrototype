@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.user.TenantRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -27,7 +28,7 @@ public class PersonTaskService {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
-	
+	@Autowired private TenantRepository tenantRepository;
 	
 
 	public void savePersonTasks(List<PersonTask> personTasks, int level) {
@@ -58,17 +59,16 @@ public class PersonTaskService {
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("unit")).forEach(p -> p.setValues(Lists.asList(personTask.getUnit(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("level")).forEach(p -> p.setValues(Lists.asList(personTask.getLevel(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> {
-		try {
-			p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"), new Object[0]));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		});
+			try {
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"), new Object[0]));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			});
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> {
 			try {
 				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss"), new Object[0]));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
@@ -82,10 +82,14 @@ public class PersonTaskService {
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(false);
 		personTaskClassInstance.setInUserRepository(true);
+		
 		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
 		personTaskClassInstance.setTimestamp(new Date());
 		personTaskClassInstance.setNewFakeData(level==FF_NEW);
 		personTaskClassInstance.setMV(level == MV);
+		
+		// TODO
+		// personTaskClassInstance.setTenantId(tenantRepository.findByName(name));
 		
 		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on

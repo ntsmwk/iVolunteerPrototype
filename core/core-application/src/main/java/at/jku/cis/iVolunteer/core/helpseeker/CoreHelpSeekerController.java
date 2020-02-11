@@ -70,6 +70,7 @@ public class CoreHelpSeekerController {
 
 		HelpSeeker helpSeeker = new HelpSeeker();
 		helpSeeker.setId(coreHelpSeeker.getId());
+		helpSeeker.setTenantId(coreHelpSeeker.getTenantId());
 		helpSeeker.setUsername(coreHelpSeeker.getUsername());
 		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
 		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());

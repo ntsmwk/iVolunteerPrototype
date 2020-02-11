@@ -4,15 +4,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Volunteer extends User {
-	private String[] subscribedTenantIds;
+	private String[] subscribedTenants;
 
-	public String[] getSubscribedTenantIds() {
-		return subscribedTenantIds;
+	public String[] getSubscribedTenants() {
+		return subscribedTenants;
 	}
 
-	public void setSubscribedTenantIds(String[] subscribedTenantIds) {
-		this.subscribedTenantIds = subscribedTenantIds;
+	public void setSubscribedTenants(String[] subscribedTenants) {
+		this.subscribedTenants = subscribedTenants;
 	}
+
+	
 
 
 
