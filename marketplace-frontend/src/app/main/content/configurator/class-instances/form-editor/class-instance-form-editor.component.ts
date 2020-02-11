@@ -88,7 +88,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
 
             for (const config of this.formConfigurations) {
-              config.formEntry = this.addQuestionsAndFormGroup(config.formEntry);
+              config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
             }
 
             console.log(this.formConfigurations);
@@ -110,13 +110,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     });
   }
 
-  private addQuestionsAndFormGroup(formEntry: FormEntry) {
-    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties);
+  private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
+
+    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
     formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
 
     if (!isNullOrUndefined(formEntry.subEntries)) {
       for (let subEntry of formEntry.subEntries) {
-        subEntry = this.addQuestionsAndFormGroup(subEntry);
+        const newIdPrefix = idPrefix + subEntry.classDefinitions[0].id + '.';
+        subEntry = this.addQuestionsAndFormGroup(subEntry, newIdPrefix);
       }
     }
     return formEntry;

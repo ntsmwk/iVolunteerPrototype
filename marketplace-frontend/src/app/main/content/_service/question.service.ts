@@ -29,21 +29,25 @@ export interface SingleValidatorData {
 export class QuestionService {
   key: number = 0;
 
-  public getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
+  public getQuestionsFromProperties(properties: ClassProperty<any>[], idPrefix?: string): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
-    console.log(properties);
-    questions = this.createQuestionsFromProperties(properties);
+    questions = this.createQuestionsFromProperties(properties, idPrefix);
 
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
+  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[], idPrefix?: string) {
     let questions: QuestionBase<any>[] = [];
     for (let property of templateProperties) {
 
       let question = this.createQuestionFromProperty(property);
 
-      question.key = property.id;
+
+      if (!isNullOrUndefined(idPrefix)) {
+        question.key = idPrefix + property.id;
+      } else {
+        question.key = property.id;
+      }
       question.label = property.name;
       question.order = property.position;
 
