@@ -195,6 +195,9 @@ public class StandardPropertyDefinitions {
 
 		list.add(new GluehzeitProperty());
 		list.add(new DurchsatzProperty());
+		
+		list.add(new ChargierhilfeProperty());
+		list.add(new WalzartProperty());
 
 		list.add(new MoeglicheInnendurchmesserProperty());
 		list.add(new MaxAussendurchmesserProperty());
@@ -848,6 +851,10 @@ public class StandardPropertyDefinitions {
 		public VerfuegbaresSchutzgasProperty() {
 			this.setId("verfuegbaresschutzgas");
 			this.setName("Verfügbares Schutzgas");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("H2");
+			this.getAllowedValues().add("N2");
+			this.getAllowedValues().add("75% N2");
 		}
 	}
 
@@ -855,6 +862,9 @@ public class StandardPropertyDefinitions {
 		public BauartProperty() {
 			this.setId("bauart");
 			this.setName("Bauart");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Band");
+			this.getAllowedValues().add("Draht");
 		}
 	}
 
@@ -883,6 +893,19 @@ public class StandardPropertyDefinitions {
 		public BundEntfettenProperty() {
 			this.setId("bundentfetten");
 			this.setName("Bund Entfetten");
+		}
+	}
+	
+	public static class ChargierhilfeProperty extends TextPropertyDefinition {
+		public ChargierhilfeProperty() {
+			this.setId("chargierhilfe");
+			this.setName("Chargierhilfe");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Konvektoren");
+			this.getAllowedValues().add("Tragerahmen");
+			this.getAllowedValues().add("Zwischenrahmen");
+			this.getAllowedValues().add("Kronenstöcke");
+			this.getAllowedValues().add("Chargierkörbe");
 		}
 	}
 
@@ -925,6 +948,7 @@ public class StandardPropertyDefinitions {
 		public MoeglicheInnendurchmesserProperty() {
 			this.setId("moeglicheinnendurchmesser");
 			this.setName("Mögliche Innendurchmesser");
+			this.setMultiple(true);
 		}
 	}
 
@@ -997,6 +1021,16 @@ public class StandardPropertyDefinitions {
 			this.setName("Kaltgewalzt");
 		}
 	}
+	
+	public static class WalzartProperty extends TextPropertyDefinition {
+		public WalzartProperty() {
+			this.setId("walzart");
+			this.setName("Walzart");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Warmgewalzt");
+			this.getAllowedValues().add("Kaltgewalzt");
+		}
+	}
 
 	public static class StreckgrenzeProperty extends LongPropertyDefinition {
 		public StreckgrenzeProperty() {
@@ -1051,6 +1085,11 @@ public class StandardPropertyDefinitions {
 		public TransportartProperty() {
 			this.setId("transportart");
 			this.setName("Transportart");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("LKW");
+			this.getAllowedValues().add("Zug");
+			this.getAllowedValues().add("Schiff");
+			this.getAllowedValues().add("Sonstiges");
 		}
 	}
 
@@ -1072,6 +1111,20 @@ public class StandardPropertyDefinitions {
 		public IncotermsProperty() {
 			this.setId("incoterms");
 			this.setName("Inco-Terms");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("EXW");
+			this.getAllowedValues().add("FCA");
+			this.getAllowedValues().add("CPT");
+			this.getAllowedValues().add("CIP");
+			this.getAllowedValues().add("DAT");
+			this.getAllowedValues().add("DAP");
+			this.getAllowedValues().add("DDP");
+			this.getAllowedValues().add("FAS");
+			this.getAllowedValues().add("FOB");
+			this.getAllowedValues().add("CFR");
+			this.getAllowedValues().add("CIF");
+
+
 		}
 	}
 

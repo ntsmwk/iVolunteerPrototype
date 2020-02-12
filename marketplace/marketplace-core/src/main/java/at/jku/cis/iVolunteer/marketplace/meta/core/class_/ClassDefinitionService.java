@@ -406,7 +406,6 @@ public class ClassDefinitionService {
 			formConfiguration.setName(rootClassDefinition.getName());
 			formConfiguration.setFormEntry(formEntry);
 			formConfigurations.add(formConfiguration);
-		
 		}
 
 		return formConfigurations;
