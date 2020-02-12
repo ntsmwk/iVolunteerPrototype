@@ -36,9 +36,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   lastEntry: boolean;
 
   isLoaded = false;
+  finishClicked = false;
 
 
   formConfigurationType: string;
+
+  expectedNumberOfResults: number;
+  results: FormEntryReturnEventData[];
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -57,7 +61,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
-
+    this.results = [];
+    this.expectedNumberOfResults = 0;
 
     Promise.all([
       this.route.params.subscribe(params => {
@@ -111,9 +116,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-
     formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
     formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
+
+    if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
+      this.expectedNumberOfResults++;
+    }
 
     if (!isNullOrUndefined(formEntry.subEntries)) {
       for (let subEntry of formEntry.subEntries) {
@@ -124,36 +132,36 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return formEntry;
   }
 
-  handleResultEvent(event: FormEntryReturnEventData) {
-    const classInstances: ClassInstance[] = [];
-    this.currentFormConfiguration.formEntry.formGroup.disable();
-    const propertyInstances: PropertyInstance<any>[] = [];
+  // handleResultEvent(event: FormEntryReturnEventData) {
+  //   const classInstances: ClassInstance[] = [];
+  //   this.currentFormConfiguration.formEntry.formGroup.disable();
+  //   const propertyInstances: PropertyInstance<any>[] = [];
 
-    for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
-      const values = [event.formGroup.value[classProperty.id]];
-      propertyInstances.push(new PropertyInstance(classProperty, values));
-    }
+  //   for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
+  //     const values = [event.formGroup.value[classProperty.id]];
+  //     propertyInstances.push(new PropertyInstance(classProperty, values));
+  //   }
 
-    for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
-      const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
-      const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
-      propertyInstance.name = enumRepresentation.classDefinition.name;
-      propertyInstance.id = enumRepresentation.id;
-      propertyInstances.push(propertyInstance);
-    }
+  //   for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
+  //     const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
+  //     const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
+  //     propertyInstance.name = enumRepresentation.classDefinition.name;
+  //     propertyInstance.id = enumRepresentation.id;
+  //     propertyInstances.push(propertyInstance);
+  //   }
 
-    const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-    classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
-    classInstances.push(classInstance);
+  //   const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+  //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
+  //   classInstances.push(classInstance);
 
-    this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
-      // handle returned value if necessary
-      if (!isNullOrUndefined(ret)) {
-        this.returnedClassInstances.push(...ret);
-        this.handleNextClick();
-      }
-    });
-  }
+  //   this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
+  //     // handle returned value if necessary
+  //     if (!isNullOrUndefined(ret)) {
+  //       this.returnedClassInstances.push(...ret);
+  //       this.handleNextClick();
+  //     }
+  //   });
+  // }
 
   handleNextClick() {
     this.canContinue = false;
@@ -168,7 +176,29 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   handleFinishClick() {
-    this.router.navigate(['/main/helpseeker/asset-inbox']);
+    this.finishClicked = true;
+  }
+
+  handleResultEvent(event: FormEntryReturnEventData) {
+    this.results.push(event);
+
+    console.log(this.results.length + 'vs' + this.expectedNumberOfResults);
+
+    if (this.results.length === this.expectedNumberOfResults) {
+      this.createInstanceFromResults();
+
+      setTimeout(() => {
+        this.finishClicked = false;
+      });
+    }
+  }
+
+  createInstanceFromResults() {
+    console.log(this.results);
+
+    for (let result of this.results) {
+      console.log(result.formGroup.controls);
+    }
   }
 
   handleCancelEvent() {

@@ -67,8 +67,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   subMenuItems = subMenuItems;
   currentRootId = 1;
 
-  @ViewChild('menubarContainer', {static: true}) menubarContainer: ElementRef;
-  @ViewChild('submenuContainer', {static: true}) submenuContainer: ElementRef;
+  @ViewChild('menubarContainer', { static: true }) menubarContainer: ElementRef;
+  @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponseAction: string;
@@ -157,7 +157,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
       } else {
-        this.menuOptionClickedEvent.emit({ id: "cancelled"});
+        this.menuOptionClickedEvent.emit({ id: "cancelled" });
       }
 
     });
@@ -165,22 +165,22 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   saveClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.confirmationDialog("Save", "Are you sure you want to save? The existing model will be overidden...").then((result: boolean) => {
-    if (result) {
+      if (result) {
         this.menuOptionClickedEvent.emit({ id: "editor_save" });
       } else {
-        this.menuOptionClickedEvent.emit({id: "cancelled"});
+        this.menuOptionClickedEvent.emit({ id: "cancelled" });
       }
     });
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {   
+  saveAsClicked(event: any, item: SubMenuItem) {
     //wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {
           this.menuOptionClickedEvent.emit({ id: "editor_save_as", configurator: ret });
         } else {
-          this.menuOptionClickedEvent.emit({ id: "cancelled"});
+          this.menuOptionClickedEvent.emit({ id: "cancelled" });
         }
       });
     });

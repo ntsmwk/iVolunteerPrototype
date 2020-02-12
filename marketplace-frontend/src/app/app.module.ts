@@ -1,21 +1,20 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PreloadAllModules, RouterModule, Routes, NoPreloading } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
-import {FuseSharedModule} from '@fuse/shared.module';
+import { FuseSharedModule } from '@fuse/shared.module';
 
-import {fuseConfig} from './fuse-config';
+import { fuseConfig } from './fuse-config';
 
-import {AppComponent} from './app.component';
-import {FuseMainModule} from './main/main.module';
+import { AppComponent } from './app.component';
+import { FuseMainModule } from './main/main.module';
 import { FuseModule } from '@fuse/fuse.module';
 import { DragulaModule } from 'ng2-dragula';
-import { DataTransportService } from './main/content/_service/data-transport/data-transport.service';
 
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 
 
 const appRoutes: Routes = [
@@ -33,7 +32,7 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules/*, enableTracing: true*/}),
+    RouterModule.forRoot(appRoutes, { preloadingStrategy: NoPreloading }),
 
     DragulaModule.forRoot(),
 
@@ -43,13 +42,13 @@ const appRoutes: Routes = [
     FuseMainModule,
 
     HttpClientModule
-    
 
-    ],
+
+  ],
   bootstrap: [
     AppComponent
   ],
-  providers: [    
+  providers: [
   ],
 })
 export class AppModule {

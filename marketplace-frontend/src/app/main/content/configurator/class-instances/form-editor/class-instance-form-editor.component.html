@@ -7,7 +7,8 @@
 
                 <mat-accordion multi=true displayMode="flat">
                     <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                        [formConfiguration]="currentFormConfiguration">
+                        [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked"
+                        (result)=handleResultEvent($event)>
                     </app-form-entry-view>
                 </mat-accordion>
 

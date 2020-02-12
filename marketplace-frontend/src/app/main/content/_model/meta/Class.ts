@@ -9,11 +9,11 @@ export class ClassDefinition {
     properties: ClassProperty<any>[] = [];
     marketplaceId: string;
     timestamp: Date;
-    
+
     imagePath: string;
 }
 
-export class CompetenceClassDefinition extends ClassDefinition{
+export class CompetenceClassDefinition extends ClassDefinition {
 
 }
 
@@ -26,13 +26,10 @@ export class ClassInstance {
     timestamp: Date;
     userId: string;
     issuerId: string;
-
-    published: boolean;
-    inRepository: boolean;
-
     imagePath: string;
-
     classArchetype: ClassArchetype;
+
+    subClassInstances: ClassInstance[];
 
     constructor(classDefinition: ClassDefinition, properties: PropertyInstance<any>[]) {
         this.name = classDefinition.name;
@@ -45,7 +42,7 @@ export class ClassInstance {
     }
 }
 
-export class CompetenceClassInstance extends ClassInstance{
+export class CompetenceClassInstance extends ClassInstance {
     constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
         super(classDefintion, properties);
         this.classArchetype = ClassArchetype.COMPETENCE;
@@ -63,14 +60,14 @@ export class FunctionClassInstance extends ClassInstance {
     constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
         super(classDefintion, properties);
         this.classArchetype = ClassArchetype.FUNCTION;
-    } 
+    }
 }
 
 export class AchievementClassInstance extends ClassInstance {
     constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
         super(classDefintion, properties);
         this.classArchetype = ClassArchetype.ACHIEVEMENT;
-    } 
+    }
 }
 
 
@@ -81,7 +78,7 @@ export enum ClassArchetype {
     ACHIEVEMENT = 'ACHIEVEMENT',
     ENUM_HEAD = 'ENUM_HEAD',
     ENUM_ENTRY = 'ENUM_ENTRY',
-    ROOT = 'ROOT',  
+    ROOT = 'ROOT',
     COMPETENCE_HEAD = 'COMPETENCE_HEAD',
     TASK_HEAD = 'TASK_HEAD',
     FUNCTION_HEAD = 'FUNCTION_HEAD',
@@ -102,7 +99,7 @@ export namespace ClassArchetype {
             case 'ENUM_ENTRY': return 'Enum entry';
             case 'ROOT': return 'Root';
             case 'FLEXPROD': return 'Flexprod';
-            case 'FLEXPROD_COLLECTOR' : return 'Flexprod';
+            case 'FLEXPROD_COLLECTOR': return 'Flexprod';
         }
     }
 }

@@ -6,7 +6,8 @@
             <h1 class="no-padding-margin pl-4">{{ formEntry.classDefinitions[0].name }}</h1>
         </div>
         <div *ngFor="let entry of formEntry.subEntries">
-            <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
+            <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"
+                [finishClicked]="finishClicked" (result)=handleResultEvent($event)></app-form-entry-view>
         </div>
     </div>
 
@@ -31,12 +32,13 @@
             <div class="m-12">
                 <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
                     [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
-                    [form]="formEntry.formGroup" lastEntry="false" (resultEvent)="handleResultEvent($event)"
-                    (cancelEvent)="handleCancelEvent()">
+                    [form]="formEntry.formGroup" lastEntry="false" [finishClicked]="finishClicked"
+                    (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
                 </app-dynamic-class-instance-creation-form>
             </div>
             <div *ngFor="let entry of formEntry.subEntries">
-                <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
+                <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"
+                    [finishClicked]="finishClicked" (result)="handleResultEvent($event)"></app-form-entry-view>
             </div>
 
         </mat-expansion-panel>

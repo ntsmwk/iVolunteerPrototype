@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { ClassInstance } from '../../../../_model/meta/Class';
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { isNullOrUndefined } from 'util';
@@ -15,8 +15,10 @@ export class FormEntryViewComponent implements OnInit {
 
   @Input() formEntry: FormEntry;
   @Input() formConfiguration: FormConfiguration;
+  @Input() finishClicked: boolean;
+  @Output() result = new EventEmitter();
 
-  isLoaded = true;
+  isLoaded = false;
 
 
   constructor(
@@ -27,9 +29,13 @@ export class FormEntryViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.isLoaded = true;
   }
 
+
+  handleResultEvent(event) {
+    this.result.emit(event);
+  }
 
 
   printAnything(anything: any) {

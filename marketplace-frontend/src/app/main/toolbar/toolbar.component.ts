@@ -123,13 +123,8 @@ export class FuseToolbarComponent {
       case '/main/configurator': this.headingText = 'Asset-Konfigurator'; break;
       case String(event.urlAfterRedirects.match(/\/main\/configurator\/instance-editor\/[^]*/)): this.headingText = 'Instanz-Editor'; break;
       default: this.headingText = ''; break;
-
     }
-
   }
-
-
-
 
   toggleSidebarOpened(key) {
     this.sidebarService.getSidebar(key).toggleOpen();
