@@ -4,10 +4,11 @@
         <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 300px; display: block; z-index: 1;">
             <div class="m-24">
 
-                <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                    [formConfiguration]="currentFormConfiguration">
-                </app-form-entry-view>
-
+                <mat-accordion multi=true displayMode="flat">
+                    <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
+                        [formConfiguration]="currentFormConfiguration">
+                    </app-form-entry-view>
+                </mat-accordion>
 
             </div>
         </div>
