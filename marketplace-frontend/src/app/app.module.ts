@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {PreloadAllModules, RouterModule, Routes, NoPreloading} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import 'hammerjs';
 
@@ -33,7 +33,7 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {preloadingStrategy: PreloadAllModules/*, enableTracing: true*/}),
+    RouterModule.forRoot(appRoutes, {preloadingStrategy: NoPreloading/*, enableTracing: true*/}),
 
     DragulaModule.forRoot(),
 

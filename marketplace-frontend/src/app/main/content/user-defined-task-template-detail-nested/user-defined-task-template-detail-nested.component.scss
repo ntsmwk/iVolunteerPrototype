@@ -1,35 +1,5 @@
 @import "src/@fuse/scss/fuse";
-.center-div {
-  position: absolute;
-  margin: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100px;
-  height: 100px;
-  border-radius: 3px;
-}
-
 .page-layout {
-  .mat-form-field {
-    width: 100%;
-  }
-  .mat-list-item .mat-list-item-content .mat-list {
-    height: 10px;
-    width: 100%;
-  }
-  // td, th, .mat-row, .mat-header-row, .mat-cell, .mat-header-cell {
-  //   text-align: left;
-  //   padding-right: 50px;
-  //   padding-bottom: 1px;
-  // }
-  // td, .mat-row, .mat-cell {
-  //   padding-top: 1px;
-  // }
-  // th, .mat-header-row, .mat-header-cell{
-  //   padding-top: 15px;
-  // }
   .mat-table {
     width: 90%;
     mat-row,
