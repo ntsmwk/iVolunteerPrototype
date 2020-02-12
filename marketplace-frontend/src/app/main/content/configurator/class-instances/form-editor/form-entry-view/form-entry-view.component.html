@@ -1,8 +1,14 @@
-<div class="page-layout blank" fusePerfectScrollbar *ngIf="isLoaded">
+<div *ngIf="isLoaded" style="width: 100%" class="page-layout pl-12">
 
-    <h1 class="h1-nospace">{{ formEntry.classDefinitions[0].name }}</h1>
+    <div *ngIf="formEntry.questions.length <= 0">
+        <h1 class="h1-nospace">{{ formEntry.classDefinitions[0].name }}</h1>
 
-    <mat-expansion-panel expanded=true>
+        <div *ngFor="let entry of formEntry.subEntries">
+            <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
+        </div>
+    </div>
+
+    <mat-expansion-panel *ngIf="formEntry.questions.length > 0" expanded=true class="mat-expansion-panel">
 
         <mat-expansion-panel-header>
             <mat-panel-title style="width: 20%">
@@ -26,4 +32,6 @@
         </div>
 
     </mat-expansion-panel>
+
+
 </div>
