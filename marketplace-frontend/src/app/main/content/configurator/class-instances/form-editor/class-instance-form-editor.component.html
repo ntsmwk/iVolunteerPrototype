@@ -1,7 +1,8 @@
 <div class="page-layout blank" fusePerfectScrollbar *ngIf="isLoaded">
 
     <div *ngIf="!canFinish">
-        <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block; z-index: 1;">
+        <!-- <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block; z-index: 1;"> -->
+        <div>
             <div class="m-24">
 
                 <mat-accordion multi=true displayMode="flat">
@@ -18,10 +19,9 @@
 
 
 
-    <div style="padding-top: 10px"></div>
 
 
-    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-20">
         <div></div>
         <button type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
             Finish

@@ -16,7 +16,7 @@ import { Participant, ParticipantRole } from '../content/_model/participant';
   styleUrls: ['./toolbar.component.scss']
 })
 
-export class FuseToolbarComponent{
+export class FuseToolbarComponent {
   userStatusOptions: any[];
   languages: any;
   selectedLanguage: any;
@@ -25,6 +25,8 @@ export class FuseToolbarComponent{
   noNav: boolean;
   navigation: any;
   icons: string;
+
+  headingText: string;
 
   @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
   displayInboxOverlay: boolean;
@@ -89,7 +91,9 @@ export class FuseToolbarComponent{
         }
         if (event instanceof NavigationEnd) {
           this.showLoadingBar = false;
+          this.changeHeading(event);
         }
+
       });
 
     this.fuseConfig.onConfigChanged.subscribe((settings) => {
@@ -111,21 +115,19 @@ export class FuseToolbarComponent{
     }).catch(e => {
       console.warn(e);
     });
-
-    // setInterval(() => { this.setHeading(this); } , 100);
   }
 
-  // private setHeading(self ){
+  private changeHeading(event: NavigationEnd) {
 
-  //   if(self.router && self.router.url && self.router.url.indexOf('instance-editor') === -1){
-  //     self.showEditor = false;
-  //   }
-  //   else{
-  //     self.showEditor = true;
-  //   }
+    switch (event.urlAfterRedirects) {
+      case '/main/matching-configurator': this.headingText = 'Matching-Konfigurator'; break;
+      case '/main/configurator': this.headingText = 'Asset-Konfigurator'; break;
+      default: this.headingText = ''; break;
 
-  //   setInterval(() => { self.setHeading(self); } , 100);
-  // }
+    }
+
+  }
+
 
 
 
