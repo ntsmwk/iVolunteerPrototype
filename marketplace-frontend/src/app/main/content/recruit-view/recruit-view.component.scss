@@ -1,36 +1,8 @@
 @import "src/@fuse/scss/fuse";
 @import '~@angular/material/theming';
-
-
 $custom-typography: mat-typography-config( $font-family: 'Muli');
 @include mat-core($custom-typography);
 .page-layout {
-  font-family: Muli, "Helvetica Neue", Arial, sans-serif;
-  .header {
-    position: relative;
-    flex: 1 0 auto;
-    height: 90px;
-    max-height: 90px;
-    background: #42A5F5;
-    // background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
-    text-align: center;
-    @include media-breakpoint('xs') {
-      height: 240px;
-      padding: 16px;
-    }
-    h1 {
-      color: white;
-      font-size: 50px;
-      font-weight: 300;
-      letter-spacing: 0.01em;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 0px;
-      @include media-breakpoint-down('xs') {
-        font-size: 24px;
-      }
-    }
-  }
   .progressBar {
     height: 8px !important;
     padding-left: 10px;
@@ -41,7 +13,6 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
 .profile-img {
   max-height: 120px;
 }
-
 
 .table {
   mat-row:nth-child(even) {
@@ -59,8 +30,7 @@ $custom-typography: mat-typography-config( $font-family: 'Muli');
   mat-header-cell {
     font-size: 20px;
   }
-
-  mat-cell{
+  mat-cell {
     font-size: 16px;
   }
 }
@@ -106,11 +76,6 @@ mat-expansion-panel-header {
   flex: 0 0 100px;
 }
 
-// .mat-column-hash {
-//   padding-right: 0;
-//   flex: 0 0 300px;
-// }
-
 .mat-column-verificationStatus {
-  justify-content:center;
+  justify-content: center;
 }

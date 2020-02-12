@@ -1,62 +1,17 @@
 @import "src/@fuse/scss/fuse";
-
 .page-layout {
-
-  .header {
-    position: relative;
-    flex: 1 0 auto;
-    height: 90px;
-    max-height: 90px;
-    background: #FF9326;
-    text-align: center;
-
-    @include media-breakpoint('xs') {
-      height: 240px;
-      padding: 16px;
-    }
-
-    h1 {
-      color: white;
-      font-size: 50px;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 0px;
-
-      @include media-breakpoint-down('xs') {
-        font-size: 24px;
-      }
-    }
-
-    img.header-icon {
-      left: 10px;
-      padding: 16px;
-      max-height: 100%;
-      position: absolute;
-      filter: brightness(0) invert(1);
-
-      @include media-breakpoint-down('xs') {
-        display: none;
-      }
-    }
-  }
-
   .content {
     flex: 1;
     background: white;
     border-radius: 2px;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-
     mat-tab-group {
       height: 100%;
-
       .mat-tab-body-wrapper {
         flex-grow: 1;
       }
     }
   }
-
 }
 
 .third {
@@ -89,11 +44,11 @@
 }
 
 .engagement {
-  padding-left: 30px; 
+  padding-left: 30px;
   align-self: flex-start;
   // width: 100%;
   text-align: left;
-font-size: 35px;
+  font-size: 35px;
 }
 
 .img {
@@ -114,7 +69,6 @@ font-size: 35px;
   // margin-right: auto;
 }
 
-
 .matFormField {
   margin-left: 50px;
   width: 100px;
@@ -133,16 +87,18 @@ h2 {
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
 h1 {
   margin-bottom: 0px;
 }
+
 .total {
   margin-left: 20px;
 }
 
-td{
-text-align: left;
-font-size: 15px;
+td {
+  text-align: left;
+  font-size: 15px;
 }
 
 .table {
@@ -150,10 +106,10 @@ font-size: 15px;
 }
 
 ngx-charts-advanced-pie-chart {
-   .total-value {
-font-size: 10px;
- }
- .item-value {
-font-size: 10px;
- }
+  .total-value {
+    font-size: 10px;
+  }
+  .item-value {
+    font-size: 10px;
+  }
 }
