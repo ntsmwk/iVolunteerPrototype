@@ -9,6 +9,7 @@ import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
 import { LoginService } from '../content/_service/login.service';
 import { Participant, ParticipantRole } from '../content/_model/participant';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'fuse-toolbar',
@@ -30,10 +31,6 @@ export class FuseToolbarComponent {
 
   @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
   displayInboxOverlay: boolean;
-
-  showEditor: boolean = false;
-
-
 
   constructor(private router: Router,
     private fuseConfig: FuseConfigService,
@@ -91,7 +88,9 @@ export class FuseToolbarComponent {
         }
         if (event instanceof NavigationEnd) {
           this.showLoadingBar = false;
+          // console.log(event);
           this.changeHeading(event);
+
         }
 
       });
@@ -122,6 +121,7 @@ export class FuseToolbarComponent {
     switch (event.urlAfterRedirects) {
       case '/main/matching-configurator': this.headingText = 'Matching-Konfigurator'; break;
       case '/main/configurator': this.headingText = 'Asset-Konfigurator'; break;
+      case String(event.urlAfterRedirects.match(/\/main\/configurator\/instance-editor\/[^]*/)): this.headingText = 'Instanz-Editor'; break;
       default: this.headingText = ''; break;
 
     }
