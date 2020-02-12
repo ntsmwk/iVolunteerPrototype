@@ -1,8 +1,9 @@
 @import "src/@fuse/scss/fuse";
 .page-layout {
 
-  .h1-nospace {
+  .no-padding-margin {
     margin: 0;
+    padding: 0;
   }
 
   mat-expansion-panel-header:hover, mat-expansion-panel-header.mat-expanded{

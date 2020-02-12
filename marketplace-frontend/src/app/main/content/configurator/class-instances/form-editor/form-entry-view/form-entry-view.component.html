@@ -1,39 +1,43 @@
-<div *ngIf="isLoaded" style="width: 100%" class="page-layout pl-12 pt-12">
+<div *ngIf="isLoaded" style="width: 100%" class="page-layout pl-16">
 
     <div *ngIf="formEntry.questions.length <= 0">
         <div fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon>keyboard_return</mat-icon>
-            <h1 class="h1-nospace pl-8">{{ formEntry.classDefinitions[0].name }}</h1>
+            <mat-icon>subdirectory_arrow_right</mat-icon>
+            <h1 class="no-padding-margin pl-4">{{ formEntry.classDefinitions[0].name }}</h1>
         </div>
         <div *ngFor="let entry of formEntry.subEntries">
             <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
         </div>
     </div>
 
-    <mat-expansion-panel *ngIf="formEntry.questions.length > 0" expanded=true class="mat-expansion-panel">
+    <div *ngIf="formEntry.questions.length > 0" class="pb-4">
+        <mat-expansion-panel expanded="true">
 
-        <mat-expansion-panel-header>
-            <mat-panel-title style="width: 20%">
-                {{formEntry.classDefinitions[0].name}}
-            </mat-panel-title>
+            <mat-expansion-panel-header>
+                <mat-panel-title style="width: 20%">
+                    {{formEntry.classDefinitions[0].name}}
+                </mat-panel-title>
 
-            <!-- <mat-panel-description style="width: 80%; text-align: start">
+                <!-- <mat-panel-description style="width: 80%; text-align: start">
                 {{demoClassPaths[0]}}
             </mat-panel-description> -->
 
 
-        </mat-expansion-panel-header>
-        <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
-            [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
-            [form]="formEntry.formGroup" lastEntry="false" (resultEvent)="handleResultEvent($event)"
-            (cancelEvent)="handleCancelEvent()">
-        </app-dynamic-class-instance-creation-form>
+            </mat-expansion-panel-header>
 
-        <div *ngFor="let entry of formEntry.subEntries">
-            <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
-        </div>
+            <div class="m-12">
+                <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
+                    [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
+                    [form]="formEntry.formGroup" lastEntry="false" (resultEvent)="handleResultEvent($event)"
+                    (cancelEvent)="handleCancelEvent()">
+                </app-dynamic-class-instance-creation-form>
+            </div>
+            <div *ngFor="let entry of formEntry.subEntries">
+                <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
+            </div>
 
-    </mat-expansion-panel>
+        </mat-expansion-panel>
+    </div>
 
 
 </div>
