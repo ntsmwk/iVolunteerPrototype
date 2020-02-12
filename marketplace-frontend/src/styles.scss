@@ -47,6 +47,10 @@
   left: -11px;
 }
 
+.fs-18{
+  font-size: 18px;
+}
+
 .fs-25 {
   font-size: 25px;
 }
@@ -208,5 +212,11 @@
         }
       }
     }
+  }
+
+  .mat-spinner {
+    position: relative;
+    margin-left: 50%;
+    margin-right: 50%;
   }
 }
