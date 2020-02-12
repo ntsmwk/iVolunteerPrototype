@@ -4,13 +4,6 @@
 $custom-typography: mat-typography-config( $font-family: 'Muli');
 @include mat-core($custom-typography);
 
-// .page-layout {
-//   font-family: "Muli", "Helvetica Neue", Arial, sans-serif;
-//   overflow: scroll;
-  
-// }
-
-
 .verein-heading{
   font-size: 50px;
   text-align: center;

@@ -2,44 +2,40 @@
   <div class="content" fxLayout="column" fxLayoutAlign="none">
 
     <div class="timeline" fxLayout="column" fxLayoutAlign="none">
-      
+
       <div fxLayout="row" fxLayoutAlign="start center">
         <h1>Zeitverlauf</h1>
 
         <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;">
-        <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
-          (change)="onYaxisChange(group.value)">
-          <mat-button-toggle value="Dauer">Dauer
-          </mat-button-toggle>
-          <mat-button-toggle value="Anzahl">Anzahl
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+          <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis" (change)="onYaxisChange(group.value)">
+            <mat-button-toggle value="Dauer">Dauer
+            </mat-button-toggle>
+            <mat-button-toggle value="Anzahl">Anzahl
+            </mat-button-toggle>
+          </mat-button-toggle-group>
 
-        <div style="margin-left: 50px;"></div>
+          <div style="margin-left: 50px;"></div>
 
-        <mat-form-field style="margin-top: 5px;">
-          <mat-label>Jahr</mat-label>
-          <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
-            <mat-option value="2012"> 2012 </mat-option>
-            <mat-option value="2013"> 2013 </mat-option>
-            <mat-option value="2014"> 2014 </mat-option>
-            <mat-option value="2015"> 2015 </mat-option>
-            <mat-option value="2016"> 2016 </mat-option>
-            <mat-option value="2017"> 2017 </mat-option>
-            <mat-option value="2018"> 2018 </mat-option>
-            <mat-option value="2019"> 2019 </mat-option>
-            <mat-option value="Gesamt"> Gesamt </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field style="margin-top: 5px;">
+            <mat-label>Jahr</mat-label>
+            <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
+              <mat-option value="2012"> 2012 </mat-option>
+              <mat-option value="2013"> 2013 </mat-option>
+              <mat-option value="2014"> 2014 </mat-option>
+              <mat-option value="2015"> 2015 </mat-option>
+              <mat-option value="2016"> 2016 </mat-option>
+              <mat-option value="2017"> 2017 </mat-option>
+              <mat-option value="2018"> 2018 </mat-option>
+              <mat-option value="2019"> 2019 </mat-option>
+              <mat-option value="Gesamt"> Gesamt </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
       <div class="timeline">
-        <ngx-charts-line-chart #lineChart [results]="timelineChartData" [scheme]="colorScheme" [schemeType]="schemeType"
-          [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
-          [tooltipDisabled]="tooltipDisabled" [xAxis]="true" [yAxis]="true" [showXAxisLabel]="false"
-          [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="true"
-          [autoScale]="autoScale" [timeline]="true" [curve]="curve" (select)="timelineSelect($event)"
+        <ngx-charts-line-chart #lineChart [results]="timelineChartData" [scheme]="colorScheme" [schemeType]="schemeType" [legend]="legend" [legendTitle]="Legende" [legendPosition]="legendPosition" [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled"
+          [xAxis]="true" [yAxis]="true" [showXAxisLabel]="false" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="true" [autoScale]="autoScale" [timeline]="true" [curve]="curve" (select)="timelineSelect($event)"
           [xAxisTickFormatting]="dateTickFormatting">
         </ngx-charts-line-chart>
       </div>
@@ -50,14 +46,14 @@
 
         <mat-chip-list class="filterChip">
           <mat-chip color="primary" [removable]="removable" *ngIf="chipTimelineFilterFrom">
-            {{chipTimelineFilterFrom | date:'dd.MM.yyyy'}} -
-            {{chipTimelineFilterTo | date:'dd.MM.yyyy'}}<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            {{chipTimelineFilterFrom | date:'dd.MM.yyyy'}} - {{chipTimelineFilterTo | date:'dd.MM.yyyy'}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
-          <mat-chip color="primary" [removable]="removable" *ngIf="chipSelectedYear">{{chipSelectedYear}}<mat-icon
-              matChipRemove *ngIf="removable">cancel</mat-icon>
+          <mat-chip color="primary" [removable]="removable" *ngIf="chipSelectedYear">{{chipSelectedYear}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
-          <mat-chip color="primary" [removable]="removable" *ngIf="chipTaskType">{{chipTaskType}}<mat-icon matChipRemove
-              *ngIf="removable">cancel</mat-icon>
+          <mat-chip color="primary" [removable]="removable" *ngIf="chipTaskType">{{chipTaskType}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
         </mat-chip-list>
 
@@ -90,41 +86,41 @@
           <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
             <table #table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8" class="table mat-elevation-z8">
               <ng-container matColumnDef="taskName">
-                <th mat-header-cell *matHeaderCellDef  > Tätigkeit </th>
+                <th mat-header-cell *matHeaderCellDef> Tätigkeit </th>
                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
               </ng-container>
 
               <ng-container matColumnDef="taskType1">
-                <th mat-header-cell *matHeaderCellDef  > Typ </th>
+                <th mat-header-cell *matHeaderCellDef> Typ </th>
                 <td mat-cell *matCellDef="let element"> {{element.taskType1}} </td>
               </ng-container>
 
               <ng-container matColumnDef="taskType2">
-                <th mat-header-cell *matHeaderCellDef  > Untertyp </th>
+                <th mat-header-cell *matHeaderCellDef> Untertyp </th>
                 <td mat-cell *matCellDef="let element"> {{element.taskType2}} </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDescription">
-                <th mat-header-cell *matHeaderCellDef  > Beschreibung </th>
+                <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
                 <td mat-cell *matCellDef="let element"> {{element.description}} </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDateFrom">
-                <th mat-header-cell *matHeaderCellDef  > Datum </th>
+                <th mat-header-cell *matHeaderCellDef> Datum </th>
                 <td mat-cell *matCellDef="let element">
                   {{element.dateFrom | date:'dd.MM.yyyy'}}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDateTo">
-                <th mat-header-cell *matHeaderCellDef  > Ende </th>
+                <th mat-header-cell *matHeaderCellDef> Ende </th>
                 <td mat-cell *matCellDef="let element">
                   {{element.dateTo | date:'dd.MM.yyyy'}}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="taskDuration">
-                <th mat-header-cell *matHeaderCellDef  > Dauer </th>
+                <th mat-header-cell *matHeaderCellDef> Dauer </th>
                 <td class="right" mat-cell *matCellDef="let element"> {{element.duration}}h
                 </td>
               </ng-container>
@@ -170,9 +166,7 @@
               </app-share-menu>
             </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData"
-                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="weekdayData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
@@ -184,9 +178,7 @@
               </app-share-menu>
             </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData"
-                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="dayNightData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
@@ -200,9 +192,7 @@
               </app-share-menu>
             </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="locationData"
-                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="locationData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
@@ -214,9 +204,7 @@
               </app-share-menu>
             </div>
             <div class="donut-parent">
-              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="rangData"
-                [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false"
-                [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
+              <ngx-charts-pie-chart class="chart-container" [view]="[600, 600]" [results]="rangData" [animations]="animations" [labels]="true" [tooltipDisabled]="false" [legend]="false" [explodeSlices]="false" [doughnut]="true" arcWidth="0.6" scheme="cool" (select)="onDonutSelect($event)">
               </ngx-charts-pie-chart>
             </div>
           </div>
