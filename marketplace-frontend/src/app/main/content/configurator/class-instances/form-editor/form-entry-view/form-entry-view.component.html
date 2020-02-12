@@ -1,8 +1,10 @@
-<div *ngIf="isLoaded" style="width: 100%" class="page-layout pl-12">
+<div *ngIf="isLoaded" style="width: 100%" class="page-layout pl-12 pt-12">
 
     <div *ngIf="formEntry.questions.length <= 0">
-        <h1 class="h1-nospace">{{ formEntry.classDefinitions[0].name }}</h1>
-
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>keyboard_return</mat-icon>
+            <h1 class="h1-nospace pl-8">{{ formEntry.classDefinitions[0].name }}</h1>
+        </div>
         <div *ngFor="let entry of formEntry.subEntries">
             <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"></app-form-entry-view>
         </div>

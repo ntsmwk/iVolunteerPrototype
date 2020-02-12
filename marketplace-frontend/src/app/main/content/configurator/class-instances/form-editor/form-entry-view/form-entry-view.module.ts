@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormEntryViewComponent } from './form-entry-view.component';
-import { MatCommonModule, MatProgressSpinnerModule, MatExpansionModule, MatButtonModule } from '@angular/material';
+import { MatCommonModule, MatProgressSpinnerModule, MatExpansionModule, MatButtonModule, MatIconModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import {
   DynamicClassInstanceCreationFormModule
@@ -18,6 +18,7 @@ import {
     MatExpansionModule,
 
     MatButtonModule,
+    MatIconModule,
 
     FuseSharedModule,
     DynamicClassInstanceCreationFormModule,
