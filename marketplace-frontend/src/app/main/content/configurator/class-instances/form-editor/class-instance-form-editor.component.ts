@@ -182,8 +182,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   handleResultEvent(event: FormEntryReturnEventData) {
     this.results.push(event);
 
-    console.log(this.results.length + 'vs' + this.expectedNumberOfResults);
-
     if (this.results.length === this.expectedNumberOfResults) {
       this.createInstanceFromResults();
 
@@ -194,10 +192,14 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   createInstanceFromResults() {
-    console.log(this.results);
+    for (const result of this.results) {
+      const ids = Object.keys(result.formGroup.controls);
+      for (const id of ids) {
 
-    for (let result of this.results) {
-      console.log(result.formGroup.controls);
+        // TODO
+        console.log(id);
+        console.log(result.formGroup.controls[id]);
+      }
     }
   }
 
