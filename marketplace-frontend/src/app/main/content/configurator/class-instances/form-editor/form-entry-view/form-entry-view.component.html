@@ -10,8 +10,11 @@
         </div>
     </div>
 
-    <div *ngIf="formEntry.questions.length > 0" class="pb-4">
-        <mat-expansion-panel expanded="true">
+    <div *ngIf="formEntry.questions.length > 0" class="pb-4" fxLayout="row" fxLayoutAlign="start center">
+
+        <mat-icon>chevron_right</mat-icon>
+
+        <mat-expansion-panel expanded="false" style="width: 100%">
 
             <mat-expansion-panel-header>
                 <mat-panel-title style="width: 20%">
