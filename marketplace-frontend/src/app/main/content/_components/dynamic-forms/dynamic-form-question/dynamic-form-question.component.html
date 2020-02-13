@@ -25,7 +25,7 @@
 
       <mat-form-field class="form-field" *ngSwitchCase="'numberbox'">
         <input matInput placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
-          [id]="question.key" [type]="question.type" [value]="question.value" />
+          [id]="question.key" type="number" [value]="question.value" />
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
 
@@ -107,7 +107,7 @@
       </div>
 
       <div *ngSwitchCase="'generic'">
-        generic property - not yet implemented: {{ question.label }} 
+        generic property - not yet implemented: {{ question.label }}
       </div>
 
       <mat-form-field class="form-field" *ngSwitchCase="'enum-single'">

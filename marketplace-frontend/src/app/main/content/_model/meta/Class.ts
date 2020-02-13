@@ -29,9 +29,9 @@ export class ClassInstance {
     imagePath: string;
     classArchetype: ClassArchetype;
 
-    subClassInstances: ClassInstance[];
+    childClassInstances: ClassInstance[];
 
-    constructor(classDefinition: ClassDefinition, properties: PropertyInstance<any>[]) {
+    constructor(classDefinition: ClassDefinition, properties?: PropertyInstance<any>[]) {
         this.name = classDefinition.name;
         this.classDefinitionId = classDefinition.id;
         this.properties = properties;

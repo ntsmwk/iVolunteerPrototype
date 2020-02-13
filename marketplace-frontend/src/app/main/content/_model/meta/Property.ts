@@ -80,7 +80,7 @@ export class PropertyInstance<T> {
         }
     }
 
-    constructor(classProperty: ClassProperty<T>, values: T[]) {
+    constructor(classProperty: ClassProperty<T>, values?: T[]) {
         this.id = classProperty.id;
         this.name = classProperty.name;
         this.values = values;

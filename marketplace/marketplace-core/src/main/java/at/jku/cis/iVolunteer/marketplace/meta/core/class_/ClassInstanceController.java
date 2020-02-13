@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
-import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
-import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.hash.Hasher;
 import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -28,14 +24,11 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired ClassInstanceRepository classInstanceRepository;
-	@Autowired ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private LoginService loginService;
 	@Autowired private Hasher hasher;
 	
-	@Autowired private IsSunburstFakeRepository isSunburstFakeRepository;
-
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstance> getAllClassInstances() {
 		return classInstanceRepository.findAll();
@@ -120,9 +113,7 @@ public class ClassInstanceController {
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
-
 		return classInstanceRepository.save(classInstances);
-
 	}
 
 	@PostMapping("/meta/core/class/instance/{id}/new")
@@ -137,9 +128,10 @@ public class ClassInstanceController {
 		return null;
 	}
 
-	@DeleteMapping("/meta/core/class/instance/delete")
-	private void deleteClassInstance() {
-		// TODO
+	@DeleteMapping("/meta/core/class/instance/{id}/delete")
+	private void deleteClassInstance(@PathVariable("id") String id) {
+		this.classInstanceRepository.delete(id);
+		
 	}
 
 }

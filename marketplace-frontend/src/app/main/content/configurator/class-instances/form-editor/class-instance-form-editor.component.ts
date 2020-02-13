@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
@@ -7,13 +7,16 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { PropertyInstance } from 'app/main/content/_model/meta/Property';
+import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
+import { FormControl, AbstractControl } from '@angular/forms';
+import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
+
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -37,6 +40,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   isLoaded = false;
   finishClicked = false;
+  showResultPage = false;
 
 
   formConfigurationType: string;
@@ -50,7 +54,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
-    private questionControlService: QuestionControlService
+    private questionControlService: QuestionControlService,
+    private objectIdService: ObjectIdService
   ) {
     // console.log('extras');
     // console.log(this.router.getCurrentNavigation().extras.state);
@@ -191,16 +196,70 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     }
   }
 
+  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
+  resultClassInstance: ClassInstance;
+
+
   createInstanceFromResults() {
+
+    const allControls = this.getAllControlsFromResults();
+    const classInstance = this.createClassInstances(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+
+    this.classInstanceService.createNewClassInstances(this.marketplace, [classInstance]).toPromise().then((ret: ClassInstance[]) => {
+      this.resultClassInstance = ret.pop();
+      this.contentDiv.nativeElement.scrollTo(0, 0);
+      this.showResultPage = true;
+    });
+
+  }
+
+  private getAllControlsFromResults() {
+    const allControls: { id: string, control: AbstractControl }[] = [];
+
     for (const result of this.results) {
       const ids = Object.keys(result.formGroup.controls);
       for (const id of ids) {
-
-        // TODO
-        console.log(id);
-        console.log(result.formGroup.controls[id]);
+        allControls.push({ id: id, control: result.formGroup.controls[id] });
       }
     }
+
+    return allControls;
+  }
+
+  private createClassInstances(parentEntry: FormEntry, currentPath: string, controls: { id: string, control: AbstractControl }[]) {
+
+    const propertyInstances: PropertyInstance<any>[] = [];
+    for (const classProperty of parentEntry.classProperties) {
+      // console.log(currentPath + '.' + classProperty.id);
+      // console.log(controls[0].id);
+
+      const control = controls.find(c => c.id === (currentPath + '.' + classProperty.id));
+
+      //make sure numbers are correct
+      let value: any;
+      if (classProperty.type === PropertyType.FLOAT_NUMBER) {
+        value = Number(control.control.value);
+      } else if (classProperty.type === PropertyType.WHOLE_NUMBER) {
+        value = Number.parseInt(control.control.value, 10);
+      } else {
+        value = control.control.value;
+      }
+
+      propertyInstances.push(new PropertyInstance(classProperty, [value]));
+    }
+
+    const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
+    classInstance.childClassInstances = [];
+    classInstance.id = this.objectIdService.getNewObjectId();
+
+    if (!isNullOrUndefined(parentEntry.subEntries)) {
+      for (const subEntry of parentEntry.subEntries) {
+        const subClassInstance = this.createClassInstances(subEntry, currentPath + '.' + subEntry.classDefinitions[0].id, controls);
+        classInstance.childClassInstances.push(subClassInstance);
+      }
+    }
+
+    return classInstance;
   }
 
   handleCancelEvent() {

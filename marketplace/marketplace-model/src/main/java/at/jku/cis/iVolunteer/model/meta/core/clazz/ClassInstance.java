@@ -24,7 +24,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	private ClassArchetype classArchetype;
 	
-	private List<ClassInstance> subClassInstances;
+	private List<ClassInstance> childClassInstances;
 
 
 	public ClassInstance() {
@@ -115,12 +115,12 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.imagePath = imagePath;
 	}
 
-	public List<ClassInstance> getSubClassInstances() {
-		return subClassInstances;
+	public List<ClassInstance> getChildClassInstances() {
+		return childClassInstances;
 	}
 
-	public void setSubClassInstances(List<ClassInstance> subClassInstances) {
-		this.subClassInstances = subClassInstances;
+	public void setChildClassInstances(List<ClassInstance> childClassInstances) {
+		this.childClassInstances = childClassInstances;
 	}
 
 	@Override
