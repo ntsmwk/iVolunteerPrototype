@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ClassInstance } from 'app/main/content/_model/meta/Class';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class InstanceCreationResultComponent implements OnInit {
   jsonString: string;
 
   constructor(
+    private router: Router,
 
   ) {
     // console.log('extras');
@@ -24,6 +26,12 @@ export class InstanceCreationResultComponent implements OnInit {
     this.jsonString = JSON.stringify(this.resultClassInstance);
   }
 
+  handleAnotherClick() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([`main/configurator/instance-editor/${this.resultClassInstance.marketplaceId}/top-down`], { queryParams: [this.resultClassInstance.classDefinitionId] });
+
+  }
 
 
   printAnything(anything: any) {

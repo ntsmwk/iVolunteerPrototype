@@ -251,6 +251,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
     classInstance.childClassInstances = [];
     classInstance.id = this.objectIdService.getNewObjectId();
+    classInstance.marketplaceId = this.marketplace.id;
 
     if (!isNullOrUndefined(parentEntry.subEntries)) {
       for (const subEntry of parentEntry.subEntries) {
