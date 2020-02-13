@@ -3,8 +3,8 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angu
 
 @Component({
   selector: 'app-instance-creation-result',
-  templateUrl: './result.html',
-  styleUrls: ['./result.scss'],
+  templateUrl: './result.component.html',
+  styleUrls: ['./result.component.scss'],
   providers: []
 })
 export class InstanceCreationResultComponent implements OnInit {

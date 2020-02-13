@@ -13,6 +13,7 @@ import {
   DynamicClassInstanceCreationFormModule
 } from 'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 import { FormEntryViewModule } from './form-entry-view/form-entry-view.module';
+import { InstanceCreationResultModule } from './result/result.module';
 
 
 const routes = [
@@ -27,29 +28,13 @@ const routes = [
 
 
     MatCommonModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
-    MatTableModule,
     MatExpansionModule,
-
-
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatCardModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatDividerModule,
-    MatIconModule,
     MatButtonModule,
-
-    MatListModule,
-
 
     FuseSharedModule,
     FuseTruncatePipeModule,
     FormEntryViewModule,
+    InstanceCreationResultModule
 
   ],
   declarations: [ClassInstanceFormEditorComponent],
