@@ -217,7 +217,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertClassDefinitionsProducerFromCollection() {
-    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'consumer_header', 'Auftraggeber', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader);
+    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'producer_header', 'Produzent', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader);
     title.setConnectable(false);
 
     let y = title.geometry.y + title.geometry.height + 20;
@@ -232,7 +232,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const x = this.graphContainer.nativeElement.offsetWidth - 220;
     let y = 20;
 
-    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'producer_header', 'Produzent', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader);
+    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'consumer_header', 'Auftraggeber', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader);
     title.setConnectable(false);
 
     y = title.geometry.y + title.geometry.height + 20;
