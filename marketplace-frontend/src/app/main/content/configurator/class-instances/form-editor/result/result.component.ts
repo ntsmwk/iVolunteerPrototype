@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ClassInstance } from 'app/main/content/_model/meta/Class';
 
 
 @Component({
@@ -9,8 +10,8 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angu
 })
 export class InstanceCreationResultComponent implements OnInit {
 
-  isLoaded = false;
-
+  @Input() resultClassInstance: ClassInstance;
+  jsonString: string;
 
   constructor(
 
@@ -20,7 +21,7 @@ export class InstanceCreationResultComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isLoaded = true;
+    this.jsonString = JSON.stringify(this.resultClassInstance);
   }
 
 

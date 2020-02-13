@@ -1,1 +1,12 @@
-result-component works!
+<div class="page-layout right-sidenav p-24" fusePerfectScrollbar>
+    Result page for instance {{ resultClassInstance.id }} - {{ resultClassInstance.name }}
+    <div class="pt-12 pb-12">
+        JSON:
+    </div>
+    <div [innerHTML]="jsonString"
+        style="height: 500px; word-wrap:break-word; overflow: scroll; background-color: rgb(216, 216, 216)">
+    </div>
+
+
+
+</div>
