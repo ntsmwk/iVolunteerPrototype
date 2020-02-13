@@ -30,7 +30,6 @@ export class InstanceCreationResultComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate([`main/configurator/instance-editor/${this.resultClassInstance.marketplaceId}/top-down`], { queryParams: [this.resultClassInstance.classDefinitionId] });
-
   }
 
 

@@ -48,6 +48,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   expectedNumberOfResults: number;
   results: FormEntryReturnEventData[];
 
+  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
+  resultClassInstance: ClassInstance;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private marketplaceService: CoreMarketplaceService,
@@ -94,15 +97,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
             this.formConfigurations = formConfigurations;
 
-            console.log(formConfigurations);
-
-
             for (const config of this.formConfigurations) {
               config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
             }
-
-            console.log(this.formConfigurations);
-
           })
 
           .then(() => {
@@ -111,8 +108,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             if (this.formConfigurations.length === 0) {
               this.lastEntry = true;
             }
-
-            console.log(this.currentFormConfiguration);
             this.isLoaded = true;
           });
 
@@ -195,9 +190,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       });
     }
   }
-
-  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
-  resultClassInstance: ClassInstance;
 
 
   createInstanceFromResults() {
