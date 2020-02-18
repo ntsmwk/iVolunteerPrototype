@@ -25,9 +25,7 @@ $custom-typography: mat-typography-config(
         mat-cell {
             color: white;
         }
-    }
-
-  
+    }  
 }
 
 .link {
@@ -51,74 +49,3 @@ $custom-typography: mat-typography-config(
     flex: 0 0 30px;
     padding-right: 5px;
 }
-
-
-
-
-// ::ng-deep .mat-ink-bar {
-//   background-color: white !important;}
-
-// ::ng-deep .mat-tab-label.mat-tab-label-active {
-//     // min-width: 25px !important;
-//     // padding: 5px;
-//     background-color: mat-color($primary);
-//     opacity: 1 !important;
-    
-//     color: white;
-//     // font-weight: 700;
-// }
-
-
-// // ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
-// //     background: mat-color($primary);
-// //     height: 35px;
-// //     // border-radius: 100px;
-// //     // margin-bottom: 5px;
-// //     opacity: 1 !important;
-// // }
-
-// ::ng-deep .mat-tab-label {
-//     // min-width: 25px !important;
-//     // padding: 5px;
-//     opacity: 1 !important;
-//     background-color: white;
-//     color: mat-color($accent);
-    
- 
-    
-    
-//     // font-weight: 700;
-// }
-
-
-
-
-//     img.header-icon {
-//       left: 10px;
-//       padding: 16px;
-//       max-height: 100%;
-//       position: absolute;
-//       filter: brightness(0) invert(1);
-
-//       @include media-breakpoint-down('xs') {
-//         display: none;
-//       }
-//     }
-
-//     .buttons {
-//       right: 0;
-//       position: absolute;
-//     }
-//   }
-
-//   .dashboard-area {
-//     gridster {
-//       min-height: 1000px;
-//       background-color: transparent;
-//     }
-
-//     gridster.display-grid {
-//       background: grey;
-//     }
-//   }
-// }

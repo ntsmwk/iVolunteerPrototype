@@ -1,11 +1,8 @@
 @import "src/@fuse/scss/fuse";
-
 .timeline-content {
-
   .add-post {
     margin-bottom: 0;
     @include mat-elevation(2);
-
     textarea {
       display: flex;
       flex: 1 0 auto;
@@ -16,12 +13,10 @@
       padding: 16px;
       resize: vertical;
     }
-
     footer {
       padding: 8px;
       border-top: 1px solid rgba(0, 0, 0, 0.08);
       background: #F3F4F5;
-
       .post-button {
         margin: 0;
         width: 64px;
@@ -32,59 +27,47 @@
       }
     }
   }
-
   mat-divider {
     border-top-width: 1px;
     border-top-style: solid;
     margin: 32px 0;
   }
-
   .timeline-item {
     margin-bottom: 32px;
     overflow: hidden;
     border-radius: 2px;
     background: #FFFFFF;
     @include mat-elevation(2);
-
     &:last-child {
       margin-bottom: 0;
     }
-
     header {
       padding: 16px 0 8px 16px;
-
       .title {
         font-weight: 500;
-
         .username {
           margin-right: 2px;
           color: mat-color($accent);
         }
       }
-
       .time {
         color: rgba(0, 0, 0, 0.54);
       }
     }
-
     .content {
-
       .message {
         padding: 16px;
       }
-
       .media {
         padding: 16px;
-
-        img, iframe {
+        img,
+        iframe {
           width: 100%;
         }
-
         a {
           color: inherit;
         }
       }
-
       .like-button,
       .share-button {
         padding: 4px 6px;
@@ -94,101 +77,77 @@
         margin: 0 0 16px 8px;
         min-width: inherit;
         line-height: inherit;
-
         &:hover {
           background-color: transparent;
         }
-
         mat-icon {
           margin: 0 8px 0 0;
         }
       }
-      .invite-button {
-
-      }
-
+      .invite-button {}
       .article {
         border: 1px solid rgba(0, 0, 0, 0.12);
         margin: 16px;
-
         .media {
           padding: 0;
           overflow: hidden;
           border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
           img {
             display: block;
             padding: 0;
           }
-
         }
-
         .title {
           font-size: 15px;
           padding: 16px 16px 4px 16px;
         }
-
         .subtitle {
           padding: 0 16px;
           color: rgba(0, 0, 0, 0.54);
         }
-
         .excerpt {
           padding: 16px 16px;
         }
       }
     }
-
     footer {
       border-top: 1px solid rgba(0, 0, 0, 0.08);
       background-color: rgba(0, 0, 0, 0.04);
       padding: 16px;
-
       .comment-count {
         margin-bottom: 16px;
         cursor: pointer;
-
         mat-icon {
           margin-left: 8px;
         }
       }
-
       .comment {
         margin-bottom: 24px !important;
-
         .username {
           font-weight: 500;
           margin-right: 4px;
         }
-
         .message {
           color: rgba(0, 0, 0, 0.87);
         }
-
         .time {
           color: rgba(0, 0, 0, 0.54);
         }
-
         .actions {
           margin-top: 8px;
-
           .reply-button {
             margin-right: 16px;
             cursor: pointer;
             color: mat-color($accent);
           }
-
           .report-button {
             margin: 0;
             cursor: pointer;
           }
         }
       }
-
       .reply {
-
         form {
-
           textarea {
             width: 100% !important;
             min-height: 72px;
@@ -197,7 +156,6 @@
             font-size: 13px;
             border: 1px solid rgba(0, 0, 0, 0.12);
           }
-
           .post-comment-button {
             margin: 0;
             text-transform: inherit;
