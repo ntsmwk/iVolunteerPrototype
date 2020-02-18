@@ -14,10 +14,8 @@ import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelati
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -29,7 +27,6 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 @Service
 public class ResetService {
 
-	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private PropertyDefinitionToPropertyInstanceMapper propertyDefinitionToPropertyInstanceMapper;
@@ -39,7 +36,6 @@ public class ResetService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
 
 	public void reset() {
 
@@ -101,11 +97,8 @@ public class ResetService {
 		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
 		nameInstance.setValues(new ArrayList<>());
 		nameInstance.getValues().add("Brandeinsatz");
-
 		properties.add(nameInstance);
-
 		instance.setProperties(properties);
-
 		List<ClassInstance> instances = new ArrayList<>();
 		instances.add(instance);
 
@@ -122,7 +115,5 @@ public class ResetService {
 		classesAndRelationshipsToReset.getConfigurators().addAll(configuratorRepository.findAll());
 
 		classesAndRelationshipsToResetRepository.save(classesAndRelationshipsToReset);
-
 	}
-
 }

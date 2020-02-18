@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Marketplace } from '../_model/marketplace';
 import { Participant } from '../_model/participant';
-import { ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
+import { ClassInstanceDTO } from '../_model/meta/Class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { LoginService } from '../_service/login.service';
+import { CoreTenantService } from '../_service/core-tenant.service';
+import { Volunteer } from '../_model/volunteer';
 
 
 @Component({
@@ -19,11 +20,10 @@ export class AssetInboxVolunteerComponent implements OnInit {
 
   isLoaded: boolean;
   marketplace: Marketplace;
-  participant: Participant;
+  volunteer: Volunteer;
   classInstanceDTOs: ClassInstanceDTO[];
 
   submitPressed: boolean;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -31,18 +31,20 @@ export class AssetInboxVolunteerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private loginService: LoginService,
+    private coreTenantService: CoreTenantService
+
 
   ) {
 
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;
-      this.participant = this.router.getCurrentNavigation().extras.state.participant;
+      this.volunteer = this.router.getCurrentNavigation().extras.state.volunteer;
     }
 
   }
 
   ngOnInit() {
-    if (!isNullOrUndefined(this.marketplace) && !isNullOrUndefined(this.participant)) {
+    if (!isNullOrUndefined(this.marketplace) && !isNullOrUndefined(this.volunteer)) {
       this.loadInboxEntries();
     } else {
       Promise.all([
@@ -51,8 +53,8 @@ export class AssetInboxVolunteerComponent implements OnInit {
             this.marketplace = marketplaces[0];
           }
         }),
-        this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-          this.participant = participant;
+        this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+          this.volunteer = volunteer;
         })
       ]).then(() => {
         this.loadInboxEntries();
@@ -61,12 +63,12 @@ export class AssetInboxVolunteerComponent implements OnInit {
   }
 
   loadInboxEntries() {
-    this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
+    this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.volunteer.id, this.volunteer.subscribedTenants).toPromise().then((ret: ClassInstanceDTO[]) => {
       this.classInstanceDTOs = ret;
       this.isLoaded = true;
-
     });
   }
+
 
   onAssetInboxSubmit(classInstanceDTOs: ClassInstanceDTO[]) {
     this.classInstanceService.setClassInstanceInUserRepository(this.marketplace, classInstanceDTOs.map(c => c.id), true).toPromise().then(() => {

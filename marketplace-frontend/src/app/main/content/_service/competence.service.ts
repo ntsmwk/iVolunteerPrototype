@@ -10,7 +10,7 @@ export class CompetenceService {
   constructor(private http: HttpClient) {
   }
 
-  findAll(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/competence`);
+  findAll(marketplace: Marketplace, tenantId: string) {
+    return this.http.get(`${marketplace.url}/competence/${tenantId}`);
   }
 }

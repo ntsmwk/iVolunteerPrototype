@@ -13,6 +13,8 @@ import { ClassInstance, ClassArchetype, ClassInstanceDTO } from '../../_model/me
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { MatSort, MatPaginator } from '@angular/material';
+import { CoreTenantService } from '../../_service/core-tenant.service';
+import { Volunteer } from '../../_model/volunteer';
 
 @Component({
   selector: 'dashboard-volunteer',
@@ -25,7 +27,7 @@ export class DashboardVolunteerComponent implements OnInit {
   widget2: any;
   widget3: any;
 
-  volunteer: Participant;
+  volunteer: Volunteer;
   marketplace: Marketplace;
 
 
@@ -45,24 +47,28 @@ export class DashboardVolunteerComponent implements OnInit {
   issuers: Participant[] = [];
   userImagePaths: any[];
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string;
+  private classInstances: ClassInstanceDTO[];
+
   constructor(public dialog: MatDialog,
     private coreVolunteerService: CoreVolunteerService,
     private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
     private classInstanceService: ClassInstanceService,
-    private userImagePathService: CoreUserImagePathService
+    private userImagePathService: CoreUserImagePathService,
+    private coreTenantService: CoreTenantService
   ) {
 
   }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.volunteer = participant;
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+      this.volunteer = volunteer;
       Promise.all([
         this.coreVolunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise().then((ret: Marketplace[]) => {
           this.marketplace = ret.filter(m => m.name = "Marketplace 1")[0];
-          console.error(this.marketplace);
         }),
       ]).then(() => {
         this.loadDashboardContent();
@@ -71,21 +77,25 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   loadDashboardContent() {
+    console.error('this.volunteer', this.volunteer);
+
     Promise.all([
-      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id).toPromise().then((instances: ClassInstanceDTO[]) => {
-
-        instances = instances.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
-        // if (instances.length > 25) {
-        //   instances = instances.slice(0, 25);
-        // }
-
-        this.dataSourceRepository.data = instances;
-        this.paginator.length = instances.length;
-        this.dataSourceRepository.paginator = this.paginator;
-        this.issuerIds.push(...instances.map(t => t.issuerId));
+      this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id, this.volunteer.subscribedTenants).toPromise().then((instances: ClassInstanceDTO[]) => {
+        console.error('returned class isntances', instances);
+        this.classInstances = instances;
       })
 
     ]).then(() => {
+      this.classInstances = this.classInstances.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
+      // if (instances.length > 25) {
+      //   instances = instances.slice(0, 25);
+      // }
+
+      this.dataSourceRepository.data = this.classInstances;
+      this.paginator.length = this.classInstances.length;
+      this.dataSourceRepository.paginator = this.paginator;
+      this.issuerIds.push(...this.classInstances.map(t => t.issuerId));
+
       this.issuerIds = this.issuerIds.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });

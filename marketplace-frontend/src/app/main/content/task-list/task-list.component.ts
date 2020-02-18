@@ -14,6 +14,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassInstanceDTO } from '../_model/meta/Class';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
+import { CoreTenantService } from '../_service/core-tenant.service';
 
 
 @Component({
@@ -35,10 +36,14 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
 
   private participant: Participant;
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string;
+
   constructor(private router: Router,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private classInstanceService: ClassInstanceService) {
+    private classInstanceService: ClassInstanceService,
+    private coreTenantService: CoreTenantService) {
   }
 
   ngOnInit() {
@@ -60,14 +65,19 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         if (!isNullOrUndefined(marketplace)) {
           this.marketplace = marketplace;
 
-          this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then((ret: ClassInstanceDTO[]) => {
-            if (!isNullOrUndefined(ret)) {
-              this.classInstanceDTOs = ret;
-              this.paginator.length = this.classInstanceDTOs.length;
-              this.tableDataSource.data = this.classInstanceDTOs;
-              this.tableDataSource.paginator = this.paginator;
+          this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+            this.tenantId = tenantId;
 
-            }
+            // TODO Philipp: commented out, since the component isn't used anywhere!?
+
+            // this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
+            //   if (!isNullOrUndefined(ret)) {
+            //     this.classInstanceDTOs = ret;
+            //     this.paginator.length = this.classInstanceDTOs.length;
+            //     this.tableDataSource.data = this.classInstanceDTOs;
+            //     this.tableDataSource.paginator = this.paginator;
+            //   }
+            // });
           });
         }
       });

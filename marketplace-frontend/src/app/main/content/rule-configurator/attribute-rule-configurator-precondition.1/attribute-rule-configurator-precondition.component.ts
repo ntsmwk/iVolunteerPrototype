@@ -16,6 +16,7 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/Property';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
 import { PropertyDefinitionService } from '../../_service/meta/core/property/property-definition.service';
+import { Helpseeker } from '../../_model/helpseeker';
 
 @Component({
   selector: 'attribute-rule-precondition',
@@ -27,7 +28,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
   @Input('attributeSourceRuleEntry') attributeSourceRuleEntry: AttributeSourceRuleEntry;
   @Output('attributeSourceRuleEntry') attributeSourceRuleEntryChange: EventEmitter<AttributeSourceRuleEntry> = new EventEmitter<AttributeSourceRuleEntry>();
 
-  participant: Participant;
+  helpseeker: Helpseeker;
   marketplace: Marketplace;
   role: ParticipantRole;
   rulePreconditionForm: FormGroup;
@@ -72,11 +73,11 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
     this.aggregationOperators = Object.keys(AttributeAggregationOperatorType);
 
 
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.participant = participant;
-      this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
+      this.helpSeekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username==='MVS'?'MV':'FF').toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.helpseeker.tenantId).toPromise().then(
           (definitions: ClassDefinition[]) => {
             this.classDefinitions = definitions;
             this.loadClassProperties(null);
@@ -91,6 +92,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
       this.attributeSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.attributeSourceRuleEntry.classDefinition.id = $event.source.value;
+    this.attributeSourceRuleEntry.classDefinition.tenantId = this.helpseeker.tenantId;
     this.enumValues = [];
     this.loadClassProperties($event);
   }
@@ -106,7 +108,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
 
   private loadClassProperties($event) {
     if (this.attributeSourceRuleEntry && this.attributeSourceRuleEntry.classDefinition && this.attributeSourceRuleEntry.classDefinition.id) {
-      this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.attributeSourceRuleEntry.classDefinition.id).toPromise()
+      this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.attributeSourceRuleEntry.classDefinition.id, this.helpseeker.tenantId).toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
           this.enumValues = [];
@@ -118,7 +120,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
   findEnumValues() {
     if (this.attributeSourceRuleEntry.classProperty.type === 'ENUM' && this.enumValues.length == 0) {
       this.classDefinitionService.getEnumValuesFromEnumHeadClassDefinition(this.marketplace,
-        this.attributeSourceRuleEntry.classProperty.allowedValues[0].enumClassId).toPromise().then((list: any[]) => {
+        this.attributeSourceRuleEntry.classProperty.allowedValues[0].enumClassId, this.helpseeker.tenantId).toPromise().then((list: any[]) => {
           this.enumValues = list.map(e => e.value);
         })
     }

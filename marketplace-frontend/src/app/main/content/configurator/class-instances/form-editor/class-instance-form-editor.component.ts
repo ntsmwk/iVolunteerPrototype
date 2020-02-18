@@ -14,6 +14,7 @@ import { Volunteer } from 'app/main/content/_model/volunteer';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant } from 'app/main/content/_model/participant';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -24,7 +25,7 @@ import { Participant } from 'app/main/content/_model/participant';
 export class ClassInstanceFormEditorComponent implements OnInit {
 
   marketplace: Marketplace;
-  helpseeker: Participant;
+  helpseeker: Helpseeker;
 
   formConfigurations: FormConfiguration[];
   currentFormConfiguration: FormConfiguration;
@@ -67,19 +68,25 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       this.route.params.subscribe(params => {
         marketplaceId = params['marketplaceId'];
       }),
+      
       this.route.queryParams.subscribe(queryParams => {
         let i = 0;
         while (!isNullOrUndefined(queryParams[i])) {
           childClassIds.push(queryParams[i]);
           i++;
         }
+      }),
+
+      this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+        this.helpseeker = helpseeker;
       })
+
     ]).then(() => {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
 
         Promise.all([
-          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds, this.helpseeker.tenantId).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
             this.formConfigurations = formConfigurations;
 
@@ -91,10 +98,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
           this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
             this.volunteers = volunteers;
-          }),
-
-          this.loginService.getLoggedIn().toPromise().then((helpseeker: Participant) => {
-            this.helpseeker = helpseeker;
           })
 
         ]).then(() => {
@@ -134,6 +137,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     for (const selectedVolunteer of this.selectedVolunteers) {
       const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
       classInstance.userId = selectedVolunteer.id;
+      classInstance.tenantId = this.helpseeker.tenantId;
       classInstance.issuerId = this.helpseeker.id;
       classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
       classInstances.push(classInstance);

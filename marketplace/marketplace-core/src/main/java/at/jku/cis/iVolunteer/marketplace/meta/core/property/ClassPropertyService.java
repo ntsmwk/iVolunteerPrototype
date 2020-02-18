@@ -15,16 +15,16 @@ public class ClassPropertyService {
 
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 
-	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId) {
-		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
+	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId, String tenantId) {
+		ClassDefinition classDefinition = classDefinitionRepository.findById(classDefinitionId, tenantId);
 		if (classDefinition != null) {
 			return classDefinition.getProperties();
 		}
 		return null;
 	}
 
-	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId) {
-		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
+	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId, String tenantId) {
+		ClassDefinition classDefinition = classDefinitionRepository.findById(classDefinitionId, tenantId);
 		if (classDefinition != null) {
 			return findClassProperty(classDefinition, classPropertyId);
 		}

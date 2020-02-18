@@ -15,6 +15,7 @@ import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/d
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 @Component({
   selector: 'user-defined-task-template-detail-single',
@@ -25,7 +26,7 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
 export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   role: ParticipantRole;
-  participant: Participant;
+  helpseeker: Helpseeker;
   marketplace: Marketplace;
   template: UserDefinedTaskTemplate;
   isLoaded: boolean;
@@ -50,7 +51,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
-      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant),
+      this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => this.helpseeker = helpseeker),
     ]).then(() => {
       this.route.params.subscribe(params => this.loadPropertiesFromTemplate(params['marketplaceId'], params['templateId']));
     })
@@ -64,7 +65,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
      
       })
       .then(() => {
-        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
           this.allPropertiesList = propertyDefinitions;
           console.log("loaded Properties: ")
           console.log(this.allPropertiesList);
@@ -83,7 +84,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
 
   loadAllPropertyDefinitions() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
       this.allPropertiesList = propertyDefinitions;
     });
   }

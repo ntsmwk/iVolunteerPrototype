@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,34 +20,33 @@ import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 public class ClassDefinitionController {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-
 	@Autowired private ClassDefinitionService classDefinitionService;
 
-	@GetMapping("/meta/core/class/definition/all")
-	private List<ClassDefinition> getAllClassDefinitions() {
-		return classDefinitionRepository.findAll();
+	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
+	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
+		return classDefinitionRepository.findAllByTenantId(tenantId);
 	}
 
-	@GetMapping("meta/core/class/definition/all/no-enum")
+	@GetMapping("meta/core/class/definition/all/no-enum/tenant/{tenantId}")
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(
-			@RequestParam(value = "org", required = false) String organisation) {
-		return classDefinitionService.getAllClassDefinitionsWithoutEnums(organisation);
+			@PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getAllClassDefinitionsWithoutEnums(tenantId);
 	}
 
-	@GetMapping("/meta/core/class/definition/{id}")
-	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
-		return classDefinitionService.getClassDefinitionById(id);
+	@GetMapping("/meta/core/class/definition/{id}/tenant/{tenantId}")
+	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getClassDefinitionById(id, tenantId);
 	}
 
-	@GetMapping("/meta/core/class/definition/archetype/{archetype}")
+	@GetMapping("/meta/core/class/definition/archetype/{archetype}/tenant/{tenantId}")
 	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype,
-			@RequestParam(value = "org", required = false) String organisation) {
-		return classDefinitionService.getClassDefinitionsByArchetype(archetype, organisation);
+			@PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getClassDefinitionsByArchetype(archetype, tenantId);
 	}
 
-	@PutMapping("/meta/core/class/definition/multiple")
-	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids) {
-		return classDefinitionService.getClassDefinitonsById(ids);
+	@PutMapping("/meta/core/class/definition/multiple/tenant/{tenantId}")
+	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getClassDefinitonsById(ids, tenantId);
 	}
 
 	@PostMapping("/meta/core/class/definition/new")
@@ -71,19 +69,19 @@ public class ClassDefinitionController {
 		return classDefinitionService.addOrUpdateClassDefinitions(classDefinitions);
 	}
 
-	@PutMapping("meta/core/class/definition/get-children")
-	private List<String> getChildrenById(@RequestBody List<String> rootIds) {
-		return classDefinitionService.getChildrenById(rootIds);
+	@PutMapping("meta/core/class/definition/get-children/tenant/{tenantId}")
+	private List<String> getChildrenById(@RequestBody List<String> rootIds, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getChildrenById(rootIds, tenantId);
 	}
 
-	@PutMapping("meta/core/class/definition/get-parents")
-	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds) {
-		return classDefinitionService.getParentsById(childIds);
+	@PutMapping("meta/core/class/definition/get-parents/tenant/{tenantId}")
+	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getParentsById(childIds, tenantId);
 	}
 
-	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
-	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {
-		return classDefinitionService.getEnumValues(classDefinitionId);
+	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}/tenant/{tenantId}")
+	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getEnumValues(classDefinitionId, tenantId);
 	}
 
 }

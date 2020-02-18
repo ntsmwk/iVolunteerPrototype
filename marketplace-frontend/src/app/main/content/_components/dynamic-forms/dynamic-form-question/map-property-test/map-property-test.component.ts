@@ -7,6 +7,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/Property';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { HelpSeekerGuard } from 'app/main/content/_guard/help-seeker.guard';
 
 @Component({
   selector: 'app-map-property-test',
@@ -23,7 +25,7 @@ export class MapPropertyTestComponent implements OnInit {
   markers: {lat: number, lng: number}[] = [];
 
   marketplace: Marketplace;
-
+  helpseeker: Helpseeker;
 
 
   constructor(
@@ -36,10 +38,11 @@ export class MapPropertyTestComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
+      this.helpSeekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+        this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
           this.mapPropertyDefinitions = propertyDefinitions.filter((property: PropertyDefinition<any>) => {
             return property.type == PropertyType.MAP;
           });

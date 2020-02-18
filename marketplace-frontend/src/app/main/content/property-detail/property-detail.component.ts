@@ -12,6 +12,7 @@ import { isNullOrUndefined } from 'util';
 import { async } from '@angular/core/testing';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 @Component({
   selector: 'app-property-detail',
@@ -21,7 +22,7 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
 export class PropertyDetailComponent implements OnInit {
 
   role: ParticipantRole;
-  participant: Participant;
+  helpseeker: Helpseeker;
   marketplace: Marketplace;
   propertyDefintion: PropertyDefinition<any>;
 
@@ -44,7 +45,7 @@ export class PropertyDetailComponent implements OnInit {
     
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
-      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
+      this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => this.helpseeker = helpseeker)
     ]).then(() => {
       
       let parameters;
@@ -77,7 +78,7 @@ export class PropertyDetailComponent implements OnInit {
       this.marketplace = marketplace;
 
       if (ref == 'list') {
-        this.propertyDefinitionService.getPropertyDefinitionById(marketplace, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
+        this.propertyDefinitionService.getPropertyDefinitionById(marketplace, propId, this.helpseeker.tenantId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
           this.propertyDefintion = propertyDefintion;    
         }).then(() => {
           console.log(this.propertyDefintion);

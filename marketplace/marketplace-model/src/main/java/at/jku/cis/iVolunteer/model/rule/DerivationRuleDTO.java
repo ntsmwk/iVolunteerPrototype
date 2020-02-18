@@ -9,6 +9,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 public class DerivationRuleDTO {
 
 	private String id;
+	private String tenantId;
 	private String name;
 	private String marketplaceId;
 	private List<ClassSourceRuleEntryDTO> classSourceRules = new ArrayList<>();
@@ -73,6 +74,14 @@ public class DerivationRuleDTO {
 
 	public void setAttributeSourceRules(List<AttributeSourceRuleEntryDTO> attributeSourceRules) {
 		this.attributeSourceRules = attributeSourceRules;
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }

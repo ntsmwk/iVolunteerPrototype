@@ -15,25 +15,28 @@ import { of } from "rxjs";
       private http: HttpClient
     ) { }
 
-    getAllClassDefinitions(marketplace: Marketplace) {
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/all`);
+    getAllClassDefinitions(marketplace: Marketplace, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/tenant/${tenantId}`);
     }
 
-    getAllClassDefinitionsWithoutHeadAndEnums(marketplace: Marketplace, org: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum?org=${org}`);
+    getAllClassDefinitionsWithoutHeadAndEnums(marketplace: Marketplace, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/all/no-enum/tenant/${tenantId}`);
     }
 
-    getClassDefinitionById(marketplace: Marketplace, id: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/${id}`);
+    getClassDefinitionById(marketplace: Marketplace, id: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/${id}/tenant/${tenantId}`);
     }
 
-    getClassDefinitionsById(marketplace: Marketplace, ids: string[]) {
+    getClassDefinitionsById(marketplace: Marketplace, ids: string[], tenantId: string) {
       if (!isNullOrUndefined(ids)) {
-        return this.http.put(`${marketplace.url}/meta/core/class/definition/multiple`, ids);
+        return this.http.put(`${marketplace.url}/meta/core/class/definition/multiple/tenant/${tenantId}`, ids);
       } else {
         return of(null);
       }
     }
+
+
+// TODO
 
     createNewClassDefinition(marketplace: Marketplace, clazz: ClassDefinition) {
       return this.http.post(`${marketplace.url}/meta/core/class/definition/new`, clazz);
@@ -51,17 +54,24 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/delete`, ids);
     }
 
-    getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children`, rootClassIds);
+
+
+
+
+    getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[], tenantId: string) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children/tenant/${tenantId}`, rootClassIds);
     }
 
-    getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
+    getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[], tenantId: string) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents/tenant/${tenantId}`, childClassIds);
     }
 
-    getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: String[]) {
-      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id`, propIds);
+    getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: String[], tenantId: string) {
+      return this.http.put(`${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id/tenant/${tenantId}`, propIds);
     }
+
+
+//TODO
 
     addPropertiesToClassDefinitionById(marketplace: Marketplace, id: string, propIds: String[]) {
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
@@ -75,11 +85,14 @@ import { of } from "rxjs";
       return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/remove-properties`, propIds);
     }
 
-    getEnumValuesFromEnumHeadClassDefinition(marketplace: Marketplace, classDefinitionId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}`);
+
+
+
+    getEnumValuesFromEnumHeadClassDefinition(marketplace: Marketplace, classDefinitionId: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/enum-values/${classDefinitionId}/tenant/${tenantId}`);
     }
 
-    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype, organisation: string){
-      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}?org=${organisation}`); 
+    getByArchetype(marketplace: Marketplace, archetype: ClassArchetype, tenantId: string){
+      return this.http.get(`${marketplace.url}/meta/core/class/definition/archetype/${archetype}/tenant/${tenantId}`); 
     }
   }

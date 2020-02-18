@@ -2,6 +2,7 @@ import { ClassProperty, PropertyInstance } from './Property';
 
 export class ClassDefinition {
     id: string;
+    tenantId: string;
     parentId: string;
     root: boolean;
     name: string;
@@ -19,6 +20,7 @@ export class CompetenceClassDefinition extends ClassDefinition{
 
 export class ClassInstance {
     id: string;
+    tenantId: string;
     name: string;
     classDefinitionId: string;
     properties: PropertyInstance<any>[];

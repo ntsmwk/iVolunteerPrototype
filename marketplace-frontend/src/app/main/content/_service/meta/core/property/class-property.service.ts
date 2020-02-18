@@ -12,12 +12,12 @@ import { ClassProperty } from "app/main/content/_model/meta/Property";
       private http: HttpClient
     ) { }
 
-    getAllClassPropertiesFromClass(marketplace: Marketplace, classDefintionId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/all`);
+    getAllClassPropertiesFromClass(marketplace: Marketplace, classDefintionId: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/all/tenant/${tenantId}`);
     }
 
-    getClassPropertyById(marketplace: Marketplace, classDefintionId: string, classPropertyId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/${classPropertyId}`)
+    getClassPropertyById(marketplace: Marketplace, classDefintionId: string, classPropertyId: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/${classPropertyId}/tenant/${tenantId}`)
     }
 
     updateClassProperty(marketplace: Marketplace, classDefintionId: string, classProperty: ClassProperty<any>) {

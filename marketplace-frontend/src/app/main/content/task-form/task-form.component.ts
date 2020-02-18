@@ -17,6 +17,7 @@ import { Marketplace } from '../_model/marketplace';
 import { Project } from '../_model/project';
 import { ProjectService } from '../_service/project.service';
 import { CompetenceClassDefinition } from '../_model/meta/Class';
+import { CoreTenantService } from '../_service/core-tenant.service';
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;
@@ -42,6 +43,9 @@ export class FuseTaskFormComponent implements OnInit {
   taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string;
+
   constructor(formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -51,7 +55,8 @@ export class FuseTaskFormComponent implements OnInit {
     private competenceService: CompetenceService,
     private taskTemplateService: TaskTemplateService,
     private workflowService: WorkflowService,
-    private projectService: ProjectService) {
+    private projectService: ProjectService,
+    private coreTenantService: CoreTenantService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
@@ -74,12 +79,17 @@ export class FuseTaskFormComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.coreHelpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
-          Promise.all([
-            this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
-            this.competenceService.findAll(marketplace).toPromise().then((competences: Array<CompetenceClassDefinition>) => this.competences = competences),
-            this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
-            this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
-          ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
+
+          this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+            this.tenantId = tenantId;
+
+            Promise.all([
+              this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
+              this.competenceService.findAll(marketplace, this.tenantId).toPromise().then((competences: Array<CompetenceClassDefinition>) => this.competences = competences),
+              this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
+              this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
+            ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));
+          });
         }
       });
     });

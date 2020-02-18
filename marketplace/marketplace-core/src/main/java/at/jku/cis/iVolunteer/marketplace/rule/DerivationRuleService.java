@@ -14,10 +14,13 @@ public class DerivationRuleService {
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
 	@Autowired private DerivationRuleMapper derivationRuleMapper;
 
-	public List<DerivationRuleDTO> getRules() {
-
-		List<DerivationRule> findAll = derivationRuleRepository.findAll();
-		return derivationRuleMapper.toTargets(findAll);
+	public List<DerivationRuleDTO> getRules(String tenantId) {
+		List<DerivationRule> all = derivationRuleRepository.findAllByTenantId(tenantId);
+		return derivationRuleMapper.toTargets(all);
+	}
+	
+	public DerivationRuleDTO getRule(String id, String tenantId) {
+		return derivationRuleMapper.toTarget(derivationRuleRepository.findById(id, tenantId));
 	}
 
 	public void createRule(DerivationRuleDTO derivationRule) {
@@ -28,7 +31,4 @@ public class DerivationRuleService {
 		derivationRuleRepository.save(derivationRuleMapper.toSource(derivationRule));
 	}
 
-	public DerivationRuleDTO getRule(String id) {
-		return derivationRuleMapper.toTarget(derivationRuleRepository.findOne(id));
-	}
 }

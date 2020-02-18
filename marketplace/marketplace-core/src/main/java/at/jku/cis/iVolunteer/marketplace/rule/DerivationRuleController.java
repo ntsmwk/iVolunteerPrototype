@@ -19,14 +19,14 @@ public class DerivationRuleController {
 
 	@Autowired private DerivationRuleService derivationRuleService;
 
-	@GetMapping
-	public List<DerivationRuleDTO> getRules() {
-		return derivationRuleService.getRules();
+	@GetMapping("tenant/{tenantId}")
+	public List<DerivationRuleDTO> getRules(@PathVariable String tenantId) {
+		return derivationRuleService.getRules(tenantId);
 	}
 
-	@GetMapping("/{ruleId}")
-	public DerivationRuleDTO getRule(@PathVariable String ruleId) {
-		return derivationRuleService.getRule(ruleId);
+	@GetMapping("/{ruleId}/tenant/{tenantId}")
+	public DerivationRuleDTO getRule(@PathVariable String ruleId, @PathVariable String tenantId) {
+		return derivationRuleService.getRule(ruleId, tenantId);
 	}
 
 	@PostMapping

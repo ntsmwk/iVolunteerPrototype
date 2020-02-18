@@ -20,6 +20,7 @@ import { StoredChart } from '../../../_model/stored-chart';
 import * as Highcharts from 'highcharts';
 import HC_drilldown from 'highcharts/modules/drilldown.js';
 import HC_sunburst from 'highcharts/modules/sunburst';
+import { CoreTenantService } from 'app/main/content/_service/core-tenant.service';
 HC_drilldown(Highcharts);
 HC_sunburst(Highcharts);
 
@@ -185,13 +186,17 @@ export class TasksMusicComponent implements OnInit {
 
   sunburstCenterName: string = 'Tätigkeiten';
 
+  private tenantName: string = 'Musikverein_Schwertberg';
+  private tenantId: string[] = [];
+
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
-    private storedChartService: StoredChartService
+    private storedChartService: StoredChartService,
+    private coreTenantService: CoreTenantService
   ) {
     this.timelineChartData = [{ name: 'Tätigkeit', series: [] }];
   }
@@ -214,35 +219,40 @@ export class TasksMusicComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK', 'MV')
-        .toPromise().then((ret: ClassInstanceDTO[]) => {
-          if (!isNullOrUndefined(ret)) {
-            this.classInstanceDTOs = ret;
+        this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+           this.tenantId.push(tenantId);
+         //  this.tenantId.push(Object.assign({}, tenantId));
 
-            this.classInstanceDTOs.forEach((ci, index, object) => {
-              if (ci.duration == null) {
-                object.splice(index, 1);
+          this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId)
+            .toPromise().then((ret: ClassInstanceDTO[]) => {
+              if (!isNullOrUndefined(ret)) {
+                this.classInstanceDTOs = ret;
+
+                this.classInstanceDTOs.forEach((ci, index, object) => {
+                  if (ci.duration == null) {
+                    object.splice(index, 1);
+                  }
+                });
+
+                this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+
+                let list = this.filteredClassInstanceDTOs
+                  .map(ci => {
+                    return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
+                  });
+                this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+                this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+                this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
+
+
+                this.tableDataSource.data = this.classInstanceDTOs;
+                this.tableDataSource.paginator = this.paginator;
+
+                this.generateTimelineData();
+                this.generateSunburstData();
+                this.generateOtherChartsData();
               }
             });
-
-            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-
-            let list = this.filteredClassInstanceDTOs
-              .map(ci => {
-                return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
-              });
-            this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
-            this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
-            this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
-
-
-            this.tableDataSource.data = this.classInstanceDTOs;
-            this.tableDataSource.paginator = this.paginator;
-
-            this.generateTimelineData();
-            this.generateSunburstData();
-            this.generateOtherChartsData();
-          }
         });
       });
     });

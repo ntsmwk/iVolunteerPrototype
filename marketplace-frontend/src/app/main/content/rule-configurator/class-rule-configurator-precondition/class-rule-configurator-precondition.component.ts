@@ -15,6 +15,7 @@ import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassProperty } from 'app/main/content/_model/meta/Property';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+import { Helpseeker } from '../../_model/helpseeker';
 
 @Component({
   selector: 'class-rule-precondition',
@@ -26,7 +27,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   @Input('classSourceRuleEntry') classSourceRuleEntry: ClassSourceRuleEntry;
   @Output('classSourceRuleEntry') classSourceRuleEntryChange: EventEmitter<ClassSourceRuleEntry> = new EventEmitter<ClassSourceRuleEntry>();
 
-  participant: Participant;
+  helpseeker: Helpseeker;
   marketplace: Marketplace;
   role: ParticipantRole;
   rulePreconditionForm: FormGroup;
@@ -64,11 +65,11 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.aggregationOperators = Object.keys(ClassAggregationOperatorType);
 
 
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.participant = participant;
-      this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
+      this.helpSeekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.helpseeker.tenantId).toPromise().then(
           (definitions: ClassDefinition[]) => {
             this.classDefinitions = definitions;
             this.loadClassProperties(null);
@@ -83,12 +84,14 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.classSourceRuleEntry.classDefinition.id = $event.source.value;
+    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.tenantId;
+
     this.loadClassProperties($event);
   }
 
   private loadClassProperties($event) {
     if (this.classSourceRuleEntry && this.classSourceRuleEntry.classDefinition && this.classSourceRuleEntry.classDefinition.id) {
-      this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.classSourceRuleEntry.classDefinition.id).toPromise()
+      this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.classSourceRuleEntry.classDefinition.id, this.helpseeker.tenantId).toPromise()
         .then((props: ClassProperty<any>[]) => {
           this.classProperties = props;
           this.onChange($event);

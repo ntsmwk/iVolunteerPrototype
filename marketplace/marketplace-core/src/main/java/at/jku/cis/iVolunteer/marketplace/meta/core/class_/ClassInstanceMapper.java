@@ -29,9 +29,6 @@ public class ClassInstanceMapper {
 			dto.setPublished(ci.isPublished());
 			dto.setInUserRepository(ci.isInUserRepository());
 			dto.setInIssuerInbox(ci.isInIssuerInbox());
-			dto.setNewFakeData(ci.isNewFakeData());
-			dto.setMV(ci.isMV());
-			
 			dto.setHash(hasher.generateHash(ci));
 
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "Name".equals(p.getName()))

@@ -9,8 +9,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 public class PropertyDefinitionInitializer {
 
 	
-	public <T> PropertyDefinition<T> createPropertyDefinition(String name, PropertyType type){
-		return new PropertyDefinition<>(name, type);
+	public <T> PropertyDefinition<T> createPropertyDefinition(String name, PropertyType type, String tenantId){
+		return new PropertyDefinition<>(name, type, tenantId);
 	}
 	
 }

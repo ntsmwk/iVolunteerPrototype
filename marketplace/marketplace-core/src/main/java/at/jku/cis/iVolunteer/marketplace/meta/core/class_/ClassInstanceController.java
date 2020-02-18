@@ -1,8 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -21,59 +20,62 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private LoginService loginService;
-	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
 
-	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
+	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
-			@RequestParam(value = "org", required = false) String organisation) {
+			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
-				organisation == null ? "FF" : organisation);
-		if (!organisation.equals("MV")) {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
-			}
-		} else {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()).stream()
-						.filter(ci -> ci.isMV()).collect(Collectors.toList()));
-			}
-		}
-
+		
+		tenantIds.forEach(tenantId -> {
+			classDefinitions.addAll(classDefinitionService.getClassDefinitionsByArchetype(archeType,
+				tenantId));
+			
+			classDefinitions.forEach(cd -> {
+				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionId(userId, cd.getId(), tenantId));
+			});
+		});
+		
+		
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
-	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user")
-	private List<ClassInstanceDTO> getClassInstancesByClassDefinitionIdFake(
-			@PathVariable("archetype") ClassArchetype archeType) {
+	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
+	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
+			@RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
-		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType, "FF");
 
-		for (ClassDefinition cd : classDefinitions) {
-			classInstances.addAll(classInstanceRepository
-					.getByUserIdAndClassDefinitionId(loginService.getLoggedInParticipant().getId(), cd.getId()));
-		}
-		return classInstanceMapper.mapToDTO(classInstances);
+		tenantIds.forEach(tenantId -> {
+			classInstances.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false, tenantId));
+		});
+		
+		return classInstances;
 	}
 
-	@GetMapping("/meta/core/class/instance/in-user-inbox/{userId}")
-	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId) {
-		return classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false);
+	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
+	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId,
+			@RequestBody List<String> tenantIds) {
+
+		Set<ClassInstance> ret = new LinkedHashSet<>();
+		tenantIds.forEach(tenantId -> {
+			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false,
+					tenantId));
+		});
+
+		return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
 	}
 
-	@GetMapping("/meta/core/class/instance/in-user-repository/{userId}")
-	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId) {
-		return classInstanceMapper
-				.mapToDTO(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false));
-	}
-
-	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId) {
+	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}/tenant/{tenantId}")
+	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
+			@PathVariable("tenantId") String tenantId) {
 		List<ClassInstance> instances = classInstanceRepository
-				.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false);
+				.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false, tenantId);
 		return instances;
 	}
 

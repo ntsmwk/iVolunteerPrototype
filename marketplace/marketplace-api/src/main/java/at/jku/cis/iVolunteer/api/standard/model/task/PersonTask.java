@@ -3,8 +3,6 @@ package at.jku.cis.iVolunteer.api.standard.model.task;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.google.gson.annotations.SerializedName;
-
 @Document
 public class PersonTask {
 
@@ -38,9 +36,8 @@ public class PersonTask {
 
 	public PersonTask(String id, String taskId, String taskName, String taskType1, String taskType2, String taskType3,
 			String taskType4, String taskDescription, String taskDateFrom, String taskDateTo, String taskDuration,
-			String taskLocation, String purpose, String role, String rank, String phase, String unit,
-			String level, GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource,
-			String personID) {
+			String taskLocation, String purpose, String role, String rank, String phase, String unit, String level,
+			GeoInformation taskGeoInformation, String iVolunteerUUID, String iVolunteerSource, String personID) {
 		super();
 		this.id = id;
 		this.taskId = taskId;

@@ -32,11 +32,10 @@ public class CoreApplication {
 	private static final String FLEXPROD = "flexprod";
 	private static final String RAW_PASSWORD = "passme";
 	
-	private static final String FFEIDENBERG = "FF Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein Schwertberg";
-	private static final String RKWILHERING = "RK Wilhering";
+	private static final String FFEIDENBERG = "FF_Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
+	private static final String RKWILHERING = "RK_Wilhering";
 	
-
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
@@ -56,7 +55,10 @@ public class CoreApplication {
 		createTenant(MUSIKVEREINSCHWERTBERG);
 		createTenant(RKWILHERING);
 		
-		createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
+		CoreHelpSeeker helpSeeker = createHelpSeeker(MMUSTERMANN, RAW_PASSWORD);
+		helpSeeker.setTenantId(coreTenantRepository.findByName(FFEIDENBERG).getId());
+		saveHelpseeker(helpSeeker);
+		
 		createRecruiter(RECRUITER, RAW_PASSWORD);
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
@@ -74,6 +76,7 @@ public class CoreApplication {
 		volunteer = createVolunteer(MWEIXLBAUMER, RAW_PASSWORD);
 		volunteer.setFirstname("Markus");
 		volunteer.setLastname("Weixlbaumer");
+		volunteer.addSubscribedTenant(coreTenantRepository.findByName(FFEIDENBERG).getId());
 		saveVolunteer(volunteer);
 
 		// Test Users for Instantiation
@@ -131,12 +134,6 @@ public class CoreApplication {
 		saveHelpseeker(helpseeker);
 		userImagePathRepository
 				.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/musikvereinschwertberg.jpeg"));
-
-		helpseeker = createHelpSeekerFixedId("EFA", "passme");
-		helpseeker.setNickname("Forum Alpbach");
-		helpseeker.setId("EFA");
-		saveHelpseeker(helpseeker);
-		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/neighborhelp.jpg"));
 
 		CoreRecruiter recruiter = createRecruiter("recruiter", "passme");
 		recruiter.setFirstname("Daniel");
@@ -225,6 +222,7 @@ public class CoreApplication {
 		if(tenant == null) {
 			tenant = new CoreTenant();
 			tenant.setName(name);
+
 			tenant = coreTenantRepository.insert(tenant);
 		}
 		return tenant;

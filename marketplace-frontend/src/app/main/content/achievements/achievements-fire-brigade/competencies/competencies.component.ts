@@ -12,6 +12,7 @@ import { Volunteer } from '../../../_model/volunteer';
 import * as moment from 'moment';
 import { StoredChart } from '../../../_model/stored-chart';
 import { StoredChartService } from '../../../_service/stored-chart.service';
+import { CoreTenantService } from 'app/main/content/_service/core-tenant.service';
 
 @Component({
   selector: 'fuse-competencies',
@@ -23,7 +24,7 @@ import { StoredChartService } from '../../../_service/stored-chart.service';
 
 })
 export class CompetenciesComponent implements OnInit {
-  private volunteer: Participant;
+  private volunteer: Volunteer;
   private marketplace: Marketplace;
   classInstanceDTOs: ClassInstanceDTO[];
 
@@ -51,17 +52,21 @@ export class CompetenciesComponent implements OnInit {
 
   test123 = "Stunden"
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string[] = [];
+
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private volunteerService: CoreVolunteerService,
-    private storedChartService: StoredChartService
+    private storedChartService: StoredChartService,
+    private coreTenantService: CoreTenantService
   ) { }
 
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.volunteer = participant as Volunteer;
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+      this.volunteer = volunteer;
 
       Promise.all([
         this.marketplaceService.findAll().toPromise(),
@@ -70,8 +75,12 @@ export class CompetenciesComponent implements OnInit {
 
         // TODO: 
         this.marketplace = values[0][0];
+        this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+          this.tenantId.push(tenantId);
+          // this.tenantId.push(Object.assign({}, tenantId));
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
+
+        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
             //this.classInstanceDTOs = ret.filter(ci => ci.name == 'PersonTask');
             this.classInstanceDTOs = ret;
@@ -84,6 +93,7 @@ export class CompetenciesComponent implements OnInit {
             this.meanYearData = this.getYearData('mean');
           }
         });
+      });
       });
     });
   }

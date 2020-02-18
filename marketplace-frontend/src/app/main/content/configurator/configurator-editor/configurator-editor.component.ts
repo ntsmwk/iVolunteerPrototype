@@ -17,6 +17,8 @@ import { ConfiguratorService } from '../../_service/meta/core/configurator/confi
 import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
+import { LoginService } from '../../_service/login.service';
+import { Helpseeker } from '../../_model/helpseeker';
 
 declare var require: any;
 
@@ -56,6 +58,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     private configuratorService: ConfiguratorService,
     private dataTransportService: DataTransportService,
     private objectIdService: ObjectIdService,
+    private loginService: LoginService
   ) {
 
   }
@@ -101,7 +104,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   // form editor not accessible from the graph editor - just for debug puposes anymore
   showWorkInProgressInfo = false;
 
+  helpseeker: Helpseeker;
+
   ngOnInit() {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
+    });
+
     this.fetchPropertyDefinitions();
     this.configurableClasses = [];
     this.deletedClassIds = [];
@@ -117,7 +126,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   fetchPropertyDefinitions() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
       if (!isNullOrUndefined(propertyDefinitions)) {
         this.allPropertyDefinitions = propertyDefinitions;
       }
@@ -237,7 +246,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   showServerContent(newGraph: boolean) {
     this.clearEditor();
     if (newGraph) {
-      const standardObjects = CUtils.addStandardObjects(this.marketplace.id, this.objectIdService);
+      const standardObjects = CUtils.addStandardObjects(this.marketplace.id, this.helpseeker.tenantId, this.objectIdService);
       this.relationships = standardObjects.relationships;
       this.configurableClasses = standardObjects.classDefintions;
     }
@@ -609,7 +618,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
                     // TODO @Alex
                   } else {
                     this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(
-                      this.marketplace, result.propertyItems.map(propertyItems => propertyItems.id)).toPromise().then((ret: ClassProperty<any>[]) => {
+                      this.marketplace, result.propertyItems.map(propertyItems => propertyItems.id), this.helpseeker.tenantId).toPromise().then((ret: ClassProperty<any>[]) => {
                         c.properties.push(...ret);
                         this.updateModel();
                         this.redrawContent(undefined);
@@ -644,6 +653,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedClass.properties = [];
         addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        addedClass.tenantId = this.helpseeker.tenantId;
 
         const cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
         cret.id = this.objectIdService.getNewObjectId();
@@ -669,6 +679,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       if (cell.value === 'add_class_new_level') {
         const addedClass = new ClassDefinition();
+        addedClass.tenantId = this.helpseeker.tenantId;
         addedClass.properties = [];
 
         const parentClassArchetype = (cell.getParent() as myMxCell).classArchetype;
@@ -724,6 +735,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         currentClass.properties.push(enumProperty);
 
         const enumClassHead = new ClassDefinition();
+        enumClassHead.tenantId = this.helpseeker.tenantId;
         enumClassHead.classArchetype = ClassArchetype.ENUM_HEAD;
         enumClassHead.name = enumProperty.name;
 
@@ -1080,7 +1092,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     Promise.all([
       // grab classDefinitionss from server
-      this.classDefinitionService.getClassDefinitionsById(this.marketplace, configurator.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
+      this.classDefinitionService.getClassDefinitionsById(this.marketplace, configurator.classDefinitionIds, this.helpseeker.tenantId).toPromise().then((classDefinitions: ClassDefinition[]) => {
         if (!isNullOrUndefined(classDefinitions)) {
           this.configurableClasses = classDefinitions;
         } else {
@@ -1243,6 +1255,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
         if (paletteItem.type === 'class') {
           const addedClass = new ClassDefinition();
+          addedClass.tenantId = this.helpseeker.tenantId;
           addedClass.name = paletteItem.label;
           addedClass.properties = [];
           addedClass.classArchetype = paletteItem.archetype;

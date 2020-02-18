@@ -11,6 +11,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassInstance, ClassArchetype, ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
 import { Router } from '@angular/router';
 import { Feedback } from 'app/main/content/_model/feedback';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 @Component({
   selector: 'inbox-overlay',
@@ -36,7 +37,7 @@ export class InboxOverlayComponent implements OnInit {
 
 
   marketplace: Marketplace;
-  participant: Participant;
+  participant;
   participantRole: ParticipantRole;
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
@@ -44,37 +45,41 @@ export class InboxOverlayComponent implements OnInit {
   displayedColumns = ['archetype', 'label'];
 
   ngOnInit() {
-    Promise.all([
-      this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
-        if (!isNullOrUndefined(marketplaces)) {
-          this.marketplace = marketplaces[0];
-        }
-      }),
-      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-        this.participant = participant;
-      })
+    this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
+      if (!isNullOrUndefined(marketplaces)) {
+        this.marketplace = marketplaces[0];
+      }
 
-    ]).then(() => {
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
         this.participantRole = role;
 
-        if (role === 'VOLUNTEER') {
-          this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
-
-            this.drawInboxElements(ret);
-
-            this.isLoaded = true;
+        if (this.participantRole === 'VOLUNTEER') {
+          this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+            this.participant = volunteer;
           });
-        } else if (role === 'HELP_SEEKER') {
-          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
+        } else if (this.participantRole === 'HELP_SEEKER') {
+          this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+            this.participant = helpseeker;
+          });
+        }
 
+        if (this.participantRole === 'VOLUNTEER') {
+          this.participant.subscribedTenants.forEach(tenantId => {
+            this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id, this.participant.subscribedTenants).toPromise().then((ret: ClassInstanceDTO[]) => {
               this.drawInboxElements(ret);
               this.isLoaded = true;
+            });
+          });
+
+
+        } else if (this.participantRole === 'HELP_SEEKER') {
+          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id, this.participant.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
+            this.drawInboxElements(ret);
+            this.isLoaded = true;
           });
         }
       });
     });
-
   }
 
   drawInboxElements(classInstanceDTOs: ClassInstanceDTO[]) {
@@ -107,7 +112,7 @@ export class InboxOverlayComponent implements OnInit {
       return '';
     }
 
-    const name =  entry.properties.find(p => p.id === 'name');
+    const name = entry.properties.find(p => p.id === 'name');
 
     if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
       return '';

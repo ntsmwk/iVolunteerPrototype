@@ -16,10 +16,10 @@ public class ClassDefinitionPropertyController {
 
 	@Autowired private ClassDefinitionPropertyService classDefinitionPropertyService;
 
-	@PutMapping("meta/core/class/definition/get-classproperty-from-propertydefinition-by-id")
+	@PutMapping("meta/core/class/definition/get-classproperty-from-propertydefinition-by-id/tenant/{tenantId}")
 	private List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(
-			@RequestBody List<String> propertyIds) {
-		return classDefinitionPropertyService.getClassPropertyFromPropertyDefinitionById(propertyIds);
+			@RequestBody List<String> propertyIds, @PathVariable("tenantId") String tenantId) {
+		return classDefinitionPropertyService.getClassPropertyFromPropertyDefinitionById(propertyIds, tenantId);
 	}
 
 	@PutMapping("meta/core/class/definition/{id}/add-properties-by-id")

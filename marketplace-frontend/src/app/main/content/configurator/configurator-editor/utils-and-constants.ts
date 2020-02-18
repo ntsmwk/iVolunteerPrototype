@@ -78,13 +78,14 @@ export class CConstants {
 
 export class CUtils {
 
-  public static addStandardObjects(marketplaceId: string, objectIdService: ObjectIdService): {classDefintions: ClassDefinition[], relationships: Relationship[]} {
+  public static addStandardObjects(marketplaceId: string, tenantId: string, objectIdService: ObjectIdService): {classDefintions: ClassDefinition[], relationships: Relationship[]} {
     let configurableClasses: ClassDefinition[] = [];
     let relationships: Relationship[] = [];
    
    
     let fwPassEintrag = new ClassDefinition();
     fwPassEintrag.id = objectIdService.getNewObjectId();
+    fwPassEintrag.tenantId = tenantId;
     fwPassEintrag.marketplaceId = marketplaceId;
     fwPassEintrag.name = "Freiwilligenpass-\nEintrag";
     fwPassEintrag.root = true;
@@ -116,6 +117,7 @@ export class CUtils {
 
     let task = new ClassDefinition();
     task.id = objectIdService.getNewObjectId();
+    task.tenantId = tenantId;
     task.marketplaceId = marketplaceId;
     task.name = "Tätigkeit";
     task.root = false;
@@ -144,6 +146,7 @@ export class CUtils {
 
     let competence = new ClassDefinition();
     competence.id = objectIdService.getNewObjectId();
+    competence.tenantId = tenantId;
     competence.marketplaceId = marketplaceId;
     competence.name = 'Kompetenz';
     competence.root = false;
@@ -160,6 +163,7 @@ export class CUtils {
 
     let achievement = new ClassDefinition();
     achievement.id = objectIdService.getNewObjectId();
+    achievement.tenantId = tenantId;
     achievement.marketplaceId = marketplaceId;
     achievement.name = 'Verdienst';
     achievement.root = false;
@@ -176,6 +180,7 @@ export class CUtils {
 
     let funktion = new ClassDefinition();
     funktion.id = objectIdService.getNewObjectId();
+    funktion.tenantId = tenantId;
     funktion.marketplaceId = marketplaceId;
     funktion.name = 'Funktion';
     funktion.root = false;

@@ -8,6 +8,7 @@ import { Marketplace } from '../_model/marketplace';
 import { PropertyType, PropertyDefinition } from '../_model/meta/Property';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 
 @Component({
@@ -18,9 +19,10 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
 export class PropertyBuildFormComponent implements OnInit {
 
   marketplace: Marketplace;
+  helpseeker: Helpseeker;
   currentProperty: PropertyDefinition<any>;
   // form: FormGroup = new FormGroup({});
-  
+
 
 
   isLoaded: boolean = false;
@@ -34,9 +36,9 @@ export class PropertyBuildFormComponent implements OnInit {
     private propertyDefinitionService: PropertyDefinitionService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private marketPlaceService: CoreMarketplaceService){
+    private marketPlaceService: CoreMarketplaceService) {
 
-    }
+  }
 
   ngOnInit() {
     console.log("init property build form");
@@ -49,38 +51,41 @@ export class PropertyBuildFormComponent implements OnInit {
 
         let marketplaceLoaded, propertyLoaded: boolean = false;
 
-        this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
-          this.propertyListItems = pdArr;
-            
+        this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+          this.helpseeker = helpseeker;
+
+          this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
+            this.propertyListItems = pdArr;
+
             console.log("properties:");
             console.log(this.propertyListItems);
 
 
-            marketplaceLoaded= true;
-            this.isLoaded = marketplaceLoaded && propertyLoaded;
-        });
-
-
-        console.log(params['propertyId']);
-
-        if (!isNullOrUndefined(params['propertyId'])) {
-          this.propertyDefinitionService.getPropertyDefinitionById(marketplace, params['propertyId']).toPromise().then((property: PropertyDefinition<any>) => {
-            this.currentProperty = property;
-
-            console.log("current Property");
-            console.log(this.currentProperty);
-
-            this.setWhichProperty();
-
-            propertyLoaded = true;
+            marketplaceLoaded = true;
             this.isLoaded = marketplaceLoaded && propertyLoaded;
           });
-        } else {
-          propertyLoaded = true;
-          this.isLoaded = marketplaceLoaded && propertyLoaded;
-        }
 
 
+          console.log(params['propertyId']);
+
+          if (!isNullOrUndefined(params['propertyId'])) {
+            this.propertyDefinitionService.getPropertyDefinitionById(marketplace, params['propertyId'], this.helpseeker.tenantId).toPromise().then((property: PropertyDefinition<any>) => {
+              this.currentProperty = property;
+
+              console.log("current Property");
+              console.log(this.currentProperty);
+
+              this.setWhichProperty();
+
+              propertyLoaded = true;
+              this.isLoaded = marketplaceLoaded && propertyLoaded;
+            });
+          } else {
+            propertyLoaded = true;
+            this.isLoaded = marketplaceLoaded && propertyLoaded;
+          }
+
+        });
       });
     });
 
@@ -91,11 +96,11 @@ export class PropertyBuildFormComponent implements OnInit {
     //       this.marketplace = marketplace;
     //       this.propertyService.getPropertyList(marketplace).toPromise().then((pArr: PropertyListItem[]) => {
     //         this.propertyListItems = pArr;
-            
+
     //         console.log("properties:");
     //         console.log(this.propertyListItems);
 
-            
+
     //         this.isLoaded = true;
     //       });
 
@@ -111,7 +116,7 @@ export class PropertyBuildFormComponent implements OnInit {
     //       })
 
 
-          
+
     //     }
     //   })
     // });
@@ -125,9 +130,9 @@ export class PropertyBuildFormComponent implements OnInit {
     }
   }
 
-//   trackByFn(index: any, item: any) {
-//     return index;
-//  }
+  //   trackByFn(index: any, item: any) {
+  //     return index;
+  //  }
 
   navigateBack() {
     window.history.back();

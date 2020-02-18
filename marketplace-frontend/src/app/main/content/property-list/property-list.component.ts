@@ -13,6 +13,7 @@ import { Marketplace } from '../_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 import { CoreFlexProdService } from '../_service/core-flexprod.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 @Component({
   selector: 'app-property-list',
@@ -27,6 +28,7 @@ export class PropertyListComponent implements OnInit {
   // displayedColumns = ['id', 'name', 'defaultValue', 'kind'];
 
   marketplace: Marketplace;
+  helpseeker: Helpseeker;
 
   propertyDefinitionArray: PropertyDefinition<any>[];
 
@@ -60,7 +62,8 @@ export class PropertyListComponent implements OnInit {
 
     let service: CoreHelpSeekerService | CoreFlexProdService;
 
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
         if (role == 'FLEXPROD') {
           service = this.flexProdService;
@@ -70,10 +73,10 @@ export class PropertyListComponent implements OnInit {
           return;
         }
       }).then(() => {
-        service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+        service.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
           if (!isNullOrUndefined(marketplace)) {
             this.marketplace = marketplace;
-            this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+            this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
               this.propertyDefinitionArray = propertyDefinitions;
               this.updateDataSource();
               this.isLoaded = true;

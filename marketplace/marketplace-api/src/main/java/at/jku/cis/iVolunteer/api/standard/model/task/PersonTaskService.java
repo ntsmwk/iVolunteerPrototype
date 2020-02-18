@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
-import at.jku.cis.iVolunteer.marketplace.user.TenantRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -23,12 +23,15 @@ import jersey.repackaged.com.google.common.collect.Lists;
 public class PersonTaskService {
 
 	private static final int FF_NEW = 2;
-	private static final int MV = 3;
+	private static final int MV = 3;	
+	private static final String FFEIDENBERG = "FF_Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
+	
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
-	@Autowired private TenantRepository tenantRepository;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	
 
 	public void savePersonTasks(List<PersonTask> personTasks, int level) {
@@ -82,15 +85,24 @@ public class PersonTaskService {
 		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(false);
 		personTaskClassInstance.setInUserRepository(true);
-		
+
+//		TODO MWE set issuerId to tenantId!
 		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
+		String tenantId = null;
+		switch(level) {
+		case 1: //FF
+			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+			break;
+		case 2: //FF
+			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+			break;
+		case 3: //MV
+			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+			break;
+		}
+		
 		personTaskClassInstance.setTimestamp(new Date());
-		personTaskClassInstance.setNewFakeData(level==FF_NEW);
-		personTaskClassInstance.setMV(level == MV);
-		
-		// TODO
-		// personTaskClassInstance.setTenantId(tenantRepository.findByName(name));
-		
+
 		return classInstanceRepository.save(personTaskClassInstance);		 
 		// @formatter:on
 	}

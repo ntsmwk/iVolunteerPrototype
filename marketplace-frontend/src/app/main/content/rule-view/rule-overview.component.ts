@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-
-import { Participant } from '../_model/participant';
 import { Marketplace } from '../_model/marketplace';
-
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { LoginService } from '../_service/login.service';
 import { fuseAnimations } from '@fuse/animations';
 import { isNullOrUndefined } from 'util';
 import { DerivationRule } from '../_model/derivation-rule';
 import { DerivationRuleService } from '../_service/derivation-rule.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 
 @Component({
@@ -24,8 +22,7 @@ export class FuseRuleOverviewComponent implements OnInit {
   marketplaces: Marketplace[];
   dataSource = new MatTableDataSource<DerivationRule>();
   displayedColumns = ['name', 'sources', 'target'];
-  participant: Participant;
-
+  helpseeker: Helpseeker;
 
   constructor(private router: Router,
     private loginService: LoginService,
@@ -41,23 +38,13 @@ export class FuseRuleOverviewComponent implements OnInit {
     this.router.navigate(['/main/rule/' + derivationRule.id]);
   }
 
-  private isFF() {
-    return this.participant.username == 'FFA';
-  }
-
-  private isMV() {
-    return this.participant.username === 'MVS';
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
-  }
 
   private loadAllDerivationRules() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.participant = participant;
+    this.loginService.getLoggedIn().toPromise().then((participant: Helpseeker) => {
+      this.helpseeker = participant;
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
-          this.derivationRuleService.findAll(marketplace).toPromise().then((rules: DerivationRule[]) => this.dataSource.data = rules);
+          this.derivationRuleService.findAll(marketplace, this.helpseeker.tenantId).toPromise().then((rules: DerivationRule[]) => this.dataSource.data = rules);
         }
       });
     });

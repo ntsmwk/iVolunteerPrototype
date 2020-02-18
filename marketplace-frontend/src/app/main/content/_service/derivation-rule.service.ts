@@ -14,13 +14,12 @@ export class DerivationRuleService {
   constructor(private http: HttpClient) {
   }
 
-  findById(marketplace: Marketplace, id: string){
-    return this.http.get(`${marketplace.url}/rule/${id}`);
-
+  findById(marketplace: Marketplace, id: string, tenantId: string){
+    return this.http.get(`${marketplace.url}/rule/${id}/tenant/${tenantId}`);
   }
 
-  findAll(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/rule`);
+  findAll(marketplace: Marketplace, tenantId: string) {
+    return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}`);
   }
 
   save(marketplace: Marketplace, derivationRule: DerivationRule) {

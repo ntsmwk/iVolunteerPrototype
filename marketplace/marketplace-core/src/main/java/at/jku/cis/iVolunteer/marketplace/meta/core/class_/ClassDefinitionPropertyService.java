@@ -21,10 +21,11 @@ public class ClassDefinitionPropertyService {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
-	List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(List<String> propertyIds) {
-		return createClassPropertiesFromDefinitions(propertyDefinitionRepository.findAll(propertyIds));
+	List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(List<String> propertyIds, String tenantId) {
+		return createClassPropertiesFromDefinitions(propertyDefinitionRepository.findAllById(propertyIds, tenantId));
 	}
 
+	// TODO: Philipp: tenantId check required?
 	List<ClassProperty<Object>> addPropertiesToClassDefinitionById(String id, @RequestBody List<String> propertyIds) {
 		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(
 				propertyDefinitionRepository.findAll(propertyIds));

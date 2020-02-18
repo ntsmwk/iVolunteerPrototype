@@ -10,6 +10,7 @@ import { Participant } from '../../_model/participant';
 import { isNullOrUndefined } from 'util';
 import { ClassInstance, ClassInstanceDTO } from '../../_model/meta/Class';
 import { StoredChart } from '../../_model/stored-chart';
+import { CoreTenantService } from '../../_service/core-tenant.service';
 
 
 @Component({
@@ -57,7 +58,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
   private comparisonData: any[] = [];
   comparisonYear: string;
-  volunteer: any;
+  volunteer: Volunteer;
   marketplace: any;
   classInstanceDTOs: ClassInstanceDTO[];
   filteredClassInstanceDTOs: ClassInstanceDTO[];
@@ -204,7 +205,8 @@ export class AchievementsManagementSummaryComponent implements OnInit {
   ];
   uniqueYears: any[];
 
-
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string;
 
   constructor(
     private loginService: LoginService,
@@ -212,14 +214,15 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
-    private storedChartService: StoredChartService
+    private storedChartService: StoredChartService,
+    private coreTenantService: CoreTenantService
   ) { }
 
   ngOnInit() {
     this.comparisonYear = '2012';
 
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.volunteer = participant as Volunteer;
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+      this.volunteer = volunteer;
 
       Promise.all([
         this.marketplaceService.findAll().toPromise(),
@@ -229,7 +232,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
+        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
             //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');
             this.classInstanceDTOs = ret;
@@ -251,6 +254,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
             this.sumNumber2019 = this.number2019.reduce((a, c) => a+c.value, 0);
           }
         });
+
       });
     });
 

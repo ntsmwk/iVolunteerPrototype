@@ -23,10 +23,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
 
   public marketplaces = new Array<Marketplace>();
   marketplace: Marketplace;
-  participant: Participant;
+  helpseeker: Helpseeker;
   classInstanceDTO: ClassInstanceDTO[];
   isLoaded: boolean;
-  helpseeker: Helpseeker;
 
 
   constructor(private arrayService: ArrayService,
@@ -38,18 +37,14 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.helpseeker = participant;
-    });
-
     Promise.all([
       this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
         if (!isNullOrUndefined(marketplaces)) {
           this.marketplace = marketplaces[0];
         }
       }),
-      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-        this.participant = participant;
+      this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+        this.helpseeker = helpseeker;
       })
     ]).then(() => {
       this.loadInboxEntries();
@@ -58,24 +53,11 @@ export class AssetInboxHelpseekerComponent implements OnInit {
 
   }
 
-  private isFF() {
-    return this.participant.username == 'FFA';
-  }
-
-  private isMV() {
-    return this.participant.username === 'MVS';
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
-  }
-
-
   loadInboxEntries() {
-    this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id).toPromise().then((ret: ClassInstanceDTO[]) => {
+    this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.helpseeker.id, this.helpseeker.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
       this.classInstanceDTO = ret;
       this.isLoaded = true;
     });
-
   }
 
   close() {
@@ -84,7 +66,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
   onAssetInboxSubmit() {
     this.classInstanceService.setClassInstanceInIssuerInbox(this.marketplace, this.classInstanceDTO.map(c => c.id), false).toPromise().then(() => {
       console.log("confirm");
-      this.router.navigate(['main/helpseeker/asset-inbox/confirm'], { state: { 'instances': this.classInstanceDTO, 'marketplace': this.marketplace, 'participant': this.participant } });
+      this.router.navigate(['main/helpseeker/asset-inbox/confirm'], { state: { 'instances': this.classInstanceDTO, 'marketplace': this.marketplace, 'participant': this.helpseeker } });
 
     });
   }

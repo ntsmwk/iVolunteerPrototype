@@ -46,29 +46,21 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getImagePath() {
-
-    if (this.router.url === '/main/rules/all' || this.router.url.startsWith('/main/rule')) {
-      return '/assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg';
+    if (isNullOrUndefined(this.participantImagepath)) {
+      return '/assets/images/avatars/profile.jpg';
     } else {
-      if (isNullOrUndefined(this.participantImagepath)) {
-        return '/assets/images/avatars/profile.jpg';
-      } else {
-        return this.participantImagepath.imagePath;
-      }
+      return this.participantImagepath.imagePath;
+
     }
   }
 
   getUserNameString() {
-    if (this.router.url === '/main/rules/all' || this.router.url.startsWith('/main/rule')) {
-      return "Sandra Horvatits (Leiterin Freiwilligenmanagement)";
-    } else {
-      let ret = this.participant.firstname + ' ' + this.participant.lastname;
+    let ret = this.participant.firstname + ' ' + this.participant.lastname;
 
-      if (!isNullOrUndefined(this.participant.position)) {
-        ret = ret + ' (' + this.participant.position + ')';
-      }
-      return ret;
+    if (!isNullOrUndefined(this.participant.position)) {
+      ret = ret + ' (' + this.participant.position + ')';
     }
+    return ret;
   }
 
 }

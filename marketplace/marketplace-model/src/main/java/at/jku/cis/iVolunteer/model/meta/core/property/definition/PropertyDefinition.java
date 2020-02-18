@@ -6,14 +6,15 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @Document
-public class PropertyDefinition<T> {
+public class PropertyDefinition<T> extends IVolunteerObject {
 
-	@Id
-	private String id;
+	//@Id
+	//private String id;
 	private String name;
 	
 	private List<T> allowedValues = new ArrayList<>();
@@ -30,9 +31,11 @@ public class PropertyDefinition<T> {
 	public PropertyDefinition() {
 	}
 	
-	public PropertyDefinition(String name, PropertyType type) {
+	public PropertyDefinition(String name, PropertyType type, String tenantId) {
 		this.name = name;
 		this.type = type;
+		this.tenantId = tenantId;
+		
 	}
 	
 	public String getId() {

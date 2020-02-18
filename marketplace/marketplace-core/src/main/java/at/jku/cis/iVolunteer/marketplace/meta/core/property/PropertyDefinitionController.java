@@ -18,15 +18,16 @@ public class PropertyDefinitionController {
 
 	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
 
-	@GetMapping("/meta/core/property/definition/all")
-	private List<PropertyDefinition<Object>> getAllPropertyDefinitions() {
-		return propertyDefinitionRepository.findAll();
+	@GetMapping("/meta/core/property/definition/all/tenant/{tenantId}")
+	private List<PropertyDefinition<Object>> getAllPropertyDefinitions(@PathVariable("tenantId") String tenantId) {
+		return propertyDefinitionRepository.findByTenantId(tenantId);
 	}
 
-	@GetMapping("/meta/core/property/definition/{id}")
-	private PropertyDefinition<Object> getPropertyDefinitionById(@PathVariable("id") String id) {
-		
-		PropertyDefinition<Object> findOne = propertyDefinitionRepository.findOne(id);
+	@GetMapping("/meta/core/property/definition/{id}/tenant/{tenantId}")
+	private PropertyDefinition<Object> getPropertyDefinitionById(@PathVariable("id") String id, 
+			@PathVariable("tenantId") String tenantId) {
+	
+		PropertyDefinition<Object> findOne = propertyDefinitionRepository.findById(id, tenantId);
 		return findOne;
 		
 	}

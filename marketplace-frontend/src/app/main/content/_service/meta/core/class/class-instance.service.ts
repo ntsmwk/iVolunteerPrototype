@@ -14,24 +14,20 @@ import { Participant } from 'app/main/content/_model/participant';
       private http: HttpClient
     ) { }
 
-    getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org?: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org===null?'FF':org}`);
+    getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string, userId: string, tenantIds: string[]) {
+      return this.http.post(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user/${userId}`, tenantIds);
     }
 
-    getUserClassInstancesByArcheType(marketplace: Marketplace, archetype: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/user`);
+    getClassInstancesInUserRepository(marketplace: Marketplace, userId: string, tenantIds: string[]) {
+      return this.http.post(`${marketplace.url}/meta/core/class/instance/in-user-repository/${userId}`, tenantIds);
     }
 
-    getClassInstancesInUserRepository(marketplace: Marketplace, userId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-user-repository/${userId}`);
+    getClassInstancesInUserInbox(marketplace: Marketplace, issuerId: string, tenantIds: string[]) {
+      return this.http.post(`${marketplace.url}/meta/core/class/instance/in-user-inbox/${issuerId}`, tenantIds);
     }
 
-    getClassInstancesInUserInbox(marketplace: Marketplace, issuerId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-user-inbox/${issuerId}`);
-    }
-
-    getClassInstancesInIssuerInbox(marketplace: Marketplace, issuerId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}`);
+    getClassInstancesInIssuerInbox(marketplace: Marketplace, issuerId: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}/tenant/${tenantId}`);
     }
 
     createNewClassInstances(marketplace: Marketplace, classInstances: ClassInstance[]) {

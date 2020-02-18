@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 
-public interface HasTenantRepository<T extends IVolunteerObject,S extends Serializable> extends MongoRepository<T, S>{
+public interface HasTenantRepository<T extends IVolunteerObject, S extends Serializable> extends MongoRepository<T, S> {
 
 	List<T> findByTenantId(String tenantId);
-	
+
 }

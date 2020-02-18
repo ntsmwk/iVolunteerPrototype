@@ -25,6 +25,9 @@ export class FuseTaskTemplateFormComponent implements OnInit {
   taskTemplateForm: FormGroup;
   workflowTypes: Array<WorkflowType>;
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string;
+
   constructor(formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private taskTemplateService: TaskTemplateService,
@@ -49,7 +52,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
       this.coreHelpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
         if (!isNullOrUndefined(marketplace)) {
           Promise.all([
-            this.competenceService.findAll(marketplace).toPromise().then((competences: CompetenceClassDefinition[]) => this.competences = competences),
+            this.competenceService.findAll(marketplace, this.tenantId).toPromise().then((competences: CompetenceClassDefinition[]) => this.competences = competences),
 
             this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
           ]).then(() => this.route.params.subscribe(params => this.findTaskTemplate(marketplace, params['taskTemplateId'])));

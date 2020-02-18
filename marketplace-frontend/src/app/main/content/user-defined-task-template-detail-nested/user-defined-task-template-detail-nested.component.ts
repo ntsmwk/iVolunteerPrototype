@@ -14,6 +14,7 @@ import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/d
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
+import { Helpseeker } from '../_model/helpseeker';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
 export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   role: ParticipantRole;
-  participant: Participant;
+  helpseeker: Helpseeker;
   marketplace: Marketplace;
 
   allPropertiesList: PropertyItem[];
@@ -56,7 +57,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
     console.log("call on init");
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
-      this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
+      this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => this.helpseeker = helpseeker)
     ]).then(() => {
       this.route.params.subscribe(params => this.loadProperty(params['marketplaceId'], params['templateId']));
     });
@@ -74,7 +75,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
           this.setUpDataSourcesAndExpandedStates();
         }),
 
-        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
           this.allPropertiesList = propertyDefinitions;
         })
       ]).then(() => {

@@ -552,8 +552,8 @@ export class SinglePropertyComponent implements OnInit {
       property.id = this.currentProperty.id;
     }
 
-
     property.name = this.form.get('name').value;
+    
 
     // property.defaultValues = [];
     // console.log(this.form);

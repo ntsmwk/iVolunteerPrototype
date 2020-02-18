@@ -3,6 +3,7 @@ import { ClassProperty } from './meta/Property';
 
 export class DerivationRule {
   id: string;
+  tenantId: string;
   marketplaceId: string;
   name: string;
   attributeSourceRules: AttributeSourceRuleEntry[];

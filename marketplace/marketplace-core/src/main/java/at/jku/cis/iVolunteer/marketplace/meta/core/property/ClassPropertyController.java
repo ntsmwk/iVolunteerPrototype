@@ -16,16 +16,18 @@ public class ClassPropertyController {
 
 	@Autowired private ClassPropertyService classPropertyService;
 
-	@GetMapping("/meta/core/property/class/{classDefinitionId}/all")
+	@GetMapping("/meta/core/property/class/{classDefinitionId}/all/tenant/{tenantId}")
 	List<ClassProperty<Object>> getAllClassPropertiesFromClass(
-			@PathVariable("classDefinitionId") String classDefinitionId) {
-		return classPropertyService.getAllClassPropertiesFromClass(classDefinitionId);
+			@PathVariable("classDefinitionId") String classDefinitionId,
+			@PathVariable("tenantId") String tenantId) {
+		return classPropertyService.getAllClassPropertiesFromClass(classDefinitionId, tenantId);
 	}
 
-	@GetMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}")
+	@GetMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}/tenant/{tenantId}")
 	ClassProperty<Object> getClassPropertyById(@PathVariable("classDefinitionId") String classDefinitionId,
-			@PathVariable("classPropertyId") String classPropertyId) {
-		return classPropertyService.getClassPropertyById(classDefinitionId, classPropertyId);
+			@PathVariable("classPropertyId") String classPropertyId,
+			@PathVariable("tenantId") String tenantId) {
+		return classPropertyService.getClassPropertyById(classDefinitionId, classPropertyId, tenantId);
 	}
 
 	@PutMapping("/meta/core/property/class/{classDefinitionId}/{classPropertyId}/update")

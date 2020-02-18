@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
@@ -58,8 +59,12 @@ public class InitializationService {
 	@Autowired private FeedbackRepository feedbackRepository;
 	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private Environment environment;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
+	
+	private static final String FFEIDENBERG = "FF_Eidenberg";
+
 
 	@PostConstruct
 	public void init() {
@@ -78,8 +83,11 @@ public class InitializationService {
 
 	}
 
+
 	public void addStandardPropertyDefinitions() {
-		for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll()) {
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+		
+		for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
 			if (!propertyDefinitionRepository.exists(pd.getId())) {
 				propertyDefinitionRepository.save(pd);
 			}
@@ -105,6 +113,7 @@ public class InitializationService {
 		functionDefinition.setRoot(true);
 		functionDefinition.setName("PersonRole");
 		functionDefinition.setTimestamp(new Date());
+		functionDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
 		functionDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonRoleProperties(properties)));
@@ -118,6 +127,7 @@ public class InitializationService {
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonBadge");
 		achievementDefinition.setTimestamp(new Date());
+		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonBadgeProperties(properties)));
@@ -131,6 +141,7 @@ public class InitializationService {
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonCertificate");
 		achievementDefinition.setTimestamp(new Date());
+		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonCertificateProperties(properties)));
@@ -144,6 +155,7 @@ public class InitializationService {
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonTask");
 		achievementDefinition.setTimestamp(new Date());
+		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonTaskProperties(properties)));
@@ -215,49 +227,61 @@ public class InitializationService {
 	}
 
 	private void addCrossCuttingProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerUUID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerSource", PropertyType.TEXT));
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
-		propertyDefinitions.add(new PropertyDefinition<Object>("issuedOn", PropertyType.DATE));
-		propertyDefinitions.add(new PropertyDefinition<Object>("icon", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerUUID", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerSource", PropertyType.TEXT, tenantId));
 
-		propertyDefinitions.add(new PropertyDefinition<Object>("purpose", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("role", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("rank", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("phase", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("unit", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("level", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("issuedOn", PropertyType.DATE, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("icon", PropertyType.TEXT, tenantId));
 
-		propertyDefinitions.add(new PropertyDefinition<Object>("duration", PropertyType.FLOAT_NUMBER));
-		propertyDefinitions.add(new PropertyDefinition<Object>("geoInformation", PropertyType.TEXT));
+		propertyDefinitions.add(new PropertyDefinition<Object>("purpose", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("role", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("rank", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("phase", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("unit", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("level", PropertyType.TEXT, tenantId));
+
+		propertyDefinitions.add(new PropertyDefinition<Object>("duration", PropertyType.FLOAT_NUMBER, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("geoInformation", PropertyType.TEXT, tenantId));
 
 	}
 
 	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("organisationType", PropertyType.TEXT));
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
+		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("organisationType", PropertyType.TEXT, tenantId));
 	}
 
 	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT));
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
+		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT, tenantId));
 	}
 
 	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT));
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
+		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT, tenantId));
 	}
 
 	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT));
-		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT));
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType3", PropertyType.TEXT, tenantId));
+		propertyDefinitions.add(new PropertyDefinition<Object>("taskType4", PropertyType.TEXT, tenantId));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addTestConfigClasses() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
 
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		c1.setId("test1");
@@ -265,15 +289,15 @@ public class InitializationService {
 		c1.setProperties(new ArrayList<ClassProperty<Object>>());
 		c1.setRoot(true);
 
-		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty();
+		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty(tenantId);
 		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
 		c1.getProperties().add(ncp);
 
-		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty();
+		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty(tenantId);
 		ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
 		c1.getProperties().add(sdcp);
 
-		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty();
+		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty(tenantId);
 		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
 		c1.getProperties().add(dcp);
 

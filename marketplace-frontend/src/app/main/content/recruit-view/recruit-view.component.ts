@@ -10,6 +10,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { MatPaginator, MatSort } from '@angular/material';
+import { CoreTenantService } from '../_service/core-tenant.service';
 
 
 
@@ -33,18 +34,18 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private classInstanceDTOs: ClassInstanceDTO[] = [];
 
 
-   // chart options
-   colorScheme = 'cool';
-   showXAxis: boolean = true;
-   showYAxis: boolean = true;
-   gradient: boolean = false;
-   showLegend: boolean = true;
-   legendTitle: string = ' ';
-   showXAxisLabel: boolean = false;
-   showYAxisLabel: boolean = true;
-   yAxisLabel1: string = 'Stunden';
-   yAxisLabel2: string = 'Anzahl';
-   animations: boolean = true;
+  // chart options
+  colorScheme = 'cool';
+  showXAxis: boolean = true;
+  showYAxis: boolean = true;
+  gradient: boolean = false;
+  showLegend: boolean = true;
+  legendTitle: string = ' ';
+  showXAxisLabel: boolean = false;
+  showYAxisLabel: boolean = true;
+  yAxisLabel1: string = 'Stunden';
+  yAxisLabel2: string = 'Anzahl';
+  animations: boolean = true;
 
 
   weekdayData;
@@ -52,11 +53,15 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   trainingData: any[];
   taskData: any[];
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string[] = [];
+
   constructor(
     private storedChartService: StoredChartService,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
-    private classInstanceService: ClassInstanceService) {
+    private classInstanceService: ClassInstanceService,
+    private coreTenantService: CoreTenantService) {
   }
 
   ngOnInit() {
@@ -81,16 +86,21 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
 
 
   private loadTasks() {
-    this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
-      if (!isNullOrUndefined(ret)) {
-        this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
-        console.log('classInstanceDTOs',this.classInstanceDTOs)
+    this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+      this.tenantId.push(tenantId);
 
-        this.tableDataSource.data = this.classInstanceDTOs;
-        this.paginator.length = this.classInstanceDTOs.length;
-        this.tableDataSource.paginator = this.paginator;
-        // this.tableDataSource.paginator.length= this.classInstances.length;
-      }
+      // TODO Philipp: broken, needs volunteer's userId
+      this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK','unknownUserId...', this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
+        if (!isNullOrUndefined(ret)) {
+          this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
+          console.log('classInstanceDTOs', this.classInstanceDTOs)
+
+          this.tableDataSource.data = this.classInstanceDTOs;
+          this.paginator.length = this.classInstanceDTOs.length;
+          this.tableDataSource.paginator = this.paginator;
+          // this.tableDataSource.paginator.length= this.classInstances.length;
+        }
+      });
     });
   }
 
@@ -103,11 +113,11 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       if (this.charts.findIndex(c => c.title == "Tageszeit") >= 0) {
         this.dayNightData = JSON.parse(this.charts.find(c => c.title === "Tageszeit").data);
       }
-      if(this.charts.findIndex(c => c.title == "STUNDEN absolvierter Ausbildungen") >= 0){
-        this.trainingData = JSON.parse(this.charts.find(c => c.title=="STUNDEN absolvierter Ausbildungen").data);
+      if (this.charts.findIndex(c => c.title == "STUNDEN absolvierter Ausbildungen") >= 0) {
+        this.trainingData = JSON.parse(this.charts.find(c => c.title == "STUNDEN absolvierter Ausbildungen").data);
       }
-      if(this.charts.findIndex(c => c.title == "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf") >= 0){
-        this.taskData = JSON.parse(this.charts.find(c => c.title=="Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf").data);
+      if (this.charts.findIndex(c => c.title == "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf") >= 0) {
+        this.taskData = JSON.parse(this.charts.find(c => c.title == "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf").data);
       }
       // Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf
     });

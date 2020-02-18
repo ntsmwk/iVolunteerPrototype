@@ -12,10 +12,13 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class CoreVolunteerService {
-	
-	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+
+	@Autowired
+	private CoreVolunteerRepository coreVolunteerRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	public void registerMarketplace(String coreVolunteerId, String marketplaceId, String authorization) {
 		CoreVolunteer coreVolunteer = coreVolunteerRepository.findOne(coreVolunteerId);
@@ -27,7 +30,6 @@ public class CoreVolunteerService {
 		coreVolunteer = updateCoreVolunteer(coreVolunteer, marketplace);
 		registerVolunteer(authorization, coreVolunteer, marketplace);
 	}
-	
 
 	private CoreVolunteer updateCoreVolunteer(CoreVolunteer coreVolunteer, Marketplace marketplace) {
 		coreVolunteer.getRegisteredMarketplaces().add(marketplace);
@@ -35,10 +37,10 @@ public class CoreVolunteerService {
 		return coreVolunteer;
 	}
 
-	
 	private void registerVolunteer(String authorization, CoreVolunteer coreVolunteer, Marketplace marketplace) {
 		Volunteer volunteer = new Volunteer();
 		volunteer.setId(coreVolunteer.getId());
+		volunteer.setSubscribedTenants(coreVolunteer.getSubscribedTenants());
 		volunteer.setUsername(coreVolunteer.getUsername());
 		volunteer.setFirstname(coreVolunteer.getFirstname());
 		volunteer.setLastname(coreVolunteer.getLastname());

@@ -12,6 +12,8 @@ import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/
 import { isNullOrUndefined } from 'util';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { SaveAsDialogComponent, SaveAsDialogData } from '../../configurator-editor/save-as-dialog/save-as-dialog.component';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 export interface ClassInstanceFormPreviewDialogData {
   marketplace: Marketplace;
@@ -33,6 +35,8 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
   isLoaded: boolean = false;
 
+  helpseeker: Helpseeker;
+
 
   constructor(
     public dialogRef: MatDialogRef<ClassInstanceFormPreviewDialogComponent>,
@@ -43,6 +47,7 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
+    private loginService: LoginService
   ) {
   }
 
@@ -51,19 +56,25 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     this.returnedClassInstances = [];
 
-    this.classDefinitionService.getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+      this.helpseeker = helpseeker;
 
-      this.formConfigurations = formConfigurations;
+      this.classDefinitionService.getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds, this.helpseeker.tenantId).toPromise().then((formConfigurations: FormConfiguration[]) => {
 
-      for (let config of this.formConfigurations) {
-        config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-        config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-      }
+        this.formConfigurations = formConfigurations;
 
-    }).then(() => {
-      this.currentFormConfiguration = this.formConfigurations.pop();
-      this.isLoaded = true;
+        for (let config of this.formConfigurations) {
+          config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+          config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+        }
+
+      }).then(() => {
+        this.currentFormConfiguration = this.formConfigurations.pop();
+        this.isLoaded = true;
+      });
     });
+
+
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {

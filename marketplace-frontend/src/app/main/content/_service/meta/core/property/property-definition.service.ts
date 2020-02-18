@@ -16,12 +16,12 @@ import { PropertyConstraint } from "app/main/content/_model/meta/Constraint";
     ) { }
 
 
-    getAllPropertyDefinitons(marketplace: Marketplace) {
-      return this.http.get(`${marketplace.url}/meta/core/property/definition/all`);
+    getAllPropertyDefinitons(marketplace: Marketplace, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/property/definition/all/tenant/${tenantId}`);
     }
 
-    getPropertyDefinitionById(marketplace: Marketplace, id: string) {
-      return this.http.get(`${marketplace.url}/meta/core/property/definition/${id}`)
+    getPropertyDefinitionById(marketplace: Marketplace, id: string, tenantId: string) {
+      return this.http.get(`${marketplace.url}/meta/core/property/definition/${id}/tenant/${tenantId}`)
     }
 
     createNewPropertyDefinition(marketplace: Marketplace, propertyDefinitions: PropertyDefinition<any>[]) {

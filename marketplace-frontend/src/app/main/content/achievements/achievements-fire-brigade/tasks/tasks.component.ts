@@ -20,6 +20,7 @@ import { StoredChart } from '../../../_model/stored-chart';
 import * as Highcharts from 'highcharts';
 import HC_drilldown from 'highcharts/modules/drilldown.js';
 import HC_sunburst from 'highcharts/modules/sunburst';
+import { CoreTenantService } from 'app/main/content/_service/core-tenant.service';
 HC_drilldown(Highcharts);
 HC_sunburst(Highcharts);
 
@@ -32,15 +33,14 @@ HC_sunburst(Highcharts);
 
 export class TasksComponent implements OnInit {
   fakeChecked: boolean = false;
-
   prevNodeLevel: number = null;
 
-  private volunteer: Participant;
+  private volunteer: Volunteer;
   private marketplace: Marketplace;
   private classInstanceDTOs: ClassInstanceDTO[] = [];
   private tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
 
   private timelineData: any[];
@@ -185,13 +185,17 @@ export class TasksComponent implements OnInit {
 
   sunburstCenterName: string = 'Tätigkeiten';
 
+  private tenantName: string = 'FF_Eidenberg';
+  private tenantId: string[] = [];
+
   constructor(private loginService: LoginService,
     private arrayService: ArrayService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
-    private storedChartService: StoredChartService
+    private storedChartService: StoredChartService,
+    private coreTenantService: CoreTenantService
   ) {
     this.timelineChartData = [{ name: 'Tätigkeit', series: [] }];
   }
@@ -203,8 +207,8 @@ export class TasksComponent implements OnInit {
     this.selectedYear = 'Gesamt';
     this.chipSelectedYear = 'Gesamt';
 
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
-      this.volunteer = participant as Volunteer;
+    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
+      this.volunteer = volunteer;
 
       Promise.all([
         this.marketplaceService.findAll().toPromise(),
@@ -214,40 +218,46 @@ export class TasksComponent implements OnInit {
         // TODO: 
         this.marketplace = values[0][0];
 
-        this.classInstanceService.getClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstanceDTO[]) => {
-          if (!isNullOrUndefined(ret)) {
-            //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');
-            this.classInstanceDTOs = ret;
+        this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
+           this.tenantId.push(tenantId);
+          // this.tenantId.push(Object.assign({}, tenantId));
 
-            this.classInstanceDTOs.forEach((ci, index, object) => {
-              if (ci.duration === null) {
-                object.splice(index, 1);
-              }
-            });
 
-            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+          this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
+            if (!isNullOrUndefined(ret)) {
+              //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');
+              this.classInstanceDTOs = ret;
 
-            let list = this.filteredClassInstanceDTOs
-              .map(ci => {
-                return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
+              this.classInstanceDTOs.forEach((ci, index, object) => {
+                if (ci.duration === null) {
+                  object.splice(index, 1);
+                }
               });
-            this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
-            this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
-            this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
+
+              this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+
+              let list = this.filteredClassInstanceDTOs
+                .map(ci => {
+                  return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
+                });
+              this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
+              this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
+              this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
 
-            this.classInstanceDTOs = this.classInstanceDTOs.sort((a, b) => {              
-             return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
-            });
+              this.classInstanceDTOs = this.classInstanceDTOs.sort((a, b) => {
+                return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
+              });
 
-            this.tableDataSource.data = this.classInstanceDTOs;
-            this.tableDataSource.paginator = this.paginator;
+              this.tableDataSource.data = this.classInstanceDTOs;
+              this.tableDataSource.paginator = this.paginator;
 
 
-            this.generateTimelineData();
-            this.generateSunburstData();
-            this.generateOtherChartsData();
-          }
+              this.generateTimelineData();
+              this.generateSunburstData();
+              this.generateOtherChartsData();
+            }
+          });
         });
       });
     });
@@ -444,7 +454,7 @@ export class TasksComponent implements OnInit {
     // sunburst data
     let list = this.filteredClassInstanceDTOs
       .map(ci => {
-        let value:number;
+        let value: number;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
 
         return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3, value: value })
@@ -541,7 +551,7 @@ export class TasksComponent implements OnInit {
     // donut: Wochentag
     let weekdayList = this.filteredClassInstanceDTOs
       .map(ci => {
-        let value:number;
+        let value: number;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
         return ({ weekday: moment(ci.dateFrom).locale("de").format('dddd'), value: value })
       });
@@ -567,7 +577,7 @@ export class TasksComponent implements OnInit {
     // donut: day night
     let dayNightList = this.filteredClassInstanceDTOs
       .map(ci => {
-        let value:number;
+        let value: number;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
 
         let key;
@@ -598,7 +608,7 @@ export class TasksComponent implements OnInit {
     // donut: taskLocation
     let locationList = this.filteredClassInstanceDTOs
       .map(ci => {
-        let value:number;
+        let value: number;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
         return ({ location: ci.location, value: value })
       });
@@ -631,7 +641,7 @@ export class TasksComponent implements OnInit {
     // donut: rang
     let rangList = this.filteredClassInstanceDTOs
       .map(ci => {
-        let value:number;
+        let value: number;
         (this.selectedYaxis === 'Anzahl') ? value = 1 : value = ci.duration;
         return ({ rang: ci.rank, value: value })
       });
@@ -661,16 +671,16 @@ export class TasksComponent implements OnInit {
 
     this.filteredClassInstanceDTOs.sort((a, b) => {
       return Number(b.dateFrom) - Number(a.dateFrom)
-     });
+    });
 
-     this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort((a, b) => {
+    this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort((a, b) => {
       return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
-     });
+    });
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
-  
+
 
   exportChart(event, source: string) {
     let storedChart: StoredChart;
@@ -695,7 +705,7 @@ export class TasksComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
-  } 
-  
+  }
+
 
 }
