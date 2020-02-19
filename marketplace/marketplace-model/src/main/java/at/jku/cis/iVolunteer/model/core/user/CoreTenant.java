@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.core.user;
 import org.springframework.data.annotation.Id;
 
 public class CoreTenant {
+	
 	@Id
 	private String id;
 	private String name;
