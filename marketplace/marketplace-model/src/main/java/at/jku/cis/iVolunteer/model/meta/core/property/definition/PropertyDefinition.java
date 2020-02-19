@@ -35,7 +35,6 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 		this.name = name;
 		this.type = type;
 		this.tenantId = tenantId;
-		
 	}
 	
 	public String getId() {

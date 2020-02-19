@@ -222,7 +222,6 @@ export class TasksComponent implements OnInit {
            this.tenantId.push(tenantId);
           // this.tenantId.push(Object.assign({}, tenantId));
 
-
           this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
             if (!isNullOrUndefined(ret)) {
               //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');

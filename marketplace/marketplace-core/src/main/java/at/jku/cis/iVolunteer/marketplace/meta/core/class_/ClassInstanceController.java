@@ -38,7 +38,7 @@ public class ClassInstanceController {
 				tenantId));
 			
 			classDefinitions.forEach(cd -> {
-				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionId(userId, cd.getId(), tenantId));
+				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(userId, cd.getId(), tenantId));
 			});
 		});
 		
@@ -52,7 +52,7 @@ public class ClassInstanceController {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
-			classInstances.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, false, false, tenantId));
+			classInstances.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
 		});
 		
 		return classInstances;
@@ -64,7 +64,7 @@ public class ClassInstanceController {
 
 		Set<ClassInstance> ret = new LinkedHashSet<>();
 		tenantIds.forEach(tenantId -> {
-			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInbox(userId, true, false,
+			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true, false,
 					tenantId));
 		});
 
@@ -75,7 +75,7 @@ public class ClassInstanceController {
 	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
 			@PathVariable("tenantId") String tenantId) {
 		List<ClassInstance> instances = classInstanceRepository
-				.getByIssuerIdAndInIssuerInboxAndInUserRepository(issuerId, true, false, tenantId);
+				.getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true, false, tenantId);
 		return instances;
 	}
 

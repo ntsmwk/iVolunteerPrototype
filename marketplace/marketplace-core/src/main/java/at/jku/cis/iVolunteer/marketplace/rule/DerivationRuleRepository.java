@@ -9,8 +9,9 @@ import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 @Repository
 public interface DerivationRuleRepository extends HasTenantRepository<DerivationRule, String> {
 	
-	List<DerivationRule> findAllByTenantId(String tenantId);
-	DerivationRule findById(String id, String tenantId);
+	List<DerivationRule> getByTenantId(String tenantId);
+	
+	DerivationRule getByIdAndTenantId(String id, String tenantId);
 
 	
 }

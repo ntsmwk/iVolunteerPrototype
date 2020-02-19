@@ -64,6 +64,8 @@ public class InitializationService {
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 	
 	private static final String FFEIDENBERG = "FF_Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
+
 
 
 	@PostConstruct
@@ -84,79 +86,90 @@ public class InitializationService {
 	}
 
 
-	public void addStandardPropertyDefinitions() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+	public void addStandardPropertyDefinitions() {		
+		List<String> tenants = new ArrayList<>();
+		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
 		
-		for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
-			if (!propertyDefinitionRepository.exists(pd.getId())) {
-				propertyDefinitionRepository.save(pd);
+		tenants.forEach(tenantId -> {	
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
+				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
+					propertyDefinitionRepository.save(pd);
+				}
 			}
-		}
+		});	
 	}
 
-	private void addiVolunteerAPIClassDefinition() {
-		ClassDefinition findByName = classDefinitionRepository.findByName("PersonRole");
-		if (findByName == null) {
-			createiVolunteerAPIPersonRoleClassDefinition();
-			createiVolunteerAPIPersonBadgeClassDefinition();
-			createiVolunteerAPIPersonCertificateClassDefinition();
-			createiVolunteerAPIPersonTaskClassDefinition();
-		}
+	private void addiVolunteerAPIClassDefinition() {	
+		List<String> tenants = new ArrayList<>();
+		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+		
 
-		addPropertyDefinitions();
+		tenants.forEach(tenantId -> {	
+			addPropertyDefinitions(tenantId);
+
+			ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenantId);
+			if (cdPersonRole == null) {
+				createiVolunteerAPIPersonRoleClassDefinition(tenantId);
+				createiVolunteerAPIPersonBadgeClassDefinition(tenantId);
+				createiVolunteerAPIPersonCertificateClassDefinition(tenantId);
+				createiVolunteerAPIPersonTaskClassDefinition(tenantId);
+			}
+		});		
 	}
 
-	private void createiVolunteerAPIPersonRoleClassDefinition() {
+	private void createiVolunteerAPIPersonRoleClassDefinition(String tenantId) {
 		FunctionClassDefinition functionDefinition = new FunctionClassDefinition();
 		functionDefinition.setClassArchetype(ClassArchetype.FUNCTION);
 		functionDefinition.setMarketplaceId(marketplaceService.getMarketplaceId());
 		functionDefinition.setRoot(true);
 		functionDefinition.setName("PersonRole");
 		functionDefinition.setTimestamp(new Date());
-		functionDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
+		functionDefinition.setTenantId(tenantId);
+		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
 		functionDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonRoleProperties(properties)));
 		classDefinitionRepository.save(functionDefinition);
 	}
 
-	private void createiVolunteerAPIPersonBadgeClassDefinition() {
+	private void createiVolunteerAPIPersonBadgeClassDefinition(String tenantId) {
 		AchievementClassDefinition achievementDefinition = new AchievementClassDefinition();
 		achievementDefinition.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		achievementDefinition.setMarketplaceId(marketplaceService.getMarketplaceId());
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonBadge");
 		achievementDefinition.setTimestamp(new Date());
-		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
+		achievementDefinition.setTenantId(tenantId);
+		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonBadgeProperties(properties)));
 		classDefinitionRepository.save(achievementDefinition);
 	}
 
-	private void createiVolunteerAPIPersonCertificateClassDefinition() {
+	private void createiVolunteerAPIPersonCertificateClassDefinition(String tenantId) {
 		AchievementClassDefinition achievementDefinition = new AchievementClassDefinition();
 		achievementDefinition.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		achievementDefinition.setMarketplaceId(marketplaceService.getMarketplaceId());
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonCertificate");
 		achievementDefinition.setTimestamp(new Date());
-		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
+		achievementDefinition.setTenantId(tenantId);
+		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonCertificateProperties(properties)));
 		classDefinitionRepository.save(achievementDefinition);
 	}
 
-	private void createiVolunteerAPIPersonTaskClassDefinition() {
+	private void createiVolunteerAPIPersonTaskClassDefinition(String tenantId) {
 		AchievementClassDefinition achievementDefinition = new AchievementClassDefinition();
 		achievementDefinition.setClassArchetype(ClassArchetype.TASK);
 		achievementDefinition.setMarketplaceId(marketplaceService.getMarketplaceId());
 		achievementDefinition.setRoot(true);
 		achievementDefinition.setName("PersonTask");
 		achievementDefinition.setTimestamp(new Date());
-		achievementDefinition.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
+		achievementDefinition.setTenantId(tenantId);
+		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
 		achievementDefinition.setProperties(
 				propertyDefinitionToClassPropertyMapper.toTargets(filterPersonTaskProperties(properties)));
 		classDefinitionRepository.save(achievementDefinition);
@@ -165,7 +178,7 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonRoleProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("roleID") || p.getName().equals("purpose") || p.getName().equals("Name")
+				.filter(p -> p.getName().equals("roleID") || p.getName().equals("purpose") || p.getName().equals("name")
 						|| p.getName().equals("Description") || p.getName().equals("organisationID")
 						|| p.getName().equals("organisationName") || p.getName().equals("organisationType")
 						|| p.getName().equals("Starting Date") || p.getName().equals("End Date")
@@ -177,7 +190,7 @@ public class InitializationService {
 	private List<PropertyDefinition<Object>> filterPersonBadgeProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("badgeID") || p.getName().equals("Name")
+				.filter(p -> p.getName().equals("badgeID") || p.getName().equals("name")
 						|| p.getName().equals("Description") || p.getName().equals("issuedOn")
 						|| p.getName().equals("icon") || p.getName().equals("iVolunteerUUID")
 						|| p.getName().equals("iVolunteerSource"))
@@ -189,7 +202,7 @@ public class InitializationService {
 			List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
 		return properties.stream()
-				.filter(p -> p.getName().equals("certificateID") || p.getName().equals("Name")
+				.filter(p -> p.getName().equals("certificateID") || p.getName().equals("name")
 						|| p.getName().equals("Description") || p.getName().equals("issuedOn")
 						|| p.getName().equals("End Date") || p.getName().equals("icon")
 						|| p.getName().equals("iVolunteerUUID") || p.getName().equals("iVolunteerSource"))
@@ -199,7 +212,7 @@ public class InitializationService {
 
 	private List<PropertyDefinition<Object>> filterPersonTaskProperties(List<PropertyDefinition<Object>> properties) {
 		// @formatter:off
-		return properties.stream().filter(p -> p.getName().equals("taskId") || p.getName().equals("Name")
+		return properties.stream().filter(p -> p.getName().equals("taskId") || p.getName().equals("name")
 				|| p.getName().equals("taskType1") || p.getName().equals("taskType2") || p.getName().equals("taskType3")
 				|| p.getName().equals("taskType4") || p.getName().equals("Description") || p.getName().equals("purpose")
 				|| p.getName().equals("role") || p.getName().equals("rank") || p.getName().equals("phase")
@@ -211,24 +224,22 @@ public class InitializationService {
 		// @formatter:on
 	}
 
-	private void addPropertyDefinitions() {
+	private void addPropertyDefinitions(String tenantId) {
 		List<PropertyDefinition<Object>> propertyDefinitions = new ArrayList<>();
-		addCrossCuttingProperties(propertyDefinitions);
-		addPersonRoleProperties(propertyDefinitions);
-		addPersonBadgeProperties(propertyDefinitions);
-		addPersonCertificateProperties(propertyDefinitions);
-		addPersonTaskProperties(propertyDefinitions);
-
+		addCrossCuttingProperties(propertyDefinitions, tenantId);
+		addPersonRoleProperties(propertyDefinitions, tenantId);
+		addPersonBadgeProperties(propertyDefinitions, tenantId);
+		addPersonCertificateProperties(propertyDefinitions, tenantId);
+		addPersonTaskProperties(propertyDefinitions, tenantId);
+		
 		propertyDefinitions.forEach(pd -> {
-			if (propertyDefinitionRepository.findByName(pd.getName()).size() == 0) {
+			if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantId).size() == 0) {
 				propertyDefinitionRepository.save(pd);
 			}
 		});
 	}
 
-	private void addCrossCuttingProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
+	private void addCrossCuttingProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerUUID", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("iVolunteerSource", PropertyType.TEXT, tenantId));
 
@@ -247,30 +258,22 @@ public class InitializationService {
 
 	}
 
-	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
+	private void addPersonRoleProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("roleID", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("organisationID", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("organisationName", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("organisationType", PropertyType.TEXT, tenantId));
 	}
 
-	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
+	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT, tenantId));
 	}
 
-	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
+	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT, tenantId));
 	}
 
-	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions) {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-
+	private void addPersonTaskProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskId", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType1", PropertyType.TEXT, tenantId));
 		propertyDefinitions.add(new PropertyDefinition<Object>("taskType2", PropertyType.TEXT, tenantId));
@@ -280,6 +283,7 @@ public class InitializationService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addTestConfigClasses() {
+		// TODO Philipp testConfig  for tenant=FFEIDENBERG only
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
 

@@ -7,6 +7,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 public class ClassInstanceDTO {
 	private String name;
 	private String id;
+	private String tenantId;
 	private ClassArchetype classArchetype;
 	private String issuerId;
 	private String userId;
@@ -204,6 +205,14 @@ public class ClassInstanceDTO {
 				+ ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", location=" + location + ", description="
 				+ description + ", duration=" + duration + ", rank=" + rank + ", taskType1=" + taskType1
 				+ ", taskType2=" + taskType2 + ", taskType3=" + taskType3 + "]" + "\n";
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }

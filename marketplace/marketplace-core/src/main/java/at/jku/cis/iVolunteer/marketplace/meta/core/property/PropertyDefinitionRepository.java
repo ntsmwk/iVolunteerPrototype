@@ -8,13 +8,14 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 @Repository
 public interface PropertyDefinitionRepository extends HasTenantRepository<PropertyDefinition<Object>, String> {
 
-	// TODO Philipp tenantId?
-	List<PropertyDefinition<Object>> findByName(String name);
+	List<PropertyDefinition<Object>> getByNameAndTenantId(String name, String tenantId);
 
-	PropertyDefinition<Object> findById(String id, String tenantId);
+	PropertyDefinition<Object> getByIdAndTenantId(String id, String tenantId);
 	
-	List<PropertyDefinition<Object>> findAllById(List<String> propertyIds, String tenantId);
-	List<PropertyDefinition<Object>> findAllByTenantId(String tenantId);
+	List<PropertyDefinition<Object>> getByIdAndTenantId(List<String> propertyIds, String tenantId);
 
+	List<PropertyDefinition<Object>> getAllByTenantId(String tenantId);
+	
+	
 
 }

@@ -27,7 +27,7 @@ public class PropertyDefinitionController {
 	private PropertyDefinition<Object> getPropertyDefinitionById(@PathVariable("id") String id, 
 			@PathVariable("tenantId") String tenantId) {
 	
-		PropertyDefinition<Object> findOne = propertyDefinitionRepository.findById(id, tenantId);
+		PropertyDefinition<Object> findOne = propertyDefinitionRepository.getByIdAndTenantId(id, tenantId);
 		return findOne;
 		
 	}

@@ -77,11 +77,9 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   loadDashboardContent() {
-    console.error('this.volunteer', this.volunteer);
 
     Promise.all([
       this.classInstanceService.getClassInstancesInUserRepository(this.marketplace, this.volunteer.id, this.volunteer.subscribedTenants).toPromise().then((instances: ClassInstanceDTO[]) => {
-        console.error('returned class isntances', instances);
         this.classInstances = instances;
       })
 

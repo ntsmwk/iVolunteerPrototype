@@ -22,6 +22,7 @@ public class ClassInstanceMapper {
 			ClassInstanceDTO dto = new ClassInstanceDTO();
 			
 			dto.setId(ci.getId());
+			dto.setTenantId(ci.getTenantId());
 			dto.setIssuerId(ci.getIssuerId());
 			dto.setBlockchainDate(ci.getTimestamp());
 			dto.setClassArchetype(ci.getClassArchetype());
@@ -31,7 +32,7 @@ public class ClassInstanceMapper {
 			dto.setInIssuerInbox(ci.isInIssuerInbox());
 			dto.setHash(hasher.generateHash(ci));
 
-			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "Name".equals(p.getName()))
+			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (name != null) {
 				dto.setName((String) name.getValues().get(0));

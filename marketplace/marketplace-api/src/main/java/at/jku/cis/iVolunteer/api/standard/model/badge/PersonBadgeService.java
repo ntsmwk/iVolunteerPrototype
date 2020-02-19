@@ -21,8 +21,8 @@ public class PersonBadgeService {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired private UserMappingService userMappingService;
 
-	public void savePersonBadges(List<PersonBadge> personBadges) {
-		ClassDefinition personBadgeClassDefinition = classDefinitionService.getByName("PersonBadge");
+	public void savePersonBadges(List<PersonBadge> personBadges, String tenantId) {
+		ClassDefinition personBadgeClassDefinition = classDefinitionService.getByName("PersonBadge", tenantId);
 		if (personBadgeClassDefinition != null) {
 			for (PersonBadge personBadge : personBadges) {
 				savePersonBadge(personBadgeClassDefinition, personBadge);

@@ -16,7 +16,7 @@ public class ClassPropertyService {
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 
 	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.findById(classDefinitionId, tenantId);
+		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
 		if (classDefinition != null) {
 			return classDefinition.getProperties();
 		}
@@ -24,7 +24,7 @@ public class ClassPropertyService {
 	}
 
 	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.findById(classDefinitionId, tenantId);
+		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
 		if (classDefinition != null) {
 			return findClassProperty(classDefinition, classPropertyId);
 		}

@@ -24,7 +24,7 @@ public class ClassDefinitionController {
 
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
 	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
-		return classDefinitionRepository.findAllByTenantId(tenantId);
+		return classDefinitionRepository.getByTenantId(tenantId);
 	}
 
 	@GetMapping("meta/core/class/definition/all/no-enum/tenant/{tenantId}")

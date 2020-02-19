@@ -11,6 +11,8 @@ import { ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { MatPaginator, MatSort } from '@angular/material';
 import { CoreTenantService } from '../_service/core-tenant.service';
+import { VolunteerService } from '../_service/volunteer.service';
+import { Volunteer } from '../_model/volunteer';
 
 
 
@@ -56,12 +58,15 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   private tenantName: string = 'FF_Eidenberg';
   private tenantId: string[] = [];
 
+  private volunteer: Volunteer;
+
   constructor(
     private storedChartService: StoredChartService,
     private loginService: LoginService,
     private marketplaceService: CoreMarketplaceService,
     private classInstanceService: ClassInstanceService,
-    private coreTenantService: CoreTenantService) {
+    private coreTenantService: CoreTenantService,
+    private volunteerService: VolunteerService) {
   }
 
   ngOnInit() {
@@ -89,18 +94,21 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
       this.tenantId.push(tenantId);
 
-      // TODO Philipp: broken, needs volunteer's userId
-      this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK','unknownUserId...', this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
-        if (!isNullOrUndefined(ret)) {
-          this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
-          console.log('classInstanceDTOs', this.classInstanceDTOs)
+      // TODO Philipp: hardcoded user querry
+      this.volunteerService.findByName(this.marketplace, 'mweixlbaumer').toPromise().then((volunteer: Volunteer) => {
+        this.volunteer = volunteer;
 
-          this.tableDataSource.data = this.classInstanceDTOs;
-          this.paginator.length = this.classInstanceDTOs.length;
-          this.tableDataSource.paginator = this.paginator;
-          // this.tableDataSource.paginator.length= this.classInstances.length;
-        }
-      });
+        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
+          if (!isNullOrUndefined(ret)) {
+            this.classInstanceDTOs = ret.sort((a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf());
+
+            this.tableDataSource.data = this.classInstanceDTOs;
+            this.paginator.length = this.classInstanceDTOs.length;
+            this.tableDataSource.paginator = this.paginator;
+            // this.tableDataSource.paginator.length= this.classInstances.length;
+          }
+        });
+      })
     });
   }
 
@@ -123,38 +131,38 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // verify1 = false;
-  // verify2 = false;
-  // verify3 = false;
-  // verify5 = false;
+  verify1 = false;
+  verify2 = false;
+  verify3 = false;
+  verify5 = false;
 
-  // pressedVerifyAll() {
-  //   const outer = this;
-  //   setTimeout(function(){ 
-  //     outer.verify2 = true;
-  //   }, 3000);
-  //   setTimeout(function(){ 
-  //     outer.verify3 = true;
-  //   }, 5000);
-  //   setTimeout(function(){ 
-  //     outer.verify5 = true;
-  //   }, 1000);
-  //   setTimeout(function(){ 
-  //     outer.verify1 = true;
-  //   }, 2000);
-  // }
+  pressedVerifyAll() {
+    const outer = this;
+    setTimeout(function(){ 
+      outer.verify2 = true;
+    }, 3000);
+    setTimeout(function(){ 
+      outer.verify3 = true;
+    }, 5000);
+    setTimeout(function(){ 
+      outer.verify5 = true;
+    }, 1000);
+    setTimeout(function(){ 
+      outer.verify1 = true;
+    }, 2000);
+  }
 
 
 
-  // getVerifyState(index: number) {
-  //   if (index % 2 === 0) {
-  //     return this.verify2;
-  //   } else if (index % 3 === 0) {
-  //     return this.verify3;
-  //   } else if (index % 5 === 0) {
-  //     return this.verify5;
-  //   } else {
-  //     return this.verify1;
-  //   }
-  // }
+  getVerifyState(index: number) {
+    if (index % 2 === 0) {
+      return this.verify2;
+    } else if (index % 3 === 0) {
+      return this.verify3;
+    } else if (index % 5 === 0) {
+      return this.verify5;
+    } else {
+      return this.verify1;
+    }
+  }
 }

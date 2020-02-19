@@ -34,22 +34,22 @@ public class PersonTaskService {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	
 
-	public void savePersonTasks(List<PersonTask> personTasks, int level) {
-		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask");
+	public void savePersonTasks(List<PersonTask> personTasks, int level, String tenantId) {
+		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, level));
+				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, level, tenantId));
 			}
 		}
 	}
 
 	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
-			int level) {
+			int level, String tenantId) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Name")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("name")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType1(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType2")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType2(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType3")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType3(), new Object[0])));
@@ -88,7 +88,6 @@ public class PersonTaskService {
 
 //		TODO MWE set issuerId to tenantId!
 		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
-		String tenantId = null;
 		switch(level) {
 		case 1: //FF
 			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));

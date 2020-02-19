@@ -15,12 +15,12 @@ public class DerivationRuleService {
 	@Autowired private DerivationRuleMapper derivationRuleMapper;
 
 	public List<DerivationRuleDTO> getRules(String tenantId) {
-		List<DerivationRule> all = derivationRuleRepository.findAllByTenantId(tenantId);
+		List<DerivationRule> all = derivationRuleRepository.getByTenantId(tenantId);
 		return derivationRuleMapper.toTargets(all);
 	}
 	
 	public DerivationRuleDTO getRule(String id, String tenantId) {
-		return derivationRuleMapper.toTarget(derivationRuleRepository.findById(id, tenantId));
+		return derivationRuleMapper.toTarget(derivationRuleRepository.getByIdAndTenantId(id, tenantId));
 	}
 
 	public void createRule(DerivationRuleDTO derivationRule) {

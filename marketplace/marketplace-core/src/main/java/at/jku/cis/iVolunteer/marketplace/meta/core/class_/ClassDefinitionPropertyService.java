@@ -22,7 +22,7 @@ public class ClassDefinitionPropertyService {
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	List<ClassProperty<Object>> getClassPropertyFromPropertyDefinitionById(List<String> propertyIds, String tenantId) {
-		return createClassPropertiesFromDefinitions(propertyDefinitionRepository.findAllById(propertyIds, tenantId));
+		return createClassPropertiesFromDefinitions(propertyDefinitionRepository.getByIdAndTenantId(propertyIds, tenantId));
 	}
 
 	// TODO: Philipp: tenantId check required?

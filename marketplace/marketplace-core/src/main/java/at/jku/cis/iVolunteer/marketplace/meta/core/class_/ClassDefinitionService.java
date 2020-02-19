@@ -36,19 +36,19 @@ public class ClassDefinitionService {
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
 
-	public ClassDefinition getByName(String name) {
-		return classDefinitionRepository.findByName(name);
+	public ClassDefinition getByName(String name, String tenantId) {
+		return classDefinitionRepository.findByNameAndTenantId(name, tenantId);
 	}
 
 	public ClassDefinition getClassDefinitionById(String id, String tenantId) {
-		return classDefinitionRepository.findById(id, tenantId);
+		return classDefinitionRepository.getByIdAndTenantId(id, tenantId);
 	}
 
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		
 		ids.forEach(id -> {
-			classDefinitions.add(classDefinitionRepository.findById(id, tenantId));
+			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
 		
 		return classDefinitions;
@@ -76,7 +76,7 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype, String tenantId) {
-		List<ClassDefinition> classDefinitions = classDefinitionRepository.findByClassArchetype(archetype, tenantId);
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByClassArchetypeAndTenantId(archetype, tenantId);
 		return  classDefinitions;
 	}
 
@@ -98,7 +98,7 @@ public class ClassDefinitionService {
 //	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
-		List<ClassDefinition> classDefinitions = classDefinitionRepository.findAllByTenantId(tenantId).stream()
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
 		return  classDefinitions;
 	}
@@ -117,7 +117,7 @@ public class ClassDefinitionService {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
 		
 		childIds.forEach(id -> {
-			childClassDefinitions.add(classDefinitionRepository.findById(id, tenantId));
+			childClassDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
 
 		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
@@ -156,7 +156,7 @@ public class ClassDefinitionService {
 					formEntry.setImagePath(currentClassDefinition.getImagePath());
 				}
 
-				currentClassDefinition = classDefinitionRepository.findById(inheritanceList.get(0).getSource(), tenantId);
+				currentClassDefinition = classDefinitionRepository.getByIdAndTenantId(inheritanceList.get(0).getSource(), tenantId);
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
@@ -277,7 +277,7 @@ public class ClassDefinitionService {
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 		
 		rootIds.forEach(id -> {
-			rootClassDefintions.add(classDefinitionRepository.findById(id, tenantId));
+			rootClassDefintions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
 
 		List<String> returnIds;
@@ -289,7 +289,7 @@ public class ClassDefinitionService {
 	}
 
 	public List<EnumEntry> getEnumValues(String classDefinitionId, String tenantId) {
-		ClassDefinition enumHead = classDefinitionRepository.findById(classDefinitionId, tenantId);
+		ClassDefinition enumHead = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
 		return performDFS(enumHead, 0, new ArrayList<>(), tenantId);
 	}
 

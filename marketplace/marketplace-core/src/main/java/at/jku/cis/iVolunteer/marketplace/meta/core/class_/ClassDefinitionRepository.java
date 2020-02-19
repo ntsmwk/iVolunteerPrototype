@@ -11,15 +11,13 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 @Repository
 public interface ClassDefinitionRepository extends HasTenantRepository<ClassDefinition, String> {
 
-	List<ClassDefinition> findByClassArchetype(ClassArchetype classArchetype, String tenantId);
-
-	ClassDefinition findById(String id, String tenantId);
-
-	List<ClassDefinition> findAllByTenantId(String tenantId);
+	List<ClassDefinition> getByClassArchetypeAndTenantId(ClassArchetype classArchetype, String tenantId);
 	
+	List<ClassDefinition> getByTenantId(String tenantId);
+
+	ClassDefinition getByIdAndTenantId(String id, String tenantId);
 	
-	// TODO: Philipp add tenantId?
-	ClassDefinition findByName(String name);
+	ClassDefinition findByNameAndTenantId(String name, String tenantId);
 
 
 

@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.api.standard.model.certificate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,9 @@ public class PersonCertificateController {
 
 	@Autowired private PersonCertificateService personCertificateService;
 
-	@PutMapping
-	public void savePersonCertificates(@RequestBody List<PersonCertificate> certificates) {
-		personCertificateService.savePersonCertificate(certificates);
+	@PutMapping("/tenant/{tenantId}")
+	public void savePersonCertificates(@RequestBody List<PersonCertificate> certificates, @PathVariable("tenantId") String tenantId) {
+		personCertificateService.savePersonCertificate(certificates, tenantId);
 	}
 
 }

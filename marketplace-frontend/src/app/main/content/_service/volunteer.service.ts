@@ -18,5 +18,10 @@ export class VolunteerService {
     return this.http.get(`${marketplace.url}/volunteer/${id}`);
   }
 
+  findByName(marketplace: Marketplace, name: string) {
+    return this.http.get(`${marketplace.url}/volunteer/username/${name}`);
+
+  }
+
   
 }

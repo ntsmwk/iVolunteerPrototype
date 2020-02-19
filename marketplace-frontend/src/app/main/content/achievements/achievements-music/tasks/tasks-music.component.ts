@@ -221,7 +221,6 @@ export class TasksMusicComponent implements OnInit {
 
         this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
            this.tenantId.push(tenantId);
-         //  this.tenantId.push(Object.assign({}, tenantId));
 
           this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId)
             .toPromise().then((ret: ClassInstanceDTO[]) => {

@@ -22,8 +22,8 @@ public class PersonCertificateService {
 	@Autowired private UserMappingService userMappingService;
 
 	
-	public void savePersonCertificate(List<PersonCertificate> personCertificates) {
-		ClassDefinition personCertificateClassDefinition = classDefinitionService.getByName("PersonCertificate");
+	public void savePersonCertificate(List<PersonCertificate> personCertificates, String tenantId) {
+		ClassDefinition personCertificateClassDefinition = classDefinitionService.getByName("PersonCertificate", tenantId);
 		if (personCertificateClassDefinition != null) {
 			for (PersonCertificate personCertificate : personCertificates) {
 				savePersonCertificate(personCertificateClassDefinition, personCertificate);

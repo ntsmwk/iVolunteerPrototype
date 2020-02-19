@@ -18,7 +18,7 @@ public class CompetenceClassDefinitionController {
 
 	@GetMapping("/competence/{tenantId}")
 	public List<ClassDefinition> findAll(@PathVariable("tenantId") String tenantId) {
-		List<ClassDefinition> findAll = classDefinitionRepository.findByClassArchetype(ClassArchetype.COMPETENCE, tenantId);
+		List<ClassDefinition> findAll = classDefinitionRepository.getByClassArchetypeAndTenantId(ClassArchetype.COMPETENCE, tenantId);
 		return findAll;
 	}
 }
