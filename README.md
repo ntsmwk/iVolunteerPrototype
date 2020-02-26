@@ -6,6 +6,9 @@ docker run --name marketplace-db --restart=unless-stopped -e MONGO_INITDB_ROOT_U
 ### Marketplace-Workflow-DB
 docker run --name marketplace-workflow-db --restart=unless-stopped -e MYSQL_DATABASE=workflow -e MYSQL_USER=workflow -e MYSQL_PASSWORD=workflow -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:5.7.22
 
+### Install MxGraph
+npm i mxgraph
+
 ### start fabric and deploy business network (precondition: hlf1.1):
 1. cd ~/iVolunteerPrototype/blockchain/network/ivolunteer-blockchain
 2. ./init
