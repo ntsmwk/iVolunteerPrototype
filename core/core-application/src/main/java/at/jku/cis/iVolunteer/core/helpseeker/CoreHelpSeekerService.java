@@ -24,9 +24,7 @@ public class CoreHelpSeekerService {
 		if (coreHelpSeeker == null || marketplace == null) {
 			throw new NotFoundException();
 		}
-
 		coreHelpSeeker = updateCoreHelpSeeker(tenantId, coreHelpSeeker, marketplace);
-
 		sendRegistrationToMarketplace(authorization, coreHelpSeeker, marketplace);
 	}
 
