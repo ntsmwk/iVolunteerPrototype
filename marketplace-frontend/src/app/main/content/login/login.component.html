@@ -10,22 +10,12 @@
       Willkommen bei iVolunteer!
     </div>
 
-    <!-- <div class="description" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',y:'25px'}}">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper nisl erat,
-      convallis elit fermentum pellentesque.
-    </div> -->
 
   </div>
 
-  <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
-       [@animate]="{value:'*',params:{delay:'300ms',x:'100%'}}">
+  <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom [@animate]="{value:'*',params:{delay:'300ms',x:'100%'}}">
 
     <div id="login-form">
-
-      <div class="logo" fxHide.gt-xs>
-        <span>F</span>
-      </div>
-
       <div class="title">Anmeldung</div>
 
       <form name="loginForm" (submit)="login()" [formGroup]="loginForm" novalidate>
@@ -44,8 +34,7 @@
           </mat-error>
         </mat-form-field>
 
-        <button type="submit" mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
-                [disabled]="loginForm.invalid">
+        <button type="submit" mat-raised-button color="accent" class="submit-button" aria-label="LOGIN" [disabled]="loginForm.invalid">
           LOGIN
         </button>
 
@@ -53,7 +42,7 @@
 
       <div class="register" fxLayout="column" fxLayoutAlign="center center">
         <span class="text">Noch nicht registriert?</span>
-        <a class="link" [routerLink]="'/pages/auth/register-2'">Neues Konto erstellen</a>
+        <a class="link" (click)="navigateToRegistration()">Neues Konto erstellen</a>
       </div>
     </div>
   </div>

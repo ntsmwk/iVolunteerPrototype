@@ -1,23 +1,19 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 
-import {FuseSharedModule} from '@fuse/shared.module';
+import { FuseSharedModule } from "@fuse/shared.module";
 
-import {FuseLoginComponent} from './login.component';
+import { FuseLoginComponent } from "./login.component";
 
-const routes = [
-  {path: '', component: FuseLoginComponent}
-];
+const routes = [{ path: "", component: FuseLoginComponent }];
 
 @NgModule({
-  declarations: [
-    FuseLoginComponent
-  ],
+  declarations: [FuseLoginComponent],
   imports: [
     RouterModule.forChild(routes),
 
@@ -29,5 +25,4 @@ const routes = [
     FuseSharedModule
   ]
 })
-export class FuseLoginModule {
-}
+export class FuseLoginModule {}
