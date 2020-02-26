@@ -1,5 +1,4 @@
-<link type="text/css" rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
 
 
 <div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll">
@@ -13,8 +12,7 @@
     <!-- Back</h1> -->
 
     <div style=" position: relative; width: 120px; height: 120px; padding-top: 0px;">
-      <img style="object-fit: contain; max-width: 100%; max-height: 100%"
-        src="../../../../assets/images/avatars/weixlbaumer.jpg">
+      <img style="object-fit: contain; max-width: 100%; max-height: 100%" src="../../../../assets/images/avatars/weixlbaumer.jpg">
     </div>
   </div>
 
@@ -70,17 +68,15 @@
       <div>Nach Organisation filtern</div>
       <div fxLayout="row" fxLayoutAlign="start start">
 
-    
+
         <div style="padding:3px"></div>
-        <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
-          fxLayoutAlign="start center">
+        <button mat-flat-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
           <div style=" position: relative; width: 50px; height: 50px; padding-top: 7px; font-size: 18px; font-weight: 900">
             Alle
           </div>
         </button>
         <div style="padding:3px"></div>
-        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
-          fxLayoutAlign="start center">
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
           <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
             <img style="object-fit: contain; max-width: 100%; max-height: 100%"
               src="../../../../assets/images/logos/FF_Altenberg.jpg">
@@ -88,8 +84,7 @@
         </button>
         <div style="padding:3px"></div>
 
-            <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;"
-                    fxLayout="row" fxLayoutAlign="start center">
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
                     <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
                         <img style="object-fit: contain; max-width: 100%; max-height: 100%"
                             src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg">
@@ -97,8 +92,7 @@
                 </button>
 
         <div style="padding:3px"></div>
-        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row"
-          fxLayoutAlign="start center">
+        <button mat-stroked-button type="button" color="accent" style="height: 60px; min-width: 60px;" fxLayout="row" fxLayoutAlign="start center">
           <div style=" position: relative; width: 50px; height: 50px; padding-top: 5px;">
             <img style="object-fit: contain; max-width: 100%; max-height: 100%"
               src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg">
@@ -110,8 +104,7 @@
 
     <div style="padding-top: 10px"></div>
 
-    <div *ngIf="userImagePaths && userImagePaths.length>0" class="table" fxLayout="row" style="width: 100%"
-      fxLayoutAlign="start center">
+    <div *ngIf="userImagePaths && userImagePaths.length>0" class="table" fxLayout="row" style="width: 100%" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
       <mat-table #table matSort [dataSource]="dataSourceRepository" style="width: 100%">
@@ -139,7 +132,7 @@
         <ng-container matColumnDef="taskType1">
           <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <span >{{element.taskType1}} </span>
+            <span>{{element.taskType1}} </span>
           </mat-cell>
         </ng-container>
         <!-- 
@@ -176,8 +169,7 @@
         </ng-container> -->
 
         <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumnsRepository;"
-          [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsRepository;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"></mat-row>
       </mat-table>
     </div>
     <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>

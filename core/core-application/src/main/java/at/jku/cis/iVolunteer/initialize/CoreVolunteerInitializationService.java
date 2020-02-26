@@ -1,10 +1,14 @@
 package at.jku.cis.iVolunteer.initialize;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
+import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
@@ -24,17 +28,20 @@ public class CoreVolunteerInitializationService {
 	@Autowired private CoreVolunteerService coreVolunteerService;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired private CoreTenantRepository coreTenantRepository;
 
 	public void registerVolunteers() {
-		coreVolunteerRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer));
+		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
+				.collect(Collectors.toList());
+		coreVolunteerRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
 	}
 
-	private void registerVolunteer(CoreVolunteer volunteer) {
+	private void registerVolunteer(CoreVolunteer volunteer, List<String> tenantIds) {
 		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
 				.findFirst().orElse(null);
 		if (mp != null) {
 			try {
-				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), "");
+				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), tenantIds, "");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
