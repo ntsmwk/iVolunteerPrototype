@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class CoreInitializationController {
 
 	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 
-	@PutMapping("/init/register")
+	@PutMapping("/init/register-volunteers")
 	public void registerVolunteers() {
 		coreVolunteerInitializationService.registerVolunteers();
+	}
+	
+	@PutMapping("init/register-helpseekers")
+	public void registerHelpSeekers() {
+		coreHelpSeekerInitializationService.registerDefaultHelpSeekers();
 	}
 }
