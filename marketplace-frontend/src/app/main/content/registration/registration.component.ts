@@ -9,10 +9,13 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { Router } from "@angular/router";
 import { RegistrationService } from "../_service/registration.service";
 import { HttpResponse } from "@angular/common/http";
+import { fuseAnimations } from "@fuse/animations";
 
 @Component({
   selector: "registration",
-  templateUrl: "registration.component.html"
+  templateUrl: "registration.component.html",
+  styleUrls: ["./registration.component.scss"],
+  animations: fuseAnimations
 })
 export class FuseRegistrationComponent implements OnInit {
   registrationForm: FormGroup;

@@ -43,7 +43,7 @@ public class CoreLoginService {
 		if (participant instanceof CoreRecruiter) {
 			return ParticipantRole.RECRUITER;
 		}
-		throw new RuntimeException("User not found");
+		return ParticipantRole.NONE;
 	}
 
 	private CoreUser findByUsername(String username) {
@@ -63,7 +63,6 @@ public class CoreLoginService {
 		if (user != null) {
 			return user;
 		}
-
 		return null;
 	}
 

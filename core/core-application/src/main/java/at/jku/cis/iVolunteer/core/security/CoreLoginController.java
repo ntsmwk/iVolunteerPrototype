@@ -32,8 +32,7 @@ public class CoreLoginController {
 		if (participant instanceof CoreRecruiter) {
 			return (CoreRecruiter) participant;
 		}
-		throw new RuntimeException("User not found");
-
+		return null;
 	}
 
 	@GetMapping("role")

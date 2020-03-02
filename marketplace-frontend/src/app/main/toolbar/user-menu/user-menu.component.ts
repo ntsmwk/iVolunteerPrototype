@@ -28,7 +28,9 @@ export class FuseUserMenuComponent implements OnInit {
       .then((participant: Participant) => (this.participant = participant))
       .catch(e => console.warn(e))
       .then(() => {
-        this.fetchUserImagePaths();
+        if (this.participant != null) {
+          this.fetchUserImagePaths();
+        }
       });
   }
 

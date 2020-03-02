@@ -32,8 +32,8 @@ const routes: Route[] = [
     loadChildren: () =>
       import("./registration/registration.module").then(
         m => m.FuseRegistrationModule
-      ),
-    canActivate: [AnonymGuard]
+      )
+    // canActivate: [AnonymGuard]
   },
   {
     path: "main/volunteer/asset-inbox",
@@ -67,7 +67,6 @@ const routes: Route[] = [
       ).then(m => m.HelpseekerConfirmationScreenModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
-  // TODO change to LoginGuard!!!!
   {
     path: "main/dashboard",
     loadChildren: () =>
