@@ -83,9 +83,4 @@ export class FuseLoginComponent implements OnInit {
         this.router.navigate(["/main/dashboard"]);
       });
   }
-
-  navigateToRegistration() {
-    console.error("register");
-    this.router.navigate(["register"]);
-  }
 }
