@@ -8,12 +8,12 @@ import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dia
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { OpenDialogComponent, OpenDialogData } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/open-dialog/open-dialog.component';
+import { OpenDialogComponent, OpenDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/open-dialog/open-dialog.component';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
-import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 
 @Component({
   selector: 'app-dialog-factory',

@@ -13,14 +13,14 @@ import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
 import { RelationshipDialogModule } from "../relationship-dialog/relationship-dialog.module";
 import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
-import { OpenDialogComponent } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/open-dialog/open-dialog.component';
-import { OpenDialogModule } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/open-dialog/open-dialog.module';
-import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { SaveAsDialogModule } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/save-as-dialog/save-as-dialog.module';
-import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
-import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/_components/help-seeker/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
-import { ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/icon-dialog/icon-dialog.component';
-import { ChangeIconDialogModule } from 'app/main/content/_components/help-seeker/configurator/configurator-editor/icon-dialog/icon-dialog.module';
+import { OpenDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/open-dialog/open-dialog.component';
+import { OpenDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/open-dialog/open-dialog.module';
+import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
+import { SaveAsDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.module';
+import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
+import { ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { ChangeIconDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.module';
 
 @NgModule({
   imports: [
