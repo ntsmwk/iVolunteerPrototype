@@ -34,6 +34,20 @@
           </mat-error>
         </mat-form-field>
 
+        <mat-form-field>
+          <input matInput type="firstName" placeholder="First Name" formControlName="firstName">
+          <mat-error *ngIf="registrationFormErrors.firstName && registrationFormErrors.firstName.required">
+            First Name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="lastName" placeholder="Last Name" formControlName="lastName">
+          <mat-error *ngIf="registrationFormErrors.lastName && registrationFormErrors.lastName.required">
+            Last Name is required
+          </mat-error>
+        </mat-form-field>
+
         <button type="submit" mat-raised-button color="accent" class="submit-button" [disabled]="registrationForm.invalid">
           Register
         </button>

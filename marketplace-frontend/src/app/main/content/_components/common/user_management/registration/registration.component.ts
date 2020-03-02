@@ -43,7 +43,9 @@ export class FuseRegistrationComponent implements OnInit {
   ngOnInit() {
     this.registrationForm = this.formBuilder.group({
       username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required)
+      password: new FormControl("", Validators.required),
+      firstName: new FormControl("", Validators.required),
+      lastName: new FormControl("", Validators.required)
     });
 
     this.registrationForm.valueChanges.subscribe(() => {
@@ -80,8 +82,7 @@ export class FuseRegistrationComponent implements OnInit {
       )
       .toPromise()
       .then((response: HttpResponse<any>) => {
-        localStorage.setItem("token", response.headers.get("Authorization"));
-        this.router.navigate(["/main"]);
+        this.router.navigate(["/login"]);
       });
   }
 }
