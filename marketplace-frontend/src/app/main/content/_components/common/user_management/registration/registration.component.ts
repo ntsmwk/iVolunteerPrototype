@@ -10,6 +10,8 @@ import { Router } from "@angular/router";
 import { RegistrationService } from "../../../../_service/registration.service";
 import { HttpResponse } from "@angular/common/http";
 import { fuseAnimations } from "@fuse/animations";
+import { Participant } from "app/main/content/_model/participant";
+import { Volunteer } from "app/main/content/_model/volunteer";
 
 @Component({
   selector: "registration",
@@ -75,11 +77,15 @@ export class FuseRegistrationComponent implements OnInit {
       return;
     }
 
+    // TODO build volunteer object
+    const volunteer = new Volunteer();
+    volunteer.username = this.registrationForm.value.username;
+    volunteer.password = this.registrationForm.value.password;
+    volunteer.firstname = this.registrationForm.value.firstName;
+    volunteer.lastname = this.registrationForm.value.lastName;
+
     this.registrationService
-      .register(
-        this.registrationForm.value.username,
-        this.registrationForm.value.password
-      )
+      .registerVolunteer(volunteer)
       .toPromise()
       .then((response: HttpResponse<any>) => {
         this.router.navigate(["/login"]);
