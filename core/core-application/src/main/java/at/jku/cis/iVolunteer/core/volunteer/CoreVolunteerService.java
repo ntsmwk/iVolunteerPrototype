@@ -3,6 +3,8 @@ package at.jku.cis.iVolunteer.core.volunteer;
 import java.util.Collections;
 import java.util.List;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +57,9 @@ public class CoreVolunteerService {
 		volunteer.setMiddlename(coreVolunteer.getMiddlename());
 		volunteer.setPosition(coreVolunteer.getPosition());
 		volunteer.setNickname(coreVolunteer.getNickname());
-		volunteer.setProfileImagePath(coreVolunteer.getProfileImagePath());
+		if (coreVolunteer.getImage() != null) {
+			volunteer.setImage(coreVolunteer.getImage());
+		}
 		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
 	}
 

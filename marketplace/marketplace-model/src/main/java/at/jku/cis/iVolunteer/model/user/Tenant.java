@@ -4,8 +4,11 @@ import org.springframework.data.annotation.Id;
 
 public class Tenant {
 	@Id private String id;
-	
+
 	private String name;
+
+	private String primaryColor;
+	private String secondaryColor;
 
 	public String getId() {
 		return id;
@@ -21,6 +24,22 @@ public class Tenant {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPrimaryColor() {
+		return primaryColor;
+	}
+
+	public void setPrimaryColor(String primaryColor) {
+		this.primaryColor = primaryColor;
+	}
+
+	public String getSecondaryColor() {
+		return secondaryColor;
+	}
+
+	public void setSecondaryColor(String secondaryColor) {
+		this.secondaryColor = secondaryColor;
 	}
 
 }

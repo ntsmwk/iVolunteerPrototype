@@ -9,6 +9,8 @@ export class Participant {
   nickname: string;
 
   position: string;
+
+  image;
 }
 
 export type ParticipantRole =

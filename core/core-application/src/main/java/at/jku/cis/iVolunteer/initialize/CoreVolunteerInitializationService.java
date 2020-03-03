@@ -1,9 +1,14 @@
 package at.jku.cis.iVolunteer.initialize;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +35,50 @@ public class CoreVolunteerInitializationService {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreTenantRepository coreTenantRepository;
 
+	public void initVolunteers() {
+
+		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", "", "");
+		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", "", "img/pstarzer.jpg");
+		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", "", "");
+		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", "", "img/weixlbaumer_small.png");
+
+		createVolunteer("AKop", "passme", "Alexander", "Kopp", "Alex", "");
+		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", "", "");
+		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "", "");
+		createVolunteer("BProe", "passme", "Birgit", "Pröll", "", "");
+		createVolunteer("KKof", "passme", "Katharina", "Kofler", "Kati", "");
+	}
+
+	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName,
+			String nickName, String fileName) {
+		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
+		if (volunteer == null) {
+			volunteer = new CoreVolunteer();
+			volunteer.setUsername(username);
+			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
+			volunteer.setFirstname(firstName);
+			volunteer.setLastname(lastName);
+			volunteer.setNickname(nickName);
+
+			setImage(fileName, volunteer);
+			volunteer = coreVolunteerRepository.insert(volunteer);
+		}
+		return volunteer;
+	}
+
+	private void setImage(String fileName, CoreVolunteer volunteer) {
+		if (fileName != null && !fileName.equals("")) {
+
+			try {
+				Resource resource = new ClassPathResource(fileName);
+				File file = resource.getFile();
+				volunteer.setImage(Files.readAllBytes(file.toPath()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
 				.collect(Collectors.toList());
@@ -46,34 +95,5 @@ public class CoreVolunteerInitializationService {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public void initVolunteers() {
-
-		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", "");
-		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", "");
-		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", "");
-		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", "");
-
-		createVolunteer("AKop", "passme", "Alexander", "Kopp", "Alex");
-		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", "");
-		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "");
-		createVolunteer("BProe", "passme", "Birgit", "Pröll", "");
-		createVolunteer("KKof", "passme", "Katharina", "Kofler", "Kati");
-	}
-
-	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName,
-			String nickName) {
-		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
-		if (volunteer == null) {
-			volunteer = new CoreVolunteer();
-			volunteer.setUsername(username);
-			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
-			volunteer.setFirstname(firstName);
-			volunteer.setLastname(lastName);
-			volunteer.setNickname(nickName);
-			volunteer = coreVolunteerRepository.insert(volunteer);
-		}
-		return volunteer;
 	}
 }

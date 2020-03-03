@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 
 @Service
@@ -17,13 +18,17 @@ public class CoreRegistrationService {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public void registerVolunteer(CoreVolunteer volunteer) {
-		volunteer.setPassword(bCryptPasswordEncoder.encode(volunteer.getPassword()));
+		encryptPassword(volunteer);
 		this.coreVolunteerRepository.save(volunteer);
 	}
 
 	public void registerHelpSeeker(CoreHelpSeeker helpSeeker) {
-		helpSeeker.setPassword(bCryptPasswordEncoder.encode(helpSeeker.getPassword()));
+		encryptPassword(helpSeeker);
 		this.coreHelpSeekerRepository.save(helpSeeker);
+	}
+
+	private void encryptPassword(CoreUser user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 	}
 
 }

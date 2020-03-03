@@ -2,25 +2,20 @@ package at.jku.cis.iVolunteer.model.user;
 
 import org.springframework.data.annotation.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public abstract class User {
 
-	@Id
-	private String id;
+	@Id private String id;
 	private String username;
-	
+	private String password;
+
 	private String firstname;
 	private String middlename;
 	private String lastname;
-	
 	private String nickname;
-	
+
 	private String position;
-	
-	private String profileImagePath;
-	
-	private String password;
+
+	private byte[] image;
 
 	public String getId() {
 		return id;
@@ -78,12 +73,20 @@ public abstract class User {
 		this.nickname = nickname;
 	}
 
-	public String getProfileImagePath() {
-		return profileImagePath;
+	public String getPosition() {
+		return position;
 	}
 
-	public void setProfileImagePath(String profileImagePath) {
-		this.profileImagePath = profileImagePath;
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	@Override
@@ -98,13 +101,4 @@ public abstract class User {
 	public int hashCode() {
 		return id.hashCode();
 	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
 }
