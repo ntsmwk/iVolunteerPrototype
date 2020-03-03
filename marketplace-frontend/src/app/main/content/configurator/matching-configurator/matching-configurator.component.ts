@@ -89,7 +89,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             this.marketplace = marketplace;
           }
         }).then(() => {
-          this.loadClassesAndRelationships('slot1', 'slot2');
+          // this.loadClassesAndRelationships('slot1', 'slot2');
         });
       });
     });
@@ -97,6 +97,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   loadClassesAndRelationships(producerConfiguratorId: string, consumerConfiguratorId: string) {
     this.clearEditor();
+    this.matchingOperatorRelationshipStorage = undefined;
+
     Promise.all([
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerConfiguratorId).toPromise()
         .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
@@ -409,7 +411,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     switch (event.id) {
       case 'editor_save': this.performSave(); break;
-      case 'editor_open': this.performOpen(); break;
+      case 'editor_open': this.performOpen(event.storage); break;
       case 'editor_new': this.performNew(event.producerConfigurator, event.consumerConfigurator); break;
     }
   }
@@ -458,14 +460,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       });
   }
 
-  performOpen() {
-
+  performOpen(storage: MatchingOperatorRelationshipStorage) {
+    this.loadClassesAndRelationships(storage.producerConfiguratorId, storage.consumerConfiguratorId);
   }
 
   performNew(producerConfigurator: Configurator, consumerConfigurator: Configurator) {
-    console.log("PerformNew");
-    console.log(producerConfigurator);
-    console.log(consumerConfigurator);
     this.loadClassesAndRelationships(producerConfigurator.id, consumerConfigurator.id);
 
   }

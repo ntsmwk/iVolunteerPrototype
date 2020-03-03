@@ -6,53 +6,50 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { MatchingOperatorRelationshipStorage } from 'app/main/content/_model/matching';
+import { MatchingOperatorRelationshipStorageService } from 'app/main/content/_service/matchingoperator-relationship-storage.service';
 
-export interface OpenDialogData {
-  configurator: Configurator;
+export interface OpenMatchingDialogData {
   marketplace: Marketplace;
+  storage: MatchingOperatorRelationshipStorage;
 }
 
 @Component({
-  selector: 'open-dialog',
+  selector: 'open-matching-dialog',
   templateUrl: './open-dialog.component.html',
   styleUrls: ['./open-dialog.component.scss']
 })
-export class OpenDialogComponent implements OnInit {
+export class OpenMatchingDialogComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<OpenDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OpenDialogData,
-    private configuratorService: ConfiguratorService,
+    public dialogRef: MatDialogRef<OpenMatchingDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: OpenMatchingDialogData,
+    private matchingOperatorRelationshipStorageService: MatchingOperatorRelationshipStorageService,
     private loginService: LoginService,
   ) {
   }
 
-  selected: string;
-  configurators: Configurator[];
-  recentConfigurators: Configurator[];
+  recentStorages: MatchingOperatorRelationshipStorage[];
   loaded = false;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-        this.configurators = configurators.filter(c => {
-          return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
+      this.matchingOperatorRelationshipStorageService.getAllMatchingOperatorRelationshipStorages(this.data.marketplace)
+        .toPromise()
+        .then((storages: MatchingOperatorRelationshipStorage[]) => {
+          this.recentStorages = storages;
+          if (this.recentStorages.length > 5) {
+            this.recentStorages.slice(0, 5);
+          }
+          this.loaded = true;
         });
 
-        if (this.configurators.length > 5) {
-          this.recentConfigurators = this.configurators.slice(0, 5);
-        }
-        this.recentConfigurators = this.configurators;
-        this.loaded = true;
-      });
     });
   }
 
-  itemSelected(event: any, c: Configurator) {
-    this.data.configurator = c;
-    this.dialogRef.close(this.data)
-
-
+  itemSelected(event: any, s: MatchingOperatorRelationshipStorage) {
+    this.data.storage = s;
+    this.dialogRef.close(this.data);
   }
 
   onNoClick(): void {

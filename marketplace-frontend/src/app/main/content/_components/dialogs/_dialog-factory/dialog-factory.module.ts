@@ -23,6 +23,8 @@ import { ChangeIconDialogComponent } from 'app/main/content/configurator/configu
 import { ChangeIconDialogModule } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.module';
 import { NewMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { NewMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.module';
+import { OpenMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
+import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.module';
 
 @NgModule({
   imports: [
@@ -38,11 +40,12 @@ import { NewMatchingDialogModule } from 'app/main/content/configurator/matching-
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
     NewMatchingDialogModule,
+    OpenMatchingDialogModule,
   ],
   declarations: [DialogFactoryComponent],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
     SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
     OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
-    ChangeIconDialogComponent, NewMatchingDialogComponent]
+    ChangeIconDialogComponent, NewMatchingDialogComponent, OpenMatchingDialogComponent]
 })
 export class DialogFactoryModule { }

@@ -76,8 +76,6 @@ export class NewMatchingDialogComponent implements OnInit {
         .getMatchingOperatorRelationshipByUnorderedConfiguratorIds(this.data.marketplace, this.data.producerConfigurator.id, this.data.consumerConfigurator.id)
         .toPromise()
         .then((ret: MatchingOperatorRelationshipStorage) => {
-          console.log("NNNNNN");
-          console.log(ret);
           if (isNullOrUndefined(ret)) {
             this.dialogRef.close(this.data);
           } else {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.model.matching.MatchingOperatorRelationshipStorage;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 
@@ -22,6 +23,7 @@ import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 public class MatchingOperatorRelationshipStorageController {
 
 	@Autowired private MatchingOperatorRelationshipStorageRepository matchingOperatorRelationshipStorageRepository;
+	@Autowired private ConfiguratorRepository configuratorRepository;
 
 	@GetMapping("matching/operator-relationship/all")
 	List<MatchingOperatorRelationshipStorage> getAllMatchingOperatorRelationships() {
@@ -58,6 +60,13 @@ public class MatchingOperatorRelationshipStorageController {
 	MatchingOperatorRelationshipStorage saveMatchingOperatorRelationships(@RequestBody MatchingOperatorRelationshipStorage storage) {
 		if (storage.getId() == null) {
 			storage.setId(createRelationshipStorageHash(storage.getProducerConfiguratorId(), storage.getConsumerConfiguratorId()));
+			
+			Configurator producer = configuratorRepository.findOne(storage.getProducerConfiguratorId());
+			Configurator consumer = configuratorRepository.findOne(storage.getConsumerConfiguratorId());
+			
+			storage.setName(producer.getName() + " --> " + consumer.getName());
+			
+			
 		}
 		return matchingOperatorRelationshipStorageRepository.save(storage);
 	}

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { OpenMatchingDialogData } from '../open-dialog/open-dialog.component';
 
 
 
@@ -149,10 +150,9 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   openClicked(event: any, item: SubMenuItem) {
-
-    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openOpenMatchingDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
-        this.menuOptionClickedEvent.emit({ id: 'editor_open', configurator: ret });
+        this.menuOptionClickedEvent.emit({ id: 'editor_open', storage: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
