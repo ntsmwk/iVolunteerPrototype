@@ -65,9 +65,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerConfigurator: Configurator;
   consumerConfigurator: Configurator;
 
-  producerClassDefinitions: ClassDefinition[];
-  consumerClassDefinitions: ClassDefinition[];
-
   producerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
   consumerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
 
@@ -92,29 +89,42 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             this.marketplace = marketplace;
           }
         }).then(() => {
-          Promise.all([
-            this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, 'slot1').toPromise()
-              .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
-                this.producerClassDefinitionCollections = collections;
-                this.insertClassDefinitionsProducerFromCollection();
-              }),
-            this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, 'slot2').toPromise()
-              .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
-                this.consumerClassDefinitionCollections = collections;
-                this.insertClassDefinitionsConsumerFromCollection();
-              })
-          ]).then(() => {
-            this.matchingOperatorRelationshipService.getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, 'slot1', 'slot2').toPromise()
-              .then((storage: MatchingOperatorRelationshipStorage) => {
-                this.matchingOperatorRelationshipStorage = storage;
-                this.insertMatchingOperatorsAndRelationships();
-              });
-          });
+          this.loadClassesAndRelationships('slot1', 'slot2');
         });
       });
     });
   }
 
+  loadClassesAndRelationships(producerConfiguratorId: string, consumerConfiguratorId: string) {
+    this.clearEditor();
+    Promise.all([
+      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerConfiguratorId).toPromise()
+        .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+          this.producerClassDefinitionCollections = collections;
+          this.insertClassDefinitionsProducerFromCollection();
+        }),
+      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerConfiguratorId).toPromise()
+        .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+          this.consumerClassDefinitionCollections = collections;
+          this.insertClassDefinitionsConsumerFromCollection();
+        })
+    ]).then(() => {
+      this.matchingOperatorRelationshipService.getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, producerConfiguratorId, consumerConfiguratorId).toPromise()
+        .then((storage: MatchingOperatorRelationshipStorage) => {
+
+          if (!isNullOrUndefined(storage)) {
+            this.matchingOperatorRelationshipStorage = storage;
+            this.insertMatchingOperatorsAndRelationships();
+
+          } else {
+            this.matchingOperatorRelationshipStorage = new MatchingOperatorRelationshipStorage();
+            this.matchingOperatorRelationshipStorage.consumerConfiguratorId = consumerConfiguratorId;
+            this.matchingOperatorRelationshipStorage.producerConfiguratorId = producerConfiguratorId;
+            this.matchingOperatorRelationshipStorage.relationships = [];
+          }
+        });
+    });
+  }
 
 
   ngAfterContentInit() {
@@ -217,7 +227,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertClassDefinitionsProducerFromCollection() {
-    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'producer_header', 'Produzent', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader);
+    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'producer_header', 'Werkunternehmen', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader);
     title.setConnectable(false);
 
     let y = title.geometry.y + title.geometry.height + 20;
@@ -232,7 +242,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const x = this.graphContainer.nativeElement.offsetWidth - 220;
     let y = 20;
 
-    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'consumer_header', 'Auftraggeber', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader);
+    const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'consumer_header', 'Werkbesteller', x - 200, y, 400, 50, CConstants.mxStyles.matchingRowHeader);
     title.setConnectable(false);
 
     y = title.geometry.y + title.geometry.height + 20;
@@ -396,52 +406,69 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   consumeMenuOptionClickedEvent(event: any) {
-    if (event.id === 'editor_save') {
-      const cells = this.graph.getChildCells(this.graph.getDefaultParent());
-      const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
 
-      const newRelationships: MatchingOperatorRelationship[] = [];
-
-      for (const operatorCell of matchingOperatorCells) {
-        const relationship = new MatchingOperatorRelationship();
-        relationship.matchingOperatorType = (operatorCell as myMxCell).operatorType;
-        relationship.coordX = operatorCell.geometry.x;
-        relationship.coordY = operatorCell.geometry.y;
-
-        let producerSet = false;
-        let consumerSet = false;
-
-        for (const edge of operatorCell.edges) {
-
-          if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
-            if (edge.target.id === operatorCell.id) {
-              relationship.producerId = edge.source.id;
-              producerSet = true;
-            } else if (edge.source.id === operatorCell.id) {
-              relationship.consumerId = edge.target.id;
-              consumerSet = true;
-            }
-          }
-
-          if (producerSet && consumerSet) {
-            break;
-          }
-
-        }
-
-        newRelationships.push(relationship);
-      }
-
-      this.matchingOperatorRelationshipStorage.relationships = newRelationships;
-
-      this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingOperatorRelationshipStorage).toPromise()
-        .then((ret: MatchingOperatorRelationshipStorage) => {
-          // do stuff
-        });
+    switch (event.id) {
+      case 'editor_save': this.performSave(); break;
+      case 'editor_open': this.performOpen(); break;
+      case 'editor_new': this.performNew(event.producerConfigurator, event.consumerConfigurator); break;
     }
   }
 
+  private performSave() {
+    const cells = this.graph.getChildCells(this.graph.getDefaultParent());
+    const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
 
+    const newRelationships: MatchingOperatorRelationship[] = [];
+
+    for (const operatorCell of matchingOperatorCells) {
+      const relationship = new MatchingOperatorRelationship();
+      relationship.matchingOperatorType = (operatorCell as myMxCell).operatorType;
+      relationship.coordX = operatorCell.geometry.x;
+      relationship.coordY = operatorCell.geometry.y;
+
+      let producerSet = false;
+      let consumerSet = false;
+
+      for (const edge of operatorCell.edges) {
+
+        if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
+          if (edge.target.id === operatorCell.id) {
+            relationship.producerId = edge.source.id;
+            producerSet = true;
+          } else if (edge.source.id === operatorCell.id) {
+            relationship.consumerId = edge.target.id;
+            consumerSet = true;
+          }
+        }
+
+        if (producerSet && consumerSet) {
+          break;
+        }
+
+      }
+
+      newRelationships.push(relationship);
+    }
+
+    this.matchingOperatorRelationshipStorage.relationships = newRelationships;
+
+    this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingOperatorRelationshipStorage).toPromise()
+      .then((ret: MatchingOperatorRelationshipStorage) => {
+        // do stuff
+      });
+  }
+
+  performOpen() {
+
+  }
+
+  performNew(producerConfigurator: Configurator, consumerConfigurator: Configurator) {
+    console.log("PerformNew");
+    console.log(producerConfigurator);
+    console.log(consumerConfigurator);
+    this.loadClassesAndRelationships(producerConfigurator.id, consumerConfigurator.id);
+
+  }
 
 
   // OLD STUFF - might still be needed later

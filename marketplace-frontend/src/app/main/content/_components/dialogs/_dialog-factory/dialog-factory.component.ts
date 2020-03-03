@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // TODO MWE evtl. only @angular/material
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
@@ -15,6 +15,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 
 @Component({
   selector: 'app-dialog-factory',
@@ -25,18 +26,8 @@ export class DialogFactoryComponent {
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
-
-
-  }
-
-
-  //// TODO EXPAND DIALOG FACTORY
-
-
-  
   //TODO EXPAND DIALOG FACTORY
-  
+
   /**
    * ADD PROPERTY DIALOG
    * 
@@ -87,7 +78,7 @@ export class DialogFactoryComponent {
 
         returnValue.key = result.key;
 
-        if (result.key == 'new_property') {
+        if (result.key === 'new_property') {
           return;
         }
 
@@ -461,7 +452,7 @@ export class DialogFactoryComponent {
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds},
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
       disableClose: true
     });
 
@@ -483,7 +474,7 @@ export class DialogFactoryComponent {
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, imagePath: currentImagePath},
+      data: { marketplace: marketplace, imagePath: currentImagePath },
       disableClose: true
     });
 
@@ -496,6 +487,31 @@ export class DialogFactoryComponent {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return imagePath;
+    });
+  }
+
+  openNewMatchingDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let producerConfigurator: Configurator;
+    let consumerConfigurator: Configurator;
+
+    dialogRef.beforeClose().toPromise().then((result: NewMatchingDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        producerConfigurator = result.producerConfigurator;
+        consumerConfigurator = result.consumerConfigurator;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return { producerConfigurator: producerConfigurator, consumerConfigurator: consumerConfigurator };
     });
   }
 

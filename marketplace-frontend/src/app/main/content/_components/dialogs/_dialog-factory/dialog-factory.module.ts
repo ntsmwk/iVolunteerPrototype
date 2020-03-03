@@ -11,7 +11,7 @@ import { SortDialogComponent } from '../sort-dialog/sort-dialog.component';
 import { SortDialogModule } from '../sort-dialog/sort-dialog.module';
 import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog.module';
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
-import { RelationshipDialogModule } from "../relationship-dialog/relationship-dialog.module";
+import { RelationshipDialogModule } from '../relationship-dialog/relationship-dialog.module';
 import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
 import { OpenDialogComponent } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.component';
 import { OpenDialogModule } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.module';
@@ -21,6 +21,8 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/config
 import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
 import { ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 import { ChangeIconDialogModule } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.module';
+import { NewMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
+import { NewMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.module';
 
 @NgModule({
   imports: [
@@ -34,12 +36,13 @@ import { ChangeIconDialogModule } from 'app/main/content/configurator/configurat
     OpenDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
-    ChangeIconDialogModule
+    ChangeIconDialogModule,
+    NewMatchingDialogModule,
   ],
   declarations: [DialogFactoryComponent],
-  entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, 
-                    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
-                    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
-                    ChangeIconDialogComponent]
+  entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
+    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
+    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
+    ChangeIconDialogComponent, NewMatchingDialogComponent]
 })
 export class DialogFactoryModule { }

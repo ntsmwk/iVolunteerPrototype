@@ -1,0 +1,86 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>open_in_new</mat-icon>
+      </td>
+      <td>
+        <h1>Konfiguratoren wählen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content>
+  <table>
+    <tr width="200px">
+      <td width="200px">
+        <h2>Werkunternehmen</h2>
+      </td>
+      <td style="padding-left: 50px">
+      </td>
+      <td>
+        <h2>Werkbesteller</h2>
+      </td>
+    <tr>
+      <td *ngIf=loaded>
+
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr *ngFor="let c of recentConfigurators" class="entry" (click)="producerItemSelected($event, c)">
+            <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
+          </tr>
+        </table>
+
+      </td>
+
+      <td *ngIf=!loaded>
+        accessing...
+      </td>
+
+      <td style="padding-left: 50px">
+      </td>
+
+      <td width="200px">
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr *ngFor="let c of recentConfigurators" class="entry" (click)="consumerItemSelected($event, c)">
+            <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+
+    <tr width="200px">
+      <td width="200px" *ngIf="data.producerConfigurator">
+        Gewählt:
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="selected">
+            <td style="padding-left: 50px; padding-right: 50px">{{data.producerConfigurator.name}}</td>
+          </tr>
+        </table>
+      </td>
+      <td style="padding-left: 50px">
+      </td>
+      <td *ngIf="data.consumerConfigurator">
+        Gewählt
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="selected">
+            <td style="padding-left: 50px; padding-right: 50px">{{data.consumerConfigurator.name}}</td>
+          </tr>
+        </table>
+      </td>
+    <tr>
+  </table>
+
+  <div *ngIf="showErrors" style="color: red">
+    <div *ngIf="!data.producerConfigurator"> Konfigurator für das Werkunternehmen wählen</div>
+    <div *ngIf="!data.consumerConfigurator"> Konfigurator für den Werkbesteller wählen</div>
+    <div *ngIf="data.consumerConfigurator === data.producerConfigurator"> Zwei verschiedene Konfiguratoren wählen</div>
+    <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfiguratoren</div>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions style="bottom: 0px">
+  <button mat-button (click)="onOKClick()">OK</button>
+  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+</mat-dialog-actions>

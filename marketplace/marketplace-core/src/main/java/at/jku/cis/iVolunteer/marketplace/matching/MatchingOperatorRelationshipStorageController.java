@@ -44,9 +44,27 @@ public class MatchingOperatorRelationshipStorageController {
 				.findByProducerConfiguratorIdAndConsumerConfiguratorId(producerConfiguratorId, consumerConfiguratorId);
 	}
 	
+	@GetMapping("matching/operator-relationship/by-configurators/{configuratorId1}/{configuratorId2}/unordered")
+	MatchingOperatorRelationshipStorage getMatchingOperatorRelationshipByConfiguratorIdsUnordered(
+			@PathVariable("configuratorId1") String configuratorId1,
+			@PathVariable("configuratorId2") String configuratorId2) {
+		
+		String id = createRelationshipStorageHash(configuratorId1, configuratorId2);
+
+		return matchingOperatorRelationshipStorageRepository.findOne(id);
+	}
+	
 	@PostMapping("matching/operator-relationship/save")
 	MatchingOperatorRelationshipStorage saveMatchingOperatorRelationships(@RequestBody MatchingOperatorRelationshipStorage storage) {
+		if (storage.getId() == null) {
+			storage.setId(createRelationshipStorageHash(storage.getProducerConfiguratorId(), storage.getConsumerConfiguratorId()));
+		}
 		return matchingOperatorRelationshipStorageRepository.save(storage);
+	}
+	
+	private String createRelationshipStorageHash(String id1, String id2) {
+		String hash = String.valueOf(id1.hashCode() ^ id2.hashCode());
+		return hash;
 	}
 	
 	@DeleteMapping("matching/operator-relationship/{id}/delete")
