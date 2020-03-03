@@ -14,7 +14,7 @@ import { isNullOrUndefined } from "util";
 import { ClassInstanceDTO } from "../../../../_model/meta/Class";
 import { MatPaginator, MatSort } from "@angular/material";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { CoreTenantService } from "../../../../_service/core-tenant.service";
+import { TenantService } from "../../../../_service/core-tenant.service";
 
 @Component({
   selector: "fuse-task-list",
@@ -48,7 +48,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private classInstanceService: ClassInstanceService,
-    private coreTenantService: CoreTenantService
+    private coreTenantService: TenantService
   ) {}
 
   ngOnInit() {}

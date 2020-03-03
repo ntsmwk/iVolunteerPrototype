@@ -1,16 +1,19 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
-export class CoreTenantService {
-
-  constructor(private http: HttpClient) {
-  }
+export class TenantService {
+  constructor(private http: HttpClient) {}
 
   findByName(tenantName: string) {
-    return this.http.get(`/core/tenant/${tenantName}`, {responseType: 'text'});
+    return this.http.get(`/core/tenant/name/${tenantName}`, {
+      responseType: "text"
+    });
   }
 
+  findById(tenantId: string) {
+    return this.http.get(`/core/tenant/${tenantId}`);
+  }
 }

@@ -39,7 +39,8 @@ public class CoreHelpSeekerService {
 		helpSeeker.setPosition(coreHelpSeeker.getPosition());
 		helpSeeker.setLastname(coreHelpSeeker.getLastname());
 		helpSeeker.setNickname(coreHelpSeeker.getNickname());
-
+		helpSeeker.setImage(coreHelpSeeker.getImage());
+		
 		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeeker);
 	}
 

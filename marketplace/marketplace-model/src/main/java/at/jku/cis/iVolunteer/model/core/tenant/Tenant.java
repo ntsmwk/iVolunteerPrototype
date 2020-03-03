@@ -1,11 +1,13 @@
-package at.jku.cis.iVolunteer.model.user;
+package at.jku.cis.iVolunteer.model.core.tenant;
 
 import org.springframework.data.annotation.Id;
 
 public class Tenant {
-	@Id private String id;
 
+	@Id private String id;
 	private String name;
+
+	private byte[] image;
 
 	private String primaryColor;
 	private String secondaryColor;
@@ -40,6 +42,14 @@ public class Tenant {
 
 	public void setSecondaryColor(String secondaryColor) {
 		this.secondaryColor = secondaryColor;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 }

@@ -11,8 +11,8 @@ import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
-import at.jku.cis.iVolunteer.model.core.user.CoreTenant;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.UserImagePath;
 
@@ -89,11 +89,11 @@ public class CoreHelpSeekerInitializationService {
 
 	private void registerDefaultHelpSeeker(String helpSeekerUser, String tenantName) {
 		List<CoreHelpSeeker> helpSeekers = coreHelpSeekerRepository.findAll();
-		List<CoreTenant> tenants = coreTenantRepository.findAll();
+		List<Tenant> tenants = coreTenantRepository.findAll();
 
 		CoreHelpSeeker MV_helpSeeker = helpSeekers.stream()
 				.filter(helpSeeker -> helpSeeker.getId().equals(helpSeekerUser)).findFirst().orElse(null);
-		CoreTenant MV_tenant = tenants.stream().filter(tenant -> tenant.getName().equals(tenantName)).findFirst()
+		Tenant MV_tenant = tenants.stream().filter(tenant -> tenant.getName().equals(tenantName)).findFirst()
 				.orElse(null);
 		if (MV_helpSeeker != null && MV_tenant != null) {
 			this.registerHelpSeeker(MV_helpSeeker, MV_tenant.getId());

@@ -20,7 +20,7 @@ import { StoredChart } from '../../../../../../_model/stored-chart';
 import * as Highcharts from 'highcharts';
 import HC_drilldown from 'highcharts/modules/drilldown.js';
 import HC_sunburst from 'highcharts/modules/sunburst';
-import { CoreTenantService } from 'app/main/content/_service/core-tenant.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
 HC_drilldown(Highcharts);
 HC_sunburst(Highcharts);
 
@@ -196,7 +196,7 @@ export class TasksMusicComponent implements OnInit {
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: CoreTenantService
+    private coreTenantService: TenantService
   ) {
     this.timelineChartData = [{ name: 'Tätigkeit', series: [] }];
   }

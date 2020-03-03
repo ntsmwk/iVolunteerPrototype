@@ -82,7 +82,6 @@ public class InitializationService {
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		this.addTestClassInstances();
-
 	}
 
 

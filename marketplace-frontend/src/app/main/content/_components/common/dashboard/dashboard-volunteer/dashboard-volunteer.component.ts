@@ -17,7 +17,7 @@ import {
 import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
 import { MatSort, MatPaginator } from "@angular/material";
-import { CoreTenantService } from "../../../../_service/core-tenant.service";
+import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationEnd } from "@angular/router";
@@ -28,11 +28,6 @@ import { NavigationEnd } from "@angular/router";
   styleUrls: ["./dashboard-volunteer.component.scss"]
 })
 export class DashboardVolunteerComponent implements OnInit {
-  widget0: any;
-  widget1: any;
-  widget2: any;
-  widget3: any;
-
   volunteer: Volunteer;
   marketplace: Marketplace;
 
@@ -69,7 +64,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private classInstanceService: ClassInstanceService,
     private userImagePathService: CoreUserImagePathService,
-    private coreTenantService: CoreTenantService,
+    private coreTenantService: TenantService,
     private sanitizer: DomSanitizer
   ) {}
 

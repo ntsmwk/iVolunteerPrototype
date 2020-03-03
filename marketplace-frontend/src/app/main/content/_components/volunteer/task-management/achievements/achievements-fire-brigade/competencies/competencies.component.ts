@@ -12,7 +12,7 @@ import { Volunteer } from '../../../../../../_model/volunteer';
 import * as moment from 'moment';
 import { StoredChart } from '../../../../../../_model/stored-chart';
 import { StoredChartService } from '../../../../../../_service/stored-chart.service';
-import { CoreTenantService } from 'app/main/content/_service/core-tenant.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
 
 @Component({
   selector: 'fuse-competencies',
@@ -60,7 +60,7 @@ export class CompetenciesComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: CoreTenantService
+    private coreTenantService: TenantService
   ) { }
 
 

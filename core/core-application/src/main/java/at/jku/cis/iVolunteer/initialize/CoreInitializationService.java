@@ -1,15 +1,21 @@
 package at.jku.cis.iVolunteer.initialize;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
-import at.jku.cis.iVolunteer.model.core.user.CoreTenant;
 
 @Service
 public class CoreInitializationService {
@@ -30,9 +36,9 @@ public class CoreInitializationService {
 	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 
 	public void init() {
-		createTenant(FFEIDENBERG);
-		createTenant(MUSIKVEREINSCHWERTBERG);
-		createTenant(RKWILHERING);
+		createTenant(FFEIDENBERG, "img/FF_Altenberg.jpg");
+		createTenant(MUSIKVEREINSCHWERTBERG, "img/musikvereinschwertberg.jpeg");
+		createTenant(RKWILHERING, "img/OERK_Sonderlogo_rgb_cropped.jpg");
 
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
@@ -43,8 +49,7 @@ public class CoreInitializationService {
 
 	}
 
-	private void createRecruiter(String username, String password, String firstName, String lastName,
-			String position) {
+	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
 		CoreRecruiter recruiter = coreRecruiterRepository.findByUsername(username);
 		if (recruiter == null) {
 			recruiter = new CoreRecruiter();
@@ -71,16 +76,29 @@ public class CoreInitializationService {
 		return fpUser;
 	}
 
-	private CoreTenant createTenant(String name) {
-		CoreTenant tenant = coreTenantRepository.findByName(name);
+	private Tenant createTenant(String name, String fileName) {
+		Tenant tenant = coreTenantRepository.findByName(name);
 
 		if (tenant == null) {
-			tenant = new CoreTenant();
+			tenant = new Tenant();
 			tenant.setName(name);
+			setTenantImage(fileName, tenant);
 
 			tenant = coreTenantRepository.insert(tenant);
 		}
 		return tenant;
 
+	}
+
+	private void setTenantImage(String fileName, Tenant tenant) {
+		if (fileName != null && !fileName.equals("")) {
+			try {
+				Resource resource = new ClassPathResource(fileName);
+				File file = resource.getFile();
+				tenant.setImage(Files.readAllBytes(file.toPath()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -3,8 +3,6 @@ package at.jku.cis.iVolunteer.core.volunteer;
 import java.util.Collections;
 import java.util.List;
 
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +41,7 @@ public class CoreVolunteerService {
 			List<String> tenantIds) {
 		coreVolunteer.getRegisteredMarketplaces().add(marketplace);
 		coreVolunteer.setSubscribedTenants(tenantIds);
-		coreVolunteer = coreVolunteerRepository.save(coreVolunteer);
-		return coreVolunteer;
+		return coreVolunteerRepository.save(coreVolunteer);
 	}
 
 	private void registerVolunteer(String authorization, CoreVolunteer coreVolunteer, Marketplace marketplace) {

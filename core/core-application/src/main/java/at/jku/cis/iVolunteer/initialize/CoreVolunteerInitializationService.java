@@ -68,7 +68,6 @@ public class CoreVolunteerInitializationService {
 
 	private void setImage(String fileName, CoreVolunteer volunteer) {
 		if (fileName != null && !fileName.equals("")) {
-
 			try {
 				Resource resource = new ClassPathResource(fileName);
 				File file = resource.getFile();

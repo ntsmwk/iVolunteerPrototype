@@ -10,7 +10,7 @@ import { Participant } from '../../../../../_model/participant';
 import { isNullOrUndefined } from 'util';
 import { ClassInstance, ClassInstanceDTO } from '../../../../../_model/meta/Class';
 import { StoredChart } from '../../../../../_model/stored-chart';
-import { CoreTenantService } from '../../../../../_service/core-tenant.service';
+import { TenantService } from '../../../../../_service/core-tenant.service';
 
 
 @Component({
@@ -215,7 +215,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: CoreTenantService
+    private coreTenantService: TenantService
   ) { }
 
   ngOnInit() {

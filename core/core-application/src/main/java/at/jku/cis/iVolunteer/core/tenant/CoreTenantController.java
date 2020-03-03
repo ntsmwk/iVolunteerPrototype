@@ -14,9 +14,14 @@ public class CoreTenantController {
 	@Autowired CoreTenantRepository coreTenantRepository;
 	
 	
-	@GetMapping("/{coreTenantName}")
-	public String getCoreTenantId(@PathVariable String coreTenantName) {
-		return coreTenantRepository.findByName(coreTenantName).getId();
+	@GetMapping("/name/{tenantName}")
+	public String getCoreTenantByName(@PathVariable String tenantName) {
+		return coreTenantRepository.findByName(tenantName).getId();
+	}
+	
+	@GetMapping("/{tenantId}")
+	public String getCoreTenantById(@PathVariable String tenantId) {
+		return coreTenantRepository.findOne(tenantId).getId();
 	}
 
 }

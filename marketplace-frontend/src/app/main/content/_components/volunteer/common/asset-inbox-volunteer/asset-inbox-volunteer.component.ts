@@ -7,7 +7,7 @@ import { ClassInstanceService } from "../../../../_service/meta/core/class/class
 import { isNullOrUndefined } from "util";
 import { CoreMarketplaceService } from "../../../../_service/core-marketplace.service";
 import { LoginService } from "../../../../_service/login.service";
-import { CoreTenantService } from "../../../../_service/core-tenant.service";
+import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 
 @Component({
@@ -29,7 +29,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private loginService: LoginService,
-    private coreTenantService: CoreTenantService
+    private coreTenantService: TenantService
   ) {
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
       this.marketplace = this.router.getCurrentNavigation().extras.state.marketplace;

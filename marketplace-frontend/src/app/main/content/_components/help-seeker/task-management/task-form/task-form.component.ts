@@ -17,7 +17,7 @@ import { Marketplace } from '../../../../_model/marketplace';
 import { Project } from '../../../../_model/project';
 import { ProjectService } from '../../../../_service/project.service';
 import { CompetenceClassDefinition } from '../../../../_model/meta/Class';
-import { CoreTenantService } from '../../../../_service/core-tenant.service';
+import { TenantService } from '../../../../_service/core-tenant.service';
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;
@@ -56,7 +56,7 @@ export class FuseTaskFormComponent implements OnInit {
     private taskTemplateService: TaskTemplateService,
     private workflowService: WorkflowService,
     private projectService: ProjectService,
-    private coreTenantService: CoreTenantService) {
+    private coreTenantService: TenantService) {
     this.taskForm = formBuilder.group({
       'id': new FormControl(undefined),
       'name': new FormControl(undefined),
