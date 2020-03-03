@@ -20,7 +20,6 @@ public abstract class User {
 	
 	private String profileImagePath;
 	
-	@JsonIgnore
 	private String password;
 
 	public String getId() {
