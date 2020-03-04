@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <mat-icon>open_in_new</mat-icon>
+        <mat-icon>create</mat-icon>
       </td>
       <td>
         <h1>Konfiguratoren wählen</h1>
@@ -10,7 +10,12 @@
     </tr>
   </table>
 </div>
-<mat-dialog-content>
+<mat-dialog-content *ngIf="loaded">
+
+  <mat-form-field style="width: 100%">
+    <input matInput placeholder="Bezeichnung (optional)" [(ngModel)]="data.label" name="label">
+  </mat-form-field>
+
   <table>
     <tr width="200px">
       <td width="200px">
@@ -22,7 +27,7 @@
         <h2>Werkbesteller</h2>
       </td>
     <tr>
-      <td *ngIf=loaded>
+      <td>
 
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr *ngFor="let c of recentConfigurators" class="entry" (click)="producerItemSelected($event, c)">
@@ -30,10 +35,6 @@
           </tr>
         </table>
 
-      </td>
-
-      <td *ngIf=!loaded>
-        accessing...
       </td>
 
       <td style="padding-left: 50px">
@@ -49,7 +50,7 @@
       </td>
     </tr>
 
-    <tr width="200px">
+    <tr>
       <td width="200px" *ngIf="data.producerConfigurator">
         Gewählt:
         <table cellspacing=1 cellpadding=0 style="border-color: none">
@@ -58,13 +59,28 @@
           </tr>
         </table>
       </td>
+      <td width="200px" *ngIf="!data.producerConfigurator">
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="findbutton">
+            <td style="padding-left: 50px; padding-right: 50px">Durchsuchen</td>
+          </tr>
+        </table>
+      </td>
+
       <td style="padding-left: 50px">
       </td>
-      <td *ngIf="data.consumerConfigurator">
+      <td *ngIf="data.consumerConfigurator" width="200px">
         Gewählt
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr class="selected">
             <td style="padding-left: 50px; padding-right: 50px">{{data.consumerConfigurator.name}}</td>
+          </tr>
+        </table>
+      </td>
+      <td *ngIf="!data.producerConfigurator" width="200px">
+        <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <tr class="findbutton">
+            <td style="padding-left: 50px; padding-right: 50px">Durchsuchen</td>
           </tr>
         </table>
       </td>
@@ -79,7 +95,7 @@
   </div>
 
 </mat-dialog-content>
-<mat-dialog-actions style="bottom: 0px">
+<mat-dialog-actions style="">
   <button mat-button (click)="onOKClick()">OK</button>
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->

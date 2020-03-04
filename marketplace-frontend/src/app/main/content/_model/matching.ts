@@ -14,6 +14,9 @@ export class MatchingOperatorRelationshipStorage {
     producerConfiguratorId: string;
     consumerConfiguratorId: string;
 
+    producerConfiguratorName: string;
+    consumerConfiguratorName: string;
+
     relationships: MatchingOperatorRelationship[];
 }
 

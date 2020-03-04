@@ -11,7 +11,10 @@ public class MatchingOperatorRelationshipStorage {
 	String name;
 	
 	String producerConfiguratorId;
+	String producerConfiguratorName;
+	
 	String consumerConfiguratorId;
+	String consumerConfiguratorName;
 	
 	List<MatchingOperatorRelationship> relationships;
 
@@ -56,6 +59,22 @@ public class MatchingOperatorRelationshipStorage {
 	}
 	
 	
+	public String getProducerConfiguratorName() {
+		return producerConfiguratorName;
+	}
+
+	public void setProducerConfiguratorName(String producerConfiguratorName) {
+		this.producerConfiguratorName = producerConfiguratorName;
+	}
+
+	public String getConsumerConfiguratorName() {
+		return consumerConfiguratorName;
+	}
+
+	public void setConsumerConfiguratorName(String consumerConfiguratorName) {
+		this.consumerConfiguratorName = consumerConfiguratorName;
+	}
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();

@@ -12,6 +12,7 @@ import { MatchingOperatorRelationshipStorage } from 'app/main/content/_model/mat
 export interface NewMatchingDialogData {
   producerConfigurator: Configurator;
   consumerConfigurator: Configurator;
+  label: string;
   marketplace: Marketplace;
 }
 
@@ -36,6 +37,7 @@ export class NewMatchingDialogComponent implements OnInit {
   loaded = false;
   showErrors = false;
   showDuplicateError = false;
+  label: string;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
@@ -72,6 +74,8 @@ export class NewMatchingDialogComponent implements OnInit {
       !isNullOrUndefined(this.data.consumerConfigurator) &&
       this.data.consumerConfigurator !== this.data.producerConfigurator) {
 
+      // this.data.label = this.label;
+      console.log(this.data);
       this.matchingOperatorRelationshipstorageService
         .getMatchingOperatorRelationshipByUnorderedConfiguratorIds(this.data.marketplace, this.data.producerConfigurator.id, this.data.consumerConfigurator.id)
         .toPromise()

@@ -142,7 +142,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   newClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.openNewMatchingDialog(this.marketplace).then((ret: any) => {
-      this.menuOptionClickedEvent.emit({ id: 'editor_new', producerConfigurator: ret.producerConfigurator, consumerConfigurator: ret.consumerConfigurator });
+      this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
     });
 
 

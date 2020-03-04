@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-// TODO MWE evtl. only @angular/material
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Directive } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
@@ -19,16 +18,12 @@ import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/cont
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { MatchingOperatorRelationshipStorage } from 'app/main/content/_model/matching';
 
-@Component({
-  selector: 'app-dialog-factory',
-  templateUrl: './dialog-factory.component.html',
-  styleUrls: ['./dialog-factory.component.scss']
+@Directive({
+  selector: 'app-dialog-factory'
 })
 export class DialogFactoryComponent {
 
   constructor(public dialog: MatDialog) { }
-
-  //TODO EXPAND DIALOG FACTORY
 
   /**
    * ADD PROPERTY DIALOG
@@ -502,24 +497,22 @@ export class DialogFactoryComponent {
       disableClose: true
     });
 
-    let producerConfigurator: Configurator;
-    let consumerConfigurator: Configurator;
+    let returnValue: NewMatchingDialogData;
 
     dialogRef.beforeClose().toPromise().then((result: NewMatchingDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        producerConfigurator = result.producerConfigurator;
-        consumerConfigurator = result.consumerConfigurator;
-      }
+      returnValue = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return { producerConfigurator: producerConfigurator, consumerConfigurator: consumerConfigurator };
+      return returnValue;
     });
   }
 
   openOpenMatchingDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(OpenMatchingDialogComponent, {
       width: '500px',
+      minWidth: '500px',
+      height: '400px',
       minHeight: '400px',
       data: { marketplace: marketplace },
       disableClose: true

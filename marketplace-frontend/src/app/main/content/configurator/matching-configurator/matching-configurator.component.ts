@@ -408,11 +408,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   consumeMenuOptionClickedEvent(event: any) {
-
+    console.log(event);
     switch (event.id) {
       case 'editor_save': this.performSave(); break;
       case 'editor_open': this.performOpen(event.storage); break;
-      case 'editor_new': this.performNew(event.producerConfigurator, event.consumerConfigurator); break;
+      case 'editor_new': this.performNew(event.payload.producerConfigurator, event.payload.consumerConfigurator, event.payload.label); break;
     }
   }
 
@@ -453,7 +453,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.matchingOperatorRelationshipStorage.relationships = newRelationships;
-
     this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingOperatorRelationshipStorage).toPromise()
       .then((ret: MatchingOperatorRelationshipStorage) => {
         // do stuff
@@ -464,9 +463,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.loadClassesAndRelationships(storage.producerConfiguratorId, storage.consumerConfiguratorId);
   }
 
-  performNew(producerConfigurator: Configurator, consumerConfigurator: Configurator) {
-    this.loadClassesAndRelationships(producerConfigurator.id, consumerConfigurator.id);
+  performNew(producerConfigurator: Configurator, consumerConfigurator: Configurator, name?: string) {
+    const storage = new MatchingOperatorRelationshipStorage();
+    storage.consumerConfiguratorId = consumerConfigurator.id;
+    storage.producerConfiguratorId = producerConfigurator.id;
+    storage.name = name;
+    storage.relationships = [];
+    console.log(storage);
+    this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, storage).toPromise().then((ret: MatchingOperatorRelationshipStorage) => {
+      //TODO
+    });
 
+    this.loadClassesAndRelationships(producerConfigurator.id, consumerConfigurator.id);
   }
 
 
