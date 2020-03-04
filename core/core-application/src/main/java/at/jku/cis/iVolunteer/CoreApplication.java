@@ -114,6 +114,7 @@ public class CoreApplication {
 		helpseeker.setPosition("Feuerwehr Kommandant");
 		helpseeker.setId("FFA");
 		helpseeker.setTenantId(coreTenantRepository.findByName(FFEIDENBERG).getId());
+		
 		saveHelpseeker(helpseeker);
 		userImagePathRepository.save(new UserImagePath(helpseeker.getId(), "/assets/images/avatars/FF_Altenberg.jpg"));
 

@@ -1,6 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { fuseAnimations } from '../../../../../../@fuse/animations';
-
 
 @Component({
   selector: 'fuse-functions',
@@ -9,18 +8,14 @@ import { fuseAnimations } from '../../../../../../@fuse/animations';
   animations: fuseAnimations
 
 })
-export class FunctionsComponent implements OnInit, AfterViewInit {
+export class FunctionsComponent implements OnInit {
 
 
-
-  constructor() { }
+  constructor(
+  ) {
+  }
 
   ngOnInit() {
-   
-  }
 
-  ngAfterViewInit() {
-    
   }
-
 }

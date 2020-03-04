@@ -23,16 +23,20 @@ import jersey.repackaged.com.google.common.collect.Lists;
 public class PersonTaskService {
 
 	private static final int FF_NEW = 2;
-	private static final int MV = 3;	
+	private static final int MV = 3;
 	private static final String FFEIDENBERG = "FF_Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
-	
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-	@Autowired private UserMappingService userMappingService;
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
-	
+
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired
+	private UserMappingService userMappingService;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
 	public void savePersonTasks(List<PersonTask> personTasks, int level, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
@@ -47,62 +51,85 @@ public class PersonTaskService {
 	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
 			int level, String tenantId) {
 		// @formatter:off
-		TaskClassInstance personTaskClassInstance = (TaskClassInstance)classDefinition2InstanceMapper.toTarget(personTaskClassDefinition);
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("name")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType1(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType2")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType2(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType3")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType3(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType4")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskType4(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Description")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDescription(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("purpose")).forEach(p -> p.setValues(Lists.asList(personTask.getPurpose(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("role")).forEach(p -> p.setValues(Lists.asList(personTask.getRole(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("rank")).forEach(p -> p.setValues(Lists.asList(personTask.getRank(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("phase")).forEach(p -> p.setValues(Lists.asList(personTask.getPhase(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("unit")).forEach(p -> p.setValues(Lists.asList(personTask.getUnit(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("level")).forEach(p -> p.setValues(Lists.asList(personTask.getLevel(), new Object[0])));
+		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
+				.toTarget(personTaskClassDefinition);
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskId"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskId(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("name"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskName(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType1"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskType1(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType2"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskType2(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType3"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskType3(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("taskType4"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskType4(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Description"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskDescription(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("purpose"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getPurpose(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("role"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getRole(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("rank"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getRank(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("phase"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getPhase(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("unit"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getUnit(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("level"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getLevel(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> {
 			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"), new Object[0]));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			});
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> {
-			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss"), new Object[0]));
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"),
+						new Object[0]));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		});
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("duration")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskDuration(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Location")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskLocation(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("geoInformation")).forEach(p -> p.setValues(Lists.asList(personTask.getTaskGeoInformation(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerUUID(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource")).forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
-		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID")).forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
-		
-		personTaskClassInstance.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> {
+			try {
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss"),
+						new Object[0]));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		});
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("duration"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskDuration(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Location"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskLocation(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("geoInformation"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getTaskGeoInformation(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerUUID"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerUUID(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("iVolunteerSource"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getiVolunteerSource(), new Object[0])));
+		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("personID"))
+				.forEach(p -> p.setValues(Lists.asList(personTask.getPersonID(), new Object[0])));
+
+		personTaskClassInstance
+				.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
 		personTaskClassInstance.setInIssuerInbox(false);
 		personTaskClassInstance.setInUserRepository(true);
 
 //		TODO MWE set issuerId to tenantId!
-		personTaskClassInstance.setIssuerId(level == MV?"MVS":"FFA");
-		switch(level) {
-		case 1: //FF
+		personTaskClassInstance.setIssuerId(level == MV ? "MVS" : "FFA");
+		switch (level) {
+		case 1: // FF
 			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 			break;
-		case 2: //FF
+		case 2: // FF
 			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 			break;
-		case 3: //MV
+		case 3: // MV
 			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
 			break;
 		}
-		
+
 		personTaskClassInstance.setTimestamp(new Date());
 
-		return classInstanceRepository.save(personTaskClassInstance);		 
+		return classInstanceRepository.save(personTaskClassInstance);
 		// @formatter:on
 	}
 

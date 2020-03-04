@@ -1,0 +1,22 @@
+<div fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2>{{type}}:</h2>
+        <app-share-menu [label]="type" (export)="exportChart()">
+        </app-share-menu>
+    </div>
+    <div class="donut-parent">
+        <ngx-charts-pie-chart 
+            *ngIf="donutData"
+            [results]="donutData"
+            [animations]="animations" 
+            [labels]="labels" 
+            [tooltipDisabled]="tooltipDisabled" 
+            [legend]="legend"
+            [explodeSlices]="explodeSlices" 
+            [doughnut]="doughnut" 
+            [arcWidth]="arcWidth" 
+            [scheme]="scheme"
+            (select)="onDonutSelect($event)">
+        </ngx-charts-pie-chart>
+    </div>
+</div>

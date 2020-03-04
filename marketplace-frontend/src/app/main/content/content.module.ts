@@ -19,7 +19,9 @@ import { RecruiterGuard } from './_guard/recruiter.guard';
 import { DataTransportService } from './_service/data-transport/data-transport.service';
 import { ShareMenuComponent } from './achievements/share-menu/share-menu.component';
 import { ShareMenuModule } from './achievements/share-menu/share-menu.module';
-
+import { TimelineFilterModule } from './achievements/timeline-filter/timeline-filter.module';
+import { SunburstTableModule } from './achievements/sunburst-table/sunburst-table.module';
+import { DonutModule } from './achievements/donut/donut.module';
 
 const routes: Route[] = [
   {
@@ -213,11 +215,17 @@ const routes: Route[] = [
   declarations: [
     FuseContentComponent,
     
+    
+    
+    
   ],
   imports: [
     RouterModule.forChild(routes),    
     FuseSharedModule,
     ShareMenuModule,
+    TimelineFilterModule,
+    SunburstTableModule,
+    DonutModule
     
     ],
   providers: [
