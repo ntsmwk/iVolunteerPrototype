@@ -68,74 +68,56 @@ export class DashboardVolunteerComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((volunteer: Volunteer) => {
-        this.volunteer = volunteer;
+  async ngOnInit() {
+    this.volunteer = <Volunteer>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
+    this.setVolunteerImage();
 
-        let objectURL = "data:image/png;base64," + this.volunteer.image;
-        this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-
-        Promise.all([
-          this.coreVolunteerService
-            .findRegisteredMarketplaces(this.volunteer.id)
-            .toPromise()
-            .then((ret: Marketplace[]) => {
-              this.marketplace = ret.filter(m => (m.name = "Marketplace 1"))[0];
-            })
-        ]).then(() => {
-          this.loadDashboardContent();
-        });
-      });
+    this.marketplace = (<Marketplace[]>(
+      await this.coreVolunteerService
+        .findRegisteredMarketplaces(this.volunteer.id)
+        .toPromise()
+    )).filter(m => (m.name = "Marketplace 1"))[0];
+    this.loadDashboardContent();
   }
 
-  loadDashboardContent() {
-    Promise.all([
-      this.classInstanceService
+  private setVolunteerImage() {
+    let objectURL = "data:image/png;base64," + this.volunteer.image;
+    this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
+
+  async loadDashboardContent() {
+    this.classInstances = <ClassInstanceDTO[]>(
+      await this.classInstanceService
         .getClassInstancesInUserRepository(
           this.marketplace,
           this.volunteer.id,
           this.volunteer.subscribedTenants
         )
         .toPromise()
-        .then((instances: ClassInstanceDTO[]) => {
-          this.classInstances = instances;
-        })
-    ]).then(() => {
-      this.classInstances = this.classInstances.sort(
-        (a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
-      );
-      // if (instances.length > 25) {
-      //   instances = instances.slice(0, 25);
-      // }
+    );
+    this.classInstances = this.classInstances.sort(
+      (a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
+    );
 
-      this.dataSourceRepository.data = this.classInstances;
-      this.paginator.length = this.classInstances.length;
-      this.dataSourceRepository.paginator = this.paginator;
-      this.issuerIds.push(...this.classInstances.map(t => t.issuerId));
+    this.dataSourceRepository.data = this.classInstances;
+    this.paginator.length = this.classInstances.length;
+    this.dataSourceRepository.paginator = this.paginator;
+    this.issuerIds.push(...this.classInstances.map(t => t.issuerId));
 
-      this.issuerIds = this.issuerIds.filter((elem, index, self) => {
-        return index === self.indexOf(elem);
-      });
-      Promise.all([
-        this.userImagePathService
-          .getImagePathsById(this.issuerIds)
-          .toPromise()
-          .then((ret: any) => {
-            this.userImagePaths = ret;
-          }),
-        this.coreHelpseekerService
-          .findByIds(this.issuerIds)
-          .toPromise()
-          .then((ret: any) => {
-            this.issuers = ret;
-          })
-      ]).then(() => {
-        this.isLoaded = true;
-      });
+    this.issuerIds = this.issuerIds.filter((elem, index, self) => {
+      return index === self.indexOf(elem);
     });
+    this.userImagePaths = <any[]>(
+      await this.userImagePathService
+        .getImagePathsById(this.issuerIds)
+        .toPromise()
+    );
+    this.issuers = <any[]>(
+      await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
+    );
+    this.isLoaded = true;
   }
 
   getDateString(dateNumber: number) {

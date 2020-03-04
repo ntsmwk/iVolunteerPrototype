@@ -28,21 +28,17 @@ export class DashboardHelpSeekerComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((participant: Helpseeker) => {
-        this.participant = participant;
-        this.tenantService
-          .findById((<Helpseeker>this.participant).tenantId)
-          .toPromise()
-          .then(tenant => {
-            this.tenant = tenant;
-            this.setTenantImage();
-            this.setTenantHeaderColor();
-          });
-      });
+  async ngOnInit() {
+    this.participant = <Participant>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
+    this.tenant = <Tenant>(
+      await this.tenantService
+        .findById((<Helpseeker>this.participant).tenantId)
+        .toPromise()
+    );
+    this.setTenantImage();
+    this.setTenantHeaderColor();
   }
 
   private setTenantImage() {
@@ -57,11 +53,11 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private isFF() {
-    return this.tenant.name == "FF_Eidenberg";
+    return this.tenant && this.tenant.name == "FF_Eidenberg";
   }
 
   private isMV() {
-    return this.tenant.name === "Musikverein_Schwertberg";
+    return this.tenant && this.tenant.name === "Musikverein_Schwertberg";
   }
   private isOther() {
     return !this.isFF() && !this.isMV();
