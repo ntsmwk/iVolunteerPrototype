@@ -19,7 +19,7 @@ import { DataTransportService } from "./_service/data-transport/data-transport.s
 import { ShareMenuComponent } from "./_components/volunteer/task-management/achievements/share-menu/share-menu.component";
 import { ShareMenuModule } from "./_components/volunteer/task-management/achievements/share-menu/share-menu.module";
 import { AnonymGuard } from "./_guard/anonym.guard";
-import { AdminGuard } from './_guard/admin.guard';
+import { AdminGuard } from "./_guard/admin.guard";
 
 const routes: Route[] = [
   {
@@ -310,6 +310,14 @@ const routes: Route[] = [
       import(
         "./_components/admin/marketplace-list/marketplace-list.module"
       ).then(m => m.FuseMarketplaceListModule),
+    canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: "main/marketplace-form",
+    loadChildren: () =>
+      import(
+        "./_components/admin/marketplace-form/marketplace-form.module"
+      ).then(m => m.FuseMarketplaceFormModule),
     canActivate: [TokenGuard, AdminGuard]
   }
 ];
