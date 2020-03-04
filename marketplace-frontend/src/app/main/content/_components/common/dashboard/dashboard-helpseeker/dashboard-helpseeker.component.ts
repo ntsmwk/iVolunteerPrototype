@@ -57,11 +57,11 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private isFF() {
-    return this.participant.username == "FFA";
+    return this.tenant.name == "FF_Eidenberg";
   }
 
   private isMV() {
-    return this.participant.username === "MVS";
+    return this.tenant.name === "Musikverein_Schwertberg";
   }
   private isOther() {
     return !this.isFF() && !this.isMV();
