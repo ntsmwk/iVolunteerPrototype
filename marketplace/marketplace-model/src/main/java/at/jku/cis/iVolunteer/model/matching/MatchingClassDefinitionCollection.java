@@ -4,10 +4,10 @@ import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-public class MatchingConfiguratorClassDefinitionCollection {
+public class MatchingClassDefinitionCollection {
 
 	ClassDefinition collector;
-	List<ClassDefinition> classDefinitions;
+	List<MatchingClassDefinitionCollectionEntry> collectionEntries;
 	int numberOfProperties;
 	int numberOfDefinitions;
 
@@ -20,12 +20,14 @@ public class MatchingConfiguratorClassDefinitionCollection {
 		this.collector = collector;
 	}
 
-	public List<ClassDefinition> getClassDefinitions() {
-		return classDefinitions;
+	
+
+	public List<MatchingClassDefinitionCollectionEntry> getCollectionEntries() {
+		return collectionEntries;
 	}
 
-	public void setClassDefinitions(List<ClassDefinition> classDefinitions) {
-		this.classDefinitions = classDefinitions;
+	public void setCollectionEntries(List<MatchingClassDefinitionCollectionEntry> collectionEntries) {
+		this.collectionEntries = collectionEntries;
 	}
 
 	public int getNumberOfProperties() {

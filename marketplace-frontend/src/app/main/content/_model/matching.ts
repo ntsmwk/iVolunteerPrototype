@@ -1,10 +1,17 @@
 import { ClassDefinition } from './meta/Class';
 
-export class MatchingConfiguratorClassDefinitionCollection {
+export class MatchingClassDefinitionCollection {
     collector: ClassDefinition;
-    classDefinitions: ClassDefinition[];
+    collectionEntries: MatchingClassDefinitionCollectionEntry[];
     numberOfProperties: number;
     numberOfDefinitions: number;
+}
+
+export class MatchingClassDefinitionCollectionEntry {
+    path: string;
+    classDefinition: ClassDefinition;
+    sourceRelationshipId: string;
+    targetRelationshipId: string;
 }
 
 export class MatchingOperatorRelationshipStorage {

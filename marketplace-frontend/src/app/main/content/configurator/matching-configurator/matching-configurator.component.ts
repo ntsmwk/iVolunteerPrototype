@@ -16,7 +16,7 @@ import { CoreFlexProdService } from '../../_service/core-flexprod.service';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
-import { MatchingConfiguratorClassDefinitionCollection, MatchingOperatorRelationshipStorage, MatchingOperatorRelationship } from '../../_model/matching';
+import { MatchingClassDefinitionCollection, MatchingOperatorRelationshipStorage, MatchingOperatorRelationship } from '../../_model/matching';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingOperatorRelationshipStorageService } from '../../_service/matchingoperator-relationship-storage.service';
 
@@ -65,8 +65,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerConfigurator: Configurator;
   consumerConfigurator: Configurator;
 
-  producerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
-  consumerClassDefinitionCollections: MatchingConfiguratorClassDefinitionCollection[];
+  producerClassDefinitionCollections: MatchingClassDefinitionCollection[];
+  consumerClassDefinitionCollections: MatchingClassDefinitionCollection[];
 
   matchingPalettes = CConstants.matchingPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
@@ -101,12 +101,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     Promise.all([
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerConfiguratorId).toPromise()
-        .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+        .then((collections: MatchingClassDefinitionCollection[]) => {
           this.producerClassDefinitionCollections = collections;
           this.insertClassDefinitionsProducerFromCollection();
         }),
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerConfiguratorId).toPromise()
-        .then((collections: MatchingConfiguratorClassDefinitionCollection[]) => {
+        .then((collections: MatchingClassDefinitionCollection[]) => {
           this.consumerClassDefinitionCollections = collections;
           this.insertClassDefinitionsConsumerFromCollection();
         })
@@ -256,7 +256,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitionCollectionsIntoGraph(collection: MatchingConfiguratorClassDefinitionCollection, geometry: mxgraph.mxGeometry): myMxCell {
+  private insertClassDefinitionCollectionsIntoGraph(collection: MatchingClassDefinitionCollection, geometry: mxgraph.mxGeometry): myMxCell {
     // create class cell
     let cell: myMxCell;
     if (collection.collector.classArchetype.startsWith('ENUM')) {
@@ -288,16 +288,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let addPropertiesReturn = this.addPropertiesToCell(cell, collection.collector, 5, 45);
     cell = addPropertiesReturn.cell;
 
-    for (const classDefinition of collection.classDefinitions) {
-      const boundaryHeight = classDefinition.name.split(/\r?\n/).length * 25;
+    console.log(collection.collectionEntries);
+
+    for (const entry of collection.collectionEntries) {
+      const boundaryHeight = entry.classDefinition.name.split(/\r?\n/).length * 25;
 
       const boundary = this.graph.insertVertex(
-        cell, classDefinition.id, classDefinition.name, 0,
+        cell, entry.classDefinition.id, entry.classDefinition.name, 0,
         addPropertiesReturn.lastPropertyGeometry.y + addPropertiesReturn.lastPropertyGeometry.height + 2,
         200, boundaryHeight, CConstants.mxStyles.matchingClassSeparator);
 
       boundary.setConnectable(true);
-      addPropertiesReturn = this.addPropertiesToCell(cell, classDefinition, boundary.geometry.x + 5, boundary.geometry.y + boundary.geometry.height + 5);
+      addPropertiesReturn = this.addPropertiesToCell(cell, entry.classDefinition, boundary.geometry.x + 5, boundary.geometry.y + boundary.geometry.height + 5);
 
     }
 
@@ -311,7 +313,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
         const propertyEntry: myMxCell = this.graph.insertVertex(
-          cell, classDefinition.id + '_' + p.id, p.name, startX, startY + lastPropertyGeometry.height,
+          cell, p.id, p.name, startX, startY + lastPropertyGeometry.height,
           190, 20, CConstants.mxStyles.matchingProperty) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
