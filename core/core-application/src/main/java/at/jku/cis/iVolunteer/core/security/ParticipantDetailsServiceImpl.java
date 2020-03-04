@@ -4,6 +4,7 @@ import static at.jku.cis.iVolunteer.core.security.ParticipantRole.FLEXPROD;
 import static at.jku.cis.iVolunteer.core.security.ParticipantRole.HELP_SEEKER;
 import static at.jku.cis.iVolunteer.core.security.ParticipantRole.RECRUITER;
 import static at.jku.cis.iVolunteer.core.security.ParticipantRole.VOLUNTEER;
+import static at.jku.cis.iVolunteer.core.security.ParticipantRole.ADMIN;
 import static java.util.Arrays.asList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.core.admin.CoreAdminRepository;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
@@ -26,6 +28,7 @@ public class ParticipantDetailsServiceImpl implements ParticipantDetailsService 
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
 	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
+	@Autowired private CoreAdminRepository coreAdminRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,6 +50,11 @@ public class ParticipantDetailsServiceImpl implements ParticipantDetailsService 
 		user = coreFlexProdRepository.findByUsername(username);
 		if (user != null) {
 			return new User(user.getUsername(), user.getPassword(), asList(FLEXPROD));
+		}
+		
+		user = coreAdminRepository.findByUsername(username);
+		if (user != null) {
+			return new User(user.getUsername(), user.getPassword(), asList(ADMIN));
 		}
 
 		throw new UsernameNotFoundException(username);

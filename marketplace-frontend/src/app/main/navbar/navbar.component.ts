@@ -24,6 +24,7 @@ import { MessageService } from "../content/_service/message.service";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { navigation_mvs } from "app/navigation/navigation_mvs";
 import { navigation_ffa } from "app/navigation/navigation_ffa";
+import { navigation_admin } from "app/navigation/navigation_admin";
 
 @Component({
   selector: "fuse-navbar",
@@ -81,8 +82,13 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
             break;
           case "FLEXPROD":
             this.navigation = navigation_flexprod;
+            break;
           case "RECRUITER":
             this.navigation = navigation_recruiter;
+            break;
+          case "ADMIN":
+            this.navigation = navigation_admin;
+            break;
         }
       })
       .catch(e => {

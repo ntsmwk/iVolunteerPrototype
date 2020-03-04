@@ -18,6 +18,9 @@ export class LoginService {
   }
 
   login(username: string, password: string) {
+    console.error(username);
+    console.error(password);
+
     return this.http.post(
       "/core/login",
       { username: username, password: password },
