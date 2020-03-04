@@ -36,9 +36,9 @@ public class CoreInitializationService {
 	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 
 	public void init() {
-		createTenant(FFEIDENBERG, "img/FF_Altenberg.jpg");
-		createTenant(MUSIKVEREINSCHWERTBERG, "img/musikvereinschwertberg.jpeg");
-		createTenant(RKWILHERING, "img/OERK_Sonderlogo_rgb_cropped.jpg");
+		createTenant(FFEIDENBERG, "img/FF_Altenberg.jpg", "#b20000", "#b2b2b2" );
+		createTenant(MUSIKVEREINSCHWERTBERG, "img/musikvereinschwertberg.jpeg", "#005900", "#b2b2b2");
+		createTenant(RKWILHERING, "img/OERK_Sonderlogo_rgb_cropped.jpg", "#b2b2b2", "#b2b2b2");
 
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
 
@@ -76,18 +76,18 @@ public class CoreInitializationService {
 		return fpUser;
 	}
 
-	private Tenant createTenant(String name, String fileName) {
+	private Tenant createTenant(String name, String fileName, String primaryColor, String secondaryColor) {
 		Tenant tenant = coreTenantRepository.findByName(name);
 
 		if (tenant == null) {
 			tenant = new Tenant();
 			tenant.setName(name);
 			setTenantImage(fileName, tenant);
-
+			tenant.setPrimaryColor(primaryColor);
+			tenant.setSecondaryColor(secondaryColor);
 			tenant = coreTenantRepository.insert(tenant);
 		}
 		return tenant;
-
 	}
 
 	private void setTenantImage(String fileName, Tenant tenant) {

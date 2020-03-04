@@ -34,15 +34,11 @@ export class DashboardHelpSeekerComponent implements OnInit {
       .toPromise()
       .then((participant: Helpseeker) => {
         this.participant = participant;
-        console.error("participant loaded");
-        console.error("drin");
         this.tenantService
           .findById((<Helpseeker>this.participant).tenantId)
           .toPromise()
           .then(tenant => {
             this.tenant = tenant;
-            console.error(tenant);
-            console.error(this.tenant.image);
             let objectURL = "data:image/png;base64," + this.tenant.image;
             this.tenantImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
           });
