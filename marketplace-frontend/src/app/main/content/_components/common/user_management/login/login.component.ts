@@ -71,16 +71,14 @@ export class FuseLoginComponent implements OnInit {
   }
 
   login() {
-    if (!this.loginForm.valid) {
-      return;
+    if (this.loginForm.valid) {
+      this.loginService
+        .login(this.loginForm.value.username, this.loginForm.value.password)
+        .toPromise()
+        .then((response: HttpResponse<any>) => {
+          localStorage.setItem("token", response.headers.get("Authorization"));
+          this.router.navigate(["/main/dashboard"]);
+        });
     }
-
-    this.loginService
-      .login(this.loginForm.value.username, this.loginForm.value.password)
-      .toPromise()
-      .then((response: HttpResponse<any>) => {
-        localStorage.setItem("token", response.headers.get("Authorization"));
-        this.router.navigate(["/main/dashboard"]);
-      });
   }
 }
