@@ -14,13 +14,11 @@
   pointer-events: none;
 }
 
-
 /* high-performance display:none; helper */
 
 .gu-hide {
   left: -9999px !important;
 }
-
 
 /* added to mirrorContainer (default = body) while dragging */
 
@@ -30,7 +28,6 @@
   -ms-user-select: none !important;
   user-select: none !important;
 }
-
 
 /* added to the source element while its mirror is dragged */
 
@@ -47,7 +44,7 @@
   left: -11px;
 }
 
-.fs-18{
+.fs-18 {
   font-size: 18px;
 }
 
@@ -87,10 +84,10 @@
   height: 90px;
   max-height: 90px;
   color: white;
-  background: #1A237E;
-  background: linear-gradient(to right, #0E2A3B 0%, #34306B 100%);
+  background: #1a237e;
+  background: linear-gradient(to right, #0e2a3b 0%, #34306b 100%);
   text-align: center;
-  @include media-breakpoint('xs') {
+  @include media-breakpoint("xs") {
     height: 240px;
     padding: 16px;
   }
@@ -103,7 +100,7 @@
     text-align: center;
     margin-top: 0;
     margin-bottom: 0px;
-    @include media-breakpoint-down('xs') {
+    @include media-breakpoint-down("xs") {
       font-size: 24px;
     }
   }
@@ -121,7 +118,7 @@
     flex: 1;
     max-width: 110px;
     filter: brightness(0) invert(1);
-    @include media-breakpoint-down('xs') {
+    @include media-breakpoint-down("xs") {
       display: none;
     }
   }
@@ -130,7 +127,7 @@
     padding: 16px;
     position: absolute;
     max-width: 110px;
-    @include media-breakpoint-down('xs') {
+    @include media-breakpoint-down("xs") {
       display: none;
     }
   }
@@ -155,11 +152,11 @@
     }
     &-achievements {
       @extend %header-default;
-      background: #FF9326;
+      background: #ff9326;
     }
     &-social {
       @extend %header-default;
-      background: #006DF0;
+      background: #006df0;
     }
   }
   .iconButton {
@@ -170,7 +167,8 @@
     flex: 1;
     background: white;
     border-radius: 2px;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     mat-tab-group {
       height: 100%;
       .mat-tab-body-wrapper {
@@ -190,13 +188,13 @@
       max-width: 380px !important;
       &.left-sidenav,
       &.right-sidenav {
-        @include media-breakpoint('gt-md') {
+        @include media-breakpoint("gt-md") {
           z-index: 0;
         }
       }
     }
-    >.mat-sidenav-content,
-    >.mat-drawer-content {
+    > .mat-sidenav-content,
+    > .mat-drawer-content {
       z-index: 1;
       .center {
         .header {
@@ -204,7 +202,7 @@
           height: 160px;
           min-height: 160px;
           max-height: 160px;
-          @include media-breakpoint-down('sm') {
+          @include media-breakpoint-down("sm") {
             height: 120px;
             min-height: 120px;
             max-height: 120px;
@@ -228,7 +226,7 @@
     font-size: 18px;
     text-align: center;
   }
-  .mat-radio-button~.mat-radio-button {
+  .mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;
   }
 }

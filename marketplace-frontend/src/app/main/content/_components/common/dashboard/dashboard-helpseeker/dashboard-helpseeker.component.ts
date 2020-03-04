@@ -39,10 +39,21 @@ export class DashboardHelpSeekerComponent implements OnInit {
           .toPromise()
           .then(tenant => {
             this.tenant = tenant;
-            let objectURL = "data:image/png;base64," + this.tenant.image;
-            this.tenantImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            this.setTenantImage();
+            this.setTenantHeaderColor();
           });
       });
+  }
+
+  private setTenantImage() {
+    let objectURL = "data:image/png;base64," + this.tenant.image;
+    this.tenantImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
+
+  private setTenantHeaderColor() {
+    (<HTMLElement>(
+      document.querySelector(".header")
+    )).style.background = this.tenant.primaryColor;
   }
 
   private isFF() {
