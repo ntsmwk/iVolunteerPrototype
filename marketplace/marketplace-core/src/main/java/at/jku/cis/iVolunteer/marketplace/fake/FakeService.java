@@ -22,7 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;

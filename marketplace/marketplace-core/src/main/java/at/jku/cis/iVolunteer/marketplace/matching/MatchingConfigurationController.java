@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
-import at.jku.cis.iVolunteer.model.matching.MatchingConfiguration;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.matching.MatchingConfiguration;
 
 @RestController
 public class MatchingConfigurationController {

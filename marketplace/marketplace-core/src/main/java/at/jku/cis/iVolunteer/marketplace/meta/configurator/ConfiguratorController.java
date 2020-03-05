@@ -17,7 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
 
 @RestController
 public class ConfiguratorController {

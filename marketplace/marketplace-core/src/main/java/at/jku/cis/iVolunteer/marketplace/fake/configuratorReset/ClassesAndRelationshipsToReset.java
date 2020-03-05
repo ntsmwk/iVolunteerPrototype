@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 

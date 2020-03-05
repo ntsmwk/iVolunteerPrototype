@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
 
 public interface ConfiguratorRepository extends MongoRepository<Configurator, String> {
 

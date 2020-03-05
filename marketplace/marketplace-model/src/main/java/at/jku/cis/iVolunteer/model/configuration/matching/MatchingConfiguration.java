@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.matching;
+package at.jku.cis.iVolunteer.model.configuration.matching;
 
 import java.util.List;
 
