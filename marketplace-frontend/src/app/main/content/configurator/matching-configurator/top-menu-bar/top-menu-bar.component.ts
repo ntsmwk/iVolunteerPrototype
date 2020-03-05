@@ -152,7 +152,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   openClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.openOpenMatchingDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
-        this.menuOptionClickedEvent.emit({ id: 'editor_open', storage: ret });
+        this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
@@ -171,7 +171,7 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   saveAsClicked(event: any, item: SubMenuItem) {
-    //wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
+    // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {

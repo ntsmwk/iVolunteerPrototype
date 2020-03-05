@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
+import { ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
@@ -27,7 +27,7 @@ const mx: typeof mxgraph = require('mxgraph')({
   // mxBasePath: './mxgraph_resources',
 });
 
-//tslint:disable-next-line: class-name
+// tslint:disable-next-line: class-name
 
 @Component({
   selector: 'app-matching-configurator',
@@ -102,20 +102,18 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     Promise.all([
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerClassConfiguratorId).toPromise()
         .then((collectorConfig: MatchingCollectorConfig[]) => {
-          console.log("Producer Collector Config")
-          console.log(collectorConfig);
           this.producerMatchingCollectorConfig = collectorConfig;
           this.insertClassDefinitionsProducerFromCollection();
         }),
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerClassConfiguratorId).toPromise()
         .then((collectorConfig: MatchingCollectorConfig[]) => {
-          console.log("Consumer Collector Config")
-          console.log(collectorConfig);
           this.consumerMatchingCollectorConfig = collectorConfig;
           this.insertClassDefinitionsConsumerFromCollection();
         })
     ]).then(() => {
-      this.matchingOperatorRelationshipService.getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, producerClassConfiguratorId, consumerClassConfiguratorId).toPromise()
+      this.matchingOperatorRelationshipService.
+        getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, producerClassConfiguratorId, consumerClassConfiguratorId)
+        .toPromise()
         .then((matchingConfigurator: MatchingConfigurator) => {
 
           if (!isNullOrUndefined(matchingConfigurator)) {
@@ -429,7 +427,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   consumeMenuOptionClickedEvent(event: any) {
     switch (event.id) {
       case 'editor_save': this.performSave(); break;
-      case 'editor_open': this.performOpen(event.storage); break;
+      case 'editor_open': this.performOpen(event.payload); break;
       case 'editor_new': this.performNew(event.payload.producerClassConfigurator, event.payload.consumerClassConfigurator, event.payload.label); break;
     }
   }
@@ -473,7 +471,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.matchingConfigurator.relationships = newRelationships;
     this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingConfigurator).toPromise()
       .then((ret: MatchingConfigurator) => {
-        // do stuff
+        // not doing anything currently
       });
   }
 
@@ -489,7 +487,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     storage.relationships = [];
     console.log(storage);
     this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, storage).toPromise().then((ret: MatchingConfigurator) => {
-      //TODO
+      // not doing anything further currently
     });
 
     this.loadClassesAndRelationships(producerClassConfigurator.id, consumerClassConfigurator.id);
