@@ -41,6 +41,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/init/**").permitAll()
 			.antMatchers("/trustifier/contractor/classInstance").permitAll()
 			.antMatchers("/trustifier/contractor/classInstances").permitAll()
+			.antMatchers("/login/**").permitAll()
+			.antMatchers("/register/**").permitAll()
 			.antMatchers("/tenant/**").permitAll()
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager()))

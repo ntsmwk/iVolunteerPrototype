@@ -16,17 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
-import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 
 @RestController
 @RequestMapping("/helpseeker")
 public class CoreHelpSeekerController {
 
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+
+	@Autowired private CoreHelpSeekerService coreHelpSeekerService;
 
 	@GetMapping("/all")
 	public List<CoreHelpSeeker> getAllCoreVolunteers() {
@@ -56,29 +54,13 @@ public class CoreHelpSeekerController {
 		return helpSeeker.getRegisteredMarketplaces().get(0);
 	}
 
-	@PostMapping("/{coreHelpSeekerId}/register/{marketplaceId}")
+	@PostMapping("/{coreHelpSeekerId}/register/{marketplaceId}/tenant/{tenantId}")
 	public void registerMarketpace(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId,
-			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreHelpSeeker coreHelpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
-		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
-		if (coreHelpSeeker == null || marketplace == null) {
-			throw new NotFoundException();
-		}
+			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
+			@RequestHeader("Authorization") String authorization) {
 
-		coreHelpSeeker.getRegisteredMarketplaces().add(marketplace);
-		coreHelpSeeker = coreHelpSeekerRepository.save(coreHelpSeeker);
+		coreHelpSeekerService.registerMarketplace(coreHelpSeekerId, marketplaceId, tenantId, authorization);
 
-		HelpSeeker helpSeeker = new HelpSeeker();
-		helpSeeker.setId(coreHelpSeeker.getId());
-		helpSeeker.setTenantId(coreHelpSeeker.getTenantId());
-		helpSeeker.setUsername(coreHelpSeeker.getUsername());
-		helpSeeker.setFirstname(coreHelpSeeker.getFirstname());
-		helpSeeker.setMiddlename(coreHelpSeeker.getMiddlename());
-		helpSeeker.setPosition(coreHelpSeeker.getPosition());
-		helpSeeker.setLastname(coreHelpSeeker.getLastname());
-		helpSeeker.setNickname(coreHelpSeeker.getNickname());
-		
-		coreMarketplaceRestClient.registerHelpSeeker(marketplace.getUrl(), authorization, helpSeeker);
 	}
 
 }

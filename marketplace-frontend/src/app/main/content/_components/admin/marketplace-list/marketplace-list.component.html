@@ -1,0 +1,51 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Marketplaces</h1>
+  </div>
+  <!-- 
+  <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+    <button mat-fab class="mat-warn" (click)="addMarketplace()" aria-label="Add marketplace" *fuseIfOnDom
+            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div> -->
+
+  <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
+    <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addMarketplace()" aria-label="Add rule" *fuseIfOnDom [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+          <mat-icon class="add-btn-icon">add</mat-icon>
+      </button>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length !== 0">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let marketplace">{{marketplace.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="shortName">
+      <mat-header-cell *matHeaderCellDef>Shortname</mat-header-cell>
+      <mat-cell *matCellDef="let marketplace">{{marketplace.shortName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="url">
+      <mat-header-cell *matHeaderCellDef>Url</mat-header-cell>
+      <mat-cell *matCellDef="let marketplace">{{marketplace.url}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let marketplace">
+        <mat-icon style="cursor: pointer" routerLink="/main/marketplace-form/{{marketplace.id}}">edit</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <div class="no-data" *ngIf="dataSource.data.length === 0">
+    No Marketplaces found!
+  </div>
+
+</div>

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.core.user.CoreAdmin;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
@@ -32,8 +33,10 @@ public class CoreLoginController {
 		if (participant instanceof CoreRecruiter) {
 			return (CoreRecruiter) participant;
 		}
-		throw new RuntimeException("User not found");
-
+		if (participant instanceof CoreAdmin) {
+			return (CoreAdmin) participant;
+		}
+		return null;
 	}
 
 	@GetMapping("role")

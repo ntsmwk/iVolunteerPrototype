@@ -20,29 +20,25 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceMapper classInstanceMapper;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceMapper classInstanceMapper;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<ClassInstance> classInstances = new ArrayList<>();
-		
+
 		tenantIds.forEach(tenantId -> {
-			classDefinitions.addAll(classDefinitionService.getClassDefinitionsByArchetype(archeType,
-				tenantId));
-			
+			classDefinitions.addAll(classDefinitionService.getClassDefinitionsByArchetype(archeType, tenantId));
+
 			classDefinitions.forEach(cd -> {
-				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(userId, cd.getId(), tenantId));
+				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(userId,
+						cd.getId(), tenantId));
 			});
 		});
-		
-		
+
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
@@ -52,9 +48,10 @@ public class ClassInstanceController {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
-			classInstances.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
+			classInstances.addAll(classInstanceRepository
+					.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
 		});
-		
+
 		return classInstances;
 	}
 
@@ -64,8 +61,8 @@ public class ClassInstanceController {
 
 		Set<ClassInstance> ret = new LinkedHashSet<>();
 		tenantIds.forEach(tenantId -> {
-			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true, false,
-					tenantId));
+			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true,
+					false, tenantId));
 		});
 
 		return classInstanceMapper.mapToDTO(new ArrayList<>(ret));

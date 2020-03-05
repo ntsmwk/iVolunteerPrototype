@@ -1,0 +1,58 @@
+<div id="login" fxLayout="row" fxLayoutAlign="start">
+
+  <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
+
+    <div class="logo" *fuseIfOnDom [@animate]="{value:'*',params:{scale:'0.2'}}">
+      <img src="assets/logo.png">
+    </div>
+
+    <div class="title" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',y:'25px'}}">
+      Willkommen bei iVolunteer!
+    </div>
+
+
+  </div>
+
+  <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom [@animate]="{value:'*',params:{delay:'300ms',x:'100%'}}">
+
+    <div id="login-form">
+      <div class="title">Registrierung</div>
+
+      <form name="registrationForm" (submit)="register()" [formGroup]="registrationForm" novalidate>
+
+        <mat-form-field>
+          <input matInput placeholder="Benutzername" formControlName="username">
+          <mat-error *ngIf="registrationFormErrors.username && registrationFormErrors.username.required">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="password" placeholder="Passwort" formControlName="password">
+          <mat-error *ngIf="registrationFormErrors.password && registrationFormErrors.password.required">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="firstName" placeholder="First Name" formControlName="firstName">
+          <mat-error *ngIf="registrationFormErrors.firstName && registrationFormErrors.firstName.required">
+            First Name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="lastName" placeholder="Last Name" formControlName="lastName">
+          <mat-error *ngIf="registrationFormErrors.lastName && registrationFormErrors.lastName.required">
+            Last Name is required
+          </mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="accent" class="submit-button" [disabled]="registrationForm.invalid">
+          Register
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

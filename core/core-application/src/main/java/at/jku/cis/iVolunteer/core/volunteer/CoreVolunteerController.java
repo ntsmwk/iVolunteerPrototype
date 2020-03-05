@@ -36,10 +36,10 @@ public class CoreVolunteerController {
 		return volunteer.getRegisteredMarketplaces();
 	}
 
-	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}")
+	@PostMapping("/{coreVolunteerId}/register/{marketplaceId}/tenant/{tenantId}")
 	public void registerMarketpace(@PathVariable("coreVolunteerId") String coreVolunteerId,
-			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		coreVolunteerService.registerMarketplace(coreVolunteerId, marketplaceId, authorization);
+			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId, @RequestHeader("Authorization") String authorization) {
+		coreVolunteerService.registerMarketplace(coreVolunteerId, marketplaceId,tenantId, authorization);
 	}
 
 }

@@ -1,39 +1,45 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {PreloadAllModules, RouterModule, Routes, NoPreloading} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
-import 'hammerjs';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  PreloadAllModules,
+  RouterModule,
+  Routes,
+  NoPreloading
+} from "@angular/router";
+import { TranslateModule } from "@ngx-translate/core";
+import "hammerjs";
 
-import {FuseSharedModule} from '@fuse/shared.module';
+import { FuseSharedModule } from "@fuse/shared.module";
 
-import {fuseConfig} from './fuse-config';
+import { fuseConfig } from "./fuse-config";
 
-import {AppComponent} from './app.component';
-import {FuseMainModule} from './main/main.module';
-import { FuseModule } from '@fuse/fuse.module';
-import { DragulaModule } from 'ng2-dragula';
-import { DataTransportService } from './main/content/_service/data-transport/data-transport.service';
+import { AppComponent } from "./app.component";
+import { FuseMainModule } from "./main/main.module";
+import { FuseModule } from "@fuse/fuse.module";
+import { DragulaModule } from "ng2-dragula";
+import { DataTransportService } from "./main/content/_service/data-transport/data-transport.service";
 
-import { HttpClientModule } from '@angular/common/http'; 
-
+import { HttpClientModule } from "@angular/common/http";
 
 const appRoutes: Routes = [
   {
-    path: '**',
-    redirectTo: 'main/dashboard'
+    path: "**",
+    // TODO @MWE fix....
+    // redirectTo: 'main/dashboard'
+    redirectTo: "login"
   }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {preloadingStrategy: NoPreloading/*, enableTracing: true*/}),
+    RouterModule.forRoot(appRoutes, {
+      preloadingStrategy: NoPreloading /*, enableTracing: true*/
+    }),
 
     DragulaModule.forRoot(),
 
@@ -43,14 +49,8 @@ const appRoutes: Routes = [
     FuseMainModule,
 
     HttpClientModule
-    
-
-    ],
-  bootstrap: [
-    AppComponent
   ],
-  providers: [    
-  ],
+  bootstrap: [AppComponent],
+  providers: []
 })
-export class AppModule {
-}
+export class AppModule {}

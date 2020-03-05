@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -28,13 +27,13 @@ public class ClassDefinitionController {
 	}
 
 	@GetMapping("meta/core/class/definition/all/no-enum/tenant/{tenantId}")
-	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(
-			@PathVariable("tenantId") String tenantId) {
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getAllClassDefinitionsWithoutEnums(tenantId);
 	}
 
 	@GetMapping("/meta/core/class/definition/{id}/tenant/{tenantId}")
-	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id, @PathVariable("tenantId") String tenantId) {
+	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id,
+			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getClassDefinitionById(id, tenantId);
 	}
 
@@ -45,7 +44,8 @@ public class ClassDefinitionController {
 	}
 
 	@PutMapping("/meta/core/class/definition/multiple/tenant/{tenantId}")
-	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids, @PathVariable("tenantId") String tenantId) {
+	private List<ClassDefinition> getClassDefinitonsById(@RequestBody List<String> ids,
+			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getClassDefinitonsById(ids, tenantId);
 	}
 
@@ -75,12 +75,14 @@ public class ClassDefinitionController {
 	}
 
 	@PutMapping("meta/core/class/definition/get-parents/tenant/{tenantId}")
-	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds, @PathVariable("tenantId") String tenantId) {
+	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds,
+			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getParentsById(childIds, tenantId);
 	}
 
 	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}/tenant/{tenantId}")
-	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId, @PathVariable("tenantId") String tenantId) {
+	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId,
+			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getEnumValues(classDefinitionId, tenantId);
 	}
 

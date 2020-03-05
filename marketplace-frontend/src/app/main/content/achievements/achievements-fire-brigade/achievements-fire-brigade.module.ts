@@ -25,25 +25,21 @@ import {
   MatSlideToggleModule
 } from '@angular/material';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../../@fuse/components';
-
-
-import { FuseProjectTaskListModule } from '../../_components/project-task-list/project-task-list.module';
 import { FuseTruncatePipeModule } from '../../_pipe/truncate-pipe.module';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { FuseProjectMembersModule } from '../../_components/project-members/project-members.module';
-
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule } from '@angular/common';
-import { AchievementsFireBrigadeComponent } from './achievement-fire-brigade.component';
-import { TasksComponent } from './tasks/tasks.component';
-import { FunctionsComponent } from './functions/functions.component';
-import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
-import { CompetenciesComponent } from './competencies/competencies.component';
-import { ShareMenuModule } from '../share-menu/share-menu.module';
-import { TimelineFilterModule } from '../timeline-filter/timeline-filter.module';
-import { SunburstTableModule } from '../sunburst-table/sunburst-table.module';
-import { DonutModule } from '../donut/donut.module';
+import { AchievementsFireBrigadeComponent } from '../../_components/volunteer/task-management/achievements/achievements-fire-brigade/achievement-fire-brigade.component';
+import { TasksComponent } from '../../_components/volunteer/task-management/achievements/achievements-fire-brigade/tasks/tasks.component';
+import { AccomplishmentsComponent } from '../../_components/volunteer/task-management/achievements/achievements-fire-brigade/accomplishments/accomplishments.component';
+import { FunctionsComponent } from '../../_components/volunteer/task-management/achievements/achievements-fire-brigade/functions/functions.component';
+import { CompetenciesComponent } from '../../_components/volunteer/task-management/achievements/achievements-fire-brigade/competencies/competencies.component';
+import { FuseProjectMembersModule } from '../../_shared_components/project-members/project-members.module';
+import { FuseProjectTaskListModule } from '../../_shared_components/project-task-list/project-task-list.module';
+import { ShareMenuModule } from '../../_components/volunteer/task-management/achievements/share-menu/share-menu.module';
+import { TimelineFilterModule } from '../../_components/volunteer/task-management/achievements/timeline-filter/timeline-filter.module';
+import { SunburstTableModule } from '../../_components/volunteer/task-management/achievements/sunburst-table/sunburst-table.module';
+import { DonutModule } from '../../_components/volunteer/task-management/achievements/donut/donut.module';
 
 const routes = [
   { path: '', component: AchievementsFireBrigadeComponent }
@@ -100,6 +96,6 @@ const routes = [
     SunburstTableModule,
     DonutModule
   ]
-  
+
 })
 export class AchievementsFireBrigadeModule { }

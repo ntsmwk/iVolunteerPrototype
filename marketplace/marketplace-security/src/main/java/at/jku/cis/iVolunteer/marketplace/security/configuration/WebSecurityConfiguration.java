@@ -39,6 +39,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		    .antMatchers("/create-reset-state").permitAll()
 		    .antMatchers("/init/**").permitAll()
 		    .antMatchers("/volunteer").permitAll()
+		    .antMatchers("/helpseeker").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()

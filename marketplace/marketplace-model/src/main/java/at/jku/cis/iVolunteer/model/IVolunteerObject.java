@@ -5,8 +5,6 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.user.Tenant;
-
 @Document
 public abstract class IVolunteerObject {
 

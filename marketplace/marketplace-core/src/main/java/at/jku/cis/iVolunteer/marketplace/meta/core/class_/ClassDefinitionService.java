@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
@@ -46,11 +45,11 @@ public class ClassDefinitionService {
 
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		
+
 		ids.forEach(id -> {
 			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
-		
+
 		return classDefinitions;
 	}
 
@@ -76,8 +75,9 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getClassDefinitionsByArchetype(ClassArchetype archetype, String tenantId) {
-		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByClassArchetypeAndTenantId(archetype, tenantId);
-		return  classDefinitions;
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByClassArchetypeAndTenantId(archetype,
+				tenantId);
+		return classDefinitions;
 	}
 
 //	private List<ClassDefinition> filterOrg(String organisation, List<ClassDefinition> classDefinitions) {
@@ -100,7 +100,7 @@ public class ClassDefinitionService {
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
-		return  classDefinitions;
+		return classDefinitions;
 	}
 
 	private boolean filterEnumsAndHeadClasses(ClassDefinition cd) {
@@ -112,10 +112,9 @@ public class ClassDefinitionService {
 		// @formatter:on
 	}
 
-
 	public List<FormConfiguration> getParentsById(List<String> childIds, String tenantId) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
-		
+
 		childIds.forEach(id -> {
 			childClassDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
@@ -156,7 +155,8 @@ public class ClassDefinitionService {
 					formEntry.setImagePath(currentClassDefinition.getImagePath());
 				}
 
-				currentClassDefinition = classDefinitionRepository.getByIdAndTenantId(inheritanceList.get(0).getSource(), tenantId);
+				currentClassDefinition = classDefinitionRepository
+						.getByIdAndTenantId(inheritanceList.get(0).getSource(), tenantId);
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);
@@ -206,7 +206,8 @@ public class ClassDefinitionService {
 							// for each Relationship, Do a DFS to construct dropdown options menu
 
 							ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-							enumProperty.setAllowedValues(performDFS(classDefinition, 0, new ArrayList<EnumEntry>(), tenantId));
+							enumProperty.setAllowedValues(
+									performDFS(classDefinition, 0, new ArrayList<EnumEntry>(), tenantId));
 
 							if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
 								enumProperty.setMultiple(false);
@@ -275,7 +276,7 @@ public class ClassDefinitionService {
 	public List<String> getChildrenById(List<String> rootIds, String tenantId) {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
-		
+
 		rootIds.forEach(id -> {
 			rootClassDefintions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
