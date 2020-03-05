@@ -2,13 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassArchetype } from 'app/main/content/_model/meta/Class';
+import { ClassArchetype, ClassConfiguration } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyType } from 'app/main/content/_model/meta/Property';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';
@@ -17,7 +15,6 @@ import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingConfiguration, MatchingCollectorConfig, MatchingOperatorRelationship, MatchingCollectorConfigEntry } from '../../_model/matching';
-import { ConfiguratorService } from '../../_service/configuration/configurator.service';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
 
 declare var require: any;
@@ -41,9 +38,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private classDefinitionService: ClassDefinitionService,
-    private dialogFactory: DialogFactoryComponent,
-    private configuratorService: ConfiguratorService,
-    private objectIdService: ObjectIdService,
 
     private loginService: LoginService,
     private flexProdService: CoreFlexProdService,
@@ -62,8 +56,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   graph: mxgraph.mxGraph;
 
-  producerClassConfigurator: Configurator;
-  consumerClassConfigurator: Configurator;
+  producerClassConfigurator: ClassConfiguration;
+  consumerClassConfigurator: ClassConfiguration;
 
   producerMatchingCollectorConfig: MatchingCollectorConfig[];
   consumerMatchingCollectorConfig: MatchingCollectorConfig[];
@@ -480,7 +474,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.loadClassesAndRelationships(matchingConfiguration.producerClassConfigurationId, matchingConfiguration.consumerClassConfigurationId);
   }
 
-  performNew(producerClassConfiguration: Configurator, consumerClassConfiguration: Configurator, name?: string) {
+  performNew(producerClassConfiguration: ClassConfiguration, consumerClassConfiguration: ClassConfiguration, name?: string) {
     const matchingConfiguration = new MatchingConfiguration();
     matchingConfiguration.consumerClassConfigurationId = consumerClassConfiguration.id;
     matchingConfiguration.producerClassConfigurationId = producerClassConfiguration.id;

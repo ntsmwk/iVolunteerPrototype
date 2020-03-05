@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.chart.StoredChartRepository;
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
@@ -22,7 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -45,7 +45,7 @@ public class FakeService {
 	@Autowired private ClassesAndRelationshipsToResetRepository classesAndRelationshipsToResetRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 
 	public void reset() {

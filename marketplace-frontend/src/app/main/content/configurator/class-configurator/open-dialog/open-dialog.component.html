@@ -24,7 +24,7 @@
     <tr>
       <td *ngIf=loaded>
         <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr *ngFor="let c of recentConfigurators" class="entry" (click)="itemSelected($event, c)">
+          <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="itemSelected($event, c)">
             <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
           </tr>
         </table>

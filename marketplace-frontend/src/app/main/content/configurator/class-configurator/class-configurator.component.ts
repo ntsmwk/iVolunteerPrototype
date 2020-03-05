@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit } fro
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition, ClassArchetype, ClassConfiguration } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
@@ -12,11 +12,10 @@ import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/p
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { EditorPopupMenu } from './popup-menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from '../../_service/configuration/configurator.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
 import { myMxCell } from '../MyMxCell';
+import { ClassConfigurationService } from '../../_service/configuration/class-configuration.service';
 
 declare var require: any;
 
@@ -44,7 +43,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private relationshipService: RelationshipService,
     private dialogFactory: DialogFactoryComponent,
     private snackBar: MatSnackBar,
-    private configuratorService: ConfiguratorService,
+    private classConfigurationService: ClassConfigurationService,
     private objectIdService: ObjectIdService,
   ) {
 
@@ -58,7 +57,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   relationships: Relationship[];
   deletedRelationshipIds: string[];
 
-  currentConfigurator: Configurator;
+  currentClassConfiguration: ClassConfiguration;
 
   isLoaded = false;
   modelUpdated: boolean;
@@ -1006,17 +1005,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.eventResponseAction = null;
     switch (event.id) {
       case 'editor_save': {
-        if (isNullOrUndefined(this.currentConfigurator)) {
+        if (isNullOrUndefined(this.currentClassConfiguration)) {
           this.eventResponseAction = 'saveAsClicked';
         } else {
           if (!isNullOrUndefined(event.configurator)) {
-            this.currentConfigurator = event.configurator;
+            this.currentClassConfiguration = event.configurator;
           }
           this.saveGraph();
         }
         break;
       } case 'editor_save_as': {
-        this.currentConfigurator = event.configurator;
+        this.currentClassConfiguration = event.configurator;
         this.saveGraph();
         break;
       } case 'editor_new': {
@@ -1040,7 +1039,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     let deletedRelSaveSuccess: boolean;
     let configuratorSaveSuccess: boolean;
 
-    const configurator = this.currentConfigurator;
+    const configurator = this.currentClassConfiguration;
     Promise.all([
       this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
         relSaveSuccess = !isNullOrUndefined(result);
@@ -1058,7 +1057,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }),
 
     ]).then(() => {
-      this.configuratorService.saveConfigurator(this.marketplace, configurator).toPromise().then((result: any) => {
+      this.classConfigurationService.saveClassConfiguration(this.marketplace, configurator).toPromise().then((result: any) => {
         configuratorSaveSuccess = !isNullOrUndefined(result);
 
       }).then(() => {
@@ -1084,16 +1083,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   newGraph() {
     this.configurableClasses = [];
     this.relationships = [];
-    this.currentConfigurator = undefined;
+    this.currentClassConfiguration = undefined;
     this.showServerContent(true);
   }
 
-  openGraph(configurator: Configurator) {
-    this.currentConfigurator = configurator;
+  openGraph(classConfiguration: ClassConfiguration) {
+    this.currentClassConfiguration = classConfiguration;
 
     Promise.all([
       // grab classDefinitionss from server
-      this.classDefinitionService.getClassDefinitionsById(this.marketplace, configurator.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
+      this.classDefinitionService.getClassDefinitionsById(this.marketplace, classConfiguration.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
         if (!isNullOrUndefined(classDefinitions)) {
           this.configurableClasses = classDefinitions;
         } else {
@@ -1102,7 +1101,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }),
 
       // grab relationships from Server
-      this.relationshipService.getRelationshipsById(this.marketplace, configurator.relationshipIds).toPromise().then((relationships: Relationship[]) => {
+      this.relationshipService.getRelationshipsById(this.marketplace, classConfiguration.relationshipIds).toPromise().then((relationships: Relationship[]) => {
         if (!isNullOrUndefined(relationships)) {
           this.relationships = relationships;
         } else {
@@ -1170,9 +1169,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     // update the configurator save file
-    if (!isNullOrUndefined(this.currentConfigurator)) {
-      this.currentConfigurator.classDefinitionIds = this.configurableClasses.map(c => c.id);
-      this.currentConfigurator.relationshipIds = this.relationships.map(r => r.id);
+    if (!isNullOrUndefined(this.currentClassConfiguration)) {
+      this.currentClassConfiguration.classDefinitionIds = this.configurableClasses.map(c => c.id);
+      this.currentClassConfiguration.relationshipIds = this.relationships.map(r => r.id);
     }
   }
 
@@ -1213,7 +1212,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   printModelToConsole() {
     console.log(this.configurableClasses);
     console.log(this.relationships);
-    console.log(this.currentConfigurator);
+    console.log(this.currentClassConfiguration);
   }
   createClassInstanceClicked(cells: myMxCell[]) {
     console.log('create class instance clicked');

@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 
 @RestController
 public class MatchingConfigurationController {
 
 	@Autowired private MatchingConfigurationRepository matchingConfigurationRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
 
 	@GetMapping("matching-configuration/all")
 	List<MatchingConfiguration> getAllMatchingConfigurations() {
@@ -63,8 +63,8 @@ public class MatchingConfigurationController {
 			matchingConfiguration.setId(createHashFromClassConfigurationIds(matchingConfiguration.getProducerClassConfigurationId(),
 					matchingConfiguration.getConsumerClassConfigurationId()));
 
-			ClassConfigurator producer = configuratorRepository.findOne(matchingConfiguration.getProducerClassConfigurationId());
-			ClassConfigurator consumer = configuratorRepository.findOne(matchingConfiguration.getConsumerClassConfigurationId());
+			ClassConfiguration producer = configuratorRepository.findOne(matchingConfiguration.getProducerClassConfigurationId());
+			ClassConfiguration consumer = configuratorRepository.findOne(matchingConfiguration.getConsumerClassConfigurationId());
 
 			matchingConfiguration.setProducerClassConfigurationName(producer.getName());
 			matchingConfiguration.setConsumerClassConfigurationName(consumer.getName());

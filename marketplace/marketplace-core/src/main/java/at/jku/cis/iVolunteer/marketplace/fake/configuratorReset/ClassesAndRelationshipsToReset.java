@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 
@@ -18,7 +18,7 @@ public class ClassesAndRelationshipsToReset {
 	
 	List<ClassDefinition> classDefinitions;
 	
-	List<ClassConfigurator> configurators;
+	List<ClassConfiguration> configurators;
 
 	
 	public ClassesAndRelationshipsToReset() {
@@ -26,7 +26,7 @@ public class ClassesAndRelationshipsToReset {
 
 		classDefinitions = new LinkedList<ClassDefinition>();
 		
-		configurators = new LinkedList<ClassConfigurator>();
+		configurators = new LinkedList<ClassConfiguration>();
 
 	}
 	
@@ -59,12 +59,12 @@ public class ClassesAndRelationshipsToReset {
 	}
 
 
-	public List<ClassConfigurator> getConfigurators() {
+	public List<ClassConfiguration> getConfigurators() {
 		return configurators;
 	}
 
 
-	public void setConfigurators(List<ClassConfigurator> configurators) {
+	public void setConfigurators(List<ClassConfiguration> configurators) {
 		this.configurators = configurators;
 	}
 

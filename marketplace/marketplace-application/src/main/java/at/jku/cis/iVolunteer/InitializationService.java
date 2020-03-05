@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
@@ -25,7 +25,7 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
@@ -61,7 +61,7 @@ public class InitializationService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
@@ -583,7 +583,7 @@ public class InitializationService {
 		relationships.add(r2);
 		relationships.add(r3);
 		
-		ClassConfigurator configurator = new ClassConfigurator();
+		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setId("slot1");
 		configurator.setName("Produzent");
 		configurator.setRelationshipIds(new ArrayList<String>());
@@ -1085,7 +1085,7 @@ public class InitializationService {
 		relationships.add(r2);
 		relationships.add(r3);
 		
-		ClassConfigurator configurator = new ClassConfigurator();
+		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setId("slot2");
 		configurator.setName("Konsument");
 		configurator.setRelationshipIds(new ArrayList<String>());

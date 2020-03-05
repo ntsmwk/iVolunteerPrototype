@@ -9,7 +9,6 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
 import { OpenDialogComponent, OpenDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
@@ -17,6 +16,7 @@ import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/conten
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { MatchingConfiguration } from 'app/main/content/_model/matching';
+import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -411,13 +411,13 @@ export class DialogFactoryComponent {
 
     });
 
-    let configurator: Configurator;
+    let classConfiguration: ClassConfiguration;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      configurator = result.configurator;
+      classConfiguration = result.classConfiguration;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return classConfiguration;
     });
   }
 
@@ -431,15 +431,15 @@ export class DialogFactoryComponent {
       disableClose: true
     });
 
-    let configurator: Configurator;
+    let classConfiguration: ClassConfiguration;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
       if (!isNullOrUndefined(result)) {
-        configurator = result.configurator;
+        classConfiguration = result.classConfiguration;
       }
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return classConfiguration;
     });
   }
 
@@ -453,15 +453,15 @@ export class DialogFactoryComponent {
       disableClose: true
     });
 
-    let configurator: Configurator;
+    let classConfiguration: ClassConfiguration;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
       if (!isNullOrUndefined(result)) {
-        configurator = result.configurator;
+        classConfiguration = result.classConfiguration;
       }
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return classConfiguration;
     });
   }
 

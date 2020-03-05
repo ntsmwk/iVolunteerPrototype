@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfiguration } from 'app/main/content/_model/matching';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
+import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 export interface NewMatchingDialogData {
-  producerClassConfiguration: Configurator;
-  consumerClassConfiguration: Configurator;
+  producerClassConfiguration: ClassConfiguration;
+  consumerClassConfiguration: ClassConfiguration;
   label: string;
   marketplace: Marketplace;
 }
@@ -26,14 +26,14 @@ export class NewMatchingDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NewMatchingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NewMatchingDialogData,
-    private configuratorService: ConfiguratorService,
+    private classConfigurationService: ClassConfigurationService,
     private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService,
   ) {
   }
 
-  classConfigurations: Configurator[];
-  recentClassConfigurations: Configurator[];
+  classConfigurations: ClassConfiguration[];
+  recentClassConfigurations: ClassConfiguration[];
   loaded = false;
   showErrors = false;
   showDuplicateError = false;
@@ -41,7 +41,7 @@ export class NewMatchingDialogComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: Configurator[]) => {
+      this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
         this.classConfigurations = classConfigurations.filter(c => {
           return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
         });
@@ -57,11 +57,11 @@ export class NewMatchingDialogComponent implements OnInit {
     });
   }
 
-  producerItemSelected(event: any, c: Configurator) {
+  producerItemSelected(event: any, c: ClassConfiguration) {
     this.data.producerClassConfiguration = c;
   }
 
-  consumerItemSelected(event: any, c: Configurator) {
+  consumerItemSelected(event: any, c: ClassConfiguration) {
     this.data.consumerClassConfiguration = c;
   }
 

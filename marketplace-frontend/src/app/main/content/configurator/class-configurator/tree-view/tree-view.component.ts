@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
@@ -99,9 +98,9 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     this.editorInstance.rightSidebarContainer.nativeElement.style.height = '50px';
   }
 
-  itemSelected(event: any, c: Configurator) {
+  // itemSelected(event: any, c: ClassConfiguration) {
 
-  }
+  // }
 
   hasChild = (_: number, node: GraphNode) => !!node.children && node.children.length > 0;
 

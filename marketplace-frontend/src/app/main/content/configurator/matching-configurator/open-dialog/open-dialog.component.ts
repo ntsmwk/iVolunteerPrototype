@@ -1,9 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfiguration } from 'app/main/content/_model/matching';

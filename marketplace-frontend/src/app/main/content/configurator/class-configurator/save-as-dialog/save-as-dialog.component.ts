@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { LoginService } from 'app/main/content/_service/login.service';
+import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 export interface SaveAsDialogData {
-  configurator: Configurator;
+  classConfiguration: ClassConfiguration;
   marketplace: Marketplace;
   userId: string;
 }
@@ -23,33 +23,33 @@ export class SaveAsDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SaveAsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SaveAsDialogData,
-    private configuratorService: ConfiguratorService,
+    private classConfigurationService: ClassConfigurationService,
     private loginService: LoginService,
   ) {
   }
 
   selected: string;
-  configurators: Configurator[];
-  recentConfigurators: Configurator[];
+  classConfigurations: ClassConfiguration[];
+  recentClassConfigurations: ClassConfiguration[];
   loaded = false;
 
   ngOnInit() {
     console.log(this.data.marketplace);
     this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
 
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
+      this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
         console.log('init dialog open');
-        console.log(configurators);
+        console.log(classConfigurations);
 
-        this.configurators = configurators.filter(c => {
+        this.classConfigurations = classConfigurations.filter(c => {
           return c.userId === volunteer.id || isNullOrUndefined(c.userId);
         });
 
-        console.log(this.configurators);
-        if (this.configurators.length > 5) {
-          this.recentConfigurators = this.configurators.slice(0, 5);
+        console.log(this.classConfigurations);
+        if (this.classConfigurations.length > 5) {
+          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
         }
-        this.recentConfigurators = this.configurators;
+        this.recentClassConfigurations = this.classConfigurations;
         this.loaded = true;
 
 
@@ -57,10 +57,10 @@ export class SaveAsDialogComponent implements OnInit {
     });
   }
 
-  itemSelected(event: any, c: Configurator) {
+  itemSelected(event: any, c: ClassConfiguration) {
     console.log(event);
     console.log(c);
-    this.data.configurator = c;
+    this.data.classConfiguration = c;
     // this.data = s;
     this.dialogRef.close(this.data)
 

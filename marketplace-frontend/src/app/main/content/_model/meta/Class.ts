@@ -70,6 +70,17 @@ export class AchievementClassInstance extends ClassInstance {
     }
 }
 
+export class ClassConfiguration {
+    id: string;
+    name: string;
+    description: string;
+    classDefinitionIds: string[];
+    relationshipIds: string[];
+    date: Date;
+    userId: String;
+
+}
+
 
 export enum ClassArchetype {
     COMPETENCE = 'COMPETENCE',
@@ -103,4 +114,6 @@ export namespace ClassArchetype {
         }
     }
 }
+
+
 

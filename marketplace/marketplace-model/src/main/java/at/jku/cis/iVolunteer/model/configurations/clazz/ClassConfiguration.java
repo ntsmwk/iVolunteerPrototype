@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class ClassConfigurator {
+public class ClassConfiguration {
 
 	@Id String id;
 
@@ -21,9 +21,9 @@ public class ClassConfigurator {
 	
 	private String userId;
 
-	private ConfiguratorArcheType configuratorArcheType;
+	private ClassConfigurationArcheType configuratorArcheType;
 
-	public ClassConfigurator() {
+	public ClassConfiguration() {
 	}
 	
 	public String getId() {
@@ -81,17 +81,17 @@ public class ClassConfigurator {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ClassConfigurator)) {
+		if (!(obj instanceof ClassConfiguration)) {
 			return false;
 		}
-		return ((ClassConfigurator) obj).id.equals(id);
+		return ((ClassConfiguration) obj).id.equals(id);
 	}
 
-	public ConfiguratorArcheType getConfiguratorArcheType() {
+	public ClassConfigurationArcheType getConfiguratorArcheType() {
 		return configuratorArcheType;
 	}
 
-	public void setConfiguratorArcheType(ConfiguratorArcheType configuratorArcheType) {
+	public void setConfiguratorArcheType(ClassConfigurationArcheType configuratorArcheType) {
 		this.configuratorArcheType = configuratorArcheType;
 	}
 

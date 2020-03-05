@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 export interface OpenDialogData {
-  configurator: Configurator;
+  classConfiguration: ClassConfiguration;
   marketplace: Marketplace;
 }
 
@@ -22,34 +22,34 @@ export class OpenDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<OpenDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OpenDialogData,
-    private configuratorService: ConfiguratorService,
+    private classConfigurationService: ClassConfigurationService,
     private loginService: LoginService,
   ) {
   }
 
   selected: string;
-  configurators: Configurator[];
-  recentConfigurators: Configurator[];
+  classConfigurations: ClassConfiguration[];
+  recentClassConfigurations: ClassConfiguration[];
   loaded = false;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-        this.configurators = configurators.filter(c => {
+      this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
+        this.classConfigurations = classConfigurations.filter(c => {
           return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
         });
 
-        if (this.configurators.length > 5) {
-          this.recentConfigurators = this.configurators.slice(0, 5);
+        if (this.classConfigurations.length > 5) {
+          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
         }
-        this.recentConfigurators = this.configurators;
+        this.recentClassConfigurations = this.classConfigurations;
         this.loaded = true;
       });
     });
   }
 
-  itemSelected(event: any, c: Configurator) {
-    this.data.configurator = c;
+  itemSelected(event: any, c: ClassConfiguration) {
+    this.data.classConfiguration = c;
     this.dialogRef.close(this.data);
 
 

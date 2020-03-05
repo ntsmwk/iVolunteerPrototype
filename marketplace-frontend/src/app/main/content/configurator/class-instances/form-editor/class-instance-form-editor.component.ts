@@ -10,11 +10,7 @@ import { QuestionControlService } from 'app/main/content/_service/question-contr
 import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
-import { Volunteer } from 'app/main/content/_model/volunteer';
-import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Participant } from 'app/main/content/_model/participant';
-import { FormControl, AbstractControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 
 

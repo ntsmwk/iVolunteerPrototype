@@ -16,9 +16,9 @@ import javax.ws.rs.NotAcceptableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfigEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -39,14 +39,14 @@ public class CollectionService {
 
 	private static final String PATH_DELIMITER = Character.toString((char) 28);
 
-	@Autowired ConfiguratorRepository configuratorRepository;
+	@Autowired ClassConfigurationRepository configuratorRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
 	
 
 
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsSingleCollection(String slotId) {
-		ClassConfigurator configurator = configuratorRepository.findOne(slotId);
+		ClassConfiguration configurator = configuratorRepository.findOne(slotId);
 		if (configurator == null) {
 			return null;
 		}
@@ -66,7 +66,7 @@ public class CollectionService {
 	}
 
 	public List<MatchingCollectorConfig> collectAllClassDefinitionsWithPropertiesAsCollections(String slotId) {
-		ClassConfigurator configurator = configuratorRepository.findOne(slotId);
+		ClassConfiguration configurator = configuratorRepository.findOne(slotId);
 
 		if (configurator == null) {
 			return null;
