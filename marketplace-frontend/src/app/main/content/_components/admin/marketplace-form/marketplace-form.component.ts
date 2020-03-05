@@ -67,6 +67,6 @@ export class FuseMarketplaceFormComponent implements OnInit {
     this.marketplaceService
       .save(<Marketplace>this.marketplaceForm.value)
       .toPromise()
-      .then(() => this.router.navigate(["/main/marketplaces/all"]));
+      .then(() => this.router.navigate(["/main/marketplace/all"]));
   }
 }
