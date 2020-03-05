@@ -43,6 +43,9 @@ import { FunctionsComponent } from "./functions/functions.component";
 import { AccomplishmentsComponent } from "./accomplishments/accomplishments.component";
 import { CompetenciesComponent } from "./competencies/competencies.component";
 import { ShareMenuModule } from "../share-menu/share-menu.module";
+import { TimelineFilterModule } from '../timeline-filter/timeline-filter.module';
+import { DonutModule } from '../donut/donut.module';
+import { SunburstTableModule } from '../sunburst-table/sunburst-table.module';
 
 const routes = [{ path: "", component: AchievementsFireBrigadeComponent }];
 
@@ -91,7 +94,10 @@ const routes = [{ path: "", component: AchievementsFireBrigadeComponent }];
 
     NgxChartsModule,
     HighchartsChartModule,
-    ShareMenuModule
+    ShareMenuModule,
+    TimelineFilterModule,
+    SunburstTableModule,
+    DonutModule
   ]
 })
 export class AchievementsFireBrigadeModule {}

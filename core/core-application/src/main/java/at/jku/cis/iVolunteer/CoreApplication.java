@@ -11,7 +11,8 @@ import at.jku.cis.iVolunteer.initialize.CoreInitializationService;
 @SpringBootApplication
 public class CoreApplication {
 
-	@Autowired private CoreInitializationService coreInitializationService;
+	@Autowired
+	private CoreInitializationService coreInitializationService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
@@ -20,7 +21,6 @@ public class CoreApplication {
 	@PostConstruct
 	private void init() {
 		this.coreInitializationService.init();
-
 	}
 
 }

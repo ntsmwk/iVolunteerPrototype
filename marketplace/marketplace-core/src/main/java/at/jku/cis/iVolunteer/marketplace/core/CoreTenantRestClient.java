@@ -20,7 +20,7 @@ public class CoreTenantRestClient {
 	private static Logger logger = LoggerFactory.getLogger(CoreTenantRestClient.class);
 
 	public String getTenantIdByName(String tenantName) {
-		String requestUrl = MessageFormat.format("{0}/tenant/{1}", url, tenantName);
+		String requestUrl = MessageFormat.format("{0}/tenant/name/{1}", url, tenantName);
 		String tenantId = null;
 		try {
 			tenantId = restTemplate.getForObject(requestUrl, String.class);

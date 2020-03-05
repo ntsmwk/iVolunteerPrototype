@@ -1,114 +1,128 @@
-.example-card {
-  //  max-width: 300px;
-  background-color: rgb(245, 245, 245);
-  mat-card-header {
-    background-color: rgb(238, 238, 238);
-    vertical-align: bottom;
+@import "src/@fuse/scss/fuse";
+
+.page-layout {
+
+  .competence {
+    padding: 16px;
+
+    &:hover {
+
+      .competence-content {
+        @include mat-elevation(8);
+      }
+    }
+
+    .competence-content {
+      background: white;
+      min-height: 240px;
+      transition: box-shadow 150ms ease-in-out;
+
+      @include mat-elevation(1);
+
+      .header {
+        color: blue;
+        background: mat-color($mat-blue, 500);
+        padding: 16px 24px;
+        height: 64px !important;
+        min-height: 64px !important;
+        max-height: 64px !important;
+
+        .category {
+          text-transform: capitalize;
+          text-align: center;
+          font-weight: 500;
+          color: rgba(0, 0, 0, 0.54);
+        }
+
+        .length {
+
+          .length-icon {
+            margin-right: 8px;
+            color: rgba(0, 0, 0, 0.54) !important;
+          }
+
+          .min {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.54);
+          }
+        }
+      }
+
+      .content {
+        padding: 24px;
+
+        .h1 {
+          font-size: 16px;
+          text-align: center;
+        }
+
+        .updated {
+          font-size: 13px;
+          font-weight: 500;
+          margin-top: 4px;
+          color: rgba(0, 0, 0, 0.37);
+        }
+      }
+
+      .footer {
+        text-align: center;
+        padding-top: 30px;
+        padding: 16px;
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.12);
+      }
+    }
   }
+
+  .competencies {
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto;
+
+    .no-competencies {
+      font-size: 20px;
+      margin: 24px 0;
+      text-align: center;
+    }
+
+
+  }
+
+  img.badge {
+    max-width: 130px;
+    padding-bottom: 20px;
+  }
+
 }
 
-.donut-parent {
-  margin-top: -50px;
-  min-height: 350px;
-  min-width: 350px;
-}
-
-.timeline {
-  min-height: 550px;
-  padding: 1rem;
-}
-
-.right {
-  text-align: right
-}
-
-th.mat-sort-header-sorted {
-  color: black;
-}
-
-.filterButton {
-  margin-left: 60px;
-  margin-right: 10px;
+.badge-row {
+  margin-top: 20px;
   margin-bottom: 20px;
-  margin-top: 5px;
-  width: 130px;
-  font-size: 20px;
 }
 
-.filterChip {
-  margin-top: 8px;
-  font-size: 20px;
+.badgeSmall{
+  height: 100%;
+  margin: 0px;
+  padding: 5px;
+  max-width: 100% !important;
 }
 
-.sunburstParent {
-  width: 70%;
+.progressBar {
+  height: 8px !important;
+  padding-left: 10px;
+  margin-right: 20px;
 }
 
-.tasksTable {
-  width: 30%;
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: blue;
 }
 
-.selector {
-  width: 100px;
-  margin-left: 50px;
+::ng-deep .mat-progress-bar-buffer {
+  background: #E4E8EB;
 }
 
-tr.is-Veranstaltung {
-  background: rgba(rgb(168, 56, 93), $alpha: 0.7);
-}
-
-tr.is-Ausbildung {
-  background: rgba(rgb(122, 163, 229), $alpha: 0.7);
-}
-
-tr.is-Jugendarbeit {
-  background: rgba(rgb(162, 126, 168), $alpha: 0.7);
-}
-
-tr.is-Taetigkeit {
-  background: rgba(rgb(170, 227, 245), $alpha: 0.7);
-}
-
-tr.is-Bewerb {
-  background: rgba(rgb(173, 205, 237), $alpha: 0.7);
-}
-
-tr.is-Einsatz {
-  background: rgba(rgb(169, 89, 99), $alpha: 0.7);
-}
-
-tr.is-Probe {
-  background: rgba(rgb(122, 163, 229), $alpha: 0.7);
-}
-
-tr.is-Ausrueckung {
-  background: rgba(rgb(162, 126, 168), $alpha: 0.7);
-}
-
-tr.mat-row {
-  cursor: pointer;
-}
-
-tr.mat-row:hover {
-  opacity: 0.8;
-}
-
-th.mat-header-cell {
-  font-size: 18px;
-}
-
-td.mat-cell {
-  font-size: 14px;
-}
-
-::ng-deep .highcharts-drillup-button {
-  display: none !important;
-}
-
-mat-panel-title {
-  font-size: 20px;
-}
-
-::ng-deep .pie-label {
-  font-size: 13px !important;
+::ng-deep .mat-progress-bar {
+  border-radius: 2px;
 }

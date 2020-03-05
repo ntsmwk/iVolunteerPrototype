@@ -1,0 +1,52 @@
+<div fxLayout="column" fxLayoutAlign="none">
+
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <h1>Zeitverlauf</h1>
+
+    <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;">
+      <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
+        (change)="onYaxisChange(group.value)">
+        <mat-button-toggle value="Dauer">Dauer
+        </mat-button-toggle>
+        <mat-button-toggle value="Anzahl">Anzahl
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div style="margin-left: 50px;"></div>
+
+      <mat-form-field class="yearForm" style="margin-top: 5px;">
+        <mat-label>Jahr</mat-label>
+        <mat-select [value]="selectedYear" (selectionChange)="onYearChange($event.value)">
+          <mat-option *ngFor="let year of uniqueYears" [value]="year">{{year}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <ngx-charts-line-chart #lineChart [results]="timelineChartData" [scheme]="colorScheme" [schemeType]="schemeType"
+      [legend]="legend" [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="xAxis"
+      [yAxis]="yAxis" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel" [animations]="animations" [autoScale]="autoScale" [timeline]="timeline" [curve]="curve">
+    </ngx-charts-line-chart>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="left">
+    <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
+
+    <mat-chip-list class="filterChip">
+      <mat-chip color="primary" [removable]="removable" *ngIf="timelineFilter.from">
+        {{timelineFilter.from | date:'dd.MM.yyyy'}} - {{timelineFilter.to | date:'dd.MM.yyyy'}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <mat-chip color="primary" [removable]="removable" *ngIf="selectedYear">{{selectedYear}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <mat-chip color="primary" [removable]="removable" *ngIf="selectedTaskType">{{selectedTaskType}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+
+  </div>
+
+</div>

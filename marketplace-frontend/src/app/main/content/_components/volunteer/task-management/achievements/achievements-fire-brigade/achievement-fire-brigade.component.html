@@ -8,7 +8,6 @@
 
   <div class="content">
     <mat-tab-group dynamicHeight="true">
-
       <mat-tab label="Tätigkeiten">
         <ng-template matTabContent>
           <fuse-tasks></fuse-tasks>
@@ -21,17 +20,19 @@
         </ng-template>
       </mat-tab>
 
+      <mat-tab label="Funktionen">
+        <ng-template matTabContent>
+          <fuse-functions></fuse-functions>
+        </ng-template>
+      </mat-tab>
+
       <mat-tab label="Verdienste">
         <ng-template matTabContent>
           <fuse-accomplishments></fuse-accomplishments>
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="Funktionen">
-        <ng-template matTabContent>
-          <fuse-functions></fuse-functions>
-        </ng-template>
-      </mat-tab>
+
     </mat-tab-group>
 
   </div>
