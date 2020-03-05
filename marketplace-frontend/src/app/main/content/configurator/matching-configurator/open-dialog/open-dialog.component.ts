@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/meta/core/configurator/configurator.service';
+import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MatchingOperatorRelationshipStorageService } from 'app/main/content/_service/matchingoperator-relationship-storage.service';
-import { MatchingConfigurator } from 'app/main/content/_model/matching';
+import { MatchingConfiguration } from 'app/main/content/_model/matching';
+import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 
 export interface OpenMatchingDialogData {
   marketplace: Marketplace;
-  matchingConfigurator: MatchingConfigurator;
+  matchingConfiguration: MatchingConfiguration;
 }
 
 @Component({
@@ -24,22 +24,22 @@ export class OpenMatchingDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<OpenMatchingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OpenMatchingDialogData,
-    private matchingOperatorRelationshipStorageService: MatchingOperatorRelationshipStorageService,
+    private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService,
   ) {
   }
 
-  recentMatchingConfigurators: MatchingConfigurator[];
+  recentMatchingConfigurations: MatchingConfiguration[];
   loaded = false;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.matchingOperatorRelationshipStorageService.getAllMatchingOperatorRelationshipStorages(this.data.marketplace)
+      this.matchingConfigurationService.getAllMatchingConfigurations(this.data.marketplace)
         .toPromise()
-        .then((matchingConfigurators: MatchingConfigurator[]) => {
-          this.recentMatchingConfigurators = matchingConfigurators;
-          if (this.recentMatchingConfigurators.length > 5) {
-            this.recentMatchingConfigurators.slice(0, 5);
+        .then((matchingConfigurations: MatchingConfiguration[]) => {
+          this.recentMatchingConfigurations = matchingConfigurations;
+          if (this.recentMatchingConfigurations.length > 5) {
+            this.recentMatchingConfigurations.slice(0, 5);
           }
           this.loaded = true;
         });
@@ -47,8 +47,8 @@ export class OpenMatchingDialogComponent implements OnInit {
     });
   }
 
-  itemSelected(event: any, matchingConfigurator: MatchingConfigurator) {
-    this.data.matchingConfigurator = matchingConfigurator;
+  itemSelected(event: any, matchingConfiguration: MatchingConfiguration) {
+    this.data.matchingConfiguration = matchingConfiguration;
     this.dialogRef.close(this.data);
   }
 

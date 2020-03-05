@@ -16,7 +16,7 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/config
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
-import { MatchingConfigurator } from 'app/main/content/_model/matching';
+import { MatchingConfiguration } from 'app/main/content/_model/matching';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -518,17 +518,17 @@ export class DialogFactoryComponent {
       disableClose: true
     });
 
-    let matchingConfigurator: MatchingConfigurator;
+    let matchingConfiguration: MatchingConfiguration;
 
     dialogRef.beforeClose().toPromise().then((result: OpenMatchingDialogData) => {
       console.log(result);
       if (!isNullOrUndefined(result)) {
-        matchingConfigurator = result.matchingConfigurator;
+        matchingConfiguration = result.matchingConfiguration;
       }
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return matchingConfigurator;
+      return matchingConfiguration;
     });
   }
 

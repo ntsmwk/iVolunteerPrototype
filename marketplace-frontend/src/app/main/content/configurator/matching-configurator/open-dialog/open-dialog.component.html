@@ -26,10 +26,10 @@
             <th style="text-align: start">Unternehmen</th>
             <th style="text-align: start">Besteller</th>
           </tr>
-          <tr *ngFor="let c of recentMatchingConfigurators" class="entry" (click)="itemSelected($event, c)">
+          <tr *ngFor="let c of recentMatchingConfigurations" class="entry" (click)="itemSelected($event, c)">
             <td style="overflow: hidden">{{c.name}}</td>
-            <td style="overflow: hidden">{{c.producerClassConfiguratorName}}</td>
-            <td style="overflow: hidden">{{c.consumerClassConfiguratorName}}</td>
+            <td style="overflow: hidden">{{c.producerClassConfigurationName}}</td>
+            <td style="overflow: hidden">{{c.consumerClassConfigurationName}}</td>
           </tr>
         </table>
       </td>

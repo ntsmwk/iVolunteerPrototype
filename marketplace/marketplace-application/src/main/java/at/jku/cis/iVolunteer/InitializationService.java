@@ -15,7 +15,7 @@ import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
-import at.jku.cis.iVolunteer.marketplace.matching.MatchingConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
@@ -28,7 +28,7 @@ import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.matching.MatchingOperatorRelationship;
-import at.jku.cis.iVolunteer.model.matching.MatchingConfigurator;
+import at.jku.cis.iVolunteer.model.matching.MatchingConfiguration;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -71,7 +71,7 @@ public class InitializationService {
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
 	@Autowired private FeedbackRepository feedbackRepository;
 	@Autowired private UserMappingRepository userMappingRepository;
-	@Autowired private MatchingConfiguratorRepository matchingConfiguratorRepository;
+	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
 
 	@PostConstruct
 	public void init() {
@@ -1111,11 +1111,11 @@ public class InitializationService {
 	}
 	
 	private void addFlexProdMachtingOperatorRelationshipStorage() {
-		MatchingConfigurator storage = new MatchingConfigurator();
+		MatchingConfiguration storage = new MatchingConfiguration();
 		storage.setId("demo");
 		storage.setName("FlexProd Demo");
-		storage.setProducerClassConfiguratorId("slot1");
-		storage.setConsumerClassConfiguratorId("slot2");
+		storage.setProducerClassConfigurationId("slot1");
+		storage.setConsumerClassConfigurationId("slot2");
 		storage.setRelationships(new ArrayList<MatchingOperatorRelationship>());
 		if (!matchingConfiguratorRepository.exists(storage.getId())) {
 			matchingConfiguratorRepository.save(storage);

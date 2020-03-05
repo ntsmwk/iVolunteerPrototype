@@ -19,15 +19,15 @@ export class MatchingCollectorConfigEntry {
     targetRelationshipId: string;
 }
 
-export class MatchingConfigurator {
+export class MatchingConfiguration {
     id: string;
     name: string;
 
-    producerClassConfiguratorId: string;
-    consumerClassConfiguratorId: string;
+    producerClassConfigurationId: string;
+    consumerClassConfigurationId: string;
 
-    producerClassConfiguratorName: string;
-    consumerClassConfiguratorName: string;
+    producerClassConfigurationName: string;
+    consumerClassConfigurationName: string;
 
     relationships: MatchingOperatorRelationship[];
 }

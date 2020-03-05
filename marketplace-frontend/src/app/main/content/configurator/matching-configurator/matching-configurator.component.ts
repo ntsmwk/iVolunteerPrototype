@@ -8,7 +8,6 @@ import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
@@ -17,8 +16,9 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
-import { MatchingOperatorRelationshipStorageService } from '../../_service/matchingoperator-relationship-storage.service';
-import { MatchingConfigurator, MatchingCollectorConfig, MatchingOperatorRelationship, MatchingCollectorConfigEntry } from '../../_model/matching';
+import { MatchingConfiguration, MatchingCollectorConfig, MatchingOperatorRelationship, MatchingCollectorConfigEntry } from '../../_model/matching';
+import { ConfiguratorService } from '../../_service/configuration/configurator.service';
+import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
 
 declare var require: any;
 
@@ -48,7 +48,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private loginService: LoginService,
     private flexProdService: CoreFlexProdService,
     private helpSeekerService: CoreHelpSeekerService,
-    private matchingOperatorRelationshipService: MatchingOperatorRelationshipStorageService
+    private matchingConfigurationService: MatchingConfigurationService
   ) {
 
   }
@@ -71,7 +71,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   matchingPalettes = CConstants.matchingPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
 
-  matchingConfigurator: MatchingConfigurator;
+  matchingConfiguration: MatchingConfiguration;
 
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
@@ -95,36 +95,36 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     });
   }
 
-  loadClassesAndRelationships(producerClassConfiguratorId: string, consumerClassConfiguratorId: string) {
+  loadClassesAndRelationships(producerClassConfigurationId: string, consumerClassConfigurationId: string) {
     this.clearEditor();
-    this.matchingConfigurator = undefined;
+    this.matchingConfiguration = undefined;
 
     Promise.all([
-      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerClassConfiguratorId).toPromise()
+      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerClassConfigurationId).toPromise()
         .then((collectorConfig: MatchingCollectorConfig[]) => {
           this.producerMatchingCollectorConfig = collectorConfig;
           this.insertClassDefinitionsProducerFromCollection();
         }),
-      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerClassConfiguratorId).toPromise()
+      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerClassConfigurationId).toPromise()
         .then((collectorConfig: MatchingCollectorConfig[]) => {
           this.consumerMatchingCollectorConfig = collectorConfig;
           this.insertClassDefinitionsConsumerFromCollection();
         })
     ]).then(() => {
-      this.matchingOperatorRelationshipService.
-        getMatchingOperatorRelationshipByConfiguratorIds(this.marketplace, producerClassConfiguratorId, consumerClassConfiguratorId)
+      this.matchingConfigurationService.
+        getMatchingConfigurationByClassConfigurationIds(this.marketplace, producerClassConfigurationId, consumerClassConfigurationId)
         .toPromise()
-        .then((matchingConfigurator: MatchingConfigurator) => {
+        .then((matchingConfiguration: MatchingConfiguration) => {
 
-          if (!isNullOrUndefined(matchingConfigurator)) {
-            this.matchingConfigurator = matchingConfigurator;
+          if (!isNullOrUndefined(matchingConfiguration)) {
+            this.matchingConfiguration = matchingConfiguration;
             this.insertMatchingOperatorsAndRelationships();
 
           } else {
-            this.matchingConfigurator = new MatchingConfigurator();
-            this.matchingConfigurator.consumerClassConfiguratorId = consumerClassConfiguratorId;
-            this.matchingConfigurator.producerClassConfiguratorId = producerClassConfiguratorId;
-            this.matchingConfigurator.relationships = [];
+            this.matchingConfiguration = new MatchingConfiguration();
+            this.matchingConfiguration.consumerClassConfigurationId = consumerClassConfigurationId;
+            this.matchingConfiguration.producerClassConfigurationId = producerClassConfigurationId;
+            this.matchingConfiguration.relationships = [];
           }
         });
     });
@@ -345,7 +345,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private insertMatchingOperatorsAndRelationships() {
-    for (const entry of this.matchingConfigurator.relationships) {
+    for (const entry of this.matchingConfiguration.relationships) {
       const operatorCell = this.insertMatchingOperator(entry.coordX, entry.coordY, entry.matchingOperatorType);
 
       let producerCell: myMxCell;
@@ -425,10 +425,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   consumeMenuOptionClickedEvent(event: any) {
+    console.log(event);
     switch (event.id) {
       case 'editor_save': this.performSave(); break;
       case 'editor_open': this.performOpen(event.payload); break;
-      case 'editor_new': this.performNew(event.payload.producerClassConfigurator, event.payload.consumerClassConfigurator, event.payload.label); break;
+      case 'editor_new': this.performNew(event.payload.producerClassConfiguration, event.payload.consumerClassConfiguration, event.payload.label); break;
     }
   }
 
@@ -468,29 +469,29 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       newRelationships.push(relationship);
     }
 
-    this.matchingConfigurator.relationships = newRelationships;
-    this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, this.matchingConfigurator).toPromise()
-      .then((ret: MatchingConfigurator) => {
+    this.matchingConfiguration.relationships = newRelationships;
+    this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, this.matchingConfiguration).toPromise()
+      .then((ret: MatchingConfiguration) => {
         // not doing anything currently
       });
   }
 
-  performOpen(matchingConfigurator: MatchingConfigurator) {
-    this.loadClassesAndRelationships(matchingConfigurator.producerClassConfiguratorId, matchingConfigurator.consumerClassConfiguratorId);
+  performOpen(matchingConfiguration: MatchingConfiguration) {
+    this.loadClassesAndRelationships(matchingConfiguration.producerClassConfigurationId, matchingConfiguration.consumerClassConfigurationId);
   }
 
-  performNew(producerClassConfigurator: Configurator, consumerClassConfigurator: Configurator, name?: string) {
-    const storage = new MatchingConfigurator();
-    storage.consumerClassConfiguratorId = consumerClassConfigurator.id;
-    storage.producerClassConfiguratorId = producerClassConfigurator.id;
-    storage.name = name;
-    storage.relationships = [];
-    console.log(storage);
-    this.matchingOperatorRelationshipService.saveMatchingOperatorRelationshipStorage(this.marketplace, storage).toPromise().then((ret: MatchingConfigurator) => {
+  performNew(producerClassConfiguration: Configurator, consumerClassConfiguration: Configurator, name?: string) {
+    const matchingConfiguration = new MatchingConfiguration();
+    matchingConfiguration.consumerClassConfigurationId = consumerClassConfiguration.id;
+    matchingConfiguration.producerClassConfigurationId = producerClassConfiguration.id;
+    matchingConfiguration.name = name;
+    matchingConfiguration.relationships = [];
+    console.log(matchingConfiguration);
+    this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration).toPromise().then((ret: MatchingConfiguration) => {
       // not doing anything further currently
     });
 
-    this.loadClassesAndRelationships(producerClassConfigurator.id, consumerClassConfigurator.id);
+    this.loadClassesAndRelationships(producerClassConfiguration.id, consumerClassConfiguration.id);
   }
 
 

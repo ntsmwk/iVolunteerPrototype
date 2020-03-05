@@ -13,7 +13,7 @@ import { RelationshipService } from 'app/main/content/_service/meta/core/relatio
 import { EditorPopupMenu } from './popup-menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
+import { ConfiguratorService } from '../../_service/configuration/configurator.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
 import { myMxCell } from '../MyMxCell';

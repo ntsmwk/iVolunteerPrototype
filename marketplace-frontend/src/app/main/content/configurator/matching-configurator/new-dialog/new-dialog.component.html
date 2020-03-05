@@ -30,7 +30,7 @@
       <td>
 
         <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr *ngFor="let c of recentConfigurators" class="entry" (click)="producerItemSelected($event, c)">
+          <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="producerItemSelected($event, c)">
             <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
           </tr>
         </table>
@@ -42,7 +42,7 @@
 
       <td width="200px">
         <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr *ngFor="let c of recentConfigurators" class="entry" (click)="consumerItemSelected($event, c)">
+          <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="consumerItemSelected($event, c)">
             <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
           </tr>
         </table>
@@ -51,15 +51,15 @@
     </tr>
 
     <tr>
-      <td width="200px" *ngIf="data.producerClassConfigurator">
+      <td width="200px" *ngIf="data.producerClassConfiguration">
         Gewählt:
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr class="selected">
-            <td style="padding-left: 50px; padding-right: 50px">{{data.producerClassConfigurator.name}}</td>
+            <td style="padding-left: 50px; padding-right: 50px">{{data.producerClassConfiguration.name}}</td>
           </tr>
         </table>
       </td>
-      <td width="200px" *ngIf="!data.producerClassConfigurator">
+      <td width="200px" *ngIf="!data.producerClassConfiguration">
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr class="findbutton">
             <td style="padding-left: 50px; padding-right: 50px">Durchsuchen</td>
@@ -69,15 +69,15 @@
 
       <td style="padding-left: 50px">
       </td>
-      <td *ngIf="data.consumerClassConfigurator" width="200px">
+      <td *ngIf="data.consumerClassConfiguration" width="200px">
         Gewählt
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr class="selected">
-            <td style="padding-left: 50px; padding-right: 50px">{{data.consumerClassConfigurator.name}}</td>
+            <td style="padding-left: 50px; padding-right: 50px">{{data.consumerClassConfiguration.name}}</td>
           </tr>
         </table>
       </td>
-      <td *ngIf="!data.producerClassConfigurator" width="200px">
+      <td *ngIf="!data.producerClassConfiguration" width="200px">
         <table cellspacing=1 cellpadding=0 style="border-color: none">
           <tr class="findbutton">
             <td style="padding-left: 50px; padding-right: 50px">Durchsuchen</td>
@@ -88,9 +88,9 @@
   </table>
 
   <div *ngIf="showErrors" style="color: red">
-    <div *ngIf="!data.producerClassConfigurator"> Konfigurator für das Werkunternehmen wählen</div>
-    <div *ngIf="!data.consumerClassConfigurator"> Konfigurator für den Werkbesteller wählen</div>
-    <div *ngIf="data.consumerClassConfigurator === data.producerClassConfigurator"> Zwei verschiedene Konfiguratoren
+    <div *ngIf="!data.producerClassConfiguration"> Konfigurator für das Werkunternehmen wählen</div>
+    <div *ngIf="!data.consumerClassConfiguration"> Konfigurator für den Werkbesteller wählen</div>
+    <div *ngIf="data.consumerClassConfiguration === data.producerClassConfiguration"> Zwei verschiedene Konfiguratoren
       wählen</div>
     <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfiguratoren</div>
   </div>

@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorService } from 'app/main/content/_service/meta/core/configurator/configurator.service';
+import { ConfiguratorService } from 'app/main/content/_service/configuration/configurator.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MatchingOperatorRelationshipStorageService } from 'app/main/content/_service/matchingoperator-relationship-storage.service';
-import { MatchingConfigurator } from 'app/main/content/_model/matching';
+import { MatchingConfiguration } from 'app/main/content/_model/matching';
+import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 
 export interface NewMatchingDialogData {
-  producerClassConfigurator: Configurator;
-  consumerClassConfigurator: Configurator;
+  producerClassConfiguration: Configurator;
+  consumerClassConfiguration: Configurator;
   label: string;
   marketplace: Marketplace;
 }
@@ -27,13 +27,13 @@ export class NewMatchingDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<NewMatchingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NewMatchingDialogData,
     private configuratorService: ConfiguratorService,
-    private matchingOperatorRelationshipstorageService: MatchingOperatorRelationshipStorageService,
+    private matchingConfigurationService: MatchingConfigurationService,
     private loginService: LoginService,
   ) {
   }
 
-  configurators: Configurator[];
-  recentConfigurators: Configurator[];
+  classConfigurations: Configurator[];
+  recentClassConfigurations: Configurator[];
   loaded = false;
   showErrors = false;
   showDuplicateError = false;
@@ -41,27 +41,28 @@ export class NewMatchingDialogComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((configurators: Configurator[]) => {
-        this.configurators = configurators.filter(c => {
+      this.configuratorService.getAllConfiguratorsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: Configurator[]) => {
+        this.classConfigurations = classConfigurations.filter(c => {
           return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
         });
 
-        if (this.configurators.length > 5) {
-          this.recentConfigurators = this.configurators.slice(0, 5);
+        if (this.classConfigurations.length > 5) {
+          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
         }
 
-        this.recentConfigurators = this.configurators;
+        this.recentClassConfigurations = this.classConfigurations;
+
         this.loaded = true;
       });
     });
   }
 
   producerItemSelected(event: any, c: Configurator) {
-    this.data.producerClassConfigurator = c;
+    this.data.producerClassConfiguration = c;
   }
 
   consumerItemSelected(event: any, c: Configurator) {
-    this.data.consumerClassConfigurator = c;
+    this.data.consumerClassConfiguration = c;
   }
 
   onNoClick(): void {
@@ -71,16 +72,16 @@ export class NewMatchingDialogComponent implements OnInit {
   onOKClick() {
     console.log(this.data);
     this.showDuplicateError = false;
-    if (!isNullOrUndefined(this.data.producerClassConfigurator) &&
-      !isNullOrUndefined(this.data.consumerClassConfigurator) &&
-      this.data.consumerClassConfigurator !== this.data.producerClassConfigurator) {
+    if (!isNullOrUndefined(this.data.producerClassConfiguration) &&
+      !isNullOrUndefined(this.data.consumerClassConfiguration) &&
+      this.data.consumerClassConfiguration !== this.data.producerClassConfiguration) {
 
       // this.data.label = this.label;
       console.log(this.data);
-      this.matchingOperatorRelationshipstorageService
-        .getMatchingOperatorRelationshipByUnorderedConfiguratorIds(this.data.marketplace, this.data.producerClassConfigurator.id, this.data.consumerClassConfigurator.id)
+      this.matchingConfigurationService
+        .getMatchingConfigurationByUnorderedClassConfigurationIds(this.data.marketplace, this.data.producerClassConfiguration.id, this.data.consumerClassConfiguration.id)
         .toPromise()
-        .then((ret: MatchingConfigurator) => {
+        .then((ret: MatchingConfiguration) => {
           if (isNullOrUndefined(ret)) {
             this.dialogRef.close(this.data);
           } else {
