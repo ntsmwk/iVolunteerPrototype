@@ -2,34 +2,46 @@ package at.jku.cis.iVolunteer.model.matching;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-public class MatchingClassDefinitionCollectionEntry {
-	
-	String path;
+public class MatchingCollectorConfigEntry {
+
 	ClassDefinition classDefinition;
-	
+	String path;
+	String pathDelimiter;
+
 	String sourceRelationshipId;
 	String targetRelationshipId;
-	
-	public MatchingClassDefinitionCollectionEntry() {
-		
+
+	public MatchingCollectorConfigEntry() {
+
 	}
-	
-	public MatchingClassDefinitionCollectionEntry(ClassDefinition classDefinition, String path) {
+
+	public MatchingCollectorConfigEntry(ClassDefinition classDefinition, String path) {
 		this.classDefinition = classDefinition;
 		this.path = path;
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
+
 	public void setPath(String path) {
 		this.path = path;
 	}
+
 	public ClassDefinition getClassDefinition() {
 		return classDefinition;
 	}
+
 	public void setClassDefinition(ClassDefinition classDefinition) {
 		this.classDefinition = classDefinition;
+	}
+
+	public String getPathDelimiter() {
+		return pathDelimiter;
+	}
+
+	public void setPathDelimiter(String pathDelimiter) {
+		this.pathDelimiter = pathDelimiter;
 	}
 
 	public String getSourceRelationshipId() {
@@ -47,8 +59,5 @@ public class MatchingClassDefinitionCollectionEntry {
 	public void setTargetRelationshipId(String targetRelationshipId) {
 		this.targetRelationshipId = targetRelationshipId;
 	}
-	
-	
-	
-	
+
 }

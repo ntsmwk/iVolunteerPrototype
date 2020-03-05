@@ -7,11 +7,11 @@ import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingOperatorRelationshipStorageService } from 'app/main/content/_service/matchingoperator-relationship-storage.service';
-import { MatchingOperatorRelationshipStorage } from 'app/main/content/_model/matching';
+import { MatchingConfigurator } from 'app/main/content/_model/matching';
 
 export interface NewMatchingDialogData {
-  producerConfigurator: Configurator;
-  consumerConfigurator: Configurator;
+  producerClassConfigurator: Configurator;
+  consumerClassConfigurator: Configurator;
   label: string;
   marketplace: Marketplace;
 }
@@ -57,11 +57,11 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
   producerItemSelected(event: any, c: Configurator) {
-    this.data.producerConfigurator = c;
+    this.data.producerClassConfigurator = c;
   }
 
   consumerItemSelected(event: any, c: Configurator) {
-    this.data.consumerConfigurator = c;
+    this.data.consumerClassConfigurator = c;
   }
 
   onNoClick(): void {
@@ -69,17 +69,18 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
   onOKClick() {
+    console.log(this.data);
     this.showDuplicateError = false;
-    if (!isNullOrUndefined(this.data.producerConfigurator) &&
-      !isNullOrUndefined(this.data.consumerConfigurator) &&
-      this.data.consumerConfigurator !== this.data.producerConfigurator) {
+    if (!isNullOrUndefined(this.data.producerClassConfigurator) &&
+      !isNullOrUndefined(this.data.consumerClassConfigurator) &&
+      this.data.consumerClassConfigurator !== this.data.producerClassConfigurator) {
 
       // this.data.label = this.label;
       console.log(this.data);
       this.matchingOperatorRelationshipstorageService
-        .getMatchingOperatorRelationshipByUnorderedConfiguratorIds(this.data.marketplace, this.data.producerConfigurator.id, this.data.consumerConfigurator.id)
+        .getMatchingOperatorRelationshipByUnorderedConfiguratorIds(this.data.marketplace, this.data.producerClassConfigurator.id, this.data.consumerClassConfigurator.id)
         .toPromise()
-        .then((ret: MatchingOperatorRelationshipStorage) => {
+        .then((ret: MatchingConfigurator) => {
           if (isNullOrUndefined(ret)) {
             this.dialogRef.close(this.data);
           } else {

@@ -23,13 +23,13 @@
           <col width="20%" />
           <tr style="background-color: rgb(62, 125, 219); color: white;">
             <th style="text-align: start">Name</th>
-            <th style="text-align: start">Producer</th>
-            <th style="text-align: start">Consumer</th>
+            <th style="text-align: start">Unternehmen</th>
+            <th style="text-align: start">Besteller</th>
           </tr>
-          <tr *ngFor="let s of recentStorages" class="entry" (click)="itemSelected($event, s)">
-            <td style="overflow: hidden">{{s.name}}</td>
-            <td style="overflow: hidden">{{s.producerConfiguratorName}}</td>
-            <td style="overflow: hidden">{{s.consumerConfiguratorName}}</td>
+          <tr *ngFor="let c of recentMatchingConfigurators" class="entry" (click)="itemSelected($event, c)">
+            <td style="overflow: hidden">{{c.name}}</td>
+            <td style="overflow: hidden">{{c.producerClassConfiguratorName}}</td>
+            <td style="overflow: hidden">{{c.consumerClassConfiguratorName}}</td>
           </tr>
         </table>
       </td>

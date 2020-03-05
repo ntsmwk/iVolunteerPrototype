@@ -123,14 +123,14 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   openSubmenu(event: any, rootItemId: number) {
     this.currentRootId = rootItemId;
     this.submenuContainer.nativeElement.style.display = 'block';
-    let leftPosition = this.calculateLeftSpace(event.srcElement.offsetParent, rootItemId);
+    const leftPosition = this.calculateLeftSpace(event.srcElement.offsetParent, rootItemId);
     this.submenuContainer.nativeElement.style.left = leftPosition + 'px';
   }
 
   private calculateLeftSpace(offsetParent: any, rootItemId: number) {
     let space = 10;
     if (!isNullOrUndefined(offsetParent.children)) {
-      for (let child of offsetParent.children) {
+      for (const child of offsetParent.children) {
         if (rootItemId - 1 <= 0) {
           return space;
         }

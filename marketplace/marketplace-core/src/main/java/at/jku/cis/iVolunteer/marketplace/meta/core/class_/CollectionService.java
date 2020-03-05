@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.matching.MatchingClassDefinitionCollection;
-import at.jku.cis.iVolunteer.model.matching.MatchingClassDefinitionCollectionEntry;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfigEntry;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -37,9 +37,13 @@ import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 @Service
 public class CollectionService {
 
+	private static final String PATH_DELIMITER = Character.toString((char) 28);
+
 	@Autowired ConfiguratorRepository configuratorRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
+	
+
 
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsSingleCollection(String slotId) {
 		Configurator configurator = configuratorRepository.findOne(slotId);
@@ -61,61 +65,60 @@ public class CollectionService {
 		return collectors;
 	}
 
-	public List<MatchingClassDefinitionCollection> collectAllClassDefinitionsWithPropertiesAsCollections(
-			String slotId) {
+	public List<MatchingCollectorConfig> collectAllClassDefinitionsWithPropertiesAsCollections(String slotId) {
 		Configurator configurator = configuratorRepository.findOne(slotId);
 
 		if (configurator == null) {
 			return null;
 		}
 
-		List<MatchingClassDefinitionCollection> collections = new ArrayList<>();
+		List<MatchingCollectorConfig> collections = new ArrayList<>();
 		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
 			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
-				MatchingClassDefinitionCollection collection = new MatchingClassDefinitionCollection();
-				collection.setCollector(c);
+				MatchingCollectorConfig collection = new MatchingCollectorConfig();
+				collection.setClassDefinition(c);
 				collection.setNumberOfProperties(c.getProperties().size());
+				collection.setPathDelimiter(PATH_DELIMITER);
 				collections.add(collection);
 			}
 		});
-		
-		for (MatchingClassDefinitionCollection collection : collections) {
-			
-			
-			collection.setCollectionEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(collection.getCollector(),
-					0, new ArrayList<MatchingClassDefinitionCollectionEntry>(),
-					getPathFromRoot(collection.getCollector())));
 
-			for (MatchingClassDefinitionCollectionEntry entry : collection.getCollectionEntries()) {
+		for (MatchingCollectorConfig collection : collections) {
+			collection.setPath(getPathFromRoot(collection.getClassDefinition()));
+			
+			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(collection.getClassDefinition(),
+					0, new ArrayList<>(), collection.getPath()));
+
+			for (MatchingCollectorConfigEntry entry : collection.getCollectorEntries()) {
 				collection.setNumberOfProperties(
 						collection.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
 			}
 
-			collection.setNumberOfDefinitions(collection.getCollectionEntries().size());
-		
+			collection.setNumberOfDefinitions(collection.getCollectorEntries().size());
 
 		}
 
 		return collections;
 
 	}
-	
+
 	String getPathFromRoot(ClassDefinition classDefinition) {
 		ArrayList<String> pathArray = new ArrayList<>();
 		pathArray.add(classDefinition.getId());
 
 		while (!classDefinition.isRoot()) {
-			List<Relationship> relationships = this.relationshipRepository.findByTargetAndRelationshipType(classDefinition.getId(), RelationshipType.AGGREGATION);
+			List<Relationship> relationships = this.relationshipRepository
+					.findByTargetAndRelationshipType(classDefinition.getId(), RelationshipType.AGGREGATION);
 			if (relationships.size() >= 1) {
 				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
-				pathArray.add(".");
+				pathArray.add(PATH_DELIMITER);
 				pathArray.add(classDefinition.getId());
 			}
 		}
-		
+
 		Collections.reverse(pathArray);
 		return String.join("", pathArray);
-	
+
 	}
 
 	List<EnumEntry> aggregateAllEnumEntriesDFS(ClassDefinition root, int level, List<EnumEntry> list) {
@@ -165,8 +168,8 @@ public class CollectionService {
 		return list;
 	}
 
-	List<MatchingClassDefinitionCollectionEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
-			List<MatchingClassDefinitionCollectionEntry> list, String path) {
+	List<MatchingCollectorConfigEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
+			List<MatchingCollectorConfigEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
 				RelationshipType.AGGREGATION);
@@ -181,10 +184,10 @@ public class CollectionService {
 				Relationship relationship = stack.pop();
 				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 				if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-					list.add(new MatchingClassDefinitionCollectionEntry(classDefinition, path));
+					list.add(new MatchingCollectorConfigEntry(classDefinition, path));
 				}
 				this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
-						path + "." + classDefinition.getId());
+						path + PATH_DELIMITER + classDefinition.getId());
 			}
 		}
 		return list;

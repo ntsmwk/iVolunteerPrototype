@@ -16,7 +16,7 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/config
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
-import { MatchingOperatorRelationshipStorage } from 'app/main/content/_model/matching';
+import { MatchingConfigurator } from 'app/main/content/_model/matching';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -518,17 +518,17 @@ export class DialogFactoryComponent {
       disableClose: true
     });
 
-    let storage: MatchingOperatorRelationshipStorage;
+    let matchingConfigurator: MatchingConfigurator;
 
     dialogRef.beforeClose().toPromise().then((result: OpenMatchingDialogData) => {
       console.log(result);
       if (!isNullOrUndefined(result)) {
-        storage = result.storage;
+        matchingConfigurator = result.matchingConfigurator;
       }
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return storage;
+      return matchingConfigurator;
     });
   }
 

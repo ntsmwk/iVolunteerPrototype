@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.matching.MatchingClassDefinitionCollection;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -49,7 +49,7 @@ public class ClassDefinitionController {
 	}
 	
 	@GetMapping("meta/core/class/definition/{slotId}/collections-with-properties")
-	private List<MatchingClassDefinitionCollection> getClassDefinitionsWithPropertiesCollections(@PathVariable("slotId") String slotId) {
+	private List<MatchingCollectorConfig> getClassDefinitionsWithPropertiesCollections(@PathVariable("slotId") String slotId) {
 		return  collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(slotId);
 	}
 

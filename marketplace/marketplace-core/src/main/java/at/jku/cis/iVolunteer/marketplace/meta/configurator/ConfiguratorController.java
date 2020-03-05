@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 
 @RestController
 public class ConfiguratorController {
 
 	@Autowired private ConfiguratorRepository configuratorRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private CollectionService collectionService;
 	
 	@GetMapping("meta/configurator/all")
 	List<Configurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
@@ -74,6 +75,7 @@ public class ConfiguratorController {
 		Configurator configurator = configuratorRepository.save(updatedConfigurator);
 	
 		//TODO aggregate and build 
+		
 		
 		return configurator;
 	}
