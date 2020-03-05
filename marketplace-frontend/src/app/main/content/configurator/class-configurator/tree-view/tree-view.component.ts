@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, RootRenderer, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorEditorComponent } from '../configurator-editor.component';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
-import { ChildActivationEnd } from '@angular/router';
 import { myMxCell } from '../../MyMxCell';
+import { ClassConfiguratorComponent } from '../class-configurator.component';
 
 export interface GraphNode {
   id: string;
@@ -25,8 +24,8 @@ export interface GraphNode {
 })
 export class EditorTreeViewComponent implements OnInit, DoCheck {
 
-  @Input() editorInstance: ConfiguratorEditorComponent;
-  oldEditorInstance: ConfiguratorEditorComponent;
+  @Input() editorInstance: ClassConfiguratorComponent;
+  oldEditorInstance: ClassConfiguratorComponent;
 
   treeControl = new NestedTreeControl<GraphNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<GraphNode>();
@@ -41,25 +40,24 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    // if (this.oldEditorInstance.graph.getAllEdges(this.oldEditorInstance.graph.getDefaultParent()) !== this.editorInstance.graph.getAllEdges(this.editorInstance.graph.getDefaultParent())) {
     if (this.editorInstance.modelUpdated) {
       this.constructJsonFromGraph();
       this.editorInstance.modelUpdated = false;
-    } 
+    }
 
     this.oldEditorInstance = Object.assign({}, this.editorInstance);
   }
 
-  //TODO
+  // TODO
   constructJsonFromGraph() {
-    let vertices: myMxCell[] = this.editorInstance.graph.getChildVertices(this.editorInstance.graph.getDefaultParent()) as myMxCell[];
-    let roots: myMxCell[] = vertices.filter((cell: myMxCell) => {
+    const vertices: myMxCell[] = this.editorInstance.graph.getChildVertices(this.editorInstance.graph.getDefaultParent()) as myMxCell[];
+    const roots: myMxCell[] = vertices.filter((cell: myMxCell) => {
       return cell.root;
     }) as myMxCell[];
 
-    let graphNodes: GraphNode[] = [];
-    for (let root of roots) {
-      let length = graphNodes.push({ id: root.id, name: root.value, type: 'root', cell: root, visible: root.isVisible() });
+    const graphNodes: GraphNode[] = [];
+    for (const root of roots) {
+      const length = graphNodes.push({ id: root.id, name: root.value, type: 'root', cell: root, visible: root.isVisible() });
       graphNodes[length - 1].children = this.addChildrenToGraphNode(graphNodes[length - 1], vertices);
     }
 
@@ -73,16 +71,16 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
 
 
   private addChildrenToGraphNode(node: GraphNode, vertices: myMxCell[]): GraphNode[] {
-    let edges: myMxCell[] = this.editorInstance.graph.getEdges(node.cell, undefined, false, true) as myMxCell[];
+    const edges: myMxCell[] = this.editorInstance.graph.getEdges(node.cell, undefined, false, true) as myMxCell[];
 
     if (!isNullOrUndefined(edges)) {
       node.children = [];
-      for (let edge of edges) {
-        let child = vertices.find((cell: myMxCell) => {
-          return cell.id == edge.target.id;
+      for (const edge of edges) {
+        const child = vertices.find((cell: myMxCell) => {
+          return cell.id === edge.target.id;
         });
         if (!isNullOrUndefined(child)) {
-          let length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child, visible: child.isVisible()});
+          const length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child, visible: child.isVisible() });
           node.children[length - 1].children = this.addChildrenToGraphNode(node.children[length - 1], vertices);
         }
       }
@@ -97,8 +95,8 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
   hideSidebar() {
     this.editorInstance.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
     this.editorInstance.rightSidebarVisible = false;
-    this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = "none";
-    this.editorInstance.rightSidebarContainer.nativeElement.style.height = "50px";
+    this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
+    this.editorInstance.rightSidebarContainer.nativeElement.style.height = '50px';
   }
 
   itemSelected(event: any, c: Configurator) {

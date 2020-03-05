@@ -8,12 +8,12 @@ import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dia
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { OpenDialogComponent, OpenDialogData } from 'app/main/content/configurator/configurator-editor/open-dialog/open-dialog.component';
+import { OpenDialogComponent, OpenDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { SaveAsDialogComponent } from 'app/main/content/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
+import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
-import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { MatchingConfigurator } from 'app/main/content/_model/matching';

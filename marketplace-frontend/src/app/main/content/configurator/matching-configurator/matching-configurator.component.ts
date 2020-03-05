@@ -10,7 +10,7 @@ import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
-import { CConstants } from '../configurator-editor/utils-and-constants';
+import { CConstants } from '../class-configurator/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';
 import { LoginService } from '../../_service/login.service';

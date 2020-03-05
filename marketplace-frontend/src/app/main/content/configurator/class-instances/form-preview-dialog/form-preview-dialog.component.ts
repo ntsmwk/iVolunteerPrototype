@@ -11,7 +11,7 @@ import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SaveAsDialogComponent, SaveAsDialogData } from '../../configurator-editor/save-as-dialog/save-as-dialog.component';
+import { SaveAsDialogComponent, SaveAsDialogData } from '../../class-configurator/save-as-dialog/save-as-dialog.component';
 
 export interface ClassInstanceFormPreviewDialogData {
   marketplace: Marketplace;

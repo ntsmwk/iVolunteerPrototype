@@ -14,7 +14,6 @@ import { EditorPopupMenu } from './popup-menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { ConfiguratorService } from '../../_service/meta/core/configurator/configurator.service';
-import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
 import { myMxCell } from '../MyMxCell';
@@ -30,13 +29,13 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 
 @Component({
-  selector: 'app-configurator-editor',
-  templateUrl: './configurator-editor.component.html',
-  styleUrls: ['./configurator-editor.component.scss'],
+  selector: 'app-class-configurator',
+  templateUrl: './class-configurator.component.html',
+  styleUrls: ['./class-configurator.component.scss'],
   providers: [DialogFactoryComponent]
 
 })
-export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
+export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -46,7 +45,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     private dialogFactory: DialogFactoryComponent,
     private snackBar: MatSnackBar,
     private configuratorService: ConfiguratorService,
-    private dataTransportService: DataTransportService,
     private objectIdService: ObjectIdService,
   ) {
 
@@ -79,7 +77,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   selectionType: string;
   selectionIndex: number;
-  selectionIndex2: number;
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   // @ViewChild('leftSidebarContainer', { static: true }) leftSidebarContainer: ElementRef;
@@ -103,9 +100,6 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.hiddenEdges = [];
 
     this.selectionIndex = -1;
-    this.selectionIndex2 = -1;
-    // console.log(this.configurableClasses);
-    // console.log(this.relationships);
   }
 
   fetchPropertyDefinitions() {
@@ -254,12 +248,12 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   private collapseGraph() {
-    let allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
-    let rootVertice = allVertices.find((v: myMxCell) => v.root);
-    let rootEdges = this.graph.getOutgoingEdges(rootVertice);
-    let headVertices: myMxCell[] = [];
+    const allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
+    const rootVertice = allVertices.find((v: myMxCell) => v.root);
+    const rootEdges = this.graph.getOutgoingEdges(rootVertice);
+    const headVertices: myMxCell[] = [];
 
-    for (let edge of rootEdges) {
+    for (const edge of rootEdges) {
       headVertices.push(edge.target);
     }
 
@@ -596,7 +590,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   handleMXGraphClickEvent(event: any) {
     const cell: myMxCell = event.getProperty('cell');
 
-    //ZOOMSCALE
+    // ZOOMSCALE
     const scale = this.graph.view.getScale();
 
     const translate = this.graph.view.getTranslate();
@@ -780,7 +774,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
 
     if (!isNullOrUndefined(edges)) {
-      for (let edge of edges) {
+      for (const edge of edges) {
         if (!isNullOrUndefined(edge) && !isNullOrUndefined(edge.target)) {
           if (!edge.target.isCollapsed()) {
             // this.graph.foldCells(true, false, [edge.target]);
@@ -905,7 +899,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
       for (const childEdge of childEdges) {
         this.graph.getModel().setVisible(childEdge.target, false);
-        this.setAllCellsInvisibleRec(childEdge.target as myMxCell)
+        this.setAllCellsInvisibleRec(childEdge.target as myMxCell);
       }
     }
   }
@@ -1166,7 +1160,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         (<Association>r).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
 
       } else if (cell.cellType === 'composition' || cell.cellType === 'aggregation') {
-        //TODO
+        // TODO
       } else {
         // console.error('invalid cellType');
         // console.log(cell);
@@ -1206,7 +1200,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   showZoomLevel() {
-    let scale = this.graph.view.getScale();
+    const scale = this.graph.view.getScale();
     console.log(this.graph.view.getScale());
     this.graph.zoomActual();
     console.log(this.graph.view.getScale());

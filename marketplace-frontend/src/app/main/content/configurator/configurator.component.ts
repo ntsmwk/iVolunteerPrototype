@@ -24,7 +24,7 @@ export class ConfiguratorComponent implements OnInit {
   relationships: Relationship[];
 
 
-  isLoaded: boolean = false;
+  isLoaded = false;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -40,9 +40,9 @@ export class ConfiguratorComponent implements OnInit {
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-        if (role == "FLEXPROD") {
+        if (role === 'FLEXPROD') {
           service = this.flexProdService;
-        } else if (role == "HELP_SEEKER") {
+        } else if (role === 'HELP_SEEKER') {
           service = this.helpSeekerService;
         }
 

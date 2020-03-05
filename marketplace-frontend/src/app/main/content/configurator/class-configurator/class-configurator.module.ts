@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ConfiguratorEditorComponent } from './configurator-editor.component';
-import { RouterModule } from '@angular/router';
+import { ClassConfiguratorComponent } from './class-configurator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule, MatOptionModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
@@ -18,7 +17,6 @@ import { AddOrRemoveDialogComponent } from 'app/main/content/_components/dialogs
 import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
-import { DataTransportService } from '../../_service/data-transport/data-transport.service';
 import { EditorTreeViewModule } from './tree-view/tree-view.module';
 
 
@@ -26,7 +24,7 @@ import { EditorTreeViewModule } from './tree-view/tree-view.module';
 @NgModule({
   imports: [
     CommonModule,
-    
+
     MatCommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -52,9 +50,9 @@ import { EditorTreeViewModule } from './tree-view/tree-view.module';
     EditorTreeViewModule,
 
   ],
-  declarations: [ConfiguratorEditorComponent],
-  exports: [ConfiguratorEditorComponent],
-  entryComponents:[AddOrRemoveDialogComponent],
+  declarations: [ClassConfiguratorComponent],
+  exports: [ClassConfiguratorComponent],
+  entryComponents: [AddOrRemoveDialogComponent],
 
 
 
@@ -62,4 +60,4 @@ import { EditorTreeViewModule } from './tree-view/tree-view.module';
 
 
 
-export class ConfiguratorEditorModule { }
+export class ClassConfiguratorModule { }

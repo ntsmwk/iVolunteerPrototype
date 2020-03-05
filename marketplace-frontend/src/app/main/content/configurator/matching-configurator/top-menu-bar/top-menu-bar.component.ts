@@ -58,7 +58,7 @@ const subMenuItems: SubMenuItem[] = [
 })
 export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
 
-  isLoaded: boolean = false;
+  isLoaded = false;
   menuOpen: false;
 
   rootMenuItems = rootMenuItems;
@@ -107,15 +107,15 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
-    let outer = this;
+    const outer = this;
 
-    document.addEventListener("click", function (event) {
+    document.addEventListener('click', function (event) {
       outer.handleHTMLClickEvent(event);
     });
   }
 
   handleHTMLClickEvent(event: any) {
-    if (event.srcElement.className != "menuitem") {
+    if (event.srcElement.className !== 'menuitem') {
       this.submenuContainer.nativeElement.style.display = 'none';
     }
   }
@@ -161,11 +161,11 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   saveClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.confirmationDialog("Save", "Are you sure you want to save? The existing model will be overidden...").then((result: boolean) => {
+    this.dialogFactory.confirmationDialog('Save', 'Are you sure you want to save? The existing model will be overidden...').then((result: boolean) => {
       if (result) {
-        this.menuOptionClickedEvent.emit({ id: "editor_save" });
+        this.menuOptionClickedEvent.emit({ id: 'editor_save' });
       } else {
-        this.menuOptionClickedEvent.emit({ id: "cancelled" });
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
     });
   }
@@ -175,9 +175,9 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
     setTimeout(() => {
       this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
         if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: "editor_save_as", configurator: ret });
+          this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
         } else {
-          this.menuOptionClickedEvent.emit({ id: "cancelled" });
+          this.menuOptionClickedEvent.emit({ id: 'cancelled' });
         }
       });
     });
@@ -188,16 +188,16 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    let eventResponse = this.eventResponseAction;
+    const eventResponse = this.eventResponseAction;
     this.eventResponseAction = undefined;
-    if (eventResponse == "saveAsClicked") {
+    if (eventResponse === 'saveAsClicked') {
       this[eventResponse](eventResponse, undefined);
     }
   }
 
 
   test(event: any, item: SubMenuItem) {
-    console.log("test");
+    console.log('test');
     console.log(event);
     console.log(item);
   }
