@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.configuration.matching;
+package at.jku.cis.iVolunteer.model.configurations.matching;
 
 public class MatchingOperatorRelationship {
 

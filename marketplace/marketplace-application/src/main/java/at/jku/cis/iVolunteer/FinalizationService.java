@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer;
 
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;

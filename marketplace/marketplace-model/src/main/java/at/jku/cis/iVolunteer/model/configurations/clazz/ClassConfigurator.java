@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.configuration.clazz;
+package at.jku.cis.iVolunteer.model.configurations.clazz;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Configurator {
+public class ClassConfigurator {
 
 	@Id String id;
 
@@ -23,7 +23,7 @@ public class Configurator {
 
 	private ConfiguratorArcheType configuratorArcheType;
 
-	public Configurator() {
+	public ClassConfigurator() {
 	}
 	
 	public String getId() {
@@ -81,10 +81,10 @@ public class Configurator {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Configurator)) {
+		if (!(obj instanceof ClassConfigurator)) {
 			return false;
 		}
-		return ((Configurator) obj).id.equals(id);
+		return ((ClassConfigurator) obj).id.equals(id);
 	}
 
 	public ConfiguratorArcheType getConfiguratorArcheType() {

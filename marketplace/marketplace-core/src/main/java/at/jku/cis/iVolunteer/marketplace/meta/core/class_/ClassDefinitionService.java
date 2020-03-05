@@ -14,9 +14,9 @@ import javax.ws.rs.NotAcceptableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -54,7 +54,7 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithProperties(String slotId) {
-		Configurator configurator = configuratorRepository.findOne(slotId);
+		ClassConfigurator configurator = configuratorRepository.findOne(slotId);
 
 		if (configurator == null) {
 			return null;

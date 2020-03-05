@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.meta.configurator;
+package at.jku.cis.iVolunteer.marketplace.configurations.clazz;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
-import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
 
 @RestController
 public class ConfiguratorController {
@@ -26,7 +26,7 @@ public class ConfiguratorController {
 	@Autowired private CollectionService collectionService;
 	
 	@GetMapping("meta/configurator/all")
-	List<Configurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
+	List<ClassConfigurator> getAllConfigurators(@RequestParam(value = "sorted", required = false) String sortType) {
 		
 //		if (sortType.equalsIgnoreCase("asc")) {
 //			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
@@ -37,27 +37,27 @@ public class ConfiguratorController {
 		
 		
 		
-		List<Configurator> configurators =  configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
+		List<ClassConfigurator> configurators =  configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "name"));
 		return configurators;
 	}
 	
 	@GetMapping("meta/configurator/{id}")
-	Configurator getConfiguratorById(@PathVariable("id") String id) {
+	ClassConfigurator getConfiguratorById(@PathVariable("id") String id) {
 		return configuratorRepository.findOne(id);
 	}
 	
 	@GetMapping("meta/configurator/by-name/{name}")
-	List<Configurator> getConfiguratorByName(@PathVariable("name") String name) {
+	List<ClassConfigurator> getConfiguratorByName(@PathVariable("name") String name) {
 		return configuratorRepository.findByName(name);
 	}
 	
 	@PostMapping("meta/configurator/new-empty")
-	Configurator createNewEmptyConfigurator(@RequestBody String[] params) {
+	ClassConfigurator createNewEmptyConfigurator(@RequestBody String[] params) {
 		if (params.length != 2) {
 			return null;
 		}
 		
-		Configurator c = new Configurator();
+		ClassConfigurator c = new ClassConfigurator();
 		c.setName(params[0]);
 		c.setDescription(params[1]);
 		
@@ -65,14 +65,14 @@ public class ConfiguratorController {
 	}
 	
 	@PostMapping("meta/configurator/new")
-	Configurator createNewConfigurator(@RequestBody Configurator newConfigurator) {
+	ClassConfigurator createNewConfigurator(@RequestBody ClassConfigurator newConfigurator) {
 		return saveConfigurator(newConfigurator);
 	}
 	
 	@PutMapping("meta/configurator/save")
-	Configurator saveConfigurator(@RequestBody Configurator updatedConfigurator) {
+	ClassConfigurator saveConfigurator(@RequestBody ClassConfigurator updatedConfigurator) {
 		
-		Configurator configurator = configuratorRepository.save(updatedConfigurator);
+		ClassConfigurator configurator = configuratorRepository.save(updatedConfigurator);
 	
 		//TODO aggregate and build 
 		

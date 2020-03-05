@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.matching;
+package at.jku.cis.iVolunteer.marketplace.configurations.matching;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
-import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
-import at.jku.cis.iVolunteer.model.configuration.matching.MatchingConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 
 @RestController
 public class MatchingConfigurationController {
@@ -63,8 +63,8 @@ public class MatchingConfigurationController {
 			matchingConfiguration.setId(createHashFromClassConfigurationIds(matchingConfiguration.getProducerClassConfigurationId(),
 					matchingConfiguration.getConsumerClassConfigurationId()));
 
-			Configurator producer = configuratorRepository.findOne(matchingConfiguration.getProducerClassConfigurationId());
-			Configurator consumer = configuratorRepository.findOne(matchingConfiguration.getConsumerClassConfigurationId());
+			ClassConfigurator producer = configuratorRepository.findOne(matchingConfiguration.getProducerClassConfigurationId());
+			ClassConfigurator consumer = configuratorRepository.findOne(matchingConfiguration.getConsumerClassConfigurationId());
 
 			matchingConfiguration.setProducerClassConfigurationName(producer.getName());
 			matchingConfiguration.setConsumerClassConfigurationName(consumer.getName());

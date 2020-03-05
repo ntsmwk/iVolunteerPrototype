@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
-import at.jku.cis.iVolunteer.marketplace.matching.MatchingConfigurationRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -25,9 +25,9 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.configuration.clazz.Configurator;
-import at.jku.cis.iVolunteer.model.configuration.matching.MatchingConfiguration;
-import at.jku.cis.iVolunteer.model.configuration.matching.MatchingOperatorRelationship;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfigurator;
+import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.matching.MatchingOperatorRelationship;
 import at.jku.cis.iVolunteer.model.feedback.Feedback;
 import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -583,7 +583,7 @@ public class InitializationService {
 		relationships.add(r2);
 		relationships.add(r3);
 		
-		Configurator configurator = new Configurator();
+		ClassConfigurator configurator = new ClassConfigurator();
 		configurator.setId("slot1");
 		configurator.setName("Produzent");
 		configurator.setRelationshipIds(new ArrayList<String>());
@@ -1085,7 +1085,7 @@ public class InitializationService {
 		relationships.add(r2);
 		relationships.add(r3);
 		
-		Configurator configurator = new Configurator();
+		ClassConfigurator configurator = new ClassConfigurator();
 		configurator.setId("slot2");
 		configurator.setName("Konsument");
 		configurator.setRelationshipIds(new ArrayList<String>());

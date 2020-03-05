@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.configuration.clazz;
+package at.jku.cis.iVolunteer.model.configurations.clazz;
 
 public enum ConfiguratorArcheType {
 
