@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
+import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
@@ -33,7 +33,7 @@ public class CoreVolunteerInitializationService {
 	@Autowired private CoreVolunteerService coreVolunteerService;
 	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private CoreTenantRepository coreTenantRepository;
+	@Autowired private TenantRepository coreTenantRepository;
 
 	public void initVolunteers() {
 

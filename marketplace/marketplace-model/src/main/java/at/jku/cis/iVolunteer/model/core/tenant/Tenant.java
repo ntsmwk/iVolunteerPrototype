@@ -11,6 +11,8 @@ public class Tenant {
 
 	private String primaryColor;
 	private String secondaryColor;
+	
+	private String marketplaceId;
 
 	public String getId() {
 		return id;
@@ -50,6 +52,14 @@ public class Tenant {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 }

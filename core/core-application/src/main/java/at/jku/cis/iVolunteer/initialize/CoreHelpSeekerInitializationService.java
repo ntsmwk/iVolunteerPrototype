@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerRepository;
 import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.tenant.CoreTenantRepository;
+import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.UserImagePathRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
@@ -36,7 +36,7 @@ public class CoreHelpSeekerInitializationService {
 	private static final String RKWILHERING = "RK_Wilhering";
 
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
-	@Autowired private CoreTenantRepository coreTenantRepository;
+	@Autowired private TenantRepository coreTenantRepository;
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private UserImagePathRepository userImagePathRepository;
 	@Autowired private CoreHelpSeekerService coreHelpSeekerService;

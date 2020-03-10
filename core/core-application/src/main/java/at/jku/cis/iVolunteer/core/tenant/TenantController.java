@@ -10,18 +10,18 @@ import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 
 @RestController
 @RequestMapping("/tenant")
-public class CoreTenantController {
+public class TenantController {
 
-	@Autowired CoreTenantRepository coreTenantRepository;
+	@Autowired TenantRepository tenantRepository;
 
 	@GetMapping("/name/{tenantName}")
-	public String getCoreTenantByName(@PathVariable String tenantName) {
-		return coreTenantRepository.findByName(tenantName).getId();
+	public String getTenantByName(@PathVariable String tenantName) {
+		return tenantRepository.findByName(tenantName).getId();
 	}
 
 	@GetMapping("/{tenantId}")
-	public Tenant getCoreTenantById(@PathVariable String tenantId) {
-		return coreTenantRepository.findOne(tenantId);
+	public Tenant getTenantById(@PathVariable String tenantId) {
+		return tenantRepository.findOne(tenantId);
 	}
 
 }
