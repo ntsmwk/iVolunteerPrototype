@@ -6,7 +6,6 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseContentComponent } from "app/main/content/content.component";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
-
 import { TokenInterceptor } from "./_interceptor/token.interceptor";
 import { Http401Interceptor } from "./_interceptor/http-401.interceptor";
 import { TokenGuard } from "./_guard/token.guard";
@@ -20,9 +19,9 @@ import { ShareMenuComponent } from "./_components/volunteer/task-management/achi
 import { ShareMenuModule } from "./_components/volunteer/task-management/achievements/share-menu/share-menu.module";
 import { AnonymGuard } from "./_guard/anonym.guard";
 import { AdminGuard } from "./_guard/admin.guard";
-import { TimelineFilterModule } from './_components/volunteer/task-management/achievements/timeline-filter/timeline-filter.module';
-import { SunburstTableModule } from './_components/volunteer/task-management/achievements/sunburst-table/sunburst-table.module';
-import { DonutModule } from './_components/volunteer/task-management/achievements/donut/donut.module';
+import { TimelineFilterModule } from "./_components/volunteer/task-management/achievements/timeline-filter/timeline-filter.module";
+import { SunburstTableModule } from "./_components/volunteer/task-management/achievements/sunburst-table/sunburst-table.module";
+import { DonutModule } from "./_components/volunteer/task-management/achievements/donut/donut.module";
 
 const routes: Route[] = [
   {
@@ -326,9 +325,7 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-  declarations: [
-    FuseContentComponent
-  ],
+  declarations: [FuseContentComponent],
   imports: [
     RouterModule.forChild(routes),
     FuseSharedModule,
@@ -345,4 +342,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent]
 })
-export class FuseContentModule { }
+export class FuseContentModule {}

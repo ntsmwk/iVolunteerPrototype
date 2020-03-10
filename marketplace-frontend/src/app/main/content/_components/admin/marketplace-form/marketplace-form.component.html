@@ -24,5 +24,7 @@
         <button type="submit" mat-raised-button color="primary">Save</button>
       </div>
     </form>
+
+    <tenant-list *ngIf="this.marketplaceForm.value.id" marketplaceId="this.marketplaceForm.value.id"></tenant-list>
   </div>
 </div>
