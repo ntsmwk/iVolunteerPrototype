@@ -7,7 +7,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 
 @Component({
   selector: "tenant-list",
-  templateUrl: "name.component.html"
+  templateUrl: "tenant-list.component.html"
 })
 export class FuseTenantListComponent implements OnInit {
   @Input() marketplaceId: string;
