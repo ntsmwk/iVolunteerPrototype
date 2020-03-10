@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.core.tenant;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,4 +26,9 @@ public class TenantController {
 		return tenantRepository.findOne(tenantId);
 	}
 
+	@GetMapping("/marketplace/{marketplaceId}")
+	public List<Tenant> getTenantsByMarketplaceIds(@PathVariable String marketplaceId){
+		return tenantRepository.findByMarketplaceId(marketplaceId);
+	}
+	
 }
