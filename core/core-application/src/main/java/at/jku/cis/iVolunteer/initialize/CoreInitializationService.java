@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,12 +13,14 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.admin.CoreAdminRepository;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
+import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreAdmin;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
+import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @Service
 public class CoreInitializationService {
@@ -25,7 +28,6 @@ public class CoreInitializationService {
 	private static final String FLEXPROD = "flexprod";
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
-
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
@@ -35,17 +37,36 @@ public class CoreInitializationService {
 	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
 	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
 	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private Environment environment;
 
 	public void init() {
+		createMarketplace();
+
 		coreTenantInitializationService.initTenants();
 		coreVolunteerInitializationService.initVolunteers();
 		coreHelpSeekerInitializationService.initHelpSeekers();
 
 		createFlexProdUser(FLEXPROD, RAW_PASSWORD);
-		
 		createAdminUser(ADMIN, RAW_PASSWORD);
-
 		createRecruiter(RECRUITER, RAW_PASSWORD, "Daniel", "Huber", "Recruiter");
+
+	}
+
+	private void createMarketplace() {
+		Marketplace marketplace = this.marketplaceRepository.findByName("Marketplace 1");
+		if (marketplace == null) {
+			marketplace = new Marketplace();
+			marketplace.setName("Marketplace 1");
+			marketplace.setShortName("MP 1");
+			if (environment.acceptsProfiles("dev")) {
+				marketplace.setId("0eaf3a6281df11e8adc0fa7ae01bbebc");
+				marketplace.setUrl("http://localhost:8080");
+			}
+			this.marketplaceRepository.save(marketplace);
+		}
+
+		// TODO Auto-generated method stub
 
 	}
 
@@ -87,5 +108,4 @@ public class CoreInitializationService {
 		return fpUser;
 	}
 
-	
 }
