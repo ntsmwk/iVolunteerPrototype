@@ -1,13 +1,7 @@
 package at.jku.cis.iVolunteer.initialize;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +9,6 @@ import at.jku.cis.iVolunteer.core.admin.CoreAdminRepository;
 import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
-import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreAdmin;
 import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
 import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
