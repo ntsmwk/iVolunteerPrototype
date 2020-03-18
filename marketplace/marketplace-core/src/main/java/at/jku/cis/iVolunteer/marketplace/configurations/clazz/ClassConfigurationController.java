@@ -80,7 +80,7 @@ public class ClassConfigurationController {
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
 	
 		//TODO aggregate and build 
-		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(classConfiguration.getId());
+		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsMultipleCollections(classConfiguration.getId());
 		
 		MatchingCollectorConfiguration matchingCollectorConfiguration = new MatchingCollectorConfiguration();
 		matchingCollectorConfiguration.setId(classConfiguration.getId());

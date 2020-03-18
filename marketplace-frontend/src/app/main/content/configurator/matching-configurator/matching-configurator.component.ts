@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
@@ -16,7 +15,8 @@ import { myMxCell } from '../MyMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry } from '../../_model/matching';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
-import { ClassConfiguration, MatchingConfiguration } from '../../_model/configurations';
+import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../_model/configurations';
+import { MatchingCollectorConfigurationService } from '../../_service/configuration/matching-collector-configuration.service';
 
 declare var require: any;
 
@@ -38,8 +38,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private classDefinitionService: ClassDefinitionService,
-
+    private matchingCollectorConfigurationService: MatchingCollectorConfigurationService,
     private loginService: LoginService,
     private flexProdService: CoreFlexProdService,
     private helpSeekerService: CoreHelpSeekerService,
@@ -60,8 +59,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerClassConfiguration: ClassConfiguration;
   consumerClassConfigurator: ClassConfiguration;
 
-  producerMatchingCollector: MatchingCollector[];
-  consumerMatchingCollector: MatchingCollector[];
+  producerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
+  consumerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
 
   matchingPalettes = CConstants.matchingPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
@@ -95,14 +94,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.matchingConfiguration = undefined;
 
     Promise.all([
-      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerClassConfigurationId).toPromise()
-        .then((collector: MatchingCollector[]) => {
-          this.producerMatchingCollector = collector;
+      this.matchingCollectorConfigurationService.getSavedMatchingCollectorConfiguration(this.marketplace, producerClassConfigurationId).toPromise()
+        .then((configuration: MatchingCollectorConfiguration) => {
+          this.producerMatchingCollectorConfiguration = configuration;
           this.insertClassDefinitionsProducerFromCollector();
         }),
-      this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerClassConfigurationId).toPromise()
-        .then((collector: MatchingCollector[]) => {
-          this.consumerMatchingCollector = collector;
+      this.matchingCollectorConfigurationService.getSavedMatchingCollectorConfiguration(this.marketplace, consumerClassConfigurationId).toPromise()
+        .then((configuration: MatchingCollectorConfiguration) => {
+          this.consumerMatchingCollectorConfiguration = configuration;
           this.insertClassDefinitionsConsumerFromCollector();
         })
     ]).then(() => {
@@ -231,7 +230,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     let y = title.geometry.y + title.geometry.height + 20;
 
-    for (const c of this.producerMatchingCollector) {
+    for (const c of this.producerMatchingCollectorConfiguration.collectors) {
       const cell = this.insertClassDefinitionCollectorIntoGraph(c, new mx.mxGeometry(120, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
@@ -247,7 +246,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     y = title.geometry.y + title.geometry.height + 20;
 
 
-    for (const c of this.consumerMatchingCollector) {
+    for (const c of this.consumerMatchingCollectorConfiguration.collectors) {
       const cell = this.insertClassDefinitionCollectorIntoGraph(c, new mx.mxGeometry(x - 100, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }

@@ -42,16 +42,6 @@ public class ClassDefinitionController {
 	private List<ClassDefinition> getClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
 		return  classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
 	}
-	
-	@GetMapping("meta/core/class/definition/{slotId}/collect-with-properties")
-	private List<ClassDefinition> collectClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
-		return  collectionService.collectAllClassDefinitionsWithPropertiesAsSingleCollection(slotId);
-	}
-	
-	@GetMapping("meta/core/class/definition/{slotId}/collections-with-properties")
-	private List<MatchingCollector> getClassDefinitionsWithPropertiesCollections(@PathVariable("slotId") String slotId) {
-		return  collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(slotId);
-	}
 
 	@GetMapping("/meta/core/class/definition/{id}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {

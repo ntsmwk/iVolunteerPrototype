@@ -65,7 +65,7 @@ public class CollectionService {
 		return collectors;
 	}
 
-	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsCollections(String classConfigurationId) {
+	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMultipleCollections(String classConfigurationId) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(classConfigurationId);
 
 		if (classConfiguration == null) {
