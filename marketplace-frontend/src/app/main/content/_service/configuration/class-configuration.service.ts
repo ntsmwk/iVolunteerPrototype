@@ -36,21 +36,21 @@ export class ClassConfigurationService {
   }
 
   createNewEmptyClassConfiguration(marketplace: Marketplace, name: string, description: string) {
-    return this.http.post(`${marketplace.url}/meta/class-configuration/new-empty`, [name, description]);
+    return this.http.post(`${marketplace.url}/class-configuration/new-empty`, [name, description]);
   }
 
   createNewClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
-    return this.http.post(`${marketplace.url}/meta/class-configuration/new`, classConfiguration);
+    return this.http.post(`${marketplace.url}/class-configuration/new`, classConfiguration);
   }
 
   saveClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
     console.log('Save configurator');
     console.log(classConfiguration);
-    return this.http.put(`${marketplace.url}/meta/class-configuration/save`, classConfiguration);
+    return this.http.put(`${marketplace.url}/class-configuration/save`, classConfiguration);
   }
 
   deleteClassConfiguration(marketplace: Marketplace, id: string) {
-    return this.http.delete(`${marketplace.url}/meta/configurator/${id}/delete`);
+    return this.http.delete(`${marketplace.url}/class-configuration/${id}/delete`);
   }
 
 

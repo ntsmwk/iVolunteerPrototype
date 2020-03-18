@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
+import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 
 @RestController
 public class ClassConfigurationController {
 
 	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 	@Autowired private CollectionService collectionService;
+	
+	@Autowired private MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
 	
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations(@RequestParam(value = "sorted", required = false) String sortType) {
@@ -70,13 +75,19 @@ public class ClassConfigurationController {
 	}
 	
 	@PutMapping("class-configuration/save")
-	ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
+	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
 		
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
 	
 		//TODO aggregate and build 
-//		collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(classConfiguration.getId());
+		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(classConfiguration.getId());
 		
+		MatchingCollectorConfiguration matchingCollectorConfiguration = new MatchingCollectorConfiguration();
+		matchingCollectorConfiguration.setId(classConfiguration.getId());
+		matchingCollectorConfiguration.setClassConfigurationId(classConfiguration.getId());
+		matchingCollectorConfiguration.setCollectors(collectors);
+		
+		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		
 		return classConfiguration;
 	}

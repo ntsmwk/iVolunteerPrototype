@@ -15,8 +15,6 @@ public class MatchingCollector {
 	int numberOfDefinitions;
 
 
-
-
 	public ClassDefinition getClassDefinition() {
 		return classDefinition;
 	}

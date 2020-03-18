@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
@@ -72,6 +73,8 @@ public class InitializationService {
 	@Autowired private FeedbackRepository feedbackRepository;
 	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	
+	@Autowired private ClassConfigurationController classConfigurationController;
 
 	@PostConstruct
 	public void init() {
@@ -605,7 +608,9 @@ public class InitializationService {
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
 		
-		configuratorRepository.save(configurator);
+//		configuratorRepository.save(configurator);
+		classConfigurationController.saveClassConfiguration(configurator);
+
 	}
 	
 	private void addFlexProdConfigClassesConsumer() {
@@ -1107,7 +1112,8 @@ public class InitializationService {
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
 		
-		configuratorRepository.save(configurator);
+//		configuratorRepository.save(configurator);
+		classConfigurationController.saveClassConfiguration(configurator);
 	}
 	
 	private void addFlexProdMachtingOperatorRelationshipStorage() {
