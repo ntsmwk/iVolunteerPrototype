@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfigEntry;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
+import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
@@ -39,14 +39,14 @@ public class CollectionService {
 
 	private static final String PATH_DELIMITER = Character.toString((char) 28);
 
-	@Autowired ClassConfigurationRepository configuratorRepository;
+	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
 	
 
 
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsSingleCollection(String slotId) {
-		ClassConfiguration configurator = configuratorRepository.findOne(slotId);
+		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
 		if (configurator == null) {
 			return null;
 		}
@@ -65,17 +65,17 @@ public class CollectionService {
 		return collectors;
 	}
 
-	public List<MatchingCollectorConfig> collectAllClassDefinitionsWithPropertiesAsCollections(String slotId) {
-		ClassConfiguration configurator = configuratorRepository.findOne(slotId);
+	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsCollections(String classConfigurationId) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(classConfigurationId);
 
-		if (configurator == null) {
+		if (classConfiguration == null) {
 			return null;
 		}
 
-		List<MatchingCollectorConfig> collections = new ArrayList<>();
-		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
+		List<MatchingCollector> collections = new ArrayList<>();
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
 			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
-				MatchingCollectorConfig collection = new MatchingCollectorConfig();
+				MatchingCollector collection = new MatchingCollector();
 				collection.setClassDefinition(c);
 				collection.setNumberOfProperties(c.getProperties().size());
 				collection.setPathDelimiter(PATH_DELIMITER);
@@ -83,13 +83,13 @@ public class CollectionService {
 			}
 		});
 
-		for (MatchingCollectorConfig collection : collections) {
+		for (MatchingCollector collection : collections) {
 			collection.setPath(getPathFromRoot(collection.getClassDefinition()));
 			
 			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(collection.getClassDefinition(),
 					0, new ArrayList<>(), collection.getPath()));
 
-			for (MatchingCollectorConfigEntry entry : collection.getCollectorEntries()) {
+			for (MatchingCollectorEntry entry : collection.getCollectorEntries()) {
 				collection.setNumberOfProperties(
 						collection.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
 			}
@@ -168,8 +168,8 @@ public class CollectionService {
 		return list;
 	}
 
-	List<MatchingCollectorConfigEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
-			List<MatchingCollectorConfigEntry> list, String path) {
+	List<MatchingCollectorEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
+			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
 				RelationshipType.AGGREGATION);
@@ -184,7 +184,7 @@ public class CollectionService {
 				Relationship relationship = stack.pop();
 				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 				if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-					list.add(new MatchingCollectorConfigEntry(classDefinition, path));
+					list.add(new MatchingCollectorEntry(classDefinition, path));
 				}
 				this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
 						path + PATH_DELIMITER + classDefinition.getId());

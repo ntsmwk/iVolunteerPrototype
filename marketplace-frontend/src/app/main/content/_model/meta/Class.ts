@@ -42,6 +42,33 @@ export class ClassInstance {
     }
 }
 
+export class ClassInstanceDTO {
+    name: string;
+    id: string;
+    issuerId: string;
+    blockchainDate: Date;
+    classArchetype: ClassArchetype;
+    purpose: string;
+    dateFrom: Date;
+    dateTo: Date;
+    location: string;
+    description: string;
+    duration: number;
+    rank: string;
+    taskType1: string;
+    taskType2: string;
+    taskType3: string;
+    hash: string;
+    imagePath: string;
+
+    published: boolean;
+    inUserRepository: boolean;
+    inIssuerInbox: boolean;
+
+    isNewFakeData: boolean;
+    isMV: boolean;
+}
+
 export class CompetenceClassInstance extends ClassInstance {
     constructor(classDefintion: ClassDefinition, properties: PropertyInstance<any>[]) {
         super(classDefintion, properties);
@@ -70,18 +97,6 @@ export class AchievementClassInstance extends ClassInstance {
     }
 }
 
-export class ClassConfiguration {
-    id: string;
-    name: string;
-    description: string;
-    classDefinitionIds: string[];
-    relationshipIds: string[];
-    date: Date;
-    userId: String;
-
-}
-
-
 export enum ClassArchetype {
     COMPETENCE = 'COMPETENCE',
     TASK = 'TASK',
@@ -102,13 +117,13 @@ export namespace ClassArchetype {
 
     export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
         switch (classArchetype) {
-            case 'COMPETENCE': return 'Competence';
-            case 'TASK': return 'Task';
-            case 'FUNCTION': return 'Function';
-            case 'ACHIEVEMENT': return 'Achievement';
-            case 'ENUM_HEAD': return 'Enum head';
-            case 'ENUM_ENTRY': return 'Enum entry';
-            case 'ROOT': return 'Root';
+            // case 'COMPETENCE': return 'Competence';
+            // case 'TASK': return 'Task';
+            // case 'FUNCTION': return 'Function';
+            // case 'ACHIEVEMENT': return 'Achievement';
+            // case 'ENUM_HEAD': return 'Enum head';
+            // case 'ENUM_ENTRY': return 'Enum entry';
+            // case 'ROOT': return 'Root';
             case 'FLEXPROD': return 'Flexprod';
             case 'FLEXPROD_COLLECTOR': return 'Flexprod';
         }

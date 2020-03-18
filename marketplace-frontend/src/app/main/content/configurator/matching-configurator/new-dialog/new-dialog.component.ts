@@ -4,10 +4,9 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MatchingConfiguration } from 'app/main/content/_model/matching';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
-import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
 
 export interface NewMatchingDialogData {
   producerClassConfiguration: ClassConfiguration;

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit } fro
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassDefinition, ClassArchetype, ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
@@ -16,6 +16,7 @@ import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
 import { myMxCell } from '../MyMxCell';
 import { ClassConfigurationService } from '../../_service/configuration/class-configuration.service';
+import { ClassConfiguration } from '../../_model/configurations';
 
 declare var require: any;
 

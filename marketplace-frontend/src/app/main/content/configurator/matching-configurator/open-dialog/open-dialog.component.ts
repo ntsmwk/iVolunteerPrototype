@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MatchingConfiguration } from 'app/main/content/_model/matching';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
+import { MatchingConfiguration } from 'app/main/content/_model/configurations';
 
 export interface OpenMatchingDialogData {
   marketplace: Marketplace;

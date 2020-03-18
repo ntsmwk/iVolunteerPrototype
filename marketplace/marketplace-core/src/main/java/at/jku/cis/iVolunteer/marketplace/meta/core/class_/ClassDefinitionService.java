@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
-import at.jku.cis.iVolunteer.model.matching.MatchingCollectorConfig;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;

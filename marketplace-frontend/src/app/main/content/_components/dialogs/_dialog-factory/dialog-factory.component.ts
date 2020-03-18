@@ -15,8 +15,7 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/config
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
-import { MatchingConfiguration } from 'app/main/content/_model/matching';
-import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
 
 @Directive({
   selector: 'app-dialog-factory'

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration } from '../../_model/meta/Class';
+import { ClassConfiguration } from '../../_model/configurations';
 
 
 
@@ -36,18 +36,17 @@ export class ClassConfigurationService {
   }
 
   createNewEmptyClassConfiguration(marketplace: Marketplace, name: string, description: string) {
-    let params: string[] = [name, description];
-    return this.http.post(`${marketplace.url}/meta/configurator/new-empty`, params);
+    return this.http.post(`${marketplace.url}/meta/class-configuration/new-empty`, [name, description]);
   }
 
   createNewClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
-    return this.http.post(`${marketplace.url}/meta/configurator/new`, classConfiguration);
+    return this.http.post(`${marketplace.url}/meta/class-configuration/new`, classConfiguration);
   }
 
   saveClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
     console.log('Save configurator');
     console.log(classConfiguration);
-    return this.http.put(`${marketplace.url}/meta/configurator/save`, classConfiguration);
+    return this.http.put(`${marketplace.url}/meta/class-configuration/save`, classConfiguration);
   }
 
   deleteClassConfiguration(marketplace: Marketplace, id: string) {

@@ -4,8 +4,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { LoginService } from 'app/main/content/_service/login.service';
-import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { ClassConfiguration } from 'app/main/content/_model/configurations';
 
 export interface SaveAsDialogData {
   classConfiguration: ClassConfiguration;

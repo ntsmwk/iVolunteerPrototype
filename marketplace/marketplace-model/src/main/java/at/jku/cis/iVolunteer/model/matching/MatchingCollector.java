@@ -4,13 +4,13 @@ import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-public class MatchingCollectorConfig {
+public class MatchingCollector {
 
 	ClassDefinition classDefinition;
 	String path;
 	String pathDelimiter;
 	
-	List<MatchingCollectorConfigEntry> collectorEntries;
+	List<MatchingCollectorEntry> collectorEntries;
 	int numberOfProperties;
 	int numberOfDefinitions;
 
@@ -41,11 +41,11 @@ public class MatchingCollectorConfig {
 		this.pathDelimiter = pathDelimiter;
 	}
 
-	public List<MatchingCollectorConfigEntry> getCollectorEntries() {
+	public List<MatchingCollectorEntry> getCollectorEntries() {
 		return collectorEntries;
 	}
 
-	public void setCollectorEntries(List<MatchingCollectorConfigEntry> collectorEntries) {
+	public void setCollectorEntries(List<MatchingCollectorEntry> collectorEntries) {
 		this.collectorEntries = collectorEntries;
 	}
 

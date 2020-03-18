@@ -2,7 +2,7 @@ package at.jku.cis.iVolunteer.model.matching;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
-public class MatchingCollectorConfigEntry {
+public class MatchingCollectorEntry {
 
 	ClassDefinition classDefinition;
 	String path;
@@ -11,11 +11,11 @@ public class MatchingCollectorConfigEntry {
 	String sourceRelationshipId;
 	String targetRelationshipId;
 
-	public MatchingCollectorConfigEntry() {
+	public MatchingCollectorEntry() {
 
 	}
 
-	public MatchingCollectorConfigEntry(ClassDefinition classDefinition, String path) {
+	public MatchingCollectorEntry(ClassDefinition classDefinition, String path) {
 		this.classDefinition = classDefinition;
 		this.path = path;
 	}

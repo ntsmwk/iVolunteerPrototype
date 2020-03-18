@@ -61,7 +61,7 @@ public class ClassConfigurationController {
 		classConfiguration.setName(params[0]);
 		classConfiguration.setDescription(params[1]);
 		
-		return classConfigurationRepository.save(classConfiguration);
+		return saveClassConfiguration(classConfiguration);
 	}
 	
 	@PostMapping("class-configuration/new")
@@ -75,6 +75,7 @@ public class ClassConfigurationController {
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
 	
 		//TODO aggregate and build 
+//		collectionService.collectAllClassDefinitionsWithPropertiesAsCollections(classConfiguration.getId());
 		
 		
 		return classConfiguration;

@@ -16,7 +16,6 @@ import { LoginGuard } from './_guard/login.guard';
 import { FlexProdGuard } from './_guard/flexprod-guard';
 import { FlexProdOrHelpseekerGuard } from './_guard/flexprod-helpseeker.guard';
 import { RecruiterGuard } from './_guard/recruiter.guard';
-import { DataTransportService } from './_service/data-transport/data-transport.service';
 import { ShareMenuComponent } from './achievements/share-menu/share-menu.component';
 import { ShareMenuModule } from './achievements/share-menu/share-menu.module';
 
@@ -58,12 +57,12 @@ const routes: Route[] = [
   },
 
 
-   {
-     path: 'main/achievements/summary',
-     loadChildren: () => import('./achievements/achievements-management-summary/achievements-management-summary.module').then(m => m.AchievementsManagementSummary),
-     canActivate: [TokenGuard, VolunteerGuard]
-   },
-   {
+  {
+    path: 'main/achievements/summary',
+    loadChildren: () => import('./achievements/achievements-management-summary/achievements-management-summary.module').then(m => m.AchievementsManagementSummary),
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
     path: 'main/achievements/fireBrigade',
     loadChildren: () => import('./achievements/achievements-fire-brigade/achievements-fire-brigade.module').then(m => m.AchievementsFireBrigadeModule),
     canActivate: [TokenGuard, VolunteerGuard]
@@ -148,7 +147,7 @@ const routes: Route[] = [
     path: 'main/task-templates/user/edit',
     loadChildren: () => import(
       './user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module'
-      ).then(m => m.SingleUserDefinedTaskTemplateDetailFormModule),
+    ).then(m => m.SingleUserDefinedTaskTemplateDetailFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
@@ -156,7 +155,7 @@ const routes: Route[] = [
     path: 'main/task-templates/user/detail/nested',
     loadChildren: () => import(
       './user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module'
-      ).then(m => m.NestedUserDefinedTaskTemplateDetailModule),
+    ).then(m => m.NestedUserDefinedTaskTemplateDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
 
@@ -176,14 +175,14 @@ const routes: Route[] = [
     path: 'main/configurator/instance-editor-m',
     loadChildren: () => import(
       './configurator/class-instances/form-editor/class-instance-form-editor-mockup.component.module'
-      ).then(m => m.ClassInstanceFormEditorMockupModule),
+    ).then(m => m.ClassInstanceFormEditorMockupModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
     path: 'main/configurator/instance-editor',
     loadChildren: () => import(
       './configurator/class-instances/form-editor/class-instance-form-editor.module'
-      ).then(m => m.ClassInstanceFormEditorModule),
+    ).then(m => m.ClassInstanceFormEditorModule),
     canActivate: [TokenGuard, HelpSeekerGuard]
   },
   {
@@ -217,25 +216,23 @@ const routes: Route[] = [
 @NgModule({
   declarations: [
     FuseContentComponent,
-    
+
   ],
   imports: [
-    RouterModule.forChild(routes),    
+    RouterModule.forChild(routes),
     FuseSharedModule,
     ShareMenuModule,
-    
-    ],
+
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: Http401Interceptor, multi: true },
-    DataTransportService,
-
   ],
   exports: [
     FuseContentComponent,
     ShareMenuComponent
 
-    
+
   ]
 })
 export class FuseContentModule {

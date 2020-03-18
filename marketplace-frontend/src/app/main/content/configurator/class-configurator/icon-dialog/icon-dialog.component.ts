@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { MatGridTile } from '@angular/material';
 import { isNullOrUndefined } from 'util';
-import { ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassConfiguration } from 'app/main/content/_model/configurations';
 
 export interface ChangeIconDialogData {
   marketplace: Marketplace;

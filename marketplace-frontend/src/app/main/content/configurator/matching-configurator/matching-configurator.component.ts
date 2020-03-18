@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassArchetype, ClassConfiguration } from 'app/main/content/_model/meta/Class';
+import { ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
@@ -14,8 +14,9 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
-import { MatchingConfiguration, MatchingCollectorConfig, MatchingOperatorRelationship, MatchingCollectorConfigEntry } from '../../_model/matching';
+import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry } from '../../_model/matching';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
+import { ClassConfiguration, MatchingConfiguration } from '../../_model/configurations';
 
 declare var require: any;
 
@@ -56,11 +57,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   graph: mxgraph.mxGraph;
 
-  producerClassConfigurator: ClassConfiguration;
+  producerClassConfiguration: ClassConfiguration;
   consumerClassConfigurator: ClassConfiguration;
 
-  producerMatchingCollectorConfig: MatchingCollectorConfig[];
-  consumerMatchingCollectorConfig: MatchingCollectorConfig[];
+  producerMatchingCollector: MatchingCollector[];
+  consumerMatchingCollector: MatchingCollector[];
 
   matchingPalettes = CConstants.matchingPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
@@ -95,14 +96,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     Promise.all([
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, producerClassConfigurationId).toPromise()
-        .then((collectorConfig: MatchingCollectorConfig[]) => {
-          this.producerMatchingCollectorConfig = collectorConfig;
-          this.insertClassDefinitionsProducerFromCollection();
+        .then((collector: MatchingCollector[]) => {
+          this.producerMatchingCollector = collector;
+          this.insertClassDefinitionsProducerFromCollector();
         }),
       this.classDefinitionService.getAllClassDefinitionsWithPropertiesCollection(this.marketplace, consumerClassConfigurationId).toPromise()
-        .then((collectorConfig: MatchingCollectorConfig[]) => {
-          this.consumerMatchingCollectorConfig = collectorConfig;
-          this.insertClassDefinitionsConsumerFromCollection();
+        .then((collector: MatchingCollector[]) => {
+          this.consumerMatchingCollector = collector;
+          this.insertClassDefinitionsConsumerFromCollector();
         })
     ]).then(() => {
       this.matchingConfigurationService.
@@ -224,19 +225,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitionsProducerFromCollection() {
+  private insertClassDefinitionsProducerFromCollector() {
     const title = this.graph.insertVertex(this.graph.getDefaultParent(), 'producer_header', 'Werkunternehmen', 20, 20, 400, 50, CConstants.mxStyles.matchingRowHeader);
     title.setConnectable(false);
 
     let y = title.geometry.y + title.geometry.height + 20;
 
-    for (const c of this.producerMatchingCollectorConfig) {
-      const cell = this.insertClassDefinitionCollectionsIntoGraph(c, new mx.mxGeometry(120, y, 200, 0));
+    for (const c of this.producerMatchingCollector) {
+      const cell = this.insertClassDefinitionCollectorIntoGraph(c, new mx.mxGeometry(120, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
   }
 
-  private insertClassDefinitionsConsumerFromCollection() {
+  private insertClassDefinitionsConsumerFromCollector() {
     const x = this.graphContainer.nativeElement.offsetWidth - 220;
     let y = 20;
 
@@ -246,55 +247,42 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     y = title.geometry.y + title.geometry.height + 20;
 
 
-    for (const c of this.consumerMatchingCollectorConfig) {
-      const cell = this.insertClassDefinitionCollectionsIntoGraph(c, new mx.mxGeometry(x - 100, y, 200, 0));
+    for (const c of this.consumerMatchingCollector) {
+      const cell = this.insertClassDefinitionCollectorIntoGraph(c, new mx.mxGeometry(x - 100, y, 200, 0));
       y = cell.geometry.y + cell.geometry.height + 20;
     }
   }
 
-  private insertClassDefinitionCollectionsIntoGraph(collectorConfig: MatchingCollectorConfig, geometry: mxgraph.mxGeometry): myMxCell {
+  private insertClassDefinitionCollectorIntoGraph(collector: MatchingCollector, geometry: mxgraph.mxGeometry): myMxCell {
     // create class cell
     let cell: myMxCell;
-    if (collectorConfig.classDefinition.classArchetype.startsWith('ENUM')) {
-      cell = new mx.mxCell(collectorConfig.classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
-    } else if (collectorConfig.classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
-      cell = new mx.mxCell(collectorConfig.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as myMxCell;
+    if (collector.classDefinition.classArchetype.startsWith('ENUM')) {
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
+    } else if (collector.classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as myMxCell;
     } else {
-      cell = new mx.mxCell(collectorConfig.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as myMxCell;
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as myMxCell;
     }
     cell.setCollapsed(false);
-    cell.classArchetype = collectorConfig.classDefinition.classArchetype;
+    cell.classArchetype = collector.classDefinition.classArchetype;
     cell.newlyAdded = false;
-    cell.value = collectorConfig.classDefinition.name;
+    cell.value = collector.classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
 
-    // cell.setStyle(cell.getStyle() + 'foldable=0;movable=0;resizable=0;editable=0;deletable=0;');
-
-    // const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
-    // this.graph.addCellOverlay(cell, overlay);
-
-    if (!isNullOrUndefined(collectorConfig.classDefinition.id)) {
-      // cell.id = collectorConfig.classDefinition.id;
-      cell.id = collectorConfig.path;
+    if (!isNullOrUndefined(collector.classDefinition.id)) {
+      cell.id = collector.path;
     }
 
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, 20);
 
-    let addPropertiesReturn = this.addPropertiesToCell(cell, collectorConfig, 5, 45);
+    let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
     cell = addPropertiesReturn.cell;
 
-    console.log(collectorConfig.collectorEntries);
 
-    for (const entry of collectorConfig.collectorEntries) {
+    for (const entry of collector.collectorEntries) {
       const boundaryHeight = entry.classDefinition.name.split(/\r?\n/).length * 25;
-
-      // const boundary = this.graph.insertVertex(
-      //   cell, entry.classDefinition.id, entry.classDefinition.name, 0,
-      //   addPropertiesReturn.lastPropertyGeometry.y + addPropertiesReturn.lastPropertyGeometry.height + 2,
-      //   200, boundaryHeight, CConstants.mxStyles.matchingClassSeparator);
-
       const boundary = this.graph.insertVertex(
         cell, entry.path, entry.classDefinition.name, 0,
         addPropertiesReturn.lastPropertyGeometry.y + addPropertiesReturn.lastPropertyGeometry.height + 2,
@@ -309,7 +297,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     return this.graph.addCell(cell) as myMxCell;
   }
 
-  private addPropertiesToCell(cell: myMxCell, entry: MatchingCollectorConfigEntry | MatchingCollectorConfig, startX: number, startY: number) {
+  private addPropertiesToCell(cell: myMxCell, entry: MatchingCollectorEntry | MatchingCollector, startX: number, startY: number) {
     const classDefinition = entry.classDefinition;
 
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);

@@ -1,35 +1,22 @@
 import { ClassDefinition } from './meta/Class';
 
-export class MatchingCollectorConfig {
+export class MatchingCollector {
     classDefinition: ClassDefinition;
     path: string;
     pathDelimiter: string;
 
-    collectorEntries: MatchingCollectorConfigEntry[];
+    collectorEntries: MatchingCollectorEntry[];
     numberOfProperties: number;
     numberOfDefinitions: number;
 }
 
-export class MatchingCollectorConfigEntry {
+export class MatchingCollectorEntry {
     classDefinition: ClassDefinition;
     path: string;
     pathDelimiter: string;
 
     sourceRelationshipId: string;
     targetRelationshipId: string;
-}
-
-export class MatchingConfiguration {
-    id: string;
-    name: string;
-
-    producerClassConfigurationId: string;
-    consumerClassConfigurationId: string;
-
-    producerClassConfigurationName: string;
-    consumerClassConfigurationName: string;
-
-    relationships: MatchingOperatorRelationship[];
 }
 
 export class MatchingOperatorRelationship {
