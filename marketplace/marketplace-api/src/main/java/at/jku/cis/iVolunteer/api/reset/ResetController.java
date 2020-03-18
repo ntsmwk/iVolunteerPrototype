@@ -24,5 +24,4 @@ public class ResetController {
 	public void createResetState() {
 		resetService.createResetState();
 	} 
-
 }

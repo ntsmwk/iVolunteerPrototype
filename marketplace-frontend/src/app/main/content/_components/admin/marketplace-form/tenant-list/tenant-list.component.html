@@ -3,7 +3,7 @@
     mat-fab
     class="mat-warn"
     style="border-radius: 50%; background-color: green;"
-    (click)="addMarketplace()"
+    (click)="addTenant()"
     aria-label="Add rule"
     *fuseIfOnDom
     [@animate]="{ value: '*', params: { delay: '300ms', scale: '0.2' } }"
@@ -19,27 +19,30 @@
 >
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-    <mat-cell *matCellDef="let marketplace">{{ marketplace.name }}</mat-cell>
+    <mat-cell *matCellDef="let tenant">{{ tenant.name }}</mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="shortName">
-    <mat-header-cell *matHeaderCellDef>Shortname</mat-header-cell>
-    <mat-cell *matCellDef="let marketplace">{{
-      marketplace.shortName
-    }}</mat-cell>
+  <ng-container matColumnDef="marketplace">
+    <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
+    <mat-cell *matCellDef="let tenant">{{ tenant.marketplaceId }}</mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="url">
-    <mat-header-cell *matHeaderCellDef>Url</mat-header-cell>
-    <mat-cell *matCellDef="let marketplace">{{ marketplace.url }}</mat-cell>
+  <ng-container matColumnDef="primaryColor">
+    <mat-header-cell *matHeaderCellDef>Primary Color</mat-header-cell>
+    <mat-cell *matCellDef="let tenant">{{ tenant.primaryColor }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="secondaryColor">
+    <mat-header-cell *matHeaderCellDef>Secondary Color</mat-header-cell>
+    <mat-cell *matCellDef="let tenant">{{ tenant.secondaryColor }}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-    <mat-cell *matCellDef="let marketplace">
+    <mat-cell *matCellDef="let tenant">
       <mat-icon
         style="cursor: pointer"
-        routerLink="/main/marketplace-form/{{ marketplace.id }}"
+        routerLink="/main/tenant-form/{{ tenant.id }}"
         >edit</mat-icon
       >
     </mat-cell>

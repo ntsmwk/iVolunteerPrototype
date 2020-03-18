@@ -8,7 +8,8 @@ import { MatInputModule } from "@angular/material/input";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseMarketplaceFormComponent } from "./marketplace-form.component";
 import { FuseTenantListComponent } from "./tenant-list/tenant-list.component";
-import { MatIconModule } from "@angular/material";
+import { MatIconModule, MatTableModule } from "@angular/material";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 const routes: Route[] = [
   { path: "", component: FuseMarketplaceFormComponent },
@@ -26,6 +27,7 @@ const routes: Route[] = [
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
 
     FuseSharedModule
   ]
