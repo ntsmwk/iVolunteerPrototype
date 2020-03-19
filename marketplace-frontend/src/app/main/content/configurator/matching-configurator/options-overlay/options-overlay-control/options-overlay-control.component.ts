@@ -1,7 +1,7 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef } from '@angular/core';
 
 @Component({
-  selector: 'app-options-overlay-control',
+  selector: 'options-overlay-control',
   templateUrl: './options-overlay-control.component.html',
   styleUrls: ['./options-overlay-control.component.scss']
 })
@@ -9,14 +9,14 @@ export class OptionsOverlayControlComponent {
 
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
-  displayInboxOverlay = false;
+  displayOptionsOverlay = true;
 
   constructor(
     private changeDetector: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-
+    this.toggleInboxOverlay();
   }
 
 
@@ -24,15 +24,14 @@ export class OptionsOverlayControlComponent {
     window.history.back();
   }
 
-  toggleInboxOverlay(event: any, inboxIcon: any) {
-    this.displayInboxOverlay = !this.displayInboxOverlay;
+  toggleInboxOverlay() {
+    // this.displayOptionsOverlay = !this.displayOptionsOverlay;
     this.changeDetector.detectChanges();
 
-    if (this.displayInboxOverlay) {
-      const { x, y } = inboxIcon._elementRef.nativeElement.getBoundingClientRect();
+    if (this.displayOptionsOverlay) {
 
-      this.overlayDiv.nativeElement.style.top = (y + 35) + 'px';
-      this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
+      this.overlayDiv.nativeElement.style.top = (150) + 'px';
+      this.overlayDiv.nativeElement.style.left = (500) + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '240px';
@@ -45,6 +44,6 @@ export class OptionsOverlayControlComponent {
   }
 
   closeOverlay($event) {
-    this.displayInboxOverlay = false;
+    this.displayOptionsOverlay = false;
   }
 }
