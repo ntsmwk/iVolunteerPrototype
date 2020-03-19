@@ -26,13 +26,13 @@ const relationshipPalettes = {
 };
 
 const matchingPalettes = [
-  { id: 'equal', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
-  { id: 'less', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
-  { id: 'greater', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
-  { id: 'lessEqual', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
-  { id: 'greaterEqual', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
-  { id: 'exists', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
-  { id: 'all', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator' },
+  { id: 'EQUAL', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
+  { id: 'LESS', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
+  { id: 'GREATER', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
+  { id: 'LESS_EQUAL', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
+  { id: 'GREATER_EQUAL', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
+  { id: 'EXISTS', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
+  { id: 'ALL', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator' },
 ];
 
 const matchingConnectorPalettes = [
@@ -65,7 +65,7 @@ const mxStyles = {
   addClassNewLevelIcon: 'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   addClassNewLevelAssociationIcon: 'shape=image;image=/assets/mxgraph_resources/images/letter-a-icon.jpg;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
-  
+
   // Relationships
   inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;',
   inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
@@ -81,9 +81,9 @@ const mxStyles = {
 
   // Matching
 
-  matchingRowHeader: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' + 
-      'fillColor=#000000;fontColor=#FFFFFF;strokeColor=#000000;' + 
-      'align=center;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;',
+  matchingRowHeader: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
+    'fillColor=#000000;fontColor=#FFFFFF;strokeColor=#000000;' +
+    'align=center;html=1;overflow=hidden;fontSize=30;fontFamily=roboto;fontStyle=bold;',
 
   matchingConnector: 'endArrow=classic;startArrow=none;html=1;curved=1;' + 'editable=0;selectable=1;deletable=1;' + 'edgeStyle=orthogonalEdgeStyle;',
   matchingOperator: 'resizable=0;editable=0;deletable=1;selectable=1;' + 'portConstraint=eastwest',

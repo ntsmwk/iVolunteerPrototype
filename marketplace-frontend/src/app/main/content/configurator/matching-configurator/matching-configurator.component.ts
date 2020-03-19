@@ -13,7 +13,7 @@ import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
 import { myMxCell } from '../MyMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
-import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry } from '../../_model/matching';
+import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry, MatchingOperatorType, MatchingProducerConsumerType } from '../../_model/matching';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
 import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../_model/configurations';
 import { MatchingCollectorConfigurationService } from '../../_service/configuration/matching-collector-configuration.service';
@@ -330,12 +330,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       const operatorCell = this.insertMatchingOperator(entry.coordX, entry.coordY, entry.matchingOperatorType);
 
       let producerCell: myMxCell;
-      if (!isNullOrUndefined(entry.producerId)) {
-        producerCell = this.graph.getModel().getCell(entry.producerId) as myMxCell;
+      if (!isNullOrUndefined(entry.producerPath)) {
+        producerCell = this.graph.getModel().getCell(entry.producerPath) as myMxCell;
       }
       let consumerCell: myMxCell;
-      if (!isNullOrUndefined(entry.consumerId)) {
-        consumerCell = this.graph.getModel().getCell(entry.consumerId) as myMxCell;
+      if (!isNullOrUndefined(entry.consumerPath)) {
+        consumerCell = this.graph.getModel().getCell(entry.consumerPath) as myMxCell;
       }
 
       this.insertRelationship(producerCell, operatorCell);
@@ -344,14 +344,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   }
 
-  private insertMatchingOperator(coordX: number, coordY: number, matchingOperatorType: string) {
+  private insertMatchingOperator(coordX: number, coordY: number, matchingOperatorType: MatchingOperatorType) {
     const cell = this.graph.insertVertex(
       this.graph.getDefaultParent(), null, null, coordX, coordY, 50, 50,
       `shape=image;image=${this.getPathForMatchingOperatorType(matchingOperatorType)};` +
       CConstants.mxStyles.matchingOperator) as myMxCell;
 
     cell.cellType = 'matchingOperator';
-    cell.operatorType = matchingOperatorType;
+    cell.matchingOperatorType = matchingOperatorType;
 
     return cell as myMxCell;
   }
@@ -422,7 +422,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     for (const operatorCell of matchingOperatorCells) {
       const relationship = new MatchingOperatorRelationship();
-      relationship.matchingOperatorType = (operatorCell as myMxCell).operatorType;
+      relationship.matchingOperatorType = (operatorCell as myMxCell).matchingOperatorType;
       relationship.coordX = operatorCell.geometry.x;
       relationship.coordY = operatorCell.geometry.y;
 
@@ -433,10 +433,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
         if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
           if (edge.target.id === operatorCell.id) {
-            relationship.producerId = edge.source.id;
+            relationship.producerPath = edge.source.id;
+            relationship.producerType = (edge.source as myMxCell).cellType === 'property' ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
             producerSet = true;
           } else if (edge.source.id === operatorCell.id) {
-            relationship.consumerId = edge.target.id;
+            relationship.consumerPath = edge.target.id;
+            relationship.consumerType = (edge.target as myMxCell).cellType === 'property' ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
             consumerSet = true;
           }
         }
@@ -511,7 +513,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
             `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as myMxCell;
 
           cell.cellType = 'matchingOperator';
-          cell.operatorType = paletteItem.id;
+          cell.matchingOperatorType = paletteItem.id;
 
         } else if (paletteItem.type === 'connector') {
           const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
