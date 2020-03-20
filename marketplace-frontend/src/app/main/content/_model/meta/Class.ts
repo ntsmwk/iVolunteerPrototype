@@ -11,6 +11,9 @@ export class ClassDefinition {
     timestamp: Date;
 
     imagePath: string;
+
+    visible: boolean;
+    formTab: number;
 }
 
 export class CompetenceClassDefinition extends ClassDefinition {
@@ -30,6 +33,9 @@ export class ClassInstance {
     classArchetype: ClassArchetype;
 
     childClassInstances: ClassInstance[];
+
+    visible: boolean;
+    formTab: number;
 
     constructor(classDefinition: ClassDefinition, properties?: PropertyInstance<any>[]) {
         this.name = classDefinition.name;
