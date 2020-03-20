@@ -71,6 +71,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   displayOverlay: boolean;
   overlayRelationship: MatchingOperatorRelationship;
+  overlayEvent: PointerEvent;
 
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
@@ -571,7 +572,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator') {
       this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
+      this.overlayEvent = event.properties.event;
       this.displayOverlay = !this.displayOverlay;
+
     }
 
   }

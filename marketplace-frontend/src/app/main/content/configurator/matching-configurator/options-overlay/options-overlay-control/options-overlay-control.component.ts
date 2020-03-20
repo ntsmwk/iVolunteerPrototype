@@ -12,6 +12,7 @@ export class OptionsOverlayControlComponent {
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
   @Input() displayOverlay: boolean;
   @Input() overlayRelationship: MatchingOperatorRelationship;
+  @Input() overlayEvent: PointerEvent;
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -32,15 +33,15 @@ export class OptionsOverlayControlComponent {
   toggleInboxOverlay() {
     this.changeDetector.detectChanges();
 
-    if (this.displayOverlay) {
 
-      this.overlayDiv.nativeElement.style.top = (150) + 'px';
-      this.overlayDiv.nativeElement.style.left = (500) + 'px';
+    if (this.displayOverlay) {
+      this.overlayDiv.nativeElement.style.top = (this.overlayEvent.clientY) + 'px';
+      this.overlayDiv.nativeElement.style.left = this.overlayEvent.clientX + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '240px';
 
-
+      console.log(this.overlayDiv.nativeElement);
     }
 
 
