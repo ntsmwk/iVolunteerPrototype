@@ -10,8 +10,8 @@ export class OptionsOverlayControlComponent {
 
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
-  @Input() displayOptionsOverlay: boolean;
-  @Input() matchingOperatorRelationship: MatchingOperatorRelationship;
+  @Input() displayOverlay: boolean;
+  @Input() overlayRelationship: MatchingOperatorRelationship;
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -21,16 +21,18 @@ export class OptionsOverlayControlComponent {
     this.toggleInboxOverlay();
   }
 
+  ngOnChanges() {
+    this.toggleInboxOverlay();
+  }
 
   navigateBack() {
     window.history.back();
   }
 
   toggleInboxOverlay() {
-    this.displayOptionsOverlay = !this.displayOptionsOverlay;
     this.changeDetector.detectChanges();
 
-    if (this.displayOptionsOverlay) {
+    if (this.displayOverlay) {
 
       this.overlayDiv.nativeElement.style.top = (150) + 'px';
       this.overlayDiv.nativeElement.style.left = (500) + 'px';
@@ -46,6 +48,6 @@ export class OptionsOverlayControlComponent {
   }
 
   closeOverlay($event) {
-    this.displayOptionsOverlay = false;
+    this.displayOverlay = false;
   }
 }

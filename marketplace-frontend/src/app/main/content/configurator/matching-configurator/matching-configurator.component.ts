@@ -69,6 +69,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   matchingConfiguration: MatchingConfiguration;
 
+  displayOverlay: boolean;
+  overlayRelationship: MatchingOperatorRelationship;
+
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
@@ -420,12 +423,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
 
-    const newRelationships: MatchingOperatorRelationship[] = [];
+    const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
-      const relationship = new MatchingOperatorRelationship();
+      const relationship = this.matchingConfiguration.relationships.find(r => r.id === operatorCell.id);
 
-      relationship.id = operatorCell.id;
       relationship.matchingOperatorType = (operatorCell as myMxCell).matchingOperatorType;
       relationship.coordX = operatorCell.geometry.x;
       relationship.coordY = operatorCell.geometry.y;
@@ -453,10 +455,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       }
 
-      newRelationships.push(relationship);
+      updatedRelationships.push(relationship);
     }
 
-    this.matchingConfiguration.relationships = newRelationships;
+    this.matchingConfiguration.relationships = updatedRelationships;
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, this.matchingConfiguration).toPromise()
       .then((ret: MatchingConfiguration) => {
         // not doing anything currently
@@ -520,6 +522,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           cell.matchingOperatorType = paletteItem.id;
           cell.id = outer.objectIdService.getNewObjectId();
 
+          const relationship = new MatchingOperatorRelationship();
+          relationship.id = cell.id;
+          relationship.coordX = cell.geometry.x;
+          relationship.coordY = cell.geometry.y;
+          relationship.matchingOperatorType = cell.matchingOperatorType;
+
+          outer.matchingConfiguration.relationships.push(relationship);
+
+          console.log(outer.matchingConfiguration.relationships);
+
 
         } else if (paletteItem.type === 'connector') {
           const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
@@ -553,8 +565,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleClickEvent(event: mxgraph.mxMouseEvent) {
+  handleClickEvent(event: mxgraph.mxEventObject) {
     console.log(event);
+    const cell = event.properties.cell as myMxCell;
+
+    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator') {
+      this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
+      this.displayOverlay = !this.displayOverlay;
+    }
+
   }
 }
 
