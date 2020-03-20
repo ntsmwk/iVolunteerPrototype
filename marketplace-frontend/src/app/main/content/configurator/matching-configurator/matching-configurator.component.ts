@@ -17,6 +17,7 @@ import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
 import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../_model/configurations';
 import { MatchingCollectorConfigurationService } from '../../_service/configuration/matching-collector-configuration.service';
+import { ObjectIdService } from '../../_service/objectid.service.';
 
 declare var require: any;
 
@@ -42,7 +43,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private loginService: LoginService,
     private flexProdService: CoreFlexProdService,
     private helpSeekerService: CoreHelpSeekerService,
-    private matchingConfigurationService: MatchingConfigurationService
+    private matchingConfigurationService: MatchingConfigurationService,
+    private objectIdService: ObjectIdService,
   ) {
 
   }
@@ -196,7 +198,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-
+        outer.handleClickEvent(evt);
 
       });
 
@@ -327,7 +329,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertMatchingOperatorsAndRelationships() {
     for (const entry of this.matchingConfiguration.relationships) {
-      const operatorCell = this.insertMatchingOperator(entry.coordX, entry.coordY, entry.matchingOperatorType);
+      const operatorCell = this.insertMatchingOperator(entry);
 
       let producerCell: myMxCell;
       if (!isNullOrUndefined(entry.producerPath)) {
@@ -344,14 +346,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   }
 
-  private insertMatchingOperator(coordX: number, coordY: number, matchingOperatorType: MatchingOperatorType) {
+  private insertMatchingOperator(relationship: MatchingOperatorRelationship) {
     const cell = this.graph.insertVertex(
-      this.graph.getDefaultParent(), null, null, coordX, coordY, 50, 50,
-      `shape=image;image=${this.getPathForMatchingOperatorType(matchingOperatorType)};` +
+      this.graph.getDefaultParent(), relationship.id, null, relationship.coordX, relationship.coordY, 50, 50,
+      `shape=image;image=${this.getPathForMatchingOperatorType(relationship.matchingOperatorType)};` +
       CConstants.mxStyles.matchingOperator) as myMxCell;
 
     cell.cellType = 'matchingOperator';
-    cell.matchingOperatorType = matchingOperatorType;
+    cell.matchingOperatorType = relationship.matchingOperatorType;
 
     return cell as myMxCell;
   }
@@ -422,6 +424,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     for (const operatorCell of matchingOperatorCells) {
       const relationship = new MatchingOperatorRelationship();
+
+      relationship.id = operatorCell.id;
       relationship.matchingOperatorType = (operatorCell as myMxCell).matchingOperatorType;
       relationship.coordX = operatorCell.geometry.x;
       relationship.coordY = operatorCell.geometry.y;
@@ -514,6 +518,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
           cell.cellType = 'matchingOperator';
           cell.matchingOperatorType = paletteItem.id;
+          cell.id = outer.objectIdService.getNewObjectId();
+
 
         } else if (paletteItem.type === 'connector') {
           const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
@@ -545,6 +551,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       outerScope.graphContainer.nativeElement.removeEventListener('dragover', onDragOver);
 
     }
+  }
+
+  handleClickEvent(event: mxgraph.mxMouseEvent) {
+    console.log(event);
   }
 }
 

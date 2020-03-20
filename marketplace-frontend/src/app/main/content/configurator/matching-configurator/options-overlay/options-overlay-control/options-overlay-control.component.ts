@@ -1,4 +1,5 @@
-import { ViewChild, ElementRef, Component, ChangeDetectorRef } from '@angular/core';
+import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input } from '@angular/core';
+import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
 
 @Component({
   selector: 'options-overlay-control',
@@ -9,7 +10,8 @@ export class OptionsOverlayControlComponent {
 
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
-  displayOptionsOverlay = true;
+  @Input() displayOptionsOverlay: boolean;
+  @Input() matchingOperatorRelationship: MatchingOperatorRelationship;
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -25,7 +27,7 @@ export class OptionsOverlayControlComponent {
   }
 
   toggleInboxOverlay() {
-    // this.displayOptionsOverlay = !this.displayOptionsOverlay;
+    this.displayOptionsOverlay = !this.displayOptionsOverlay;
     this.changeDetector.detectChanges();
 
     if (this.displayOptionsOverlay) {

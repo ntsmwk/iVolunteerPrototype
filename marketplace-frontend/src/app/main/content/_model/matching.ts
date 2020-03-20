@@ -20,6 +20,8 @@ export class MatchingCollectorEntry {
 }
 
 export class MatchingOperatorRelationship {
+    id: string;
+
     producerPath: string;
     producerType: MatchingProducerConsumerType;
 

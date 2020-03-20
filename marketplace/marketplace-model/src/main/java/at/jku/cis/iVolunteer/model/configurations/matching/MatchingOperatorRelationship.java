@@ -1,6 +1,10 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
+import org.springframework.data.annotation.Id;
+
 public class MatchingOperatorRelationship {
+	
+	@Id String id;
 
 	String producerPath;
 	MatchingProducerConsumerType producerType;
@@ -17,6 +21,13 @@ public class MatchingOperatorRelationship {
 	int coordX;
 	int coordY;
 	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getProducerPath() {
 		return producerPath;
 	}
