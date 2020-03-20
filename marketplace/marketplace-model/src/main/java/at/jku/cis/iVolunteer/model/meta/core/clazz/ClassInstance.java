@@ -26,7 +26,9 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	
 	private List<ClassInstance> childClassInstances;
 
-
+	private boolean visible;
+	private int formTab;
+	
 	public ClassInstance() {
 	}
 
@@ -121,6 +123,24 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	public void setChildClassInstances(List<ClassInstance> childClassInstances) {
 		this.childClassInstances = childClassInstances;
+	}
+	
+	
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getFormTab() {
+		return formTab;
+	}
+
+	public void setFormTab(int formTab) {
+		this.formTab = formTab;
 	}
 
 	@Override

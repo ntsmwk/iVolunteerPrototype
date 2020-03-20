@@ -22,6 +22,10 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String imagePath;
 	
 	boolean root;
+	
+	
+	private boolean visible;
+	private int formTab;
 
 	public ClassDefinition() {
 	}
@@ -81,6 +85,23 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setClassArchetype(ClassArchetype classArchetype) {
 		this.classArchetype = classArchetype;
+	}
+	
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getFormTab() {
+		return formTab;
+	}
+
+	public void setFormTab(int formTab) {
+		this.formTab = formTab;
 	}
 
 	@Override

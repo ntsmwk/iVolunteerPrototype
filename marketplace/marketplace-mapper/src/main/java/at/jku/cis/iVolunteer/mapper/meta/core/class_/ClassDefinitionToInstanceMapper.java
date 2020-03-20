@@ -57,6 +57,9 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 			properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
 		}
 		classInstance.setProperties(properties);
+		
+		classInstance.setVisible(source.isVisible());
+		classInstance.setFormTab(source.getFormTab());
 
 		return classInstance;
 	}
