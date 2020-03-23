@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { OptionsOverlayComponent } from './options-overlay.component';
+import { OptionsOverlayContentComponent } from './options-overlay-content.component';
 import { MatTableModule, MatCheckboxModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 
@@ -17,7 +17,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
         MatTableModule,
         MatCheckboxModule
     ],
-    declarations: [OptionsOverlayComponent],
-    exports: [OptionsOverlayComponent]
+    declarations: [OptionsOverlayContentComponent],
+    exports: [OptionsOverlayContentComponent]
 })
-export class OptionsOverlayModule { }
+export class OptionsOverlayContentModule { }

@@ -30,7 +30,7 @@
   <div #graphContainer id="graphContainer"></div>
 
   <options-overlay-control [displayOverlay]="displayOverlay" [overlayRelationship]="overlayRelationship"
-    [overlayEvent]="overlayEvent">
+    [overlayEvent]="overlayEvent" (overlayClosed)="handleOverlayClosedEvent($event)">
   </options-overlay-control>
 
 </div>

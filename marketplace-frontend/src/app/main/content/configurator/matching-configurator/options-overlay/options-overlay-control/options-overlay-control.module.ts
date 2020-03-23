@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { OptionsOverlayControlComponent } from './options-overlay-control.component';
 import { MatTableModule, MatCheckboxModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { OptionsOverlayModule } from '../options-overlay.module';
+import { OptionsOverlayContentModule } from '../options-overlay-content.module';
 
 @NgModule({
     imports: [
@@ -17,7 +17,7 @@ import { OptionsOverlayModule } from '../options-overlay.module';
         MatIconModule,
         MatTableModule,
         MatCheckboxModule,
-        OptionsOverlayModule,
+        OptionsOverlayContentModule,
     ],
     declarations: [OptionsOverlayControlComponent],
     exports: [OptionsOverlayControlComponent]

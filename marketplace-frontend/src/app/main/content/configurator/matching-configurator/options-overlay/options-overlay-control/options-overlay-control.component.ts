@@ -1,4 +1,4 @@
-import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input } from '@angular/core';
+import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
 
 @Component({
@@ -13,6 +13,7 @@ export class OptionsOverlayControlComponent {
   @Input() displayOverlay: boolean;
   @Input() overlayRelationship: MatchingOperatorRelationship;
   @Input() overlayEvent: PointerEvent;
+  @Output() overlayClosed = new EventEmitter<any>();
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -49,6 +50,8 @@ export class OptionsOverlayControlComponent {
   }
 
   closeOverlay($event) {
+    console.log("clicked close overlay");
     this.displayOverlay = false;
+    this.overlayClosed.emit(true);
   }
 }

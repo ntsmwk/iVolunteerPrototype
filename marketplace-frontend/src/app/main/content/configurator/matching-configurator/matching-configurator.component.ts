@@ -570,15 +570,24 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(event);
     const cell = event.properties.cell as myMxCell;
 
-    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator') {
+    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay) {
       this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
       this.overlayEvent = event.properties.event;
-      this.displayOverlay = !this.displayOverlay;
+      this.displayOverlay = true;
+
+      this.graphContainer.nativeElement.style.overflow = 'hidden';
 
     }
 
   }
+  handleOverlayClosedEvent(event: any) {
+    this.displayOverlay = false;
+    this.graphContainer.nativeElement.style.overflow = 'scroll';
+  }
+
 }
+
+
 
 
 

@@ -2,11 +2,11 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
-    selector: 'options-overlay',
-    templateUrl: './options-overlay.component.html',
-    styleUrls: ['./options-overlay.component.scss']
+    selector: 'options-overlay-content',
+    templateUrl: './options-overlay-content.component.html',
+    styleUrls: ['./options-overlay-content.component.scss']
 })
-export class OptionsOverlayComponent implements OnInit {
+export class OptionsOverlayContentComponent implements OnInit {
 
     constructor(
 
