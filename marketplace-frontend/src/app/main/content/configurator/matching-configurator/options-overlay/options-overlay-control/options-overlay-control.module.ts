@@ -15,8 +15,6 @@ import { OptionsOverlayContentModule } from '../options-overlay-content.module';
         MatCommonModule,
         MatButtonModule,
         MatIconModule,
-        MatTableModule,
-        MatCheckboxModule,
         OptionsOverlayContentModule,
     ],
     declarations: [OptionsOverlayControlComponent],
