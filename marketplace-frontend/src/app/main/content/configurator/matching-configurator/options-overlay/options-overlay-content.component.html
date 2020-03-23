@@ -1,4 +1,12 @@
-<div class="overlay-content">
-    Test
+<div class="overlay-content m-8">
+    <mat-slide-toggle labelPosition="before">Notwendig</mat-slide-toggle>
 
+    <mat-form-field>
+        <input matInput placeholder="Gewichtung" type="number">
+    </mat-form-field>
+
+    <div>
+        <mat-label>Unschärfe</mat-label>
+        <mat-slider min="0" max="100" step="0.5" tickInterval="10" style="width: 100%"></mat-slider>
+    </div>
 </div>

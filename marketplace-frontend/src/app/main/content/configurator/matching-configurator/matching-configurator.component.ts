@@ -570,7 +570,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(event);
     const cell = event.properties.cell as myMxCell;
 
-    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay) {
+    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0) {
       this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
       this.overlayEvent = event.properties.event;
       this.displayOverlay = true;

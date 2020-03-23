@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
 
 
 @Component({
@@ -8,12 +9,15 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class OptionsOverlayContentComponent implements OnInit {
 
+    @Input() overlayRelationship: MatchingOperatorRelationship;
+
     constructor(
 
     ) { }
 
     ngOnInit() {
-
+        console.log("content init");
+        console.log(this.overlayRelationship);
     }
 
 

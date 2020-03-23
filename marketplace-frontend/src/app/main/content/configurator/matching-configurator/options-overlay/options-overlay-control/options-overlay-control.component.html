@@ -1,17 +1,15 @@
-<div #overlayDiv *ngIf="displayOverlay" class="mat-elevation-z4"
-    style="background: white; border-color: rgb(62, 125, 219); border-style: solid; border-width: 2px; border-radius: 5px; z-index: 2;">
+<div #overlayDiv *ngIf="displayOverlay" class="mat-elevation-z4 overlay-layout">
 
-    <div fxLayout="row" fxLayoutAlign="space-between center" style="background-color: rgb(62, 125, 219);
-    color: white;">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="overlay-title-bar">
         <div class="pl-4">Einstellungen</div>
         <div></div>
-        <mat-icon color="primary" aria-label="Schließen" (click)="closeOverlay($event)"
-            style="cursor: pointer; color: white">
+        <mat-icon color="primary" aria-label="Schließen" (click)="closeOverlay($event)">
             close
         </mat-icon>
 
     </div>
-    <options-overlay-content>
+
+    <options-overlay-content [overlayRelationship]="overlayRelationship">
         <!-- (closeOverlay)="closeOverlay($event)" -->
 
     </options-overlay-content>
