@@ -18,6 +18,9 @@ export class OptionsOverlayContentComponent implements OnInit {
     ngOnInit() {
         console.log("content init");
         console.log(this.overlayRelationship);
+        this.overlayRelationship.weighting = 20;
+        this.overlayRelationship.fuzzyness = 30;
+        this.overlayRelationship.necessary = true;
     }
 
 

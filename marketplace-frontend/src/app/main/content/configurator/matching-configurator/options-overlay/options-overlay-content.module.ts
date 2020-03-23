@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { OptionsOverlayContentComponent } from './options-overlay-content.component';
-import { MatCheckboxModule, MatInputModule, MatFormFieldModule, MatSliderModule, MatSlideToggleModule } from '@angular/material';
+import { MatCheckboxModule, MatInputModule, MatFormFieldModule, MatSliderModule, MatSlideToggleModule, MatDividerModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FormsModule } from '@angular/forms';
 
@@ -20,6 +20,8 @@ import { FormsModule } from '@angular/forms';
         MatFormFieldModule,
         FormsModule,
         MatSliderModule,
+        MatDividerModule,
+        MatCheckboxModule,
     ],
     declarations: [OptionsOverlayContentComponent],
     exports: [OptionsOverlayContentComponent]

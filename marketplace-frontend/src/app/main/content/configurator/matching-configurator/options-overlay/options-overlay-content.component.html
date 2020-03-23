@@ -1,12 +1,37 @@
 <div class="overlay-content m-8">
-    <mat-slide-toggle labelPosition="before">Notwendig</mat-slide-toggle>
-
-    <mat-form-field>
-        <input matInput placeholder="Gewichtung" type="number">
-    </mat-form-field>
-
-    <div>
-        <mat-label>Unschärfe</mat-label>
-        <mat-slider min="0" max="100" step="0.5" tickInterval="10" style="width: 100%"></mat-slider>
+    <div class="pt-8 pb-16">
+        <mat-checkbox labelPosition="after" [(ngModel)]="overlayRelationship.necessary">
+            <div style="font-size: 14px">Notwendig</div>
+        </mat-checkbox>
     </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="pt-16">
+        <mat-label>Unschärfe (in %)</mat-label>
+        <div fxLayout="row" fxLayoutAlign="start start">
+            <mat-slider min="0" max="100" step="" tickInterval="10" style="width: 100%"
+                [(ngModel)]="overlayRelationship.fuzzyness"></mat-slider>
+            <mat-form-field style="width: 45px; padding-left: 4px">
+                <input matInput type="number" id="fuzzyness" [(ngModel)]="overlayRelationship.fuzzyness" min=0 max=100
+                    style="text-align: right">
+            </mat-form-field>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-label>Gewichtung</mat-label>
+            <mat-form-field style="width: 50px; padding-left: 4px">
+                <input matInput type="number" id="weighting" [(ngModel)]="overlayRelationship.weighting"
+                    style="text-align: right">
+            </mat-form-field>
+        </div>
+
+        <div></div>
+
+        <button mat-stroked-button color="accent" class="confirm-button">Speichern</button>
+    </div>
+
 </div>
