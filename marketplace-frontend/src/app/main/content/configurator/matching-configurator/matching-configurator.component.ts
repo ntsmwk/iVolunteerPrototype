@@ -580,9 +580,26 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
   }
-  handleOverlayClosedEvent(event: any) {
+  handleOverlayClosedEvent(event: MatchingOperatorRelationship) {
     this.displayOverlay = false;
+    this.overlayRelationship = undefined;
+    this.overlayEvent = undefined;
     this.graphContainer.nativeElement.style.overflow = 'scroll';
+
+    if (!isNullOrUndefined(event)) {
+      const index = this.matchingConfiguration.relationships.findIndex(r => r.id === event.id);
+      this.matchingConfiguration.relationships[index] = event;
+
+      try {
+        this.graph.getModel().beginUpdate();
+        let cell = (this.graph.getModel().getCell(event.id) as myMxCell)
+        cell.matchingOperatorType = event.matchingOperatorType;
+        this.graph.setCellStyle(`shape=image;image=${this.getPathForMatchingOperatorType(cell.matchingOperatorType)};` + CConstants.mxStyles.matchingOperator, [cell]);
+        cell = this.graph.getModel().getCell(event.id) as myMxCell;
+      } finally {
+        this.graph.getModel().endUpdate();
+      }
+    }
   }
 
 }

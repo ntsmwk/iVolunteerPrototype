@@ -13,7 +13,7 @@ export class OptionsOverlayControlComponent {
   @Input() displayOverlay: boolean;
   @Input() overlayRelationship: MatchingOperatorRelationship;
   @Input() overlayEvent: PointerEvent;
-  @Output() overlayClosed = new EventEmitter<any>();
+  @Output() overlayClosed = new EventEmitter<MatchingOperatorRelationship>();
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -47,8 +47,16 @@ export class OptionsOverlayControlComponent {
 
   }
 
+  handleResultEvent(event: MatchingOperatorRelationship) {
+    console.log("new Relationship");
+    console.log(event);
+
+    this.displayOverlay = false;
+    this.overlayClosed.emit(event);
+  }
+
   closeOverlay($event) {
     this.displayOverlay = false;
-    this.overlayClosed.emit(true);
+    this.overlayClosed.emit(undefined);
   }
 }

@@ -11,6 +11,7 @@ import { CConstants } from '../../class-configurator/utils-and-constants';
 export class OptionsOverlayContentComponent implements OnInit {
 
     @Input() overlayRelationship: MatchingOperatorRelationship;
+    @Output() resultRelationship = new EventEmitter<MatchingOperatorRelationship>();
 
     matchingPalettes = CConstants.matchingPalettes;
 
@@ -24,9 +25,7 @@ export class OptionsOverlayContentComponent implements OnInit {
     ngOnInit() {
         console.log("content init");
         console.log(this.overlayRelationship);
-        this.overlayRelationship.weighting = 20;
-        this.overlayRelationship.fuzzyness = 30;
-        this.overlayRelationship.necessary = true;
+
 
         console.log(this.matchingPalettes);
     }
@@ -58,6 +57,7 @@ export class OptionsOverlayContentComponent implements OnInit {
 
         if (this.fuzzynessValid && this.weightingValid) {
             // RETURN
+            this.resultRelationship.emit(this.overlayRelationship);
         }
     }
 

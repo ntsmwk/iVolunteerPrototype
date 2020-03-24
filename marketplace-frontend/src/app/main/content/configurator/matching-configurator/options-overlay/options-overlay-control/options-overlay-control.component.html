@@ -9,7 +9,8 @@
 
     </div>
 
-    <options-overlay-content [overlayRelationship]="overlayRelationship">
+    <options-overlay-content [overlayRelationship]="overlayRelationship"
+        (resultRelationship)="handleResultEvent($event)">
         <!-- (closeOverlay)="closeOverlay($event)" -->
 
     </options-overlay-content>
