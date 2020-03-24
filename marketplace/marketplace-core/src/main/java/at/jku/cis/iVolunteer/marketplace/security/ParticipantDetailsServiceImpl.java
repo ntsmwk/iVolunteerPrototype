@@ -1,8 +1,8 @@
 package at.jku.cis.iVolunteer.marketplace.security;
 
-import static at.jku.cis.iVolunteer.marketplace.security.ParticipantRole.HELP_SEEKER;
-import static at.jku.cis.iVolunteer.marketplace.security.ParticipantRole.RECRUITER;
-import static at.jku.cis.iVolunteer.marketplace.security.ParticipantRole.VOLUNTEER;
+import static at.jku.cis.iVolunteer.model.user.ParticipantRole.HELP_SEEKER;
+import static at.jku.cis.iVolunteer.model.user.ParticipantRole.RECRUITER;
+import static at.jku.cis.iVolunteer.model.user.ParticipantRole.VOLUNTEER;
 import static java.util.Arrays.asList;
 
 import org.springframework.beans.factory.annotation.Autowired;

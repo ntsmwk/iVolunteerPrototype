@@ -20,5 +20,10 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>at.jku.cis</groupId>
+			<artifactId>marketplace-security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

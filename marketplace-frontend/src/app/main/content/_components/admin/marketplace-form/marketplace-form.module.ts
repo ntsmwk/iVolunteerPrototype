@@ -10,20 +10,16 @@ import { FuseMarketplaceFormComponent } from "./marketplace-form.component";
 import { FuseTenantListComponent } from "./tenant-list/tenant-list.component";
 import { MatIconModule, MatTableModule } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FuseTenantFormComponent } from "./tenant-form/tenant-form.component";
+import { FuseTenantFormComponent } from "../tenant-form/tenant-form.component";
+import { FuseTenantFormModule } from "../tenant-form/tenant-form.module";
 
 const routes: Route[] = [
   { path: "", component: FuseMarketplaceFormComponent },
-  { path: ":marketplaceId", component: FuseMarketplaceFormComponent },
-  { path: "/tenant-form", component: FuseTenantFormComponent }
+  { path: ":marketplaceId", component: FuseMarketplaceFormComponent }
 ];
 
 @NgModule({
-  declarations: [
-    FuseMarketplaceFormComponent,
-    FuseTenantListComponent,
-    FuseTenantFormComponent
-  ],
+  declarations: [FuseMarketplaceFormComponent, FuseTenantListComponent],
   imports: [
     RouterModule.forChild(routes),
 
@@ -34,7 +30,6 @@ const routes: Route[] = [
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-
     FuseSharedModule
   ]
 })

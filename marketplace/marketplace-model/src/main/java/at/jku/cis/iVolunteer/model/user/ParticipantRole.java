@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.security;
+package at.jku.cis.iVolunteer.model.user;
 
 import org.springframework.security.core.GrantedAuthority;
 
