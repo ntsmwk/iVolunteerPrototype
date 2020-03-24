@@ -16,4 +16,8 @@ export class TenantService {
   findById(tenantId: string) {
     return this.http.get(`/core/tenant/${tenantId}`);
   }
+
+  findByMarketplace(marketplaceId: string) {
+    return this.http.get(`/core/tenant/marketplace/${marketplaceId}`);
+  }
 }

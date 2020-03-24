@@ -9,6 +9,7 @@ import at.jku.cis.iVolunteer.marketplace.user.RecruiterRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
+import at.jku.cis.iVolunteer.model.user.ParticipantRole;
 import at.jku.cis.iVolunteer.model.user.Recruiter;
 import at.jku.cis.iVolunteer.model.user.User;
 import at.jku.cis.iVolunteer.model.user.Volunteer;

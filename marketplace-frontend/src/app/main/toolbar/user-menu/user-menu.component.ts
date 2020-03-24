@@ -63,10 +63,19 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   getUserNameString() {
-    let ret = this.participant.firstname + " " + this.participant.lastname;
+    let ret = "";
+    if (
+      this.participant &&
+      this.participant.firstname &&
+      this.participant.lastname
+    ) {
+      ret += this.participant.firstname + " " + this.participant.lastname;
+    } else {
+      ret += this.participant.username;
+    }
 
     if (!isNullOrUndefined(this.participant.position)) {
-      ret = ret + " (" + this.participant.position + ")";
+      ret += " (" + this.participant.position + ")";
     }
     return ret;
   }

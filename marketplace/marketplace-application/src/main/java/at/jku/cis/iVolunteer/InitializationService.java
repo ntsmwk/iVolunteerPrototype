@@ -63,8 +63,8 @@ public class InitializationService {
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 	
-	private static final String FFEIDENBERG = "FF_Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 
 
 

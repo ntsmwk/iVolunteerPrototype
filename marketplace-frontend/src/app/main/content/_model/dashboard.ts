@@ -1,5 +1,5 @@
-import {Dashlet} from './dashlet';
-import {Participant} from './participant';
+import { Dashlet } from "./dashlet";
+import { Participant } from "./participant";
 
 export class Dashboard {
   id: string;

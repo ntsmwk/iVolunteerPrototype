@@ -241,19 +241,11 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   generateSunburstData() {
-    // this.chipTaskType = null;
-    // this.updateChipTaskType(this.chipTaskType);
-
-    console.error('prevNodeLevel', this.prevNodeLevel);
     if(this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
-      // TODO problem
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
       this.selectedTaskType = null;
       this.updateSelectedTaskType(this.selectedTaskType);
-
-    } else {
-
-    }
+    } 
 
     let list = this.filteredClassInstanceDTOs
       .map(ci => {

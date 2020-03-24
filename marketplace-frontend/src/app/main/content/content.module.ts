@@ -6,7 +6,6 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseContentComponent } from "app/main/content/content.component";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
-
 import { TokenInterceptor } from "./_interceptor/token.interceptor";
 import { Http401Interceptor } from "./_interceptor/http-401.interceptor";
 import { TokenGuard } from "./_guard/token.guard";
@@ -311,13 +310,19 @@ const routes: Route[] = [
         "./_components/admin/marketplace-form/marketplace-form.module"
       ).then(m => m.FuseMarketplaceFormModule),
     canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: "main/tenant-form",
+    loadChildren: () =>
+      import("./_components/admin/tenant-form/tenant-form.module").then(
+        m => m.FuseTenantFormModule
+      ),
+    canActivate: [TokenGuard, AdminGuard]
   }
 ];
 
 @NgModule({
-  declarations: [
-    FuseContentComponent
-  ],
+  declarations: [FuseContentComponent],
   imports: [
     RouterModule.forChild(routes),
     FuseSharedModule,
@@ -331,4 +336,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent]
 })
-export class FuseContentModule { }
+export class FuseContentModule {}
