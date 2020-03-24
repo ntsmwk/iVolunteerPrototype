@@ -40,9 +40,7 @@ export class OptionsOverlayControlComponent {
       this.overlayDiv.nativeElement.style.left = this.overlayEvent.clientX + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
-      this.overlayDiv.nativeElement.style.height = '240px';
-
-      console.log(this.overlayDiv.nativeElement);
+      this.overlayDiv.nativeElement.style.height = '275px';
     }
 
 
@@ -50,7 +48,6 @@ export class OptionsOverlayControlComponent {
   }
 
   closeOverlay($event) {
-    console.log("clicked close overlay");
     this.displayOverlay = false;
     this.overlayClosed.emit(true);
   }

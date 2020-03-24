@@ -29,9 +29,9 @@ const matchingPalettes = [
   { id: 'EQUAL', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
   { id: 'LESS', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
   { id: 'GREATER', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
-  { id: 'LESS_EQUAL', label: 'kleiner oder gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
-  { id: 'GREATER_EQUAL', label: 'größer oder gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
-  { id: 'EXISTS', label: 'es existiert mindestens eines', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
+  { id: 'LESS_EQUAL', label: 'kleiner gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
+  { id: 'GREATER_EQUAL', label: 'größer gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
+  { id: 'EXISTS', label: 'existiert', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
   { id: 'ALL', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator' },
 ];
 

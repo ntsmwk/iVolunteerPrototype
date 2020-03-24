@@ -14,6 +14,9 @@ export class OptionsOverlayContentComponent implements OnInit {
 
     matchingPalettes = CConstants.matchingPalettes;
 
+    fuzzynessValid = true;
+    weightingValid = true;
+
     constructor(
 
     ) { }
@@ -29,14 +32,62 @@ export class OptionsOverlayContentComponent implements OnInit {
     }
 
     getImagePathForMatchingOperatorType(type: MatchingOperatorType) {
-        return (this.matchingPalettes.find(p => p.id === type).imgPath)
+        return (this.matchingPalettes.find(p => p.id === type).imgPath);
+    }
+
+    getLabelForMatchingOperatorType(type: MatchingOperatorType) {
+        return (this.matchingPalettes.find(p => p.id === type).label);
+    }
+
+    matchingOperatorChanged(paletteItem: any) {
+        this.overlayRelationship.matchingOperatorType = paletteItem.id;
     }
 
 
     onSubmit() {
+        this.fuzzynessValid = this.checkFuzzyness();
+        this.weightingValid = this.checkWeighting();
 
+        if (!this.fuzzynessValid) {
+            this.fixFuzzyness();
+        }
+
+        if (!this.weightingValid) {
+            this.fixWeighting();
+        }
+
+        if (this.fuzzynessValid && this.weightingValid) {
+            // RETURN
+        }
     }
 
+    checkFuzzyness() {
+        return this.overlayRelationship.fuzzyness >= 0 && this.overlayRelationship.fuzzyness <= 100;
+    }
+
+    fixFuzzyness() {
+        if (this.overlayRelationship.fuzzyness < 0) {
+            this.overlayRelationship.fuzzyness = 0;
+        }
+
+        if (this.overlayRelationship.fuzzyness > 100) {
+            this.overlayRelationship.fuzzyness = 100;
+        }
+    }
+
+    checkWeighting() {
+        return this.overlayRelationship.weighting >= 0 && this.overlayRelationship.weighting <= 9999;
+    }
+
+    fixWeighting() {
+        if (this.overlayRelationship.weighting < 0) {
+            this.overlayRelationship.weighting = 0;
+        }
+
+        if (this.overlayRelationship.weighting > 9999) {
+            this.overlayRelationship.weighting = 9999;
+        }
+    }
 
     navigateBack() {
         window.history.back();
