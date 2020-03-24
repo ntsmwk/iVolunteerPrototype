@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
+import { MatchingOperatorRelationship, MatchingOperatorType } from 'app/main/content/_model/matching';
+import { CConstants } from '../../class-configurator/utils-and-constants';
 
 
 @Component({
@@ -11,6 +12,8 @@ export class OptionsOverlayContentComponent implements OnInit {
 
     @Input() overlayRelationship: MatchingOperatorRelationship;
 
+    matchingPalettes = CConstants.matchingPalettes;
+
     constructor(
 
     ) { }
@@ -21,6 +24,12 @@ export class OptionsOverlayContentComponent implements OnInit {
         this.overlayRelationship.weighting = 20;
         this.overlayRelationship.fuzzyness = 30;
         this.overlayRelationship.necessary = true;
+
+        console.log(this.matchingPalettes);
+    }
+
+    getImagePathForMatchingOperatorType(type: MatchingOperatorType) {
+        return (this.matchingPalettes.find(p => p.id === type).imgPath)
     }
 
 

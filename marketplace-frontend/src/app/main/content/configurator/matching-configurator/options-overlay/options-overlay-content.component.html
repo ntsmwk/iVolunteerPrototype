@@ -1,5 +1,25 @@
 <div class="overlay-content m-8">
-    <div class="pb-4">
+
+
+
+
+    <div class="pb-4" fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="start start">
+            <mat-label>Operator</mat-label>
+
+            <button mat-button [matMenuTriggerFor]="menu">
+                <div>
+                    <img width="20" height="20"
+                        [src]="getImagePathForMatchingOperatorType(overlayRelationship.matchingOperatorType)">
+                </div>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button *ngFor="let p of matchingPalettes" mat-menu-item>
+                    <div> <img width="20" height="20" [src]="p.imgPath"> </div>
+                </button>
+            </mat-menu>
+
+        </div>
         <mat-checkbox labelPosition="after" [(ngModel)]="overlayRelationship.necessary">
             <div style="font-size: 14px">Notwendig</div>
         </mat-checkbox>
