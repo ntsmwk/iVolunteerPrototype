@@ -37,7 +37,7 @@ import { FuseProjectMembersModule } from "../../../../_shared_components/project
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { HighchartsChartModule } from "highcharts-angular";
 import { CommonModule } from "@angular/common";
-import { AchievementsFireBrigadeComponent } from "./achievement-fire-brigade.component";
+import { AchievementsFireBrigadeComponent } from "./achievement.component";
 import { TasksComponent } from "./tasks/tasks.component";
 import { FunctionsComponent } from "./functions/functions.component";
 import { AccomplishmentsComponent } from "./accomplishments/accomplishments.component";

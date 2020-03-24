@@ -10,9 +10,9 @@ import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 
 @Component({
-  selector: "fuse-achievements-fire-brigade",
-  templateUrl: "./achievement-fire-brigade.component.html",
-  styleUrls: ["./achievement-fire-brigade.component.scss"],
+  selector: "fuse-achievements",
+  templateUrl: "./achievement.component.html",
+  styleUrls: ["./achievement.component.scss"],
   animations: fuseAnimations
 })
 export class AchievementsFireBrigadeComponent implements OnInit {

@@ -98,7 +98,7 @@ const routes: Route[] = [
     path: "main/achievements/details",
     loadChildren: () =>
       import(
-        "./_components/volunteer/task-management/achievements/achievements-fire-brigade.module"
+        "./_components/volunteer/task-management/achievements/achievements.module"
       ).then(m => m.AchievementsFireBrigadeModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
