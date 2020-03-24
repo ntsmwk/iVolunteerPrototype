@@ -321,6 +321,14 @@ const routes: Route[] = [
         "./_components/admin/marketplace-form/marketplace-form.module"
       ).then(m => m.FuseMarketplaceFormModule),
     canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: "main/tenant-form",
+    loadChildren: () =>
+      import("./_components/admin/tenant-form/tenant-form.module").then(
+        m => m.FuseTenantFormModule
+      ),
+    canActivate: [TokenGuard, AdminGuard]
   }
 ];
 
