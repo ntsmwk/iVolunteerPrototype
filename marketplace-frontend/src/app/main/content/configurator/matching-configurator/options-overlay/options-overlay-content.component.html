@@ -1,5 +1,5 @@
 <div class="overlay-content m-8">
-    <div class="pt-8 pb-16">
+    <div class="pb-4">
         <mat-checkbox labelPosition="after" [(ngModel)]="overlayRelationship.necessary">
             <div style="font-size: 14px">Notwendig</div>
         </mat-checkbox>
@@ -7,14 +7,14 @@
 
     <mat-divider></mat-divider>
 
-    <div class="pt-16">
+    <div class="pt-4">
         <mat-label>Unschärfe (in %)</mat-label>
         <div fxLayout="row" fxLayoutAlign="start start">
             <mat-slider min="0" max="100" step="" tickInterval="10" style="width: 100%"
-                [(ngModel)]="overlayRelationship.fuzzyness"></mat-slider>
-            <mat-form-field style="width: 45px; padding-left: 4px">
+                [ngModel]="overlayRelationship.fuzzyness" (input)="sliderValueChanged($event)"></mat-slider>
+            <mat-form-field style="width: 55px; padding-left: 4px" appearance="outline">
                 <input matInput type="number" id="fuzzyness" [(ngModel)]="overlayRelationship.fuzzyness" min=0 max=100
-                    style="text-align: right">
+                    style=" text-align: right">
             </mat-form-field>
         </div>
     </div>
@@ -23,7 +23,7 @@
     <div fxLayout="row" fxLayoutAlign="space-between center">
         <div fxLayout="row" fxLayoutAlign="start center">
             <mat-label>Gewichtung</mat-label>
-            <mat-form-field style="width: 50px; padding-left: 4px">
+            <mat-form-field style="width: 60px; padding-left: 4px" appearance="outline">
                 <input matInput type="number" id="weighting" [(ngModel)]="overlayRelationship.weighting"
                     style="text-align: right">
             </mat-form-field>

@@ -33,4 +33,8 @@ export class OptionsOverlayContentComponent implements OnInit {
         window.history.back();
     }
 
+    sliderValueChanged(evt) {
+        this.overlayRelationship.fuzzyness = evt.value;
+    }
+
 }
