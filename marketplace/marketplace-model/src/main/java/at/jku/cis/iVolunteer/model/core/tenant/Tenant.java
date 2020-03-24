@@ -1,5 +1,8 @@
 package at.jku.cis.iVolunteer.model.core.tenant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 
 public class Tenant {
@@ -13,6 +16,8 @@ public class Tenant {
 	private String secondaryColor;
 	
 	private String marketplaceId;
+	
+	private List<SubscriptionRule> subscriptionRules = new ArrayList<>();
 
 	public String getId() {
 		return id;
@@ -60,6 +65,14 @@ public class Tenant {
 
 	public void setMarketplaceId(String marketplaceId) {
 		this.marketplaceId = marketplaceId;
+	}
+
+	public List<SubscriptionRule> getSubscriptionRules() {
+		return subscriptionRules;
+	}
+
+	public void setSubscriptionRules(List<SubscriptionRule> subscriptionRules) {
+		this.subscriptionRules = subscriptionRules;
 	}
 
 }
