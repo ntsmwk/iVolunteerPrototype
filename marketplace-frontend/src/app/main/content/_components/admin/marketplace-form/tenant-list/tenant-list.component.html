@@ -22,11 +22,6 @@
     <mat-cell *matCellDef="let tenant">{{ tenant.name }}</mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="marketplace">
-    <mat-header-cell *matHeaderCellDef>Marketplace</mat-header-cell>
-    <mat-cell *matCellDef="let tenant">{{ tenant.marketplaceId }}</mat-cell>
-  </ng-container>
-
   <ng-container matColumnDef="primaryColor">
     <mat-header-cell *matHeaderCellDef>Primary Color</mat-header-cell>
     <mat-cell *matCellDef="let tenant">{{ tenant.primaryColor }}</mat-cell>

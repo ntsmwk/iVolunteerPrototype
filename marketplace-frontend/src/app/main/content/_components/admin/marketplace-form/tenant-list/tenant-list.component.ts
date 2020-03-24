@@ -14,13 +14,7 @@ import { fuseAnimations } from "@fuse/animations";
 export class FuseTenantListComponent implements OnInit {
   @Input() marketplaceId: string;
   dataSource = new MatTableDataSource<Marketplace>();
-  displayedColumns = [
-    "name",
-    "marketplace",
-    "primaryColor",
-    "secondaryColor",
-    "actions"
-  ];
+  displayedColumns = ["name", "primaryColor", "secondaryColor", "actions"];
 
   constructor(private router: Router, private tenantService: TenantService) {}
 
@@ -31,6 +25,6 @@ export class FuseTenantListComponent implements OnInit {
   }
 
   addTenant() {
-    this.router.navigate(["/main/tenant-form"]);
+    this.router.navigate(["/main/marketplace-form/tenant-form"]);
   }
 }
