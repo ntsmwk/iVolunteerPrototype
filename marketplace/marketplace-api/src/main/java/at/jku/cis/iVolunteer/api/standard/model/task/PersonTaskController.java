@@ -19,9 +19,9 @@ public class PersonTaskController {
 	private static final int FF_NEW = 2;
 	private static final int FF_OLD = 1;
 	
-	private static final String FFEIDENBERG = "FF_Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
-	private static final String RKWILHERING = "RK_Wilhering";
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
+	private static final String RKWILHERING = "RK Wilhering";
 	
 	@Autowired private PersonTaskService personTaskService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;

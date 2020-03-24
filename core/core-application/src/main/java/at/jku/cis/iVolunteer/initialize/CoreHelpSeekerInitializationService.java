@@ -20,20 +20,20 @@ import at.jku.cis.iVolunteer.model.user.UserImagePath;
 public class CoreHelpSeekerInitializationService {
 	
 	private static final String USER_MV = "MVS";
-	private static final String TENANT_MV = "Musikverein_Schwertberg";
+	private static final String TENANT_MV = "MV Schwertberg";
 	
 	private static final String USER_FF = "FFA";
-	private static final String TENANT_FF = "FF_Eidenberg";
+	private static final String TENANT_FF = "FF Eidenberg";
 	
 	private static final String USER_RK = "OERK";
-	private static final String TENANT_RK = "RK_Wilhering";
+	private static final String TENANT_RK = "RK Wilhering";
 
 	private static final String MMUSTERMANN = "mmustermann";
 	private static final String RAW_PASSWORD = "passme";
 
 	private static final String FFEIDENBERG = TENANT_FF;
 	private static final String MUSIKVEREINSCHWERTBERG = TENANT_MV;
-	private static final String RKWILHERING = "RK_Wilhering";
+	private static final String RKWILHERING = "RK Wilhering";
 
 	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
 	@Autowired private CoreTenantRepository coreTenantRepository;

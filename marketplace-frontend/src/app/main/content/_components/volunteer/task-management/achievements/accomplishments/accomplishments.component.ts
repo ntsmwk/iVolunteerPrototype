@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { fuseAnimations } from "../../../../../../../../../@fuse/animations";
+import { fuseAnimations } from "../../../../../../../../@fuse/animations";
 import * as d3 from "d3";
 
 @Component({

@@ -26,9 +26,9 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	private static final String FFEIDENBERG = "FF_Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
-	private static final String RKWILHERING = "RK_Wilhering";
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
+	private static final String RKWILHERING = "RK Wilhering";
 
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
