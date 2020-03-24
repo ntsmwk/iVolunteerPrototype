@@ -15,10 +15,10 @@ import { TenantService } from '../../../../../_service/core-tenant.service';
 
 @Component({
   selector: 'fuse-management-summary',
-  templateUrl: './achievements-management-summary.component.html',
-  styleUrls: ['./achievements-management-summary.component.scss']
+  templateUrl: './management-summary.component.html',
+  styleUrls: ['./management-summary.component.scss']
 })
-export class AchievementsManagementSummaryComponent implements OnInit {
+export class ManagementSummaryComponent implements OnInit {
 
   // comparison chart
   comparisonXlabel = 'Jahr';

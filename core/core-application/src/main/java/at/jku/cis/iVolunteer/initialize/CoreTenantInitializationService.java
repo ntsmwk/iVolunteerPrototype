@@ -17,9 +17,9 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 @Service
 public class CoreTenantInitializationService {
 
-	private static final String FF_EIDENBERG = "FF_Eidenberg";
-	private static final String MV_SCHWERTBERG = "Musikverein_Schwertberg";
-	private static final String RK_WILHERING = "RK_Wilhering";
+	private static final String FF_EIDENBERG = "FF Eidenberg";
+	private static final String MV_SCHWERTBERG = "MV Schwertberg";
+	private static final String RK_WILHERING = "RK Wilhering";
 
 	@Autowired private TenantRepository coreTenantRepository;
 	@Autowired private MarketplaceRepository marketplaceRepository;

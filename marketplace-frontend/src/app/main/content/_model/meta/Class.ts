@@ -50,6 +50,7 @@ export class ClassInstance {
 export class ClassInstanceDTO {
     name: string;
     id: string;
+    tenantId: string;
     issuerId: string;
     blockchainDate: Date;
     classArchetype: ClassArchetype;

@@ -1,0 +1,79 @@
+.sunburstParent {
+    width: 70%;
+}
+
+.tasksTable {
+   width: 30%;
+}
+
+.right {
+    text-align: right
+  }
+
+  .mat-column-taskName {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 50% !important;
+    width: 50% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-taskDateFrom {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 30% !important;
+    width: 30% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-taskDuration {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 20% !important;
+    width: 20% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  
+  mat-row {
+    cursor: pointer;
+  }
+  
+  mat-row:hover {
+    opacity: 0.8;
+  }
+  
+  mat-header-cell {
+    font-size: 18px;
+  }
+  
+  mat-cell {
+    font-size: 14px;
+  }
+  
+  ::ng-deep .highcharts-drillup-button {
+    display: none !important;
+  }

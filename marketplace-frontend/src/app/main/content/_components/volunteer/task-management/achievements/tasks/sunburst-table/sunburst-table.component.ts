@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, OnChanges, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
+import { ClassInstanceDTO } from '../../../../../../_model/meta/Class';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
@@ -25,10 +25,10 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
 
   prevNodeLevel: number = null;
 
-  private tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  private displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
+  tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
+  displayedColumns: string[] = ['taskName', 'taskDateFrom', 'taskDuration'];
 
   sunburstData = [];
   ngxColorsCool =
@@ -118,18 +118,20 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   uniqueTt2: any[];
   uniqueTt3: any[];
 
+  tt1ColorMap: Map<any, any>;
+
   sunburstCenterName: string = 'Tätigkeiten';
 
-  constructor() {
-  }
+  constructor(
+  ) {}
 
   ngOnInit() {
-    Highcharts.getOptions().colors.splice(0, 0, 'transparent');
   }
 
   ngAfterViewInit(): void {
-    this.tableDataSource.paginator = this.paginator;
+   this.tableDataSource.paginator = this.paginator;
 
+    Highcharts.getOptions().colors.splice(0, 0, 'transparent');
     Highcharts.chart('sunburstChart', this.chartOptions).update({
       plotOptions: {
         series: {
@@ -161,12 +163,19 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
               this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
               this.uniqueTt3 = [...new Set(list.map(item => item.tt2))];
 
+
+              this.uniqueTt1.sort();
+              this.tt1ColorMap = new Map();
+              this.uniqueTt1.forEach((tt1, index) => {
+                this.tt1ColorMap.set(tt1, this.ngxColorsCool[index % this.ngxColorsCool.length]);
+              });
+
               this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort((a, b) => {
                 return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
               });
 
               this.tableDataSource.data = this.filteredClassInstanceDTOs;
-              this.paginator._changePageSize(this.paginator.pageSize);
+              this.tableDataSource.paginator = this.paginator;
 
               this.generateSunburstData();
             }
@@ -232,8 +241,11 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   generateSunburstData() {
-    // this.chipTaskType = null;
-    // this.updateChipTaskType(this.chipTaskType);
+    if(this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
+      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+      this.selectedTaskType = null;
+      this.updateSelectedTaskType(this.selectedTaskType);
+    } 
 
     let list = this.filteredClassInstanceDTOs
       .map(ci => {
@@ -250,6 +262,8 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
 
     // insert tt1 entries
     this.uniqueTt1.forEach((tt1, index) => {
+      // TODO use color map here, modulo, so to start from beginning...
+
       data.push({ id: (index + 1).toString(), parent: '0', name: tt1, color: this.ngxColorsCool[index] });
     });
 
@@ -323,7 +337,7 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
     Highcharts.chart('sunburstChart', this.chartOptions);
 
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
-    this.paginator._changePageSize(this.paginator.pageSize);
+    this.tableDataSource.paginator = this.paginator;
   }
 
 
@@ -415,7 +429,7 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
 
     // update table
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
-    this.paginator._changePageSize(this.paginator.pageSize);
+    this.tableDataSource.paginator = this.paginator;
   }
 
 
@@ -424,6 +438,12 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   updateSelectedTaskType(selectedTaskType) {
     this.selectedTaskType = selectedTaskType;
     this.selectedTaskTypeChange.emit(selectedTaskType);
+  }
+
+  getStyle(tt1) {
+    return {
+      'background-color': this.tt1ColorMap.get(tt1) + '9B' // opacity
+    }
   }
 
 }

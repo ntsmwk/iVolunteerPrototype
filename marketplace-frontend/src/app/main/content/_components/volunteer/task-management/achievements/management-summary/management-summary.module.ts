@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AchievementsMusicComponent } from './achievements-music.component';
 import { RouterModule } from '@angular/router';
-import { TasksMusicComponent } from './tasks/tasks-music.component';
 import { FuseSharedModule } from '@fuse/shared.module';
 import {
   MatButtonModule,
@@ -28,23 +25,26 @@ import {
   MatSlideToggleModule
 } from '@angular/material';
 import { FuseConfirmDialogModule, FuseWidgetModule } from '../../../../../../../../@fuse/components';
+
+
 import { FuseProjectTaskListModule } from '../../../../../_shared_components/project-task-list/project-task-list.module';
 import { FuseTruncatePipeModule } from '../../../../../_pipe/truncate-pipe.module';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FuseProjectMembersModule } from '../../../../../_shared_components/project-members/project-members.module';
+
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { HighchartsChartModule } from 'highcharts-angular';
+import { CommonModule } from '@angular/common';
+import { ManagementSummaryComponent } from './management-summary.component';
+import { ShareMenuComponent } from '../share-menu/share-menu.component';
 import { ShareMenuModule } from '../share-menu/share-menu.module';
-import { CompetenciesMusicComponent } from './competencies/competencies-music.component';
+
 const routes = [
-  { path: '', component: AchievementsMusicComponent }
+  { path: '', component: ManagementSummaryComponent }
 ];
 
 @NgModule({
   declarations: [
-    AchievementsMusicComponent,
-    TasksMusicComponent,
-    CompetenciesMusicComponent
+    ManagementSummaryComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -82,8 +82,12 @@ const routes = [
     NgbModalModule,
 
     NgxChartsModule,
-    HighchartsChartModule,
-    ShareMenuModule
-  ]
+    ShareMenuModule,
+    
+  ],
+  providers   : [
+]
 })
-export class AchievementsMusicModule { }
+
+export class ManagementSummary {
+}

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
+import { ClassInstanceDTO } from '../../../../../../_model/meta/Class';
 import * as moment from 'moment';
-import { StoredChartService } from '../../../../../_service/stored-chart.service';
-import { StoredChart } from '../../../../../_model/stored-chart';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { Volunteer } from '../../../../../_model/volunteer';
+import { StoredChartService } from '../../../../../../_service/stored-chart.service';
+import { StoredChart } from '../../../../../../_model/stored-chart';
+import { Marketplace } from '../../../../../../_model/marketplace';
+import { Volunteer } from '../../../../../../_model/volunteer';
 
 
 @Component({

@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { fuseAnimations } from '../../../../../../../../../@fuse/animations';
-import { Participant } from '../../../../../../_model/participant';
-import { LoginService } from '../../../../../../_service/login.service';
-import { ClassInstanceService } from '../../../../../../_service/meta/core/class/class-instance.service';
-import { Marketplace } from '../../../../../../_model/marketplace';
-import { CoreMarketplaceService } from '../../../../../../_service/core-marketplace.service';
-import { ClassInstance, ClassInstanceDTO } from '../../../../../../_model/meta/Class';
+import { fuseAnimations } from '../../../../../../../../@fuse/animations';
+import { Participant } from '../../../../../_model/participant';
+import { LoginService } from '../../../../../_service/login.service';
+import { ClassInstanceService } from '../../../../../_service/meta/core/class/class-instance.service';
+import { Marketplace } from '../../../../../_model/marketplace';
+import { CoreMarketplaceService } from '../../../../../_service/core-marketplace.service';
+import { ClassInstance, ClassInstanceDTO } from '../../../../../_model/meta/Class';
 import { isNullOrUndefined } from 'util';
-import { CoreVolunteerService } from '../../../../../../_service/core-volunteer.service';
-import { Volunteer } from '../../../../../../_model/volunteer';
+import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
+import { Volunteer } from '../../../../../_model/volunteer';
 import * as moment from 'moment';
-import { StoredChart } from '../../../../../../_model/stored-chart';
-import { StoredChartService } from '../../../../../../_service/stored-chart.service';
+import { StoredChart } from '../../../../../_model/stored-chart';
+import { StoredChartService } from '../../../../../_service/stored-chart.service';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 
 @Component({
@@ -91,6 +91,7 @@ export class CompetenciesComponent implements OnInit {
             this.currYearData = [... this.getYearData('2019')];
             this.lastYearData = this.getYearData('2018');
             this.meanYearData = this.getYearData('mean');
+
           }
         });
       });

@@ -19,9 +19,6 @@ import { ShareMenuComponent } from "./_components/volunteer/task-management/achi
 import { ShareMenuModule } from "./_components/volunteer/task-management/achievements/share-menu/share-menu.module";
 import { AnonymGuard } from "./_guard/anonym.guard";
 import { AdminGuard } from "./_guard/admin.guard";
-import { TimelineFilterModule } from "./_components/volunteer/task-management/achievements/timeline-filter/timeline-filter.module";
-import { SunburstTableModule } from "./_components/volunteer/task-management/achievements/sunburst-table/sunburst-table.module";
-import { DonutModule } from "./_components/volunteer/task-management/achievements/donut/donut.module";
 
 const routes: Route[] = [
   {
@@ -90,27 +87,19 @@ const routes: Route[] = [
   },
 
   {
-    path: "main/achievements/summary",
+    path: "main/achievements/overview",
     loadChildren: () =>
       import(
-        "./_components/volunteer/task-management/achievements/achievements-management-summary/achievements-management-summary.module"
-      ).then(m => m.AchievementsManagementSummary),
+        "./_components/volunteer/task-management/achievements/management-summary/management-summary.module"
+      ).then(m => m.ManagementSummary),
     canActivate: [TokenGuard, VolunteerGuard]
   },
   {
-    path: "main/achievements/fireBrigade",
+    path: "main/achievements/details",
     loadChildren: () =>
       import(
-        "./_components/volunteer/task-management/achievements/achievements-fire-brigade/achievements-fire-brigade.module"
+        "./_components/volunteer/task-management/achievements/achievements.module"
       ).then(m => m.AchievementsFireBrigadeModule),
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
-    path: "main/achievements/music",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/task-management/achievements/achievements-music/achievements-music.module"
-      ).then(m => m.AchievementsMusicModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
 
@@ -337,10 +326,7 @@ const routes: Route[] = [
   imports: [
     RouterModule.forChild(routes),
     FuseSharedModule,
-    ShareMenuModule,
-    TimelineFilterModule,
-    SunburstTableModule,
-    DonutModule
+    ShareMenuModule
   ],
 
   providers: [
