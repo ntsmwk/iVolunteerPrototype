@@ -2,7 +2,10 @@ import { NgModule } from "@angular/core";
 import { FuseTenantFormComponent } from "./tenant-form.component";
 import { Route, RouterModule } from "@angular/router";
 
-const routes: Route[] = [{ path: "", component: FuseTenantFormComponent }];
+const routes: Route[] = [
+  { path: "", component: FuseTenantFormComponent },
+  { path: ":tenantId", component: FuseTenantFormComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

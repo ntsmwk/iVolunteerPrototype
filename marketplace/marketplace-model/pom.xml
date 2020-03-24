@@ -21,9 +21,8 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>at.jku.cis</groupId>
-			<artifactId>marketplace-security</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 	</dependencies>
 </project>
