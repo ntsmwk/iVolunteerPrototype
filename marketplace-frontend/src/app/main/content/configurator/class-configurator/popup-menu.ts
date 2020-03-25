@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
-import { myMxCell } from '../MyMxCell';
+import { myMxCell } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
 
 declare var require: any;

@@ -14,7 +14,7 @@ import { EditorPopupMenu } from './popup-menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants, CUtils } from './utils-and-constants';
-import { myMxCell } from '../MyMxCell';
+import { myMxCell } from '../myMxCell';
 import { ClassConfigurationService } from '../../_service/configuration/class-configuration.service';
 import { ClassConfiguration } from '../../_model/configurations';
 

@@ -1,6 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
-import { myMxCell } from '../MyMxCell';
+import { myMxCell } from '../myMxCell';
 import { MatchingConfiguratorComponent } from './matching-configurator.component';
 
 declare var require: any;
@@ -38,7 +38,7 @@ export class MatchingConfiguratorPopupMenu {
 
       if (cell.cellType === 'matchingOperator' || cell.cellType === 'matchingConnector') {
         const deleteItem = menu.addItem('Delete', null, function () {
-         
+
           try {
             graph.getModel().beginUpdate();
 

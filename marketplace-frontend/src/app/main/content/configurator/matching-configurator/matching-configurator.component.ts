@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterContentInit, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassArchetype } from 'app/main/content/_model/meta/Class';
@@ -11,7 +11,7 @@ import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
-import { myMxCell } from '../MyMxCell';
+import { myMxCell } from '../myMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry, MatchingOperatorType, MatchingProducerConsumerType } from '../../_model/matching';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
@@ -45,6 +45,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private helpSeekerService: CoreHelpSeekerService,
     private matchingConfigurationService: MatchingConfigurationService,
     private objectIdService: ObjectIdService,
+    private renderer: Renderer2,
   ) {
 
   }
@@ -56,6 +57,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('paletteContainer', { static: true }) paletteContainer: ElementRef;
 
+
   graph: mxgraph.mxGraph;
 
   producerClassConfiguration: ClassConfiguration;
@@ -64,8 +66,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   producerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
   consumerMatchingCollectorConfiguration: MatchingCollectorConfiguration;
 
-  matchingPalettes = CConstants.matchingPalettes;
+  matchingOperatorPalettes = CConstants.matchingOperatorPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
+  matchingOperationPalettes = CConstants.matchingOperationPalettes;
 
   matchingConfiguration: MatchingConfiguration;
 
@@ -73,7 +76,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   overlayRelationship: MatchingOperatorRelationship;
   overlayEvent: PointerEvent;
 
+  //Delete Mode
+  confirmDelete: boolean;
+  deleteMode: boolean;
+
   ngOnInit() {
+    this.confirmDelete = true;
+
     let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
@@ -378,7 +387,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private getPathForMatchingOperatorType(matchingOperatorType: String) {
-    const paletteItem = CConstants.matchingPalettes.find((ret) => ret.id === matchingOperatorType);
+    const paletteItem = CConstants.matchingOperatorPalettes.find((ret) => ret.id === matchingOperatorType);
 
     return paletteItem.imgPath;
   }
@@ -570,16 +579,27 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(event);
     const cell = event.properties.cell as myMxCell;
 
-    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0) {
+    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && !this.deleteMode) {
       this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
       this.overlayEvent = event.properties.event;
       this.displayOverlay = true;
 
       this.graphContainer.nativeElement.style.overflow = 'hidden';
-
     }
 
   }
+
+  handleDeleteClickedEvent(event: MouseEvent, item: any, graph: mxgraph.mxGraph) {
+
+    this.deleteMode = !this.deleteMode;
+
+    if (this.deleteMode) {
+      this.renderer.setStyle(event.target, 'background', 'skyblue');
+    } else {
+      this.renderer.setStyle(event.target, 'background', 'none');
+    }
+  }
+
   handleOverlayClosedEvent(event: MatchingOperatorRelationship) {
     this.displayOverlay = false;
     this.overlayRelationship = undefined;

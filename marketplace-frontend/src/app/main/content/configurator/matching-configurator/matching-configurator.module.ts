@@ -18,6 +18,7 @@ import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/ad
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { MatchingEditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { OptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
+import { MatCheckboxModule } from '@angular/material';
 
 const routes = [
   { path: '', component: MatchingConfiguratorComponent }
@@ -41,6 +42,7 @@ const routes = [
     MatOptionModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatCheckboxModule,
 
 
     FuseSharedModule,

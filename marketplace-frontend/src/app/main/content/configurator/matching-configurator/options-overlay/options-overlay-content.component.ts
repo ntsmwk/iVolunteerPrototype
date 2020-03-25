@@ -20,7 +20,7 @@ export class OptionsOverlayContentComponent implements OnInit {
     weighting: number;
 
 
-    matchingPalettes = CConstants.matchingPalettes;
+    matchingOperatorPalettes = CConstants.matchingOperatorPalettes;
 
     fuzzynessValid = true;
     weightingValid = true;
@@ -34,7 +34,7 @@ export class OptionsOverlayContentComponent implements OnInit {
         console.log(this.overlayRelationship);
 
 
-        console.log(this.matchingPalettes);
+        console.log(this.matchingOperatorPalettes);
 
         this.matchingOperatorType = this.overlayRelationship.matchingOperatorType;
         this.necessary = this.overlayRelationship.necessary;
@@ -43,11 +43,11 @@ export class OptionsOverlayContentComponent implements OnInit {
     }
 
     getImagePathForMatchingOperatorType(type: MatchingOperatorType) {
-        return (this.matchingPalettes.find(p => p.id === type).imgPath);
+        return (this.matchingOperatorPalettes.find(p => p.id === type).imgPath);
     }
 
     getLabelForMatchingOperatorType(type: MatchingOperatorType) {
-        return (this.matchingPalettes.find(p => p.id === type).label);
+        return (this.matchingOperatorPalettes.find(p => p.id === type).label);
     }
 
     matchingOperatorChanged(paletteItem: any) {

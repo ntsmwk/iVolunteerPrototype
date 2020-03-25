@@ -25,7 +25,7 @@ const relationshipPalettes = {
   ]
 };
 
-const matchingPalettes = [
+const matchingOperatorPalettes = [
   { id: 'EQUAL', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
   { id: 'LESS', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
   { id: 'GREATER', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
@@ -38,7 +38,12 @@ const matchingPalettes = [
 const matchingConnectorPalettes = [
   { id: 'connector', label: 'verbinder', imgPath: '/assets/mxgraph_resources/images/connect.gif', type: 'connector' },
 
-]
+];
+
+const matchingOperationPalettes = [
+  { id: 'delete', label: 'löschen', imgPath: '/assets/mxgraph_resources/images/delete.gif', type: 'operation' },
+
+];
 
 const mxStyles = {
 
@@ -122,8 +127,9 @@ const cellTypes = {
 export class CConstants {
   public static sidebarPalettes = sidebarPalettes;
   public static relationshipPalettes = relationshipPalettes;
-  public static matchingPalettes = matchingPalettes;
+  public static matchingOperatorPalettes = matchingOperatorPalettes;
   public static matchingConnectorPalettes = matchingConnectorPalettes;
+  public static matchingOperationPalettes = matchingOperationPalettes;
   public static mxStyles = mxStyles;
   public static cellTypes = cellTypes;
 }

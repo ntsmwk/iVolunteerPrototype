@@ -2,7 +2,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
-import { myMxCell } from '../../MyMxCell';
+import { myMxCell } from '../../myMxCell';
 import { ClassConfiguratorComponent } from '../class-configurator.component';
 
 export interface GraphNode {

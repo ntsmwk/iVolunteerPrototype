@@ -24,7 +24,7 @@
                 </div>
             </button>
             <mat-menu #menu="matMenu" class="custom">
-                <button *ngFor="let p of matchingPalettes" mat-button fxLayout="column"
+                <button *ngFor="let p of matchingOperatorPalettes" mat-button fxLayout="column"
                     fxLayoutAlign="space-between center" [matTooltip]="p.label" (click)="matchingOperatorChanged(p)">
                     <div></div>
                     <div style="width: 40px; height: 40px"><img width="40" height="40" [src]="p.imgPath"></div>
