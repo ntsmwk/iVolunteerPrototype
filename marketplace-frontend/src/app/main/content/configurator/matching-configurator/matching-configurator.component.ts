@@ -162,6 +162,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     this.graph = new mx.mxGraph(this.graphContainer.nativeElement);
 
+    const outer = this;
+
     this.graph.isCellSelectable = function (cell) {
       const state = this.view.getState(cell);
       const style = (state != null) ? state.style : this.getCellStyle(cell);
@@ -170,10 +172,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType === 'property' || cell.cellType === 'add' || cell.cellType === 'remove' ||
-        cell.cellType === 'add_class_new_level' || cell.cellType === 'add_class_same_level' ||
-        cell.cellType === 'add_association') {
+      if (cell.cellType === 'matchingOperator' && outer.deleteMode) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
+      } else if (outer.deleteMode) {
+        return 'default';
       }
     };
 
@@ -211,12 +213,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        // outer.handleClickEvent(evt);
+        outer.handleClickEvent(evt);
 
       });
 
       this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
-        // Handle Click
+        // Handle Double Click
         outer.handleDoubleClickEvent(evt);
 
       });
@@ -592,6 +594,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.graphContainer.nativeElement.style.overflow = 'hidden';
     }
+  }
+
+  handleClickEvent(event: mxgraph.mxEventObject) {
+    console.log(event);
+    const cell = event.properties.cell as myMxCell;
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
       try {
@@ -604,8 +611,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         this.graph.getModel().endUpdate();
       }
     }
-
-
   }
 
   handleDeleteClickedEvent(event: MouseEvent, item: any, graph: mxgraph.mxGraph) {
@@ -614,8 +619,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (this.deleteMode) {
       this.renderer.setStyle(event.target, 'background', 'skyblue');
+      this.graph.setEnabled(false);
+
     } else {
       this.renderer.setStyle(event.target, 'background', 'none');
+      this.graph.setEnabled(true);
+
     }
   }
 
