@@ -72,7 +72,7 @@ export class FuseTenantFormComponent implements OnInit {
       .save(<Tenant>this.tenantForm.value)
       .toPromise()
       .then(() =>
-        this.router.navigate([`/main/marketplace/${this.marketplaceId}`])
+        this.router.navigate([`/main/marketplace-form/${this.marketplaceId}`])
       );
   }
 }
