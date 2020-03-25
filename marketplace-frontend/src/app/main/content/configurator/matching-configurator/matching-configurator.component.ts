@@ -587,6 +587,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       this.graphContainer.nativeElement.style.overflow = 'hidden';
     }
 
+    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
+      try {
+        this.graph.getModel().beginUpdate();
+        this.graph.removeCells([cell], true);
+        const index = this.matchingConfiguration.relationships.findIndex(r => r.id === cell.id);
+        this.matchingConfiguration.relationships.splice(index, 1);
+
+      } finally {
+        this.graph.getModel().endUpdate();
+      }
+    }
+
+
   }
 
   handleDeleteClickedEvent(event: MouseEvent, item: any, graph: mxgraph.mxGraph) {
