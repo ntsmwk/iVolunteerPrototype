@@ -13,11 +13,11 @@
                     <div fxLayout="row" fxLayoutAlign="start center">
                         <div>
                             <img width="40" height="40"
-                                [src]="getImagePathForMatchingOperatorType(overlayRelationship.matchingOperatorType)">
+                                [src]="getImagePathForMatchingOperatorType(matchingOperatorType)">
                         </div>
 
                         <div class="pl-4">
-                            {{getLabelForMatchingOperatorType(overlayRelationship.matchingOperatorType)}}
+                            {{getLabelForMatchingOperatorType(matchingOperatorType)}}
                         </div>
                     </div>
                     <div></div>
@@ -34,7 +34,7 @@
 
         </div>
 
-        <mat-checkbox labelPosition="after" [(ngModel)]="overlayRelationship.necessary">
+        <mat-checkbox labelPosition="after" [(ngModel)]="necessary">
             <div style="font-size: 14px">Notwendig</div>
         </mat-checkbox>
     </div>
@@ -44,10 +44,10 @@
     <div class="pt-4">
         <mat-label>Unschärfe (in %)</mat-label>
         <div fxLayout="row" fxLayoutAlign="start start">
-            <mat-slider min="0" max="100" step="" tickInterval="10" style="width: 100%"
-                [ngModel]="overlayRelationship.fuzzyness" (input)="sliderValueChanged($event)"></mat-slider>
+            <mat-slider min="0" max="100" step="" tickInterval="10" style="width: 100%" [ngModel]="fuzzyness"
+                (input)="sliderValueChanged($event)"></mat-slider>
             <mat-form-field style="width: 55px; padding-left: 4px" appearance="outline">
-                <input matInput type="number" id="fuzzyness" [(ngModel)]="overlayRelationship.fuzzyness" min=0 max=100
+                <input matInput type="number" id="fuzzyness" [(ngModel)]="fuzzyness" min=0 max=100
                     style=" text-align: right">
             </mat-form-field>
         </div>
@@ -57,8 +57,8 @@
     <div fxLayout="row" fxLayoutAlign="start center">
         <mat-label>Gewichtung</mat-label>
         <mat-form-field style="width: 70px; padding-left: 4px" appearance="outline">
-            <input matInput type="number" id="weighting" [(ngModel)]="overlayRelationship.weighting"
-                style="text-align: right" min="0" max="9999">
+            <input matInput type="number" id="weighting" [(ngModel)]="weighting" style="text-align: right" min="0"
+                max="9999">
         </mat-form-field>
     </div>
 

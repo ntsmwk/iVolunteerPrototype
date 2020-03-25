@@ -13,6 +13,13 @@ export class OptionsOverlayContentComponent implements OnInit {
     @Input() overlayRelationship: MatchingOperatorRelationship;
     @Output() resultRelationship = new EventEmitter<MatchingOperatorRelationship>();
 
+    //Model for Overlay
+    matchingOperatorType: MatchingOperatorType;
+    necessary: boolean;
+    fuzzyness: number;
+    weighting: number;
+
+
     matchingPalettes = CConstants.matchingPalettes;
 
     fuzzynessValid = true;
@@ -28,6 +35,11 @@ export class OptionsOverlayContentComponent implements OnInit {
 
 
         console.log(this.matchingPalettes);
+
+        this.matchingOperatorType = this.overlayRelationship.matchingOperatorType;
+        this.necessary = this.overlayRelationship.necessary;
+        this.weighting = this.overlayRelationship.weighting;
+        this.fuzzyness = this.overlayRelationship.fuzzyness;
     }
 
     getImagePathForMatchingOperatorType(type: MatchingOperatorType) {
@@ -39,7 +51,7 @@ export class OptionsOverlayContentComponent implements OnInit {
     }
 
     matchingOperatorChanged(paletteItem: any) {
-        this.overlayRelationship.matchingOperatorType = paletteItem.id;
+        this.matchingOperatorType = paletteItem.id;
     }
 
 
@@ -57,35 +69,40 @@ export class OptionsOverlayContentComponent implements OnInit {
 
         if (this.fuzzynessValid && this.weightingValid) {
             // RETURN
+            this.overlayRelationship.matchingOperatorType = this.matchingOperatorType;
+            this.overlayRelationship.necessary = this.necessary;
+            this.overlayRelationship.fuzzyness = this.fuzzyness;
+            this.overlayRelationship.weighting = this.weighting;
+
             this.resultRelationship.emit(this.overlayRelationship);
         }
     }
 
     checkFuzzyness() {
-        return this.overlayRelationship.fuzzyness >= 0 && this.overlayRelationship.fuzzyness <= 100;
+        return this.fuzzyness >= 0 && this.fuzzyness <= 100;
     }
 
     fixFuzzyness() {
-        if (this.overlayRelationship.fuzzyness < 0) {
-            this.overlayRelationship.fuzzyness = 0;
+        if (this.fuzzyness < 0) {
+            this.fuzzyness = 0;
         }
 
-        if (this.overlayRelationship.fuzzyness > 100) {
-            this.overlayRelationship.fuzzyness = 100;
+        if (this.fuzzyness > 100) {
+            this.fuzzyness = 100;
         }
     }
 
     checkWeighting() {
-        return this.overlayRelationship.weighting >= 0 && this.overlayRelationship.weighting <= 9999;
+        return this.weighting >= 0 && this.weighting <= 9999;
     }
 
     fixWeighting() {
-        if (this.overlayRelationship.weighting < 0) {
-            this.overlayRelationship.weighting = 0;
+        if (this.weighting < 0) {
+            this.weighting = 0;
         }
 
-        if (this.overlayRelationship.weighting > 9999) {
-            this.overlayRelationship.weighting = 9999;
+        if (this.weighting > 9999) {
+            this.weighting = 9999;
         }
     }
 
@@ -94,7 +111,7 @@ export class OptionsOverlayContentComponent implements OnInit {
     }
 
     sliderValueChanged(evt) {
-        this.overlayRelationship.fuzzyness = evt.value;
+        this.fuzzyness = evt.value;
     }
 
 }
