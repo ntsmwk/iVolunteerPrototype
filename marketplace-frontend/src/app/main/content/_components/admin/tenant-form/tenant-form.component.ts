@@ -17,6 +17,7 @@ import { Tenant } from "app/main/content/_model/tenant";
 export class FuseTenantFormComponent implements OnInit {
   tenantForm: FormGroup;
   tenant: Tenant;
+  marketplaceId: string;
 
   constructor(
     formBuilder: FormBuilder,
@@ -37,7 +38,12 @@ export class FuseTenantFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.findTenant(params["tenantId"]));
+    this.route.params.subscribe(params => {
+      this.findTenant(params["tenantId"]);
+    });
+    this.route.queryParams.subscribe(params => {
+      this.marketplaceId = params["marketplaceId"];
+    });
   }
 
   private async findTenant(tenantId: string) {
@@ -59,14 +65,14 @@ export class FuseTenantFormComponent implements OnInit {
     if (!this.tenantForm.valid) {
       return;
     }
+    this.tenant = <Tenant>this.tenantForm.value;
+    this.tenant.marketplaceId = this.marketplaceId;
+
     this.tenantService
       .save(<Tenant>this.tenantForm.value)
       .toPromise()
-      .then();
-
-    // this.marketplaceService
-    //   .save(<Marketplace>this.marketplaceForm.value)
-    //   .toPromise()
-    //   .then(() => this.router.navigate(["/main/marketplace/all"]));
+      .then(() =>
+        this.router.navigate([`/main/marketplace/${this.marketplaceId}`])
+      );
   }
 }

@@ -51,6 +51,7 @@ public class TenantController {
 		orginalTenant.setName(tenant.getName());
 		orginalTenant.setPrimaryColor(tenant.getPrimaryColor());
 		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
+		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
 		return tenantRepository.save(orginalTenant);
 	}
 	
