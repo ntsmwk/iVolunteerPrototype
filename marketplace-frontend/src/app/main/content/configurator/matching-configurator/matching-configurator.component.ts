@@ -211,7 +211,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
-        outer.handleClickEvent(evt);
+        // outer.handleClickEvent(evt);
+
+      });
+
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
+        // Handle Click
+        outer.handleDoubleClickEvent(evt);
 
       });
 
@@ -575,7 +581,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleClickEvent(event: mxgraph.mxEventObject) {
+  handleDoubleClickEvent(event: mxgraph.mxEventObject) {
     console.log(event);
     const cell = event.properties.cell as myMxCell;
 
