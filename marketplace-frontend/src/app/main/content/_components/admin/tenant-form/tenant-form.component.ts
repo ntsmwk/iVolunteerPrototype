@@ -59,11 +59,10 @@ export class FuseTenantFormComponent implements OnInit {
     if (!this.tenantForm.valid) {
       return;
     }
-    // this.tenantService
-    //   .save(<Tenant>this.tenantForm.value)
-    //   .toPromise()
-    //   .then();
-    // TODO save
+    this.tenantService
+      .save(<Tenant>this.tenantForm.value)
+      .toPromise()
+      .then();
 
     // this.marketplaceService
     //   .save(<Marketplace>this.marketplaceForm.value)
