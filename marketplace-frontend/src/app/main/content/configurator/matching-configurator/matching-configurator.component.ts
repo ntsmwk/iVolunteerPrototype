@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterContentInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterContentInit, Renderer2, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassArchetype } from 'app/main/content/_model/meta/Class';
@@ -617,12 +617,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         //display Dialog
         this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
           if (ret) {
-            this.deleteOperator(cell);
+            this.deleteOperators([cell]);
           }
         });
 
       } else {
-        this.deleteOperator(cell);
+        this.deleteOperators([cell]);
       }
 
 
@@ -630,13 +630,22 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private deleteOperator(cell: myMxCell) {
+  private deleteOperators(cells: myMxCell[]) {
+
+    const cellsToRemove: myMxCell[] = cells.filter(c => c.cellType === 'matchingOperator');
+
     try {
       this.graph.getModel().beginUpdate();
-      this.graph.removeCells([cell], true);
-      const index = this.matchingConfiguration.relationships.findIndex(r => r.id === cell.id);
-      this.matchingConfiguration.relationships.splice(index, 1);
-
+      this.graph.removeCells(cellsToRemove, true);
+      console.log("inital relationships")
+      console.log(this.matchingConfiguration.relationships);
+      console.log("To Remove");
+      console.log(cellsToRemove);
+      this.matchingConfiguration.relationships = this.matchingConfiguration.relationships
+        .filter(r => cellsToRemove
+          .findIndex(c => (r.id === c.id)) < 0);
+      console.log("result");
+      console.log(this.matchingConfiguration.relationships);
     } finally {
       this.graph.getModel().endUpdate();
     }
@@ -676,6 +685,20 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       } finally {
         this.graph.getModel().endUpdate();
       }
+    }
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    console.log('key pressed: ' + event.key);
+
+    if (event.key === 'Delete') {
+      console.log('Pressed Delete');
+
+      const cells = this.graph.getSelectionCells() as myMxCell[];
+
+      this.deleteOperators(cells);
+
     }
   }
 
