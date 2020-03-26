@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { VolunteerProfileComponent } from "./profile.component";
-import { RouterLink, RouterState, RouterModule } from "@angular/router";
+import { RouterModule } from "@angular/router";
 
 const routes = [{ path: "", component: VolunteerProfileComponent }];
 
