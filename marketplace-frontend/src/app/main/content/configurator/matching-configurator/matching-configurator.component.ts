@@ -195,51 +195,26 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getEdgeValidationError = function (edge: myMxCell, source: myMxCell, target: myMxCell) {
-      // console.log("===========")
-      // console.log("Edge");
-      // console.log(edge);
-      // console.log("Source");
-      // console.log(source);
-      // console.log("Target");
-      // console.log(target);
-      // console.log("==============");
-      console.log("999999");
-
-      console.log(edge.target)
-      console.log(target);
-      console.log("9999999");
-
-
-
-
 
       if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator' && edge.target.id === target.id) {
 
         if (source.edges.length >= 2) {
-          // console.log(1);
-          // console.log(target);
           return '';
         }
 
         for (const e of source.edges) {
           if (!isNullOrUndefined(e.source) && e.source.id === source.id) {
-            // console.log(2);
-
             return '';
           }
         }
 
       } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator' && edge.source.id === source.id) {
         if (target.edges.length >= 2) {
-          // console.log(3);
-
           return '';
         }
 
         for (const e of target.edges) {
           if (!isNullOrUndefined(e.target) && e.target.id === target.id) {
-            // console.log(4);
-
             return '';
           }
         }
