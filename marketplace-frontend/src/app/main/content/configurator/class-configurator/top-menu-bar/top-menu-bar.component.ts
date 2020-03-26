@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
-import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 
 
@@ -78,7 +78,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private dialogFactory: DialogFactoryComponent
+    private dialogFactory: DialogFactoryDirective
   ) {
 
   }

@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
-import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
@@ -32,7 +32,7 @@ const mx: typeof mxgraph = require('mxgraph')({
   selector: 'app-matching-configurator',
   templateUrl: './matching-configurator.component.html',
   styleUrls: ['./matching-configurator.component.scss'],
-  providers: [DialogFactoryComponent]
+  providers: [DialogFactoryDirective]
 
 })
 export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
@@ -46,6 +46,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     private matchingConfigurationService: MatchingConfigurationService,
     private objectIdService: ObjectIdService,
     private renderer: Renderer2,
+    private dialogFactory: DialogFactoryDirective,
   ) {
 
   }
@@ -56,6 +57,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('paletteContainer', { static: true }) paletteContainer: ElementRef;
+  @ViewChild('deleteOperationIcon', { static: true }) deleteOperationContainer: ElementRef;
 
 
   graph: mxgraph.mxGraph;
@@ -68,7 +70,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   matchingOperatorPalettes = CConstants.matchingOperatorPalettes;
   matchingConnectorPalettes = CConstants.matchingConnectorPalettes;
-  matchingOperationPalettes = CConstants.matchingOperationPalettes;
+  deleteOperationPalette = CConstants.deleteOperationPalette;
 
   matchingConfiguration: MatchingConfiguration;
 
@@ -430,6 +432,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   consumeMenuOptionClickedEvent(event: any) {
     console.log(event);
+    this.deleteMode = false;
+
+    this.deleteOperationContainer.nativeElement.style.background = 'none';
+    this.graph.setEnabled(true);
+
+    this.displayOverlay = false;
+    this.overlayEvent = undefined;
+    this.overlayRelationship = undefined;
+
     switch (event.id) {
       case 'editor_save': this.performSave(); break;
       case 'editor_open': this.performOpen(event.payload); break;
@@ -438,6 +449,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private performSave() {
+
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
     const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
 
@@ -601,15 +613,32 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = event.properties.cell as myMxCell;
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
-      try {
-        this.graph.getModel().beginUpdate();
-        this.graph.removeCells([cell], true);
-        const index = this.matchingConfiguration.relationships.findIndex(r => r.id === cell.id);
-        this.matchingConfiguration.relationships.splice(index, 1);
+      if (this.confirmDelete) {
+        //display Dialog
+        this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
+          if (ret) {
+            this.deleteOperator(cell);
+          }
+        });
 
-      } finally {
-        this.graph.getModel().endUpdate();
+      } else {
+        this.deleteOperator(cell);
       }
+
+
+
+    }
+  }
+
+  private deleteOperator(cell: myMxCell) {
+    try {
+      this.graph.getModel().beginUpdate();
+      this.graph.removeCells([cell], true);
+      const index = this.matchingConfiguration.relationships.findIndex(r => r.id === cell.id);
+      this.matchingConfiguration.relationships.splice(index, 1);
+
+    } finally {
+      this.graph.getModel().endUpdate();
     }
   }
 

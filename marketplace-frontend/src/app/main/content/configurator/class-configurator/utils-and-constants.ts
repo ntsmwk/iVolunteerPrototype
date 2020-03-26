@@ -40,10 +40,10 @@ const matchingConnectorPalettes = [
 
 ];
 
-const matchingOperationPalettes = [
-  { id: 'delete', label: 'löschen', imgPath: '/assets/mxgraph_resources/images/delete.gif', type: 'operation' },
+const deleteOperationPalette =
+  { id: 'delete', label: 'löschen', imgPath: '/assets/mxgraph_resources/images/delete.gif', type: 'operation' }
 
-];
+  ;
 
 const mxStyles = {
 
@@ -129,7 +129,7 @@ export class CConstants {
   public static relationshipPalettes = relationshipPalettes;
   public static matchingOperatorPalettes = matchingOperatorPalettes;
   public static matchingConnectorPalettes = matchingConnectorPalettes;
-  public static matchingOperationPalettes = matchingOperationPalettes;
+  public static deleteOperationPalette = deleteOperationPalette;
   public static mxStyles = mxStyles;
   public static cellTypes = cellTypes;
 }

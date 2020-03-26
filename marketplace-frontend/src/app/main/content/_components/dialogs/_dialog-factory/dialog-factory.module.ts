@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DialogFactoryComponent } from './dialog-factory.component';
+import { DialogFactoryDirective } from './dialog-factory.component';
 import { AddOrRemoveDialogComponent } from '../add-or-remove-dialog/add-or-remove-dialog.component';
 import { AddOrRemoveDialogModule } from '../add-or-remove-dialog/add-or-remove-dialog.module';
 import { TextFieldDialogComponent } from '../text-field-dialog/text-field-dialog.component';
@@ -42,7 +42,7 @@ import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
   ],
-  declarations: [DialogFactoryComponent],
+  declarations: [DialogFactoryDirective],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
     SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
     OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,

@@ -20,7 +20,7 @@ import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_mod
 @Directive({
   selector: 'app-dialog-factory'
 })
-export class DialogFactoryComponent {
+export class DialogFactoryDirective {
 
   constructor(public dialog: MatDialog) { }
 

@@ -10,7 +10,7 @@ import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { PropertyInstance, PropertyItem, PropertyDefinition, TemplateProperty } from '../_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { MatTableDataSource } from '@angular/material/table';
-import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
@@ -20,7 +20,7 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
   selector: 'app-user-defined-task-template-detail-nested',
   templateUrl: './user-defined-task-template-detail-nested.component.html',
   styleUrls: ['./user-defined-task-template-detail-nested.component.scss'],
-  providers: [QuestionService, DialogFactoryComponent],
+  providers: [QuestionService, DialogFactoryDirective],
 })
 export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
@@ -46,7 +46,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
     private propertyInstanceService: PropertyInstanceService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private dialogFactory: DialogFactoryComponent,
+    private dialogFactory: DialogFactoryDirective,
   ) {
     this.isLoaded = false;
   }

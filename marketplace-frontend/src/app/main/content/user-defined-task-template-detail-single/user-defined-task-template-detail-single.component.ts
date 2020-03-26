@@ -11,7 +11,7 @@ import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-te
 import { QuestionService } from '../_service/question.service';
 import { QuestionBase } from '../_model/dynamic-forms/questions';
 import { isNullOrUndefined, isNull } from 'util';
-import { DialogFactoryComponent } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
 import { SortDialogData } from '../_components/dialogs/sort-dialog/sort-dialog.component';
 import { PropertyInstanceService } from '../_service/meta/core/property/property-instance.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
@@ -20,7 +20,7 @@ import { PropertyDefinitionService } from '../_service/meta/core/property/proper
   selector: 'user-defined-task-template-detail-single',
   templateUrl: './user-defined-task-template-detail-single.html',
   styleUrls: ['./user-defined-task-template-detail-single.scss'],
-  providers:  [QuestionService, DialogFactoryComponent]
+  providers: [QuestionService, DialogFactoryDirective]
 })
 export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
@@ -32,7 +32,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   dialogIds: string[];
   questions: QuestionBase<any>[];
   allPropertiesList: PropertyItem[];
- 
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private loginService: LoginService,
@@ -41,13 +41,13 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     private questionService: QuestionService,
     private propertyInstanceService: PropertyInstanceService,
     private propertyDefinitionService: PropertyDefinitionService,
-    private dialogFactory: DialogFactoryComponent
-    ) {
-      this.isLoaded = false;
-    }
+    private dialogFactory: DialogFactoryDirective
+  ) {
+    this.isLoaded = false;
+  }
 
   ngOnInit() {
-    
+
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant),
@@ -60,23 +60,23 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
       this.userDefinedTaskTemplateService.getTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
-        this.template = template;    
-     
+        this.template = template;
+
       })
-      .then(() => {
-        this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
-          this.allPropertiesList = propertyDefinitions;
-        
-        
-        })
         .then(() => {
-          if (!isNullOrUndefined(this.template)) {
-            this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
-          }
-          this.isLoaded = true;
-        })
-      });
-    });  
+          this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+            this.allPropertiesList = propertyDefinitions;
+
+
+          })
+            .then(() => {
+              if (!isNullOrUndefined(this.template)) {
+                this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
+              }
+              this.isLoaded = true;
+            })
+        });
+    });
   }
 
 
@@ -92,7 +92,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
   }
 
   navigateEditForm() {
-    this.router.navigate([`/main/task-templates/user/edit/${this.marketplace.id}/${this.template.id}`], {queryParams: {ref: 'single'}});
+    this.router.navigate([`/main/task-templates/user/edit/${this.marketplace.id}/${this.template.id}`], { queryParams: { ref: 'single' } });
   }
 
   deleteTemplate() {
@@ -100,18 +100,18 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       "Are you sure?", "Are you sure you want to delete this Template? This action cannot be reverted")
       .then((cont: boolean) => {
         if (cont) {
-          this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, this.template.id).toPromise().then( (success: boolean) => {
+          this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, this.template.id).toPromise().then((success: boolean) => {
             this.navigateBack();
           });
         }
       });
-    }
+  }
 
-    
+
 
   addPropertyDialog() {
 
-    this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {   
+    this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {
       if (!isNullOrUndefined(propIds)) {
         this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
           this.refresh();
@@ -119,7 +119,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       }
     });
   }
-  
+
   removePropertyDialog() {
     this.dialogFactory.removePropertyDialog(this.template).then((propIds: string[]) => {
       if (!isNullOrUndefined(propIds)) {
@@ -128,7 +128,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
         });
       }
     });
-    
+
   }
 
   //TODO
@@ -136,7 +136,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
     this.dialogFactory.changePropertyOrderDialog(this.template.templateProperties).then((data: SortDialogData) => {
       if (!isNullOrUndefined(data)) {
-        for (let i = 0; i<data.list.length; i++) {
+        for (let i = 0; i < data.list.length; i++) {
           data.list[i].order = i;
         }
 
@@ -144,7 +144,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
           this.refresh();
         });
 
-      }  
+      }
 
     });
   }
@@ -159,7 +159,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       }
     });
   }
-  
+
   editNameDialog() {
 
     this.dialogFactory.editTemplateNameDialog(this.template).then((name: string) => {

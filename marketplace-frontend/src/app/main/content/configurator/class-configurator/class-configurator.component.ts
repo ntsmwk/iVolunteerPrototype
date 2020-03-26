@@ -6,7 +6,7 @@ import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Cl
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
-import { DialogFactoryComponent } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { PropertyDefinition, PropertyItem, ClassProperty, PropertyType, EnumReference } from 'app/main/content/_model/meta/Property';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
@@ -32,7 +32,7 @@ const mx: typeof mxgraph = require('mxgraph')({
   selector: 'app-class-configurator',
   templateUrl: './class-configurator.component.html',
   styleUrls: ['./class-configurator.component.scss'],
-  providers: [DialogFactoryComponent]
+  providers: [DialogFactoryDirective]
 
 })
 export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
@@ -42,7 +42,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private classDefinitionService: ClassDefinitionService,
     private propertyDefinitionService: PropertyDefinitionService,
     private relationshipService: RelationshipService,
-    private dialogFactory: DialogFactoryComponent,
+    private dialogFactory: DialogFactoryDirective,
     private snackBar: MatSnackBar,
     private classConfigurationService: ClassConfigurationService,
     private objectIdService: ObjectIdService,
