@@ -36,8 +36,28 @@ export class OptionsOverlayControlComponent {
 
 
     if (this.displayOverlay) {
-      this.overlayDiv.nativeElement.style.top = (this.overlayEvent.clientY) + 'px';
-      this.overlayDiv.nativeElement.style.left = this.overlayEvent.clientX + 'px';
+
+      let yPos = this.overlayEvent.clientY;
+      let xPos = this.overlayEvent.clientX;
+
+      console.log("Y = " + yPos);
+      console.log("Y2= " + (yPos + 275));
+      console.log("H = " + window.innerHeight);
+
+      if (yPos + 275 > window.innerHeight) {
+        yPos = window.innerHeight - 275;
+      }
+
+      // if (yPos + 275 < window.innerHeight) {
+      //   yPos = window.innerHeight - 275;
+      // }
+
+
+
+
+
+      this.overlayDiv.nativeElement.style.top = yPos + 'px';
+      this.overlayDiv.nativeElement.style.left = xPos + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '275px';
