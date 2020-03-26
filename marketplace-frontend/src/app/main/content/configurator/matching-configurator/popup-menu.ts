@@ -33,29 +33,21 @@ export class MatchingConfiguratorPopupMenu {
     if (cell != null) {
       // Options present in every cell (vertexes as well as edges)
       const printCellItem = menu.addItem('Print cell to console', null, function () {
-        console.log(cell as myMxCell);
+        console.log(cell);
       }, null, null, true, true);
 
       if (cell.cellType === 'matchingOperator' || cell.cellType === 'matchingConnector') {
         const deleteItem = menu.addItem('Delete', null, function () {
 
-          try {
-            graph.getModel().beginUpdate();
-
-            graph.removeCells([cell]);
-
-
-          } finally {
-            graph.getModel().endUpdate();
-          }
+          outer.editorInstance.deleteOperators([cell]);
 
 
         }, null, null, true, true);
       }
     } else {
-      console.log('clicked empty canvas space');
-      console.log(event);
-      console.log(graph);
+      // console.log('clicked empty canvas space');
+      // console.log(event);
+      // console.log(graph);
 
     }
   }

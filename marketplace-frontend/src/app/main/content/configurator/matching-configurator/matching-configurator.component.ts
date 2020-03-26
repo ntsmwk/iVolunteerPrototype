@@ -630,7 +630,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private deleteOperators(cells: myMxCell[]) {
+  deleteOperators(cells: myMxCell[]) {
 
     const cellsToRemove: myMxCell[] = cells.filter(c => c.cellType === 'matchingOperator');
 
