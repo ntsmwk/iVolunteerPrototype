@@ -194,6 +194,23 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       return null;
     };
 
+    this.graph.getEdgeValidationError = function (edge: myMxCell, source: myMxCell, target: myMxCell) {
+      console.log("===========")
+      console.log("Edge");
+      console.log(edge);
+      console.log("Source");
+      console.log(source);
+      console.log("Target");
+      console.log(target);
+      console.log("==============");
+      if (!isNullOrUndefined(source) && source.cellType === 'matchingOperator' && source.edges.length >= 2) {
+        return '';
+      } else if (!isNullOrUndefined(target) && target.cellType === 'matchingOperator' && target.edges.length >= 2) {
+        return '';
+      }
+
+    };
+
 
     if (!mx.mxClient.isBrowserSupported()) {
       mx.mxUtils.error('Browser is not supported!', 200, false);
@@ -429,7 +446,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   consumeMenuOptionClickedEvent(event: any) {
-    console.log(event);
     this.deleteMode = false;
 
     this.deleteOperationContainer.nativeElement.style.background = 'none';
@@ -503,7 +519,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     matchingConfiguration.producerClassConfigurationId = producerClassConfiguration.id;
     matchingConfiguration.name = name;
     matchingConfiguration.relationships = [];
-    console.log(matchingConfiguration);
+
     this.matchingConfigurationService.saveMatchingConfiguration(this.marketplace, matchingConfiguration).toPromise().then((ret: MatchingConfiguration) => {
       // not doing anything further currently
     });
@@ -558,7 +574,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
           outer.matchingConfiguration.relationships.push(relationship);
 
-          console.log(outer.matchingConfiguration.relationships);
 
 
         } else if (paletteItem.type === 'connector') {
@@ -594,7 +609,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleDoubleClickEvent(event: mxgraph.mxEventObject) {
-    console.log(event);
     const cell = event.properties.cell as myMxCell;
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && !this.deleteMode) {
@@ -607,7 +621,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleClickEvent(event: mxgraph.mxEventObject) {
-    console.log(event);
     const cell = event.properties.cell as myMxCell;
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
