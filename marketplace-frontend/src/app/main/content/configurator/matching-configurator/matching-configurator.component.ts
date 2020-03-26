@@ -196,8 +196,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     this.graph.getEdgeValidationError = function (edge: myMxCell, source: myMxCell, target: myMxCell) {
 
-      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator' && edge.target.id === target.id) {
+      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator' && !isNullOrUndefined(edge.target) && edge.target.id === target.id) {
 
+        // if (isNullOrUndefined(edge) || (!isNullOrUndefined(edge.target) && edge.target.id === target.id)) {
         if (source.edges.length >= 2) {
           return '';
         }
@@ -208,8 +209,17 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           }
         }
 
-      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator' && edge.source.id === source.id) {
+        // }
+
+      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator' && !isNullOrUndefined(edge.source) && edge.source.id === source.id) {
+
+        // if (isNullOrUndefined(edge) || (!isNullOrUndefined(edge.source) && edge.source.id === source.id)) {
+
         if (target.edges.length >= 2) {
+          return '';
+        }
+
+        if (source.cellType === 'matchingOperator') {
           return '';
         }
 
@@ -219,6 +229,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           }
         }
       }
+      // }
 
     };
 
