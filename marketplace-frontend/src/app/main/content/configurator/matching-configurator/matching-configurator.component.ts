@@ -78,7 +78,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   overlayRelationship: MatchingOperatorRelationship;
   overlayEvent: PointerEvent;
 
-  //Delete Mode
+  // Delete Mode
   confirmDelete: boolean;
   deleteMode: boolean;
 
@@ -210,8 +210,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
-
-      const outer = this; // preserve outer scope
 
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
         // Handle Click
@@ -613,8 +611,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = event.properties.cell as myMxCell;
 
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
+
       if (this.confirmDelete) {
-        //display Dialog
         this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
           if (ret) {
             this.deleteOperators([cell]);
@@ -624,9 +622,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       } else {
         this.deleteOperators([cell]);
       }
-
-
-
     }
   }
 
@@ -637,15 +632,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       this.graph.removeCells(cellsToRemove, true);
-      console.log("inital relationships")
-      console.log(this.matchingConfiguration.relationships);
-      console.log("To Remove");
-      console.log(cellsToRemove);
       this.matchingConfiguration.relationships = this.matchingConfiguration.relationships
         .filter(r => cellsToRemove
           .findIndex(c => (r.id === c.id)) < 0);
-      console.log("result");
-      console.log(this.matchingConfiguration.relationships);
     } finally {
       this.graph.getModel().endUpdate();
     }
@@ -678,10 +667,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
       try {
         this.graph.getModel().beginUpdate();
-        let cell = (this.graph.getModel().getCell(event.id) as myMxCell)
+
+        let cell = (this.graph.getModel().getCell(event.id) as myMxCell);
+
         cell.matchingOperatorType = event.matchingOperatorType;
         this.graph.setCellStyle(`shape=image;image=${this.getPathForMatchingOperatorType(cell.matchingOperatorType)};` + CConstants.mxStyles.matchingOperator, [cell]);
         cell = this.graph.getModel().getCell(event.id) as myMxCell;
+
       } finally {
         this.graph.getModel().endUpdate();
       }
@@ -690,22 +682,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    console.log('key pressed: ' + event.key);
-
     if (event.key === 'Delete') {
-      console.log('Pressed Delete');
-
       const cells = this.graph.getSelectionCells() as myMxCell[];
-
       this.deleteOperators(cells);
-
     }
   }
 
 }
-
-
-
-
-
-
