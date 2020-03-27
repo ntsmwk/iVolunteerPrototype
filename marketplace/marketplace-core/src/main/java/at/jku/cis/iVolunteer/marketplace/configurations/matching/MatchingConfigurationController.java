@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.matching;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,9 @@ public class MatchingConfigurationController {
 			}
 
 		}
+		
+		matchingConfiguration.setTimestamp(new Date());
+		
 		return matchingConfigurationRepository.save(matchingConfiguration);
 	}
 

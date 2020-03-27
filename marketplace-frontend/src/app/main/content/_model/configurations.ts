@@ -14,6 +14,7 @@ export class ClassConfiguration {
 export class MatchingConfiguration {
     id: string;
     name: string;
+    timestamp: Date;
 
     producerClassConfigurationId: string;
     consumerClassConfigurationId: string;

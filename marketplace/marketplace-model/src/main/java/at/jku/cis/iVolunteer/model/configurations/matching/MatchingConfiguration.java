@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.configurations.matching;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MatchingConfiguration {
 	@Id String id;
 	String name;
+	Date timestamp;
 
 	String producerClassConfigurationId;
 	String producerClassConfigurationName;
@@ -32,6 +34,14 @@ public class MatchingConfiguration {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public List<MatchingOperatorRelationship> getRelationships() {

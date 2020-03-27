@@ -5,6 +5,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { BrowseSubDialogData } from 'app/main/content/_components/dialogs/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface OpenMatchingDialogData {
   marketplace: Marketplace;
@@ -26,6 +27,9 @@ export class OpenMatchingDialogComponent implements OnInit {
   ) {
   }
 
+  allMatchingConfigurations: MatchingConfiguration[];
+  browseDialogData: BrowseSubDialogData;
+
   recentMatchingConfigurations: MatchingConfiguration[];
   loaded: boolean;
   browseMode: boolean;
@@ -36,6 +40,7 @@ export class OpenMatchingDialogComponent implements OnInit {
         .toPromise()
         .then((matchingConfigurations: MatchingConfiguration[]) => {
           this.recentMatchingConfigurations = matchingConfigurations;
+          this.allMatchingConfigurations = matchingConfigurations;
           if (this.recentMatchingConfigurations.length > 5) {
             this.recentMatchingConfigurations.slice(0, 5);
           }
@@ -56,7 +61,23 @@ export class OpenMatchingDialogComponent implements OnInit {
 
   handleBrowseClick() {
     console.log("Browse click");
+    this.browseDialogData = new BrowseSubDialogData();
+
+    this.browseDialogData.title = "Test";
+    this.browseDialogData.entries = [];
+
+    for (const matchingConfiguration of this.allMatchingConfigurations) {
+      this.browseDialogData.entries.push({ id: matchingConfiguration.id, label1: matchingConfiguration.name, date: matchingConfiguration.timestamp });
+    }
+    this.browseDialogData.displayedColumns = ['label1', 'date'];
+    this.browseDialogData.columnTitles = ['Label', 'Datum'];
+
     this.browseMode = true;
+
+  }
+
+  handleReturnFromBrowse(event: any) {
+
   }
 
 

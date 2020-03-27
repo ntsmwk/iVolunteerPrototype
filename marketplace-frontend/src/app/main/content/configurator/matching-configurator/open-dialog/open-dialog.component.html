@@ -50,11 +50,11 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-sub-dialog></browse-sub-dialog>
+    <browse-sub-dialog [data]="browseDialogData" (entryClicked)="handleReturnFromBrowse($event)"></browse-sub-dialog>
   </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>
