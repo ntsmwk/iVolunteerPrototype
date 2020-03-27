@@ -48,17 +48,9 @@ export class BrowseSubDialogComponent implements OnInit {
     }
 
     this.dataSource.data = this.data.entries;
-
-
-
-    console.log(this.data);
-    console.log(this.dataSource.data);
   }
 
   handleRowClick(row) {
-    console.log('clicked row');
-    console.log(row);
-
     this.entryClicked.emit(row.id);
   }
 

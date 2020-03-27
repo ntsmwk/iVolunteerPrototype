@@ -60,7 +60,6 @@ export class OpenMatchingDialogComponent implements OnInit {
   }
 
   handleBrowseClick() {
-    console.log("Browse click");
     this.browseDialogData = new BrowseSubDialogData();
 
     this.browseDialogData.title = "Test";
