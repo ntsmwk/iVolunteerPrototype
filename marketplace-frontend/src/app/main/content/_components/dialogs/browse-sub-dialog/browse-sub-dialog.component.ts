@@ -21,8 +21,8 @@ export class BrowseSubDialogComponent implements OnInit {
   @Output() entryClicked: EventEmitter<any> = new EventEmitter<any>();
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-  displayedColumns = ['label1', 'label2', 'label3', 'date'];
-  columnTitles = ['Text 1', 'Text 2', 'Text 3', 'Datum'];
+  displayedColumns = ['id', 'label1', 'label2', 'label3', 'date'];
+  columnTitles = ['ID', 'Text 1', 'Text 2', 'Text 3', 'Datum'];
 
   loaded: boolean;
 
@@ -42,9 +42,12 @@ export class BrowseSubDialogComponent implements OnInit {
       this.columnTitles = this.data.columnTitles;
     }
 
+    this.dataSource.data = this.data.entries;
+
 
 
     console.log(this.data);
+    console.log(this.dataSource.data);
   }
 
 
