@@ -520,7 +520,6 @@ export class DialogFactoryDirective {
     let matchingConfiguration: MatchingConfiguration;
 
     dialogRef.beforeClose().toPromise().then((result: OpenMatchingDialogData) => {
-      console.log(result);
       if (!isNullOrUndefined(result)) {
         matchingConfiguration = result.matchingConfiguration;
       }

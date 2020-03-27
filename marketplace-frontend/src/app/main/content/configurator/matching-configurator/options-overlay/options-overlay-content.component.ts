@@ -30,12 +30,6 @@ export class OptionsOverlayContentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log("content init");
-        console.log(this.overlayRelationship);
-
-
-        console.log(this.matchingOperatorPalettes);
-
         this.matchingOperatorType = this.overlayRelationship.matchingOperatorType;
         this.necessary = this.overlayRelationship.necessary;
         this.weighting = this.overlayRelationship.weighting;

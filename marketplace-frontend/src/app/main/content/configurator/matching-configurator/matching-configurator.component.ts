@@ -196,9 +196,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     this.graph.getEdgeValidationError = function (edge: myMxCell, source: myMxCell, target: myMxCell) {
 
-      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator' && !isNullOrUndefined(edge.target) && edge.target.id === target.id) {
+      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator'
+        && !isNullOrUndefined(edge.target) && edge.target.id === target.id) {
 
-        // if (isNullOrUndefined(edge) || (!isNullOrUndefined(edge.target) && edge.target.id === target.id)) {
         if (source.edges.length >= 2) {
           return '';
         }
@@ -209,11 +209,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           }
         }
 
-        // }
-
-      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator' && !isNullOrUndefined(edge.source) && edge.source.id === source.id) {
-
-        // if (isNullOrUndefined(edge) || (!isNullOrUndefined(edge.source) && edge.source.id === source.id)) {
+      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator'
+        && !isNullOrUndefined(edge.source) && edge.source.id === source.id) {
 
         if (target.edges.length >= 2) {
           return '';
@@ -229,8 +226,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           }
         }
       }
-      // }
-
     };
 
 
@@ -245,7 +240,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       // new mx.mxRubberband(this.graph);
 
       this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
-
 
       this.graph.setPanning(true);
       this.graph.useScrollbarsForPanning = true;
@@ -467,6 +461,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     window.history.back();
   }
 
+
+  /* 
+   * .........Top Menu Bar Options..........
+   */
+
   consumeMenuOptionClickedEvent(event: any) {
     this.deleteMode = false;
 
@@ -549,8 +548,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     this.loadClassesAndRelationships(producerClassConfiguration.id, consumerClassConfiguration.id);
   }
 
+  /**
+   * ...........Mouse Events..............
+   */
 
-  // OLD STUFF - might still be needed later
   handleMousedownEvent(event: any, item: any, graph: mxgraph.mxGraph) {
     const outer = this;
     let positionEvent: MouseEvent;
@@ -632,13 +633,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleDoubleClickEvent(event: mxgraph.mxEventObject) {
     const cell = event.properties.cell as myMxCell;
-
     if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && !this.deleteMode) {
-      this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
-      this.overlayEvent = event.properties.event;
-      this.displayOverlay = true;
-
-      this.graphContainer.nativeElement.style.overflow = 'hidden';
+      this.handleOverlayOpened(event, cell);
     }
   }
 
@@ -659,6 +655,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     }
   }
+
+
+  /**
+   * ...........Delete Mode..............
+   */
 
   deleteOperators(cells: myMxCell[]) {
 
@@ -690,6 +691,19 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  /**
+   * ...........Overlay..............
+   */
+
+  handleOverlayOpened(event: mxgraph.mxEventObject, cell: myMxCell) {
+    this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
+    this.overlayEvent = event.properties.event;
+    this.displayOverlay = true;
+
+    this.graphContainer.nativeElement.style.overflow = 'hidden';
+
+  }
+
   handleOverlayClosedEvent(event: MatchingOperatorRelationship) {
     this.displayOverlay = false;
     this.overlayRelationship = undefined;
@@ -714,6 +728,10 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       }
     }
   }
+
+    /**
+   * ...........Key Handler..............
+   */
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
