@@ -70,14 +70,16 @@ export class OpenMatchingDialogComponent implements OnInit {
       this.browseDialogData.entries.push({ id: matchingConfiguration.id, label1: matchingConfiguration.name, date: matchingConfiguration.timestamp });
     }
     this.browseDialogData.displayedColumns = ['label1', 'date'];
-    this.browseDialogData.columnTitles = ['Label', 'Datum'];
+    this.browseDialogData.columnTitles = { label1: 'Label', date: 'Datum' };
 
     this.browseMode = true;
 
   }
 
-  handleReturnFromBrowse(event: any) {
-
+  handleReturnFromBrowse(resultId: string) {
+    this.browseMode = false;
+    this.data.matchingConfiguration = this.allMatchingConfigurations.find(c => c.id === resultId);
+    this.dialogRef.close(this.data);
   }
 
 

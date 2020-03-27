@@ -6,7 +6,7 @@ export class BrowseSubDialogData {
   title: string;
 
   entries: { id: string, label1: string, label2?: string, label3?: string, date: Date }[];
-  columnTitles: string[];
+  columnTitles: { id?: string, label1?: string, label2?: string, label3?: string, date?: string };
   displayedColumns: string[];
 }
 
@@ -22,7 +22,8 @@ export class BrowseSubDialogComponent implements OnInit {
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   displayedColumns = ['id', 'label1', 'label2', 'label3', 'date'];
-  columnTitles = ['ID', 'Text 1', 'Text 2', 'Text 3', 'Datum'];
+  columnTitles = { id: 'ID', label1: 'Text 1', label2: 'Text 2', label3: 'Text 3', date: 'Datum' };
+
 
   loaded: boolean;
 
@@ -39,7 +40,11 @@ export class BrowseSubDialogComponent implements OnInit {
     }
 
     if (!isNullOrUndefined(this.data.columnTitles)) {
-      this.columnTitles = this.data.columnTitles;
+      this.columnTitles.id = this.data.columnTitles.id;
+      this.columnTitles.label1 = this.data.columnTitles.label1;
+      this.columnTitles.label2 = this.data.columnTitles.label2;
+      this.columnTitles.label3 = this.data.columnTitles.label3;
+      this.columnTitles.date = this.data.columnTitles.date;
     }
 
     this.dataSource.data = this.data.entries;
@@ -48,6 +53,13 @@ export class BrowseSubDialogComponent implements OnInit {
 
     console.log(this.data);
     console.log(this.dataSource.data);
+  }
+
+  handleRowClick(row) {
+    console.log('clicked row');
+    console.log(row);
+
+    this.entryClicked.emit(row.id);
   }
 
 

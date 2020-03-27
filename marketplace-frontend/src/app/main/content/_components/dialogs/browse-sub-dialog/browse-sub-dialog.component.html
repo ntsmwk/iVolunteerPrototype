@@ -2,35 +2,35 @@
   <mat-table #browseTable class="browse-table" [dataSource]="dataSource" *ngIf="dataSource.data.length > 0">
 
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>{{columnTitles.id}}</mat-header-cell>
       <mat-cell *matCellDef="let entry">
         {{entry.id}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label1">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>{{columnTitles.label1}}</mat-header-cell>
       <mat-cell *matCellDef="let entry">
         {{entry.label1}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label2">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>{{columnTitles.label2}}</mat-header-cell>
       <mat-cell *matCellDef="let entry">
         {{entry.label2}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label3">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>{{columnTitles.label3}}</mat-header-cell>
       <mat-cell *matCellDef="let entry">
         {{entry.label3}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>{{columnTitles.date}}</mat-header-cell>
       <mat-cell *matCellDef="let entry">
         {{entry.date}}
       </mat-cell>
@@ -40,6 +40,6 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
-      class="table-row"></mat-row>
+      class="table-row" (click)="handleRowClick(row)"></mat-row>
   </mat-table>
 </div>
