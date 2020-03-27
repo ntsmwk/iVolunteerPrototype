@@ -729,7 +729,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-    /**
+  /**
    * ...........Key Handler..............
    */
 
