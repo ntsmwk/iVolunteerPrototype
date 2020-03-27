@@ -26,6 +26,7 @@ import { NewMatchingDialogModule } from 'app/main/content/configurator/matching-
 import { OpenMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.module';
 
+
 @NgModule({
   imports: [
     CommonModule,

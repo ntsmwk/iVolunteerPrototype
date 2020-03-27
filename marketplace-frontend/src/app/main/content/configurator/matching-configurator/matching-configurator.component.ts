@@ -517,7 +517,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (producerSet && consumerSet) {
           break;
         }
-
       }
 
       updatedRelationships.push(relationship);
@@ -596,8 +595,6 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           relationship.matchingOperatorType = cell.matchingOperatorType;
 
           outer.matchingConfiguration.relationships.push(relationship);
-
-
 
         } else if (paletteItem.type === 'connector') {
           const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;

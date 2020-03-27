@@ -11,41 +11,47 @@
   </table>
 </div>
 <mat-dialog-content *ngIf="loaded">
-  <table style="margin: 0 auto;" cellspacing=10>
+  <div *ngIf="!browseMode">
+    <table style="margin: 0 auto;" cellspacing=10>
 
-    <tr>
-      <td style="vertical-align: top; width: 100%">
-        Zuletzt verwendet
-        <table cellspacing=0 cellpadding=3
-          style="border-style: solid; border-color: rgb(62, 125, 219); border-width: 1px; table-layout: fixed; width: 100%">
-          <col width="60%" />
-          <col width="20%" />
-          <col width="20%" />
-          <tr style="background-color: rgb(62, 125, 219); color: white;">
-            <th style="text-align: start">Name</th>
-            <th style="text-align: start">Unternehmen</th>
-            <th style="text-align: start">Besteller</th>
-          </tr>
-          <tr *ngFor="let c of recentMatchingConfigurations" class="entry" (click)="itemSelected($event, c)">
-            <td style="overflow: hidden">{{c.name}}</td>
-            <td style="overflow: hidden">{{c.producerClassConfigurationName}}</td>
-            <td style="overflow: hidden">{{c.consumerClassConfigurationName}}</td>
-          </tr>
-        </table>
-      </td>
+      <tr>
+        <td style="vertical-align: top; width: 100%">
+          Zuletzt verwendet
+          <table cellspacing=0 cellpadding=3
+            style="border-style: solid; border-color: rgb(62, 125, 219); border-width: 1px; table-layout: fixed; width: 100%">
+            <col width="60%" />
+            <col width="20%" />
+            <col width="20%" />
+            <tr style="background-color: rgb(62, 125, 219); color: white;">
+              <th style="text-align: start">Name</th>
+              <th style="text-align: start">Unternehmen</th>
+              <th style="text-align: start">Besteller</th>
+            </tr>
+            <tr *ngFor="let c of recentMatchingConfigurations" class="entry" (click)="itemSelected($event, c)">
+              <td style="overflow: hidden">{{c.name}}</td>
+              <td style="overflow: hidden">{{c.producerClassConfigurationName}}</td>
+              <td style="overflow: hidden">{{c.consumerClassConfigurationName}}</td>
+            </tr>
+          </table>
+        </td>
 
-    </tr>
-    <tr>
-      <td>
-        <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr class="entry">
-            <td style="width: 200px; text-align: center">Durchsuchen
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+      </tr>
+      <tr>
+        <td>
+          <table cellspacing=1 cellpadding=0 style="border-color: none">
+            <tr class="entry">
+              <td style="width: 200px; text-align: center" (click)="handleBrowseClick()">Durchsuchen
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="browseMode">
+    <browse-sub-dialog></browse-sub-dialog>
+  </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>

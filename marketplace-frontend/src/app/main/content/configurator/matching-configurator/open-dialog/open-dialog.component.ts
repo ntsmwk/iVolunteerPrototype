@@ -14,7 +14,7 @@ export interface OpenMatchingDialogData {
 @Component({
   selector: 'open-matching-dialog',
   templateUrl: './open-dialog.component.html',
-  styleUrls: ['./open-dialog.component.scss']
+  styleUrls: ['./open-dialog.component.scss'],
 })
 export class OpenMatchingDialogComponent implements OnInit {
 
@@ -22,12 +22,13 @@ export class OpenMatchingDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<OpenMatchingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OpenMatchingDialogData,
     private matchingConfigurationService: MatchingConfigurationService,
-    private loginService: LoginService,
+    private loginService: LoginService
   ) {
   }
 
   recentMatchingConfigurations: MatchingConfiguration[];
-  loaded = false;
+  loaded: boolean;
+  browseMode: boolean;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
@@ -51,6 +52,11 @@ export class OpenMatchingDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  handleBrowseClick() {
+    console.log("Browse click");
+    this.browseMode = true;
   }
 
 

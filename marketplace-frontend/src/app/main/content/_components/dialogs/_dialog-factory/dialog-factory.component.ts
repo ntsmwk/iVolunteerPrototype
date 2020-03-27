@@ -57,7 +57,6 @@ export class DialogFactoryDirective {
     return dialogRef.afterClosed().toPromise().then(() => {
       return propIds;
     });
-
   }
 
   addPropertyDialogGeneric(properties: PropertyItem[], addedProperties: PropertyItem[]) {
@@ -85,7 +84,6 @@ export class DialogFactoryDirective {
               returnValue.propertyItems.push(s.propertyItem);
             }
           }
-
         }
       }
     });
@@ -93,7 +91,6 @@ export class DialogFactoryDirective {
     return dialogRef.afterClosed().toPromise().then(() => {
       return returnValue;
     });
-
   }
 
   private prepareDataForGenericAdd(label: string, addedPropertyItems: PropertyItem[], propertyItems: PropertyItem[]): AddOrRemoveDialogData {
@@ -111,7 +108,6 @@ export class DialogFactoryDirective {
 
     const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
     return data;
-
   }
 
   private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
@@ -407,7 +403,6 @@ export class DialogFactoryDirective {
       minHeight: '400px',
       data: { marketplace: marketplace, configurator: undefined },
       disableClose: true
-
     });
 
     let classConfiguration: ClassConfiguration;
@@ -529,10 +524,6 @@ export class DialogFactoryDirective {
       return matchingConfiguration;
     });
   }
-
-
-
-
 
 
 }
