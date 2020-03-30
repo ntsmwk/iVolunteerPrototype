@@ -1,0 +1,57 @@
+<div fxLayout="row" fxLayoutAlign="space-between start">
+    <div class="sunburstParent" id="sunburstChart"></div>
+
+    <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
+        <mat-table class="mat-elevation-z8" [dataSource]="tableDataSource" matSort>
+            <ng-container matColumnDef="taskName">
+                <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskType1">
+                <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.taskType1}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskType2">
+                <mat-header-cell *matHeaderCellDef> Untertyp </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.taskType2}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskDescription">
+                <mat-header-cell *matHeaderCellDef> Beschreibung </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskDateFrom">
+                <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{element.dateFrom | date:'dd.MM.yyyy'}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskDateTo">
+                <mat-header-cell *matHeaderCellDef> Ende </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{element.dateTo | date:'dd.MM.yyyy'}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taskDuration">
+                <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
+                <mat-cell class="right" mat-cell *matCellDef="let element"> {{element.duration}}h
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let element; let row; columns: displayedColumns;"
+                [ngStyle]="getStyle(element.taskType1)"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSize]="16" showFirstLastButtons></mat-paginator>
+    </div>
+</div>
+
+    <div fxLayout="row">
+        <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
+        </app-share-menu>
+    </div>

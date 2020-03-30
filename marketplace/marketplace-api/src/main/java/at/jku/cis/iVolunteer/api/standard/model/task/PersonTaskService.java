@@ -24,8 +24,8 @@ public class PersonTaskService {
 
 	private static final int FF_NEW = 2;
 	private static final int MV = 3;
-	private static final String FFEIDENBERG = "FF_Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 
 	@Autowired
 	private ClassDefinitionService classDefinitionService;

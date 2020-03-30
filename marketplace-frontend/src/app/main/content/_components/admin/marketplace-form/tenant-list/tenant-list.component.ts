@@ -4,15 +4,17 @@ import { CoreMarketplaceService } from "app/main/content/_service/core-marketpla
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { fuseAnimations } from "@fuse/animations";
 
 @Component({
   selector: "tenant-list",
-  templateUrl: "tenant-list.component.html"
+  templateUrl: "tenant-list.component.html",
+  animations: fuseAnimations
 })
 export class FuseTenantListComponent implements OnInit {
   @Input() marketplaceId: string;
   dataSource = new MatTableDataSource<Marketplace>();
-  displayedColumns = ["name", "shortName", "url", "actions"];
+  displayedColumns = ["name", "primaryColor", "secondaryColor", "actions"];
 
   constructor(private router: Router, private tenantService: TenantService) {}
 
@@ -23,6 +25,14 @@ export class FuseTenantListComponent implements OnInit {
   }
 
   addTenant() {
-    this.router.navigate(["/main/tenant-form"]);
+    this.router.navigate([`/main/tenant-form`], {
+      queryParams: { marketplaceId: this.marketplaceId }
+    });
+  }
+
+  navigateToTenantForm(tenantId: string) {
+    this.router.navigate([`/main/tenant-form/${tenantId}`], {
+      queryParams: { marketplaceId: this.marketplaceId }
+    });
   }
 }

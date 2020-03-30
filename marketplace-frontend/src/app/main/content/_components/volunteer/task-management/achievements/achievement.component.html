@@ -1,0 +1,79 @@
+<div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
+
+  <div class="header-achievements p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1 class="l-heading">Mein FreiwilligenLEBEN</h1>
+    <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Organisation</mat-card-title>
+    </mat-card-header>
+
+    <div *ngFor="let tenant of tenantMap | keyvalue">
+      <mat-checkbox class="orgCheckbox" [checked]="true" [value]="tenant.key"
+        (change)="onOrganisationFilterChange($event)">
+        {{tenant.value.name}}
+      </mat-checkbox>
+    </div>
+  </mat-card>
+
+  <div class="content" *ngIf="(filteredClassInstanceDTOs.length > 0)">
+    <mat-tab-group dynamicHeight="true">
+      <mat-tab label="Tätigkeiten">
+        <!-- with ng-temp = lazy loading: TODO PROBLEM: not showing line in timeline chart -->
+        <!-- I would prefer not to lazy load, since db fetch takes foooor ever, each time tab is changed-->
+        <ng-template matTabContent>
+          <fuse-tasks 
+          [classInstanceDTOs]="filteredClassInstanceDTOs">
+          </fuse-tasks>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Kompetenzen">
+        <ng-template matTabContent>
+          <fuse-competencies></fuse-competencies>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Funktionen">
+        <ng-template matTabContent>
+          <!-- <fuse-functions></fuse-functions> -->
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Verdienste">
+        <ng-template matTabContent>
+          <!-- <fuse-accomplishments></fuse-accomplishments> -->
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+
+    <mat-card>
+      <mat-card-content>
+        <div *ngIf="(filteredClassInstanceDTOs.length === 0 && selectedTenants.length > 0)" class="loadData">
+          <ngx-spinner 
+          bdOpacity = 0.1
+          bdColor = "#FFFFFF"
+          size = "medium"
+          color = "#000000"
+          type = "ball-scale-ripple-multiple"
+          [fullScreen] = "false">
+            <p class="loadingText">Loading Data...</p>
+          </ngx-spinner>
+        </div>
+      </mat-card-content>  
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div *ngIf="(selectedTenants.length === 0)">
+         <p>Keine Organisation ausgewählt!</p>
+        </div>
+      </mat-card-content>  
+    </mat-card>
+
+
+</div>

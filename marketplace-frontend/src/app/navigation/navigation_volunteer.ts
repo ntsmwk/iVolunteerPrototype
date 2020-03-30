@@ -16,44 +16,19 @@ export const navigation_volunteer = [
     'url': '/main/dashboard'
   },
   {
+    'id': 'achievements-management-summary',
+    'title': 'Mein FreiwilligenÜBERBLICK',
+    'icon': 'home',
+    'type': 'item',
+    'url': 'main/achievements/overview'
+  },
+  {
     'id': 'achievements',
     'title': 'Mein FreiwilligenLEBEN',
-    'type': 'collapse',
+    'type': 'item',
     'icon': 'award2',
-    'children' : [
-      {
-        'id': 'achievements-management-summary',
-        'title': 'Überblick',
-        'icon': 'home',
-        'type': 'item',
-        'url': 'main/achievements/summary'
-      },
-      {
-        'id': 'achievements-feuerwehr',
-        'title': 'Freiwillige Feuerwehr',
-        'icon': 'home2',
-        'type': 'item',
-        'url': 'main/achievements/fireBrigade'
-      },
-      {
-        'id': 'achievements-rotesKreuz',
-        'title': 'Rotes Kreuz',
-        'icon': 'home2',
-        'type': 'item',
-        'url': 'main/achievements/dummy'
-      },
-      {
-        'id': 'achievements-musikverein',
-        'title': 'Musikverein',
-        'icon': 'home2',
-        'type': 'item',
-        'url': '/main/achievements/music'
-      },
-    ]
-
-    
+    'url': 'main/achievements/details'
   },
-
   
   // {
   //   'id': 'digi',

@@ -1,31 +1,21 @@
-import { NgModule } from '@angular/core';
-import { FuseSharedModule } from '@fuse/shared.module';
-import { HelpseekerConfirmationScreenComponent } from './confirmation-screen.component';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { FuseSharedModule } from "@fuse/shared.module";
+import { HelpseekerConfirmationScreenComponent } from "./confirmation-screen.component";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material";
+import { RouterModule } from "@angular/router";
 
-const routes = [
-  { path: '', component: HelpseekerConfirmationScreenComponent }
-];
+const routes = [{ path: "", component: HelpseekerConfirmationScreenComponent }];
 
 @NgModule({
-  declarations: [
-    HelpseekerConfirmationScreenComponent
-  ],
+  declarations: [HelpseekerConfirmationScreenComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),       
+    RouterModule.forChild(routes),
     FuseSharedModule,
     MatButtonModule,
-    FuseSharedModule,
-    
-  
+    FuseSharedModule
   ],
-  exports: [
-    HelpseekerConfirmationScreenComponent
-  ]
+  exports: [HelpseekerConfirmationScreenComponent]
 })
-
-export class HelpseekerConfirmationScreenModule {
-}
+export class HelpseekerConfirmationScreenModule {}
