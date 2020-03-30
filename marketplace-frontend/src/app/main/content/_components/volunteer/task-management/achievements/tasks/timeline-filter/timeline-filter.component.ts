@@ -77,9 +77,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
               this.filteredClassInstanceDTOs = this.classInstanceDTOs;
 
-
-
-
               let list = this.filteredClassInstanceDTOs
                 .map(ci => {
                   let date = new Date(ci.dateFrom);

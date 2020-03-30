@@ -47,6 +47,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SunburstTableComponent } from './tasks/sunburst-table/sunburst-table.component';
 import { TimelineFilterComponent } from './tasks/timeline-filter/timeline-filter.component';
 import { DonutComponent } from './tasks/donut/donut.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+
 
 const routes = [{ path: "", component: AchievementsFireBrigadeComponent }];
 
@@ -102,6 +104,8 @@ const routes = [{ path: "", component: AchievementsFireBrigadeComponent }];
     NgxChartsModule,
     HighchartsChartModule,
     ShareMenuModule,
+
+    NgxSpinnerModule
   ]
 })
 export class AchievementsFireBrigadeModule { }

@@ -39,6 +39,7 @@ export class TasksComponent implements OnInit {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
             }
           }
+
         }
       }
     }
