@@ -16,12 +16,12 @@
 
       <tr>
         <td style="vertical-align: top; width: 100%">
-          Zuletzt verwendet
+          <h2>Zuletzt verwendet</h2>
           <table cellspacing=0 cellpadding=3
             style="border-style: solid; border-color: rgb(62, 125, 219); border-width: 1px; table-layout: fixed; width: 100%">
-            <col width="60%" />
-            <col width="20%" />
-            <col width="20%" />
+            <col width="50%" />
+            <col width="25%" />
+            <col width="25%" />
             <tr style="background-color: rgb(62, 125, 219); color: white;">
               <th style="text-align: start">Name</th>
               <th style="text-align: start">Unternehmen</th>
@@ -50,7 +50,8 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-sub-dialog [data]="browseDialogData" (entryClicked)="handleReturnFromBrowse($event)"></browse-sub-dialog>
+    <browse-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)"></browse-sub-dialog>
   </div>
 
 </mat-dialog-content>

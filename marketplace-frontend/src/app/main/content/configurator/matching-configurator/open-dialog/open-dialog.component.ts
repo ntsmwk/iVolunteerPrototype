@@ -5,7 +5,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { MatchingConfiguration } from 'app/main/content/_model/configurations';
-import { BrowseSubDialogData } from 'app/main/content/_components/dialogs/browse-sub-dialog/browse-sub-dialog.component';
+import { MatchingBrowseSubDialogData } from 'app/main/content/configurator/matching-configurator/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface OpenMatchingDialogData {
   marketplace: Marketplace;
@@ -28,7 +28,7 @@ export class OpenMatchingDialogComponent implements OnInit {
   }
 
   allMatchingConfigurations: MatchingConfiguration[];
-  browseDialogData: BrowseSubDialogData;
+  browseDialogData: MatchingBrowseSubDialogData;
 
   recentMatchingConfigurations: MatchingConfiguration[];
   loaded: boolean;
@@ -41,8 +41,14 @@ export class OpenMatchingDialogComponent implements OnInit {
         .then((matchingConfigurations: MatchingConfiguration[]) => {
           this.recentMatchingConfigurations = matchingConfigurations;
           this.allMatchingConfigurations = matchingConfigurations;
+
+
+          //----DEBUG
+          // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+          // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+          //----
           if (this.recentMatchingConfigurations.length > 5) {
-            this.recentMatchingConfigurations.slice(0, 5);
+            this.recentMatchingConfigurations = this.recentMatchingConfigurations.slice(0, 5);
           }
           this.loaded = true;
         });
@@ -60,25 +66,32 @@ export class OpenMatchingDialogComponent implements OnInit {
   }
 
   handleBrowseClick() {
-    this.browseDialogData = new BrowseSubDialogData();
+    this.browseDialogData = new MatchingBrowseSubDialogData();
 
-    this.browseDialogData.title = "Test";
+    this.browseDialogData.title = 'Durchsuchen';
     this.browseDialogData.entries = [];
 
     for (const matchingConfiguration of this.allMatchingConfigurations) {
-      this.browseDialogData.entries.push({ id: matchingConfiguration.id, label1: matchingConfiguration.name, date: matchingConfiguration.timestamp });
+      this.browseDialogData.entries.push({
+        id: matchingConfiguration.id,
+        name: matchingConfiguration.name,
+        producer: matchingConfiguration.producerClassConfigurationName,
+        consumer: matchingConfiguration.consumerClassConfigurationName,
+        date: matchingConfiguration.timestamp
+      });
     }
-    this.browseDialogData.displayedColumns = ['label1', 'date'];
-    this.browseDialogData.columnTitles = { label1: 'Label', date: 'Datum' };
 
     this.browseMode = true;
 
   }
 
-  handleReturnFromBrowse(resultId: string) {
+  handleReturnFromBrowse(event: { cancelled: boolean, entryId: string }) {
     this.browseMode = false;
-    this.data.matchingConfiguration = this.allMatchingConfigurations.find(c => c.id === resultId);
-    this.dialogRef.close(this.data);
+
+    if (!event.cancelled) {
+      this.data.matchingConfiguration = this.allMatchingConfigurations.find(c => c.id === event.entryId);
+      this.dialogRef.close(this.data);
+    }
   }
 
 

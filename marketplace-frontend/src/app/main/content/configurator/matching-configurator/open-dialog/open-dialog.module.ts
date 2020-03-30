@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { BrowseSubDialogModule } from 'app/main/content/_components/dialogs/browse-sub-dialog/browse-sub-dialog.module';
+import { BrowseSubDialogModule } from 'app/main/content/configurator/matching-configurator/browse-sub-dialog/browse-sub-dialog.module';
 
 @NgModule({
   imports: [
