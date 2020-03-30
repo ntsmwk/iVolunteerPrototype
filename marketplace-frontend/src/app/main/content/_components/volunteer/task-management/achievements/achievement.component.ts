@@ -8,6 +8,8 @@ import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/
 import { ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
+import { NgxSpinnerService } from "ngx-spinner";
+
 
 @Component({
   selector: "fuse-achievements",
@@ -30,22 +32,26 @@ export class AchievementsFireBrigadeComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private spinner: NgxSpinnerService
   ) { }
 
 
   ngAfterViewInit() {
   }
 
-  async ngOnInit () {
+  async ngOnInit() {
+    this.spinner.show();
+
     this.filteredClassInstanceDTOs = [];
-    
+    this.selectedTenants = [];
+
+
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
 
     this.tenantMap = new Map<String, Tenant>();
-    this.selectedTenants = [];
     for (let tenantId of this.volunteer.subscribedTenants) {
       let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
       this.tenantMap.set(tenantId, tenant);
@@ -86,6 +92,14 @@ export class AchievementsFireBrigadeComponent implements OnInit {
       return this.selectedTenants.indexOf(ci.tenantId) > -1;
     });
 
+  }
+
+  showSpinner() {
+    this.spinner.show();
+  }
+
+  hideSpinner() {
+    this.spinner.hide();
   }
 
 }

@@ -80,6 +80,7 @@ export class CompetenciesComponent implements OnInit {
           // this.tenantId.push(Object.assign({}, tenantId));
 
 
+          // TODO Philipp: change to input variable like in tasks.component
         this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
           if (!isNullOrUndefined(ret)) {
             //this.classInstanceDTOs = ret.filter(ci => ci.name == 'PersonTask');

@@ -126,6 +126,7 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   ) {}
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit(): void {
