@@ -4,4 +4,5 @@ export class Tenant {
   image;
   primaryColor: string;
   secondaryColor: string;
+  marketplaceId: string;
 }

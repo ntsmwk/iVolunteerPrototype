@@ -36,9 +36,10 @@
     <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
     <mat-cell *matCellDef="let tenant">
       <mat-icon
+        (click)="navigateToTenantForm(tenant.id)"
         style="cursor: pointer"
-        routerLink="/main/tenant-form/{{ tenant.id }}"
-        >edit</mat-icon
+      >
+        edit</mat-icon
       >
     </mat-cell>
   </ng-container>

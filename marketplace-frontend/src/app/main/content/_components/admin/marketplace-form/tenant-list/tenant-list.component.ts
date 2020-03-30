@@ -25,6 +25,14 @@ export class FuseTenantListComponent implements OnInit {
   }
 
   addTenant() {
-    this.router.navigate(["/main/tenant-form"]);
+    this.router.navigate([`/main/tenant-form`], {
+      queryParams: { marketplaceId: this.marketplaceId }
+    });
+  }
+
+  navigateToTenantForm(tenantId: string) {
+    this.router.navigate([`/main/tenant-form/${tenantId}`], {
+      queryParams: { marketplaceId: this.marketplaceId }
+    });
   }
 }

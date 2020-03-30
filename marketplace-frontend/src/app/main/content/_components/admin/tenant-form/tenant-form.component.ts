@@ -7,6 +7,8 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CoreMarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "tenant-form",
@@ -14,12 +16,14 @@ import { CoreMarketplaceService } from "app/main/content/_service/core-marketpla
 })
 export class FuseTenantFormComponent implements OnInit {
   tenantForm: FormGroup;
+  tenant: Tenant;
+  marketplaceId: string;
 
   constructor(
     formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private marketplaceService: CoreMarketplaceService
+    private tenantService: TenantService
   ) {
     this.tenantForm = formBuilder.group({
       id: new FormControl(undefined),
@@ -34,39 +38,41 @@ export class FuseTenantFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params =>
-      this.findMarketplace(params["marketplaceId"])
-    );
+    this.route.params.subscribe(params => {
+      this.findTenant(params["tenantId"]);
+    });
+    this.route.queryParams.subscribe(params => {
+      this.marketplaceId = params["marketplaceId"];
+    });
   }
 
-  private findMarketplace(tenantId: string) {
+  private async findTenant(tenantId: string) {
     if (tenantId == null || tenantId.length === 0) {
       return;
     }
-
-    // this.marketplaceService
-    //   .findById(marketplaceId)
-    //   .toPromise()
-    //   .then((marketplace: Marketplace) => {
-    //     this.marketplaceForm.setValue({
-    //       id: marketplace.id,
-    //       name: marketplace.name,
-    //       shortName: marketplace.shortName,
-    //       url: marketplace.url
-    //     });
-    //   });
+    this.tenant = <Tenant>(
+      await this.tenantService.findById(tenantId).toPromise()
+    );
+    this.tenantForm.setValue({
+      id: this.tenant.id,
+      name: this.tenant.name,
+      primaryColor: this.tenant.primaryColor,
+      secondaryColor: this.tenant.secondaryColor
+    });
   }
 
   save() {
     if (!this.tenantForm.valid) {
       return;
     }
+    this.tenant = <Tenant>this.tenantForm.value;
+    this.tenant.marketplaceId = this.marketplaceId;
 
-    // TODO save
-
-    // this.marketplaceService
-    //   .save(<Marketplace>this.marketplaceForm.value)
-    //   .toPromise()
-    //   .then(() => this.router.navigate(["/main/marketplace/all"]));
+    this.tenantService
+      .save(<Tenant>this.tenantForm.value)
+      .toPromise()
+      .then(() =>
+        this.router.navigate([`/main/marketplace-form/${this.marketplaceId}`])
+      );
   }
 }
