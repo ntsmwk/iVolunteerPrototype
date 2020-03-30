@@ -47,6 +47,7 @@ public class CoreVolunteerInitializationService {
 		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "", "");
 		createVolunteer("BProe", "passme", "Birgit", "Pröll", "", "");
 		createVolunteer("KKof", "passme", "Katharina", "Kofler", "Kati", "");
+		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", "", "");
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName,

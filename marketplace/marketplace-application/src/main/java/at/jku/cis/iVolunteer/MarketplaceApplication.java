@@ -15,6 +15,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 
 @SpringBootApplication
 public class MarketplaceApplication {
@@ -38,12 +39,13 @@ public class MarketplaceApplication {
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 
 	@PreDestroy
 	public void onExit() {
 		FinalizationService finalizationService = new FinalizationService();
 		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
-				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository);
+				relationshipRepository, propertyDefinitionRepository, derivationRuleRepository, containerRuleEntryRepository);
 	}
 
 }

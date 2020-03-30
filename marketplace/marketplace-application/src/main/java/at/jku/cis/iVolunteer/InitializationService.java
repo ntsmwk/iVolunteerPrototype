@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
@@ -40,6 +42,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 
 @Service
 public class InitializationService {
@@ -60,6 +63,7 @@ public class InitializationService {
 	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private Environment environment;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private RuleService ruleService;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 	
@@ -81,11 +85,11 @@ public class InitializationService {
 
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
-		this.addTestClassInstances();
+		addTestRuleEngine();
 	}
 
 
-	public void addStandardPropertyDefinitions() {		
+	public void addStandardPropertyDefinitions() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
@@ -681,5 +685,19 @@ public class InitializationService {
 		ci1.setTimestamp(new Date(System.currentTimeMillis()));
 		ci1.setInUserRepository(false);
 		classInstanceRepository.save(ci1);
+	}
+	
+	private void addTestRuleEngine() {
+		/****** load rules into database ******/
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+		ruleService.initTestData(tenantId);
+	
+		tenantId = coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG);
+		ruleService.initTestData(tenantId);
+		
+	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+	    ruleService.printContainers();
+	    // ruleService.executeRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG), "general");
 	}
 }
