@@ -47,7 +47,8 @@ export class FuseRegistrationComponent implements OnInit {
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
       firstName: new FormControl("", Validators.required),
-      lastName: new FormControl("", Validators.required)
+      lastName: new FormControl("", Validators.required),
+      birthday: new FormControl("", Validators.required)
     });
 
     this.registrationForm.valueChanges.subscribe(() => {
@@ -83,6 +84,7 @@ export class FuseRegistrationComponent implements OnInit {
     volunteer.password = this.registrationForm.value.password;
     volunteer.firstname = this.registrationForm.value.firstName;
     volunteer.lastname = this.registrationForm.value.lastName;
+    volunteer.birthday = this.registrationForm.value.birthday;
 
     this.registrationService
       .registerVolunteer(volunteer)

@@ -10,6 +10,8 @@ export class Participant {
 
   position: string;
 
+  birthday: Date;
+
   image;
 }
 
