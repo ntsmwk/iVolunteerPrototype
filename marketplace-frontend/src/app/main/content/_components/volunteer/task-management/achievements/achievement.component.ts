@@ -17,7 +17,7 @@ import { NgxSpinnerService } from "ngx-spinner";
   styleUrls: ["./achievement.component.scss"],
   animations: fuseAnimations
 })
-export class AchievementsFireBrigadeComponent implements OnInit {
+export class AchievementsComponent implements OnInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
   classInstanceDTOs: ClassInstanceDTO[];
