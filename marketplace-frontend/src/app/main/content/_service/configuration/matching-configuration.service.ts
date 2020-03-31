@@ -36,4 +36,8 @@ export class MatchingConfigurationService {
     return this.http.delete(`${marketplace.url}/matching-configuration/${id}/delete`);
   }
 
+  deleteMatchingConfigurations(marketplace: Marketplace, ids: string[]) {
+    return this.http.put(`${marketplace.url}/matching-configuration/delete-multiple`, ids);
+  }
+
 }

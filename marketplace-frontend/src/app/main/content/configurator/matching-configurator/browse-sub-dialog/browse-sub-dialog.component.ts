@@ -1,9 +1,12 @@
 import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 
 export class MatchingBrowseSubDialogData {
   title: string;
 
   entries: { id: string, name: string, producer: string, consumer: string, date: Date }[];
+
+  marketplace: Marketplace;
 }
 
 @Component({
@@ -18,7 +21,6 @@ export class BrowseSubDialogComponent implements OnInit {
   @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string }> = new EventEmitter<{ cancelled: boolean, entryId: string }>();
 
   constructor(
-
   ) {
 
   }

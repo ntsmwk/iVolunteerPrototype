@@ -72,6 +72,7 @@ export class OpenMatchingDialogComponent implements OnInit {
 
     this.browseDialogData.title = 'Durchsuchen';
     this.browseDialogData.entries = [];
+    this.browseDialogData.marketplace = this.data.marketplace;
 
     for (const matchingConfiguration of this.allMatchingConfigurations) {
       this.browseDialogData.entries.push({

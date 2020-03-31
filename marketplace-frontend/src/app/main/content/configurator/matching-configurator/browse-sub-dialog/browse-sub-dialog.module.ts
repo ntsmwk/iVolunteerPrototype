@@ -4,6 +4,7 @@ import { BrowseSubDialogComponent } from './browse-sub-dialog.component';
 import { MatCommonModule } from '@angular/material/core';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { MatButtonModule, MatTooltipModule, MatIconModule } from '@angular/material';
+import { ConfirmDialogModule } from 'app/main/content/_components/dialogs/confirm-dialog/confirm-dialog.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,9 @@ import { MatButtonModule, MatTooltipModule, MatIconModule } from '@angular/mater
     MatTooltipModule,
     MatIconModule,
 
+
     FuseSharedModule,
+    ConfirmDialogModule,
   ],
 
   declarations: [BrowseSubDialogComponent],

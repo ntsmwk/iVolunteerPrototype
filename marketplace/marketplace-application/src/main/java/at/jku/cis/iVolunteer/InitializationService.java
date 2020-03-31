@@ -1122,7 +1122,23 @@ public class InitializationService {
 		storage.setName("FlexProd Demo");
 		storage.setProducerClassConfigurationId("slot1");
 		storage.setConsumerClassConfigurationId("slot2");
+		storage.setTimestamp(new Date());
 		storage.setRelationships(new ArrayList<MatchingOperatorRelationship>());
+		if (!matchingConfiguratorRepository.exists(storage.getId())) {
+			matchingConfiguratorRepository.save(storage);
+		}
+		storage.setId("dummy");
+		storage.setName("Dummy");
+		if (!matchingConfiguratorRepository.exists(storage.getId())) {
+			matchingConfiguratorRepository.save(storage);
+		}
+		storage.setId("dummy2");
+		storage.setName("Dummy2");
+		if (!matchingConfiguratorRepository.exists(storage.getId())) {
+			matchingConfiguratorRepository.save(storage);
+		}
+		storage.setId("dummy3");
+		storage.setName("Dummy3");
 		if (!matchingConfiguratorRepository.exists(storage.getId())) {
 			matchingConfiguratorRepository.save(storage);
 		}

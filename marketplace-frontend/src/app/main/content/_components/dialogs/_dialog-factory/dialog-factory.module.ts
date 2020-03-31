@@ -25,6 +25,8 @@ import { NewMatchingDialogComponent } from 'app/main/content/configurator/matchi
 import { NewMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.module';
 import { OpenMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.module';
+import { DeleteMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
+import { DeleteMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.module';
 
 
 @NgModule({
@@ -42,11 +44,12 @@ import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching
     ChangeIconDialogModule,
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
+    DeleteMatchingDialogModule,
   ],
   declarations: [DialogFactoryDirective],
   entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
     SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
     OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
-    ChangeIconDialogComponent, NewMatchingDialogComponent, OpenMatchingDialogComponent]
+    ChangeIconDialogComponent, NewMatchingDialogComponent, OpenMatchingDialogComponent, DeleteMatchingDialogComponent]
 })
 export class DialogFactoryModule { }

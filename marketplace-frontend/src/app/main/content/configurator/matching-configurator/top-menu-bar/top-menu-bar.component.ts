@@ -32,6 +32,7 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 1, label: 'Neues Matching', clickAction: 'newClicked', icon: undefined },
   { rootId: 1, id: 2, label: 'Matching öffnen', clickAction: 'openClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Matching speichern', clickAction: 'saveClicked', icon: undefined },
+  { rootId: 1, id: 4, label: 'Matching löschen', clickAction: 'deleteClicked', icon: undefined },
 
   { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
   { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
@@ -56,7 +57,7 @@ const subMenuItems: SubMenuItem[] = [
   templateUrl: './top-menu-bar.component.html',
   styleUrls: ['./top-menu-bar.component.scss']
 })
-export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
+export class MatchingTopMenuBarComponent implements AfterViewInit {
 
   isLoaded = false;
   menuOpen: false;
@@ -172,37 +173,49 @@ export class MatchingTopMenuBarComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {
-    // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-    setTimeout(() => {
-      this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
-        if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
-        } else {
-          this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-        }
-      });
+  deleteClicked(event: any, item: SubMenuItem) {
+    this.dialogFactory.openDeleteMatchingDialog(this.marketplace).then((ret: any) => {
+      if (!isNullOrUndefined(ret)) {
+        this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+      }
+
     });
   }
 
-  createEditorClicked(event: any, item: SubMenuItem) {
 
-  }
+  // saveAsClicked(event: any, item: SubMenuItem) {
+  //   // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
+  //   setTimeout(() => {
+  //     this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
+  //       if (!isNullOrUndefined(ret)) {
+  //         this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
+  //       } else {
+  //         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+  //       }
+  //     });
+  //   });
+  // }
 
-  ngOnChanges() {
-    const eventResponse = this.eventResponseAction;
-    this.eventResponseAction = undefined;
-    if (eventResponse === 'saveAsClicked') {
-      this[eventResponse](eventResponse, undefined);
-    }
-  }
+  // createEditorClicked(event: any, item: SubMenuItem) {
+
+  // }
+
+  // ngOnChanges() {
+  //   const eventResponse = this.eventResponseAction;
+  //   this.eventResponseAction = undefined;
+  //   if (eventResponse === 'saveAsClicked') {
+  //     this[eventResponse](eventResponse, undefined);
+  //   }
+  // }
 
 
-  test(event: any, item: SubMenuItem) {
-    console.log('test');
-    console.log(event);
-    console.log(item);
-  }
+  // test(event: any, item: SubMenuItem) {
+  //   console.log('test');
+  //   console.log(event);
+  //   console.log(item);
+  // }
 
 
 

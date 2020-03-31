@@ -16,6 +16,7 @@ import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/conten
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -522,6 +523,29 @@ export class DialogFactoryDirective {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return matchingConfiguration;
+    });
+  }
+
+  openDeleteMatchingDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(DeleteMatchingDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let idsDeleted: string[];
+
+    dialogRef.beforeClose().toPromise().then((result: DeleteMatchingDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        idsDeleted = result.idsToDelete;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return idsDeleted;
     });
   }
 
