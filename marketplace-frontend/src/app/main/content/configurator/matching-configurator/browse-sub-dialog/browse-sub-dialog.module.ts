@@ -28,4 +28,4 @@ import { ConfirmDialogModule } from 'app/main/content/_components/dialogs/confir
 
 
 
-export class BrowseSubDialogModule { }
+export class BrowseMatchingSubDialogModule { }

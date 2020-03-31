@@ -26,4 +26,4 @@ import { MatButtonModule, MatTooltipModule, MatIconModule } from '@angular/mater
 
 
 
-export class BrowseSubDialogModule { }
+export class BrowseClassSubDialogModule { }

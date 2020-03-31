@@ -4,7 +4,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 export class ClassBrowseSubDialogData {
   title: string;
 
-  entries: { id: string, name: string, producer: string, consumer: string, date: Date }[];
+  entries: { id: string, name: string, date: Date }[];
+  sourceReference: 'PRODUCER' | 'CONSUMER';
 
   marketplace: Marketplace;
 }

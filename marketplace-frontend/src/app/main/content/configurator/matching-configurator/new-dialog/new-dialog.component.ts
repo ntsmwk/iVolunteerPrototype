@@ -7,6 +7,7 @@ import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { ClassBrowseSubDialogData } from '../../class-configurator/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface NewMatchingDialogData {
   producerClassConfiguration: ClassConfiguration;
@@ -37,6 +38,10 @@ export class NewMatchingDialogComponent implements OnInit {
   showErrors = false;
   showDuplicateError = false;
   label: string;
+
+  browseMode: boolean;
+  browseDialogData: ClassBrowseSubDialogData;
+
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
@@ -73,7 +78,8 @@ export class NewMatchingDialogComponent implements OnInit {
     this.showDuplicateError = false;
     if (!isNullOrUndefined(this.data.producerClassConfiguration) &&
       !isNullOrUndefined(this.data.consumerClassConfiguration) &&
-      this.data.consumerClassConfiguration !== this.data.producerClassConfiguration) {
+      this.data.consumerClassConfiguration !== this.data.producerClassConfiguration &&
+      !isNullOrUndefined(this.data.label)) {
 
       // this.data.label = this.label;
       console.log(this.data);
@@ -92,6 +98,29 @@ export class NewMatchingDialogComponent implements OnInit {
     } else {
       this.showErrors = true;
     }
+  }
+
+  handleBrowseClick(sourceReference: 'PRODUCER' | 'CONSUMER') {
+    console.log("Clicked Browse " + sourceReference);
+    this.browseDialogData = new ClassBrowseSubDialogData();
+    this.browseDialogData.title = "Durchsuchen";
+    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.sourceReference = sourceReference;
+
+    this.browseDialogData.entries = [];
+    for (const classConfiguration of this.classConfigurations) {
+      this.browseDialogData.entries.push({ id: classConfiguration.id, name: classConfiguration.name, date: classConfiguration.date });
+    }
+
+    this.browseMode = true;
+
+
+  }
+
+  handleReturnFromBrowse(event: any) {
+    console.log("clicked browse");
+    console.log(event);
+    this.browseMode = false;
   }
 
 

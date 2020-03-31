@@ -50,8 +50,9 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
-      (subDialogReturn)="handleReturnFromBrowse($event)"></browse-sub-dialog>
+    <browse-matching-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
+    </browse-matching-sub-dialog>
   </div>
 
 </mat-dialog-content>
