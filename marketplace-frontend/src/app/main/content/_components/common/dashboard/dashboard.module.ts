@@ -28,6 +28,7 @@ import {
 import { AssetInboxHelpseekerModule } from "../../help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module";
 import { AssetInboxModule } from "../../../_shared_components/asset-inbox/asset-inbox.module";
 import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-helpseeker.component";
+import { OrganisationSelectionModule } from "app/main/content/_shared_components/organisation-selection/organisation-selection.module";
 
 const routes = [
   {
@@ -48,6 +49,7 @@ const routes = [
 
     MatIconModule,
     AssetInboxModule,
+    OrganisationSelectionModule,
 
     MatButtonModule,
     MatTableModule,
