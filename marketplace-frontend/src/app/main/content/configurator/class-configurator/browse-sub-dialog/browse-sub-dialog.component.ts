@@ -1,7 +1,7 @@
 import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 
-export class MatchingBrowseSubDialogData {
+export class ClassBrowseSubDialogData {
   title: string;
 
   entries: { id: string, name: string, producer: string, consumer: string, date: Date }[];
@@ -10,13 +10,13 @@ export class MatchingBrowseSubDialogData {
 }
 
 @Component({
-  selector: 'browse-matching-sub-dialog',
+  selector: 'browse-class-sub-dialog',
   templateUrl: './browse-sub-dialog.component.html',
   styleUrls: ['./browse-sub-dialog.component.scss']
 })
-export class BrowseMatchingSubDialogComponent implements OnInit {
+export class BrowseClassSubDialogComponent implements OnInit {
 
-  @Input() data: MatchingBrowseSubDialogData;
+  @Input() data: ClassBrowseSubDialogData;
   @Input() browseMode: boolean;
   @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string }> = new EventEmitter<{ cancelled: boolean, entryId: string }>();
 
