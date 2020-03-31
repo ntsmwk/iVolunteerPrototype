@@ -47,6 +47,8 @@ export class OpenMatchingDialogComponent implements OnInit {
           // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
           // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
           //----
+          this.recentMatchingConfigurations = this.recentMatchingConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+
           if (this.recentMatchingConfigurations.length > 5) {
             this.recentMatchingConfigurations = this.recentMatchingConfigurations.slice(0, 5);
           }
