@@ -143,10 +143,14 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.confirmationDialog("New", "Create New Editor? Unsaved changes will be lost...").then((cont: boolean) => {
-      if (cont) {
-        this.menuOptionClickedEvent.emit({ id: "editor_new" });
-      }
+    // this.dialogFactory.confirmationDialog("New", "Create New Editor? Unsaved changes will be lost...").then((cont: boolean) => {
+    //   if (cont) {
+    //     this.menuOptionClickedEvent.emit({ id: "editor_new" });
+    //   }
+    // });
+
+    this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret) => {
+      console.log(ret);
     });
 
   }

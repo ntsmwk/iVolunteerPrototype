@@ -27,6 +27,8 @@ import { OpenMatchingDialogComponent } from 'app/main/content/configurator/match
 import { OpenMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.module';
 import { DeleteMatchingDialogComponent } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
 import { DeleteMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.module';
+import { NewClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.module';
+import { NewClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
 
 
 @NgModule({
@@ -38,18 +40,40 @@ import { DeleteMatchingDialogModule } from 'app/main/content/configurator/matchi
     SortDialogModule,
     ChooseTemplateToCopyDialogModule,
     RelationshipDialogModule,
+
+
+    // Class Configurator
+    NewClassConfigurationDialogModule,
     OpenDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
+
+    // Matching Configurator
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
     DeleteMatchingDialogModule,
   ],
   declarations: [DialogFactoryDirective],
-  entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
-    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
-    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
-    ChangeIconDialogComponent, NewMatchingDialogComponent, OpenMatchingDialogComponent, DeleteMatchingDialogComponent]
+  entryComponents: [
+    AddOrRemoveDialogComponent,
+    TextFieldDialogComponent,
+    ConfirmDialogComponent,
+    SortDialogComponent,
+    ChooseTemplateToCopyDialogComponent,
+
+    RelationshipDialogComponent,
+
+    // Class Configurator
+    NewClassConfigurationDialogComponent,
+    OpenDialogComponent,
+    SaveAsDialogComponent,
+    ClassInstanceFormPreviewDialogComponent,
+    ChangeIconDialogComponent,
+
+    // Matching Configurator
+    NewMatchingDialogComponent,
+    OpenMatchingDialogComponent,
+    DeleteMatchingDialogComponent]
 })
 export class DialogFactoryModule { }

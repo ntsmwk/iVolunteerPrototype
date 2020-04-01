@@ -17,6 +17,7 @@ import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/cont
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
 import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
+import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -396,6 +397,31 @@ export class DialogFactoryDirective {
     });
   }
 
+
+  /**
+   *  Class-Configurator Dialogs
+   */
+
+  openNewClassConfigurationDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(NewClassConfigurationDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let classConfiguration: ClassConfiguration;
+    dialogRef.beforeClose().toPromise().then((result: NewClassConfigurationDialogData) => {
+      // classConfiguration = result.label;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return classConfiguration;
+    });
+  }
+
   openConfiguratorDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(OpenDialogComponent, {
       width: '500px',
@@ -482,6 +508,9 @@ export class DialogFactoryDirective {
     });
   }
 
+  /*  
+   *  Matching-Configurator Dialogs
+   */
   openNewMatchingDialog(marketplace: Marketplace) {
     const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
       width: '500px',
