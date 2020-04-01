@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { MatTooltipModule } from '@angular/material';
+import { MatTooltipModule, MatDividerModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -23,7 +23,7 @@ import { MatTooltipModule } from '@angular/material';
     MatFormFieldModule,
     MatIconModule,
     MatTooltipModule,
-
+    MatDividerModule,
   ],
   declarations: [NewClassConfigurationDialogComponent],
   exports: [NewClassConfigurationDialogComponent]

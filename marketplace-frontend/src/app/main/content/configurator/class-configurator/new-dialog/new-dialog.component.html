@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <mat-icon>new</mat-icon>
+        <mat-icon>add</mat-icon>
       </td>
       <td>
         <h1>Neue Klassenkonfiguration</h1>
@@ -12,8 +12,25 @@
 </div>
 <mat-dialog-content *ngIf="loaded">
 
+  <mat-label>Bezeichnung Konfiguration*</mat-label>
   <mat-form-field style="width: 100%" appearance="outline">
-    <input matInput placeholder=" Bezeichnung" [(ngModel)]="data.label" name="label" required>
+    <input matInput [(ngModel)]="data.label" name="label" required />
+  </mat-form-field>
+
+
+  <mat-label>Beschreibung (optional)</mat-label>
+  <mat-form-field style="width: 100%" appearance="outline">
+    <textarea matInput [(ngModel)]="data.description" name="description" matTextareaAutosize matAutosizeMinRows=3
+      matAutosizeMaxRows=3></textarea>
+  </mat-form-field>
+
+  <div class="pt-20 pb-16">
+    <mat-divider></mat-divider>
+  </div>
+
+  <mat-label>Bezeichnung Wurzelknoten*</mat-label>
+  <mat-form-field style="width: 100%" appearance="outline">
+    <input matInput [(ngModel)]="data.rootLabel" name="rootLabel" required />
   </mat-form-field>
 
 

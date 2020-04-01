@@ -1,16 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
-import { ClassBrowseSubDialogData } from '../../class-configurator/browse-sub-dialog/browse-sub-dialog.component';
+import { ClassConfiguration } from 'app/main/content/_model/configurations';
 
 export interface NewClassConfigurationDialogData {
   label: string;
+  description: string;
+  rootLabel: string;
+
   marketplace: Marketplace;
 }
 
