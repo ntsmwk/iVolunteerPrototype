@@ -21,6 +21,7 @@ import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationEnd } from "@angular/router";
+import { ImageService } from "app/main/content/_service/image.service";
 
 @Component({
   selector: "dashboard-volunteer",
@@ -65,7 +66,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private userImagePathService: CoreUserImagePathService,
     private coreTenantService: TenantService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private imageService: ImageService
   ) {}
 
   async ngOnInit() {

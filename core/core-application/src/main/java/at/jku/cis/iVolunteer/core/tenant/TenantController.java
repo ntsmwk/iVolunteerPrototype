@@ -60,5 +60,4 @@ public class TenantController {
 		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
 		return tenantRepository.save(orginalTenant);
 	}
-	
 }
