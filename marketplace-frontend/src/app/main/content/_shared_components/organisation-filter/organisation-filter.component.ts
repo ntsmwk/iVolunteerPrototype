@@ -32,7 +32,7 @@ export class OrganisationFilterComponent implements OnInit {
 
     this.marketplace = (<Marketplace[]>(
       await this.coreVolunteerService
-        .findRegisteredMarketplaces(this.part.id)
+        .findRegisteredMarketplaces(this.participant.id)
         .toPromise()
     )).filter(m => (m.name = "Marketplace 1"))[0];
   }
