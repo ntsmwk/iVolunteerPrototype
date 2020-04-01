@@ -17,7 +17,7 @@ public class ClassConfiguration {
 	private List<String> classDefinitionIds;
 	private List<String> relationshipIds;
 
-	private Date date;
+	private Date timestamp;
 	
 	private String userId;
 
@@ -66,12 +66,12 @@ public class ClassConfiguration {
 		this.relationshipIds = relationshipIds;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override

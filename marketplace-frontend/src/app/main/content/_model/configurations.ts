@@ -6,7 +6,7 @@ export class ClassConfiguration {
     description: string;
     classDefinitionIds: string[];
     relationshipIds: string[];
-    date: Date;
+    timestamp: Date;
     userId: String;
 
 }

@@ -19,7 +19,8 @@ export class BrowseClassSubDialogComponent implements OnInit {
 
   @Input() data: ClassBrowseSubDialogData;
   @Input() browseMode: boolean;
-  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string }> = new EventEmitter<{ cancelled: boolean, entryId: string }>();
+  @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>
+    = new EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>();
 
   constructor(
   ) {
@@ -32,14 +33,16 @@ export class BrowseClassSubDialogComponent implements OnInit {
     // this.data.entries.push(...this.data.entries);
     // this.data.entries.push(...this.data.entries);
     // this.data.entries.push(...this.data.entries);
+    // this.data.entries.push(...this.data.entries);
+
   }
 
   handleRowClick(entry: any) {
-    this.subDialogReturn.emit({ cancelled: false, entryId: entry.id });
+    this.subDialogReturn.emit({ cancelled: false, entryId: entry.id, sourceReference: this.data.sourceReference });
   }
 
   handleBackClick() {
-    this.subDialogReturn.emit({ cancelled: true, entryId: undefined });
+    this.subDialogReturn.emit({ cancelled: true, entryId: undefined, sourceReference: this.data.sourceReference });
   }
 
 

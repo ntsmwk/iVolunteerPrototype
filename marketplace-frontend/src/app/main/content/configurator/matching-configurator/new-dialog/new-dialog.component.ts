@@ -32,7 +32,7 @@ export class NewMatchingDialogComponent implements OnInit {
   ) {
   }
 
-  classConfigurations: ClassConfiguration[];
+  allClassConfigurations: ClassConfiguration[];
   recentClassConfigurations: ClassConfiguration[];
   loaded = false;
   showErrors = false;
@@ -46,15 +46,20 @@ export class NewMatchingDialogComponent implements OnInit {
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
-        this.classConfigurations = classConfigurations.filter(c => {
-          return c.userId === helpseeker.id || isNullOrUndefined(c.userId);
-        });
 
-        if (this.classConfigurations.length > 5) {
-          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
+        this.recentClassConfigurations = classConfigurations;
+        this.allClassConfigurations = classConfigurations;
+
+
+        //----DEBUG
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+        //----
+        this.recentClassConfigurations = this.recentClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+
+        if (this.recentClassConfigurations.length > 5) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 5);
         }
-
-        this.recentClassConfigurations = this.classConfigurations;
 
         this.loaded = true;
       });
@@ -108,8 +113,8 @@ export class NewMatchingDialogComponent implements OnInit {
     this.browseDialogData.sourceReference = sourceReference;
 
     this.browseDialogData.entries = [];
-    for (const classConfiguration of this.classConfigurations) {
-      this.browseDialogData.entries.push({ id: classConfiguration.id, name: classConfiguration.name, date: classConfiguration.date });
+    for (const classConfiguration of this.allClassConfigurations) {
+      this.browseDialogData.entries.push({ id: classConfiguration.id, name: classConfiguration.name, date: new Date(classConfiguration.timestamp) });
     }
 
     this.browseMode = true;
@@ -117,10 +122,23 @@ export class NewMatchingDialogComponent implements OnInit {
 
   }
 
-  handleReturnFromBrowse(event: any) {
+  handleReturnFromBrowse(event: { cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }) {
     console.log("clicked browse");
     console.log(event);
+
+    if (!event.cancelled) {
+      const classConfiguration = this.allClassConfigurations.find(c => c.id === event.entryId);
+
+      if (event.sourceReference === 'PRODUCER') {
+        this.data.producerClassConfiguration = classConfiguration;
+
+      } else if (event.sourceReference === 'CONSUMER') {
+        this.data.consumerClassConfiguration = classConfiguration;
+      }
+    }
+
     this.browseMode = false;
+
   }
 
 

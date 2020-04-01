@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.clazz;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,15 @@ public class ClassConfigurationController {
 	
 	@Autowired private MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
 	
+	
+	
 	@GetMapping("class-configuration/all")
-	List<ClassConfiguration> getAllClassConfigurations(@RequestParam(value = "sorted", required = false) String sortType) {
+	List<ClassConfiguration> getAllClassConfigurations() {
+		return classConfigurationRepository.findAll();
+	}
+	
+	@GetMapping("class-configuration/all/sort")
+	List<ClassConfiguration> getAllClassConfigurationsWithSort(@RequestParam(value = "sorted", required = false) String sortType) {
 		
 //		if (sortType.equalsIgnoreCase("asc")) {
 //			return configuratorRepository.findAllWithSort(new Sort(Sort.Direction.ASC, "date"));
@@ -65,6 +73,7 @@ public class ClassConfigurationController {
 		ClassConfiguration classConfiguration = new ClassConfiguration();
 		classConfiguration.setName(params[0]);
 		classConfiguration.setDescription(params[1]);
+		classConfiguration.setTimestamp(new Date());
 		
 		return saveClassConfiguration(classConfiguration);
 	}
@@ -76,6 +85,7 @@ public class ClassConfigurationController {
 	
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
+		updatedClassConfiguration.setTimestamp(new Date());
 		
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
 	
