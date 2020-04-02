@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../../../../_service/login.service';
 import { ClassInstanceService } from '../../../../../_service/meta/core/class/class-instance.service';
-import { CoreMarketplaceService } from '../../../../../_service/core-marketplace.service';
-import { ActivatedRoute } from '@angular/router';
 import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
 import { StoredChartService } from '../../../../../_service/stored-chart.service';
 import { Volunteer } from '../../../../../_model/volunteer';
-import { Participant } from '../../../../../_model/participant';
-import { isNullOrUndefined } from 'util';
-import { ClassInstance, ClassInstanceDTO } from '../../../../../_model/meta/Class';
+import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
 import { StoredChart } from '../../../../../_model/stored-chart';
 import { TenantService } from '../../../../../_service/core-tenant.service';
-
+import { Tenant } from 'app/main/content/_model/tenant';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 
 @Component({
   selector: 'fuse-management-summary',
@@ -24,20 +21,6 @@ export class ManagementSummaryComponent implements OnInit {
   comparisonXlabel = 'Jahr';
   comparisonYlabel = 'Anzahl Tätigkeiten';
   colorScheme = 'cool';
-  colors = [
-    {
-      name: 'Feuerwehr',
-      value: '#a72920'
-    },
-    {
-      name: 'Rotes Kreuz',
-      value: '#b2b2b2'
-    },
-    {
-      name: 'Musikverein',
-      value: '#05913A'
-    }
-  ];
 
   schemeType = 'ordinal';
   showGridLines = true;
@@ -56,292 +39,125 @@ export class ManagementSummaryComponent implements OnInit {
   legendPosition = 'below';
   tooltipDisabled = false;
 
-  private comparisonData: any[] = [];
-  comparisonYear: string;
   volunteer: Volunteer;
   marketplace: any;
   classInstanceDTOs: ClassInstanceDTO[];
-  filteredClassInstanceDTOs: ClassInstanceDTO[];
-  yearsMap: any;
 
-
-  // ---- 
-  // cards 
-  cardColor: string = '#232837';
-
-  durationTotal = [
-    {
-      "name": "Feuerwehr",
-      "value": 3549
-    },
-    {
-      "name": "Rotes Kreuz",
-      "value": 883
-    },
-    {
-      "name": "Musikverein",
-      "value": 1632
-    },
-  ];
-
-  numberTotal = [
-    {
-      "name": "Feuerwehr",
-      "value": 1207
-    },
-    {
-      "name": "Rotes Kreuz",
-      "value": 401
-    },
-    {
-      "name": "Musikverein",
-      "value": 425
-    },
-  ];
-
-  duration2019 = [
-    {
-      "name": "Feuerwehr",
-      "value": 346
-    },
-    {
-      "name": "Rotes Kreuz",
-      "value": 83
-    },
-    {
-      "name": "Musikverein",
-      "value": 173
-    },
-  ];
-
-  number2019 = [
-    {
-      "name": "Feuerwehr",
-      "value": 104
-    },
-    {
-      "name": "Rotes Kreuz",
-      "value": 31
-    },
-    {
-      "name": "Musikverein",
-      "value": 49
-    },
-  ];
-
-  sumDurationTotal: number;
-  sumNumberTotal: number;
-  sumDuration2019: number;
-  sumNumber2019: number;
-
-  fakeDataMusic = [
-    {
-      "name": "2012",
-      "value": 0,
-    },
-    {
-      "name": "2013",
-      "value": 0,
-    },
-    {
-      "name": "2014",
-      "value": 0,
-    },
-    {
-      "name": "2015",
-      "value": 19,
-    },
-    {
-      "name": "2016",
-      "value": 18,
-    },
-    {
-      "name": "2017",
-      "value": 19,
-    },
-    {
-      "name": "2018",
-      "value": 29,
-    },
-    {
-      "name": "2019",
-      "value": 49,
-    },
-  ];
-
-  fakeDataRk = [
-    {
-      "name": "2012",
-      "value": 20,
-    },
-    {
-      "name": "2013",
-      "value": 13,
-    },
-    {
-      "name": "2014",
-      "value": 4,
-    },
-    {
-      "name": "2015",
-      "value": 3,
-    },
-    {
-      "name": "2016",
-      "value": 1,
-    },
-    {
-      "name": "2017",
-      "value": 36,
-    },
-    {
-      "name": "2018",
-      "value": 41,
-    },
-    {
-      "name": "2019",
-      "value": 31,
-    },
-  ];
   uniqueYears: any[];
+  tenantMap: Map<String, Tenant>;
 
-  private tenantName: string = 'FF_Eidenberg';
-  private tenantId: string;
+  durationTotal: any[] = [];
+  numberTotal: any[] = [];
+  durationLastYear: any[] = [];
+  numberLastYear: any[] = [];
+
+  comparisonData: any[] = [];
+  comparisonYear: number;
+  lastYear: number;
 
   constructor(
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: CoreMarketplaceService,
-    private route: ActivatedRoute,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: TenantService
+    private tenantService: TenantService,
   ) { }
 
-  ngOnInit() {
-    this.comparisonYear = '2012';
+  async ngOnInit() {
+    this.comparisonYear = 2019;
+    this.classInstanceDTOs = [];
 
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
-      this.volunteer = volunteer;
+    this.volunteer = <Volunteer>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
 
-      Promise.all([
-        this.marketplaceService.findAll().toPromise(),
-        this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-      ]).then((values: any[]) => {
+    this.tenantMap = new Map<String, Tenant>();
+    for (let tenantId of this.volunteer.subscribedTenants) {
+      let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
+      this.tenantMap.set(tenantId, tenant);
+    }
 
-        // TODO: 
-        this.marketplace = values[0][0];
+    let marketplaces = <Marketplace[]>(
+      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+    );
 
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise().then((ret: ClassInstanceDTO[]) => {
-          if (!isNullOrUndefined(ret)) {
-            //this.classInstanceDTOs = ret.filter(ci => ci.name=='PersonTask');
-            this.classInstanceDTOs = ret;
+    // TODO for each registert mp
+    this.marketplace = marketplaces[0];
 
-            this.classInstanceDTOs.forEach((ci, index, object) => {
-              if (ci.duration == null) {
-                object.splice(index, 1);
-              }
-            });
+    this.classInstanceDTOs = <ClassInstanceDTO[]>(
+      await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
+    );
 
-            this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-            this.generateStaticChartData();
-
-
-
-            this.sumDurationTotal = this.durationTotal.reduce((a, c) => a+c.value, 0);
-            this.sumNumberTotal = this.numberTotal.reduce((a, c) => a+c.value, 0);
-            this.sumDuration2019 = this.duration2019.reduce((a, c) => a+c.value, 0);
-            this.sumNumber2019 = this.number2019.reduce((a, c) => a+c.value, 0);
-          }
-        });
-
-      });
-    });
-
-  }
-
-  onComparisonYearChanged(value) {
-    this.comparisonYear = value;
-
-    let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
-    let comparisonYearDataMusikverein = this.fakeDataMusic.find(d => {
-      return d.name === this.comparisonYear;
-    }).value;
-
-    let comparisonYearDataRk = this.fakeDataRk.find(d => {
-      return d.name === this.comparisonYear;
-    }).value;
-
-    let data = [];
-    let dataFinal = [];
-
-    this.uniqueYears.forEach(curYear => {
-      let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
-      let currentYearDataMusikverein = this.fakeDataMusic.find(d => {
-        return d.name === curYear;
-      }).value;
-
-      let currentYearDataRk = this.fakeDataRk.find(d => {
-        return d.name === curYear;
-      }).value;
-
-      data = [];
-      data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
-      data.push({ name: 'Rotes Kreuz', value: currentYearDataRk - comparisonYearDataRk });
-      data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
-      dataFinal.push({ name: curYear, series: data });
-    });
-
-    this.comparisonData = [...dataFinal];
-
-  }
-
-  generateStaticChartData() {
-    // yearComparison
-    let yearsList = this.classInstanceDTOs.map(ci => {
-      return ({ year: (new Date(ci.dateFrom).getFullYear()).toString(), value: 1 });
-    });
-
-    this.yearsMap = new Map<string, number>();
-    yearsList.forEach(t => {
-      if (this.yearsMap.get(t.year)) {
-        this.yearsMap.set(t.year, Number(this.yearsMap.get(t.year)) + Number(t.value))
-      } else {
-        this.yearsMap.set(t.year, t.value);
+    this.classInstanceDTOs.forEach((ci, index, object) => {
+      if (ci.duration === null) {
+        object.splice(index, 1);
       }
     });
 
-    let comparisonYearDataFeuerwehr = this.yearsMap.get(this.comparisonYear);
-    let comparisonYearDataMusikverein = this.fakeDataMusic.find(d => {
-      return d.name === this.comparisonYear;
-    }).value;
-    let comparisonYearDataRk = this.fakeDataRk.find(d => {
-      return d.name === this.comparisonYear;
-    }).value;
-    let data = [];
-    let dataFinal = [];
+    this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
 
-    this.uniqueYears = [...new Set(yearsList.map(item => item.year))];
-    this.uniqueYears.forEach(curYear => {
+    this.generateComparisonChartData(this.comparisonYear);
+    this.generateEngagementData();
+  }
 
-      let currentYearDataFeuerwehr = this.yearsMap.get(curYear);
-      let currentYearDataMusikverein = this.fakeDataMusic.find(d => {
-        return d.name === curYear;
-      }).value;
-      let currentYearDataRk = this.fakeDataRk.find(d => {
-        return d.name === curYear;
-      }).value;
+  generateComparisonChartData(comparisonYear) {
+    this.tenantMap.forEach(tenant => {
 
-      data = [];
-      data.push({ name: 'Feuerwehr', value: currentYearDataFeuerwehr - comparisonYearDataFeuerwehr });
-      data.push({ name: 'Rotes Kreuz', value: currentYearDataRk - comparisonYearDataRk });
-      data.push({ name: 'Musikverein', value: currentYearDataMusikverein - comparisonYearDataMusikverein });
-      dataFinal.push({ name: curYear, series: data });
+      let yearData = this.classInstanceDTOs.filter(ci => {
+        return (new Date(ci.dateFrom).getFullYear() === comparisonYear);
+      }).filter(ci => {
+        return (ci.tenantId === tenant.id);
+      })
+
+      this.comparisonData.push({ name: tenant.name, value: yearData.length });
     });
 
-    this.comparisonData = [...dataFinal];
-    // /yearComparision
 
+    let finalData: any[] = [];
+
+    this.uniqueYears.forEach(curYear => {
+      let data: any[] = [];
+      this.tenantMap.forEach(tenant => {
+        let currentData = this.classInstanceDTOs.filter(ci => {
+          return new Date(ci.dateFrom).getFullYear() === curYear;
+        }).filter(ci => {
+          return ci.tenantId === tenant.id;
+        })
+
+        data.push({ name: tenant.name, value: currentData.length - this.comparisonData.find(d => d.name === tenant.name).value });
+      });
+      finalData.push({ name: curYear, series: data });
+    });
+
+    this.comparisonData = [...finalData];
+  }
+
+  generateEngagementData() {
+    this.tenantMap.forEach(tenant => {
+      let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
+        return ci.tenantId === tenant.id;
+      });
+
+      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0)
+      this.durationTotal.push({ name: tenant.name, value: duration });
+      this.numberTotal.push({ name: tenant.name, value: classInstancesTenant.length });
+    });
+
+
+    this.lastYear = new Date().getFullYear() - 1;
+    let classInstancesLastYear = this.classInstanceDTOs.filter(ci => {
+      return new Date(ci.dateFrom).getFullYear() === this.lastYear;
+    });
+
+    this.tenantMap.forEach(tenant => {
+      let classInstancesTenant = classInstancesLastYear.filter(ci => {
+        return ci.tenantId === tenant.id;
+      });
+
+      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0)
+      this.durationLastYear.push({ name: tenant.name, value: duration });
+      this.numberLastYear.push({ name: tenant.name, value: classInstancesTenant.length });
+    });
   }
 
   exportChart(source: string) {
@@ -355,7 +171,7 @@ export class ManagementSummaryComponent implements OnInit {
     }
   }
 
-   valueFormattingDuration(c) {
+  valueFormattingDuration(c) {
     return `${(c)} Stunden`;
   }
 
@@ -363,4 +179,14 @@ export class ManagementSummaryComponent implements OnInit {
     return `${(c)} Tätigkeiten`;
   }
 
+  getMemberSince(tenantId) {
+    let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
+      return ci.tenantId === tenantId
+    });
+
+    let uniqueYears = [...new Set(classInstancesTenant.map(item => new Date(item.dateFrom).getFullYear().toString()))];
+    uniqueYears.sort;
+
+    return uniqueYears[0];
+  }
 }

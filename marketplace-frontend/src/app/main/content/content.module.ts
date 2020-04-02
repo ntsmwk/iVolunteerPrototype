@@ -315,10 +315,16 @@ const routes: Route[] = [
     path: "main/tenant-form",
     loadChildren: () =>
       import("./_components/admin/tenant-form/tenant-form.module").then(
-        m => m.FuseTenantFormModule
-      ),
+        m => m.FuseTenantFormModule),
     canActivate: [TokenGuard, AdminGuard]
-  }
+  },
+  {
+    path: "main/localRepository",
+    loadChildren: () =>
+      import("./_components/volunteer/local-repository/local-repository.module").then(
+        m => m.LocalRepositoryModule),
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
 ];
 
 @NgModule({
@@ -336,4 +342,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent]
 })
-export class FuseContentModule {}
+export class FuseContentModule { }

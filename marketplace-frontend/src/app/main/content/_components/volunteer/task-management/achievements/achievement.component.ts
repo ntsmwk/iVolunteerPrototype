@@ -23,8 +23,6 @@ export class AchievementsComponent implements OnInit {
   classInstanceDTOs: ClassInstanceDTO[];
   filteredClassInstanceDTOs: ClassInstanceDTO[];
 
-  subscribedTenants: string[];
-
   tenantMap: Map<String, Tenant>;
   selectedTenants: String[];
 
@@ -77,7 +75,6 @@ export class AchievementsComponent implements OnInit {
     });
 
     this.filteredClassInstanceDTOs = this.classInstanceDTOs;
-
   }
 
 
