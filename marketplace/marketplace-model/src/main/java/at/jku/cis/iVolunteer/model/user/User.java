@@ -16,7 +16,7 @@ public abstract class User {
 	private String nickname;
 
 	private String position;
-	
+
 	private Date birthdate;
 
 	private byte[] image;

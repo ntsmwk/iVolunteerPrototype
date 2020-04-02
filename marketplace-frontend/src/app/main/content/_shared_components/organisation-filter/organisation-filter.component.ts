@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { CoreVolunteerService } from "../../_service/core-volunteer.service";
 import { CoreHelpSeekerService } from "../../_service/core-helpseeker.service";
 import { LoginService } from "../../_service/login.service";
@@ -20,6 +20,9 @@ export class OrganisationFilterComponent implements OnInit {
   tenants: Tenant[];
   selectedTenants: Tenant[] = [];
 
+  @Output()
+  tenantSelectionChanged = new EventEmitter();
+
   constructor(
     private coreVolunteerService: CoreVolunteerService,
     private coreHelpseekerService: CoreHelpSeekerService,
@@ -36,12 +39,6 @@ export class OrganisationFilterComponent implements OnInit {
     this.tenants = <Tenant[]>(
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
     );
-
-    // this.marketplace = (<Marketplace[]>(
-    //   await this.coreVolunteerService
-    //     .findRegisteredMarketplaces(this.volunteer.id)
-    //     .toPromise()
-    // )).filter(m => (m.name = "Marketplace 1"))[0];
   }
 
   getTenantImage(tenant: Tenant) {
@@ -57,6 +54,6 @@ export class OrganisationFilterComponent implements OnInit {
     } else {
       this.selectedTenants.push(tenant);
     }
-    console.error(this.selectedTenants);
+    this.tenantSelectionChanged.emit(this.selectedTenants);
   }
 }
