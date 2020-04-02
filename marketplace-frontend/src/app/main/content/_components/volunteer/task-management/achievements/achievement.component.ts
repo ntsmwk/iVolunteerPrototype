@@ -17,13 +17,11 @@ import { NgxSpinnerService } from "ngx-spinner";
   styleUrls: ["./achievement.component.scss"],
   animations: fuseAnimations
 })
-export class AchievementsFireBrigadeComponent implements OnInit {
+export class AchievementsComponent implements OnInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
   classInstanceDTOs: ClassInstanceDTO[];
   filteredClassInstanceDTOs: ClassInstanceDTO[];
-
-  subscribedTenants: string[];
 
   tenantMap: Map<String, Tenant>;
   selectedTenants: String[];
@@ -77,7 +75,6 @@ export class AchievementsFireBrigadeComponent implements OnInit {
     });
 
     this.filteredClassInstanceDTOs = this.classInstanceDTOs;
-
   }
 
 
