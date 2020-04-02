@@ -5,6 +5,8 @@ import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_di
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { NewClassConfigurationDialogData } from '../new-dialog/new-dialog.component';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 
 
 
@@ -19,6 +21,18 @@ export interface SubMenuItem {
   label: string;
   clickAction: string;
   icon: string;
+}
+
+export class TopMenuResponse {
+  action: string;
+  classConfiguration: ClassConfiguration;
+  classDefintions: ClassDefinition[];
+  relationships: Relationship[];
+
+  constructor() {
+    this.classDefintions = [];
+    this.relationships = [];
+  }
 }
 
 const rootMenuItems: RootMenuItem[] = [
@@ -62,8 +76,8 @@ const subMenuItems: SubMenuItem[] = [
 })
 export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
-  isLoaded = false;
-  menuOpen: false;
+  isLoaded: boolean;
+  menuOpen: boolean;
 
   rootMenuItems = rootMenuItems;
   subMenuItems = subMenuItems;
@@ -73,7 +87,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
-  @Input() eventResponseAction: string;
+  @Input() eventResponse: TopMenuResponse;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
 
@@ -145,12 +159,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    // this.dialogFactory.confirmationDialog("New", "Create New Editor? Unsaved changes will be lost...").then((cont: boolean) => {
-    //   if (cont) {
-    //     this.menuOptionClickedEvent.emit({ id: "editor_new" });
-    //   }
-    // });
-
     this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
@@ -158,11 +166,9 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
     });
-
   }
 
   openClicked(event: any, item: SubMenuItem) {
-
     this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
@@ -201,11 +207,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    const eventResponse = this.eventResponseAction;
-    this.eventResponseAction = undefined;
-    if (eventResponse == 'saveAsClicked') {
-      this[eventResponse](eventResponse, undefined);
+    const eventResponseAction = this.eventResponse.action;
+    this.eventResponse = new TopMenuResponse();
+    if (eventResponseAction === 'saveAsClicked') {
+      this[eventResponseAction](eventResponseAction, undefined);
+    } else if (eventResponseAction === 'test') {
+      console.log('test bla');
     }
+
+
   }
 
 

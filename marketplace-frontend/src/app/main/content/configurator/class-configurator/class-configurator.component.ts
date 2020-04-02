@@ -17,6 +17,7 @@ import { CConstants, CUtils } from './utils-and-constants';
 import { myMxCell } from '../myMxCell';
 import { ClassConfigurationService } from '../../_service/configuration/class-configuration.service';
 import { ClassConfiguration } from '../../_model/configurations';
+import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 
 declare var require: any;
 
@@ -69,7 +70,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   popupMenu: EditorPopupMenu;
 
-  eventResponseAction: string;
+  eventResponse: TopMenuResponse;
 
   rightSidebarVisible: boolean;
 
@@ -100,6 +101,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.hiddenEdges = [];
 
     this.selectionIndex = -1;
+    this.eventResponse = new TopMenuResponse();
   }
 
   fetchPropertyDefinitions() {
@@ -1000,11 +1002,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   // Menu functions
   async consumeMenuOptionClickedEvent(event: any) {
     console.log(event);
-    this.eventResponseAction = null;
+    this.eventResponse = new TopMenuResponse();
     switch (event.id) {
       case 'editor_save': {
         if (isNullOrUndefined(this.currentClassConfiguration)) {
-          this.eventResponseAction = 'saveAsClicked';
+          this.eventResponse.action = 'saveAsClicked';
         } else {
           if (!isNullOrUndefined(event.configurator)) {
             this.currentClassConfiguration = event.configurator;
@@ -1079,8 +1081,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   newGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
-
-
     this.configurableClasses = classDefinitions;
     this.relationships = relationships;
     this.currentClassConfiguration = classConfiguration;
@@ -1094,31 +1094,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     this.showServerContent(false);
     // this.collapseGraph();
-
-    // Promise.all([
-    //   // grab classDefinitionss from server
-    //   this.classDefinitionService.getClassDefinitionsById(this.marketplace, classConfiguration.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
-    //     if (!isNullOrUndefined(classDefinitions)) {
-    //       this.configurableClasses = classDefinitions;
-    //     } else {
-    //       this.configurableClasses = [];
-    //     }
-    //   }),
-
-    //   // grab relationships from Server
-    //   this.relationshipService.getRelationshipsById(this.marketplace, classConfiguration.relationshipIds).toPromise().then((relationships: Relationship[]) => {
-    //     if (!isNullOrUndefined(relationships)) {
-    //       this.relationships = relationships;
-    //     } else {
-    //       this.relationships = [];
-    //     }
-    //   })
-    // ]).then(() => {
-    //   // draw graph
-    //   this.showServerContent(false);
-    //   // this.collapseGraph();
-    // });
-
   }
 
   updateModel() {
