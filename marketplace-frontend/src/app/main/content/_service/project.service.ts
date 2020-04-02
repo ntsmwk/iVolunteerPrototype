@@ -1,18 +1,16 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import {isNullOrUndefined} from 'util';
+import { isNullOrUndefined } from "util";
 
-import {Project} from '../_model/project';
-import {Marketplace} from '../_model/marketplace';
+import { Project } from "../_model/project";
+import { Marketplace } from "../_model/marketplace";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ProjectService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/project`);
@@ -40,6 +38,4 @@ export class ProjectService {
     }
     return this.http.put(`${marketplace.url}/project/${project.id}`, project);
   }
-
-
 }

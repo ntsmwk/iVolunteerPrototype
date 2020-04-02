@@ -1,0 +1,25 @@
+<div style="font-size: 18px">
+  <div>Nach Organisation filtern</div>
+  <div fxLayout="row" fxLayoutAlign="start start">
+    <button
+      *ngFor="let t of tenants"
+      mat-stroked-button
+      type="button"
+      color="accent"
+      style="height: 60px; min-width: 60px; margin: 3px;"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      (click)="tenantClicked(t)"
+    >
+      <div
+        style=" position: relative; width: 50px; height: 50px; padding-top: 5px;"
+      >
+        <img
+          style="object-fit: contain; max-width: 100%; max-height: 100%"
+          [src]="getTenantImage(t)"
+        />
+      </div>
+    </button>
+    <div style="padding:3px"></div>
+  </div>
+</div>

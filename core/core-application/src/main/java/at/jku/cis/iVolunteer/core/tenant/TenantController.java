@@ -20,6 +20,7 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 public class TenantController {
 
 	@Autowired TenantRepository tenantRepository;
+	@Autowired TenantService tenantService;
 
 	@GetMapping("/name/{tenantName}")
 	public String getTenantByName(@PathVariable String tenantName) {
@@ -29,6 +30,11 @@ public class TenantController {
 	@GetMapping("/{tenantId}")
 	public Tenant getTenantById(@PathVariable String tenantId) {
 		return tenantRepository.findOne(tenantId);
+	}
+	
+	@GetMapping("/volunteer/{volunteerId}")
+	public List<Tenant> getTenantsByVolunteer(@PathVariable String volunteerId){
+		return tenantService.getTenantsByVolunteer(volunteerId);
 	}
 
 	@GetMapping("/marketplace/{marketplaceId}")
@@ -54,5 +60,4 @@ public class TenantController {
 		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
 		return tenantRepository.save(orginalTenant);
 	}
-	
 }

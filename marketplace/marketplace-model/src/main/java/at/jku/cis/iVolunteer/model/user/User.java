@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.model.user;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 
 public abstract class User {
@@ -14,6 +16,8 @@ public abstract class User {
 	private String nickname;
 
 	private String position;
+	
+	private Date birthdate;
 
 	private byte[] image;
 
@@ -100,5 +104,13 @@ public abstract class User {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 }

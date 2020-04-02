@@ -18,6 +18,10 @@ export class TenantService {
     return this.http.get(`/core/tenant/${tenantId}`);
   }
 
+  findByVolunteerId(volunteerId: string) {
+    return this.http.get(`/core/tenant/volunteer/${volunteerId}`);
+  }
+
   findByMarketplace(marketplaceId: string) {
     return this.http.get(`/core/tenant/marketplace/${marketplaceId}`);
   }
