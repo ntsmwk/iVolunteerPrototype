@@ -10,46 +10,40 @@
     </tr>
   </table>
 </div>
-<mat-dialog-content>
-  <table>
-    <tr width="200px">
-      <td width="200px">
-        <h2>zuletzt verwendet</h2>
-      </td>
-      <td style="padding-left: 50px">
-      </td>
-      <td>
-        <h2>mehr</h2>
-      </td>
-    <tr>
-      <td *ngIf=loaded>
-        <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="itemSelected($event, c)">
-            <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
-          </tr>
-        </table>
-      </td>
+<mat-dialog-content *ngIf="loaded">
 
-      <td *ngIf=!loaded>
-        accessing...
-      </td>
+  <div *ngIf="!browseMode">
+    <h2>Zuletzt Geändert</h2>
 
-      <td style="padding-left: 50px">
-      </td>
+    <table class="browse-table" cellspacing=0 cellpadding=3>
+      <col width="325px" />
+      <col width="125px" />
 
-      <td>
-        <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr class="entry">
-            <td style="padding-left: 50px; padding-right: 50px" class="right">Find...</td>
-          </tr>
-          <tr class="entry">
-            <td style="padding-left: 50px; padding-right: 50px" class="right">Import</td>
-          </tr>
+      <tr style="background-color: rgb(62, 125, 219); color: white;">
+        <th style="text-align: start" class="table-header-cell">Name</th>
+        <th style="text-align: start" class="table-header-cell">Geändert</th>
 
-        </table>
-      </td>
-    </tr>
-  </table>
+      </tr>
+      <tr *ngFor="let entry of recentClassConfigurations" class="table-row" (click)="handleRowClick(entry)">
+        <td style="overflow: hidden">{{entry.name}}</td>
+        <td style="overflow: hidden; font-size: 12px">{{entry.timestamp | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+      </tr>
+    </table>
+
+    <div class="pt-12">
+
+      <div class="browse-button">
+        <div class="browse-button-text" (click)="handleBrowseClick()">Durchsuchen</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="browseMode">
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
+    </browse-class-sub-dialog>
+  </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>

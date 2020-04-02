@@ -11,8 +11,9 @@ import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { isNull } from '@angular/compiler/src/output/output_ast';
+import { ClassBrowseSubDialogData } from '../browse-sub-dialog/browse-sub-dialog.component';
 
-export interface OpenDialogData {
+export interface OpenClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
   classDefinitions: ClassDefinition[];
   relationships: Relationship[];
@@ -20,15 +21,15 @@ export interface OpenDialogData {
 }
 
 @Component({
-  selector: 'open-dialog',
+  selector: 'open-class-configuration-dialog',
   templateUrl: './open-dialog.component.html',
   styleUrls: ['./open-dialog.component.scss']
 })
-export class OpenDialogComponent implements OnInit {
+export class OpenClassConfigurationDialogComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<OpenDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OpenDialogData,
+    public dialogRef: MatDialogRef<OpenClassConfigurationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: OpenClassConfigurationDialogData,
     private classConfigurationService: ClassConfigurationService,
     private classDefinitionService: ClassDefinitionService,
     private relationshipService: RelationshipService,
@@ -39,7 +40,10 @@ export class OpenDialogComponent implements OnInit {
   selected: string;
   allClassConfigurations: ClassConfiguration[];
   recentClassConfigurations: ClassConfiguration[];
-  loaded = false;
+  loaded: boolean;
+
+  browseMode: boolean;
+  browseDialogData: ClassBrowseSubDialogData;
 
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
@@ -59,7 +63,7 @@ export class OpenDialogComponent implements OnInit {
     });
   }
 
-  itemSelected(event: any, c: ClassConfiguration) {
+  handleRowClick(c: ClassConfiguration) {
     this.data.classConfiguration = c;
     this.data.classDefinitions = [];
     this.data.relationships = [];
@@ -79,6 +83,34 @@ export class OpenDialogComponent implements OnInit {
     ]).then(() => {
       this.dialogRef.close(this.data);
     });
+  }
+
+  handleBrowseClick() {
+    this.browseDialogData = new ClassBrowseSubDialogData();
+    this.browseDialogData.marketplace = this.data.marketplace;
+    this.browseDialogData.sourceReference = undefined;
+    this.browseDialogData.title = 'Klassen-Konfigurationen Durchsuchen';
+
+    this.browseDialogData.entries = [];
+
+    for (const classConfiguration of this.allClassConfigurations) {
+      this.browseDialogData.entries.push({ id: classConfiguration.id, name: classConfiguration.name, date: classConfiguration.timestamp });
+    }
+
+    this.browseMode = true;
+  }
+
+  handleReturnFromBrowse(event: { cancelled: boolean, entryId: string }) {
+    console.log(event);
+    if (!event.cancelled) {
+      const selectedClassConfiguration = this.allClassConfigurations.find(c => c.id === event.entryId);
+
+      this.handleRowClick(selectedClassConfiguration);
+    } else {
+      this.browseMode = false;
+    }
+
+
   }
 
   onNoClick(): void {

@@ -13,8 +13,8 @@ import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
 import { RelationshipDialogModule } from '../relationship-dialog/relationship-dialog.module';
 import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
-import { OpenDialogComponent } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
-import { OpenDialogModule } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.module';
+import { OpenClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
+import { OpenClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.module';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
 import { SaveAsDialogModule } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.module';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
@@ -44,7 +44,7 @@ import { NewClassConfigurationDialogComponent } from 'app/main/content/configura
 
     // Class Configurator
     NewClassConfigurationDialogModule,
-    OpenDialogModule,
+    OpenClassConfigurationDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
@@ -66,7 +66,7 @@ import { NewClassConfigurationDialogComponent } from 'app/main/content/configura
 
     // Class Configurator
     NewClassConfigurationDialogComponent,
-    OpenDialogComponent,
+    OpenClassConfigurationDialogComponent,
     SaveAsDialogComponent,
     ClassInstanceFormPreviewDialogComponent,
     ChangeIconDialogComponent,

@@ -8,7 +8,7 @@ import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dia
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { OpenDialogComponent, OpenDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
+import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
@@ -423,7 +423,7 @@ export class DialogFactoryDirective {
   }
 
   openConfiguratorDialog(marketplace: Marketplace) {
-    const dialogRef = this.dialog.open(OpenDialogComponent, {
+    const dialogRef = this.dialog.open(OpenClassConfigurationDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
@@ -432,8 +432,8 @@ export class DialogFactoryDirective {
       disableClose: true
     });
 
-    let returnData: OpenDialogData;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+    let returnData: OpenClassConfigurationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
       returnData = result;
     });
 
@@ -453,7 +453,7 @@ export class DialogFactoryDirective {
     });
 
     let classConfiguration: ClassConfiguration;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(result)) {
         classConfiguration = result.classConfiguration;
       }
@@ -475,7 +475,7 @@ export class DialogFactoryDirective {
     });
 
     let classConfiguration: ClassConfiguration;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
+    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(result)) {
         classConfiguration = result.classConfiguration;
       }

@@ -3,6 +3,7 @@
   <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-12">
     <h2 *ngIf="data.sourceReference === 'PRODUCER'">Konfiguration für Werkunternehmen wählen</h2>
     <h2 *ngIf="data.sourceReference === 'CONSUMER'">Konfiguration für Werkbesteller wählen</h2>
+    <h2 *ngIf="data.sourceReference === undefined">{{data.title}}</h2>
 
     <div></div>
     <div matTooltip="Zurück" (click)="handleBackClick()" class="back-button">
