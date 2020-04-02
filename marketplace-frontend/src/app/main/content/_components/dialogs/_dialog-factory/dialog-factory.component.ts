@@ -432,13 +432,13 @@ export class DialogFactoryDirective {
       disableClose: true
     });
 
-    let classConfiguration: ClassConfiguration;
+    let returnData: OpenDialogData;
     dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      classConfiguration = result.classConfiguration;
+      returnData = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return classConfiguration;
+      return returnData;
     });
   }
 

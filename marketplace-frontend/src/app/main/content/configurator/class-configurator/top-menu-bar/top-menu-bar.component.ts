@@ -165,7 +165,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
-        this.menuOptionClickedEvent.emit({ id: 'editor_open', configurator: ret });
+        this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }

@@ -1020,7 +1020,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.newGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
       } case 'editor_open': {
-        this.openGraph(event.configurator);
+        this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
       } case 'cancelled': {
         break;
@@ -1087,32 +1087,37 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.showServerContent(true);
   }
 
-  openGraph(classConfiguration: ClassConfiguration) {
+  openGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
     this.currentClassConfiguration = classConfiguration;
+    this.relationships = relationships;
+    this.configurableClasses = classDefinitions;
 
-    Promise.all([
-      // grab classDefinitionss from server
-      this.classDefinitionService.getClassDefinitionsById(this.marketplace, classConfiguration.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
-        if (!isNullOrUndefined(classDefinitions)) {
-          this.configurableClasses = classDefinitions;
-        } else {
-          this.configurableClasses = [];
-        }
-      }),
+    this.showServerContent(false);
+    // this.collapseGraph();
 
-      // grab relationships from Server
-      this.relationshipService.getRelationshipsById(this.marketplace, classConfiguration.relationshipIds).toPromise().then((relationships: Relationship[]) => {
-        if (!isNullOrUndefined(relationships)) {
-          this.relationships = relationships;
-        } else {
-          this.relationships = [];
-        }
-      })
-    ]).then(() => {
-      // draw graph
-      this.showServerContent(false);
-      // this.collapseGraph();
-    });
+    // Promise.all([
+    //   // grab classDefinitionss from server
+    //   this.classDefinitionService.getClassDefinitionsById(this.marketplace, classConfiguration.classDefinitionIds).toPromise().then((classDefinitions: ClassDefinition[]) => {
+    //     if (!isNullOrUndefined(classDefinitions)) {
+    //       this.configurableClasses = classDefinitions;
+    //     } else {
+    //       this.configurableClasses = [];
+    //     }
+    //   }),
+
+    //   // grab relationships from Server
+    //   this.relationshipService.getRelationshipsById(this.marketplace, classConfiguration.relationshipIds).toPromise().then((relationships: Relationship[]) => {
+    //     if (!isNullOrUndefined(relationships)) {
+    //       this.relationships = relationships;
+    //     } else {
+    //       this.relationships = [];
+    //     }
+    //   })
+    // ]).then(() => {
+    //   // draw graph
+    //   this.showServerContent(false);
+    //   // this.collapseGraph();
+    // });
 
   }
 
