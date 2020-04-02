@@ -227,11 +227,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   showServerContent(newGraph: boolean) {
     this.clearEditor();
-    if (newGraph) {
-      const standardObjects = CUtils.addStandardObjects(this.marketplace.id, this.objectIdService);
-      this.relationships = standardObjects.relationships;
-      this.configurableClasses = standardObjects.classDefintions;
-    }
+
 
     this.parseGraphContent();
     this.setLayout();
@@ -1003,6 +999,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   // Menu functions
   async consumeMenuOptionClickedEvent(event: any) {
+    console.log(event);
     this.eventResponseAction = null;
     switch (event.id) {
       case 'editor_save': {
@@ -1020,7 +1017,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.saveGraph();
         break;
       } case 'editor_new': {
-        this.newGraph();
+        this.newGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
       } case 'editor_open': {
         this.openGraph(event.configurator);
@@ -1081,10 +1078,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     });
   }
 
-  newGraph() {
-    this.configurableClasses = [];
-    this.relationships = [];
-    this.currentClassConfiguration = undefined;
+  newGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+
+
+    this.configurableClasses = classDefinitions;
+    this.relationships = relationships;
+    this.currentClassConfiguration = classConfiguration;
     this.showServerContent(true);
   }
 

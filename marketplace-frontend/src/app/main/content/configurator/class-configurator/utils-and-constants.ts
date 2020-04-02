@@ -1,7 +1,7 @@
 import { ClassDefinition, ClassArchetype } from '../../_model/meta/Class';
-import { Relationship, Inheritance, RelationshipType } from '../../_model/meta/Relationship';
+import { Relationship, RelationshipType } from '../../_model/meta/Relationship';
 import { ObjectIdService } from '../../_service/objectid.service.';
-import { ClassProperty, PropertyType } from '../../_model/meta/Property';
+import { isNullOrUndefined } from 'util';
 
 const sidebarPalettes = {
   id: 'building_blocks', label: 'Building Blocks',
@@ -136,21 +136,27 @@ export class CConstants {
 
 export class CUtils {
 
-  public static addStandardObjects(marketplaceId: string, objectIdService: ObjectIdService): { classDefintions: ClassDefinition[], relationships: Relationship[] } {
-    const classDefintions: ClassDefinition[] = [];
+  public static getStandardObjects(marketplaceId: string, objectIdService: ObjectIdService, rootLabel?: string): { classDefinitions: ClassDefinition[], relationships: Relationship[] } {
+    const classDefinitions: ClassDefinition[] = [];
     const relationships: Relationship[] = [];
 
 
     const root = new ClassDefinition();
     root.id = objectIdService.getNewObjectId();
     root.marketplaceId = marketplaceId;
-    root.name = '<Maschninen-\nname>';
+
+    if (!isNullOrUndefined(rootLabel)) {
+      root.name = rootLabel;
+    } else {
+      root.name = '<Maschninen-\nName>';
+    }
+
     root.root = true;
     root.classArchetype = ClassArchetype.ROOT;
 
     root.properties = [];
 
-    classDefintions.push(root);
+    classDefinitions.push(root);
 
     const flexProdclass = new ClassDefinition();
     flexProdclass.id = objectIdService.getNewObjectId();
@@ -161,7 +167,7 @@ export class CUtils {
 
     flexProdclass.properties = [];
 
-    classDefintions.push(flexProdclass);
+    classDefinitions.push(flexProdclass);
 
     const r1 = new Relationship();
     r1.id = objectIdService.getNewObjectId();
@@ -171,7 +177,7 @@ export class CUtils {
 
     relationships.push(r1);
 
-    return { classDefintions: classDefintions, relationships: relationships };
+    return { classDefinitions: classDefinitions, relationships: relationships };
 
   }
 }
