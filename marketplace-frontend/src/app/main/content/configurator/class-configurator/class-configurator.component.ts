@@ -1031,10 +1031,15 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       } case 'editor_save_as': {
         // this.currentClassConfiguration = event.configurator;
+        this.updateModel();
 
-        console.log("return save as")
-        console.log(event);
+        this.eventResponse.action = 'saveAs';
+        this.eventResponse.classConfiguration = this.currentClassConfiguration;
+        this.eventResponse.classDefintions = this.configurableClasses;
+        this.eventResponse.relationships = this.relationships;
 
+        this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
+        this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
         // this.saveGraph();
         break;
       } case 'editor_new': {

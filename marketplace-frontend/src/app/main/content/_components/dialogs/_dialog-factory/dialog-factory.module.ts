@@ -15,8 +15,8 @@ import { RelationshipDialogModule } from '../relationship-dialog/relationship-di
 import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
 import { OpenClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { OpenClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.module';
-import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
-import { SaveAsDialogModule } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.module';
+import { SaveClassConfigurationAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
+import { SaveClassConfigurationAsDialogModule } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.module';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
 import { ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
@@ -48,7 +48,7 @@ import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/c
     NewClassConfigurationDialogModule,
     OpenClassConfigurationDialogModule,
     ConfirmClassConfigurationSaveDialogModule,
-    SaveAsDialogModule,
+    SaveClassConfigurationAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
 
@@ -71,7 +71,7 @@ import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/c
     NewClassConfigurationDialogComponent,
     OpenClassConfigurationDialogComponent,
     ConfirmClassConfigurationSaveDialogComponent,
-    SaveAsDialogComponent,
+    SaveClassConfigurationAsDialogComponent,
     ClassInstanceFormPreviewDialogComponent,
     ChangeIconDialogComponent,
 

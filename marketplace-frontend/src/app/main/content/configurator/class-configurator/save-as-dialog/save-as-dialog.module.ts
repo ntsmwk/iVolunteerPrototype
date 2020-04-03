@@ -1,30 +1,34 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SaveAsDialogComponent } from './save-as-dialog.component';
+import { SaveClassConfigurationAsDialogComponent } from './save-as-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
+import { MatDividerModule } from '@angular/material';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+
     MatCommonModule,
-    MatTableModule,
+    FormsModule,
+    ReactiveFormsModule,
+
     MatDialogModule,
     MatButtonModule,
-    MatCheckboxModule,
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
 
-    
+    MatDividerModule,
+
+
   ],
-  declarations: [SaveAsDialogComponent],
-  exports: [SaveAsDialogComponent]
+  declarations: [SaveClassConfigurationAsDialogComponent],
+  exports: [SaveClassConfigurationAsDialogComponent]
 })
-export class SaveAsDialogModule { }
+export class SaveClassConfigurationAsDialogModule { }

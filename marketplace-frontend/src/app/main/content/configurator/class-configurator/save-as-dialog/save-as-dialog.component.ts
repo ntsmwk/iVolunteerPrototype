@@ -1,69 +1,64 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from 'util';
-import { Volunteer } from 'app/main/content/_model/volunteer';
 import { LoginService } from 'app/main/content/_service/login.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
+import { isNullOrUndefined } from 'util';
+import { FormControl, FormGroup } from '@angular/forms';
+import { CUtils } from '../utils-and-constants';
+import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
-export interface SaveAsDialogData {
+
+export interface SaveClassConfigurationAsDialogData {
   classConfiguration: ClassConfiguration;
+  classDefinitions: ClassDefinition[];
+  relationships: Relationship[];
+
+  deletedClassDefinitions: string[];
+  deletedRelationships: string[];
+
   marketplace: Marketplace;
-  userId: string;
+
 }
 
 @Component({
-  selector: 'save-as-dialog',
+  selector: 'save-class-configuration-as-dialog',
   templateUrl: './save-as-dialog.component.html',
   styleUrls: ['./save-as-dialog.component.scss']
 })
-export class SaveAsDialogComponent implements OnInit {
+export class SaveClassConfigurationAsDialogComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<SaveAsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SaveAsDialogData,
+    public dialogRef: MatDialogRef<SaveClassConfigurationAsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: SaveClassConfigurationAsDialogData,
     private classConfigurationService: ClassConfigurationService,
+    private relationshipsService: RelationshipService,
+    private classDefintionService: ClassDefinitionService,
+    private objectIdService: ObjectIdService,
     private loginService: LoginService,
   ) {
   }
 
-  selected: string;
-  classConfigurations: ClassConfiguration[];
-  recentClassConfigurations: ClassConfiguration[];
-  loaded = false;
+  dialogForm = new FormGroup({
+    label: new FormControl(''),
+    description: new FormControl('')
+  });
+
+  allClassConfigurations: ClassConfiguration[];
+  loaded: boolean;
+  browseMode: boolean;
+
 
   ngOnInit() {
-    console.log(this.data.marketplace);
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
 
-      this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
-        console.log('init dialog open');
-        console.log(classConfigurations);
-
-        this.classConfigurations = classConfigurations.filter(c => {
-          return c.userId === volunteer.id || isNullOrUndefined(c.userId);
-        });
-
-        console.log(this.classConfigurations);
-        if (this.classConfigurations.length > 5) {
-          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
-        }
-        this.recentClassConfigurations = this.classConfigurations;
-        this.loaded = true;
-
-
-      });
-    });
-  }
-
-  itemSelected(event: any, c: ClassConfiguration) {
-    console.log(event);
-    console.log(c);
-    this.data.classConfiguration = c;
-    // this.data = s;
-    this.dialogRef.close(this.data)
-
+    console.log(this.data);
+    this.loaded = true;
 
   }
 
@@ -71,8 +66,62 @@ export class SaveAsDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onOKClick() {
+
+    if (this.dialogForm.invalid) {
+      this.dialogForm.get('label').markAsTouched();
+      this.dialogForm.get('description').markAsTouched();
+    } else {
+
+      const classConfiguration = new ClassConfiguration();
+
+      classConfiguration.name = this.dialogForm.get('label').value;
+      classConfiguration.description = this.dialogForm.get('description').value;
+
+      classConfiguration.relationshipIds = this.data.relationships.map(r => r.id);
+      classConfiguration.classDefinitionIds = this.data.classDefinitions.map(c => c.id);
+
+      Promise.all([
+        this.relationshipsService.addAndUpdateRelationships(this.data.marketplace, this.data.relationships).toPromise().then((ret: Relationship) => {
+          console.log(ret);
+        }),
+        this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
+          console.log(ret);
+        })
+      ]).then(() => {
+        this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
+          console.log(ret);
+          this.data.classConfiguration = ret;
+        }).then(() => {
+          console.log('finished');
+
+          this.dialogRef.close(this.data);
+        });
+      });
 
 
+
+
+    }
+
+
+
+  }
+
+  handleBrowseClick() {
+    this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
+
+      this.allClassConfigurations = classConfigurations;
+
+
+      // ----DEBUG
+      // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+      // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
+      // ----
+
+      this.loaded = true;
+    });
+  }
 
 
 

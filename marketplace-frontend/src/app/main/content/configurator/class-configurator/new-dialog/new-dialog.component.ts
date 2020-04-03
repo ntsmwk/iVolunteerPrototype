@@ -72,16 +72,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  //TODO just use a fucking FormControl
-
   onOKClick() {
-
-
-    console.log(this.dialogForm.value);
-    console.log(this.dialogForm);
-
-
-
 
     if (this.dialogForm.invalid) {
       this.dialogForm.get('label').markAsTouched();
@@ -109,15 +100,17 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
           console.log(ret);
         }),
+      ]).then(() => {
+
         this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
           console.log(ret);
           this.data.classConfiguration = ret;
-        })
-      ]).then(() => {
-        console.log('finished');
 
-        this.dialogRef.close(this.data);
+        }).then(() => {
+          console.log('finished');
 
+          this.dialogRef.close(this.data);
+        });
       });
 
 

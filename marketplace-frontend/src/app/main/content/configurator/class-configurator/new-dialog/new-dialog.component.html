@@ -35,20 +35,9 @@
     </mat-form-field>
   </form>
 
-  <!-- <div *ngIf="showErrors" style="color: red">
-      <div *ngIf="!data.producerClassConfiguration"> Konfigurator für das Werkunternehmen wählen</div>
-      <div *ngIf="!data.consumerClassConfiguration"> Konfigurator für den Werkbesteller wählen</div>
-      <div *ngIf="data.consumerClassConfiguration === data.producerClassConfiguration"> Zwei verschiedene Konfiguratoren
-        wählen</div>
-      <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfiguratoren</div>
-    </div> -->
-
-
-
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button (click)="onOKClick(f)">OK</button>
+  <button mat-button (click)="onOKClick()">OK</button>
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>

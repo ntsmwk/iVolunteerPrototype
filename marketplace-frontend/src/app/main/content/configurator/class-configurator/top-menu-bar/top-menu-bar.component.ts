@@ -200,21 +200,39 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
         }
       });
-
-
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {
-    // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-    setTimeout(() => {
-      this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
+  private performSaveAs(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
+
+    console.log("perform save as");
+    this.dialogFactory
+      .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+      .then((ret) => {
         if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
+          //return
+          console.log(ret);
         } else {
           this.menuOptionClickedEvent.emit({ id: 'cancelled' });
         }
       });
-    });
+  }
+
+  saveAsClicked(event: any, item: SubMenuItem) {
+    this.menuOptionClickedEvent.emit({ id: 'editor_save_as' });
+
+    // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
+    // setTimeout(() => {
+    //   this.dialogFactory
+    //   .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+    //   .then((ret: any) => {
+    //     if (!isNullOrUndefined(ret)) {
+    //       this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
+    //     } else {
+    //       this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+    //     }
+    //   });
+    // });
   }
 
   createEditorClicked(event: any, item: SubMenuItem) {
@@ -231,19 +249,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.eventResponse = new TopMenuResponse();
     if (eventResponseAction === 'saveAsClicked') {
-      this[eventResponseAction](eventResponseAction, undefined);
+      // this[eventResponseAction](eventResponseAction, undefined);
     } else if (eventResponseAction === 'save') {
-      console.log("clicked save");
-      console.log(eventResponseAction);
-      console.log(eventClassConfiguration);
-      console.log(eventClassDefinitions);
-      console.log(eventRelationships);
-
       if (isNullOrUndefined(eventClassConfiguration)) {
 
       } else {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
       }
+    } else if (eventResponseAction === 'saveAs') {
+      this.performSaveAs(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
     }
 
 

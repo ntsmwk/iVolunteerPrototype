@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
 import { ClassInstance } from '../../../_model/meta/Class';
@@ -7,11 +6,8 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { isNullOrUndefined } from 'util';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SaveAsDialogComponent, SaveAsDialogData } from '../../class-configurator/save-as-dialog/save-as-dialog.component';
 
 export interface ClassInstanceFormPreviewDialogData {
   marketplace: Marketplace;

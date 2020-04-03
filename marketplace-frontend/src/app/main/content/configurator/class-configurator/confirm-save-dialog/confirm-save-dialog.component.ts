@@ -36,10 +36,7 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
   ) {
   }
 
-  selected: string;
-  classConfigurations: ClassConfiguration[];
-  recentClassConfigurations: ClassConfiguration[];
-  loaded = false;
+  loaded: boolean;
 
   ngOnInit() {
     console.log(this.data.marketplace);

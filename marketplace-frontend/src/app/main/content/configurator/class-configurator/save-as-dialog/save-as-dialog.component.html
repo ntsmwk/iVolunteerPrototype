@@ -10,49 +10,34 @@
     </tr>
   </table>
 </div>
-<mat-dialog-content>
-  <table>
-    <tr width="200px">
-      <td width="200px">
-        <h2>zuletzt verwendet</h2>
-      </td>
-      <td style="padding-left: 50px">
-      </td>
-      <td>
-        <h2>mehr</h2>
-      </td>
-    <tr>
-      <td *ngIf=loaded>
-        <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="itemSelected($event, c)">
-            <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
-          </tr>
-        </table>
-      </td>
+<mat-dialog-content *ngIf="loaded">
 
-      <td *ngIf=!loaded>
-        accessing...
-      </td>
+  <form [formGroup]="dialogForm">
+    <mat-label>Bezeichnung Konfiguration*</mat-label>
+    <mat-form-field style="width: 100%" appearance="outline" #label>
+      <input matInput name="label" class="form-control" formControlName="label" required />
+    </mat-form-field>
 
-      <td style="padding-left: 50px">
-      </td>
 
-      <td>
-        <table cellspacing=1 cellpadding=0 style="border-color: none">
-          <tr class="entry">
-            <td style="padding-left: 50px; padding-right: 50px" class="right">Find...</td>
-          </tr>
-          <tr class="entry">
-            <td style="padding-left: 50px; padding-right: 50px" class="right">Export</td>
-          </tr>
+    <mat-label>Beschreibung (optional)</mat-label>
+    <mat-form-field style="width: 100%" appearance="outline">
+      <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows=5
+        matAutosizeMaxRows=5></textarea>
+    </mat-form-field>
 
-        </table>
-      </td>
-    </tr>
-  </table>
+  </form>
+
+  <div class="pt-24"></div>
+
+  <div class="browse-button">
+    <div class="browse-button-text" (click)="handleBrowseClick()">Existierende Überschreiben</div>
+  </div>
 
 </mat-dialog-content>
+
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+
+  <button mat-button (click)="onOKClick()">OK</button>
+  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+
 </mat-dialog-actions>

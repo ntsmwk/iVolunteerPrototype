@@ -10,7 +10,7 @@ import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
 import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { SaveAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
+import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
@@ -474,25 +474,34 @@ export class DialogFactoryDirective {
     });
   }
 
-  openSaveConfiguratorDialog(marketplace: Marketplace) {
-    const dialogRef = this.dialog.open(SaveAsDialogComponent, {
+  openSaveClassConfigurationAsDialog(marketplace: Marketplace, classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefintions: string[], deletedRelationships: string[]) {
+
+    const dialogRef = this.dialog.open(SaveClassConfigurationAsDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, configurator: undefined },
+      data: {
+        classConfiguration: classConfiguration,
+        classDefinitions: classDefinitions,
+        relationships: relationships,
+
+        deletedClassDefinitions: deletedClassDefintions,
+        deletedRelationships: deletedRelationships,
+
+        marketplace: marketplace
+      },
       disableClose: true
     });
 
-    let classConfiguration: ClassConfiguration;
-    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        classConfiguration = result.classConfiguration;
-      }
+    let returnData: SaveClassConfigurationAsDialogData;
+    dialogRef.beforeClose().toPromise().then((result: SaveClassConfigurationAsDialogData) => {
+      returnData = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return classConfiguration;
+      return returnData;
     });
   }
 
