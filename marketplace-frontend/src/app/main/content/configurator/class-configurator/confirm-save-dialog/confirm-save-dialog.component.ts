@@ -2,12 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from 'util';
-import { Volunteer } from 'app/main/content/_model/volunteer';
-import { LoginService } from 'app/main/content/_service/login.service';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 export interface ConfirmClassConfigurationSaveDialogData {
   classConfiguration: ClassConfiguration;
@@ -31,7 +31,8 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmClassConfigurationSaveDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmClassConfigurationSaveDialogData,
     private classConfigurationService: ClassConfigurationService,
-    private loginService: LoginService,
+    private relationshipService: RelationshipService,
+    private classDefinitionService: ClassDefinitionService,
   ) {
   }
 
@@ -42,36 +43,45 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data.marketplace);
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
-
-      this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
-        console.log('init dialog open');
-        console.log(classConfigurations);
-
-        this.classConfigurations = classConfigurations.filter(c => {
-          return c.userId === volunteer.id || isNullOrUndefined(c.userId);
-        });
-
-        console.log(this.classConfigurations);
-        if (this.classConfigurations.length > 5) {
-          this.recentClassConfigurations = this.classConfigurations.slice(0, 5);
-        }
-        this.recentClassConfigurations = this.classConfigurations;
-        this.loaded = true;
 
 
-      });
-    });
   }
 
-  itemSelected(event: any, c: ClassConfiguration) {
-    console.log(event);
-    console.log(c);
-    this.data.classConfiguration = c;
-    // this.data = s;
-    this.dialogRef.close(this.data)
+  onOKClick() {
+    Promise.all([
+      this.relationshipService
+        .addAndUpdateRelationships(this.data.marketplace, this.data.relationships)
+        .toPromise().then((ret: Relationship[]) => {
+          this.data.relationships = ret;
+        }),
 
+      this.classDefinitionService
+        .addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions)
+        .toPromise().then((ret: ClassDefinition[]) => {
+          this.data.classDefinitions = ret;
+        }),
 
+      this.classDefinitionService
+        .deleteClassDefinitions(this.data.marketplace, this.data.deletedClassDefintions)
+        .toPromise().then((ret: any) => {
+          this.data.deletedClassDefintions = [];
+        }),
+
+      this.relationshipService
+        .deleteRelationships(this.data.marketplace, this.data.deletedRelationships)
+        .toPromise().then((ret: any) => {
+          this.data.deletedRelationships = [];
+        }),
+    ]).then(() => {
+      this.classConfigurationService
+        .saveClassConfiguration(this.data.marketplace, this.data.classConfiguration)
+        .toPromise().then((ret: ClassConfiguration) => {
+          this.data.classConfiguration = ret;
+
+        }).then(() => {
+          this.dialogRef.close(this.data);
+        });
+    });
   }
 
   onNoClick(): void {

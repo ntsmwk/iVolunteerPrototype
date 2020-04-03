@@ -1026,12 +1026,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
 
       } case 'editor_save_return': {
-
+        this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
 
       } case 'editor_save_as': {
-        this.currentClassConfiguration = event.configurator;
-        this.saveGraph();
+        // this.currentClassConfiguration = event.configurator;
+
+        console.log("return save as")
+        console.log(event);
+
+        // this.saveGraph();
         break;
       } case 'editor_new': {
         this.newGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
@@ -1046,54 +1050,54 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     return;
   }
 
-  async saveGraph() {
-    this.updateModel();
-    let relSaveSuccess: boolean;
-    let classSaveSuccess: boolean;
-    let deletedClassSaveSuccess: boolean;
-    let deletedRelSaveSuccess: boolean;
-    let configuratorSaveSuccess: boolean;
+  // async saveGraph() {
+  //   this.updateModel();
+  //   let relSaveSuccess: boolean;
+  //   let classSaveSuccess: boolean;
+  //   let deletedClassSaveSuccess: boolean;
+  //   let deletedRelSaveSuccess: boolean;
+  //   let configuratorSaveSuccess: boolean;
 
-    const configurator = this.currentClassConfiguration;
-    Promise.all([
-      this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
-        relSaveSuccess = !isNullOrUndefined(result);
-      }),
-      this.classDefinitionService.addOrUpdateClassDefintions(this.marketplace, this.configurableClasses).toPromise().then((result: any) => {
-        classSaveSuccess = !isNullOrUndefined(result);
-      }),
-      this.classDefinitionService.deleteClassDefinitions(this.marketplace, this.deletedClassIds).toPromise().then((result: any) => {
-        this.deletedClassIds = [];
-        deletedClassSaveSuccess = true;
-      }),
-      this.relationshipService.deleteRelationships(this.marketplace, this.deletedRelationshipIds).toPromise().then((result: any) => {
-        this.deletedRelationshipIds = [];
-        deletedRelSaveSuccess = true;
-      }),
+  //   const configurator = this.currentClassConfiguration;
+  //   // Promise.all([
+  //   //   this.relationshipService.addAndUpdateRelationships(this.marketplace, this.relationships).toPromise().then((result: any) => {
+  //   //     relSaveSuccess = !isNullOrUndefined(result);
+  //   //   }),
+  //   //   this.classDefinitionService.addOrUpdateClassDefintions(this.marketplace, this.configurableClasses).toPromise().then((result: any) => {
+  //   //     classSaveSuccess = !isNullOrUndefined(result);
+  //   //   }),
+  //   //   this.classDefinitionService.deleteClassDefinitions(this.marketplace, this.deletedClassIds).toPromise().then((result: any) => {
+  //   //     this.deletedClassIds = [];
+  //   //     deletedClassSaveSuccess = true;
+  //   //   }),
+  //   //   this.relationshipService.deleteRelationships(this.marketplace, this.deletedRelationshipIds).toPromise().then((result: any) => {
+  //   //     this.deletedRelationshipIds = [];
+  //   //     deletedRelSaveSuccess = true;
+  //   //   }),
 
-    ]).then(() => {
-      this.classConfigurationService.saveClassConfiguration(this.marketplace, configurator).toPromise().then((result: any) => {
-        configuratorSaveSuccess = !isNullOrUndefined(result);
+  //   // ]).then(() => {
+  //   //   this.classConfigurationService.saveClassConfiguration(this.marketplace, configurator).toPromise().then((result: any) => {
+  //   //     configuratorSaveSuccess = !isNullOrUndefined(result);
 
-      }).then(() => {
-        let snackBarMessage: string;
-        this.saveDone = true;
+  //   //   }).then(() => {
+  //   //     let snackBarMessage: string;
+  //   //     this.saveDone = true;
 
-        if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
-          snackBarMessage = 'save successful!';
-        } else {
-          snackBarMessage = 'save failed!';
-        }
+  //   //     if (relSaveSuccess && classSaveSuccess && deletedClassSaveSuccess && deletedRelSaveSuccess && configuratorSaveSuccess) {
+  //   //       snackBarMessage = 'save successful!';
+  //   //     } else {
+  //   //       snackBarMessage = 'save failed!';
+  //   //     }
 
-        const snackbarRef = this.snackBar.open(snackBarMessage, 'dismiss', {
-          duration: 5000
-        });
-        snackbarRef.onAction().toPromise().then(() => {
-          this.snackBar.dismiss();
-        });
-      });
-    });
-  }
+  //   //     const snackbarRef = this.snackBar.open(snackBarMessage, 'dismiss', {
+  //   //       duration: 5000
+  //   //     });
+  //   //     snackbarRef.onAction().toPromise().then(() => {
+  //   //       this.snackBar.dismiss();
+  //   //     });
+  //   //   });
+  //   // });
+  // }
 
   newGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
     this.configurableClasses = classDefinitions;
@@ -1106,6 +1110,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.currentClassConfiguration = classConfiguration;
     this.relationships = relationships;
     this.configurableClasses = classDefinitions;
+    this.deletedClassIds = [];
+    this.deletedRelationshipIds = [];
 
     this.showServerContent(false);
     // this.collapseGraph();

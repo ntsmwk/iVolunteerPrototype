@@ -189,12 +189,19 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   private performSave(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
     relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
 
-    this.dialogFactory.confirmationDialog('Wirklich Speichern?', 'Die existierende Konfiguration wird überschrieben, erstellte Matching-Konfigurationen funktionieren möglicherweise nicht mehr.').then((result: boolean) => {
-      if (result) {
-      } else {
-        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-      }
-    });
+    this.dialogFactory
+      .openSaveConfirmationDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+      .then((ret) => {
+        if (!isNullOrUndefined(ret)) {
+          //return
+
+          this.menuOptionClickedEvent.emit({ id: 'editor_save_return', payload: ret });
+        } else {
+          this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+        }
+      });
+
+
   }
 
   saveAsClicked(event: any, item: SubMenuItem) {

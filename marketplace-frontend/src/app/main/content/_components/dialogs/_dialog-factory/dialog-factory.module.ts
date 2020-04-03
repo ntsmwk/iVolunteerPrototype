@@ -29,6 +29,8 @@ import { DeleteMatchingDialogComponent } from 'app/main/content/configurator/mat
 import { DeleteMatchingDialogModule } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.module';
 import { NewClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.module';
 import { NewClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
+import { ConfirmClassConfigurationSaveDialogModule } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.module';
+import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
 
 
 @NgModule({
@@ -45,6 +47,7 @@ import { NewClassConfigurationDialogComponent } from 'app/main/content/configura
     // Class Configurator
     NewClassConfigurationDialogModule,
     OpenClassConfigurationDialogModule,
+    ConfirmClassConfigurationSaveDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
@@ -67,6 +70,7 @@ import { NewClassConfigurationDialogComponent } from 'app/main/content/configura
     // Class Configurator
     NewClassConfigurationDialogComponent,
     OpenClassConfigurationDialogComponent,
+    ConfirmClassConfigurationSaveDialogComponent,
     SaveAsDialogComponent,
     ClassInstanceFormPreviewDialogComponent,
     ChangeIconDialogComponent,

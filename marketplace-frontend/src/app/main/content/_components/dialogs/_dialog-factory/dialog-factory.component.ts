@@ -18,8 +18,9 @@ import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/co
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
 import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
 import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
-import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
-import { ConfirmClassConfigurationSaveDialogModule } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/save-as-dialog.module';
+import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -444,23 +445,32 @@ export class DialogFactoryDirective {
     });
   }
 
-  openSaveConfirmationDialog(title: string, description: string) {
+  openSaveConfirmationDialog(marketplace: Marketplace, classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefintions: string[], deletedRelationships: string[]) {
+
     const dialogRef = this.dialog.open(ConfirmClassConfigurationSaveDialogComponent, {
       width: '500px',
-      data: { title: title, description: description }
-    });
+      data: {
+        classConfiguration: classConfiguration,
+        classDefinitions: classDefinitions,
+        relationships: relationships,
 
-    let ret = false;
+        deletedClassDefintions: deletedClassDefintions,
+        deletedRelationships: deletedRelationships,
 
-
-    dialogRef.beforeClose().toPromise().then((result: boolean) => {
-      if (result) {
-        ret = result;
+        marketplace: marketplace
       }
     });
 
+    let returnData: ConfirmClassConfigurationSaveDialogData;
+
+
+    dialogRef.beforeClose().toPromise().then((result: ConfirmClassConfigurationSaveDialogData) => {
+      returnData = result;
+    });
+
     return dialogRef.afterClosed().toPromise().then(() => {
-      return ret;
+      return returnData;
     });
   }
 
