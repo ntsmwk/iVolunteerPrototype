@@ -56,4 +56,8 @@ export class OrganisationFilterComponent implements OnInit {
     }
     this.tenantSelectionChanged.emit(this.selectedTenants);
   }
+
+  tenantSelected(tenant: Tenant) {
+    return this.selectedTenants.findIndex(t => t.id === tenant.id) >= 0;
+  }
 }

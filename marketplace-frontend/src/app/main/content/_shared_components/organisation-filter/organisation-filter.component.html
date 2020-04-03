@@ -9,6 +9,9 @@
       style="height: 60px; min-width: 60px; margin: 3px;"
       fxLayout="row"
       fxLayoutAlign="start center"
+      [ngStyle]="{
+        'background-color': tenantSelected(t) ? '#4863A0' : 'white'
+      }"
       (click)="tenantClicked(t)"
     >
       <div
