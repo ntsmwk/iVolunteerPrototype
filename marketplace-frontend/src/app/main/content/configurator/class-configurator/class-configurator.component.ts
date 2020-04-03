@@ -1005,15 +1005,30 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.eventResponse = new TopMenuResponse();
     switch (event.id) {
       case 'editor_save': {
-        if (isNullOrUndefined(this.currentClassConfiguration)) {
-          this.eventResponse.action = 'saveAsClicked';
-        } else {
-          if (!isNullOrUndefined(event.configurator)) {
-            this.currentClassConfiguration = event.configurator;
-          }
-          this.saveGraph();
-        }
+        this.updateModel();
+
+        this.eventResponse.action = 'save';
+        this.eventResponse.classConfiguration = this.currentClassConfiguration;
+        this.eventResponse.classDefintions = this.configurableClasses;
+        this.eventResponse.relationships = this.relationships;
+
+        this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
+        this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
+
+        // if (isNullOrUndefined(this.currentClassConfiguration)) {
+        //   this.eventResponse.action = 'saveAsClicked';
+        // } else {
+        //   if (!isNullOrUndefined(event.configurator)) {
+        //     this.currentClassConfiguration = event.configurator;
+        //   }
+        //   this.saveGraph();
+        // }
         break;
+
+      } case 'editor_save_return': {
+
+        break;
+
       } case 'editor_save_as': {
         this.currentClassConfiguration = event.configurator;
         this.saveGraph();

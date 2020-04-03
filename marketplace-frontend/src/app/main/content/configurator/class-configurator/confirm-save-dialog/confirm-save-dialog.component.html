@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Wirklich Speichern?</h1>
+<mat-dialog-content>
+
+  Die existierende Konfiguration wird überschrieben. Erstellte Matching-Konfigurationen funktionieren möglicherweise
+  nicht mehr.
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="undefined">No</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button [mat-dialog-close]="true">Yes</button>
+</mat-dialog-actions>

@@ -29,6 +29,9 @@ export class TopMenuResponse {
   classDefintions: ClassDefinition[];
   relationships: Relationship[];
 
+  deletedClassDefinitions?: string[];
+  deletedRelationships?: string[];
+
   constructor() {
     this.classDefintions = [];
     this.relationships = [];
@@ -180,9 +183,14 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   saveClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.confirmationDialog('Save', 'Are you sure you want to save? The existing model will be overidden...').then((result: boolean) => {
+    this.menuOptionClickedEvent.emit({ id: 'editor_save' });
+  }
+
+  private performSave(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
+
+    this.dialogFactory.confirmationDialog('Wirklich Speichern?', 'Die existierende Konfiguration wird überschrieben, erstellte Matching-Konfigurationen funktionieren möglicherweise nicht mehr.').then((result: boolean) => {
       if (result) {
-        this.menuOptionClickedEvent.emit({ id: 'editor_save' });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
@@ -208,11 +216,27 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges() {
     const eventResponseAction = this.eventResponse.action;
+    const eventClassConfiguration = this.eventResponse.classConfiguration;
+    const eventClassDefinitions = this.eventResponse.classDefintions;
+    const eventRelationships = this.eventResponse.relationships;
+    const eventDeletedClassDefinitions = this.eventResponse.deletedClassDefinitions;
+    const eventDeletedRelationships = this.eventResponse.deletedRelationships;
+
     this.eventResponse = new TopMenuResponse();
     if (eventResponseAction === 'saveAsClicked') {
       this[eventResponseAction](eventResponseAction, undefined);
-    } else if (eventResponseAction === 'test') {
-      console.log('test bla');
+    } else if (eventResponseAction === 'save') {
+      console.log("clicked save");
+      console.log(eventResponseAction);
+      console.log(eventClassConfiguration);
+      console.log(eventClassDefinitions);
+      console.log(eventRelationships);
+
+      if (isNullOrUndefined(eventClassConfiguration)) {
+
+      } else {
+        this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
+      }
     }
 
 
