@@ -50,7 +50,8 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 1, label: 'Neue Konfiguration', clickAction: 'newClicked', icon: undefined },
   { rootId: 1, id: 2, label: 'Konfiguration öffnen', clickAction: 'openClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
-  { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
+  // { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Konfiguration löschen', clickAction: 'deleteClicked', icon: undefined },
 
   { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
 
@@ -202,38 +203,45 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
       });
   }
 
-  private performSaveAs(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
-    relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
+  deleteClicked(event: any, item: SubMenuItem) {
+    console.log("delete clicked");
+    console.log(event);
+    console.log(item);
 
-    console.log("perform save as");
-    this.dialogFactory
-      .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
-      .then((ret) => {
-        if (!isNullOrUndefined(ret)) {
-          //return
-          console.log(ret);
-        } else {
-          this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-        }
-      });
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {
-    this.menuOptionClickedEvent.emit({ id: 'editor_save_as' });
+  // private performSaveAs(classConfiguration: ClassConfiguration, classDefintions: ClassDefinition[],
+  //   relationships: Relationship[], deletedClassDefinitions: string[], deletedRelationships: string[]) {
 
-    // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-    // setTimeout(() => {
-    //   this.dialogFactory
-    //   .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
-    //   .then((ret: any) => {
-    //     if (!isNullOrUndefined(ret)) {
-    //       this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
-    //     } else {
-    //       this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-    //     }
-    //   });
-    // });
-  }
+  //   console.log("perform save as");
+  //   this.dialogFactory
+  //     .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+  //     .then((ret) => {
+  //       if (!isNullOrUndefined(ret)) {
+  //         //return
+  //         console.log(ret);
+  //       } else {
+  //         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+  //       }
+  //     });
+  // }
+
+  // saveAsClicked(event: any, item: SubMenuItem) {
+  //   this.menuOptionClickedEvent.emit({ id: 'editor_save_as' });
+
+  //   // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
+  //   // setTimeout(() => {
+  //   //   this.dialogFactory
+  //   //   .openSaveClassConfigurationAsDialog(this.marketplace, classConfiguration, classDefintions, relationships, deletedClassDefinitions, deletedRelationships)
+  //   //   .then((ret: any) => {
+  //   //     if (!isNullOrUndefined(ret)) {
+  //   //       this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
+  //   //     } else {
+  //   //       this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+  //   //     }
+  //   //   });
+  //   // });
+  // }
 
   createEditorClicked(event: any, item: SubMenuItem) {
 
@@ -257,7 +265,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
         this.performSave(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
       }
     } else if (eventResponseAction === 'saveAs') {
-      this.performSaveAs(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
+      // this.performSaveAs(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
     }
 
 

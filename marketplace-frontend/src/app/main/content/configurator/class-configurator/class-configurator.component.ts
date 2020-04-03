@@ -1031,22 +1031,26 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       } case 'editor_save_as': {
         // this.currentClassConfiguration = event.configurator;
-        this.updateModel();
+        // this.updateModel();
 
-        this.eventResponse.action = 'saveAs';
-        this.eventResponse.classConfiguration = this.currentClassConfiguration;
-        this.eventResponse.classDefintions = this.configurableClasses;
-        this.eventResponse.relationships = this.relationships;
+        // this.eventResponse.action = 'saveAs';
+        // this.eventResponse.classConfiguration = this.currentClassConfiguration;
+        // this.eventResponse.classDefintions = this.configurableClasses;
+        // this.eventResponse.relationships = this.relationships;
 
-        this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
-        this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
+        // this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
+        // this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
         // this.saveGraph();
+        console.log('not implemented');
         break;
       } case 'editor_new': {
         this.newGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
       } case 'editor_open': {
         this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
+        break;
+      } case 'editor_delete': {
+        console.log('delete');
         break;
       } case 'cancelled': {
         break;
