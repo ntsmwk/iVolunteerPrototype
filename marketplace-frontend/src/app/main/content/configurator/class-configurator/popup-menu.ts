@@ -153,7 +153,7 @@ export class EditorPopupMenu {
             outer.editorInstance.deletedRelationshipIds.push(deleted.pop().id);
 
             // remove relationship
-          } else if (cell.cellType === 'association' || cell.cellType === 'inheritance') {
+          } else if (cell.cellType === 'association' || cell.cellType === 'inheritance' || cell.cellType === 'aggregation') {
             graph.getModel().remove(cell);
 
             const relationshipIndex = outer.editorInstance.relationships.findIndex((c: Relationship) => {
