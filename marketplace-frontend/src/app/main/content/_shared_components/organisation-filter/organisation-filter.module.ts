@@ -4,10 +4,10 @@ import { OrganisationFilterComponent } from "./organisation-filter.component";
 import { ImageService } from "../../_service/image.service";
 import { CommonModule } from "@angular/common";
 import { FuseSharedModule } from "@fuse/shared.module";
-import { MatButtonModule } from "@angular/material";
+import { MatButtonModule, MatTooltipModule } from "@angular/material";
 
 @NgModule({
-  imports: [CommonModule, FuseSharedModule, MatButtonModule],
+  imports: [CommonModule, FuseSharedModule, MatButtonModule, MatTooltipModule],
   exports: [OrganisationFilterComponent],
   declarations: [OrganisationFilterComponent],
   providers: []
