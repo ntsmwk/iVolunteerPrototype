@@ -41,8 +41,10 @@ mat-dialog-content {
     .table-row {
         min-height: 0px;
         padding-top: 4px;
-        padding-bottom: 4px;
+        padding-bottom: 4px;        
         cursor: pointer;
+
+        z-index: 4;
     }
 
     .table-row:hover {
@@ -54,10 +56,19 @@ mat-dialog-content {
       position: -webkit-sticky;
       position: sticky;
       top: 0;
-      z-index: 2;
+      z-index: 5;
 
       background-color: rgb(62, 125, 219);
 
+      text-align: start;
+
+    }
+
+    .table-entry-cell {
+      overflow: hidden;
+    }
+    .table-date-entry-cell {
+      font-size: 12px;
     }
   }
 }

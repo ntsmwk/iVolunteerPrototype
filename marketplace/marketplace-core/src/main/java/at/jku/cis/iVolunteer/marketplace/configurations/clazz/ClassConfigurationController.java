@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeDocument;
 import at.jku.cis.iVolunteer.marketplace.fake.IsSunburstFakeRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
@@ -30,6 +32,8 @@ public class ClassConfigurationController {
 	@Autowired private CollectionService collectionService;
 	
 	@Autowired private MatchingCollectorConfigurationRepository matchingCollectorConfigurationRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
 	
 	
 	
@@ -104,12 +108,18 @@ public class ClassConfigurationController {
 	
 	@DeleteMapping("class-configuration/{id}/delete")
 	void deleteClassConfiguration(@PathVariable("id") String id) {
+		System.out.println("Delete Config with id " + id);
+		ClassConfiguration classConfiguration= classConfigurationRepository.findOne(id);
+		
+		classConfiguration.getClassDefinitionIds().forEach(classDefinitionRepository::delete);
+		classConfiguration.getRelationshipIds().forEach(relationshipRepository::delete);
+		
 		classConfigurationRepository.delete(id);
 	}
 	
 	@PutMapping("class-configuration/delete-multiple")
 	List<ClassConfiguration> deleteMultipleClassConfigurations(@RequestBody List<String> ids) {
-		ids.forEach(this.classConfigurationRepository::delete);
+		ids.forEach(this::deleteClassConfiguration);
 		return this.classConfigurationRepository.findAll();
 	}
 	

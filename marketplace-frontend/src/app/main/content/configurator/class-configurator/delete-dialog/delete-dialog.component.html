@@ -23,20 +23,20 @@
       <col width="125px" />
 
       <tr style="background-color: rgb(62, 125, 219); color: white;">
-        <th></th>
-        <th style="text-align: start" class="table-header-cell">Name</th>
-        <th style="text-align: start" class="table-header-cell">Datum</th>
+        <th class="table-header-cell"></th>
+        <th class="table-header-cell">Name</th>
+        <th class="table-header-cell">Datum</th>
 
       </tr>
       <tr *ngFor="let entry of allClassConfigurations; let i = index" class="table-row"
         (click)="handleCheckboxRowClicked($event, i, entry)">
-        <td style="overflow: hidden">
+        <td class="table-entry-cell">
           <mat-checkbox [(ngModel)]="checkboxStates[i]" (change)="handleCheckboxClicked($event.checked, entry)"
             (click)="$event.stopPropagation();">
           </mat-checkbox>
         </td>
-        <td style="overflow: hidden">{{entry.name}}</td>
-        <td style="overflow: hidden; font-size: 12px">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+        <td class="table-entry-cell">{{entry.name}}</td>
+        <td class="table-date-entry-cell">{{entry.timestamp | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
       </tr>
     </table>
 
