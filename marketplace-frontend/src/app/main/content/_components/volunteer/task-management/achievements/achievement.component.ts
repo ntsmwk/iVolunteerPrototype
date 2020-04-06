@@ -6,9 +6,9 @@ import { Volunteer } from 'app/main/content/_model/volunteer';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { NgxSpinnerService } from "ngx-spinner";
+import { isNullOrUndefined } from "util";
 
 
 @Component({
@@ -23,14 +23,12 @@ export class AchievementsComponent implements OnInit {
   classInstanceDTOs: ClassInstanceDTO[];
   filteredClassInstanceDTOs: ClassInstanceDTO[];
 
-  tenantMap: Map<String, Tenant>;
-  selectedTenants: String[];
+  selectedTenants: Tenant[];
 
   constructor(
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private tenantService: TenantService,
     private spinner: NgxSpinnerService
   ) { }
 
@@ -41,6 +39,7 @@ export class AchievementsComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
 
+    this.classInstanceDTOs = [];
     this.filteredClassInstanceDTOs = [];
     this.selectedTenants = [];
 
@@ -49,20 +48,15 @@ export class AchievementsComponent implements OnInit {
       await this.loginService.getLoggedIn().toPromise()
     );
 
-    this.tenantMap = new Map<String, Tenant>();
-    for (let tenantId of this.volunteer.subscribedTenants) {
-      let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
-      this.tenantMap.set(tenantId, tenant);
-
-      this.selectedTenants.push(tenantId);
-    }
-
     let marketplaces = <Marketplace[]>(
       await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
     );
 
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
+
+    if(!isNullOrUndefined(this.marketplace)) {
+
 
     this.classInstanceDTOs = <ClassInstanceDTO[]>(
       await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
@@ -74,21 +68,18 @@ export class AchievementsComponent implements OnInit {
       }
     });
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs;
+    this.tenantSelectionChanged(this.selectedTenants);
+
   }
 
+  }
 
-  onOrganisationFilterChange(event) {
-    if (event.checked) {
-      this.selectedTenants.push(event.source.value);
-    } else {
-      this.selectedTenants.splice(this.selectedTenants.indexOf(event.source.value), 1);
-    }
+  tenantSelectionChanged(selectedTenants: Tenant[]) {
+    this.selectedTenants = selectedTenants;
 
     this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-      return this.selectedTenants.indexOf(ci.tenantId) > -1;
+      return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
-
   }
 
   showSpinner() {

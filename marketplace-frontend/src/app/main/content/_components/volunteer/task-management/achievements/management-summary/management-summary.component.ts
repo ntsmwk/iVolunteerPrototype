@@ -9,6 +9,8 @@ import { StoredChart } from '../../../../../_model/stored-chart';
 import { TenantService } from '../../../../../_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { isNullOrUndefined } from "util";
+
 
 @Component({
   selector: 'fuse-management-summary',
@@ -67,6 +69,8 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonYear = 2019;
     this.classInstanceDTOs = [];
 
+    this.marketplace = [];
+
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -84,20 +88,24 @@ export class ManagementSummaryComponent implements OnInit {
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
 
-    this.classInstanceDTOs = <ClassInstanceDTO[]>(
-      await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-    );
+    if(!isNullOrUndefined(this.marketplace)) {
 
-    this.classInstanceDTOs.forEach((ci, index, object) => {
-      if (ci.duration === null) {
-        object.splice(index, 1);
-      }
-    });
+      this.classInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
+      );
+  
+      this.classInstanceDTOs.forEach((ci, index, object) => {
+        if (ci.duration === null) {
+          object.splice(index, 1);
+        }
+      });
+  
+      this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+  
+      this.generateComparisonChartData(this.comparisonYear);
+      this.generateEngagementData();
+    }
 
-    this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
-
-    this.generateComparisonChartData(this.comparisonYear);
-    this.generateEngagementData();
   }
 
   generateComparisonChartData(comparisonYear) {

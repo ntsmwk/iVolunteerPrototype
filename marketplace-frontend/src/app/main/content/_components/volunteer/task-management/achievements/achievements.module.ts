@@ -48,6 +48,7 @@ import { SunburstTableComponent } from './tasks/sunburst-table/sunburst-table.co
 import { TimelineFilterComponent } from './tasks/timeline-filter/timeline-filter.component';
 import { DonutComponent } from './tasks/donut/donut.component';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { OrganisationFilterModule } from 'app/main/content/_shared_components/organisation-filter/organisation-filter.module';
 
 
 const routes = [{ path: "", component: AchievementsComponent }];
@@ -104,6 +105,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     NgxChartsModule,
     HighchartsChartModule,
     ShareMenuModule,
+    OrganisationFilterModule,
 
     NgxSpinnerModule
   ]
