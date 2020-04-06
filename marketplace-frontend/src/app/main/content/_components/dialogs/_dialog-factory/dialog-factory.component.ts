@@ -21,6 +21,7 @@ import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData }
 import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
 import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { DeleteClassConfigurationDialogData, DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -497,6 +498,26 @@ export class DialogFactoryDirective {
 
     let returnData: SaveClassConfigurationAsDialogData;
     dialogRef.beforeClose().toPromise().then((result: SaveClassConfigurationAsDialogData) => {
+      returnData = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnData;
+    });
+  }
+
+  openDeleteClassConfiguratorDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(DeleteClassConfigurationDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, configurator: undefined },
+      disableClose: true
+    });
+
+    let returnData: DeleteClassConfigurationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: DeleteClassConfigurationDialogData) => {
       returnData = result;
     });
 

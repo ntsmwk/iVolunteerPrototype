@@ -31,6 +31,8 @@ import { NewClassConfigurationDialogModule } from 'app/main/content/configurator
 import { NewClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
 import { ConfirmClassConfigurationSaveDialogModule } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.module';
 import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
+import { DeleteClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.module';
+import { DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
@@ -49,6 +51,7 @@ import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/c
     OpenClassConfigurationDialogModule,
     ConfirmClassConfigurationSaveDialogModule,
     SaveClassConfigurationAsDialogModule,
+    DeleteClassConfigurationDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
 
@@ -73,6 +76,7 @@ import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/c
     ConfirmClassConfigurationSaveDialogComponent,
     SaveClassConfigurationAsDialogComponent,
     ClassInstanceFormPreviewDialogComponent,
+    DeleteClassConfigurationDialogComponent,
     ChangeIconDialogComponent,
 
     // Matching Configurator

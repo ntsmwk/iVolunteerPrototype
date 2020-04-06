@@ -7,6 +7,7 @@ import { NewClassConfigurationDialogData } from '../new-dialog/new-dialog.compon
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
 import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
 
 
 
@@ -207,6 +208,11 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     console.log("delete clicked");
     console.log(event);
     console.log(item);
+
+    this.dialogFactory.openDeleteClassConfiguratorDialog(this.marketplace).then((ret: DeleteClassConfigurationDialogData) => {
+      console.log(ret);
+    });
+
 
   }
 
