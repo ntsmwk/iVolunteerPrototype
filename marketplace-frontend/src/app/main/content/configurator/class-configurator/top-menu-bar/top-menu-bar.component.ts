@@ -205,12 +205,12 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   deleteClicked(event: any, item: SubMenuItem) {
-    console.log("delete clicked");
-    console.log(event);
-    console.log(item);
-
     this.dialogFactory.openDeleteClassConfiguratorDialog(this.marketplace).then((ret: DeleteClassConfigurationDialogData) => {
-      console.log(ret);
+      if (!isNullOrUndefined(ret)) {
+        this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+      }
     });
 
 

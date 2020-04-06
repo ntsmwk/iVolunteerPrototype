@@ -1001,7 +1001,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   // Menu functions
   async consumeMenuOptionClickedEvent(event: any) {
-    console.log(event);
+    // console.log(event);
     this.eventResponse = new TopMenuResponse();
     switch (event.id) {
       case 'editor_save': {
@@ -1050,7 +1050,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
       } case 'editor_delete': {
-        console.log('delete');
+        if (!isNullOrUndefined(event.payload.idsToDelete)
+          && event.payload.idsToDelete.find((id: string) => id === this.currentClassConfiguration.id)) {
+          this.createClearGraph();
+        }
         break;
       } case 'cancelled': {
         break;
@@ -1107,6 +1110,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   //   //   });
   //   // });
   // }
+
+  createClearGraph() {
+    this.configurableClasses = [];
+    this.relationships = [];
+    this.currentClassConfiguration = undefined;
+    this.clearEditor();
+  }
 
   newGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
     this.configurableClasses = classDefinitions;
