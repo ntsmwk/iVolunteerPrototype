@@ -40,6 +40,7 @@ export class OrganisationFilterComponent implements OnInit {
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
     );
     this.selectedTenants = [...this.tenants];
+    this.tenantSelectionChanged.emit(this.selectedTenants);
   }
 
   getTenantImage(tenant: Tenant) {
