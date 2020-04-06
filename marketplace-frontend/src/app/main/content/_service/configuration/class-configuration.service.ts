@@ -53,6 +53,10 @@ export class ClassConfigurationService {
     return this.http.delete(`${marketplace.url}/class-configuration/${id}/delete`);
   }
 
+  deleteClassConfigurations(marketplace: Marketplace, ids: string[]) {
+    return this.http.put(`${marketplace.url}/class-configuration/delete-multiple`, ids);
+  }
+
 
 
 }

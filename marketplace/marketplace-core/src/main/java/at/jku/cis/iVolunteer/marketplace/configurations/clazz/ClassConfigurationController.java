@@ -107,5 +107,11 @@ public class ClassConfigurationController {
 		classConfigurationRepository.delete(id);
 	}
 	
+	@PutMapping("class-configuration/delete-multiple")
+	List<ClassConfiguration> deleteMultipleClassConfigurations(@RequestBody List<String> ids) {
+		ids.forEach(this.classConfigurationRepository::delete);
+		return this.classConfigurationRepository.findAll();
+	}
+	
 	
 }
