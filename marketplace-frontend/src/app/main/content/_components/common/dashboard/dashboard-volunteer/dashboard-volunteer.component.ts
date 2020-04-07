@@ -12,7 +12,7 @@ import { ClassInstanceService } from "../../../../_service/meta/core/class/class
 import {
   ClassInstance,
   ClassArchetype,
-  ClassInstanceDTO
+  ClassInstanceDTO,
 } from "../../../../_model/meta/Class";
 import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
@@ -20,13 +20,14 @@ import { MatSort, MatPaginator } from "@angular/material";
 import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
-import { NavigationEnd } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { ImageService } from "app/main/content/_service/image.service";
+import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "dashboard-volunteer",
   templateUrl: "./dashboard-volunteer.component.html",
-  styleUrls: ["./dashboard-volunteer.component.scss"]
+  styleUrls: ["./dashboard-volunteer.component.scss"],
 })
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: Volunteer;
@@ -45,17 +46,17 @@ export class DashboardVolunteerComponent implements OnInit {
     "issuer",
     "taskName",
     "taskType1",
-    "date"
+    "date",
   ];
 
   issuerIds: string[] = [];
   issuers: Participant[] = [];
-  userImagePaths: any[];
+  userImagePaths: any[] = [];
   image;
 
-  private tenantName: string = "FF_Eidenberg";
-  private tenantId: string;
-  private classInstances: ClassInstanceDTO[];
+  tenants: Tenant[] = [];
+
+  private classInstances: ClassInstanceDTO[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -65,9 +66,10 @@ export class DashboardVolunteerComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private classInstanceService: ClassInstanceService,
     private userImagePathService: CoreUserImagePathService,
-    private coreTenantService: TenantService,
+    private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -80,7 +82,10 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.coreVolunteerService
         .findRegisteredMarketplaces(this.volunteer.id)
         .toPromise()
-    )).filter(m => (m.name = "Marketplace 1"))[0];
+    )).filter((m) => (m.name = "Marketplace 1"))[0];
+    this.tenants = <Tenant[]>(
+      await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
+    );
     this.loadDashboardContent();
   }
 
@@ -90,36 +95,38 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async loadDashboardContent() {
-    this.classInstances = <ClassInstanceDTO[]>(
-      await this.classInstanceService
-        .getClassInstancesInUserRepository(
-          this.marketplace,
-          this.volunteer.id,
-          this.volunteer.subscribedTenants
-        )
-        .toPromise()
-    );
-    this.classInstances = this.classInstances.sort(
-      (a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
-    );
+    if (this.marketplace != null && this.tenants.length > 0) {
+      this.classInstances = <ClassInstanceDTO[]>(
+        await this.classInstanceService
+          .getClassInstancesInUserRepository(
+            this.marketplace,
+            this.volunteer.id,
+            this.volunteer.subscribedTenants
+          )
+          .toPromise()
+      );
+      this.classInstances = this.classInstances.sort(
+        (a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
+      );
 
-    this.dataSourceRepository.data = this.classInstances;
-    this.paginator.length = this.classInstances.length;
-    this.dataSourceRepository.paginator = this.paginator;
-    this.issuerIds.push(...this.classInstances.map(t => t.issuerId));
+      this.dataSourceRepository.data = this.classInstances;
+      this.paginator.length = this.classInstances.length;
+      this.dataSourceRepository.paginator = this.paginator;
+      this.issuerIds.push(...this.classInstances.map((t) => t.issuerId));
 
-    this.issuerIds = this.issuerIds.filter((elem, index, self) => {
-      return index === self.indexOf(elem);
-    });
-    this.userImagePaths = <any[]>(
-      await this.userImagePathService
-        .getImagePathsById(this.issuerIds)
-        .toPromise()
-    );
-    this.issuers = <any[]>(
-      await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
-    );
-    this.isLoaded = true;
+      this.issuerIds = this.issuerIds.filter((elem, index, self) => {
+        return index === self.indexOf(elem);
+      });
+      this.userImagePaths = <any[]>(
+        await this.userImagePathService
+          .getImagePathsById(this.issuerIds)
+          .toPromise()
+      );
+      this.issuers = <any[]>(
+        await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
+      );
+      this.isLoaded = true;
+    }
   }
 
   getDateString(dateNumber: number) {
@@ -127,8 +134,12 @@ export class DashboardVolunteerComponent implements OnInit {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   }
 
+  navigateToTenantOverview() {
+    this.router.navigate(["/main/dashboard/tenants"]);
+  }
+
   getImagePathById(id: string) {
-    const ret = this.userImagePaths.find(userImagePath => {
+    const ret = this.userImagePaths.find((userImagePath) => {
       return userImagePath.userId === id;
     });
 
@@ -140,13 +151,13 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   getIssuerById(id: string) {
-    return this.issuers.find(issuer => {
+    return this.issuers.find((issuer) => {
       return issuer.id === id;
     });
   }
 
   getIssuerName(issuerId: string) {
-    const person = this.issuers.find(i => i.id === issuerId);
+    const person = this.issuers.find((i) => i.id === issuerId);
 
     let result = "";
 
@@ -159,7 +170,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   getIssuerPosition(issuerId: string) {
-    const person = this.issuers.find(i => i.id === issuerId);
+    const person = this.issuers.find((i) => i.id === issuerId);
     if (isNullOrUndefined(person) || isNullOrUndefined(person.position)) {
       return "";
     } else {
@@ -172,10 +183,10 @@ export class DashboardVolunteerComponent implements OnInit {
       return "";
     }
 
-    let name = entry.properties.find(p => p.id === "name");
+    let name = entry.properties.find((p) => p.id === "name");
 
     if (isNullOrUndefined(name)) {
-      name = entry.properties.find(p => p.name === "taskName");
+      name = entry.properties.find((p) => p.name === "taskName");
     }
 
     if (
@@ -211,17 +222,21 @@ export class DashboardVolunteerComponent implements OnInit {
     const dialogRef = this.dialog.open(ShareDialog, {
       width: "700px",
       height: "255px",
-      data: { name: "share" }
+      data: { name: "share" },
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {});
+  }
+
+  getTenantImage(tenant: Tenant) {
+    return this.imageService.getImgSourceFromBytes(tenant.image);
   }
 
   triggerStoreDialog() {
     const dialogRef = this.dialog.open(ShareDialog, {
       width: "700px",
       height: "255px",
-      data: { name: "store" }
+      data: { name: "store" },
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {

@@ -12,7 +12,7 @@ import { ImageService } from "../../_service/image.service";
 
 @Component({
   selector: "organisation-filter",
-  templateUrl: "organisation-filter.component.html"
+  templateUrl: "organisation-filter.component.html",
 })
 export class OrganisationFilterComponent implements OnInit {
   volunteer: Volunteer;
@@ -48,8 +48,8 @@ export class OrganisationFilterComponent implements OnInit {
   }
 
   tenantClicked(tenant: Tenant) {
-    let t = this.selectedTenants.find(t => t.id === tenant.id);
-    let index = this.selectedTenants.findIndex(t => t.id === tenant.id);
+    let t = this.selectedTenants.find((t) => t.id === tenant.id);
+    let index = this.selectedTenants.findIndex((t) => t.id === tenant.id);
 
     if (index >= 0) {
       this.selectedTenants.splice(index, 1);
@@ -60,6 +60,6 @@ export class OrganisationFilterComponent implements OnInit {
   }
 
   tenantSelected(tenant: Tenant) {
-    return this.selectedTenants.findIndex(t => t.id === tenant.id) >= 0;
+    return this.selectedTenants.findIndex((t) => t.id === tenant.id) >= 0;
   }
 }

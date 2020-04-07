@@ -12,30 +12,30 @@ export const navigation_volunteer = [
     title: "Mein FreiwilligenPASS",
     type: "item",
     icon: "dashboard2",
-    url: "/main/dashboard"
+    url: "/main/dashboard",
   },
   {
     id: "achievements-management-summary",
     title: "Mein FreiwilligenÜBERBLICK",
     icon: "home",
     type: "item",
-    url: "main/achievements/overview"
+    url: "main/achievements/overview",
   },
   {
     id: "achievements",
     title: "Mein FreiwilligenLEBEN",
     type: "item",
     icon: "award2",
-    url: "main/achievements/details"
+    url: "main/achievements/details",
   },
 
-  {
-    id: "get-engaged",
-    title: "Meine FreiwilligenMÖGLICHKEITEN",
-    type: "item",
-    icon: "opportunities",
-    url: "main/opportunities"
-  },
+  // {
+  //   id: "get-engaged",
+  //   title: "Meine FreiwilligenMÖGLICHKEITEN",
+  //   type: "item",
+  //   icon: "opportunities",
+  //   url: "main/opportunities"
+  // },
   // {
   //   'id': 'digi',
   //   'title': 'Soziales Netzwerk',

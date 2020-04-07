@@ -23,18 +23,25 @@ import { DashboardVolunteerComponent } from "./dashboard-volunteer/dashboard-vol
 import {
   MatBadgeModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatCard,
+  MatCardModule,
 } from "@angular/material";
 import { AssetInboxHelpseekerModule } from "../../help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module";
 import { AssetInboxModule } from "../../../_shared_components/asset-inbox/asset-inbox.module";
 import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-helpseeker.component";
 import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
+import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
 
 const routes = [
   {
     path: "",
-    component: DashboardComponent
-  }
+    component: DashboardComponent,
+  },
+  {
+    path: "tenants",
+    component: TenantOverviewComponent,
+  },
 ];
 
 @NgModule({
@@ -42,7 +49,8 @@ const routes = [
     DashboardVolunteerComponent,
     DashboardHelpSeekerComponent,
     DashboardComponent,
-    ShareDialog
+    TenantOverviewComponent,
+    ShareDialog,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -67,11 +75,12 @@ const routes = [
     MatBadgeModule,
     MatPaginatorModule,
     MatSortModule,
+    MatCardModule,
 
     FuseSharedModule,
-    FuseWidgetModule
+    FuseWidgetModule,
   ],
   exports: [DashboardComponent],
-  entryComponents: [ShareDialog]
+  entryComponents: [ShareDialog],
 })
 export class FuseDashboardModule {}
