@@ -223,6 +223,10 @@ export class DashboardVolunteerComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
+  getTenantImage(tenant: Tenant) {
+    return this.imageService.getImgSourceFromBytes(tenant.image);
+  }
+
   triggerStoreDialog() {
     const dialogRef = this.dialog.open(ShareDialog, {
       width: "700px",

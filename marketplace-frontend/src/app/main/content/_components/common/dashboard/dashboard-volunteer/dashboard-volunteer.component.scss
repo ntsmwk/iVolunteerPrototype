@@ -7,9 +7,18 @@ $custom-typography: mat-typography-config(
 @include mat-core($custom-typography);
 
 .dashboard-main {
-  flex: 2;
+  flex: 4;
 }
 
 .dashboard-org {
   flex: 1;
+}
+
+.org-icon {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  padding-top: 5px;
+  margin: 3px;
+  border-radius: 50%;
 }

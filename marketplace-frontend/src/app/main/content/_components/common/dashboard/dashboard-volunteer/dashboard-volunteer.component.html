@@ -163,7 +163,21 @@
       ></mat-paginator>
     </div>
     <div class="mat-card dashboard-org p-20 m-20">
-      <h2>Organisationen</h2>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <h2>Deine Organisationen</h2>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div
+          *ngFor="let t of tenants"
+          class="org-icon"
+          matTooltip="{{ t.name }}"
+        >
+          <img
+            style="object-fit: contain; max-width: 100%; max-height: 100%;"
+            [src]="getTenantImage(t)"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
