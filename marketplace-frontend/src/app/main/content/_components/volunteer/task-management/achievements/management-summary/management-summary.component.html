@@ -10,13 +10,13 @@
     <div style="height: 20px;"></div>
 
     <div *ngIf="classInstanceDTOs.length != 0">
-      <div fxLayout="row" fxLayoutAlign="space-around">
+      <div fxLayout="row wrap" fxLayoutAlign="space-around">
 
         <div *ngFor="let tenant of tenantMap | keyvalue">
 
           <div fxLayout="column" style="width: 100%;">
             <h2 style="font-size: 30px;">{{tenant.value.name}}</h2>
-            <div fxLayout=row>
+            <div fxLayout="row">
               <img src="{{'data:image/png;base64,' + tenant.value.image}}" class="img" />
               <table class="table">
                 <tbody>
