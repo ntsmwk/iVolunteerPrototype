@@ -47,13 +47,14 @@ export const navigation_volunteer = [
     type: "item",
     icon: "people",
     url: "/main/get-connected"
+  },
+
+  {
+    id: "local-repository",
+    title: "Local Repository",
+    type: "item",
+    icon: "home",
+    url: "main/localRepository"
   }
 
-  // {
-  //   'id': 'local-repository',
-  //   'title': 'Local Repository',
-  //   'icon': 'home',
-  //   'type': 'item',
-  //   'url': 'main/localRepository'
-  // },
 ];

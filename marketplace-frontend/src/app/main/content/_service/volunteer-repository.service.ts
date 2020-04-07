@@ -2,25 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Volunteer } from '../_model/volunteer';
-import { VolunteerProfile } from '../_model/volunteer-profile';
+import { LocalRepository } from '../_model/local-repository';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance, TaskClassInstance } from '../_model/meta/Class';
+import { ClassInstanceDTO, ClassArchetype } from '../_model/meta/Class';
 
 @Injectable({
     providedIn: 'root'
 })
-export class VolunteerRepositoryService {
+export class LocalRepositoryService {
 
     private apiUrl = 'http://localhost:3000/repository';
 
     constructor(private http: HttpClient) {
     }
 
+
     findByVolunteer(volunteer: Volunteer) {
         const observable = new Observable(subscriber => {
 
-            const successFunction = (volunteerProfile: VolunteerProfile) => {
-                subscriber.next(volunteerProfile);
+            const successFunction = (localRepository: LocalRepository) => {
+                subscriber.next(localRepository);
                 subscriber.complete();
             };
 
@@ -31,9 +32,9 @@ export class VolunteerRepositoryService {
 
             this.http.get(this.apiUrl)
                 .toPromise()
-                .then((volunteerProfiles: VolunteerProfile[]) => {
-                    successFunction(volunteerProfiles.find((volunteerProfile: VolunteerProfile) => {
-                        return volunteerProfile.volunteer.username === volunteer.username;
+                .then((localRepositorys: LocalRepository[]) => {
+                    successFunction(localRepositorys.find((localRepository: LocalRepository) => {
+                        return localRepository.volunteer.username === volunteer.username;
                     }));
                 })
                 .catch((error: any) => failureFunction(error));
@@ -41,99 +42,107 @@ export class VolunteerRepositoryService {
         return observable;
     }
 
-    findTasksByVolunteer(volunteer: Volunteer) {
+    findByVolunteerAndArcheType(volunteer: Volunteer, classArcheType: ClassArchetype) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);
                 subscriber.complete();
             };
 
-            const successFunction = (volunteerProfile: VolunteerProfile) => {
-                if (isNullOrUndefined(volunteerProfile)) {
+            const successFunction = (localRepository: LocalRepository) => {
+                if (isNullOrUndefined(localRepository)) {
                     subscriber.next([]);
                 } else {
-                    subscriber.next(volunteerProfile.taskList);
+                    switch (classArcheType) {
+                        case ClassArchetype.TASK:
+                            subscriber.next(localRepository.taskList);
+                            break;
+
+                        case ClassArchetype.COMPETENCE:
+                            subscriber.next(localRepository.competenceList);
+                            break;
+                    }
                 }
                 subscriber.complete();
             };
 
             this.findByVolunteer(volunteer)
                 .toPromise()
-                .then((volunteerProfile: VolunteerProfile) => successFunction(volunteerProfile))
+                .then((localRepository: LocalRepository) => successFunction(localRepository))
                 .catch((error: any) => failureFunction(error));
         });
 
         return observable;
     }
 
-    // TODO evlt. überlegen ob generell "ClassInstance"
-    synchronizeTask(volunteer: Volunteer, taskClassInstance: TaskClassInstance) {
+
+    synchronizeClassInstance(volunteer: Volunteer, classInstance: ClassInstanceDTO) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);
                 subscriber.complete();
             };
 
-            // this.findByVolunteer(volunteer)
-            //     .toPromise()
-            //     .then((volunteerProfile: VolunteerProfile) => {
-            //         // TODO why volunteerProfile?!?
-            //         volunteerProfile.taskList.push(taskClassInstance);
-            //         this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
-            //             .toPromise()
-            //             .then(() => subscriber.complete())
-            //             .catch((error: any) => failureFunction(error));
-            //     })
-            //     .catch((error: any) => failureFunction(error));
+            this.findByVolunteer(volunteer)
+                .toPromise()
+                .then((localRepository: LocalRepository) => {
+                    switch (classInstance.classArchetype) {
+                        case ClassArchetype.TASK:
+                            localRepository.taskList.push(classInstance);
+                            break;
+
+                        case ClassArchetype.COMPETENCE:
+                            localRepository.competenceList.push(classInstance);
+                            break;
+                    }
+                    this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+                        .toPromise()
+                        .then(() => subscriber.complete())
+                        .catch((error: any) => failureFunction(error));
+                })
+                .catch((error: any) => failureFunction(error));
         });
 
         return observable;
     }
 
-    // findCompetencesByVolunteer(volunteer: Volunteer) {
-    //     const observable = new Observable(subscriber => {
-    //         const failureFunction = (error: any) => {
-    //             subscriber.error(error);
-    //             subscriber.complete();
-    //         };
 
-    //         const successFunction = (volunteerProfile: VolunteerProfile) => {
-    //             if (isNullOrUndefined(volunteerProfile)) {
-    //                 subscriber.next([]);
-    //             } else {
-    //                 subscriber.next(volunteerProfile.competenceList);
-    //             }
-    //             subscriber.complete();
-    //         };
+    removeClassInstance(volunteer: Volunteer, classInstance: ClassInstanceDTO) {
+        const observable = new Observable(subscriber => {
+            const failureFunction = (error: any) => {
+                subscriber.error(error);
+                subscriber.complete();
+            };
 
-    //         this.findByVolunteer(volunteer)
-    //             .toPromise()
-    //             .then((volunteerProfile: VolunteerProfile) => successFunction(volunteerProfile))
-    //             .catch((error: any) => failureFunction(error));
-    //     });
+            this.findByVolunteer(volunteer)
+                .toPromise()
+                .then((localRepository: LocalRepository) => {
+                    switch (classInstance.classArchetype) {
+                        case ClassArchetype.TASK:
+                            localRepository.taskList.forEach((ci, index, object) => {
+                                if (ci.id === classInstance.id) {
+                                    object.splice(index, 1);
+                                }
+                            });
+                            break;
 
-    //     return observable;
-    // }
+                        case ClassArchetype.COMPETENCE:
+                            localRepository.competenceList.forEach((ci, index, object) => {
+                                if (ci.id === classInstance.id) {
+                                    object.splice(index, 1);
+                                }
+                            });
+                            break;
+                    }
+                    this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+                        .toPromise()
+                        .then(() => subscriber.complete())
+                        .catch((error: any) => failureFunction(error));
+                })
+                .catch((error: any) => failureFunction(error));
+        });
 
-    // synchronizeCompetence(volunteer: Volunteer, competenceEntry: CompetenceEntry) {
-    //     const observable = new Observable(subscriber => {
-    //         const failureFunction = (error: any) => {
-    //             subscriber.error(error);
-    //             subscriber.complete();
-    //         };
+        return observable;
+    }
 
-    //         this.findByVolunteer(volunteer)
-    //             .toPromise()
-    //             .then((volunteerProfile: VolunteerProfile) => {
-    //                 volunteerProfile.competenceList.push(competenceEntry);
-    //                 this.http.put(`${this.apiUrl}/${volunteerProfile.id}`, volunteerProfile)
-    //                     .toPromise()
-    //                     .then(() => subscriber.complete())
-    //                     .catch((error: any) => failureFunction(error));
-    //             })
-    //             .catch((error: any) => failureFunction(error));
-    //     });
-
-    //     return observable;
-    // }
 }
