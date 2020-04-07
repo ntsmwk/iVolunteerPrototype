@@ -2,7 +2,7 @@ import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitte
 import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
 
 @Component({
-  selector: 'options-overlay-control',
+  selector: 'matching-options-overlay-control',
   templateUrl: './options-overlay-control.component.html',
   styleUrls: ['./options-overlay-control.component.scss']
 })

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatchingOperatorRelationship, MatchingOperatorType } from 'app/main/content/_model/matching';
-import { CConstants } from '../../class-configurator/utils-and-constants';
+import { CConstants } from '../../../class-configurator/utils-and-constants';
 
 
 @Component({
-    selector: 'options-overlay-content',
+    selector: 'matching-options-overlay-content',
     templateUrl: './options-overlay-content.component.html',
     styleUrls: ['./options-overlay-content.component.scss']
 })

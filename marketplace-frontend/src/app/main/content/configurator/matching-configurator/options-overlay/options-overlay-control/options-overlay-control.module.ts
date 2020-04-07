@@ -4,9 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { OptionsOverlayControlComponent } from './options-overlay-control.component';
-import { MatTableModule, MatCheckboxModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { OptionsOverlayContentModule } from '../options-overlay-content.module';
+import { OptionsOverlayContentModule } from '../options-overlay-content/options-overlay-content.module';
 
 @NgModule({
     imports: [

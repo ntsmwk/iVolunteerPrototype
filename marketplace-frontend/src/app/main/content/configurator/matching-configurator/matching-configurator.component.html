@@ -1,9 +1,6 @@
 <div>
 
   <div>
-    <!-- <matching-editor-top-menu-bar [marketplace]="marketplace" [eventResponseAction]="eventResponseAction"
-      (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)">
-    </matching-editor-top-menu-bar> -->
     <matching-editor-top-menu-bar [marketplace]="marketplace"
       (menuOptionClickedEvent)="consumeMenuOptionClickedEvent($event)">
     </matching-editor-top-menu-bar>
@@ -44,15 +41,13 @@
 
     <div class="pr-8 pl-8">|</div>
 
-
-
   </div>
 
 
   <div #graphContainer id="graphContainer"></div>
 
-  <options-overlay-control [displayOverlay]="displayOverlay" [overlayRelationship]="overlayRelationship"
+  <matching-options-overlay-control [displayOverlay]="displayOverlay" [overlayRelationship]="overlayRelationship"
     [overlayEvent]="overlayEvent" (overlayClosed)="handleOverlayClosedEvent($event)">
-  </options-overlay-control>
+  </matching-options-overlay-control>
 
 </div>
