@@ -51,9 +51,9 @@ const mxStyles = {
   // classNormal: 'shape=swimlane;resizable=0;' + 'fontColor=#000e8a;strokeColor=#000e8a;',
   // classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;' + 'portConstraint=north',
   // classFlexprodCollector: 'shape=swimlane;resizable=0;' + 'fillColor=#ffbdbd;fontColor=#700000;strokeColor=#700000;',
-  classNormal: 'shape=swimlane;resizable=0;' + 'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
+  classNormal: 'editable=0;' + 'shape=swimlane;resizable=0;' + 'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
   classEnum: 'shape=swimlane;resizable=0;' + 'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' + 'portConstraint=north;',
-  classFlexprodCollector: 'shape=swimlane;resizable=0;' + 'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
+  classFlexprodCollector: 'editable=0;' + 'shape=swimlane;resizable=0;' + 'fillColor=#700000;fontColor=#FFFFFF;strokeColor=#700000;fontSize=14;',
 
   // Fillers
   classVfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
