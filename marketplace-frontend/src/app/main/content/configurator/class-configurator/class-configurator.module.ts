@@ -18,6 +18,7 @@ import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/ad
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { EditorTreeViewModule } from './tree-view/tree-view.module';
+import { ClassOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 
 
 
@@ -48,6 +49,8 @@ import { EditorTreeViewModule } from './tree-view/tree-view.module';
 
     EditorTopMenuBarModule,
     EditorTreeViewModule,
+
+    ClassOptionsOverlayControlModule,
 
   ],
   declarations: [ClassConfiguratorComponent],

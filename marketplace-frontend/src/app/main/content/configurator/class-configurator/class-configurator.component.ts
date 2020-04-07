@@ -15,6 +15,7 @@ import { CConstants } from './utils-and-constants';
 import { myMxCell } from '../myMxCell';
 import { ClassConfiguration } from '../../_model/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
+import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 
 declare var require: any;
 
@@ -70,11 +71,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   hiddenEdges: myMxCell[];
 
-  selectionType: string;
-  selectionIndex: number;
-
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
-  // @ViewChild('leftSidebarContainer', { static: true }) leftSidebarContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
   graph: mxgraph.mxGraph;
@@ -82,8 +79,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   saveDone: boolean;
 
-  // form editor not accessible from the graph editor - just for debug puposes anymore
-  showWorkInProgressInfo = false;
+  // Overlay
+  displayOverlay: boolean;
+  overlayContent: ClassOptionsOverlayContentData;
+  overlayEvent: PointerEvent;
 
   ngOnInit() {
     this.fetchPropertyDefinitions();
@@ -93,8 +92,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deletedRelationshipIds = [];
     this.rightSidebarVisible = true;
     this.hiddenEdges = [];
-
-    this.selectionIndex = -1;
     this.eventResponse = new TopMenuResponse();
   }
 
@@ -116,15 +113,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
     // this.graphContainer.nativeElement.style.margin = '5px';
-
-    // this.leftSidebarContainer.nativeElement.style.position = 'absolute';
-    // this.leftSidebarContainer.nativeElement.style.overflow = 'auto';
-    // this.leftSidebarContainer.nativeElement.style.padding = '2px';
-    // this.leftSidebarContainer.nativeElement.style.left = '0px';
-    // this.leftSidebarContainer.nativeElement.style.top = '30px';
-    // this.leftSidebarContainer.nativeElement.style.width = '200px';
-    // this.leftSidebarContainer.nativeElement.style.bottom = '0px';
-    // this.leftSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
 
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
@@ -206,9 +194,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         // outer.handleMXGraphCellSelectEvent(evt);
       });
       this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
-        console.log("double click");
-        console.log(sender);
-        console.log(evt);
+        outer.handleMXGraphDoubleClickEvent(evt);
       });
 
       this.showServerContent();
@@ -744,6 +730,19 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.modelUpdated = true;
     }
+  }
+
+  handleMXGraphDoubleClickEvent(event: PointerEvent) {
+    console.log("Overlay Event");
+    console.log(event);
+    this.overlayEvent = event;
+    this.displayOverlay = true;
+  }
+
+  handleOverlayClosedEvent(event: any) {
+    this.overlayContent = undefined;
+    this.overlayEvent = undefined;
+    this.displayOverlay = false;
   }
 
   handleMXGraphFoldEvent(cell: myMxCell) {

@@ -1,5 +1,5 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
-import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
+import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
 
 @Component({
   selector: 'class-options-overlay-control',
@@ -11,9 +11,9 @@ export class ClassOptionsOverlayControlComponent {
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
   @Input() displayOverlay: boolean;
-  @Input() overlayRelationship: MatchingOperatorRelationship;
+  @Input() overlayContent: ClassOptionsOverlayContentData;
   @Input() overlayEvent: PointerEvent;
-  @Output() overlayClosed = new EventEmitter<MatchingOperatorRelationship>();
+  @Output() overlayClosed = new EventEmitter<ClassOptionsOverlayContentData>();
 
   constructor(
     private changeDetector: ChangeDetectorRef
@@ -36,13 +36,16 @@ export class ClassOptionsOverlayControlComponent {
 
 
     if (this.displayOverlay) {
+      console.log(this.overlayEvent);
 
       let yPos = this.overlayEvent.clientY;
-      const xPos = this.overlayEvent.clientX;
+      // yPos = 500;
+      let xPos = this.overlayEvent.clientX;
+      // xPos = 500;
 
-      if (yPos + 275 > window.innerHeight) {
-        yPos = window.innerHeight - 275;
-      }
+      // if (yPos + 275 > window.innerHeight) {
+      //   yPos = window.innerHeight - 275;
+      // }
 
       this.overlayDiv.nativeElement.style.top = yPos + 'px';
       this.overlayDiv.nativeElement.style.left = xPos + 'px';
@@ -55,7 +58,7 @@ export class ClassOptionsOverlayControlComponent {
 
   }
 
-  handleResultEvent(event: MatchingOperatorRelationship) {
+  handleResultEvent(event: ClassOptionsOverlayContentData) {
     this.displayOverlay = false;
     this.overlayClosed.emit(event);
   }
