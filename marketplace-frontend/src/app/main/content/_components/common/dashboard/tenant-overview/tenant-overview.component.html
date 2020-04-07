@@ -1,0 +1,40 @@
+<div
+  class="page-layout blank p-24"
+  fusePerfectScrollbar
+  style="overflow: scroll;"
+>
+  <div style="padding-top: 12px;"></div>
+
+  <div
+    class="header mat-accent-bg p-16 p-sm-24"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
+    <h1>Organisationen</h1>
+  </div>
+
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    style="overflow: hidden;"
+    class="p-20"
+  >
+    <div *ngFor="let t of tenants" class="mat-card org-card p-10 m-10">
+      <div class="mat-card-header">
+        <h2>{{ t.name }}</h2>
+      </div>
+      <div class="mat-card-content">
+        asdfasdf
+      </div>
+    </div>
+  </div>
+  <mat-card>
+    <mat-card-header>
+      asdfasdf
+    </mat-card-header>
+    asdf
+  </mat-card>
+
+  <!-- todo selection -->
+  <div style="padding-top: 40px;"></div>
+</div>

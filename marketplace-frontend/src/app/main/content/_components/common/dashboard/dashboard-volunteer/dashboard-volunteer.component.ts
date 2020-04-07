@@ -20,7 +20,7 @@ import { MatSort, MatPaginator } from "@angular/material";
 import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
-import { NavigationEnd } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { ImageService } from "app/main/content/_service/image.service";
 import { Tenant } from "app/main/content/_model/tenant";
 
@@ -68,7 +68,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private userImagePathService: CoreUserImagePathService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -131,6 +132,10 @@ export class DashboardVolunteerComponent implements OnInit {
   getDateString(dateNumber: number) {
     const date = new Date(dateNumber);
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+  }
+
+  navigateToTenantOverview() {
+    this.router.navigate(["/main/dashboard/tenants"]);
   }
 
   getImagePathById(id: string) {
