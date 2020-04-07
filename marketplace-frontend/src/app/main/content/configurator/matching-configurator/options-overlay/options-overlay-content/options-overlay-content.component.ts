@@ -8,7 +8,7 @@ import { CConstants } from '../../../class-configurator/utils-and-constants';
     templateUrl: './options-overlay-content.component.html',
     styleUrls: ['./options-overlay-content.component.scss']
 })
-export class OptionsOverlayContentComponent implements OnInit {
+export class MatchingOptionsOverlayContentComponent implements OnInit {
 
     @Input() overlayRelationship: MatchingOperatorRelationship;
     @Output() resultRelationship = new EventEmitter<MatchingOperatorRelationship>();

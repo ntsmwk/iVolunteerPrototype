@@ -17,7 +17,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { MatchingEditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
-import { OptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
+import { MatchingOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 import { MatCheckboxModule } from '@angular/material';
 
 const routes = [
@@ -52,7 +52,7 @@ const routes = [
     AddOrRemoveDialogModule,
 
     MatchingEditorTopMenuBarModule,
-    OptionsOverlayControlModule,
+    MatchingOptionsOverlayControlModule,
 
   ],
   declarations: [MatchingConfiguratorComponent],

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatchingOptionsOverlayControlComponent } from './options-overlay-control.component';
+import { ClassOptionsOverlayControlComponent } from './options-overlay-control.component';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { MatchingOptionsOverlayContentModule } from '../options-overlay-content/options-overlay-content.module';
+import { ClassOptionsOverlayContentModule } from '../options-overlay-content/options-overlay-content.module';
 
 @NgModule({
     imports: [
@@ -14,9 +14,9 @@ import { MatchingOptionsOverlayContentModule } from '../options-overlay-content/
         MatCommonModule,
         MatButtonModule,
         MatIconModule,
-        MatchingOptionsOverlayContentModule,
+        ClassOptionsOverlayContentModule,
     ],
-    declarations: [MatchingOptionsOverlayControlComponent],
-    exports: [MatchingOptionsOverlayControlComponent]
+    declarations: [ClassOptionsOverlayControlComponent],
+    exports: [ClassOptionsOverlayControlComponent]
 })
-export class MatchingOptionsOverlayControlModule { }
+export class ClassOptionsOverlayControlModule { }

@@ -2,11 +2,11 @@ import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitte
 import { MatchingOperatorRelationship } from 'app/main/content/_model/matching';
 
 @Component({
-  selector: 'matching-options-overlay-control',
+  selector: 'class-options-overlay-control',
   templateUrl: './options-overlay-control.component.html',
   styleUrls: ['./options-overlay-control.component.scss']
 })
-export class MatchingOptionsOverlayControlComponent {
+export class ClassOptionsOverlayControlComponent {
 
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
