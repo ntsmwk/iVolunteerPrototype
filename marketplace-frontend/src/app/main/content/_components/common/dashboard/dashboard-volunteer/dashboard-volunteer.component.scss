@@ -5,3 +5,11 @@ $custom-typography: mat-typography-config(
   $font-family: "Muli",
 );
 @include mat-core($custom-typography);
+
+.dashboard-main {
+  flex: 2;
+}
+
+.dashboard-org {
+  flex: 1;
+}
