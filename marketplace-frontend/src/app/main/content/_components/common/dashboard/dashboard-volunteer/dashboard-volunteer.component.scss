@@ -14,11 +14,19 @@ $custom-typography: mat-typography-config(
   flex: 1;
 }
 
-.org-icon {
+.org-icon-container {
   position: relative;
   width: 50px;
   height: 50px;
   padding-top: 5px;
   margin: 3px;
   border-radius: 50%;
+}
+
+.org-icon {
+  border: 1px solid;
+  border-radius: 10px;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
 }
