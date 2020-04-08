@@ -255,13 +255,15 @@ $primary: #1a237e;
 
 .alert-info {
   background-color: #5bc0de;
-  color: black;
+  color: black !important;
 }
 .alert-success {
   background-color: #36f456;
 }
 .alert {
-  padding: 20px;
+  margin: auto;
+  border-radius: 10px;
+  padding: 10px;
   font-size: 18px;
   color: white;
   margin-bottom: 15px;

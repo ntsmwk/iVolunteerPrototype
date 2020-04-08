@@ -95,6 +95,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async loadDashboardContent() {
+    // TODO only fetch from tenant!!
     if (this.marketplace != null && this.tenants.length > 0) {
       this.classInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService
@@ -110,6 +111,8 @@ export class DashboardVolunteerComponent implements OnInit {
       );
 
       this.dataSourceRepository.data = this.classInstances;
+      console.error(this.paginator);
+      console.error(this.classInstances);
       this.paginator.length = this.classInstances.length;
       this.dataSourceRepository.paginator = this.paginator;
       this.issuerIds.push(...this.classInstances.map((t) => t.issuerId));
