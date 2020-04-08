@@ -32,6 +32,7 @@ import { AssetInboxModule } from "../../../_shared_components/asset-inbox/asset-
 import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-helpseeker.component";
 import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
 import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
+import { FuseTruncatePipeModule } from "app/main/content/_pipe/truncate-pipe.module";
 
 const routes = [
   {
@@ -76,6 +77,7 @@ const routes = [
     MatPaginatorModule,
     MatSortModule,
     MatCardModule,
+    FuseTruncatePipeModule,
 
     FuseSharedModule,
     FuseWidgetModule,
