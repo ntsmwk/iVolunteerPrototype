@@ -244,3 +244,26 @@ $primary: #1a237e;
   height: 100px;
   border-radius: 3px;
 }
+
+.alert-danger {
+  background-color: #f44336;
+}
+
+.alert-warn {
+  background-color: #f0ad4e;
+}
+
+.alert-info {
+  background-color: #5bc0de;
+  color: black;
+}
+.alert-success {
+  background-color: #36f456;
+}
+.alert {
+  padding: 20px;
+  font-size: 18px;
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+}

@@ -157,14 +157,22 @@
         </mat-table>
       </div>
       <mat-paginator
+        *ngIf="dataSourceRepository.data > 0"
         [pageSize]="12"
         id="paginator"
         showFirstLastButtons
       ></mat-paginator>
+
+      <p *ngIf="dataSourceRepository.data == 0" class="alert alert-info">
+        Es befinden Sich noch keine Einträge im digitalen Freiwilligenpass!
+      </p>
     </div>
     <div class="mat-card dashboard-org p-20 m-20">
       <div fxLayout="column" fxLayoutAlign="center center">
-        <h2>Deine Organisationen</h2>
+        <h2 *ngIf="tenants.length > 0">Deine Organisationen</h2>
+        <h2 *ngIf="tenants.length == 0">
+          Du bist noch keiner Organisation beigetreten
+        </h2>
 
         <div fxLayout="column" fxLayoutAlign="center center">
           <div

@@ -89,7 +89,7 @@ public class CoreVolunteerInitializationService {
 				.findFirst().orElse(null);
 		if (mp != null) {
 			try {
-				coreVolunteerService.registerMarketplace(volunteer.getId(), mp.getId(), tenantIds, "");
+				coreVolunteerService.subscribeTenant(volunteer.getId(), mp.getId(), tenantIds, "");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
