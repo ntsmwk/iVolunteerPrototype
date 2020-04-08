@@ -34,13 +34,9 @@ export class ClassOptionsOverlayControlComponent {
   toggleInboxOverlay() {
     this.changeDetector.detectChanges();
 
-
     if (this.displayOverlay) {
-      console.log(this.overlayEvent);
-
       let yPos = this.overlayEvent.clientY;
       let xPos = this.overlayEvent.clientX;
-
 
       if (yPos + 275 > window.innerHeight) {
         yPos = window.innerHeight - 275;
@@ -56,9 +52,6 @@ export class ClassOptionsOverlayControlComponent {
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '275px';
     }
-
-
-
   }
 
   handleResultEvent(event: ClassOptionsOverlayContentData) {
