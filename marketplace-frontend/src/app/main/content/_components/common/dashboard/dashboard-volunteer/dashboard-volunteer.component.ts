@@ -96,7 +96,6 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async loadDashboardContent() {
-    // TODO only fetch from tenant!!
     if (this.marketplace != null && this.tenants.length > 0) {
       this.classInstances = <ClassInstanceDTO[]>await this.classInstanceService
         .getClassInstancesInUserRepository(

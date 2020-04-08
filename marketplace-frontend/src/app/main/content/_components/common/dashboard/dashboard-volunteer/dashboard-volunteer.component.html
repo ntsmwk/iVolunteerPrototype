@@ -29,7 +29,7 @@
 
   <!-- todo selection -->
   <div style="padding-top: 40px;"></div>
-  <div fxLayout="row">
+  <div fxLayout="row" fxLayoutAlign="space-between start">
     <div
       class="mat-card dashboard-main p-20 m-20"
       fxLayout="column"
@@ -157,15 +157,11 @@
           ></mat-row>
         </mat-table>
       </div>
-      <!--         *ngIf="dataSourceRepository.data.length > 0"
- -->
-      <!-- <div *ngIf="dataSourceRepository.data.length > 0"> -->
       <mat-paginator
         [pageSize]="12"
         id="paginator"
         showFirstLastButtons
       ></mat-paginator>
-      <!-- </div> -->
       <p *ngIf="dataSourceRepository.data.length == 0" class="alert alert-info">
         <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden Sich noch
         keine Einträge im digitalen Freiwilligenpass!
