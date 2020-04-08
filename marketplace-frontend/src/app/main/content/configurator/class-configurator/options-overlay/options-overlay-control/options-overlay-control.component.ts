@@ -46,6 +46,10 @@ export class ClassOptionsOverlayControlComponent {
         yPos = window.innerHeight - 275;
       }
 
+      if (xPos + 300 > window.innerWidth) {
+        xPos = window.innerWidth - 300;
+      }
+
       this.overlayDiv.nativeElement.style.top = yPos + 'px';
       this.overlayDiv.nativeElement.style.left = xPos + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
