@@ -46,15 +46,14 @@ export const navigation_volunteer = [
     title: "Mein FreiwilligenNETZWERK",
     type: "item",
     icon: "people",
-    url: "/main/get-connected"
+    url: "/main/get-connected",
   },
 
-  {
-    id: "local-repository",
-    title: "Local Repository",
-    type: "item",
-    icon: "home",
-    url: "main/localRepository"
-  }
-
+  // {
+  //   id: "local-repository",
+  //   title: "Local Repository",
+  //   type: "item",
+  //   icon: "home",
+  //   url: "main/localRepository"
+  // }
 ];

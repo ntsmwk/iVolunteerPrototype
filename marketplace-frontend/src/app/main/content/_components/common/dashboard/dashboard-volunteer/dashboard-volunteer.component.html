@@ -29,7 +29,7 @@
 
   <!-- todo selection -->
   <div style="padding-top: 40px;"></div>
-  <div fxLayout="row">
+  <div fxLayout="row" fxLayoutAlign="space-between start">
     <div
       class="mat-card dashboard-main p-20 m-20"
       fxLayout="column"
@@ -92,12 +92,17 @@
       <div style="padding-top: 10px;"></div>
 
       <!---FILTER BY ORGANIZATION ROW-->
-      <organisation-filter></organisation-filter>
+      <organisation-filter
+        (tenantSelectionChanged)="tenantSelectionChanged($event)"
+      ></organisation-filter>
 
       <div style="padding-top: 10px;"></div>
-
+      <p *ngIf="dataSourceRepository.data.length == 0" class="alert alert-info">
+        <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden Sich keine
+        Einträge im digitalen Freiwilligenpass!
+      </p>
       <div
-        *ngIf="userImagePaths && userImagePaths.size > 0"
+        *ngIf="userImagePaths && userImagePaths.length > 0"
         class="table"
         fxLayout="row"
         style="width: 100%;"
@@ -164,7 +169,10 @@
     </div>
     <div class="mat-card dashboard-org p-20 m-20">
       <div fxLayout="column" fxLayoutAlign="center center">
-        <h2>Deine Organisationen</h2>
+        <h2 *ngIf="tenants.length > 0">Deine Organisationen</h2>
+        <h2 *ngIf="tenants.length == 0">
+          Du bist noch keiner Organisation beigetreten
+        </h2>
 
         <div fxLayout="column" fxLayoutAlign="center center">
           <div
