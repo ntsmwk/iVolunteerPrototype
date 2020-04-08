@@ -39,13 +39,12 @@ export class ClassOptionsOverlayControlComponent {
       console.log(this.overlayEvent);
 
       let yPos = this.overlayEvent.clientY;
-      // yPos = 500;
       let xPos = this.overlayEvent.clientX;
-      // xPos = 500;
 
-      // if (yPos + 275 > window.innerHeight) {
-      //   yPos = window.innerHeight - 275;
-      // }
+
+      if (yPos + 275 > window.innerHeight) {
+        yPos = window.innerHeight - 275;
+      }
 
       this.overlayDiv.nativeElement.style.top = yPos + 'px';
       this.overlayDiv.nativeElement.style.left = xPos + 'px';

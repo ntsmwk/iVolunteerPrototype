@@ -732,10 +732,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleMXGraphDoubleClickEvent(event: PointerEvent) {
+  handleMXGraphDoubleClickEvent(event: mxgraph.mxEventObject) {
     console.log("Overlay Event");
     console.log(event);
-    this.overlayEvent = event;
+    this.overlayEvent = event.getProperty('event');
     this.displayOverlay = true;
   }
 
