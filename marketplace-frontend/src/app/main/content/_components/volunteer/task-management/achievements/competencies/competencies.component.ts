@@ -64,40 +64,45 @@ export class CompetenciesComponent implements OnInit {
   ) { }
 
 
-  ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
-      this.volunteer = volunteer;
+  async ngOnInit() {
+    this.classInstanceDTOs = [];
 
-      Promise.all([
-        this.marketplaceService.findAll().toPromise(),
-        this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-      ]).then((values: any[]) => {
+    this.volunteer = <Volunteer>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
 
-        // TODO: 
-        this.marketplace = values[0][0];
-        this.coreTenantService.findByName(this.tenantName).toPromise().then((tenantId: string) => {
-          this.tenantId.push(tenantId);
-          // this.tenantId.push(Object.assign({}, tenantId));
+    let marketplaces = <Marketplace[]>(
+      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+    );
+
+    // TODO for each registert mp
+    this.marketplace = marketplaces[0];
+
+    if (!isNullOrUndefined(this.marketplace)) {
 
 
-          // TODO Philipp: change to input variable like in tasks.component
-        this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
-          if (!isNullOrUndefined(ret)) {
-            //this.classInstanceDTOs = ret.filter(ci => ci.name == 'PersonTask');
-            this.classInstanceDTOs = ret;
+      this.classInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
+      );
 
-            this.generateChartData();
-
-            this.calcMean();
-            this.currYearData = [... this.getYearData('2019')];
-            this.lastYearData = this.getYearData('2018');
-            this.meanYearData = this.getYearData('mean');
-
-          }
-        });
+      this.classInstanceDTOs.forEach((ci, index, object) => {
+        if (ci.duration === null) {
+          object.splice(index, 1);
+        }
       });
-      });
-    });
+
+    }
+
+
+    this.generateChartData();
+
+    this.calcMean();
+    this.currYearData = [... this.getYearData('2019')];
+    this.lastYearData = this.getYearData('2018');
+    this.meanYearData = this.getYearData('mean');
+
+
+
   }
 
   onSelect(event) {

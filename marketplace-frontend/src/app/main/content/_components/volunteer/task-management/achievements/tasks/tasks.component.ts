@@ -26,6 +26,7 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.classInstanceDTOs = [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
