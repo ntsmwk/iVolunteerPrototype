@@ -41,6 +41,7 @@ export class DashboardVolunteerComponent implements OnInit {
   dataSourceComp = new MatTableDataSource<ClassInstanceDTO>();
   dataSourceFeedback = new MatTableDataSource<ClassInstanceDTO>();
   dataSourceRepository = new MatTableDataSource<ClassInstanceDTO>();
+  selectedTenants: Tenant[] = [];
 
   private displayedColumnsRepository: string[] = [
     "issuer",
@@ -97,22 +98,18 @@ export class DashboardVolunteerComponent implements OnInit {
   async loadDashboardContent() {
     // TODO only fetch from tenant!!
     if (this.marketplace != null && this.tenants.length > 0) {
-      this.classInstances = <ClassInstanceDTO[]>(
-        await this.classInstanceService
-          .getClassInstancesInUserRepository(
-            this.marketplace,
-            this.volunteer.id,
-            this.volunteer.subscribedTenants
-          )
-          .toPromise()
-      );
+      this.classInstances = <ClassInstanceDTO[]>await this.classInstanceService
+        .getClassInstancesInUserRepository(
+          this.marketplace,
+          this.volunteer.id,
+          this.selectedTenants.map((t) => t.id)
+        )
+        .toPromise();
       this.classInstances = this.classInstances.sort(
         (a, b) => b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
       );
 
       this.dataSourceRepository.data = this.classInstances;
-      console.error(this.paginator);
-      console.error(this.classInstances);
       this.paginator.length = this.classInstances.length;
       this.dataSourceRepository.paginator = this.paginator;
       this.issuerIds.push(...this.classInstances.map((t) => t.issuerId));
@@ -130,6 +127,11 @@ export class DashboardVolunteerComponent implements OnInit {
       );
       this.isLoaded = true;
     }
+  }
+
+  tenantSelectionChanged(selectedTenants: Tenant[]) {
+    this.selectedTenants = selectedTenants;
+    this.loadDashboardContent();
   }
 
   getDateString(dateNumber: number) {

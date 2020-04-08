@@ -92,7 +92,9 @@
       <div style="padding-top: 10px;"></div>
 
       <!---FILTER BY ORGANIZATION ROW-->
-      <organisation-filter></organisation-filter>
+      <organisation-filter
+        (tenantSelectionChanged)="tenantSelectionChanged($event)"
+      ></organisation-filter>
 
       <div style="padding-top: 10px;"></div>
       <div
