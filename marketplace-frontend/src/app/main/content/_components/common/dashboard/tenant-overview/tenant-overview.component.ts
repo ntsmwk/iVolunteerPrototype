@@ -60,4 +60,8 @@ export class TenantOverviewComponent implements OnInit {
       .toPromise();
     window.setTimeout(() => this.initialize(), 2000);
   }
+
+  navigateBack() {
+    window.history.back();
+  }
 }
