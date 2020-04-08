@@ -97,6 +97,10 @@
       ></organisation-filter>
 
       <div style="padding-top: 10px;"></div>
+      <p *ngIf="dataSourceRepository.data.length == 0" class="alert alert-info">
+        <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden Sich keine
+        Einträge im digitalen Freiwilligenpass!
+      </p>
       <div
         *ngIf="userImagePaths && userImagePaths.length > 0"
         class="table"
@@ -162,10 +166,6 @@
         id="paginator"
         showFirstLastButtons
       ></mat-paginator>
-      <p *ngIf="dataSourceRepository.data.length == 0" class="alert alert-info">
-        <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden Sich noch
-        keine Einträge im digitalen Freiwilligenpass!
-      </p>
     </div>
     <div class="mat-card dashboard-org p-20 m-20">
       <div fxLayout="column" fxLayoutAlign="center center">
