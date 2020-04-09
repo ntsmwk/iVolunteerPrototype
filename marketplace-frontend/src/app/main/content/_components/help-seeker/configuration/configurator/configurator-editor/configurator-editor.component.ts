@@ -1299,6 +1299,10 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  exportJsonClicked(cell: myMxCell) {
+    console.log('Export JSON clicked');
+  }
+
 
 
 }
