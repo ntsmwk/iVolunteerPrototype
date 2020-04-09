@@ -36,11 +36,6 @@ export const navigation_volunteer = [
   //   icon: "opportunities",
   //   url: "main/opportunities"
   // },
-  // {
-  //   'id': 'digi',
-  //   'title': 'Soziales Netzwerk',
-  //   'type': 'group',
-  // },
   {
     id: "get-connected",
     title: "Mein FreiwilligenNETZWERK",
@@ -54,6 +49,6 @@ export const navigation_volunteer = [
     title: "Local Repository",
     type: "item",
     icon: "home",
-    url: "main/localRepository"
-  }
+    url: "main/localRepository",
+  },
 ];
