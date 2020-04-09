@@ -2,20 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { fuseAnimations } from "../../../../../../../@fuse/animations";
 import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
 import { LoginService } from "../../../../_service/login.service";
-import { Volunteer } from 'app/main/content/_model/volunteer';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
-import { Tenant } from 'app/main/content/_model/tenant';
+import { Volunteer } from "app/main/content/_model/volunteer";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
+import { Tenant } from "app/main/content/_model/tenant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { isNullOrUndefined } from "util";
-
 
 @Component({
   selector: "fuse-achievements",
   templateUrl: "./achievement.component.html",
   styleUrls: ["./achievement.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class AchievementsComponent implements OnInit {
   volunteer: Volunteer;
@@ -30,11 +29,9 @@ export class AchievementsComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
     private spinner: NgxSpinnerService
-  ) { }
+  ) {}
 
-
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   async ngOnInit() {
     this.spinner.show();
@@ -43,42 +40,46 @@ export class AchievementsComponent implements OnInit {
     this.filteredClassInstanceDTOs = [];
     this.selectedTenants = [];
 
-
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
 
     let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+      await this.volunteerService
+        .findRegisteredMarketplaces(this.volunteer.id)
+        .toPromise()
     );
 
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
 
-    if(!isNullOrUndefined(this.marketplace)) {
+    if (!isNullOrUndefined(this.marketplace)) {
+      this.classInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.classInstanceService
+          .getUserClassInstancesByArcheType(
+            this.marketplace,
+            "TASK",
+            this.volunteer.id,
+            this.volunteer.subscribedTenants
+          )
+          .toPromise()
+      );
 
+      this.classInstanceDTOs.forEach((ci, index, object) => {
+        if (ci.duration === null) {
+          object.splice(index, 1);
+        }
+      });
 
-    this.classInstanceDTOs = <ClassInstanceDTO[]>(
-      await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-    );
-
-    this.classInstanceDTOs.forEach((ci, index, object) => {
-      if (ci.duration === null) {
-        object.splice(index, 1);
-      }
-    });
-
-    this.tenantSelectionChanged(this.selectedTenants);
-
-  }
-
+      this.tenantSelectionChanged(this.selectedTenants);
+    }
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-      return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
+    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
+      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
     });
   }
 
@@ -89,5 +90,4 @@ export class AchievementsComponent implements OnInit {
   hideSpinner() {
     this.spinner.hide();
   }
-
 }
