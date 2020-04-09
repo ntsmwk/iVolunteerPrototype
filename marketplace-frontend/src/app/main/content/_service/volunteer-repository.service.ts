@@ -16,6 +16,21 @@ export class LocalRepositoryService {
     constructor(private http: HttpClient) {
     }
 
+     async isConnected() {
+            let isConnected;
+            await this.http.get(this.apiUrl)
+                .toPromise()
+                .then(() => {
+                    isConnected = true;
+                })
+                .catch((error: any) => {
+                    isConnected = false;
+               });
+
+               return isConnected;
+     
+    }
+
 
     findByVolunteer(volunteer: Volunteer) {
         const observable = new Observable(subscriber => {

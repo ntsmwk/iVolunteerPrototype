@@ -30,7 +30,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div class="secondRow" fxLayout="row" fxLayoutAlign="space-evenly center">
+      <div class="secondRow" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
         <app-donut [type]="'Wochentag'" [classInstanceDTOs]="classInstanceDTOs" [timelineFilter]="timelineFilter"
           [selectedYear]="selectedYear" [selectedYaxis]="selectedYaxis" [selectedTaskType]="selectedTaskType"
           [marketplace]="marketplace" [volunteer]="volunteer">
@@ -42,7 +42,7 @@
         </app-donut>
       </div>
 
-      <div class="secondRow" fxLayout="row" fxLayoutAlign="space-evenly center">
+      <div class="secondRow" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
         <app-donut [type]="'Orte'" [classInstanceDTOs]="classInstanceDTOs" [timelineFilter]="timelineFilter"
           [selectedYear]="selectedYear" [selectedYaxis]="selectedYaxis" [selectedTaskType]="selectedTaskType"
           [marketplace]="marketplace" [volunteer]="volunteer">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassInstanceDTO, ClassArchetype } from 'app/main/content/_model/meta/Class';
@@ -21,8 +21,8 @@ import { Tenant } from 'app/main/content/_model/tenant';
 export class LocalRepositoryComponent implements OnInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
-  classInstanceDTOs: ClassInstanceDTO[] = [];
-  filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
+  classInstanceDTOs: ClassInstanceDTO[];
+  filteredClassInstanceDTOs: ClassInstanceDTO[];
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -43,6 +43,9 @@ export class LocalRepositoryComponent implements OnInit {
   tasksLocalRepository: ClassInstanceDTO[] = [];
   selectedTenants: Tenant[] = [];
 
+  isConnected: boolean;
+
+
   constructor(
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
@@ -55,53 +58,59 @@ export class LocalRepositoryComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.classInstanceDTOs = [];
+    this.filteredClassInstanceDTOs = [];
 
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.isConnected = await this.localRepositoryService.isConnected();
 
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-    );
+    if(this.isConnected) {
+      this.volunteer = <Volunteer>(
+        await this.loginService.getLoggedIn().toPromise()
+      );
 
-    this.marketplace = marketplaces[0];
+      let marketplaces = <Marketplace[]>(
+        await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+      );
 
-    this.classInstanceDTOs = <ClassInstanceDTO[]>(
-      await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-    );
+      this.marketplace = marketplaces[0];
 
-    this.classInstanceDTOs.forEach((ci, index, object) => {
-      if (ci.duration === null) {
-        object.splice(index, 1);
+      this.classInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
+      );
+
+      this.classInstanceDTOs.forEach((ci, index, object) => {
+        if (ci.duration === null) {
+          object.splice(index, 1);
+        }
+      });
+
+      this.classInstanceDTOs = this.classInstanceDTOs.sort(
+        (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
+      );
+
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs;
+
+      this.dataSourceRepository.data = this.filteredClassInstanceDTOs;
+      this.dataSourceRepository.paginator = this.paginator;
+
+      this.issuerIds.push(...this.filteredClassInstanceDTOs.map(t => t.issuerId));
+
+      this.issuerIds = this.issuerIds.filter((elem, index, self) => {
+        return index === self.indexOf(elem);
+      });
+      this.userImagePaths = <any[]>(
+        await this.userImagePathService
+          .getImagePathsById(this.issuerIds)
+          .toPromise()
+      );
+      this.issuers = <any[]>(
+        await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
+      );
+
+      this.tasksLocalRepository = <ClassInstanceDTO[]>(
+        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer, ClassArchetype.TASK).toPromise());
       }
-    });
 
-    this.classInstanceDTOs = this.classInstanceDTOs.sort(
-      (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
-    );
-
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs;
-
-    this.dataSourceRepository.data = this.filteredClassInstanceDTOs;
-    this.paginator.length = this.filteredClassInstanceDTOs.length;
-    this.dataSourceRepository.paginator = this.paginator;
-
-    this.issuerIds.push(...this.filteredClassInstanceDTOs.map(t => t.issuerId));
-
-    this.issuerIds = this.issuerIds.filter((elem, index, self) => {
-      return index === self.indexOf(elem);
-    });
-    this.userImagePaths = <any[]>(
-      await this.userImagePathService
-        .getImagePathsById(this.issuerIds)
-        .toPromise()
-    );
-    this.issuers = <any[]>(
-      await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
-    );
-
-    this.tasksLocalRepository = <ClassInstanceDTO[]>(
-      await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer, ClassArchetype.TASK).toPromise());
   }
 
 
@@ -158,6 +167,7 @@ export class LocalRepositoryComponent implements OnInit {
     return this.tasksLocalRepository.findIndex(t => t.id === classInstance.id) >= 0;
   }
 
+
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
 
@@ -166,7 +176,6 @@ export class LocalRepositoryComponent implements OnInit {
     });
 
     this.dataSourceRepository.data = this.filteredClassInstanceDTOs;
-    this.paginator.length = this.filteredClassInstanceDTOs.length;
     this.dataSourceRepository.paginator = this.paginator;
   }
 

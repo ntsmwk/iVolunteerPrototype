@@ -11,21 +11,20 @@
     </div>
 
     <mat-card>
-    <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
-    </organisation-filter>
+        <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
+        </organisation-filter>
     </mat-card>
 
-
-    <div class="mat-card p-20" fxLayout="column">
-        <div *ngIf="userImagePaths && userImagePaths.length > 0" class="table" fxLayout="row" style="width: 100%"
+    <div *ngIf="isConnected" class="mat-card p-20" fxLayout="column">
+        <div *ngIf="userImagePaths && userImagePaths.length > 0" fxLayout="row" style="width: 100%"
             fxLayoutAlign="start center">
             <div class="pt-32"></div>
 
-            <mat-table #table matSort [dataSource]="dataSourceRepository" style="width: 100%">
+            <mat-table matSort class="localRepoTable" [dataSource]="dataSourceRepository" style="width: 100%">
                 <ng-container matColumnDef="issuer">
                     <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        <div fxLayout="row" fxLayoutAligne="start center">
+                        <div fxLayout="row" fxLayoutAlign="start center">
                             <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
                             <div fxLayout="column">
                                 <div>{{ getIssuerName(entry.issuerId) }}</div>
@@ -57,21 +56,35 @@
                 </ng-container>
 
                 <ng-container matColumnDef="syncButton">
-                    <mat-header-cell *matHeaderCellDef> Local Repository Aktion</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let entry">
                         <button mat-raised-button *ngIf="!inLocalRepository(entry)" color="primary"
                             (click)="syncToLocalRepository(entry)">Hinzufügen</button>
                         <button mat-raised-button *ngIf="inLocalRepository(entry)" color="primary"
                             (click)="removeFromLocalRepository(entry)">Entfernen</button>
-
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsRepository"></mat-row>
+                <mat-row *matRowDef="let element; let row; columns: displayedColumnsRepository" [ngClass]="{
+                    'is-white': inLocalRepository(element),
+                    'is-blue': !inLocalRepository(element)
+                        }"></mat-row>
             </mat-table>
         </div>
         <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
     </div>
+
+    <div *ngIf="!isConnected">
+        <p>Local Repository Service not up!</p>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <div *ngIf="selectedTenants.length === 0">
+                <p>Keine Organisation ausgewählt!</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
 </div>
