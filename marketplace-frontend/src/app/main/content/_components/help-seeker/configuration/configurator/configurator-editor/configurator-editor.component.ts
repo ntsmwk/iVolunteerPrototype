@@ -104,12 +104,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   // form editor not accessible from the graph editor - just for debug puposes anymore
   showWorkInProgressInfo = false;
 
-  helpseeker: Helpseeker;
+  @Input() helpseeker: Helpseeker;
 
   ngOnInit() {
-    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-      this.helpseeker = helpseeker;
-    });
 
     this.fetchPropertyDefinitions();
     this.configurableClasses = [];
@@ -123,6 +120,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.selectionIndex2 = -1;
     // console.log(this.configurableClasses);
     // console.log(this.relationships);
+
   }
 
   fetchPropertyDefinitions() {
@@ -234,7 +232,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       this.showServerContent(true);
       this.collapseGraph();
 
- 
+
     }
   }
 
@@ -531,7 +529,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   // TODO @Alex fix issue in regards to saved Geometry
   redrawContent(focusCell: myMxCell) {
-    
+
 
 
     // let savedGeometry = this.saveGeometry();
@@ -539,7 +537,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.showServerContent(false);
     // this.restoreGeometry(savedGeometry);
 
-    
+
     this.setLayout();
     this.focusOnCell(focusCell);
 
@@ -711,9 +709,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
-         this.updateModel();
+        this.updateModel();
         this.redrawContent(cret as myMxCell);
-     
+
       }
 
       if (cell.value === 'add_association') {
@@ -762,7 +760,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         this.redrawContent(cret as myMxCell);
       }
       this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
-      bounds.x = bounds.x-20;
+      bounds.x = bounds.x - 20;
       this.graph.view.setGraphBounds(bounds);
 
       this.modelUpdated = true;
@@ -1090,9 +1088,13 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   openGraph(configurator: Configurator) {
     this.currentConfigurator = configurator;
 
+    console.log(this.helpseeker);
+
     Promise.all([
       // grab classDefinitionss from server
       this.classDefinitionService.getClassDefinitionsById(this.marketplace, configurator.classDefinitionIds, this.helpseeker.tenantId).toPromise().then((classDefinitions: ClassDefinition[]) => {
+
+        console.log(classDefinitions);
         if (!isNullOrUndefined(classDefinitions)) {
           this.configurableClasses = classDefinitions;
         } else {
