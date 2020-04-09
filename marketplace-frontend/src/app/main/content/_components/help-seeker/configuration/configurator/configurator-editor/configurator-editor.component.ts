@@ -1306,7 +1306,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     setTimeout(() => {
       if (this.saveDone) {
         this.dialogFactory.openInstanceFormPreviewDialog(this.marketplace, [cell.id]).then(() => {
-
+          this.saveDone = false;
         });
       } else {
         this.consumeMenuOptionClickedEvent({ id: 'editor_save' });
