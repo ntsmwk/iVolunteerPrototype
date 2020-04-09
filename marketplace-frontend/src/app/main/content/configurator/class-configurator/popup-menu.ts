@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
-import { myMxCell, MyMxCellType } from '../myMxCell';
+import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
 
 declare var require: any;
@@ -30,7 +30,7 @@ export class EditorPopupMenu {
     });
   }
 
-  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: myMxCell, evt) {
+  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt) {
     const outer = this;
 
     if (cell != null) {
@@ -193,7 +193,7 @@ export class EditorPopupMenu {
           }
 
           function duplicateEdge(cell: mxgraph.mxCell) {
-            const dupe: myMxCell = graph.getModel().cloneCell(cell);
+            const dupe: MyMxCell = graph.getModel().cloneCell(cell);
             if (!isNullOrUndefined(cell.geometry.points)) {
               dupe.getGeometry().points[0].x = dupe.getGeometry().sourcePoint.x = cell.getGeometry().points[0].x + 20;
               dupe.getGeometry().points[0].y = dupe.getGeometry().sourcePoint.y = cell.getGeometry().points[0].y + 20;
@@ -211,7 +211,7 @@ export class EditorPopupMenu {
           }
 
           function duplicateVertex(cell: mxgraph.mxCell) {
-            const dupe: myMxCell = graph.getModel().cloneCell(cell);
+            const dupe: MyMxCell = graph.getModel().cloneCell(cell);
             dupe.getGeometry().x += 20;
             dupe.getGeometry().y += 20;
             dupe.newlyAdded = true;
@@ -230,7 +230,7 @@ export class EditorPopupMenu {
     }
   }
 
-  addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: myMxCell, childId: 0 | 1) {
+  addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: MyMxCell, childId: 0 | 1) {
     menu.addItem(AssociationCardinality.ZEROSTAR, null, function () {
       setCellValue(cell, childId, 'ZEROSTAR');
     }, parent, null, null, null);
@@ -249,7 +249,7 @@ export class EditorPopupMenu {
 
 
     const outer = this;
-    function setCellValue(cell: myMxCell, childId: 0 | 1, parameter: string) {
+    function setCellValue(cell: MyMxCell, childId: 0 | 1, parameter: string) {
       // updateCardinality(cell, childId, parameter);
 
       try {
@@ -269,7 +269,7 @@ export class EditorPopupMenu {
       }
     }
 
-    function updateCardinality(associationCell: myMxCell, childId: 0 | 1, parameter: string) {
+    function updateCardinality(associationCell: MyMxCell, childId: 0 | 1, parameter: string) {
       (<Association>outer.editorInstance.relationships.find((r: Association) => {
         return r.id === associationCell.id;
       }))['param' + (childId + 1)] = parameter;

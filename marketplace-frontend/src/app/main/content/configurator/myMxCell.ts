@@ -2,7 +2,7 @@ import { mxgraph } from 'mxgraph';
 import { ClassArchetype } from '../_model/meta/Class';
 import { MatchingOperatorType } from '../_model/matching';
 
-export class myMxCell extends mxgraph.mxCell {
+export class MyMxCell extends mxgraph.mxCell {
   cellType?: MyMxCellType;
   classArchetype?: ClassArchetype;
   matchingOperatorType?: MatchingOperatorType;
@@ -26,7 +26,9 @@ export enum MyMxCellType {
 
   ADD_PROPERTY_ICON = 'ADD_PROPERTY_ICON', ADD_ASSOCIATION_ICON = 'ADD_ASSOCIATION_ICON',
   ADD_CLASS_SAME_LEVEL_ICON = 'ADD_CLASS_SAME_LEVEL_ICON', ADD_CLASS_NEXT_LEVEL_ICON = 'ADD_CLASS_NEXT_LEVEL_ICON',
-  REMOVE_ICON = 'REMOVE_ICON'
+  REMOVE_ICON = 'REMOVE_ICON',
+
+  MATCHING_OPERATOR = 'MATCHING_OPERATOR', MATCHING_CONNECTOR = 'MATCHING_CONNECTOR',
 
 
 }

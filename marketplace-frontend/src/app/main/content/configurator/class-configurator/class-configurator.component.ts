@@ -12,7 +12,7 @@ import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/p
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
-import { myMxCell, MyMxCellType } from '../myMxCell';
+import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguration } from '../../_model/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
@@ -69,7 +69,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   rightSidebarVisible: boolean;
 
-  hiddenEdges: myMxCell[];
+  hiddenEdges: MyMxCell[];
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
@@ -136,7 +136,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       return this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0;
     };
 
-    this.graph.getCursorForCell = function (cell: myMxCell) {
+    this.graph.getCursorForCell = function (cell: MyMxCell) {
       if (cell.cellType === MyMxCellType.PROPERTY
         || cell.cellType === MyMxCellType.ADD_PROPERTY_ICON || cell.cellType === MyMxCellType.REMOVE_ICON
         || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON || cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON
@@ -182,7 +182,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       });
 
       this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender, evt) {
-        const cells: myMxCell[] = evt.getProperty('cells');
+        const cells: MyMxCell[] = evt.getProperty('cells');
         const cell = cells.pop();
         outer.handleMXGraphFoldEvent(cell);
       });
@@ -226,9 +226,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   private collapseGraph() {
     const allVertices = this.graph.getChildVertices(this.graph.getDefaultParent());
-    const rootVertice = allVertices.find((v: myMxCell) => v.root);
+    const rootVertice = allVertices.find((v: MyMxCell) => v.root);
     const rootEdges = this.graph.getOutgoingEdges(rootVertice);
-    const headVertices: myMxCell[] = [];
+    const headVertices: MyMxCell[] = [];
 
     for (const edge of rootEdges) {
       headVertices.push(edge.target);
@@ -259,7 +259,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       for (const r of this.relationships) {
-        const rel: myMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0), false) as myMxCell;
+        const rel: MyMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0), false) as MyMxCell;
         if (rel.cellType === MyMxCellType.ASSOCIATION) {
           this.addHiddenRelationshipHack(rel);
         }
@@ -271,13 +271,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
     // create class cell
-    let cell: myMxCell;
+    let cell: MyMxCell;
     if (classDefinition.classArchetype.startsWith('ENUM')) {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
+      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as MyMxCell;
     } else if (classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classFlexprodCollector) as myMxCell;
+      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classFlexprodCollector) as MyMxCell;
     } else {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as myMxCell;
+      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as MyMxCell;
     }
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
@@ -307,7 +307,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     let i = 5;
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as myMxCell;
+        const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
 
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
@@ -328,7 +328,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
       && cell.classArchetype !== ClassArchetype.ENUM_ENTRY && !cell.classArchetype.endsWith('_HEAD')) {
 
-      const addIcon: myMxCell = this.graph.insertVertex(cell, 'add', 'add', 5, i + 50, 20, 20, CConstants.mxStyles.addIcon) as myMxCell;
+      const addIcon: MyMxCell = this.graph.insertVertex(cell, 'add', 'add', 5, i + 50, 20, 20, CConstants.mxStyles.addIcon) as MyMxCell;
       addIcon.setConnectable(false);
       addIcon.cellType = MyMxCellType.ADD_PROPERTY_ICON;
     }
@@ -337,8 +337,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
       && cell.classArchetype !== ClassArchetype.ENUM_ENTRY && !cell.classArchetype.endsWith('_HEAD')) {
 
-      const downAssociationIcon: myMxCell = this.graph.insertVertex(
-        cell, 'add association', 'add_association', 45, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelAssociationIcon) as myMxCell;
+      const downAssociationIcon: MyMxCell = this.graph.insertVertex(
+        cell, 'add association', 'add_association', 45, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelAssociationIcon) as MyMxCell;
       downAssociationIcon.setConnectable(false);
       downAssociationIcon.cellType = MyMxCellType.ADD_ASSOCIATION_ICON;
     }
@@ -347,16 +347,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
       && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
 
-      const nextIcon: myMxCell = this.graph.insertVertex(
-        cell, 'add another', 'add_class_same_level', 85, i + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as myMxCell;
+      const nextIcon: MyMxCell = this.graph.insertVertex(
+        cell, 'add another', 'add_class_same_level', 85, i + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
       nextIcon.setConnectable(false);
       nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
     }
 
     // down icon
     if (cell.classArchetype !== ClassArchetype.ROOT) {
-      const downIcon: myMxCell = this.graph.insertVertex(
-        cell, 'add another', 'add_class_new_level', 65, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as myMxCell;
+      const downIcon: MyMxCell = this.graph.insertVertex(
+        cell, 'add another', 'add_class_new_level', 65, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
       downIcon.setConnectable(false);
       downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
     }
@@ -365,7 +365,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (classDefinition.properties.length > 0 && cell.classArchetype !== ClassArchetype.ENUM_HEAD
       && cell.classArchetype !== ClassArchetype.ENUM_ENTRY && cell.classArchetype !== ClassArchetype.ROOT && !cell.classArchetype.endsWith('_HEAD')) {
 
-      const removeIcon: myMxCell = this.graph.insertVertex(cell, 'remove', 'remove', 25, i + 50, 20, 20, CConstants.mxStyles.removeIcon) as myMxCell;
+      const removeIcon: MyMxCell = this.graph.insertVertex(cell, 'remove', 'remove', 25, i + 50, 20, 20, CConstants.mxStyles.removeIcon) as MyMxCell;
       removeIcon.setConnectable(false);
       removeIcon.cellType = MyMxCellType.REMOVE_ICON;
     }
@@ -381,13 +381,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     const parent = this.graph.getDefaultParent();
 
-    let source: myMxCell = this.graph.getModel().getCell(r.source) as myMxCell;
-    let target: myMxCell = this.graph.getModel().getCell(r.target) as myMxCell;
+    let source: MyMxCell = this.graph.getModel().getCell(r.source) as MyMxCell;
+    let target: MyMxCell = this.graph.getModel().getCell(r.target) as MyMxCell;
 
-    let cell: myMxCell;
+    let cell: MyMxCell;
 
     if (r.relationshipType === RelationshipType.INHERITANCE) {
-      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as myMxCell;
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as MyMxCell;
       cell.cellType = MyMxCellType.INHERITANCE;
 
       if (source.classArchetype.startsWith('ENUM_')) {
@@ -395,10 +395,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }
 
     } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
-      cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as myMxCell;
+      cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
       cell.cellType = MyMxCellType.ASSOCIATION;
 
-      const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
+      const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
       cell1.geometry.relative = true;
       cell1.setConnectable(false);
       cell1.vertex = true;
@@ -410,7 +410,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }
       cell.insert(cell1);
 
-      const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
+      const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
       cell2.geometry.relative = true;
       cell2.setConnectable(false);
       cell2.vertex = true;
@@ -423,11 +423,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell.insert(cell2);
 
     } else if (r.relationshipType === RelationshipType.AGGREGATION) {
-      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as myMxCell;
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as MyMxCell;
       cell.cellType = MyMxCellType.AGGREGATION;
 
     } else if (r.relationshipType === RelationshipType.COMPOSITION) {
-      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as myMxCell;
+      cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as MyMxCell;
       cell.cellType = MyMxCellType.COMPOSITION;
     } else {
       console.error('invalid RelationshipType');
@@ -450,7 +450,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     return this.graph.addEdge(cell, parent, source, target);
   }
 
-  private addHiddenRelationshipHack(relationship: myMxCell) {
+  private addHiddenRelationshipHack(relationship: MyMxCell) {
 
     const sourceCell = relationship.source.getParent();
     const targetCell = relationship.target;
@@ -463,7 +463,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     hack.targetCardinality = 'ONE';
     hack.id = this.objectIdService.getNewObjectId();
 
-    const relationshipCell = new mx.mxCell('', new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as myMxCell;
+    const relationshipCell = new mx.mxCell('', new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as MyMxCell;
     relationshipCell.cellType = MyMxCellType.ASSOCIATION;
     relationshipCell.setVertex(false);
     relationshipCell.setEdge(true);
@@ -494,7 +494,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.setCellStyles('noEdgeStyle', null, edges);
 
     function getRootCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
-      return graph.getModel().getChildCells(graph.getDefaultParent()).filter((cell: myMxCell) => {
+      return graph.getModel().getChildCells(graph.getDefaultParent()).filter((cell: MyMxCell) => {
         return cell.root;
       });
 
@@ -503,7 +503,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   // TODO @Alex fix issue in regards to saved Geometry
-  redrawContent(focusCell: myMxCell) {
+  redrawContent(focusCell: MyMxCell) {
     // let savedGeometry = this.saveGeometry();
     this.clearEditor();
     this.showServerContent();
@@ -512,7 +512,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.focusOnCell(focusCell);
   }
 
-  private focusOnCell(focusCell: myMxCell) {
+  private focusOnCell(focusCell: MyMxCell) {
     const bounds = this.graph.getView().getGraphBounds();
     const scale = this.graph.getView().getScale();
     const translate = this.graph.getView().getTranslate();
@@ -558,7 +558,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   // Events TODO @Alex Refactor that
   handleMXGraphClickEvent(event: any) {
-    const cell: myMxCell = event.getProperty('cell');
+    const cell: MyMxCell = event.getProperty('cell');
 
     // ZOOMSCALE
     const scale = this.graph.view.getScale();
@@ -613,10 +613,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const addedClass = new ClassDefinition();
         addedClass.properties = [];
 
-        if ((cell.getParent() as myMxCell).classArchetype.startsWith('FLEXPROD')) {
+        if ((cell.getParent() as MyMxCell).classArchetype.startsWith('FLEXPROD')) {
           addedClass.classArchetype = ClassArchetype.FLEXPROD;
         } else {
-          addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+          addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
@@ -639,14 +639,14 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.relationships.push(addedRelationship);
 
         this.updateModel();
-        this.redrawContent(cret as myMxCell);
+        this.redrawContent(cret as MyMxCell);
       }
 
       if (cell.value === 'add_class_new_level') {
         const addedClass = new ClassDefinition();
         addedClass.properties = [];
 
-        const parentClassArchetype = (cell.getParent() as myMxCell).classArchetype;
+        const parentClassArchetype = (cell.getParent() as MyMxCell).classArchetype;
 
         if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
           addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
@@ -657,7 +657,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         } else if (parentClassArchetype.startsWith('FLEXPROD')) {
           addedClass.classArchetype = ClassArchetype.FLEXPROD;
         } else {
-          addedClass.classArchetype = (cell.getParent() as myMxCell).classArchetype;
+          addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
@@ -678,7 +678,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.relationships.push(addedRelationship);
 
         this.updateModel();
-        this.redrawContent(cret as myMxCell);
+        this.redrawContent(cret as MyMxCell);
       }
 
       if (cell.value === 'add_association') {
@@ -723,7 +723,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.relationships.push(addedRelationship);
 
         this.updateModel();
-        this.redrawContent(cret as myMxCell);
+        this.redrawContent(cret as MyMxCell);
       }
       this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
       bounds.x = bounds.x - 20;
@@ -737,7 +737,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     console.log("Overlay Event");
     console.log(event);
 
-    const cell = <myMxCell>event.getProperty('cell');
+    const cell = <MyMxCell>event.getProperty('cell');
 
     if (cell.cellType == MyMxCellType.CLASS)
 
@@ -751,8 +751,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.displayOverlay = false;
   }
 
-  handleMXGraphFoldEvent(cell: myMxCell) {
-    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+  handleMXGraphFoldEvent(cell: MyMxCell) {
+    const edges: MyMxCell[] = this.graph.getOutgoingEdges(cell) as MyMxCell[];
 
     if (!isNullOrUndefined(edges)) {
       for (const edge of edges) {
@@ -785,7 +785,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleMXGraphLabelChangedEvent(event: any) {
-    const cell: myMxCell = event.getProperty('cell');
+    const cell: MyMxCell = event.getProperty('cell');
     if (cell.cellType === MyMxCellType.CLASS) {
 
       this.configurableClasses.find((classDefiniton: ClassDefinition) => {
@@ -794,10 +794,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       if (cell.classArchetype === ClassArchetype.ENUM_HEAD) {
 
-        const edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
+        const edges: MyMxCell[] = this.graph.getIncomingEdges(cell) as MyMxCell[];
 
-        const propertyEdge = edges.find((edge: myMxCell) => {
-          return (edge.source as myMxCell).cellType !== MyMxCellType.CLASS;
+        const propertyEdge = edges.find((edge: MyMxCell) => {
+          return (edge.source as MyMxCell).cellType !== MyMxCellType.CLASS;
         });
 
         // Update Cell Value
@@ -856,8 +856,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   // }
 
-  private setAllCellsInvisibleRec(cell: myMxCell) {
-    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+  private setAllCellsInvisibleRec(cell: MyMxCell) {
+    const edges: MyMxCell[] = this.graph.getOutgoingEdges(cell) as MyMxCell[];
     // console.log(cell);
     for (const edge of edges) {
       // this.graph.foldCells(true, false, [edge.target]);
@@ -867,10 +867,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.graph.getModel().setCollapsed(edge.target, true);
       }
       this.graph.getModel().setVisible(edge.target, false);
-      this.setAllCellsInvisibleRec(edge.target as myMxCell);
+      this.setAllCellsInvisibleRec(edge.target as MyMxCell);
     }
 
-    let children = this.graph.getChildCells(cell) as myMxCell[];
+    let children = this.graph.getChildCells(cell) as MyMxCell[];
     children = children.filter(c => c.cellType === MyMxCellType.ENUM_PROPERTY);
 
     for (const child of children) {
@@ -878,22 +878,22 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       for (const childEdge of childEdges) {
         this.graph.getModel().setVisible(childEdge.target, false);
-        this.setAllCellsInvisibleRec(childEdge.target as myMxCell);
+        this.setAllCellsInvisibleRec(childEdge.target as MyMxCell);
       }
     }
   }
-  private setAllCellsVisibleRec(cell: myMxCell) {
-    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+  private setAllCellsVisibleRec(cell: MyMxCell) {
+    const edges: MyMxCell[] = this.graph.getOutgoingEdges(cell) as MyMxCell[];
     for (const edge of edges) {
       this.graph.getModel().setVisible(edge.target, true);
 
-      this.setAllCellsVisibleRec(edge.target as myMxCell);
+      this.setAllCellsVisibleRec(edge.target as MyMxCell);
 
     }
   }
 
-  private setNextCellVisible(cell: myMxCell) {
-    const edges: myMxCell[] = this.graph.getOutgoingEdges(cell) as myMxCell[];
+  private setNextCellVisible(cell: MyMxCell) {
+    const edges: MyMxCell[] = this.graph.getOutgoingEdges(cell) as MyMxCell[];
     for (const edge of edges) {
       // this.graph.getModel().setVisible(edge.target, true);
       // this.setAllCellsInvisibleRec(edge.target as myMxCell);
@@ -901,7 +901,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       // this.graph.getModel().setCollapsed(edge.target, false);
       this.graph.getModel().setVisible(edge.target, true);
 
-      let children = this.graph.getChildCells(cell) as myMxCell[];
+      let children = this.graph.getChildCells(cell) as MyMxCell[];
       children = children.filter(c => c.cellType === MyMxCellType.ENUM_PROPERTY);
 
       for (const child of children) {
@@ -943,7 +943,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   resetViewport() {
     const outer = this;
     this.graph.scrollCellToVisible((function getLeftMostCell() {
-      return outer.graph.getModel().getChildCells(outer.graph.getDefaultParent()).find((c: myMxCell) => c.root);
+      return outer.graph.getModel().getChildCells(outer.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
     })(), false);
 
     const translate = this.graph.view.getTranslate();
@@ -1051,9 +1051,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
 
     for (const cd of this.configurableClasses) {
-      const cell: myMxCell = allCells.find((c: mxgraph.mxCell) => {
+      const cell: MyMxCell = allCells.find((c: mxgraph.mxCell) => {
         return c.id === cd.id;
-      }) as myMxCell;
+      }) as MyMxCell;
 
       if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS)) {
         cd.root = cell.root;
@@ -1062,9 +1062,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     for (const r of this.relationships) {
-      const cell: myMxCell = allCells.find((c: mxgraph.mxCell) => {
+      const cell: MyMxCell = allCells.find((c: mxgraph.mxCell) => {
         return c.id === r.id;
-      }) as myMxCell;
+      }) as MyMxCell;
 
       if (!isNullOrUndefined(cell.source)) {
         r.source = cell.source.id;
@@ -1110,7 +1110,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   showInstanceForm() {
 
-    const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: myMxCell) => c.classArchetype === ClassArchetype.ROOT);
+    const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
     if (!isNullOrUndefined(rootCell)) {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/top-down`], { queryParams: [rootCell.id] });
     }
@@ -1132,7 +1132,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(this.relationships);
     console.log(this.currentClassConfiguration);
   }
-  createClassInstanceClicked(cells: myMxCell[]) {
+  createClassInstanceClicked(cells: MyMxCell[]) {
     console.log('create class instance clicked');
     console.log(cells);
 

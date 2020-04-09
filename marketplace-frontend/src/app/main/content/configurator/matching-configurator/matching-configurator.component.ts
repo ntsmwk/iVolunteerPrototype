@@ -11,7 +11,7 @@ import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
-import { myMxCell } from '../myMxCell';
+import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry, MatchingProducerConsumerType } from '../../_model/matching';
 import { MatchingConfigurationService } from '../../_service/configuration/matching-configuration.service';
@@ -173,8 +173,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       return this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0;
     };
 
-    this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType === 'matchingOperator' && outer.deleteMode) {
+    this.graph.getCursorForCell = function (cell: MyMxCell) {
+      if (cell.cellType === MyMxCellType.MATCHING_OPERATOR && outer.deleteMode) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       } else if (outer.deleteMode) {
         return 'default';
@@ -194,9 +194,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       return null;
     };
 
-    this.graph.getEdgeValidationError = function (edge: myMxCell, source: myMxCell, target: myMxCell) {
+    this.graph.getEdgeValidationError = function (edge: MyMxCell, source: MyMxCell, target: MyMxCell) {
 
-      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === 'matchingOperator'
+      if (!isNullOrUndefined(source) && !isNullOrUndefined(source.edges) && source.cellType === MyMxCellType.MATCHING_OPERATOR
         && !isNullOrUndefined(edge.target) && edge.target.id === target.id) {
 
         if (source.edges.length >= 2) {
@@ -209,14 +209,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           }
         }
 
-      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === 'matchingOperator'
+      } else if (!isNullOrUndefined(target) && !isNullOrUndefined(target.edges) && target.cellType === MyMxCellType.MATCHING_OPERATOR
         && !isNullOrUndefined(edge.source) && edge.source.id === source.id) {
 
         if (target.edges.length >= 2) {
           return '';
         }
 
-        if (source.cellType === 'matchingOperator') {
+        if (source.cellType === MyMxCellType.MATCHING_OPERATOR) {
           return '';
         }
 
@@ -308,15 +308,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassDefinitionCollectorIntoGraph(collector: MatchingCollector, geometry: mxgraph.mxGeometry): myMxCell {
+  private insertClassDefinitionCollectorIntoGraph(collector: MatchingCollector, geometry: mxgraph.mxGeometry): MyMxCell {
     // create class cell
-    let cell: myMxCell;
+    let cell: MyMxCell;
     if (collector.classDefinition.classArchetype.startsWith('ENUM')) {
-      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.classEnum) as myMxCell;
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.classEnum) as MyMxCell;
     } else if (collector.classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
-      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as myMxCell;
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as MyMxCell;
     } else {
-      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as myMxCell;
+      cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
     }
     cell.setCollapsed(false);
     cell.classArchetype = collector.classDefinition.classArchetype;
@@ -349,25 +349,25 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, cell.geometry.height + 5);
-    return this.graph.addCell(cell) as myMxCell;
+    return this.graph.addCell(cell) as MyMxCell;
   }
 
-  private addPropertiesToCell(cell: myMxCell, entry: MatchingCollectorEntry | MatchingCollector, startX: number, startY: number) {
+  private addPropertiesToCell(cell: MyMxCell, entry: MatchingCollectorEntry | MatchingCollector, startX: number, startY: number) {
     const classDefinition = entry.classDefinition;
 
     let lastPropertyGeometry = new mx.mxGeometry(40, 40);
 
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        const propertyEntry: myMxCell = this.graph.insertVertex(
+        const propertyEntry: MyMxCell = this.graph.insertVertex(
           cell, entry.path + entry.pathDelimiter + p.id, p.name, startX, startY + lastPropertyGeometry.height,
-          190, 20, CConstants.mxStyles.matchingProperty) as myMxCell;
+          190, 20, CConstants.mxStyles.matchingProperty) as MyMxCell;
 
         if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = 'enum_property';
+          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
           propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
         } else {
-          propertyEntry.cellType = 'property';
+          propertyEntry.cellType = MyMxCellType.PROPERTY;
         }
         propertyEntry.setConnectable(true);
 
@@ -385,13 +385,13 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     for (const entry of this.matchingConfiguration.relationships) {
       const operatorCell = this.insertMatchingOperator(entry);
 
-      let producerCell: myMxCell;
+      let producerCell: MyMxCell;
       if (!isNullOrUndefined(entry.producerPath)) {
-        producerCell = this.graph.getModel().getCell(entry.producerPath) as myMxCell;
+        producerCell = this.graph.getModel().getCell(entry.producerPath) as MyMxCell;
       }
-      let consumerCell: myMxCell;
+      let consumerCell: MyMxCell;
       if (!isNullOrUndefined(entry.consumerPath)) {
-        consumerCell = this.graph.getModel().getCell(entry.consumerPath) as myMxCell;
+        consumerCell = this.graph.getModel().getCell(entry.consumerPath) as MyMxCell;
       }
 
       this.insertRelationship(producerCell, operatorCell);
@@ -404,15 +404,15 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = this.graph.insertVertex(
       this.graph.getDefaultParent(), relationship.id, null, relationship.coordX, relationship.coordY, 50, 50,
       `shape=image;image=${this.getPathForMatchingOperatorType(relationship.matchingOperatorType)};` +
-      CConstants.mxStyles.matchingOperator) as myMxCell;
+      CConstants.mxStyles.matchingOperator) as MyMxCell;
 
-    cell.cellType = 'matchingOperator';
+    cell.cellType = MyMxCellType.MATCHING_OPERATOR;
     cell.matchingOperatorType = relationship.matchingOperatorType;
 
-    return cell as myMxCell;
+    return cell as MyMxCell;
   }
 
-  private insertRelationship(sourceCell: myMxCell, targetCell: myMxCell) {
+  private insertRelationship(sourceCell: MyMxCell, targetCell: MyMxCell) {
 
     if (isNullOrUndefined(sourceCell) || isNullOrUndefined(targetCell)) {
       return;
@@ -420,9 +420,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     const edge = this.graph.insertEdge(
       this.graph.getDefaultParent(), null, null, sourceCell, targetCell,
-      CConstants.mxStyles.matchingConnector) as myMxCell;
+      CConstants.mxStyles.matchingConnector) as MyMxCell;
 
-    edge.cellType = 'matchingConnector';
+    edge.cellType = MyMxCellType.MATCHING_CONNECTOR;
 
     return edge;
   }
@@ -450,7 +450,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   resetViewport() {
     const outer = this;
     this.graph.scrollCellToVisible((function getLeftMostCell() {
-      return outer.graph.getModel().getChildCells(outer.graph.getDefaultParent()).find((c: myMxCell) => c.root);
+      return outer.graph.getModel().getChildCells(outer.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
     })(), false);
 
     const translate = this.graph.view.getTranslate();
@@ -486,14 +486,14 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   private performSave() {
 
     const cells = this.graph.getChildCells(this.graph.getDefaultParent());
-    const matchingOperatorCells = cells.filter((cell: myMxCell) => cell.cellType === 'matchingOperator');
+    const matchingOperatorCells = cells.filter((cell: MyMxCell) => cell.cellType === MyMxCellType.MATCHING_OPERATOR);
 
     const updatedRelationships: MatchingOperatorRelationship[] = [];
 
     for (const operatorCell of matchingOperatorCells) {
       const relationship = this.matchingConfiguration.relationships.find(r => r.id === operatorCell.id);
 
-      relationship.matchingOperatorType = (operatorCell as myMxCell).matchingOperatorType;
+      relationship.matchingOperatorType = (operatorCell as MyMxCell).matchingOperatorType;
       relationship.coordX = operatorCell.geometry.x;
       relationship.coordY = operatorCell.geometry.y;
 
@@ -505,11 +505,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
         if (!isNullOrUndefined(edge.source) && !isNullOrUndefined(edge.target)) {
           if (edge.target.id === operatorCell.id) {
             relationship.producerPath = edge.source.id;
-            relationship.producerType = (edge.source as myMxCell).cellType === 'property' ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
+            relationship.producerType = (edge.source as MyMxCell).cellType === MyMxCellType.PROPERTY ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
             producerSet = true;
           } else if (edge.source.id === operatorCell.id) {
             relationship.consumerPath = edge.target.id;
-            relationship.consumerType = (edge.target as myMxCell).cellType === 'property' ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
+            relationship.consumerType = (edge.target as MyMxCell).cellType === MyMxCellType.PROPERTY ? MatchingProducerConsumerType.PROPERTY : MatchingProducerConsumerType.CLASS;
             consumerSet = true;
           }
         }
@@ -582,9 +582,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
 
           const cell = graph.insertVertex(graph.getDefaultParent(), null, null, coords.x, coords.y, 50, 50,
-            `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as myMxCell;
+            `shape=image;image=${paletteItem.imgPath};` + CConstants.mxStyles.matchingOperator) as MyMxCell;
 
-          cell.cellType = 'matchingOperator';
+          cell.cellType = MyMxCellType.MATCHING_OPERATOR;
           cell.matchingOperatorType = paletteItem.id;
           cell.id = outer.objectIdService.getNewObjectId();
 
@@ -597,8 +597,8 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
           outer.matchingConfiguration.relationships.push(relationship);
 
         } else if (paletteItem.type === 'connector') {
-          const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as myMxCell;
-          cell.cellType = 'matchingConnector';
+          const cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.matchingConnector) as MyMxCell;
+          cell.cellType = MyMxCellType.MATCHING_CONNECTOR;
           cell.setEdge(true);
           cell.setVertex(false);
           cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
@@ -629,16 +629,16 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleDoubleClickEvent(event: mxgraph.mxEventObject) {
-    const cell = event.properties.cell as myMxCell;
-    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && !this.deleteMode) {
+    const cell = event.properties.cell as MyMxCell;
+    if (!isNullOrUndefined(cell) && cell.cellType === MyMxCellType.MATCHING_OPERATOR && !this.displayOverlay && event.properties.event.button === 0 && !this.deleteMode) {
       this.handleOverlayOpened(event, cell);
     }
   }
 
   handleClickEvent(event: mxgraph.mxEventObject) {
-    const cell = event.properties.cell as myMxCell;
+    const cell = event.properties.cell as MyMxCell;
 
-    if (!isNullOrUndefined(cell) && cell.cellType === 'matchingOperator' && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
+    if (!isNullOrUndefined(cell) && cell.cellType === MyMxCellType.MATCHING_OPERATOR && !this.displayOverlay && event.properties.event.button === 0 && this.deleteMode) {
 
       if (this.confirmDelete) {
         this.dialogFactory.confirmationDialog('Löschen bestätigen', 'Soll der Operator wirklich gelöscht werden?').then((ret: boolean) => {
@@ -658,9 +658,9 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    * ...........Delete Mode..............
    */
 
-  deleteOperators(cells: myMxCell[]) {
+  deleteOperators(cells: MyMxCell[]) {
 
-    const cellsToRemove: myMxCell[] = cells.filter(c => c.cellType === 'matchingOperator');
+    const cellsToRemove: MyMxCell[] = cells.filter(c => c.cellType === MyMxCellType.MATCHING_OPERATOR);
 
     try {
       this.graph.getModel().beginUpdate();
@@ -692,7 +692,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
    * ...........Overlay..............
    */
 
-  handleOverlayOpened(event: mxgraph.mxEventObject, cell: myMxCell) {
+  handleOverlayOpened(event: mxgraph.mxEventObject, cell: MyMxCell) {
     this.overlayRelationship = this.matchingConfiguration.relationships.find(r => r.id === cell.id);
     this.overlayEvent = event.properties.event;
     this.displayOverlay = true;
@@ -714,11 +714,11 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       try {
         this.graph.getModel().beginUpdate();
 
-        let cell = (this.graph.getModel().getCell(event.id) as myMxCell);
+        let cell = (this.graph.getModel().getCell(event.id) as MyMxCell);
 
         cell.matchingOperatorType = event.matchingOperatorType;
         this.graph.setCellStyle(`shape=image;image=${this.getPathForMatchingOperatorType(cell.matchingOperatorType)};` + CConstants.mxStyles.matchingOperator, [cell]);
-        cell = this.graph.getModel().getCell(event.id) as myMxCell;
+        cell = this.graph.getModel().getCell(event.id) as MyMxCell;
 
       } finally {
         this.graph.getModel().endUpdate();
@@ -733,7 +733,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Delete') {
-      const cells = this.graph.getSelectionCells() as myMxCell[];
+      const cells = this.graph.getSelectionCells() as MyMxCell[];
       this.deleteOperators(cells);
     }
   }

@@ -2,14 +2,14 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
-import { myMxCell } from '../../myMxCell';
+import { MyMxCell } from '../../myMxCell';
 import { ClassConfiguratorComponent } from '../class-configurator.component';
 
 export interface GraphNode {
   id: string;
   name: string;
   type: string;
-  cell: myMxCell;
+  cell: MyMxCell;
   visible: boolean;
 
   children?: GraphNode[];
@@ -49,10 +49,10 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
 
   // TODO
   constructJsonFromGraph() {
-    const vertices: myMxCell[] = this.editorInstance.graph.getChildVertices(this.editorInstance.graph.getDefaultParent()) as myMxCell[];
-    const roots: myMxCell[] = vertices.filter((cell: myMxCell) => {
+    const vertices: MyMxCell[] = this.editorInstance.graph.getChildVertices(this.editorInstance.graph.getDefaultParent()) as MyMxCell[];
+    const roots: MyMxCell[] = vertices.filter((cell: MyMxCell) => {
       return cell.root;
-    }) as myMxCell[];
+    }) as MyMxCell[];
 
     const graphNodes: GraphNode[] = [];
     for (const root of roots) {
@@ -69,13 +69,13 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
 
 
 
-  private addChildrenToGraphNode(node: GraphNode, vertices: myMxCell[]): GraphNode[] {
-    const edges: myMxCell[] = this.editorInstance.graph.getEdges(node.cell, undefined, false, true) as myMxCell[];
+  private addChildrenToGraphNode(node: GraphNode, vertices: MyMxCell[]): GraphNode[] {
+    const edges: MyMxCell[] = this.editorInstance.graph.getEdges(node.cell, undefined, false, true) as MyMxCell[];
 
     if (!isNullOrUndefined(edges)) {
       node.children = [];
       for (const edge of edges) {
-        const child = vertices.find((cell: myMxCell) => {
+        const child = vertices.find((cell: MyMxCell) => {
           return cell.id === edge.target.id;
         });
         if (!isNullOrUndefined(child)) {

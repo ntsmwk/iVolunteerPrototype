@@ -1,6 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
-import { myMxCell } from '../myMxCell';
+import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { MatchingConfiguratorComponent } from './matching-configurator.component';
 
 declare var require: any;
@@ -27,7 +27,7 @@ export class MatchingConfiguratorPopupMenu {
     });
   }
 
-  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: myMxCell, evt) {
+  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt) {
     const outer = this;
 
     if (cell != null) {
@@ -36,7 +36,7 @@ export class MatchingConfiguratorPopupMenu {
         console.log(cell);
       }, null, null, true, true);
 
-      if (cell.cellType === 'matchingOperator' || cell.cellType === 'matchingConnector') {
+      if (cell.cellType === MyMxCellType.MATCHING_OPERATOR || cell.cellType === MyMxCellType.MATCHING_CONNECTOR) {
         const deleteItem = menu.addItem('Delete', null, function () {
 
           outer.editorInstance.deleteOperators([cell]);
