@@ -2,7 +2,14 @@ import { mxgraph } from 'mxgraph';
 import { ClassArchetype } from '../_model/meta/Class';
 import { MatchingOperatorType } from '../_model/matching';
 
-export class MyMxCell extends mxgraph.mxCell {
+declare var require: any;
+
+const mx: typeof mxgraph = require('mxgraph')({
+  // mxDefaultLanguage: 'de',
+  // mxBasePath: './mxgraph_resources',
+});
+
+export class MyMxCell extends mx.mxCell {
   cellType?: MyMxCellType;
   classArchetype?: ClassArchetype;
   matchingOperatorType?: MatchingOperatorType;
