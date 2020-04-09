@@ -991,6 +991,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
         });
       } else {
+        this.consumeMenuOptionClickedEvent({ id: 'editor_save' });
         outer.openPreviewDialog(selectionIndex);
       }
     }, 500);
@@ -1301,6 +1302,18 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   exportJsonClicked(cell: myMxCell) {
     console.log('Export JSON clicked');
+
+    setTimeout(() => {
+      if (this.saveDone) {
+        this.dialogFactory.openInstanceFormPreviewDialog(this.marketplace, [cell.id]).then(() => {
+
+        });
+      } else {
+        this.consumeMenuOptionClickedEvent({ id: 'editor_save' });
+        this.exportJsonClicked(cell);
+      }
+    }, 500);
+
   }
 
 
