@@ -12,7 +12,7 @@ import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/p
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
-import { myMxCell } from '../myMxCell';
+import { myMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguration } from '../../_model/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
@@ -137,9 +137,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     this.graph.getCursorForCell = function (cell: myMxCell) {
-      if (cell.cellType === 'property' || cell.cellType === 'add' || cell.cellType === 'remove' ||
-        cell.cellType === 'add_class_new_level' || cell.cellType === 'add_class_same_level' ||
-        cell.cellType === 'add_association') {
+      if (cell.cellType === MyMxCellType.PROPERTY
+        || cell.cellType === MyMxCellType.ADD_PROPERTY_ICON || cell.cellType === MyMxCellType.REMOVE_ICON
+        || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON || cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON
+        || cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON) {
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
@@ -259,7 +260,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().beginUpdate();
       for (const r of this.relationships) {
         const rel: myMxCell = this.insertRelationshipIntoGraph(r, new mx.mxPoint(0, 0), false) as myMxCell;
-        if (rel.cellType === 'association') {
+        if (rel.cellType === MyMxCellType.ASSOCIATION) {
           this.addHiddenRelationshipHack(rel);
         }
       }
@@ -280,7 +281,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
     cell.root = classDefinition.root;
     cell.setCollapsed(false);
-    cell.cellType = 'class';
+    cell.cellType = MyMxCellType.CLASS;
     cell.classArchetype = classDefinition.classArchetype;
     cell.newlyAdded = createNew;
     cell.value = classDefinition.name;
@@ -309,12 +310,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const propertyEntry: myMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as myMxCell;
 
         if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = 'enum_property';
+          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
           propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
 
         } else {
 
-          propertyEntry.cellType = 'property';
+          propertyEntry.cellType = MyMxCellType.PROPERTY;
         }
         propertyEntry.setConnectable(false);
 
@@ -329,7 +330,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       const addIcon: myMxCell = this.graph.insertVertex(cell, 'add', 'add', 5, i + 50, 20, 20, CConstants.mxStyles.addIcon) as myMxCell;
       addIcon.setConnectable(false);
-      addIcon.cellType = 'add';
+      addIcon.cellType = MyMxCellType.ADD_PROPERTY_ICON;
     }
 
     // add association icon
@@ -339,7 +340,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       const downAssociationIcon: myMxCell = this.graph.insertVertex(
         cell, 'add association', 'add_association', 45, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelAssociationIcon) as myMxCell;
       downAssociationIcon.setConnectable(false);
-      downAssociationIcon.cellType = 'add_association';
+      downAssociationIcon.cellType = MyMxCellType.ADD_ASSOCIATION_ICON;
     }
 
     // next icon
@@ -349,7 +350,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       const nextIcon: myMxCell = this.graph.insertVertex(
         cell, 'add another', 'add_class_same_level', 85, i + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as myMxCell;
       nextIcon.setConnectable(false);
-      nextIcon.cellType = 'add_class_same_level';
+      nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
     }
 
     // down icon
@@ -357,7 +358,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       const downIcon: myMxCell = this.graph.insertVertex(
         cell, 'add another', 'add_class_new_level', 65, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as myMxCell;
       downIcon.setConnectable(false);
-      downIcon.cellType = 'add_class_new_level';
+      downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
     }
 
     // remove icon
@@ -366,7 +367,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       const removeIcon: myMxCell = this.graph.insertVertex(cell, 'remove', 'remove', 25, i + 50, 20, 20, CConstants.mxStyles.removeIcon) as myMxCell;
       removeIcon.setConnectable(false);
-      removeIcon.cellType = 'remove';
+      removeIcon.cellType = MyMxCellType.REMOVE_ICON;
     }
 
     // create horizonal filler in front of properties
@@ -387,7 +388,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (r.relationshipType === RelationshipType.INHERITANCE) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.inheritance) as myMxCell;
-      cell.cellType = 'inheritance';
+      cell.cellType = MyMxCellType.INHERITANCE;
 
       if (source.classArchetype.startsWith('ENUM_')) {
         cell.setStyle(CConstants.mxStyles.inheritanceEnum);
@@ -395,13 +396,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     } else if (r.relationshipType === RelationshipType.ASSOCIATION) {
       cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as myMxCell;
-      cell.cellType = 'association';
+      cell.cellType = MyMxCellType.ASSOCIATION;
 
       const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as myMxCell;
       cell1.geometry.relative = true;
       cell1.setConnectable(false);
       cell1.vertex = true;
-      cell1.cellType = 'associationLabel';
+      cell1.cellType = MyMxCellType.ASSOCIATION_LABEL;
       cell1.setVisible(false);
 
       if (isNullOrUndefined(cell1.value)) {
@@ -413,7 +414,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell2.geometry.relative = true;
       cell2.setConnectable(false);
       cell2.vertex = true;
-      cell2.cellType = 'associationLabel';
+      cell2.cellType = MyMxCellType.ASSOCIATION_LABEL;
       cell2.setVisible(false);
 
       if (isNullOrUndefined(cell2.value)) {
@@ -423,11 +424,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     } else if (r.relationshipType === RelationshipType.AGGREGATION) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as myMxCell;
-      cell.cellType = 'aggregation';
+      cell.cellType = MyMxCellType.AGGREGATION;
 
     } else if (r.relationshipType === RelationshipType.COMPOSITION) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.composition) as myMxCell;
-      cell.cellType = 'composition';
+      cell.cellType = MyMxCellType.COMPOSITION;
     } else {
       console.error('invalid RelationshipType');
     }
@@ -463,7 +464,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     hack.id = this.objectIdService.getNewObjectId();
 
     const relationshipCell = new mx.mxCell('', new mx.mxGeometry(0, 0, 0, 0), CConstants.mxStyles.association) as myMxCell;
-    relationshipCell.cellType = 'association';
+    relationshipCell.cellType = MyMxCellType.ASSOCIATION;
     relationshipCell.setVertex(false);
     relationshipCell.setEdge(true);
 
@@ -735,7 +736,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   handleMXGraphDoubleClickEvent(event: mxgraph.mxEventObject) {
     console.log("Overlay Event");
     console.log(event);
-    this.overlayEvent = event.getProperty('event');
+
+    const cell = <myMxCell>event.getProperty('cell');
+
+    if (cell.cellType == MyMxCellType.CLASS)
+
+      this.overlayEvent = event.getProperty('event');
     this.displayOverlay = true;
   }
 
@@ -780,7 +786,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleMXGraphLabelChangedEvent(event: any) {
     const cell: myMxCell = event.getProperty('cell');
-    if (cell.cellType === 'class') {
+    if (cell.cellType === MyMxCellType.CLASS) {
 
       this.configurableClasses.find((classDefiniton: ClassDefinition) => {
         return classDefiniton.id === cell.id;
@@ -791,7 +797,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const edges: myMxCell[] = this.graph.getIncomingEdges(cell) as myMxCell[];
 
         const propertyEdge = edges.find((edge: myMxCell) => {
-          return (edge.source as myMxCell).cellType !== 'class';
+          return (edge.source as myMxCell).cellType !== MyMxCellType.CLASS;
         });
 
         // Update Cell Value
@@ -865,7 +871,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     let children = this.graph.getChildCells(cell) as myMxCell[];
-    children = children.filter(c => c.cellType === 'enum_property');
+    children = children.filter(c => c.cellType === MyMxCellType.ENUM_PROPERTY);
 
     for (const child of children) {
       const childEdges = this.graph.getOutgoingEdges(child);
@@ -896,7 +902,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().setVisible(edge.target, true);
 
       let children = this.graph.getChildCells(cell) as myMxCell[];
-      children = children.filter(c => c.cellType === 'enum_property');
+      children = children.filter(c => c.cellType === MyMxCellType.ENUM_PROPERTY);
 
       for (const child of children) {
         const childEdges = this.graph.getOutgoingEdges(child);
@@ -1049,7 +1055,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         return c.id === cd.id;
       }) as myMxCell;
 
-      if (!isNullOrUndefined(cell) && (cell.cellType === 'class')) {
+      if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS)) {
         cd.root = cell.root;
         cd.name = cell.value;
       }
@@ -1067,15 +1073,15 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         r.target = cell.target.id;
       }
 
-      if (cell.cellType === 'inheritance') {
+      if (cell.cellType === MyMxCellType.INHERITANCE) {
         if (!isNullOrUndefined(cell.source)) {
           (<Inheritance>r).superClassId = cell.source.id;
         }
-      } else if (cell.cellType === 'association') {
+      } else if (cell.cellType === MyMxCellType.ASSOCIATION) {
         (<Association>r).sourceCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(0).value);
         (<Association>r).targetCardinality = AssociationCardinality.getAssociationParameterFromLabel(cell.getChildAt(1).value);
 
-      } else if (cell.cellType === 'composition' || cell.cellType === 'aggregation') {
+      } else if (cell.cellType === MyMxCellType.AGGREGATION || cell.cellType === MyMxCellType.COMPOSITION) {
         // TODO
       } else {
         // console.error('invalid cellType');

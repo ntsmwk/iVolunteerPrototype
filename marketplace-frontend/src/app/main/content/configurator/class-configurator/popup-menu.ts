@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
 import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
-import { myMxCell } from '../myMxCell';
+import { myMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
 
 declare var require: any;
@@ -36,7 +36,7 @@ export class EditorPopupMenu {
     if (cell != null) {
       if (cell.isEdge()) {
 
-        if (cell.cellType === 'association') {
+        if (cell.cellType === MyMxCellType.ASSOCIATION) {
           const item1 = menu.addItem('Set Cardinality', null, null, null, null, true, false);
 
           menu.addSeparator(null, true);
@@ -52,7 +52,7 @@ export class EditorPopupMenu {
         }
       } else if (cell.isVertex()) {
 
-        if (cell.cellType === 'associationLabel') {
+        if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
           const item1 = menu.addItem('Set Cardinality', null, function () {
             console.log(cell);
 
@@ -110,7 +110,7 @@ export class EditorPopupMenu {
         try {
 
           // remove property from Class in Array
-          if (cell.cellType === 'property') {
+          if (cell.cellType === MyMxCellType.PROPERTY) {
             const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
               return c.id === cell.getParent().getId();
             });
@@ -125,7 +125,7 @@ export class EditorPopupMenu {
 
 
             // remove Class from Array
-          } else if (cell.cellType === 'class') {
+          } else if (cell.cellType === MyMxCellType.CLASS) {
 
             const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
               return c.id === cell.getId();
@@ -140,7 +140,7 @@ export class EditorPopupMenu {
 
 
             // remove Relationship when clicking on a Label
-          } else if (cell.cellType === 'associationLabel') {
+          } else if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
             const parent = cell.getParent();
 
             outer.graph.getModel().remove(parent);
@@ -153,7 +153,10 @@ export class EditorPopupMenu {
             outer.editorInstance.deletedRelationshipIds.push(deleted.pop().id);
 
             // remove relationship
-          } else if (cell.cellType === 'association' || cell.cellType === 'inheritance' || cell.cellType === 'aggregation') {
+          } else if (
+            cell.cellType === MyMxCellType.ASSOCIATION || cell.cellType === MyMxCellType.INHERITANCE ||
+            cell.cellType === MyMxCellType.AGGREGATION || cell.cellType === MyMxCellType.COMPOSITION) {
+
             graph.getModel().remove(cell);
 
             const relationshipIndex = outer.editorInstance.relationships.findIndex((c: Relationship) => {
@@ -175,10 +178,10 @@ export class EditorPopupMenu {
 
       }, null, null, true, true);
 
-      if (cell.cellType !== 'property') {
+      if (cell.cellType !== MyMxCellType.PROPERTY) {
         const copyItem = menu.addItem('Duplicate', null, function () {
           if (cell.isVertex()) {
-            if (cell.cellType === 'associationLabel') {
+            if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
               duplicateEdge(cell.getParent());
             } else {
               duplicateVertex(cell);
