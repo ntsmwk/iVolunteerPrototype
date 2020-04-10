@@ -33,7 +33,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   returnedClassInstances: ClassInstance[];
 
-  isLoaded: boolean = false;
+  isLoaded = false;
 
   helpseeker: Helpseeker;
 
@@ -100,15 +100,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   }
 
   handleCloseClick() {
-    this.dialogRef.close();
-  }
-
-  printAnything(anything: any) {
-    console.log(anything);
-  }
-
-  navigateBack() {
-    window.history.back();
+    console.log("handle close click");
+    this.dialogRef.close(this.data);
   }
 
 }

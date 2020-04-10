@@ -12,7 +12,7 @@ import { OpenDialogComponent, OpenDialogData } from 'app/main/content/_component
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
@@ -487,13 +487,14 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
+    let returnValue: ClassInstanceFormPreviewDialogData;
     dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
-
-
+      console.log("closing from DialogFactory");
+      returnValue = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return undefined;
+      return returnValue;
     });
   }
 

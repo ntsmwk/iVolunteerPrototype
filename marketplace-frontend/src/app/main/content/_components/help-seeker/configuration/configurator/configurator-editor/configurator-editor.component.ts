@@ -1301,18 +1301,21 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
   }
 
   exportJsonClicked(cell: myMxCell) {
-    console.log('Export JSON clicked');
 
     setTimeout(() => {
-      if (this.saveDone) {
-        this.dialogFactory.openPreviewExportDialog(this.marketplace, [cell.id]).then(() => {
-          this.saveDone = false;
+      if (!this.saveDone) {
+        this.consumeMenuOptionClickedEvent({ id: 'editor_save' }).then(() => {
+          this.exportJsonClicked(cell);
         });
       } else {
-        this.consumeMenuOptionClickedEvent({ id: 'editor_save' });
-        this.exportJsonClicked(cell);
+        this.dialogFactory.openPreviewExportDialog(this.marketplace, [cell.id]).then((ret) => {
+          console.log("returned to Configurator");
+          this.saveDone = false;
+        });
       }
     }, 500);
+
+
 
   }
 

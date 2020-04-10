@@ -87,6 +87,10 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
     this.resultEvent.emit(new FormEntryReturnEventData(this.form, this.formConfigurationId));
   }
 
+  handleCancel() {
+    this.cancelEvent.emit("cancel");
+  }
+
   navigateBack() {
     window.history.back();
   }

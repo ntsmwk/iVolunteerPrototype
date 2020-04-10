@@ -10,16 +10,16 @@
 
   <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center">
 
-    <button type="button" mat-raised-button color="secondary" (click)="navigateBack()">
+    <button type="button" mat-raised-button color="secondary" (click)="handleCancel()">
       Abbrechen</button>
 
     <div></div>
 
     <button *ngIf="!lastEntry" type="submit" mat-raised-button color="primary">
       Weiter</button>
-      <button *ngIf="lastEntry" type="submit" mat-raised-button color="primary">
-        Speichern</button>
-  
-    </div>
+    <button *ngIf="lastEntry" type="submit" mat-raised-button color="primary">
+      Speichern</button>
+
+  </div>
 
 </form>
