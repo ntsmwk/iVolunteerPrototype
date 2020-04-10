@@ -230,7 +230,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
         outer.handleMXGraphCellSelectEvent(evt);
       });
       this.showServerContent(true);
-      this.collapseGraph();
+      // this.collapseGraph();
 
 
     }
@@ -1114,7 +1114,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     ]).then(() => {
       // draw graph
       this.showServerContent(false);
-      this.collapseGraph();
+      // this.collapseGraph();
     });
 
   }
@@ -1305,7 +1305,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
     setTimeout(() => {
       if (this.saveDone) {
-        this.dialogFactory.openInstanceFormPreviewDialog(this.marketplace, [cell.id]).then(() => {
+        this.dialogFactory.openPreviewExportDialog(this.marketplace, [cell.id]).then(() => {
           this.saveDone = false;
         });
       } else {
