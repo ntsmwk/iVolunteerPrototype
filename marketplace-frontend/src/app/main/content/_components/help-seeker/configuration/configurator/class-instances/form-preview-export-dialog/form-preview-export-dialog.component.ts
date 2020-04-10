@@ -42,9 +42,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ClassInstanceFormPreviewExportDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ClassInstanceFormPreviewExportDialogData,
 
-    private marketplaceService: CoreMarketplaceService,
     private classDefinitionService: ClassDefinitionService,
-    private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private loginService: LoginService
