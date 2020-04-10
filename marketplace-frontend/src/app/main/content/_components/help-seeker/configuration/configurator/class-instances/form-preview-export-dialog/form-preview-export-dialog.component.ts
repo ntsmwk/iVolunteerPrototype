@@ -7,7 +7,7 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { PropertyInstance } from 'app/main/content/_model/meta/Property';
+import { PropertyInstance, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -59,7 +59,13 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
         this.formConfigurations = formConfigurations;
 
+
         for (const config of this.formConfigurations) {
+          const classProperties: ClassProperty<any>[] = [];
+          for (const classProperty of config.formEntry.classProperties) {
+            classProperty.id = classProperty.name;
+          }
+
           config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
           config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
         }
@@ -75,12 +81,22 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   handleExportClick(returnData: FormEntryReturnEventData) {
     returnData.formGroup.enable();
-    const json = '[' + JSON.stringify(returnData.formGroup.value) + ']';
-    this.exportFile(json);
+    returnData.formGroup.updateValueAndValidity();
+
+    const json = '[' + JSON.stringify(returnData.formGroup.value, this.replacer) + ']';
+    this.exportFile([json]);
   }
 
-  private exportFile(content: string) {
-    const blob = new Blob([content], { type: 'application/json' });
+  private replacer(key, value) {
+    if (isNullOrUndefined(value)) {
+      return '';
+    } else {
+      return value;
+    }
+  }
+
+  private exportFile(content: string[]) {
+    const blob = new Blob(content, { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
 
     const link = document.createElement('a');

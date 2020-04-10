@@ -62,11 +62,9 @@ public class InitializationService {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
-	
+
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-
-
 
 	@PostConstruct
 	public void init() {
@@ -84,28 +82,26 @@ public class InitializationService {
 		this.addTestClassInstances();
 	}
 
-
-	public void addStandardPropertyDefinitions() {		
+	public void addStandardPropertyDefinitions() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		
-		tenants.forEach(tenantId -> {	
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
+
+		tenants.forEach(tenantId -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {				
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
-		});	
+		});
 	}
-
-	private void addiVolunteerAPIClassDefinition() {	
+	
+	private void addiVolunteerAPIClassDefinition() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		
 
-		tenants.forEach(tenantId -> {	
+		tenants.forEach(tenantId -> {
 			addPropertyDefinitions(tenantId);
 
 			ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenantId);
@@ -115,7 +111,7 @@ public class InitializationService {
 				createiVolunteerAPIPersonCertificateClassDefinition(tenantId);
 				createiVolunteerAPIPersonTaskClassDefinition(tenantId);
 			}
-		});		
+		});
 	}
 
 	private void createiVolunteerAPIPersonRoleClassDefinition(String tenantId) {
@@ -230,7 +226,7 @@ public class InitializationService {
 		addPersonBadgeProperties(propertyDefinitions, tenantId);
 		addPersonCertificateProperties(propertyDefinitions, tenantId);
 		addPersonTaskProperties(propertyDefinitions, tenantId);
-		
+
 		propertyDefinitions.forEach(pd -> {
 			if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantId).size() == 0) {
 				propertyDefinitionRepository.save(pd);
@@ -282,12 +278,10 @@ public class InitializationService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addTestConfigClasses() {
-		// TODO Philipp testConfig  for tenant=FFEIDENBERG only
+		// TODO Philipp testConfig for tenant=FFEIDENBERG only
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
-		
 		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
-		
 
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		c1.setId("test1");
@@ -375,7 +369,7 @@ public class InitializationService {
 
 		Inheritance i1 = new Inheritance(c1.getId(), c3.getId(), c1.getId());
 		i1.setId("test_i1");
-	
+
 		Inheritance i2 = new Inheritance(c1.getId(), c2.getId(), c1.getId());
 		i2.setId("test_i2");
 		Inheritance i3 = new Inheritance(c2.getId(), c4.getId(), c2.getId());
