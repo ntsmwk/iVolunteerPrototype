@@ -6,9 +6,9 @@
 
         <div style="padding-top: 12px"></div>
         <app-dynamic-class-instance-creation-form [questions]="currentFormConfiguration.formEntry.questions"
-            [hideButtons]="true" [formConfigurationId]="currentFormConfiguration.id"
-            [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleResultEvent($event)"
-            (cancelEvent)="handleCancelEvent()">
+            [hideButtons]="false" [formConfigurationId]="currentFormConfiguration.id"
+            [form]="currentFormConfiguration.formEntry.formGroup" (resultEvent)="handleExportClick($event)"
+            (cancelEvent)="handleCloseClick()">
         </app-dynamic-class-instance-creation-form>
     </div>
 
@@ -20,12 +20,12 @@
         <div></div>
 
         <div>
-            <button type="button" mat-raised-button color="primary" (click)="handleExportClick()">
+            <!-- <button type="button" mat-raised-button color="primary" (click)="handleExportClick()">
                 Export JSON
             </button>
             <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()" class="ml-8">
                 Close
-            </button>
+            </button> -->
         </div>
 
         <div></div>

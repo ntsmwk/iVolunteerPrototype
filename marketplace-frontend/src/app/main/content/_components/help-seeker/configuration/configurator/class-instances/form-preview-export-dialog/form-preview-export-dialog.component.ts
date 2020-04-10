@@ -5,7 +5,7 @@ import { ClassDefinitionService } from '../../../../../../_service/meta/core/cla
 import { ClassInstance } from '../../../../../../_model/meta/Class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
-import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
+import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
 import { PropertyInstance } from 'app/main/content/_model/meta/Property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
@@ -75,9 +75,28 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   }
 
-  handleExportClick() {
-    const json = JSON.stringify(this.currentFormConfiguration.formEntry.formGroup.value);
-    console.log(json);
+  handleExportClick(returnData: FormEntryReturnEventData) {
+    returnData.formGroup.enable();
+    const json = '[' + JSON.stringify(returnData.formGroup.value) + ']';
+    this.exportFile(json);
+  }
+
+  private exportFile(content: string) {
+    const blob = new Blob([content], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'export.json';
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(() => {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+
   }
 
   handleCloseClick() {
