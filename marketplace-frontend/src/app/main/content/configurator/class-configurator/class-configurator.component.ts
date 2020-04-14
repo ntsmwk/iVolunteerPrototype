@@ -7,7 +7,7 @@ import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { PropertyDefinition, PropertyItem, ClassProperty, PropertyType, EnumReference } from 'app/main/content/_model/meta/Property';
+import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/Property';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../_service/objectid.service.';
@@ -179,24 +179,32 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
 
       const outer = this; // preserve outer scope
-      this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
-        outer.handleMXGraphClickEvent(evt);
+      this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+        console.log(evt);
+        console.log(sender);
+
+        const mouseEvent = evt.getProperty('event');
+        if (mouseEvent.button === 0) {
+          outer.handleMXGraphLeftClickEvent(evt);
+        } else if (mouseEvent.button === 2) {
+          outer.handleMXGraphRightClickEvent(evt);
+        }
       });
 
-      this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.FOLD_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
         const cells: MyMxCell[] = evt.getProperty('cells');
         const cell = cells.pop();
         outer.handleMXGraphFoldEvent(cell);
       });
 
-      this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function (sender, evt) {
-        outer.handleMXGraphLabelChangedEvent(evt);
+      this.graph.addListener(mx.mxEvent.LABEL_CHANGED, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+        // outer.handleMXGraphLabelChangedEvent(evt);
       });
 
-      this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender, evt) {
+      this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
         // outer.handleMXGraphCellSelectEvent(evt);
       });
-      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender, evt) {
+      this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
         outer.handleMXGraphDoubleClickEvent(evt);
       });
 
@@ -300,8 +308,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     // create vertical space before properties
-    const vfiller = this.graph.insertVertex(cell, 'vfiller', null, 105, 45, 5, 130, CConstants.mxStyles.classVfiller);
-    vfiller.setConnectable(false);
+    // const vfiller = this.graph.insertVertex(cell, 'vfiller', null, 105, 45, 5, 130, CConstants.mxStyles.classVfiller);
+    // vfiller.setConnectable(false);
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
 
@@ -565,7 +573,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   // Events TODO @Alex Refactor that
-  handleMXGraphClickEvent(event: mxgraph.mxEventObject) {
+  handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
     const cell: MyMxCell = event.getProperty('cell');
 
     // ZOOMSCALE
@@ -747,6 +755,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
+    let pointerevent = event.getProperty('event') as PointerEvent;
+  }
+
+
   handleMXGraphDoubleClickEvent(event: mxgraph.mxEventObject) {
     console.log("Overlay Event");
     console.log(event);
@@ -803,36 +816,36 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.modelUpdated = true;
   }
 
-  handleMXGraphLabelChangedEvent(event: any) {
-    const cell: MyMxCell = event.getProperty('cell');
-    if (cell.cellType === MyMxCellType.CLASS) {
+  // handleMXGraphLabelChangedEvent(event: any) {
+  //   const cell: MyMxCell = event.getProperty('cell');
+  //   if (cell.cellType === MyMxCellType.CLASS) {
 
-      this.configurableClasses.find((classDefiniton: ClassDefinition) => {
-        return classDefiniton.id === cell.id;
-      }).name = cell.value;
+  //     this.configurableClasses.find((classDefiniton: ClassDefinition) => {
+  //       return classDefiniton.id === cell.id;
+  //     }).name = cell.value;
 
-      if (cell.classArchetype === ClassArchetype.ENUM_HEAD) {
+  //     if (cell.classArchetype === ClassArchetype.ENUM_HEAD) {
 
-        const edges: MyMxCell[] = this.graph.getIncomingEdges(cell) as MyMxCell[];
+  //       const edges: MyMxCell[] = this.graph.getIncomingEdges(cell) as MyMxCell[];
 
-        const propertyEdge = edges.find((edge: MyMxCell) => {
-          return (edge.source as MyMxCell).cellType !== MyMxCellType.CLASS;
-        });
+  //       const propertyEdge = edges.find((edge: MyMxCell) => {
+  //         return (edge.source as MyMxCell).cellType !== MyMxCellType.CLASS;
+  //       });
 
-        // Update Cell Value
-        this.graph.getModel().setValue(propertyEdge.source, cell.value);
+  //       // Update Cell Value
+  //       this.graph.getModel().setValue(propertyEdge.source, cell.value);
 
-        // Update Property in Model
-        this.configurableClasses.find((classDefinition: ClassDefinition) => {
-          return classDefinition.id === propertyEdge.source.parent.id;
-        }).properties.find((classProperty: ClassProperty<any>) => {
-          return classProperty.id === propertyEdge.source.id;
-        }).name = propertyEdge.source.value;
+  //       // Update Property in Model
+  //       this.configurableClasses.find((classDefinition: ClassDefinition) => {
+  //         return classDefinition.id === propertyEdge.source.parent.id;
+  //       }).properties.find((classProperty: ClassProperty<any>) => {
+  //         return classProperty.id === propertyEdge.source.id;
+  //       }).name = propertyEdge.source.value;
 
-        this.modelUpdated = true;
-      }
-    }
-  }
+  //       this.modelUpdated = true;
+  //     }
+  //   }
+  // }
 
   // handleMXGraphCellSelectEvent(event: any) {
   //   console.log(event);
@@ -905,9 +918,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const edges: MyMxCell[] = this.graph.getOutgoingEdges(cell) as MyMxCell[];
     for (const edge of edges) {
       this.graph.getModel().setVisible(edge.target, true);
-
       this.setAllCellsVisibleRec(edge.target as MyMxCell);
-
     }
   }
 
@@ -930,7 +941,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
           this.graph.getModel().setVisible(childEdge.target, true);
         }
       }
-
     }
   }
 
@@ -1006,32 +1016,18 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     switch (event.id) {
       case 'editor_save': {
         this.updateModel();
-
         this.eventResponse.action = 'save';
         this.eventResponse.classConfiguration = this.currentClassConfiguration;
         this.eventResponse.classDefintions = this.configurableClasses;
         this.eventResponse.relationships = this.relationships;
         this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
         this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
-
         break;
-
       } case 'editor_save_return': {
         this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
         break;
 
       } case 'editor_save_as': {
-        // this.currentClassConfiguration = event.configurator;
-        // this.updateModel();
-
-        // this.eventResponse.action = 'saveAs';
-        // this.eventResponse.classConfiguration = this.currentClassConfiguration;
-        // this.eventResponse.classDefintions = this.configurableClasses;
-        // this.eventResponse.relationships = this.relationships;
-
-        // this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
-        // this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
-        // this.saveGraph();
         console.log('not implemented');
         break;
       } case 'editor_new': {

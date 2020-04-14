@@ -26,6 +26,7 @@ export class EditorPopupMenu {
 
     const outer = this;
     return new mx.mxPopupMenuHandler(graph, function (menu, cell, evt) {
+      console.log("create");
       return outer.createPopupMenu(this.graph, menu, cell, evt);
     });
   }
@@ -33,7 +34,7 @@ export class EditorPopupMenu {
   private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt) {
     const outer = this;
 
-    if (cell != null) {
+    if (cell != null && cell.cellType !== MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON && cell.cellType !== MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
       if (cell.isEdge()) {
 
         if (cell.cellType === MyMxCellType.ASSOCIATION) {

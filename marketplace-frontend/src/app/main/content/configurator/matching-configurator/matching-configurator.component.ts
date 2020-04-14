@@ -313,7 +313,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     let cell: MyMxCell;
     if (collector.classDefinition.classArchetype.startsWith('ENUM')) {
       cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.classEnum) as MyMxCell;
-    } else if (collector.classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
+    } else if (collector.classDefinition.collector) {
       cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassFlexprodCollector) as MyMxCell;
     } else {
       cell = new mx.mxCell(collector.classDefinition.name, geometry, CConstants.mxStyles.matchingClassNormal) as MyMxCell;
