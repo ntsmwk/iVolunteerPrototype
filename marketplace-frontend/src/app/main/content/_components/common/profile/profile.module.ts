@@ -17,6 +17,8 @@ import {
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
+import { VolunteerProfileComponent } from "./volunteer-profile/volunteer-profile.component";
+import { HelpSeekerProfileComponent } from "./helpseeker-profile/helpseeker-profile.component";
 
 const routes = [{ path: "", component: ProfileComponent }];
 
@@ -38,7 +40,11 @@ const routes = [{ path: "", component: ProfileComponent }];
     FuseWidgetModule
   ],
   exports: [],
-  declarations: [ProfileComponent],
+  declarations: [
+    ProfileComponent,
+    VolunteerProfileComponent,
+    HelpSeekerProfileComponent
+  ],
   providers: []
 })
 export class ProfileModule {}
