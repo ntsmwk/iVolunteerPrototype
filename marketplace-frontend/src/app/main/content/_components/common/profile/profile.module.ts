@@ -19,6 +19,9 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
 import { VolunteerProfileComponent } from "./volunteer-profile/volunteer-profile.component";
 import { HelpSeekerProfileComponent } from "./helpseeker-profile/helpseeker-profile.component";
+import { ProfileAboutComponent } from "./volunteer-profile/about/about.component";
+import { ProfilePhotosVideosComponent } from "./volunteer-profile/photos-videos/photos-videos.component";
+import { ProfileTimelineComponent } from "./volunteer-profile/timeline/timeline.component";
 
 const routes = [{ path: "", component: ProfileComponent }];
 
@@ -43,7 +46,10 @@ const routes = [{ path: "", component: ProfileComponent }];
   declarations: [
     ProfileComponent,
     VolunteerProfileComponent,
-    HelpSeekerProfileComponent
+    HelpSeekerProfileComponent,
+    ProfileAboutComponent,
+    ProfilePhotosVideosComponent,
+    ProfileTimelineComponent
   ],
   providers: []
 })
