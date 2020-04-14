@@ -53,7 +53,7 @@ public class CollectionService {
 
 		List<ClassDefinition> collectors = new ArrayList<ClassDefinition>();
 		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
-			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
+			if (c.isCollector()) {
 				collectors.add(c);
 			}
 		});
@@ -74,7 +74,7 @@ public class CollectionService {
 
 		List<MatchingCollector> collections = new ArrayList<>();
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
-			if (c.getClassArchetype() == ClassArchetype.FLEXPROD_COLLECTOR) {
+			if (c.isCollector()) {
 				MatchingCollector collection = new MatchingCollector();
 				collection.setClassDefinition(c);
 				collection.setNumberOfProperties(c.getProperties().size());

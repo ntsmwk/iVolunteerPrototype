@@ -6,6 +6,7 @@ export class ClassDefinition {
     root: boolean;
     name: string;
     classArchetype: ClassArchetype;
+    collector: boolean;
     properties: ClassProperty<any>[] = [];
     marketplaceId: string;
     timestamp: Date;
@@ -117,8 +118,8 @@ export enum ClassArchetype {
     ACHIEVEMENT_HEAD = 'ACHIEVEMENT_HEAD',
 
     FLEXPROD = 'FLEXPROD',
-    FLEXPROD_COLLECTOR = 'FLEXPROD_COLLECTOR'
 }
+
 export namespace ClassArchetype {
 
     export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
@@ -131,7 +132,6 @@ export namespace ClassArchetype {
             // case 'ENUM_ENTRY': return 'Enum entry';
             // case 'ROOT': return 'Root';
             case 'FLEXPROD': return 'Flexprod';
-            case 'FLEXPROD_COLLECTOR': return 'Flexprod';
         }
     }
 }

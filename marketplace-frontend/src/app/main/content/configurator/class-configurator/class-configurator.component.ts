@@ -146,6 +146,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     };
 
     const modelGetStyle = this.graph.model.getStyle;
+
     this.graph.model.getStyle = function (cell) {
       if (cell != null) {
         let style = modelGetStyle.apply(this, arguments);
@@ -175,6 +176,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
 
       this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
+
 
       const outer = this; // preserve outer scope
       this.graph.addListener(mx.mxEvent.CLICK, function (sender, evt) {
@@ -274,7 +276,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     let cell: MyMxCell;
     if (classDefinition.classArchetype.startsWith('ENUM')) {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as MyMxCell;
-    } else if (classDefinition.classArchetype === ClassArchetype.FLEXPROD_COLLECTOR) {
+    } else if (classDefinition.collector) {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classFlexprodCollector) as MyMxCell;
     } else {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as MyMxCell;
@@ -739,10 +741,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     const cell = <MyMxCell>event.getProperty('cell');
 
-    if (cell.cellType == MyMxCellType.CLASS)
-
+    if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
       this.overlayEvent = event.getProperty('event');
-    this.displayOverlay = true;
+      this.displayOverlay = true;
+    }
+
   }
 
   handleOverlayClosedEvent(event: any) {

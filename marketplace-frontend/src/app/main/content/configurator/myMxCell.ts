@@ -39,3 +39,9 @@ export enum MyMxCellType {
 
 
 }
+
+export namespace MyMxCellType {
+  export function isRelationship(s: string) {
+    return (s === MyMxCellType.INHERITANCE || s === MyMxCellType.ASSOCIATION || s === MyMxCellType.COMPOSITION || s === MyMxCellType.AGGREGATION);
+  }
+}

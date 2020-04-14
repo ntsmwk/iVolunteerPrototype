@@ -18,6 +18,8 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
 	private ClassArchetype classArchetype;
+	
+	private boolean collector;
 
 	private String imagePath;
 	
@@ -86,7 +88,14 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	public void setClassArchetype(ClassArchetype classArchetype) {
 		this.classArchetype = classArchetype;
 	}
-	
+
+	public boolean isCollector() {
+		return collector;
+	}
+
+	public void setCollector(boolean collector) {
+		this.collector = collector;
+	}
 
 	public boolean isVisible() {
 		return visible;
