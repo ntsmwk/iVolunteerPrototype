@@ -80,6 +80,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   rootCell: MyMxCell;
   rootCellSet: boolean;
 
+  quickEditMode: boolean;
+
   saveDone: boolean;
 
   // Overlay
@@ -656,26 +658,29 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        addedClass.id = this.objectIdService.getNewObjectId();
 
-        const cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
-        // cret.id = this.objectIdService.getNewObjectId();
-        addedClass.id = cret.id;
+        const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45), true);
         this.configurableClasses.push(addedClass);
 
         const precursor = this.graph.getIncomingEdges(cell.getParent())[0].source;
 
         const addedRelationship = new Relationship();
+        //TODO
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        //TODO END
         addedRelationship.source = precursor.id;
         addedRelationship.target = addedClass.id;
+        addedRelationship.id = this.objectIdService.getNewObjectId();
 
-        const rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
-        rret.id = this.objectIdService.getNewObjectId();
-        addedRelationship.id = rret.id;
+        const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
+
         this.relationships.push(addedRelationship);
 
         // this.updateModel();
-        this.redrawContent(cret as MyMxCell);
+        if (!this.quickEditMode) {
+          this.redrawContent(classCell as MyMxCell);
+        }
       }
 
       if (cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
@@ -698,26 +703,29 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         }
 
         addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        addedClass.id = this.objectIdService.getNewObjectId();
 
-        const cret = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(0, 0, 80, 30), true);
-        // cret.id = this.objectIdService.getNewObjectId();
-        addedClass.id = cret.id;
+        const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45), true);
+
         this.configurableClasses.push(addedClass);
 
         const addedRelationship = new Relationship();
+        //TODO
         addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        //TODO END
         addedRelationship.source = cell.getParent().id;
-        addedRelationship.target = cret.id;
+        addedRelationship.target = classCell.id;
 
-        const rret = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), true);
-        rret.id = this.objectIdService.getNewObjectId();
-        addedRelationship.id = rret.id;
+        addedRelationship.id = this.objectIdService.getNewObjectId();
+
+        const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
 
-        // this.updateModel();
-        this.redrawContent(cret as MyMxCell);
+        //  this.updateModel();
+        if (!this.quickEditMode) {
+          this.redrawContent(classCell as MyMxCell);
+        }
       }
-
       if (cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON) {
 
         // const enumProperty = new ClassProperty<EnumReference>();
