@@ -3,7 +3,7 @@
     <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
       <img class="profile-image avatar huge" src="assets/images/avatars/Velazquez.jpg" [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }" />
       <div class="name" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
-        Charlie Adams
+        {{volunteer.name}}
       </div>
     </div>
 
@@ -16,7 +16,7 @@
       </button>
     </div>
   </div>
-  <div class="content">
+  <!-- <div class="content">
     <mat-tab-group dynamicHeight="true">
       <mat-tab label="Timeline">
         <profile-timeline></profile-timeline>
@@ -30,6 +30,6 @@
         <profile-photos-videos></profile-photos-videos>
       </mat-tab>
     </mat-tab-group>
-  </div>
+  </div> -->
 
 </div>
