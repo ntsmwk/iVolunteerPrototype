@@ -310,8 +310,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // create vertical space before properties
     // const vfiller = this.graph.insertVertex(cell, 'vfiller', null, 105, 45, 5, 130, CConstants.mxStyles.classVfiller);
     // vfiller.setConnectable(false);
-    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 45);
-    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
+    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 50);
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
 
     // create properties TODO @Alex Refactor
     let i = 5;
