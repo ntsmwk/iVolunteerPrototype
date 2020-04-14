@@ -77,6 +77,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   graph: mxgraph.mxGraph;
   folding: boolean;
 
+  rootCell: MyMxCell;
+  rootCellSet: boolean;
+
   saveDone: boolean;
 
   // Overlay
@@ -186,9 +189,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
        */
       const outer = this; // preserve outer scope
       this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-        console.log(evt);
-        console.log(sender);
-
         const mouseEvent = evt.getProperty('event');
         if (mouseEvent.button === 0) {
           outer.handleMXGraphLeftClickEvent(evt);
@@ -247,6 +247,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private parseGraphContent() {
     this.parseIncomingClasses();
     this.parseIncomingRelationships();
+    this.rootCellSet = false;
   }
 
   /**
@@ -276,6 +277,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as MyMxCell;
     }
     cell.root = classDefinition.root;
+
+    if (cell.root) {
+      if (!this.rootCellSet) {
+        this.rootCell = cell;
+        this.rootCellSet = true;
+      } else {
+        console.error('root cell already set - must not be more than one root cell!');
+      }
+
+    }
+
     cell.setCollapsed(false);
     cell.cellType = MyMxCellType.CLASS;
     cell.classArchetype = classDefinition.classArchetype;
@@ -507,31 +519,23 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   private setLayout() {
     const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
-    const rootCells = getRootCells(this.graph);
-
+    // const layout: any = new mx.mxFastOrganicLayout(this.graph);
     layout.levelDistance = 50;
     layout.alignRanks = true;
     layout.minEdgeJetty = 50;
     layout.prefHozEdgeSep = 5;
-    layout.resetEdges = true;
+    layout.resetEdges = false;
+    layout.edgeRouting = true;
 
-    for (const rootCell of rootCells) {
-      layout.execute(this.graph.getDefaultParent(), rootCell);
-    }
+    layout.execute(this.graph.getDefaultParent(), this.rootCell);
 
     for (const edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
     }
 
-    const edges = this.graph.getChildEdges(this.graph.getDefaultParent());
-    this.graph.setCellStyles('noEdgeStyle', null, edges);
+    // const edges = this.graph.getChildEdges(this.graph.getDefaultParent());
+    // this.graph.setCellStyles('noEdgeStyle', null, edges);
 
-    function getRootCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
-      return graph.getModel().getChildCells(graph.getDefaultParent()).filter((cell: MyMxCell) => {
-        return cell.root;
-      });
-
-    }
     this.resetViewport();
   }
 
@@ -670,7 +674,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
-        this.updateModel();
+        // this.updateModel();
         this.redrawContent(cret as MyMxCell);
       }
 
@@ -710,7 +714,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         addedRelationship.id = rret.id;
         this.relationships.push(addedRelationship);
 
-        this.updateModel();
+        // this.updateModel();
         this.redrawContent(cret as MyMxCell);
       }
 
@@ -772,12 +776,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
-    let pointerevent = event.getProperty('event') as PointerEvent;
+    const pointerevent = event.getProperty('event') as PointerEvent;
   }
 
 
   handleMXGraphDoubleClickEvent(event: mxgraph.mxEventObject) {
-    console.log("Overlay Event");
+    console.log('Overlay Event');
     console.log(event);
 
     // const cell = <MyMxCell>event.getProperty('cell');
