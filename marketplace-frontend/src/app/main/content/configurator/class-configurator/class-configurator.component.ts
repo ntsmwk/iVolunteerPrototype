@@ -257,7 +257,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       for (const c of this.configurableClasses) {
-        this.insertClassIntoGraph(c, new mx.mxGeometry(0, 0, 80, 30), false);
+        this.insertClassIntoGraph(c, new mx.mxGeometry(0, 0, 110, 45), false);
       }
 
     } finally {
@@ -310,7 +310,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // create vertical space before properties
     // const vfiller = this.graph.insertVertex(cell, 'vfiller', null, 105, 45, 5, 130, CConstants.mxStyles.classVfiller);
     // vfiller.setConnectable(false);
-    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
+    cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 45);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 25);
 
     // create properties TODO @Alex Refactor
