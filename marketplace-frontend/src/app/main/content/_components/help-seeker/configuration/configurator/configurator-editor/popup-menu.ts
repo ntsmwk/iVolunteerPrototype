@@ -76,6 +76,10 @@ export class EditorPopupMenu {
             outer.editorInstance.createClassInstanceClicked([cell]);
           }, null, null, true, true);
 
+          const exportJsonItem = menu.addItem('Export JSON', null, function () {
+            outer.editorInstance.exportJsonClicked(cell);
+          }, null, null, true, true);
+
         }
 
 

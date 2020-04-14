@@ -62,11 +62,9 @@ public class InitializationService {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
-	
+
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-
-
 
 	@PostConstruct
 	public void init() {
@@ -76,7 +74,7 @@ public class InitializationService {
 //		if(environment.acceptsProfiles("dev")) {}
 
 		addStandardPropertyDefinitions();
-		addTestConfigClasses();
+//		addTestConfigClasses();
 		addConfigurators();
 
 		addiVolunteerAPIClassDefinition();
@@ -84,28 +82,26 @@ public class InitializationService {
 		this.addTestClassInstances();
 	}
 
-
-	public void addStandardPropertyDefinitions() {		
+	public void addStandardPropertyDefinitions() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		
-		tenants.forEach(tenantId -> {	
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
+
+		tenants.forEach(tenantId -> {
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {				
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
-		});	
+		});
 	}
-
-	private void addiVolunteerAPIClassDefinition() {	
+	
+	private void addiVolunteerAPIClassDefinition() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		
 
-		tenants.forEach(tenantId -> {	
+		tenants.forEach(tenantId -> {
 			addPropertyDefinitions(tenantId);
 
 			ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenantId);
@@ -115,7 +111,7 @@ public class InitializationService {
 				createiVolunteerAPIPersonCertificateClassDefinition(tenantId);
 				createiVolunteerAPIPersonTaskClassDefinition(tenantId);
 			}
-		});		
+		});
 	}
 
 	private void createiVolunteerAPIPersonRoleClassDefinition(String tenantId) {
@@ -230,7 +226,7 @@ public class InitializationService {
 		addPersonBadgeProperties(propertyDefinitions, tenantId);
 		addPersonCertificateProperties(propertyDefinitions, tenantId);
 		addPersonTaskProperties(propertyDefinitions, tenantId);
-		
+
 		propertyDefinitions.forEach(pd -> {
 			if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), tenantId).size() == 0) {
 				propertyDefinitionRepository.save(pd);
@@ -282,15 +278,16 @@ public class InitializationService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void addTestConfigClasses() {
-		// TODO Philipp testConfig  for tenant=FFEIDENBERG only
+		// TODO Philipp testConfig for tenant=FFEIDENBERG only
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
-
+		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		c1.setId("test1");
 		c1.setName("Class 1");
 		c1.setProperties(new ArrayList<ClassProperty<Object>>());
 		c1.setRoot(true);
+		c1.setTenantId(ffa.getTenantId());
 
 		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty(tenantId);
 		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
@@ -309,41 +306,57 @@ public class InitializationService {
 		CompetenceClassDefinition c2 = new CompetenceClassDefinition();
 		c2.setId("test2");
 		c2.setName("Class 2");
+		c2.setTenantId(ffa.getTenantId());
+
 		c2.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c3 = new CompetenceClassDefinition();
 		c3.setId("test3");
 		c3.setName("Class 3");
+		c3.setTenantId(ffa.getTenantId());
+
 		c3.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c4 = new CompetenceClassDefinition();
 		c4.setId("test4");
 		c4.setName("Class 4");
+		c4.setTenantId(ffa.getTenantId());
+
 		c4.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c5 = new CompetenceClassDefinition();
 		c5.setId("test5");
 		c5.setName("Class 5");
+		c5.setTenantId(ffa.getTenantId());
+
 		c5.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c6 = new CompetenceClassDefinition();
 		c6.setId("test6");
 		c6.setName("Class 6");
+		c6.setTenantId(ffa.getTenantId());
+
 		c6.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c7 = new CompetenceClassDefinition();
 		c7.setId("test7");
 		c7.setName("Class 7");
+		c7.setTenantId(ffa.getTenantId());
+
 		c7.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c8 = new CompetenceClassDefinition();
 		c8.setId("test8");
 		c8.setName("Class 8");
+		c8.setTenantId(ffa.getTenantId());
+
 		c8.setClassArchetype(ClassArchetype.COMPETENCE);
 
 		CompetenceClassDefinition c9 = new CompetenceClassDefinition();
 		c9.setId("test9");
 		c9.setName("Class 9");
+		c9.setTenantId(ffa.getTenantId());
+
 		c9.setClassArchetype(ClassArchetype.COMPETENCE);
 
 //		{from: 1, to: 3},
@@ -355,6 +368,7 @@ public class InitializationService {
 
 		Inheritance i1 = new Inheritance(c1.getId(), c3.getId(), c1.getId());
 		i1.setId("test_i1");
+
 		Inheritance i2 = new Inheritance(c1.getId(), c2.getId(), c1.getId());
 		i2.setId("test_i2");
 		Inheritance i3 = new Inheritance(c2.getId(), c4.getId(), c2.getId());

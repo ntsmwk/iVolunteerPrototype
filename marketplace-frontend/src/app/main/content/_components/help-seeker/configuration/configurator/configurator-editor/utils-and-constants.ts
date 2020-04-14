@@ -38,7 +38,7 @@ const mxStyles = {
   removeIcon: 'shape=image;image=/assets/mxgraph_resources/images/remove_red.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
   classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
-  inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;' ,
+  inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;',
   inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
 
 
@@ -52,11 +52,11 @@ const mxStyles = {
 };
 
 const cellTypes = {
-  property: {label: 'property', icon:''},
-  property_enum: {label: 'property_enum', icon:''},
+  property: { label: 'property', icon: '' },
+  property_enum: { label: 'property_enum', icon: '' },
 
-  add: {label: 'add', icon:''},
-  add_association: {label: 'property', icon:''},
+  add: { label: 'add', icon: '' },
+  add_association: { label: 'property', icon: '' },
   add_class_new_level: {},
   add_class_same_level: {},
   remove: {},
@@ -78,11 +78,11 @@ export class CConstants {
 
 export class CUtils {
 
-  public static addStandardObjects(marketplaceId: string, tenantId: string, objectIdService: ObjectIdService): {classDefintions: ClassDefinition[], relationships: Relationship[]} {
+  public static addStandardObjects(marketplaceId: string, tenantId: string, objectIdService: ObjectIdService): { classDefintions: ClassDefinition[], relationships: Relationship[] } {
     let configurableClasses: ClassDefinition[] = [];
     let relationships: Relationship[] = [];
-   
-   
+
+
     let fwPassEintrag = new ClassDefinition();
     fwPassEintrag.id = objectIdService.getNewObjectId();
     fwPassEintrag.tenantId = tenantId;
@@ -97,12 +97,14 @@ export class CUtils {
     idProperty.name = 'ID';
     idProperty.id = 'id';
     idProperty.type = PropertyType.TEXT;
+    idProperty.exportLabel = 'id';
     fwPassEintrag.properties.push(idProperty);
-    
+
 
     let nameProperty = new ClassProperty<string>();
     nameProperty.name = 'Name';
     nameProperty.id = 'name';
+    nameProperty.exportLabel = 'name';
     nameProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(nameProperty);
 
@@ -110,6 +112,7 @@ export class CUtils {
     let evidenceProperty = new ClassProperty<string>();
     evidenceProperty.name = 'Evidenz';
     evidenceProperty.id = 'evidence';
+    evidenceProperty.exportLabel = 'evidenz';
     evidenceProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(evidenceProperty);
 
@@ -121,18 +124,21 @@ export class CUtils {
     task.marketplaceId = marketplaceId;
     task.name = "Tätigkeit";
     task.root = false;
+
     task.classArchetype = ClassArchetype.TASK_HEAD;
     configurableClasses.push(task);
 
     let vonProperty = new ClassProperty<Date>();
     vonProperty.name = 'taskDateFrom';
     vonProperty.id = 'taskDateFrom';
+    vonProperty.exportLabel = 'taskDateFrom';
     vonProperty.type = PropertyType.DATE;
     task.properties.push(vonProperty);
 
     let bisProperty = new ClassProperty<Date>();
     bisProperty.name = 'taskDateTo';
     bisProperty.id = 'taskDateTo';
+    bisProperty.exportLabel = 'taskDateTo';
     bisProperty.type = PropertyType.DATE;
     task.properties.push(bisProperty);
 
@@ -195,7 +201,7 @@ export class CUtils {
     r4.superClassId = r4.source;
     relationships.push(r4);
 
-    return {classDefintions: configurableClasses, relationships: relationships};
+    return { classDefintions: configurableClasses, relationships: relationships };
 
   }
 }

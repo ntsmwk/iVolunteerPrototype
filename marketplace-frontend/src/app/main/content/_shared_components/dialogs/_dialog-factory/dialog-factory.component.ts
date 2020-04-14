@@ -12,8 +12,9 @@ import { OpenDialogComponent, OpenDialogData } from 'app/main/content/_component
 import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
+import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
 @Component({
   selector: 'app-dialog-factory',
@@ -460,7 +461,7 @@ export class DialogFactoryComponent implements OnInit {
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds},
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
       disableClose: true
     });
 
@@ -476,13 +477,34 @@ export class DialogFactoryComponent implements OnInit {
     });
   }
 
+  openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+    const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
+      disableClose: true
+    });
+
+    let returnValue: ClassInstanceFormPreviewDialogData;
+    dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
+      console.log("closing from DialogFactory");
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
+
   openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
     const dialogRef = this.dialog.open(ChangeIconDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, imagePath: currentImagePath},
+      data: { marketplace: marketplace, imagePath: currentImagePath },
       disableClose: true
     });
 
