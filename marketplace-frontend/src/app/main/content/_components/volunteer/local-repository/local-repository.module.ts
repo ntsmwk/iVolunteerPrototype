@@ -5,6 +5,7 @@ import { MatTableModule, MatPaginatorModule, MatSortModule, MatDividerModule, Ma
 import { LocalRepositoryComponent } from './local-repository.component';
 import { CommonModule } from '@angular/common';
 import { OrganisationFilterModule } from 'app/main/content/_shared_components/organisation-filter/organisation-filter.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const routes = [{ path: "", component: LocalRepositoryComponent }];
 
@@ -19,7 +20,8 @@ const routes = [{ path: "", component: LocalRepositoryComponent }];
     MatDividerModule,
     MatButtonModule,
     OrganisationFilterModule,
-    MatCardModule
+    MatCardModule,
+    FlexLayoutModule
 
   ],
   exports: [],

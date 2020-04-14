@@ -15,7 +15,13 @@
         </organisation-filter>
     </mat-card>
 
-    <div *ngIf="isConnected" class="mat-card p-20" fxLayout="column">
+    <div *ngIf="isConnected && selectedTenants.length > 0" class="mat-card p-20" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="end center">
+            <button mat-raised-button color="primary" (click)="syncAll()">Alle hinzufügen</button>
+            <button mat-raised-button color="primary" (click)="removeAll()" style="margin-left: 20px;">Alle
+                entfernen</button>
+        </div>
+
         <div *ngIf="userImagePaths && userImagePaths.length > 0" fxLayout="row" style="width: 100%"
             fxLayoutAlign="start center">
             <div class="pt-32"></div>
@@ -24,11 +30,13 @@
                 <ng-container matColumnDef="issuer">
                     <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
                     <mat-cell *matCellDef="let entry">
-                        <div fxLayout="row" fxLayoutAlign="start center">
+                        <div fxLayout="row" fxLayoutAligne="start center">
                             <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
                             <div fxLayout="column">
                                 <div>{{ getIssuerName(entry.issuerId) }}</div>
-                                <div class="pl-8">{{ getIssuerPosition(entry.issuerId) }}</div>
+                                <div class="pl-8">
+                                    {{ getIssuerPosition(entry.issuerId) }}
+                                </div>
                             </div>
                         </div>
                     </mat-cell>
@@ -72,19 +80,18 @@
                         }"></mat-row>
             </mat-table>
         </div>
-        <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
     </div>
+    <mat-paginator [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
 
-    <div *ngIf="!isConnected">
-        <p>Local Repository Service not up!</p>
-    </div>
+    <div style="padding-top: 20px;"></div>
 
-    <mat-card>
-        <mat-card-content>
-            <div *ngIf="selectedTenants.length === 0">
-                <p>Keine Organisation ausgewählt!</p>
-            </div>
-        </mat-card-content>
-    </mat-card>
+    <p *ngIf="!isConnected" class="alert alert-info">
+        <i class="fas fa-exclamation-circle"></i> &nbsp; Local Repository Service läuft nicht!
+    </p>
+
+    <p *ngIf="selectedTenants.length === 0" class="alert alert-info">
+        <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+    </p>
+
 
 </div>

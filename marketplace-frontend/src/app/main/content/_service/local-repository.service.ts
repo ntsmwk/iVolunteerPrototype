@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Volunteer } from '../_model/volunteer';
 import { LocalRepository } from '../_model/local-repository';
 import { isNullOrUndefined } from 'util';
-import { ClassInstanceDTO, ClassArchetype } from '../_model/meta/Class';
+import { ClassArchetype, ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
 
 @Injectable({
     providedIn: 'root'
@@ -121,6 +121,30 @@ export class LocalRepositoryService {
         return observable;
     }
 
+    synchronizeClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
+        const observable = new Observable(subscriber => {
+            const failureFunction = (error: any) => {
+                subscriber.error(error);
+                subscriber.complete();
+            };
+
+            this.findByVolunteer(volunteer)
+                .toPromise()
+                .then((localRepository: LocalRepository) => {
+
+                    localRepository.taskList = [ ...localRepository.taskList, ...classInstances];
+
+                      this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+                      .toPromise()
+                        .then(() => subscriber.complete())
+                        .catch((error: any) => failureFunction(error));
+                })
+                .catch((error: any) => failureFunction(error));
+        });
+
+        return observable;
+    }
+
 
     removeClassInstance(volunteer: Volunteer, classInstance: ClassInstanceDTO) {
         const observable = new Observable(subscriber => {
@@ -149,6 +173,29 @@ export class LocalRepositoryService {
                             });
                             break;
                     }
+                    this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+                        .toPromise()
+                        .then(() => subscriber.complete())
+                        .catch((error: any) => failureFunction(error));
+                })
+                .catch((error: any) => failureFunction(error));
+        });
+
+        return observable;
+    }
+
+    removeAllClassInstances(volunteer: Volunteer) {
+        const observable = new Observable(subscriber => {
+            const failureFunction = (error: any) => {
+                subscriber.error(error);
+                subscriber.complete();
+            };
+
+            this.findByVolunteer(volunteer)
+                .toPromise()
+                .then((localRepository: LocalRepository) => {
+                    localRepository.taskList = [];
+
                     this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                         .toPromise()
                         .then(() => subscriber.complete())

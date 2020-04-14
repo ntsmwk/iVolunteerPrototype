@@ -41,6 +41,7 @@ export class LocalRepositoryComponent implements OnInit {
   image;
 
   tasksLocalRepository: ClassInstanceDTO[] = [];
+
   selectedTenants: Tenant[] = [];
 
   isConnected: boolean;
@@ -51,7 +52,6 @@ export class LocalRepositoryComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
     private localRepositoryService: LocalRepositoryService,
-    private coreHelpSeekerService: CoreHelpSeekerService,
     private userImagePathService: CoreUserImagePathService,
     private coreHelpseekerService: CoreHelpSeekerService,
 
@@ -63,7 +63,7 @@ export class LocalRepositoryComponent implements OnInit {
 
     this.isConnected = await this.localRepositoryService.isConnected();
 
-    if(this.isConnected) {
+    if (this.isConnected) {
       this.volunteer = <Volunteer>(
         await this.loginService.getLoggedIn().toPromise()
       );
@@ -91,6 +91,7 @@ export class LocalRepositoryComponent implements OnInit {
       this.filteredClassInstanceDTOs = this.classInstanceDTOs;
 
       this.dataSourceRepository.data = this.filteredClassInstanceDTOs;
+      this.paginator.length = this.filteredClassInstanceDTOs.length;
       this.dataSourceRepository.paginator = this.paginator;
 
       this.issuerIds.push(...this.filteredClassInstanceDTOs.map(t => t.issuerId));
@@ -109,7 +110,7 @@ export class LocalRepositoryComponent implements OnInit {
 
       this.tasksLocalRepository = <ClassInstanceDTO[]>(
         await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer, ClassArchetype.TASK).toPromise());
-      }
+    }
 
   }
 
@@ -148,9 +149,14 @@ export class LocalRepositoryComponent implements OnInit {
     }
   }
 
-  async syncToLocalRepository(classInstance: ClassInstanceDTO) {
-    await this.localRepositoryService.synchronizeClassInstance(this.volunteer, classInstance).toPromise();
-    this.tasksLocalRepository.push(classInstance);
+  async syncToLocalRepository(classInstanceDTO: ClassInstanceDTO) {
+    // let ci = <ClassInstance>await
+    //   this.classInstanceService.getClassInstanceById(this.marketplace, classInstanceDTO.id, classInstanceDTO.tenantId).toPromise();
+    // await this.localRepositoryService.synchronizeClassInstance(this.volunteer, ci).toPromise();
+    // this.tasksLocalRepository.push(ci);
+
+    await this.localRepositoryService.synchronizeClassInstance(this.volunteer, classInstanceDTO).toPromise();
+    this.tasksLocalRepository.push(classInstanceDTO);
   }
 
   async removeFromLocalRepository(classInstance: ClassInstanceDTO) {
@@ -176,10 +182,32 @@ export class LocalRepositoryComponent implements OnInit {
     });
 
     this.dataSourceRepository.data = this.filteredClassInstanceDTOs;
+    this.paginator.length = this.filteredClassInstanceDTOs.length;
     this.dataSourceRepository.paginator = this.paginator;
   }
 
+  async syncAll() {
+    let filteredClassInstances: ClassInstanceDTO[] = [];
 
+
+    this.filteredClassInstanceDTOs.forEach(dto => {
+      if (!(this.tasksLocalRepository.findIndex(t => t.id === dto.id) >= 0)) {
+        // let ci = <ClassInstance>await
+        //   this.classInstanceService.getClassInstanceById(this.marketplace, dto.id, dto.tenantId).toPromise();
+
+        filteredClassInstances.push(dto);
+      }
+    });
+
+    await this.localRepositoryService.synchronizeClassInstances(this.volunteer, filteredClassInstances).toPromise();
+    this.tasksLocalRepository = [...this.tasksLocalRepository, ...filteredClassInstances];
+  }
+
+
+  async removeAll() {
+    await this.localRepositoryService.removeAllClassInstances(this.volunteer).toPromise();
+    this.tasksLocalRepository = [];
+  }
 
 
 }

@@ -20,21 +20,21 @@ export class CompetenceClassDefinition extends ClassDefinition{
 
 export class ClassInstance {
     id: string;
-    tenantId: string;
-    name: string;
     classDefinitionId: string;
+    name: string;
     properties: PropertyInstance<any>[];
-    marketplaceId: string;
-    timestamp: Date;
     userId: string;
     issuerId: string;
-
     published: boolean;
-    inRepository: boolean;
+	inUserRepository: boolean;
+	inIssuerInbox: boolean;
+    classArchetype: ClassArchetype;
+    tenantId: string;
+    timestamp: Date;
 
+    marketplaceId: string;
     imagePath: string;
 
-    classArchetype: ClassArchetype;
 
     constructor(classDefinition: ClassDefinition, properties: PropertyInstance<any>[]) {
         this.name = classDefinition.name;

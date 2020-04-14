@@ -1,7 +1,6 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
   <div class="header-achievements p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
     <h1 class="l-heading">Mein FreiwilligenLEBEN</h1>
-    <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
   </div>
 
   <div *ngIf="marketplace !== undefined">
@@ -11,7 +10,7 @@
       </organisation-filter>
     </mat-card>
 
-    <div class="content" >
+    <div class="content">
       <mat-tab-group dynamicHeight="true">
         <mat-tab label="Tätigkeiten">
           <!-- with ng-temp = lazy loading: TODO PROBLEM: not showing line in timeline chart -->
@@ -50,19 +49,16 @@
       </ngx-spinner>
     </mat-card>
 
-    <mat-card>
-      <mat-card-content>
-        <div *ngIf="selectedTenants.length === 0">
-          <p>Keine Organisation ausgewählt!</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <div style="padding-top: 20px;"></div>
 
+    <p *ngIf="selectedTenants.length === 0" class="alert alert-info">
+      <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+    </p>
 
   </div>
 
-  <div *ngIf="marketplace === undefined">
-    <p> Noch keiner Organisation beigetreten!</p>
-  </div>
-  
+  <p *ngIf="marketplace === undefined" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation beigetreten!
+  </p>
+
 </div>

@@ -41,7 +41,17 @@ public class ClassInstanceController {
 
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
-
+		
+	
+	@GetMapping("/meta/core/class/instance/by-id/{classInstanceId}/tenant/{tenantId}")
+	private ClassInstance getClassInstanceById(@PathVariable("classInstanceId") String classInstanceId,
+			@PathVariable("tenantId") String tenantId) {
+		ClassInstance ci = classInstanceRepository.getByIdAndTenantId(classInstanceId, tenantId);
+		
+		return ci;
+	}
+	
+	
 	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
 	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
 			@RequestBody List<String> tenantIds) {
