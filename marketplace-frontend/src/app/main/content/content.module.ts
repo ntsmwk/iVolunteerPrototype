@@ -333,7 +333,7 @@ const routes: Route[] = [
       import("./_components/common/profile/profile.module").then(
         m => m.ProfileModule
       ),
-    canActivate: [TokenGuard, VolunteerGuard]
+    canActivate: [TokenGuard, LoginGuard]
   }
 ];
 

@@ -74,7 +74,7 @@ public class InitializationService {
 //		if(environment.acceptsProfiles("dev")) {}
 
 		addStandardPropertyDefinitions();
-		addTestConfigClasses();
+//		addTestConfigClasses();
 		addConfigurators();
 
 		addiVolunteerAPIClassDefinition();
@@ -282,7 +282,6 @@ public class InitializationService {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
 		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
-
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		c1.setId("test1");
 		c1.setName("Class 1");
