@@ -315,25 +315,31 @@ const routes: Route[] = [
     path: "main/tenant-form",
     loadChildren: () =>
       import("./_components/admin/tenant-form/tenant-form.module").then(
-        m => m.FuseTenantFormModule),
+        m => m.FuseTenantFormModule
+      ),
     canActivate: [TokenGuard, AdminGuard]
   },
   {
     path: "main/localRepository",
     loadChildren: () =>
-      import("./_components/volunteer/local-repository/local-repository.module").then(
-        m => m.LocalRepositoryModule),
+      import(
+        "./_components/volunteer/local-repository/local-repository.module"
+      ).then(m => m.LocalRepositoryModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
+  {
+    path: "main/profile",
+    loadChildren: () =>
+      import("./_components/common/profile/profile.module").then(
+        m => m.ProfileModule
+      ),
+    canActivate: [TokenGuard, VolunteerGuard]
+  }
 ];
 
 @NgModule({
   declarations: [FuseContentComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    FuseSharedModule,
-    ShareMenuModule
-  ],
+  imports: [RouterModule.forChild(routes), FuseSharedModule, ShareMenuModule],
 
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
@@ -342,4 +348,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent]
 })
-export class FuseContentModule { }
+export class FuseContentModule {}
