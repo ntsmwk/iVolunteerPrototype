@@ -7,7 +7,7 @@ import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/Property';
+import { PropertyDefinition, PropertyType, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../_service/objectid.service.';
@@ -314,25 +314,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
 
     // create properties TODO @Alex Refactor
-    let i = 5;
-    if (!isNullOrUndefined(classDefinition.properties)) {
-      for (const p of classDefinition.properties) {
-        const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, i + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
-
-        if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
-
-        } else {
-
-          propertyEntry.cellType = MyMxCellType.PROPERTY;
-        }
-        propertyEntry.setConnectable(false);
-
-        propertyEntry.propertyId = p.id;
-        i = i + 20;
-      }
-    }
+    let yLocation = 5;
+    yLocation = this.addPropertiesToCell(cell, classDefinition.properties, yLocation);
 
     // // add property icon
     // if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
@@ -358,7 +341,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
 
       const nextIcon: MyMxCell = this.graph.insertVertex(
-        cell, 'add another', 'add_class_same_level', 85, i + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
+        cell, 'add another', 'add_class_same_level', 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
       nextIcon.setConnectable(false);
       nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
     }
@@ -366,7 +349,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // down icon
     if (cell.classArchetype !== ClassArchetype.ROOT) {
       const downIcon: MyMxCell = this.graph.insertVertex(
-        cell, 'add another', 'add_class_new_level', 65, i + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
+        cell, 'add another', 'add_class_new_level', 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
       downIcon.setConnectable(false);
       downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
     }
@@ -382,7 +365,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     // options icon
 
-    const optionsIcon: MyMxCell = this.graph.insertVertex(cell, 'options', 'options', 5, i + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
+    const optionsIcon: MyMxCell = this.graph.insertVertex(cell, 'options', 'options', 5, yLocation + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
     optionsIcon.setConnectable(false);
     optionsIcon.cellType = MyMxCellType.OPTIONS_ICON;
 
@@ -391,6 +374,28 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // hfiller.setConnectable(false);
 
     return this.graph.addCell(cell);
+  }
+
+  private addPropertiesToCell(cell: MyMxCell, properties: ClassProperty<any>[], yLocation: number): number {
+    if (!isNullOrUndefined(properties)) {
+      for (const p of properties) {
+        const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
+
+        if (p.type === PropertyType.ENUM) {
+          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
+          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
+
+        } else {
+          propertyEntry.cellType = MyMxCellType.PROPERTY;
+        }
+        propertyEntry.setConnectable(false);
+
+        propertyEntry.propertyId = p.id;
+        yLocation += 20;
+      }
+    }
+
+    return yLocation;
   }
 
   private insertRelationshipIntoGraph(r: Relationship, coords: mxgraph.mxPoint, createNew: boolean) {
@@ -422,7 +427,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell1.setVisible(false);
 
       if (isNullOrUndefined(cell1.value)) {
-        cell1.value = 'start';
+        cell1.value = AssociationCardinality.ONE;
       }
       cell.insert(cell1);
 
@@ -434,7 +439,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell2.setVisible(false);
 
       if (isNullOrUndefined(cell2.value)) {
-        cell2.value = 'end';
+        cell2.value = AssociationCardinality.ONE;
       }
       cell.insert(cell2);
 
@@ -531,17 +536,14 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private focusOnCell(focusCell: MyMxCell) {
     const bounds = this.graph.getView().getGraphBounds();
     const scale = this.graph.getView().getScale();
-    const translate = this.graph.getView().getTranslate();
 
     bounds.y *= -1;
     bounds.x *= -1;
-    // this.graph.getView().setGraphBounds(bounds);
 
     this.graph.getView().setScale(scale);
     if (!isNullOrUndefined(focusCell)) {
       this.graph.scrollCellToVisible(this.graph.getModel().getCell(focusCell.id), true);
     }
-    // this.graph.scrollRectToVisible(bounds);
   }
 
   // TODO
@@ -970,13 +972,15 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   resetViewport() {
-    const outer = this;
-    this.graph.scrollCellToVisible((function getLeftMostCell() {
-      return outer.graph.getModel().getChildCells(outer.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
-    })(), false);
+    const rootCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
 
-    const translate = this.graph.view.getTranslate();
-    this.graph.view.setTranslate(translate.x + 10, translate.y + 10);
+    if (!isNullOrUndefined(rootCell)) {
+      this.graph.scrollCellToVisible(rootCell, false);
+
+      const translate = this.graph.view.getTranslate();
+      const windowWidth = window.innerWidth;
+      this.graph.view.setTranslate(translate.x - (windowWidth / 2) + (rootCell.geometry.width / 2), translate.y + 25);
+    }
   }
 
   // changeIconClicked(selectionIndex: number) {
