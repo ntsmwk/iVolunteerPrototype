@@ -1,9 +1,7 @@
 @import "src/@fuse/scss/fuse";
-
 profile-about {
   #about {
     max-width: 1200px;
-
     .about-content {
       .general {
         .location {
@@ -12,7 +10,6 @@ profile-about {
           }
         }
       }
-
       .work {
         .job {
           .company {
@@ -22,35 +19,28 @@ profile-about {
         }
       }
     }
-
     .about-sidebar {
       padding-left: 32px;
-
       @include media-breakpoint("sm") {
         padding: 8px;
       }
-
       .friends {
         .content {
           .friend {
             padding: 4px;
-
             img {
               border-radius: 4px;
             }
           }
         }
       }
-
       .groups {
         .content {
           .group {
             margin-bottom: 24px;
-
             &:last-child {
               margin-bottom: 0;
             }
-
             .logo {
               display: flex;
               align-items: center;
@@ -62,12 +52,10 @@ profile-about {
               border-radius: 50%;
               margin-right: 16px;
             }
-
             .name {
               font-weight: 600;
               font-size: 15px;
             }
-
             .members {
               margin-top: 8px;
             }
@@ -76,48 +64,37 @@ profile-about {
       }
     }
   }
-
   // Profile boxes
   .profile-box {
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 16px;
     @include mat-elevation(2);
-
     header {
       padding: 16px;
-
       .title {
         font-size: 17px;
       }
-
       .more {
         cursor: pointer;
       }
     }
-
     .content {
       padding: 16px;
     }
-
     footer {
       padding: 8px;
       border-top: 1px solid;
     }
-
     &.info-box {
       .info-line {
         margin-bottom: 24px;
-
         .title {
           font-size: 15px;
           font-weight: 600;
           padding-bottom: 4px;
         }
-
-        .info {
-        }
-
+        .info {}
         &:last-child {
           margin-bottom: 0;
         }

@@ -14,25 +14,7 @@ import { fuseAnimations } from "@fuse/animations";
 export class ProfileAboutComponent implements OnInit {
   about: any;
 
-  // Private
-  private _unsubscribeAll: Subject<any>;
+  constructor() {}
 
-  /**
-   * Constructor
-   *
-   * @param {ProfileService} _profileService
-   */
-  constructor() {
-    // Set the private defaults
-    this._unsubscribeAll = new Subject();
-  }
-
-  // -----------------------------------------------------------------------------------------------------
-  // @ Lifecycle hooks
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * On init
-   */
   ngOnInit(): void {}
 }
