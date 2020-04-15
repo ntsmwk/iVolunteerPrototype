@@ -10,8 +10,8 @@
   <div class="sidebar-content">
 
     <div *ngIf="rightSidebarVisible">
-      <h2>Ansicht</h2>
 
+      <h2>Ansicht</h2>
       <div class="pt-4"></div>
 
       <div fxLayout="row" fxLayoutAlign="start start">
@@ -40,14 +40,27 @@
       </div>
 
       <div class="pt-4"></div>
+      <h2>Relationships</h2>
+      <div class="pt-4"></div>
 
-      <mat-form-field style="width: 100%">
+
+
+      <button mat-raised-button type="button" color="primary" (click)="setLayout()">
+        Vertikal
+      </button>
+
+
+      <mat-form-field style="width: 100%" appearance="outline">
         <mat-select placeholder="Automatisches Layout" value="Vertical">
           <!-- <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option> -->
           <mat-option value="Vertical" (click)="setLayout('vertical')">Vertikal</mat-option>
           <!-- <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option> -->
         </mat-select>
       </mat-form-field>
+
+      <div class="pt-4"></div>
+      <h2>Tree View</h2>
+      <div class="pt-4"></div>
 
       <editor-tree-view [editorInstance]="this"></editor-tree-view>
 

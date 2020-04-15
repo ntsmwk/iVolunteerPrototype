@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
@@ -244,6 +243,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.clearEditor();
     this.parseGraphContent();
     this.setLayout();
+    this.modelUpdated = true;
   }
 
   clearEditor() {
@@ -563,7 +563,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.clearEditor();
     this.loadServerContent();
     // this.restoreGeometry(savedGeometry);
-    this.setLayout();
+    // this.setLayout();
     this.focusOnCell(focusCell);
   }
 
@@ -694,12 +694,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         // addedRelationship.target = addedClass.id;
         // addedRelationship.id = this.objectIdService.getNewObjectId();
 
-        const ret = this.addClassWithRelationship(cell, this.graph.getIncomingEdges(cell.getParent())[0].source.id);
+        const ret = this.addClassWithRelationship(cell, this.graph.getIncomingEdges(parent)[0].source.id);
         const addedClass = ret.class;
         const addedRelationship = ret.relationship;
 
         const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45), true);
         this.configurableClasses.push(addedClass);
+
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
 
@@ -741,7 +742,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
         // addedRelationship.id = this.objectIdService.getNewObjectId();
 
-        const ret = this.addClassWithRelationship(cell, cell.getParent().id);
+        const ret = this.addClassWithRelationship(cell, parent.id);
         const addedClass = ret.class;
         const addedRelationship = ret.relationship;
 
@@ -809,7 +810,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       // bounds.x = bounds.x - 20;
       // this.graph.view.setGraphBounds(bounds);
 
-      this.modelUpdated = true;
+      // this.modelUpdated = true;
     }
   }
 
@@ -1091,11 +1092,15 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const rootCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
 
     if (!isNullOrUndefined(rootCell)) {
-      this.graph.scrollCellToVisible(rootCell, false);
+      // this.graph.scrollCellToVisible(rootCell, false);
+      this.graph.scrollCellToVisible(rootCell, true);
 
       const translate = this.graph.view.getTranslate();
-      const windowWidth = window.innerWidth;
-      this.graph.view.setTranslate(translate.x - (windowWidth / 2) + (rootCell.geometry.width / 2), translate.y + 25);
+      const windowHeight = window.innerHeight;
+      // const windowWidth = window.innerWidth;
+      // this.graph.view.setTranslate(translate.x - (windowWidth / 2) + (rootCell.geometry.width / 2), translate.y + 25);
+      this.graph.view.setTranslate(translate.x, translate.y - (windowHeight / 2) + (rootCell.geometry.height + 25));
+
     }
   }
 
