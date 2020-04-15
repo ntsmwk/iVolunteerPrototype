@@ -1,4 +1,4 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar *ngIf="classInstanceDTOs.length > 0">
+<div class="page-layout blank p-24" fusePerfectScrollbar *ngIf="selectedTenants.length > 0">
   <app-timeline-filter [(classInstanceDTOs)]="classInstanceDTOs" [(timelineFilter)]="timelineFilter"
     [(selectedYear)]="selectedYear" [(selectedYaxis)]="selectedYaxis" [(selectedTaskType)]="selectedTaskType">
   </app-timeline-filter>

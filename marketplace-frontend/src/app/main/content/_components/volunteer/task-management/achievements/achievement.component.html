@@ -11,12 +11,15 @@
     </mat-card>
 
     <div class="content">
-      <mat-tab-group dynamicHeight="true">
+      <mat-tab-group dynamicHeight="true" (selectedTabChange)="tabChanged($event)">
         <mat-tab label="Tätigkeiten">
-          <!-- with ng-temp = lazy loading: TODO PROBLEM: not showing line in timeline chart -->
+          <!-- with ng-temp = lazy loading:  -->
           <!-- I would prefer not to lazy load, since db fetch takes foooor ever, each time tab is changed-->
+          <!-- TODO PROBLEM: not showing line in timeline chart if not lazy loaded -->
           <ng-template matTabContent>
-            <fuse-tasks [classInstanceDTOs]="filteredClassInstanceDTOs">
+            <fuse-tasks 
+            [classInstanceDTOs]="filteredClassInstanceDTOs"
+            [selectedTenants]="selectedTenants">
             </fuse-tasks>
           </ng-template>
         </mat-tab>
@@ -41,13 +44,13 @@
       </mat-tab-group>
     </div>
 
-    <mat-card *ngIf="
+    <!-- <mat-card *ngIf="
   filteredClassInstanceDTOs.length === 0 && selectedTenants.length > 0" class="loadData">
       <ngx-spinner bdOpacity="0.1" bdColor="#FFFFFF" size="medium" color="#000000" type="ball-scale-ripple-multiple"
         [fullScreen]="false">
         <p class="loadingText">Loading Data...</p>
       </ngx-spinner>
-    </mat-card>
+    </mat-card> -->
 
     <div style="padding-top: 20px;"></div>
 
