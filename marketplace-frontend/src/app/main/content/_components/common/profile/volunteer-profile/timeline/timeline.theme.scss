@@ -2,7 +2,6 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $accent: map-get($theme, accent);
-
   profile-timeline {
     #timeline {
       .timeline-content {
@@ -11,62 +10,50 @@
             color: map-get($foreground, text);
             background: map-get($background, card);
           }
-
           footer {
             border-top-color: map-get($foreground, divider);
             background: map-get($background, app-bar);
           }
         }
-
         .timeline-item {
           background: map-get($background, card);
-
           header {
             .title {
               .username {
                 color: map-get($accent, default);
               }
             }
-
             .time {
               color: map-get($foreground, secondary-text);
             }
           }
-
           .content {
             .article {
               border-color: map-get($foreground, divider);
-
               .media {
                 border-bottom-color: map-get($foreground, divider);
               }
-
               .subtitle {
                 color: map-get($foreground, secondary-text);
               }
             }
           }
-
           footer {
             border-top-color: map-get($foreground, divider);
             background-color: rgba(0, 0, 0, 0.04);
-
             .comment {
               .message {
                 color: map-get($foreground, text);
               }
-
               .time {
                 color: map-get($foreground, secondary-text);
               }
-
               .actions {
                 .reply-button {
                   color: map-get($accent, default);
                 }
               }
             }
-
             .reply {
               textarea {
                 background-color: map-get($background, card);
@@ -77,12 +64,10 @@
           }
         }
       }
-
       .timeline-sidebar {
         .latest-activity {
           .content {
             background-color: map-get($background, card);
-
             .activities {
               .activity {
                 .username {
@@ -94,12 +79,10 @@
         }
       }
     }
-
     .profile-box {
       .content {
         background-color: map-get($background, card);
       }
-
       footer {
         border-top-color: map-get($foreground, divider);
         background-color: rgba(0, 0, 0, 0.06);

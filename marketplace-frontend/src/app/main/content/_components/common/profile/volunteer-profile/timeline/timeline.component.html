@@ -1,17 +1,10 @@
 <div id="timeline" class="p-24" fxLayout="row wrap">
-
   <div class="timeline-content" fxLayout="column" fxFlex="100" fxFlex.gt-sm="55" fxFlex.gt-md="65">
-
     <div class="profile-box add-post">
-
       <div class="form" fxFlex>
-
         <textarea placeholder="Write something.."></textarea>
-
         <footer fxLayout="row" fxLayoutAlign="space-between center">
-
           <div fxLayout="row" fxLayoutAlign="start center">
-
             <button mat-icon-button aria-label="Add photo" matTooltip="Add Photo">
                             <mat-icon>photo</mat-icon>
                         </button>
@@ -23,17 +16,11 @@
             <button mat-icon-button aria-label="Add location" matTooltip="Add location">
                             <mat-icon>location_on</mat-icon>
                         </button>
-
           </div>
-
           <button mat-raised-button color="accent" class="post-button" aria-label="POST">POST</button>
-
         </footer>
-
       </div>
-
     </div>
-
     <mat-divider></mat-divider>
 
     <div class="timeline-item" *ngFor="let post of timeline.posts">

@@ -4,8 +4,10 @@
 
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
     <h1 class="l-heading"> Herzlich Willkommen bei iVolunteer</h1>
-    <img class="header-logo" [src]="tenantImage">
+    <img class="header-logo" [src]="getTenantImage()">
   </div>
+
+  <!-- Landing Pages.. TODO Remove/Replace someday -->
 
   <div *ngIf="this.participant && isFF()">
     <section fxLayout="column" class="p-40">
