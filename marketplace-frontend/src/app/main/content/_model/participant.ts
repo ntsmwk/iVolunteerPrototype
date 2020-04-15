@@ -12,6 +12,12 @@ export class Participant {
 
   birthday: Date;
 
+  about: string;
+  address: string;
+  phoneNumbers: string[] = [];
+  websites: string[] = [];
+  emails: string[] = [];
+
   image;
 }
 

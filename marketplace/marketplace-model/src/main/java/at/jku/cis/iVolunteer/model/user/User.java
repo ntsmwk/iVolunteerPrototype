@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.model.user;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -17,8 +18,15 @@ public abstract class User {
 
 	private String position;
 
-	private Date birthdate;
-
+	private Date birthday;
+	
+	private List<String> locations;
+	private String about;
+	private String address;
+	private List<String> phoneNumbers;
+	private List<String> websites;
+	private List<String> emails;
+	
 	private byte[] image;
 
 	public String getId() {
@@ -106,11 +114,59 @@ public abstract class User {
 		return id.hashCode();
 	}
 
-	public Date getBirthdate() {
-		return birthdate;
+	public List<String> getLocations() {
+		return locations;
 	}
 
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
+	public void setLocations(List<String> locations) {
+		this.locations = locations;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public List<String> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
+	public void setPhoneNumbers(List<String> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+	public List<String> getWebsites() {
+		return websites;
+	}
+
+	public void setWebsites(List<String> websites) {
+		this.websites = websites;
+	}
+
+	public List<String> getEmails() {
+		return emails;
+	}
+
+	public void setEmails(List<String> emails) {
+		this.emails = emails;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 }
