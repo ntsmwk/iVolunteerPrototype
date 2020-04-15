@@ -285,7 +285,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.rootCell = cell;
         this.rootCellSet = true;
       } else {
-        console.error('root cell already set - must not be more than one root cell!');
+        console.error('root cell already set - there must not be more than one root cell!');
       }
 
     }
@@ -442,28 +442,21 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell.cellType = MyMxCellType.ASSOCIATION;
 
       const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-      cell1.geometry.relative = true;
-      cell1.setConnectable(false);
-      cell1.vertex = true;
-      cell1.cellType = MyMxCellType.ASSOCIATION_LABEL;
-      cell1.setVisible(false);
-
-      if (isNullOrUndefined(cell1.value)) {
-        cell1.value = AssociationCardinality.ONE;
-      }
-      cell.insert(cell1);
+      this.addAssociationLabel(cell1, cell);
 
       const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
-      cell2.geometry.relative = true;
-      cell2.setConnectable(false);
-      cell2.vertex = true;
-      cell2.cellType = MyMxCellType.ASSOCIATION_LABEL;
-      cell2.setVisible(false);
+      this.addAssociationLabel(cell2, cell);
 
-      if (isNullOrUndefined(cell2.value)) {
-        cell2.value = AssociationCardinality.ONE;
-      }
-      cell.insert(cell2);
+      // cell2.geometry.relative = true;
+      // cell2.setConnectable(false);
+      // cell2.vertex = true;
+      // cell2.cellType = MyMxCellType.ASSOCIATION_LABEL;
+      // cell2.setVisible(false);
+
+      // if (isNullOrUndefined(cell2.value)) {
+      //   cell2.value = AssociationCardinality.ONE;
+      // }
+      // cell.insert(cell2);
 
     } else if (r.relationshipType === RelationshipType.AGGREGATION) {
       cell = new mx.mxCell(undefined, new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.aggregation) as MyMxCell;
@@ -491,6 +484,19 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     cell.edge = true;
 
     return this.graph.addEdge(cell, parent, source, target);
+  }
+
+  private addAssociationLabel(associationCell: MyMxCell, daddyCell: MyMxCell) {
+    associationCell.geometry.relative = true;
+    associationCell.setConnectable(false);
+    associationCell.vertex = true;
+    associationCell.cellType = MyMxCellType.ASSOCIATION_LABEL;
+    associationCell.setVisible(false);
+
+    if (isNullOrUndefined(associationCell.value)) {
+      associationCell.value = AssociationCardinality.ONE;
+    }
+    daddyCell.insert(associationCell);
   }
 
   private addHiddenRelationshipHack(relationship: MyMxCell) {
@@ -648,33 +654,43 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }
 
       if (cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
-        const addedClass = new ClassDefinition();
-        addedClass.properties = [];
+        // const addedClass = new ClassDefinition();
+        // addedClass.properties = [];
 
-        if ((cell.getParent() as MyMxCell).classArchetype.startsWith('FLEXPROD')) {
-          addedClass.classArchetype = ClassArchetype.FLEXPROD;
-        } else {
-          addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
-        }
+        // const parentClassArchetype = (cell.getParent() as MyMxCell).classArchetype;
 
-        addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
-        addedClass.id = this.objectIdService.getNewObjectId();
+        // if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
+        //   addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+
+        // } else if (parentClassArchetype.endsWith('_HEAD')) {
+        //   addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
+
+        //   // } else if (parentClassArchetype.startsWith('FLEXPROD')) {
+        //   //   addedClass.classArchetype = ClassArchetype.FLEXPROD;
+        // } else {
+        //   addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
+        // }
+
+        // addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        // addedClass.id = this.objectIdService.getNewObjectId();
+
+        // const precursor = this.graph.getIncomingEdges(cell.getParent())[0].source;
+
+        // const addedRelationship = new Relationship();
+        // //TODO
+        // addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        // //TODO END
+        // addedRelationship.source = precursor.id;
+        // addedRelationship.target = addedClass.id;
+        // addedRelationship.id = this.objectIdService.getNewObjectId();
+
+        const ret = this.addBlahBlahBlah(cell, this.graph.getIncomingEdges(cell.getParent())[0].source.id);
+        const addedClass = ret.class;
+        const addedRelationship = ret.relationship;
 
         const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45), true);
         this.configurableClasses.push(addedClass);
-
-        const precursor = this.graph.getIncomingEdges(cell.getParent())[0].source;
-
-        const addedRelationship = new Relationship();
-        //TODO
-        addedRelationship.relationshipType = RelationshipType.INHERITANCE;
-        //TODO END
-        addedRelationship.source = precursor.id;
-        addedRelationship.target = addedClass.id;
-        addedRelationship.id = this.objectIdService.getNewObjectId();
-
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
-
         this.relationships.push(addedRelationship);
 
         // this.updateModel();
@@ -684,39 +700,43 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       }
 
       if (cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
-        const addedClass = new ClassDefinition();
-        addedClass.properties = [];
+        // const addedClass = new ClassDefinition();
+        // addedClass.properties = [];
 
-        const parentCell = (cell.getParent() as MyMxCell);
-        const parentClassArchetype = (cell.getParent() as MyMxCell).classArchetype;
+        // const parentClassArchetype = (cell.getParent() as MyMxCell).classArchetype;
 
-        if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
-          addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+        // if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
+        //   addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
 
-        } else if (parentClassArchetype.endsWith('_HEAD')) {
-          addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
+        // } else if (parentClassArchetype.endsWith('_HEAD')) {
+        //   addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
 
-          // } else if (parentClassArchetype.startsWith('FLEXPROD')) {
-          //   addedClass.classArchetype = ClassArchetype.FLEXPROD;
-        } else {
-          addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
-        }
+        //   // } else if (parentClassArchetype.startsWith('FLEXPROD')) {
+        //   //   addedClass.classArchetype = ClassArchetype.FLEXPROD;
+        // } else {
+        //   addedClass.classArchetype = (cell.getParent() as MyMxCell).classArchetype;
+        // }
 
-        addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
-        addedClass.id = this.objectIdService.getNewObjectId();
+        // addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+        // addedClass.id = this.objectIdService.getNewObjectId();
+
+
+
+        // const addedRelationship = new Relationship();
+        // //TODO
+        // addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+        // //TODO END
+        // addedRelationship.source = cell.getParent().id;
+        // addedRelationship.target = addedClass.id;
+
+        // addedRelationship.id = this.objectIdService.getNewObjectId();
+
+        const ret = this.addBlahBlahBlah(cell, cell.getParent().id);
+        const addedClass = ret.class;
+        const addedRelationship = ret.relationship;
 
         const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45), true);
-
         this.configurableClasses.push(addedClass);
-
-        const addedRelationship = new Relationship();
-        //TODO
-        addedRelationship.relationshipType = RelationshipType.INHERITANCE;
-        //TODO END
-        addedRelationship.source = cell.getParent().id;
-        addedRelationship.target = classCell.id;
-
-        addedRelationship.id = this.objectIdService.getNewObjectId();
 
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
@@ -781,6 +801,40 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.modelUpdated = true;
     }
+  }
+
+  addBlahBlahBlah(iconCell: MyMxCell, sourceId: string): { class: ClassDefinition, relationship: Relationship } {
+    const addedClass = new ClassDefinition();
+
+    const parentClassArchetype = (iconCell.getParent() as MyMxCell).classArchetype;
+
+    addedClass.id = this.objectIdService.getNewObjectId();
+
+    if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
+      addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
+
+    } else if (parentClassArchetype.endsWith('_HEAD')) {
+      addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
+
+      // } else if (parentClassArchetype.startsWith('FLEXPROD')) {
+      //   addedClass.classArchetype = ClassArchetype.FLEXPROD;
+    } else {
+      addedClass.classArchetype = parentClassArchetype;
+    }
+
+    addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+
+    addedClass.properties = [];
+
+    const addedRelationship = new Relationship();
+    //TODO
+    addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+    //TODO END
+    addedRelationship.source = sourceId;
+    addedRelationship.target = addedClass.id;
+    addedRelationship.id = this.objectIdService.getNewObjectId();
+
+    return { class: addedClass, relationship: addedRelationship };
   }
 
   handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
