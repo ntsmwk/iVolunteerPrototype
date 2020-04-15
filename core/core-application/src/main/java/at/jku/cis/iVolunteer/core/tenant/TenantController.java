@@ -13,13 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
-import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired TenantRepository tenantRepository;
+	@Autowired private TenantRepository tenantRepository;
+	@Autowired private TenantService tenantService;
+
+	@GetMapping
+	public List<Tenant> getAllTenants() {
+//		TODO MWE tenant restrictions - public...
+		return tenantRepository.findAll();
+	}
 
 	@GetMapping("/name/{tenantName}")
 	public String getTenantByName(@PathVariable String tenantName) {
@@ -31,19 +37,23 @@ public class TenantController {
 		return tenantRepository.findOne(tenantId);
 	}
 
+	@GetMapping("/volunteer/{volunteerId}")
+	public List<Tenant> getTenantsByVolunteer(@PathVariable String volunteerId) {
+		return tenantService.getTenantsByVolunteer(volunteerId);
+	}
+
 	@GetMapping("/marketplace/{marketplaceId}")
-	public List<Tenant> getTenantsByMarketplaceIds(@PathVariable String marketplaceId){
+	public List<Tenant> getTenantsByMarketplaceIds(@PathVariable String marketplaceId) {
 		return tenantRepository.findByMarketplaceId(marketplaceId);
 	}
-	
+
 	@PostMapping
 	public Tenant createTenant(@RequestBody Tenant tenant) {
 		return tenantRepository.insert(tenant);
 	}
 
 	@PutMapping("{tenantId}")
-	public Tenant updateTenant(@PathVariable("tenantId") String tenantId,
-			@RequestBody Tenant tenant) {
+	public Tenant updateTenant(@PathVariable("tenantId") String tenantId, @RequestBody Tenant tenant) {
 		Tenant orginalTenant = tenantRepository.findOne(tenantId);
 		if (orginalTenant == null) {
 			throw new NotAcceptableException();
@@ -54,5 +64,4 @@ public class TenantController {
 		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
 		return tenantRepository.save(orginalTenant);
 	}
-	
 }

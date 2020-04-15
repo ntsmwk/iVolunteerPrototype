@@ -279,7 +279,7 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setType(PropertyType.TEXT);
-			this.setName("name");
+			this.setName("Name");
 			this.setRequired(true);
 			this.setTenantId(tenantId);
 

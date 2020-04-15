@@ -1,0 +1,55 @@
+@import "src/@fuse/scss/fuse";
+@import "~@angular/material/theming";
+@include mat-core();
+$custom-typography: mat-typography-config(
+  $font-family: "Muli",
+);
+@include mat-core($custom-typography);
+
+.localRepoTable {
+    mat-row.is-white {
+        background: white;
+    }
+    mat-row.is-white {
+        background: #afcbe6;
+    }
+
+    mat-header-cell {
+        font-size: 20px;
+      }
+    mat-cell {
+        font-size: 16px;
+      } 
+}
+
+
+.mat-column-issuer {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 30% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-taskName {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+

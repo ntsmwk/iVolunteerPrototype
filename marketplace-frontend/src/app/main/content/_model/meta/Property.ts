@@ -5,6 +5,8 @@ export class PropertyDefinition<T> {
     id: string;
     name: string;
 
+    exportLabel: string;
+
     custom: boolean;
     multiple: boolean;
 
@@ -19,6 +21,8 @@ export class PropertyDefinition<T> {
 export class ClassProperty<T> {
     id: string;
     name: string;
+
+    exportLabel: string;
 
     defaultValues: T[];
     allowedValues: T[];

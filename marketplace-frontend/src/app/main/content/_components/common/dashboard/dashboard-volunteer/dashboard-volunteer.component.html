@@ -1,189 +1,83 @@
-<link
-  type="text/css"
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
-/>
+<link type="text/css" rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans" />
 
-<div
-  class="page-layout blank p-24"
-  fusePerfectScrollbar
-  style="overflow: scroll"
->
-  <div style="padding-top: 12px"></div>
+<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll;">
+  <div style="padding-top: 12px;"></div>
 
-  <div
-    class="header mat-accent-bg p-16 p-sm-24"
-    fxLayout="row"
-    fxLayoutAlign="space-between center"
-  >
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
     <h1>Mein FreiwilligenPASS</h1>
-    <div
-      style=" position: relative; width: 120px; height: 120px; padding-top: 0px;"
-    >
-      <img
-        style="object-fit: contain; max-width: 100%; max-height: 100%"
-        [src]="image"
-      />
+    <div style="position: relative; width: 120px; height: 120px; padding-top: 0px;">
+      <img style="object-fit: contain; max-width: 100%; max-height: 100%;" [src]="image" />
     </div>
   </div>
 
-  <div style="padding-top: 30px"></div>
+  <div style="padding-top: 20px;"></div>
 
-  <mat-divider></mat-divider>
-  <div style="padding-top: 10px"></div>
 
-  <div class="mat-card p-20" fxLayout="column">
-    <div style="padding-top: 10px;"></div>
+  <!--Organisation selector-->
+  <div class="mat-card dashboard-org p-20 m-20">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <h2 *ngIf="tenants.length > 0">Deine Organisationen</h2>
+      <h2 *ngIf="tenants.length == 0">
+        Du bist noch keiner Organisation beigetreten
+      </h2>
 
-    <!-- First row -->
-    <div
-      fxLayout="row"
-      fxLayoutAlign="space-between center"
-      style="padding-left: 5px"
-    >
-      <div fxLayout="row" fxLayoutAlign="start center"></div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div *ngFor="let t of tenants" class="org-icon-container" matTooltip="{{ t.name }}">
+          <img class="org-icon" [src]="getTenantImage(t)" />
+        </div>
+      </div>
+      <button class="mt-20" mat-raised-button color="primary" (click)="navigateToTenantOverview()">
+        Finde Organisationen
+      </button>
+    </div>
+  </div>
 
-      <div></div>
 
-      <!--Share Icon and Menu-->
-      <div style="padding-right: 20px; padding-top: 5px">
-        <button
-          mat-mini-fab
-          type="button"
-          color="primary"
-          [matMenuTriggerFor]="shareMenu"
-        >
+  <mat-card *ngIf="isConnected">
+    <!-- Organisation Filter -->
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
+      </organisation-filter>
+
+      <!-- Fin new Organisation button -->
+      <!-- <button class="mt-20" mat-raised-button color="primary" (click)="navigateToTenantOverview()">
+        Finde neue Organisationen
+      </button> -->
+
+      <!-- Share Icon and Menu-->
+      <div style="padding-right: 20px; padding-top: 5px;">
+        <button mat-mini-fab type="button" color="primary" [matMenuTriggerFor]="shareMenu">
           <mat-icon>share</mat-icon>
         </button>
 
-        <mat-menu
-          #shareMenu="matMenu"
-          xPosition="after"
-          yPosition="below"
-          [overlapTrigger]="false"
-        >
-          <mat-label mat-menu-item disabled style="color: black"
-            >Freigeben an...</mat-label
-          >
-          <button
-            mat-menu-item
-            (click)="triggerShareDialog()"
-            style="width: 220px"
-            matTooltip="Recruiter: 'Best Jobs'"
-          >
+        <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+          <mat-label mat-menu-item disabled style="color: black;">Freigeben an...</mat-label>
+          <button mat-menu-item (click)="triggerShareDialog()" style="width: 220px;"
+            matTooltip="Recruiter: 'Best Jobs'">
             <div fxLayout="row" fxLayoutAlign="start center">
-              <img
-                class="avatar"
-                src="../../../../assets/images/logos/recruiter.jpg"
-              />
-              <div style="padding-left: 10px"></div>
+              <img class="avatar" src="../../../../assets/images/logos/recruiter.jpg" />
+              <div style="padding-left: 10px;"></div>
               <div>Best Jobs</div>
             </div>
           </button>
         </mat-menu>
       </div>
     </div>
-    <!--END Share Icon and Menu-->
+  </mat-card>
 
-    <!-- END First row -->
-
-    <div style="padding-top: 10px"></div>
-
-    <!---FILTER BY ORGANIZATION ROW-->
-    <div style="font-size: 18px; padding-left: 10px">
-      <div>Nach Organisation filtern</div>
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <div style="padding:3px"></div>
-        <button
-          mat-flat-button
-          type="button"
-          color="accent"
-          style="height: 60px; min-width: 60px;"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-        >
-          <div
-            style=" position: relative; width: 50px; height: 50px; padding-top: 7px; font-size: 18px; font-weight: 900"
-          >
-            Alle
-          </div>
-        </button>
-        <div style="padding:3px"></div>
-        <button
-          mat-stroked-button
-          type="button"
-          color="accent"
-          style="height: 60px; min-width: 60px;"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-        >
-          <div
-            style=" position: relative; width: 50px; height: 50px; padding-top: 5px;"
-          >
-            <img
-              style="object-fit: contain; max-width: 100%; max-height: 100%"
-              src="../../../../assets/images/logos/FF_Altenberg.jpg"
-            />
-          </div>
-        </button>
-        <div style="padding:3px"></div>
-
-        <button
-          mat-stroked-button
-          type="button"
-          color="accent"
-          style="height: 60px; min-width: 60px;"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-        >
-          <div
-            style=" position: relative; width: 50px; height: 50px; padding-top: 5px;"
-          >
-            <img
-              style="object-fit: contain; max-width: 100%; max-height: 100%"
-              src="../../../../assets/images/logos/OERK_Sonderlogo_rgb_cropped.jpg"
-            />
-          </div>
-        </button>
-
-        <div style="padding:3px"></div>
-        <button
-          mat-stroked-button
-          type="button"
-          color="accent"
-          style="height: 60px; min-width: 60px;"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-        >
-          <div
-            style=" position: relative; width: 50px; height: 50px; padding-top: 5px;"
-          >
-            <img
-              style="object-fit: contain; max-width: 100%; max-height: 100%"
-              src="../../../../assets/images/avatars/musikvereinschwertberg.jpeg"
-            />
-          </div>
-        </button>
-      </div>
+  <div *ngIf="isConnected && selectedTenants.length > 0" class="mat-card p-20" fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <button mat-raised-button color="primary" (click)="syncAll()">Alle hinzufügen</button>
+      <button mat-raised-button color="primary" (click)="removeAll()" style="margin-left: 20px;">Alle
+        entfernen</button>
     </div>
 
-    <div style="padding-top: 10px"></div>
-
-    <div
-      *ngIf="userImagePaths && userImagePaths.length > 0"
-      class="table"
-      fxLayout="row"
-      style="width: 100%"
-      fxLayoutAlign="start center"
-    >
+    <div *ngIf="userImagePaths && userImagePaths.length > 0" fxLayout="row" style="width: 100%"
+      fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
-      <mat-table
-        #table
-        matSort
-        [dataSource]="dataSourceRepository"
-        style="width: 100%"
-      >
+      <mat-table matSort class="localRepoTable" [dataSource]="dataSourceRepository" style="width: 100%">
         <ng-container matColumnDef="issuer">
           <mat-header-cell *matHeaderCellDef>Aussteller</mat-header-cell>
           <mat-cell *matCellDef="let entry">
@@ -191,7 +85,9 @@
               <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
               <div fxLayout="column">
                 <div>{{ getIssuerName(entry.issuerId) }}</div>
-                <div class="pl-8">{{ getIssuerPosition(entry.issuerId) }}</div>
+                <div class="pl-8">
+                  {{ getIssuerPosition(entry.issuerId) }}
+                </div>
               </div>
             </div>
           </mat-cell>
@@ -214,23 +110,39 @@
         <ng-container matColumnDef="date">
           <mat-header-cell *matHeaderCellDef>Datum</mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            {{ getDateString(entry.blockchainDate) }}
+            {{ entry.dateFrom | date: 'dd.MM.yyyy' }}
           </mat-cell>
         </ng-container>
 
-        <mat-header-row
-          *matHeaderRowDef="displayedColumnsRepository"
-        ></mat-header-row>
-        <mat-row
-          *matRowDef="let row; columns: displayedColumnsRepository"
-          [ngClass]="{ highlighted_new: row.status == 'new' }"
-        ></mat-row>
+        <ng-container matColumnDef="syncButton">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <button mat-raised-button *ngIf="!inLocalRepository(entry)" color="primary"
+              (click)="syncToLocalRepository(entry)">Hinzufügen</button>
+            <button mat-raised-button *ngIf="inLocalRepository(entry)" color="primary"
+              (click)="removeFromLocalRepository(entry)">Entfernen</button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsRepository"></mat-header-row>
+        <mat-row *matRowDef="let element; let row; columns: displayedColumnsRepository" [ngClass]="{
+                'is-white': inLocalRepository(element),
+                'is-blue': !inLocalRepository(element)
+                    }"></mat-row>
       </mat-table>
     </div>
-    <mat-paginator
-      [pageSize]="12"
-      id="paginator"
-      showFirstLastButtons
-    ></mat-paginator>
   </div>
+  <mat-paginator *ngIf="isConnected" [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
+
+
+  <div style="padding-top: 20px;"></div>
+
+  <p *ngIf="!isConnected" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Local Repository Service läuft nicht!
+  </p>
+
+  <p *ngIf="selectedTenants.length === 0 && isConnected" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+  </p>
+
 </div>

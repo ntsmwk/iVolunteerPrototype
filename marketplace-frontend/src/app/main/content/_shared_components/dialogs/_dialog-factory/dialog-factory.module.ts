@@ -21,6 +21,8 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_compo
 import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.module';
 import { ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
 import { ChangeIconDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.module';
+import { ClassInstanceFormPreviewExportDialogModule } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
+import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
 @NgModule({
   imports: [
@@ -34,12 +36,13 @@ import { ChangeIconDialogModule } from 'app/main/content/_components/help-seeker
     OpenDialogModule,
     SaveAsDialogModule,
     ClassInstanceFormPreviewDialogModule,
-    ChangeIconDialogModule
+    ChangeIconDialogModule,
+    ClassInstanceFormPreviewExportDialogModule
   ],
   declarations: [DialogFactoryComponent],
-  entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent, 
-                    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
-                    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
-                    ChangeIconDialogComponent]
+  entryComponents: [AddOrRemoveDialogComponent, TextFieldDialogComponent, ConfirmDialogComponent,
+    SortDialogComponent, ChooseTemplateToCopyDialogComponent, RelationshipDialogComponent,
+    OpenDialogComponent, SaveAsDialogComponent, ClassInstanceFormPreviewDialogComponent,
+    ChangeIconDialogComponent, ClassInstanceFormPreviewExportDialogComponent]
 })
 export class DialogFactoryModule { }

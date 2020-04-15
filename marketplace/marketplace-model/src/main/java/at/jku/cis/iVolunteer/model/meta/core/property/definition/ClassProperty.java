@@ -14,7 +14,7 @@ public class ClassProperty<T> {
 
 	@Id private String id;
 	private String name;
-
+	
 	private List<T> defaultValues = new ArrayList<>();
 	private List<T> allowedValues = new ArrayList<>();
 
@@ -41,6 +41,7 @@ public class ClassProperty<T> {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 
 	public String getName() {
 		return name;

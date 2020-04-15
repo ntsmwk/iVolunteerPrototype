@@ -3,6 +3,7 @@ import { fuseAnimations } from '../../../../../../../../@fuse/animations';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
 import { Volunteer } from '../../../../../_model/volunteer';
+import { Tenant } from 'app/main/content/_model/tenant';
 
 @Component({
   selector: 'fuse-tasks',
@@ -16,6 +17,7 @@ export class TasksComponent implements OnInit {
   marketplace: Marketplace;
 
   @Input() classInstanceDTOs: ClassInstanceDTO[];
+  @Input() selectedTenants: Tenant[];
   selectedYaxis: string;
   selectedYear: string;
   selectedTaskType: string;
@@ -26,6 +28,7 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.classInstanceDTOs = [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -37,6 +40,12 @@ export class TasksComponent implements OnInit {
           case 'classInstanceDTOs': {
             if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
+            }
+            break;
+          }
+          case 'selectedTenants': {
+            if (typeof changes.selectedTenants.currentValue != 'undefined') {
+              this.selectedTenants = changes.selectedTenants.currentValue;
             }
           }
 

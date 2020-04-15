@@ -3,19 +3,27 @@ import { HttpClient } from "@angular/common/http";
 import { Tenant } from "../_model/tenant";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class TenantService {
   constructor(private http: HttpClient) {}
 
+  findAll() {
+    return this.http.get(`/core/tenant`);
+  }
+
   findByName(tenantName: string) {
     return this.http.get(`/core/tenant/name/${tenantName}`, {
-      responseType: "text"
+      responseType: "text",
     });
   }
 
   findById(tenantId: string) {
     return this.http.get(`/core/tenant/${tenantId}`);
+  }
+
+  findByVolunteerId(volunteerId: string) {
+    return this.http.get(`/core/tenant/volunteer/${volunteerId}`);
   }
 
   findByMarketplace(marketplaceId: string) {

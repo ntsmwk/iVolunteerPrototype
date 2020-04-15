@@ -99,7 +99,7 @@ const routes: Route[] = [
     loadChildren: () =>
       import(
         "./_components/volunteer/task-management/achievements/achievements.module"
-      ).then(m => m.AchievementsFireBrigadeModule),
+      ).then(m => m.AchievementsModule),
     canActivate: [TokenGuard, VolunteerGuard]
   },
 
@@ -318,16 +318,28 @@ const routes: Route[] = [
         m => m.FuseTenantFormModule
       ),
     canActivate: [TokenGuard, AdminGuard]
+  },
+  {
+    path: "main/localRepository",
+    loadChildren: () =>
+      import(
+        "./_components/volunteer/local-repository/local-repository.module"
+      ).then(m => m.LocalRepositoryModule),
+    canActivate: [TokenGuard, VolunteerGuard]
+  },
+  {
+    path: "main/profile",
+    loadChildren: () =>
+      import("./_components/common/profile/profile.module").then(
+        m => m.ProfileModule
+      ),
+    canActivate: [TokenGuard, LoginGuard]
   }
 ];
 
 @NgModule({
   declarations: [FuseContentComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    FuseSharedModule,
-    ShareMenuModule
-  ],
+  imports: [RouterModule.forChild(routes), FuseSharedModule, ShareMenuModule],
 
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

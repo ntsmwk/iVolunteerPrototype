@@ -9,6 +9,8 @@ public class Tenant {
 
 	@Id private String id;
 	private String name;
+	
+	private String homepage;
 
 	private byte[] image;
 
@@ -33,6 +35,14 @@ public class Tenant {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getHomepage() {
+		return homepage;
+	}
+
+	public void setHomepage(String homepage) {
+		this.homepage = homepage;
 	}
 
 	public String getPrimaryColor() {

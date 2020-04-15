@@ -10,6 +10,14 @@ export class Participant {
 
   position: string;
 
+  birthday: Date;
+
+  about: string;
+  address: string;
+  phoneNumbers: string[] = [];
+  websites: string[] = [];
+  emails: string[] = [];
+
   image;
 }
 

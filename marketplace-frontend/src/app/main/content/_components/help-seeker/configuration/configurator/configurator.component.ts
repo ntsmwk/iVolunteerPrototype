@@ -11,6 +11,7 @@ import { Participant, ParticipantRole } from '../../../../_model/participant';
 import { RelationshipService } from '../../../../_service/meta/core/relationship/relationship.service';
 import { Relationship } from '../../../../_model/meta/Relationship';
 import { CoreFlexProdService } from '../../../../_service/core-flexprod.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 @Component({
   selector: 'app-configurator',
@@ -22,7 +23,7 @@ export class ConfiguratorComponent implements OnInit {
   marketplace: Marketplace;
   configurableClasses: ClassDefinition[];
   relationships: Relationship[];
-
+  helpseeker: Helpseeker;
 
   isLoaded: boolean = false;
 
@@ -37,7 +38,7 @@ export class ConfiguratorComponent implements OnInit {
   ngOnInit() {
     let service: CoreHelpSeekerService | CoreFlexProdService;
     // get marketplace
-    this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
         if (role == "FLEXPROD") {
           service = this.flexProdService;
@@ -45,10 +46,13 @@ export class ConfiguratorComponent implements OnInit {
           service = this.helpSeekerService;
         }
 
-        service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+        service.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
           if (!isNullOrUndefined(marketplace)) {
             this.marketplace = marketplace;
+            this.helpseeker = helpseeker;
+
             this.isLoaded = true;
+
 
           }
         });

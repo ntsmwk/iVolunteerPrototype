@@ -233,4 +233,5 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     this.timelineFilter = timelineFilter;
     this.timelineFilterChange.emit(JSON.parse(JSON.stringify(timelineFilter)));
   }
+
 }
