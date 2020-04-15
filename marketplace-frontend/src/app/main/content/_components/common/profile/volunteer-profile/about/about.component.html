@@ -1,4 +1,4 @@
-<div id="about" class="p-24" fxLayout="row wrap">
+<div *ngIf="volunteer" id="about" class="p-24" fxLayout="row wrap">
   <div class="about-content" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="65">
     <div class="profile-box info-box general" fxLayout="column">
       <header class="accent">
@@ -62,5 +62,5 @@
           <img [src]="friend.avatar">
         </div>
       </div>
-    </div>
-  </div> -->
+    </div>-->
+</div>
