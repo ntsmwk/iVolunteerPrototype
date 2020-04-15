@@ -22,7 +22,6 @@ export class VolunteerProfileComponent implements OnInit {
     this.volunteer = <Participant>(
       await this.loginService.getLoggedIn().toPromise()
     );
-    console.error(this.volunteer);
   }
 
   getProfileImage() {
