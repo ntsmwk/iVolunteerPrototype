@@ -33,7 +33,9 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.RuleEngineTestData;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
+import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 /**
  * Adapted from barry.wong
@@ -43,6 +45,7 @@ public class RuleService {
 	
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private VolunteerRepository volunteerRepository;
 	
 	private ConcurrentHashMap<String,  ConcurrentHashMap<String, KieContainer>> tenant2ContainerMap;
 	
@@ -84,10 +87,6 @@ public class RuleService {
 		KieModule module = ks.getRepository().addKieModule(resource);
         KieContainer kieContainer = ks.newKieContainer(module.getReleaseId());
         
-       //  System.out.println("Module release id: " + module.getReleaseId());
-
-        // create container is heavy, we only create once and cache it
-        // ConcurrentHashMap<String, KieContainer> containerName2Container = 
         tenant2ContainerMap.get(tenantId).put(container, kieContainer);
         
 		kieContainer.updateToVersion(releaseId); 
@@ -105,9 +104,20 @@ public class RuleService {
 			}
 		};
 	}
+	
+	public void executeRules(String tenantId, String container, String volunteerId) {
+		KieSession ksession = getKieSession(tenantId, container);
+		
+		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
+		ksession.insert(volunteer);
+        
+		ksession.fireAllRules();
+		
+		ksession.dispose();
+	}
 
-	public void executeFibonacci(String tenantId, String containerName) {
-		KieSession ksession = getKieSession(tenantId, containerName);
+	public void executeFibonacci(String tenantId, String container) {
+		KieSession ksession = getKieSession(tenantId, container);
 		// The application can insert facts into the session
 		Fibonacci f = new Fibonacci(10);
         ksession.insert( f );
@@ -115,17 +125,13 @@ public class RuleService {
         // and fire the rules
         ksession.fireAllRules();
 
-        System.out.println("after rule execution: " + f.toString());
-        // Close loggers
-        System.out.println("session endend");
-
         // and then dispose the session
         ksession.dispose();
 	}
 	
-	public void executeRules(String tenantId, String containerName) {
+    public void executeHelloWorld(String tenantId, String container) {
 		
-		KieSession ksession = getKieSession(tenantId, containerName);
+		KieSession ksession = getKieSession(tenantId, container);
 		// The application can insert facts into the session
         final Message message = new Message();
         message.setMessage( "Hello World" );
@@ -135,31 +141,22 @@ public class RuleService {
         // and fire the rules
         ksession.fireAllRules();
 
-        // Close loggers
-        System.out.println("session endend");
-
         // and then dispose the session
         ksession.dispose();
 	}
 	
-	public KieSession getKieSession(String tenantId, String containerName) {
-		System.out.println("get new kie session!!!!");
+	public KieSession getKieSession(String tenantId, String container) {
 		ConcurrentHashMap<String, KieContainer> containerName2Container = tenant2ContainerMap.get(tenantId);
-        KieContainer container = containerName2Container.get(containerName);
-        System.out.println("container " + container + " found");
-       // System.out.println("new session for container " + container.getReleaseId());
+        KieContainer kieContainer = containerName2Container.get(container); 
         if (container == null) {
-            throw new NoSuchContainerException(containerName);
+            throw new NoSuchContainerException(container);
         }
-        System.out.println("dann muss hier das Problem liegen");
-        return container.newKieSession();
+        return kieContainer.newKieSession();
     }
 
 	
 	public void addRule2Container(String tenantId, String marketplaceId, String container, String name, String content) {
-		System.out.println("add new rule " + name + " to container " + container);
 		ContainerRuleEntry containerRule = new ContainerRuleEntry(tenantId, marketplaceId, container, name, content);
-		System.out.println("rule created - " + containerRule.toString());
 		containerRuleEntryRepository.insert(containerRule);
 	}
 	

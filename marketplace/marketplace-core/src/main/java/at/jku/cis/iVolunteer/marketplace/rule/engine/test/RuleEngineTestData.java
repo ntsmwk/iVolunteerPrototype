@@ -2,8 +2,8 @@ package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
 public class RuleEngineTestData {
 	
-	public final String ruleFibonacci =  "package at.jku.cis.iVolunteer.marketplace.rule.engine.test ;\r\n" +
-	//		"import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;\r\n" + 
+	public final String ruleFibonacci =  "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" +
+	     	"import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;\r\n" + 
 			"dialect \"mvel\"\r\n" + 
 			"\r\n" + 
 			"rule Recurse\r\n" + 
@@ -34,8 +34,8 @@ public class RuleEngineTestData {
 			"        System.out.println( s3 + \" == \" + f3.value ); // see how you can access pattern and field  bindings\r\n" + 
 			"end \r\n";
 	
-	public final String ruleHelloWorld = "package at.jku.cis.iVolunteer.marketplace.rule.engine.test;\r\n" +
-	// import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;\r\n" + 
+	public final String ruleHelloWorld = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" +
+	        "import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;\r\n" + 
 			"global java.util.List list\r\n" + 
 			" \r\n" + 
 			"rule \"Hello World\"\r\n" + 

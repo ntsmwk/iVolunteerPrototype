@@ -67,8 +67,8 @@ public class InitializationService {
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 	
-	private static final String FFEIDENBERG = "FF Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
+	private static final String FFEIDENBERG = "FF_Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "Musikverein_Schwertberg";
 
 
 
@@ -85,6 +85,7 @@ public class InitializationService {
 
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
+		//this.addTestClassInstances();
 		addTestRuleEngine();
 	}
 
@@ -690,10 +691,10 @@ public class InitializationService {
 	private void addTestRuleEngine() {
 		/****** load rules into database ******/
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-		ruleService.initTestData(tenantId);
+		// ruleService.initTestData(tenantId);
 	
 		tenantId = coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG);
-		ruleService.initTestData(tenantId);
+		//ruleService.initTestData(tenantId);
 		
 	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));

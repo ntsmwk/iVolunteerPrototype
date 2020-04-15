@@ -49,11 +49,21 @@ public class RuleEngineController {
 
 	@PutMapping("/tenant/{tenantId}/{container}/execute")
 	public void executeRules(@PathVariable String tenantId, @PathVariable String container) {
-		if (container.equals("general"))
-		   ruleService.executeRules(tenantId, container);
-		if (container.equals("math"))
+		switch (container) {
+		case "general":
+			ruleService.executeHelloWorld(tenantId, container);
+			break;
+		case "math":
 			ruleService.executeFibonacci(tenantId, container);
+			break;
+		} 
 	}
+	
+	@PutMapping("/tenant/{tenantId}/{container}/{volunteerId}/execute")
+	public void executeRules(@PathVariable String tenantId, @PathVariable String container, @PathVariable String volunteerId) {
+		ruleService.executeRules(tenantId, container, volunteerId);
+	}
+	
 	
 	@PostMapping("/init")
 	public void initTestData() {
