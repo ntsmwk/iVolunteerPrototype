@@ -76,6 +76,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   rootCell: MyMxCell;
   rootCellSet: boolean;
 
+  relationshipType: RelationshipType;
+
   quickEditMode: boolean;
 
   saveDone: boolean;
@@ -98,6 +100,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarVisible = true;
     this.hiddenEdges = [];
     this.eventResponse = new TopMenuResponse();
+    this.relationshipType = RelationshipType.AGGREGATION;
+
   }
 
   getPropertyDefinitionsFromServer() {

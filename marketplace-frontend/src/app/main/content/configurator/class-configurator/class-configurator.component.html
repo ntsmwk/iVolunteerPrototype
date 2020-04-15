@@ -51,10 +51,11 @@
 
 
       <mat-form-field style="width: 100%" appearance="outline">
-        <mat-select placeholder="Automatisches Layout" value="Vertical">
-          <!-- <mat-option value="Horizontal" (click)="setLayout('horizontal')">Horizontal</mat-option> -->
-          <mat-option value="Vertical" (click)="setLayout('vertical')">Vertikal</mat-option>
-          <!-- <mat-option value="Radial (experimental)" (click)="setLayout('radial')">Radial (experimental) </mat-option> -->
+        <mat-select placeholder="Relationship Type" [(ngModel)]="relationshipType">
+          <mat-option value="INHERITANCE">Vererbung</mat-option>
+          <!-- <mat-option value="association" (click)="">Assoziation</mat-option> -->
+          <mat-option value="AGGREGATION">Aggregation</mat-option>
+          <mat-option value="COMPOSITION">Komposition</mat-option>
         </mat-select>
       </mat-form-field>
 
