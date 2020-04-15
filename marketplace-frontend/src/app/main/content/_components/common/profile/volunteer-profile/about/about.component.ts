@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-
 import { fuseAnimations } from "@fuse/animations";
+import { Participant } from "app/main/content/_model/participant";
+import { LoginService } from "app/main/content/_service/login.service";
 
 @Component({
   selector: "profile-about",
@@ -12,9 +11,13 @@ import { fuseAnimations } from "@fuse/animations";
   animations: fuseAnimations
 })
 export class ProfileAboutComponent implements OnInit {
-  about: any;
+  volunteer: Participant;
 
-  constructor() {}
+  constructor(private loginService: LoginService) {}
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+    this.volunteer = <Participant>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
+  }
 }
