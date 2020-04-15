@@ -292,8 +292,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (cell.root) {
       if (!this.rootCellSet) {
         this.rootCell = cell;
+        cell.root = classDefinition.root;
         this.rootCellSet = true;
       } else {
+        cell.root = false;
         console.error('root cell already set - there must not be more than one root cell!');
       }
     }
@@ -307,7 +309,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setConnectable(true);
 
     if (!isNullOrUndefined(classDefinition.imagePath)) {
-      const overlay = new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
+      const overlay =
+        new mx.mxCellOverlay(new mx.mxImage(classDefinition.imagePath, 30, 30), 'Overlay', mx.mxConstants.ALIGN_RIGHT, mx.mxConstants.ALIGN_TOP);
       this.graph.addCellOverlay(cell, overlay);
     }
 
@@ -389,7 +392,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   /**
    * ******PROPERTIES******
    */
-
   private addPropertiesToCell(cell: MyMxCell, properties: ClassProperty<any>[], yLocation: number): number {
     if (!isNullOrUndefined(properties)) {
       for (const p of properties) {
@@ -398,7 +400,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         if (p.type === PropertyType.ENUM) {
           propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
           propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
-
         } else {
           propertyEntry.cellType = MyMxCellType.PROPERTY;
         }
@@ -408,7 +409,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         yLocation += 20;
       }
     }
-
     return yLocation;
   }
 
@@ -451,10 +451,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell = new mx.mxCell('', new mx.mxGeometry(coords.x, coords.y, 0, 0), CConstants.mxStyles.association) as MyMxCell;
       cell.cellType = MyMxCellType.ASSOCIATION;
 
-      const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality], new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
+      const cell1 = new mx.mxCell(AssociationCardinality[(r as Association).sourceCardinality],
+        new mx.mxGeometry(-0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
       this.addAssociationLabel(cell1, cell);
 
-      const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality], new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
+      const cell2 = new mx.mxCell(AssociationCardinality[(r as Association).targetCardinality],
+        new mx.mxGeometry(0.8, 0, 0, 0), CConstants.mxStyles.associationCell) as MyMxCell;
       this.addAssociationLabel(cell2, cell);
 
       // cell2.geometry.relative = true;
@@ -479,15 +481,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       console.error('invalid RelationshipType');
     }
 
-    if (!createNew) {
-      cell.id = r.id;
-    } else {
-      cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
-      cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
+    cell.id = r.id;
 
-      source = undefined;
-      target = undefined;
-    }
+    // if (!createNew) {
+    //   cell.id = r.id;
+    // } else {
+    //   cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x - 100, coords.y - 20), true);
+    //   cell.geometry.setTerminalPoint(new mx.mxPoint(coords.x + 100, coords.y), false);
+
+    //   source = undefined;
+    //   target = undefined;
+    // }
 
     cell.newlyAdded = createNew;
     cell.geometry.relative = true;
@@ -1092,15 +1096,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const rootCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find((c: MyMxCell) => c.root);
 
     if (!isNullOrUndefined(rootCell)) {
-      // this.graph.scrollCellToVisible(rootCell, false);
       this.graph.scrollCellToVisible(rootCell, true);
 
       const translate = this.graph.view.getTranslate();
       const windowHeight = window.innerHeight;
-      // const windowWidth = window.innerWidth;
-      // this.graph.view.setTranslate(translate.x - (windowWidth / 2) + (rootCell.geometry.width / 2), translate.y + 25);
       this.graph.view.setTranslate(translate.x, translate.y - (windowHeight / 2) + (rootCell.geometry.height + 25));
-
     }
   }
 
