@@ -79,8 +79,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   relationshipType: RelationshipType;
 
   quickEditMode: boolean;
-  clickDeleteMode: boolean;
+  clickToDeleteMode: boolean;
   confirmDelete: boolean;
+  deleteRelationships: boolean;
 
   saveDone: boolean;
 
@@ -104,7 +105,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.eventResponse = new TopMenuResponse();
     this.relationshipType = RelationshipType.AGGREGATION;
     this.confirmDelete = true;
-
+    this.deleteRelationships = true;
   }
 
   getPropertyDefinitionsFromServer() {
@@ -207,11 +208,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
           const mouseEvent = evt.getProperty('event');
 
-          if (mouseEvent.button === 0) {
-            outer.handleMXGraphLeftClickEvent(evt);
+          if (outer.clickToDeleteMode) {
+            outer.handleClickToDeleteEvent(evt);
+          } else {
 
-          } else if (mouseEvent.button === 2) {
-            outer.handleMXGraphRightClickEvent(evt);
+            if (mouseEvent.button === 0) {
+              outer.handleMXGraphLeftClickEvent(evt);
+
+            } else if (mouseEvent.button === 2) {
+              outer.handleMXGraphRightClickEvent(evt);
+            }
           }
         });
 
@@ -547,8 +553,19 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   /**
- * ******LAYOUT AND DRAWING******
- */
+  * ******DELETE******
+  */
+
+  private deleteCell(cells: MyMxCell[]) {
+    console.log(cells);
+
+    this.graph.removeCells(cells, this.deleteRelationships);
+  }
+
+
+  /**
+   * ******LAYOUT AND DRAWING******
+   */
 
   private setLayout() {
     const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
@@ -907,6 +924,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     this.modelUpdated = true;
+  }
+
+  handleClickToDeleteEvent(event: mxgraph.mxEventObject) {
+    let cell = event.getProperty('cell');
+    console.log(cell);
   }
 
   // handleMXGraphLabelChangedEvent(event: any) {

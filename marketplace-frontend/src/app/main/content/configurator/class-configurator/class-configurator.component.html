@@ -97,7 +97,7 @@
             <div class="sidebar-content-card-outline">
 
               <div fxLayout="row" fxLayoutAlign="start center">
-                <mat-checkbox labelPosition="after" [(ngModel)]="clickDeleteMode">
+                <mat-checkbox labelPosition="after" [(ngModel)]="clickToDeleteMode">
                   <div style="font-size: 14px">Click-To-Delete</div>
                 </mat-checkbox>
 
@@ -105,6 +105,12 @@
 
                 <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete">
                   <div style="font-size: 14px">Bestätigen</div>
+                </mat-checkbox>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-checkbox labelPosition="after" [(ngModel)]="deleteRelationships">
+                  <div style="font-size: 14px">Beziehungen löschen</div>
                 </mat-checkbox>
               </div>
             </div>
