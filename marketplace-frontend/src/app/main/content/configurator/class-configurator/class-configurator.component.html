@@ -97,7 +97,8 @@
             <div class="sidebar-content-card-outline">
 
               <div fxLayout="row" fxLayoutAlign="start center">
-                <mat-checkbox labelPosition="after" [(ngModel)]="clickToDeleteMode">
+                <mat-checkbox labelPosition="after" [(ngModel)]="clickToDeleteMode"
+                  (ngModelChange)="clickToDeleteModeToggled()">
                   <div style="font-size: 14px">Click-To-Delete</div>
                 </mat-checkbox>
 

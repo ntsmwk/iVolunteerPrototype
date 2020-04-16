@@ -106,6 +106,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.relationshipType = RelationshipType.AGGREGATION;
     this.confirmDelete = true;
     this.deleteRelationships = true;
+    this.clickToDeleteMode = false;
+    this.quickEditMode = false;
   }
 
   getPropertyDefinitionsFromServer() {
@@ -208,7 +210,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
           const mouseEvent = evt.getProperty('event');
 
-          if (outer.clickToDeleteMode) {
+          if (outer.clickToDeleteMode && mouseEvent.button === 0) {
             outer.handleClickToDeleteEvent(evt);
           } else {
 
@@ -556,10 +558,26 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   * ******DELETE******
   */
 
-  private deleteCell(cells: MyMxCell[]) {
-    console.log(cells);
+  private deleteCells(cells: MyMxCell[]) {
+    const removedCells = this.graph.removeCells(cells, this.deleteRelationships) as MyMxCell[];
+    console.log(removedCells);
 
-    this.graph.removeCells(cells, this.deleteRelationships);
+    if (isNullOrUndefined(removedCells)) {
+      return;
+    }
+    this.deleteFromModel(removedCells);
+  }
+
+  deleteFromModel(removedCells: MyMxCell[]) {
+    for (const cell of removedCells) {
+      if (cell.cellType === MyMxCellType.CLASS) {
+        this.configurableClasses = this.configurableClasses.filter(c => c.id !== cell.id);
+        this.deletedClassIds.push(cell.id);
+      } else if (MyMxCellType.isRelationship(cell.cellType)) {
+        this.relationships = this.relationships.filter(r => r.id !== cell.id);
+        this.deletedRelationshipIds.push(cell.id);
+      }
+    }
   }
 
 
@@ -927,8 +945,25 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleClickToDeleteEvent(event: mxgraph.mxEventObject) {
-    let cell = event.getProperty('cell');
+    const cell = event.getProperty('cell') as MyMxCell;
     console.log(cell);
+
+    if (!isNullOrUndefined(cell)) {
+      if (cell.cellType === MyMxCellType.CLASS) {
+        this.deleteCells([cell]);
+      }
+    }
+  }
+
+  clickToDeleteModeToggled() {
+
+    console.log(this.clickToDeleteMode);
+    if (this.clickToDeleteMode) {
+      this.graph.setEnabled(false);
+    } else {
+      this.graph.setEnabled(true);
+    }
+
   }
 
   // handleMXGraphLabelChangedEvent(event: any) {
