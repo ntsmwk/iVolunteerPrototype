@@ -42,7 +42,7 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   border-width: 1px; 
   border-color: currentColor; 
   background-color: white; 
-  padding: 0 10px; 
+  padding: 0 5px; 
   line-height: 20px;
 }
 .sidebar-minimize-button {
@@ -77,7 +77,7 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   cursor: pointer; 
   display: block; 
   
-  background: blue; 
+  background: rgb(62, 125, 219); 
   color: white; 
   
   border-color: black; 
@@ -88,6 +88,30 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   
   padding-left: 4px;
 
+}
+
+.sidebar-content-card {
+  margin: 4px;
+  margin-top: 0px;
+
+  .sidebar-content-card-container {
+    margin-top: -8px;
+
+    .sidebar-content-card-outline-label {
+      display: inline; 
+      position: relative; 
+      top: 10px; 
+      left: 8px; 
+      background: white;
+      color: rgb(80, 80, 80);
+    }
+
+    .sidebar-content-card-outline {
+      padding: 8px; 
+      border: solid 1px rgb(80, 80, 80); 
+      border-radius: 4px
+    }
+  }
 }
 
 .subheader{
