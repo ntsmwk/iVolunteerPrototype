@@ -156,6 +156,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       return this.isCellsSelectable() && !this.isCellLocked(cell) && style['selectable'] !== 0;
     };
 
+    const outer = this;
     this.graph.getCursorForCell = function (cell: MyMxCell) {
       if (cell.cellType === MyMxCellType.PROPERTY
         || cell.cellType === MyMxCellType.ADD_PROPERTY_ICON
@@ -163,7 +164,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON
         || cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON
         || cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON
-        || cell.cellType === MyMxCellType.OPTIONS_ICON) {
+        || cell.cellType === MyMxCellType.OPTIONS_ICON
+        || (outer.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS)
+      ) {
 
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
@@ -230,15 +233,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
           outer.handleMXGraphFoldEvent(cell);
         });
 
-      this.graph.addListener(mx.mxEvent.LABEL_CHANGED,
-        function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-          // outer.handleMXGraphLabelChangedEvent(evt);
-        });
+      // this.graph.addListener(mx.mxEvent.LABEL_CHANGED,
+      //   function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+      //     // outer.handleMXGraphLabelChangedEvent(evt);
+      //   });
 
-      this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE,
-        function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-          // outer.handleMXGraphCellSelectEvent(evt);
-        });
+      // this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE,
+      //   function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+      //     // outer.handleMXGraphCellSelectEvent(evt);
+      //   });
+
       this.graph.addListener(mx.mxEvent.DOUBLE_CLICK,
         function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
           outer.handleMXGraphDoubleClickEvent(evt);
@@ -453,8 +457,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     const parent = this.graph.getDefaultParent();
 
-    let source: MyMxCell = this.graph.getModel().getCell(r.source) as MyMxCell;
-    let target: MyMxCell = this.graph.getModel().getCell(r.target) as MyMxCell;
+    const source: MyMxCell = this.graph.getModel().getCell(r.source) as MyMxCell;
+    const target: MyMxCell = this.graph.getModel().getCell(r.target) as MyMxCell;
 
     let cell: MyMxCell;
 
@@ -569,17 +573,19 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   deleteFromModel(removedCells: MyMxCell[]) {
+
     for (const cell of removedCells) {
+
       if (cell.cellType === MyMxCellType.CLASS) {
         this.configurableClasses = this.configurableClasses.filter(c => c.id !== cell.id);
         this.deletedClassIds.push(cell.id);
+
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
         this.relationships = this.relationships.filter(r => r.id !== cell.id);
         this.deletedRelationshipIds.push(cell.id);
       }
     }
   }
-
 
   /**
    * ******LAYOUT AND DRAWING******
@@ -946,7 +952,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   handleClickToDeleteEvent(event: mxgraph.mxEventObject) {
     const cell = event.getProperty('cell') as MyMxCell;
-    console.log(cell);
 
     if (!isNullOrUndefined(cell)) {
       if (cell.cellType === MyMxCellType.CLASS) {
@@ -956,8 +961,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   clickToDeleteModeToggled() {
-
-    console.log(this.clickToDeleteMode);
     if (this.clickToDeleteMode) {
       this.graph.setEnabled(false);
     } else {
