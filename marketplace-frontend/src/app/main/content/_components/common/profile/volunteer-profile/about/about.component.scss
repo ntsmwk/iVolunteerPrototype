@@ -80,11 +80,14 @@ profile-about {
       }
     }
     .content {
+      background-color: #039be5 !important; //map-get($background, card);
       padding: 16px;
     }
     footer {
       padding: 8px;
       border-top: 1px solid;
+      border-top-color: #039be5 !important; //map-get($foreground, divider);
+      background-color: rgba(0, 0, 0, 0.06);
     }
     &.info-box {
       .info-line {
@@ -94,7 +97,8 @@ profile-about {
           font-weight: 600;
           padding-bottom: 4px;
         }
-        .info {}
+        .info {
+        }
         &:last-child {
           margin-bottom: 0;
         }
