@@ -34,7 +34,7 @@
   </div>
 
 
-  <mat-card *ngIf="isConnected">
+  <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
@@ -66,7 +66,7 @@
     </div>
   </mat-card>
 
-  <div *ngIf="isConnected && selectedTenants.length > 0" class="mat-card p-20" fxLayout="column">
+  <div *ngIf="isLocalRepositoryConnected && selectedTenants.length > 0" class="mat-card p-20" fxLayout="column">
     <div fxLayout="row" fxLayoutAlign="end center">
       <button mat-raised-button color="primary" (click)="syncAll()">Alle hinzufügen</button>
       <button mat-raised-button color="primary" (click)="removeAll()" style="margin-left: 20px;">Alle
@@ -83,12 +83,7 @@
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
               <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
-              <div fxLayout="column">
-                <div>{{ getIssuerName(entry.issuerId) }}</div>
-                <div class="pl-8">
-                  {{ getIssuerPosition(entry.issuerId) }}
-                </div>
-              </div>
+              <div>{{ getIssuerName(entry.issuerId) }}</div>
             </div>
           </mat-cell>
         </ng-container>
@@ -132,16 +127,16 @@
       </mat-table>
     </div>
   </div>
-  <mat-paginator *ngIf="isConnected" [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
+  <mat-paginator *ngIf="isLocalRepositoryConnected" [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
 
 
   <div style="padding-top: 20px;"></div>
 
-  <p *ngIf="!isConnected" class="alert alert-info">
+  <p *ngIf="!isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Local Repository Service läuft nicht!
   </p>
 
-  <p *ngIf="selectedTenants.length === 0 && isConnected" class="alert alert-info">
+  <p *ngIf="selectedTenants.length === 0 && isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
   </p>
 

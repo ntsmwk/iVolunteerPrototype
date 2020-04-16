@@ -5,11 +5,13 @@ import { LoginService } from "../../../../_service/login.service";
 import { Volunteer } from "app/main/content/_model/volunteer";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
+import { ClassInstanceDTO, ClassArchetype } from "app/main/content/_model/meta/Class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { isNullOrUndefined } from "util";
 import { MatTabChangeEvent } from '@angular/material';
+import { LocalRepositoryService } from 'app/main/content';
+import { timer } from 'rxjs';
 
 @Component({
   selector: "fuse-achievements",
@@ -20,26 +22,30 @@ import { MatTabChangeEvent } from '@angular/material';
 export class AchievementsComponent implements OnInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
-  classInstanceDTOs: ClassInstanceDTO[];
-  filteredClassInstanceDTOs: ClassInstanceDTO[];
+  classInstanceDTOs: ClassInstanceDTO[] = [];
+  filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
-  selectedTenants: Tenant[];
+  selectedTenants: Tenant[] = [];
+  isLocalRepositoryConnected: boolean;
+
+  timeout: boolean = false;
 
   constructor(
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private spinner: NgxSpinnerService
-  ) {}
-
-  ngAfterViewInit() {}
+    private spinner: NgxSpinnerService,
+    private localRepositoryService: LocalRepositoryService,
+  ) { }
 
   async ngOnInit() {
-    //this.spinner.show();
+    let t = timer(3000);
+    t.subscribe(() => {
+        this.timeout = true;
+    });
 
-    this.classInstanceDTOs = [];
-    this.filteredClassInstanceDTOs = [];
-    this.selectedTenants = [];
+    //this.spinner.show();
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
@@ -50,30 +56,35 @@ export class AchievementsComponent implements OnInit {
         .findRegisteredMarketplaces(this.volunteer.id)
         .toPromise()
     );
-
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
 
-    if (!isNullOrUndefined(this.marketplace)) {
+    if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService
-          .getUserClassInstancesByArcheType(
-            this.marketplace,
-            "TASK",
-            this.volunteer.id,
-            this.volunteer.subscribedTenants
-          )
-          .toPromise()
-      );
+        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
 
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
+    } else {
+      if (!isNullOrUndefined(this.marketplace)) {
+        this.classInstanceDTOs = <ClassInstanceDTO[]>(
+          await this.classInstanceService
+            .getUserClassInstancesByArcheType(
+              this.marketplace,
+              "TASK",
+              this.volunteer.id,
+              this.volunteer.subscribedTenants
+            )
+            .toPromise()
+        );
 
-      this.tenantSelectionChanged(this.selectedTenants);
+        this.classInstanceDTOs.forEach((ci, index, object) => {
+          if (ci.duration === null) {
+            object.splice(index, 1);
+          }
+        });
+      }
     }
+
+    this.tenantSelectionChanged(this.selectedTenants);
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -84,6 +95,14 @@ export class AchievementsComponent implements OnInit {
     });
   }
 
+  public tabChanged(tabChangeEvent: MatTabChangeEvent) {
+    if (tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
+      this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
+    }
+  }
+
+
+
   showSpinner() {
     this.spinner.show();
   }
@@ -91,10 +110,4 @@ export class AchievementsComponent implements OnInit {
   hideSpinner() {
     this.spinner.hide();
   }
-
-  public tabChanged(tabChangeEvent: MatTabChangeEvent) {
-    if(tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
-      this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
-    }
-}
 }

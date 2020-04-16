@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Volunteer } from '../_model/volunteer';
 import { LocalRepository } from '../_model/local-repository';
 import { isNullOrUndefined } from 'util';
-import { ClassArchetype, ClassInstance, ClassInstanceDTO } from '../_model/meta/Class';
+import { ClassInstanceDTO } from '../_model/meta/Class';
 
 @Injectable({
     providedIn: 'root'
@@ -57,7 +57,7 @@ export class LocalRepositoryService {
         return observable;
     }
 
-    findByVolunteerAndArcheType(volunteer: Volunteer, classArcheType: ClassArchetype) {
+    findByVolunteerAndArcheType(volunteer: Volunteer) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);
@@ -68,17 +68,9 @@ export class LocalRepositoryService {
                 if (isNullOrUndefined(localRepository)) {
                     subscriber.next([]);
                 } else {
-                    switch (classArcheType) {
-                        case ClassArchetype.TASK:
-                            subscriber.next(localRepository.taskList);
-                            break;
-
-                        case ClassArchetype.COMPETENCE:
-                            subscriber.next(localRepository.competenceList);
-                            break;
-                    }
+                    subscriber.next(localRepository.classInstances);
+                    subscriber.complete();
                 }
-                subscriber.complete();
             };
 
             this.findByVolunteer(volunteer)
@@ -101,15 +93,8 @@ export class LocalRepositoryService {
             this.findByVolunteer(volunteer)
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
-                    switch (classInstance.classArchetype) {
-                        case ClassArchetype.TASK:
-                            localRepository.taskList.push(classInstance);
-                            break;
+                    localRepository.classInstances.push(classInstance);
 
-                        case ClassArchetype.COMPETENCE:
-                            localRepository.competenceList.push(classInstance);
-                            break;
-                    }
                     this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                         .toPromise()
                         .then(() => subscriber.complete())
@@ -132,7 +117,7 @@ export class LocalRepositoryService {
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
 
-                    localRepository.taskList = [ ...localRepository.taskList, ...classInstances];
+                    localRepository.classInstances = [ ...localRepository.classInstances, ...classInstances];
 
                       this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                       .toPromise()
@@ -156,23 +141,12 @@ export class LocalRepositoryService {
             this.findByVolunteer(volunteer)
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
-                    switch (classInstance.classArchetype) {
-                        case ClassArchetype.TASK:
-                            localRepository.taskList.forEach((ci, index, object) => {
-                                if (ci.id === classInstance.id) {
-                                    object.splice(index, 1);
-                                }
-                            });
-                            break;
+                    localRepository.classInstances.forEach((ci, index, object) => {
+                        if (ci.id === classInstance.id) {
+                            object.splice(index, 1);
+                        }
+                    });
 
-                        case ClassArchetype.COMPETENCE:
-                            localRepository.competenceList.forEach((ci, index, object) => {
-                                if (ci.id === classInstance.id) {
-                                    object.splice(index, 1);
-                                }
-                            });
-                            break;
-                    }
                     this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                         .toPromise()
                         .then(() => subscriber.complete())
@@ -194,7 +168,7 @@ export class LocalRepositoryService {
             this.findByVolunteer(volunteer)
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
-                    localRepository.taskList = [];
+                    localRepository.classInstances = [];
 
                     this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                         .toPromise()

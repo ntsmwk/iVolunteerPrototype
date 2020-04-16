@@ -109,7 +109,7 @@ export class LocalRepositoryComponent implements OnInit {
       );
 
       this.tasksLocalRepository = <ClassInstanceDTO[]>(
-        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer, ClassArchetype.TASK).toPromise());
+        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
     }
 
   }

@@ -4,12 +4,14 @@ import { ClassInstanceService } from '../../../../../_service/meta/core/class/cl
 import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
 import { StoredChartService } from '../../../../../_service/stored-chart.service';
 import { Volunteer } from '../../../../../_model/volunteer';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
+import { ClassInstanceDTO, ClassArchetype } from '../../../../../_model/meta/Class';
 import { StoredChart } from '../../../../../_model/stored-chart';
 import { TenantService } from '../../../../../_service/core-tenant.service';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { isNullOrUndefined } from "util";
+import { LocalRepositoryService } from 'app/main/content';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -42,8 +44,8 @@ export class ManagementSummaryComponent implements OnInit {
   tooltipDisabled = false;
 
   volunteer: Volunteer;
-  marketplace: any;
-  classInstanceDTOs: ClassInstanceDTO[];
+  marketplace: any = [];
+  classInstanceDTOs: ClassInstanceDTO[] = [];
 
   uniqueYears: any[];
   tenantMap: Map<String, Tenant>;
@@ -57,20 +59,28 @@ export class ManagementSummaryComponent implements OnInit {
   comparisonYear: number;
   lastYear: number;
 
+  isLocalRepositoryConnected: boolean;
+  timeout: boolean = false;
+
   constructor(
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
+    private localRepositoryService: LocalRepositoryService
   ) { }
 
   async ngOnInit() {
+      let t = timer(3000);
+      t.subscribe(() => {
+          this.timeout = true;
+      });
+
     this.comparisonYear = 2019;
-    this.classInstanceDTOs = [];
 
-    this.marketplace = [];
-
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
+    
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -82,29 +92,42 @@ export class ManagementSummaryComponent implements OnInit {
     }
 
     let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+      await this.volunteerService
+        .findRegisteredMarketplaces(this.volunteer.id)
+        .toPromise()
     );
-
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
 
-    if(!isNullOrUndefined(this.marketplace)) {
-
+    if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-      );
-  
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
-  
-      this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
-  
-      this.generateComparisonChartData(this.comparisonYear);
-      this.generateEngagementData();
+        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
+
+    } else {
+      if (!isNullOrUndefined(this.marketplace)) {
+        this.classInstanceDTOs = <ClassInstanceDTO[]>(
+          await this.classInstanceService
+            .getUserClassInstancesByArcheType(
+              this.marketplace,
+              "TASK",
+              this.volunteer.id,
+              this.volunteer.subscribedTenants
+            )
+            .toPromise()
+        );
+
+        this.classInstanceDTOs.forEach((ci, index, object) => {
+          if (ci.duration === null) {
+            object.splice(index, 1);
+          }
+        });
+      }
     }
+
+    this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+  
+    this.generateComparisonChartData(this.comparisonYear);
+    this.generateEngagementData();
 
   }
 

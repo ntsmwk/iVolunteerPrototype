@@ -3,12 +3,12 @@
     <h1 class="l-heading">Mein FreiwilligenLEBEN</h1>
   </div>
 
-  <div *ngIf="marketplace !== undefined">
+  <mat-card>
+    <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
+    </organisation-filter>
+  </mat-card>
 
-    <mat-card>
-      <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
-      </organisation-filter>
-    </mat-card>
+  <div *ngIf="marketplace !== undefined">
 
     <div class="content">
       <mat-tab-group dynamicHeight="true" (selectedTabChange)="tabChanged($event)">
@@ -17,9 +17,12 @@
           <!-- I would prefer not to lazy load, since db fetch takes foooor ever, each time tab is changed-->
           <!-- TODO PROBLEM: not showing line in timeline chart if not lazy loaded -->
           <ng-template matTabContent>
-            <fuse-tasks 
-            [classInstanceDTOs]="filteredClassInstanceDTOs"
-            [selectedTenants]="selectedTenants">
+            <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
+              <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler Freiwilligenpass nicht erreichbar, deshalb
+              stammen die Daten vom Marktplatz!
+            </p>
+
+            <fuse-tasks [classInstanceDTOs]="filteredClassInstanceDTOs" [selectedTenants]="selectedTenants">
             </fuse-tasks>
           </ng-template>
         </mat-tab>
@@ -44,7 +47,10 @@
       </mat-tab-group>
     </div>
 
-    <!-- <mat-card *ngIf="
+  </div>
+
+
+  <!-- <mat-card *ngIf="
   filteredClassInstanceDTOs.length === 0 && selectedTenants.length > 0" class="loadData">
       <ngx-spinner bdOpacity="0.1" bdColor="#FFFFFF" size="medium" color="#000000" type="ball-scale-ripple-multiple"
         [fullScreen]="false">
@@ -52,16 +58,17 @@
       </ngx-spinner>
     </mat-card> -->
 
-    <div style="padding-top: 20px;"></div>
+  <p *ngIf="timeout && selectedTenants.length === 0" class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+  </p>
 
-    <p *ngIf="selectedTenants.length === 0" class="alert alert-info">
-      <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
-    </p>
-
-  </div>
-
-  <p *ngIf="marketplace === undefined" class="alert alert-info">
+  <p *ngIf="timeout && marketplace === undefined" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation beigetreten!
+  </p>
+
+  <p *ngIf="timeout && filteredClassInstanceDTOs.length === 0 && isLocalRepositoryConnected && selectedTenants.length > 0"
+    class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Daten im Local Repository!
   </p>
 
 </div>

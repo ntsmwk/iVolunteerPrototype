@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, AfterViewInit } from '@angular/core';
 import { fuseAnimations } from '../../../../../../../../@fuse/animations';
 import { Marketplace } from '../../../../../_model/marketplace';
 import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
@@ -28,7 +28,7 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.classInstanceDTOs = [];
+    // this.classInstanceDTOs = [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -40,6 +40,7 @@ export class TasksComponent implements OnInit {
           case 'classInstanceDTOs': {
             if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
+
             }
             break;
           }
@@ -54,5 +55,5 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  
+
 }

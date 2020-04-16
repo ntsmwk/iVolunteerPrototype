@@ -24,6 +24,8 @@ import { NavigationEnd, Router } from "@angular/router";
 import { ImageService } from "app/main/content/_service/image.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LocalRepositoryService } from 'app/main/content';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: "dashboard-volunteer",
@@ -53,19 +55,16 @@ export class DashboardVolunteerComponent implements OnInit {
   ];
 
   issuerIds: string[] = [];
-  issuers: Participant[] = [];
+  issuers: Helpseeker[] = [];
   userImagePaths: any[] = [];
   image;
 
   tenants: Tenant[] = [];
 
-  private classInstances: ClassInstanceDTO[] = [];
-
-
-  classInstanceDTOs: ClassInstanceDTO[];
-  filteredClassInstanceDTOs: ClassInstanceDTO[];
-  tasksLocalRepository: ClassInstanceDTO[] = [];
-  isConnected: boolean;
+  classInstanceDTOs: ClassInstanceDTO[] = [];
+  filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
+  localClassInstances: ClassInstanceDTO[] = [];
+  isLocalRepositoryConnected: boolean;
 
   constructor(
     public dialog: MatDialog,
@@ -84,10 +83,7 @@ export class DashboardVolunteerComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.classInstanceDTOs = [];
-    this.filteredClassInstanceDTOs = [];
-
-    this.isConnected = await this.localRepositoryService.isConnected();
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
@@ -96,7 +92,6 @@ export class DashboardVolunteerComponent implements OnInit {
     let marketplaces = <Marketplace[]>(
       await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
     );
-
     this.marketplace = marketplaces[0];
 
     this.setVolunteerImage();
@@ -105,7 +100,7 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
     );
 
-    if (this.isConnected) {
+    if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
@@ -140,16 +135,16 @@ export class DashboardVolunteerComponent implements OnInit {
         await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
       );
 
-      this.tasksLocalRepository = <ClassInstanceDTO[]>(
-        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer, ClassArchetype.TASK).toPromise());
+      this.localClassInstances = <ClassInstanceDTO[]>(
+        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
     }
 
   }
 
-    private setVolunteerImage() {
-     let objectURL = "data:image/png;base64," + this.volunteer.image;
-     this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-   }
+  private setVolunteerImage() {
+    let objectURL = "data:image/png;base64," + this.volunteer.image;
+    this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
 
   navigateToTenantOverview() {
     this.router.navigate(["/main/dashboard/tenants"]);
@@ -167,27 +162,38 @@ export class DashboardVolunteerComponent implements OnInit {
     }
   }
 
+  // getIssuerName(issuerId: string) {
+  //   const person = this.issuers.find((i) => i.id === issuerId);
+
+  //   let result = "";
+
+  //   if (isNullOrUndefined(person)) {
+  //     return result;
+  //   }
+
+  //   result = person.firstname + " " + person.lastname;
+  //   return result;
+  // }
+
   getIssuerName(issuerId: string) {
-    const person = this.issuers.find((i) => i.id === issuerId);
+     let person: Helpseeker = this.issuers.find((i) => i.id === issuerId);
 
-    let result = "";
-
-    if (isNullOrUndefined(person)) {
-      return result;
-    }
-
-    result = person.firstname + " " + person.lastname;
-    return result;
+     if(!isNullOrUndefined(person)) {
+      let tenant = this.tenants.find(t => t.id === person.tenantId);
+      return tenant.name;
+     } else {
+       return "";
+     }
   }
 
-  getIssuerPosition(issuerId: string) {
-    const person = this.issuers.find((i) => i.id === issuerId);
-    if (isNullOrUndefined(person) || isNullOrUndefined(person.position)) {
-      return "";
-    } else {
-      return "(" + person.position + ")";
-    }
-  }
+  // getIssuerPosition(issuerId: string) {
+  //   const person = this.issuers.find((i) => i.id === issuerId);
+  //   if (isNullOrUndefined(person) || isNullOrUndefined(person.position)) {
+  //     return "";
+  //   } else {
+  //     return "(" + person.position + ")";
+  //   }
+  // }
 
   triggerShareDialog() {
     const dialogRef = this.dialog.open(ShareDialog, {
@@ -221,16 +227,16 @@ export class DashboardVolunteerComponent implements OnInit {
     // let ci = <ClassInstance>await
     //   this.classInstanceService.getClassInstanceById(this.marketplace, classInstanceDTO.id, classInstanceDTO.tenantId).toPromise();
     // await this.localRepositoryService.synchronizeClassInstance(this.volunteer, ci).toPromise();
-    // this.tasksLocalRepository.push(ci);
+    // this.localClassInstances.push(ci);
 
     await this.localRepositoryService.synchronizeClassInstance(this.volunteer, classInstanceDTO).toPromise();
-    this.tasksLocalRepository.push(classInstanceDTO);
+    this.localClassInstances.push(classInstanceDTO);
   }
 
   async removeFromLocalRepository(classInstance: ClassInstanceDTO) {
     await this.localRepositoryService.removeClassInstance(this.volunteer, classInstance).toPromise();
 
-    this.tasksLocalRepository.forEach((ci, index, object) => {
+    this.localClassInstances.forEach((ci, index, object) => {
       if (ci.id === classInstance.id) {
         object.splice(index, 1);
       }
@@ -238,7 +244,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   inLocalRepository(classInstance: ClassInstanceDTO) {
-    return this.tasksLocalRepository.findIndex(t => t.id === classInstance.id) >= 0;
+    return this.localClassInstances.findIndex(t => t.id === classInstance.id) >= 0;
   }
 
 
@@ -259,7 +265,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
 
     this.filteredClassInstanceDTOs.forEach(dto => {
-      if (!(this.tasksLocalRepository.findIndex(t => t.id === dto.id) >= 0)) {
+      if (!(this.localClassInstances.findIndex(t => t.id === dto.id) >= 0)) {
         // let ci = <ClassInstance>await
         //   this.classInstanceService.getClassInstanceById(this.marketplace, dto.id, dto.tenantId).toPromise();
 
@@ -268,13 +274,13 @@ export class DashboardVolunteerComponent implements OnInit {
     });
 
     await this.localRepositoryService.synchronizeClassInstances(this.volunteer, filteredClassInstances).toPromise();
-    this.tasksLocalRepository = [...this.tasksLocalRepository, ...filteredClassInstances];
+    this.localClassInstances = [...this.localClassInstances, ...filteredClassInstances];
   }
 
 
   async removeAll() {
     await this.localRepositoryService.removeAllClassInstances(this.volunteer).toPromise();
-    this.tasksLocalRepository = [];
+    this.localClassInstances = [];
   }
 }
 
