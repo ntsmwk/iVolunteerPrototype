@@ -40,15 +40,31 @@
       </div>
 
       <div class="pt-4"></div>
-      <h2>Relationships</h2>
+      <h2>Layout Algorithmus</h2>
       <div class="pt-4"></div>
 
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <button mat-stroked-button type="button" color="accent" (click)="setLayout()" class="sidebar-button">
+          Ausführen
+        </button>
+
+        <div class="pl-8 pr-8">|</div>
+
+        <mat-checkbox labelPosition="after" [(ngModel)]="quickEditMode">
+          <div fxLayout="row">
+            <div style="font-size: 14px" class="pr-8">-</div>
+            <div style="font-size: 14px">Quick-Edit Modus</div>
+          </div>
+        </mat-checkbox>
 
 
-      <button mat-raised-button type="button" color="primary" (click)="setLayout()">
-        Vertikal
-      </button>
 
+      </div>
+
+      <div class="pt-4"></div>
+      <h2>Beziehungstypen</h2>
+      <div class="pt-4"></div>
 
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-select placeholder="Relationship Type" [(ngModel)]="relationshipType">

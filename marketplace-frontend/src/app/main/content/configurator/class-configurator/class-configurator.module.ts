@@ -15,6 +15,7 @@ import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { EditorTreeViewModule } from './tree-view/tree-view.module';
 import { ClassOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material';
 
 
 
@@ -33,6 +34,7 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     MatOptionModule,
     MatTooltipModule,
+    MatCheckboxModule,
 
     FuseSharedModule,
 
