@@ -11,10 +11,23 @@
 
     <div *ngIf="rightSidebarVisible">
 
-      <h2>Ansicht</h2>
+
+
+      <div (click)="hideSidebar()" class="sidebar-minimize-button">
+        <mat-icon>minimize</mat-icon>
+      </div>
+
+      <div class="pt-36"></div>
+
+      <div
+        style="cursor: pointer; display: block; background: blue; color: white; border-color: black; border-style: solid; border-width: 2px; border-right: none; border-left: none; padding-left: 4px"
+        (click)="ansicht=!ansicht">
+        <h2>Ansicht</h2>
+      </div>
+
       <div class="pt-4"></div>
 
-      <div fxLayout="row" fxLayoutAlign="start start">
+      <div fxLayout="row" fxLayoutAlign="start start" *ngIf="ansicht">
         <div
           style="width: 25; height: 25; background: rgb(240, 240, 240); outline-color: grey; outline-style: solid; outline-width: 1px">
           <img src="/assets/mxgraph_resources/images/zoomin.gif" width="25" height="25" (click)="zoomInEvent()"
@@ -40,26 +53,37 @@
       </div>
 
       <div class="pt-4"></div>
-      <h2>Layout Algorithmus</h2>
+      <h2>Layout</h2>
       <div class="pt-4"></div>
 
       <div fxLayout="row" fxLayoutAlign="start center">
 
-        <button mat-stroked-button type="button" color="accent" (click)="setLayout()" class="sidebar-button">
-          Ausführen
-        </button>
+        <mat-checkbox labelPosition="after" [(ngModel)]="quickEditMode">
+          <div style="font-size: 14px">Quick-Edit Modus</div>
+        </mat-checkbox>
 
         <div class="pl-8 pr-8">|</div>
 
-        <mat-checkbox labelPosition="after" [(ngModel)]="quickEditMode">
-          <div fxLayout="row">
-            <div style="font-size: 14px" class="pr-8">-</div>
-            <div style="font-size: 14px">Quick-Edit Modus</div>
-          </div>
+        <button mat-stroked-button type="button" color="accent" (click)="setLayout()" class="sidebar-button">
+          Layout Refresh
+        </button>
+
+      </div>
+
+      <div class="pt-4"></div>
+      <h2>Löschen</h2>
+      <div class="pt-4"></div>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-checkbox labelPosition="after" [(ngModel)]="clickDeleteMode">
+          <div style="font-size: 14px">Click-To-Delete</div>
         </mat-checkbox>
 
+        <div class="pl-8 pr-8">|</div>
 
-
+        <mat-checkbox labelPosition="after" [(ngModel)]="confirmDelete">
+          <div style="font-size: 14px">Bestätigen</div>
+        </mat-checkbox>
       </div>
 
       <div class="pt-4"></div>
@@ -90,6 +114,7 @@
     <div *ngIf="!rightSidebarVisible" fxLayout="row" fxLayoutAlign="end center">
       <a (click)="showSidebar()" style="cursor: pointer">Textansicht aufklappen</a>
     </div>
+
 
   </div>
 

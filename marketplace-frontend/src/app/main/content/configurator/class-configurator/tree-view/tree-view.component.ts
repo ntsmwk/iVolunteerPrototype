@@ -91,12 +91,12 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
   ngOnChanges() {
   }
 
-  hideSidebar() {
-    this.editorInstance.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
-    this.editorInstance.rightSidebarVisible = false;
-    this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
-    this.editorInstance.rightSidebarContainer.nativeElement.style.height = '50px';
-  }
+  // hideSidebar() {
+  //   this.editorInstance.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
+  //   this.editorInstance.rightSidebarVisible = false;
+  //   this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
+  //   this.editorInstance.rightSidebarContainer.nativeElement.style.height = '50px';
+  // }
 
   // itemSelected(event: any, c: ClassConfiguration) {
 

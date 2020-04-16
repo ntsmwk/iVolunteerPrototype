@@ -45,14 +45,40 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   padding: 0 10px; 
   line-height: 20px;
 }
+.sidebar-minimize-button {
+  cursor: pointer; 
+  
+  display: block; 
+  position: absolute; 
+  top: 4px; 
+  right: 4px; 
+  
+  border-style: solid; 
+  border-color: black; 
+  border-width: 2px; 
+  border-radius: 2px; 
+  
+  width: 28px; 
+  height: 28px;
 
+  color: black; 
+
+  
+}
+
+.sidebar-minimize-button:hover {
+  background:  rgb(62, 125, 219); 
+  border-color:  rgb(62, 125, 219); 
+  color: white;
+  
+}
 
 .subheader{
   margin: 5px 0px 5px 0px
 }
 
 .sidebar-content {
-  padding: 5px 5px 10px 10px;
+  // margin: 5px 5px 10px 10px;
   overflow: hidden;
 }
 

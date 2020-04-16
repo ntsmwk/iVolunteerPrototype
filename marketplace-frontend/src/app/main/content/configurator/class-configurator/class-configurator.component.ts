@@ -79,6 +79,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   relationshipType: RelationshipType;
 
   quickEditMode: boolean;
+  clickDeleteMode: boolean;
+  confirmDelete: boolean;
 
   saveDone: boolean;
 
@@ -101,6 +103,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.hiddenEdges = [];
     this.eventResponse = new TopMenuResponse();
     this.relationshipType = RelationshipType.AGGREGATION;
+    this.confirmDelete = true;
 
   }
 
@@ -126,13 +129,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
-    this.rightSidebarContainer.nativeElement.style.padding = '2px';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
     this.rightSidebarContainer.nativeElement.style.top = '30px';
     this.rightSidebarContainer.nativeElement.style.width = '300px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
-    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
-    this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 1px rgb(160, 160, 160)';
+    // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(255, 255, 255, 0.9)';
+    this.rightSidebarContainer.nativeElement.style.color = 'black';
+
+    // this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 1px rgb(160, 160, 160)';
+    this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
+
 
     // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
     // this.rightSidebarContainer.nativeElement.style.borderLeft = "none";
@@ -846,10 +853,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     addedClass.properties = [];
 
     const addedRelationship = new Relationship();
-    //TODO
-    // addedRelationship.relationshipType = RelationshipType.INHERITANCE;
     addedRelationship.relationshipType = this.relationshipType;
-    //TODO END
     addedRelationship.source = sourceId;
     addedRelationship.target = addedClass.id;
     addedRelationship.id = this.objectIdService.getNewObjectId();
@@ -1251,6 +1255,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 1px rgb(160, 160, 160)';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
     this.rightSidebarContainer.nativeElement.style.height = 'auto';
+  }
+
+  hideSidebar() {
+    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
+    this.rightSidebarVisible = false;
+    this.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
+    this.rightSidebarContainer.nativeElement.style.height = '50px';
   }
 
 

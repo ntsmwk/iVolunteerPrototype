@@ -34,7 +34,9 @@ export class EditorPopupMenu {
   private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt) {
     const outer = this;
 
-    if (cell != null && cell.cellType !== MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON && cell.cellType !== MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
+    if (cell != null && cell.cellType !== MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON &&
+      cell.cellType !== MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON && cell.cellType !== MyMxCellType.OPTIONS_ICON) {
+
       if (cell.isEdge()) {
 
         if (cell.cellType === MyMxCellType.ASSOCIATION) {
