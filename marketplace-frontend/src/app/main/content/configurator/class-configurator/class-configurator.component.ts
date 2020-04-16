@@ -1250,18 +1250,21 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   showSidebar() {
-    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
+    // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';
     this.rightSidebarVisible = true;
-    this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 1px rgb(160, 160, 160)';
-    this.rightSidebarContainer.nativeElement.style.bottom = '0px';
+    this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
+    // this.rightSidebarContainer.nativeElement.style.bottom = '0px';
     this.rightSidebarContainer.nativeElement.style.height = 'auto';
+    this.rightSidebarContainer.nativeElement.style.width = '300px';
+
   }
 
   hideSidebar() {
-    this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
+    // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
     this.rightSidebarVisible = false;
     this.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
-    this.rightSidebarContainer.nativeElement.style.height = '50px';
+    this.rightSidebarContainer.nativeElement.style.height = '35px';
+    this.rightSidebarContainer.nativeElement.style.width = '35px';
   }
 
 

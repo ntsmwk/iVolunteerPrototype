@@ -73,6 +73,23 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   
 }
 
+.sidebar-title-card {
+  cursor: pointer; 
+  display: block; 
+  
+  background: blue; 
+  color: white; 
+  
+  border-color: black; 
+  border-style: solid; 
+  border-width: 2px; 
+  border-right: none; 
+  border-left: none; 
+  
+  padding-left: 4px;
+
+}
+
 .subheader{
   margin: 5px 0px 5px 0px
 }
