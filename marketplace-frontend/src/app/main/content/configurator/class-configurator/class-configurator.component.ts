@@ -847,7 +847,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     const addedRelationship = new Relationship();
     //TODO
-    addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+    // addedRelationship.relationshipType = RelationshipType.INHERITANCE;
+    addedRelationship.relationshipType = this.relationshipType;
     //TODO END
     addedRelationship.source = sourceId;
     addedRelationship.target = addedClass.id;
