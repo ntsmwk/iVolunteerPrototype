@@ -9,6 +9,7 @@ import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
 import { Tenant } from "app/main/content/_model/tenant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { isNullOrUndefined } from "util";
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: "fuse-achievements",
@@ -34,7 +35,7 @@ export class AchievementsComponent implements OnInit {
   ngAfterViewInit() {}
 
   async ngOnInit() {
-    this.spinner.show();
+    //this.spinner.show();
 
     this.classInstanceDTOs = [];
     this.filteredClassInstanceDTOs = [];
@@ -90,4 +91,10 @@ export class AchievementsComponent implements OnInit {
   hideSpinner() {
     this.spinner.hide();
   }
+
+  public tabChanged(tabChangeEvent: MatTabChangeEvent) {
+    if(tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
+      this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
+    }
+}
 }
