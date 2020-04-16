@@ -42,8 +42,12 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   border-width: 1px; 
   border-color: currentColor; 
   background-color: white; 
-  padding: 0 5px; 
+  padding: 0 3px; 
   line-height: 20px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
 }
 .sidebar-minimize-button {
   cursor: pointer; 
@@ -56,7 +60,7 @@ div#leftSidebarContainer, div#rightSidebarContainer {
   border-style: solid; 
   border-color: black; 
   border-width: 2px; 
-  border-radius: 2px; 
+  border-radius: 4px; 
   
   width: 28px; 
   height: 28px;
