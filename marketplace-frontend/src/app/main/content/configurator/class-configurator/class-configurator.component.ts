@@ -121,7 +121,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graphContainer.nativeElement.style.overflow = 'hidden';
     // this.graphContainer.nativeElement.style.left = '200px';
     this.graphContainer.nativeElement.style.left = '0px';
-    this.graphContainer.nativeElement.style.top = '30px';
+    this.graphContainer.nativeElement.style.top = '35px';
     this.graphContainer.nativeElement.style.right = '0px';
     this.graphContainer.nativeElement.style.bottom = '0px';
     this.graphContainer.nativeElement.style.background = 'white';
@@ -130,7 +130,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.position = 'absolute';
     this.rightSidebarContainer.nativeElement.style.overflow = 'auto';
     this.rightSidebarContainer.nativeElement.style.right = '0px';
-    this.rightSidebarContainer.nativeElement.style.top = '30px';
+    this.rightSidebarContainer.nativeElement.style.top = '35px';
     this.rightSidebarContainer.nativeElement.style.width = '300px';
     this.rightSidebarContainer.nativeElement.style.bottom = '0px';
     // this.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.9)';

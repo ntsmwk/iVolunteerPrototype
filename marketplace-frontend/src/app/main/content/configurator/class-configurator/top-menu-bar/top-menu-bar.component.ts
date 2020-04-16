@@ -111,8 +111,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.submenuContainer.nativeElement.style.position = 'absolute';
     this.submenuContainer.nativeElement.style.overflow = 'hidden';
-    this.submenuContainer.nativeElement.style.padding = '2px';
-    this.submenuContainer.nativeElement.style.top = '30px';
+    this.submenuContainer.nativeElement.style.padding = '0px';
+    this.submenuContainer.nativeElement.style.top = '29px';
     this.submenuContainer.nativeElement.style.left = '10px';
     this.submenuContainer.nativeElement.style.height = 'auto';
     this.submenuContainer.nativeElement.style.width = '200px';
@@ -126,7 +126,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.right = '0px';
     this.menubarContainer.nativeElement.style.top = '0px';
     this.menubarContainer.nativeElement.style.left = '0px';
-    this.menubarContainer.nativeElement.style.height = '30px';
+    this.menubarContainer.nativeElement.style.height = '35px';
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
@@ -138,7 +138,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   handleHTMLClickEvent(event: any) {
-    if (event.srcElement.className != 'menuitem') {
+    if (event.srcElement.className !== 'menuitem') {
       this.submenuContainer.nativeElement.style.display = 'none';
     }
   }

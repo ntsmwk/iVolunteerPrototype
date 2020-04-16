@@ -2,17 +2,25 @@
 
 
 div#menubarContainer {
+
+  border-bottom: solid 2px black;
+
     div.menuitem:hover {
       background-color: rgb(62, 125, 219);
       color: white;
+      border: solid 2px black;
+      border-bottom: none;
+
     }
 
     div.menuitem {
       cursor: pointer;
       padding-top: 5px;
       padding-bottom: 5px;
-      padding-right: 10px;
-      padding-left: 10px;
+      padding-right: 8px;
+      padding-left: 8px;
+      border: solid 2px white;
+      border-bottom: none;
     }
   
   
@@ -20,15 +28,22 @@ div#menubarContainer {
 
 div#submenuContainer {
   z-index: 240;
+  border: solid 2px black;
+
   div.menuitem:hover {
     background-color: rgb(62, 125, 219);
     color: white;
+    border-top: solid 2px black;
+    border-bottom: solid 2px black;
+
   }
 
   div.menuitem {
     cursor: pointer;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     padding-left: 5px;
+    border-top: solid 2px white;
+    border-bottom: solid 2px white;
   }
 }
