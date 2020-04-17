@@ -1,6 +1,3 @@
-<p>Disclaimer: Organisationsfilter hier nicht funktional, es werden aktuell nur Daten der Feuerwehr verwendet!</p>
-
-
 <mat-accordion multi="true">
   <mat-expansion-panel [expanded]="false">
     <mat-expansion-panel-header>
@@ -10,12 +7,13 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-
+    <div *ngIf="containsFF() && classInstanceDTOs.length > 0">
     <mat-card class="card">
       <mat-card-header>
         <mat-card-title>Lernbereitschaft</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+
         <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, gern und erfolgreich zu lernen"</p>
 
         <div class="chartParent" fxLayout="row">
@@ -82,9 +80,10 @@
             </tbody>
           </table>
         </div>
-
       </mat-card-content>
     </mat-card>
+  </div>
+
   </mat-expansion-panel>
 
   <mat-expansion-panel [expanded]="false">
@@ -95,11 +94,13 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
+    <div *ngIf="containsFF() && classInstanceDTOs.length > 0">
     <mat-card class="card">
       <mat-card-header>
         <mat-card-title>Anpassungsfähigkeit</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+
         <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p>
 
         <div class="chartParent2" fxLayout="column">
@@ -114,6 +115,8 @@
         </div>
       </mat-card-content>
     </mat-card>
+  </div>
+
 
   </mat-expansion-panel>
 

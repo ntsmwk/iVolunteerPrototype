@@ -320,14 +320,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, AdminGuard]
   },
   {
-    path: "main/localRepository",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/local-repository/local-repository.module"
-      ).then(m => m.LocalRepositoryModule),
-    canActivate: [TokenGuard, VolunteerGuard]
-  },
-  {
     path: "main/profile",
     loadChildren: () =>
       import("./_components/common/profile/profile.module").then(

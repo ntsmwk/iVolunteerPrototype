@@ -85,7 +85,7 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
     );
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
     if (this.isLocalRepositoryConnected) {
       let marketplaces = <Marketplace[]>(
         await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
@@ -203,6 +203,10 @@ export class DashboardVolunteerComponent implements OnInit {
     this.filteredClassInstances = this.filteredClassInstances.filter(ci => {
       return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
+
+    this.filteredClassInstances = this.filteredClassInstances.sort(
+      (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
+    );
 
     this.dataSourceRepository.data = this.filteredClassInstances;
     this.paginator.length = this.filteredClassInstances.length;

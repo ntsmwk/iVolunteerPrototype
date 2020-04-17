@@ -16,19 +16,19 @@ export class LocalRepositoryService {
     constructor(private http: HttpClient) {
     }
 
-     async isConnected() {
-            let isConnected;
-            await this.http.get(this.apiUrl)
-                .toPromise()
-                .then(() => {
-                    isConnected = true;
-                })
-                .catch((error: any) => {
-                    isConnected = false;
-               });
+    async isConnected(volunteer: Volunteer) {
+        let isConnected;
+        await this.http.get(this.apiUrl)
+            .toPromise()
+            .then(() => {
+                isConnected = true;
+            })
+            .catch((error: any) => {
+                isConnected = false;
+            });
 
-               return isConnected;
-     
+        return isConnected;
+
     }
 
 
@@ -117,10 +117,10 @@ export class LocalRepositoryService {
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
 
-                    localRepository.classInstances = [ ...localRepository.classInstances, ...classInstances];
+                    localRepository.classInstances = [...localRepository.classInstances, ...classInstances];
 
-                      this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
-                      .toPromise()
+                    this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+                        .toPromise()
                         .then(() => subscriber.complete())
                         .catch((error: any) => failureFunction(error));
                 })

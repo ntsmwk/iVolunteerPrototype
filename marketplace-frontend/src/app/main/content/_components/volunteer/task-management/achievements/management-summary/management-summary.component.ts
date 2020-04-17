@@ -79,11 +79,12 @@ export class ManagementSummaryComponent implements OnInit {
 
     this.comparisonYear = 2019;
 
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
     
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
+
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
 
     this.tenantMap = new Map<String, Tenant>();
     for (let tenantId of this.volunteer.subscribedTenants) {

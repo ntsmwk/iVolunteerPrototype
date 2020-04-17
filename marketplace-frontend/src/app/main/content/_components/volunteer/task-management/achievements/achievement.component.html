@@ -17,19 +17,30 @@
           <!-- I would prefer not to lazy load, since db fetch takes foooor ever, each time tab is changed-->
           <!-- TODO PROBLEM: not showing line in timeline chart if not lazy loaded -->
           <ng-template matTabContent>
+            <p *ngIf="timeout && filteredClassInstanceDTOs.length === 0 && isLocalRepositoryConnected && selectedTenants.length > 0"
+              class="alert alert-info">
+              <i class="fas fa-exclamation-circle"></i> &nbsp;  Es befinden sich noch keine Daten in deinem lokalen Freiwillilgenpass!
+            </p>
+
             <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
               <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler Freiwilligenpass nicht erreichbar, deshalb
               stammen die Daten vom Marktplatz!
             </p>
-
-            <fuse-tasks [classInstanceDTOs]="filteredClassInstanceDTOs" [selectedTenants]="selectedTenants">
-            </fuse-tasks>
+            <!--
+              <div *ngIf="filteredClassInstanceDTOs.length > 0 && selectedTenants.length > 0">
+                TODO: would be correct, because so no empty charts are shown if local repo is empty
+                      BUT enormous performance problems (+ several seconds...)
+            -->
+            <div *ngIf="selectedTenants.length > 0">
+              <fuse-tasks [classInstanceDTOs]="filteredClassInstanceDTOs" [selectedTenants]="selectedTenants">
+              </fuse-tasks>
+            </div>
           </ng-template>
         </mat-tab>
 
         <mat-tab label="Kompetenzen">
           <ng-template matTabContent>
-            <fuse-competencies></fuse-competencies>
+            <fuse-competencies [selectedTenants]="selectedTenants"></fuse-competencies>
           </ng-template>
         </mat-tab>
 
@@ -64,11 +75,6 @@
 
   <p *ngIf="timeout && marketplace === undefined" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation beigetreten!
-  </p>
-
-  <p *ngIf="timeout && filteredClassInstanceDTOs.length === 0 && isLocalRepositoryConnected && selectedTenants.length > 0"
-    class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Daten im Local Repository!
   </p>
 
 </div>

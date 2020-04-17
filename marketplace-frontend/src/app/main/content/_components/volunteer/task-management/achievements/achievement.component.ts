@@ -45,11 +45,12 @@ export class AchievementsComponent implements OnInit {
     });
 
     //this.spinner.show();
-    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected();
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
+
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
 
     let marketplaces = <Marketplace[]>(
       await this.volunteerService

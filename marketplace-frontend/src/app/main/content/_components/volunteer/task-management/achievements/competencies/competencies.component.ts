@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { fuseAnimations } from '../../../../../../../../@fuse/animations';
 import { Participant } from '../../../../../_model/participant';
 import { LoginService } from '../../../../../_service/login.service';
@@ -13,6 +13,8 @@ import * as moment from 'moment';
 import { StoredChart } from '../../../../../_model/stored-chart';
 import { StoredChartService } from '../../../../../_service/stored-chart.service';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'fuse-competencies',
@@ -52,19 +54,28 @@ export class CompetenciesComponent implements OnInit {
 
   test123 = "Stunden"
 
+  @Input() selectedTenants: Tenant[];
+
   private tenantName: string = 'FF_Eidenberg';
   private tenantId: string[] = [];
+
+  timeout: boolean = false;
 
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: TenantService
+    private tenantService: TenantService
   ) { }
 
 
   async ngOnInit() {
+    let t = timer(3000);
+    t.subscribe(() => {
+      this.timeout = true;
+    });
+
     this.classInstanceDTOs = [];
 
     this.volunteer = <Volunteer>(
@@ -93,16 +104,29 @@ export class CompetenciesComponent implements OnInit {
 
     }
 
-
     this.generateChartData();
 
     this.calcMean();
     this.currYearData = [... this.getYearData('2019')];
     this.lastYearData = this.getYearData('2018');
     this.meanYearData = this.getYearData('mean');
+  }
 
+  ngOnChanges(changes: SimpleChanges) {
+    // console.error('tasks', changes);
 
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
 
+          case 'selectedTenants': {
+            if (typeof changes.selectedTenants.currentValue != 'undefined') {
+              this.selectedTenants = changes.selectedTenants.currentValue;
+            }
+          }
+        }
+      }
+    }
   }
 
   onSelect(event) {
@@ -297,6 +321,10 @@ export class CompetenciesComponent implements OnInit {
         this.storedChartService.save(this.marketplace, storedChart).toPromise();
         break;
     }
+  }
+
+  containsFF() {
+    return this.selectedTenants.findIndex(t => t.name === 'FF Eidenberg') >= 0;
   }
 
 }

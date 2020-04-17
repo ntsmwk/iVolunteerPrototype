@@ -66,7 +66,9 @@
     </div>
   </mat-card>
 
-  <div *ngIf="isLocalRepositoryConnected && selectedTenants.length > 0" class="mat-card p-20" fxLayout="column">
+
+  <div *ngIf="filteredClassInstances.length > 0 && isLocalRepositoryConnected && selectedTenants.length > 0"
+    class="mat-card p-20" fxLayout="column">
     <div fxLayout="row" fxLayoutAlign="end center">
       <button mat-raised-button color="primary" (click)="syncAll()">Alle hinzufügen</button>
       <button mat-raised-button color="primary" (click)="removeAll()" style="margin-left: 20px;">Alle
@@ -127,7 +129,8 @@
       </mat-table>
     </div>
   </div>
-  <mat-paginator *ngIf="isLocalRepositoryConnected" [pageSize]="12" id="paginator" showFirstLastButtons></mat-paginator>
+  <mat-paginator *ngIf="isLocalRepositoryConnected" [pageSize]="12" id="paginator" showFirstLastButtons>
+  </mat-paginator>
 
 
   <div style="padding-top: 20px;"></div>
@@ -138,6 +141,12 @@
 
   <p *ngIf="selectedTenants.length === 0 && isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
+  </p>
+
+  <p *ngIf="filteredClassInstances.length === 0 && selectedTenants.length > 0 && isLocalRepositoryConnected"
+    class="alert alert-info">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine Daten in deinem lokalen
+    Freiwillilgenpass!
   </p>
 
 </div>
