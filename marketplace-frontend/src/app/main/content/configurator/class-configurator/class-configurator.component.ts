@@ -208,7 +208,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
        * ******EVENT LISTENERS******
        */
 
-      const outer = this; // preserve outer scope
       this.graph.addListener(mx.mxEvent.CLICK,
         function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
           const mouseEvent = evt.getProperty('event');
@@ -217,10 +216,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
             outer.handleClickToDeleteEvent(evt);
           } else {
 
-            if (mouseEvent.button === 0) {
+            if (mouseEvent.button === 0 && outer.graph.enabled) {
               outer.handleMXGraphLeftClickEvent(evt);
 
-            } else if (mouseEvent.button === 2) {
+            } else if (mouseEvent.button === 2 && outer.graph.enabled) {
               outer.handleMXGraphRightClickEvent(evt);
             }
           }
@@ -1049,6 +1048,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
     if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
       this.overlayEvent = event.getProperty('event');
+      this.graph.setPanning(false);
+      this.graph.setEnabled(false);
+      this.graph.setTooltips(false);
       this.displayOverlay = true;
     }
   }
@@ -1056,6 +1058,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   handleOverlayClosedEvent(event: any) {
     this.overlayContent = undefined;
     this.overlayEvent = undefined;
+    this.graph.setPanning(true);
+    this.graph.setEnabled(true);
+    this.graph.setTooltips(true);
     this.displayOverlay = false;
   }
 
