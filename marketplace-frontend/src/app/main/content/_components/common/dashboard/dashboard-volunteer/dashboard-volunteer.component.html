@@ -13,9 +13,14 @@
 
   <div style="padding-top: 20px;"></div>
 
+  <mat-card class="infoText">Hier kannst du die Organisationen verwalten, in denen du sich engagieren willst, 
+    sowie erworbene Voluntär-Assets <br> in deinen lokalen digitalen Freiwilligenpass speichern.
+  </mat-card>
+
+  <div style="padding-top: 10px;"></div>
 
   <!--Organisation selector-->
-  <div class="mat-card dashboard-org p-20 m-20">
+  <!-- <div class="mat-card dashboard-org p-20 m-20">
     <div fxLayout="column" fxLayoutAlign="center center">
       <h2 *ngIf="tenants.length > 0">Deine Organisationen</h2>
       <h2 *ngIf="tenants.length == 0">
@@ -31,19 +36,26 @@
         Finde Organisationen
       </button>
     </div>
-  </div>
+  </div> -->
 
 
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
-      </organisation-filter>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)" *ngIf="tenants.length > 0">
+        </organisation-filter>
 
-      <!-- Fin new Organisation button -->
-      <!-- <button class="mt-20" mat-raised-button color="primary" (click)="navigateToTenantOverview()">
-        Finde neue Organisationen
-      </button> -->
+        <h2 *ngIf="tenants.length == 0">
+          Du bist noch keiner Organisation beigetreten
+        </h2>
+
+        <!-- Find new Organisation button -->
+        <button class="mt-20" style="height: 60px; margin: 3px; margin-left: 10px;" mat-raised-button color="primary"
+          (click)="navigateToTenantOverview()">
+          Organisationen verwalten
+        </button>
+      </div>
 
       <!-- Share Icon and Menu-->
       <div style="padding-right: 20px; padding-top: 5px;">
@@ -139,7 +151,7 @@
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Verbindung zu deinem lokalen Freiwilligenpass!
   </p>
 
-  <p *ngIf="selectedTenants.length === 0 && isLocalRepositoryConnected" class="alert alert-info">
+  <p *ngIf="selectedTenants.length === 0 && isLocalRepositoryConnected && tenants != 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
   </p>
 
