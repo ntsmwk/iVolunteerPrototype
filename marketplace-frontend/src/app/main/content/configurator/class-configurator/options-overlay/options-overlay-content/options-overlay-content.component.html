@@ -1,55 +1,94 @@
 <div class="overlay-content m-8">
 
-    <div class="field-container">
-        <div class="field-label">Name *</div>
-        <mat-form-field style="width: 100%" appearance="outline" #label>
-            <input matInput name="name" [(ngModel)]="inputData.classDefinition.name" required />
-        </mat-form-field>
-    </div>
+    <div *ngIf="inputData.classDefinition">
 
-    <div fxLayout="row" fxLayoutAlign="start start">
-        <div style="width: 50%">
-            <div class="normal-label">Icon</div>
-
-            <div fxLayout="row" fxLayoutAlign="start end">
-                <div class="icon-wrapper" (click)=changeIconClicked()>
-                    <img *ngIf="inputData.classDefinition.imagePath" [src]="inputData.classDefinition.imagePath"
-                        width="60" height="60" style="cursor: pointer" matTooltip="icon">
-                </div>
-                <a style="cursor: pointer; line-height: 0.7;" class="pl-4" (click)="changeIconClicked()">ändern</a>
-            </div>
+        <div class="field-container">
+            <div class="field-label">Name *</div>
+            <mat-form-field style="width: 100%" appearance="outline" #label>
+                <input matInput name="name" [(ngModel)]="inputData.classDefinition.name" required />
+            </mat-form-field>
         </div>
 
-        <div style="width: 50%">
-            <div class="normal-label">Sonstiges</div>
-
-            <mat-checkbox>Collector-Klasse</mat-checkbox>
-            <mat-checkbox>Root-Klasse</mat-checkbox>
-        </div>
-    </div>
-
-
-    <div class="pt-4">
         <div fxLayout="row" fxLayoutAlign="start start">
+            <div style="width: 50%">
+                <div class="normal-label">Icon</div>
 
-            <div style="width: 65%;" class="mt-4 mr-4">
-                <div class="normal-label">Properties und Enums</div>
-                <div style=" background: cadetblue; height: 130px; overflow-y: scroll; overflow-x: hidden">
-                    Property und Enum Fields
-                    <!-- <div *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]">number</div> -->
+                <div fxLayout="row" fxLayoutAlign="start end">
+                    <div class="icon-wrapper" (click)=changeIconClicked()>
+                        <img *ngIf="inputData.classDefinition.imagePath" [src]="inputData.classDefinition.imagePath"
+                            width="60" height="60" style="cursor: pointer" matTooltip="icon">
+                    </div>
+                    <a style="cursor: pointer; line-height: 0.7;" class="pl-4" (click)="changeIconClicked()">ändern</a>
                 </div>
             </div>
 
-            <div style="width: 35%;" class="mt-4 ml-4">
-                <div class="normal-label">Aktionen</div>
-                <div style="background: plum; height: 85px">
-                    Interaction
+            <div style="width: 50%">
+                <div class="normal-label">Sonstiges</div>
+
+                <mat-checkbox labelPosition="after" [(ngModel)]="inputData.classDefinition.collector">
+                    Collector-Klasse
+                </mat-checkbox>
+                <mat-checkbox labelPosition="after" [(ngModel)]="inputData.classDefinition.root">
+                    Root-Klasse
+                </mat-checkbox>
+            </div>
+        </div>
+
+
+        <div class="pt-4">
+            <div fxLayout="row" fxLayoutAlign="start start">
+
+                <div style="width: 65%;" class="mt-4 mr-4">
+                    <div class="normal-label">Properties und Enums</div>
+                    <div style=" background: cadetblue; height: 130px; overflow-y: scroll; overflow-x: hidden">
+                        Property und Enum Fields
+                        <!-- <div *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]">number</div> -->
+                    </div>
                 </div>
-                <div style="background: indianred; height: 45px">
-                    Instanzierung Interaction
+
+                <div style="width: 35%;" class="mt-4 ml-4">
+                    <div class="normal-label">Aktionen</div>
+                    <div style="background: plum; height: 85px">
+                        Interaction
+                    </div>
+                    <div style="background: indianred; height: 45px">
+                        Instanzierung Interaction
+                    </div>
                 </div>
             </div>
         </div>
+
+    </div>
+
+    <div *ngIf="inputData.relationship">
+        relationship
+
+        <mat-label>Operator</mat-label>
+
+        <button mat-stroked-button [matMenuTriggerFor]="menu" style="width: 165px">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div></div>
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div>
+                        <img width="40" height="40" [src]="getImagePathForMatchingOperatorType(matchingOperatorType)">
+                    </div>
+
+                    <div class="pl-4">
+                        {{getLabelForMatchingOperatorType(matchingOperatorType)}}
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </button>
+        <mat-menu #menu="matMenu" class="custom">
+            <button *ngFor="let p of matchingOperatorPalettes" mat-button fxLayout="column"
+                fxLayoutAlign="space-between center" [matTooltip]="p.label" (click)="matchingOperatorChanged(p)">
+                <div></div>
+                <div style="width: 40px; height: 40px"><img width="40" height="40" [src]="p.imgPath"></div>
+                <div></div>
+            </button>
+        </mat-menu>
+
     </div>
 
     <!-- <div class="pt-12"></div>
