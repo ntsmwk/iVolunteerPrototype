@@ -102,7 +102,7 @@ export class ManagementSummaryComponent implements OnInit {
 
     if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
+        await this.localRepositoryService.findByVolunteer(this.volunteer).toPromise());
 
     } else {
       if (!isNullOrUndefined(this.marketplace)) {

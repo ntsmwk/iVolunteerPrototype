@@ -16,21 +16,23 @@ export class LocalRepositoryService {
     constructor(private http: HttpClient) {
     }
 
+
     async isConnected(volunteer: Volunteer) {
         let isConnected;
-        await this.http.get(this.apiUrl)
-            .toPromise()
-            .then(() => {
-                isConnected = true;
-            })
-            .catch((error: any) => {
-                isConnected = false;
-            });
+
+        let localRepos = <LocalRepository[]>await this.http.get(this.apiUrl).toPromise().catch(() => isConnected = false);
+
+        if (localRepos) {
+            isConnected = true;
+            if (localRepos.findIndex(l => l.id === volunteer.id) === -1) {
+                let newRepo = new LocalRepository(volunteer.id, volunteer.username);
+                this.http.post(this.apiUrl, newRepo).toPromise().catch(e => console.log(e));
+            }
+        }
 
         return isConnected;
 
     }
-
 
     findByVolunteer(volunteer: Volunteer) {
         const observable = new Observable(subscriber => {
@@ -49,7 +51,7 @@ export class LocalRepositoryService {
                 .toPromise()
                 .then((localRepositorys: LocalRepository[]) => {
                     successFunction(localRepositorys.find((localRepository: LocalRepository) => {
-                        return localRepository.volunteer.username === volunteer.username;
+                        return localRepository.volunteerUsername === volunteer.username;
                     }));
                 })
                 .catch((error: any) => failureFunction(error));
@@ -57,7 +59,7 @@ export class LocalRepositoryService {
         return observable;
     }
 
-    findByVolunteerAndArcheType(volunteer: Volunteer) {
+    findClassInstancesByVolunteer(volunteer: Volunteer) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);
@@ -83,7 +85,7 @@ export class LocalRepositoryService {
     }
 
 
-    synchronizeClassInstance(volunteer: Volunteer, classInstance: ClassInstanceDTO) {
+    synchronizeSingleClassInstance(volunteer: Volunteer, classInstance: ClassInstanceDTO) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);

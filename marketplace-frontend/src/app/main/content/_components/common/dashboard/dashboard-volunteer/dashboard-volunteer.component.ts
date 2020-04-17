@@ -116,7 +116,7 @@ export class DashboardVolunteerComponent implements OnInit {
       );
 
       this.localClassInstances = <ClassInstanceDTO[]>(
-        await this.localRepositoryService.findByVolunteerAndArcheType(this.volunteer).toPromise());
+        await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
 
       // concat local and mp and remove dublicates
       this.filteredClassInstances = this.localClassInstances.concat(
@@ -225,7 +225,7 @@ export class DashboardVolunteerComponent implements OnInit {
     // await this.localRepositoryService.synchronizeClassInstance(this.volunteer, ci).toPromise();
     // this.localClassInstances.push(ci);
 
-    await this.localRepositoryService.synchronizeClassInstance(this.volunteer, classInstanceDTO).toPromise();
+    await this.localRepositoryService.synchronizeSingleClassInstance(this.volunteer, classInstanceDTO).toPromise();
     this.localClassInstances.push(classInstanceDTO);
   }
 
