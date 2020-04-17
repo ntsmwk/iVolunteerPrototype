@@ -1048,6 +1048,16 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
     if (!isNullOrUndefined(cell) && (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType))) {
       this.overlayEvent = event.getProperty('event');
+
+      this.overlayContent = new ClassOptionsOverlayContentData();
+      this.overlayContent.marketplace = this.marketplace;
+
+      if (cell.cellType === MyMxCellType.CLASS) {
+        this.overlayContent.classDefinition = this.configurableClasses.find(c => c.id === cell.id);
+      } else if (MyMxCellType.isRelationship(cell.cellType)) {
+        this.overlayContent.relationship = this.relationships.find(r => r.id === cell.id);
+      }
+
       this.graph.setPanning(false);
       this.graph.setEnabled(false);
       this.graph.setTooltips(false);

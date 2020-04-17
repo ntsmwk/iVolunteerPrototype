@@ -1,6 +1,10 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
 
+const OVERLAY_WIDTH = 400;
+const OVERLAY_HEIGHT = 375;
+
+
 @Component({
   selector: 'class-options-overlay-control',
   templateUrl: './options-overlay-control.component.html',
@@ -20,6 +24,7 @@ export class ClassOptionsOverlayControlComponent {
   ) { }
 
   ngOnInit() {
+    console.log(this.overlayContent);
     this.toggleInboxOverlay();
   }
 
@@ -38,19 +43,19 @@ export class ClassOptionsOverlayControlComponent {
       let yPos = this.overlayEvent.clientY;
       let xPos = this.overlayEvent.clientX;
 
-      if (yPos + 275 > window.innerHeight) {
-        yPos = window.innerHeight - 275;
+      if (yPos + OVERLAY_HEIGHT > window.innerHeight) {
+        yPos = window.innerHeight - OVERLAY_HEIGHT;
       }
 
-      if (xPos + 300 > window.innerWidth) {
-        xPos = window.innerWidth - 300;
+      if (xPos + OVERLAY_WIDTH > window.innerWidth) {
+        xPos = window.innerWidth - OVERLAY_WIDTH;
       }
 
       this.overlayDiv.nativeElement.style.top = yPos + 'px';
       this.overlayDiv.nativeElement.style.left = xPos + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
-      this.overlayDiv.nativeElement.style.width = '300px';
-      this.overlayDiv.nativeElement.style.height = '275px';
+      this.overlayDiv.nativeElement.style.width = OVERLAY_WIDTH + 'px';
+      this.overlayDiv.nativeElement.style.height = OVERLAY_HEIGHT + 'px';
     }
   }
 
