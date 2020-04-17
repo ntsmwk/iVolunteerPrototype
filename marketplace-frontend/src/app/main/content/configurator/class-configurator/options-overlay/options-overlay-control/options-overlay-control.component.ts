@@ -24,7 +24,6 @@ export class ClassOptionsOverlayControlComponent {
   ) { }
 
   ngOnInit() {
-    console.log(this.overlayContent);
     this.toggleInboxOverlay();
   }
 

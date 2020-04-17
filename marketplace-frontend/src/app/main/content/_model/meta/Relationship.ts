@@ -26,6 +26,21 @@ export enum RelationshipType {
     COMPOSITION = 'COMPOSITION'
 }
 
+export namespace RelationshipType {
+    export function getLabelFromRelationshipType(relationshipType: RelationshipType) {
+        switch (relationshipType) {
+            case RelationshipType.INHERITANCE: return 'Vererbung';
+            case RelationshipType.ASSOCIATION: return 'Assoziation';
+            case RelationshipType.COMPOSITION: return 'Komposition';
+            case RelationshipType.AGGREGATION: return 'Aggreation';
+        }
+    }
+
+    export function getImagePathFromRelationshipType(relationshipType: RelationshipType) {
+        return "TODO";
+    }
+}
+
 export enum AssociationCardinality {
     NONE = '', ONE = '1', ZEROONE = '0...1', ZEROSTAR = '0...*', ONESTAR = '1...*'
 }
