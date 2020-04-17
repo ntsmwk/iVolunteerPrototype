@@ -28,7 +28,6 @@ import { timer } from 'rxjs';
 export class CompetenciesComponent implements OnInit {
   private volunteer: Volunteer;
   private marketplace: Marketplace;
-  classInstanceDTOs: ClassInstanceDTO[];
 
   trainingData: any[];
   trainingData2: any[];
@@ -55,11 +54,8 @@ export class CompetenciesComponent implements OnInit {
   test123 = "Stunden"
 
   @Input() selectedTenants: Tenant[];
+  @Input() classInstanceDTOs: ClassInstanceDTO[];
 
-  private tenantName: string = 'FF_Eidenberg';
-  private tenantId: string[] = [];
-
-  timeout: boolean = false;
 
   constructor(private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
@@ -71,38 +67,31 @@ export class CompetenciesComponent implements OnInit {
 
 
   async ngOnInit() {
-    let t = timer(3000);
-    t.subscribe(() => {
-      this.timeout = true;
-    });
-
-    this.classInstanceDTOs = [];
-
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
 
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-    );
+    // let marketplaces = <Marketplace[]>(
+    //   await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
+    // );
 
-    // TODO for each registert mp
-    this.marketplace = marketplaces[0];
+    // // TODO for each registert mp
+    // this.marketplace = marketplaces[0];
 
-    if (!isNullOrUndefined(this.marketplace)) {
+    // if (!isNullOrUndefined(this.marketplace)) {
 
 
-      this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-      );
+    //   this.classInstanceDTOs = <ClassInstanceDTO[]>(
+    //     await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
+    //   );
 
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
+    //   this.classInstanceDTOs.forEach((ci, index, object) => {
+    //     if (ci.duration === null) {
+    //       object.splice(index, 1);
+    //     }
+    //   });
 
-    }
+    // }
 
     this.generateChartData();
 
@@ -113,17 +102,24 @@ export class CompetenciesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // console.error('tasks', changes);
+    console.error('competencies', changes);
 
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
+          case 'classInstanceDTOs': {
+            if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
+              this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
 
+            }
+            break;
+          }
           case 'selectedTenants': {
             if (typeof changes.selectedTenants.currentValue != 'undefined') {
               this.selectedTenants = changes.selectedTenants.currentValue;
             }
           }
+
         }
       }
     }
