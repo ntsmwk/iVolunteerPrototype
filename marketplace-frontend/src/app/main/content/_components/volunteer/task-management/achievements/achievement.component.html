@@ -3,12 +3,12 @@
     <h1 class="l-heading">Mein FreiwilligenLEBEN</h1>
   </div>
 
-  <mat-card>
-    <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
-    </organisation-filter>
-  </mat-card>
-
   <div *ngIf="marketplace !== undefined">
+
+    <mat-card>
+      <organisation-filter (tenantSelectionChanged)="tenantSelectionChanged($event)">
+      </organisation-filter>
+    </mat-card>
 
     <div class="content">
       <mat-tab-group dynamicHeight="true" (selectedTabChange)="tabChanged($event)">
@@ -19,7 +19,8 @@
           <ng-template matTabContent>
             <p *ngIf="timeout && filteredClassInstanceDTOs.length === 0 && isLocalRepositoryConnected && selectedTenants.length > 0"
               class="alert alert-info">
-              <i class="fas fa-exclamation-circle"></i> &nbsp;  Es befinden sich noch keine Daten in deinem lokalen Freiwillilgenpass!
+              <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine Daten in deinem lokalen
+              Freiwillilgenpass!
             </p>
 
             <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
@@ -40,7 +41,8 @@
 
         <mat-tab label="Kompetenzen">
           <ng-template matTabContent>
-            <fuse-competencies [selectedTenants]="selectedTenants" [classInstanceDTOs]="classInstanceDTOs"></fuse-competencies>
+            <fuse-competencies [selectedTenants]="selectedTenants" [classInstanceDTOs]="classInstanceDTOs">
+            </fuse-competencies>
           </ng-template>
         </mat-tab>
 
@@ -69,7 +71,7 @@
       </ngx-spinner>
     </mat-card> -->
 
-  <p *ngIf="timeout && selectedTenants.length === 0" class="alert alert-info">
+  <p *ngIf="timeout && selectedTenants.length === 0 && marketplace" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation ausgewählt!
   </p>
 
