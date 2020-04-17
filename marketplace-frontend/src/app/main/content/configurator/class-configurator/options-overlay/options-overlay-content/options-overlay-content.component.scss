@@ -1,13 +1,47 @@
 .overlay-content {
-    .confirm-button {
-        border-radius: 4px; 
-        border-style: solid; 
-        border-width: 1px; 
-        border-color: currentColor; 
-        background-color: white; 
-        padding: 0 10px; 
-        line-height: 20px;
-      }
+  .confirm-button {
+    border-radius: 4px; 
+    border-style: solid; 
+    border-width: 1px; 
+    border-color: currentColor; 
+    background-color: white; 
+    padding: 0 10px; 
+    line-height: 20px;
+  }
+
+  .icon-wrapper {
+    width: 65px; 
+    height: 65px; 
+    
+    background: rgb(240, 240, 240); 
+    outline-color: grey; 
+    outline-style: solid; 
+    outline-width: 1px;
+
+    cursor: pointer;
+  }
+
+  .field-container {
+    margin-top: -16px;
+
+    .field-label {
+      z-index: 1;
+      display: inline; 
+      position: relative; 
+      top: 15px; 
+      left: 8px;
+      font-size: 12px; 
+      background: white;
+    }
+  }
+
+  .normal-label {
+    z-index: 1;
+    display: inline; 
+    position: relative; 
+    font-size: 12px; 
+    background: white;
+  }
 }
 
 

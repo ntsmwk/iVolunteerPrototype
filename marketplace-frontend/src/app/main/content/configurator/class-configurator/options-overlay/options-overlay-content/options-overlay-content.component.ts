@@ -27,17 +27,14 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log(this.inputData);
     }
 
     onSubmit() {
 
     }
 
-    changeIconClicked(selectionIndex: number) {
-
+    changeIconClicked() {
         this.dialogFactory.openChangeIconDialog(this.inputData.marketplace, this.inputData.classDefinition.imagePath).then((result: any) => {
-
             this.inputData.classDefinition.imagePath = result;
         });
     }
