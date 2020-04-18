@@ -52,6 +52,8 @@
             (submit)="changeProfile()"
             [formGroup]="profileForm"
             novalidate
+            fxLayout="column"
+            style="max-width: 500px;"
           >
             <mat-form-field>
               <input
@@ -88,11 +90,6 @@
             <mat-form-field>
               <mat-label>Geburtsdatum</mat-label>
 
-              <!-- <input
-                matInput
-                placeholder="Geburtsdatum"
-                formControlName="birthday"
-              /> -->
               <input
                 matInput
                 [matDatepicker]="picker"
@@ -127,14 +124,5 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <!-- <mat-tab-group dynamicHeight="true">
-      <mat-tab label="About">
-        <profile-about></profile-about>
-      </mat-tab>
-
-      <mat-tab label="Timeline">
-        <profile-timeline></profile-timeline>
-      </mat-tab>
-    </mat-tab-group> -->
   </div>
 </div>

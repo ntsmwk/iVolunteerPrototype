@@ -31,7 +31,6 @@ export class VolunteerProfileComponent implements OnInit {
       firstName: {},
       lastName: {},
       birthday: {},
-      about: {},
     };
   }
 
@@ -40,7 +39,6 @@ export class VolunteerProfileComponent implements OnInit {
       firstName: new FormControl("", Validators.required),
       lastName: new FormControl("", Validators.required),
       birthday: new FormControl("", Validators.required),
-      about: new FormControl("", Validators.required),
     });
 
     this.profileForm.valueChanges.subscribe(() => {
@@ -50,6 +48,11 @@ export class VolunteerProfileComponent implements OnInit {
     this.volunteer = <Participant>(
       await this.loginService.getLoggedIn().toPromise()
     );
+    this.profileForm.setValue({
+      firstName: this.volunteer.firstname,
+      lastName: this.volunteer.lastname,
+      birthday: this.volunteer.birthday,
+    });
   }
 
   onProfileFormValuesChanged() {
