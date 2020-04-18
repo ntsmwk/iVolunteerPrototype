@@ -1,9 +1,11 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
-
-  <div class="header-achievements p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+  <div
+    class="header-achievements p-16 p-sm-24"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
     <h1>Mein FreiwilligenÜBERBLICK</h1>
   </div>
-
 
   <!-- HEADER END -->
   <div *ngIf="(tenantMap | keyvalue)?.length">
@@ -11,29 +13,29 @@
 
     <div *ngIf="classInstanceDTOs.length != 0">
       <div fxLayout="row wrap" fxLayoutAlign="space-around">
-
         <div *ngFor="let tenant of tenantMap | keyvalue">
-
           <div fxLayout="column" style="width: 100%;">
-            <h2 style="font-size: 30px;">{{tenant.value.name}}</h2>
+            <h2 style="font-size: 30px;">{{ tenant.value.name }}</h2>
             <div fxLayout="row">
-              <img src="{{'data:image/png;base64,' + tenant.value.image}}" class="img" />
+              <img
+                src="{{ 'data:image/png;base64,' + tenant.value.image }}"
+                class="img"
+              />
               <table class="table">
                 <tbody>
                   <tr>
-                    <td>Homepage: </td>
-                    <td>{{tenant.value.homepage}}</td>
+                    <td>Homepage:</td>
+                    <td>{{ tenant.value.homepage }}</td>
                   </tr>
                   <tr>
-                    <td>Mitglied seit: </td>
-                    <td>{{getMemberSince(tenant.value.id)}} </td>
+                    <td>Mitglied seit:</td>
+                    <td>{{ getMemberSince(tenant.value.id) }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -41,29 +43,46 @@
 
     <div style="height: 10px;"></div>
     <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
-      <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler Freiwilligenpass nicht erreichbar, deshalb
-      stammen die Daten vom Marktplatz!
+      <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler Freiwilligenpass
+      nicht erreichbar, deshalb stammen die Daten vom Marktplatz!
     </p>
 
     <!-- CHARTS BEGINN -->
     <div style="height: 30px;"></div>
-    <div *ngIf="timeout && classInstanceDTOs.length > 0 && isLocalRepositoryConnected">
-
-
+    <div
+      *ngIf="
+        timeout && classInstanceDTOs.length > 0 && isLocalRepositoryConnected
+      "
+    >
       <h1 class="engagement">Engagement gesamt</h1>
       <div fxLayout="column" fxLayoutAlign="start center" style="width: 100%;">
         <div fxLayout="column" fxLayoutAlign="start center">
           <div>
-            <div class="donut-parent-duration" *ngIf="durationTotal.length != 0">
-              <ngx-charts-advanced-pie-chart class="chart-container" [results]="durationTotal" [animations]="animations"
-                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingDuration">
+            <div
+              class="donut-parent-duration"
+              *ngIf="durationTotal.length != 0"
+            >
+              <ngx-charts-advanced-pie-chart
+                class="chart-container"
+                [results]="durationTotal"
+                [animations]="animations"
+                [tooltipDisabled]="false"
+                [customColors]="colors"
+                [valueFormatting]="valueFormattingDuration"
+              >
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
           <div>
             <div class="donut-parent-duration" *ngIf="numberTotal.length != 0">
-              <ngx-charts-advanced-pie-chart class="chart-container" [results]="numberTotal" [animations]="animations"
-                [tooltipDisabled]="false" [customColors]="colors" [valueFormatting]="valueFormattingNumber">
+              <ngx-charts-advanced-pie-chart
+                class="chart-container"
+                [results]="numberTotal"
+                [animations]="animations"
+                [tooltipDisabled]="false"
+                [customColors]="colors"
+                [valueFormatting]="valueFormattingNumber"
+              >
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
@@ -71,23 +90,37 @@
 
         <div style="height: 50px;"></div>
 
-        <h1 class="engagement">Engagement {{2019}}</h1>
+        <h1 class="engagement">Engagement {{ 2019 }}</h1>
         <div fxLayout="column" fxLayoutAlign="start center">
           <div>
-
-            <div class="donut-parent-duration" *ngIf="durationLastYear.length != 0">
-              <ngx-charts-advanced-pie-chart class="chart-container" [results]="durationLastYear"
-                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
-                [valueFormatting]="valueFormattingDuration">
+            <div
+              class="donut-parent-duration"
+              *ngIf="durationLastYear.length != 0"
+            >
+              <ngx-charts-advanced-pie-chart
+                class="chart-container"
+                [results]="durationLastYear"
+                [animations]="animations"
+                [tooltipDisabled]="false"
+                [customColors]="colors"
+                [valueFormatting]="valueFormattingDuration"
+              >
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
           <div>
-
-            <div class="donut-parent-duration" *ngIf="numberLastYear.length != 0">
-              <ngx-charts-advanced-pie-chart class="chart-container" [results]="numberLastYear"
-                [animations]="animations" [tooltipDisabled]="false" [customColors]="colors"
-                [valueFormatting]="valueFormattingNumber">
+            <div
+              class="donut-parent-duration"
+              *ngIf="numberLastYear.length != 0"
+            >
+              <ngx-charts-advanced-pie-chart
+                class="chart-container"
+                [results]="numberLastYear"
+                [animations]="animations"
+                [tooltipDisabled]="false"
+                [customColors]="colors"
+                [valueFormatting]="valueFormattingNumber"
+              >
               </ngx-charts-advanced-pie-chart>
             </div>
           </div>
@@ -103,21 +136,41 @@
           <mat-form-field class="matFormField">
             <mat-label>Vergleichsjahr</mat-label>
 
-            <mat-select [value]="comparisonYear" (selectionChange)="generateComparisonChartData($event.value)">
-              <mat-option *ngFor="let year of uniqueYears" [value]="year">{{year}}</mat-option>
+            <mat-select
+              [value]="comparisonYear"
+              (selectionChange)="generateComparisonChartData($event.value)"
+            >
+              <mat-option *ngFor="let year of uniqueYears" [value]="year">{{
+                year
+              }}</mat-option>
             </mat-select>
-
           </mat-form-field>
           <div style="width: 50px;"></div>
-          <app-share-menu class="shareMenu" [label]="'Vergleich'" (export)="exportChart($event)">
+          <app-share-menu
+            class="shareMenu"
+            [label]="'Vergleich'"
+            (export)="exportChart($event)"
+          >
           </app-share-menu>
         </div>
 
         <div class="chartParrent">
-          <ngx-charts-bar-vertical-2d [results]="comparisonData" [customColors]="colors" [animations]="animations"
-            [xAxis]="true" [yAxis]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
-            [xAxisLabel]="comparisonXlabel" [yAxisLabel]="comparisonYlabel" [roundEdges]="false" [legend]="true"
-            [legendTitle]="Legende" [showDataLabel]="true" [noBarWhenZero]="false">
+          <ngx-charts-bar-vertical-2d
+            [results]="comparisonData"
+            [customColors]="colors"
+            [animations]="animations"
+            [xAxis]="true"
+            [yAxis]="true"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            [xAxisLabel]="comparisonXlabel"
+            [yAxisLabel]="comparisonYlabel"
+            [roundEdges]="false"
+            [legend]="true"
+            [legendTitle]="Legende"
+            [showDataLabel]="true"
+            [noBarWhenZero]="false"
+          >
           </ngx-charts-bar-vertical-2d>
         </div>
       </div>
@@ -125,10 +178,17 @@
   </div>
 
   <p *ngIf="timeout && marketplace === undefined" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation beigetreten!
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
+    beigetreten!
   </p>
 
-  <p *ngIf="timeout && classInstanceDTOs.length === 0 && isLocalRepositoryConnected" class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine Daten in deinem lokalen Freiwillilgenpass!
+  <p
+    *ngIf="
+      timeout && classInstanceDTOs.length === 0 && isLocalRepositoryConnected
+    "
+    class="alert alert-info"
+  >
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine
+    Daten in deinem lokalen Freiwilligenpass!
   </p>
 </div>
