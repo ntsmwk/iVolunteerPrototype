@@ -38,15 +38,96 @@
   </div>
   <div class="content">
     <div style="padding-top: 15px;"></div>
+    <!-- <mat-card class="org-card p-10 m-10">
+      <h3>asdfasf</h3>
+    </mat-card> -->
+    <div fxLayout="column">
+      <mat-card style="margin: 20px;">
+        <mat-card-title>
+          Stammdaten
+        </mat-card-title>
+        <mat-card-content>
+          <form
+            name="profileForm"
+            (submit)="changeProfile()"
+            [formGroup]="profileForm"
+            novalidate
+          >
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Vorname"
+                formControlName="firstName"
+              />
+              <mat-error
+                *ngIf="
+                  profileFormErrors.firstName &&
+                  profileFormErrors.firstName.required
+                "
+              >
+                Vorname benötigt
+              </mat-error>
+            </mat-form-field>
 
-    <div class="mat-card" style="margin: 20px;">
-      <div class="mat-card-title">
-        asdfafdsas
-      </div>
-      <div class="mat-card-content m-20">asdfafdasfd</div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Nachname"
+                formControlName="lastName"
+              />
+              <mat-error
+                *ngIf="
+                  profileFormErrors.lastName &&
+                  profileFormErrors.lastName.required
+                "
+              >
+                Nachname benötigt
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Geburtsdatum</mat-label>
+
+              <!-- <input
+                matInput
+                placeholder="Geburtsdatum"
+                formControlName="birthday"
+              /> -->
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="birthday"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error
+                *ngIf="
+                  profileFormErrors.birthday &&
+                  profileFormErrors.birthday.required
+                "
+              >
+                Geburtsdatum benötigt
+              </mat-error>
+            </mat-form-field>
+
+            <button
+              type="submit"
+              mat-raised-button
+              color="accent"
+              class="submit-button"
+              aria-label="SUBMIT"
+              [disabled]="profileForm.invalid"
+            >
+              Speichern
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
     </div>
-
-    <mat-tab-group dynamicHeight="true">
+    <!-- <mat-tab-group dynamicHeight="true">
       <mat-tab label="About">
         <profile-about></profile-about>
       </mat-tab>
@@ -54,6 +135,6 @@
       <mat-tab label="Timeline">
         <profile-timeline></profile-timeline>
       </mat-tab>
-    </mat-tab-group>
+    </mat-tab-group> -->
   </div>
 </div>
