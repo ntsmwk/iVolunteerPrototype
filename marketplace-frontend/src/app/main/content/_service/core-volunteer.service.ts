@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Participant } from "../_model/participant";
 
 @Injectable({
   providedIn: "root",
@@ -17,6 +18,10 @@ export class CoreVolunteerService {
 
   findRegisteredMarketplaces(volunteerId: string) {
     return this.http.get(`/core/volunteer/${volunteerId}/marketplaces`);
+  }
+
+  updateVolunteer(volunteer: Participant) {
+    return this.http.put(`/core/volunteer/${volunteer.id}`, volunteer);
   }
 
   subscribeTenant(

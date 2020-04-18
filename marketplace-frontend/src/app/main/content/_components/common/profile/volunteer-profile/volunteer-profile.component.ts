@@ -9,6 +9,7 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
+import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 
 @Component({
   selector: "volunteer-profile",
@@ -25,7 +26,8 @@ export class VolunteerProfileComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private imageService: ImageService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private volunteerService: CoreVolunteerService
   ) {
     this.profileFormErrors = {
       firstName: {},
@@ -44,14 +46,18 @@ export class VolunteerProfileComponent implements OnInit {
     this.profileForm.valueChanges.subscribe(() => {
       this.onProfileFormValuesChanged();
     });
+    this.reload();
+  }
 
+  async reload() {
     this.volunteer = <Participant>(
       await this.loginService.getLoggedIn().toPromise()
     );
+    console.error(this.volunteer);
     this.profileForm.setValue({
       firstName: this.volunteer.firstname,
       lastName: this.volunteer.lastname,
-      birthday: this.volunteer.birthday,
+      birthday: new Date(this.volunteer.birthday),
     });
   }
 
@@ -72,8 +78,12 @@ export class VolunteerProfileComponent implements OnInit {
     }
   }
 
-  changeProfile() {
-    console.error("change");
+  async changeProfile() {
+    this.volunteer.firstname = this.profileForm.value.firstName;
+    this.volunteer.lastname = this.profileForm.value.lastName;
+    this.volunteer.birthday = this.profileForm.value.birthday;
+    await this.volunteerService.updateVolunteer(this.volunteer).toPromise();
+    this.reload();
   }
 
   getProfileImage() {

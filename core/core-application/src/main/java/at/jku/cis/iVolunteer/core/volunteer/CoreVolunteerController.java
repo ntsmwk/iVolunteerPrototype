@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,12 +40,10 @@ public class CoreVolunteerController {
 		return volunteer.getRegisteredMarketplaces(); 
 	}
 
-//	@PostMapping("/{coreVolunteerId}/subscribe/tenant/{tenantId}")
-//	public void subscribeTenant(@PathVariable("coreVolunteerId") String coreVolunteerId,
-//			@PathVariable("tenantId") String tenantId, @RequestHeader("Authorization") String authorization) {
-//		coreVolunteerService.subscribeTenant(coreVolunteerId, tenantId, authorization);
-//}
-
+	@PutMapping("/{volunteerId}")
+	public void updateVolunteer(@RequestBody CoreVolunteer volunteer) {
+		this.coreVolunteerRepository.save(volunteer);
+	}
 	
 	@PostMapping("/{coreVolunteerId}/subscribe/{marketplaceId}/tenant/{tenantId}")
 	public ResponseEntity<Void> subscribeTenant(@PathVariable("coreVolunteerId") String coreVolunteerId,
