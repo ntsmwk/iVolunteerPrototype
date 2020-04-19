@@ -1,0 +1,43 @@
+<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
+  <div
+    class="header p-16 p-sm-24"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
+    <!-- <mat-icon
+    class="iconButton"
+    (click)="navigateBack()"
+    style="margin-left: 20px; color: white;"
+    >keyboard_return
+  </mat-icon> -->
+    <h1>Freiwilligenpasseinträge importieren</h1>
+    <div style="padding-top: 70px; z-index: 255; position: relative;"></div>
+  </div>
+  <form
+    form
+    style="padding-top: 12px; padding-left: 40px;"
+    name="form"
+    fxLayout="column"
+    fxLayoutGap="20px"
+    fxLayoutAlign="start"
+    (submit)="save()"
+    [formGroup]="ruleForm"
+  >
+    <!-- File upload -->
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <mat-form-field style="width: 300px;">
+        <mat-label>Freiwilligenpasseintrag</mat-label>
+        <mat-select formControlName="target">
+          <mat-option *ngFor="let cd of classDefinitions" [value]="cd">
+            {{ cd.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
+      <button mat-raised-button type="submit" color="primary">Speichern</button>
+      <div style="padding-right: 5px;"></div>
+    </div>
+  </form>
+</div>
