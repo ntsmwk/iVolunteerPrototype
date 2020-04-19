@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @RestController
 @RequestMapping("/volunteer")
