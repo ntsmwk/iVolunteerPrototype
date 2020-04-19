@@ -10,3 +10,4 @@ composer-logs/
 marketplace-frontend/package-lock.json
 marketplace/Servers/**
 /marketplace/.recommenders/**
+/marketplace-frontend/db.json
