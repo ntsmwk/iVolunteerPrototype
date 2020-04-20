@@ -28,8 +28,8 @@ export class ImportComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
-      file: new FormControl(undefined),
       classDefinition: new FormControl(undefined),
+      file: new FormControl(undefined),
     });
   }
 
@@ -47,7 +47,7 @@ export class ImportComponent implements OnInit {
             this.marketplace = marketplace;
 
             this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
+              .getAllClassDefinitionsWithoutRootAndEnums(
                 marketplace,
                 this.helpseeker.tenantId
               )

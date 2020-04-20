@@ -88,14 +88,14 @@ public class InitializationService {
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
 
 		tenants.forEach(tenantId -> {
-			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {				
+			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {
 				if (propertyDefinitionRepository.getByNameAndTenantId(pd.getName(), pd.getTenantId()).size() == 0) {
 					propertyDefinitionRepository.save(pd);
 				}
 			}
 		});
 	}
-	
+
 	private void addiVolunteerAPIClassDefinition() {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
@@ -282,82 +282,83 @@ public class InitializationService {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
 		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
-		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
-		c1.setId("test1");
-		c1.setName("Class 1");
-		c1.setProperties(new ArrayList<ClassProperty<Object>>());
-		c1.setRoot(true);
-		c1.setTenantId(ffa.getTenantId());
+		if (ffa != null) {
+			CompetenceClassDefinition c1 = new CompetenceClassDefinition();
+			c1.setId("test1");
+			c1.setName("Class 1");
+			c1.setProperties(new ArrayList<ClassProperty<Object>>());
+			c1.setRoot(true);
+			c1.setTenantId(ffa.getTenantId());
 
-		PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty(tenantId);
-		ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
-		c1.getProperties().add(ncp);
+			PropertyDefinition npd = new StandardPropertyDefinitions.NameProperty(tenantId);
+			ClassProperty<Object> ncp = propertyDefinitionToClassPropertyMapper.toTarget(npd);
+			c1.getProperties().add(ncp);
 
-		PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty(tenantId);
-		ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
-		c1.getProperties().add(sdcp);
+			PropertyDefinition sdpd = new StandardPropertyDefinitions.StartDateProperty(tenantId);
+			ClassProperty<Object> sdcp = propertyDefinitionToClassPropertyMapper.toTarget(sdpd);
+			c1.getProperties().add(sdcp);
 
-		PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty(tenantId);
-		ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
-		c1.getProperties().add(dcp);
+			PropertyDefinition dpd = new StandardPropertyDefinitions.DescriptionProperty(tenantId);
+			ClassProperty<Object> dcp = propertyDefinitionToClassPropertyMapper.toTarget(dpd);
+			c1.getProperties().add(dcp);
 
-		c1.setClassArchetype(ClassArchetype.COMPETENCE);
+			c1.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c2 = new CompetenceClassDefinition();
-		c2.setId("test2");
-		c2.setName("Class 2");
-		c2.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c2 = new CompetenceClassDefinition();
+			c2.setId("test2");
+			c2.setName("Class 2");
+			c2.setTenantId(ffa.getTenantId());
 
-		c2.setClassArchetype(ClassArchetype.COMPETENCE);
+			c2.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c3 = new CompetenceClassDefinition();
-		c3.setId("test3");
-		c3.setName("Class 3");
-		c3.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c3 = new CompetenceClassDefinition();
+			c3.setId("test3");
+			c3.setName("Class 3");
+			c3.setTenantId(ffa.getTenantId());
 
-		c3.setClassArchetype(ClassArchetype.COMPETENCE);
+			c3.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c4 = new CompetenceClassDefinition();
-		c4.setId("test4");
-		c4.setName("Class 4");
-		c4.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c4 = new CompetenceClassDefinition();
+			c4.setId("test4");
+			c4.setName("Class 4");
+			c4.setTenantId(ffa.getTenantId());
 
-		c4.setClassArchetype(ClassArchetype.COMPETENCE);
+			c4.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c5 = new CompetenceClassDefinition();
-		c5.setId("test5");
-		c5.setName("Class 5");
-		c5.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c5 = new CompetenceClassDefinition();
+			c5.setId("test5");
+			c5.setName("Class 5");
+			c5.setTenantId(ffa.getTenantId());
 
-		c5.setClassArchetype(ClassArchetype.COMPETENCE);
+			c5.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c6 = new CompetenceClassDefinition();
-		c6.setId("test6");
-		c6.setName("Class 6");
-		c6.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c6 = new CompetenceClassDefinition();
+			c6.setId("test6");
+			c6.setName("Class 6");
+			c6.setTenantId(ffa.getTenantId());
 
-		c6.setClassArchetype(ClassArchetype.COMPETENCE);
+			c6.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c7 = new CompetenceClassDefinition();
-		c7.setId("test7");
-		c7.setName("Class 7");
-		c7.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c7 = new CompetenceClassDefinition();
+			c7.setId("test7");
+			c7.setName("Class 7");
+			c7.setTenantId(ffa.getTenantId());
 
-		c7.setClassArchetype(ClassArchetype.COMPETENCE);
+			c7.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c8 = new CompetenceClassDefinition();
-		c8.setId("test8");
-		c8.setName("Class 8");
-		c8.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c8 = new CompetenceClassDefinition();
+			c8.setId("test8");
+			c8.setName("Class 8");
+			c8.setTenantId(ffa.getTenantId());
 
-		c8.setClassArchetype(ClassArchetype.COMPETENCE);
+			c8.setClassArchetype(ClassArchetype.COMPETENCE);
 
-		CompetenceClassDefinition c9 = new CompetenceClassDefinition();
-		c9.setId("test9");
-		c9.setName("Class 9");
-		c9.setTenantId(ffa.getTenantId());
+			CompetenceClassDefinition c9 = new CompetenceClassDefinition();
+			c9.setId("test9");
+			c9.setName("Class 9");
+			c9.setTenantId(ffa.getTenantId());
 
-		c9.setClassArchetype(ClassArchetype.COMPETENCE);
+			c9.setClassArchetype(ClassArchetype.COMPETENCE);
 
 //		{from: 1, to: 3},
 //		  {from: 1, to: 2},
@@ -366,87 +367,88 @@ public class InitializationService {
 //		  {from: 3, to: 3},
 //		  {from: 6, to: 6},
 
-		Inheritance i1 = new Inheritance(c1.getId(), c3.getId(), c1.getId());
-		i1.setId("test_i1");
+			Inheritance i1 = new Inheritance(c1.getId(), c3.getId(), c1.getId());
+			i1.setId("test_i1");
 
-		Inheritance i2 = new Inheritance(c1.getId(), c2.getId(), c1.getId());
-		i2.setId("test_i2");
-		Inheritance i3 = new Inheritance(c2.getId(), c4.getId(), c2.getId());
-		i3.setId("test_i3");
-		Inheritance i4 = new Inheritance(c2.getId(), c5.getId(), c2.getId());
-		i4.setId("test_i4");
+			Inheritance i2 = new Inheritance(c1.getId(), c2.getId(), c1.getId());
+			i2.setId("test_i2");
+			Inheritance i3 = new Inheritance(c2.getId(), c4.getId(), c2.getId());
+			i3.setId("test_i3");
+			Inheritance i4 = new Inheritance(c2.getId(), c5.getId(), c2.getId());
+			i4.setId("test_i4");
 //		Inheritance i5 = new Inheritance(c3.getId(), c3.getId(), c3.getId());
 //		i5.setId("test_i5");
 //		Inheritance i6 = new Inheritance(c6.getId(), c6.getId(), c6.getId());
 //		i6.setId("test_i6");
 
-		Inheritance i7 = new Inheritance(c5.getId(), c7.getId(), c5.getId());
-		i7.setId("test_i7");
-		Inheritance i8 = new Inheritance(c5.getId(), c8.getId(), c5.getId());
-		i8.setId("test_i8");
-		Inheritance i9 = new Inheritance(c4.getId(), c9.getId(), c4.getId());
-		i9.setId("test_i9");
+			Inheritance i7 = new Inheritance(c5.getId(), c7.getId(), c5.getId());
+			i7.setId("test_i7");
+			Inheritance i8 = new Inheritance(c5.getId(), c8.getId(), c5.getId());
+			i8.setId("test_i8");
+			Inheritance i9 = new Inheritance(c4.getId(), c9.getId(), c4.getId());
+			i9.setId("test_i9");
 
-		if (!relationshipRepository.exists(i1.getId())) {
-			relationshipRepository.save(i1);
-		}
-		if (!relationshipRepository.exists(i2.getId())) {
-			relationshipRepository.save(i2);
-		}
-		if (!relationshipRepository.exists(i3.getId())) {
-			relationshipRepository.save(i3);
-		}
-		if (!relationshipRepository.exists(i4.getId())) {
-			relationshipRepository.save(i4);
-		}
+			if (!relationshipRepository.exists(i1.getId())) {
+				relationshipRepository.save(i1);
+			}
+			if (!relationshipRepository.exists(i2.getId())) {
+				relationshipRepository.save(i2);
+			}
+			if (!relationshipRepository.exists(i3.getId())) {
+				relationshipRepository.save(i3);
+			}
+			if (!relationshipRepository.exists(i4.getId())) {
+				relationshipRepository.save(i4);
+			}
 //		if (!relationshipRepository.exists(i5.getId())) {
 //			relationshipRepository.save(i5);
 //		}
 
-		if (!relationshipRepository.exists(i7.getId())) {
-			relationshipRepository.save(i7);
-		}
-		if (!relationshipRepository.exists(i8.getId())) {
-			relationshipRepository.save(i8);
-		}
-		if (!relationshipRepository.exists(i9.getId())) {
-			relationshipRepository.save(i9);
-		}
+			if (!relationshipRepository.exists(i7.getId())) {
+				relationshipRepository.save(i7);
+			}
+			if (!relationshipRepository.exists(i8.getId())) {
+				relationshipRepository.save(i8);
+			}
+			if (!relationshipRepository.exists(i9.getId())) {
+				relationshipRepository.save(i9);
+			}
 
-		if (!classDefinitionRepository.exists(c1.getId())) {
-			classDefinitionRepository.save(c1);
-		}
+			if (!classDefinitionRepository.exists(c1.getId())) {
+				classDefinitionRepository.save(c1);
+			}
 
-		if (!classDefinitionRepository.exists(c2.getId())) {
-			classDefinitionRepository.save(c2);
-		}
+			if (!classDefinitionRepository.exists(c2.getId())) {
+				classDefinitionRepository.save(c2);
+			}
 
-		if (!classDefinitionRepository.exists(c3.getId())) {
-			classDefinitionRepository.save(c3);
-		}
+			if (!classDefinitionRepository.exists(c3.getId())) {
+				classDefinitionRepository.save(c3);
+			}
 
-		if (!classDefinitionRepository.exists(c4.getId())) {
-			classDefinitionRepository.save(c4);
-		}
+			if (!classDefinitionRepository.exists(c4.getId())) {
+				classDefinitionRepository.save(c4);
+			}
 
-		if (!classDefinitionRepository.exists(c5.getId())) {
-			classDefinitionRepository.save(c5);
-		}
+			if (!classDefinitionRepository.exists(c5.getId())) {
+				classDefinitionRepository.save(c5);
+			}
 
-		if (!classDefinitionRepository.exists(c6.getId())) {
-			classDefinitionRepository.save(c6);
-		}
+			if (!classDefinitionRepository.exists(c6.getId())) {
+				classDefinitionRepository.save(c6);
+			}
 
-		if (!classDefinitionRepository.exists(c7.getId())) {
-			classDefinitionRepository.save(c7);
-		}
+			if (!classDefinitionRepository.exists(c7.getId())) {
+				classDefinitionRepository.save(c7);
+			}
 
-		if (!classDefinitionRepository.exists(c8.getId())) {
-			classDefinitionRepository.save(c8);
-		}
+			if (!classDefinitionRepository.exists(c8.getId())) {
+				classDefinitionRepository.save(c8);
+			}
 
-		if (!classDefinitionRepository.exists(c9.getId())) {
-			classDefinitionRepository.save(c9);
+			if (!classDefinitionRepository.exists(c9.getId())) {
+				classDefinitionRepository.save(c9);
+			}
 		}
 	}
 

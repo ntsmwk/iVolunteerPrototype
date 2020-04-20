@@ -8,6 +8,7 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
+  MatCardModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 
@@ -17,7 +18,7 @@ const routes = [{ path: "", component: ImportComponent }];
   imports: [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-
+    MatCardModule,
     MatSelectModule,
     MatButtonModule,
     MatFormFieldModule,
