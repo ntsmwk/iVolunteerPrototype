@@ -2,37 +2,73 @@ import { ClassDefinition, ClassArchetype } from '../../_model/meta/Class';
 import { Relationship, RelationshipType } from '../../_model/meta/Relationship';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { isNullOrUndefined } from 'util';
+import { MatchingOperatorType } from '../../_model/matching';
+import { PropertyType } from '../../_model/meta/Property';
 
-const sidebarPalettes = {
-  id: 'building_blocks', label: 'Building Blocks',
-  rows: [
-    {
-      c0: { id: 'competence', label: 'Competence', imgPath: '/assets/icons/class_editor/competence.png', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
-      c1: { id: 'task', label: 'Task', imgPath: '/assets/icons/class_editor/task.png', type: 'class', archetype: ClassArchetype.TASK, shape: undefined },
-    }, {
-      c0: { id: 'function', label: 'Function', imgPath: '/assets/icons/class_editor/function.png', type: 'class', archetype: ClassArchetype.FUNCTION, shape: undefined },
-      c1: { id: 'achievement', label: 'Achievement', imgPath: '/assets/icons/class_editor/achievement.png', type: 'class', archetype: ClassArchetype.ACHIEVEMENT, shape: undefined },
-    }
-  ]
-};
+// const sidebarPalettes = {
+//   id: 'building_blocks', label: 'Building Blocks',
+//   rows: [
+//     {
+//       c0: { id: 'competence', label: 'Competence', imgPath: '/assets/icons/class_editor/competence.png', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
+//       c1: { id: 'task', label: 'Task', imgPath: '/assets/icons/class_editor/task.png', type: 'class', archetype: ClassArchetype.TASK, shape: undefined },
+//     }, {
+//       c0: { id: 'function', label: 'Function', imgPath: '/assets/icons/class_editor/function.png', type: 'class', archetype: ClassArchetype.FUNCTION, shape: undefined },
+//       c1: { id: 'achievement', label: 'Achievement', imgPath: '/assets/icons/class_editor/achievement.png', type: 'class', archetype: ClassArchetype.ACHIEVEMENT, shape: undefined },
+//     }
+//   ]
+// };
 
 const relationshipPalettes = {
   id: 'relationships', label: 'Relationships',
   rows: [
-    { id: 'INHERITANCE', label: 'Inheritance', imgPath: '/assets/mxgraph_resources/images/custom/inheritance.svg', type: 'inheritance', shape: undefined },
-    { id: 'ASSOCIATION', label: 'Association', imgPath: '/assets/mxgraph_resources/images/custom/association.svg', type: 'association', shape: undefined },
-    { id: 'AGGREGATION', label: 'Aggregation', imgPath: '', type: 'aggregation', shape: undefined }
+    {
+      id: RelationshipType.INHERITANCE, label: RelationshipType.getLabelFromRelationshipType(RelationshipType.INHERITANCE),
+      imgPath: '/assets/icons/class_editor/relationships/inheritance.png', type: 'inheritance', shape: undefined
+    },
+    {
+      id: RelationshipType.ASSOCIATION, label: RelationshipType.getLabelFromRelationshipType(RelationshipType.ASSOCIATION),
+      imgPath: '/assets/icons/class_editor/relationships/', type: 'association', shape: undefined
+    },
+    {
+      id: RelationshipType.AGGREGATION, label: RelationshipType.getLabelFromRelationshipType(RelationshipType.AGGREGATION),
+      imgPath: '/assets/icons/class_editor/relationships/aggregation.png', type: 'aggregation', shape: undefined
+    },
+    {
+      id: RelationshipType.COMPOSITION, label: RelationshipType.getLabelFromRelationshipType(RelationshipType.COMPOSITION),
+      imgPath: '/assets/icons/class_editor/relationships/composition.png', type: 'composition', shape: undefined
+    }
   ]
 };
 
 const matchingOperatorPalettes = [
-  { id: 'EQUAL', label: 'gleich', imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator' },
-  { id: 'LESS', label: 'kleiner', imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator' },
-  { id: 'GREATER', label: 'größer', imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator' },
-  { id: 'LESS_EQUAL', label: 'kleiner gleich', imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator' },
-  { id: 'GREATER_EQUAL', label: 'größer gleich', imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator' },
-  { id: 'EXISTS', label: 'existiert', imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator' },
-  { id: 'ALL', label: 'alle', imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator' },
+  {
+    id: MatchingOperatorType.EQUAL, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.EQUAL),
+    imgPath: '/assets/icons/class_editor/matching/equal_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.LESS, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.LESS),
+    imgPath: '/assets/icons/class_editor/matching/lt_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.GREATER, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.GREATER),
+    imgPath: '/assets/icons/class_editor/matching/gt_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.LESS_EQUAL, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.LESS_EQUAL),
+    imgPath: '/assets/icons/class_editor/matching/lteq_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.GREATER_EQUAL, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.GREATER_EQUAL),
+    imgPath: '/assets/icons/class_editor/matching/gteq_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.EXISTS, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.EXISTS),
+    imgPath: '/assets/icons/class_editor/matching/exists_reduced.png', type: 'matchingOperator'
+  },
+  {
+    id: MatchingOperatorType.ALL, label: MatchingOperatorType.getLabelForMatchingOperatorType(MatchingOperatorType.ALL),
+    imgPath: '/assets/icons/class_editor/matching/all_reduced.png', type: 'matchingOperator'
+  },
 ];
 
 const matchingConnectorPalettes = [
@@ -42,8 +78,20 @@ const matchingConnectorPalettes = [
 
 const deleteOperationPalette =
   { id: 'delete', label: 'löschen', imgPath: '/assets/mxgraph_resources/images/delete.gif', type: 'operation' }
-
   ;
+
+const propertyTypePalettes = [
+  { id: PropertyType.TEXT, label: PropertyType.getLabelForPropertyType(PropertyType.TEXT), imgPath: '/assets/icons/datatypes/s.png' },
+  { id: PropertyType.LONG_TEXT, label: PropertyType.getLabelForPropertyType(PropertyType.LONG_TEXT), imgPath: '/assets/icons/datatypes/s.png' },
+  { id: PropertyType.WHOLE_NUMBER, label: PropertyType.getLabelForPropertyType(PropertyType.WHOLE_NUMBER), imgPath: '/assets/icons/datatypes/n.png' },
+  { id: PropertyType.FLOAT_NUMBER, label: PropertyType.getLabelForPropertyType(PropertyType.FLOAT_NUMBER), imgPath: '/assets/icons/datatypes/f.png' },
+  { id: PropertyType.BOOL, label: PropertyType.getLabelForPropertyType(PropertyType.BOOL), imgPath: '/assets/icons/datatypes/tf2.png' },
+  { id: PropertyType.DATE, label: PropertyType.getLabelForPropertyType(PropertyType.DATE), imgPath: '/assets/icons/datatypes/d.png' },
+  { id: PropertyType.LIST, label: PropertyType.getLabelForPropertyType(PropertyType.LIST), imgPath: '/assets/icons/datatypes/o.png' },
+  { id: PropertyType.ENUM, label: PropertyType.getLabelForPropertyType(PropertyType.ENUM), imgPath: '/assets/icons/datatypes/o.png' },
+
+
+]
 
 const mxStyles = {
 
@@ -128,8 +176,9 @@ const cellTypes = {
 
 
 export class CConstants {
-  public static sidebarPalettes = sidebarPalettes;
+  // public static sidebarPalettes = sidebarPalettes;
   public static relationshipPalettes = relationshipPalettes;
+  public static propertyTypePalettes = propertyTypePalettes;
   public static matchingOperatorPalettes = matchingOperatorPalettes;
   public static matchingConnectorPalettes = matchingConnectorPalettes;
   public static deleteOperationPalette = deleteOperationPalette;

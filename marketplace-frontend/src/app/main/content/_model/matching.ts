@@ -52,3 +52,17 @@ export enum MatchingOperatorType {
     EXISTS = 'EXISTS',
     ALL = 'ALL'
 }
+
+export namespace MatchingOperatorType {
+    export function getLabelForMatchingOperatorType(matchingOperatorType: string) {
+        switch (matchingOperatorType) {
+            case MatchingOperatorType.EQUAL: return 'gleich';
+            case MatchingOperatorType.LESS: return 'kleiner';
+            case MatchingOperatorType.GREATER: return 'größer';
+            case MatchingOperatorType.LESS_EQUAL: return 'kleiner oder gleich';
+            case MatchingOperatorType.GREATER_EQUAL: return 'größer oder gleich';
+            case MatchingOperatorType.EXISTS: return 'existiert';
+            case MatchingOperatorType.ALL: return 'alle';
+        }
+    }
+}

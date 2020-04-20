@@ -4,6 +4,8 @@ import { Relationship, RelationshipType } from 'app/main/content/_model/meta/Rel
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
+import { PropertyType } from 'app/main/content/_model/meta/Property';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export class ClassOptionsOverlayContentData {
     marketplace: Marketplace;
@@ -23,9 +25,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     @Output() resultData = new EventEmitter<ClassOptionsOverlayContentData>();
 
     relationshipPalettes = CConstants.relationshipPalettes;
-
+    propertyTypePalettes = CConstants.propertyTypePalettes;
     constructor(
         private dialogFactory: DialogFactoryDirective,
+        private _sanitizer: DomSanitizer,
 
     ) { }
 
@@ -43,11 +46,22 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     getImagePathForRelationship(relationshipType: RelationshipType) {
-        return RelationshipType.getImagePathFromRelationshipType(relationshipType);
+        return this.relationshipPalettes.rows.find(r => r.id === relationshipType).imgPath;
     }
 
     getLabelForRelationship(relationshipType: RelationshipType) {
         return RelationshipType.getLabelFromRelationshipType(relationshipType);
+    }
 
+    getImagePathPropertyType(propertyType: PropertyType) {
+        return this.propertyTypePalettes.find(p => p.id === propertyType).imgPath;
+    }
+
+    getPropertyEntryStyle(index: number) {
+        if (index < this.inputData.classDefinition.properties.length - 1) {
+            return this._sanitizer.bypassSecurityTrustStyle('height: 20px; border-bottom: solid 1px rgb(80, 80, 80)');
+        } else {
+            return this._sanitizer.bypassSecurityTrustStyle('height: 20px; border-bottom: none');
+        }
     }
 }

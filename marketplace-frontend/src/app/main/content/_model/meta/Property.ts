@@ -1,5 +1,5 @@
-import { isNullOrUndefined } from "util";
-import { PropertyConstraint } from "./Constraint";
+import { isNullOrUndefined } from 'util';
+import { PropertyConstraint } from './Constraint';
 
 export class PropertyDefinition<T> {
     id: string;
@@ -95,8 +95,24 @@ export class PropertyInstance<T> {
 
 
 export enum PropertyType {
-    TEXT = "TEXT", LONG_TEXT = "LONG_TEXT", WHOLE_NUMBER = "WHOLE_NUMBER", FLOAT_NUMBER = "FLOAT_NUMBER", BOOL = "BOOL",
-    DATE = "DATE", COMPETENCE = "COMPETENCE", LIST = "LIST", ENUM = "ENUM", MAP = "MAP", GRAPH = "GRAPH", MULTI = "MULTI"
+    TEXT = 'TEXT', LONG_TEXT = 'LONG_TEXT', WHOLE_NUMBER = 'WHOLE_NUMBER', FLOAT_NUMBER = 'FLOAT_NUMBER', BOOL = 'BOOL',
+    DATE = 'DATE', COMPETENCE = 'COMPETENCE', LIST = 'LIST', ENUM = 'ENUM', MAP = 'MAP', GRAPH = 'GRAPH', MULTI = 'MULTI'
+}
+
+export namespace PropertyType {
+    export function getLabelForPropertyType(propertyType: string) {
+        switch (propertyType) {
+            case PropertyType.TEXT: return 'Text';
+            case PropertyType.LONG_TEXT: return 'Text Field';
+            case PropertyType.WHOLE_NUMBER: return 'Number';
+            case PropertyType.FLOAT_NUMBER: return 'Float';
+            case PropertyType.BOOL: return 'Boolean';
+            case PropertyType.DATE: return 'Date';
+            case PropertyType.LIST: return 'List';
+            case PropertyType.ENUM: return 'Enum';
+
+        }
+    }
 }
 
 
@@ -105,8 +121,8 @@ export class PropertyItem {
     name: string;
 }
 
-export class PropertyParentSubTemplate extends PropertyItem { };
-export class PropertyParentTemplate extends PropertyItem { };
+export class PropertyParentSubTemplate extends PropertyItem { }
+export class PropertyParentTemplate extends PropertyItem { }
 
 export class Rule {
     id: string;
@@ -121,7 +137,7 @@ export class Rule {
 
 
 export enum RuleKind {
-    REQUIRED = "REQUIRED", REQUIRED_TRUE = "REQUIRED_TRUE", REGEX_PATTERN = "REGEX_PATTERN", MAX_LENGTH = "MAX_LENGTH",
-    MIN_LENGTH = "MIN_LENGTH", MAX = "MAX", MIN = "MIN", REQUIRED_OTHER = "REQUIRED_OTHER", MIN_OTHER = "MIN_OTHER",
-    MAX_OTHER = "MAX_OTHER"
+    REQUIRED = 'REQUIRED', REQUIRED_TRUE = 'REQUIRED_TRUE', REGEX_PATTERN = 'REGEX_PATTERN', MAX_LENGTH = 'MAX_LENGTH',
+    MIN_LENGTH = 'MIN_LENGTH', MAX = 'MAX', MIN = 'MIN', REQUIRED_OTHER = 'REQUIRED_OTHER', MIN_OTHER = 'MIN_OTHER',
+    MAX_OTHER = 'MAX_OTHER'
 }

@@ -57,7 +57,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   modelUpdated: boolean;
 
   allPropertyDefinitions: PropertyDefinition<any>[];
-  sidebarPalettes = CConstants.sidebarPalettes;
   relationshipPalettes = CConstants.relationshipPalettes;
 
   popupMenu: EditorPopupMenu;

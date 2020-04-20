@@ -36,9 +36,14 @@ export namespace RelationshipType {
         }
     }
 
-    export function getImagePathFromRelationshipType(relationshipType: RelationshipType) {
-        return "TODO";
-    }
+    // export function getIconPathForRelationshipType(relationshipType: RelationshipType) {
+    //     switch (relationshipType) {
+    //         case RelationshipType.INHERITANCE: return 'Vererbung';
+    //         case RelationshipType.ASSOCIATION: return 'Assoziation';
+    //         case RelationshipType.COMPOSITION: return 'Komposition';
+    //         case RelationshipType.AGGREGATION: return 'Aggreation';
+    //     };
+    // }
 }
 
 export enum AssociationCardinality {

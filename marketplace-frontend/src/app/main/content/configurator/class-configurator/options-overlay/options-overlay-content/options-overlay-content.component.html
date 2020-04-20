@@ -40,16 +40,22 @@
 
                 <div style="width: 65%;" class="mt-4 mr-4">
                     <div class="normal-label">Properties und Enums</div>
-                    <div style=" background: cadetblue; height: 133px; overflow-y: scroll; overflow-x: hidden">
+                    <div
+                        style="height: 143px; overflow-y: scroll; overflow-x: hidden; border: solid 1px rgb(80, 80, 80); border-radius: 4px">
 
-                        <div *ngFor="let property of inputData.classDefinition.properties" fxLayout="row">
-                            <div fxFlex="80">
-                                {{ property.name }}
+                        <div *ngFor="let property of inputData.classDefinition.properties; let i = index"
+                            [style]="getPropertyEntryStyle(i)">
+
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <div style="width: 15px; height: 15px;" class="ml-8">
+                                    <img width="15" height="15" [src]="getImagePathPropertyType(property.type)">
+                                </div>
+
+                                <div class="pl-8">
+                                    {{ property.name }}
+                                </div>
                             </div>
 
-                            <div>
-                                {{ property.type }}
-                            </div>
                         </div>
 
                     </div>
@@ -78,11 +84,12 @@
                     <div></div>
                     <div fxLayout="row" fxLayoutAlign="start center">
                         <div>
-                            <img width="40" height="40" [src]="getImagePathForRelationship(relationshipType)">
+                            <img width="40" height="40"
+                                [src]="getImagePathForRelationship(inputData.relationship.relationshipType)">
                         </div>
 
                         <div class="pl-4">
-                            {{getLabelForRelationship(relationshipType)}}
+                            {{getLabelForRelationship(inputData.relationship.relationshipType)}}
                         </div>
                     </div>
                     <div></div>
