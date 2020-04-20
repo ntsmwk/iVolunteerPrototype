@@ -39,7 +39,7 @@ export class AchievementsComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private spinner: NgxSpinnerService,
     private localRepositoryService: LocalRepositoryService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     let t = timer(3000);
@@ -68,7 +68,7 @@ export class AchievementsComponent implements OnInit {
     if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
         await this.localRepositoryService
-          .findByVolunteer(this.volunteer)
+          .findClassInstancesByVolunteer(this.volunteer)
           .toPromise()
       );
     } else {
@@ -97,12 +97,10 @@ export class AchievementsComponent implements OnInit {
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
-    console.error(this.classInstanceDTOs);
-    if (this.classInstanceDTOs && this.classInstanceDTOs.length > 0) {
-      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
-        return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
-      });
-    }
+
+    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((ci) => {
+      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
+    });
   }
 
   public tabChanged(tabChangeEvent: MatTabChangeEvent) {

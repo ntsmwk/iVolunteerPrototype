@@ -45,11 +45,11 @@ public class ClassDefinitionService {
 
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-
+		System.out.println(tenantId);
 		ids.forEach(id -> {
 			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
-
+		
 		return classDefinitions;
 	}
 

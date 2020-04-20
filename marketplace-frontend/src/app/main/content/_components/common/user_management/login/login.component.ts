@@ -1,21 +1,22 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
-} from "@angular/forms";
-import { Router } from "@angular/router";
-import { HttpResponse } from "@angular/common/http";
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
 
-import { FuseConfigService } from "@fuse/services/config.service";
-import { fuseAnimations } from "@fuse/animations";
-import { LoginService } from "../../../../_service/login.service";
+import { FuseConfigService } from '@fuse/services/config.service';
+import { fuseAnimations } from '@fuse/animations';
+import { LoginService } from '../../../../_service/login.service';
+
 
 @Component({
-  selector: "fuse-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+  selector: 'fuse-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
   providers: [LoginService],
   animations: fuseAnimations
 })
@@ -27,12 +28,12 @@ export class FuseLoginComponent implements OnInit {
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {
     const layout = {
-      navigation: "none",
-      toolbar: "none",
-      footer: "none"
+      navigation: 'none',
+      toolbar: 'none',
+      footer: 'none'
     };
     this.fuseConfig.setConfig({ layout: layout });
 
@@ -44,8 +45,8 @@ export class FuseLoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required)
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -76,8 +77,8 @@ export class FuseLoginComponent implements OnInit {
         .login(this.loginForm.value.username, this.loginForm.value.password)
         .toPromise()
         .then((response: HttpResponse<any>) => {
-          localStorage.setItem("token", response.headers.get("Authorization"));
-          this.router.navigate(["/main/dashboard"]);
+          localStorage.setItem('token', response.headers.get('Authorization'));
+          this.router.navigate(['/main/dashboard']);
         });
     }
   }
