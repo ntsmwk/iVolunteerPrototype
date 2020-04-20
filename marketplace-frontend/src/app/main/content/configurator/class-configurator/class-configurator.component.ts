@@ -167,8 +167,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         || cell.cellType === MyMxCellType.ADD_ASSOCIATION_ICON
         || cell.cellType === MyMxCellType.OPTIONS_ICON
         || (outer.clickToDeleteMode && cell.cellType === MyMxCellType.CLASS)
+        || (outer.clickToDeleteMode && MyMxCellType.isRelationship(cell.cellType))
       ) {
-
         return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
       }
     };
