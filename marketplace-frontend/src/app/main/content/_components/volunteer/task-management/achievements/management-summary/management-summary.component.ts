@@ -79,7 +79,6 @@ export class ManagementSummaryComponent implements OnInit {
 
     this.comparisonYear = 2019;
 
-    
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -102,7 +101,7 @@ export class ManagementSummaryComponent implements OnInit {
 
     if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.localRepositoryService.findByVolunteer(this.volunteer).toPromise());
+        await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
 
     } else {
       if (!isNullOrUndefined(this.marketplace)) {
@@ -212,11 +211,11 @@ export class ManagementSummaryComponent implements OnInit {
   }
 
   getMemberSince(tenantId) {
-    let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
+    let t = this.classInstanceDTOs.filter(ci => {
       return ci.tenantId === tenantId
     });
 
-    let uniqueYears = [...new Set(classInstancesTenant.map(item => new Date(item.dateFrom).getFullYear().toString()))];
+    let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear().toString()))];
     uniqueYears.sort;
 
     return uniqueYears[0];
