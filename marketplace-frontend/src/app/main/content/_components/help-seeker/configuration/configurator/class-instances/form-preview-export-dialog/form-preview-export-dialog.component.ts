@@ -1,17 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../../../../_service/meta/core/class/class-definition.service';
 import { ClassInstance } from '../../../../../../_model/meta/Class';
-import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
-import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
+import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { PropertyInstance, ClassProperty } from 'app/main/content/_model/meta/Property';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { ClassProperty } from 'app/main/content/_model/meta/Property';
 import { isNullOrUndefined } from 'util';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SaveAsDialogComponent, SaveAsDialogData } from '../../configurator-editor/save-as-dialog/save-as-dialog.component';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
@@ -73,6 +69,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       }).then(() => {
         this.currentFormConfiguration = this.formConfigurations.pop();
         this.isLoaded = true;
+
+        const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
+        this.handleExportClick(returnData);
+        this.handleCloseClick();
       });
     });
 

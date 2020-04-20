@@ -610,6 +610,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
           if (c.id === parent.id) {
             this.dialogFactory.addPropertyDialogGeneric(this.allPropertyDefinitions, c.properties).then(
               (result: { propertyItems: PropertyItem[], key: string }) => {
+
                 if (!isNullOrUndefined(result)) {
 
                   if (result.key === 'new_property') {
@@ -1088,14 +1089,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   openGraph(configurator: Configurator) {
     this.currentConfigurator = configurator;
-
-    console.log(this.helpseeker);
-
     Promise.all([
       // grab classDefinitionss from server
       this.classDefinitionService.getClassDefinitionsById(this.marketplace, configurator.classDefinitionIds, this.helpseeker.tenantId).toPromise().then((classDefinitions: ClassDefinition[]) => {
-
-        console.log(classDefinitions);
         if (!isNullOrUndefined(classDefinitions)) {
           this.configurableClasses = classDefinitions;
         } else {
@@ -1143,7 +1139,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
       }) as myMxCell;
 
       if (isNullOrUndefined(cell)) {
-        console.log(r);
+        // console.log(r);
       }
 
       if (!isNullOrUndefined(cell.source)) {
@@ -1193,9 +1189,7 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
 
   showZoomLevel() {
     let scale = this.graph.view.getScale();
-    console.log(this.graph.view.getScale());
     this.graph.zoomActual();
-    console.log(this.graph.view.getScale());
     this.graph.view.setScale(scale);
   }
 
