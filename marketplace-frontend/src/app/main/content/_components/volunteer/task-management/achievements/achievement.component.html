@@ -42,17 +42,6 @@
         dynamicHeight="true"
         (selectedTabChange)="tabChanged($event)"
       >
-
-      <mat-tab label="Kompetenzen">
-        <ng-template matTabContent>
-          <fuse-competencies
-            [classInstanceDTOs]="filteredClassInstanceDTOs"
-            [selectedTenants]="selectedTenants">
-          </fuse-competencies>
-        </ng-template>
-      </mat-tab>
-
-
         <mat-tab label="Tätigkeiten">
           <!-- with ng-temp = lazy loading:  -->
           <!-- I would prefer not to lazy load, since db fetch takes foooor ever, each time tab is changed-->
@@ -73,7 +62,14 @@
           </ng-template>
         </mat-tab>
 
-
+        <mat-tab label="Kompetenzen">
+          <ng-template matTabContent>
+            <fuse-competencies
+              [classInstanceDTOs]="filteredClassInstanceDTOs"
+              [selectedTenants]="selectedTenants">
+            </fuse-competencies>
+          </ng-template>
+        </mat-tab>
 
         <mat-tab label="Funktionen">
           <ng-template matTabContent>
