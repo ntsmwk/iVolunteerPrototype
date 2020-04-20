@@ -47,7 +47,7 @@ export class ImportComponent implements OnInit {
             this.marketplace = marketplace;
 
             this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
+              .getAllClassDefinitionsWithoutRootAndEnums(
                 marketplace,
                 this.helpseeker.tenantId
               )
