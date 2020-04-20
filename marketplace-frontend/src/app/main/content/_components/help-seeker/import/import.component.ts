@@ -28,8 +28,8 @@ export class ImportComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
-      file: new FormControl(undefined),
       classDefinition: new FormControl(undefined),
+      file: new FormControl(undefined),
     });
   }
 

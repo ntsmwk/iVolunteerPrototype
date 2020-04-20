@@ -42,10 +42,10 @@ export class AchievementsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // let t = timer(3000);
-    // t.subscribe(() => {
-    //     this.timeout = true;
-    // });
+    let t = timer(3000);
+    t.subscribe(() => {
+      this.timeout = true;
+    });
 
     //this.spinner.show();
 

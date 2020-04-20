@@ -7,6 +7,14 @@
     <h1>Freiwilligenpasseinträge importieren</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative;"></div>
   </div>
+
+  <div style="padding-top: 20px;"></div>
+
+  <mat-card class="infoText"
+    >Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende
+    Konfiguration und das dazugehörige JSON-File aus.
+  </mat-card>
+
   <form
     form
     style="padding-top: 12px; padding-left: 40px;"
@@ -15,13 +23,12 @@
     fxLayoutGap="20px"
     fxLayoutAlign="start"
     (submit)="save()"
-    [formGroup]="ruleForm"
+    [formGroup]="importForm"
   >
-    <!-- File upload -->
     <div fxLayout="row" fxLayoutAlign="start start">
       <mat-form-field style="width: 300px;">
         <mat-label>Freiwilligenpasseintrag</mat-label>
-        <mat-select formControlName="target">
+        <mat-select formControlName="classDefinition">
           <mat-option *ngFor="let cd of classDefinitions" [value]="cd">
             {{ cd.name }}
           </mat-option>
@@ -29,6 +36,15 @@
       </mat-form-field>
     </div>
 
+    <input
+      class="ng-hide"
+      id="input-file-id"
+      type="file"
+      formControlName="file"
+    />
+    <label for="input-file-id" class="md-button md-raised md-primary"
+      >Wähle</label
+    >
     <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
       <button mat-raised-button type="submit" color="primary">Speichern</button>
       <div style="padding-right: 5px;"></div>
