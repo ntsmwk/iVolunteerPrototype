@@ -1,4 +1,4 @@
-<mat-accordion multi="true">
+<mat-accordion multi="true" *ngIf="selectedTenants.length > 0">
   <mat-expansion-panel [expanded]="false">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -7,7 +7,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="containsFF() && classInstanceDTOs.length > 0">
+    <div *ngIf="classInstanceDTOs.length > 0">
     <mat-card class="card">
       <mat-card-header>
         <mat-card-title>Lernbereitschaft</mat-card-title>
@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        <div *ngIf="meanYearData">
+        <!-- <div *ngIf="meanYearData">
           <table class="paleBlueRows">
             <thead>
               <tr>
@@ -68,18 +68,10 @@
                 <td><b>{{currYearData[0][1].number-meanYearData[0][1].number | number : '1.2-2'}}</b>
                 </td>
               </tr>
-              <!-- <tr>
-                <td>{{meanYearData[0][2].name}}</td>
-               TODO: rework hardcoded "0": check for existence of currYearData[0][2] ("Kurs"), if undefined use 0 
-                TODO: always show sign, eg "+4" or "-3"
-                <td>0</td>
-                <td><b>0</b></td>
-                <td><b>{{0-meanYearData[0][2].number | number : '1.2-2'}}</b></td>
-              </tr> -->
               <tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
       </mat-card-content>
     </mat-card>
   </div>
@@ -94,7 +86,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="containsFF() && classInstanceDTOs.length > 0">
+    <div *ngIf="classInstanceDTOs.length > 0">
     <mat-card class="card">
       <mat-card-header>
         <mat-card-title>Anpassungsfähigkeit</mat-card-title>
