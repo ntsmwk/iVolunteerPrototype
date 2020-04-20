@@ -30,6 +30,7 @@ export class ImportComponent implements OnInit {
     this.importForm = formBuilder.group({
       classDefinition: new FormControl(undefined),
       file: new FormControl(undefined),
+      fileBtn: new FormControl(undefined),
     });
   }
 

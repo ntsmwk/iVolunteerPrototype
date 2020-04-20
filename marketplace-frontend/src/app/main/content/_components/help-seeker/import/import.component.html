@@ -19,35 +19,43 @@
     form
     style="padding-top: 12px; padding-left: 40px;"
     name="form"
-    fxLayout="column"
+    fxLayout="row"
     fxLayoutGap="20px"
     fxLayoutAlign="start"
     (submit)="save()"
     [formGroup]="importForm"
   >
-    <div fxLayout="row" fxLayoutAlign="start start">
-      <mat-form-field style="width: 300px;">
-        <mat-label>Freiwilligenpasseintrag</mat-label>
-        <mat-select formControlName="classDefinition">
-          <mat-option *ngFor="let cd of classDefinitions" [value]="cd">
-            {{ cd.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <mat-form-field style="width: 300px;">
+      <mat-label>Freiwilligenpasseintrag</mat-label>
+      <mat-select formControlName="classDefinition">
+        <mat-option *ngFor="let cd of classDefinitions" [value]="cd">
+          {{ cd.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <input
-      class="ng-hide"
-      id="input-file-id"
-      type="file"
-      formControlName="file"
-    />
-    <label for="input-file-id" class="md-button md-raised md-primary"
+    <mat-form-field>
+      <input class="ng-hide" id="input-file-id" type="file" hidden />
+      <div
+        mat-raised-button
+        color="primary"
+        style="padding: 10px;"
+        formControlName="file"
+      >
+        Wähle Datei
+      </div>
+    </mat-form-field>
+
+    <!-- <label for="input-file-id" class="md-button md-raised md-primary"
       >Wähle</label
+    > -->
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      style="padding: 10px;"
     >
-    <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
-      <button mat-raised-button type="submit" color="primary">Speichern</button>
-      <div style="padding-right: 5px;"></div>
-    </div>
+      Speichern
+    </button>
   </form>
 </div>
