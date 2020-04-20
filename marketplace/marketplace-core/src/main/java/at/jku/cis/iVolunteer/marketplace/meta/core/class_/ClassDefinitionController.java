@@ -30,6 +30,11 @@ public class ClassDefinitionController {
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getAllClassDefinitionsWithoutEnums(tenantId);
 	}
+	
+	@GetMapping("meta/core/class/definition/all/no-enum-no-head/tenant/{tenantId}")
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(@PathVariable("tenantId") String tenantId) {
+		return classDefinitionService.getAllClassDefinitionsWithoutEnumsAndHeads(tenantId);
+	}
 
 	@GetMapping("/meta/core/class/definition/{id}/tenant/{tenantId}")
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id,

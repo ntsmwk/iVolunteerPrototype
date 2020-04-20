@@ -80,35 +80,38 @@ public class ClassDefinitionService {
 		return classDefinitions;
 	}
 
-//	private List<ClassDefinition> filterOrg(String organisation, List<ClassDefinition> classDefinitions) {
-//		if (organisation == null) {
-//			return classDefinitions;
-//		}
-//		if (organisation.equals("FF")) {
-//			Configurator configurator = configuratorRepository.findOne("slot2");
-//			return classDefinitions.stream().filter(cd -> configurator.getClassDefinitionIds().contains(cd.getId())|| cd.getName().equals("PersonTask"))
-//					.collect(Collectors.toList());
-//		}
-//		if (organisation.equals("MV")) {
-//			Configurator configurator = configuratorRepository.findOne("slot4");
-//			return classDefinitions.stream().filter(cd -> configurator.getClassDefinitionIds().contains(cd.getId())|| cd.getName().equals("PersonTask"))
-//					.collect(Collectors.toList());
-//		}
-//		return new ArrayList<>();
-//	}
-
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
+		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
+				.filter(cd -> filterEnumClasses(cd)).collect(Collectors.toList());
+		return classDefinitions;
+	}
+
+	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(String tenantId) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumsAndHeadClasses(cd)).collect(Collectors.toList());
 		return classDefinitions;
 	}
 
+	
 	private boolean filterEnumsAndHeadClasses(ClassDefinition cd) {
 		// @formatter:off
 		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
 				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
 				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
-				|| cd.getClassArchetype() == ClassArchetype.TASK;		 
+				|| cd.getClassArchetype() == ClassArchetype.TASK;
+		// @formatter:on
+	}
+	
+	private boolean filterEnumClasses(ClassDefinition cd) {
+		// @formatter:off
+		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
+				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
+				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
+				|| cd.getClassArchetype() == ClassArchetype.TASK
+				|| cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT_HEAD
+				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE_HEAD
+				|| cd.getClassArchetype() == ClassArchetype.FUNCTION_HEAD
+				|| cd.getClassArchetype() == ClassArchetype.TASK_HEAD;
 		// @formatter:on
 	}
 
