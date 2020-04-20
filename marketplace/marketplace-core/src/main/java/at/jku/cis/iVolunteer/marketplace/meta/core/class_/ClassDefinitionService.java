@@ -49,8 +49,6 @@ public class ClassDefinitionService {
 		ids.forEach(id -> {
 			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
-
-//		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 		
 		return classDefinitions;
 	}

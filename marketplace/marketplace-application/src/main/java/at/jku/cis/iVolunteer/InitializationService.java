@@ -74,7 +74,7 @@ public class InitializationService {
 //		if(environment.acceptsProfiles("dev")) {}
 
 		addStandardPropertyDefinitions();
-		addTestConfigClasses();
+//		addTestConfigClasses();
 		addConfigurators();
 
 		addiVolunteerAPIClassDefinition();
