@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
@@ -1341,6 +1341,20 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.height = '35px';
     this.rightSidebarContainer.nativeElement.style.width = '35px';
   }
+
+  /**
+   * ******KEY LISTENER/HANDLER******
+   */
+
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Delete') {
+      const cells = this.graph.getSelectionCells() as MyMxCell[];
+      this.deleteCells(cells);
+    }
+  }
+
 
 
   /**
