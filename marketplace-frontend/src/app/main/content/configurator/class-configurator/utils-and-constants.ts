@@ -60,8 +60,8 @@ const mxStyles = {
   // classHfiller: 'fillColor=none;strokeColor=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
   // property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=1;fillColor=rgb(186,255,171);fontColor=rgb(54,115,41);strokeColor=rgb(54,115,41);align=left;html=1;overflow=hidden',
-  property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
-  propertyEnum: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;align=left;html=1;overflow=hidden;' + 'portConstraint=eastwest',
+  property: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' + 'fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
+  propertyEnum: 'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' + 'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;align=left;html=1;overflow=hidden;' + 'portConstraint=eastwest',
 
   // Icons
   // addIcon: 'shape=image;image=/assets/mxgraph_resources/images/add_green.png;noLabel=1;imageBackground=none;imageBorder=none;movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
@@ -76,10 +76,7 @@ const mxStyles = {
   // Relationships
   // inheritance: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;',
   inheritanceEnum: 'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
-
   inheritance: 'sideToSideEdgeStyle=1;endArrow=none;startArrow=block;startSize=16;startFill=0;curved=1;html=1;strokeColor=#000e8a;',
-
-
 
   association: 'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
   associationCell: 'resizable=0;html=1;align=left;verticalAlign=bottom;labelBackgroundColor=#ffffff;fontSize=10;',

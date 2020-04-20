@@ -40,6 +40,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     private route: ActivatedRoute,
     private propertyDefinitionService: PropertyDefinitionService,
     private objectIdService: ObjectIdService,
+    private dialogFactory: DialogFactoryDirective,
   ) { }
 
   @Input() marketplace: Marketplace;
@@ -562,6 +563,18 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   */
 
   private deleteCells(cells: MyMxCell[]) {
+    if (this.confirmDelete) {
+      this.dialogFactory.confirmationDialog('Löschen Bestätigen', 'Wirklich löschen?').then((ret: boolean) => {
+        if (ret) {
+          this.performDelete(cells);
+        }
+      });
+    } else {
+      this.performDelete(cells);
+    }
+  }
+
+  private performDelete(cells: MyMxCell[]) {
     const removedCells = this.graph.removeCells(cells, this.deleteRelationships) as MyMxCell[];
     console.log(removedCells);
 
@@ -571,7 +584,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteFromModel(removedCells);
   }
 
-  deleteFromModel(removedCells: MyMxCell[]) {
+  private deleteFromModel(removedCells: MyMxCell[]) {
 
     for (const cell of removedCells) {
 
@@ -953,7 +966,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = event.getProperty('cell') as MyMxCell;
 
     if (!isNullOrUndefined(cell)) {
-      if (cell.cellType === MyMxCellType.CLASS) {
+      if (cell.cellType === MyMxCellType.CLASS || MyMxCellType.isRelationship(cell.cellType)) {
         this.deleteCells([cell]);
       }
     }
@@ -1346,7 +1359,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    * ******KEY LISTENER/HANDLER******
    */
 
-
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Delete') {
@@ -1354,8 +1366,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.deleteCells(cells);
     }
   }
-
-
 
   /**
    * ******DEBUGGING******
