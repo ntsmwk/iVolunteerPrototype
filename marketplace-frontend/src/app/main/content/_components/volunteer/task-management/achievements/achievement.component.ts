@@ -29,6 +29,8 @@ export class AchievementsComponent implements OnInit {
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
   selectedTenants: Tenant[] = [];
+  subscribedTenants: string[] = [];
+
   isLocalRepositoryConnected: boolean;
 
   timeout: boolean = false;
@@ -52,6 +54,8 @@ export class AchievementsComponent implements OnInit {
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
+
+    this.subscribedTenants = this.volunteer.subscribedTenants;
 
     this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
       this.volunteer

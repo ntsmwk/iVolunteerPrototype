@@ -235,14 +235,19 @@
 
   <div style="padding-top: 20px;"></div>
 
-  <p *ngIf="!isLocalRepositoryConnected" class="alert alert-info">
+  <p *ngIf="
+      timeout &&
+      !isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Verbindung zu deinem
     lokalen Freiwilligenpass!
   </p>
 
   <p
     *ngIf="
-      selectedTenants.length === 0 && isLocalRepositoryConnected && tenants != 0
+      timeout &&
+      selectedTenants.length === 0 && 
+      isLocalRepositoryConnected && 
+      tenants != 0
     "
     class="alert alert-info"
   >
@@ -252,6 +257,7 @@
 
   <p
     *ngIf="
+      timeout &&
       filteredClassInstances.length === 0 &&
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected

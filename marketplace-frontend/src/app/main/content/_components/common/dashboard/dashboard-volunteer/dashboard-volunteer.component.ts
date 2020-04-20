@@ -20,6 +20,7 @@ import { ImageService } from "app/main/content/_service/image.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LocalRepositoryService } from 'app/main/content';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { timer } from 'rxjs';
 
 @Component({
   selector: "dashboard-volunteer",
@@ -60,6 +61,7 @@ export class DashboardVolunteerComponent implements OnInit {
   filteredClassInstances: ClassInstanceDTO[] = [];
 
   isLocalRepositoryConnected: boolean;
+  timeout: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -76,6 +78,11 @@ export class DashboardVolunteerComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    let t = timer(3000);
+    t.subscribe(() => {
+        this.timeout = true;
+    });
+
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );

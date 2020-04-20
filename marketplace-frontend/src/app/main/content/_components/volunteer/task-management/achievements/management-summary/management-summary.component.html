@@ -51,7 +51,7 @@
     <div style="height: 30px;"></div>
     <div
       *ngIf="
-        timeout && classInstanceDTOs.length > 0 && isLocalRepositoryConnected
+        timeout && classInstanceDTOs.length > 0
       "
     >
       <h1 class="engagement">Engagement gesamt</h1>
@@ -177,7 +177,8 @@
     </div>
   </div>
 
-  <p *ngIf="timeout && marketplace === undefined" class="alert alert-info">
+  <p *ngIf="timeout && 
+    tenantMap.size === 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
     beigetreten!
   </p>
