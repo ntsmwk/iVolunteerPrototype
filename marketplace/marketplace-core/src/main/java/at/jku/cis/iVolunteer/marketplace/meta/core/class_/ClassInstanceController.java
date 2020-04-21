@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -23,6 +25,7 @@ public class ClassInstanceController {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceMapper classInstanceMapper;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -41,17 +44,15 @@ public class ClassInstanceController {
 
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
-		
-	
+
 	@GetMapping("/meta/core/class/instance/by-id/{classInstanceId}/tenant/{tenantId}")
 	private ClassInstance getClassInstanceById(@PathVariable("classInstanceId") String classInstanceId,
 			@PathVariable("tenantId") String tenantId) {
 		ClassInstance ci = classInstanceRepository.getByIdAndTenantId(classInstanceId, tenantId);
-		
+
 		return ci;
 	}
-	
-	
+
 	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
 	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
 			@RequestBody List<String> tenantIds) {
@@ -63,6 +64,24 @@ public class ClassInstanceController {
 		});
 
 		return classInstances;
+	}
+
+	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/tenant/{tenantId}/user/{volunteerId}")
+	public void createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
+			@PathVariable String tenantId, @PathVariable String volunteerId,
+			@RequestBody Map<String, String> properties) {
+		System.out.println(classDefinitionId);
+		System.out.println(tenantId);
+		System.out.println(volunteerId);
+		System.out.println(properties);
+		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
+				tenantId);
+		if (classDefinition != null) {
+			ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
+			classInstance.setUserId(volunteerId);
+
+		}
+
 	}
 
 	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")

@@ -15,6 +15,7 @@ import {
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { PropertyInstance } from "app/main/content/_model/meta/Property";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 
 @Component({
   selector: "import",
@@ -34,7 +35,7 @@ export class ImportComponent implements OnInit {
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
-
+    private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
@@ -72,34 +73,36 @@ export class ImportComponent implements OnInit {
     );
   }
 
-  save() {
-    this.importForm.value.file;
+  async save() {
+    // TODO check all form are inputted.. ;)
 
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      let importContent = fileReader.result;
-      this.handleFileContent(importContent);
-      // this.importService.import();
+    fileReader.onload = async (e) => {
+      let contentObject = JSON.parse(<string>fileReader.result);
+      for (const entry of contentObject) {
+        console.error(entry);
+        await this.classInstanceService
+          .createClassInstanceByClassDefinitionId(
+            this.marketplace,
+            this.importForm.value.classDefinition.id,
+            this.importForm.value.volunteer.id,
+            this.helpseeker.tenantId,
+            entry
+          )
+          .toPromise();
+      }
     };
     fileReader.readAsText(this.importForm.value.file.files[0]);
-    // TODO import call...
-    //   this.derivationRuleService
-    //     .save(this.marketplace, this.derivationRule)
-    //     .toPromise()
-    //     .then(() =>
-    //       this.loadDerivationRule(this.marketplace, this.derivationRule.id)
-    //     );
-    // }
   }
 
-  handleFileContent(content) {
-    const classInstances: ClassInstance[] = [];
-    const propertyInstances: PropertyInstance<any>[] = [];
-    let fileContentObject = JSON.parse(content);
-    for (const entry of fileContentObject) {
-      this.handleEntry(entry);
-    }
-  }
+  // handleFileContent(content) {
+  //   const classInstances: ClassInstance[] = [];
+  //   const propertyInstances: PropertyInstance<any>[] = [];
+  //   let fileContentObject = JSON.parse(content);
+  //   for (const entry of fileContentObject) {
+  //     this.handleEntry(entry);
+  //   }
+  // }
 
   handleEntry(entry) {
     for (const classProperty of Object.keys(entry)) {
@@ -109,19 +112,7 @@ export class ImportComponent implements OnInit {
       // const values = [event.formGroup.value[classProperty.id]];
       // propertyInstances.push(new PropertyInstance(classProperty, values));
     }
-    // for (const enumRepresentation of this.currentFormConfiguration.formEntry
-    //   .enumRepresentations) {
-    //   const values = [
-    //     event.formGroup.value[enumRepresentation.classDefinition.id]
-    //   ];
-    //   const propertyInstance = new PropertyInstance(
-    //     enumRepresentation.classDefinition.properties[0],
-    //     values
-    //   );
-    //   propertyInstance.name = enumRepresentation.classDefinition.name;
-    //   propertyInstance.id = enumRepresentation.id;
-    //   propertyInstances.push(propertyInstance);
-    // }
+
     // for (const selectedVolunteer of this.selectedVolunteers) {
     //   const classInstance: ClassInstance = new ClassInstance(
     //     this.currentFormConfiguration.formEntry.classDefinitions[0],
