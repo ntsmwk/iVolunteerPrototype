@@ -9,7 +9,8 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  MatCardModule
+  MatCardModule,
+  MatIconModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 

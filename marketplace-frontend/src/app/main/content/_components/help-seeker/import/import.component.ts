@@ -30,6 +30,7 @@ export class ImportComponent implements OnInit {
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
+    private importService: ImportService,
 
     private classDefinitionService: ClassDefinitionService
   ) {
@@ -69,6 +70,13 @@ export class ImportComponent implements OnInit {
   }
 
   save() {
+    this.importForm.value.file;
+
+    let fileReader = new FileReader();
+    fileReader.onload = e => {
+      let importContent = fileReader.result;
+      this.importService.
+    fileReader.readAsText(this.importForm.value.file.files[0]);
     // TODO import call...
     //   this.derivationRuleService
     //     .save(this.marketplace, this.derivationRule)

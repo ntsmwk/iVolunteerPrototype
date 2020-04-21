@@ -9,7 +9,7 @@
   <mat-card class="infoText">Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende Konfiguration und das dazugehörige JSON-File aus.
   </mat-card>
 
-  <form form style="padding-top: 12px; padding-left: 40px;" name="form" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start" (submit)="save()" [formGroup]="importForm">
+  <form form style="padding-top: 12px; padding-left: 40px;" name="form" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start" [formGroup]="importForm">
     <mat-form-field style="width: 300px;">
       <mat-label>Freiwilligenpasseintrag</mat-label>
       <mat-select formControlName="classDefinition">
@@ -33,7 +33,7 @@
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
 
-    <button mat-raised-button type="submit" color="primary">
+    <button mat-raised-button type="submit" color="primary" (click)="save()">
       Speichern
     </button>
   </form>

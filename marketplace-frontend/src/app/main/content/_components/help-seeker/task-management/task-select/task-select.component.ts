@@ -79,7 +79,7 @@ export class FuseTaskSelectComponent implements OnInit {
   }
 
   private isFF() {
-    return this.tenant.name == "FF_Eidenberg";
+    return this.tenant.name == "FF Eidenberg";
   }
 
   private isMV() {

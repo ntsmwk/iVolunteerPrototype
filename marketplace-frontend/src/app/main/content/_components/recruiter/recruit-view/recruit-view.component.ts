@@ -56,7 +56,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   trainingData: any[];
   taskData: any[];
 
-  private tenantName: string = "FF_Eidenberg";
+  private tenantName: string = "FF Eidenberg";
   private tenantId: string[] = [];
 
   private volunteer: Volunteer;

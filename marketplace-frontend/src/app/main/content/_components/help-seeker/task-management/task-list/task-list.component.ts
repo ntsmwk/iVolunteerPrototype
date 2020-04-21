@@ -40,7 +40,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
 
   private participant: Participant;
 
-  private tenantName: string = "FF_Eidenberg";
+  private tenantName: string = "FF Eidenberg";
   private tenantId: string;
 
   constructor(
