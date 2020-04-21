@@ -64,4 +64,16 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
             return this._sanitizer.bypassSecurityTrustStyle('height: 20px; border-bottom: none');
         }
     }
+
+    addPropertyClicked() {
+
+    }
+
+    addEnumClicked() {
+
+    }
+
+    removeClicked() {
+
+    }
 }

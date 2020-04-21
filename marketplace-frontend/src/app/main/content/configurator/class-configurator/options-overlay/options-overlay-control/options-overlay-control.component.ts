@@ -2,7 +2,7 @@ import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitte
 import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
 
 const OVERLAY_WIDTH = 400;
-const OVERLAY_HEIGHT = 375;
+const OVERLAY_HEIGHT = 390;
 
 
 @Component({

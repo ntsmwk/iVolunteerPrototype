@@ -17,6 +17,18 @@
     margin: 0 auto;
   }
 
+  .icon-wrapper {
+    width: 65px; 
+    height: 65px; 
+
+    background: rgb(240, 240, 240); 
+    outline-color: grey; 
+    outline-style: solid; 
+    outline-width: 1px;
+
+    cursor: pointer;
+  }
+
   .field-container {
     margin-top: -16px;
 

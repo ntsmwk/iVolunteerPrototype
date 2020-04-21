@@ -1,7 +1,10 @@
 <div class="overlay-content m-8">
 
-    <div *ngIf="inputData.classDefinition">
+    <!--
+        Class Definition
+    -->
 
+    <div *ngIf="inputData.classDefinition">
         <div class="field-container">
             <div class="field-label">Name *</div>
             <mat-form-field style="width: 100%" appearance="outline" #label>
@@ -42,6 +45,11 @@
                     <div class="normal-label">Properties und Enums</div>
                     <div class="pl-12 outline-border properties-section">
 
+                        <div *ngIf="inputData.classDefinition.properties.length <= 0" class="pt-12"
+                            style="text-align: center">
+                            Keine Enums oder Properties vorhanden
+                        </div>
+
                         <div *ngFor="let property of inputData.classDefinition.properties; let i = index"
                             [style]="getPropertyEntryStyle(i)" class="property-entry">
 
@@ -66,7 +74,7 @@
                         <div style="padding-top: 3px"></div>
 
                         <button class="overlay-button" mat-stroked-button type="button" color="accent"
-                            (click)="undefined">
+                            (click)="addPropertyClicked()">
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <mat-icon>add</mat-icon>
                                 <div>Property</div>
@@ -76,7 +84,7 @@
                         <div style="padding-top: 2px"></div>
 
                         <button class="overlay-button" mat-stroked-button type="button" color="accent"
-                            (click)="undefined">
+                            (click)="addEnumClicked()">
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <mat-icon>add</mat-icon>
                                 <div>Enum</div>
@@ -86,7 +94,7 @@
                         <div style="padding-top: 2px"></div>
 
                         <button class="overlay-button" mat-stroked-button type="button" color="accent"
-                            (click)="undefined">
+                            (click)="removeClicked()">
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <mat-icon>remove</mat-icon>
                                 <div>Entfernen</div>
@@ -111,6 +119,10 @@
         </div>
 
     </div>
+
+    <!--
+        Relationship
+    -->
 
     <div *ngIf="inputData.relationship">
         <div fxLayout="column" fxLayoutAlign="start start">
@@ -150,89 +162,10 @@
         </div>
     </div>
 
-    <!-- <div class="pt-12"></div>
-    <div style="font-size: 10px; color: gray">Instanzierung</div>
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div></div>
-        <button class="preview-button" mat-stroked-button color="accent"
-            (click)="previewClicked(selectionIndex)">Vorschau Anzeigen</button>
-        <div></div>
-    </div>
-    <div class="pb-4"></div> -->
 
 
 
-
-
-
-
-
-    <!-- <div class="pb-4" fxLayout="row" fxLayoutAlign="start center">
-        <div fxLayout="column" fxLayoutAlign="start start" style="width: 185px">
-            <mat-label>Operator</mat-label>
-
-            <button mat-stroked-button [matMenuTriggerFor]="menu" style="width: 165px">
-                <div fxLayout="row" fxLayoutAlign="space-between center">
-                    <div></div>
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                        <div>
-                            <img width="40" height="40"
-                                [src]="getImagePathForMatchingOperatorType(matchingOperatorType)">
-                        </div>
-
-                        <div class="pl-4">
-                            {{getLabelForMatchingOperatorType(matchingOperatorType)}}
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
-            </button>
-            <mat-menu #menu="matMenu" class="custom">
-                <button *ngFor="let p of matchingOperatorPalettes" mat-button fxLayout="column"
-                    fxLayoutAlign="space-between center" [matTooltip]="p.label" (click)="matchingOperatorChanged(p)">
-                    <div></div>
-                    <div style="width: 40px; height: 40px"><img width="40" height="40" [src]="p.imgPath"></div>
-                    <div></div>
-                </button>
-            </mat-menu>
-
-        </div>
-
-        <mat-checkbox labelPosition="after" [(ngModel)]="necessary">
-            <div style="font-size: 14px">Notwendig</div>
-        </mat-checkbox>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="pt-4">
-        <mat-label>Unschärfe (in %)</mat-label>
-        <div fxLayout="row" fxLayoutAlign="start start">
-            <mat-slider min="0" max="100" step="" tickInterval="10" style="width: 100%" [ngModel]="fuzzyness"
-                (input)="sliderValueChanged($event)"></mat-slider>
-            <mat-form-field style="width: 55px; padding-left: 4px" appearance="outline">
-                <input matInput type="number" id="fuzzyness" [(ngModel)]="fuzzyness" min=0 max=100
-                    style=" text-align: right">
-            </mat-form-field>
-        </div>
-    </div>
-    <mat-divider></mat-divider>
-
-    <div fxLayout="row" fxLayoutAlign="start center">
-        <mat-label>Gewichtung</mat-label>
-        <mat-form-field style="width: 70px; padding-left: 4px" appearance="outline">
-            <input matInput type="number" id="weighting" [(ngModel)]="weighting" style="text-align: right" min="0"
-                max="9999">
-        </mat-form-field>
-    </div>
-
-
-    <div *ngIf="!fuzzynessValid || !weightingValid" style="font-weight: 700">
-        Ungültige Werte entdeckt und korrigiert.
-    </div> -->
-
-
-    <div style="position: absolute; bottom: 8px; right: 8px">
+    <div style="position: absolute; bottom: 8px; left: 8px">
         <button mat-stroked-button color="accent" class="confirm-button" (click)="onSubmit()">Speichern</button>
     </div>
 </div>
