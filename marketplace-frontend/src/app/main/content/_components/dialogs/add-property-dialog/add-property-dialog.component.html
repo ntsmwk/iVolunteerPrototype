@@ -16,14 +16,16 @@
   <mat-table #propertyTable class="property-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
 
     <ng-container matColumnDef="checkbox">
-      <mat-header-cell *matHeaderCellDef>
+      <!-- <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
-      </mat-header-cell>
+      </mat-header-cell> -->
+
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-          [checked]="selection.isSelected(row)">
+          [checked]="selection.isSelected(row)" [disabled]="isDisabled(row)">
         </mat-checkbox>
       </mat-cell>
     </ng-container>
@@ -51,6 +53,7 @@
       class="table-row"></mat-row>
   </mat-table>
 </mat-dialog-content>
+
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->

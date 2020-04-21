@@ -7,6 +7,7 @@ import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { MatTableDataSource } from '@angular/material';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
+import { isNullOrUndefined } from 'util';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
@@ -27,16 +28,19 @@ export class AddPropertyDialogComponent implements OnInit {
   ) {
   }
 
-  datasource = new MatTableDataSource<PropertyDefinition<any>>();
+  datasource = new MatTableDataSource<PropertyItem>();
   displayedColumns = ['checkbox', 'label', 'type'];
   loaded: boolean;
-  selection = new SelectionModel<PropertyDefinition<any>>(true, []);
+  selection = new SelectionModel<PropertyItem>(true, []);
+  initialProperties: PropertyDefinition<any>[];
 
 
 
   ngOnInit() {
     this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
+      this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
+      this.selection.select(...this.initialProperties);
       this.loaded = true;
     });
 
@@ -47,18 +51,23 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.datasource.data.length;
-    return numSelected === numRows;
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.datasource.data.length;
+  //   return numSelected === numRows;
+  // }
+
+  // /** Selects all rows if they are not all selected; otherwise clear selection. */
+  // masterToggle() {
+  //   if (this.isAllSelected()) {
+  //     this.selection.clear();
+  //     this.selection.select(...this.initialProperties);
+  //   } else {
+  //     this.datasource.data.forEach(row => this.selection.select(row));
+  //   }
+  // }
+
+  isDisabled(propertyDefinition: PropertyDefinition<any>) {
+    return !isNullOrUndefined(this.initialProperties.find(p => p.id === propertyDefinition.id));
   }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.datasource.data.forEach(row => this.selection.select(row));
-  }
-
-
 }
