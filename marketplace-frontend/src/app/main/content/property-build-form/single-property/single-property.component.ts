@@ -508,7 +508,7 @@ export class SinglePropertyComponent implements OnInit {
       this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then(() => {
 
         this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
-      
+
       });
 
       console.log("VALID")

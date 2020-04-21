@@ -119,10 +119,12 @@ export namespace PropertyType {
 export class PropertyItem {
     id: string;
     name: string;
+    type: PropertyType;
 }
 
-export class PropertyParentSubTemplate extends PropertyItem { }
-export class PropertyParentTemplate extends PropertyItem { }
+
+export class PropertyParentSubTemplate { id: string; name: string; }
+export class PropertyParentTemplate { id: string; name: string; }
 
 export class Rule {
     id: string;
