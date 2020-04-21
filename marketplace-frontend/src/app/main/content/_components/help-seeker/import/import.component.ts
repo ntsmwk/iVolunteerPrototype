@@ -11,6 +11,7 @@ import {
 } from "app/main/content/_model/participant";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
+import { ImportService } from "app/main/content/_service/import.service";
 
 @Component({
   selector: "import",
@@ -75,7 +76,8 @@ export class ImportComponent implements OnInit {
     let fileReader = new FileReader();
     fileReader.onload = e => {
       let importContent = fileReader.result;
-      this.importService.
+      // this.importService.import();
+    };
     fileReader.readAsText(this.importForm.value.file.files[0]);
     // TODO import call...
     //   this.derivationRuleService
