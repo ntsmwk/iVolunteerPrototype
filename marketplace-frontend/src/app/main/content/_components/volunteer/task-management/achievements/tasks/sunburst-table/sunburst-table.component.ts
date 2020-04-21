@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, OnChanges, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { ClassInstanceDTO } from '../../../../../../_model/meta/Class';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
@@ -445,6 +445,23 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
     return {
       'background-color': this.tt1ColorMap.get(tt1) + '9B' // opacity
     }
+  }
+
+  sortData(sort: Sort) {
+    this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'taskName': return this.compare(a.name, b.name, isAsc);
+        case 'taskDateFrom': return this.compare(a.dateFrom, b.dateFrom, isAsc);
+        case 'taskDuration': return this.compare(a.duration, b.duration, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+
+  compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
 }

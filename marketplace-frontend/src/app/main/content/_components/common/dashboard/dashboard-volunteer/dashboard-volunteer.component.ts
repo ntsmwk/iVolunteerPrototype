@@ -11,7 +11,7 @@ import { ClassInstanceService } from "../../../../_service/meta/core/class/class
 import { ClassInstanceDTO, } from "../../../../_model/meta/Class";
 import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { MatSort, MatPaginator } from "@angular/material";
+import { MatSort, MatPaginator, Sort } from "@angular/material";
 import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -32,13 +32,11 @@ export class DashboardVolunteerComponent implements OnInit {
   marketplace: Marketplace;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   isLoaded: boolean;
 
-  dataSourceComp = new MatTableDataSource<ClassInstanceDTO>();
-  dataSourceFeedback = new MatTableDataSource<ClassInstanceDTO>();
-  dataSourceRepository = new MatTableDataSource<ClassInstanceDTO>();
+  tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
   selectedTenants: Tenant[] = [];
 
   private displayedColumnsRepository: string[] = [
@@ -133,9 +131,9 @@ export class DashboardVolunteerComponent implements OnInit {
         (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
       );
 
-      this.dataSourceRepository.data = this.filteredClassInstances;
+      this.tableDataSource.data = this.filteredClassInstances;
       this.paginator.length = this.filteredClassInstances.length;
-      this.dataSourceRepository.paginator = this.paginator;
+      this.tableDataSource.paginator = this.paginator;
     }
   }
 
@@ -215,9 +213,9 @@ export class DashboardVolunteerComponent implements OnInit {
       (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
     );
 
-    this.dataSourceRepository.data = this.filteredClassInstances;
+    this.tableDataSource.data = this.filteredClassInstances;
     this.paginator.length = this.filteredClassInstances.length;
-    this.dataSourceRepository.paginator = this.paginator;
+    this.tableDataSource.paginator = this.paginator;
   }
 
   //---- Local Repository functions -----//
@@ -269,8 +267,27 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
 
+  sortData(sort: Sort) {
+    this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'issuer': return this.compare(this.getIssuerName(a.issuerId), this.getIssuerName(b.issuerId), isAsc);
+        case 'taskName': return this.compare(a.name, b.name, isAsc);
+        case 'taskType1': return this.compare(a.taskType1, b.taskType1, isAsc);
+        case 'date': return this.compare(a.dateFrom, b.dateFrom, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+
 }
 
 export interface DialogData {
   name: string;
 }
+

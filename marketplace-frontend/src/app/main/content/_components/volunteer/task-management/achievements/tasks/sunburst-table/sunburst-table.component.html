@@ -2,9 +2,9 @@
     <div class="sunburstParent" id="sunburstChart"></div>
 
     <div *ngIf="tableDataSource" class="tasksTable" fxLayout="column" fxLayoutAlign="none">
-        <mat-table class="mat-elevation-z8" [dataSource]="tableDataSource" matSort>
+        <mat-table class="mat-elevation-z8" [dataSource]="tableDataSource" (matSortChange)="sortData($event)" matSort>
             <ng-container matColumnDef="taskName">
-                <mat-header-cell *matHeaderCellDef> Tätigkeit </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Tätigkeit </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
             </ng-container>
 
@@ -24,7 +24,7 @@
             </ng-container>
 
             <ng-container matColumnDef="taskDateFrom">
-                <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Datum </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     {{element.dateFrom | date:'dd.MM.yyyy'}}
                 </mat-cell>
@@ -38,7 +38,7 @@
             </ng-container>
 
             <ng-container matColumnDef="taskDuration">
-                <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Dauer </mat-header-cell>
                 <mat-cell class="right" mat-cell *matCellDef="let element"> {{element.duration}}h
                 </mat-cell>
             </ng-container>
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-    <div fxLayout="row">
-        <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
-        </app-share-menu>
-    </div>
+<div fxLayout="row">
+    <app-share-menu [label]="'Zweck'" (export)="exportChart($event)">
+    </app-share-menu>
+</div>
