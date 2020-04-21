@@ -6,6 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
     MatDialogModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatIconModule,
 
   ],
   declarations: [AddPropertyDialogComponent],

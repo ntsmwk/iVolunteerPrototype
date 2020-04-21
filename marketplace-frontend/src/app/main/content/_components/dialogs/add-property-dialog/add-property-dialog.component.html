@@ -1,7 +1,19 @@
-<h1 mat-dialog-title>{{data.label}}</h1>
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>add</mat-icon>
+      </td>
+      <td>
+        <h1>Property hinzufügen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
 <mat-dialog-content>
 
-  <mat-table #inboxTable class="inbox-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
+  <mat-table #propertyTable class="property-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
 
     <ng-container matColumnDef="checkbox">
       <mat-header-cell *matHeaderCellDef>
@@ -44,7 +56,5 @@
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
   <button mat-button (click)="applyClicked()">Apply</button>
 
-  <div *ngIf="data.key=='add'">
-    <button mat-button (click)="createNewPropertyClicked()">Create New Property</button>
-  </div>
+  <button mat-button (click)="createNewPropertyClicked()">Create New Property</button>
 </mat-dialog-actions>
