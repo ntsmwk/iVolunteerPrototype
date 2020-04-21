@@ -2,7 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "app/main/content/_service/login.service";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassDefinition } from "app/main/content/_model/meta/Class";
+import {
+  ClassDefinition,
+  ClassInstance
+} from "app/main/content/_model/meta/Class";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
@@ -12,6 +15,7 @@ import {
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ImportService } from "app/main/content/_service/import.service";
+import { PropertyInstance } from "app/main/content/_model/meta/Property";
 
 @Component({
   selector: "import",
@@ -87,5 +91,57 @@ export class ImportComponent implements OnInit {
     //       this.loadDerivationRule(this.marketplace, this.derivationRule.id)
     //     );
     // }
+  }
+
+  handleFileContent(content: string) {
+    const classInstances: ClassInstance[] = [];
+    const propertyInstances: PropertyInstance<any>[] = [];
+    let fileContentObject = JSON.stringify(content);
+    console.error(content);
+    console.error(fileContentObject);
+    for (const entry of fileContentObject) {
+      console.error(entry);
+    }
+  }
+
+  handleEntry(entry) {
+    // for (const classProperty of entry) {
+    //   const values = [event.formGroup.value[classProperty.id]];
+    //   propertyInstances.push(new PropertyInstance(classProperty, values));
+    // }
+    // for (const enumRepresentation of this.currentFormConfiguration.formEntry
+    //   .enumRepresentations) {
+    //   const values = [
+    //     event.formGroup.value[enumRepresentation.classDefinition.id]
+    //   ];
+    //   const propertyInstance = new PropertyInstance(
+    //     enumRepresentation.classDefinition.properties[0],
+    //     values
+    //   );
+    //   propertyInstance.name = enumRepresentation.classDefinition.name;
+    //   propertyInstance.id = enumRepresentation.id;
+    //   propertyInstances.push(propertyInstance);
+    // }
+    // for (const selectedVolunteer of this.selectedVolunteers) {
+    //   const classInstance: ClassInstance = new ClassInstance(
+    //     this.currentFormConfiguration.formEntry.classDefinitions[0],
+    //     propertyInstances
+    //   );
+    //   classInstance.userId = selectedVolunteer.id;
+    //   classInstance.tenantId = this.helpseeker.tenantId;
+    //   classInstance.issuerId = this.helpseeker.id;
+    //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
+    //   classInstances.push(classInstance);
+    // }
+    // this.classInstanceService
+    //   .createNewClassInstances(this.marketplace, classInstances)
+    //   .toPromise()
+    //   .then((ret: ClassInstance[]) => {
+    //     // handle returned value if necessary
+    //     if (!isNullOrUndefined(ret)) {
+    //       this.returnedClassInstances.push(...ret);
+    //       this.handleNextClick();
+    //     }
+    //   });
   }
 }
