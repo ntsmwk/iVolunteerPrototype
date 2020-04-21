@@ -16,15 +16,10 @@
       </organisation-filter>
     </mat-card>
 
-    <div class="content" *ngIf="
-    filteredClassInstanceDTOs.length > 0 &&
-    classInstanceDTOs.length > 0 &&
-    selectedTenants.length > 0">
+    <div class="content">
 
-      <p
-        *ngIf="timeout && !isLocalRepositoryConnected"
-        class="alert alert-info"
-      >
+      <p *ngIf="timeout && !isLocalRepositoryConnected" 
+        class="alert alert-info">
         <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler
         Freiwilligenpass nicht erreichbar, deshalb stammen die Daten vom
         Marktplatz!
@@ -44,19 +39,21 @@
                 TODO: would be correct, because so no empty charts are shown if local repo is empty
                       BUT enormous performance problems (+ several seconds...)
             -->
-            <div *ngIf="selectedTenants.length > 0">
-              <fuse-tasks
+              <fuse-tasks *ngIf="selectedTenants.length > 0 &&
+                filteredClassInstanceDTOs.length > 0 &&
+                classInstanceDTOs.length > 0" 
                 [classInstanceDTOs]="filteredClassInstanceDTOs"
                 [selectedTenants]="selectedTenants"
               >
               </fuse-tasks>
-            </div>
           </ng-template>
         </mat-tab>
 
         <mat-tab label="Kompetenzen">
           <ng-template matTabContent>
-            <fuse-competencies
+            <fuse-competencies *ngIf="selectedTenants.length > 0 &&
+              filteredClassInstanceDTOs.length > 0 &&
+              classInstanceDTOs.length > 0" 
               [classInstanceDTOs]="filteredClassInstanceDTOs"
               [selectedTenants]="selectedTenants">
             </fuse-competencies>
