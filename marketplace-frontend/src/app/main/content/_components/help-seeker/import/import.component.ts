@@ -5,16 +5,21 @@ import { ClassDefinitionService } from "app/main/content/_service/meta/core/clas
 import { ClassDefinition } from "app/main/content/_model/meta/Class";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ParticipantRole } from "app/main/content/_model/participant";
+import {
+  ParticipantRole,
+  Participant
+} from "app/main/content/_model/participant";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 
 @Component({
   selector: "import",
   templateUrl: "import.component.html",
-  styleUrls: ["import.component.scss"],
+  styleUrls: ["import.component.scss"]
 })
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
+  volunteers: Participant[] = [];
   helpseeker: Helpseeker;
   marketplace: Marketplace;
   role: ParticipantRole;
@@ -24,41 +29,43 @@ export class ImportComponent implements OnInit {
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
+    private volunteerService: CoreVolunteerService,
 
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
       classDefinition: new FormControl(undefined),
+      volunteer: new FormControl(undefined),
       file: new FormControl(undefined),
-      fileBtn: new FormControl(undefined),
+      fileBtn: new FormControl(undefined)
     });
   }
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: Helpseeker) => {
-        this.helpseeker = helpseeker;
+  async ngOnInit() {
+    this.helpseeker = <Helpseeker>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
 
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
+    this.marketplace = <Marketplace>(
+      await this.helpSeekerService
+        .findRegisteredMarketplaces(this.helpseeker.id)
+        .toPromise()
+    );
 
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutRootAndEnums(
-                marketplace,
-                this.helpseeker.tenantId
-              )
-              .toPromise()
-              .then(
-                (definitions: ClassDefinition[]) =>
-                  (this.classDefinitions = definitions)
-              );
-          });
-      });
+    this.classDefinitions = <ClassDefinition[]>(
+      await this.classDefinitionService
+        .getAllClassDefinitionsWithoutRootAndEnums(
+          this.marketplace,
+          this.helpseeker.tenantId
+        )
+        .toPromise()
+    );
+
+    this.volunteers = <Participant[]>(
+      await this.volunteerService
+        .findAllByTenantId(this.helpseeker.tenantId)
+        .toPromise()
+    );
   }
 
   save() {

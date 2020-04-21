@@ -3,13 +3,17 @@ import { HttpClient } from "@angular/common/http";
 import { Participant } from "../_model/participant";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class CoreVolunteerService {
   constructor(private http: HttpClient) {}
 
   findAll() {
     return this.http.get(`/core/volunteer/all`);
+  }
+
+  findAllByTenantId(tenenatId: string) {
+    return this.http.get(`/core/volunteer/all/${tenenatId}`);
   }
 
   findById(volunteerId: string) {

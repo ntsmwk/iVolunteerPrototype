@@ -27,7 +27,12 @@ public class CoreVolunteerController {
 	public List<CoreVolunteer> getAllCoreVolunteers() {
 		return this.coreVolunteerRepository.findAll();
 	}
-
+	
+	@GetMapping("/all/{tenantId}")
+	public List<CoreVolunteer> getAllCoreVolunteersByTenantId(@PathVariable String tenantId) {
+		return this.coreVolunteerRepository.findAllByTenantId(tenantId);
+	}
+	
 	@GetMapping("/{volunteerId}")
 	public CoreVolunteer getCoreVolunteer(@PathVariable("volunteerId") String volunteerId) {
 		return coreVolunteerRepository.findOne(volunteerId);
