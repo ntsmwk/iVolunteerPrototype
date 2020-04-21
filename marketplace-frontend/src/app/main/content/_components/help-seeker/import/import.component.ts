@@ -4,23 +4,22 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassDefinition,
-  ClassInstance
+  ClassInstance,
 } from "app/main/content/_model/meta/Class";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ParticipantRole,
-  Participant
+  Participant,
 } from "app/main/content/_model/participant";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
-import { ImportService } from "app/main/content/_service/import.service";
 import { PropertyInstance } from "app/main/content/_model/meta/Property";
 
 @Component({
   selector: "import",
   templateUrl: "import.component.html",
-  styleUrls: ["import.component.scss"]
+  styleUrls: ["import.component.scss"],
 })
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
@@ -35,7 +34,6 @@ export class ImportComponent implements OnInit {
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
-    private importService: ImportService,
 
     private classDefinitionService: ClassDefinitionService
   ) {
@@ -43,7 +41,7 @@ export class ImportComponent implements OnInit {
       classDefinition: new FormControl(undefined),
       volunteer: new FormControl(undefined),
       file: new FormControl(undefined),
-      fileBtn: new FormControl(undefined)
+      fileBtn: new FormControl(undefined),
     });
   }
 
@@ -78,8 +76,9 @@ export class ImportComponent implements OnInit {
     this.importForm.value.file;
 
     let fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       let importContent = fileReader.result;
+      this.handleFileContent(importContent);
       // this.importService.import();
     };
     fileReader.readAsText(this.importForm.value.file.files[0]);
@@ -93,22 +92,23 @@ export class ImportComponent implements OnInit {
     // }
   }
 
-  handleFileContent(content: string) {
+  handleFileContent(content) {
     const classInstances: ClassInstance[] = [];
     const propertyInstances: PropertyInstance<any>[] = [];
-    let fileContentObject = JSON.stringify(content);
-    console.error(content);
-    console.error(fileContentObject);
+    let fileContentObject = JSON.parse(content);
     for (const entry of fileContentObject) {
-      console.error(entry);
+      this.handleEntry(entry);
     }
   }
 
   handleEntry(entry) {
-    // for (const classProperty of entry) {
-    //   const values = [event.formGroup.value[classProperty.id]];
-    //   propertyInstances.push(new PropertyInstance(classProperty, values));
-    // }
+    for (const classProperty of Object.keys(entry)) {
+      console.error(classProperty);
+      console.error(entry[classProperty]);
+
+      // const values = [event.formGroup.value[classProperty.id]];
+      // propertyInstances.push(new PropertyInstance(classProperty, values));
+    }
     // for (const enumRepresentation of this.currentFormConfiguration.formEntry
     //   .enumRepresentations) {
     //   const values = [
