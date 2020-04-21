@@ -1,6 +1,8 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -70,16 +72,17 @@ public class ClassInstanceController {
 	public void createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
 			@PathVariable String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {
-		System.out.println(classDefinitionId);
-		System.out.println(tenantId);
-		System.out.println(volunteerId);
-		System.out.println(properties);
 		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
 				tenantId);
 		if (classDefinition != null) {
 			ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
 			classInstance.setUserId(volunteerId);
-
+			classInstance.getProperties().forEach(p -> {
+				if(properties.containsKey(p.getName())){
+					p.setValues(Collections.singletonList(properties.get(p.getName())));
+				}
+			});
+			this.classInstanceRepository.save(classInstance);
 		}
 
 	}
