@@ -11,6 +11,6 @@ public interface CoreVolunteerRepository extends MongoRepository<CoreVolunteer, 
 
 	CoreVolunteer findByUsername(String username);
 
-	@Query("{'tenantId': $0}")
+	@Query("{'tenantId': ?0}")
 	List<CoreVolunteer> findAllByTenantId(String tenantId);
 }
