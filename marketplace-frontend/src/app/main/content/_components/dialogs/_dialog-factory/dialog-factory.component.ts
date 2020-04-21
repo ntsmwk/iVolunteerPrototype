@@ -2,7 +2,7 @@ import { Directive } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
 import { PropertyItem } from 'app/main/content/_model/meta/Property';
-import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
+import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../deprecrated-add-or-remove-dialog/add-or-remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -22,6 +22,7 @@ import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfiguration
 import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { DeleteClassConfigurationDialogData, DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
+import { AddPropertyDialogComponent, AddPropertyDialogData } from '../add-property-dialog/add-property-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -30,180 +31,180 @@ export class DialogFactoryDirective {
 
   constructor(public dialog: MatDialog) { }
 
-  /**
-   * ADD PROPERTY DIALOG
-   * 
-   * Dialog displaying properties to be added to template @param template 
-   * 
-   * @param properties: list of all properties from server
-   */
+  // /**
+  //  * ADD PROPERTY DIALOG
+  //  * 
+  //  * Dialog displaying properties to be added to template @param template 
+  //  * 
+  //  * @param properties: list of all properties from server
+  //  */
 
-  addPropertyDialog(template: UserDefinedTaskTemplate, properties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      position: { top: '50px', },
-      width: '500px',
-      data: this.prepareDataForAdd('Add Properties', template, properties)
-    });
+  // addPropertyDialog(template: UserDefinedTaskTemplate, properties: PropertyItem[]) {
+  //   const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
+  //     position: { top: '50px', },
+  //     width: '500px',
+  //     data: this.prepareDataForAdd('Add Properties', template, properties)
+  //   });
 
-    let propIds: string[];
+  //   let propIds: string[];
 
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        propIds = [];
+  //   dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
+  //     if (!isNullOrUndefined(result)) {
+  //       propIds = [];
 
-        for (const s of result.checkboxStates) {
-          if (s.dirty) {
-            propIds.push(s.propertyItem.id);
+  //       for (const s of result.checkboxStates) {
+  //         if (s.dirty) {
+  //           propIds.push(s.propertyItem.id);
 
-          }
-        }
-      }
-    });
+  //         }
+  //       }
+  //     }
+  //   });
 
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return propIds;
-    });
-  }
+  //   return dialogRef.afterClosed().toPromise().then(() => {
+  //     return propIds;
+  //   });
+  // }
 
-  addPropertyDialogGeneric(properties: PropertyItem[], addedProperties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      position: { top: '50px' },
-      width: '500px',
-      data: this.prepareDataForGenericAdd('Add Properties', addedProperties, properties)
-    });
+  // addPropertyDialogGeneric(properties: PropertyItem[], addedProperties: PropertyItem[]) {
+  //   const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
+  //     position: { top: '50px' },
+  //     width: '500px',
+  //     data: this.prepareDataForGenericAdd('Add Properties', addedProperties, properties)
+  //   });
 
-    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
+  //   const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
 
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
+  //   dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
+  //     if (!isNullOrUndefined(result)) {
 
-        returnValue.key = result.key;
+  //       returnValue.key = result.key;
 
-        if (result.key === 'new_property') {
-          return;
-        }
+  //       if (result.key === 'new_property') {
+  //         return;
+  //       }
 
-        if (!isNullOrUndefined(result.checkboxStates)) {
-          returnValue.propertyItems = [];
-          for (const s of result.checkboxStates) {
-            if (s.dirty) {
-              returnValue.propertyItems.push(s.propertyItem);
-            }
-          }
-        }
-      }
-    });
+  //       if (!isNullOrUndefined(result.checkboxStates)) {
+  //         returnValue.propertyItems = [];
+  //         for (const s of result.checkboxStates) {
+  //           if (s.dirty) {
+  //             returnValue.propertyItems.push(s.propertyItem);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
 
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return returnValue;
-    });
-  }
+  //   return dialogRef.afterClosed().toPromise().then(() => {
+  //     return returnValue;
+  //   });
+  // }
 
-  private prepareDataForGenericAdd(label: string, addedPropertyItems: PropertyItem[], propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+  // private prepareDataForGenericAdd(label: string, addedPropertyItems: PropertyItem[], propertyItems: PropertyItem[]): AddOrRemoveDialogData {
+  //   const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (const p of propertyItems) {
-      states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (const ap of addedPropertyItems) {
-        if (p.id === ap.id) {
-          states[states.length - 1].disabled = true;
-          states[states.length - 1].checked = true;
-        }
-      }
-    }
+  //   for (const p of propertyItems) {
+  //     states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
+  //     for (const ap of addedPropertyItems) {
+  //       if (p.id === ap.id) {
+  //         states[states.length - 1].disabled = true;
+  //         states[states.length - 1].checked = true;
+  //       }
+  //     }
+  //   }
 
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
-    return data;
-  }
+  //   const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
+  //   return data;
+  // }
 
-  private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+  // private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
+  //   const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (const p of propertyItems) {
-      states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (const tp of template.templateProperties) {
-        if (p.id === tp.id) {
-          states[states.length - 1].disabled = true;
-          states[states.length - 1].checked = true;
-        }
-      }
-    }
+  //   for (const p of propertyItems) {
+  //     states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
+  //     for (const tp of template.templateProperties) {
+  //       if (p.id === tp.id) {
+  //         states[states.length - 1].disabled = true;
+  //         states[states.length - 1].checked = true;
+  //       }
+  //     }
+  //   }
 
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
-    return data;
-  }
+  //   const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
+  //   return data;
+  // }
 
-  removePropertyDialogGeneric(addedProperties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      width: '500px',
-      data: this.prepareDataForGenericRemove('Remove Properties', addedProperties)
-    });
+  // removePropertyDialogGeneric(addedProperties: PropertyItem[]) {
+  //   const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
+  //     width: '500px',
+  //     data: this.prepareDataForGenericRemove('Remove Properties', addedProperties)
+  //   });
 
-    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
+  //   const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
+  //   dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
+  //     if (!isNullOrUndefined(result)) {
 
-        if (!isNullOrUndefined(result.checkboxStates)) {
-          for (const s of result.checkboxStates) {
-            if (s.dirty) {
-              returnValue.propertyItems.push(s.propertyItem);
-            }
-          }
-        }
-      }
-    });
+  //       if (!isNullOrUndefined(result.checkboxStates)) {
+  //         for (const s of result.checkboxStates) {
+  //           if (s.dirty) {
+  //             returnValue.propertyItems.push(s.propertyItem);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
 
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return returnValue.propertyItems;
-    });
-  }
+  //   return dialogRef.afterClosed().toPromise().then(() => {
+  //     return returnValue.propertyItems;
+  //   });
+  // }
 
-  prepareDataForGenericRemove(label: string, addedProperties: PropertyItem[]) {
+  // prepareDataForGenericRemove(label: string, addedProperties: PropertyItem[]) {
 
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+  //   const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (const property of addedProperties) {
-      states.push({ propertyItem: property, disabled: false, checked: false, dirty: false });
-    }
+  //   for (const property of addedProperties) {
+  //     states.push({ propertyItem: property, disabled: false, checked: false, dirty: false });
+  //   }
 
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
-    return data;
-  }
+  //   const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
+  //   return data;
+  // }
 
-  removePropertyDialog(template: UserDefinedTaskTemplate) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      width: '500px',
-      data: this.prepareDataForRemove('Remove Properties', template)
-    });
+  // removePropertyDialog(template: UserDefinedTaskTemplate) {
+  //   const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
+  //     width: '500px',
+  //     data: this.prepareDataForRemove('Remove Properties', template)
+  //   });
 
-    let propIds: string[];
+  //   let propIds: string[];
 
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        propIds = [];
-        for (const s of result.checkboxStates) {
-          if (s.dirty) {
-            propIds.push(s.propertyItem.id);
-          }
-        }
-      }
-    });
+  //   dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
+  //     if (!isNullOrUndefined(result)) {
+  //       propIds = [];
+  //       for (const s of result.checkboxStates) {
+  //         if (s.dirty) {
+  //           propIds.push(s.propertyItem.id);
+  //         }
+  //       }
+  //     }
+  //   });
 
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return propIds;
-    });
-  }
+  //   return dialogRef.afterClosed().toPromise().then(() => {
+  //     return propIds;
+  //   });
+  // }
 
-  private prepareDataForRemove(label: string, template: UserDefinedTaskTemplate): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
+  // private prepareDataForRemove(label: string, template: UserDefinedTaskTemplate): AddOrRemoveDialogData {
+  //   const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
 
-    for (const tp of template.templateProperties) {
-      states.push({ propertyItem: tp, disabled: false, checked: false, dirty: false });
-    }
+  //   for (const tp of template.templateProperties) {
+  //     states.push({ propertyItem: tp, disabled: false, checked: false, dirty: false });
+  //   }
 
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
-    return data;
-  }
+  //   const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
+  //   return data;
+  // }
 
 
   /**
@@ -637,6 +638,27 @@ export class DialogFactoryDirective {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return idsDeleted;
+    });
+  }
+
+
+  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
+    const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, classDefinition: classDefinition }
+    });
+
+    let returnValue: AddPropertyDialogData;
+
+    dialogRef.beforeClose().toPromise().then((result: AddPropertyDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
     });
   }
 

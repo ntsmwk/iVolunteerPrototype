@@ -66,7 +66,9 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     addPropertyClicked() {
+        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then(() => {
 
+        });
     }
 
     addEnumClicked() {

@@ -111,23 +111,23 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   addPropertyDialog() {
 
-    this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {
-      if (!isNullOrUndefined(propIds)) {
-        this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
-          this.refresh();
-        });
-      }
-    });
+    // this.dialogFactory.addPropertyDialog(this.template, this.allPropertiesList).then((propIds: string[]) => {
+    //   if (!isNullOrUndefined(propIds)) {
+    //     this.userDefinedTaskTemplateService.addPropertiesToSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
+    //       this.refresh();
+    //     });
+    //   }
+    // });
   }
 
   removePropertyDialog() {
-    this.dialogFactory.removePropertyDialog(this.template).then((propIds: string[]) => {
-      if (!isNullOrUndefined(propIds)) {
-        this.userDefinedTaskTemplateService.removePropertiesFromSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
-          this.refresh();
-        });
-      }
-    });
+    // this.dialogFactory.removePropertyDialog(this.template).then((propIds: string[]) => {
+    //   if (!isNullOrUndefined(propIds)) {
+    //     this.userDefinedTaskTemplateService.removePropertiesFromSingleTemplate(this.marketplace, this.template.id, propIds).toPromise().then(() => {
+    //       this.refresh();
+    //     });
+    //   }
+    // });
 
   }
 

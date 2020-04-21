@@ -14,7 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
+import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/deprecrated-add-or-remove-dialog/add-or-remove-dialog.module';
 import { DialogFactoryModule } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.module';
 import { MatchingEditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { MatchingOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';

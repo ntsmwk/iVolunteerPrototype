@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogFactoryDirective } from './dialog-factory.component';
-import { AddOrRemoveDialogComponent } from '../add-or-remove-dialog/add-or-remove-dialog.component';
-import { AddOrRemoveDialogModule } from '../add-or-remove-dialog/add-or-remove-dialog.module';
+// import { AddOrRemoveDialogComponent } from '../deprecrated-add-or-remove-dialog/add-or-remove-dialog.component';
+// import { AddOrRemoveDialogModule } from '../deprecrated-add-or-remove-dialog/add-or-remove-dialog.module';
 import { TextFieldDialogComponent } from '../text-field-dialog/text-field-dialog.component';
 import { TextFieldDialogModule } from '../text-field-dialog/text-field-dialog.module';
 import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
@@ -33,12 +33,14 @@ import { ConfirmClassConfigurationSaveDialogModule } from 'app/main/content/conf
 import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
 import { DeleteClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.module';
 import { DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
+import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
+import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    AddOrRemoveDialogModule,
+    // AddOrRemoveDialogModule,
     TextFieldDialogModule,
     ConfirmDialogModule,
     SortDialogModule,
@@ -55,6 +57,8 @@ import { DeleteClassConfigurationDialogComponent } from 'app/main/content/config
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
 
+    AddPropertyDialogModule,
+
     // Matching Configurator
     NewMatchingDialogModule,
     OpenMatchingDialogModule,
@@ -62,7 +66,7 @@ import { DeleteClassConfigurationDialogComponent } from 'app/main/content/config
   ],
   declarations: [DialogFactoryDirective],
   entryComponents: [
-    AddOrRemoveDialogComponent,
+    // AddOrRemoveDialogComponent,
     TextFieldDialogComponent,
     ConfirmDialogComponent,
     SortDialogComponent,
@@ -78,6 +82,8 @@ import { DeleteClassConfigurationDialogComponent } from 'app/main/content/config
     ClassInstanceFormPreviewDialogComponent,
     DeleteClassConfigurationDialogComponent,
     ChangeIconDialogComponent,
+
+    AddPropertyDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,
