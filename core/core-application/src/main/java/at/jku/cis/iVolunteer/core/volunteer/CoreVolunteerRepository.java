@@ -10,7 +10,4 @@ import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 public interface CoreVolunteerRepository extends MongoRepository<CoreVolunteer, String> {
 
 	CoreVolunteer findByUsername(String username);
-
-	@Query("{'tenantId': ?0}")
-	List<CoreVolunteer> findAllByTenantId(String tenantId);
 }
