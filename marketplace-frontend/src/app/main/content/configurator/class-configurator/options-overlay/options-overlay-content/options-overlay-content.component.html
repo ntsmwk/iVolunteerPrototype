@@ -40,11 +40,10 @@
 
                 <div style="width: 65%;" class="mt-4 mr-4">
                     <div class="normal-label">Properties und Enums</div>
-                    <div
-                        style="height: 143px; overflow-y: scroll; overflow-x: hidden; border: solid 1px rgb(80, 80, 80); border-radius: 4px">
+                    <div class="pl-12 outline-border properties-section">
 
                         <div *ngFor="let property of inputData.classDefinition.properties; let i = index"
-                            [style]="getPropertyEntryStyle(i)">
+                            [style]="getPropertyEntryStyle(i)" class="property-entry">
 
                             <div fxLayout="row" fxLayoutAlign="start center">
                                 <div style="width: 15px; height: 15px;" class="ml-8">
@@ -63,11 +62,49 @@
 
                 <div style="width: 35%;" class="mt-4 ml-4">
                     <div class="normal-label">Aktionen</div>
-                    <div style="background: plum; height: 87px">
-                        Interaction
+                    <div class="outline-border" style="height: 90px;">
+                        <div style="padding-top: 3px"></div>
+
+                        <button class="overlay-button" mat-stroked-button type="button" color="accent"
+                            (click)="undefined">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <mat-icon>add</mat-icon>
+                                <div>Property</div>
+                            </div>
+                        </button>
+
+                        <div style="padding-top: 2px"></div>
+
+                        <button class="overlay-button" mat-stroked-button type="button" color="accent"
+                            (click)="undefined">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <mat-icon>add</mat-icon>
+                                <div>Enum</div>
+                            </div>
+                        </button>
+
+                        <div style="padding-top: 2px"></div>
+
+                        <button class="overlay-button" mat-stroked-button type="button" color="accent"
+                            (click)="undefined">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <mat-icon>remove</mat-icon>
+                                <div>Entfernen</div>
+                            </div>
+                        </button>
                     </div>
-                    <div style="background: indianred; height: 41px">
-                        Instanzierung Interaction
+
+                    <div class="normal-label">Instanzierung</div>
+                    <div class="outline-border" style="height: 34px">
+                        <div style="padding-top: 3px"></div>
+
+                        <button class="overlay-button" mat-stroked-button type="button" color="accent"
+                            (click)="undefined">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <mat-icon>pages</mat-icon>
+                                <div>Vorschau</div>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
