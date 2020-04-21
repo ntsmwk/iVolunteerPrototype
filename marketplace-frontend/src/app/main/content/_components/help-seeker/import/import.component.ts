@@ -74,7 +74,7 @@ export class ImportComponent implements OnInit {
   }
 
   async save() {
-    // TODO check all form are inputted.. ;)
+    // TODO MWE check all form are inputted.. ;)
 
     let fileReader = new FileReader();
     fileReader.onload = async (e) => {
@@ -93,46 +93,5 @@ export class ImportComponent implements OnInit {
       }
     };
     fileReader.readAsText(this.importForm.value.file.files[0]);
-  }
-
-  // handleFileContent(content) {
-  //   const classInstances: ClassInstance[] = [];
-  //   const propertyInstances: PropertyInstance<any>[] = [];
-  //   let fileContentObject = JSON.parse(content);
-  //   for (const entry of fileContentObject) {
-  //     this.handleEntry(entry);
-  //   }
-  // }
-
-  handleEntry(entry) {
-    for (const classProperty of Object.keys(entry)) {
-      console.error(classProperty);
-      console.error(entry[classProperty]);
-
-      // const values = [event.formGroup.value[classProperty.id]];
-      // propertyInstances.push(new PropertyInstance(classProperty, values));
-    }
-
-    // for (const selectedVolunteer of this.selectedVolunteers) {
-    //   const classInstance: ClassInstance = new ClassInstance(
-    //     this.currentFormConfiguration.formEntry.classDefinitions[0],
-    //     propertyInstances
-    //   );
-    //   classInstance.userId = selectedVolunteer.id;
-    //   classInstance.tenantId = this.helpseeker.tenantId;
-    //   classInstance.issuerId = this.helpseeker.id;
-    //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
-    //   classInstances.push(classInstance);
-    // }
-    // this.classInstanceService
-    //   .createNewClassInstances(this.marketplace, classInstances)
-    //   .toPromise()
-    //   .then((ret: ClassInstance[]) => {
-    //     // handle returned value if necessary
-    //     if (!isNullOrUndefined(ret)) {
-    //       this.returnedClassInstances.push(...ret);
-    //       this.handleNextClick();
-    //     }
-    //   });
   }
 }
