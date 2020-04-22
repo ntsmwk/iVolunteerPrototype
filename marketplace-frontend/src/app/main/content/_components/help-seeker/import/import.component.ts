@@ -15,6 +15,7 @@ import {
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { PropertyInstance } from "app/main/content/_model/meta/Property";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 
 @Component({
   selector: "import",
@@ -34,6 +35,7 @@ export class ImportComponent implements OnInit {
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
+    private classInstanceService: ClassInstanceService,
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
@@ -71,66 +73,25 @@ export class ImportComponent implements OnInit {
     );
   }
 
-  save() {
-    this.importForm.value.file;
+  async save() {
+    // TODO MWE check all form are inputted.. ;)
 
     let fileReader = new FileReader();
-    fileReader.onload = e => {
-      let importContent = fileReader.result;
-      this.handleFileContent(fileReader.result);
+    fileReader.onload = async e => {
+      let contentObject = JSON.parse(<string>fileReader.result);
+      for (const entry of contentObject) {
+        console.error(entry);
+        await this.classInstanceService
+          .createClassInstanceByClassDefinitionId(
+            this.marketplace,
+            this.importForm.value.classDefinition.id,
+            this.importForm.value.volunteer.id,
+            this.helpseeker.tenantId,
+            entry
+          )
+          .toPromise();
+      }
     };
     fileReader.readAsText(this.importForm.value.file.files[0]);
-  }
-
-  handleFileContent(content) {
-    const classInstances: ClassInstance[] = [];
-    const propertyInstances: PropertyInstance<any>[] = [];
-    let fileContentObject = JSON.parse(content);
-    for (const entry of fileContentObject) {
-      this.handleEntry(entry);
-      console.error(entry);
-    }
-  }
-
-  handleEntry(entry) {
-    for (let [key, value] of Object.keys(entry)) {
-      console.error(key + value);
-      // const values = [event.formGroup.value[classProperty.id]];
-      // propertyInstances.push(new PropertyInstance(classProperty, values));
-    }
-    // for (const enumRepresentation of this.currentFormConfiguration.formEntry
-    //   .enumRepresentations) {
-    //   const values = [
-    //     event.formGroup.value[enumRepresentation.classDefinition.id]
-    //   ];
-    //   const propertyInstance = new PropertyInstance(
-    //     enumRepresentation.classDefinition.properties[0],
-    //     values
-    //   );
-    //   propertyInstance.name = enumRepresentation.classDefinition.name;
-    //   propertyInstance.id = enumRepresentation.id;
-    //   propertyInstances.push(propertyInstance);
-    // }
-    // for (const selectedVolunteer of this.selectedVolunteers) {
-    //   const classInstance: ClassInstance = new ClassInstance(
-    //     this.currentFormConfiguration.formEntry.classDefinitions[0],
-    //     propertyInstances
-    //   );
-    //   classInstance.userId = selectedVolunteer.id;
-    //   classInstance.tenantId = this.helpseeker.tenantId;
-    //   classInstance.issuerId = this.helpseeker.id;
-    //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
-    //   classInstances.push(classInstance);
-    // }
-    // this.classInstanceService
-    //   .createNewClassInstances(this.marketplace, classInstances)
-    //   .toPromise()
-    //   .then((ret: ClassInstance[]) => {
-    //     // handle returned value if necessary
-    //     if (!isNullOrUndefined(ret)) {
-    //       this.returnedClassInstances.push(...ret);
-    //       this.handleNextClick();
-    //     }
-    //   });
   }
 }
