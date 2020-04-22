@@ -82,8 +82,25 @@
         </button>
       </div>
 
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Einträge gesamt:</td>
+            <td class="alignRight">{{marketplaceClassInstances.length}}</td>
+          </tr>
+          <tr>
+            <td>Einträge im lokalen Repository:</td>
+            <td class="alignRight">{{localClassInstances.length}}</td>
+          </tr>
+          <tr>
+            <td>Noch nicht gesyncte Einträge:</td>
+            <td class="alignRight">{{marketplaceClassInstances.length - localClassInstances.length}}</td>
+          </tr>
+        </tbody>
+      </table>
+
       <!-- Share Icon and Menu-->
-      <div style="padding-right: 20px; padding-top: 5px;">
+      <!-- <div style="padding-right: 20px; padding-top: 5px;">
         <button
           mat-mini-fab
           type="button"
@@ -118,7 +135,7 @@
             </div>
           </button>
         </mat-menu>
-      </div>
+      </div> -->
     </div>
   </mat-card>
 
@@ -132,13 +149,14 @@
     fxLayout="column"
   >
     <div fxLayout="row" fxLayoutAlign="end center">
-      <button mat-raised-button color="primary" (click)="syncAll()">
+      <button mat-raised-button color="primary" 
+      (click)="syncAllToLocalRepository()">
         Alle hinzufügen
       </button>
       <button
         mat-raised-button
         color="primary"
-        (click)="removeAll()"
+        (click)="removeAllFromLocalRepository()"
         style="margin-left: 20px;"
       >
         Alle entfernen
@@ -198,7 +216,7 @@
               mat-raised-button
               *ngIf="!inLocalRepository(entry)"
               color="primary"
-              (click)="syncToLocalRepository(entry)"
+              (click)="syncOneToLocalRepository(entry)"
             >
               Hinzufügen
             </button>
@@ -206,7 +224,7 @@
               mat-raised-button
               *ngIf="inLocalRepository(entry)"
               color="primary"
-              (click)="removeFromLocalRepository(entry)"
+              (click)="removeOneFromLocalRepository(entry)"
             >
               Entfernen
             </button>

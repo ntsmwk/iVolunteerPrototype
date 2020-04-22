@@ -78,7 +78,7 @@ export class DashboardVolunteerComponent implements OnInit {
   async ngOnInit() {
     let t = timer(3000);
     t.subscribe(() => {
-        this.timeout = true;
+      this.timeout = true;
     });
 
     this.volunteer = <Volunteer>(
@@ -224,46 +224,57 @@ export class DashboardVolunteerComponent implements OnInit {
     return this.localClassInstances.findIndex(t => t.id === classInstance.id) >= 0;
   }
 
-  async syncToLocalRepository(classInstanceDTO: ClassInstanceDTO) {
+  async syncOneToLocalRepository(classInstance: ClassInstanceDTO) {
     // let ci = <ClassInstance>await
     //   this.classInstanceService.getClassInstanceById(this.marketplace, classInstanceDTO.id, classInstanceDTO.tenantId).toPromise();
     // await this.localRepositoryService.synchronizeClassInstance(this.volunteer, ci).toPromise();
     // this.localClassInstances.push(ci);
 
-    await this.localRepositoryService.synchronizeSingleClassInstance(this.volunteer, classInstanceDTO).toPromise();
-    this.localClassInstances.push(classInstanceDTO);
+    this.localClassInstances = <ClassInstanceDTO[]>await
+      this.localRepositoryService.synchronizeSingleClassInstance(this.volunteer, classInstance).toPromise();
   }
 
-  async removeFromLocalRepository(classInstance: ClassInstanceDTO) {
-    await this.localRepositoryService.removeClassInstance(this.volunteer, classInstance).toPromise();
+  async removeOneFromLocalRepository(classInstance: ClassInstanceDTO) {
+    this.localClassInstances = <ClassInstanceDTO[]>await
+      this.localRepositoryService.removeSingleClassInstance(this.volunteer, classInstance).toPromise();
 
-    this.localClassInstances.forEach((ci, index, object) => {
-      if (ci.id === classInstance.id) {
-        object.splice(index, 1);
-      }
-    });
+
   }
 
-  async syncAll() {
-    let filteredClassInstances: ClassInstanceDTO[] = [];
+  async syncAllToLocalRepository() {
+    let missingClassInstances: ClassInstanceDTO[] = [];
+    // TODO
+    // sync only filtered selection
+      //this.filteredClassInstances.forEach(ci => {
 
-    this.filteredClassInstances.forEach(ci => {
+    // sync all
+    this.marketplaceClassInstances.forEach(ci => {
       if (!(this.localClassInstances.findIndex(t => t.id === ci.id) >= 0)) {
         // let ci = <ClassInstance>await
         //   this.classInstanceService.getClassInstanceById(this.marketplace, ci.id, ci.tenantId).toPromise();
 
-        filteredClassInstances.push(ci);
+        missingClassInstances.push(ci);
       }
     });
 
-    await this.localRepositoryService.synchronizeClassInstances(this.volunteer, filteredClassInstances).toPromise();
-    this.localClassInstances = [...this.localClassInstances, ...filteredClassInstances];
+    console.error(missingClassInstances);
+
+    this.localClassInstances = <ClassInstanceDTO[]>await
+      this.localRepositoryService.synchronizeClassInstances(this.volunteer, missingClassInstances).toPromise();
   }
 
 
-  async removeAll() {
-    await this.localRepositoryService.removeAllClassInstances(this.volunteer).toPromise();
-    this.localClassInstances = [];
+  async removeAllFromLocalRepository() {
+    let toRemoveClassInstances: ClassInstanceDTO[] = [];
+
+    this.filteredClassInstances.forEach(ci => {
+      if (this.localClassInstances.findIndex(t => t.id === ci.id) >= 0) {
+        toRemoveClassInstances.push(ci);
+      }
+    });
+
+    this.localClassInstances = <ClassInstanceDTO[]>await
+      this.localRepositoryService.removeClassInstances(this.volunteer, toRemoveClassInstances).toPromise();
   }
 
 
