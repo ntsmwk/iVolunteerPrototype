@@ -169,7 +169,8 @@ export class LocalRepositoryService {
         return observable;
     }
 
-    removeClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
+        // TODO: workaround for removeClassInstances
+        setClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
         const observable = new Observable(subscriber => {
             const failureFunction = (error: any) => {
                 subscriber.error(error);
@@ -180,17 +181,8 @@ export class LocalRepositoryService {
                 .toPromise()
                 .then((localRepository: LocalRepository) => {
                   
-                    // TODO: only remove "classInstances", not all
-                    // localRepository.classInstances.forEach((ci, index, object) => {
-                    //     classInstances.forEach(t => {
-                    //         if (ci.id === t.id) {
-                    //             object.splice(index, 1);
-                    //         }
-                    //     });
-                    // });
-
-                    localRepository.classInstances = [];
-
+                    localRepository.classInstances = classInstances;
+                   
                     this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
                         .toPromise()
                         .then(() => subscriber.complete())
@@ -204,5 +196,40 @@ export class LocalRepositoryService {
 
         return observable;
     }
+
+
+    // TODO: not working as intended...
+    // removeClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
+    //     const observable = new Observable(subscriber => {
+    //         const failureFunction = (error: any) => {
+    //             subscriber.error(error);
+    //             subscriber.complete();
+    //         };
+
+    //         this.findByVolunteer(volunteer)
+    //             .toPromise()
+    //             .then((localRepository: LocalRepository) => {
+                  
+    //                 // localRepository.classInstances.forEach((ci, index, object) => {
+    //                 //     classInstances.forEach(t => {
+    //                 //         if (ci.id === t.id) {
+    //                 //             object.splice(index, 1);
+    //                 //         }
+    //                 //     });
+    //                 // });
+
+    //                 this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+    //                     .toPromise()
+    //                     .then(() => subscriber.complete())
+    //                     .catch((error: any) => failureFunction(error));
+
+    //                 subscriber.next(localRepository.classInstances);
+
+    //             })
+    //             .catch((error: any) => failureFunction(error));
+    //     });
+
+    //     return observable;
+    // }
 
 }

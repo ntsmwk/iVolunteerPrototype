@@ -149,17 +149,18 @@
     fxLayout="column"
   >
     <div fxLayout="row" fxLayoutAlign="end center">
-      <button mat-raised-button color="primary" 
+      <button mat-raised-button 
+      color="primary" 
       (click)="syncAllToLocalRepository()">
-        Alle hinzufügen
+        Auswahl hinzufügen
       </button>
-      <button
-        mat-raised-button
+
+      <button mat-raised-button
         color="primary"
         (click)="removeAllFromLocalRepository()"
         style="margin-left: 20px;"
       >
-        Alle entfernen
+        Auswahl entfernen
       </button>
     </div>
 
@@ -209,8 +210,8 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="syncButton">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Aktion</mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <button
               mat-raised-button
@@ -244,12 +245,12 @@
       </mat-table>
     </div>
   </div>
+
   <mat-paginator
     *ngIf="isLocalRepositoryConnected"
     [pageSize]="12"
     id="paginator"
-    showFirstLastButtons
-  >
+    showFirstLastButtons>
   </mat-paginator>
 
   <div style="padding-top: 20px;"></div>

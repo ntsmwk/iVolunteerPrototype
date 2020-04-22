@@ -44,7 +44,7 @@ export class DashboardVolunteerComponent implements OnInit {
     "taskName",
     "taskType1",
     "date",
-    "syncButton"
+    "action"
   ];
 
   issuerIds: string[] = [];
@@ -134,6 +134,8 @@ export class DashboardVolunteerComponent implements OnInit {
       this.tableDataSource.data = this.filteredClassInstances;
       this.paginator.length = this.filteredClassInstances.length;
       this.tableDataSource.paginator = this.paginator;
+
+      console.error(this.tableDataSource.data);
     }
   }
 
@@ -243,12 +245,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   async syncAllToLocalRepository() {
     let missingClassInstances: ClassInstanceDTO[] = [];
-    // TODO
-    // sync only filtered selection
-      //this.filteredClassInstances.forEach(ci => {
-
-    // sync all
-    this.marketplaceClassInstances.forEach(ci => {
+    this.filteredClassInstances.forEach(ci => {
       if (!(this.localClassInstances.findIndex(t => t.id === ci.id) >= 0)) {
         // let ci = <ClassInstance>await
         //   this.classInstanceService.getClassInstanceById(this.marketplace, ci.id, ci.tenantId).toPromise();
@@ -257,28 +254,33 @@ export class DashboardVolunteerComponent implements OnInit {
       }
     });
 
-    console.error(missingClassInstances);
-
     this.localClassInstances = <ClassInstanceDTO[]>await
       this.localRepositoryService.synchronizeClassInstances(this.volunteer, missingClassInstances).toPromise();
   }
 
 
   async removeAllFromLocalRepository() {
-    let toRemoveClassInstances: ClassInstanceDTO[] = [];
+    // let toRemoveClassInstances: ClassInstanceDTO[] = [];
+    // this.filteredClassInstances.forEach(ci => {
+    //   if (this.localClassInstances.findIndex(t => t.id === ci.id) >= 0) {
+    //     toRemoveClassInstances.push(ci);
+    //   }
+    // });
 
-    this.filteredClassInstances.forEach(ci => {
-      if (this.localClassInstances.findIndex(t => t.id === ci.id) >= 0) {
-        toRemoveClassInstances.push(ci);
-      }
+    let newClassInstances: ClassInstanceDTO[] = [];
+
+    newClassInstances = this.localClassInstances.filter(ci => {
+      return (this.filteredClassInstances.findIndex(t => t.id === ci.id) === -1)
     });
 
     this.localClassInstances = <ClassInstanceDTO[]>await
-      this.localRepositoryService.removeClassInstances(this.volunteer, toRemoveClassInstances).toPromise();
+      this.localRepositoryService.setClassInstances(this.volunteer, newClassInstances).toPromise();
   }
 
 
   sortData(sort: Sort) {
+    console.error('sort', sort);
+
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -286,6 +288,7 @@ export class DashboardVolunteerComponent implements OnInit {
         case 'taskName': return this.compare(a.name, b.name, isAsc);
         case 'taskType1': return this.compare(a.taskType1, b.taskType1, isAsc);
         case 'date': return this.compare(a.dateFrom, b.dateFrom, isAsc);
+        case 'action': return this.compare(this.inLocalRepository(a).toString(), this.inLocalRepository(b).toString(), isAsc);
         default: return 0;
       }
     });
