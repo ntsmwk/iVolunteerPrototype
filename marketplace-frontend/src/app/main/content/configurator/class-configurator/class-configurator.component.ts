@@ -1092,7 +1092,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.graph.setEnabled(true);
     this.graph.setTooltips(true);
     this.displayOverlay = false;
-    this.handleModelChanges(event.classDefinition);
+
+    // tslint:disable-next-line: no-unused-expression
+    !isNullOrUndefined(event) ? this.handleModelChanges(event.classDefinition) : '';
+
     this.overlayContent = undefined;
     this.overlayEvent = undefined;
   }

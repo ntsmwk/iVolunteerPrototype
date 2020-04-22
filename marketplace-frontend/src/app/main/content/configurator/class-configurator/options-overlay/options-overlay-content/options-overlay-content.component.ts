@@ -71,7 +71,9 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     addPropertyClicked() {
         this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: AddPropertyDialogData) => {
             console.log(ret);
-            this.inputData.classDefinition.properties = ret.classDefinition.properties;
+            if (!isNullOrUndefined(ret)) {
+                this.inputData.classDefinition.properties = ret.classDefinition.properties;
+            }
         });
     }
 
