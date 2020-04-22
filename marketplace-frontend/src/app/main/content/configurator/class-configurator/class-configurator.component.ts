@@ -292,14 +292,14 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     try {
       this.graph.getModel().beginUpdate();
       for (const c of this.configurableClasses) {
-        this.insertClassIntoGraph(c, new mx.mxGeometry(0, 0, 110, 45), false);
+        this.insertClassIntoGraph(c);
       }
     } finally {
       this.graph.getModel().endUpdate();
     }
   }
 
-  private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean, replaceCell?: MyMxCell) {
+  private insertClassIntoGraph(classDefinition: ClassDefinition, geometry?: mxgraph.mxGeometry, replaceCell?: MyMxCell) {
     // create class cell
 
     let cell: MyMxCell;
@@ -311,6 +311,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       style = CConstants.mxStyles.classFlexprodCollector;
     } else {
       style = CConstants.mxStyles.classNormal;
+    }
+
+    if (isNullOrUndefined(geometry)) {
+      geometry = new mx.mxGeometry(0, 0, 110, 45);
     }
 
     if (!isNullOrUndefined(replaceCell)) {
@@ -340,7 +344,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     cell.setCollapsed(false);
     cell.cellType = MyMxCellType.CLASS;
     cell.classArchetype = classDefinition.classArchetype;
-    cell.newlyAdded = createNew;
     cell.value = classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);
@@ -784,7 +787,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const addedClass = ret.class;
         const addedRelationship = ret.relationship;
 
-        const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45), true);
+        const classCell = this.insertClassIntoGraph(
+          addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45));
         this.configurableClasses.push(addedClass);
 
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
@@ -832,7 +836,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const addedClass = ret.class;
         const addedRelationship = ret.relationship;
 
-        const classCell = this.insertClassIntoGraph(addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45), true);
+        const classCell = this.insertClassIntoGraph(
+          addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45));
         this.configurableClasses.push(addedClass);
 
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
@@ -1117,7 +1122,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     const cell = this.graph.getModel().getCell(classDefinition.id) as MyMxCell;
     try {
       this.graph.getModel().beginUpdate();
-      const newCell = this.insertClassIntoGraph(classDefinition, cell.geometry, false, cell);
+      const newCell = this.insertClassIntoGraph(classDefinition, undefined, cell);
     } finally {
       this.graph.getModel().endUpdate();
     }
