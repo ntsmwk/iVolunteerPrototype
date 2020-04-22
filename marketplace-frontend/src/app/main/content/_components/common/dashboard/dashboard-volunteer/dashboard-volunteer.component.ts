@@ -135,7 +135,6 @@ export class DashboardVolunteerComponent implements OnInit {
       this.paginator.length = this.filteredClassInstances.length;
       this.tableDataSource.paginator = this.paginator;
 
-      console.error(this.tableDataSource.data);
     }
   }
 
@@ -279,8 +278,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
 
   sortData(sort: Sort) {
-    console.error('sort', sort);
-
     this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
