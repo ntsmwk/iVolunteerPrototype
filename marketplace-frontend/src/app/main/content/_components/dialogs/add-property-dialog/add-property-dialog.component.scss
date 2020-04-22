@@ -20,17 +20,61 @@ mat-dialog-content {
   }
 
   .property-table {
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
     height: 215px;
+
+    border-style: solid; 
+    border-color: rgb(62, 125, 219); 
+    border-width: 1px; 
+    border-radius: 2px;
+    background-color: rgb(230, 228, 228);
+
+
+    .mat-column-checkbox {
+        flex: 0 0 50px;
+    }
+
+    .mat-column-label {
+        flex: 0 1 250px;
+    }
+
+    .mat-column-type {
+      flex: 0 1 115px;
+  }
   }
 
   mat-header-row {
     min-height: 0;
+    background: rgb(62, 125, 219); 
+    padding: 2px 0;
+  }
+
+  mat-header-cell {
+    font-size: 14px;
+    color: white;
   }
 
   mat-row {
     min-height: 0;
+    cursor: pointer;
   }
+
+  mat-cell {
+    cursor: pointer;
+  }
+
+  mat-row:hover {
+    background: rgb(62, 125, 219); 
+    color: white;
+
+    mat-cell {
+      color: white;
+    }
+  }
+
+  
 
   .center-spinner-wrapper {
     display: flex;

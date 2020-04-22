@@ -77,4 +77,9 @@ export class AddPropertyDialogComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.datasource.filter = filterValue.trim().toLowerCase();
   }
+
+  onRowClick(row: PropertyDefinition<any>) {
+    console.log(row);
+    this.selection.select(row);
+  }
 }

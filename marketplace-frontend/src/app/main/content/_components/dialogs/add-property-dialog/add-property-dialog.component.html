@@ -43,14 +43,15 @@
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Datentyp</mat-header-cell>
         <mat-cell *matCellDef="let entry">
-          Type
+          <div>
+            {{entry.type}}
+          </div>
         </mat-cell>
       </ng-container>
 
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
-        class="table-row"></mat-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></mat-row>
     </mat-table>
 
     <mat-form-field appearance="outline">
