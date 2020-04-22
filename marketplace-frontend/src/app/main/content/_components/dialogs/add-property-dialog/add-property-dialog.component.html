@@ -12,49 +12,59 @@
 </div>
 
 <mat-dialog-content>
+  <div *ngIf="loaded">
+    <mat-table #propertyTable class="property-table" [dataSource]="datasource" matSort>
 
-  <mat-table #propertyTable class="property-table" [dataSource]="datasource" *ngIf="datasource.data.length > 0">
-
-    <ng-container matColumnDef="checkbox">
-      <!-- <mat-header-cell *matHeaderCellDef>
+      <ng-container matColumnDef="checkbox">
+        <!-- <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </mat-header-cell> -->
 
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-          [checked]="selection.isSelected(row)" [disabled]="isDisabled(row)">
-        </mat-checkbox>
-      </mat-cell>
-    </ng-container>
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)" [disabled]="isDisabled(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-      <mat-cell *matCellDef="let entry">
-        <div fxLayout="column" fxLayoutAlign="start start">
-          <div>{{entry.name}}</div>
-          <!-- <div class="pl-8">{{findNameProperty(entry)}}</div> -->
-        </div>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="label">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let entry">
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <div>{{entry.name}}</div>
+            <!-- <div class="pl-8">{{findNameProperty(entry)}}</div> -->
+          </div>
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="type">
-      <mat-header-cell *matHeaderCellDef>Datentyp</mat-header-cell>
-      <mat-cell *matCellDef="let entry">
-        Type
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Datentyp</mat-header-cell>
+        <mat-cell *matCellDef="let entry">
+          Type
+        </mat-cell>
+      </ng-container>
 
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
-      class="table-row"></mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'highlighted_new': row.status == 'new' }"
+        class="table-row"></mat-row>
+    </mat-table>
+
+    <mat-form-field appearance="outline">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Suchen...">
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="!loaded" class="center-spinner-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
+
+<mat-dialog-actions *ngIf="loaded">
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
   <button mat-button (click)="applyClicked()">Apply</button>

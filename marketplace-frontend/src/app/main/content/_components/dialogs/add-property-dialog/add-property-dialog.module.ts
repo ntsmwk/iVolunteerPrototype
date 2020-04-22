@@ -6,7 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -17,6 +17,11 @@ import { MatIconModule } from '@angular/material';
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
+
+    MatFormFieldModule,
+    MatInputModule,
+
+    MatProgressSpinnerModule,
 
   ],
   declarations: [AddPropertyDialogComponent],

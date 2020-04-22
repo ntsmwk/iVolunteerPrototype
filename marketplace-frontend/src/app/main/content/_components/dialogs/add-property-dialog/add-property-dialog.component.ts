@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PropertyItem, ClassProperty, PropertyInstance, PropertyDefinition } from '../../../_model/meta/Property';
 import { Router } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
@@ -34,6 +34,8 @@ export class AddPropertyDialogComponent implements OnInit {
   selection = new SelectionModel<PropertyItem>(true, []);
   initialProperties: PropertyDefinition<any>[];
 
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
 
   ngOnInit() {
@@ -69,5 +71,10 @@ export class AddPropertyDialogComponent implements OnInit {
 
   isDisabled(propertyDefinition: PropertyDefinition<any>) {
     return !isNullOrUndefined(this.initialProperties.find(p => p.id === propertyDefinition.id));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.datasource.filter = filterValue.trim().toLowerCase();
   }
 }
