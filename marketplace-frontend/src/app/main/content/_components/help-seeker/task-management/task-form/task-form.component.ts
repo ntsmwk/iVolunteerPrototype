@@ -48,7 +48,7 @@ export class FuseTaskFormComponent implements OnInit {
   taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
 
-  private tenantName: string = "FF_Eidenberg";
+  private tenantName: string = "FF Eidenberg";
   private tenantId: string;
 
   constructor(

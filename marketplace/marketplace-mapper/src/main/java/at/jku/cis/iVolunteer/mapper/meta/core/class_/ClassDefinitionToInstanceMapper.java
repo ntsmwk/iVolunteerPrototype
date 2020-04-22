@@ -31,15 +31,19 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		switch (source.getClassArchetype()) {
 		case ACHIEVEMENT:
+		case ACHIEVEMENT_HEAD:
 			classInstance = new AchievementClassInstance();
 			break;
 		case COMPETENCE:
+		case COMPETENCE_HEAD:
 			classInstance = new CompetenceClassInstance();
 			break;
 		case FUNCTION:
+		case FUNCTION_HEAD:
 			classInstance = new FunctionClassInstance();
 			break;
 		case TASK:
+		case TASK_HEAD:
 			classInstance = new TaskClassInstance();
 			break;
 		default:

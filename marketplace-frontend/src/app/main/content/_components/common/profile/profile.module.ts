@@ -18,7 +18,7 @@ import {
   MatFormFieldModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatInputModule,
+  MatInputModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
@@ -50,7 +50,7 @@ const routes = [{ path: "", component: ProfileComponent }];
     MatInputModule,
     FuseSharedModule,
     MatCardModule,
-    FuseWidgetModule,
+    FuseWidgetModule
   ],
   exports: [],
   declarations: [
@@ -59,8 +59,8 @@ const routes = [{ path: "", component: ProfileComponent }];
     HelpSeekerProfileComponent,
     ProfileAboutComponent,
     ProfilePhotosVideosComponent,
-    ProfileTimelineComponent,
+    ProfileTimelineComponent
   ],
-  providers: [],
+  providers: []
 })
 export class ProfileModule {}
