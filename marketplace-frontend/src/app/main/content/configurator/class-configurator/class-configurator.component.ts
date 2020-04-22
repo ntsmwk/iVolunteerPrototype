@@ -6,8 +6,7 @@ import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/Relationship';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { PropertyDefinition, PropertyType, ClassProperty } from 'app/main/content/_model/meta/Property';
-import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
+import { PropertyType, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
@@ -37,15 +36,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private propertyDefinitionService: PropertyDefinitionService,
     private objectIdService: ObjectIdService,
     private dialogFactory: DialogFactoryDirective,
   ) { }
 
   @Input() marketplace: Marketplace;
 
-  configurableClasses: ClassDefinition[];
+  classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
 
   relationships: Relationship[];
@@ -56,7 +53,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   isLoaded = false;
   modelUpdated: boolean;
 
-  allPropertyDefinitions: PropertyDefinition<any>[];
   relationshipPalettes = CConstants.relationshipPalettes;
 
   popupMenu: EditorPopupMenu;
@@ -95,8 +91,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   ngOnInit() {
-    this.getPropertyDefinitionsFromServer();
-    this.configurableClasses = [];
+    this.classDefinitions = [];
     this.deletedClassIds = [];
     this.relationships = [];
     this.deletedRelationshipIds = [];
@@ -108,15 +103,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
     this.quickEditMode = false;
-  }
-
-  getPropertyDefinitionsFromServer() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace)
-      .toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
-        if (!isNullOrUndefined(propertyDefinitions)) {
-          this.allPropertyDefinitions = propertyDefinitions;
-        }
-      });
   }
 
   ngAfterContentInit() {
@@ -291,7 +277,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private parseIncomingClasses() {
     try {
       this.graph.getModel().beginUpdate();
-      for (const c of this.configurableClasses) {
+      for (const c of this.classDefinitions) {
         this.insertClassIntoGraph(c);
       }
     } finally {
@@ -610,7 +596,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     for (const cell of removedCells) {
 
       if (cell.cellType === MyMxCellType.CLASS) {
-        this.configurableClasses = this.configurableClasses.filter(c => c.id !== cell.id);
+        this.classDefinitions = this.classDefinitions.filter(c => c.id !== cell.id);
         this.deletedClassIds.push(cell.id);
 
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
@@ -789,7 +775,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
         const classCell = this.insertClassIntoGraph(
           addedClass, new mx.mxGeometry(parent.geometry.x + 130, parent.geometry.y, 110, 45));
-        this.configurableClasses.push(addedClass);
+        this.classDefinitions.push(addedClass);
 
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
@@ -838,7 +824,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
         const classCell = this.insertClassIntoGraph(
           addedClass, new mx.mxGeometry(parent.geometry.x, parent.geometry.y + parent.geometry.height + 20, 110, 45));
-        this.configurableClasses.push(addedClass);
+        this.classDefinitions.push(addedClass);
 
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
@@ -1089,7 +1075,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.overlayContent.marketplace = this.marketplace;
 
       if (cell.cellType === MyMxCellType.CLASS) {
-        this.overlayContent.classDefinition = this.configurableClasses.find(c => c.id === cell.id);
+        this.overlayContent.classDefinition = this.classDefinitions.find(c => c.id === cell.id);
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
         this.overlayContent.relationship = this.relationships.find(r => r.id === cell.id);
       }
@@ -1102,22 +1088,18 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   handleOverlayClosedEvent(event: ClassOptionsOverlayContentData) {
-
     this.graph.setPanning(true);
     this.graph.setEnabled(true);
     this.graph.setTooltips(true);
     this.displayOverlay = false;
-    console.log("overlay closed");
-    console.log(event);
     this.handleModelChanges(event.classDefinition);
     this.overlayContent = undefined;
     this.overlayEvent = undefined;
-
   }
 
   handleModelChanges(classDefinition: ClassDefinition) {
-    const i = this.configurableClasses.findIndex(c => c.id === classDefinition.id);
-    const existingClassDefinition = this.configurableClasses[i];
+    const i = this.classDefinitions.findIndex(c => c.id === classDefinition.id);
+    const existingClassDefinition = this.classDefinitions[i];
 
     const cell = this.graph.getModel().getCell(classDefinition.id) as MyMxCell;
     try {
@@ -1127,7 +1109,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.getModel().endUpdate();
     }
 
-    this.configurableClasses[i] = classDefinition;
+    this.classDefinitions[i] = classDefinition;
 
     if (!this.quickEditMode && classDefinition.properties.length !== existingClassDefinition.properties.length) {
       this.redrawContent(cell);
@@ -1291,7 +1273,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.updateModel();
         this.eventResponse.action = 'save';
         this.eventResponse.classConfiguration = this.currentClassConfiguration;
-        this.eventResponse.classDefintions = this.configurableClasses;
+        this.eventResponse.classDefintions = this.classDefinitions;
         this.eventResponse.relationships = this.relationships;
         this.eventResponse.deletedClassDefinitions = this.deletedClassIds;
         this.eventResponse.deletedRelationships = this.deletedRelationshipIds;
@@ -1325,7 +1307,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   openGraph(classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
     this.currentClassConfiguration = classConfiguration;
     this.relationships = relationships;
-    this.configurableClasses = classDefinitions;
+    this.classDefinitions = classDefinitions;
     this.deletedClassIds = [];
     this.deletedRelationshipIds = [];
     this.hiddenEdges = [];
@@ -1338,7 +1320,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // store current connections in relationships
     const allCells = this.graph.getModel().getChildren(this.graph.getDefaultParent());
 
-    for (const cd of this.configurableClasses) {
+    for (const cd of this.classDefinitions) {
       const cell: MyMxCell = allCells.find((c: mxgraph.mxCell) => {
         return c.id === cd.id;
       }) as MyMxCell;
@@ -1380,7 +1362,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     // update the configurator save file
     if (!isNullOrUndefined(this.currentClassConfiguration)) {
-      this.currentClassConfiguration.classDefinitionIds = this.configurableClasses.map(c => c.id);
+      this.currentClassConfiguration.classDefinitionIds = this.classDefinitions.map(c => c.id);
       this.currentClassConfiguration.relationshipIds = this.relationships.map(r => r.id);
     }
   }
@@ -1439,7 +1421,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(graph);
   }
   printModelToConsole() {
-    console.log(this.configurableClasses);
+    console.log(this.classDefinitions);
     console.log(this.relationships);
     console.log(this.currentClassConfiguration);
   }
