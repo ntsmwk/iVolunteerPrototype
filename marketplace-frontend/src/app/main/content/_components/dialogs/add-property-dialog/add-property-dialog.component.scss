@@ -74,13 +74,16 @@ mat-dialog-content {
     }
   }
 
-  
-
   .center-spinner-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     height: inherit;
+  }
+
+  .search-field {
+    color: black;
+    width: 100%;    
   }
 
 }
@@ -96,4 +99,9 @@ mat-dialog-content {
 
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   padding: 0;
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  // background-color: rgb(230, 228, 228);
+  color: rgb(62, 125, 219);
 }

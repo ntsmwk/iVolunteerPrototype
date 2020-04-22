@@ -54,7 +54,7 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></mat-row>
     </mat-table>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="search-field">
       <input matInput (keyup)="applyFilter($event)" placeholder="Suchen...">
     </mat-form-field>
   </div>
@@ -68,7 +68,7 @@
 <mat-dialog-actions *ngIf="loaded">
   <button mat-button [mat-dialog-close]="undefined">Cancel</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button (click)="applyClicked()">Apply</button>
+  <button mat-button (click)="onSubmit()">Apply</button>
 
   <button mat-button (click)="createNewPropertyClicked()">Create New Property</button>
 </mat-dialog-actions>

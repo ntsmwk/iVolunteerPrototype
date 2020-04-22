@@ -6,6 +6,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
 import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
 
 export class ClassOptionsOverlayContentData {
     marketplace: Marketplace;
@@ -66,8 +67,9 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     addPropertyClicked() {
-        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then(() => {
-
+        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: AddPropertyDialogData) => {
+            console.log(ret);
+            this.inputData.classDefinition.properties = ret.classDefinition.properties;
         });
     }
 

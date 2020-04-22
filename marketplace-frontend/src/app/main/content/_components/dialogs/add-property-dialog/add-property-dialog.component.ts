@@ -8,6 +8,7 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
@@ -25,6 +26,7 @@ export class AddPropertyDialogComponent implements OnInit {
     public data: AddPropertyDialogData,
     private router: Router,
     private propertyDefinitionService: PropertyDefinitionService,
+    private classDefinitionService: ClassDefinitionService
   ) {
   }
 
@@ -48,9 +50,7 @@ export class AddPropertyDialogComponent implements OnInit {
 
   }
 
-  onSubmit() {
 
-  }
 
   /** Whether the number of selected elements matches the total number of rows. */
   // isAllSelected() {
@@ -79,7 +79,18 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   onRowClick(row: PropertyDefinition<any>) {
-    console.log(row);
     this.selection.select(row);
+  }
+
+  onSubmit() {
+    const addedProperties = this.selection.selected.filter(p => this.data.classDefinition.properties.findIndex(q => p.id === q.id) === -1);
+    this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id)).toPromise().then((ret: ClassProperty<any>[]) => {
+      this.data.classDefinition.properties.push(...ret);
+      this.dialogRef.close(this.data);
+    });
+  }
+
+  createNewPropertyClicked() {
+    console.log('implement');
   }
 }
