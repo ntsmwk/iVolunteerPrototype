@@ -114,15 +114,15 @@ export class EditorPopupMenu {
 
           // remove property from Class in Array
           if (cell.cellType === MyMxCellType.PROPERTY) {
-            const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
+            const classIndex = outer.editorInstance.classDefinitions.findIndex((c: ClassDefinition) => {
               return c.id === cell.getParent().getId();
             });
-            const remIndex = outer.editorInstance.configurableClasses[classIndex].properties.findIndex((p: PropertyItem) => {
+            const remIndex = outer.editorInstance.classDefinitions[classIndex].properties.findIndex((p: PropertyItem) => {
               return p.id === cell.propertyId;
             });
 
             if (remIndex >= 0) {
-              outer.editorInstance.configurableClasses[classIndex].properties.splice(remIndex, 1);
+              outer.editorInstance.classDefinitions[classIndex].properties.splice(remIndex, 1);
             }
             outer.editorInstance.redrawContent(undefined);
 
@@ -130,12 +130,12 @@ export class EditorPopupMenu {
             // remove Class from Array
           } else if (cell.cellType === MyMxCellType.CLASS) {
 
-            const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
+            const classIndex = outer.editorInstance.classDefinitions.findIndex((c: ClassDefinition) => {
               return c.id === cell.getId();
             });
 
             if (classIndex >= 0) {
-              const deleted = outer.editorInstance.configurableClasses.splice(classIndex, 1);
+              const deleted = outer.editorInstance.classDefinitions.splice(classIndex, 1);
               // add to delete Queue
               outer.editorInstance.deletedClassIds.push(deleted.pop().id);
             }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterContentInit, HostListener } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/Class';
 import { mxgraph } from 'mxgraph';
@@ -44,16 +44,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
-
   relationships: Relationship[];
   deletedRelationshipIds: string[];
-
   currentClassConfiguration: ClassConfiguration;
 
-  isLoaded = false;
   modelUpdated: boolean;
-
-  relationshipPalettes = CConstants.relationshipPalettes;
 
   popupMenu: EditorPopupMenu;
 
@@ -187,7 +182,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       this.graph.setPanning(true);
 
       this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
-
       this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
 
       /**
@@ -312,8 +306,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       cell = new mx.mxCell(classDefinition.name, geometry, style) as MyMxCell;
     }
 
-
-
     cell.root = classDefinition.root;
 
     if (cell.root) {
@@ -380,7 +372,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
 
       const nextIcon: MyMxCell = this.graph.insertVertex(
-        cell, 'add_class_same_level_icon', 'add class', 85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
+        cell, 'add_class_same_level_icon', 'add class',
+        85, yLocation + 50, 20, 20, CConstants.mxStyles.addClassSameLevelIcon) as MyMxCell;
       nextIcon.setConnectable(false);
       nextIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
     }
@@ -388,7 +381,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // down icon
     if (cell.classArchetype !== ClassArchetype.ROOT) {
       const downIcon: MyMxCell = this.graph.insertVertex(
-        cell, 'add_class_next_level_icon', 'add class', 65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
+        cell, 'add_class_next_level_icon', 'add class',
+        65, yLocation + 50, 20, 20, CConstants.mxStyles.addClassNewLevelIcon) as MyMxCell;
       downIcon.setConnectable(false);
       downIcon.cellType = MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON;
     }
@@ -404,7 +398,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     // options icon
 
-    const optionsIcon: MyMxCell = this.graph.insertVertex(cell, 'options', 'options', 5, yLocation + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
+    const optionsIcon: MyMxCell = this.graph.insertVertex(
+      cell, 'options', 'options', 5, yLocation + 50, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
     optionsIcon.setConnectable(false);
     optionsIcon.cellType = MyMxCellType.OPTIONS_ICON;
 
@@ -1391,7 +1386,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   /**
    * ******KEY LISTENER/HANDLER******
    */
-
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Delete') {
@@ -1405,7 +1399,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   showInstanceForm() {
-
     const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
     if (!isNullOrUndefined(rootCell)) {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/top-down`], { queryParams: [rootCell.id] });
