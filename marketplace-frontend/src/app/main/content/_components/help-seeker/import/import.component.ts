@@ -14,7 +14,6 @@ import {
 } from "app/main/content/_model/participant";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
-import { ImportService } from "app/main/content/_service/import.service";
 import { PropertyInstance } from "app/main/content/_model/meta/Property";
 
 @Component({
@@ -35,8 +34,6 @@ export class ImportComponent implements OnInit {
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
-    private importService: ImportService,
-
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
@@ -80,35 +77,27 @@ export class ImportComponent implements OnInit {
     let fileReader = new FileReader();
     fileReader.onload = e => {
       let importContent = fileReader.result;
-      // this.importService.import();
+      this.handleFileContent(fileReader.result);
     };
     fileReader.readAsText(this.importForm.value.file.files[0]);
-    // TODO import call...
-    //   this.derivationRuleService
-    //     .save(this.marketplace, this.derivationRule)
-    //     .toPromise()
-    //     .then(() =>
-    //       this.loadDerivationRule(this.marketplace, this.derivationRule.id)
-    //     );
-    // }
   }
 
-  handleFileContent(content: string) {
+  handleFileContent(content) {
     const classInstances: ClassInstance[] = [];
     const propertyInstances: PropertyInstance<any>[] = [];
-    let fileContentObject = JSON.stringify(content);
-    console.error(content);
-    console.error(fileContentObject);
+    let fileContentObject = JSON.parse(content);
     for (const entry of fileContentObject) {
+      this.handleEntry(entry);
       console.error(entry);
     }
   }
 
   handleEntry(entry) {
-    // for (const classProperty of entry) {
-    //   const values = [event.formGroup.value[classProperty.id]];
-    //   propertyInstances.push(new PropertyInstance(classProperty, values));
-    // }
+    for (let [key, value] of Object.keys(entry)) {
+      console.error(key + value);
+      // const values = [event.formGroup.value[classProperty.id]];
+      // propertyInstances.push(new PropertyInstance(classProperty, values));
+    }
     // for (const enumRepresentation of this.currentFormConfiguration.formEntry
     //   .enumRepresentations) {
     //   const values = [
