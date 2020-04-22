@@ -299,16 +299,31 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean) {
+  private insertClassIntoGraph(classDefinition: ClassDefinition, geometry: mxgraph.mxGeometry, createNew: boolean, replaceCell?: MyMxCell) {
     // create class cell
+
     let cell: MyMxCell;
+    let style: string;
+
     if (classDefinition.classArchetype.startsWith('ENUM')) {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classEnum) as MyMxCell;
+      style = CConstants.mxStyles.classEnum;
     } else if (classDefinition.collector) {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classFlexprodCollector) as MyMxCell;
+      style = CConstants.mxStyles.classFlexprodCollector;
     } else {
-      cell = new mx.mxCell(classDefinition.name, geometry, CConstants.mxStyles.classNormal) as MyMxCell;
+      style = CConstants.mxStyles.classNormal;
     }
+
+    if (!isNullOrUndefined(replaceCell)) {
+      cell = replaceCell;
+      this.graph.removeCells(cell.children);
+      this.graph.setCellStyle(style, [cell]);
+
+    } else {
+      cell = new mx.mxCell(classDefinition.name, geometry, style) as MyMxCell;
+    }
+
+
+
     cell.root = classDefinition.root;
 
     if (cell.root) {
@@ -408,7 +423,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // const hfiller = this.graph.insertVertex(cell, 'hfiller', null, 0, i + 50 + 20, 85, 5, CConstants.mxStyles.classHfiller);
     // hfiller.setConnectable(false);
 
-    return this.graph.addCell(cell);
+    if (isNullOrUndefined(replaceCell)) {
+      return this.graph.addCell(cell);
+    } else {
+      return cell;
+    }
   }
 
   /**
@@ -1077,13 +1096,38 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleOverlayClosedEvent(event: any) {
-    this.overlayContent = undefined;
-    this.overlayEvent = undefined;
+  handleOverlayClosedEvent(event: ClassOptionsOverlayContentData) {
+
     this.graph.setPanning(true);
     this.graph.setEnabled(true);
     this.graph.setTooltips(true);
     this.displayOverlay = false;
+    console.log("overlay closed");
+    console.log(event);
+    this.handleModelChanges(event.classDefinition);
+    this.overlayContent = undefined;
+    this.overlayEvent = undefined;
+
+  }
+
+  handleModelChanges(classDefinition: ClassDefinition) {
+    const i = this.configurableClasses.findIndex(c => c.id === classDefinition.id);
+    const existingClassDefinition = this.configurableClasses[i];
+
+    const cell = this.graph.getModel().getCell(classDefinition.id) as MyMxCell;
+    try {
+      this.graph.getModel().beginUpdate();
+      const newCell = this.insertClassIntoGraph(classDefinition, cell.geometry, false, cell);
+    } finally {
+      this.graph.getModel().endUpdate();
+    }
+
+    this.configurableClasses[i] = classDefinition;
+
+    if (!this.quickEditMode && classDefinition.properties.length !== existingClassDefinition.properties.length) {
+      this.redrawContent(cell);
+    }
+
   }
 
   /**

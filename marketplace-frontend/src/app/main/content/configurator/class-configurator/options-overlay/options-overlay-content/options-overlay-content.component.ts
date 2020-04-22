@@ -4,9 +4,10 @@ import { Relationship, RelationshipType } from 'app/main/content/_model/meta/Rel
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
-import { PropertyType } from 'app/main/content/_model/meta/Property';
+import { PropertyType, ClassProperty } from 'app/main/content/_model/meta/Property';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
+import { isNullOrUndefined } from 'util';
 
 export class ClassOptionsOverlayContentData {
     marketplace: Marketplace;
@@ -27,6 +28,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     relationshipPalettes = CConstants.relationshipPalettes;
     propertyTypePalettes = CConstants.propertyTypePalettes;
+
     constructor(
         private dialogFactory: DialogFactoryDirective,
         private _sanitizer: DomSanitizer,
@@ -37,7 +39,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     onSubmit() {
-
+        this.resultData.emit(this.inputData);
     }
 
     changeIconClicked() {

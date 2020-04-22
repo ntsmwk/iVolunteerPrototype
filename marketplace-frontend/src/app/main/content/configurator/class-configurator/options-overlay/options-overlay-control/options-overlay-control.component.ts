@@ -1,5 +1,7 @@
-import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
+import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output, OnInit, OnChanges } from '@angular/core';
 import { ClassOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
+
+declare var $: any;
 
 const OVERLAY_WIDTH = 400;
 const OVERLAY_HEIGHT = 390;
@@ -10,7 +12,7 @@ const OVERLAY_HEIGHT = 390;
   templateUrl: './options-overlay-control.component.html',
   styleUrls: ['./options-overlay-control.component.scss']
 })
-export class ClassOptionsOverlayControlComponent {
+export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
 
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
@@ -19,16 +21,23 @@ export class ClassOptionsOverlayControlComponent {
   @Input() overlayEvent: PointerEvent;
   @Output() overlayClosed = new EventEmitter<ClassOptionsOverlayContentData>();
 
+  model: ClassOptionsOverlayContentData = new ClassOptionsOverlayContentData();
+
   constructor(
     private changeDetector: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
+    this.model = $.extend(true, {}, this.overlayContent);
+    console.log(this.model);
+
     this.toggleInboxOverlay();
   }
 
   ngOnChanges() {
-    this.toggleInboxOverlay();
+    if (this.displayOverlay) {
+      this.ngOnInit();
+    }
   }
 
   navigateBack() {
@@ -63,7 +72,7 @@ export class ClassOptionsOverlayControlComponent {
     this.overlayClosed.emit(event);
   }
 
-  closeOverlay($event) {
+  closeOverlay(event: ClassOptionsOverlayContentData) {
     this.displayOverlay = false;
     this.overlayClosed.emit(undefined);
   }
