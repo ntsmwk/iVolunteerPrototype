@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
+import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController
 public class ClassInstanceController {
@@ -28,6 +32,7 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassInstanceMapper classInstanceMapper;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -75,16 +80,23 @@ public class ClassInstanceController {
 		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
 				tenantId);
 		if (classDefinition != null) {
-			ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
-			classInstance.setUserId(volunteerId);
-			classInstance.getProperties().forEach(p -> {
-				if(properties.containsKey(p.getName())){
-					p.setValues(Collections.singletonList(properties.get(p.getName())));
-				}
-			});
-			this.classInstanceRepository.save(classInstance);
+			List<FormConfiguration> formConfigurations = this.classDefinitionService
+					.getParentsById(Collections.singletonList(classDefinitionId), tenantId);
+			if (formConfigurations.size() > 0) {
+				List<ClassProperty<Object>> classProperties = formConfigurations.get(0).getFormEntry()
+						.getClassProperties();
+				List<PropertyInstance<Object>> propertyInstances = this.classPropertyToPropertyInstanceMapper.toTargets(classProperties);
+				ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
+				classInstance.setUserId(volunteerId);
+				classInstance.setProperties(propertyInstances);
+				classInstance.getProperties().forEach(p -> {
+					if (properties.containsKey(p.getName())) {
+						p.setValues(Collections.singletonList(properties.get(p.getName())));
+					}
+				});
+				this.classInstanceRepository.save(classInstance);
+			}
 		}
-
 	}
 
 	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
