@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.StandardPropertyDefinitions.IDProperty;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -26,25 +25,18 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.feedback.Feedback;
-import at.jku.cis.iVolunteer.model.feedback.FeedbackType;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
+
 
 @Service
 public class InitializationService {
@@ -54,16 +46,8 @@ public class InitializationService {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private ConfiguratorRepository configuratorRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private FinalizationService finalizationService;
-	@Autowired private DerivationRuleRepository derivationRuleRepository;
-	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private HelpSeekerRepository helpSeekerRepository;
-	@Autowired private FeedbackRepository feedbackRepository;
-	@Autowired private UserMappingRepository userMappingRepository;
-	@Autowired private Environment environment;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
