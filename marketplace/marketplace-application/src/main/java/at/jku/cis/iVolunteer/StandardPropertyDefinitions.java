@@ -175,6 +175,7 @@ public class StandardPropertyDefinitions {
 //	}
 
 	public List<PropertyDefinition<Object>> getAll(String tenantId) {
+		List<PropertyDefinition<Object>> properties = this.getAllHeader(tenantId);
 		List<PropertyDefinition<Object>> sps = this.getAllSingle(tenantId);
 //		List<PropertyDefinition<Object>> mps = this.getAllMulti();
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
@@ -186,8 +187,27 @@ public class StandardPropertyDefinitions {
 //		sps.addAll(tmwr);
 //		sps.addAll(flexProd);
 
-		return sps;
+		properties.addAll(sps);
+		return properties;
 
+	}
+	
+	public List<PropertyDefinition<Object>> getAllHeader(String tenantId) {
+		List<PropertyDefinition<?>> props = new LinkedList<>();
+		
+		props.add(new IDProperty(tenantId));
+		props.add(new EvidenzProperty(tenantId));
+		props.add(new DateFromProperty(tenantId));
+		props.add(new DateToProperty(tenantId));
+		props.add(new TaskType1Property(tenantId));
+		props.add(new TaskType2Property(tenantId));
+		props.add(new TaskType3Property(tenantId));
+		props.add(new TaskType4Property(tenantId));
+		props.add(new RankProperty(tenantId));
+		props.add(new DurationProperty(tenantId));
+		
+		return new ArrayList(props);
+		
 	}
 
 	public List<PropertyDefinition<Object>> getAllSingle(String tenantId) {
@@ -264,6 +284,142 @@ public class StandardPropertyDefinitions {
 //			
 //		return new HashMap<>(props);
 //	}
+	
+	/**
+	 * 
+	 * Header Properties
+	 *
+	 */
+	public static class IDProperty extends TextPropertyDefinition {
+
+		IDProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("id");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class EvidenzProperty extends TextPropertyDefinition {
+
+		EvidenzProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("evidenz");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class DateFromProperty extends TextPropertyDefinition {
+
+		DateFromProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("dateFrom");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class DateToProperty extends TextPropertyDefinition {
+
+		DateToProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("dateTo");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TaskType1Property extends TextPropertyDefinition {
+
+		TaskType1Property(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("taskType1");
+			this.setTenantId(tenantId);
+		}
+	}
+	public static class TaskType2Property extends TextPropertyDefinition {
+
+		TaskType2Property(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("taskType2");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TaskType3Property extends TextPropertyDefinition {
+
+		TaskType3Property(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("taskType3");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class TaskType4Property extends TextPropertyDefinition {
+
+		TaskType4Property(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("taskType4");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class RankProperty extends TextPropertyDefinition {
+
+		RankProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("rank");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class DurationProperty extends TextPropertyDefinition {
+
+		DurationProperty(String tenantId) {
+			inst(tenantId);
+		}
+
+		@PostConstruct
+		public void inst(String tenantId) {
+			this.setName("duration");
+			this.setTenantId(tenantId);
+		}
+	}
+	
+	
 
 	/**
 	 * 
@@ -279,15 +435,15 @@ public class StandardPropertyDefinitions {
 		@PostConstruct
 		public void inst(String tenantId) {
 			this.setType(PropertyType.TEXT);
-			this.setName("Name");
+			this.setName("name");
 			this.setRequired(true);
 			this.setTenantId(tenantId);
 
-			List<PropertyConstraint<?>> constraints = new ArrayList<>();
-			constraints.add(new MinimumTextLength(3));
-			constraints.add(new MaximumTextLength(10));
-			constraints.add(new TextPattern("^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*"));
-			this.setPropertyConstraints(new ArrayList(constraints));
+//			List<PropertyConstraint<?>> constraints = new ArrayList<>();
+//			constraints.add(new MinimumTextLength(3));
+//			constraints.add(new MaximumTextLength(10));
+//			constraints.add(new TextPattern("^[A-Za-z][A-Za-zöäüÖÄÜß\\s]*"));
+//			this.setPropertyConstraints(new ArrayList(constraints));
 
 		}
 	}
@@ -384,7 +540,7 @@ public class StandardPropertyDefinitions {
 		}
 
 		public void inst(String tenantId) {
-			this.setName("Location");
+			this.setName("location");
 			this.setTenantId(tenantId);
 		}
 	}

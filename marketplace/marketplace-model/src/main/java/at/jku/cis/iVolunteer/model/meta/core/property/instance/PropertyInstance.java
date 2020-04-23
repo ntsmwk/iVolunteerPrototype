@@ -117,7 +117,6 @@ public class PropertyInstance<T> {
 			return false;
 		}
 		return ((PropertyInstance<?>) obj).id.equals(id);
-
 	}
 
 	@Override
