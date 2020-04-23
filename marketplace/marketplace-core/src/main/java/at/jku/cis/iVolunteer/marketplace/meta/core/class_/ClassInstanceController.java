@@ -88,6 +88,7 @@ public class ClassInstanceController {
 				List<PropertyInstance<Object>> propertyInstances = this.classPropertyToPropertyInstanceMapper.toTargets(classProperties);
 				ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
 				classInstance.setUserId(volunteerId);
+				classInstance.setTenantId(tenantId);
 				classInstance.setProperties(propertyInstances);
 				classInstance.getProperties().forEach(p -> {
 					if (properties.containsKey(p.getName())) {
