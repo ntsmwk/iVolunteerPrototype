@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.class_.ClassDefinitionToInstanceMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -74,30 +74,36 @@ public class ClassInstanceController {
 	}
 
 	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/tenant/{tenantId}/user/{volunteerId}")
-	public void createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
+	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
 			@PathVariable String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {
+		
 		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
 				tenantId);
 		if (classDefinition != null) {
-			List<FormConfiguration> formConfigurations = this.classDefinitionService
-					.getParentsById(Collections.singletonList(classDefinitionId), tenantId);
-			if (formConfigurations.size() > 0) {
-				List<ClassProperty<Object>> classProperties = formConfigurations.get(0).getFormEntry()
-						.getClassProperties();
-				List<PropertyInstance<Object>> propertyInstances = this.classPropertyToPropertyInstanceMapper.toTargets(classProperties);
+//			List<FormConfiguration> formConfigurations = this.classDefinitionService
+//					.getParentsById(Collections.singletonList(classDefinitionId), tenantId);
+//			if (formConfigurations.size() > 0) {
+//				List<ClassProperty<Object>> classProperties = formConfigurations.get(0).getFormEntry().getClassProperties();
+//				
+//				List<PropertyInstance<Object>> propertyInstances = this.classPropertyToPropertyInstanceMapper.toTargets(classProperties);
+				
+				
 				ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
+			
 				classInstance.setUserId(volunteerId);
 				classInstance.setTenantId(tenantId);
-				classInstance.setProperties(propertyInstances);
+//				classInstance.setProperties(propertyInstances);
 				classInstance.getProperties().forEach(p -> {
 					if (properties.containsKey(p.getName())) {
 						p.setValues(Collections.singletonList(properties.get(p.getName())));
 					}
 				});
-				this.classInstanceRepository.save(classInstance);
-			}
+				return this.classInstanceRepository.save(classInstance);
+//			}
 		}
+		
+		return null;
 	}
 
 	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")

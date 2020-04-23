@@ -1,11 +1,11 @@
-package at.jku.cis.iVolunteer.mapper.meta.core.property;
+package at.jku.cis.iVolunteer.marketplace._mapper.property;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.OneWayMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;

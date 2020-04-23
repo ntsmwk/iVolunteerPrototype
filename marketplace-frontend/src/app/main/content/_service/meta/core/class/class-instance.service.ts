@@ -11,7 +11,7 @@ import { Participant } from "app/main/content/_model/participant";
   providedIn: "root",
 })
 export class ClassInstanceService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUserClassInstancesByArcheType(
     marketplace: Marketplace,

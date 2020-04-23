@@ -1,13 +1,20 @@
-package at.jku.cis.iVolunteer.mapper.meta.core.class_;
+package at.jku.cis.iVolunteer.marketplace._mapper.clazz;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.NotAcceptableException;
+
+import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.OneWayMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
@@ -21,6 +28,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefinition, ClassInstance> {
 
 	@Autowired ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+	@Autowired ClassDefinitionService classDefinitionService;
 
 	@Override
 	public ClassInstance toTarget(ClassDefinition source) {
@@ -55,12 +63,8 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		classInstance.setClassDefinitionId(source.getId());
 
 		classInstance.setName(source.getName());
-
-		List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
-		for (ClassProperty<Object> classProperty : source.getProperties()) {
-			properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
-		}
-		classInstance.setProperties(properties);
+	
+		classInstance.setProperties(getParentProperties(source));
 
 		return classInstance;
 	}
@@ -77,6 +81,17 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		}
 
 		return instances;
+	}
+	
+
+	
+	
+	
+	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
+		List<ClassProperty<Object>> properties = new ArrayList<>();
+		
+		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId()), classDefinition.getTenantId()).get(0).getFormEntry().getClassProperties();
+		return classPropertyToPropertyInstanceMapper.toTargets(properties);
 	}
 
 }

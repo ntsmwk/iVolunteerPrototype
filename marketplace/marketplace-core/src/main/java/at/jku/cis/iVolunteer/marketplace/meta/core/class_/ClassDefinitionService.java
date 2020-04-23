@@ -33,7 +33,6 @@ public class ClassDefinitionService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
 
 	public ClassDefinition getByName(String name, String tenantId) {
 		return classDefinitionRepository.findByNameAndTenantId(name, tenantId);
@@ -118,10 +117,8 @@ public class ClassDefinitionService {
 	public List<FormConfiguration> getParentsById(List<String> childIds, String tenantId) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
 
-		childIds.forEach(id -> {
-			childClassDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
-		});
-
+		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
+		
 		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
 
 		// Pre-Condition: Graph must be acyclic - a child can only have one parent, one
@@ -149,7 +146,7 @@ public class ClassDefinitionService {
 
 				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
-
+				
 				if (inheritanceList == null || inheritanceList.size() == 0) {
 					throw new NotAcceptableException("getParentById: child is not root and has no parent");
 				}
@@ -158,8 +155,7 @@ public class ClassDefinitionService {
 					formEntry.setImagePath(currentClassDefinition.getImagePath());
 				}
 
-				currentClassDefinition = classDefinitionRepository
-						.getByIdAndTenantId(inheritanceList.get(0).getSource(), tenantId);
+				currentClassDefinition = classDefinitionRepository.findOne(inheritanceList.get(0).getSource());
 			}
 
 			formEntry.getClassDefinitions().add(currentClassDefinition);

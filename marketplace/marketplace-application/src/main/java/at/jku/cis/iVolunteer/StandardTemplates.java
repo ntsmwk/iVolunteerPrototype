@@ -8,10 +8,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
+//import at.jku.cis.iVolunteer.marketplace.task.template.UserDefinedTaskTemplateRepository;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.task.template.MultiUserDefinedTaskTemplate;
@@ -24,7 +24,7 @@ public class StandardTemplates {
 	@Autowired public ClassDefinitionRepository competenceRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
+//	@Autowired private UserDefinedTaskTemplateRepository userDefinedTaskTemplateRepository;
 
 	public StandardTemplates() {
 

@@ -13,8 +13,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.StandardPropertyDefinitions.IDProperty;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
@@ -287,10 +287,10 @@ public class InitializationService {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
 		this.createConfigurator(tenantId, "slot1");
-		this.createConfigurator(tenantId, "slot2");
-		this.createConfigurator(tenantId, "slot3");
-		this.createConfigurator(tenantId, "slot4");
-		this.createConfigurator(tenantId, "slot5");
+//		this.createConfigurator(tenantId, "slot2");
+//		this.createConfigurator(tenantId, "slot3");
+//		this.createConfigurator(tenantId, "slot4");
+//		this.createConfigurator(tenantId, "slot5");
 
 	}
 	

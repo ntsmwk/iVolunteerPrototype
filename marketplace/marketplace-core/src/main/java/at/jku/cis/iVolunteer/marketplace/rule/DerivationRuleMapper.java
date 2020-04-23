@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
