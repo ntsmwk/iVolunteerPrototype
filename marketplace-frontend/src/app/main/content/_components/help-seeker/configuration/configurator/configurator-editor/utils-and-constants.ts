@@ -94,25 +94,22 @@ export class CUtils {
     fwPassEintrag.properties = [];
 
     let idProperty = new ClassProperty<string>();
-    idProperty.name = 'ID';
-    idProperty.id = 'id';
+    idProperty.name = 'id';
+    idProperty.id = objectIdService.getNewObjectId();
     idProperty.type = PropertyType.TEXT;
-    idProperty.exportLabel = 'id';
     fwPassEintrag.properties.push(idProperty);
 
 
     let nameProperty = new ClassProperty<string>();
-    nameProperty.name = 'Name';
-    nameProperty.id = 'name';
-    nameProperty.exportLabel = 'name';
+    nameProperty.name = 'name';
+    nameProperty.id = objectIdService.getNewObjectId();
     nameProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(nameProperty);
 
 
     let evidenceProperty = new ClassProperty<string>();
-    evidenceProperty.name = 'Evidenz';
-    evidenceProperty.id = 'evidence';
-    evidenceProperty.exportLabel = 'evidenz';
+    evidenceProperty.name = 'evidenz';
+    evidenceProperty.id = objectIdService.getNewObjectId();
     evidenceProperty.type = PropertyType.TEXT;
     fwPassEintrag.properties.push(evidenceProperty);
 
@@ -129,16 +126,14 @@ export class CUtils {
     configurableClasses.push(task);
 
     let vonProperty = new ClassProperty<Date>();
-    vonProperty.name = 'taskDateFrom';
-    vonProperty.id = 'taskDateFrom';
-    vonProperty.exportLabel = 'taskDateFrom';
+    vonProperty.name = 'dateFrom';
+    vonProperty.id = 'objectIdService.getNewObjectId();';
     vonProperty.type = PropertyType.DATE;
     task.properties.push(vonProperty);
 
     let bisProperty = new ClassProperty<Date>();
-    bisProperty.name = 'taskDateTo';
-    bisProperty.id = 'taskDateTo';
-    bisProperty.exportLabel = 'taskDateTo';
+    bisProperty.name = 'dateTo';
+    bisProperty.id = objectIdService.getNewObjectId();;
     bisProperty.type = PropertyType.DATE;
     task.properties.push(bisProperty);
 
@@ -200,6 +195,61 @@ export class CUtils {
     r4.source = fwPassEintrag.id;
     r4.superClassId = r4.source;
     relationships.push(r4);
+
+    let myTask = new ClassDefinition();
+    myTask.id = objectIdService.getNewObjectId();
+    myTask.tenantId = tenantId;
+    myTask.marketplaceId = marketplaceId;
+    myTask.name = 'myTask';
+    myTask.root = false;
+    myTask.classArchetype = ClassArchetype.TASK;
+
+    myTask.properties = [];
+    let tt1 = new ClassProperty<string>();
+    tt1.name = 'taskType1';
+    tt1.id = objectIdService.getNewObjectId();
+    tt1.type = PropertyType.TEXT;
+    myTask.properties.push(tt1);
+
+    let tt2 = new ClassProperty<string>();
+    tt2.name = 'taskType2';
+    tt2.id = objectIdService.getNewObjectId();
+    tt2.type = PropertyType.TEXT;
+    myTask.properties.push(tt2);
+
+    let tt3 = new ClassProperty<string>();
+    tt3.name = 'taskType3';
+    tt3.id = objectIdService.getNewObjectId();
+    tt3.type = PropertyType.TEXT;
+    myTask.properties.push(tt3);
+
+    let location = new ClassProperty<string>();
+    location.name = 'location';
+    location.id = objectIdService.getNewObjectId();
+    location.type = PropertyType.TEXT;
+    myTask.properties.push(location);
+
+    let rank = new ClassProperty<string>();
+    rank.name = 'rank';
+    rank.id = objectIdService.getNewObjectId();
+    rank.type = PropertyType.TEXT;
+    myTask.properties.push(rank);
+
+    let duration = new ClassProperty<number>();
+    duration.name = 'rank';
+    duration.id = objectIdService.getNewObjectId();
+    duration.type = PropertyType.FLOAT_NUMBER;
+    myTask.properties.push(duration);
+
+    configurableClasses.push(myTask);
+
+    let r5 = new Inheritance();
+    r5.id = objectIdService.getNewObjectId();
+    r5.relationshipType = RelationshipType.INHERITANCE;
+    r5.target = myTask.id;
+    r5.source = task.id;
+    r5.superClassId = r5.source;
+    relationships.push(r5);
 
     return { classDefintions: configurableClasses, relationships: relationships };
 

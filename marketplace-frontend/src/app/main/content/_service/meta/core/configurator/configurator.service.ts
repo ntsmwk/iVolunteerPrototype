@@ -7,7 +7,7 @@ import { Marketplace } from "app/main/content/_model/marketplace";
   providedIn: "root"
 })
 export class ConfiguratorService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllConfigurators(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/meta/configurator/all`);
@@ -35,12 +35,13 @@ export class ConfiguratorService {
     );
   }
 
-  createNewConfigurator(marketplace: Marketplace, configurator: Configurator) {
-    return this.http.post(
-      `${marketplace.url}/meta/configurator/new`,
-      configurator
+  createNewConfigurator(marketplace: Marketplace) {
+    return this.http.get(
+      `${marketplace.url}/meta/configurator/new/`
     );
   }
+
+
 
   saveConfigurator(marketplace: Marketplace, configurator: Configurator) {
     console.log("Save configurator");

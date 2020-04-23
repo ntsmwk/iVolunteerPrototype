@@ -1084,6 +1084,9 @@ export class ConfiguratorEditorComponent implements OnInit, AfterContentInit {
     this.configurableClasses = [];
     this.relationships = [];
     this.currentConfigurator = undefined;
+    this.configuratorService.createNewConfigurator(this.marketplace).toPromise().then((ret: Configurator) => {
+      this.currentConfigurator = ret;
+    })
     this.showServerContent(true);
   }
 

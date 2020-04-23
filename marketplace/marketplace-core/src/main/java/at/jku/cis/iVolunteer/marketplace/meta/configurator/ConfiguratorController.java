@@ -1,7 +1,10 @@
 package at.jku.cis.iVolunteer.marketplace.meta.configurator;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,12 +15,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
 @RestController
 public class ConfiguratorController {
 
 	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	
 	@GetMapping("meta/configurator/all")
 	List<Configurator> getAllConfigurators() {
@@ -48,9 +63,10 @@ public class ConfiguratorController {
 		return configuratorRepository.save(c);
 	}
 	
-	@PostMapping("meta/configurator/new")
-	Configurator createNewConfigurator(@RequestBody Configurator newConfigurator) {
-		return saveConfigurator(newConfigurator);
+	@GetMapping("meta/configurator/new/")
+	Configurator createNewConfigurator() {
+		return null;
+		
 	}
 	
 	@PutMapping("meta/configurator/save")
@@ -62,6 +78,7 @@ public class ConfiguratorController {
 	void deleteConfigurator(@PathVariable("id") String id) {
 		configuratorRepository.delete(id);
 	}
+	
 	
 	
 }
