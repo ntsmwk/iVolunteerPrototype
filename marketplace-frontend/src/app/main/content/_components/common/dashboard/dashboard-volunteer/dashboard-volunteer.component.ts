@@ -97,28 +97,27 @@ export class DashboardVolunteerComponent implements OnInit {
       );
       this.marketplace = marketplaces[0];
 
-      // auch "TASK_HEAD" holen (konfig file oben: funktion, verdienst, ....)
       this.marketplaceClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
 
-      console.error(this.marketplaceClassInstances);
-
-      // this.marketplaceClassInstances.forEach((ci, index, object) => {
-      //   if (ci.duration === null) {
-      //     object.splice(index, 1);
-      //   }
-      // });
+      this.marketplaceClassInstances.forEach((ci, index, object) => {
+        if (ci.duration && ci.duration === null) {
+          object.splice(index, 1);
+        }
+      });
 
       this.issuerIds.push(...this.marketplaceClassInstances.map(t => t.issuerId));
       this.issuerIds = this.issuerIds.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });
+
       this.userImagePaths = <any[]>(
         await this.userImagePathService
           .getImagePathsById(this.issuerIds)
           .toPromise()
       );
+      
       this.issuers = <any[]>(
         await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
       );
@@ -130,9 +129,13 @@ export class DashboardVolunteerComponent implements OnInit {
       this.filteredClassInstances = this.localClassInstances.concat(
         this.marketplaceClassInstances.filter(mp => this.localClassInstances.map(lo => lo.id).indexOf(mp.id) < 0));
 
+
       this.filteredClassInstances = this.filteredClassInstances.sort(
-        (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
-      );
+        (a, b) => {
+          if (a.dateFrom && b.dateFrom) {
+            return b.dateFrom.valueOf() - a.dateFrom.valueOf();
+          }
+        });
 
       this.tableDataSource.data = this.filteredClassInstances;
       this.paginator.length = this.filteredClassInstances.length;
@@ -187,20 +190,6 @@ export class DashboardVolunteerComponent implements OnInit {
     return this.imageService.getImgSourceFromBytes(tenant.image);
   }
 
-  triggerStoreDialog() {
-    const dialogRef = this.dialog.open(ShareDialog, {
-      width: "700px",
-      height: "255px",
-      data: { name: "store" },
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      this.toggleShareInRep();
-    });
-  }
-
-  toggleShareInRep() { }
-
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
     this.selectedTenants = selectedTenants;
@@ -209,13 +198,16 @@ export class DashboardVolunteerComponent implements OnInit {
     this.filteredClassInstances = this.localClassInstances.concat(
       this.marketplaceClassInstances.filter(mp => this.localClassInstances.map(lo => lo.id).indexOf(mp.id) < 0));
 
-    this.filteredClassInstances = this.filteredClassInstances.filter(ci => {
+    this.filteredClassInstances.filter(ci => {
       return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
 
-    this.filteredClassInstances = this.filteredClassInstances.sort(
-      (a, b) => b.dateFrom.valueOf() - a.dateFrom.valueOf()
-    );
+    this.filteredClassInstances.sort(
+      (a, b) => {
+        if (a.dateFrom && b.dateFrom) {
+          return b.dateFrom.valueOf() - a.dateFrom.valueOf();
+        }
+      });
 
     this.tableDataSource.data = this.filteredClassInstances;
     this.paginator.length = this.filteredClassInstances.length;
