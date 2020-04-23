@@ -324,7 +324,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("dateFrom");
+			this.setName("Starting Date");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -337,7 +337,7 @@ public class StandardPropertyDefinitions {
 
 		@PostConstruct
 		public void inst(String tenantId) {
-			this.setName("dateTo");
+			this.setName("End Date");
 			this.setTenantId(tenantId);
 		}
 	}
@@ -540,7 +540,7 @@ public class StandardPropertyDefinitions {
 		}
 
 		public void inst(String tenantId) {
-			this.setName("location");
+			this.setName("Location");
 			this.setTenantId(tenantId);
 		}
 	}
