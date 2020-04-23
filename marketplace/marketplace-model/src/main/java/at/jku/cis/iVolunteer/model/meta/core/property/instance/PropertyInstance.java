@@ -15,8 +15,8 @@ public class PropertyInstance<T> {
 	@Id String id;
 	String name;
 
-	List<T> values;
-	List<T> allowedValues;
+	List<T> values = new ArrayList<>();
+	List<T> allowedValues = new ArrayList<>();
 
 	PropertyType type;
 
@@ -26,7 +26,7 @@ public class PropertyInstance<T> {
 	boolean updateable;
 	boolean required;
 
-	List<PropertyConstraint<T>> propertyConstraints;
+	List<PropertyConstraint<T>> propertyConstraints = new ArrayList<>();
 
 	public PropertyInstance() {
 	}
