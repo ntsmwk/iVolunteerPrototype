@@ -126,13 +126,13 @@ export class CUtils {
     configurableClasses.push(task);
 
     let vonProperty = new ClassProperty<Date>();
-    vonProperty.name = 'dateFrom';
+    vonProperty.name = 'Starting Date';
     vonProperty.id = 'objectIdService.getNewObjectId();';
     vonProperty.type = PropertyType.DATE;
     task.properties.push(vonProperty);
 
     let bisProperty = new ClassProperty<Date>();
-    bisProperty.name = 'dateTo';
+    bisProperty.name = 'End Date';
     bisProperty.id = objectIdService.getNewObjectId();;
     bisProperty.type = PropertyType.DATE;
     task.properties.push(bisProperty);
@@ -224,7 +224,7 @@ export class CUtils {
     myTask.properties.push(tt3);
 
     let location = new ClassProperty<string>();
-    location.name = 'location';
+    location.name = 'Location';
     location.id = objectIdService.getNewObjectId();
     location.type = PropertyType.TEXT;
     myTask.properties.push(location);

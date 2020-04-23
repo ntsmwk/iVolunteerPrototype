@@ -328,10 +328,10 @@ public class InitializationService {
 		task.setClassArchetype(ClassArchetype.TASK_HEAD);
 		task.setProperties(new ArrayList<>());
 		
-		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("dateFrom")).findFirst().get();
+		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date")).findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateFromProperty));
 		
-		PropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("dateTo")).findFirst().get();
+		PropertyDefinition dateToProperty = properties.stream().filter(p -> p.getName().equals("End Date")).findFirst().get();
 		task.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(dateToProperty));
 		
 		classDefinitions.add(task);
@@ -412,7 +412,7 @@ public class InitializationService {
 		PropertyDefinition tt3 = properties.stream().filter(p -> p.getName().equals("taskType3")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(tt3));
 		
-		PropertyDefinition location = properties.stream().filter(p -> p.getName().equals("location")).findFirst().get();
+		PropertyDefinition location = properties.stream().filter(p -> p.getName().equals("Location")).findFirst().get();
 		myTask.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(location));
 		
 		PropertyDefinition rank = properties.stream().filter(p -> p.getName().equals("rank")).findFirst().get();

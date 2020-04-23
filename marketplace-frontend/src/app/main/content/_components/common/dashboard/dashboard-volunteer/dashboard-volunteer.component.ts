@@ -101,6 +101,8 @@ export class DashboardVolunteerComponent implements OnInit {
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
 
+      console.error('marketplaceClassInstances', this.marketplaceClassInstances);
+
       this.marketplaceClassInstances.forEach((ci, index, object) => {
         if (ci.duration && ci.duration === null) {
           object.splice(index, 1);
@@ -129,13 +131,15 @@ export class DashboardVolunteerComponent implements OnInit {
       this.filteredClassInstances = this.localClassInstances.concat(
         this.marketplaceClassInstances.filter(mp => this.localClassInstances.map(lo => lo.id).indexOf(mp.id) < 0));
 
-
       this.filteredClassInstances = this.filteredClassInstances.sort(
         (a, b) => {
           if (a.dateFrom && b.dateFrom) {
             return b.dateFrom.valueOf() - a.dateFrom.valueOf();
           }
         });
+
+        console.error('filteredClassInstances', this.filteredClassInstances);
+
 
       this.tableDataSource.data = this.filteredClassInstances;
       this.paginator.length = this.filteredClassInstances.length;
