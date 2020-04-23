@@ -287,10 +287,10 @@ public class InitializationService {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
 		this.createConfigurator(tenantId, "slot1");
-//		this.createConfigurator(tenantId, "slot2");
-//		this.createConfigurator(tenantId, "slot3");
-//		this.createConfigurator(tenantId, "slot4");
-//		this.createConfigurator(tenantId, "slot5");
+		this.createConfigurator(tenantId, "slot2");
+		this.createConfigurator(tenantId, "slot3");
+		this.createConfigurator(tenantId, "slot4");
+		this.createConfigurator(tenantId, "slot5");
 
 	}
 	

@@ -77,32 +77,23 @@ public class ClassInstanceController {
 	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
 			@PathVariable String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {
+
+		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
 		
-		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
-				tenantId);
 		if (classDefinition != null) {
-//			List<FormConfiguration> formConfigurations = this.classDefinitionService
-//					.getParentsById(Collections.singletonList(classDefinitionId), tenantId);
-//			if (formConfigurations.size() > 0) {
-//				List<ClassProperty<Object>> classProperties = formConfigurations.get(0).getFormEntry().getClassProperties();
-//				
-//				List<PropertyInstance<Object>> propertyInstances = this.classPropertyToPropertyInstanceMapper.toTargets(classProperties);
-				
-				
-				ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
-			
-				classInstance.setUserId(volunteerId);
-				classInstance.setTenantId(tenantId);
-//				classInstance.setProperties(propertyInstances);
-				classInstance.getProperties().forEach(p -> {
-					if (properties.containsKey(p.getName())) {
-						p.setValues(Collections.singletonList(properties.get(p.getName())));
-					}
-				});
-				return this.classInstanceRepository.save(classInstance);
-//			}
+
+			ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
+
+			classInstance.setUserId(volunteerId);
+			classInstance.setTenantId(tenantId);
+			classInstance.getProperties().forEach(p -> {
+				if (properties.containsKey(p.getName())) {
+					p.setValues(Collections.singletonList(properties.get(p.getName())));
+				}
+			});
+			return this.classInstanceRepository.save(classInstance);
 		}
-		
+
 		return null;
 	}
 
