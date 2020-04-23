@@ -97,15 +97,18 @@ export class DashboardVolunteerComponent implements OnInit {
       );
       this.marketplace = marketplaces[0];
 
+      // auch "TASK_HEAD" holen (konfig file oben: funktion, verdienst, ....)
       this.marketplaceClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
 
-      this.marketplaceClassInstances.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
+      console.error(this.marketplaceClassInstances);
+
+      // this.marketplaceClassInstances.forEach((ci, index, object) => {
+      //   if (ci.duration === null) {
+      //     object.splice(index, 1);
+      //   }
+      // });
 
       this.issuerIds.push(...this.marketplaceClassInstances.map(t => t.issuerId));
       this.issuerIds = this.issuerIds.filter((elem, index, self) => {

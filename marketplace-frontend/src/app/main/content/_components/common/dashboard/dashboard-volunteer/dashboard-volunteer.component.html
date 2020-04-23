@@ -215,6 +215,7 @@
           <mat-cell *matCellDef="let entry">
             <button
               mat-raised-button
+              class="button1"
               *ngIf="!inLocalRepository(entry)"
               color="primary"
               (click)="syncOneToLocalRepository(entry)"
@@ -223,6 +224,7 @@
             </button>
             <button
               mat-raised-button
+              class="button1"
               *ngIf="inLocalRepository(entry)"
               color="primary"
               (click)="removeOneFromLocalRepository(entry)"
