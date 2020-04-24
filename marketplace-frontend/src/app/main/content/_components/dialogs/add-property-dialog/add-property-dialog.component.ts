@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { PropertyItem, ClassProperty, PropertyInstance, PropertyDefinition } from '../../../_model/meta/Property';
 import { Router } from '@angular/router';
 import { Marketplace } from 'app/main/content/_model/marketplace';
@@ -9,6 +9,7 @@ import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/p
 import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { PropertyCreationDialogComponent, PropertyCreationDialogData } from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
@@ -26,7 +27,8 @@ export class AddPropertyDialogComponent implements OnInit {
     public data: AddPropertyDialogData,
     private router: Router,
     private propertyDefinitionService: PropertyDefinitionService,
-    private classDefinitionService: ClassDefinitionService
+    private classDefinitionService: ClassDefinitionService,
+    public dialog: MatDialog,
   ) {
   }
 
@@ -97,5 +99,23 @@ export class AddPropertyDialogComponent implements OnInit {
 
   createNewPropertyClicked() {
     console.log('implement');
+
+    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: this.data.marketplace },
+      disableClose: true
+    });
+
+    dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
+      console.log(result);
+
+    });
+
+    // return dialogRef.afterClosed().toPromise().then(() => {
+    //   return classConfiguration;
+    // });
   }
 }

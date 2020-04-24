@@ -7,6 +7,8 @@ import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule } from '@angular/material';
+import { PropertyCreationDialogModule } from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.module';
+import { PropertyCreationDialogComponent } from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
 
 @NgModule({
   imports: [
@@ -23,8 +25,11 @@ import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerMo
 
     MatProgressSpinnerModule,
 
+    PropertyCreationDialogModule,
+
   ],
   declarations: [AddPropertyDialogComponent],
+  entryComponents: [PropertyCreationDialogComponent],
   exports: [AddPropertyDialogComponent]
 })
 export class AddPropertyDialogModule { }

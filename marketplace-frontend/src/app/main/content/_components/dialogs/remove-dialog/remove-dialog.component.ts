@@ -80,12 +80,7 @@ export class RemoveDialogComponent implements OnInit {
   }
 
   onSubmit() {
-
     this.data.classDefinition.properties = this.data.classDefinition.properties.filter(p => this.selection.selected.findIndex(s => s.id === p.id) === -1);
     this.dialogRef.close(this.data);
-  }
-
-  createNewPropertyClicked() {
-    console.log('implement');
   }
 }
