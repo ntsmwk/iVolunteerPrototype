@@ -83,5 +83,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     removeClicked() {
 
+
     }
 }
