@@ -8,6 +8,7 @@ import { PropertyType, ClassProperty } from 'app/main/content/_model/meta/Proper
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
 import { isNullOrUndefined } from 'util';
+import { RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 
 export class ClassOptionsOverlayContentData {
     marketplace: Marketplace;
@@ -82,7 +83,12 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     removeClicked() {
-
+        this.dialogFactory.openRemoveDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: RemoveDialogData) => {
+            console.log(ret);
+            if (!isNullOrUndefined) {
+                this.inputData.classDefinition.properties = ret.classDefinition.properties;
+            }
+        });
 
     }
 }

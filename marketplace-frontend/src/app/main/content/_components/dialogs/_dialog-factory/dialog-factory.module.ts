@@ -35,6 +35,8 @@ import { DeleteClassConfigurationDialogModule } from 'app/main/content/configura
 import { DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
 import { AddPropertyDialogComponent } from '../add-property-dialog/add-property-dialog.component';
 import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dialog.module';
+import { RemoveDialogComponent } from '../remove-dialog/remove-dialog.component';
+import { RemoveDialogModule } from '../remove-dialog/remove-dialog.module';
 
 
 @NgModule({
@@ -58,6 +60,7 @@ import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dia
     ChangeIconDialogModule,
 
     AddPropertyDialogModule,
+    RemoveDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
@@ -84,6 +87,7 @@ import { AddPropertyDialogModule } from '../add-property-dialog/add-property-dia
     ChangeIconDialogComponent,
 
     AddPropertyDialogComponent,
+    RemoveDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,

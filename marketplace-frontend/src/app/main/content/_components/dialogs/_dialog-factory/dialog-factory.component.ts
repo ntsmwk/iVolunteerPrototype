@@ -23,6 +23,7 @@ import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { DeleteClassConfigurationDialogData, DeleteClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
 import { AddPropertyDialogComponent, AddPropertyDialogData } from '../add-property-dialog/add-property-dialog.component';
+import { RemoveDialogData, RemoveDialogComponent } from '../remove-dialog/remove-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -654,6 +655,26 @@ export class DialogFactoryDirective {
     let returnValue: AddPropertyDialogData;
 
     dialogRef.beforeClose().toPromise().then((result: AddPropertyDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
+
+  openRemoveDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
+    const dialogRef = this.dialog.open(RemoveDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, classDefinition: classDefinition }
+    });
+
+    let returnValue: RemoveDialogData;
+
+    dialogRef.beforeClose().toPromise().then((result: RemoveDialogData) => {
       returnValue = result;
     });
 

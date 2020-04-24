@@ -25,7 +25,6 @@ export class RemoveDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<RemoveDialogData>, @Inject(MAT_DIALOG_DATA)
     public data: RemoveDialogData,
     private router: Router,
-    private propertyDefinitionService: PropertyDefinitionService,
     private classDefinitionService: ClassDefinitionService
   ) {
   }
@@ -34,20 +33,14 @@ export class RemoveDialogComponent implements OnInit {
   displayedColumns = ['checkbox', 'label', 'type'];
   loaded: boolean;
   selection = new SelectionModel<PropertyItem>(true, []);
-  initialProperties: PropertyDefinition<any>[];
 
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
 
   ngOnInit() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace).toPromise().then((ret: PropertyDefinition<any>[]) => {
-      this.datasource.data = ret;
-      this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
-      this.selection.select(...this.initialProperties);
-      this.loaded = true;
-    });
-
+    this.datasource.data = this.data.classDefinition.properties;
+    this.loaded = true;
   }
 
 
@@ -70,7 +63,7 @@ export class RemoveDialogComponent implements OnInit {
   // }
 
   isDisabled(propertyDefinition: PropertyDefinition<any>) {
-    return !isNullOrUndefined(this.initialProperties.find(p => p.id === propertyDefinition.id));
+    return false;
   }
 
   applyFilter(event: Event) {
@@ -79,15 +72,17 @@ export class RemoveDialogComponent implements OnInit {
   }
 
   onRowClick(row: PropertyDefinition<any>) {
-    this.selection.select(row);
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.select(row);
+    }
   }
 
   onSubmit() {
-    const addedProperties = this.selection.selected.filter(p => this.data.classDefinition.properties.findIndex(q => p.id === q.id) === -1);
-    this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id)).toPromise().then((ret: ClassProperty<any>[]) => {
-      this.data.classDefinition.properties.push(...ret);
-      this.dialogRef.close(this.data);
-    });
+
+    this.data.classDefinition.properties = this.data.classDefinition.properties.filter(p => this.selection.selected.findIndex(s => s.id === p.id) === -1);
+    this.dialogRef.close(this.data);
   }
 
   createNewPropertyClicked() {

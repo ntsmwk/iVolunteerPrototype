@@ -79,7 +79,12 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   onRowClick(row: PropertyDefinition<any>) {
-    this.selection.select(row);
+
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selection.select(row);
+    }
   }
 
   onSubmit() {
