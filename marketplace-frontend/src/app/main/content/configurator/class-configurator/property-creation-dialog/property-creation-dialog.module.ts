@@ -2,20 +2,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PropertyCreationDialogComponent } from './property-creation-dialog.component';
 import {
-  MatCommonModule, MatProgressSpinnerModule
+  MatCommonModule, MatProgressSpinnerModule, MatButtonModule, MatDialogModule, MatIconModule
 } from '@angular/material';
-import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
-
     MatCommonModule,
-    MatProgressSpinnerModule,
-
     FuseSharedModule,
+    MatDialogModule,
+
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
 
   ],
   declarations: [PropertyCreationDialogComponent],

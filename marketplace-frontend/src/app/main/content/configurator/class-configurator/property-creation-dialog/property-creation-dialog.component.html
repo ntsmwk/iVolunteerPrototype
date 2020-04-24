@@ -1,14 +1,22 @@
-<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
-
-    "Property Creation Dialog"
-
-    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
-        <div></div>
-        <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
-            Close
-        </button>
-        <div></div>
-    </div>
-
-
+<div mat-dialog-title>
+    <table>
+        <tr>
+            <td>
+                <mat-icon>add</mat-icon>
+            </td>
+            <td>
+                <h1>Neues Property erstellen</h1>
+            </td>
+        </tr>
+    </table>
 </div>
+
+<mat-dialog-content>
+    Property Creation Dialog
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
+        Close
+    </button>
+</mat-dialog-actions>

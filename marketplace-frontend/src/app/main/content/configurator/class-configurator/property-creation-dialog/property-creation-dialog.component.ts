@@ -15,7 +15,7 @@ export interface PropertyCreationDialogData {
 })
 export class PropertyCreationDialogComponent implements OnInit {
 
-  isLoaded = false;
+  loaded = false;
 
 
   constructor(
@@ -25,7 +25,7 @@ export class PropertyCreationDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loaded = true;
   }
 
   handleResultEvent(event: FormEntryReturnEventData) {
