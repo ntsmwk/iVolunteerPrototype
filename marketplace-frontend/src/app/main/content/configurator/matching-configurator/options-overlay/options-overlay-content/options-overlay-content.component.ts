@@ -13,7 +13,7 @@ export class MatchingOptionsOverlayContentComponent implements OnInit {
     @Input() overlayRelationship: MatchingOperatorRelationship;
     @Output() resultRelationship = new EventEmitter<MatchingOperatorRelationship>();
 
-    //Model for Overlay
+    // Model for Overlay
     matchingOperatorType: MatchingOperatorType;
     necessary: boolean;
     fuzzyness: number;

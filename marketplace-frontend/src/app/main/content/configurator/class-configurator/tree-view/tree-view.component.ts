@@ -63,11 +63,7 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     this.dataSource.data = graphNodes;
     this.treeControl.dataNodes = graphNodes;
     this.treeControl.expandAll();
-    // console.log(this.treeControl.dataNodes);
-    // this.treeControl.expandAll();
   }
-
-
 
   private addChildrenToGraphNode(node: GraphNode, vertices: MyMxCell[]): GraphNode[] {
     const edges: MyMxCell[] = this.editorInstance.graph.getEdges(node.cell, undefined, false, true) as MyMxCell[];
@@ -90,17 +86,6 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
 
   ngOnChanges() {
   }
-
-  // hideSidebar() {
-  //   this.editorInstance.rightSidebarContainer.nativeElement.style.background = 'rgba(214, 239, 249, 0.0)';
-  //   this.editorInstance.rightSidebarVisible = false;
-  //   this.editorInstance.rightSidebarContainer.nativeElement.style.borderLeft = 'none';
-  //   this.editorInstance.rightSidebarContainer.nativeElement.style.height = '50px';
-  // }
-
-  // itemSelected(event: any, c: ClassConfiguration) {
-
-  // }
 
   hasChild = (_: number, node: GraphNode) => !!node.children && node.children.length > 0;
 

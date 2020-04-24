@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { PropertyItem, ClassProperty, PropertyInstance, PropertyDefinition } from '../../../_model/meta/Property';
-import { Router } from '@angular/router';
+import { PropertyItem, ClassProperty, PropertyDefinition } from '../../../_model/meta/Property';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { MatTableDataSource, MatSort } from '@angular/material';
@@ -25,7 +24,6 @@ export class AddPropertyDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddPropertyDialogData>, @Inject(MAT_DIALOG_DATA)
     public data: AddPropertyDialogData,
-    private router: Router,
     private propertyDefinitionService: PropertyDefinitionService,
     private classDefinitionService: ClassDefinitionService,
     public dialog: MatDialog,
@@ -51,25 +49,6 @@ export class AddPropertyDialogComponent implements OnInit {
     });
 
   }
-
-
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.datasource.data.length;
-  //   return numSelected === numRows;
-  // }
-
-  // /** Selects all rows if they are not all selected; otherwise clear selection. */
-  // masterToggle() {
-  //   if (this.isAllSelected()) {
-  //     this.selection.clear();
-  //     this.selection.select(...this.initialProperties);
-  //   } else {
-  //     this.datasource.data.forEach(row => this.selection.select(row));
-  //   }
-  // }
 
   isDisabled(propertyDefinition: PropertyDefinition<any>) {
     return !isNullOrUndefined(this.initialProperties.find(p => p.id === propertyDefinition.id));
@@ -98,8 +77,6 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   createNewPropertyClicked() {
-    console.log('implement');
-
     const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
       width: '90vw',
       minWidth: '90vw',

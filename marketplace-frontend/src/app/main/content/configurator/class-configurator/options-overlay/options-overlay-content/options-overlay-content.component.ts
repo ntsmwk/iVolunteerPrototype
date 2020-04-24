@@ -4,7 +4,7 @@ import { Relationship, RelationshipType } from 'app/main/content/_model/meta/Rel
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
-import { PropertyType, ClassProperty } from 'app/main/content/_model/meta/Property';
+import { PropertyType } from 'app/main/content/_model/meta/Property';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
 import { isNullOrUndefined } from 'util';
@@ -71,7 +71,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     addPropertyClicked() {
         this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: AddPropertyDialogData) => {
-            console.log(ret);
             if (!isNullOrUndefined(ret)) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
             }
@@ -84,7 +83,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     removeClicked() {
         this.dialogFactory.openRemoveDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: RemoveDialogData) => {
-            console.log(ret);
             if (!isNullOrUndefined) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
             }

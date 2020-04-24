@@ -1,14 +1,9 @@
-import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
-import { isNullOrUndefined } from 'util';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CUtils } from '../utils-and-constants';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
@@ -40,8 +35,6 @@ export class SaveClassConfigurationAsDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private relationshipsService: RelationshipService,
     private classDefintionService: ClassDefinitionService,
-    private objectIdService: ObjectIdService,
-    private loginService: LoginService,
   ) {
   }
 
@@ -56,10 +49,7 @@ export class SaveClassConfigurationAsDialogComponent implements OnInit {
 
 
   ngOnInit() {
-
-    console.log(this.data);
     this.loaded = true;
-
   }
 
   onNoClick(): void {
@@ -98,14 +88,7 @@ export class SaveClassConfigurationAsDialogComponent implements OnInit {
           this.dialogRef.close(this.data);
         });
       });
-
-
-
-
     }
-
-
-
   }
 
   handleBrowseClick() {

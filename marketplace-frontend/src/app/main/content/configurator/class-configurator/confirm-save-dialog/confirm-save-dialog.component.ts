@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from 'util';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
@@ -39,9 +38,6 @@ export class ConfirmClassConfigurationSaveDialogComponent implements OnInit {
   loaded: boolean;
 
   ngOnInit() {
-    console.log(this.data.marketplace);
-
-
   }
 
   onOKClick() {

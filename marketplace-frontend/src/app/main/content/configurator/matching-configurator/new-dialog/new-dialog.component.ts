@@ -50,7 +50,6 @@ export class NewMatchingDialogComponent implements OnInit {
         this.recentClassConfigurations = classConfigurations;
         this.allClassConfigurations = classConfigurations;
 
-
         //----DEBUG
         // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
         // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
@@ -79,15 +78,12 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
   onOKClick() {
-    console.log(this.data);
     this.showDuplicateError = false;
     if (!isNullOrUndefined(this.data.producerClassConfiguration) &&
       !isNullOrUndefined(this.data.consumerClassConfiguration) &&
       this.data.consumerClassConfiguration !== this.data.producerClassConfiguration &&
       !isNullOrUndefined(this.data.label)) {
 
-      // this.data.label = this.label;
-      console.log(this.data);
       this.matchingConfigurationService
         .getMatchingConfigurationByUnorderedClassConfigurationIds(this.data.marketplace, this.data.producerClassConfiguration.id, this.data.consumerClassConfiguration.id)
         .toPromise()
@@ -106,9 +102,8 @@ export class NewMatchingDialogComponent implements OnInit {
   }
 
   handleBrowseClick(sourceReference: 'PRODUCER' | 'CONSUMER') {
-    console.log("Clicked Browse " + sourceReference);
     this.browseDialogData = new ClassBrowseSubDialogData();
-    this.browseDialogData.title = "Durchsuchen";
+    this.browseDialogData.title = 'Durchsuchen';
     this.browseDialogData.marketplace = this.data.marketplace;
     this.browseDialogData.sourceReference = sourceReference;
 

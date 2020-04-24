@@ -4,7 +4,7 @@ import { MatchingConfiguration } from 'app/main/content/_model/configurations';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MAT_DIALOG_DATA, MatDialogRef, MatCheckboxChange } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 
 export class DeleteMatchingDialogData {
@@ -35,10 +35,7 @@ export class DeleteMatchingDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.data.idsToDelete = [];
-
-
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.matchingConfigurationService.getAllMatchingConfigurations(this.data.marketplace)
         .toPromise()
@@ -48,9 +45,7 @@ export class DeleteMatchingDialogComponent implements OnInit {
           this.checkboxStates.fill(false);
           this.loaded = true;
         });
-
     });
-
   }
 
   handleCheckboxClicked(checked: boolean, entry: MatchingConfiguration, index?: number) {
@@ -73,8 +68,6 @@ export class DeleteMatchingDialogComponent implements OnInit {
 
   onSubmit() {
     this.matchingConfigurationService.deleteMatchingConfigurations(this.data.marketplace, this.data.idsToDelete).toPromise().then((ret) => {
-      console.log("restconfigs");
-      console.log(ret);
     });
 
     this.dialogRef.close(this.data);

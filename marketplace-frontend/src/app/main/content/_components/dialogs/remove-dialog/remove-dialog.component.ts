@@ -1,14 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PropertyItem, ClassProperty, PropertyDefinition } from '../../../_model/meta/Property';
-import { Router } from '@angular/router';
+import { PropertyItem, PropertyDefinition } from '../../../_model/meta/Property';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { isNullOrUndefined } from 'util';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 export interface RemoveDialogData {
   marketplace: Marketplace;
@@ -24,8 +20,6 @@ export class RemoveDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<RemoveDialogData>, @Inject(MAT_DIALOG_DATA)
     public data: RemoveDialogData,
-    private router: Router,
-    private classDefinitionService: ClassDefinitionService
   ) {
   }
 
@@ -42,25 +36,6 @@ export class RemoveDialogComponent implements OnInit {
     this.datasource.data = this.data.classDefinition.properties;
     this.loaded = true;
   }
-
-
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.datasource.data.length;
-  //   return numSelected === numRows;
-  // }
-
-  // /** Selects all rows if they are not all selected; otherwise clear selection. */
-  // masterToggle() {
-  //   if (this.isAllSelected()) {
-  //     this.selection.clear();
-  //     this.selection.select(...this.initialProperties);
-  //   } else {
-  //     this.datasource.data.forEach(row => this.selection.select(row));
-  //   }
-  // }
 
   isDisabled(propertyDefinition: PropertyDefinition<any>) {
     return false;

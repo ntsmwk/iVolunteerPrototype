@@ -5,18 +5,6 @@ import { isNullOrUndefined } from 'util';
 import { MatchingOperatorType } from '../../_model/matching';
 import { PropertyType } from '../../_model/meta/Property';
 
-// const sidebarPalettes = {
-//   id: 'building_blocks', label: 'Building Blocks',
-//   rows: [
-//     {
-//       c0: { id: 'competence', label: 'Competence', imgPath: '/assets/icons/class_editor/competence.png', type: 'class', archetype: ClassArchetype.COMPETENCE, shape: undefined },
-//       c1: { id: 'task', label: 'Task', imgPath: '/assets/icons/class_editor/task.png', type: 'class', archetype: ClassArchetype.TASK, shape: undefined },
-//     }, {
-//       c0: { id: 'function', label: 'Function', imgPath: '/assets/icons/class_editor/function.png', type: 'class', archetype: ClassArchetype.FUNCTION, shape: undefined },
-//       c1: { id: 'achievement', label: 'Achievement', imgPath: '/assets/icons/class_editor/achievement.png', type: 'class', archetype: ClassArchetype.ACHIEVEMENT, shape: undefined },
-//     }
-//   ]
-// };
 
 const relationshipPalettes = {
   id: 'relationships', label: 'Relationships',

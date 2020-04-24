@@ -1,11 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { OpenMatchingDialogData } from '../open-dialog/open-dialog.component';
-
-
 
 export interface RootMenuItem {
   id: number;
@@ -72,8 +69,6 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
   @Input() marketplace: Marketplace;
   @Input() eventResponseAction: string;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
-
-
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -147,9 +142,6 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       }
     });
-
-
-
   }
 
   openClicked(event: any, item: SubMenuItem) {
@@ -182,47 +174,6 @@ export class MatchingTopMenuBarComponent implements AfterViewInit {
       }
 
     });
-  }
-
-
-  // saveAsClicked(event: any, item: SubMenuItem) {
-  //   // wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-  //   setTimeout(() => {
-  //     this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
-  //       if (!isNullOrUndefined(ret)) {
-  //         this.menuOptionClickedEvent.emit({ id: 'editor_save_as', configurator: ret });
-  //       } else {
-  //         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
-  //       }
-  //     });
-  //   });
-  // }
-
-  // createEditorClicked(event: any, item: SubMenuItem) {
-
-  // }
-
-  // ngOnChanges() {
-  //   const eventResponse = this.eventResponseAction;
-  //   this.eventResponseAction = undefined;
-  //   if (eventResponse === 'saveAsClicked') {
-  //     this[eventResponse](eventResponse, undefined);
-  //   }
-  // }
-
-
-  // test(event: any, item: SubMenuItem) {
-  //   console.log('test');
-  //   console.log(event);
-  //   console.log(item);
-  // }
-
-
-
-
-
-  navigateBack() {
-    window.history.back();
   }
 
 }

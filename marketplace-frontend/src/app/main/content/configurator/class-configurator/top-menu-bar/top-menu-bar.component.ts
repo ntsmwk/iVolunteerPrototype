@@ -9,8 +9,6 @@ import { Relationship } from 'app/main/content/_model/meta/Relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/Class';
 import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
 
-
-
 export interface RootMenuItem {
   id: number;
   label: string;
@@ -94,8 +92,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   @Input() marketplace: Marketplace;
   @Input() eventResponse: TopMenuResponse;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
-
-
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -273,23 +269,6 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     } else if (eventResponseAction === 'saveAs') {
       // this.performSaveAs(eventClassConfiguration, eventClassDefinitions, eventRelationships, eventDeletedClassDefinitions, eventDeletedRelationships);
     }
-
-
-  }
-
-
-  test(event: any, item: SubMenuItem) {
-    console.log('test');
-    console.log(event);
-    console.log(item);
-  }
-
-
-
-
-
-  navigateBack() {
-    window.history.back();
   }
 
 }

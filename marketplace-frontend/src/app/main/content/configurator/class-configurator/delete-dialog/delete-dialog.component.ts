@@ -1,16 +1,12 @@
 import { OnInit, Component, Inject } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { MatchingConfiguration, ClassConfiguration } from 'app/main/content/_model/configurations';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MAT_DIALOG_DATA, MatDialogRef, MatCheckboxChange } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 
 export class DeleteClassConfigurationDialogData {
   idsToDelete: string[];
-
   marketplace: Marketplace;
 }
 
@@ -22,19 +18,15 @@ export class DeleteClassConfigurationDialogData {
 export class DeleteClassConfigurationDialogComponent implements OnInit {
   allClassConfigurations: ClassConfiguration[];
   checkboxStates: boolean[];
-
   loaded: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteClassConfigurationDialogData>,
     @Inject(MAT_DIALOG_DATA) public data: DeleteClassConfigurationDialogData,
     private classConfigurationService: ClassConfigurationService,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
-
     this.data.idsToDelete = [];
 
     this.classConfigurationService.getAllClassConfigurations(this.data.marketplace)
@@ -45,8 +37,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
         this.checkboxStates.fill(false);
         this.loaded = true;
       });
-
-
   }
 
   handleCheckboxClicked(checked: boolean, entry: MatchingConfiguration, index?: number) {
@@ -69,11 +59,8 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
 
   onSubmit() {
     this.classConfigurationService.deleteClassConfigurations(this.data.marketplace, this.data.idsToDelete).toPromise().then((ret) => {
-      console.log("restconfigs");
-      console.log(ret);
+      this.dialogRef.close(this.data);
     });
-
-    this.dialogRef.close(this.data);
   }
 
 }
