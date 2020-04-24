@@ -83,7 +83,12 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     returnData.formGroup.enable();
     returnData.formGroup.updateValueAndValidity();
 
-    const json = '[' + JSON.stringify(returnData.formGroup.value, this.replacer) + ']';
+    const json =
+      '{' +
+      '"tenantId": "' + this.helpseeker.tenantId + '", ' +
+      '"classDefinitionId": "' + this.currentFormConfiguration.formEntry.classDefinitions[0].id + '", ' +
+      '"properties": [' + JSON.stringify(returnData.formGroup.value, this.replacer) + ']' +
+      '}';
     this.exportFile([json]);
   }
 
