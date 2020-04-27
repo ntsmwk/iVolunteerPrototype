@@ -1,0 +1,36 @@
+.error {
+  color: #f44336;
+}
+
+.bg-error {
+  background-color: #f44336;
+}
+
+.alert-danger {
+  background-color: #f44336;
+}
+
+.alert-warn {
+  background-color: #f0ad4e;
+}
+
+.alert-info {
+  background-color: #5bc0de;
+  color: black !important;
+}
+.alert-success {
+  background-color: #36f456;
+}
+.alert {
+  margin: auto;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.text-align-center {
+  text-align: center;
+}
