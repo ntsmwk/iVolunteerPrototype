@@ -27,7 +27,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	
 	
 	private boolean visible;
-	private int formTab;
+	private int tabId;
 
 	public ClassDefinition() {
 	}
@@ -105,12 +105,12 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 		this.visible = visible;
 	}
 
-	public int getFormTab() {
-		return formTab;
+	public int getTabId() {
+		return tabId;
 	}
 
-	public void setFormTab(int formTab) {
-		this.formTab = formTab;
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
 	}
 
 	@Override

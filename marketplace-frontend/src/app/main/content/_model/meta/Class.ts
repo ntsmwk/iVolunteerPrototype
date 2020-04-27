@@ -5,6 +5,7 @@ export class ClassDefinition {
     parentId: string;
     root: boolean;
     name: string;
+
     classArchetype: ClassArchetype;
     collector: boolean;
     properties: ClassProperty<any>[] = [];
@@ -14,7 +15,7 @@ export class ClassDefinition {
     imagePath: string;
 
     visible: boolean;
-    formTab: number;
+    tabId: number;
 }
 
 export class CompetenceClassDefinition extends ClassDefinition {
@@ -36,7 +37,7 @@ export class ClassInstance {
     childClassInstances: ClassInstance[];
 
     visible: boolean;
-    formTab: number;
+    tabId: number;
 
     constructor(classDefinition: ClassDefinition, properties?: PropertyInstance<any>[]) {
         this.name = classDefinition.name;

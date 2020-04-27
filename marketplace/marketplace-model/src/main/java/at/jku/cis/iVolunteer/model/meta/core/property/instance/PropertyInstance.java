@@ -17,7 +17,9 @@ public class PropertyInstance<T> {
 
 	List<T> values;
 	List<T> allowedValues;
-
+	
+	private String unit;
+	
 	PropertyType type;
 
 	int position;
@@ -27,6 +29,9 @@ public class PropertyInstance<T> {
 	boolean required;
 
 	List<PropertyConstraint<T>> propertyConstraints;
+	
+	boolean visible;
+	int tabId;
 
 	public PropertyInstance() {
 	}
@@ -61,6 +66,14 @@ public class PropertyInstance<T> {
 
 	public void setAllowedValues(List<T> allowedValues) {
 		this.allowedValues = allowedValues;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public PropertyType getType() {
@@ -109,6 +122,22 @@ public class PropertyInstance<T> {
 
 	public void setPropertyConstraints(List<PropertyConstraint<T>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
+	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
 	}
 
 	@Override

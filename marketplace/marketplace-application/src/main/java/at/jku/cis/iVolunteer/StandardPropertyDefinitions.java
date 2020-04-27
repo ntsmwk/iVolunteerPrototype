@@ -273,6 +273,198 @@ public class StandardPropertyDefinitions {
 //			
 //		return new HashMap<>(props);
 //	}
+	
+	public static class TitelProperty extends TextPropertyDefinition {
+		TitelProperty() {
+			this.setId("titel");
+			this.setName("Titel");
+		}
+	}
+	
+	public static class ProdukttypProperty extends TextPropertyDefinition {
+		ProdukttypProperty() {
+			this.setId("produkttyp");
+			this.setName("Produkttyp");
+		}
+	}
+	
+	public static class MengeProperty extends DoublePropertyDefinition {
+		MengeProperty() {
+			this.setId("menge");
+			this.setName("Menge");
+			this.setUnit("t");
+		}
+	}
+	
+	public static class MinimaleMengeProperty extends DoublePropertyDefinition {
+		MinimaleMengeProperty() {
+			this.setId("minimale_menge");
+			this.setName("minimale Menge");
+			this.setUnit("t");
+		}
+	}
+	
+	public static class LieferdatumProperty extends DatePropertyDefinition {
+		LieferdatumProperty() {
+			this.setId("lieferdatum");
+			this.setName("Lieferdatum (spätestens)");
+		}
+	}
+	
+	public static class WerkstoffBereitgestelltProperty extends TextPropertyDefinition {
+		WerkstoffBereitgestelltProperty() {
+			this.setId("werkstoff_bereitgestellt");
+			this.setName("Werkstoff bereitgestellt");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("Ja");
+			this.getAllowedValues().add("Nein");
+		}
+	}
+	
+	public static class BeschreibungZusatzinfoProperty extends LongTextPropertyDefinition {
+		BeschreibungZusatzinfoProperty() {
+			this.setId("allgemeine_beschreibung");
+			this.setName("allgemeine Beschreibung / Zusatzinformationen");
+		}
+	}
+	
+	public static class DurchmesserInnenProperty extends LongPropertyDefinition {
+		public DurchmesserInnenProperty() {
+			this.setId("durchmesser_innen");
+			this.setName("Durchmesser (innen)");
+			this.setUnit("mm");
+		}
+	}
+	
+	public static class DurchmesserAussenProperty extends LongPropertyDefinition {
+		public DurchmesserAussenProperty() {
+			this.setId("durchmesser_aussen");
+			this.setName("Durchmesser (außen)");
+			this.setUnit("mm");
+		}
+	}
+	
+	public static class HoeheProperty extends LongPropertyDefinition {
+		public HoeheProperty() {
+			this.setId("hoehe");
+			this.setName("Höhe");
+			this.setUnit("mm");
+		}
+	}
+	
+	public static class WerkstoffProperty extends TextPropertyDefinition {
+		public WerkstoffProperty() {
+			this.setId("werkstoff");
+			this.setName("Werkstoff");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("Eintrag 1");
+			this.getAllowedValues().add("Eintrag 2");
+			this.getAllowedValues().add("Eintrag 3");
+			this.getAllowedValues().add("...");
+			this.getAllowedValues().add("Freitext");
+		}
+	}
+	
+	public static class WerkstoffFreitextProperty extends LongTextPropertyDefinition {
+		public WerkstoffFreitextProperty() {
+			this.setId("werkstoff_freitext");
+			this.setName("Werkstoff (Freitext)");
+		}
+	}
+	
+	public static class ZugfestigkeitProperty extends LongPropertyDefinition {
+		public ZugfestigkeitProperty() {
+			this.setId("zugfestigkeit");
+			this.setName("Zugfestigkeit");
+			this.setUnit("N/mm²");
+		}
+	}
+	
+	public static class SchutzgasProperty extends TextPropertyDefinition {
+		public SchutzgasProperty() {
+			this.setId("schutzgas");
+			this.setName("Schutzgas");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("H2 0%, N2 100%");
+			this.getAllowedValues().add("H2 10%, N2 90%");
+			this.getAllowedValues().add("H2 20%, N2 80%");
+			this.getAllowedValues().add("H2 30%, N2 70%");
+			this.getAllowedValues().add("H2 40%, N2 60%");
+			this.getAllowedValues().add("H2 50%, N2 50%");
+			this.getAllowedValues().add("H2 60%, N2 40%");
+			this.getAllowedValues().add("H2 70%, N2 30%");
+			this.getAllowedValues().add("H2 80%, N2 20%");
+			this.getAllowedValues().add("H2 90%, N2 10%");
+			this.getAllowedValues().add("H2 100%, N2 0%");
+		}
+	}
+	
+	public static class GluehreiseProperty extends TextPropertyDefinition {
+		public GluehreiseProperty() {
+			this.setId("gluehreise");
+			this.setName("Glühprogramm / -reise");
+		}
+	}
+	
+	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
+		public TemperaturhomogenitaetProperty() {
+			this.setId("temperaturhomogenitaet");
+			this.setName("erforderliche Temperaturhomogenität");
+			this.setUnit("°C (+/-)");
+		}
+	}
+	
+	public static class OberflaechenqualitaetProperty extends TextPropertyDefinition {
+		public OberflaechenqualitaetProperty() {
+			this.setId("oberflaechenqualitaet");
+			this.setName("Oberflächenqualität");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("blank");
+			this.getAllowedValues().add("schwarz");
+		}
+	}
+	
+	public static class ZusaetzlicheProduktinformationenProperty extends LongTextPropertyDefinition {
+		public ZusaetzlicheProduktinformationenProperty() {
+			this.setId("zusaetzliche_produktinformationen");
+			this.setName("Zusätzliche Produkt- und Bearbeitungsinformationen");
+		}
+	}
+	
+	public static class IncotermsProperty extends TextPropertyDefinition {
+		public IncotermsProperty() {
+			this.setId("incoterms");
+			this.setName("Incoterms");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add("EXW");
+			this.getAllowedValues().add("DAP");
+		}
+	}
+	
+	public static class LieferortProperty extends TextPropertyDefinition {
+		public LieferortProperty() {
+			this.setId("lieferort");
+			this.setName("Lieferort");
+		}
+	}
+	
+	public static class AbholortProperty extends TextPropertyDefinition {
+		public AbholortProperty() {
+			this.setId("abholort");
+			this.setName("Abholort");
+		}
+	}
+	
+	public static class VerpackungsvorgabenProperty extends LongTextPropertyDefinition {
+		public VerpackungsvorgabenProperty() {
+			this.setId("verpackungsvorgaben");
+			this.setName("Verpackungsvorgaben");
+		}
+	}
+	
+	
+	
+	
 
 	/**
 	 * 
@@ -868,12 +1060,12 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
-		public TemperaturhomogenitaetProperty() {
-			this.setId("temperaturhomogenitaet");
-			this.setName("Temperaturhomogenität");
-		}
-	}
+//	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
+//		public TemperaturhomogenitaetProperty() {
+//			this.setId("temperaturhomogenitaet");
+//			this.setName("Temperaturhomogenität");
+//		}
+//	}
 
 	public static class KaltgewalztesMaterialZulaessigProperty extends BooleanPropertyDefinition {
 		public KaltgewalztesMaterialZulaessigProperty() {
@@ -923,12 +1115,12 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class HoeheProperty extends LongPropertyDefinition {
-		public HoeheProperty() {
-			this.setId("hoehe");
-			this.setName("Höhe");
-		}
-	}
+//	public static class HoeheProperty extends LongPropertyDefinition {
+//		public HoeheProperty() {
+//			this.setId("hoehe");
+//			this.setName("Höhe");
+//		}
+//	}
 
 	public static class GluehzeitProperty extends LongPropertyDefinition {
 		public GluehzeitProperty() {
@@ -1039,12 +1231,12 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class ZugfestigkeitProperty extends LongPropertyDefinition {
-		public ZugfestigkeitProperty() {
-			this.setId("zugfestigkeit");
-			this.setName("Zugfestigkeit");
-		}
-	}
+//	public static class ZugfestigkeitProperty extends LongPropertyDefinition {
+//		public ZugfestigkeitProperty() {
+//			this.setId("zugfestigkeit");
+//			this.setName("Zugfestigkeit");
+//		}
+//	}
 
 	public static class DehnungProperty extends LongPropertyDefinition {
 		public DehnungProperty() {
@@ -1067,12 +1259,12 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class LieferortProperty extends TextPropertyDefinition {
-		public LieferortProperty() {
-			this.setId("lieferort");
-			this.setName("Lieferort");
-		}
-	}
+//	public static class LieferortProperty extends TextPropertyDefinition {
+//		public LieferortProperty() {
+//			this.setId("lieferort");
+//			this.setName("Lieferort");
+//		}
+//	}
 
 	public static class VerpackungProperty extends TextPropertyDefinition {
 		public VerpackungProperty() {
@@ -1093,40 +1285,40 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class MengeProperty extends LongPropertyDefinition {
-		public MengeProperty() {
-			this.setId("menge");
-			this.setName("Menge");
-		}
-	}
+//	public static class MengeProperty extends LongPropertyDefinition {
+//		public MengeProperty() {
+//			this.setId("menge");
+//			this.setName("Menge");
+//		}
+//	}
+//
+//	public static class LieferdatumProperty extends DatePropertyDefinition {
+//		public LieferdatumProperty() {
+//			this.setId("lieferdatum");
+//			this.setName("Lieferdatum");
+//		}
+//	}
 
-	public static class LieferdatumProperty extends DatePropertyDefinition {
-		public LieferdatumProperty() {
-			this.setId("lieferdatum");
-			this.setName("Lieferdatum");
-		}
-	}
-
-	public static class IncotermsProperty extends TextPropertyDefinition {
-		public IncotermsProperty() {
-			this.setId("incoterms");
-			this.setName("Inco-Terms");
-			this.setAllowedValues(new LinkedList<String>());
-			this.getAllowedValues().add("EXW");
-			this.getAllowedValues().add("FCA");
-			this.getAllowedValues().add("CPT");
-			this.getAllowedValues().add("CIP");
-			this.getAllowedValues().add("DAT");
-			this.getAllowedValues().add("DAP");
-			this.getAllowedValues().add("DDP");
-			this.getAllowedValues().add("FAS");
-			this.getAllowedValues().add("FOB");
-			this.getAllowedValues().add("CFR");
-			this.getAllowedValues().add("CIF");
-
-
-		}
-	}
+//	public static class IncotermsProperty extends TextPropertyDefinition {
+//		public IncotermsProperty() {
+//			this.setId("incoterms");
+//			this.setName("Inco-Terms");
+//			this.setAllowedValues(new LinkedList<String>());
+//			this.getAllowedValues().add("EXW");
+//			this.getAllowedValues().add("FCA");
+//			this.getAllowedValues().add("CPT");
+//			this.getAllowedValues().add("CIP");
+//			this.getAllowedValues().add("DAT");
+//			this.getAllowedValues().add("DAP");
+//			this.getAllowedValues().add("DDP");
+//			this.getAllowedValues().add("FAS");
+//			this.getAllowedValues().add("FOB");
+//			this.getAllowedValues().add("CFR");
+//			this.getAllowedValues().add("CIF");
+//
+//
+//		}
+//	}
 
 	public static class ZahlungsbedingungenProperty extends LongTextPropertyDefinition {
 		public ZahlungsbedingungenProperty() {

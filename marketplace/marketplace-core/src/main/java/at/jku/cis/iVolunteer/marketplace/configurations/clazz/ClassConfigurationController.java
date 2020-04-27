@@ -39,6 +39,7 @@ public class ClassConfigurationController {
 	
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
+		System.out.println("test");
 		return classConfigurationRepository.findAll();
 	}
 	
@@ -90,19 +91,18 @@ public class ClassConfigurationController {
 	@PutMapping("class-configuration/save")
 	public ClassConfiguration saveClassConfiguration(@RequestBody ClassConfiguration updatedClassConfiguration) {
 		updatedClassConfiguration.setTimestamp(new Date());
-		
+				
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
 	
 		//TODO aggregate and build 
 		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsMultipleCollections(classConfiguration.getId());
-		
+				
 		MatchingCollectorConfiguration matchingCollectorConfiguration = new MatchingCollectorConfiguration();
 		matchingCollectorConfiguration.setId(classConfiguration.getId());
 		matchingCollectorConfiguration.setClassConfigurationId(classConfiguration.getId());
 		matchingCollectorConfiguration.setCollectors(collectors);
 		
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
-		
 		return classConfiguration;
 	}
 	

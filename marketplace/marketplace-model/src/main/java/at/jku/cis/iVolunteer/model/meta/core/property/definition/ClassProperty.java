@@ -17,6 +17,8 @@ public class ClassProperty<T> {
 
 	private List<T> defaultValues = new ArrayList<>();
 	private List<T> allowedValues = new ArrayList<>();
+	
+	private String unit;
 
 	private PropertyType type;
 	private boolean multiple;
@@ -64,6 +66,13 @@ public class ClassProperty<T> {
 
 	public void setAllowedValues(List<T> allowedValues) {
 		this.allowedValues = allowedValues;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public PropertyType getType() {

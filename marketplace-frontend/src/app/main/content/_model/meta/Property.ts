@@ -12,8 +12,13 @@ export class PropertyDefinition<T> {
 
     allowedValues: T[];
 
+    unit: string;
+
     required: boolean;
     propertyConstraints: PropertyConstraint<T>[];
+
+    visible: boolean;
+    tabId: number;
 }
 
 export class ClassProperty<T> {
@@ -22,6 +27,8 @@ export class ClassProperty<T> {
 
     defaultValues: T[];
     allowedValues: T[];
+
+    unit: string;
 
     multiple: boolean;
 
@@ -63,6 +70,8 @@ export class PropertyInstance<T> {
 
     values: T[];
     allowedValues: T[];
+
+    unit: string;
 
     type: PropertyType;
 

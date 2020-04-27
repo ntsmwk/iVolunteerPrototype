@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +77,8 @@ public class InitializationService {
 	
 	@Autowired private ClassConfigurationController classConfigurationController;
 
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
+
 	@PostConstruct
 	public void init() {
 //		finalizationService.destroy(configuratorRepository, classDefinitionRepository, classInstanceRepository,
@@ -88,11 +91,20 @@ public class InitializationService {
 //		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 //		this.addTestClassInstances();
+		
+		this.propertyDefinitionRepository.deleteAll();
+		this.relationshipRepository.deleteAll();
+		this.classDefinitionRepository.deleteAll();
+		this.classConfigurationRepository.deleteAll();
 
-		this.addStandardPropertyDefinitions();
-		this.addFlexProdConfigClassesConsumer();
-		this.addFlexProdConfigClassesProducer();
-		this.addFlexProdMachtingOperatorRelationshipStorage();
+		addStandardPropertyDefinitions();
+		addFlexProdConfigClassesConsumer();
+		addFlexProdConfigClassesProducer();
+		addFlexProdMachtingOperatorRelationshipStorage();
+		
+		addDrahtOven();
+		addBandOven();
+		addHaubenOven();
 		
 
 	}
@@ -1120,10 +1132,10 @@ public class InitializationService {
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
 		
-//		configuratorRepository.save(configurator);
 		classConfigurationController.saveClassConfiguration(configurator);
 	}
 	
+
 	private void addFlexProdMachtingOperatorRelationshipStorage() {
 		MatchingConfiguration storage = new MatchingConfiguration();
 		storage.setId("demo");
@@ -1151,6 +1163,124 @@ public class InitializationService {
 			matchingConfiguratorRepository.save(storage);
 		}
 
+	}
+	
+	private void addDrahtOven() {
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		List<Relationship> relationships = new ArrayList<Relationship>();
+
+		ClassDefinition root = new ClassDefinition();
+		root.setId(new ObjectId().toHexString());
+		root.setName("Draht-Ofen");
+		root.setProperties(new ArrayList<ClassProperty<Object>>());
+		root.setRoot(true);
+		root.setClassArchetype(ClassArchetype.ROOT);
+		classDefinitions.add(root);
+		
+		ClassDefinition auftragsdaten = new ClassDefinition();
+		auftragsdaten.setId(new ObjectId().toHexString());
+		auftragsdaten.setName("Auftragsdaten");
+		auftragsdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		auftragsdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		auftragsdaten.setCollector(true);
+		classDefinitions.add(auftragsdaten);
+
+		ClassDefinition produktdaten = new ClassDefinition();
+		produktdaten.setId(new ObjectId().toHexString());
+		produktdaten.setName("Produktdaten");
+		produktdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		produktdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		produktdaten.setCollector(true);
+		classDefinitions.add(produktdaten);
+		
+		ClassDefinition logistik = new ClassDefinition();
+		logistik.setId(new ObjectId().toHexString());
+		logistik.setName("Logistik");
+		logistik.setProperties(new ArrayList<ClassProperty<Object>>());
+		logistik.setClassArchetype(ClassArchetype.FLEXPROD);
+		logistik.setCollector(true);
+		classDefinitions.add(logistik);
+
+		Aggregation i1 = new Aggregation(root.getId(), auftragsdaten.getId(), root.getId());
+		i1.setId(new ObjectId().toHexString());
+		relationships.add(i1);
+		
+		Aggregation i2 = new Aggregation(root.getId(), produktdaten.getId(), root.getId());
+		i2.setId(new ObjectId().toHexString());
+		relationships.add(i2);
+		
+		Aggregation i3 = new Aggregation(root.getId(), logistik.getId(), root.getId());
+		i3.setId(new ObjectId().toHexString());
+		relationships.add(i3);
+		
+		ClassDefinition bund = new ClassDefinition();
+		bund.setId(new ObjectId().toHexString());
+		bund.setName("Bund");
+		bund.setProperties(new ArrayList<ClassProperty<Object>>());
+		bund.setClassArchetype(ClassArchetype.FLEXPROD);
+		bund.setCollector(false);
+		classDefinitions.add(bund);
+		
+		ClassDefinition nichtBereitgestellt = new ClassDefinition();
+		nichtBereitgestellt.setId(new ObjectId().toHexString());
+		nichtBereitgestellt.setName("Werkstoff nicht bereitgestellt");
+		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		nichtBereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
+		nichtBereitgestellt.setCollector(false);
+		classDefinitions.add(nichtBereitgestellt);
+		
+		ClassDefinition bereitgestellt = new ClassDefinition();
+		bereitgestellt.setId(new ObjectId().toHexString());
+		bereitgestellt.setName("Werkstoff bereitgestellt");
+		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		bereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
+		bereitgestellt.setCollector(false);
+		classDefinitions.add(bereitgestellt);
+		
+		Aggregation i4 = new Aggregation(produktdaten.getId(), bund.getId(), produktdaten.getId());
+		i4.setId(new ObjectId().toHexString());
+		relationships.add(i4);
+		
+		Aggregation i5 = new Aggregation(produktdaten.getId(), nichtBereitgestellt.getId(), produktdaten.getId());
+		i5.setId(new ObjectId().toHexString());
+		relationships.add(i5);
+		
+		Aggregation i6 = new Aggregation(produktdaten.getId(), bereitgestellt.getId(), produktdaten.getId());
+		i6.setId(new ObjectId().toHexString());
+		relationships.add(i6);
+		
+		ClassConfiguration configuration = new ClassConfiguration();
+		configuration.setId("Drahtofen");
+		configuration.setName("Drahtofen");
+		configuration.setRelationshipIds(new ArrayList<String>());
+		configuration.setClassDefinitionIds(new ArrayList<String>());
+
+		for (Relationship r : relationships) {
+			if (!relationshipRepository.exists(r.getId())) {
+				relationshipRepository.save(r);
+			}
+			
+			configuration.getRelationshipIds().add(r.getId());
+		}
+
+		for (ClassDefinition cd : classDefinitions) {
+			if (!classDefinitionRepository.exists(cd.getId())) {
+				classDefinitionRepository.save(cd);
+			}
+			
+			configuration.getClassDefinitionIds().add(cd.getId());
+		}
+
+		classConfigurationController.saveClassConfiguration(configuration);
+		
+	}
+	
+	private void addBandOven() {
+		
+	}
+	
+	private void addHaubenOven() {
+		
 	}
 	
 	
