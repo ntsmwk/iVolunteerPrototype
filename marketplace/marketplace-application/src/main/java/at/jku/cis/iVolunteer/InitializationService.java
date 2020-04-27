@@ -1183,6 +1183,18 @@ public class InitializationService {
 		auftragsdaten.setProperties(new ArrayList<ClassProperty<Object>>());
 		auftragsdaten.setClassArchetype(ClassArchetype.FLEXPROD);
 		auftragsdaten.setCollector(true);
+		
+		auftragsdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("titel")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("produkttyp")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("menge")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("minimale_menge")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff_bereitgestellt")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("allgemeine_beschreibung")));
+
+
+		
 		classDefinitions.add(auftragsdaten);
 
 		ClassDefinition produktdaten = new ClassDefinition();
@@ -1199,6 +1211,14 @@ public class InitializationService {
 		logistik.setProperties(new ArrayList<ClassProperty<Object>>());
 		logistik.setClassArchetype(ClassArchetype.FLEXPROD);
 		logistik.setCollector(true);
+		
+		logistik.setProperties(new ArrayList<ClassProperty<Object>>());
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("incoterms")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferort")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("abholort")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("verpackungsvorgaben")));
+	
+		
 		classDefinitions.add(logistik);
 
 		Aggregation i1 = new Aggregation(root.getId(), auftragsdaten.getId(), root.getId());
@@ -1219,6 +1239,13 @@ public class InitializationService {
 		bund.setProperties(new ArrayList<ClassProperty<Object>>());
 		bund.setClassArchetype(ClassArchetype.FLEXPROD);
 		bund.setCollector(false);
+		
+		bund.setProperties(new ArrayList<ClassProperty<Object>>());
+		bund.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_innen")));
+		bund.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_aussen")));
+		bund.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
+
+		
 		classDefinitions.add(bund);
 		
 		ClassDefinition nichtBereitgestellt = new ClassDefinition();
@@ -1227,6 +1254,12 @@ public class InitializationService {
 		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
 		nichtBereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
 		nichtBereitgestellt.setCollector(false);
+		
+		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff")));
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser")));
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zugfestigkeit")));
+
 		classDefinitions.add(nichtBereitgestellt);
 		
 		ClassDefinition bereitgestellt = new ClassDefinition();
@@ -1235,6 +1268,12 @@ public class InitializationService {
 		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
 		bereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
 		bereitgestellt.setCollector(false);
+		
+		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("schutzgas")));
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehreise")));
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("temperaturhomogenitaet")));
+		
 		classDefinitions.add(bereitgestellt);
 		
 		Aggregation i4 = new Aggregation(produktdaten.getId(), bund.getId(), produktdaten.getId());

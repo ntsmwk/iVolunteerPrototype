@@ -194,6 +194,7 @@ public class StandardPropertyDefinitions {
 		list.add(new HoeheProperty());
 
 		list.add(new GluehzeitProperty());
+		list.add(new DurchmesserProperty());
 		list.add(new DurchsatzProperty());
 		
 		list.add(new ChargierhilfeProperty());
@@ -232,7 +233,40 @@ public class StandardPropertyDefinitions {
 		list.add(new ZahlungsbedingungenProperty());
 
 		return new ArrayList(list);
-
+	}
+	
+	public List<PropertyDefinition<Object>> getDrahtofenProperties() {
+		List<PropertyDefinition<?>> list = new LinkedList<>();
+		
+		list.add(new TitelProperty());
+		list.add(new ProdukttypProperty());
+		list.add(new MengeProperty());
+		list.add(new MinimaleMengeProperty());
+		list.add(new LieferdatumProperty());
+		list.add(new WerkstoffBereitgestelltProperty());
+		list.add(new BeschreibungZusatzinfoProperty());
+		
+		list.add(new DurchmesserInnenProperty());
+		list.add(new DurchmesserAussenProperty());
+		list.add(new HoeheProperty());
+		
+		list.add(new WerkstoffProperty());
+		list.add(new WerkstoffFreitextProperty());
+		list.add(new ZugfestigkeitProperty());
+		
+		list.add(new SchutzgasProperty());
+		list.add(new GluehreiseProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		
+		list.add(new OberflaechenqualitaetProperty());
+		list.add(new ZusaetzlicheProduktinformationenProperty());
+		
+		list.add(new IncotermsProperty());
+		list.add(new LieferortProperty());
+		list.add(new AbholortProperty());
+		list.add(new VerpackungsvorgabenProperty());
+		
+		return new ArrayList(list);
 	}
 
 	public List<PropertyDefinition<Object>> getAll() {
@@ -241,14 +275,15 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
 		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-
+		List<PropertyDefinition<Object>> drahtofen = this.getDrahtofenProperties();
+		
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
 		sps.addAll(flexProd);
+		sps.addAll(drahtofen);
 
 		return sps;
-
 	}
 
 	public List<String> addCompetenceLegalValues() {
@@ -362,6 +397,14 @@ public class StandardPropertyDefinitions {
 			this.getAllowedValues().add("Eintrag 3");
 			this.getAllowedValues().add("...");
 			this.getAllowedValues().add("Freitext");
+		}
+	}
+	
+	public static class DurchmesserProperty extends LongPropertyDefinition {
+		public DurchmesserProperty() {
+			this.setId("durchmesser");
+			this.setName("Durchmesser");
+			this.setUnit("mm");
 		}
 	}
 	
