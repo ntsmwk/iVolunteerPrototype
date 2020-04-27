@@ -1,5 +1,6 @@
 @import "src/@fuse/scss/fuse";
 @import "~@angular/material/theming";
+@import "common";
 @include mat-core();
 $custom-typography: mat-typography-config(
   $font-family: "Muli",

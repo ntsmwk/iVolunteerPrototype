@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
   FormControl,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { FuseConfigService } from "@fuse/services/config.service";
 import { Router } from "@angular/router";
@@ -17,11 +17,12 @@ import { Volunteer } from "app/main/content/_model/volunteer";
   selector: "registration",
   templateUrl: "registration.component.html",
   styleUrls: ["./registration.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class FuseRegistrationComponent implements OnInit {
   registrationForm: FormGroup;
   registrationFormErrors: any;
+  today = new Date();
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -32,13 +33,13 @@ export class FuseRegistrationComponent implements OnInit {
     const layout = {
       navigation: "none",
       toolbar: "none",
-      footer: "none"
+      footer: "none",
     };
     this.fuseConfig.setConfig({ layout: layout });
 
     this.registrationFormErrors = {
       username: {},
-      password: {}
+      password: {},
     };
   }
 
@@ -48,7 +49,7 @@ export class FuseRegistrationComponent implements OnInit {
       password: new FormControl("", Validators.required),
       firstName: new FormControl("", Validators.required),
       lastName: new FormControl("", Validators.required),
-      birthday: new FormControl("", Validators.required)
+      birthday: new FormControl("", Validators.required),
     });
 
     this.registrationForm.valueChanges.subscribe(() => {
