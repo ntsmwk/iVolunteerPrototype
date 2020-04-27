@@ -34,6 +34,9 @@ public class ClassPropertyToPropertyInstanceMapper
 
 		propertyInstance
 				.setPropertyConstraints(new ArrayList<PropertyConstraint<Object>>(source.getPropertyConstraints()));
+		
+		propertyInstance.setTabId(source.getTabId());
+		propertyInstance.setVisible(source.isVisible());
 
 		return propertyInstance;
 	}

@@ -1175,6 +1175,8 @@ public class InitializationService {
 		root.setProperties(new ArrayList<ClassProperty<Object>>());
 		root.setRoot(true);
 		root.setClassArchetype(ClassArchetype.ROOT);
+		root.setTabId(-1);
+		root.setVisible(true);
 		classDefinitions.add(root);
 		
 		ClassDefinition auftragsdaten = new ClassDefinition();
@@ -1192,8 +1194,12 @@ public class InitializationService {
 		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
 		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff_bereitgestellt")));
 		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("allgemeine_beschreibung")));
-
-
+		
+		
+		auftragsdaten.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		
+		auftragsdaten.setTabId(0);
+		auftragsdaten.setVisible(true);
 		
 		classDefinitions.add(auftragsdaten);
 
@@ -1203,6 +1209,7 @@ public class InitializationService {
 		produktdaten.setProperties(new ArrayList<ClassProperty<Object>>());
 		produktdaten.setClassArchetype(ClassArchetype.FLEXPROD);
 		produktdaten.setCollector(true);
+		produktdaten.setTabId(1);
 		classDefinitions.add(produktdaten);
 		
 		ClassDefinition logistik = new ClassDefinition();
@@ -1218,6 +1225,10 @@ public class InitializationService {
 		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("abholort")));
 		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("verpackungsvorgaben")));
 	
+		logistik.getProperties().forEach(p -> {p.setTabId(2); p.setVisible(true);});
+		
+		logistik.setTabId(2);
+		logistik.setVisible(true);
 		
 		classDefinitions.add(logistik);
 
@@ -1246,6 +1257,10 @@ public class InitializationService {
 		bund.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
 
 		
+		bund.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		bund.setTabId(1);
+		bund.setVisible(true);
+		
 		classDefinitions.add(bund);
 		
 		ClassDefinition nichtBereitgestellt = new ClassDefinition();
@@ -1260,6 +1275,10 @@ public class InitializationService {
 		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser")));
 		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zugfestigkeit")));
 
+		nichtBereitgestellt.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		nichtBereitgestellt.setTabId(1);
+		nichtBereitgestellt.setVisible(true);
+		
 		classDefinitions.add(nichtBereitgestellt);
 		
 		ClassDefinition bereitgestellt = new ClassDefinition();
@@ -1273,6 +1292,10 @@ public class InitializationService {
 		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("schutzgas")));
 		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehreise")));
 		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("temperaturhomogenitaet")));
+		
+		bereitgestellt.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		bereitgestellt.setTabId(1);
+		bereitgestellt.setVisible(true);
 		
 		classDefinitions.add(bereitgestellt);
 		

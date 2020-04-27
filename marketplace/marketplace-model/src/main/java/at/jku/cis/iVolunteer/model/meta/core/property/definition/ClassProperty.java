@@ -29,6 +29,9 @@ public class ClassProperty<T> {
 	
 	private int position;
 	
+	private boolean visible;
+	private int tabId;
+	
 	
 
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
@@ -131,5 +134,23 @@ public class ClassProperty<T> {
 	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
+	}
+	
+	
 
 }

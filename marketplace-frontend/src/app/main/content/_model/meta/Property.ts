@@ -40,6 +40,9 @@ export class ClassProperty<T> {
 
     position: number;
 
+    visible: boolean;
+    tabId: number;
+
     propertyConstraints: PropertyConstraint<T>[];
 
     public static getDefaultValue(templateProperty: TemplateProperty<any>): any {
@@ -79,6 +82,9 @@ export class PropertyInstance<T> {
 
     position: number;
 
+    visible: boolean;
+    tabId: number;
+
     propertyConstraints: PropertyConstraint<T>[];
 
     public static getValue(propertyInstance: PropertyInstance<any>): any {
@@ -98,6 +104,8 @@ export class PropertyInstance<T> {
         this.required = classProperty.required;
         this.position = classProperty.position;
         this.propertyConstraints = classProperty.propertyConstraints;
+        this.visible = classProperty.visible;
+        this.tabId = classProperty.tabId;
     }
 
 }

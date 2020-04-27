@@ -47,6 +47,8 @@ export class ClassInstance {
         this.timestamp = new Date();
         this.userId = null;
         this.classArchetype = classDefinition.classArchetype;
+        this.visible = classDefinition.visible;
+        this.tabId = classDefinition.tabId;
     }
 }
 
