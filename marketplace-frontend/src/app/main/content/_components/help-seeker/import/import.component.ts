@@ -4,13 +4,13 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassDefinition,
-  ClassInstance
+  ClassInstance,
 } from "app/main/content/_model/meta/Class";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ParticipantRole,
-  Participant
+  Participant,
 } from "app/main/content/_model/participant";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
@@ -20,7 +20,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 @Component({
   selector: "import",
   templateUrl: "import.component.html",
-  styleUrls: ["import.component.scss"]
+  styleUrls: ["import.component.scss"],
 })
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
@@ -42,7 +42,7 @@ export class ImportComponent implements OnInit {
       classDefinition: new FormControl(undefined),
       volunteer: new FormControl(undefined),
       file: new FormControl(undefined),
-      fileBtn: new FormControl(undefined)
+      fileBtn: new FormControl(undefined),
     });
   }
 
@@ -77,16 +77,18 @@ export class ImportComponent implements OnInit {
     // TODO MWE check all form are inputted.. ;)
 
     let fileReader = new FileReader();
-    fileReader.onload = async e => {
+    fileReader.onload = async (e) => {
       let contentObject = JSON.parse(<string>fileReader.result);
-      for (const entry of contentObject) {
+      console.error(contentObject);
+
+      for (const entry of contentObject.properties) {
         console.error(entry);
         await this.classInstanceService
           .createClassInstanceByClassDefinitionId(
             this.marketplace,
-            this.importForm.value.classDefinition.id,
+            contentObject.classDefinitionId,
             this.importForm.value.volunteer.id,
-            this.helpseeker.tenantId,
+            contentObject.tenantId,
             entry
           )
           .toPromise();

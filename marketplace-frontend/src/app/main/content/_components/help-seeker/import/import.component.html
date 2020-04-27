@@ -1,35 +1,43 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
-  <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+  <div
+    class="header p-16 p-sm-24"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
     <h1>Freiwilligenpasseinträge importieren</h1>
     <div style="padding-top: 70px; z-index: 255; position: relative;"></div>
   </div>
 
   <div style="padding-top: 20px;"></div>
 
-  <mat-card class="infoText">Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende Konfiguration und das dazugehörige JSON-File aus.
+  <mat-card class="infoText"
+    >Importiere Freiwilligenpass-Einträge. Wähle dazu die entsprechende
+    Konfiguration und das dazugehörige JSON-File aus.
   </mat-card>
 
-  <form form style="padding-top: 12px; padding-left: 40px;" name="form" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start" [formGroup]="importForm">
-    <mat-form-field style="width: 300px;">
-      <mat-label>Freiwilligenpasseintrag</mat-label>
-      <mat-select formControlName="classDefinition">
-        <mat-option *ngFor="let cd of classDefinitions" [value]="cd">
-          {{ cd.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
+  <form
+    form
+    style="padding-top: 12px; padding-left: 40px;"
+    name="form"
+    fxLayout="row"
+    fxLayoutGap="20px"
+    fxLayoutAlign="start"
+    [formGroup]="importForm"
+  >
     <mat-form-field style="width: 300px;">
       <mat-label>Voluntär</mat-label>
       <mat-select formControlName="volunteer">
         <mat-option *ngFor="let vol of volunteers" [value]="vol">
-          {{ vol.firstname}} {{vol.lastname }}
+          {{ vol.firstname }} {{ vol.lastname }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <ngx-mat-file-input formControlName="file" placeholder="Import-Datei"></ngx-mat-file-input>
+      <ngx-mat-file-input
+        formControlName="file"
+        placeholder="Import-Datei"
+      ></ngx-mat-file-input>
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
 

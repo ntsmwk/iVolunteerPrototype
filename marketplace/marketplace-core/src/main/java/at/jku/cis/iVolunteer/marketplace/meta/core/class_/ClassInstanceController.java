@@ -1,7 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,9 +20,6 @@ import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropert
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
-import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 
 @RestController
 public class ClassInstanceController {
@@ -78,8 +74,9 @@ public class ClassInstanceController {
 			@PathVariable String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {
 
-		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId, tenantId);
-		
+		ClassDefinition classDefinition = this.classDefinitionService.getClassDefinitionById(classDefinitionId,
+				tenantId);
+
 		if (classDefinition != null) {
 
 			ClassInstance classInstance = this.classDefinitionToInstanceMapper.toTarget(classDefinition);
