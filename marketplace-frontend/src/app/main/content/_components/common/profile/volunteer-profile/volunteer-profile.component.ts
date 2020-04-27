@@ -23,6 +23,8 @@ export class VolunteerProfileComponent implements OnInit {
   profileForm: FormGroup;
   profileFormErrors: any;
 
+  today = new Date();
+
   constructor(
     private loginService: LoginService,
     private imageService: ImageService,
