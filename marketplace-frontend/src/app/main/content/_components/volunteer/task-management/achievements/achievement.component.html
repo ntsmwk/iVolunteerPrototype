@@ -7,8 +7,7 @@
     <h1 class="l-heading">Mein FreiwilligenLEBEN</h1>
   </div>
 
-  <div *ngIf="marketplace !== undefined &&
-    subscribedTenants.length > 0">
+  <div *ngIf="marketplace !== undefined && subscribedTenants.length > 0">
     <mat-card>
       <organisation-filter
         (tenantSelectionChanged)="tenantSelectionChanged($event)"
@@ -17,9 +16,10 @@
     </mat-card>
 
     <div class="content">
-
-      <p *ngIf="timeout && !isLocalRepositoryConnected" 
-        class="alert alert-info">
+      <p
+        *ngIf="timeout && !isLocalRepositoryConnected"
+        class="alert alert-info"
+      >
         <i class="fas fa-exclamation-circle"></i> &nbsp; Lokaler
         Freiwilligenpass nicht erreichbar, deshalb stammen die Daten vom
         Marktplatz!
@@ -39,23 +39,30 @@
                 TODO: would be correct, because so no empty charts are shown if local repo is empty
                       BUT enormous performance problems (+ several seconds...)
             -->
-              <fuse-tasks *ngIf="selectedTenants.length > 0 &&
+            <fuse-tasks
+              *ngIf="
+                selectedTenants.length > 0 &&
                 filteredClassInstanceDTOs.length > 0 &&
-                classInstanceDTOs.length > 0" 
-                [classInstanceDTOs]="filteredClassInstanceDTOs"
-                [selectedTenants]="selectedTenants"
-              >
-              </fuse-tasks>
+                classInstanceDTOs.length > 0
+              "
+              [classInstanceDTOs]="filteredClassInstanceDTOs"
+              [selectedTenants]="selectedTenants"
+            >
+            </fuse-tasks>
           </ng-template>
         </mat-tab>
 
         <mat-tab label="Kompetenzen">
           <ng-template matTabContent>
-            <fuse-competencies *ngIf="selectedTenants.length > 0 &&
-              filteredClassInstanceDTOs.length > 0 &&
-              classInstanceDTOs.length > 0" 
+            <fuse-competencies
+              *ngIf="
+                selectedTenants.length > 0 &&
+                filteredClassInstanceDTOs.length > 0 &&
+                classInstanceDTOs.length > 0
+              "
               [classInstanceDTOs]="filteredClassInstanceDTOs"
-              [selectedTenants]="selectedTenants">
+              [selectedTenants]="selectedTenants"
+            >
             </fuse-competencies>
           </ng-template>
         </mat-tab>
@@ -83,40 +90,47 @@
       </ngx-spinner>
     </mat-card> -->
 
-  <p *ngIf="timeout && 
-    selectedTenants.length === 0 && 
-    subscribedTenants.length > 0
-      marketplace" 
-    class="alert alert-info">
+  <p
+    *ngIf="
+      timeout && selectedTenants.length === 0 && subscribedTenants.length > 0;
+      marketplace
+    "
+    class="alert alert-info"
+  >
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Organisation
     ausgewählt!
   </p>
-  
 
-    <p *ngIf="timeout && 
-    subscribedTenants.length === 0" class="alert alert-info">
+  <p *ngIf="timeout && subscribedTenants.length === 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
     beigetreten!
   </p>
 
-  <p *ngIf="
-            timeout &&
-            classInstanceDTOs.length === 0 &&
-            filteredClassInstanceDTOs.length === 0 &&
-            isLocalRepositoryConnected &&
-            selectedTenants.length > 0
-          " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich
-    noch keine Daten in deinem lokalen Freiwilligenpass!
+  <p
+    *ngIf="
+      timeout &&
+      classInstanceDTOs.length === 0 &&
+      filteredClassInstanceDTOs.length === 0 &&
+      isLocalRepositoryConnected &&
+      selectedTenants.length > 0
+    "
+    class="alert alert-info"
+  >
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Es befinden sich noch keine
+    Daten in deinem lokalen Freiwilligenpass!
   </p>
 
-  <p *ngIf="
-            timeout &&
-            classInstanceDTOs.length != 0 &&
-            filteredClassInstanceDTOs.length === 0 &&
-            isLocalRepositoryConnected &&
-            selectedTenants.length > 0
-          " class="alert alert-info">
-    <i class="fas fa-exclamation-circle"></i> &nbsp; Die aktuelle Filterauswahl liefert keine Daten!
+  <p
+    *ngIf="
+      timeout &&
+      classInstanceDTOs.length != 0 &&
+      filteredClassInstanceDTOs.length === 0 &&
+      isLocalRepositoryConnected &&
+      selectedTenants.length > 0
+    "
+    class="alert alert-info"
+  >
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Keine
+    Freiwilligenpass-Einträge zur aktuellen Filterung gefunden
   </p>
 </div>

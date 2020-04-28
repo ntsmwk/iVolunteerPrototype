@@ -1,6 +1,6 @@
 <div id="achievements" class="page-layout blank p-24" fusePerfectScrollbar>
   <div
-    class="header-achievements p-16 p-sm-24"
+    class="header-management-summary p-16 p-sm-24"
     fxLayout="row"
     fxLayoutAlign="center center"
   >
@@ -49,11 +49,7 @@
 
     <!-- CHARTS BEGINN -->
     <div style="height: 30px;"></div>
-    <div
-      *ngIf="
-        timeout && classInstanceDTOs.length > 0
-      "
-    >
+    <div *ngIf="timeout && classInstanceDTOs.length > 0">
       <h1 class="engagement">Engagement gesamt</h1>
       <div fxLayout="column" fxLayoutAlign="start center" style="width: 100%;">
         <div fxLayout="column" fxLayoutAlign="start center">
@@ -177,8 +173,7 @@
     </div>
   </div>
 
-  <p *ngIf="timeout && 
-    tenantMap.size === 0" class="alert alert-info">
+  <p *ngIf="timeout && tenantMap.size === 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation
     beigetreten!
   </p>

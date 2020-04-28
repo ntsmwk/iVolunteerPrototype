@@ -154,6 +154,10 @@ $primary: #1a237e;
     }
     &-achievements {
       @extend %header-default;
+      background: #ff9326;
+    }
+    &-management-summary {
+      @extend %header-default;
       background: #8bdf5d;
     }
     &-social {
