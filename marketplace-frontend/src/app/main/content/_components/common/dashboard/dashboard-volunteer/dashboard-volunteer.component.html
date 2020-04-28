@@ -86,15 +86,19 @@
         <tbody>
           <tr>
             <td>Einträge gesamt:</td>
-            <td class="alignRight">{{marketplaceClassInstances.length}}</td>
+            <td class="alignRight">{{ marketplaceClassInstances.length }}</td>
           </tr>
           <tr>
             <td>Einträge im lokalen Repository:</td>
-            <td class="alignRight">{{localClassInstances.length}}</td>
+            <td class="alignRight">{{ localClassInstances.length }}</td>
           </tr>
           <tr>
             <td>Noch nicht hinzugefügte Einträge:</td>
-            <td class="alignRight">{{marketplaceClassInstances.length - localClassInstances.length}}</td>
+            <td class="alignRight">
+              {{
+                marketplaceClassInstances.length - localClassInstances.length
+              }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -149,13 +153,16 @@
     fxLayout="column"
   >
     <div fxLayout="row" fxLayoutAlign="end center">
-      <button mat-raised-button 
-      color="primary" 
-      (click)="syncAllToLocalRepository()">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="syncAllToLocalRepository()"
+      >
         Auswahl hinzufügen
       </button>
 
-      <button mat-raised-button
+      <button
+        mat-raised-button
         color="primary"
         (click)="removeAllFromLocalRepository()"
         style="margin-left: 20px;"
@@ -164,11 +171,7 @@
       </button>
     </div>
 
-    <div
-      fxLayout="row"
-      style="width: 100%;"
-      fxLayoutAlign="start center"
-    >
+    <div fxLayout="row" style="width: 100%;" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
       <mat-table
@@ -179,7 +182,9 @@
         (matSortChange)="sortData($event)"
       >
         <ng-container matColumnDef="issuer">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Aussteller</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Aussteller</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
               <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
@@ -189,28 +194,36 @@
         </ng-container>
 
         <ng-container matColumnDef="taskName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Eintrag </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Eintrag
+          </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <span>{{ element.name }} </span>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="taskType1">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Typ </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Typ
+          </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <span>{{ element.taskType1 }} </span>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Datum</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
-            {{ entry.dateFrom | date: "dd.MM.yyyy" }}
+            {{ entry.dateFrom | date: "dd.MM.yyyy hh:mm" }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Aktion</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header
+            >Aktion</mat-header-cell
+          >
           <mat-cell *matCellDef="let entry">
             <button
               mat-raised-button
@@ -251,14 +264,13 @@
     *ngIf="isLocalRepositoryConnected"
     [pageSize]="12"
     id="paginator"
-    showFirstLastButtons>
+    showFirstLastButtons
+  >
   </mat-paginator>
 
   <div style="padding-top: 20px;"></div>
 
-  <p *ngIf="
-      timeout &&
-      !isLocalRepositoryConnected" class="alert alert-info">
+  <p *ngIf="timeout && !isLocalRepositoryConnected" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine Verbindung zu deinem
     lokalen Freiwilligenpass!
   </p>
@@ -266,8 +278,8 @@
   <p
     *ngIf="
       timeout &&
-      selectedTenants.length === 0 && 
-      isLocalRepositoryConnected && 
+      selectedTenants.length === 0 &&
+      isLocalRepositoryConnected &&
       tenants != 0
     "
     class="alert alert-info"
