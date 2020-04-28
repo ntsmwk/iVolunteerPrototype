@@ -35,7 +35,7 @@ public class ClassDefinitionService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ClassConfigurationRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 	@Autowired private CollectionService collectionService;
 
 	public ClassDefinition getByName(String name) {
@@ -53,14 +53,14 @@ public class ClassDefinitionService {
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithProperties(String slotId) {
-		ClassConfiguration configurator = configuratorRepository.findOne(slotId);
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(slotId);
 
-		if (configurator == null) {
+		if (classConfiguration == null) {
 			return null;
 		}
 
 		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
-		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
 			if (c.getProperties() != null && c.getProperties().size() > 0) {
 				classDefinitions.add(c);
 			}
@@ -237,7 +237,15 @@ public class ClassDefinitionService {
 
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 		for (ClassDefinition rootClassDefinition : rootClassDefintions) {
-			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry());
+			
+			List<ClassDefinition> classDefinitions = new ArrayList<>();
+			List<Relationship> relationships = new ArrayList<>();
+			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(rootClassDefinition.getConfigurationId());
+			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+			
+
+			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
 			FormConfiguration formConfiguration = new FormConfiguration();
 			formConfiguration.setId(rootClassDefinition.getId());
 			formConfiguration.setName(rootClassDefinition.getName());

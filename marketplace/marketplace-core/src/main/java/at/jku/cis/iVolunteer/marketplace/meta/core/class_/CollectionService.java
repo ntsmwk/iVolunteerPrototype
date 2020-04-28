@@ -198,16 +198,24 @@ public class CollectionService {
 		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
 	}
 
-	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry) {
+	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
 
 		rootFormEntry.setClassDefinitions(new LinkedList<>());
 		rootFormEntry.getClassDefinitions().add(rootClassDefinition);
 
 		rootFormEntry.setClassProperties(rootClassDefinition.getProperties());
+//
+//		List<Relationship> relationships = relationshipRepository
+//				.findBySourceAndRelationshipType(rootClassDefinition.getId(), RelationshipType.AGGREGATION);
 
-		List<Relationship> relationships = relationshipRepository
-				.findBySourceAndRelationshipType(rootClassDefinition.getId(), RelationshipType.AGGREGATION);
-
+		List<Relationship> relationships = new ArrayList<>();
+		
+		for (Relationship r : allRelationships) {
+			if (r.getRelationshipType().equals(RelationshipType.AGGREGATION) && r.getSource().equals(rootClassDefinition.getId())) {
+				relationships.add(r);
+			}
+		}
+		
 		Collections.reverse(relationships);
 
 		Stack<Relationship> stack = new Stack<Relationship>();
@@ -220,9 +228,11 @@ public class CollectionService {
 		} else {
 			while (!stack.isEmpty()) {
 				Relationship relationship = stack.pop();
-				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-
-				FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry());
+//				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+				
+				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+				
+				FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
 				subFormEntries.add(subFormEntry);
 			}
 

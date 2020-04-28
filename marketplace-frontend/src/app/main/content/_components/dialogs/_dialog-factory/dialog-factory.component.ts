@@ -528,13 +528,13 @@ export class DialogFactoryDirective {
     });
   }
 
-  openInstanceFormPreviewDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
     const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
+      data: { marketplace: marketplace, classDefinition: classDefinition },
       disableClose: true
     });
 

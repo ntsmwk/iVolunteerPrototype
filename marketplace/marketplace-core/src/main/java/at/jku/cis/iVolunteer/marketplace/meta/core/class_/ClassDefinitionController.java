@@ -98,7 +98,7 @@ public class ClassDefinitionController {
 		} else {
 			throw new IllegalArgumentException("Invalid collection type - has to be 'top-down' or 'bottom-up'" );
 		}
-	}
+	}	
 
 	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
 	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {

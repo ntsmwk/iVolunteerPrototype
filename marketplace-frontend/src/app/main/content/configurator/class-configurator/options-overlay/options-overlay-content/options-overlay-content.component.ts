@@ -89,4 +89,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         });
 
     }
+
+    previewClicked() {
+        // this.dialogFactory.openInstanceFormPreviewDialog(this.inputData.marketplace, ).then(() => {
+
+    }
+
 }

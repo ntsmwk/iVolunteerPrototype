@@ -617,6 +617,7 @@ public class InitializationService {
 		}
 
 		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configurator.getId());
 			if (!classDefinitionRepository.exists(cd.getId())) {
 				classDefinitionRepository.save(cd);
 			}
@@ -1125,6 +1126,7 @@ public class InitializationService {
 		}
 
 		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configurator.getId());
 			if (!classDefinitionRepository.exists(cd.getId())) {
 				classDefinitionRepository.save(cd);
 			}
@@ -1272,6 +1274,7 @@ public class InitializationService {
 		
 		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
 		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff")));
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff_freitext")));
 		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser")));
 		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zugfestigkeit")));
 
@@ -1326,6 +1329,7 @@ public class InitializationService {
 		}
 
 		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configuration.getId());
 			if (!classDefinitionRepository.exists(cd.getId())) {
 				classDefinitionRepository.save(cd);
 			}

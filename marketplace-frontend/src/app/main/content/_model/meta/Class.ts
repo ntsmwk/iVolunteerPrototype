@@ -2,6 +2,7 @@ import { ClassProperty, PropertyInstance } from './Property';
 
 export class ClassDefinition {
     id: string;
+    configurationId: string;
     parentId: string;
     root: boolean;
     name: string;

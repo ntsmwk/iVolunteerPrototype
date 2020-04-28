@@ -15,9 +15,11 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	private String parentId;
+	private String configurationId;
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
 	private ClassArchetype classArchetype;
+	
 	
 	private boolean collector;
 
@@ -38,6 +40,14 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getConfigurationId() {
+		return configurationId;
+	}
+
+	public void setConfigurationId(String configurationId) {
+		this.configurationId = configurationId;
 	}
 
 	public String getParentId() {
