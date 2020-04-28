@@ -11,36 +11,34 @@ import { FuseTruncatePipeModule } from '../../../_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicClassInstanceCreationFormModule } from
   'app/main/content/_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
+import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-view.module';
 
-const routes = [
-  { path: ':marketplaceId', component: ClassInstanceFormPreviewDialogComponent }
-];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
 
     MatCommonModule,
     MatProgressSpinnerModule,
-    MatIconModule,
-    MatTableModule,
+    // MatIconModule,
+    // MatTableModule,
     MatExpansionModule,
 
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatCardModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatDividerModule,
+    // MatFormFieldModule,
+    // MatInputModule,
+    // MatSelectModule,
+    // MatOptionModule,
+    // MatCardModule,
+    // MatSlideToggleModule,
+    // MatDatepickerModule,
+    // MatDividerModule,
     MatIconModule,
     MatButtonModule,
 
     FuseSharedModule,
-    FuseTruncatePipeModule,
-    DynamicClassInstanceCreationFormModule,
+    // FuseTruncatePipeModule,
+    // DynamicClassInstanceCreationFormModule,
+    FormEntryViewModule,
   ],
   declarations: [ClassInstanceFormPreviewDialogComponent],
   exports: [ClassInstanceFormPreviewDialogComponent]

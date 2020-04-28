@@ -11,7 +11,7 @@ import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } f
 import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from 'app/main/content/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
 import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/configurator/class-configurator/icon-dialog/icon-dialog.component';
 import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
@@ -528,25 +528,23 @@ export class DialogFactoryDirective {
     });
   }
 
-  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
     const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classDefinition: classDefinition },
+      data: { marketplace: marketplace, classDefinitions: classDefinitions, relationships: relationships },
       disableClose: true
     });
 
-    let classConfiguration: ClassConfiguration;
-    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        classConfiguration = result.classConfiguration;
-      }
+    let returnData: ClassInstanceFormPreviewDialogData;
+    dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewDialogData) => {
+      returnData = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return classConfiguration;
+      return returnData;
     });
   }
 
@@ -643,13 +641,13 @@ export class DialogFactoryDirective {
   }
 
 
-  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
+  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, classDefinition: classDefinition }
+      data: { marketplace: marketplace, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
     });
 
     let returnValue: AddPropertyDialogData;

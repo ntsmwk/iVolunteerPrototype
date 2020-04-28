@@ -1072,9 +1072,13 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       if (cell.cellType === MyMxCellType.CLASS) {
         this.overlayContent.classDefinition = this.classDefinitions.find(c => c.id === cell.id);
+        this.overlayContent.allClassDefinitions = this.classDefinitions;
+        this.overlayContent.allRelationships = this.relationships;
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
         this.overlayContent.relationship = this.relationships.find(r => r.id === cell.id);
       }
+
+
 
       this.graph.setPanning(false);
       this.graph.setEnabled(false);

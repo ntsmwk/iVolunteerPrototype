@@ -29,8 +29,6 @@ export class ClassOptionsOverlayControlComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.model = $.extend(true, {}, this.overlayContent);
-    console.log(this.model);
-
     this.toggleInboxOverlay();
   }
 

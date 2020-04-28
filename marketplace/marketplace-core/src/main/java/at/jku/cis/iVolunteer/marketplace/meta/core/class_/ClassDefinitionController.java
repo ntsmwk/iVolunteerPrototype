@@ -17,6 +17,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
+import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
 
 @RestController
 public class ClassDefinitionController {
@@ -24,7 +25,7 @@ public class ClassDefinitionController {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 
 	@Autowired private ClassDefinitionService classDefinitionService;
-	
+
 	@Autowired private CollectionService collectionService;
 
 	@GetMapping("/meta/core/class/definition/all")
@@ -37,10 +38,10 @@ public class ClassDefinitionController {
 			@RequestParam(value = "org", required = false) String organisation) {
 		return classDefinitionService.getAllClassDefinitionsWithoutEnums(organisation);
 	}
-	
+
 	@GetMapping("meta/core/class/definition/{slotId}/with-properties")
 	private List<ClassDefinition> getClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
-		return  classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
+		return classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
 	}
 
 	@GetMapping("/meta/core/class/definition/{id}")
@@ -88,17 +89,27 @@ public class ClassDefinitionController {
 //	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds) {
 //		return classDefinitionService.getParentsById(childIds);
 //	}
-	
+
 	@PutMapping("meta/core/class/definition/form-configuration")
-	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids, @RequestParam(value = "type") String collectionType) {
+	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids,
+			@RequestParam(value = "type") String collectionType) {
 		if (collectionType.equals("top-down")) {
-			return classDefinitionService.getChildrenById(ids);
+			return classDefinitionService.aggregateChildrenById(ids);
 		} else if (collectionType.equals("bottom-up")) {
 			return classDefinitionService.getParentsById(ids);
 		} else {
-			throw new IllegalArgumentException("Invalid collection type - has to be 'top-down' or 'bottom-up'" );
+			throw new IllegalArgumentException("Invalid collection type - has to be 'top-down' or 'bottom-up'");
 		}
-	}	
+	}
+
+	@PutMapping("meta/core/class/definition/form-configuration-preview")
+	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
+		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
+		System.out.println("ret");
+		System.out.println(ret.get(0).getFormEntry().getSubEntries().size());
+		
+		return ret;
+	}
 
 	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
 	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {

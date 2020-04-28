@@ -4,6 +4,8 @@ import { Marketplace } from '../../../../_model/marketplace';
 import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/Class';
 import { isNullOrUndefined } from 'util';
 import { of } from 'rxjs';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { FormConfiguration, FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +75,11 @@ export class ClassDefinitionService {
 
   getFormConfigurations(marketplace: Marketplace, ids: string[], type: string) {
     return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration?type=${type}`, ids);
+  }
+
+  getFromConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+    const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(classDefinitions, relationships);
+    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-preview`, formConfigurationPreviewRequest);
   }
 
 

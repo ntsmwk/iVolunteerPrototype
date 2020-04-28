@@ -27,6 +27,16 @@ export class FormConfiguration {
 
 }
 
+export class FormConfigurationPreviewRequest {
+    classDefinitions: ClassDefinition[];
+    relationships: Relationship[];
+
+    constructor(classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+        this.classDefinitions = classDefinitions;
+        this.relationships = relationships;
+    }
+}
+
 export class FormEntryReturnEventData {
     formGroup: FormGroup;
     formConfigurationId: string;

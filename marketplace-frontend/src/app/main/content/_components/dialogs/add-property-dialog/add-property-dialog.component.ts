@@ -9,10 +9,14 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { PropertyCreationDialogComponent, PropertyCreationDialogData } from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
+import { Relationship } from 'app/main/content/_model/meta/Relationship';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
   classDefinition: ClassDefinition;
+
+  allClassDefinitions: ClassDefinition[];
+  allRelationships: Relationship[];
 }
 
 @Component({
@@ -35,7 +39,7 @@ export class AddPropertyDialogComponent implements OnInit {
   loaded: boolean;
   selection = new SelectionModel<PropertyItem>(true, []);
   initialProperties: PropertyDefinition<any>[];
-
+  disabledProperties: PropertyDefinition<any>[];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -43,15 +47,37 @@ export class AddPropertyDialogComponent implements OnInit {
   ngOnInit() {
     this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
+
       this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
+
+      const parentClassProperties = this.findParentProperties();
+      const parentProperties = ret.filter(p => parentClassProperties.find(q => q.id === p.id));
+
+      this.disabledProperties = [];
+      this.disabledProperties.push(...this.initialProperties, ...parentProperties);
+
       this.selection.select(...this.initialProperties);
       this.loaded = true;
     });
 
   }
 
+  findParentProperties() {
+    let currentClassDefinition = this.data.classDefinition;
+    const parentProperties = [];
+    do {
+      const relationship = this.data.allRelationships.find(r => r.target === currentClassDefinition.id);
+      console.log(relationship);
+      currentClassDefinition = this.data.allClassDefinitions.find(cd => cd.id === relationship.source);
+      console.log(currentClassDefinition);
+      parentProperties.push(...currentClassDefinition.properties);
+    } while (!currentClassDefinition.root);
+
+    return parentProperties;
+  }
+
   isDisabled(propertyDefinition: PropertyDefinition<any>) {
-    return !isNullOrUndefined(this.initialProperties.find(p => p.id === propertyDefinition.id));
+    return !isNullOrUndefined(this.disabledProperties.find(p => p.id === propertyDefinition.id));
   }
 
   applyFilter(event: Event) {
@@ -60,6 +86,9 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   onRowClick(row: PropertyDefinition<any>) {
+    if (this.isDisabled(row)) {
+      return;
+    }
 
     if (this.selection.isSelected(row)) {
       this.selection.deselect(row);

@@ -213,7 +213,9 @@ public class CollectionService {
 		for (Relationship r : allRelationships) {
 			if (r.getRelationshipType().equals(RelationshipType.AGGREGATION) && r.getSource().equals(rootClassDefinition.getId())) {
 				relationships.add(r);
+				
 			}
+	
 		}
 		
 		Collections.reverse(relationships);

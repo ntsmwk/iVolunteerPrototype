@@ -17,12 +17,9 @@ export class FormEntryViewComponent implements OnInit {
   @Input() finishClicked: boolean;
   @Output() result = new EventEmitter();
 
-  isLoaded = false;
-
   constructor() { }
 
   ngOnInit() {
-    this.isLoaded = true;
   }
 
   handleResultEvent(event) {

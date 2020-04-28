@@ -15,6 +15,9 @@ export class ClassOptionsOverlayContentData {
 
     classDefinition: ClassDefinition;
     relationship: Relationship;
+
+    allClassDefinitions: ClassDefinition[];
+    allRelationships: Relationship[];
 }
 
 @Component({
@@ -70,7 +73,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     addPropertyClicked() {
-        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: AddPropertyDialogData) => {
+        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition, this.inputData.allClassDefinitions, this.inputData.allRelationships).then((ret: AddPropertyDialogData) => {
             if (!isNullOrUndefined(ret)) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
             }
@@ -93,6 +96,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     previewClicked() {
         // this.dialogFactory.openInstanceFormPreviewDialog(this.inputData.marketplace, ).then(() => {
 
+        console.log(this.inputData);
+        this.dialogFactory.openInstanceFormPreviewDialog(this.inputData.marketplace, this.inputData.allClassDefinitions, this.inputData.allRelationships).then(() => {
+
+        })
     }
 
 }
