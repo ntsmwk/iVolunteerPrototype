@@ -105,9 +105,6 @@ public class ClassDefinitionController {
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
 		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
-		System.out.println("ret");
-		System.out.println(ret.get(0).getFormEntry().getSubEntries().size());
-		
 		return ret;
 	}
 

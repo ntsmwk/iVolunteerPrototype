@@ -62,22 +62,11 @@ public class InitializationService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionsRepository;
-	@Autowired private ClassConfigurationRepository configuratorRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private FinalizationService finalizationService;
-	@Autowired private DerivationRuleRepository derivationRuleRepository;
-	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private HelpSeekerRepository helpSeekerRepository;
-	@Autowired private FeedbackRepository feedbackRepository;
-	@Autowired private UserMappingRepository userMappingRepository;
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 	
 	@Autowired private ClassConfigurationController classConfigurationController;
-
-	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 
 	@PostConstruct
 	public void init() {
@@ -1173,7 +1162,7 @@ public class InitializationService {
 
 		ClassDefinition root = new ClassDefinition();
 		root.setId(new ObjectId().toHexString());
-		root.setName("Draht-Ofen");
+		root.setName("Draht-Auftrag");
 		root.setProperties(new ArrayList<ClassProperty<Object>>());
 		root.setRoot(true);
 		root.setClassArchetype(ClassArchetype.ROOT);
@@ -1209,6 +1198,10 @@ public class InitializationService {
 		produktdaten.setId(new ObjectId().toHexString());
 		produktdaten.setName("Produktdaten");
 		produktdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("oberflaechenqualitaet")));
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zusaetzliche_produktinformationen")));
+
+		
 		produktdaten.setClassArchetype(ClassArchetype.FLEXPROD);
 		produktdaten.setCollector(true);
 		produktdaten.setTabId(1);
@@ -1294,7 +1287,7 @@ public class InitializationService {
 		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
 		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("schutzgas")));
 		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehreise")));
-		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("temperaturhomogenitaet")));
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("erforderliche_temperaturhomogenitaet")));
 		
 		bereitgestellt.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
 		bereitgestellt.setTabId(1);
@@ -1315,8 +1308,8 @@ public class InitializationService {
 		relationships.add(i6);
 		
 		ClassConfiguration configuration = new ClassConfiguration();
-		configuration.setId("Drahtofen");
-		configuration.setName("Drahtofen");
+		configuration.setId("drahtauftrag");
+		configuration.setName("Drahtauftrag");
 		configuration.setRelationshipIds(new ArrayList<String>());
 		configuration.setClassDefinitionIds(new ArrayList<String>());
 
@@ -1342,10 +1335,305 @@ public class InitializationService {
 	}
 	
 	private void addBandOven() {
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		List<Relationship> relationships = new ArrayList<Relationship>();
+
+		ClassDefinition root = new ClassDefinition();
+		root.setId(new ObjectId().toHexString());
+		root.setName("Band-Auftrag");
+		root.setProperties(new ArrayList<ClassProperty<Object>>());
+		root.setRoot(true);
+		root.setClassArchetype(ClassArchetype.ROOT);
+		root.setTabId(-1);
+		root.setVisible(true);
+		classDefinitions.add(root);
+		
+		ClassDefinition auftragsdaten = new ClassDefinition();
+		auftragsdaten.setId(new ObjectId().toHexString());
+		auftragsdaten.setName("Auftragsdaten");
+		auftragsdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		auftragsdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		auftragsdaten.setCollector(true);
+		
+		auftragsdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("titel")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("produkttyp")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("menge")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("minimale_menge")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferdatum")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff_bereitgestellt")));
+		auftragsdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("allgemeine_beschreibung")));
+		
+		
+		auftragsdaten.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		
+		auftragsdaten.setTabId(0);
+		auftragsdaten.setVisible(true);
+		
+		classDefinitions.add(auftragsdaten);
+
+		ClassDefinition produktdaten = new ClassDefinition();
+		produktdaten.setId(new ObjectId().toHexString());
+		produktdaten.setName("Produktdaten");
+		produktdaten.setProperties(new ArrayList<ClassProperty<Object>>());
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("banddicke")));
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("bandbreite")));
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("oberflaechenqualitaet")));
+		produktdaten.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("zusaetzliche_produktinformationen")));
+
+		
+		produktdaten.setClassArchetype(ClassArchetype.FLEXPROD);
+		produktdaten.setCollector(true);
+		produktdaten.setTabId(1);
+		classDefinitions.add(produktdaten);
+		
+		ClassDefinition logistik = new ClassDefinition();
+		logistik.setId(new ObjectId().toHexString());
+		logistik.setName("Logistik");
+		logistik.setProperties(new ArrayList<ClassProperty<Object>>());
+		logistik.setClassArchetype(ClassArchetype.FLEXPROD);
+		logistik.setCollector(true);
+		
+		logistik.setProperties(new ArrayList<ClassProperty<Object>>());
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("incoterms")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("lieferort")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("abholort")));
+		logistik.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("verpackungsvorgaben")));
+	
+		logistik.getProperties().forEach(p -> {p.setTabId(2); p.setVisible(true);});
+		
+		logistik.setTabId(2);
+		logistik.setVisible(true);
+		
+		classDefinitions.add(logistik);
+
+		Aggregation i1 = new Aggregation(root.getId(), auftragsdaten.getId(), root.getId());
+		i1.setId(new ObjectId().toHexString());
+		relationships.add(i1);
+		
+		Aggregation i2 = new Aggregation(root.getId(), produktdaten.getId(), root.getId());
+		i2.setId(new ObjectId().toHexString());
+		relationships.add(i2);
+		
+		Aggregation i3 = new Aggregation(root.getId(), logistik.getId(), root.getId());
+		i3.setId(new ObjectId().toHexString());
+		relationships.add(i3);
+		
+		ClassDefinition coil = new ClassDefinition();
+		coil.setId(new ObjectId().toHexString());
+		coil.setName("Coil");
+		coil.setProperties(new ArrayList<ClassProperty<Object>>());
+		coil.setClassArchetype(ClassArchetype.FLEXPROD);
+		coil.setCollector(false);
+		
+		coil.setProperties(new ArrayList<ClassProperty<Object>>());
+		coil.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_innen")));
+		coil.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_aussen")));
+		coil.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("hoehe")));
+
+		coil.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		coil.setTabId(1);
+		coil.setVisible(true);
+		
+		classDefinitions.add(coil);
+		
+		ClassDefinition nichtBereitgestellt = new ClassDefinition();
+		nichtBereitgestellt.setId(new ObjectId().toHexString());
+		nichtBereitgestellt.setName("Werkstoff nicht bereitgestellt");
+		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		nichtBereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
+		nichtBereitgestellt.setCollector(false);
+		
+		nichtBereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff")));
+		nichtBereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("werkstoff_freitext")));
+		
+		nichtBereitgestellt.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		nichtBereitgestellt.setTabId(1);
+		nichtBereitgestellt.setVisible(true);
+		
+		classDefinitions.add(nichtBereitgestellt);
+		
+		ClassDefinition bereitgestellt = new ClassDefinition();
+		bereitgestellt.setId(new ObjectId().toHexString());
+		bereitgestellt.setName("Werkstoff bereitgestellt");
+		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		bereitgestellt.setClassArchetype(ClassArchetype.FLEXPROD);
+		bereitgestellt.setCollector(false);
+		
+		bereitgestellt.setProperties(new ArrayList<ClassProperty<Object>>());
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("schutzgas")));
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehreise")));
+		bereitgestellt.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("erforderliche_temperaturhomogenitaet")));
+		
+		bereitgestellt.getProperties().forEach(p -> {p.setTabId(1); p.setVisible(true);});
+		bereitgestellt.setTabId(1);
+		bereitgestellt.setVisible(true);
+		
+		classDefinitions.add(bereitgestellt);
+		
+		Aggregation i4 = new Aggregation(produktdaten.getId(), coil.getId(), produktdaten.getId());
+		i4.setId(new ObjectId().toHexString());
+		relationships.add(i4);
+		
+		Aggregation i5 = new Aggregation(produktdaten.getId(), nichtBereitgestellt.getId(), produktdaten.getId());
+		i5.setId(new ObjectId().toHexString());
+		relationships.add(i5);
+		
+		Aggregation i6 = new Aggregation(produktdaten.getId(), bereitgestellt.getId(), produktdaten.getId());
+		i6.setId(new ObjectId().toHexString());
+		relationships.add(i6);
+		
+		ClassConfiguration configuration = new ClassConfiguration();
+		configuration.setId("bandauftrag");
+		configuration.setName("Bandauftrag");
+		configuration.setRelationshipIds(new ArrayList<String>());
+		configuration.setClassDefinitionIds(new ArrayList<String>());
+
+		for (Relationship r : relationships) {
+			if (!relationshipRepository.exists(r.getId())) {
+				relationshipRepository.save(r);
+			}
+			
+			configuration.getRelationshipIds().add(r.getId());
+		}
+
+		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configuration.getId());
+			if (!classDefinitionRepository.exists(cd.getId())) {
+				classDefinitionRepository.save(cd);
+			}
+			
+			configuration.getClassDefinitionIds().add(cd.getId());
+		}
+
+		classConfigurationController.saveClassConfiguration(configuration);
 		
 	}
 	
 	private void addHaubenOven() {
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		List<Relationship> relationships = new ArrayList<Relationship>();
+
+		ClassDefinition root = new ClassDefinition();
+		root.setId(new ObjectId().toHexString());
+		root.setName("Haubenofen");
+		root.setProperties(new ArrayList<ClassProperty<Object>>());
+		root.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("produkttyp")));
+		root.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("ofenhoehe")));
+		root.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("kapazitaet")));
+	
+		root.setRoot(true);
+		root.setClassArchetype(ClassArchetype.ROOT);
+		
+		root.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		root.setTabId(0);
+		root.setVisible(true);
+		classDefinitions.add(root);
+		
+		ClassDefinition wennDraht = new ClassDefinition();
+		wennDraht.setId(new ObjectId().toHexString());
+		wennDraht.setName("wennDraht");
+		wennDraht.setProperties(new ArrayList<ClassProperty<Object>>());
+		wennDraht.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_kronenstock")));
+		wennDraht.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("maximaldurchmesser_bund")));
+	
+		wennDraht.setRoot(false);
+		wennDraht.setClassArchetype(ClassArchetype.FLEXPROD);
+		
+		wennDraht.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		wennDraht.setTabId(0);
+		wennDraht.setVisible(true);
+		classDefinitions.add(wennDraht);
+		
+		ClassDefinition wennBand = new ClassDefinition();
+		wennBand.setId(new ObjectId().toHexString());
+		wennBand.setName("wennBand");
+		wennBand.setProperties(new ArrayList<ClassProperty<Object>>());
+		wennBand.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("durchmesser_dorn")));
+		wennBand.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("innendurchmesser_ofen")));
+	
+		wennBand.setRoot(false);
+		wennBand.setClassArchetype(ClassArchetype.FLEXPROD);
+		
+		wennBand.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		wennBand.setTabId(0);
+		wennBand.setVisible(true);
+		classDefinitions.add(wennBand);
+		
+		ClassDefinition gluehreise = new ClassDefinition();
+		gluehreise.setId(new ObjectId().toHexString());
+		gluehreise.setName("Glühreise");
+		gluehreise.setProperties(new ArrayList<ClassProperty<Object>>());
+		gluehreise.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("max_gluehtemperatur")));
+		gluehreise.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("temperaturhomogenitaet")));
+		gluehreise.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("aufheizrate")));
+		gluehreise.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("abkuehlrate")));
+		gluehreise.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("gluehprogramm_verfuegbar")));
+
+		
+		gluehreise.setRoot(false);
+		gluehreise.setClassArchetype(ClassArchetype.FLEXPROD);
+		
+		gluehreise.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		gluehreise.setTabId(0);
+		gluehreise.setVisible(true);
+		classDefinitions.add(gluehreise);
+		
+		ClassDefinition schutzgas = new ClassDefinition();
+		schutzgas.setId(new ObjectId().toHexString());
+		schutzgas.setName("Schutzgas");
+		schutzgas.setProperties(new ArrayList<ClassProperty<Object>>());
+		schutzgas.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(propertyDefinitionRepository.findOne("max_anteil_h2")));
+		
+		schutzgas.setRoot(false);
+		schutzgas.setClassArchetype(ClassArchetype.FLEXPROD);
+		
+		schutzgas.getProperties().forEach(p -> {p.setTabId(0); p.setVisible(true);});
+		schutzgas.setTabId(0);
+		schutzgas.setVisible(true);
+		classDefinitions.add(schutzgas);
+		
+		
+		Aggregation i1 = new Aggregation(root.getId(), wennDraht.getId(), root.getId());
+		i1.setId(new ObjectId().toHexString());
+		relationships.add(i1);
+		
+		Aggregation i2 = new Aggregation(root.getId(), wennBand.getId(), root.getId());
+		i2.setId(new ObjectId().toHexString());
+		relationships.add(i2);
+		
+		Aggregation i3 = new Aggregation(root.getId(), gluehreise.getId(), root.getId());
+		i3.setId(new ObjectId().toHexString());
+		relationships.add(i3);
+		
+		Aggregation i4 = new Aggregation(root.getId(), schutzgas.getId(), root.getId());
+		i4.setId(new ObjectId().toHexString());
+		relationships.add(i4);
+		
+		
+		ClassConfiguration configuration = new ClassConfiguration();
+		configuration.setId("haubenofen");
+		configuration.setName("Haubenofen");
+		configuration.setRelationshipIds(new ArrayList<String>());
+		configuration.setClassDefinitionIds(new ArrayList<String>());
+
+		for (Relationship r : relationships) {
+			if (!relationshipRepository.exists(r.getId())) {
+				relationshipRepository.save(r);
+			}
+			configuration.getRelationshipIds().add(r.getId());
+		}
+
+		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configuration.getId());
+			if (!classDefinitionRepository.exists(cd.getId())) {
+				classDefinitionRepository.save(cd);
+			}
+			configuration.getClassDefinitionIds().add(cd.getId());
+		}
+
+		classConfigurationController.saveClassConfiguration(configuration);
 		
 	}
 	

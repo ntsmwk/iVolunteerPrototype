@@ -235,7 +235,7 @@ public class StandardPropertyDefinitions {
 		return new ArrayList(list);
 	}
 	
-	public List<PropertyDefinition<Object>> getDrahtofenProperties() {
+	public List<PropertyDefinition<Object>> getNewFlexprodProperties() {
 		List<PropertyDefinition<?>> list = new LinkedList<>();
 		
 		list.add(new TitelProperty());
@@ -266,8 +266,30 @@ public class StandardPropertyDefinitions {
 		list.add(new AbholortProperty());
 		list.add(new VerpackungsvorgabenProperty());
 		
+		list.add(new BandDickeProperty());
+		list.add(new BandBreiteProperty());
+		
+		list.add(new DurchmesserKronenstockProperty());
+		list.add(new MaximaldurchmesserBundProperty());
+		
+		list.add(new DurchmesserDornProperty());
+		list.add(new InnendurchmesserOfenProperty());
+		
+		list.add(new OfenHoeheProperty());
+		list.add(new MaxGluehtemperaturProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		list.add(new ErforderlicheTemperaturhomogenitaetProperty());
+		list.add(new AufheizrateProperty());
+		list.add(new AbkuehlrateProperty());
+		list.add(new MaxAnteilH2Property());
+		list.add(new KapazitaetProperty());
+		list.add(new GluehprogrammVerfuegbarProperty());
+		
+		
 		return new ArrayList(list);
 	}
+	
+	
 
 	public List<PropertyDefinition<Object>> getAll() {
 		List<PropertyDefinition<Object>> sps = this.getAllSingle();
@@ -275,7 +297,7 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
 		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-		List<PropertyDefinition<Object>> drahtofen = this.getDrahtofenProperties();
+		List<PropertyDefinition<Object>> drahtofen = this.getNewFlexprodProperties();
 		
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
@@ -320,6 +342,11 @@ public class StandardPropertyDefinitions {
 		ProdukttypProperty() {
 			this.setId("produkttyp");
 			this.setName("Produkttyp");
+			
+			this.setAllowedValues(new ArrayList<String>());
+			this.getAllowedValues().add("Band");
+			this.getAllowedValues().add("Draht");
+			this.getAllowedValues().add("Band & Draht");
 		}
 	}
 	
@@ -449,9 +476,9 @@ public class StandardPropertyDefinitions {
 		}
 	}
 	
-	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
-		public TemperaturhomogenitaetProperty() {
-			this.setId("temperaturhomogenitaet");
+	public static class ErforderlicheTemperaturhomogenitaetProperty extends LongPropertyDefinition {
+		public ErforderlicheTemperaturhomogenitaetProperty() {
+			this.setId("erforderliche_temperaturhomogenitaet");
 			this.setName("erforderliche Temperaturhomogenität");
 			this.setUnit("°C (+/-)");
 		}
@@ -504,6 +531,130 @@ public class StandardPropertyDefinitions {
 			this.setName("Verpackungsvorgaben");
 		}
 	}
+	
+	public static class BandDickeProperty extends LongPropertyDefinition {
+		public BandDickeProperty() {
+			this.setId("banddicke");
+			this.setName("Banddicke");
+			this.setUnit("mm");
+		}
+	}
+	
+	public static class BandBreiteProperty extends LongPropertyDefinition {
+		public BandBreiteProperty() {
+			this.setId("bandbreite");
+			this.setName("Bandbreite");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class DurchmesserKronenstockProperty extends LongPropertyDefinition {
+		public DurchmesserKronenstockProperty() {
+			this.setId("durchmesser_kronenstock");
+			this.setName("Durchmesser Kronenstock");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class MaximaldurchmesserBundProperty extends LongPropertyDefinition {
+		public MaximaldurchmesserBundProperty() {
+			this.setId("maximaldurchmesser_bund");
+			this.setName("Maximaldurchmesser Bund");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class DurchmesserDornProperty extends LongPropertyDefinition {
+		public DurchmesserDornProperty() {
+			this.setId("durchmesser_dorn");
+			this.setName("Durchmesser Dorn");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class InnendurchmesserOfenProperty extends LongPropertyDefinition {
+		public InnendurchmesserOfenProperty() {
+			this.setId("innendurchmesser_ofen");
+			this.setName("Innendurchmesser Ofen");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class OfenHoeheProperty extends LongPropertyDefinition {
+		public OfenHoeheProperty() {
+			this.setId("ofenhoehe");
+			this.setName("Ofenhöhe");
+			this.setUnit("mm");;
+		}
+	}
+	
+	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
+		public MaxGluehtemperaturProperty() {
+			this.setId("max_gluehtemperatur");
+			this.setName("Max. Glühtemperatur");
+			this.setUnit("°C");;
+		}
+	}
+	
+	public static class TemperaturhomogenitaetProperty extends LongPropertyDefinition {
+		public TemperaturhomogenitaetProperty() {
+			this.setId("temperaturhomogenitaet");
+			this.setName("Temperaturhomogenität");
+			this.setUnit("°C");;
+		}
+	}
+	
+	public static class AufheizrateProperty extends DoublePropertyDefinition {
+		public AufheizrateProperty() {
+			this.setId("aufheizrate");
+			this.setName("Aufheizrate");
+		}
+	}
+	
+	public static class AbkuehlrateProperty extends DoublePropertyDefinition {
+		public AbkuehlrateProperty() {
+			this.setId("abkuehlrate");
+			this.setName("Abkühlrate");
+		}
+	}
+	
+	public static class GluehprogrammVerfuegbarProperty extends BooleanPropertyDefinition {
+		public GluehprogrammVerfuegbarProperty() {
+			this.setId("gluehprogramm_verfuegbar");
+			this.setName("Glühprogramm /-reise verfügbar?");
+		}
+	}
+	
+	
+	
+	public static class MaxAnteilH2Property extends LongPropertyDefinition {
+		public MaxAnteilH2Property() {
+			this.setId("max_anteil_h2");
+			this.setName("Maximaler Anteil H2");
+			this.setAllowedValues(new ArrayList<>());
+			this.getAllowedValues().add(10L);
+			this.getAllowedValues().add(20L);
+			this.getAllowedValues().add(30L);
+			this.getAllowedValues().add(40L);
+			this.getAllowedValues().add(50L);
+			this.getAllowedValues().add(60L);
+			this.getAllowedValues().add(70L);
+			this.getAllowedValues().add(80L);
+			this.getAllowedValues().add(90L);
+			this.getAllowedValues().add(100L);
+			this.setUnit("%");
+		}
+	}
+	
+	public static class KapazitaetProperty extends TextPropertyDefinition {
+		public KapazitaetProperty() {
+			this.setId("kapazitaet");
+			this.setName("Kapazität");
+		}
+	}
+	
+	
+	
 	
 	
 	
@@ -1075,12 +1226,12 @@ public class StandardPropertyDefinitions {
 	// --------------FlexProd Properties
 	// -----------------------------------------
 
-	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
-		public MaxGluehtemperaturProperty() {
-			this.setId("maxgluehtemperatur");
-			this.setName("Max. Glühtemperatur");
-		}
-	}
+//	public static class MaxGluehtemperaturProperty extends LongPropertyDefinition {
+//		public MaxGluehtemperaturProperty() {
+//			this.setId("maxgluehtemperatur");
+//			this.setName("Max. Glühtemperatur");
+//		}
+//	}
 
 	public static class VerfuegbaresSchutzgasProperty extends TextPropertyDefinition {
 		public VerfuegbaresSchutzgasProperty() {

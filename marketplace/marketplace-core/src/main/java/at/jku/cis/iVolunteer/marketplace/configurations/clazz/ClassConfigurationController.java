@@ -39,7 +39,6 @@ public class ClassConfigurationController {
 	
 	@GetMapping("class-configuration/all")
 	List<ClassConfiguration> getAllClassConfigurations() {
-		System.out.println("test");
 		return classConfigurationRepository.findAll();
 	}
 	
