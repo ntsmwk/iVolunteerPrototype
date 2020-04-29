@@ -5,12 +5,8 @@ import { LoginService } from "../../../../_service/login.service";
 import { Volunteer } from "app/main/content/_model/volunteer";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import {
-  ClassInstanceDTO,
-  ClassArchetype,
-} from "app/main/content/_model/meta/Class";
+import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
 import { Tenant } from "app/main/content/_model/tenant";
-import { NgxSpinnerService } from "ngx-spinner";
 import { isNullOrUndefined } from "util";
 import { MatTabChangeEvent } from "@angular/material";
 import { LocalRepositoryService } from "app/main/content";
@@ -39,7 +35,6 @@ export class AchievementsComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private spinner: NgxSpinnerService,
     private localRepositoryService: LocalRepositoryService
   ) { }
 
@@ -48,8 +43,6 @@ export class AchievementsComponent implements OnInit {
     t.subscribe(() => {
       this.timeout = true;
     });
-
-    //this.spinner.show();
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
@@ -87,14 +80,17 @@ export class AchievementsComponent implements OnInit {
             )
             .toPromise()
         );
-
-        this.classInstanceDTOs.forEach((ci, index, object) => {
-          if (ci.duration === null) {
-            object.splice(index, 1);
-          }
-        });
       }
     }
+
+    // TODO: philipp filter out classInstances missing the reqired fields
+    // current assumption: if existent the format is valid
+    // console.error('before', this.classInstanceDTOs.length);
+    this.classInstanceDTOs.filter(ci => {
+      return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
+        ci.taskType3 && ci.duration && ci.location && ci.rank)
+    });
+    // console.error('after', this.classInstanceDTOs.length);
 
     this.tenantSelectionChanged(this.selectedTenants);
   }
@@ -113,11 +109,5 @@ export class AchievementsComponent implements OnInit {
     }
   }
 
-  showSpinner() {
-    this.spinner.show();
-  }
 
-  hideSpinner() {
-    this.spinner.hide();
-  }
 }

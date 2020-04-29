@@ -28,7 +28,6 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.classInstanceDTOs = [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -40,7 +39,6 @@ export class TasksComponent implements OnInit {
           case 'classInstanceDTOs': {
             if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
-
             }
             break;
           }

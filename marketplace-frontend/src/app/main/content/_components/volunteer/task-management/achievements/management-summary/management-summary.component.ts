@@ -72,10 +72,10 @@ export class ManagementSummaryComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-      let t = timer(3000);
-      t.subscribe(() => {
-          this.timeout = true;
-      });
+    let t = timer(3000);
+    t.subscribe(() => {
+      this.timeout = true;
+    });
 
     this.comparisonYear = 2019;
 
@@ -115,17 +115,20 @@ export class ManagementSummaryComponent implements OnInit {
             )
             .toPromise()
         );
-
-        this.classInstanceDTOs.forEach((ci, index, object) => {
-          if (ci.duration === null) {
-            object.splice(index, 1);
-          }
-        });
       }
     }
 
+    // TODO: philipp filter out classInstances missing the reqired fields
+    // current assumption: if existent the format is valid
+    // console.error('before', this.classInstanceDTOs.length);
+    this.classInstanceDTOs.filter(ci => {
+      return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
+        ci.taskType3 && ci.duration && ci.location && ci.rank)
+    });
+    // console.error('after', this.classInstanceDTOs.length);
+
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
-  
+
     this.generateComparisonChartData(this.comparisonYear);
     this.generateEngagementData();
 
