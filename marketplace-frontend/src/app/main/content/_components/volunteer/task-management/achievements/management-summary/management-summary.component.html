@@ -43,7 +43,10 @@
     <!-- CHARTS BEGINN -->
     <div style="height: 30px;"></div>
     <div *ngIf="timeout && classInstanceDTOs.length > 0">
-      <h1 class="engagement">Engagement gesamt</h1>
+      <div style="width: 100%;" fxLayout="row" fxLayoutAlign="start center">
+        <h1 class="engagement">Engagement gesamt</h1>
+        <p class="engagementSince">{{getEngagementSince()}}</p>
+      </div>
       <div fxLayout="column" fxLayoutAlign="start center" style="width: 100%;">
         <div fxLayout="column" fxLayoutAlign="start center">
           <div>
@@ -67,7 +70,8 @@
         <div style="width: 100%;" fxLayout="row" fxLayoutAlign="start center">
           <h1 class="engagement">Engagement </h1>
           <mat-form-field>
-            <mat-select class="formFieldEngament" [value]="engagementYear" (selectionChange)="generateEngagementYearData($event.value)">
+            <mat-select class="formFieldEngament" [value]="engagementYear"
+              (selectionChange)="generateEngagementYearData($event.value)">
               <mat-option *ngFor="let year of uniqueYears" [value]="year">{{year}}</mat-option>
             </mat-select>
           </mat-form-field>

@@ -234,4 +234,9 @@ export class ManagementSummaryComponent implements OnInit {
 
     return Math.min.apply(Math, uniqueYears);
   }
+
+  getEngagementSince() {
+    let uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+    return Math.min.apply(Math, uniqueYears) + ' - ' + Math.max.apply(Math, uniqueYears);
+  }
 }
