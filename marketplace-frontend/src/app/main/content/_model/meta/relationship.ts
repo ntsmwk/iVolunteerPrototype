@@ -51,7 +51,7 @@ export enum AssociationCardinality {
 }
 
 export namespace AssociationCardinality {
-    let reverseMode = new Map<string, AssociationCardinality>();
+    const reverseMode = new Map<string, AssociationCardinality>();
 
     export function getAssociationParameterFromLabel(label: string): string {
         Object.keys(AssociationCardinality).forEach((param: AssociationCardinality) => {

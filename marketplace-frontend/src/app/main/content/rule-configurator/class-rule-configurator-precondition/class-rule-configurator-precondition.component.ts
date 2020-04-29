@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-
 import { isNullOrUndefined } from 'util';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
@@ -11,9 +9,9 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry, ClassAggregationOperatorType } from 'app/main/content/_model/derivation-rule';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassProperty } from 'app/main/content/_model/meta/Property';
+import { ClassProperty } from 'app/main/content/_model/meta/property';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
 
 @Component({

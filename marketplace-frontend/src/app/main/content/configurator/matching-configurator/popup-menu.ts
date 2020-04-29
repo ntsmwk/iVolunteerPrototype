@@ -1,5 +1,4 @@
 import { mxgraph } from 'mxgraph';
-import { isNullOrUndefined } from 'util';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { MatchingConfiguratorComponent } from './matching-configurator.component';
 
@@ -51,10 +50,5 @@ export class MatchingConfiguratorPopupMenu {
 
     }
   }
-
-
-
-
-
 
 }

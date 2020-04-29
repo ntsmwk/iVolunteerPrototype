@@ -1,4 +1,4 @@
-import { ClassProperty, PropertyInstance } from './Property';
+import { ClassProperty, PropertyInstance } from './property';
 
 export class ClassDefinition {
     id: string;

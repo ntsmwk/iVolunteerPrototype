@@ -50,9 +50,6 @@ export class MatchingOptionsOverlayControlComponent {
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '275px';
     }
-
-
-
   }
 
   handleResultEvent(event: MatchingOperatorRelationship) {

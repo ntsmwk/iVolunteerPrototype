@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-// import { PropertyService } from '../_service/property.service';
-import { LoginService } from '../_service/login.service';
-import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
+import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-import { PropertyType, PropertyDefinition } from '../_model/meta/Property';
+import { PropertyType, PropertyDefinition } from '../_model/meta/property';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
@@ -19,22 +16,14 @@ export class PropertyBuildFormComponent implements OnInit {
 
   marketplace: Marketplace;
   currentProperty: PropertyDefinition<any>;
-  // form: FormGroup = new FormGroup({});
-  
-
-
-  isLoaded: boolean = false;
+  isLoaded = false;
   whichProperty: string;
-
-
   propertyListItems: PropertyDefinition<any>[];
 
   constructor(
     private route: ActivatedRoute,
     private propertyDefinitionService: PropertyDefinitionService,
-    private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
-    private marketPlaceService: CoreMarketplaceService){
+    private marketPlaceService: CoreMarketplaceService) {
   }
 
   ngOnInit() {
@@ -43,17 +32,13 @@ export class PropertyBuildFormComponent implements OnInit {
       this.marketPlaceService.findById(params['marketplaceId']).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
 
-        let marketplaceLoaded, propertyLoaded: boolean = false;
+        let marketplaceLoaded = false, propertyLoaded = false;
 
         this.propertyDefinitionService.getAllPropertyDefinitons(marketplace).toPromise().then((pdArr: PropertyDefinition<any>[]) => {
           this.propertyListItems = pdArr;
-            
-            console.log("properties:");
-            console.log(this.propertyListItems);
 
-
-            marketplaceLoaded= true;
-            this.isLoaded = marketplaceLoaded && propertyLoaded;
+          marketplaceLoaded = true;
+          this.isLoaded = marketplaceLoaded && propertyLoaded;
         });
 
         if (!isNullOrUndefined(params['propertyId'])) {
@@ -74,7 +59,7 @@ export class PropertyBuildFormComponent implements OnInit {
   }
 
   setWhichProperty() {
-    if (this.currentProperty.type == PropertyType.MULTI) {
+    if (this.currentProperty.type === PropertyType.MULTI) {
       this.whichProperty = 'multi';
     } else {
       this.whichProperty = 'single';

@@ -11,8 +11,6 @@ import { SortDialogComponent } from '../sort-dialog/sort-dialog.component';
 import { SortDialogModule } from '../sort-dialog/sort-dialog.module';
 import { ChooseTemplateToCopyDialogModule } from '../choose-dialog/choose-dialog.module';
 import { ChooseTemplateToCopyDialogComponent } from '../choose-dialog/choose-dialog.component';
-import { RelationshipDialogModule } from '../relationship-dialog/relationship-dialog.module';
-import { RelationshipDialogComponent } from '../relationship-dialog/relationship-dialog.component';
 import { OpenClassConfigurationDialogComponent } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
 import { OpenClassConfigurationDialogModule } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.module';
 import { SaveClassConfigurationAsDialogComponent } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
@@ -47,7 +45,6 @@ import { RemoveDialogModule } from '../remove-dialog/remove-dialog.module';
     ConfirmDialogModule,
     SortDialogModule,
     ChooseTemplateToCopyDialogModule,
-    RelationshipDialogModule,
 
 
     // Class Configurator
@@ -74,8 +71,6 @@ import { RemoveDialogModule } from '../remove-dialog/remove-dialog.module';
     ConfirmDialogComponent,
     SortDialogComponent,
     ChooseTemplateToCopyDialogComponent,
-
-    RelationshipDialogComponent,
 
     // Class Configurator
     NewClassConfigurationDialogComponent,

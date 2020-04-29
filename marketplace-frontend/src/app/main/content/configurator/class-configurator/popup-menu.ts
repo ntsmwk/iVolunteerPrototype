@@ -1,8 +1,8 @@
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
-import { PropertyItem } from 'app/main/content/_model/meta/Property';
-import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { PropertyItem } from 'app/main/content/_model/meta/property';
+import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/relationship';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
 
@@ -26,7 +26,6 @@ export class EditorPopupMenu {
 
     const outer = this;
     return new mx.mxPopupMenuHandler(graph, function (menu, cell, evt) {
-      console.log("create");
       return outer.createPopupMenu(this.graph, menu, cell, evt);
     });
   }
@@ -63,55 +62,31 @@ export class EditorPopupMenu {
 
           this.addCardinalitiesToSubmenu(graph, menu, undefined, cell, undefined);
           menu.addSeparator(null, false);
-        }
-
-        else {
-          // var showPropertiesItem = menu.addItem("Show Properties", null, function () {
-
-          //   outer.toggleRightSidebar(true);
-          //   outer.rightSidebarContext = 'properties';
-
-          //   outer.currentClass = outer.configurableClasses.find((c: ClassDefinition) => {
-          //     return c.id == cell.id;
-          //   });
-          // }, null, null, true, true);
-
+        } else {
           const createClassInstanceItem = menu.addItem('Create new Instance', null, function () {
             outer.editorInstance.createClassInstanceClicked([cell]);
           }, null, null, true, true);
 
         }
 
-
         if (cell.root) {
-
           const rootItem = menu.addItem('unset as Root', null, function () {
             cell.root = false;
           }, null, null, null, null);
-
         } else if (!cell.root) {
           const rootItem = menu.addItem('set as Root', null, function () {
             cell.root = true;
           }, null, null, null, null);
-
-
         }
       }
       // Options present in every cell (vertexes as well as edges)
       const testItem = menu.addItem('Print cell to console', null, function () {
-        if (cell.isVertex()) {
-          console.log(cell);
-        } else {
-          console.log(cell);
-        }
+        console.log(cell);
       }, null, null, true, true);
 
       const deleteItem = menu.addItem('Delete', null, function () {
-
         graph.getModel().beginUpdate();
-
         try {
-
           // remove property from Class in Array
           if (cell.cellType === MyMxCellType.PROPERTY) {
             const classIndex = outer.editorInstance.classDefinitions.findIndex((c: ClassDefinition) => {
@@ -126,7 +101,6 @@ export class EditorPopupMenu {
             }
             outer.editorInstance.redrawContent(undefined);
 
-
             // remove Class from Array
           } else if (cell.cellType === MyMxCellType.CLASS) {
 
@@ -140,7 +114,6 @@ export class EditorPopupMenu {
               outer.editorInstance.deletedClassIds.push(deleted.pop().id);
             }
             graph.removeCells([cell], false);
-
 
             // remove Relationship when clicking on a Label
           } else if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
@@ -280,9 +253,4 @@ export class EditorPopupMenu {
 
     }
   }
-
-
-
-
-
 }

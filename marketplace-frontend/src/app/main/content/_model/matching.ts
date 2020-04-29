@@ -1,4 +1,4 @@
-import { ClassDefinition } from './meta/Class';
+import { ClassDefinition } from './meta/class';
 
 export class MatchingCollector {
     classDefinition: ClassDefinition;

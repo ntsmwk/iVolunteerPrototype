@@ -13,7 +13,7 @@ import { Marketplace } from '../_model/marketplace';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 import { CompetenceValidator } from '../_validator/competence.validator';
-import { CompetenceClassDefinition } from '../_model/meta/Class';
+import { CompetenceClassDefinition } from '../_model/meta/class';
 
 @Component({
   templateUrl: './task-template-form.component.html',

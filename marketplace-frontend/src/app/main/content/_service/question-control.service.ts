@@ -1,4 +1,4 @@
-import { Injectable }   from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { QuestionBase } from '../_model/dynamic-forms/questions';
@@ -7,7 +7,7 @@ import { QuestionBase } from '../_model/dynamic-forms/questions';
 export class QuestionControlService {
   constructor() { }
 
-  toFormGroup(questions: QuestionBase<any>[] ) {
+  toFormGroup(questions: QuestionBase<any>[]) {
     const fb: FormBuilder = new FormBuilder();
     const parent = fb.group({});
     const ret = this.addChildToGroup(fb, questions, parent);
@@ -17,7 +17,7 @@ export class QuestionControlService {
 
 
   private displayFormGroup(fg: FormGroup): void {
-    
+
     console.log("DISPLAYING FORMGROUP: ");
     console.log("RAW: ");
     console.log(fg);
@@ -27,7 +27,7 @@ export class QuestionControlService {
 
     console.log("VALUES");
     console.log(fg.value);
-  
+
   }
 
   //step into questions recursively, and create FormGroup according to question-layout
@@ -48,5 +48,5 @@ export class QuestionControlService {
     return parent;
   }
 
- 
+
 }

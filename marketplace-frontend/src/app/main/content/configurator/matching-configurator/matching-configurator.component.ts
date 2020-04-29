@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { mxgraph } from 'mxgraph';
 import { isNullOrUndefined } from 'util';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
-import { PropertyType } from 'app/main/content/_model/meta/Property';
+import { PropertyType } from 'app/main/content/_model/meta/property';
 import { CConstants } from '../class-configurator/utils-and-constants';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreFlexProdService } from '../../_service/core-flexprod.service';

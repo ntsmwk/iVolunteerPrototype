@@ -1,15 +1,18 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { PropertyItem, ClassProperty, PropertyDefinition } from '../../../_model/meta/Property';
+import { PropertyItem, ClassProperty, PropertyDefinition } from '../../../_model/meta/property';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { PropertyCreationDialogComponent, PropertyCreationDialogData } from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import {
+  PropertyCreationDialogComponent,
+  PropertyCreationDialogData
+} from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
@@ -31,8 +34,7 @@ export class AddPropertyDialogComponent implements OnInit {
     private propertyDefinitionService: PropertyDefinitionService,
     private classDefinitionService: ClassDefinitionService,
     public dialog: MatDialog,
-  ) {
-  }
+  ) { }
 
   datasource = new MatTableDataSource<PropertyItem>();
   displayedColumns = ['checkbox', 'label', 'type'];
@@ -42,7 +44,6 @@ export class AddPropertyDialogComponent implements OnInit {
   disabledProperties: PropertyDefinition<any>[];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-
 
   ngOnInit() {
     this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace).toPromise().then((ret: PropertyDefinition<any>[]) => {
@@ -67,9 +68,7 @@ export class AddPropertyDialogComponent implements OnInit {
     const parentProperties = [];
     do {
       const relationship = this.data.allRelationships.find(r => r.target === currentClassDefinition.id);
-      console.log(relationship);
       currentClassDefinition = this.data.allClassDefinitions.find(cd => cd.id === relationship.source);
-      console.log(currentClassDefinition);
       parentProperties.push(...currentClassDefinition.properties);
     } while (!currentClassDefinition.root);
 
@@ -119,9 +118,5 @@ export class AddPropertyDialogComponent implements OnInit {
       console.log(result);
 
     });
-
-    // return dialogRef.afterClosed().toPromise().then(() => {
-    //   return classConfiguration;
-    // });
   }
 }

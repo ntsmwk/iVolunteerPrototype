@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { PropertyInstance, PropertyItem, PropertyDefinition } from '../_model/meta/Property';
+import { PropertyItem, PropertyDefinition } from '../_model/meta/property';
 import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
@@ -39,7 +39,6 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
     private questionService: QuestionService,
-    private propertyInstanceService: PropertyInstanceService,
     private propertyDefinitionService: PropertyDefinitionService,
     private dialogFactory: DialogFactoryDirective
   ) {
@@ -53,7 +52,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant),
     ]).then(() => {
       this.route.params.subscribe(params => this.loadPropertiesFromTemplate(params['marketplaceId'], params['templateId']));
-    })
+    });
   }
 
   loadPropertiesFromTemplate(marketplaceId: string, templateId: string): void {
@@ -74,7 +73,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
                 this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
               }
               this.isLoaded = true;
-            })
+            });
         });
     });
   }
@@ -97,7 +96,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   deleteTemplate() {
     this.dialogFactory.confirmationDialog(
-      "Are you sure?", "Are you sure you want to delete this Template? This action cannot be reverted")
+      'Are you sure?', 'Are you sure you want to delete this Template? This action cannot be reverted')
       .then((cont: boolean) => {
         if (cont) {
           this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, this.template.id).toPromise().then((success: boolean) => {
@@ -131,7 +130,7 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   }
 
-  //TODO
+  // TODO
   changePropertyOrderDialog() {
 
     this.dialogFactory.changePropertyOrderDialog(this.template.templateProperties).then((data: SortDialogData) => {
@@ -153,9 +152,12 @@ export class SingleUserDefinedTaskTemplateDetailComponent implements OnInit {
 
     this.dialogFactory.editTemplateDescriptionDialog(this.template).then((description: string) => {
       if (!isNullOrUndefined(description)) {
-        this.userDefinedTaskTemplateService.updateRootTaskTemplate(this.marketplace, this.template.id, null, description).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-          this.template.description = updatedTemplate.description;
-        });
+        this.userDefinedTaskTemplateService
+          .updateRootTaskTemplate(this.marketplace, this.template.id, null, description)
+          .toPromise()
+          .then((updatedTemplate: UserDefinedTaskTemplate) => {
+            this.template.description = updatedTemplate.description;
+          });
       }
     });
   }

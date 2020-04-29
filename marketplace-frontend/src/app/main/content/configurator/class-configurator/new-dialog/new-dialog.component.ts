@@ -8,8 +8,8 @@ import { ClassConfiguration } from 'app/main/content/_model/configurations';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CUtils } from '../utils-and-constants';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 

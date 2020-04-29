@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { Marketplace } from '../_model/marketplace';
-
 import { isNullOrUndefined } from 'util';
 import { LoginService } from '../_service/login.service';
 import { Participant, ParticipantRole } from '../_model/participant';
@@ -13,8 +11,8 @@ import { DerivationRule, MappingOperatorType, AttributeSourceRuleEntry, ClassSou
 import { DerivationRuleService } from '../_service/derivation-rule.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
-import { ClassDefinition } from '../_model/meta/Class';
-import { ClassProperty } from '../_model/meta/Property';
+import { ClassDefinition } from '../_model/meta/class';
+import { ClassProperty } from '../_model/meta/property';
 import { FakeService } from '../_service/fake.service';
 
 @Component({

@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-
 import { isNullOrUndefined } from 'util';
 import { LoginService } from '../../_service/login.service';
 import { Participant, ParticipantRole } from '../../_model/participant';
@@ -11,9 +9,9 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { MappingOperatorType, AttributeSourceRuleEntry, ClassSourceRuleEntry, AttributeAggregationOperatorType } from 'app/main/content/_model/derivation-rule';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/Property';
+import { ClassProperty, PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
 import { PropertyDefinitionService } from '../../_service/meta/core/property/property-definition.service';
 
@@ -76,7 +74,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent implements OnIni
       this.participant = participant;
       this.helpSeekerService.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
-        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username==='MVS'?'MV':'FF').toPromise().then(
+        this.classDefinitionService.getAllClassDefinitionsWithoutHeadAndEnums(marketplace, this.participant.username === 'MVS' ? 'MV' : 'FF').toPromise().then(
           (definitions: ClassDefinition[]) => {
             this.classDefinitions = definitions;
             this.loadClassProperties(null);

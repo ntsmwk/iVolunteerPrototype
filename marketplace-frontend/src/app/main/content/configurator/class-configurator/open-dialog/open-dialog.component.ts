@@ -6,11 +6,10 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
-import { isNull } from '@angular/compiler/src/output/output_ast';
 import { ClassBrowseSubDialogData } from '../browse-sub-dialog/browse-sub-dialog.component';
 
 export interface OpenClassConfigurationDialogData {

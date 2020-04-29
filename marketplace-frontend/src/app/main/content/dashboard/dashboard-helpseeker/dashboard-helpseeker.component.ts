@@ -1,7 +1,5 @@
 import { OnInit, Component } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
-import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
 import { Participant } from '../../_model/participant';
 import { LoginService } from '../../_service/login.service';
@@ -21,7 +19,7 @@ export class DashboardHelpSeekerComponent implements OnInit {
     private router: Router) {
   }
 
-  ngOnInit() { 
+  ngOnInit() {
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.participant = participant;
@@ -31,13 +29,13 @@ export class DashboardHelpSeekerComponent implements OnInit {
 
 
   private isFF() {
-    return this.participant.username== 'FFA';
+    return this.participant.username === 'FFA';
   }
 
-  private isMV(){
-    return this.participant.username==='MVS';
+  private isMV() {
+    return this.participant.username === 'MVS';
   }
-  private isOther(){
-    return !this.isFF()&& !this.isMV();
+  private isOther() {
+    return !this.isFF() && !this.isMV();
   }
 }

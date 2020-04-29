@@ -1,5 +1,5 @@
-import { ClassDefinition } from './meta/Class';
-import { ClassProperty } from './meta/Property';
+import { ClassDefinition } from './meta/class';
+import { ClassProperty } from './meta/property';
 
 export class DerivationRule {
   id: string;
@@ -26,14 +26,14 @@ export class ClassSourceRuleEntry {
 }
 
 export enum MappingOperatorType {
-  EQ = "=", LT = "<", LE = "<=", GT = ">", GE = ">=", NE = "!="
+  EQ = '=', LT = '<', LE = '<=', GT = '>', GE = '>=', NE = '!='
 }
 
 export enum AttributeAggregationOperatorType {
-  SUM = "Summe", MIN = "Min", MAX = "Max"
+  SUM = 'Summe', MIN = 'Min', MAX = 'Max'
 }
 
 
 export enum ClassAggregationOperatorType {
-  COUNT = "Anzahl"
+  COUNT = 'Anzahl'
 }

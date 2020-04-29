@@ -8,7 +8,7 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { PropertyType, TemplateProperty } from '../_model/meta/Property';
+import { PropertyType, TemplateProperty } from '../_model/meta/property';
 import { FormGroup } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 
@@ -16,7 +16,7 @@ import { isNullOrUndefined } from 'util';
   selector: 'app-user-defined-task-template-detail-form-single',
   templateUrl: './user-defined-task-template-detail-form-single.component.html',
   styleUrls: ['./user-defined-task-template-detail-form-single.component.scss'],
-  providers:  [QuestionService]
+  providers: [QuestionService]
 })
 export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit {
   questions: QuestionBase<any>[];
@@ -36,16 +36,16 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     private marketplaceService: CoreMarketplaceService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService,
     private questionService: QuestionService) {
-      this.isLoaded = false;
-    
-    }
+    this.isLoaded = false;
+
+  }
 
   ngOnInit() {
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
     ]).then(() => {
-      
+
       let queryParameters;
       let urlParameters;
 
@@ -58,9 +58,9 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
         })
       ]).then(() => {
         this.loadProperty(urlParameters['marketplaceId'], urlParameters['templateId'], urlParameters['subtemplateId'], queryParameters['ref']);
-      });  
+      });
     });
-  
+
   }
 
   private loadProperty(marketplaceId: string, templateId: string, subtemplateId: string, ref: string): void {
@@ -68,9 +68,9 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     this.templateId = templateId;
     this.subtemplateId = subtemplateId;
 
-    if (ref == 'single') {
+    if (ref === 'single') {
       this.loadFromSingleTemplate(marketplaceId, templateId);
-    } else if (ref == 'nested') {
+    } else if (ref === 'nested') {
       // console.log("entered nested");
       this.loadFromNestedTemplate(marketplaceId, templateId, subtemplateId);
     } else {
@@ -89,7 +89,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
       this.userDefinedTaskTemplateService.getTemplate(marketplace, templateId).toPromise().then((template: UserDefinedTaskTemplate) => {
-        this.template = template;    
+        this.template = template;
       }).then(() => {
         // console.log("DETAIL PAGE FOR PROPERTY " + this.template.id);
         // console.log(this.template.name + ": ");
@@ -103,7 +103,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
         this.questions = this.questionService.getQuestionsFromProperties(this.template.templateProperties);
         this.isLoaded = true;
       });
-    }); 
+    });
   }
 
   private loadFromNestedTemplate(marketplaceId: string, templateId: string, subtemplateId: string) {
@@ -128,15 +128,15 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
     // console.log("attempt to update properties of template");
     // console.log("Values:");
 
-   
+
     let props: TemplateProperty<any>[] = [];
     // console.log("====================================================");
     // //console.log("form");
     // //console.log(JSON.stringify(form));
     // console.log("form.value");
     // console.log(JSON.stringify(form.value));
-    
-    
+
+
     props = this.traverseResultAndUpdateProperties(form.value, this.template.templateProperties);
 
     this.userDefinedTaskTemplateService.updateProperties(this.marketplace, this.templateId, this.subtemplateId, props).toPromise().then(() => {
@@ -147,15 +147,15 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
 
 
   private traverseResultAndUpdateProperties(values: any[], templateProperties: TemplateProperty<any>[]): TemplateProperty<any>[] {
-    
-    for (let prop of templateProperties) {
-      if (prop.type == PropertyType.MULTI) {
-        //TODO DO NESTED
+
+    for (const prop of templateProperties) {
+      if (prop.type === PropertyType.MULTI) {
+        // TODO DO NESTED
         // this.traverseResultAndUpdateProperties(values[prop.id], prop.properties);
       } else {
-        if (!isNullOrUndefined(values[prop.id]) && values[prop.id] != '') {
+        if (!isNullOrUndefined(values[prop.id]) && values[prop.id] !== '') {
           if (prop.multiple) {
-            //TODO do list stuff
+            // TODO do list stuff
             // const result: any[] = [];
             // let arr = values[prop.id];
 
@@ -172,7 +172,7 @@ export class SingleUserDefinedTaskTemplateDetailFormComponent implements OnInit 
           } else {
 
             if (isNullOrUndefined(prop.defaultValues) || isNullOrUndefined(prop.defaultValues[0])) {
-              prop.defaultValues = []
+              prop.defaultValues = [];
               prop.defaultValues.push(values[prop.id]);
             } else {
               prop.defaultValues[0] = values[prop.id];

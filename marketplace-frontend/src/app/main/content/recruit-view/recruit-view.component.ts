@@ -7,7 +7,7 @@ import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { Marketplace } from '../_model/marketplace';
 import { StoredChart } from '../_model/stored-chart';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../_model/meta/Class';
+import { ClassInstance } from '../_model/meta/class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { MatPaginator, MatSort } from '@angular/material';
 import { CIP } from '../_model/classInstancePropertyConstants';

@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Marketplace } from '../_model/marketplace';
 import { Participant } from '../_model/participant';
-import { ClassInstance } from '../_model/meta/Class';
+import { ClassInstance } from '../_model/meta/class';
 import { ClassInstanceService } from '../_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';

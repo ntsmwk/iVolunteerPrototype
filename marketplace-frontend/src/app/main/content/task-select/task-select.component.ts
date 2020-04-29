@@ -6,7 +6,7 @@ import { LoginService } from '../_service/login.service';
 import { Participant } from '../_model/participant';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { Marketplace } from '../_model/marketplace';
-import { ClassArchetype, ClassDefinition } from '../_model/meta/Class';
+import { ClassArchetype, ClassDefinition } from '../_model/meta/class';
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
 import { MatTableDataSource } from '@angular/material';
 

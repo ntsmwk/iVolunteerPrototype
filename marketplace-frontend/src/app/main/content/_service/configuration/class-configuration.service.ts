@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassConfiguration } from '../../_model/configurations';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -44,8 +42,6 @@ export class ClassConfigurationService {
   }
 
   saveClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
-    console.log('Save configurator');
-    console.log(classConfiguration);
     return this.http.put(`${marketplace.url}/class-configuration/save`, classConfiguration);
   }
 

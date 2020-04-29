@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
 import { ClassConfiguration } from 'app/main/content/_model/configurations';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 

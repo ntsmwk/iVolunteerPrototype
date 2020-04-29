@@ -7,7 +7,7 @@ import { Marketplace } from '../_model/marketplace';
 import { UserDefinedTaskTemplate } from '../_model/user-defined-task-template';
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
-import { PropertyInstance, PropertyItem, PropertyDefinition, TemplateProperty } from '../_model/meta/Property';
+import { PropertyInstance, PropertyItem, PropertyDefinition, TemplateProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogFactoryDirective } from '../_components/dialogs/_dialog-factory/dialog-factory.component';
@@ -76,7 +76,7 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
           this.allPropertiesList = propertyDefinitions;
         })
       ]).then(() => {
-        //finally, after all of the crap has been loaded from the server, display it
+        // finally, after all of the crap has been loaded from the server, display it
         this.isLoaded = true;
       });
     });
@@ -84,8 +84,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   private setUpDataSourcesAndExpandedStates() {
 
-    for (let t of this.template.templates) {
-      let dataSource: MatTableDataSource<TemplateProperty<any>> = new MatTableDataSource<TemplateProperty<any>>();
+    for (const t of this.template.templates) {
+      const dataSource: MatTableDataSource<TemplateProperty<any>> = new MatTableDataSource<TemplateProperty<any>>();
       dataSource.data = t.templateProperties;
       this.dataSources.push(dataSource);
       this.expandedPanelMap.push(false);
@@ -97,13 +97,16 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
    *  OnClick Actions
    */
 
-  //actions for the root template
+  // actions for the root template
   editDescription() {
     this.dialogFactory.editTemplateDescriptionDialog(this.template).then((description: string) => {
       if (!isNullOrUndefined(description)) {
-        this.userDefinedTaskTemplateService.updateRootTaskTemplate(this.marketplace, this.template.id, null, description).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-          this.template.description = updatedTemplate.description;
-        });
+        this.userDefinedTaskTemplateService
+          .updateRootTaskTemplate(this.marketplace, this.template.id, null, description)
+          .toPromise()
+          .then((updatedTemplate: UserDefinedTaskTemplate) => {
+            this.template.description = updatedTemplate.description;
+          });
       }
     });
   }
@@ -120,8 +123,8 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
 
   removeTemplate() {
     this.dialogFactory.confirmationDialog(
-      "Are You Sure?",
-      "Do you really want to delete this template '" + this.template.name + "'? \n Sub-Templates will be deleted as well. This action cannot be reverted!"
+      'Are You Sure?',
+      'Do you really want to delete this template \'' + this.template.name + '\'? \n Sub-Templates will be deleted as well. This action cannot be reverted!'
     ).then((cont: boolean) => {
       if (cont) {
         this.userDefinedTaskTemplateService.deleteRootTaskTemplate(this.marketplace, this.template.id).toPromise().then((success: boolean) => {
@@ -137,30 +140,36 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   // actions on each subtemplate (displayed once)
   newSubTemplate() {
     this.dialogFactory.newTaskTemplateDialog().then((result: string[]) => {
-      this.userDefinedTaskTemplateService.newNestedSingleTaskTemplate(this.marketplace, this.template.id, result[0], result[1]).toPromise().then((createdTemplate: UserDefinedTaskTemplate) => {
+      this.userDefinedTaskTemplateService
+        .newNestedSingleTaskTemplate(this.marketplace, this.template.id, result[0], result[1])
+        .toPromise()
+        .then((createdTemplate: UserDefinedTaskTemplate) => {
 
-        this.template.templates.push(createdTemplate.templates[createdTemplate.templates.length - 1]);
-        let newDataSource = new MatTableDataSource<TemplateProperty<any>>();
+          this.template.templates.push(createdTemplate.templates[createdTemplate.templates.length - 1]);
+          const newDataSource = new MatTableDataSource<TemplateProperty<any>>();
 
-        newDataSource.data = createdTemplate.templates[createdTemplate.templates.length - 1].templateProperties;
-        this.dataSources.push(newDataSource);
-        this.expandedPanelMap.push(true);
-      });
+          newDataSource.data = createdTemplate.templates[createdTemplate.templates.length - 1].templateProperties;
+          this.dataSources.push(newDataSource);
+          this.expandedPanelMap.push(true);
+        });
     });
   }
 
   removeSubTemplate(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
-    this.dialogFactory.confirmationDialog("Remove Sub-Template " + subtemplate.name + "...",
-      "Are you sure you want to delete the Sub-Template " + subtemplate.name + "? \nThis action cannot be reverted")
+    this.dialogFactory.confirmationDialog('Remove Sub-Template ' + subtemplate.name + '...',
+      'Are you sure you want to delete the Sub-Template ' + subtemplate.name + '? \nThis action cannot be reverted')
       .then((cont: boolean) => {
         if (cont) {
-          this.userDefinedTaskTemplateService.deleteNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id).toPromise().then((success: boolean) => {
-            if (success) {
-              this.template.templates.splice(subTemplateIndex, 1);
-              this.dataSources.splice(subTemplateIndex, 1);
-              this.expandedPanelMap.splice(subTemplateIndex, 1);
-            }
-          });
+          this.userDefinedTaskTemplateService
+            .deleteNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id)
+            .toPromise()
+            .then((success: boolean) => {
+              if (success) {
+                this.template.templates.splice(subTemplateIndex, 1);
+                this.dataSources.splice(subTemplateIndex, 1);
+                this.expandedPanelMap.splice(subTemplateIndex, 1);
+              }
+            });
         }
       });
   }
@@ -168,11 +177,14 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   editSubTemplateName(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
     this.dialogFactory.editTemplateNameDialog(subtemplate).then((name: string) => {
       if (!isNullOrUndefined(name)) {
-        this.userDefinedTaskTemplateService.updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, name, null).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-          if (!isNullOrUndefined(updatedTemplate)) {
-            this.template.templates[subTemplateIndex].name = updatedTemplate.templates[subTemplateIndex].name;
-          }
-        });
+        this.userDefinedTaskTemplateService
+          .updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, name, null)
+          .toPromise()
+          .then((updatedTemplate: UserDefinedTaskTemplate) => {
+            if (!isNullOrUndefined(updatedTemplate)) {
+              this.template.templates[subTemplateIndex].name = updatedTemplate.templates[subTemplateIndex].name;
+            }
+          });
       }
     });
   }
@@ -180,11 +192,14 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   editSubTemplateDescription(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
     this.dialogFactory.editTemplateDescriptionDialog(subtemplate).then((description: string) => {
       if (!isNullOrUndefined(description)) {
-        this.userDefinedTaskTemplateService.updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, null, description).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-          if (!isNullOrUndefined(updatedTemplate)) {
-            this.template.templates[subTemplateIndex].description = updatedTemplate.templates[subTemplateIndex].description;
-          }
-        });
+        this.userDefinedTaskTemplateService
+          .updateNestedTaskTemplate(this.marketplace, this.template.id, subtemplate.id, null, description)
+          .toPromise()
+          .then((updatedTemplate: UserDefinedTaskTemplate) => {
+            if (!isNullOrUndefined(updatedTemplate)) {
+              this.template.templates[subTemplateIndex].description = updatedTemplate.templates[subTemplateIndex].description;
+            }
+          });
       }
     });
   }
@@ -212,11 +227,14 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   addProperties(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
     // this.dialogFactory.addPropertyDialog(subtemplate, this.allPropertiesList).then((propIds: string[]) => {
     //   if (!isNullOrUndefined(propIds)) {
-    //     this.userDefinedTaskTemplateService.addPropertiesToNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-    //       this.template = updatedTemplate;
-    //       this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
-    //       // this.refresh();
-    //     });
+    //     this.userDefinedTaskTemplateService
+    //       .addPropertiesToNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds)
+    //       .toPromise()
+    //       .then((updatedTemplate: UserDefinedTaskTemplate) => {
+    //         this.template = updatedTemplate;
+    //         this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
+    //         // this.refresh();
+    //       });
     //   }
     // });
   }
@@ -234,12 +252,14 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
           data.list[i].order = i;
         }
 
-        this.userDefinedTaskTemplateService.updatePropertyOrderNested(this.marketplace, this.template.id, subtemplate.id, data.list).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-          console.log(updatedTemplate);
-          this.template = updatedTemplate;
-          this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
-          // this.refresh();        
-        });
+        this.userDefinedTaskTemplateService
+          .updatePropertyOrderNested(this.marketplace, this.template.id, subtemplate.id, data.list)
+          .toPromise()
+          .then((updatedTemplate: UserDefinedTaskTemplate) => {
+            this.template = updatedTemplate;
+            this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
+            // this.refresh();        
+          });
       }
     });
   }
@@ -247,45 +267,44 @@ export class NestedUserDefinedTaskTemplateDetailComponent implements OnInit {
   removeProperties(subtemplate: UserDefinedTaskTemplate, subTemplateIndex: number) {
     // this.dialogFactory.removePropertyDialog(subtemplate).then((propIds: string[]) => {
     //   if (!isNullOrUndefined(propIds)) {
-    //     this.userDefinedTaskTemplateService.removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-    //       this.template = updatedTemplate;
-    //       this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
-    //     });
+    //     this.userDefinedTaskTemplateService
+    //       .removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, propIds)
+    //       .toPromise()
+    //       .then((updatedTemplate: UserDefinedTaskTemplate) => {
+    //         this.template = updatedTemplate;
+    //         this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
+    //       });
     //   }
     // });
   }
 
   // actions on each row of each subtemplate
   viewPropertyDetails(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
-    console.log("View Property " + templateProperty.name + " from subtemplate " + subtemplate.name + " at index " + subTemplateIndex + "...");
-    console.log(templateProperty);
-
-    console.log("route: " + `main/task-templates/user/detail/viewproperty/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`);
-
-    this.router.navigate([`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`], { queryParams: { ref: 'subtemplate' } })
+    this.router.navigate(
+      [`main/property/detail/view/${this.marketplace.id}/${this.template.id}/${subtemplate.id}/${templateProperty.id}`]
+      , { queryParams: { ref: 'subtemplate' } }
+    );
   }
 
   removeProperty(subtemplate: UserDefinedTaskTemplate, templateProperty: TemplateProperty<any>, subTemplateIndex: number) {
-    this.userDefinedTaskTemplateService.removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, [templateProperty.id]).toPromise().then((updatedTemplate: UserDefinedTaskTemplate) => {
-      this.template = updatedTemplate;
-      this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
-    });
+    this.userDefinedTaskTemplateService
+      .removePropertiesFromNestedTemplate(this.marketplace, this.template.id, subtemplate.id, [templateProperty.id])
+      .toPromise()
+      .then((updatedTemplate: UserDefinedTaskTemplate) => {
+        this.template = updatedTemplate;
+        this.dataSources[subTemplateIndex].data = updatedTemplate.templates[subTemplateIndex].templateProperties;
+      });
   }
-  //end OnClick Actions
+  // end OnClick Actions
 
 
-  //==================
-  //Misc
-  //==================
+  // ==================
+  // Misc
+  // ==================
 
   printValue(property: PropertyInstance<any>) {
     return PropertyInstance.getValue(property);
   }
-
-  // printDefaultValue(property: PropertyInstance<any>) {
-  //   return PropertyInstance.getDefaultValue(property);
-  // }
-
 
   navigateBack() {
     window.history.back();

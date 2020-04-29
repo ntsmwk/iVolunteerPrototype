@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ClassInstance } from 'app/main/content/_model/meta/Class';
+import { ClassInstance } from 'app/main/content/_model/meta/class';
 import { Router } from '@angular/router';
 
 

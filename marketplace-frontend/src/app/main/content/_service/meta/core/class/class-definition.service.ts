@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from '../../../../_model/marketplace';
-import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/Class';
+import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/class';
 import { isNullOrUndefined } from 'util';
 import { of } from 'rxjs';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
-import { FormConfiguration, FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
 
 @Injectable({
   providedIn: 'root'
@@ -57,14 +57,6 @@ export class ClassDefinitionService {
     return this.http.put(`${marketplace.url}/meta/core/class/definition/delete`, ids);
   }
 
-  // getAllChildrenIdMap(marketplace: Marketplace, rootClassIds: string[]) {
-  //   return this.http.put(`${marketplace.url}/meta/core/class/definition/get-children`, rootClassIds);
-  // }
-
-  // getAllParentsIdMap(marketplace: Marketplace, childClassIds: string[]) {
-  //   return this.http.put(`${marketplace.url}/meta/core/class/definition/get-parents`, childClassIds);
-  // }
-
   getFormConfiguratorsBottomUp(marketplace: Marketplace, ids: string[]) {
     return this.getFormConfigurations(marketplace, ids, 'bottom-up');
   }
@@ -90,10 +82,6 @@ export class ClassDefinitionService {
   addPropertiesToClassDefinitionById(marketplace: Marketplace, id: string, propIds: String[]) {
     return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`, propIds);
   }
-
-  // addPropertiesToClassDefinition(marketplace: Marketplace, id: string, propsToAdd: Property<any>[]) {
-  //   return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/add-properties`, propsToAdd);
-  // }
 
   removePropertiesFromClassDefinition(marketplace: Marketplace, id: string, propIds: string[]) {
     return this.http.put(`${marketplace.url}/meta/core/class/definition/${id}/remove-properties`, propIds);

@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-
 import { FuseSharedModule } from '@fuse/shared.module';
-
 import { FuseContentComponent } from 'app/main/content/content.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { TokenInterceptor } from './_interceptor/token.interceptor';
 import { Http401Interceptor } from './_interceptor/http-401.interceptor';
-
 import { TokenGuard } from './_guard/token.guard';
 import { HelpSeekerGuard } from './_guard/help-seeker.guard';
 import { VolunteerGuard } from './_guard/volunteer.guard';

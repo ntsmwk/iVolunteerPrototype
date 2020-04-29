@@ -3,10 +3,9 @@ import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../_model/marketplace';
-
-import { ClassDefinition } from '../_model/meta/Class';
+import { ClassDefinition } from '../_model/meta/class';
 import { Participant, ParticipantRole } from '../_model/participant';
-import { Relationship } from '../_model/meta/Relationship';
+import { Relationship } from '../_model/meta/relationship';
 import { CoreFlexProdService } from '../_service/core-flexprod.service';
 
 @Component({

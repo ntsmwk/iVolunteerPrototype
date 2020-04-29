@@ -1,7 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
-import { ClassInstance } from '../../../../_model/meta/Class';
-import { PropertyInstance } from 'app/main/content/_model/meta/Property';
-import { isNullOrUndefined } from 'util';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormConfiguration, FormEntry } from 'app/main/content/_model/meta/form';
 
 @Component({

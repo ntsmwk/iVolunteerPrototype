@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { LoginService } from '../_service/login.service';
 import { CoreMarketplaceService } from '../_service/core-marketplace.service';
 import { ParticipantRole, Participant } from '../_model/participant';
-import { PropertyDefinition, PropertyItem, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/Property';
+import { PropertyDefinition, PropertyParentSubTemplate, PropertyParentTemplate } from '../_model/meta/property';
 import { Marketplace } from '../_model/marketplace';
-import { isNullOrUndefined } from 'util';
-import { async } from '@angular/core/testing';
 import { UserDefinedTaskTemplateService } from '../_service/user-defined-task-template.service';
 import { PropertyDefinitionService } from '../_service/meta/core/property/property-definition.service';
 
@@ -34,75 +31,58 @@ export class PropertyDetailComponent implements OnInit {
     private marketplaceService: CoreMarketplaceService,
     private propertyDefinitionService: PropertyDefinitionService,
     private userDefinedTaskTemplateService: UserDefinedTaskTemplateService) {
-      this.isLoaded = false;
-      }
+    this.isLoaded = false;
+  }
 
   ngOnInit() {
 
     Promise.all([
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => this.role = role),
       this.loginService.getLoggedIn().toPromise().then((participant: Participant) => this.participant = participant)
-    
+
     ]).then(() => {
       let parameters;
       let queryParameters;
 
       Promise.all([
-        
+
         this.route.params.subscribe(params => {
           parameters = params;
         }),
         this.route.queryParams.subscribe(params => {
           queryParameters = params;
-        })  
+        })
       ]).then(() => {
-        this.loadProperty(parameters['marketplaceId'], parameters['templateId'], 
+        this.loadProperty(parameters['marketplaceId'], parameters['templateId'],
           parameters['subtemplateId'], parameters['propertyId'], queryParameters['ref']);
       });
     });
   }
 
   loadProperty(marketplaceId: string, templateId: string, subtemplateId: string, propId: string, ref: string): void {
-    
+
     this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
       this.marketplace = marketplace;
 
-      if (ref == 'list') {
+      if (ref === 'list') {
         this.propertyDefinitionService.getPropertyDefinitionById(marketplace, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
-          this.propertyDefintion = propertyDefintion;    
+          this.propertyDefintion = propertyDefintion;
         }).then(() => {
           this.isLoaded = true;
         });
-       
-      } else if (ref == 'template') {
 
-      } else if (ref == 'subtemplate') {
-        this.userDefinedTaskTemplateService.getPropertyFromSubTemplate(this.marketplace, templateId, subtemplateId, propId).toPromise().then((propertyDefintion: PropertyDefinition<any>) => {
-          this.propertyDefintion = propertyDefintion;
+      } else if (ref === 'template') {
 
-          // this.propertyDefinitionService.getPropertyParentItems(this.marketplace, propertyDefintion.id, templateId, subtemplateId).toPromise().then((parents: PropertyItem[]) => {
-          //   console.log("Recheived PropertyParentItem");
-          //   console.log(parents);
-          //   this.templateItem = parents[0];
-
-          //   if (parents.length >= 2) {
-          //     this.subtemplateItem = parents[0];
-          //   }
-          //   this.isLoaded = true;
-          // });
-
-        });
+      } else if (ref === 'subtemplate') {
+        this.userDefinedTaskTemplateService
+          .getPropertyFromSubTemplate(this.marketplace, templateId, subtemplateId, propId)
+          .toPromise()
+          .then((propertyDefintion: PropertyDefinition<any>) => {
+            this.propertyDefintion = propertyDefintion;
+          });
       }
-    }); 
+    });
   }
-
-  // displayPropertyValue(property: PropertyDefintion<any>): string {    
-  //   return PropertyDefinition.getValue(property);
-  // }
-
-  // displayPropertyDefaultValue(property: Property<any>): string {
-  //   return Property.getDefaultValue(property);
-  // }
 
   navigateBack() {
     window.history.back();

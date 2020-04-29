@@ -1,9 +1,8 @@
-import { ClassDefinition } from './Class';
+import { ClassDefinition } from './class';
 import { QuestionBase } from '../dynamic-forms/questions';
 import { FormGroup } from '@angular/forms';
-import { ClassProperty } from './Property';
-import { ClassConfiguration } from '../configurations';
-import { Relationship } from './Relationship';
+import { ClassProperty } from './property';
+import { Relationship } from './relationship';
 
 export class FormEntry {
     positionLevel: string;

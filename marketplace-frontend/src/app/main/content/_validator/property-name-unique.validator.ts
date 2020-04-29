@@ -1,9 +1,6 @@
-import { ValidatorFn, AbstractControl, NG_VALIDATORS, FormControl, Validator, ValidationErrors } from '@angular/forms';
+import { ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
-
-import { PropertyItem } from '../_model/meta/Property';
-import { Directive } from '@angular/core';
-
+import { PropertyItem } from '../_model/meta/property';
 
 // validation function
 export function propertyNameUniqueValidator(properties: PropertyItem[], currentProperty: PropertyItem): ValidatorFn {
@@ -17,9 +14,9 @@ export function propertyNameUniqueValidator(properties: PropertyItem[], currentP
             return null;
         }
 
-        let item;
-        item = properties.find((prop: PropertyItem) => {
-            return prop.name.toLocaleLowerCase() == control.value.toLocaleLowerCase();
+
+        const item = properties.find((prop: PropertyItem) => {
+            return prop.name.toLocaleLowerCase() === control.value.toLocaleLowerCase();
         });
 
 

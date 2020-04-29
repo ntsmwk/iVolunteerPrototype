@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PropertyItem, PropertyDefinition } from '../../../_model/meta/Property';
+import { PropertyItem, PropertyDefinition } from '../../../_model/meta/property';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 

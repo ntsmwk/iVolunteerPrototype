@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
-import { Relationship, RelationshipType } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
 import { DialogFactoryDirective } from 'app/main/content/_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
-import { PropertyType } from 'app/main/content/_model/meta/Property';
+import { PropertyType } from 'app/main/content/_model/meta/property';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
 import { isNullOrUndefined } from 'util';
@@ -73,11 +73,13 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     addPropertyClicked() {
-        this.dialogFactory.openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition, this.inputData.allClassDefinitions, this.inputData.allRelationships).then((ret: AddPropertyDialogData) => {
-            if (!isNullOrUndefined(ret)) {
-                this.inputData.classDefinition.properties = ret.classDefinition.properties;
-            }
-        });
+        this.dialogFactory
+            .openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition, this.inputData.allClassDefinitions, this.inputData.allRelationships)
+            .then((ret: AddPropertyDialogData) => {
+                if (!isNullOrUndefined(ret)) {
+                    this.inputData.classDefinition.properties = ret.classDefinition.properties;
+                }
+            });
     }
 
     addEnumClicked() {
@@ -94,12 +96,8 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     }
 
     previewClicked() {
-        // this.dialogFactory.openInstanceFormPreviewDialog(this.inputData.marketplace, ).then(() => {
-
-        console.log(this.inputData);
         this.dialogFactory.openInstanceFormPreviewDialog(this.inputData.marketplace, this.inputData.allClassDefinitions, this.inputData.allRelationships).then(() => {
-
-        })
+        });
     }
 
 }

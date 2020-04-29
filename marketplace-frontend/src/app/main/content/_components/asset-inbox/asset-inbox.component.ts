@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClassArchetype, ClassInstanceDTO } from '../../_model/meta/Class';
+import { ClassArchetype, ClassInstanceDTO } from '../../_model/meta/class';
 import { MatTableDataSource } from '@angular/material';
 import { Feedback } from '../../_model/feedback';
 import { HelpseekerService } from '../../_service/helpseeker.service';

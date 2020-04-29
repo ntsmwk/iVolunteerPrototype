@@ -1,5 +1,5 @@
 import { isNullOrUndefined } from 'util';
-import { PropertyConstraint } from './Constraint';
+import { PropertyConstraint } from './constraint';
 
 export class PropertyDefinition<T> {
     id: string;

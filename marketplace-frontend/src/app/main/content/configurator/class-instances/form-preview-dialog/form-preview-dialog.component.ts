@@ -1,16 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
-import { ClassInstance, ClassDefinition } from '../../../_model/meta/Class';
-import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { ClassInstance, ClassDefinition } from '../../../_model/meta/class';
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ClassConfiguration } from 'app/main/content/_model/configurations';
-import { Relationship } from 'app/main/content/_model/meta/Relationship';
-import { isNullOrUndefined } from "util";
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { isNullOrUndefined } from 'util';
 
 export interface ClassInstanceFormPreviewDialogData {
   marketplace: Marketplace;
@@ -51,17 +48,20 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     this.returnedClassInstances = [];
 
-    this.classDefinitionService.getFromConfigurationPreview(this.data.marketplace, this.data.classDefinitions, this.data.relationships).toPromise().then((ret: FormConfiguration[]) => {
-      this.formConfigurations = ret;
+    this.classDefinitionService
+      .getFromConfigurationPreview(this.data.marketplace, this.data.classDefinitions, this.data.relationships)
+      .toPromise()
+      .then((ret: FormConfiguration[]) => {
+        this.formConfigurations = ret;
 
-      for (const config of this.formConfigurations) {
-        config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
-      }
+        for (const config of this.formConfigurations) {
+          config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
+        }
 
-    }).then(() => {
-      this.currentFormConfiguration = this.formConfigurations.pop();
-      this.isLoaded = true;
-    });
+      }).then(() => {
+        this.currentFormConfiguration = this.formConfigurations.pop();
+        this.isLoaded = true;
+      });
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {

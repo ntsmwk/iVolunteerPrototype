@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Marketplace } from '../../../_model/marketplace';
 import { ClassDefinitionService } from '../../../_service/meta/core/class/class-definition.service';
-import { ClassDefinition } from '../../../_model/meta/Class';
+import { ClassDefinition } from '../../../_model/meta/class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
 import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';

@@ -9,7 +9,7 @@ import { Volunteer } from '../../_model/volunteer';
 import { Participant } from '../../_model/participant';
 import { CIP } from '../../_model/classInstancePropertyConstants';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstance } from '../../_model/meta/class';
 import { StoredChart } from '../../_model/stored-chart';
 
 
@@ -252,7 +252,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
         this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK').toPromise().then((ret: ClassInstance[]) => {
           if (!isNullOrUndefined(ret)) {
-            this.classInstances = ret.filter(ci => ci.name=='PersonTask');
+            this.classInstances = ret.filter(ci => ci.name == 'PersonTask');
 
             this.classInstances.forEach((ci, index, object) => {
               if (ci.properties[this.TASK_DURATION].values[0] == 'null') {
@@ -265,10 +265,10 @@ export class AchievementsManagementSummaryComponent implements OnInit {
 
 
 
-            this.sumDurationTotal = this.durationTotal.reduce((a, c) => a+c.value, 0);
-            this.sumNumberTotal = this.numberTotal.reduce((a, c) => a+c.value, 0);
-            this.sumDuration2019 = this.duration2019.reduce((a, c) => a+c.value, 0);
-            this.sumNumber2019 = this.number2019.reduce((a, c) => a+c.value, 0);
+            this.sumDurationTotal = this.durationTotal.reduce((a, c) => a + c.value, 0);
+            this.sumNumberTotal = this.numberTotal.reduce((a, c) => a + c.value, 0);
+            this.sumDuration2019 = this.duration2019.reduce((a, c) => a + c.value, 0);
+            this.sumNumber2019 = this.number2019.reduce((a, c) => a + c.value, 0);
           }
         });
       });
@@ -371,7 +371,7 @@ export class AchievementsManagementSummaryComponent implements OnInit {
     }
   }
 
-   valueFormattingDuration(c) {
+  valueFormattingDuration(c) {
     return `${(c)} Stunden`;
   }
 

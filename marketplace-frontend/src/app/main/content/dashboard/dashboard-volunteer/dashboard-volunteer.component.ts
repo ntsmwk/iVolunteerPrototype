@@ -9,7 +9,7 @@ import { CoreMarketplaceService } from '../../_service/core-marketplace.service'
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from '../../_model/marketplace';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
-import { ClassInstance, ClassArchetype } from '../../_model/meta/Class';
+import { ClassInstance, ClassArchetype } from '../../_model/meta/class';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
 import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { MatSort, MatPaginator } from '@angular/material';

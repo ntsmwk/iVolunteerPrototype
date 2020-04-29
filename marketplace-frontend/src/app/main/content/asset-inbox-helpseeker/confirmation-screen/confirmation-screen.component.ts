@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Marketplace } from '../../_model/marketplace';
 import { Participant } from '../../_model/participant';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance } from '../../_model/meta/Class';
+import { ClassInstance } from '../../_model/meta/class';
 import { ClassInstanceService } from '../../_service/meta/core/class/class-instance.service';
 import { CoreMarketplaceService } from '../../_service/core-marketplace.service';
 import { LoginService } from '../../_service/login.service';
@@ -47,7 +47,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
     console.log(this.participant);
 
     if (isNullOrUndefined(this.marketplace) || isNullOrUndefined(this.participant)) {
-        Promise.all([
+      Promise.all([
         this.marketplaceService.findAll().toPromise().then((marketplaces: Marketplace[]) => {
           if (!isNullOrUndefined(marketplaces)) {
             this.marketplace = marketplaces[0];
@@ -63,7 +63,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
   }
 
   onBackClickInbox() {
-    this.router.navigate(['main/helpseeker/asset-inbox'], {state: {'instances': undefined, 'marketplace': this.marketplace, 'participant': this.participant}});
+    this.router.navigate(['main/helpseeker/asset-inbox'], { state: { 'instances': undefined, 'marketplace': this.marketplace, 'participant': this.participant } });
   }
 
   onBackClickDashboard() {

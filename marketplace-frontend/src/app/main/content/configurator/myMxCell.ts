@@ -1,5 +1,5 @@
 import { mxgraph } from 'mxgraph';
-import { ClassArchetype } from '../_model/meta/Class';
+import { ClassArchetype } from '../_model/meta/class';
 import { MatchingOperatorType } from '../_model/matching';
 
 declare var require: any;

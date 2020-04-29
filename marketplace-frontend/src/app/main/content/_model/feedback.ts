@@ -1,6 +1,6 @@
-import { AchievementClassInstance } from './meta/Class';
+import { AchievementClassInstance } from './meta/class';
 
-export class Feedback extends AchievementClassInstance {   
+export class Feedback extends AchievementClassInstance {
     id: string;
     marketplaceId: string;
     timestamp: Date;
@@ -8,9 +8,9 @@ export class Feedback extends AchievementClassInstance {
     name: string;
     description: string;
     feedbackType: FeedbackType;
-    feedbackValue: number;    
+    feedbackValue: number;
     iVolunteerObjectIds: string[];
-    
+
     userid: string;
     issuerId: string;
 }

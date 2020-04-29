@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { fuseAnimations } from '@fuse/animations';
 
-import { PropertyDefinition } from "../_model/meta/Property";
+import { PropertyDefinition } from "../_model/meta/property";
 
 import { LoginService } from '../_service/login.service';
 import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
@@ -58,9 +58,9 @@ export class PropertyListComponent implements OnInit {
 
     this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-        if (role == 'FLEXPROD') {
+        if (role === 'FLEXPROD') {
           service = this.flexProdService;
-        } else if (role == 'HELP_SEEKER') {
+        } else if (role === 'HELP_SEEKER') {
           service = this.helpSeekerService;
         } else {
           return;
@@ -79,13 +79,13 @@ export class PropertyListComponent implements OnInit {
       });
     });
 
-      
+
   }
 
   updateDataSource() {
-    let ret: PropertyDefinition<any>[] = [];
+    const ret: PropertyDefinition<any>[] = [];
 
-    for (let property of this.propertyDefinitionArray) {
+    for (const property of this.propertyDefinitionArray) {
       if (!this.customOnly) {
         ret.push(property);
       } else {
@@ -98,50 +98,20 @@ export class PropertyListComponent implements OnInit {
 
 
   viewPropertyAction(property: PropertyDefinition<any>) {
-    console.log("clicked view Property")
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
-    console.log(property);
   }
 
   newPropertyAction() {
-    console.log("clicked new Property");
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/']);
   }
 
   editPropertyAction(property: PropertyDefinition<any>) {
-    console.log("clicked edit Property: ");
     this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
   }
 
   deletePropertyAction(property: PropertyDefinition<any>) {
-    console.log("clicked delete Property: ");
-    console.log(property)
-
     this.propertyDefinitionService.deletePropertyDefinition(this.marketplace, property.id).toPromise().then(() => {
       this.ngOnInit();
     });
   }
-
-
-  // updateProperty(item: PropertyListItem) {
-  // console.log("clicked to update property " + item.id + " " + item.name + " TODO - link to detail page");
-
-  // }
-
-  // updatePropertySave(property: Property<string>) {
-  //   console.log("attempt to update");
-  //   this.loginService.getLoggedIn().toPromise().then((helpSeeker: Participant) => {
-  //     this.helpSeekerService.findRegisteredMarketplaces(helpSeeker.id).toPromise().then((marketplace: Marketplace) => {
-  //       if (!isNullOrUndefined(marketplace)) {
-  //         this.propertyService.updateProperty(marketplace, <Property<string>>property).toPromise().then(() => 
-  //           console.log("Updated"));
-
-  //       }
-  //     })
-  //   });
-  //}
-
-  // displayPropertyValue(property: PropertyListItem): string {    
-  //   return PropertyListItem.getValue(property);
-  // }
 }

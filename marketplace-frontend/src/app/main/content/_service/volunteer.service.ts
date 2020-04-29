@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Marketplace} from '../_model/marketplace';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Marketplace } from '../_model/marketplace';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +18,5 @@ export class VolunteerService {
     return this.http.get(`${marketplace.url}/volunteer/${id}`);
   }
 
-  
+
 }

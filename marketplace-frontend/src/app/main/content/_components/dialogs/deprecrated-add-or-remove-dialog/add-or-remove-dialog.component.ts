@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { PropertyItem, PropertyDefinition } from '../../../_model/meta/Property';
+import { PropertyItem, PropertyDefinition } from '../../../_model/meta/property';
 import { Router } from '@angular/router';
 
 export interface AddOrRemoveDialogData {
-  checkboxStates: {propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean}[];
+  checkboxStates: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[];
   label: string;
   key: string;
 }
@@ -33,7 +33,7 @@ export class AddOrRemoveDialogComponent {
   onNoClick(): void {
     this.data.key = undefined;
     this.dialogRef.close();
-  } 
+  }
 
   applyClicked() {
     this.data.key = undefined;

@@ -1,4 +1,4 @@
-import { CompetenceClassDefinition } from './meta/Class';
+import { CompetenceClassDefinition } from './meta/class';
 
 export class TaskTemplate {
   id: string;
@@ -12,16 +12,16 @@ export class TaskTemplate {
 }
 
 export class Address {
-    latitude: string;
-    langitude: string;
-    street: string;
-    streetNumber: string;
-    city: string;
-    region: string;
-    country: string;
-  }
+  latitude: string;
+  langitude: string;
+  street: string;
+  streetNumber: string;
+  city: string;
+  region: string;
+  country: string;
+}
 
-  export class Material {
-    name: string;
-    description: string;
-  }
+export class Material {
+  name: string;
+  description: string;
+}

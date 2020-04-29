@@ -16,7 +16,7 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { Marketplace } from '../_model/marketplace';
 import { Project } from '../_model/project';
 import { ProjectService } from '../_service/project.service';
-import { CompetenceClassDefinition } from '../_model/meta/Class';
+import { CompetenceClassDefinition } from '../_model/meta/class';
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;

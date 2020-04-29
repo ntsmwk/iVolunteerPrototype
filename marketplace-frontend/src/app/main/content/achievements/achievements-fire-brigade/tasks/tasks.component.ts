@@ -6,7 +6,7 @@ import { ClassInstanceService } from '../../../_service/meta/core/class/class-in
 import { Marketplace } from '../../../_model/marketplace';
 import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
 import { ActivatedRoute } from '@angular/router';
-import { ClassInstance } from '../../../_model/meta/Class';
+import { ClassInstance } from '../../../_model/meta/class';
 import { isNullOrUndefined } from 'util';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { CoreVolunteerService } from '../../../_service/core-volunteer.service';
