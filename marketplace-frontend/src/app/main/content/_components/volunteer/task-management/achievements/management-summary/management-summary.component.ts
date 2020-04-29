@@ -150,9 +150,9 @@ export class ManagementSummaryComponent implements OnInit {
       this.comparisonData.push({ name: tenant.name, value: yearData.length });
     });
 
-
     let finalData: any[] = [];
 
+    this.uniqueYears.sort();
     this.uniqueYears.forEach(curYear => {
       let data: any[] = [];
       this.tenantMap.forEach(tenant => {
@@ -164,13 +164,11 @@ export class ManagementSummaryComponent implements OnInit {
 
         data.push({ name: tenant.name, value: currentData.length - this.comparisonData.find(d => d.name === tenant.name).value });
       });
-      finalData.push({ name: curYear, series: data });
+      finalData.push({ name: curYear.toString(), series: data });
     });
 
     this.comparisonData = [...finalData];
   }
-
-
 
   generateEngagementYearData(engagementYear) {
     this.engagementYear = engagementYear;
@@ -233,7 +231,7 @@ export class ManagementSummaryComponent implements OnInit {
       return ci.tenantId === tenantId
     });
     let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear()))];
-    
+
     return Math.min.apply(Math, uniqueYears);
   }
 }
