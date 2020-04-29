@@ -52,12 +52,13 @@ export class ManagementSummaryComponent implements OnInit {
 
   durationTotal: any[] = [];
   numberTotal: any[] = [];
-  durationLastYear: any[] = [];
-  numberLastYear: any[] = [];
+
+  durationYear: any[] = [];
+  numberYear: any[] = [];
 
   comparisonData: any[] = [];
   comparisonYear: number;
-  lastYear: number;
+  engagementYear: number;
 
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
@@ -78,6 +79,8 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
     this.comparisonYear = 2019;
+    this.engagementYear = 2019;
+
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
@@ -130,7 +133,8 @@ export class ManagementSummaryComponent implements OnInit {
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
 
     this.generateComparisonChartData(this.comparisonYear);
-    this.generateEngagementData();
+    this.generateEngagementYearData(this.engagementYear);
+    this.generateEngagementTotalData();
 
   }
 
@@ -166,7 +170,32 @@ export class ManagementSummaryComponent implements OnInit {
     this.comparisonData = [...finalData];
   }
 
-  generateEngagementData() {
+
+
+  generateEngagementYearData(engagementYear) {
+    this.engagementYear = engagementYear;
+    let classInstancesYear = this.classInstanceDTOs.filter(ci => {
+      return new Date(ci.dateFrom).getFullYear() === this.engagementYear;
+    });
+
+    this.durationYear = [];
+    this.numberYear = [];
+
+    this.tenantMap.forEach(tenant => {
+      let classInstancesTenant = classInstancesYear.filter(ci => {
+        return ci.tenantId === tenant.id;
+      });
+
+      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0);
+      this.durationYear.push({ name: tenant.name, value: duration });
+      this.numberYear.push({ name: tenant.name, value: classInstancesTenant.length });
+    });
+
+    this.durationYear = [... this.durationYear];
+    this.numberYear = [... this.numberYear];
+  }
+
+  generateEngagementTotalData() {
     this.tenantMap.forEach(tenant => {
       let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
         return ci.tenantId === tenant.id;
@@ -178,20 +207,6 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
 
-    this.lastYear = new Date().getFullYear() - 1;
-    let classInstancesLastYear = this.classInstanceDTOs.filter(ci => {
-      return new Date(ci.dateFrom).getFullYear() === this.lastYear;
-    });
-
-    this.tenantMap.forEach(tenant => {
-      let classInstancesTenant = classInstancesLastYear.filter(ci => {
-        return ci.tenantId === tenant.id;
-      });
-
-      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0)
-      this.durationLastYear.push({ name: tenant.name, value: duration });
-      this.numberLastYear.push({ name: tenant.name, value: classInstancesTenant.length });
-    });
   }
 
   exportChart(source: string) {
