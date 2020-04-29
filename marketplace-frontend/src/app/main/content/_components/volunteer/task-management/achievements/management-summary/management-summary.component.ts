@@ -55,7 +55,7 @@ export class ManagementSummaryComponent implements OnInit {
 
   durationYear: any[] = [];
   numberYear: any[] = [];
-
+  
   comparisonData: any[] = [];
   comparisonYear: number;
   engagementYear: number;
@@ -232,10 +232,8 @@ export class ManagementSummaryComponent implements OnInit {
     let t = this.classInstanceDTOs.filter(ci => {
       return ci.tenantId === tenantId
     });
-
-    let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear().toString()))];
-    uniqueYears.sort;
-
-    return uniqueYears[0];
+    let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear()))];
+    
+    return Math.min.apply(Math, uniqueYears);
   }
 }
