@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
+import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
 
 @RestController
 public class ClassDefinitionController {
@@ -40,6 +42,15 @@ public class ClassDefinitionController {
 	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id,
 			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getClassDefinitionById(id, tenantId);
+		
+	@GetMapping("meta/core/class/definition/{slotId}/with-properties")
+	private List<ClassDefinition> getClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
+		return classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
+	}
+
+	@GetMapping("/meta/core/class/definition/{id}")
+	private ClassDefinition getClassDefinitionById(@PathVariable("id") String id) {
+		return classDefinitionService.getClassDefinitionById(id);
 	}
 
 	@GetMapping("/meta/core/class/definition/archetype/{archetype}/tenant/{tenantId}")
@@ -89,6 +100,28 @@ public class ClassDefinitionController {
 	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId,
 			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getEnumValues(classDefinitionId, tenantId);
+
+	@PutMapping("meta/core/class/definition/form-configuration")
+	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids,
+			@RequestParam(value = "type") String collectionType) {
+		if (collectionType.equals("top-down")) {
+			return classDefinitionService.aggregateChildrenById(ids);
+		} else if (collectionType.equals("bottom-up")) {
+			return classDefinitionService.getParentsById(ids);
+		} else {
+			throw new IllegalArgumentException("Invalid collection type - has to be 'top-down' or 'bottom-up'");
+		}
+	}
+
+	@PutMapping("meta/core/class/definition/form-configuration-preview")
+	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
+		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
+		return ret;
+	}
+
+	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
+	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {
+		return collectionService.aggregateEnums(classDefinitionId);
 	}
 
 }

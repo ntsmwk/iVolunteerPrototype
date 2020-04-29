@@ -1,7 +1,7 @@
-import { ClassDefinition, ClassArchetype } from '../../../../../_model/meta/Class';
-import { Relationship, Inheritance, RelationshipType } from '../../../../../_model/meta/Relationship';
+import { ClassDefinition, ClassArchetype } from '../../../../../_model/meta/class';
+import { Relationship, Inheritance, RelationshipType } from '../../../../../_model/meta/relationship';
 import { ObjectIdService } from '../../../../../_service/objectid.service.';
-import { ClassProperty, PropertyType } from '../../../../../_model/meta/Property';
+import { ClassProperty, PropertyType } from '../../../../../_model/meta/property';
 
 const sidebarPalettes = {
   id: 'building_blocks', label: 'Building Blocks',
@@ -122,7 +122,7 @@ export class CUtils {
     task.name = "Tätigkeit";
     task.root = false;
 
-    task.classArchetype = ClassArchetype.TASK_HEAD;
+    task.classArchetype = ClassArchetype.TASK;
     configurableClasses.push(task);
 
     let vonProperty = new ClassProperty<Date>();
@@ -151,7 +151,7 @@ export class CUtils {
     competence.marketplaceId = marketplaceId;
     competence.name = 'Kompetenz';
     competence.root = false;
-    competence.classArchetype = ClassArchetype.COMPETENCE_HEAD;
+    competence.classArchetype = ClassArchetype.COMPETENCE;
     configurableClasses.push(competence);
 
     let r2 = new Inheritance();
@@ -168,7 +168,7 @@ export class CUtils {
     achievement.marketplaceId = marketplaceId;
     achievement.name = 'Verdienst';
     achievement.root = false;
-    achievement.classArchetype = ClassArchetype.ACHIEVEMENT_HEAD;
+    achievement.classArchetype = ClassArchetype.ACHIEVEMENT;
     configurableClasses.push(achievement);
 
     let r3 = new Inheritance();
@@ -185,7 +185,7 @@ export class CUtils {
     funktion.marketplaceId = marketplaceId;
     funktion.name = 'Funktion';
     funktion.root = false;
-    funktion.classArchetype = ClassArchetype.FUNCTION_HEAD;
+    funktion.classArchetype = ClassArchetype.FUNCTION;
     configurableClasses.push(funktion);
 
     let r4 = new Inheritance();

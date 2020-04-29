@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Composition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
@@ -17,18 +19,24 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
 @Component
 public class RelationshipMapper implements AbstractMapper<Relationship, RelationshipDTO> {
-	
+
 	@Autowired AssociationRelationshipDTOMapper associationMapper;
 	@Autowired InheritanceRelationshipDTOMapper inheritanceMapper;
+	@Autowired AggregationRelationshipDTOMapper aggregationMapper;
+	@Autowired CompositionRelationshipDTOMapper compositionMapper;
 
 	@Override
 	public RelationshipDTO toTarget(Relationship source) {
 		if (source == null) {
 			return null;
 		} else if (source.getRelationshipType().equals(RelationshipType.ASSOCIATION)) {
-			return associationMapper.toTarget((Association)source);
+			return associationMapper.toTarget((Association) source);
 		} else if (source.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-			return inheritanceMapper.toTarget((Inheritance)source);
+			return inheritanceMapper.toTarget((Inheritance) source);
+		} else if (source.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
+			return aggregationMapper.toTarget((Aggregation) source);
+		} else if (source.getRelationshipType().equals(RelationshipType.COMPOSITION)) {
+			return compositionMapper.toTarget((Composition) source);
 		} else {
 			throw new NotAcceptableException("RelationshipType not recognized");
 		}
@@ -39,12 +47,12 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 		if (sources == null) {
 			return null;
 		}
-		
+
 		List<RelationshipDTO> targets = new LinkedList<RelationshipDTO>();
 		for (Relationship r : sources) {
 			targets.add(this.toTarget(r));
 		}
-		
+
 		return targets;
 	}
 
@@ -57,6 +65,10 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 			return associationMapper.toSource(target);
 		} else if (target.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 			return inheritanceMapper.toSource(target);
+		} else if (target.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
+			return aggregationMapper.toSource(target);
+		} else if (target.getRelationshipType().equals(RelationshipType.COMPOSITION)) {
+			return compositionMapper.toSource(target);
 		} else {
 			throw new NotAcceptableException("RelationshipType not recognized");
 		}
@@ -67,12 +79,12 @@ public class RelationshipMapper implements AbstractMapper<Relationship, Relation
 		if (targets == null) {
 			return null;
 		}
-		
+
 		List<Relationship> sources = new LinkedList<Relationship>();
 		for (RelationshipDTO dto : targets) {
 			sources.add(this.toSource(dto));
 		}
-		
+
 		return sources;
 	}
 

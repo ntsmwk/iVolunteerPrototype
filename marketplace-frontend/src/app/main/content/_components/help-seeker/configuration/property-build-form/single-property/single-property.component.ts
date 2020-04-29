@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
-import { isNullOrUndefined, isNull } from 'util';
-import { PropertyType, Rule, RuleKind, PropertyDefinition } from '../../../../../_model/meta/Property';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { propertyNameUniqueValidator } from '../../../../../_validator/property-name-unique.validator';
-import { listNotEmptyValidator } from "../../../../../_validator/list-not-empty.validator";
-import { PropertyDefinitionService } from '../../../../../_service/meta/core/property/property-definition.service';
-import { PropertyConstraint } from '../../../../../_model/meta/Constraint';
+import { isNullOrUndefined } from 'util';
+import { Router } from '@angular/router';
+import { PropertyDefinition, PropertyType, RuleKind } from 'app/main/content/_model/meta/property';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
+import { propertyNameUniqueValidator } from 'app/main/content/_validator/property-name-unique.validator';
+import { listNotEmptyValidator } from 'app/main/content/_validator/list-not-empty.validator';
+import { PropertyConstraint } from 'app/main/content/_model/meta/constraint';
 
 export class PropertyKindOption {
   kind: string;
@@ -35,7 +36,7 @@ export class SinglePropertyComponent implements OnInit {
   @Input() marketplace: Marketplace;
   @Input() currentProperty: PropertyDefinition<any>;
 
-  //Form Layout Controls
+  // Form Layout Controls
   isLoaded: boolean; isDropdown: boolean; hasRules: boolean;
 
   ruleEditActive: boolean; isNewRule: boolean; submitPressed: boolean;
@@ -45,7 +46,7 @@ export class SinglePropertyComponent implements OnInit {
 
   propertyLegalValues: any[] = [];
 
-  //SingleProperty
+  // SingleProperty
   form: FormGroup;
 
   rules: FormArray; legalValues: FormArray;
@@ -58,21 +59,18 @@ export class SinglePropertyComponent implements OnInit {
   };
 
   constructor(private formBuilder: FormBuilder,
+    private router: Router,
     private propertyDefinitionService: PropertyDefinitionService) { }
 
   ngOnInit() {
-
-    console.log("init")
     this.preparePropertyKindOptions();
     this.prepareRuleKindOptions();
 
     this.clearForm();
 
     if (!isNullOrUndefined(this.currentProperty)) {
-      console.log("prefiling form");
       this.prefillForm();
     } else {
-      console.log("empty form");
       this.isDropdown = false;
       this.hasRules = false;
     }
@@ -84,31 +82,30 @@ export class SinglePropertyComponent implements OnInit {
 
   }
 
-  //----------------------------------------------------
+  // ----------------------------------------------------
 
   private preparePropertyKindOptions() {
-    for (let kind in PropertyType) {
+    for (const kind in PropertyType) {
 
-      if (kind != PropertyType.GRAPH && kind != PropertyType.MAP && kind != PropertyType.MULTI && kind != PropertyType.COMPETENCE) {
+      if (kind !== PropertyType.GRAPH && kind !== PropertyType.MAP && kind !== PropertyType.MULTI && kind !== PropertyType.COMPETENCE) {
         this.propertyKindOptions.push({ kind: kind, label: kind, display: true });
       }
     }
   }
 
   private prepareRuleKindOptions() {
-    for (let kind in RuleKind) {
-
+    for (const kind in RuleKind) {
       switch (kind) {
         case RuleKind.REQUIRED: case RuleKind.REQUIRED_TRUE: {
           this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: false, hasValueField: false });
           break;
         }
         case RuleKind.MAX: case RuleKind.MAX_LENGTH: case RuleKind.MIN: case RuleKind.MIN_LENGTH: {
-          this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: false, hasValueField: true })
+          this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: false, hasValueField: true });
           break;
         }
         case RuleKind.REGEX_PATTERN: {
-          this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: true, hasValueField: false })
+          this.ruleKindOptions.push({ kind: kind, label: kind, display: true, hasDataField: true, hasValueField: false });
         }
       }
     }
@@ -127,18 +124,18 @@ export class SinglePropertyComponent implements OnInit {
     this.form.get('name').setValue(this.currentProperty.name);
     this.form.get('kind').setValue(this.currentProperty.type);
 
-    //TODO remove
-    this.form.get('defaultValues').setValue("");
+    // TODO remove
+    this.form.get('defaultValues').setValue('');
 
 
     if (!isNullOrUndefined(this.currentProperty.allowedValues) && this.currentProperty.allowedValues.length > 0) {
       this.isDropdown = true;
       this.clearLegalValues();
-      let formAllowedValues: FormArray = this.form.get('legalValues') as FormArray;
+      const formAllowedValues: FormArray = this.form.get('legalValues') as FormArray;
 
-      for (let value of this.currentProperty.allowedValues) {
+      for (const value of this.currentProperty.allowedValues) {
         formAllowedValues.push(this.createLegalValue());
-        let pushed = formAllowedValues.at(formAllowedValues.length - 1);
+        const pushed = formAllowedValues.at(formAllowedValues.length - 1);
 
         pushed.get('value').setValue(value);
       }
@@ -176,14 +173,11 @@ export class SinglePropertyComponent implements OnInit {
       this.hasRules = false;
     }
 
-    console.log(this.form.controls);
-    console.log(this.currentProperty);
-
   }
 
-  //----------------------------------------------------
-  //-----------------Legal Values-----------------------
-  //----------------------------------------------------
+  // ----------------------------------------------------
+  // -----------------Legal Values-----------------------
+  // ----------------------------------------------------
 
   createLegalValue(): FormGroup {
     return this.formBuilder.group({
@@ -192,17 +186,12 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   addLegalValue() {
-    console.log("adding legal value");
-    // this.legalValues = this.legalValuesForm.get('legalValues') as FormArray;
     this.legalValues = this.form.get('legalValues') as FormArray;
-
     this.legalValues.push(this.createLegalValue());
   }
 
   markLegalValuesAsTouched() {
-    // let legalValues = (this.form.get('legalValues') as FormGroup).controls
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
-
       Object.keys((this.form.get('legalValues') as FormArray).controls).forEach(key => {
         (this.form.get('legalValues').get(key) as FormGroup).controls.value.markAsTouched();
       });
@@ -214,7 +203,6 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearLegalAndDefaultValues() {
-    console.log("clearing");
     this.clearDefaultValues();
     this.clearLegalValues();
   }
@@ -226,40 +214,28 @@ export class SinglePropertyComponent implements OnInit {
   clearLegalValues() {
 
     if (!isNullOrUndefined(this.form.get('legalValues')) && !this.isDropdown) {
-      console.log("removing");
       this.form.removeControl('legalValues');
     } else {
-      console.log("adding");
       this.form.addControl('legalValues', this.formBuilder.array([], listNotEmptyValidator()));
     }
 
-    if (this.form.get('kind').value == 'LIST') { this.isDropdown = false }
-
-
-    console.log("cleared result")
-    console.log(this.form);
+    if (this.form.get('kind').value === 'LIST') { this.isDropdown = false; };
   }
 
+  // ----------------------------------------------------
+  // -----------------------Rules------------------------
+  // ----------------------------------------------------
 
-  //----------------------------------------------------
-  //-----------------------Rules------------------------
-  //----------------------------------------------------
-
-  //----Only Rules which are fitting for the Type should be displayed
+  // ----Only Rules which are fitting for the Type should be displayed
   prepareValidRules(event: any, source: string) {
 
     this.hasRules = false;
     this.clearRules();
 
-    console.log("prepare Rules " + event);
-    console.log(event);
-
-    if (source == 'dropdown-select') {
-
-
+    if (source === 'dropdown-select') {
       if (this.isDropdown) {
-        for (let option of this.ruleKindOptions) {
-          if (option.kind == RuleKind.REQUIRED) {
+        for (const option of this.ruleKindOptions) {
+          if (option.kind === RuleKind.REQUIRED) {
             option.display = true;
           } else {
             option.display = false;
@@ -270,20 +246,17 @@ export class SinglePropertyComponent implements OnInit {
       }
     }
 
-    else if (source == 'type-select') {
+    else if (source === 'type-select') {
       switch (event.value) {
 
-        //Texts: no ranges, no required_true reserved for boolean
+        // Texts: no ranges, no required_true reserved for boolean
         // allowed are amount ranges, required and regex
         case PropertyType.TEXT: case PropertyType.LONG_TEXT: {
-          console.log("text")
-          for (let option of this.ruleKindOptions) {
-            if (option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
+          for (const option of this.ruleKindOptions) {
+            if (option.kind === RuleKind.MIN_LENGTH || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.REQUIRED || option.kind == RuleKind.REGEX_PATTERN) {
               option.display = true;
-              console.log(option.kind + ": true")
             } else {
               option.display = false;
-              console.log(option.kind + ": false")
 
             }
           }
@@ -291,70 +264,63 @@ export class SinglePropertyComponent implements OnInit {
 
         }
 
-        //Boolean: only required_true
+        // Boolean: only required_true
         case PropertyType.BOOL: {
-          console.log("bool")
-          for (let option of this.ruleKindOptions) {
-            if (option.kind == RuleKind.REQUIRED_TRUE) {
+          for (const option of this.ruleKindOptions) {
+            if (option.kind === RuleKind.REQUIRED_TRUE) {
               option.display = true;
-              console.log(option.kind + ": true")
-
             } else {
               option.display = false;
-              console.log(option.kind + ": false")
-
             }
           }
-
           break;
         }
 
-        //Date: no max/min amount of characters, no required true, no regex
+        // Date: no max/min amount of characters, no required true, no regex
         case PropertyType.DATE: {
-          for (let option of this.ruleKindOptions) {
-            if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MIN || option.kind == RuleKind.MIN) {
+          for (const option of this.ruleKindOptions) {
+            if (option.kind === RuleKind.REQUIRED || option.kind === RuleKind.MIN || option.kind === RuleKind.MIN) {
               option.display = true;
             } else {
               option.display = false;
             }
           }
-
           break;
         }
 
-        //Numbers ranges and amounts allowed, required allowed, regex maybe allowed, no required_true, 
+        // Numbers ranges and amounts allowed, required allowed, regex maybe allowed, no required_true, 
         case PropertyType.FLOAT_NUMBER: case PropertyType.WHOLE_NUMBER: {
-          for (let option of this.ruleKindOptions) {
-            if (option.kind == RuleKind.REQUIRED || option.kind == RuleKind.MAX || option.kind == RuleKind.MIN || option.kind == RuleKind.MAX_LENGTH || option.kind == RuleKind.MIN_LENGTH || option.kind == RuleKind.REGEX_PATTERN) {
+          for (const option of this.ruleKindOptions) {
+            if (option.kind === RuleKind.REQUIRED || option.kind === RuleKind.MAX || option.kind === RuleKind.MIN || option.kind === RuleKind.MAX_LENGTH ||
+              option.kind === RuleKind.MIN_LENGTH || option.kind === RuleKind.REGEX_PATTERN) {
+
               option.display = true;
             } else {
               option.display = false;
             }
           }
-
           break;
         }
 
         case PropertyType.LIST: {
-          for (let option of this.ruleKindOptions) {
-            if (option.kind == RuleKind.REQUIRED) {
+          for (const option of this.ruleKindOptions) {
+            if (option.kind === RuleKind.REQUIRED) {
               option.display = true;
             } else {
               option.display = false;
             }
           }
         }
-
       }
 
     } else {
-      console.error('should not happen source must either be "type-select" or "dropdown-select"')
+      console.error('should not happen source must either be "type-select" or "dropdown-select"');
     }
 
 
   }
 
-  //----Rule Form manipulation
+  // ----Rule Form manipulation
 
   createRule(): FormGroup {
     return this.formBuilder.group({
@@ -364,12 +330,11 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   addRule(): void {
-    this.rules = this.form.get('rules') as FormArray
+    this.rules = this.form.get('rules') as FormArray;
     this.rules.push(this.createRule());
 
     this.ruleEditActive = true;
     this.isNewRule = true;
-    // this.rules.disable();
   }
 
   clearRules() {
@@ -391,7 +356,7 @@ export class SinglePropertyComponent implements OnInit {
       value: isNullOrUndefined(rule.get('value')) ? undefined : rule.get('value').value,
       data: isNullOrUndefined(rule.get('data')) ? undefined : rule.get('data').value,
       message: rule.get('message').value
-    }
+    };
   }
 
   setDisabledRule(rule: FormGroup) {
@@ -410,7 +375,7 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   removeRule(i: number) {
-    let rules = this.form.get('rules') as FormArray;
+    const rules = this.form.get('rules') as FormArray;
     rules.removeAt(i);
 
     if (rules.length <= 0) {
@@ -420,7 +385,7 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   revertRule(i: number) {
-    let rule = this.form.get('rules').get("" + i) as FormGroup;
+    const rule = this.form.get('rules').get('' + i) as FormGroup;
 
     if (this.isNewRule) {
       this.removeRule(i);
@@ -460,7 +425,7 @@ export class SinglePropertyComponent implements OnInit {
 
   }
 
-  //--Validity Checks and Queries
+  // --Validity Checks and Queries
 
   isFieldInvalid(value: FormControl) {
     if (isNullOrUndefined(value)) {
@@ -470,16 +435,15 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   isRuleKindDisabled(kind: string): boolean {
-    let array = this.form.get('rules') as FormArray;
+    const array = this.form.get('rules') as FormArray;
 
     for (let i = 0; i < array.length; i++) {
-      if (this.form.get('rules').get("" + i).get('kind').value == kind) {
+      if (this.form.get('rules').get('' + i).get('kind').value === kind) {
         return true;
       }
     }
 
     return false;
-
   }
 
   hasValueField(kind: string): boolean {
@@ -488,7 +452,7 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     return this.ruleKindOptions.find((option: RuleKindOption) => {
-      return option.kind == kind
+      return option.kind === kind;
     }).hasValueField;
   }
 
@@ -498,11 +462,11 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     return this.ruleKindOptions.find((option: RuleKindOption) => {
-      return option.kind == kind;
+      return option.kind === kind;
     }).hasDataField;
   }
 
-  //---
+  // ---
 
   trackByFn(index: any, item: any) {
     return index;
@@ -516,35 +480,31 @@ export class SinglePropertyComponent implements OnInit {
 
     if (valid && !this.ruleEditActive) {
 
-      let property = this.createPropertyFromForm();
-
-      console.log(property);
-
-      console.log("call propertyService...");
+      const property = this.createPropertyFromForm();
 
       // TODO call service to send to server (and save in db)
       this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then(() => {
-        console.log("PropertyService called, property added");
-        console.log(property);
-        this.navigateBack();
+
+        this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
+
       });
 
-      console.log("VALID")
-      let ret = JSON.stringify(property, null, 2);
+      console.log('VALID');
+      const ret = JSON.stringify(property, null, 2);
       console.log(ret);
     } else {
-      console.log("INVALID");
+      console.log('INVALID');
       console.log(JSON.stringify(this.createPropertyFromForm(), null, 2));
 
-      console.log("Valid: " + valid);
-      console.log("RuleEdit: " + this.ruleEditActive);
+      console.log('Valid: ' + valid);
+      console.log('RuleEdit: ' + this.ruleEditActive);
 
       this.markLegalValuesAsTouched();
     }
   }
 
   createPropertyFromForm(): PropertyDefinition<any> {
-    let property: PropertyDefinition<any> = new PropertyDefinition<any>();
+    const property: PropertyDefinition<any> = new PropertyDefinition<any>();
 
     if (isNullOrUndefined(this.currentProperty)) {
       property.id = null;
@@ -553,7 +513,7 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     property.name = this.form.get('name').value;
-    
+
 
     // property.defaultValues = [];
     // console.log(this.form);
@@ -569,16 +529,16 @@ export class SinglePropertyComponent implements OnInit {
 
     property.allowedValues = [];
     if (!isNullOrUndefined(this.form.get('legalValues'))) {
-      for (let value of (this.form.get('legalValues') as FormArray).value) {
+      for (const value of (this.form.get('legalValues') as FormArray).value) {
         property.allowedValues.push(value.value);
       }
     }
 
     property.propertyConstraints = [];
     if (!isNullOrUndefined(this.form.get('rules'))) {
-      for (let value of (this.form.get('rules') as FormArray).controls) {
+      for (const value of (this.form.get('rules') as FormArray).controls) {
 
-        let constraint = new PropertyConstraint();
+        const constraint = new PropertyConstraint();
         constraint.id = null;
         constraint.constraintType = value.get('kind').value;
 
@@ -597,7 +557,6 @@ export class SinglePropertyComponent implements OnInit {
     property.type = this.form.get('kind').value;
 
     return property;
-
   }
 
   navigateBack() {

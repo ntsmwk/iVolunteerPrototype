@@ -8,13 +8,15 @@ import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import javax.management.relation.Relation;
 import javax.ws.rs.NotAcceptableException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
@@ -33,6 +35,8 @@ public class ClassDefinitionService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired private CollectionService collectionService;
 
 	public ClassDefinition getByName(String name, String tenantId) {
 		return classDefinitionRepository.findByNameAndTenantId(name, tenantId);
@@ -49,6 +53,23 @@ public class ClassDefinitionService {
 			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
 		
+		return classDefinitions;
+	}
+
+	public List<ClassDefinition> getAllClassDefinitionsWithProperties(String slotId) {
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(slotId);
+
+		if (classConfiguration == null) {
+			return null;
+		}
+
+		List<ClassDefinition> classDefinitions = new ArrayList<ClassDefinition>();
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(c -> {
+			if (c.getProperties() != null && c.getProperties().size() > 0) {
+				classDefinitions.add(c);
+			}
+		});
+
 		return classDefinitions;
 	}
 
@@ -82,7 +103,6 @@ public class ClassDefinitionService {
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumClasses(cd)).collect(Collectors.toList());
-		return classDefinitions;
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(String tenantId) {
@@ -114,7 +134,7 @@ public class ClassDefinitionService {
 		// @formatter:on
 	}
 
-	public List<FormConfiguration> getParentsById(List<String> childIds, String tenantId) {
+	public List<FormConfiguration> getParentsById(List<String> childIds) {
 		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
 
 		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
@@ -205,8 +225,8 @@ public class ClassDefinitionService {
 							// for each Relationship, Do a DFS to construct dropdown options menu
 
 							ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-							enumProperty.setAllowedValues(
-									performDFS(classDefinition, 0, new ArrayList<EnumEntry>(), tenantId));
+							enumProperty.setAllowedValues(collectionService.aggregateAllEnumEntriesDFS(classDefinition,
+									0, new ArrayList<EnumEntry>()));
 
 							if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
 								enumProperty.setMultiple(false);
@@ -236,43 +256,7 @@ public class ClassDefinitionService {
 		return properties;
 	}
 
-// Keep in case of changes of mind :)
-//	private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
-//		List<EnumEntry> entries = new ArrayList<EnumEntry>();
-//		entries = performDFS(root, 0, entries);
-//		
-//		EnumRepresentation enum
-//		Representation = new EnumRepresentation();
-//		enumRepresentation.setEnumEntries(entries);
-//		enumRepresentation.setId(root.getId());
-//		
-//		return enumRepresentation;
-//	}
-
-	private List<EnumEntry> performDFS(ClassDefinition root, int level, List<EnumEntry> list, String tenantId) {
-		Stack<Relationship> stack = new Stack<>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
-				RelationshipType.INHERITANCE);
-		Collections.reverse(relationships);
-		stack.addAll(relationships);
-
-		if (stack == null || stack.size() <= 0) {
-			return list;
-		} else {
-			while (!stack.isEmpty()) {
-				Relationship relationship = stack.pop();
-				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
-				enumEntry.setPosition(new int[level + 1]);
-				list.add(enumEntry);
-				this.performDFS(classDefinition, level + 1, list, tenantId);
-			}
-		}
-		return list;
-	}
-
-	// TODO @Alex implement
-	public List<String> getChildrenById(List<String> rootIds, String tenantId) {
+	public List<FormConfiguration> aggregateChildrenById(List<String> rootIds) {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 
@@ -280,17 +264,56 @@ public class ClassDefinitionService {
 			rootClassDefintions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
 		});
 
-		List<String> returnIds;
-		for (ClassDefinition rootClassDefinitions : rootClassDefintions) {
+		List<FormConfiguration> formConfigurations = new ArrayList<>();
+		for (ClassDefinition rootClassDefinition : rootClassDefintions) {
 
+			List<ClassDefinition> classDefinitions = new ArrayList<>();
+			List<Relationship> relationships = new ArrayList<>();
+			ClassConfiguration classConfiguration = classConfigurationRepository
+					.findOne(rootClassDefinition.getConfigurationId());
+			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds())
+					.forEach(classDefinitions::add);
+			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+
+			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(),
+					classDefinitions, relationships);
+			FormConfiguration formConfiguration = new FormConfiguration();
+			formConfiguration.setId(rootClassDefinition.getId());
+			formConfiguration.setName(rootClassDefinition.getName());
+			formConfiguration.setFormEntry(formEntry);
+			formConfigurations.add(formConfiguration);
 		}
 
-		return null;
+		return formConfigurations;
 	}
 
-	public List<EnumEntry> getEnumValues(String classDefinitionId, String tenantId) {
-		ClassDefinition enumHead = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
-		return performDFS(enumHead, 0, new ArrayList<>(), tenantId);
+	public List<FormConfiguration> aggregateChildren(List<ClassDefinition> classDefinitions,
+			List<Relationship> relationships) {
+
+		ClassDefinition rootClassDefinition = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().get();
+		List<FormConfiguration> formConfigurations = new ArrayList<>();
+
+		FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(),
+				classDefinitions, relationships);
+		
+		FormConfiguration formConfiguration = new FormConfiguration();
+		formConfiguration.setId(rootClassDefinition.getId());
+		formConfiguration.setName(rootClassDefinition.getName());
+		formConfiguration.setFormEntry(formEntry);
+		formConfigurations.add(formConfiguration);
+		return formConfigurations;
 	}
+
+	// Keep in case of changes of mind :)
+//		private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
+//			List<EnumEntry> entries = new ArrayList<EnumEntry>();
+//			entries = performDFS(root, 0, entries);
+//			
+//			EnumRepresentation enumRepresentation = new EnumRepresentation();
+//			enumRepresentation.setEnumEntries(entries);
+//			enumRepresentation.setId(root.getId());
+//			
+//			return enumRepresentation;
+//		}
 
 }

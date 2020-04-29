@@ -1,0 +1,29 @@
+<div class="browse-dialog-content pt-8">
+
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-12">
+    <h2>Durchsuchen</h2>
+    <div></div>
+    <div matTooltip="Zurück" (click)="handleBackClick()" class="back-button">
+      <mat-icon>keyboard_return</mat-icon>
+    </div>
+  </div>
+
+  <table class="browse-table" cellspacing=0 cellpadding=3>
+    <col width="250px" />
+    <col width="100px" />
+    <col width="100px" />
+
+    <tr style="background-color: rgb(62, 125, 219); color: white;">
+      <th style="text-align: start" class="table-header-cell">Name</th>
+      <th style="text-align: start" class="table-header-cell">Unternehmen</th>
+      <th style="text-align: start" class="table-header-cell">Besteller</th>
+
+    </tr>
+    <tr *ngFor="let entry of data.entries" class="table-row" (click)="handleRowClick(entry)">
+      <td style="overflow: hidden">{{entry.name}}</td>
+      <td style="overflow: hidden">{{entry.producer}}</td>
+      <td style="overflow: hidden">{{entry.consumer}}</td>
+    </tr>
+  </table>
+
+</div>

@@ -1,0 +1,37 @@
+@import "src/@fuse/scss/fuse";
+
+.browse-dialog-content {
+
+  .browse-table {
+    overflow: scroll;
+    .table-row {
+        min-height: 0px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        cursor: pointer;
+    }
+
+    mat-row:hover {
+        background-color: rgb(62, 125, 219);
+
+        mat-cell {
+            color: white;
+        }
+    }
+
+    .mat-column-id {
+    }
+
+    .mat-column-label1 {      
+      flex: 0 0 200px !important;
+      width: 200px !important;
+
+    }
+
+    mat-cell > span.ellipsis-container {
+      text-overflow: ellipsis; 
+      overflow: hidden; 
+      white-space: nowrap;
+   }
+  }
+}

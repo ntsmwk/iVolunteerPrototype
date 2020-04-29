@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import {Marketplace} from '../_model/marketplace';
-import {WorkflowStep} from '../_model/workflow-step';
+import { Marketplace } from '../_model/marketplace';
+import { WorkflowStep } from '../_model/workflow-step';
 
 @Injectable({
   providedIn: 'root'

@@ -1,10 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
-import { DialogFactoryComponent } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-
-
+import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 
 export interface RootMenuItem {
   id: number;
@@ -28,12 +26,10 @@ const rootMenuItems: RootMenuItem[] = [
 ];
 
 const subMenuItems: SubMenuItem[] = [
-  { rootId: 1, id: 1, label: 'Neue Konfiguration', clickAction: 'newClicked', icon: undefined },
-  { rootId: 1, id: 2, label: 'Konfiguration öffnen', clickAction: 'openClicked', icon: undefined },
-  { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
-  { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
-
-  { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
+  { rootId: 1, id: 1, label: 'Neues Matching', clickAction: 'newClicked', icon: undefined },
+  { rootId: 1, id: 2, label: 'Matching öffnen', clickAction: 'openClicked', icon: undefined },
+  { rootId: 1, id: 3, label: 'Matching speichern', clickAction: 'saveClicked', icon: undefined },
+  { rootId: 1, id: 4, label: 'Matching löschen', clickAction: 'deleteClicked', icon: undefined },
 
   { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
   { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
@@ -54,31 +50,29 @@ const subMenuItems: SubMenuItem[] = [
 ];
 
 @Component({
-  selector: 'editor-top-menu-bar',
+  selector: 'matching-editor-top-menu-bar',
   templateUrl: './top-menu-bar.component.html',
   styleUrls: ['./top-menu-bar.component.scss']
 })
-export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
+export class MatchingTopMenuBarComponent implements AfterViewInit {
 
-  isLoaded: boolean = false;
+  isLoaded = false;
   menuOpen: false;
 
   rootMenuItems = rootMenuItems;
   subMenuItems = subMenuItems;
   currentRootId = 1;
 
-  @ViewChild('menubarContainer', {static: true}) menubarContainer: ElementRef;
-  @ViewChild('submenuContainer', {static: true}) submenuContainer: ElementRef;
+  @ViewChild('menubarContainer', { static: true }) menubarContainer: ElementRef;
+  @ViewChild('submenuContainer', { static: true }) submenuContainer: ElementRef;
 
   @Input() marketplace: Marketplace;
   @Input() eventResponseAction: string;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
 
-
-
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private dialogFactory: DialogFactoryComponent
+    private dialogFactory: DialogFactoryDirective
   ) {
 
   }
@@ -109,15 +103,15 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
     this.menubarContainer.nativeElement.style.background = 'white';
     this.menubarContainer.nativeElement.style.font = 'Arial, Helvetica, sans-serif';
 
-    let outer = this;
+    const outer = this;
 
-    document.addEventListener("click", function (event) {
+    document.addEventListener('click', function (event) {
       outer.handleHTMLClickEvent(event);
     });
   }
 
   handleHTMLClickEvent(event: any) {
-    if (event.srcElement.className != "menuitem") {
+    if (event.srcElement.className !== 'menuitem') {
       this.submenuContainer.nativeElement.style.display = 'none';
     }
   }
@@ -125,14 +119,14 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   openSubmenu(event: any, rootItemId: number) {
     this.currentRootId = rootItemId;
     this.submenuContainer.nativeElement.style.display = 'block';
-    let leftPosition = this.calculateLeftSpace(event.srcElement.offsetParent, rootItemId);
+    const leftPosition = this.calculateLeftSpace(event.srcElement.offsetParent, rootItemId);
     this.submenuContainer.nativeElement.style.left = leftPosition + 'px';
   }
 
   private calculateLeftSpace(offsetParent: any, rootItemId: number) {
     let space = 10;
     if (!isNullOrUndefined(offsetParent.children)) {
-      for (let child of offsetParent.children) {
+      for (const child of offsetParent.children) {
         if (rootItemId - 1 <= 0) {
           return space;
         }
@@ -143,74 +137,43 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   newClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.confirmationDialog("New", "Create New Editor? Unsaved changes will be lost...").then((cont: boolean) => {
-      if (cont) {
-        this.menuOptionClickedEvent.emit({ id: "editor_new" });
+    this.dialogFactory.openNewMatchingDialog(this.marketplace).then((ret: any) => {
+      if (!isNullOrUndefined(ret)) {
+        this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       }
     });
-
   }
 
   openClicked(event: any, item: SubMenuItem) {
-
-    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openOpenMatchingDialog(this.marketplace).then((ret: any) => {
       if (!isNullOrUndefined(ret)) {
-        this.menuOptionClickedEvent.emit({ id: "editor_open", configurator: ret });
+        this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
-        this.menuOptionClickedEvent.emit({ id: "cancelled"});
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
 
     });
   }
 
   saveClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.confirmationDialog("Save", "Are you sure you want to save? The existing model will be overidden...").then((result: boolean) => {
-    if (result) {
-        this.menuOptionClickedEvent.emit({ id: "editor_save" });
+    this.dialogFactory.confirmationDialog('Save', 'Are you sure you want to save? The existing model will be overidden...').then((result: boolean) => {
+      if (result) {
+        this.menuOptionClickedEvent.emit({ id: 'editor_save' });
       } else {
-        this.menuOptionClickedEvent.emit({id: "cancelled"});
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
       }
     });
   }
 
-  saveAsClicked(event: any, item: SubMenuItem) {   
-    //wrapped in setTimeout - hack to avoid ExpressionChangedAfterItHasBeenCheckedError because of ngOnChanges lifecycle hook
-    setTimeout(() => {
-      this.dialogFactory.openSaveConfiguratorDialog(this.marketplace).then((ret: any) => {
-        if (!isNullOrUndefined(ret)) {
-          this.menuOptionClickedEvent.emit({ id: "editor_save_as", configurator: ret });
-        } else {
-          this.menuOptionClickedEvent.emit({ id: "cancelled"});
-        }
-      });
+  deleteClicked(event: any, item: SubMenuItem) {
+    this.dialogFactory.openDeleteMatchingDialog(this.marketplace).then((ret: any) => {
+      if (!isNullOrUndefined(ret)) {
+        this.menuOptionClickedEvent.emit({ id: 'editor_delete', payload: ret });
+      } else {
+        this.menuOptionClickedEvent.emit({ id: 'cancelled' });
+      }
+
     });
-  }
-
-  createEditorClicked(event: any, item: SubMenuItem) {
-
-  }
-
-  ngOnChanges() {
-    let eventResponse = this.eventResponseAction;
-    this.eventResponseAction = undefined;
-    if (eventResponse == "saveAsClicked") {
-      this[eventResponse](eventResponse, undefined);
-    }
-  }
-
-
-  test(event: any, item: SubMenuItem) {
-    console.log("test");
-    console.log(event);
-    console.log(item);
-  }
-
-
-
-
-
-  navigateBack() {
-    window.history.back();
   }
 
 }

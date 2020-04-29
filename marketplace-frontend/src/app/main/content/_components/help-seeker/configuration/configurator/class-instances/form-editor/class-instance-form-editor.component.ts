@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Marketplace } from '../../../../../../_model/marketplace';
-import { ClassDefinitionService } from '../../../../../../_service/meta/core/class/class-definition.service';
-import { ClassInstance } from '../../../../../../_model/meta/Class';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { ClassInstance } from 'app/main/content/_model/meta/class';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { QuestionService } from 'app/main/content/_service/question.service';
-import { FormConfiguration, FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
+import { FormConfiguration, FormEntryReturnEventData, FormEntry } from 'app/main/content/_model/meta/form';
 import { QuestionControlService } from 'app/main/content/_service/question-control.service';
-import { PropertyInstance } from 'app/main/content/_model/meta/Property';
+import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/property';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { isNullOrUndefined } from 'util';
 import { Volunteer } from 'app/main/content/_model/volunteer';
-import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { Participant } from 'app/main/content/_model/participant';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { AbstractControl } from '@angular/forms';
+import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { VolunteerService } from 'app/main/content/_service/volunteer.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+
 
 @Component({
   selector: 'app-class-instance-form-editor',
@@ -32,15 +35,24 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
   returnedClassInstances: ClassInstance[];
 
-  volunteers: Volunteer[];
-  selectedVolunteers: Volunteer[];
 
   canContinue: boolean;
   canFinish: boolean;
   lastEntry: boolean;
 
   isLoaded = false;
+  finishClicked = false;
+  showResultPage = false;
 
+  volunteers: Volunteer[];
+
+  formConfigurationType: string;
+
+  expectedNumberOfResults: number;
+  results: FormEntryReturnEventData[];
+
+  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
+  resultClassInstance: ClassInstance;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -49,11 +61,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
-    private volunteerService: CoreVolunteerService,
-    private loginService: LoginService
+    private objectIdService: ObjectIdService,
+    private loginService: LoginService,
+    private volunteerService: CoreVolunteerService
   ) {
-    console.log('extras');
-    console.log(this.router.getCurrentNavigation().extras.state);
+    // console.log('extras');
+    // console.log(this.router.getCurrentNavigation().extras.state);
   }
 
   ngOnInit() {
@@ -61,14 +74,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const childClassIds: string[] = [];
 
     this.returnedClassInstances = [];
-    this.selectedVolunteers = [];
-
+    this.results = [];
+    this.expectedNumberOfResults = 0;
 
     Promise.all([
       this.route.params.subscribe(params => {
         marketplaceId = params['marketplaceId'];
+        this.formConfigurationType = params['type'];
       }),
-      
+
       this.route.queryParams.subscribe(queryParams => {
         let i = 0;
         while (!isNullOrUndefined(queryParams[i])) {
@@ -85,124 +99,83 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
 
+        if (isNullOrUndefined(this.formConfigurationType)) {
+          this.formConfigurationType = 'top-down';
+        }
+
         Promise.all([
-          this.classDefinitionService.getAllParentsIdMap(this.marketplace, childClassIds, this.helpseeker.tenantId).toPromise().then((formConfigurations: FormConfiguration[]) => {
-
-            this.formConfigurations = formConfigurations;
-
-            for (const config of this.formConfigurations) {
-              config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-              config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-            }
-          }),
+          this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds, this.formConfigurationType).toPromise()
+            .then((formConfigurations: FormConfiguration[]) => {
+              this.formConfigurations = formConfigurations;
+              for (const config of this.formConfigurations) {
+                config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
+              }
+            }),
 
           this.volunteerService.findAll().toPromise().then((volunteers: Volunteer[]) => {
             this.volunteers = volunteers;
-          })
+          })])
 
-        ]).then(() => {
-          this.currentFormConfiguration = this.formConfigurations.pop();
+          .then(() => {
+            this.currentFormConfiguration = this.formConfigurations.pop();
 
-          if (this.formConfigurations.length === 0) {
-            this.lastEntry = true;
-          }
-
-          console.log(this.currentFormConfiguration);
-          this.isLoaded = true;
-        });
-
+            if (this.formConfigurations.length === 0) {
+              this.lastEntry = true;
+            }
+            this.isLoaded = true;
+          });
 
       });
     });
   }
 
-  handleResultEvent(event: FormEntryReturnEventData) {
-    const classInstances: ClassInstance[] = [];
-    this.currentFormConfiguration.formEntry.formGroup.disable();
-    const propertyInstances: PropertyInstance<any>[] = [];
+  private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
+    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
+    formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
 
-    for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
-      const values = [event.formGroup.value[classProperty.id]];
-      propertyInstances.push(new PropertyInstance(classProperty, values));
+    if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
+      this.expectedNumberOfResults++;
     }
 
-    for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
-      const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
-      const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
-      propertyInstance.name = enumRepresentation.classDefinition.name;
-      propertyInstance.id = enumRepresentation.id;
-      propertyInstances.push(propertyInstance);
-    }
-
-    for (const selectedVolunteer of this.selectedVolunteers) {
-      const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-      classInstance.userId = selectedVolunteer.id;
-      classInstance.tenantId = this.helpseeker.tenantId;
-      classInstance.issuerId = this.helpseeker.id;
-      classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
-      classInstances.push(classInstance);
-    }
-    
-    this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
-      // handle returned value if necessary
-      if (!isNullOrUndefined(ret)) {
-        this.returnedClassInstances.push(...ret);
-        this.handleNextClick();
+    if (!isNullOrUndefined(formEntry.subEntries)) {
+      for (let subEntry of formEntry.subEntries) {
+        const newIdPrefix = idPrefix + subEntry.classDefinitions[0].id + '.';
+        subEntry = this.addQuestionsAndFormGroup(subEntry, newIdPrefix);
       }
-    });
-  }
-
-  getDisplayedName(volunteer: Volunteer): string {
-    let result = '';
-
-    if (!isNullOrUndefined(volunteer.lastname)) {
-      if (!isNullOrUndefined(volunteer.nickname)) {
-        result = result + volunteer.nickname;
-      } else if (!isNullOrUndefined(volunteer.firstname)) {
-        result = result + volunteer.firstname;
-      }
-      if (!isNullOrUndefined(volunteer.middlename)) {
-        result = result + ' ' + volunteer.middlename;
-      }
-      result = result + ' ' + volunteer.lastname;
-    } else {
-      result = result + volunteer.username;
     }
-
-    return result;
+    return formEntry;
   }
 
-  getDisplayedNameFromUserId(userId: string) {
-    const volunteer = this.volunteers.find(v => v.id === userId);
+  // handleResultEvent(event: FormEntryReturnEventData) {
+  //   const classInstances: ClassInstance[] = [];
+  //   this.currentFormConfiguration.formEntry.formGroup.disable();
+  //   const propertyInstances: PropertyInstance<any>[] = [];
 
-    if (isNullOrUndefined(volunteer)) {
-      return 'a volunteer';
-    } else {
-      return this.getDisplayedName(volunteer);
-    }
-  }
+  //   for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
+  //     const values = [event.formGroup.value[classProperty.id]];
+  //     propertyInstances.push(new PropertyInstance(classProperty, values));
+  //   }
 
-  getIcon() {
-    if (isNullOrUndefined(this.currentFormConfiguration.formEntry.imagePath)) {
-      return '/assets/cog.png';
-    } else {
-      return this.currentFormConfiguration.formEntry.imagePath;
-    }
-  }
+  //   for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
+  //     const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
+  //     const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
+  //     propertyInstance.name = enumRepresentation.classDefinition.name;
+  //     propertyInstance.id = enumRepresentation.id;
+  //     propertyInstances.push(propertyInstance);
+  //   }
 
-  addToSelection(event: any) {
-    const volunteer = this.selectedVolunteers.find((v: Volunteer) => {
-      return v.id === event.option.value.id;
-    });
+  //   const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
+  //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
+  //   classInstances.push(classInstance);
 
-    if (!isNullOrUndefined(volunteer)) {
-      this.selectedVolunteers = this.selectedVolunteers.filter((v: Volunteer) => {
-        return v.id !== volunteer.id;
-      });
-    } else {
-      this.selectedVolunteers.push(event.option.value);
-    }
-  }
+  //   this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
+  //     // handle returned value if necessary
+  //     if (!isNullOrUndefined(ret)) {
+  //       this.returnedClassInstances.push(...ret);
+  //       this.handleNextClick();
+  //     }
+  //   });
+  // }
 
   handleNextClick() {
     this.canContinue = false;
@@ -217,7 +190,83 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   handleFinishClick() {
-    this.router.navigate(['/main/helpseeker/asset-inbox']);
+    this.finishClicked = true;
+  }
+
+  handleResultEvent(event: FormEntryReturnEventData) {
+    this.results.push(event);
+
+    if (this.results.length === this.expectedNumberOfResults) {
+      this.createInstanceFromResults();
+
+      setTimeout(() => {
+        this.finishClicked = false;
+      });
+    }
+  }
+
+
+  createInstanceFromResults() {
+
+    const allControls = this.getAllControlsFromResults();
+    const classInstance = this.createClassInstances(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+
+    this.classInstanceService.createNewClassInstances(this.marketplace, [classInstance]).toPromise().then((ret: ClassInstance[]) => {
+      this.resultClassInstance = ret.pop();
+      this.contentDiv.nativeElement.scrollTo(0, 0);
+      this.showResultPage = true;
+    });
+
+  }
+
+  private getAllControlsFromResults() {
+    const allControls: { id: string, control: AbstractControl }[] = [];
+
+    for (const result of this.results) {
+      const ids = Object.keys(result.formGroup.controls);
+      for (const id of ids) {
+        allControls.push({ id: id, control: result.formGroup.controls[id] });
+      }
+    }
+
+    return allControls;
+  }
+
+  private createClassInstances(parentEntry: FormEntry, currentPath: string, controls: { id: string, control: AbstractControl }[]) {
+
+    const propertyInstances: PropertyInstance<any>[] = [];
+    for (const classProperty of parentEntry.classProperties) {
+      // console.log(currentPath + '.' + classProperty.id);
+      // console.log(controls[0].id);
+
+      const control = controls.find(c => c.id === (currentPath + '.' + classProperty.id));
+
+      //make sure numbers are correct
+      let value: any;
+      if (classProperty.type === PropertyType.FLOAT_NUMBER) {
+        value = Number(control.control.value);
+      } else if (classProperty.type === PropertyType.WHOLE_NUMBER) {
+        value = Number.parseInt(control.control.value, 10);
+      } else {
+        value = control.control.value;
+      }
+
+      propertyInstances.push(new PropertyInstance(classProperty, [value]));
+    }
+
+    const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
+    classInstance.childClassInstances = [];
+    classInstance.id = this.objectIdService.getNewObjectId();
+    classInstance.marketplaceId = this.marketplace.id;
+
+    if (!isNullOrUndefined(parentEntry.subEntries)) {
+      for (const subEntry of parentEntry.subEntries) {
+        const subClassInstance = this.createClassInstances(subEntry, currentPath + '.' + subEntry.classDefinitions[0].id, controls);
+        classInstance.childClassInstances.push(subClassInstance);
+      }
+    }
+
+    return classInstance;
   }
 
   handleCancelEvent() {

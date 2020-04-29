@@ -38,7 +38,7 @@ public class PropertyDefinitionToClassPropertyMapper
 
 		classProperty.setMultiple(source.isMultiple());
 		classProperty.setRequired(source.isRequired());
-
+		
 		return classProperty;
 	}
 

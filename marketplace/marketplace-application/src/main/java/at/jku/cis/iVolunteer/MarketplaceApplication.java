@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -19,25 +19,22 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 @SpringBootApplication
 public class MarketplaceApplication {
 
-	@Bean
-	@Primary
-	public RestTemplate produceRestTemplate() {
-		return new RestTemplate();
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(MarketplaceApplication.class, args);
-	}
-
-	// does not work - find better solution @Alex -- fixed --- kinda; maybe use
-	// array or List of repositories instead
-
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private DerivationRuleRepository derivationRuleRepository;
+
+	public static void main(String[] args) {
+		SpringApplication.run(MarketplaceApplication.class, args);
+	}
+
+	@Bean
+	@Primary
+	public RestTemplate produceRestTemplate() {
+		return new RestTemplate();
+	}
 
 	@PreDestroy
 	public void onExit() {

@@ -17,6 +17,8 @@ public class ClassProperty<T> {
 	
 	private List<T> defaultValues = new ArrayList<>();
 	private List<T> allowedValues = new ArrayList<>();
+	
+	private String unit;
 
 	private PropertyType type;
 	private boolean multiple;
@@ -26,6 +28,9 @@ public class ClassProperty<T> {
 	private boolean required;
 	
 	private int position;
+	
+	private boolean visible;
+	private int tabId;
 	
 	
 
@@ -65,6 +70,13 @@ public class ClassProperty<T> {
 
 	public void setAllowedValues(List<T> allowedValues) {
 		this.allowedValues = allowedValues;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public PropertyType getType() {
@@ -123,5 +135,23 @@ public class ClassProperty<T> {
 	public void setPropertyConstraints(List<PropertyConstraint<Object>> propertyConstraints) {
 		this.propertyConstraints = propertyConstraints;
 	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
+	}
+	
+	
 
 }

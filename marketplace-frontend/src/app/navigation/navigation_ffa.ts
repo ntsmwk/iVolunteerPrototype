@@ -51,4 +51,13 @@ export const navigation_ffa = [
     icon: "share-square",
     url: "/main/rules/all",
   },
+  {
+    'id': 'matching-configurator',
+    'title': 'Matching Configurator',
+    'type': 'item',
+    'icon': 'cogs',
+    'url': '/main/matching-configurator/'
+  },
+
+  
 ];

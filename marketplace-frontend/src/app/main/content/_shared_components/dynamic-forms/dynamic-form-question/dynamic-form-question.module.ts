@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-//import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-
 
 import { FuseSharedModule } from "@fuse/shared.module";
 import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
-//import { DynamicFormModule } from "../dynamic-form/dynamic-form.module";
 import { GermanDateAdapter } from '../../../_adapter/german-date-adapter';
-import { DynamicFormErrorModule } from "../dynamic-form-error/dynamic-form-error.module";
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -31,7 +27,6 @@ import {
 } from '@angular/material';
 import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
 
-
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule,
@@ -44,7 +39,6 @@ import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
     MultipleEnumModule,
 
     FuseSharedModule,
-    DynamicFormErrorModule
   ],
   declarations: [DynamicFormQuestionComponent],
   exports: [DynamicFormQuestionComponent],

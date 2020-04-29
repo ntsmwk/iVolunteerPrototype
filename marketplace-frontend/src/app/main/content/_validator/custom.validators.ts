@@ -1,6 +1,6 @@
-import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup, FormControl } from "@angular/forms";
-import { isNullOrUndefined } from "util";
-import { QuestionBase } from "../_model/dynamic-forms/questions";
+import { ValidatorFn, AbstractControl, ValidationErrors, FormGroup, FormControl } from '@angular/forms';
+import { isNullOrUndefined } from 'util';
+import { QuestionBase } from '../_model/dynamic-forms/questions';
 
 
 /**
@@ -19,7 +19,7 @@ export function requiredOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
+            console.log('at least one key is not avaiable');
             return null;
         }
 
@@ -88,7 +88,7 @@ export function maxOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
+            console.log('at least one key is not avaiable');
             return null;
         }
 
@@ -146,7 +146,7 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
         const containsKeyOther = !isNullOrUndefined(control.get(keyOther));
 
         if (!containsKeyThis || !containsKeyOther) {
-            console.log("at least one key is not avaiable");
+            console.log('at least one key is not avaiable');
             return null;
         }
 
@@ -199,11 +199,11 @@ export function minOther(keyThis: string, keyOther: string): ValidatorFn {
 export function maxOtherNew(form: FormGroup, keyThis: string, mode: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
 
-        let thisValue = form.value[keyThis];
+        const thisValue = form.value[keyThis];
 
         let otherValue: number;
-        if (mode == 'aussen') {
-            let choices: number[] = [];
+        if (mode === 'aussen') {
+            const choices: number[] = [];
 
             if (!isNullOrUndefined(form.value['21'])) {
                 choices.push(form.value['21']);
@@ -227,9 +227,9 @@ export function maxOtherNew(form: FormGroup, keyThis: string, mode: string): Val
             otherValue = Math.max(...choices);
             // console.log(choices);
             // console.log(otherValue);
-        } else if (mode == 'innen') {
+        } else if (mode === 'innen') {
 
-            let choices: number[] = [];
+            const choices: number[] = [];
 
             if (!isNullOrUndefined(form.value['20'])) {
                 choices.push(form.value['20']);
@@ -248,7 +248,7 @@ export function maxOtherNew(form: FormGroup, keyThis: string, mode: string): Val
             }
 
             if (!isNullOrUndefined(form.value['80'])) {
-                for (let v of form.controls['80'].value) {
+                for (const v of form.controls['80'].value) {
                     if (!isNullOrUndefined(v)) {
                         choices.push(v);
                     }
@@ -295,7 +295,7 @@ export function maxOtherNew(form: FormGroup, keyThis: string, mode: string): Val
 }
 
 
-//taken from angular validators file
+// taken from angular validators file
 function isEmptyInputValue(value: any): boolean {
     // we don't check for string here so it also works with arrays
     return value == null || value.length === 0;

@@ -1,0 +1,14 @@
+
+<div fxLayout="row" fxLayoutAlign="start start" #menubarContainer id="menubarContainer" style="border-bottom: solid 1px rgb(160, 160, 160)"> 
+  <div *ngFor="let item of rootMenuItems">
+    <div style="padding-right: 5px; padding-left: 5px"> </div>
+    <div class="menuitem" (click)="openSubmenu($event, item.id)">{{item.label}}</div>
+  </div>
+</div>
+
+<div #submenuContainer id="submenuContainer" style="border: solid 1px rgb(160, 160, 160)">
+
+  <div *ngFor="let item of subMenuItems">
+      <div class="menuitem" *ngIf="currentRootId == item.rootId" (click)="this[item.clickAction]($event, item)">{{item.label}}</div>
+  </div>
+</div>

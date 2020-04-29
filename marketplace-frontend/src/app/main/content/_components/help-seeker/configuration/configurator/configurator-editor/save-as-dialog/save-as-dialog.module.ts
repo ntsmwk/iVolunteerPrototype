@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SaveAsDialogComponent } from './save-as-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
@@ -9,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { ConfirmClassConfigurationSaveDialogComponent } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
 
 @NgModule({
   imports: [
@@ -22,9 +22,9 @@ import { MatTableModule } from '@angular/material/table';
     MatFormFieldModule,
     MatIconModule,
 
-    
+
   ],
-  declarations: [SaveAsDialogComponent],
-  exports: [SaveAsDialogComponent]
+  declarations: [ConfirmClassConfigurationSaveDialogComponent],
+  exports: [ConfirmClassConfigurationSaveDialogComponent]
 })
-export class SaveAsDialogModule { }
+export class ConfirmClassConfigurationSaveDialogModule { }

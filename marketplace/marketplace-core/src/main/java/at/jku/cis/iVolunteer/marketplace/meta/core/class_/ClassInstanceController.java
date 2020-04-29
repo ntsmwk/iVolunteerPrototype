@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace.hash.Hasher;
+import at.jku.cis.iVolunteer.marketplace.security.LoginService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
@@ -29,6 +31,7 @@ public class ClassInstanceController {
 	@Autowired private ClassInstanceMapper classInstanceMapper;
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -55,6 +58,33 @@ public class ClassInstanceController {
 
 		return ci;
 	}
+	@Autowired private LoginService loginService;
+	@Autowired private Hasher hasher;
+	
+	@GetMapping("/meta/core/class/instance/all")
+	private List<ClassInstance> getAllClassInstances() {
+		return classInstanceRepository.findAll();
+	}
+
+	@GetMapping("/meta/core/class/instance/{id}")
+	private ClassInstance getClassInstanceById(@PathVariable("id") String id) {
+		return classInstanceRepository.findOne(id);
+	}
+
+	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
+	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+			@RequestParam(value = "org", required = false) String organisation) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
+				organisation == null ? "FF" : organisation);
+		if (!organisation.equals("MV")) {
+			for (ClassDefinition cd : classDefinitions) {
+				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+			}
+		}
+		return classInstances;
+	}
+	
 
 	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
 	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
@@ -121,10 +151,6 @@ public class ClassInstanceController {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
 
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInUserRepository(inUserRepository);
-		}
-
 		return classInstanceRepository.save(classInstances);
 	}
 
@@ -140,17 +166,30 @@ public class ClassInstanceController {
 		}
 
 		return classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
+		return classInstanceRepository.save(classInstances);
 	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
-
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInIssuerInbox(true);
-			classInstance.setInUserRepository(false);
-		}
 		return classInstanceRepository.save(classInstances);
+	}
 
+	@PostMapping("/meta/core/class/instance/{id}/new")
+	private ClassInstance createNewClassInstanceById() {
+		// TODO
+		return null;
+	}
+
+	@PutMapping("/meta/core/class/instance/{id}/update")
+	private ClassInstance updateClassInstance() {
+		// TODO
+		return null;
+	}
+
+	@DeleteMapping("/meta/core/class/instance/{id}/delete")
+	private void deleteClassInstance(@PathVariable("id") String id) {
+		this.classInstanceRepository.delete(id);
+		
 	}
 
 }

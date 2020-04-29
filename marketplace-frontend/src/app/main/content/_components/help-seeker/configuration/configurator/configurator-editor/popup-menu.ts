@@ -1,9 +1,11 @@
 import { mxgraph } from 'mxgraph';
-import { myMxCell, ConfiguratorEditorComponent } from './configurator-editor.component';
 import { isNullOrUndefined } from 'util';
-import { ClassDefinition } from 'app/main/content/_model/meta/Class';
-import { PropertyItem } from 'app/main/content/_model/meta/Property';
-import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/Relationship';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { PropertyItem } from 'app/main/content/_model/meta/property';
+import { Relationship, AssociationCardinality, Association } from 'app/main/content/_model/meta/relationship';
+import { ClassConfiguratorComponent } from 'app/main/content/configurator/class-configurator/class-configurator.component';
+import { MyMxCellType, MyMxCell } from 'app/main/content/configurator/myMxCell';
+
 
 declare var require: any;
 
@@ -14,9 +16,9 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 export class EditorPopupMenu {
   graph: mxgraph.mxGraph;
-  editorInstance: ConfiguratorEditorComponent;
+  editorInstance: ClassConfiguratorComponent;
 
-  constructor(graph: mxgraph.mxGraph, editorInstance: ConfiguratorEditorComponent) {
+  constructor(graph: mxgraph.mxGraph, editorInstance: ClassConfiguratorComponent) {
     this.graph = graph;
     this.editorInstance = editorInstance;
   }
@@ -29,19 +31,21 @@ export class EditorPopupMenu {
     });
   }
 
-  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: myMxCell, evt) {
+  private createPopupMenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, cell: MyMxCell, evt) {
     const outer = this;
 
-    if (cell != null) {
+    if (cell != null && cell.cellType !== MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON &&
+      cell.cellType !== MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON && cell.cellType !== MyMxCellType.OPTIONS_ICON) {
+
       if (cell.isEdge()) {
 
-        if (cell.cellType == 'association') {
-          let item1 = menu.addItem('Set Cardinality', null, null, null, null, true, false);
+        if (cell.cellType === MyMxCellType.ASSOCIATION) {
+          const item1 = menu.addItem('Set Cardinality', null, null, null, null, true, false);
 
           menu.addSeparator(null, true);
           // on error: define "	var td;" in mxgraph/build.js line 15755
-          let nestedMenu1 = menu.addItem(`"start" Node (${cell.children[0].value})`, null, null, null, null, null, null);
-          let nestedMenu2 = menu.addItem(`"end" Node (${cell.children[1].value})`, null, null, null, null, null, null);
+          const nestedMenu1 = menu.addItem(`"start" Node (${cell.children[0].value})`, null, null, null, null, null, null);
+          const nestedMenu2 = menu.addItem(`"end" Node (${cell.children[1].value})`, null, null, null, null, null, null);
 
           this.addCardinalitiesToSubmenu(graph, menu, nestedMenu1, cell, 0);
           this.addCardinalitiesToSubmenu(graph, menu, nestedMenu2, cell, 1);
@@ -51,116 +55,93 @@ export class EditorPopupMenu {
         }
       } else if (cell.isVertex()) {
 
-        if (cell.cellType == 'associationLabel') {
-          let item1 = menu.addItem('Set Cardinality', null, function () {
+        if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
+          const item1 = menu.addItem('Set Cardinality', null, function () {
             console.log(cell);
 
           }, null, null, true, false);
 
           this.addCardinalitiesToSubmenu(graph, menu, undefined, cell, undefined);
           menu.addSeparator(null, false);
-        }
-
-        else {
-          // var showPropertiesItem = menu.addItem("Show Properties", null, function () {
-
-          //   outer.toggleRightSidebar(true);
-          //   outer.rightSidebarContext = 'properties';
-
-          //   outer.currentClass = outer.configurableClasses.find((c: ClassDefinition) => {
-          //     return c.id == cell.id;
-          //   });
-          // }, null, null, true, true);
-
+        } else {
           const createClassInstanceItem = menu.addItem('Create new Instance', null, function () {
             outer.editorInstance.createClassInstanceClicked([cell]);
           }, null, null, true, true);
 
-          const exportJsonItem = menu.addItem('Export JSON', null, function () {
-            outer.editorInstance.exportJsonClicked(cell);
-          }, null, null, true, true);
+          // const exportJsonItem = menu.addItem('Export JSON', null, function () {
+          //   outer.editorInstance.exportJsonClicked(cell);
+          // }, null, null, true, true);
 
         }
 
-
         if (cell.root) {
-
-          let rootItem = menu.addItem('unset as Root', null, function () {
+          const rootItem = menu.addItem('unset as Root', null, function () {
             cell.root = false;
           }, null, null, null, null);
-
         } else if (!cell.root) {
-          let rootItem = menu.addItem('set as Root', null, function () {
+          const rootItem = menu.addItem('set as Root', null, function () {
             cell.root = true;
           }, null, null, null, null);
-
-
         }
       }
       // Options present in every cell (vertexes as well as edges)
-      let testItem = menu.addItem('Print cell to console', null, function () {
-        if (cell.isVertex()) {
-          console.log(cell);
-        } else {
-          console.log(cell);
-        }
+      const testItem = menu.addItem('Print cell to console', null, function () {
+        console.log(cell);
       }, null, null, true, true);
 
-      let deleteItem = menu.addItem('Delete', null, function () {
-
+      const deleteItem = menu.addItem('Delete', null, function () {
         graph.getModel().beginUpdate();
-
         try {
-
           // remove property from Class in Array
-          if (cell.cellType == 'property') {
-            const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
-              return c.id == cell.getParent().getId();
+          if (cell.cellType === MyMxCellType.PROPERTY) {
+            const classIndex = outer.editorInstance.classDefinitions.findIndex((c: ClassDefinition) => {
+              return c.id === cell.getParent().getId();
             });
-            const remIndex = outer.editorInstance.configurableClasses[classIndex].properties.findIndex((p: PropertyItem) => {
-              return p.id == cell.propertyId;
+            const remIndex = outer.editorInstance.classDefinitions[classIndex].properties.findIndex((p: PropertyItem) => {
+              return p.id === cell.propertyId;
             });
 
             if (remIndex >= 0) {
-              outer.editorInstance.configurableClasses[classIndex].properties.splice(remIndex, 1);
+              outer.editorInstance.classDefinitions[classIndex].properties.splice(remIndex, 1);
             }
             outer.editorInstance.redrawContent(undefined);
 
-
             // remove Class from Array
-          } else if (cell.cellType == 'class') {
+          } else if (cell.cellType === MyMxCellType.CLASS) {
 
-            const classIndex = outer.editorInstance.configurableClasses.findIndex((c: ClassDefinition) => {
-              return c.id == cell.getId();
+            const classIndex = outer.editorInstance.classDefinitions.findIndex((c: ClassDefinition) => {
+              return c.id === cell.getId();
             });
 
             if (classIndex >= 0) {
-              const deleted = outer.editorInstance.configurableClasses.splice(classIndex, 1);
+              const deleted = outer.editorInstance.classDefinitions.splice(classIndex, 1);
               // add to delete Queue
               outer.editorInstance.deletedClassIds.push(deleted.pop().id);
             }
             graph.removeCells([cell], false);
 
-
             // remove Relationship when clicking on a Label
-          } else if (cell.cellType == 'associationLabel') {
+          } else if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
             const parent = cell.getParent();
 
             outer.graph.getModel().remove(parent);
 
             const relationshipIndex = outer.editorInstance.relationships.findIndex((c: Relationship) => {
-              return c.id == parent.id;
+              return c.id === parent.id;
             });
 
             const deleted = outer.editorInstance.relationships.splice(relationshipIndex, 1);
             outer.editorInstance.deletedRelationshipIds.push(deleted.pop().id);
 
             // remove relationship
-          } else if (cell.cellType == 'association' || cell.cellType == 'inheritance') {
+          } else if (
+            cell.cellType === MyMxCellType.ASSOCIATION || cell.cellType === MyMxCellType.INHERITANCE ||
+            cell.cellType === MyMxCellType.AGGREGATION || cell.cellType === MyMxCellType.COMPOSITION) {
+
             graph.getModel().remove(cell);
 
             const relationshipIndex = outer.editorInstance.relationships.findIndex((c: Relationship) => {
-              return c.id == cell.id;
+              return c.id === cell.id;
             });
 
             const deleted = outer.editorInstance.relationships.splice(relationshipIndex, 1);
@@ -178,10 +159,10 @@ export class EditorPopupMenu {
 
       }, null, null, true, true);
 
-      if (cell.cellType != 'property') {
-        let copyItem = menu.addItem('Duplicate', null, function () {
+      if (cell.cellType !== MyMxCellType.PROPERTY) {
+        const copyItem = menu.addItem('Duplicate', null, function () {
           if (cell.isVertex()) {
-            if (cell.cellType == 'associationLabel') {
+            if (cell.cellType === MyMxCellType.ASSOCIATION_LABEL) {
               duplicateEdge(cell.getParent());
             } else {
               duplicateVertex(cell);
@@ -193,7 +174,7 @@ export class EditorPopupMenu {
           }
 
           function duplicateEdge(cell: mxgraph.mxCell) {
-            let dupe: myMxCell = graph.getModel().cloneCell(cell);
+            const dupe: MyMxCell = graph.getModel().cloneCell(cell);
             if (!isNullOrUndefined(cell.geometry.points)) {
               dupe.getGeometry().points[0].x = dupe.getGeometry().sourcePoint.x = cell.getGeometry().points[0].x + 20;
               dupe.getGeometry().points[0].y = dupe.getGeometry().sourcePoint.y = cell.getGeometry().points[0].y + 20;
@@ -211,7 +192,7 @@ export class EditorPopupMenu {
           }
 
           function duplicateVertex(cell: mxgraph.mxCell) {
-            let dupe: myMxCell = graph.getModel().cloneCell(cell);
+            const dupe: MyMxCell = graph.getModel().cloneCell(cell);
             dupe.getGeometry().x += 20;
             dupe.getGeometry().y += 20;
             dupe.newlyAdded = true;
@@ -230,7 +211,7 @@ export class EditorPopupMenu {
     }
   }
 
-  addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: myMxCell, childId: 0 | 1) {
+  addCardinalitiesToSubmenu(graph: mxgraph.mxGraph, menu: mxgraph.mxPopupMenu, parent: HTMLTableRowElement, cell: MyMxCell, childId: 0 | 1) {
     menu.addItem(AssociationCardinality.ZEROSTAR, null, function () {
       setCellValue(cell, childId, 'ZEROSTAR');
     }, parent, null, null, null);
@@ -249,7 +230,7 @@ export class EditorPopupMenu {
 
 
     const outer = this;
-    function setCellValue(cell: myMxCell, childId: 0 | 1, parameter: string) {
+    function setCellValue(cell: MyMxCell, childId: 0 | 1, parameter: string) {
       // updateCardinality(cell, childId, parameter);
 
       try {
@@ -269,17 +250,12 @@ export class EditorPopupMenu {
       }
     }
 
-    function updateCardinality(associationCell: myMxCell, childId: 0 | 1, parameter: string) {
+    function updateCardinality(associationCell: MyMxCell, childId: 0 | 1, parameter: string) {
       (<Association>outer.editorInstance.relationships.find((r: Association) => {
-        return r.id == associationCell.id;
+        return r.id === associationCell.id;
       }))['param' + (childId + 1)] = parameter;
       console.log(outer.editorInstance.relationships);
 
     }
   }
-
-
-
-
-
 }

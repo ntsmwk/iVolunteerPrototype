@@ -253,3 +253,10 @@ $primary: #1a237e;
   font-size: 16px;
   text-align: center;
 }
+.mat-expansion-panel-content > .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.mat-menu-panel {
+  min-width: 0 !important;
+}

@@ -34,9 +34,12 @@ export const navigation_mvs = [
     'id': 'configurator',
     'title': 'Einträge konfigurieren',
     'type': 'item',
-    'icon':'cogs',
-    'url': '/main/configurator'
+    'icon': 'cogs',
+    'url': '/main/configurator/'
   },
+  
+
+
   {
     'id': 'rule-configurator',
     'title': 'Einträge ableiten',

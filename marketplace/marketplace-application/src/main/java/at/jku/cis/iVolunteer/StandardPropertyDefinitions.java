@@ -119,60 +119,119 @@ public class StandardPropertyDefinitions {
 //
 //	}
 
-//	public List<PropertyDefinition<Object>> getAllFlexProdProperties() {
-//		List<PropertyDefinition<?>> list = new LinkedList<>();
-//
-//		list.add(new MaxGluehtemperaturProperty());
-//		list.add(new VerfuegbaresSchutzgasProperty());
-//		list.add(new BauartProperty());
-//		list.add(new TemperaturhomogenitaetProperty());
-//		list.add(new KaltgewalztesMaterialZulaessigProperty());
-//		list.add(new WarmgewalztesMaterialZulaessigProperty());
-//
-//		list.add(new BundEntfettenProperty());
-//
-//		list.add(new InnendurchmesserProperty());
-//		list.add(new AussendurchmesserProperty());
-//		list.add(new HoeheProperty());
-//
-//		list.add(new GluehzeitProperty());
-//		list.add(new DurchsatzProperty());
-//
-//		list.add(new MoeglicheInnendurchmesserProperty());
-//		list.add(new MaxAussendurchmesserProperty());
-//		list.add(new MaxChargierhoeheProperty());
-//
-//		list.add(new CQI9Property());
-//		list.add(new TUSProperty());
-//
-//		list.add(new LetzteWartungProperty());
-//		list.add(new WartungsintervallProperty());
-//
-//		list.add(new BandbreiteProperty());
-//		list.add(new BandstaerkeProperty());
-//
-//		list.add(new WarmgewalztProperty());
-//		list.add(new KaltgewalztProperty());
-//
-//		list.add(new StreckgrenzeProperty());
-//		list.add(new ZugfestigkeitProperty());
-//		list.add(new DehnungProperty());
-//
-//		list.add(new GefuegeProperty());
-//
-//		list.add(new MaterialBereitgestelltProperty());
-//		list.add(new LieferortProperty());
-//		list.add(new VerpackungProperty());
-//		list.add(new TransportartProperty());
-//		list.add(new MengeProperty());
-//		list.add(new LieferdatumProperty());
-//		list.add(new IncotermsProperty());
-//
-//		list.add(new ZahlungsbedingungenProperty());
-//
-//		return new ArrayList(list);
-//
-//	}
+	public List<PropertyDefinition<Object>> getAllFlexProdProperties() {
+		List<PropertyDefinition<?>> list = new LinkedList<>();
+
+		list.add(new MaxGluehtemperaturProperty());
+		list.add(new VerfuegbaresSchutzgasProperty());
+		list.add(new BauartProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		list.add(new KaltgewalztesMaterialZulaessigProperty());
+		list.add(new WarmgewalztesMaterialZulaessigProperty());
+
+		list.add(new BundEntfettenProperty());
+
+		list.add(new InnendurchmesserProperty());
+		list.add(new AussendurchmesserProperty());
+		list.add(new HoeheProperty());
+
+		list.add(new GluehzeitProperty());
+		list.add(new DurchmesserProperty());
+		list.add(new DurchsatzProperty());
+		
+		list.add(new ChargierhilfeProperty());
+		list.add(new WalzartProperty());
+
+		list.add(new MoeglicheInnendurchmesserProperty());
+		list.add(new MaxAussendurchmesserProperty());
+		list.add(new MaxChargierhoeheProperty());
+
+		list.add(new CQI9Property());
+		list.add(new TUSProperty());
+
+		list.add(new LetzteWartungProperty());
+		list.add(new WartungsintervallProperty());
+
+		list.add(new BandbreiteProperty());
+		list.add(new BandstaerkeProperty());
+
+		list.add(new WarmgewalztProperty());
+		list.add(new KaltgewalztProperty());
+
+		list.add(new StreckgrenzeProperty());
+		list.add(new ZugfestigkeitProperty());
+		list.add(new DehnungProperty());
+
+		list.add(new GefuegeProperty());
+
+		list.add(new MaterialBereitgestelltProperty());
+		list.add(new LieferortProperty());
+		list.add(new VerpackungProperty());
+		list.add(new TransportartProperty());
+		list.add(new MengeProperty());
+		list.add(new LieferdatumProperty());
+		list.add(new IncotermsProperty());
+
+		list.add(new ZahlungsbedingungenProperty());
+
+		return new ArrayList(list);
+	}
+	
+	public List<PropertyDefinition<Object>> getNewFlexprodProperties() {
+		List<PropertyDefinition<?>> list = new LinkedList<>();
+		
+		list.add(new TitelProperty());
+		list.add(new ProdukttypProperty());
+		list.add(new MengeProperty());
+		list.add(new MinimaleMengeProperty());
+		list.add(new LieferdatumProperty());
+		list.add(new WerkstoffBereitgestelltProperty());
+		list.add(new BeschreibungZusatzinfoProperty());
+		
+		list.add(new DurchmesserInnenProperty());
+		list.add(new DurchmesserAussenProperty());
+		list.add(new HoeheProperty());
+		
+		list.add(new WerkstoffProperty());
+		list.add(new WerkstoffFreitextProperty());
+		list.add(new ZugfestigkeitProperty());
+		
+		list.add(new SchutzgasProperty());
+		list.add(new GluehreiseProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		
+		list.add(new OberflaechenqualitaetProperty());
+		list.add(new ZusaetzlicheProduktinformationenProperty());
+		
+		list.add(new IncotermsProperty());
+		list.add(new LieferortProperty());
+		list.add(new AbholortProperty());
+		list.add(new VerpackungsvorgabenProperty());
+		
+		list.add(new BandDickeProperty());
+		list.add(new BandBreiteProperty());
+		
+		list.add(new DurchmesserKronenstockProperty());
+		list.add(new MaximaldurchmesserBundProperty());
+		
+		list.add(new DurchmesserDornProperty());
+		list.add(new InnendurchmesserOfenProperty());
+		
+		list.add(new OfenHoeheProperty());
+		list.add(new MaxGluehtemperaturProperty());
+		list.add(new TemperaturhomogenitaetProperty());
+		list.add(new ErforderlicheTemperaturhomogenitaetProperty());
+		list.add(new AufheizrateProperty());
+		list.add(new AbkuehlrateProperty());
+		list.add(new MaxAnteilH2Property());
+		list.add(new KapazitaetProperty());
+		list.add(new GluehprogrammVerfuegbarProperty());
+		
+		
+		return new ArrayList(list);
+	}
+	
+	
 
 	public List<PropertyDefinition<Object>> getAll(String tenantId) {
 		List<PropertyDefinition<Object>> properties = this.getAllHeader(tenantId);
@@ -180,12 +239,14 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> mps = this.getAllMulti();
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
-//		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-
+		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
+		List<PropertyDefinition<Object>> drahtofen = this.getNewFlexprodProperties();
+		
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
-//		sps.addAll(flexProd);
+		sps.addAll(flexProd);
+		sps.addAll(drahtofen);
 
 		properties.addAll(sps);
 		return properties;
@@ -1009,6 +1070,19 @@ public class StandardPropertyDefinitions {
 		public BundEntfettenProperty() {
 			this.setName("Bund Entfetten");
 			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class ChargierhilfeProperty extends TextPropertyDefinition {
+		public ChargierhilfeProperty() {
+			this.setId("chargierhilfe");
+			this.setName("Chargierhilfe");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Konvektoren");
+			this.getAllowedValues().add("Tragerahmen");
+			this.getAllowedValues().add("Zwischenrahmen");
+			this.getAllowedValues().add("Kronenstöcke");
+			this.getAllowedValues().add("Chargierkörbe");
 		}
 	}
 

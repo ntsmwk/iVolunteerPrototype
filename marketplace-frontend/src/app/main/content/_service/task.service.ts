@@ -1,11 +1,8 @@
-import {Injectable} from '@angular/core';
-
-import {HttpClient} from '@angular/common/http';
-
-import {isNullOrUndefined} from 'util';
-
-import {Task} from '../_model/task';
-import {Marketplace} from '../_model/marketplace';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
+import { Task } from '../_model/task';
+import { Marketplace } from '../_model/marketplace';
 
 @Injectable({
   providedIn: 'root'

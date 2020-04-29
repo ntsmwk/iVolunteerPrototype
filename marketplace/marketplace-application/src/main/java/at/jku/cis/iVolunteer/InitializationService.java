@@ -9,14 +9,12 @@ import javax.annotation.PostConstruct;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
@@ -33,6 +31,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -54,6 +53,11 @@ public class InitializationService {
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
+	
+	@Autowired private ClassConfigurationController classConfigurationController;
 
 	@PostConstruct
 	public void init() {
@@ -253,6 +257,7 @@ public class InitializationService {
 	private void addPersonBadgeProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("badgeID", PropertyType.TEXT, tenantId));
 	}
+	
 
 	private void addPersonCertificateProperties(List<PropertyDefinition<Object>> propertyDefinitions, String tenantId) {
 		propertyDefinitions.add(new PropertyDefinition<Object>("certificateID", PropertyType.TEXT, tenantId));

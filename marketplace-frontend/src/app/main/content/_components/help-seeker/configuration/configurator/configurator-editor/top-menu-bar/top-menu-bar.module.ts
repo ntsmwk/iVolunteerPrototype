@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EditorTopMenuBarComponent } from './top-menu-bar.component';
 import { MatCommonModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -11,11 +10,12 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { DialogFactoryModule } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.module';
 import { ConfirmDialogComponent } from 'app/main/content/_shared_components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModule } from 'app/main/content/_shared_components/dialogs/confirm-dialog/confirm-dialog.module';
+import { EditorTopMenuBarComponent } from 'app/main/content/configurator/class-configurator/top-menu-bar/top-menu-bar.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    
+
     MatCommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -31,7 +31,7 @@ import { ConfirmDialogModule } from 'app/main/content/_shared_components/dialogs
 
   declarations: [EditorTopMenuBarComponent],
   exports: [EditorTopMenuBarComponent],
-  entryComponents:[ConfirmDialogComponent]
+  entryComponents: [ConfirmDialogComponent]
 
 
 })

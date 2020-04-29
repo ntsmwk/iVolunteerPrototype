@@ -1,16 +1,15 @@
 import { Component, OnInit, Input, RootRenderer, DoCheck } from '@angular/core';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
-import { ConfiguratorEditorComponent, myMxCell } from '../configurator-editor.component';
 import { isNullOrUndefined } from 'util';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
 import { ChildActivationEnd } from '@angular/router';
+import { MyMxCell } from 'app/main/content/configurator/myMxCell';
 
 export interface GraphNode {
   id: string;
   name: string;
   type: string;
-  cell: myMxCell;
+  cell: MyMxCell;
   visible: boolean;
 
   children?: GraphNode[];
@@ -44,7 +43,7 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
     if (this.editorInstance.modelUpdated) {
       this.constructJsonFromGraph();
       this.editorInstance.modelUpdated = false;
-    } 
+    }
 
     this.oldEditorInstance = Object.assign({}, this.editorInstance);
   }
@@ -81,7 +80,7 @@ export class EditorTreeViewComponent implements OnInit, DoCheck {
           return cell.id == edge.target.id;
         });
         if (!isNullOrUndefined(child)) {
-          let length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child, visible: child.isVisible()});
+          let length = node.children.push({ id: child.id, name: child.value, type: 'node', cell: child, visible: child.isVisible() });
           node.children[length - 1].children = this.addChildrenToGraphNode(node.children[length - 1], vertices);
         }
       }
