@@ -4,7 +4,6 @@ import { MatTableDataSource } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
 import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
 import { LoginService } from "../../../../_service/login.service";
-import { CoreMarketplaceService } from "../../../../_service/core-marketplace.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
@@ -197,7 +196,7 @@ export class DashboardVolunteerComponent implements OnInit {
     this.filteredClassInstances = this.localClassInstances.concat(
       this.marketplaceClassInstances.filter(mp => this.localClassInstances.map(lo => lo.id).indexOf(mp.id) < 0));
 
-    this.filteredClassInstances.filter(ci => {
+    this.filteredClassInstances = this.filteredClassInstances.filter(ci => {
       return this.selectedTenants.findIndex(t => t.id === ci.tenantId) >= 0;
     });
 

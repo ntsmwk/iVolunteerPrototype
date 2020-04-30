@@ -122,9 +122,10 @@ export class ManagementSummaryComponent implements OnInit {
     }
 
     // TODO: philipp filter out classInstances missing the reqired fields
-    // current assumption: if existent the format is valid
+    // TODO: check if data is valid!
+    
     // console.error('before', this.classInstanceDTOs.length);
-    this.classInstanceDTOs.filter(ci => {
+    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
       return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
         ci.taskType3 && ci.duration && ci.location && ci.rank)
     });

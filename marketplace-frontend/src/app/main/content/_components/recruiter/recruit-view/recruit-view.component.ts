@@ -101,7 +101,6 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       .then((tenantId: string) => {
         this.tenantId.push(tenantId);
 
-        // TODO Philipp: hardcoded user querry
         this.volunteerService
           .findByName(this.marketplace, "mweixlbaumer")
           .toPromise()
