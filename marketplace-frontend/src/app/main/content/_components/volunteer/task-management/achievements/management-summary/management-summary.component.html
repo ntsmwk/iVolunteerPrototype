@@ -21,7 +21,7 @@
                     <td>{{ tenant.value.homepage }}</td>
                   </tr>
                   <tr>
-                    <td>Mitglied seit:</td>
+                    <td>Daten seit:</td>
                     <td>{{ getMemberSince(tenant.value.id) }}</td>
                   </tr>
                 </tbody>
@@ -100,6 +100,8 @@
       <div style="width: 100%;">
         <h1 class="engagement">Jahresvergleich Tätigkeiten</h1>
         <div style="height: 10px;"></div>
+
+        <div *ngIf="uniqueYears.length >= 2">
         <div fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="formFieldComparison">
             <mat-label>Vergleichsjahr</mat-label>
@@ -123,8 +125,13 @@
           </ngx-charts-bar-vertical-2d>
         </div>
       </div>
+      </div>
     </div>
   </div>
+
+  <p *ngIf="timeout && uniqueYears.length < 2" style="margin-left: 40px;">
+    Kein Vergleich möglich, da zu wenig Daten über mehrere Jahre vorhanden sind!
+  </p>
 
   <p *ngIf="timeout && tenantMap.size === 0" class="alert alert-info">
     <i class="fas fa-exclamation-circle"></i> &nbsp; Noch keiner Organisation

@@ -47,7 +47,7 @@ export class ManagementSummaryComponent implements OnInit {
   marketplace: any = [];
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
-  uniqueYears: any[];
+  uniqueYears: any[] = [];
   tenantMap: Map<String, Tenant>;
 
   durationTotal: any[] = [];
