@@ -1,9 +1,9 @@
 import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/class';
-import { Relationship, RelationshipType } from '../../../../_model/meta/relationship';
+import { Relationship, RelationshipType, Inheritance } from '../../../../_model/meta/relationship';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { isNullOrUndefined } from 'util';
 import { MatchingOperatorType } from '../../../../_model/matching';
-import { PropertyType } from '../../../../_model/meta/property';
+import { PropertyType, ClassProperty } from '../../../../_model/meta/property';
 
 
 const relationshipPalettes = {
@@ -163,48 +163,180 @@ export class CConstants {
 
 export class CUtils {
 
-  public static getStandardObjects(marketplaceId: string, objectIdService: ObjectIdService, rootLabel?: string)
+  public static getStandardObjects(marketplaceId: string, tenantId: string, objectIdService: ObjectIdService)
     : { classDefinitions: ClassDefinition[], relationships: Relationship[] } {
-
     const classDefinitions: ClassDefinition[] = [];
     const relationships: Relationship[] = [];
 
 
-    const root = new ClassDefinition();
-    root.id = objectIdService.getNewObjectId();
-    root.marketplaceId = marketplaceId;
+    const fwPassEintrag = new ClassDefinition();
+    fwPassEintrag.id = objectIdService.getNewObjectId();
+    fwPassEintrag.tenantId = tenantId;
+    fwPassEintrag.marketplaceId = marketplaceId;
+    fwPassEintrag.name = "Freiwilligenpass-\nEintrag";
+    fwPassEintrag.root = true;
+    fwPassEintrag.classArchetype = ClassArchetype.ROOT;
 
-    if (!isNullOrUndefined(rootLabel)) {
-      root.name = rootLabel;
-    } else {
-      root.name = '<Maschninen-\nName>';
-    }
+    fwPassEintrag.properties = [];
 
-    root.root = true;
-    root.classArchetype = ClassArchetype.ROOT;
+    let idProperty = new ClassProperty<string>();
+    idProperty.name = 'id';
+    idProperty.id = objectIdService.getNewObjectId();
+    idProperty.type = PropertyType.TEXT;
+    fwPassEintrag.properties.push(idProperty);
 
-    root.properties = [];
 
-    classDefinitions.push(root);
+    let nameProperty = new ClassProperty<string>();
+    nameProperty.name = 'name';
+    nameProperty.id = objectIdService.getNewObjectId();
+    nameProperty.type = PropertyType.TEXT;
+    fwPassEintrag.properties.push(nameProperty);
 
-    const flexProdclass = new ClassDefinition();
-    flexProdclass.id = objectIdService.getNewObjectId();
-    flexProdclass.marketplaceId = marketplaceId;
-    flexProdclass.name = '<Komponenten-\nName>';
-    flexProdclass.root = false;
-    flexProdclass.classArchetype = ClassArchetype.FLEXPROD;
 
-    flexProdclass.properties = [];
+    let evidenceProperty = new ClassProperty<string>();
+    evidenceProperty.name = 'evidenz';
+    evidenceProperty.id = objectIdService.getNewObjectId();
+    evidenceProperty.type = PropertyType.TEXT;
+    fwPassEintrag.properties.push(evidenceProperty);
 
-    classDefinitions.push(flexProdclass);
+    classDefinitions.push(fwPassEintrag);
 
-    const r1 = new Relationship();
+    let task = new ClassDefinition();
+    task.id = objectIdService.getNewObjectId();
+    task.tenantId = tenantId;
+    task.marketplaceId = marketplaceId;
+    task.name = "Tätigkeit";
+    task.root = false;
+
+    task.classArchetype = ClassArchetype.TASK;
+
+    classDefinitions.push(task);
+
+    let vonProperty = new ClassProperty<Date>();
+    vonProperty.name = 'Starting Date';
+    vonProperty.id = 'objectIdService.getNewObjectId();';
+    vonProperty.type = PropertyType.DATE;
+    task.properties.push(vonProperty);
+
+    let bisProperty = new ClassProperty<Date>();
+    bisProperty.name = 'End Date';
+    bisProperty.id = objectIdService.getNewObjectId();;
+    bisProperty.type = PropertyType.DATE;
+    task.properties.push(bisProperty);
+
+    let r1 = new Inheritance();
     r1.id = objectIdService.getNewObjectId();
-    r1.relationshipType = RelationshipType.AGGREGATION;
-    r1.source = root.id;
-    r1.target = flexProdclass.id;
-
+    r1.relationshipType = RelationshipType.INHERITANCE;
+    r1.target = task.id;
+    r1.source = fwPassEintrag.id;
+    r1.superClassId = r1.source;
     relationships.push(r1);
+
+    let competence = new ClassDefinition();
+    competence.id = objectIdService.getNewObjectId();
+    competence.tenantId = tenantId;
+    competence.marketplaceId = marketplaceId;
+    competence.name = 'Kompetenz';
+    competence.root = false;
+    competence.classArchetype = ClassArchetype.COMPETENCE;
+    classDefinitions.push(competence);
+
+    let r2 = new Inheritance();
+    r2.id = objectIdService.getNewObjectId();
+    r2.relationshipType = RelationshipType.INHERITANCE;
+    r2.target = competence.id;
+    r2.source = fwPassEintrag.id;
+    r2.superClassId = r2.source;
+    relationships.push(r2);
+
+    let achievement = new ClassDefinition();
+    achievement.id = objectIdService.getNewObjectId();
+    achievement.tenantId = tenantId;
+    achievement.marketplaceId = marketplaceId;
+    achievement.name = 'Verdienst';
+    achievement.root = false;
+    achievement.classArchetype = ClassArchetype.ACHIEVEMENT;
+    classDefinitions.push(achievement);
+
+    let r3 = new Inheritance();
+    r3.id = objectIdService.getNewObjectId();
+    r3.relationshipType = RelationshipType.INHERITANCE;
+    r3.target = achievement.id;
+    r3.source = fwPassEintrag.id;
+    r3.superClassId = r3.source;
+    relationships.push(r3);
+
+    let funktion = new ClassDefinition();
+    funktion.id = objectIdService.getNewObjectId();
+    funktion.tenantId = tenantId;
+    funktion.marketplaceId = marketplaceId;
+    funktion.name = 'Funktion';
+    funktion.root = false;
+    funktion.classArchetype = ClassArchetype.FUNCTION;
+    classDefinitions.push(funktion);
+
+    let r4 = new Inheritance();
+    r4.id = objectIdService.getNewObjectId();
+    r4.relationshipType = RelationshipType.INHERITANCE;
+    r4.target = funktion.id;
+    r4.source = fwPassEintrag.id;
+    r4.superClassId = r4.source;
+    relationships.push(r4);
+
+    let myTask = new ClassDefinition();
+    myTask.id = objectIdService.getNewObjectId();
+    myTask.tenantId = tenantId;
+    myTask.marketplaceId = marketplaceId;
+    myTask.name = 'myTask';
+    myTask.root = false;
+    myTask.classArchetype = ClassArchetype.TASK;
+
+    myTask.properties = [];
+    let tt1 = new ClassProperty<string>();
+    tt1.name = 'taskType1';
+    tt1.id = objectIdService.getNewObjectId();
+    tt1.type = PropertyType.TEXT;
+    myTask.properties.push(tt1);
+
+    let tt2 = new ClassProperty<string>();
+    tt2.name = 'taskType2';
+    tt2.id = objectIdService.getNewObjectId();
+    tt2.type = PropertyType.TEXT;
+    myTask.properties.push(tt2);
+
+    let tt3 = new ClassProperty<string>();
+    tt3.name = 'taskType3';
+    tt3.id = objectIdService.getNewObjectId();
+    tt3.type = PropertyType.TEXT;
+    myTask.properties.push(tt3);
+
+    let location = new ClassProperty<string>();
+    location.name = 'Location';
+    location.id = objectIdService.getNewObjectId();
+    location.type = PropertyType.TEXT;
+    myTask.properties.push(location);
+
+    let rank = new ClassProperty<string>();
+    rank.name = 'rank';
+    rank.id = objectIdService.getNewObjectId();
+    rank.type = PropertyType.TEXT;
+    myTask.properties.push(rank);
+
+    let duration = new ClassProperty<number>();
+    duration.name = 'rank';
+    duration.id = objectIdService.getNewObjectId();
+    duration.type = PropertyType.FLOAT_NUMBER;
+    myTask.properties.push(duration);
+
+    classDefinitions.push(myTask);
+
+    let r5 = new Inheritance();
+    r5.id = objectIdService.getNewObjectId();
+    r5.relationshipType = RelationshipType.INHERITANCE;
+    r5.target = myTask.id;
+    r5.source = task.id;
+    r5.superClassId = r5.source;
+    relationships.push(r5);
 
     return { classDefinitions: classDefinitions, relationships: relationships };
 

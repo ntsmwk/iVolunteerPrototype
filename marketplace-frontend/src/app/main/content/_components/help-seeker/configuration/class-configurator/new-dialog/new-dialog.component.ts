@@ -20,6 +20,7 @@ export interface NewClassConfigurationDialogData {
   classConfiguration: ClassConfiguration;
   relationships: Relationship[];
   classDefinitions: ClassDefinition[];
+  tenantId: string;
 }
 
 @Component({
@@ -52,7 +53,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   ngOnInit() {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.classConfigurationService.getAllClassConfigurationsSortedDesc(this.data.marketplace).toPromise().then((classConfigurations: ClassConfiguration[]) => {
-
+        this.data.tenantId = helpseeker.tenantId;
         this.allClassConfigurations = classConfigurations;
 
 
@@ -84,7 +85,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
       classConfiguration.description = this.dialogForm.get('description').value;
 
 
-      const standardObjects = CUtils.getStandardObjects(this.data.marketplace.id, this.objectIdService, this.dialogForm.get('rootLabel').value);
+      const standardObjects = CUtils.getStandardObjects(this.data.marketplace.id, this.data.tenantId, this.objectIdService);
       this.data.relationships = standardObjects.relationships;
       this.data.classDefinitions = standardObjects.classDefinitions;
 

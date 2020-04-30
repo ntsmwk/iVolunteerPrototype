@@ -41,6 +41,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   ) { }
 
   @Input() marketplace: Marketplace;
+  @Input() tenantId: string;
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
