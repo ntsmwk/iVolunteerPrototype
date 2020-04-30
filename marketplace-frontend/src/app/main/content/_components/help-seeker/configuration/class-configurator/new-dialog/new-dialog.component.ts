@@ -94,19 +94,19 @@ export class NewClassConfigurationDialogComponent implements OnInit {
 
       Promise.all([
         this.relationshipsService.addAndUpdateRelationships(this.data.marketplace, this.data.relationships).toPromise().then((ret: Relationship) => {
-          console.log(ret);
+          // console.log(ret);
         }),
         this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
-          console.log(ret);
+          // console.log(ret);
         }),
       ]).then(() => {
 
         this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
-          console.log(ret);
+          // console.log(ret);
           this.data.classConfiguration = ret;
 
         }).then(() => {
-          console.log('finished');
+          // console.log('finished');
 
           this.dialogRef.close(this.data);
         });
