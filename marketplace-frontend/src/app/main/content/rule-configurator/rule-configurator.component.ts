@@ -13,7 +13,6 @@ import { CoreHelpSeekerService } from '../_service/core-helpseeker.service';
 import { ClassDefinitionService } from '../_service/meta/core/class/class-definition.service';
 import { ClassDefinition } from '../_model/meta/class';
 import { ClassProperty } from '../_model/meta/property';
-import { FakeService } from '../_service/fake.service';
 
 @Component({
   templateUrl: './rule-configurator.component.html',
@@ -40,7 +39,6 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
     private classDefinitionService: ClassDefinitionService,
-    private fakeService: FakeService,
     private messageService: MessageService) {
     this.ruleForm = formBuilder.group({
       'id': new FormControl(undefined),
@@ -112,7 +110,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
     // this.derivationRuleService.save(this.marketplace, this.derivationRule).toPromise().then(() => this.loadDerivationRule(this.marketplace, this.derivationRule.id));
 
-    this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(() => { this.router.navigate(["/main/helpseeker/asset-inbox"]) });
+    // this.fakeService.fahrtenspangeFake(this.marketplace).toPromise().then(() => { this.router.navigate(["/main/helpseeker/asset-inbox"]) });
   }
 
   navigateBack() {

@@ -1,9 +1,7 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
-
-import {FuseSharedModule} from '@fuse/shared.module';
-
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FuseSharedModule } from '@fuse/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatOptionModule } from '@angular/material/core';
@@ -12,11 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {FuseTaskTemplateFormComponent} from './task-template-form.component';
+import { FuseTaskTemplateFormComponent } from './task-template-form.component';
 
 const routes = [
-  {path: '', component: FuseTaskTemplateFormComponent},
-  {path: ':taskTemplateId', component: FuseTaskTemplateFormComponent}
+  { path: '', component: FuseTaskTemplateFormComponent },
+  { path: ':taskTemplateId', component: FuseTaskTemplateFormComponent }
 ];
 
 @NgModule({

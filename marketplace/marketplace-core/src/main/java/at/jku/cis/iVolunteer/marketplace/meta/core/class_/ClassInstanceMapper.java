@@ -27,9 +27,9 @@ public class ClassInstanceMapper {
 			dto.setBlockchainDate(ci.getTimestamp());
 			dto.setClassArchetype(ci.getClassArchetype());
 			dto.setImagePath(ci.getImagePath());
-			dto.setPublished(ci.isPublished());
-			dto.setInUserRepository(ci.isInUserRepository());
-			dto.setInIssuerInbox(ci.isInIssuerInbox());
+//			dto.setPublished(ci.isPublished());
+//			dto.setInUserRepository(ci.isInUserRepository());
+//			dto.setInIssuerInbox(ci.isInIssuerInbox());
 			dto.setHash(hasher.generateHash(ci));
 
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))

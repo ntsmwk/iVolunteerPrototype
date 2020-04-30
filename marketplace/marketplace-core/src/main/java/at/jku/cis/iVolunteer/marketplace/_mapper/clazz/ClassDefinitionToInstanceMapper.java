@@ -39,19 +39,19 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		switch (source.getClassArchetype()) {
 		case ACHIEVEMENT:
-		case ACHIEVEMENT_HEAD:
+//		case ACHIEVEMENT_HEAD:
 			classInstance = new AchievementClassInstance();
 			break;
 		case COMPETENCE:
-		case COMPETENCE_HEAD:
+//		case COMPETENCE_HEAD:
 			classInstance = new CompetenceClassInstance();
 			break;
 		case FUNCTION:
-		case FUNCTION_HEAD:
+//		case FUNCTION_HEAD:
 			classInstance = new FunctionClassInstance();
 			break;
 		case TASK:
-		case TASK_HEAD:
+//		case TASK_HEAD:
 			classInstance = new TaskClassInstance();
 			break;
 		default:
@@ -91,13 +91,10 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 	}
 	
 
-	
-	
-	
 	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
 		List<ClassProperty<Object>> properties = new ArrayList<>();
 		
-		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId()), classDefinition.getTenantId()).get(0).getFormEntry().getClassProperties();
+		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
 		return classPropertyToPropertyInstanceMapper.toTargets(properties);
 	}
 

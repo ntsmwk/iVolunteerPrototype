@@ -1,4 +1,4 @@
-import { ValidatorFn } from "@angular/forms";
+import { ValidatorFn } from '@angular/forms';
 import { EnumEntry } from '../meta/form';
 
 export class QuestionBase<T> {
@@ -12,9 +12,9 @@ export class QuestionBase<T> {
   values: T[];
 
   validators?: ValidatorFn[];
-  messages: Map<string, string>
+  messages: Map<string, string>;
 
-  subQuestions?: QuestionBase<T>[]
+  subQuestions?: QuestionBase<T>[];
 
   constructor(options: {
     value?: T,
@@ -91,7 +91,7 @@ export class NumberDropdownQuestion extends QuestionBase<number> {
 }
 
 export class RadioButtonQuestion extends QuestionBase<string> {
-  controlType = 'radiobutton'
+  controlType = 'radiobutton';
   options: { key: string, value: string }[] = [];
   constructor(options: {} = {}) {
     super(options);
@@ -100,7 +100,7 @@ export class RadioButtonQuestion extends QuestionBase<string> {
 }
 
 export class DatepickerQuestion extends QuestionBase<Date> {
-  controlType = 'datepicker'
+  controlType = 'datepicker';
   options: {}[] = [];
   constructor(options: {} = {}) {
     super(options);
@@ -109,7 +109,7 @@ export class DatepickerQuestion extends QuestionBase<Date> {
 }
 
 export class SliderQuestion extends QuestionBase<number> {
-  controlType = 'slider'
+  controlType = 'slider';
   options: {}[] = [];
   min: number;
   max: number;
@@ -121,7 +121,7 @@ export class SliderQuestion extends QuestionBase<number> {
 }
 
 export class SlideToggleQuestion extends QuestionBase<boolean> {
-  controlType = 'slidetoggle'
+  controlType = 'slidetoggle';
   options: {}[] = [];
 
   constructor(options: {} = {}) {
@@ -131,7 +131,7 @@ export class SlideToggleQuestion extends QuestionBase<boolean> {
 }
 
 export class DropdownMultipleQuestion extends QuestionBase<string> {
-  controlType = 'dropdown-multiple'
+  controlType = 'dropdown-multiple';
   options: { key: string, value: string }[] = [];
   values: any[] = [];
 
@@ -143,21 +143,21 @@ export class DropdownMultipleQuestion extends QuestionBase<string> {
 }
 
 export class MultipleQuestion extends QuestionBase<string> {
-  controlType = 'multiple'
+  controlType = 'multiple';
   options: { key: string, value: string }[] = [];
-  //values: {key: string, value: string}[] = [];
-  //subQuestions: QuestionBase<any>[] = [];
+  // values: {key: string, value: string}[] = [];
+  // subQuestions: QuestionBase<any>[] = [];
 
   constructor(options: {} = {}) {
     super(options);
     this.options = options['options'] || [];
-    //this.values = options['values'] || [];
-    //this.subQuestions = options['subQuestions'] || [];
+    // this.values = options['values'] || [];
+    // this.subQuestions = options['subQuestions'] || [];
   }
 }
 
 export class GenericQuestion extends QuestionBase<string> {
-  controlType = 'generic'
+  controlType = 'generic';
   options: { key: string, value: string }[] = [];
 
   constructor(options: {} = {}) {
@@ -167,10 +167,10 @@ export class GenericQuestion extends QuestionBase<string> {
 }
 
 export class SingleSelectionEnumQuestion extends QuestionBase<any> {
-  controlType = 'enum-single'
+  controlType = 'enum-single';
   options: EnumEntry[] = [];
 
-  //+++ TODO
+  // +++ TODO
   constructor(options: {} = {}) {
     super(options);
     this.options = options['options'] || [];
@@ -178,10 +178,10 @@ export class SingleSelectionEnumQuestion extends QuestionBase<any> {
 }
 
 export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
-  controlType = 'enum-multiple'
+  controlType = 'enum-multiple';
   options: EnumEntry[] = [];
 
-  //+++ TODO
+  // +++ TODO
   constructor(options: {} = {}) {
     super(options);
     this.options = options['options'] || [];

@@ -7,23 +7,22 @@ import { PropertyItem } from 'app/main/content/_model/meta/property';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/new-dialog/new-dialog.component';
-import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/open-dialog/open-dialog.component';
+import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
+import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
 import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
-import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/configurator/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
-import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from 'app/main/content/configurator/class-configurator/save-as-dialog/save-as-dialog.component';
-import { DeleteClassConfigurationDialogComponent, DeleteClassConfigurationDialogData } from 'app/main/content/configurator/class-configurator/delete-dialog/delete-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
-import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
-import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
-import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/configurator/matching-configurator/new-dialog/new-dialog.component';
-import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/configurator/matching-configurator/open-dialog/open-dialog.component';
-import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/configurator/matching-configurator/delete-dialog/delete-dialog.component';
+import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
+import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/save-as-dialog/save-as-dialog.component';
+import { DeleteClassConfigurationDialogComponent, DeleteClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/delete-dialog/delete-dialog.component';
+import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
+import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
+import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
 import { AddPropertyDialogComponent, AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
 import { RemoveDialogComponent, RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 import { isNullOrUndefined } from 'util';
+import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -354,25 +353,25 @@ export class DialogFactoryDirective {
     });
   }
 
-  openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
-    const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
-      width: '90vw',
-      minWidth: '90vw',
-      height: '90vh',
-      minHeight: '90vh',
-      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
-      disableClose: true
-    });
+  // openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+  //   const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
+  //     width: '90vw',
+  //     minWidth: '90vw',
+  //     height: '90vh',
+  //     minHeight: '90vh',
+  //     data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
+  //     disableClose: true
+  //   });
 
-    let returnValue: ClassInstanceFormPreviewExportDialogData;
-    dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
-      returnValue = result;
-    });
+  //   let returnValue: ClassInstanceFormPreviewExportDialogData;
+  //   dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
+  //     returnValue = result;
+  //   });
 
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return returnValue;
-    });
-  }
+  //   return dialogRef.afterClosed().toPromise().then(() => {
+  //     return returnValue;
+  //   });
+  // }
 
   openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
     const dialogRef = this.dialog.open(ChangeIconDialogComponent, {

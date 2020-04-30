@@ -1,5 +1,4 @@
-import { Volunteer } from "./volunteer";
-import { ClassInstance, ClassInstanceDTO } from './meta/Class';
+import { ClassInstanceDTO } from './meta/class';
 
 export class LocalRepository {
   id: string;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
-import { ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import * as shape from 'd3-shape';
 import * as moment from 'moment';
 import { isNullOrUndefined } from 'util';
@@ -136,8 +136,8 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   filterTimelineApply() {
-   this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
-   this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
+    this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
+    this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
 
     this.selectedYear = null;
 
@@ -168,7 +168,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     }
 
     // filter by time
-     if (this.timelineFilter.from === null || typeof this.timelineFilter.from === 'undefined') {
+    if (this.timelineFilter.from === null || typeof this.timelineFilter.from === 'undefined') {
       // filter by year
       if (this.selectedYear === 'Gesamt') {
         this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];

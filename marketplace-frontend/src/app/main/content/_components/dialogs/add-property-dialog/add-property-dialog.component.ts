@@ -11,7 +11,7 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 import {
   PropertyCreationDialogComponent,
   PropertyCreationDialogData
-} from 'app/main/content/configurator/class-configurator/property-creation-dialog/property-creation-dialog.component';
+} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 
 export interface AddPropertyDialogData {
@@ -46,7 +46,7 @@ export class AddPropertyDialogComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace).toPromise().then((ret: PropertyDefinition<any>[]) => {
+    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, null).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
 
       this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
@@ -98,7 +98,7 @@ export class AddPropertyDialogComponent implements OnInit {
 
   onSubmit() {
     const addedProperties = this.selection.selected.filter(p => this.data.classDefinition.properties.findIndex(q => p.id === q.id) === -1);
-    this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id)).toPromise().then((ret: ClassProperty<any>[]) => {
+    this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), null).toPromise().then((ret: ClassProperty<any>[]) => {
       this.data.classDefinition.properties.push(...ret);
       this.dialogRef.close(this.data);
     });

@@ -9,10 +9,12 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
@@ -77,27 +79,27 @@ public class ClassInstanceController {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
 				organisation == null ? "FF" : organisation);
-		if (!organisation.equals("MV")) {
-			for (ClassDefinition cd : classDefinitions) {
-				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
-			}
-		}
+//		if (!organisation.equals("MV")) {
+//			for (ClassDefinition cd : classDefinitions) {
+//				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
+//			}
+//		}
 		return classInstances;
 	}
 	
 
-	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
-	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
-			@RequestBody List<String> tenantIds) {
-		List<ClassInstance> classInstances = new ArrayList<>();
-
-		tenantIds.forEach(tenantId -> {
-			classInstances.addAll(classInstanceRepository
-					.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
-		});
-
-		return classInstances;
-	}
+//	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
+//	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
+//			@RequestBody List<String> tenantIds) {
+//		List<ClassInstance> classInstances = new ArrayList<>();
+//
+//		tenantIds.forEach(tenantId -> {
+//			classInstances.addAll(classInstanceRepository
+//					.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
+//		});
+//
+//		return classInstances;
+//	}
 
 	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/tenant/{tenantId}/user/{volunteerId}")
 	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
@@ -124,26 +126,26 @@ public class ClassInstanceController {
 		return null;
 	}
 
-	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
-	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId,
-			@RequestBody List<String> tenantIds) {
-
-		Set<ClassInstance> ret = new LinkedHashSet<>();
-		tenantIds.forEach(tenantId -> {
-			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true,
-					false, tenantId));
-		});
-
-		return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
-	}
-
-	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}/tenant/{tenantId}")
-	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
-			@PathVariable("tenantId") String tenantId) {
-		List<ClassInstance> instances = classInstanceRepository
-				.getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true, false, tenantId);
-		return instances;
-	}
+//	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
+//	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId,
+//			@RequestBody List<String> tenantIds) {
+//
+//		Set<ClassInstance> ret = new LinkedHashSet<>();
+//		tenantIds.forEach(tenantId -> {
+//			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true,
+//					false, tenantId));
+//		});
+//
+//		return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
+//	}
+//
+//	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}/tenant/{tenantId}")
+//	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
+//			@PathVariable("tenantId") String tenantId) {
+//		List<ClassInstance> instances = classInstanceRepository
+//				.getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true, false, tenantId);
+//		return instances;
+//	}
 
 	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
 	private List<ClassInstance> setClassInstancesInUserRepository(
@@ -154,20 +156,20 @@ public class ClassInstanceController {
 		return classInstanceRepository.save(classInstances);
 	}
 
-	@PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
-	private List<ClassInstanceDTO> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
-			@RequestBody List<String> classInstanceIds) {
-		List<ClassInstance> classInstances = new ArrayList<>();
-		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-
-		for (ClassInstance classInstance : classInstances) {
-			classInstance.setInIssuerInbox(inIssuerInbox);
-			classInstance.setInUserRepository(false);
-		}
-
-		return classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
-		return classInstanceRepository.save(classInstances);
-	}
+//	@PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
+//	private List<ClassInstanceDTO> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
+//			@RequestBody List<String> classInstanceIds) {
+//		List<ClassInstance> classInstances = new ArrayList<>();
+//		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+//
+//		for (ClassInstance classInstance : classInstances) {
+//			classInstance.setInIssuerInbox(inIssuerInbox);
+//			classInstance.setInUserRepository(false);
+//		}
+//
+//		return classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
+//		return classInstanceRepository.save(classInstances);
+//	}
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {

@@ -225,31 +225,22 @@ const routes: Route[] = [
   },
 
   {
-    path: 'main/test-map-property',
-    loadChildren: () =>
-      import(
-        './_shared_components/dynamic-forms/dynamic-form-question/map-property-test/map-property-test.module'
-      ).then((m) => m.MapPropertyTestModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
-  {
     path: 'main/configurator',
     loadChildren: () =>
       import(
-        './_components/help-seeker/configuration/configurator/configurator.module'
+        './_components/help-seeker/configuration/class-configurator/configurator.module'
       ).then((m) => m.ConfiguratorModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard],
   },
 
-  {
-    path: 'main/configurator/instance-editor',
-    loadChildren: () =>
-      import(
-        './_components/help-seeker/configuration/configurator/class-instances/form-editor/class-instance-form-editor.module'
-      ).then((m) => m.ClassInstanceFormEditorModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
+  // {
+  //   path: 'main/configurator/instance-editor',
+  //   loadChildren: () =>
+  //     import(
+  //       './_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor-mockup.component.module'
+  //     ).then((m) => m.ClassInstanceFormEditorModule),
+  //   canActivate: [TokenGuard, HelpSeekerGuard],
+  // },
   {
     path: 'main/rules/all',
     loadChildren: () =>
@@ -330,6 +321,13 @@ const routes: Route[] = [
         (m) => m.ProfileModule
       ),
     canActivate: [TokenGuard, LoginGuard],
+  },
+  {
+    path: 'main/matching-configurator',
+    loadChildren: () =>
+      import('./_components/help-seeker/configuration/matching-configurator/matching-configurator.module').then(
+        (m) => m.MatchingConfiguratorModule),
+    canActivate: [TokenGuard, HelpSeekerGuard],
   },
 ];
 

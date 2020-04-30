@@ -1,27 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ParticipantRole } from 'app/main/content/_model/participant';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { DerivationRule, AttributeSourceRuleEntry, MappingOperatorType, ClassSourceRuleEntry } from 'app/main/content/_model/derivation-rule';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { DerivationRuleService } from 'app/main/content/_service/derivation-rule.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { ClassProperty } from 'app/main/content/_model/meta/property';
 
-import { Marketplace } from "../../../../_model/marketplace";
-
-import { LoginService } from "../../../../_service/login.service";
-import { ParticipantRole } from "../../../../_model/participant";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
-import {
-  DerivationRule,
-  MappingOperatorType,
-  AttributeSourceRuleEntry,
-  ClassSourceRuleEntry
-} from "../../../../_model/derivation-rule";
-import { DerivationRuleService } from "../../../../_service/derivation-rule.service";
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { ClassDefinitionService } from "../../../../_service/meta/core/class/class-definition.service";
-import { ClassDefinition } from "../../../../_model/meta/Class";
-import { ClassProperty } from "../../../../_model/meta/Property";
-import { Helpseeker } from "../../../../_model/helpseeker";
 
 @Component({
-  templateUrl: "./rule-configurator.component.html",
-  styleUrls: ["./rule-configurator.component.scss"],
+  templateUrl: './rule-configurator.component.html',
+  styleUrls: ['./rule-configurator.component.scss'],
   providers: []
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
@@ -68,7 +62,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             this.marketplace = marketplace;
 
             this.route.params.subscribe(params =>
-              this.loadDerivationRule(marketplace, params["ruleId"])
+              this.loadDerivationRule(marketplace, params['ruleId'])
             );
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
@@ -87,7 +81,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
     if (ruleId) {
       this.derivationRuleService
-        .findById(marketplace, ruleId, this.helpseeker.tenantId)
+        .findByIdAndTenantId(marketplace, ruleId, this.helpseeker.tenantId)
         .toPromise()
         .then((rule: DerivationRule) => {
           this.derivationRule = rule;
@@ -106,14 +100,14 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           classDefinition: new ClassDefinition(),
           classProperty: new ClassProperty(),
           mappingOperatorType: MappingOperatorType.EQ,
-          value: ""
+          value: ''
         }
       ];
       this.derivationRule.classSourceRules = [
         <ClassSourceRuleEntry>{
           classDefinition: new ClassDefinition(),
           mappingOperatorType: MappingOperatorType.EQ,
-          value: ""
+          value: ''
         }
       ];
     }

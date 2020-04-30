@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
-import { ImportComponent } from "./import.component";
-import { RouterModule } from "@angular/router";
-import { ReactiveFormsModule } from "@angular/forms";
-import { MaterialFileInputModule } from "ngx-material-file-input";
+import { ImportComponent } from './import.component';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 import {
   MatSelectModule,
   MatButtonModule,
@@ -11,10 +11,10 @@ import {
   MatInputModule,
   MatCardModule,
   MatIconModule
-} from "@angular/material";
-import { FuseSharedModule } from "@fuse/shared.module";
+} from '@angular/material';
+import { FuseSharedModule } from '@fuse/shared.module';
 
-const routes = [{ path: "", component: ImportComponent }];
+const routes = [{ path: '', component: ImportComponent }];
 
 @NgModule({
   imports: [
@@ -33,4 +33,4 @@ const routes = [{ path: "", component: ImportComponent }];
   declarations: [ImportComponent],
   providers: []
 })
-export class ImportModule {}
+export class ImportModule { }

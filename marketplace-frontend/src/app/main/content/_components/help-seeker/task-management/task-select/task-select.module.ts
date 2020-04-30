@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
@@ -8,13 +8,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {FuseSharedModule} from '@fuse/shared.module';
-import {GermanDateAdapter} from '../../../../_adapter/german-date-adapter';
+import { FuseSharedModule } from '@fuse/shared.module';
+import { GermanDateAdapter } from '../../../../_adapter/german-date-adapter';
 import { FuseTaskSelectComponent } from './task-select.component';
 import { MatTableModule } from '@angular/material';
 
 const routes: Route[] = [
-  {path: '', component: FuseTaskSelectComponent}
+  { path: '', component: FuseTaskSelectComponent }
 ];
 
 @NgModule({
@@ -35,7 +35,7 @@ const routes: Route[] = [
     FuseSharedModule
   ],
   providers: [
-    {provide: DateAdapter, useClass: GermanDateAdapter},
+    { provide: DateAdapter, useClass: GermanDateAdapter },
   ]
 })
 export class FuseTaskSelectModule {

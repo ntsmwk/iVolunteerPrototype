@@ -1,28 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-import { isArray, isNullOrUndefined } from "util";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import { Task } from "../../../../_model/task";
-import { TaskTemplate } from "../../../../_model/task-template";
-import { WorkflowType } from "../../../../_model/workflow-type";
-import { ActivatedRoute, Router } from "@angular/router";
-import { LoginService } from "../../../../_service/login.service";
-import { TaskService } from "../../../../_service/task.service";
-import { CompetenceService } from "../../../../_service/competence.service";
-import { TaskTemplateService } from "../../../../_service/task-template.service";
-import { WorkflowService } from "../../../../_service/workflow.service";
-import { CompetenceValidator } from "../../../../_validator/competence.validator";
-import { Participant } from "../../../../_model/participant";
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { Marketplace } from "../../../../_model/marketplace";
-import { Project } from "../../../../_model/project";
-import { ProjectService } from "../../../../_service/project.service";
-import { CompetenceClassDefinition } from "../../../../_model/meta/Class";
-import { TenantService } from "../../../../_service/core-tenant.service";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Project } from 'app/main/content/_model/project';
+import { CompetenceClassDefinition } from 'app/main/content/_model/meta/class';
+import { TaskTemplate } from 'app/main/content/_model/task-template';
+import { WorkflowType } from 'app/main/content/_model/workflow-type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { TaskService } from 'app/main/content/_service/task.service';
+import { CompetenceService } from 'app/main/content/_service/competence.service';
+import { TaskTemplateService } from 'app/main/content/_service/task-template.service';
+import { WorkflowService } from 'app/main/content/_service/workflow.service';
+import { ProjectService } from 'app/main/content/_service/project.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { CompetenceValidator } from 'app/main/content/_validator/competence.validator';
+import { Participant } from 'app/main/content/_model/participant';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Task } from 'app/main/content/_model/task';
+import { isArray } from 'lodash';
+import { isNullOrUndefined } from 'util';
+
+
+
 // import * as $ from 'jquery'
 // import 'periodpicker'
 // declare var jquery:any;
@@ -37,8 +36,8 @@ declare global {
 }
 
 @Component({
-  templateUrl: "./task-form.component.html",
-  styleUrls: ["./task-form.component.scss"],
+  templateUrl: './task-form.component.html',
+  styleUrls: ['./task-form.component.scss'],
 })
 export class FuseTaskFormComponent implements OnInit {
   taskForm: FormGroup;
@@ -48,7 +47,7 @@ export class FuseTaskFormComponent implements OnInit {
   taskTemplates: Array<TaskTemplate>;
   workflowTypes: Array<WorkflowType>;
 
-  private tenantName: string = "FF Eidenberg";
+  private tenantName = 'FF Eidenberg';
   private tenantId: string;
 
   constructor(
@@ -130,7 +129,7 @@ export class FuseTaskFormComponent implements OnInit {
                       ),
                   ]).then(() =>
                     this.route.params.subscribe((params) =>
-                      this.findTask(marketplace, params["taskId"])
+                      this.findTask(marketplace, params['taskId'])
                     )
                   );
                 });
@@ -138,7 +137,7 @@ export class FuseTaskFormComponent implements OnInit {
           });
       });
 
-    $("#startDate").periodpicker({
+    $('#startDate').periodpicker({
       norange: true, // use only one value
       cells: [1, 1], // show only one month
 
@@ -155,7 +154,7 @@ export class FuseTaskFormComponent implements OnInit {
       },
     });
 
-    $("#endDate").periodpicker({
+    $('#endDate').periodpicker({
       norange: true, // use only one value
       cells: [1, 1], // show only one month
 
@@ -233,7 +232,7 @@ export class FuseTaskFormComponent implements OnInit {
                 this.taskService
                   .save(marketplace, <Task>task)
                   .toPromise()
-                  .then(() => this.router.navigate(["/main/tasks/all"]));
+                  .then(() => this.router.navigate(['/main/tasks/all']));
               } else {
                 Promise.all([
                   this.loginService.getLoggedIn().toPromise(),
@@ -250,7 +249,7 @@ export class FuseTaskFormComponent implements OnInit {
                       participantId
                     )
                     .toPromise()
-                    .then(() => this.router.navigate(["/main/tasks/all"]));
+                    .then(() => this.router.navigate(['/main/tasks/all']));
                 });
               }
             }

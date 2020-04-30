@@ -1,13 +1,13 @@
-package at.jku.cis.iVolunteer.mapper.meta.core.relationship;
+package at.jku.cis.iVolunteer.marketplace._mapper.relationship;
+
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.mapper.AbstractMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Composition;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
 
 @Component

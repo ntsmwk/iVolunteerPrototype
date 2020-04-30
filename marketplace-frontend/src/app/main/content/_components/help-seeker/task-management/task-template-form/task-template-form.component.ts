@@ -1,30 +1,29 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-
-import { TaskTemplate } from "../../../../_model/task-template";
-import { TaskTemplateService } from "../../../../_service/task-template.service";
-import { CompetenceService } from "../../../../_service/competence.service";
-import { WorkflowService } from "../../../../_service/workflow.service";
-import { WorkflowType } from "../../../../_model/workflow-type";
-import { LoginService } from "../../../../_service/login.service";
-import { Participant } from "../../../../_model/participant";
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { Marketplace } from "../../../../_model/marketplace";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { isNullOrUndefined } from "util";
-import { CompetenceValidator } from "../../../../_validator/competence.validator";
-import { CompetenceClassDefinition } from "../../../../_model/meta/Class";
+import { Component, OnInit } from '@angular/core';
+import { CompetenceClassDefinition } from 'app/main/content/_model/meta/class';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { WorkflowType } from 'app/main/content/_model/workflow-type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskTemplateService } from 'app/main/content/_service/task-template.service';
+import { WorkflowService } from 'app/main/content/_service/workflow.service';
+import { CompetenceService } from 'app/main/content/_service/competence.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { CompetenceValidator } from 'app/main/content/_validator/competence.validator';
+import { Participant } from 'app/main/content/_model/participant';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { TaskTemplate } from 'app/main/content/_model/task-template';
+import { isNullOrUndefined } from 'util';
 
 @Component({
-  templateUrl: "./task-template-form.component.html",
-  styleUrls: ["./task-template-form.component.scss"]
+  templateUrl: './task-template-form.component.html',
+  styleUrls: ['./task-template-form.component.scss']
 })
 export class FuseTaskTemplateFormComponent implements OnInit {
   competences: CompetenceClassDefinition[];
   taskTemplateForm: FormGroup;
   workflowTypes: Array<WorkflowType>;
 
-  private tenantName: string = "FF Eidenberg";
+  private tenantName = 'FF Eidenberg';
   private tenantId: string;
 
   constructor(
@@ -78,7 +77,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
                   )
               ]).then(() =>
                 this.route.params.subscribe(params =>
-                  this.findTaskTemplate(marketplace, params["taskTemplateId"])
+                  this.findTaskTemplate(marketplace, params['taskTemplateId'])
                 )
               );
             }
@@ -141,7 +140,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
               this.taskTemplateService
                 .save(marketplace, <TaskTemplate>taskTemplate)
                 .toPromise()
-                .then(() => this.router.navigate(["/main/task-templates/all"]));
+                .then(() => this.router.navigate(['/main/task-templates/all']));
             }
           });
       });

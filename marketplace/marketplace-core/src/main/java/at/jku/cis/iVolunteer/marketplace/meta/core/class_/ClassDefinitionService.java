@@ -48,10 +48,14 @@ public class ClassDefinitionService {
 
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		System.out.println(tenantId);
-		ids.forEach(id -> {
-			classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
-		});
+		
+	
+//			ids.forEach(id -> {
+//				classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
+//			});
+		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
+		
+		
 		
 		return classDefinitions;
 	}
@@ -103,6 +107,7 @@ public class ClassDefinitionService {
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(String tenantId) {
 		List<ClassDefinition> classDefinitions = classDefinitionRepository.getByTenantId(tenantId).stream()
 				.filter(cd -> filterEnumClasses(cd)).collect(Collectors.toList());
+		return classDefinitions;
 	}
 
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(String tenantId) {
@@ -126,11 +131,11 @@ public class ClassDefinitionService {
 		return cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT
 				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
 				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
-				|| cd.getClassArchetype() == ClassArchetype.TASK
-				|| cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT_HEAD
-				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE_HEAD
-				|| cd.getClassArchetype() == ClassArchetype.FUNCTION_HEAD
-				|| cd.getClassArchetype() == ClassArchetype.TASK_HEAD;
+				|| cd.getClassArchetype() == ClassArchetype.TASK;
+//				|| cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT_HEAD
+//				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE_HEAD
+//				|| cd.getClassArchetype() == ClassArchetype.FUNCTION_HEAD
+//				|| cd.getClassArchetype() == ClassArchetype.TASK_HEAD;
 		// @formatter:on
 	}
 
@@ -162,7 +167,7 @@ public class ClassDefinitionService {
 				formEntry.getClassDefinitions().add(currentClassDefinition);
 
 				formEntry.getClassProperties().addAll(0,
-						getPropertiesInClassDefinition(formEntry, currentClassDefinition, tenantId));
+						getPropertiesInClassDefinition(formEntry, currentClassDefinition));
 
 				List<Relationship> inheritanceList = relationshipRepository
 						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
@@ -200,7 +205,7 @@ public class ClassDefinitionService {
 	}
 
 	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry,
-			ClassDefinition currentClassDefinition, String tenantId) {
+			ClassDefinition currentClassDefinition) {
 		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
 		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(
 				currentClassDefinition.getProperties());
@@ -260,9 +265,7 @@ public class ClassDefinitionService {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 
-		rootIds.forEach(id -> {
-			rootClassDefintions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
-		});
+		this.classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
 
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 		for (ClassDefinition rootClassDefinition : rootClassDefintions) {

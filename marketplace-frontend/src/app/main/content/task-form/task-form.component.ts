@@ -76,7 +76,7 @@ export class FuseTaskFormComponent implements OnInit {
         if (!isNullOrUndefined(marketplace)) {
           Promise.all([
             this.projectService.findAll(marketplace).toPromise().then((projects: Array<Project>) => this.projects = projects),
-            this.competenceService.findAll(marketplace).toPromise().then((competences: Array<CompetenceClassDefinition>) => this.competences = competences),
+            // this.competenceService.findAll(marketplace).toPromise().then((competences: Array<CompetenceClassDefinition>) => this.competences = competences),
             this.taskTemplateService.findAll(marketplace).toPromise().then((taskTemplates: Array<TaskTemplate>) => this.taskTemplates = taskTemplates),
             this.workflowService.findAllTypes(marketplace).toPromise().then((workflowTypes: Array<WorkflowType>) => this.workflowTypes = workflowTypes)
           ]).then(() => this.route.params.subscribe(params => this.findTask(marketplace, params['taskId'])));

@@ -86,11 +86,11 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
 
   private loadClassProperties($event) {
     if (this.classSourceRuleEntry && this.classSourceRuleEntry.classDefinition && this.classSourceRuleEntry.classDefinition.id) {
-      this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.classSourceRuleEntry.classDefinition.id).toPromise()
-        .then((props: ClassProperty<any>[]) => {
-          this.classProperties = props;
-          this.onChange($event);
-        });
+      // this.classPropertyService.getAllClassPropertiesFromClass(this.marketplace, this.classSourceRuleEntry.classDefinition.id).toPromise()
+      //   .then((props: ClassProperty<any>[]) => {
+      //     this.classProperties = props;
+      //     this.onChange($event);
+      //   });
     }
   }
 

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
@@ -23,7 +25,7 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
-import at.jku.cis.iVolunteer.model.meta.configurator.Configurator;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassDefinition;
@@ -44,20 +46,17 @@ public class InitializationService {
 
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
+	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
-	@Autowired private ClassConfigurationRepository classConfigurationRepository;
-	
-	@Autowired private ClassConfigurationController classConfigurationController;
 
 	@PostConstruct
 	public void init() {
@@ -314,7 +313,7 @@ public class InitializationService {
 		task.setId(new ObjectId().toHexString());
 		task.setTenantId(tenantId);
 		task.setName("Tätigkeit");
-		task.setClassArchetype(ClassArchetype.TASK_HEAD);
+		task.setClassArchetype(ClassArchetype.TASK);
 		task.setProperties(new ArrayList<>());
 		
 		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date")).findFirst().get();
@@ -336,7 +335,7 @@ public class InitializationService {
 		competence.setId(new ObjectId().toHexString());
 		competence.setTenantId(tenantId);
 		competence.setName("Kompetenz");
-		competence.setClassArchetype(ClassArchetype.COMPETENCE_HEAD);
+		competence.setClassArchetype(ClassArchetype.COMPETENCE);
 		competence.setProperties(new ArrayList<>());
 
 		classDefinitions.add(competence);
@@ -353,7 +352,7 @@ public class InitializationService {
 		achievement.setId(new ObjectId().toHexString());
 		achievement.setTenantId(tenantId);
 		achievement.setName("Verdienst");
-		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT_HEAD);
+		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		achievement.setProperties(new ArrayList<>());
 		
 		classDefinitions.add(achievement);
@@ -371,7 +370,7 @@ public class InitializationService {
 		function.setId(new ObjectId().toHexString());
 		function.setTenantId(tenantId);
 		function.setName("Funktion");
-		function.setClassArchetype(ClassArchetype.FUNCTION_HEAD);
+		function.setClassArchetype(ClassArchetype.FUNCTION);
 		function.setProperties(new ArrayList<>());
 
 		classDefinitions.add(function);
@@ -419,8 +418,8 @@ public class InitializationService {
 		
 		relationships.add(r5);
 		
-		Configurator configurator = new Configurator();
-		configurator.setDate(new Date());
+		ClassConfiguration configurator = new ClassConfiguration();
+		configurator.setTimestamp(new Date());
 		configurator.setId(slotName);
 		configurator.setName(slotName);
 		configurator.setClassDefinitionIds(new ArrayList<>());
@@ -437,7 +436,7 @@ public class InitializationService {
 			configurator.getRelationshipIds().add(r.getId());
 		}
 		
-		this.configuratorRepository.save(configurator);
+		this.classConfigurationRepository.save(configurator);
 		
 	}
 	
