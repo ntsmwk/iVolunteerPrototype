@@ -28,12 +28,13 @@
       [legend]="legend" [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="xAxis"
       [yAxis]="yAxis" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel" [animations]="animations" [autoScale]="autoScale" [timeline]="timeline" [curve]="curve"
+      [xAxisTickFormatting]="dateTickFormatting"
       >
     </ngx-charts-line-chart>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="left">
-    <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
+    <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Zeitraum filtern</button>
 
     <mat-chip-list class="filterChip">
       <mat-chip color="primary" [removable]="removable" *ngIf="timelineFilter.from">

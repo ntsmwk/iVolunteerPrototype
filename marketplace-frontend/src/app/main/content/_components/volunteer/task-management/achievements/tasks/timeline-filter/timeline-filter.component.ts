@@ -39,7 +39,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   showXAxisLabel = true;
   showYAxisLabel = true;
   xAxisLabel = 'Datum';
-  yAxisLabel = 'Dauer [h]';
+  yAxisLabel = 'Dauer';
   animations = true;
   autoScale = true;
   timeline = true;
@@ -136,8 +136,8 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   filterTimelineApply() {
-   this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
-   this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
+    this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
+    this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
 
     this.selectedYear = null;
 
@@ -168,7 +168,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     }
 
     // filter by time
-     if (this.timelineFilter.from === null || typeof this.timelineFilter.from === 'undefined') {
+    if (this.timelineFilter.from === null || typeof this.timelineFilter.from === 'undefined') {
       // filter by year
       if (this.selectedYear === 'Gesamt') {
         this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
@@ -232,6 +232,33 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   updateTimelineFilter(timelineFilter) {
     this.timelineFilter = timelineFilter;
     this.timelineFilterChange.emit(JSON.parse(JSON.stringify(timelineFilter)));
+  }
+
+  dateTickFormatting2(date) {
+    if (date instanceof Date) {
+      return (<Date>date).toLocaleString('de-DE');
+    }
+  }
+
+  dateTickFormatting(value) {
+    let locale = 'de-DE';
+    let formatOptions;
+
+    if (value.getSeconds() !== 0) {
+      formatOptions = { second: '2-digit' };
+    } else if (value.getMinutes() !== 0) {
+      formatOptions = { hour: '2-digit', minute: '2-digit' };
+    } else if (value.getHours() !== 0) {
+      formatOptions = { hour: '2-digit' };
+    } else if (value.getDate() !== 1) {
+      formatOptions = value.getDay() === 0 ? { month: 'short', day: '2-digit' } : { weekday: 'short', day: '2-digit' };
+    } else if (value.getMonth() !== 0) {
+      formatOptions = { month: 'long' };
+    } else {
+      formatOptions = { year: 'numeric' };
+    }
+
+    return new Intl.DateTimeFormat(locale, formatOptions).format(value);
   }
 
 }
