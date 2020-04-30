@@ -12,6 +12,10 @@ import { FuseMainModule } from './main/main.module';
 import { FuseModule } from '@fuse/fuse.module';
 import { DragulaModule } from 'ng2-dragula';
 import { HttpClientModule } from '@angular/common/http';
+import localeDe from '@angular/common/locales/de';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe, 'de-AT');
 
 const appRoutes: Routes = [
   {
@@ -44,4 +48,6 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   providers: []
 })
-export class AppModule { }
+export class AppModule { 
+  
+}

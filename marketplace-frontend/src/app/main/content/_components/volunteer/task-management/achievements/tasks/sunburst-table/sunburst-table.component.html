@@ -60,7 +60,7 @@
           Dauer
         </mat-header-cell>
         <mat-cell class="right" mat-cell *matCellDef="let element">
-          {{ element.duration }}h
+          {{ element.duration | number:'1.2-2':'de-AT' }} h
         </mat-cell>
       </ng-container>
 

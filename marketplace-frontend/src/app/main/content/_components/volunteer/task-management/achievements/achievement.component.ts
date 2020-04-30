@@ -98,48 +98,6 @@ export class AchievementsComponent implements OnInit {
       }
     });
 
-
-    let nameCnt:number = 0, dateFromCnt:number = 0, taskType1Cnt:number = 0, taskType2Cnt:number = 0, 
-    taskType3Cnt:number = 0, durationCnt:number = 0, locationCnt:number = 0, rankCnt:number = 0;
-
-    console.error(this.classInstanceDTOs);
-    this.classInstanceDTOs.forEach(ci => {
-      if(!ci.name) {
-        nameCnt++;
-      }
-      if(!ci.dateFrom) {
-        dateFromCnt++;
-      }
-      if(!ci.taskType1) {
-        taskType1Cnt++;
-      }
-      if(!ci.taskType2) {
-        taskType2Cnt++;
-      }
-      if(!ci.taskType3) {
-        taskType3Cnt++;
-      }
-      if(!ci.duration) {
-        durationCnt++;
-      }
-      if(!ci.location) {
-        locationCnt++;
-      }
-      if(!ci.rank) {
-        rankCnt++;
-      }
-      
-    });
-
-    console.error('ohne name', nameCnt);
-    console.error('ohne dateFrom', dateFromCnt);
-    console.error('ohne taskType1', taskType1Cnt);
-    console.error('ohne taskType2', taskType2Cnt);
-    console.error('ohne taskType3', taskType3Cnt);
-    console.error('ohne duration', durationCnt);
-    console.error('ohne location', locationCnt);
-    console.error('ohne rank', rankCnt);
-
     // console.error('after', this.classInstanceDTOs.length);
 
     this.tenantSelectionChanged(this.selectedTenants);

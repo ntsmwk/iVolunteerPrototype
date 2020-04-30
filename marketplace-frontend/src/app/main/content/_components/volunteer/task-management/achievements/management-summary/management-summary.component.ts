@@ -123,13 +123,26 @@ export class ManagementSummaryComponent implements OnInit {
 
     // TODO: philipp filter out classInstances missing the reqired fields
     // TODO: check if data is valid!
-    
+
     // console.error('before', this.classInstanceDTOs.length);
-    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-      return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
-        ci.taskType3 && ci.duration && ci.location && ci.rank)
+    // this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+    //   return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
+    //     ci.taskType3 && ci.duration)
+    // });
+
+    this.classInstanceDTOs.forEach((ci, index, object) => {
+      if (ci.duration === null) {
+        object.splice(index, 1);
+      }
     });
+
     // console.error('after', this.classInstanceDTOs.length);
+
+    this.classInstanceDTOs.forEach((ci, index, object) => {
+      if (ci.duration === null) {
+        object.splice(index, 1);
+      }
+    });
 
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
 
