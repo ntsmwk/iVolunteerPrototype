@@ -14,6 +14,7 @@ import { ClassConfiguration } from '../../../../_model/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 declare var require: any;
 
@@ -41,7 +42,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   ) { }
 
   @Input() marketplace: Marketplace;
-  @Input() tenantId: string;
+  @Input() helpseeker: Helpseeker;
 
   classDefinitions: ClassDefinition[];
   deletedClassIds: string[];
@@ -673,7 +674,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
-
+    addedClass.tenantId = this.helpseeker.tenantId;
     addedClass.properties = [];
 
     const addedRelationship = new Relationship();

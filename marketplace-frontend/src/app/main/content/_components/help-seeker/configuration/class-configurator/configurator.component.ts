@@ -7,6 +7,7 @@ import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker
 import { CoreFlexProdService } from 'app/main/content/_service/core-flexprod.service';
 import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { isNullOrUndefined } from 'util';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ConfiguratorComponent implements OnInit {
     marketplace: Marketplace;
     configurableClasses: ClassDefinition[];
     relationships: Relationship[];
+    helpseeker: Helpseeker;
 
 
     isLoaded = false;
@@ -33,19 +35,18 @@ export class ConfiguratorComponent implements OnInit {
         let service: CoreHelpSeekerService | CoreFlexProdService;
         // get marketplace
 
-        this.loginService.getLoggedIn().toPromise().then((participant: Participant) => {
+        this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+            this.helpseeker = helpseeker;
             this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
                 if (role === 'FLEXPROD') {
                     service = this.flexProdService;
                 } else if (role === 'HELP_SEEKER') {
                     service = this.helpSeekerService;
                 }
-
-                service.findRegisteredMarketplaces(participant.id).toPromise().then((marketplace: Marketplace) => {
+                service.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
                     if (!isNullOrUndefined(marketplace)) {
                         this.marketplace = marketplace;
                         this.isLoaded = true;
-
                     }
                 });
             });
