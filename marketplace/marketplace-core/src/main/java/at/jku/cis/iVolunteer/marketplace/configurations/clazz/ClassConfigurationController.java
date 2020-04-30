@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.clazz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.configurations.matching.collector.MatchingCollectorConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 
 @RestController
 public class ClassConfigurationController {
@@ -90,7 +92,18 @@ public class ClassConfigurationController {
 		updatedClassConfiguration.setTimestamp(new Date());
 				
 		ClassConfiguration classConfiguration = classConfigurationRepository.save(updatedClassConfiguration);
-	
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		classDefinitionRepository.findAll(updatedClassConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+		if (classDefinitions != null) {
+			for (ClassDefinition cd : classDefinitions) {
+				cd.setConfigurationId(classConfiguration.getId());
+			}
+		}
+		classDefinitionRepository.save(classDefinitions);
+		
+		
+		
 		//TODO aggregate and build 
 		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsMultipleCollections(classConfiguration.getId());
 				
