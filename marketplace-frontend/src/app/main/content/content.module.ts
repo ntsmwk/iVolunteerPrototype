@@ -233,14 +233,14 @@ const routes: Route[] = [
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard],
   },
 
-  // {
-  //   path: 'main/configurator/instance-editor',
-  //   loadChildren: () =>
-  //     import(
-  //       './_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor-mockup.component.module'
-  //     ).then((m) => m.ClassInstanceFormEditorModule),
-  //   canActivate: [TokenGuard, HelpSeekerGuard],
-  // },
+  {
+    path: 'main/configurator/instance-editor',
+    loadChildren: () =>
+      import(
+        './_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor.module'
+      ).then((m) => m.ClassInstanceFormEditorModule),
+    canActivate: [TokenGuard, HelpSeekerGuard],
+  },
   {
     path: 'main/rules/all',
     loadChildren: () =>
