@@ -15,13 +15,21 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	private String parentId;
+	private String configurationId;
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
 	private ClassArchetype classArchetype;
+	
+	
+	private boolean collector;
 
 	private String imagePath;
 	
 	boolean root;
+	
+	
+	private boolean visible;
+	private int tabId;
 
 	public ClassDefinition() {
 	}
@@ -32,6 +40,14 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getConfigurationId() {
+		return configurationId;
+	}
+
+	public void setConfigurationId(String configurationId) {
+		this.configurationId = configurationId;
 	}
 
 	public String getParentId() {
@@ -81,6 +97,30 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setClassArchetype(ClassArchetype classArchetype) {
 		this.classArchetype = classArchetype;
+	}
+
+	public boolean isCollector() {
+		return collector;
+	}
+
+	public void setCollector(boolean collector) {
+		this.collector = collector;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
 	}
 
 	@Override

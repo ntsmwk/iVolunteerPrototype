@@ -1,21 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { fuseAnimations } from "../../../../../../../@fuse/animations";
-import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
-import { LoginService } from "../../../../_service/login.service";
-import { Volunteer } from "app/main/content/_model/volunteer";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
-import { Tenant } from "app/main/content/_model/tenant";
-import { isNullOrUndefined } from "util";
-import { MatTabChangeEvent } from "@angular/material";
-import { LocalRepositoryService } from "app/main/content";
-import { timer } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { LocalRepositoryService } from 'app/main/content';
+import { timer } from 'rxjs';
+import { MatTabChangeEvent } from '@angular/material';
+import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: "fuse-achievements",
-  templateUrl: "./achievement.component.html",
-  styleUrls: ["./achievement.component.scss"],
+  selector: 'fuse-achievements',
+  templateUrl: './achievement.component.html',
+  styleUrls: ['./achievement.component.scss'],
   animations: fuseAnimations,
 })
 export class AchievementsComponent implements OnInit {
@@ -74,7 +74,7 @@ export class AchievementsComponent implements OnInit {
           await this.classInstanceService
             .getUserClassInstancesByArcheType(
               this.marketplace,
-              "TASK",
+              'TASK',
               this.volunteer.id,
               this.volunteer.subscribedTenants
             )
@@ -154,7 +154,7 @@ export class AchievementsComponent implements OnInit {
   }
 
   public tabChanged(tabChangeEvent: MatTabChangeEvent) {
-    if (tabChangeEvent.tab.textLabel === "Tätigkeiten") {
+    if (tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
       this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
     }
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
-import { ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import * as shape from 'd3-shape';
 import * as moment from 'moment';
 import { isNullOrUndefined } from 'util';

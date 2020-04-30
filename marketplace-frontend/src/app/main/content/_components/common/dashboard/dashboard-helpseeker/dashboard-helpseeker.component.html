@@ -1,10 +1,13 @@
-<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans">
+<link
+  type="text/css"
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Muli|Roboto:300,400,500,700|Google+Sans"
+/>
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-    <h1 class="l-heading"> Herzlich Willkommen bei iVolunteer</h1>
-    <img class="header-logo" [src]="getTenantImage()">
+    <h1 class="l-heading">Herzlich Willkommen bei iVolunteer</h1>
+    <img *ngIf="tenant" class="header-logo" [src]="getTenantImage()" />
   </div>
 
   <!-- Landing Pages.. TODO Remove/Replace someday -->
@@ -13,14 +16,14 @@
     <section fxLayout="column" class="p-40">
       <h2 class="verein-heading">Freiwillige Feuerwehr Eidenberg</h2>
 
-      <img src="assets/images/FF_Eidenberg.png" alt="FF Eidenberg">
+      <img src="assets/images/FF_Eidenberg.png" alt="FF Eidenberg" />
     </section>
   </div>
 
   <div *ngIf="this.participant && isMV()">
     <section fxLayout="column" class="p-40">
       <h2 class="verein-heading">Musikverein Schwertberg</h2>
-      <img src="assets/images/musicverein.jpg" alt="Musikverein Schwertberg">
+      <img src="assets/images/musicverein.jpg" alt="Musikverein Schwertberg" />
     </section>
   </div>
 </div>

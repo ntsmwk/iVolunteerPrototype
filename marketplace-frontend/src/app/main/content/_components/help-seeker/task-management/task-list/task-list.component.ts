@@ -1,25 +1,22 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { MatTableDataSource } from "@angular/material/table";
 
-import { Task } from "../../../../_model/task";
-import { Participant } from "../../../../_model/participant";
-import { Marketplace } from "../../../../_model/marketplace";
-
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { LoginService } from "../../../../_service/login.service";
-import { TaskService } from "../../../../_service/task.service";
-import { fuseAnimations } from "@fuse/animations";
-import { isNullOrUndefined } from "util";
-import { ClassInstanceDTO } from "../../../../_model/meta/Class";
-import { MatPaginator, MatSort } from "@angular/material";
-import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { TenantService } from "../../../../_service/core-tenant.service";
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { Participant } from 'app/main/content/_model/participant';
+import { Router } from '@angular/router';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Task } from 'app/main/content/_model/task';
+import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: "fuse-task-list",
-  templateUrl: "./task-list.component.html",
-  styleUrls: ["./task-list.component.scss"],
+  selector: 'fuse-task-list',
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.scss'],
   animations: fuseAnimations
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
@@ -30,17 +27,17 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   private displayedColumns: string[] = [
-    "taskName",
-    "taskType1",
-    "taskType2",
-    "taskDateFrom",
-    "taskDuration",
-    "verified"
+    'taskName',
+    'taskType1',
+    'taskType2',
+    'taskDateFrom',
+    'taskDuration',
+    'verified'
   ];
 
   private participant: Participant;
 
-  private tenantName: string = "FF Eidenberg";
+  private tenantName = 'FF Eidenberg';
   private tenantId: string;
 
   constructor(
@@ -49,9 +46,9 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     private helpSeekerService: CoreHelpSeekerService,
     private classInstanceService: ClassInstanceService,
     private coreTenantService: TenantService
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
     this.loadAllTasks();
@@ -98,15 +95,15 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   }
 
   addTask() {
-    this.router.navigate(["/main/task-select"]);
+    this.router.navigate(['/main/task-select']);
   }
 
   private isFF() {
-    return this.participant.username == "FFA";
+    return this.participant.username == 'FFA';
   }
 
   private isMV() {
-    return this.participant.username === "MVS";
+    return this.participant.username === 'MVS';
   }
   private isOther() {
     return !this.isFF() && !this.isMV();

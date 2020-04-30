@@ -1,19 +1,19 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { Volunteer } from "../_model/volunteer";
-import { LocalRepository } from "../_model/local-repository";
-import { isNullOrUndefined } from "util";
-import { ClassInstanceDTO, ClassInstance } from "../_model/meta/Class";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Volunteer } from '../_model/volunteer';
+import { LocalRepository } from '../_model/local-repository';
+import { isNullOrUndefined } from 'util';
+import { ClassInstanceDTO, ClassInstance } from '../_model/meta/class';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class LocalRepositoryService {
-     private apiUrl = 'http://localhost:3000/repository';
+  private apiUrl = 'http://localhost:3000/repository';
   //private apiUrl = "http://140.78.92.57:3000/repository";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async isConnected(volunteer: Volunteer) {
     let isConnected;

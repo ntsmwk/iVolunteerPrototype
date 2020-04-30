@@ -1,17 +1,15 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClassArchetype, ClassInstanceDTO } from '../../_model/meta/Class';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
+import { ClassInstanceDTO, ClassArchetype } from '../../_model/meta/class';
 import { Feedback } from '../../_model/feedback';
-import { HelpseekerService } from '../../_service/helpseeker.service';
-import { Helpseeker } from '../../_model/helpseeker';
-import { Marketplace } from '../../_model/marketplace';
-import { isNullOrUndefined } from 'util';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Marketplace } from '../../_model/marketplace';
+import { Helpseeker } from '../../_model/helpseeker';
 import { Volunteer } from '../../_model/volunteer';
+import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
 import { CoreVolunteerService } from '../../_service/core-volunteer.service';
 import { CoreUserImagePathService } from '../../_service/core-user-imagepath.service';
-import { CoreHelpSeekerService } from '../../_service/core-helpseeker.service';
-
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-asset-inbox',

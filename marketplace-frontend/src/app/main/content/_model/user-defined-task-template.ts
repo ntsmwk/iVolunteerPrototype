@@ -1,4 +1,4 @@
-import { PropertyDefinition, PropertyInstance, TemplateProperty } from "./meta/Property";
+import { TemplateProperty } from './meta/property';
 
 export class UserDefinedTaskTemplate {
     id: string;
@@ -7,7 +7,7 @@ export class UserDefinedTaskTemplate {
 
     kind: string;
 
-    templateProperties?: TemplateProperty<any>[];    
+    templateProperties?: TemplateProperty<any>[];
     templates?: UserDefinedTaskTemplate[];
 
     order: number;

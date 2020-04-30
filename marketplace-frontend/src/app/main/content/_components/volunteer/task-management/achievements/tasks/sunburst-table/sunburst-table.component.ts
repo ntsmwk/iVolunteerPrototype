@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, OnChanges, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { ClassInstanceDTO } from '../../../../../../_model/meta/Class';
+import { Component, OnInit, OnChanges, AfterViewInit, Input, Output, EventEmitter, ViewChild, SimpleChanges } from '@angular/core';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
+
 HC_sunburst(Highcharts);
 
 @Component({
@@ -123,14 +124,14 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   sunburstCenterName: string = 'Tätigkeiten';
 
   constructor(
-  ) {}
+  ) { }
 
   ngOnInit() {
 
   }
 
   ngAfterViewInit(): void {
-   this.tableDataSource.paginator = this.paginator;
+    this.tableDataSource.paginator = this.paginator;
 
     Highcharts.getOptions().colors.splice(0, 0, 'transparent');
     Highcharts.chart('sunburstChart', this.chartOptions).update({
@@ -242,11 +243,11 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   generateSunburstData() {
-    if(this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
+    if (this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
       this.selectedTaskType = null;
       this.updateSelectedTaskType(this.selectedTaskType);
-    } 
+    }
 
     let list = this.filteredClassInstanceDTOs
       .map(ci => {

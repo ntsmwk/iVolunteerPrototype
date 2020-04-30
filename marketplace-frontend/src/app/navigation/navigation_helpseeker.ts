@@ -1,5 +1,5 @@
 export const navigation_helpseeker = [
-  {
+/*   {
     'id': 'dashboard',
     'title': 'Dashboard',
     'type': 'item',
@@ -29,7 +29,7 @@ export const navigation_helpseeker = [
     'type': 'item',
     'url': '/main/properties/all'
   },
-  {
+  /* {
     'id': 'userDefinedTaskTemplates',
     'title': 'Task Templates',
     'type': 'item',
@@ -47,5 +47,5 @@ export const navigation_helpseeker = [
     'type': 'item',
     'url': '/main/rules/all'
   },
-
+*/
 ];

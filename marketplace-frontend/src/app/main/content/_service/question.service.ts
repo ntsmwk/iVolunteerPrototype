@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
-
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, MultipleQuestion, GenericQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
 } from '../_model/dynamic-forms/questions';
-
-import { PropertyType, ClassProperty } from '../_model/meta/Property';
+import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
 
-import { minDate, maxOther, minOther, requiredOther } from "../_validator/custom.validators";
-import { PropertyConstraint, ConstraintType } from '../_model/meta/Constraint';
+import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
   required: boolean;
-  messages: Map<string, string>; //Key - Message
+  messages: Map<string, string>; // Key - Message
 }
 
 export interface SingleValidatorData {
@@ -23,32 +20,35 @@ export interface SingleValidatorData {
   validator: ValidatorFn;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class QuestionService {
-  key: number = 0;
+  key = 0;
 
-  public getQuestionsFromProperties(properties: ClassProperty<any>[]): QuestionBase<any>[] {
+  public getQuestionsFromProperties(properties: ClassProperty<any>[], idPrefix?: string): QuestionBase<any>[] {
     let questions: QuestionBase<any>[] = [];
-    console.log(properties);
-    questions = this.createQuestionsFromProperties(properties);
+    questions = this.createQuestionsFromProperties(properties, idPrefix);
 
     return questions.sort((a, b) => a.order - b.order);
   }
 
-  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[]) {
-    let questions: QuestionBase<any>[] = [];
-    for (let property of templateProperties) {
+  private createQuestionsFromProperties(templateProperties: ClassProperty<any>[], idPrefix?: string) {
+    const questions: QuestionBase<any>[] = [];
+    for (const property of templateProperties) {
 
-      let question = this.createQuestionFromProperty(property);
+      const question = this.createQuestionFromProperty(property);
 
-      question.key = property.id;
+
+      if (!isNullOrUndefined(idPrefix)) {
+        question.key = idPrefix + property.id;
+      } else {
+        question.key = property.id;
+      }
       question.label = property.name;
       question.order = property.position;
 
-      let validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
+      const validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
 
       if (!isNullOrUndefined(validatorData)) {
         question.validators = validatorData.validators;
@@ -129,13 +129,13 @@ export class QuestionService {
     } else if (property.type === PropertyType.ENUM) {
       if (property.multiple) {
         question = new MultipleSelectionEnumQuestion({
-          //TODO
+          // TODO
           values: property.defaultValues,
           options: property.allowedValues
         });
       } else {
         question = new SingleSelectionEnumQuestion({
-          //TODO
+          // TODO
           values: property.defaultValues,
           options: property.allowedValues
         });
@@ -149,7 +149,7 @@ export class QuestionService {
 
       // }
 
-      ///TEST MultiProp List
+      /// TEST MultiProp List
       // else if (property.type === PropertyType.MULTI) {
       //   console.log("Multiple Property found:");
       //   console.log(property);
@@ -157,18 +157,16 @@ export class QuestionService {
       //     subQuestions: this.setQuestions(property.properties),
       //   });
     } else {
-      console.log("property kind not implemented: " + property.type);
+      console.log('property kind not implemented: ' + property.type);
       question = new GenericQuestion({
 
       });
-
     }
-
     return question;
   }
 
   private setAsListValues(values: any[]): { key: any, value: any }[] {
-    let ret: any[] = [];
+    const ret: any[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
         ret.push({ key: values[i], value: values[i] });
@@ -180,7 +178,7 @@ export class QuestionService {
 
   private setValuesWithoutKeys(values: any[]): any {
 
-    let ret: any[] = [];
+    const ret: any[] = [];
     if (!isNullOrUndefined(values)) {
       for (let i = 0; i < values.length; i++) {
         ret.push(values[i].value);
@@ -199,16 +197,16 @@ export class QuestionService {
   }
 
   private setDateValueArr(value: Date): Date[] {
-    let ret: Date[] = [];
+    const ret: Date[] = [];
     ret.push(this.setDateValue(value));
     return ret;
   }
 
   private setKeys(values: any[]): any {
 
-    let ret: string[] = [];
+    const ret: string[] = [];
     if (!isNullOrUndefined(values)) {
-      for (let val of values) {
+      for (const val of values) {
         ret.push(val);
       }
     }
@@ -217,27 +215,27 @@ export class QuestionService {
 
 
   private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType, required: boolean): ValidatorData {
-    let validators: ValidatorFn[] = [];
-    let messages: Map<string, string> = new Map<string, string>();
+    const validators: ValidatorFn[] = [];
+    const messages: Map<string, string> = new Map<string, string>();
 
     if (!isNullOrUndefined(propertyConstraints)) {
-      for (let constraint of propertyConstraints) {
+      for (const constraint of propertyConstraints) {
 
-        let singleValidatorData = this.convertRuleToValidator(constraint, propertyType);
+        const singleValidatorData = this.convertRuleToValidator(constraint, propertyType);
 
         if (!isNullOrUndefined(singleValidatorData)) {
           validators.push(singleValidatorData.validator);
           messages.set(singleValidatorData.key, constraint.message);
 
         } else {
-          console.log("undefined - done nothing - continue");
+          console.log('undefined - done nothing - continue');
         }
 
         if (required) {
           validators.push(Validators.required);
         }
       }
-      const ret = { validators: validators, messages: messages, required: required }
+      const ret = { validators: validators, messages: messages, required: required };
       return ret;
 
     } else {
@@ -253,37 +251,37 @@ export class QuestionService {
     switch (ConstraintType[propertyConstraint.constraintType]) {
 
       case ConstraintType.PATTERN:
-        //console.log("adding regex_pattern Validator" + rule.regex);
+        // console.log("adding regex_pattern Validator" + rule.regex);
         validator = Validators.pattern(propertyConstraint.value);
         key = 'pattern';
         break;
 
       case ConstraintType.MAX_LENGTH:
-        //console.log("adding max_length Validator" + rule.value);
+        // console.log("adding max_length Validator" + rule.value);
         validator = Validators.maxLength(propertyConstraint.value);
         key = 'maxlength';
         break;
 
       case ConstraintType.MIN_LENGTH:
-        //console.log("adding min_length Validator: " + rule.value);
+        // console.log("adding min_length Validator: " + rule.value);
         validator = Validators.minLength(propertyConstraint.value);
         key = 'minlength';
         break;
 
       case ConstraintType.MAX:
-        //console.log("adding max Validator" + rule.value);
+        // console.log("adding max Validator" + rule.value);
         validator = Validators.max(propertyConstraint.value);
         key = 'max';
         break;
 
       case ConstraintType.MIN:
-        //console.log("adding min Validator" + rule.value);
+        // console.log("adding min Validator" + rule.value);
         validator = Validators.min(propertyConstraint.value);
         key = 'min';
         break;
 
       default:
-        console.error("VALIDATORS: switch-default should not happen");
+        console.error('VALIDATORS: switch-default should not happen');
         break;
     }
 

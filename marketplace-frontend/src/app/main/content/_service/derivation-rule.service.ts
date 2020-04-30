@@ -1,9 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-
-import {isNullOrUndefined} from 'util';
-
-import {Marketplace} from '../_model/marketplace';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
+import { Marketplace } from '../_model/marketplace';
 import { DerivationRule } from '../_model/derivation-rule';
 
 @Injectable({
@@ -14,8 +12,12 @@ export class DerivationRuleService {
   constructor(private http: HttpClient) {
   }
 
-  findById(marketplace: Marketplace, id: string, tenantId: string){
+  findByIdAndTenantId(marketplace: Marketplace, id: string, tenantId: string){
     return this.http.get(`${marketplace.url}/rule/${id}/tenant/${tenantId}`);
+  }
+
+  findById(marketplace: Marketplace, id: string) {
+    return this.http.get(`${marketplace.url}/rule/${id}`);
   }
 
   findAll(marketplace: Marketplace, tenantId: string) {

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-// import { PropertyService } from '../_service/property.service';
-import { LoginService } from '../../../../_service/login.service';
-import { CoreHelpSeekerService } from '../../../../_service/core-helpseeker.service';
+import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
-import { Marketplace } from '../../../../_model/marketplace';
-import { PropertyType, PropertyDefinition } from '../../../../_model/meta/Property';
-import { CoreMarketplaceService } from '../../../../_service/core-marketplace.service';
-import { PropertyDefinitionService } from '../../../../_service/meta/core/property/property-definition.service';
-import { Helpseeker } from '../../../../_model/helpseeker';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/property';
+import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+
 
 
 @Component({
@@ -21,35 +20,24 @@ export class PropertyBuildFormComponent implements OnInit {
   marketplace: Marketplace;
   helpseeker: Helpseeker;
   currentProperty: PropertyDefinition<any>;
-  // form: FormGroup = new FormGroup({});
-
-
-
-  isLoaded: boolean = false;
+  isLoaded = false;
   whichProperty: string;
-
-
   propertyListItems: PropertyDefinition<any>[];
 
-  constructor(private router: Router,
+  constructor(
     private route: ActivatedRoute,
     private propertyDefinitionService: PropertyDefinitionService,
     private loginService: LoginService,
-    private helpSeekerService: CoreHelpSeekerService,
     private marketPlaceService: CoreMarketplaceService) {
-
   }
 
   ngOnInit() {
-    console.log("init property build form");
-
-
     // get propertylist
     this.route.params.subscribe(params => {
       this.marketPlaceService.findById(params['marketplaceId']).toPromise().then((marketplace: Marketplace) => {
         this.marketplace = marketplace;
 
-        let marketplaceLoaded, propertyLoaded: boolean = false;
+        let marketplaceLoaded = false, propertyLoaded = false;
 
         this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
           this.helpseeker = helpseeker;
@@ -123,7 +111,7 @@ export class PropertyBuildFormComponent implements OnInit {
   }
 
   setWhichProperty() {
-    if (this.currentProperty.type == PropertyType.MULTI) {
+    if (this.currentProperty.type === PropertyType.MULTI) {
       this.whichProperty = 'multi';
     } else {
       this.whichProperty = 'single';

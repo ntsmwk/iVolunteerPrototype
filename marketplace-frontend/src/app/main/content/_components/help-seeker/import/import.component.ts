@@ -1,26 +1,25 @@
-import { Component, OnInit } from "@angular/core";
-import { LoginService } from "app/main/content/_service/login.service";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
+import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import {
   ClassDefinition,
   ClassInstance,
-} from "app/main/content/_model/meta/Class";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
-import { Marketplace } from "app/main/content/_model/marketplace";
+} from 'app/main/content/_model/meta/class';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 import {
   ParticipantRole,
   Participant,
-} from "app/main/content/_model/participant";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
-import { PropertyInstance } from "app/main/content/_model/meta/Property";
-import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+} from 'app/main/content/_model/participant';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 
 @Component({
   selector: "import",
-  templateUrl: "import.component.html",
-  styleUrls: ["import.component.scss"],
+  templateUrl: 'import.component.html',
+  styleUrls: ['import.component.scss'],
 })
 export class ImportComponent implements OnInit {
   classDefinitions: ClassDefinition[] = [];
@@ -76,9 +75,9 @@ export class ImportComponent implements OnInit {
   async save() {
     // TODO MWE check all form are inputted.. ;)
 
-    let fileReader = new FileReader();
+    const fileReader = new FileReader();
     fileReader.onload = async (e) => {
-      let contentObject = JSON.parse(<string>fileReader.result);
+      const contentObject = JSON.parse(<string>fileReader.result);
       console.error(contentObject);
 
       for (const entry of contentObject.properties) {

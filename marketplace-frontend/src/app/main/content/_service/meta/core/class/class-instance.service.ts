@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Marketplace } from "app/main/content/_model/marketplace";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 import {
   ClassInstance,
   ClassDefinition,
-} from "app/main/content/_model/meta/Class";
-import { Participant } from "app/main/content/_model/participant";
+} from 'app/main/content/_model/meta/class';
+import { Participant } from 'app/main/content/_model/participant';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ClassInstanceService {
   constructor(private http: HttpClient) { }
@@ -111,4 +111,46 @@ export class ClassInstanceService {
       classInstanceIds
     );
   }
+
+
+  getAllClassInstances(marketplace: Marketplace) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
+  }
+
+  getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
+  }
+
+  getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
+  }
+
+  getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
+  }
+
+  getClassInstancesByArcheTypeFake(marketplace: Marketplace, archetype: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/fake`);
+  }
+
+  getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
+  }
+
+  getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
+    return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`);
+  }
+
+  createNewClassInstanceById(marketplace: Marketplace, classDefinitionId: string) {
+    return this.http.post(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/new`, '');
+  }
+
+  updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
+    return this.http.put(`${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`, classInstance);
+  }
+
+  deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
+    return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
+  }
+
 }

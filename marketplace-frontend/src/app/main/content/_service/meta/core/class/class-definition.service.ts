@@ -1,16 +1,18 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Marketplace } from "../../../../_model/marketplace";
-import { ClassDefinition, ClassArchetype } from "../../../../_model/meta/Class";
-import { PropertyDefinition } from "../../../../_model/meta/Property";
-import { isNullOrUndefined } from "util";
-import { of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Marketplace } from '../../../../_model/marketplace';
+import { ClassDefinition, ClassArchetype } from '../../../../_model/meta/class';
+import { isNullOrUndefined } from 'util';
+import { of } from 'rxjs';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { FormConfigurationPreviewRequest } from 'app/main/content/_model/meta/form';
+import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 
 @Injectable({
   providedIn: "root",
 })
 export class ClassDefinitionService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllClassDefinitions(marketplace: Marketplace, tenantId: string) {
     return this.http.get(
@@ -185,4 +187,25 @@ export class ClassDefinitionService {
       `${marketplace.url}/meta/core/class/definition/archetype/${archetype}/tenant/${tenantId}`
     );
   }
+
+
+  getFormConfiguratorsBottomUp(marketplace: Marketplace, ids: string[]) {
+    return this.getFormConfigurations(marketplace, ids, 'bottom-up');
+  }
+
+  getFormConfiguratorsTopDown(marketplace: Marketplace, ids: string[]) {
+    return this.getFormConfigurations(marketplace, ids, 'top-down');
+  }
+
+  getFormConfigurations(marketplace: Marketplace, ids: string[], type: string) {
+    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration?type=${type}`, ids);
+  }
+
+  getFromConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+    const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(classDefinitions, relationships);
+    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-preview`, formConfigurationPreviewRequest);
+  }
+
+
+
 }

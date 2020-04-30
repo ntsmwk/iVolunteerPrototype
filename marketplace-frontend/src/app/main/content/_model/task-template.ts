@@ -1,4 +1,4 @@
-import { CompetenceClassDefinition } from "./meta/Class";
+import { CompetenceClassDefinition } from './meta/class';
 
 export class TaskTemplate {
   id: string;

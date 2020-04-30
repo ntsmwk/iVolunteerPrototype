@@ -22,8 +22,8 @@ public class UserDefinedTaskTemplate extends IVolunteerObject {
 	
 	int order;
 	
-	public UserDefinedTaskTemplate() {
-	}
+	public UserDefinedTaskTemplate() {}
+
 	
 	public UserDefinedTaskTemplate(String id) {
 		this.id = id;

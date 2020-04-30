@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { fuseAnimations } from '../../../../../../../../@fuse/animations';
-import { LoginService } from '../../../../../_service/login.service';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
-import { Volunteer } from '../../../../../_model/volunteer';
-import { StoredChart } from '../../../../../_model/stored-chart';
-import { StoredChartService } from '../../../../../_service/stored-chart.service';
+import { fuseAnimations } from '@fuse/animations';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { Tenant } from 'app/main/content/_model/tenant';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { StoredChartService } from 'app/main/content/_service/stored-chart.service';
+import { StoredChart } from 'app/main/content/_model/stored-chart';
 
 @Component({
   selector: 'fuse-competencies',
@@ -125,7 +125,7 @@ export class CompetenciesComponent implements OnInit {
       for (var month = 0; month < 12; month++) {
         var d = new Date(Date.UTC(2000, month, 1, 0, 0, 0));
         uniqueMonths.push(this.dateLocale.format(d))
-    }
+      }
 
       uniqueMonths.forEach(month => {
         let currentMonthList = filteredList.filter(entry => {
@@ -254,7 +254,7 @@ export class CompetenciesComponent implements OnInit {
             } else {
               map.set(t.month, [1, Number(t.duration)]);
             }
-          }else {
+          } else {
             if (map.get(t.year)) {
               map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
             } else {

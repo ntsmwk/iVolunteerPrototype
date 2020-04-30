@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../../../../_service/login.service';
-import { ClassInstanceService } from '../../../../../_service/meta/core/class/class-instance.service';
-import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
-import { StoredChartService } from '../../../../../_service/stored-chart.service';
-import { Volunteer } from '../../../../../_model/volunteer';
-import { ClassInstanceDTO, ClassArchetype } from '../../../../../_model/meta/Class';
-import { StoredChart } from '../../../../../_model/stored-chart';
-import { TenantService } from '../../../../../_service/core-tenant.service';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { Tenant } from 'app/main/content/_model/tenant';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from "util";
+import { LoginService } from 'app/main/content/_service/login.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { StoredChartService } from 'app/main/content/_service/stored-chart.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { LocalRepositoryService } from 'app/main/content';
 import { timer } from 'rxjs';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { StoredChart } from 'app/main/content/_model/stored-chart';
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class ManagementSummaryComponent implements OnInit {
 
   durationYear: any[] = [];
   numberYear: any[] = [];
-  
+
   comparisonData: any[] = [];
   comparisonYear: number;
   engagementYear: number;

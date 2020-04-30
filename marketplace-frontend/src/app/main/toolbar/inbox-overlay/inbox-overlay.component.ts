@@ -8,7 +8,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance, ClassArchetype, ClassInstanceDTO } from 'app/main/content/_model/meta/Class';
+import { ClassInstance, ClassArchetype, ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { Router } from '@angular/router';
 import { Feedback } from 'app/main/content/_model/feedback';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';

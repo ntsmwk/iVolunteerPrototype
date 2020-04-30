@@ -136,7 +136,11 @@ public class StandardPropertyDefinitions {
 //		list.add(new HoeheProperty());
 //
 //		list.add(new GluehzeitProperty());
+//		list.add(new DurchmesserProperty());
 //		list.add(new DurchsatzProperty());
+//		
+//		list.add(new ChargierhilfeProperty());
+//		list.add(new WalzartProperty());
 //
 //		list.add(new MoeglicheInnendurchmesserProperty());
 //		list.add(new MaxAussendurchmesserProperty());
@@ -171,8 +175,11 @@ public class StandardPropertyDefinitions {
 //		list.add(new ZahlungsbedingungenProperty());
 //
 //		return new ArrayList(list);
-//
 //	}
+	
+
+	
+	
 
 	public List<PropertyDefinition<Object>> getAll(String tenantId) {
 		List<PropertyDefinition<Object>> properties = this.getAllHeader(tenantId);
@@ -181,11 +188,12 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
 //		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-
+		
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
 //		sps.addAll(flexProd);
+//		sps.addAll(drahtofen);
 
 		properties.addAll(sps);
 		return properties;
@@ -1009,6 +1017,19 @@ public class StandardPropertyDefinitions {
 		public BundEntfettenProperty() {
 			this.setName("Bund Entfetten");
 			this.setTenantId(tenantId);
+		}
+	}
+	
+	public static class ChargierhilfeProperty extends TextPropertyDefinition {
+		public ChargierhilfeProperty() {
+			this.setId("chargierhilfe");
+			this.setName("Chargierhilfe");
+			this.setAllowedValues(new LinkedList<String>());
+			this.getAllowedValues().add("Konvektoren");
+			this.getAllowedValues().add("Tragerahmen");
+			this.getAllowedValues().add("Zwischenrahmen");
+			this.getAllowedValues().add("Kronenstöcke");
+			this.getAllowedValues().add("Chargierkörbe");
 		}
 	}
 

@@ -7,7 +7,7 @@ import { LoginService } from "../../../../_service/login.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { ClassInstanceDTO, } from "../../../../_model/meta/Class";
+import { ClassInstanceDTO, } from "../../../../_model/meta/class";
 import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
 import { MatSort, MatPaginator, Sort } from "@angular/material";
@@ -116,7 +116,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .getImagePathsById(this.issuerIds)
           .toPromise()
       );
-      
+
       this.issuers = <any[]>(
         await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
       );

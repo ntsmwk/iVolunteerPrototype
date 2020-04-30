@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
- 
 import { QuestionBase, MultipleSelectionEnumQuestion } from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 

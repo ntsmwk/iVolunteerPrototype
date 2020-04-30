@@ -1,4 +1,4 @@
-import { AchievementClassInstance } from "./meta/Class";
+import { AchievementClassInstance } from './meta/class';
 
 export class Feedback extends AchievementClassInstance {
   id: string;
@@ -16,6 +16,6 @@ export class Feedback extends AchievementClassInstance {
 }
 
 export enum FeedbackType {
-  KUDOS = "KUDOS",
-  STARRATING = "STARRATING"
+  KUDOS = 'KUDOS',
+  STARRATING = 'STARRATING'
 }

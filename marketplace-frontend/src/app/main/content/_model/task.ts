@@ -1,5 +1,5 @@
 import { Project } from './project';
-import { CompetenceClassDefinition } from './meta/Class';
+import { CompetenceClassDefinition } from './meta/class';
 
 export class Task {
   id: string;

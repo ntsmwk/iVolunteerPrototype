@@ -110,8 +110,8 @@ public class PersonTaskService {
 
 		personTaskClassInstance
 				.setUserId(userMappingService.getByExternalUserId(personTask.getPersonID()).getiVolunteerUserId());
-		personTaskClassInstance.setInIssuerInbox(false);
-		personTaskClassInstance.setInUserRepository(true);
+//		personTaskClassInstance.setInIssuerInbox(false);
+//		personTaskClassInstance.setInUserRepository(true);
 
 //		TODO MWE set issuerId to tenantId!
 		personTaskClassInstance.setIssuerId(level == MV ? "MVS" : "FFA");

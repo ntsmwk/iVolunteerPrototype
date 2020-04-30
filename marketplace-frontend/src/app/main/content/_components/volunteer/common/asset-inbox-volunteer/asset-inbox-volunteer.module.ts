@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { FuseSharedModule } from "@fuse/shared.module";
-import { AssetInboxVolunteerComponent } from "./asset-inbox-volunteer.component";
-import { CommonModule } from "@angular/common";
-import { MatButtonModule, MatMenuModule } from "@angular/material";
-import { RouterModule } from "@angular/router";
-import { AssetInboxModule } from "../../../../_shared_components/asset-inbox/asset-inbox.module";
+import { NgModule } from '@angular/core';
+import { FuseSharedModule } from '@fuse/shared.module';
+import { AssetInboxVolunteerComponent } from './asset-inbox-volunteer.component';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule, MatMenuModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
+import { AssetInboxModule } from '../../../../_shared_components/asset-inbox/asset-inbox.module';
 
-const routes = [{ path: "", component: AssetInboxVolunteerComponent }];
+const routes = [{ path: '', component: AssetInboxVolunteerComponent }];
 
 @NgModule({
   declarations: [AssetInboxVolunteerComponent],
@@ -21,4 +21,4 @@ const routes = [{ path: "", component: AssetInboxVolunteerComponent }];
   ],
   exports: [AssetInboxVolunteerComponent]
 })
-export class AssetInboxVolunteerModule {}
+export class AssetInboxVolunteerModule { }
