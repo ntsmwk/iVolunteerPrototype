@@ -334,13 +334,13 @@ export class DialogFactoryDirective {
     });
   }
 
-  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
     const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classDefinitions: classDefinitions, relationships: relationships },
+      data: { marketplace: marketplace, classDefinitions: classDefinitions, relationships: relationships, rootClassDefinition: rootClassDefinition },
       disableClose: true
     });
 

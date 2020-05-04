@@ -319,7 +319,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     }
     cell.setCollapsed(false);
     cell.classArchetype = collector.classDefinition.classArchetype;
-    cell.newlyAdded = false;
+    // cell.newlyAdded = false;
     cell.value = collector.classDefinition.name;
     cell.setVertex(true);
     cell.setConnectable(true);

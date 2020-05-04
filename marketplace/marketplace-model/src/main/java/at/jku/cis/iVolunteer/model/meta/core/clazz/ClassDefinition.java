@@ -22,6 +22,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	
 	
 	private boolean collector;
+	private boolean writeProtected;
 
 	private String imagePath;
 	
@@ -105,6 +106,13 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 
 	public void setCollector(boolean collector) {
 		this.collector = collector;
+	}
+	public boolean isWriteProtected() {
+		return writeProtected;
+	}
+
+	public void setWriteProtected(boolean writeProtected) {
+		this.writeProtected = writeProtected;
 	}
 
 	public boolean isVisible() {

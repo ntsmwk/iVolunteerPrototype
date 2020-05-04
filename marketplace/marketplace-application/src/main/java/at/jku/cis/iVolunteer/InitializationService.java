@@ -295,6 +295,7 @@ public class InitializationService {
 		fwPassEintrag.setName("Freiwilligenpass-\nEintrag");
 		fwPassEintrag.setRoot(true);
 		fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
+		fwPassEintrag.setWriteProtected(true);
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 		
 		PropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
@@ -314,6 +315,7 @@ public class InitializationService {
 		task.setTenantId(tenantId);
 		task.setName("Tätigkeit");
 		task.setClassArchetype(ClassArchetype.TASK);
+		task.setWriteProtected(true);
 		task.setProperties(new ArrayList<>());
 		
 		PropertyDefinition dateFromProperty = properties.stream().filter(p -> p.getName().equals("Starting Date")).findFirst().get();
@@ -336,6 +338,7 @@ public class InitializationService {
 		competence.setTenantId(tenantId);
 		competence.setName("Kompetenz");
 		competence.setClassArchetype(ClassArchetype.COMPETENCE);
+		competence.setWriteProtected(true);
 		competence.setProperties(new ArrayList<>());
 
 		classDefinitions.add(competence);
@@ -353,6 +356,7 @@ public class InitializationService {
 		achievement.setTenantId(tenantId);
 		achievement.setName("Verdienst");
 		achievement.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+		achievement.setWriteProtected(true);
 		achievement.setProperties(new ArrayList<>());
 		
 		classDefinitions.add(achievement);
@@ -371,6 +375,7 @@ public class InitializationService {
 		function.setTenantId(tenantId);
 		function.setName("Funktion");
 		function.setClassArchetype(ClassArchetype.FUNCTION);
+		function.setWriteProtected(true);
 		function.setProperties(new ArrayList<>());
 
 		classDefinitions.add(function);
