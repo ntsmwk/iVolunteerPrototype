@@ -44,9 +44,7 @@ public class CollectionService {
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
 	
-
-
-	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsSingleCollection(String slotId) {
+	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
 		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
 		if (configurator == null) {
 			return null;
@@ -60,13 +58,13 @@ public class CollectionService {
 		});
 
 		for (ClassDefinition collector : collectors) {
-			collector.setProperties(this.aggregateAllPropertiesDFS(collector, 0, collector.getProperties()));
+			collector.setProperties(aggregateAllPropertiesDFS(collector, 0, collector.getProperties()));
 		}
 
 		return collectors;
 	}
 
-	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMultipleCollections(String classConfigurationId) {
+	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(String classConfigurationId) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(classConfigurationId);
 
 		if (classConfiguration == null) {
@@ -94,16 +92,12 @@ public class CollectionService {
 				collection.setNumberOfProperties(
 						collection.getNumberOfProperties() + entry.getClassDefinition().getProperties().size());
 			}
-
 			collection.setNumberOfDefinitions(collection.getCollectorEntries().size());
-
 		}
-
 		return collections;
-
 	}
 
-	String getPathFromRoot(ClassDefinition classDefinition) {
+	private String getPathFromRoot(ClassDefinition classDefinition) {
 		ArrayList<String> pathArray = new ArrayList<>();
 		pathArray.add(classDefinition.getId());
 
@@ -116,30 +110,27 @@ public class CollectionService {
 				pathArray.add(classDefinition.getId());
 			}
 		}
-
 		Collections.reverse(pathArray);
 		return String.join("", pathArray);
-
 	}
 
 	List<EnumEntry> aggregateAllEnumEntriesDFS(ClassDefinition root, int level, List<EnumEntry> list) {
 		Stack<Relationship> stack = new Stack<>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
-				RelationshipType.INHERITANCE);
+		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 
 		if (stack == null || stack.size() <= 0) {
 			return list;
-		} else {
-			while (!stack.isEmpty()) {
-				Relationship relationship = stack.pop();
-				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
-				enumEntry.setPosition(new int[level + 1]);
-				list.add(enumEntry);
-				this.aggregateAllEnumEntriesDFS(classDefinition, level + 1, list);
-			}
+		}
+		
+		while (!stack.isEmpty()) {
+			Relationship relationship = stack.pop();
+			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+			EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
+			enumEntry.setPosition(new int[level + 1]);
+			list.add(enumEntry);
+			this.aggregateAllEnumEntriesDFS(classDefinition, level + 1, list);
 		}
 		return list;
 	}
@@ -154,17 +145,17 @@ public class CollectionService {
 
 		if (stack == null || stack.size() <= 0) {
 			return list;
-		} else {
-			while (!stack.isEmpty()) {
-				Relationship relationship = stack.pop();
-				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				for (ClassProperty<Object> property : classDefinition.getProperties()) {
-					if (!list.stream().filter(p -> p.getId().contentEquals(property.getId())).findFirst().isPresent()) {
-						list.add(property);
-					}
+		}
+		while (!stack.isEmpty()) {
+			Relationship relationship = stack.pop();
+			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+			
+			for (ClassProperty<Object> property : classDefinition.getProperties()) {
+				if (!list.stream().filter(p -> p.getId().contentEquals(property.getId())).findFirst().isPresent()) {
+					list.add(property);
 				}
-				this.aggregateAllPropertiesDFS(classDefinition, level + 1, list);
 			}
+			this.aggregateAllPropertiesDFS(classDefinition, level + 1, list);
 		}
 		return list;
 	}
@@ -180,17 +171,17 @@ public class CollectionService {
 
 		if (stack == null || stack.size() <= 0) {
 			return list;
-		} else {
-			while (!stack.isEmpty()) {
-				Relationship relationship = stack.pop();
-				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-					list.add(new MatchingCollectorEntry(classDefinition, path));
-				}
-				this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
-						path + PATH_DELIMITER + classDefinition.getId());
+		} 
+		while (!stack.isEmpty()) {
+			Relationship relationship = stack.pop();
+			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
+				list.add(new MatchingCollectorEntry(classDefinition, path));
 			}
+			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
+					path + PATH_DELIMITER + classDefinition.getId());
 		}
+		
 		return list;
 	}
 

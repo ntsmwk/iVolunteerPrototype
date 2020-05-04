@@ -25,12 +25,12 @@ public class MatchingCollectorConfigurationController {
 	@GetMapping("matching-collector-configuration/{slotId}/aggregate-in-single")
 	private List<ClassDefinition> aggregateInSingleMatchingCollectorConfiguration(
 			@PathVariable("slotId") String slotId) {
-		return collectionService.collectAllClassDefinitionsWithPropertiesAsSingleCollection(slotId);
+		return collectionService.collectAllClassDefinitionsWithPropertiesAsList(slotId);
 	}
 
 	@GetMapping("matching-collector-configuration/{slotId}/aggregate-in-collections")
 	private List<MatchingCollector> aggregateInMultipleCollectorsConfiguration(@PathVariable("slotId") String slotId) {
-		return collectionService.collectAllClassDefinitionsWithPropertiesAsMultipleCollections(slotId);
+		return collectionService.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(slotId);
 	}
 
 	@GetMapping("matching-collector-configuration/{id}/saved-configuration")

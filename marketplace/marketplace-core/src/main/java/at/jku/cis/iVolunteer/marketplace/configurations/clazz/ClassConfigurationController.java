@@ -102,10 +102,8 @@ public class ClassConfigurationController {
 		}
 		classDefinitionRepository.save(classDefinitions);
 		
-		
-		
-		//TODO aggregate and build 
-		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsMultipleCollections(classConfiguration.getId());
+		//Build MatchingCollector
+		List<MatchingCollector> collectors = collectionService.collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(classConfiguration.getId());
 				
 		MatchingCollectorConfiguration matchingCollectorConfiguration = new MatchingCollectorConfiguration();
 		matchingCollectorConfiguration.setId(classConfiguration.getId());
