@@ -23,6 +23,7 @@ import { RemoveDialogComponent, RemoveDialogData } from 'app/main/content/_compo
 import { isNullOrUndefined } from 'util';
 import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
 import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -353,25 +354,25 @@ export class DialogFactoryDirective {
     });
   }
 
-  // openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
-  //   const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
-  //     width: '90vw',
-  //     minWidth: '90vw',
-  //     height: '90vh',
-  //     minHeight: '90vh',
-  //     data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
-  //     disableClose: true
-  //   });
+  openPreviewExportDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+    const dialogRef = this.dialog.open(ClassInstanceFormPreviewExportDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
+      disableClose: true
+    });
 
-  //   let returnValue: ClassInstanceFormPreviewExportDialogData;
-  //   dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
-  //     returnValue = result;
-  //   });
+    let returnValue: ClassInstanceFormPreviewExportDialogData;
+    dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
+      returnValue = result;
+    });
 
-  //   return dialogRef.afterClosed().toPromise().then(() => {
-  //     return returnValue;
-  //   });
-  // }
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
 
   openChangeIconDialog(marketplace: Marketplace, currentImagePath: string) {
     const dialogRef = this.dialog.open(ChangeIconDialogComponent, {

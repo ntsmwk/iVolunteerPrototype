@@ -35,6 +35,10 @@ import { AddPropertyDialogComponent } from 'app/main/content/_components/dialogs
 import { RemoveDialogComponent } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 import { ClassInstanceFormPreviewDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.module';
 import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
+import {
+  ClassInstanceFormPreviewExportDialogModule
+} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
+import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
 
 
@@ -59,6 +63,7 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_compo
 
     AddPropertyDialogModule,
     RemoveDialogModule,
+    ClassInstanceFormPreviewExportDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
@@ -81,6 +86,7 @@ import { ClassInstanceFormPreviewDialogComponent } from 'app/main/content/_compo
     ClassInstanceFormPreviewDialogComponent,
     DeleteClassConfigurationDialogComponent,
     ChangeIconDialogComponent,
+    ClassInstanceFormPreviewExportDialogComponent,
 
     AddPropertyDialogComponent,
     RemoveDialogComponent,

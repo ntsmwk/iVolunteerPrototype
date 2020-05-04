@@ -1061,6 +1061,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
   }
 
+  showExportDialog() {
+    const rootCell = this.graph.getSelectionCell() as MyMxCell;
+
+    if (!isNullOrUndefined(rootCell)) {
+      this.dialogFactory.openPreviewExportDialog(this.marketplace, [rootCell.id]).then(() => {
+
+      });
+    }
+  }
+
+
   showZoomLevel() {
     const scale = this.graph.view.getScale();
     console.log(this.graph.view.getScale());
