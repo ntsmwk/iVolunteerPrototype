@@ -38,7 +38,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   showXAxisLabel = true;
   showYAxisLabel = true;
   xAxisLabel = 'Datum';
-  yAxisLabel = 'Dauer [h]';
+  yAxisLabel = 'Dauer [Stunden]';
   animations = true;
   autoScale = true;
   timeline = true;
@@ -55,7 +55,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.selectedYaxis = 'Dauer [h]';
+    this.selectedYaxis = 'Dauer [Stunden]';
     this.updateSelectedYaxis(this.selectedYaxis);
 
     this.selectedYear = 'Gesamt';

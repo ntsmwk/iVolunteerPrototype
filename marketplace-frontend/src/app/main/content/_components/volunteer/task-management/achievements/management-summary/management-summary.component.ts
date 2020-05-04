@@ -35,7 +35,7 @@ export class ManagementSummaryComponent implements OnInit {
   showXAxisLabel = true;
   showYAxisLabel = true;
   xAxisLabel = 'Datum';
-  yAxisLabel = 'Dauer [h]';
+  yAxisLabel = 'Dauer [Stunden]';
   noBarWhenZero = true;
   showLabels = true;
   autoScale = true;
@@ -88,12 +88,6 @@ export class ManagementSummaryComponent implements OnInit {
 
     this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
 
-    this.tenantMap = new Map<String, Tenant>();
-    for (let tenantId of this.volunteer.subscribedTenants) {
-      let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
-      this.tenantMap.set(tenantId, tenant);
-    }
-
     let marketplaces = <Marketplace[]>(
       await this.volunteerService
         .findRegisteredMarketplaces(this.volunteer.id)
@@ -138,13 +132,14 @@ export class ManagementSummaryComponent implements OnInit {
 
     // console.error('after', this.classInstanceDTOs.length);
 
-    this.classInstanceDTOs.forEach((ci, index, object) => {
-      if (ci.duration === null) {
-        object.splice(index, 1);
-      }
-    });
-
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+    
+    let uniqueTenants = [...new Set(this.classInstanceDTOs.map(item => item.tenantId))];
+    this.tenantMap = new Map<String, Tenant>();
+    for (let tenantId of uniqueTenants) {
+      let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
+      this.tenantMap.set(tenantId, tenant);
+    }
 
     this.generateComparisonChartData(this.comparisonYear);
     this.generateEngagementYearData(this.engagementYear);
@@ -245,7 +240,6 @@ export class ManagementSummaryComponent implements OnInit {
       return ci.tenantId === tenantId
     });
     let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear()))];
-
     return Math.min.apply(Math, uniqueYears);
   }
 
