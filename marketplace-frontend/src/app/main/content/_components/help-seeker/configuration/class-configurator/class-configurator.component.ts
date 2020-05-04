@@ -286,6 +286,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.root = classDefinition.root;
+    cell.writeProtected = classDefinition.writeProtected;
 
     if (cell.root) {
       if (!this.rootCellSet) {
@@ -438,7 +439,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.id = r.id;
-    cell.newlyAdded = createNew;
+    // cell.newlyAdded = createNew;
     cell.geometry.relative = true;
     cell.edge = true;
 
@@ -497,7 +498,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private performDelete(cells: MyMxCell[]) {
+    cells = cells.filter((c: MyMxCell) => !c.writeProtected);
     const removedCells = this.graph.removeCells(cells, this.deleteRelationships) as MyMxCell[];
+    console.log(cells);
 
     if (isNullOrUndefined(removedCells)) {
       return;
