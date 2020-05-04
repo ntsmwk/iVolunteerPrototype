@@ -13,6 +13,7 @@ export interface ClassInstanceFormPreviewDialogData {
     marketplace: Marketplace;
     classDefinitions: ClassDefinition[];
     relationships: Relationship[];
+    rootClassDefinition: ClassDefinition;
 }
 
 @Component({
@@ -46,10 +47,12 @@ export class ClassInstanceFormPreviewDialogComponent implements OnInit {
 
     ngOnInit() {
 
+        console.log(this.data);
+
         this.returnedClassInstances = [];
 
         this.classDefinitionService
-            .getFromConfigurationPreview(this.data.marketplace, this.data.classDefinitions, this.data.relationships)
+            .getFromConfigurationPreview(this.data.marketplace, this.data.classDefinitions, this.data.relationships, this.data.rootClassDefinition)
             .toPromise()
             .then((ret: FormConfiguration[]) => {
                 this.formConfigurations = ret;

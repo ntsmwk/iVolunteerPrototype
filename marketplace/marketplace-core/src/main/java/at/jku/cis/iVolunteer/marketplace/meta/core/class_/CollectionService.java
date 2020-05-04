@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -196,6 +197,114 @@ public class CollectionService {
 	public List<EnumEntry> aggregateEnums(String classDefinitionId) {
 		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
 		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
+	}
+	
+	FormEntry getParentClassDefintions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitons, List<Relationship> allRelationships) {
+
+		rootFormEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
+		rootFormEntry.setClassProperties(new LinkedList<ClassProperty<Object>>());
+		rootFormEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
+		rootFormEntry.setSubEntries(new ArrayList<FormEntry>());
+
+		Queue<ClassDefinition> classDefinitions = new LinkedList<ClassDefinition>();
+		classDefinitions.add(rootClassDefinition);
+		
+		while (!classDefinitions.isEmpty()) {
+			ClassDefinition currentClassDefinition = classDefinitions.poll();
+			
+			rootFormEntry.getClassDefinitions().add(currentClassDefinition);
+			
+			if (!currentClassDefinition.isRoot()) {
+				Relationship inheritance = allRelationships.stream().filter(r -> r.getTarget().equals(currentClassDefinition.getId())).findFirst().get();
+			
+				if (inheritance == null) {
+					throw new NotAcceptableException("getParentById: child is not root and has no parent");
+				}
+				
+				ClassDefinition next = allClassDefinitons.stream().filter(c -> c.getId().equals(inheritance.getSource())).findFirst().get();
+				
+				if (next != null) {
+					classDefinitions.add(next);
+				}	
+				
+			}
+
+			if (currentClassDefinition.getImagePath() != null && rootFormEntry.getImagePath() == null) {
+				rootFormEntry.setImagePath(currentClassDefinition.getImagePath());
+			}
+			
+		}
+
+		List<ClassProperty<Object>> properties = new LinkedList<>();
+		for (ClassProperty<Object> property : rootClassDefinition.getProperties()) {
+			if (!rootFormEntry.getClassProperties().contains(property)) {
+				properties.add(property);
+			}
+		}
+
+		rootFormEntry.getClassProperties().addAll(0, properties);
+		
+		return rootFormEntry;
+
+	}
+	
+	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition, List<Relationship> allRelationships) {
+		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
+		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+		
+		for (ClassProperty<Object> property : copyList) {
+			if (!formEntry.getClassProperties().contains(property)) {
+				if (property.getType().equals(PropertyType.ENUM)) {
+					handleEnumProperties(currentClassDefinition, properties, property);
+				}
+
+				if (!property.getType().equals(PropertyType.ENUM)) {
+					properties.add(property);
+				}
+			}
+
+		}
+
+		return properties;
+	}
+
+	private void handleEnumProperties(ClassDefinition currentClassDefinition, List<ClassProperty<Object>> properties, ClassProperty<Object> property) {
+//	TODO
+//		
+//		ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
+//		
+//		enumProperty.setId(property.getId());
+//		enumProperty.setName(property.getName());
+//		enumProperty.setType(PropertyType.ENUM);
+//		enumProperty.setRequired(property.isRequired());
+//
+//		List<Relationship> associationList = (relationshipRepository.findBySourceAndRelationshipType(property.getId(), RelationshipType.ASSOCIATION));
+//
+//		if (associationList != null) {
+//			int i = 0;
+//			for (Relationship r : associationList) {
+//				// for each Relationship, Do a DFS to construct dropdown options menu
+//
+//				ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
+//				enumProperty.setAllowedValues(aggregateAllEnumEntriesDFS(classDefinition,
+//						0, new ArrayList<EnumEntry>()));
+//
+//				if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
+//					enumProperty.setMultiple(false);
+//				} else if (((Association) r).getTargetCardinality()
+//						.equals(AssociationCardinality.ONESTAR)) {
+//					enumProperty.setMultiple(true);
+//				}
+//
+//				currentClassDefinition.getProperties().remove(i);
+//
+//				ArrayList temp = new ArrayList();
+//				temp.add(enumProperty);
+//				currentClassDefinition.getProperties().addAll(i, temp);
+//				properties.addAll(temp);
+//				i++;
+//			}
+//		}
 	}
 
 	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {

@@ -203,6 +203,20 @@ public class ClassDefinitionService {
 
 		return configList;
 	}
+	
+	public List<FormConfiguration> getParents(List<ClassDefinition> classDefinitions, List<Relationship> relationships, ClassDefinition rootClassDefinition) {
+		List<FormConfiguration> formConfigurations = new ArrayList<>();
+
+		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
+		
+		FormConfiguration formConfiguration = new FormConfiguration();
+		formConfiguration.setId(rootClassDefinition.getId());
+		formConfiguration.setName(rootClassDefinition.getName());
+		formConfiguration.setFormEntry(formEntry);
+		formConfigurations.add(formConfiguration);
+		return formConfigurations;
+	}
+
 
 	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry,
 			ClassDefinition currentClassDefinition) {
@@ -290,9 +304,7 @@ public class ClassDefinitionService {
 		return formConfigurations;
 	}
 
-	public List<FormConfiguration> aggregateChildren(List<ClassDefinition> classDefinitions,
-			List<Relationship> relationships) {
-
+	public List<FormConfiguration> aggregateChildren(List<ClassDefinition> classDefinitions, List<Relationship> relationships) {
 		ClassDefinition rootClassDefinition = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().get();
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 

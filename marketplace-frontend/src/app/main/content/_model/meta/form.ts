@@ -29,10 +29,12 @@ export class FormConfiguration {
 export class FormConfigurationPreviewRequest {
     classDefinitions: ClassDefinition[];
     relationships: Relationship[];
+    rootClassDefinition: ClassDefinition;
 
-    constructor(classDefinitions: ClassDefinition[], relationships: Relationship[]) {
+    constructor(classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
         this.classDefinitions = classDefinitions;
         this.relationships = relationships;
+        this.rootClassDefinition = rootClassDefinition;
     }
 }
 
