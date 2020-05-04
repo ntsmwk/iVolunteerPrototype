@@ -244,14 +244,10 @@ public class CollectionService {
 		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
 		
 		for (ClassProperty<Object> property : copyList) {
-			if (!formEntry.getClassProperties().contains(property)) {
-				if (property.getType().equals(PropertyType.ENUM)) {
-					handleEnumProperties(currentClassDefinition, properties, property);
-				}
-
-				if (!property.getType().equals(PropertyType.ENUM)) {
-					properties.add(property);
-				}
+			if (!formEntry.getClassProperties().contains(property) && property.getType().equals(PropertyType.ENUM)) {
+				handleEnumProperties(currentClassDefinition, properties, property);
+			} else if (!formEntry.getClassProperties().contains(property) &&!property.getType().equals(PropertyType.ENUM)) {
+				properties.add(property);
 			}
 		}
 
@@ -259,7 +255,7 @@ public class CollectionService {
 	}
 
 	private void handleEnumProperties(ClassDefinition currentClassDefinition, List<ClassProperty<Object>> properties, ClassProperty<Object> property) {
-//	TODO
+//	TODO Alexander
 //		
 //		ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
 //		
@@ -298,23 +294,16 @@ public class CollectionService {
 	}
 
 	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
-
 		rootFormEntry.setClassDefinitions(new LinkedList<>());
 		rootFormEntry.getClassDefinitions().add(rootClassDefinition);
-
 		rootFormEntry.setClassProperties(rootClassDefinition.getProperties());
-//
-//		List<Relationship> relationships = relationshipRepository
-//				.findBySourceAndRelationshipType(rootClassDefinition.getId(), RelationshipType.AGGREGATION);
 
 		List<Relationship> relationships = new ArrayList<>();
 		
 		for (Relationship r : allRelationships) {
 			if (r.getRelationshipType().equals(RelationshipType.AGGREGATION) && r.getSource().equals(rootClassDefinition.getId())) {
 				relationships.add(r);
-				
 			}
-	
 		}
 		
 		Collections.reverse(relationships);
@@ -326,19 +315,18 @@ public class CollectionService {
 
 		if (stack == null || stack.size() <= 0) {
 			return rootFormEntry;
-		} else {
-			while (!stack.isEmpty()) {
-				Relationship relationship = stack.pop();
-//				ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-				
-				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-				
-				FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
-				subFormEntries.add(subFormEntry);
-			}
-
-			rootFormEntry.setSubEntries(subFormEntries);
+		} 
+		
+		while (!stack.isEmpty()) {
+			Relationship relationship = stack.pop();				
+			ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+			
+			FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
+			subFormEntries.add(subFormEntry);
 		}
+
+		rootFormEntry.setSubEntries(subFormEntries);
+		
 		return rootFormEntry;
 
 	}
