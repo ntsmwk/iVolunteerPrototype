@@ -500,7 +500,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   private performDelete(cells: MyMxCell[]) {
     cells = cells.filter((c: MyMxCell) => !c.writeProtected);
     const removedCells = this.graph.removeCells(cells, this.deleteRelationships) as MyMxCell[];
-    console.log(cells);
 
     if (isNullOrUndefined(removedCells)) {
       return;
@@ -670,8 +669,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
       addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
 
-    } else if (parentClassArchetype.endsWith('_HEAD')) {
-      addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
+      // } else if (parentClassArchetype.endsWith('_HEAD')) {
+      //   addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
     } else {
       addedClass.classArchetype = parentClassArchetype;
     }
@@ -765,11 +764,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         this.overlayContent.classDefinition = this.classDefinitions.find(c => c.id === cell.id);
         this.overlayContent.allClassDefinitions = this.classDefinitions;
         this.overlayContent.allRelationships = this.relationships;
+
       } else if (MyMxCellType.isRelationship(cell.cellType)) {
         this.overlayContent.relationship = this.relationships.find(r => r.id === cell.id);
       }
-
-
 
       this.graph.setPanning(false);
       this.graph.setEnabled(false);
@@ -808,7 +806,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!this.quickEditMode && classDefinition.properties.length !== existingClassDefinition.properties.length) {
       this.redrawContent(cell);
     }
-
   }
 
   /**
@@ -1025,7 +1022,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarContainer.nativeElement.style.borderLeft = 'solid 2px black';
     this.rightSidebarContainer.nativeElement.style.height = 'auto';
     this.rightSidebarContainer.nativeElement.style.width = '300px';
-
   }
 
   hideSidebar() {

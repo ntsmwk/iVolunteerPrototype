@@ -154,50 +154,17 @@ public class ClassDefinitionService {
 			FormConfiguration formConfig = new FormConfiguration();
 			formConfig.setName(childClassDefinition.getName());
 			formConfig.setId(childClassDefinition.getId());
-
-			FormEntry formEntry = new FormEntry();
-			formEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
-			formEntry.setClassProperties(new LinkedList<ClassProperty<Object>>());
-			formEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
-			formEntry.setSubEntries(new ArrayList<FormEntry>());
-
-			ClassDefinition currentClassDefinition = childClassDefinition;
-			while (!currentClassDefinition.isRoot()) {
-
-				formEntry.getClassDefinitions().add(currentClassDefinition);
-
-				formEntry.getClassProperties().addAll(0,
-						getPropertiesInClassDefinition(formEntry, currentClassDefinition));
-
-				List<Relationship> inheritanceList = relationshipRepository
-						.findByTargetAndRelationshipType(currentClassDefinition.getId(), RelationshipType.INHERITANCE);
-				
-				if (inheritanceList == null || inheritanceList.size() == 0) {
-					throw new NotAcceptableException("getParentById: child is not root and has no parent");
-				}
-
-				if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
-					formEntry.setImagePath(currentClassDefinition.getImagePath());
-				}
-
-				currentClassDefinition = classDefinitionRepository.findOne(inheritanceList.get(0).getSource());
-			}
-
-			formEntry.getClassDefinitions().add(currentClassDefinition);
-
-			if (currentClassDefinition.getImagePath() != null && formEntry.getImagePath() == null) {
-				formEntry.setImagePath(currentClassDefinition.getImagePath());
-			}
-
-			List<ClassProperty<Object>> properties = new LinkedList<>();
-			for (ClassProperty<Object> property : currentClassDefinition.getProperties()) {
-				if (!formEntry.getClassProperties().contains(property)) {
-					properties.add(property);
-				}
-			}
-
-			formEntry.getClassProperties().addAll(0, properties);
-			formConfig.setFormEntry(formEntry);
+			
+			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(childClassDefinition.getConfigurationId());
+			
+			List<ClassDefinition> allClassDefinitions = new ArrayList<>();
+			List<Relationship> allRelationships = new ArrayList<>();
+			
+			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(allClassDefinitions::add);
+			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(allRelationships::add);
+			
+			formConfig.setFormEntry(this.collectionService.getParentClassDefintions(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
+			
 			configList.add(formConfig);
 		}
 
@@ -218,63 +185,6 @@ public class ClassDefinitionService {
 	}
 
 
-	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry,
-			ClassDefinition currentClassDefinition) {
-		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
-		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(
-				currentClassDefinition.getProperties());
-		for (ClassProperty<Object> property : copyList) {
-			int i = 0;
-
-			if (!formEntry.getClassProperties().contains(property)) {
-				// TODO refactor into own method (Alex)
-				if (property.getType().equals(PropertyType.ENUM)) {
-
-					ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
-					enumProperty.setId(property.getId());
-					enumProperty.setName(property.getName());
-					enumProperty.setType(PropertyType.ENUM);
-					enumProperty.setRequired(property.isRequired());
-
-					List<Relationship> associationList = (relationshipRepository
-							.findBySourceAndRelationshipType(property.getId(), RelationshipType.ASSOCIATION));
-
-					if (associationList != null) {
-						for (Relationship r : associationList) {
-							// for each Relationship, Do a DFS to construct dropdown options menu
-
-							ClassDefinition classDefinition = classDefinitionRepository.findOne(r.getTarget());
-							enumProperty.setAllowedValues(collectionService.aggregateAllEnumEntriesDFS(classDefinition,
-									0, new ArrayList<EnumEntry>()));
-
-							if (((Association) r).getTargetCardinality().equals(AssociationCardinality.ONE)) {
-								enumProperty.setMultiple(false);
-							} else if (((Association) r).getTargetCardinality()
-									.equals(AssociationCardinality.ONESTAR)) {
-								enumProperty.setMultiple(true);
-							}
-
-							currentClassDefinition.getProperties().remove(i);
-
-							ArrayList temp = new ArrayList();
-							temp.add(enumProperty);
-							currentClassDefinition.getProperties().addAll(i, temp);
-							properties.addAll(temp);
-							i++;
-						}
-					}
-				}
-
-				if (!property.getType().equals(PropertyType.ENUM)) {
-					properties.add(property);
-				}
-			}
-
-		}
-
-		return properties;
-	}
-
 	public List<FormConfiguration> aggregateChildrenById(List<String> rootIds) {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
@@ -287,13 +197,16 @@ public class ClassDefinitionService {
 			List<ClassDefinition> classDefinitions = new ArrayList<>();
 			List<Relationship> relationships = new ArrayList<>();
 			ClassConfiguration classConfiguration = classConfigurationRepository
-					.findOne(rootClassDefinition.getConfigurationId());
-			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds())
-					.forEach(classDefinitions::add);
-			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+				.findOne(rootClassDefinition.getConfigurationId());
+			
+			classDefinitionRepository
+				.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+			
+			relationshipRepository
+				.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
 
-			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(),
-					classDefinitions, relationships);
+			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
+			
 			FormConfiguration formConfiguration = new FormConfiguration();
 			formConfiguration.setId(rootClassDefinition.getId());
 			formConfiguration.setName(rootClassDefinition.getName());

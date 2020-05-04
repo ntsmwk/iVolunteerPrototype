@@ -210,42 +210,33 @@ public class CollectionService {
 		classDefinitions.add(rootClassDefinition);
 		
 		while (!classDefinitions.isEmpty()) {
+
 			ClassDefinition currentClassDefinition = classDefinitions.poll();
-			
+			rootFormEntry.getClassProperties().addAll(0, getPropertiesInClassDefinition(rootFormEntry, currentClassDefinition, allRelationships));
 			rootFormEntry.getClassDefinitions().add(currentClassDefinition);
 			
 			if (!currentClassDefinition.isRoot()) {
-				Relationship inheritance = allRelationships.stream().filter(r -> r.getTarget().equals(currentClassDefinition.getId())).findFirst().get();
-			
+				Relationship inheritance = allRelationships
+						.stream()
+						.filter(r -> r.getTarget().equals(currentClassDefinition.getId()) && r.getRelationshipType().equals(RelationshipType.INHERITANCE))
+						.findFirst()
+						.get();
 				if (inheritance == null) {
 					throw new NotAcceptableException("getParentById: child is not root and has no parent");
 				}
 				
-				ClassDefinition next = allClassDefinitons.stream().filter(c -> c.getId().equals(inheritance.getSource())).findFirst().get();
-				
+				ClassDefinition next = allClassDefinitons.stream().filter(c -> c.getId().equals(inheritance.getSource())).findFirst().get();	
 				if (next != null) {
 					classDefinitions.add(next);
 				}	
-				
 			}
 
 			if (currentClassDefinition.getImagePath() != null && rootFormEntry.getImagePath() == null) {
 				rootFormEntry.setImagePath(currentClassDefinition.getImagePath());
 			}
-			
 		}
-
-		List<ClassProperty<Object>> properties = new LinkedList<>();
-		for (ClassProperty<Object> property : rootClassDefinition.getProperties()) {
-			if (!rootFormEntry.getClassProperties().contains(property)) {
-				properties.add(property);
-			}
-		}
-
-		rootFormEntry.getClassProperties().addAll(0, properties);
 		
 		return rootFormEntry;
-
 	}
 	
 	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition, List<Relationship> allRelationships) {
@@ -262,7 +253,6 @@ public class CollectionService {
 					properties.add(property);
 				}
 			}
-
 		}
 
 		return properties;

@@ -282,6 +282,7 @@ public class InitializationService {
 
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void createConfigurator(String tenantId, String slotName) {
 		
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
@@ -432,6 +433,7 @@ public class InitializationService {
 		
 		
 		for (ClassDefinition cd : classDefinitions) {
+			cd.setConfigurationId(configurator.getId());
 			this.classDefinitionRepository.save(cd);
 			configurator.getClassDefinitionIds().add(cd.getId());
 		}
