@@ -324,7 +324,7 @@ public class StandardPropertyDefinitions {
 		}
 	}
 	
-	public static class DateFromProperty extends TextPropertyDefinition {
+	public static class DateFromProperty extends DatePropertyDefinition {
 
 		DateFromProperty(String tenantId) {
 			inst(tenantId);
@@ -337,7 +337,7 @@ public class StandardPropertyDefinitions {
 		}
 	}
 	
-	public static class DateToProperty extends TextPropertyDefinition {
+	public static class DateToProperty extends DatePropertyDefinition {
 
 		DateToProperty(String tenantId) {
 			inst(tenantId);
