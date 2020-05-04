@@ -11,3 +11,5 @@ marketplace-frontend/package-lock.json
 marketplace/Servers/**
 /marketplace/.recommenders/**
 **/db.json
+
+**/.sts4-cache/
