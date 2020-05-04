@@ -24,6 +24,7 @@ import {
   MatChipsModule,
   MatSlideToggleModule,
   MatCheckboxModule,
+  MatTooltipModule,
 } from "@angular/material";
 import {
   FuseConfirmDialogModule,
@@ -90,6 +91,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     MatSlideToggleModule,
     MatCheckboxModule,
     MatTableModule,
+    MatTooltipModule,
     FuseProjectMembersModule,
     FuseProjectTaskListModule,
     FuseTruncatePipeModule,

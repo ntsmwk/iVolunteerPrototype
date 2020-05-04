@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChange
 import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import * as shape from 'd3-shape';
 import * as moment from 'moment';
-import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-timeline-filter',
@@ -39,7 +38,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   showXAxisLabel = true;
   showYAxisLabel = true;
   xAxisLabel = 'Datum';
-  yAxisLabel = 'Dauer';
+  yAxisLabel = 'Dauer [h]';
   animations = true;
   autoScale = true;
   timeline = true;
@@ -56,7 +55,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.selectedYaxis = 'Dauer';
+    this.selectedYaxis = 'Dauer [h]';
     this.updateSelectedYaxis(this.selectedYaxis);
 
     this.selectedYear = 'Gesamt';
@@ -261,4 +260,40 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     return new Intl.DateTimeFormat(locale, formatOptions).format(value);
   }
 
+  getTooltip(data) {
+    let model = JSON.parse(data);
+
+    let date = new Date(model.name);
+    let dateString = date.toLocaleDateString("de-DE");
+
+    let result = '';
+    if (this.selectedYaxis === 'Anzahl') {
+      result = dateString + "\n" + "Anzahl: " + model.value;
+
+    } else {
+      result = dateString + "\n" + "Dauer: " + model.value + " Stunden";
+
+    }
+
+    return result;
+  }
+
+  getSeriesTooltip(data) {
+    let model = JSON.parse(data);
+    model = model[0];
+
+    let date = new Date(model.name);
+    let dateString = date.toLocaleDateString("de-DE");
+
+    let result = '';
+    if (this.selectedYaxis === 'Anzahl') {
+      result = dateString + "\n" + "Anzahl: " + model.value;
+
+    } else {
+      result = dateString + "\n" + "Dauer: " + model.value + " Stunden";
+    }
+
+    return result;
+
+  }
 }

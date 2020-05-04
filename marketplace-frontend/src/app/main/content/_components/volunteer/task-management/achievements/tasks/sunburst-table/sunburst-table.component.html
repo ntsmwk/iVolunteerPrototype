@@ -17,7 +17,10 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Tätigkeit
         </mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element"
+        [matTooltip]="element.name.length > 25 ? 
+        element.name : null"
+        >
           {{ element.name | truncate: [25] }}
         </mat-cell>
       </ng-container>

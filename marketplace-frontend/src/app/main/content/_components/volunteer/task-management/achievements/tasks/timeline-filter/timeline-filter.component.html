@@ -6,7 +6,7 @@
     <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;">
       <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
         (change)="onYaxisChange(group.value)">
-        <mat-button-toggle value="Dauer">Dauer
+        <mat-button-toggle value="Dauer [h]">Dauer
         </mat-button-toggle>
         <mat-button-toggle value="Anzahl">Anzahl
         </mat-button-toggle>
@@ -30,7 +30,17 @@
       [yAxisLabel]="yAxisLabel" [animations]="animations" [autoScale]="autoScale" [timeline]="timeline" [curve]="curve"
       [xAxisTickFormatting]="dateTickFormatting"
       >
+      <ng-template #tooltipTemplate let-model="model">
+        <pre>{{getTooltip(model | json)}}</pre>
+      </ng-template>
+    
+      <ng-template #seriesTooltipTemplate let-model="model">
+        <pre>{{getSeriesTooltip(model | json)}}</pre>        
+      </ng-template>
+
     </ngx-charts-line-chart>
+
+
   </div>
 
   <div fxLayout="row" fxLayoutAlign="left">
