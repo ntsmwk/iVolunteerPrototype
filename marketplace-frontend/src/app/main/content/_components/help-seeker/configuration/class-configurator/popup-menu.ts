@@ -64,7 +64,7 @@ export class EditorPopupMenu {
           menu.addSeparator(null, false);
         } else {
           const createClassInstanceItem = menu.addItem('Create new Instance', null, function () {
-            outer.editorInstance.createClassInstanceClicked([cell]);
+            outer.editorInstance.showInstanceForm();
           }, null, null, true, true);
 
           // const exportJsonItem = menu.addItem('Export JSON', null, function () {

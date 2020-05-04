@@ -95,7 +95,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.rightSidebarVisible = true;
     this.hiddenEdges = [];
     this.eventResponse = new TopMenuResponse();
-    this.relationshipType = RelationshipType.AGGREGATION;
+    this.relationshipType = RelationshipType.INHERITANCE;
     this.confirmDelete = true;
     this.deleteRelationships = true;
     this.clickToDeleteMode = false;
@@ -1047,9 +1047,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    * ******DEBUGGING******
    */
   showInstanceForm() {
-    const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
-    if (!isNullOrUndefined(rootCell)) {
+
+    const rootCell = this.graph.getSelectionCell() as MyMxCell;
+
+    // if (!isNullOrUndefined(rootCell) && rootCell.root) {
+    if (!isNullOrUndefined(rootCell) && !isNullOrUndefined(rootCell.edges.find((e: MyMxCell) => e.cellType === MyMxCellType.AGGREGATION))) {
       this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/top-down`], { queryParams: [rootCell.id] });
+    } else {
+
+      // const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
+      // if (!isNullOrUndefined(rootCell) && !rootCell.root) {
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/bottom-up`], { queryParams: [rootCell.id] });
     }
   }
 
@@ -1069,23 +1077,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     console.log(this.relationships);
     console.log(this.currentClassConfiguration);
   }
-  createClassInstanceClicked(cells: MyMxCell[]) {
-    console.log('create class instance clicked');
-    console.log(cells);
-
-    let params: string[];
-    console.log(cells);
-    if (cells == null) {
-      params = ['test8', 'test7', 'test9'];
-    } else {
-      params = cells.map(c => c.id);
-    }
-    // this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: params });
-    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { state: { classDefinitionIds: params }, queryParams: params });
-
-    // }
-  }
-
 
   // OLD STUFF - might still be needed later
   // handleMousedownEvent(event: any, paletteItempaletteEntry: any, item: any, graph: mxgraph.mxGraph) {
