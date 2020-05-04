@@ -46,7 +46,7 @@ export class AddPropertyDialogComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, null).toPromise().then((ret: PropertyDefinition<any>[]) => {
+    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
 
       this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
