@@ -11,13 +11,17 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 export class MyMxCell extends mx.mxCell {
   cellType?: MyMxCellType;
+  writeProtected: boolean;
+
   classArchetype?: ClassArchetype;
   matchingOperatorType?: MatchingOperatorType;
 
   root?: boolean;
+
   property: boolean;
   propertyId?: string;
-  newlyAdded: boolean;
+
+
 
 }
 

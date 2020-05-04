@@ -44,7 +44,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
   dialogForm = new FormGroup({
     label: new FormControl(''),
     description: new FormControl(''),
-    rootLabel: new FormControl('')
+    // rootLabel: new FormControl('')
   });
 
   allClassConfigurations: ClassConfiguration[];
@@ -76,7 +76,7 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     if (this.dialogForm.invalid) {
       this.dialogForm.get('label').markAsTouched();
       this.dialogForm.get('description').markAsTouched();
-      this.dialogForm.get('rootLabel').markAsTouched();
+      // this.dialogForm.get('rootLabel').markAsTouched();
     } else {
 
       const classConfiguration = new ClassConfiguration();

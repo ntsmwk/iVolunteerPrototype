@@ -9,7 +9,10 @@ export class ClassDefinition {
     name: string;
 
     classArchetype: ClassArchetype;
+
     collector: boolean;
+    writeProtected: boolean;
+
     properties: ClassProperty<any>[] = [];
     marketplaceId: string;
     timestamp: Date;
