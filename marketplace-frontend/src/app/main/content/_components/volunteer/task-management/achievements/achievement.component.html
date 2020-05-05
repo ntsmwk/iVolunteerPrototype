@@ -133,4 +133,8 @@
     <i class="fas fa-exclamation-circle"></i> &nbsp; Keine
     Freiwilligenpass-Einträge zur aktuellen Filterung gefunden
   </p>
+
+  <mat-card *ngIf="timeout && percentageFilteredOut > 0">
+    {{percentageFilteredOut}}% der Daten können nicht visualisiert werden, da essenzielle Felder fehlen (z.B. Datum, Dauer, oder Tasktyp)!
+  </mat-card>
 </div>

@@ -51,7 +51,8 @@ export class DashboardVolunteerComponent implements OnInit {
   userImagePaths: any[] = [];
   image;
 
-  tenants: Tenant[] = [];
+  subscribedTenants: Tenant[] = [];
+  allTenants: Tenant[] = [];
 
   marketplaceClassInstances: ClassInstanceDTO[] = [];
   localClassInstances: ClassInstanceDTO[] = [];
@@ -85,8 +86,12 @@ export class DashboardVolunteerComponent implements OnInit {
     );
     this.setVolunteerImage();
 
-    this.tenants = <Tenant[]>(
+    this.subscribedTenants = <Tenant[]>(
       await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
+    );
+
+    this.allTenants = <Tenant[]>(
+      await this.tenantService.findAll().toPromise()
     );
 
     this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
@@ -151,9 +156,9 @@ export class DashboardVolunteerComponent implements OnInit {
     this.router.navigate(["/main/dashboard/tenants"]);
   }
 
-  getImagePathById(id: string) {
+  getImagePathById(issuerId: string) {
     const ret = this.userImagePaths.find((userImagePath) => {
-      return userImagePath.userId === id;
+      return userImagePath.userId === issuerId;
     });
 
     if (isNullOrUndefined(ret)) {
@@ -163,16 +168,31 @@ export class DashboardVolunteerComponent implements OnInit {
     }
   }
 
+  getImagePathById2(tenantId: string) {
+
+  }
+
   getIssuerName(issuerId: string) {
     let person: Helpseeker = this.issuers.find((i) => i.id === issuerId);
 
     if (!isNullOrUndefined(person)) {
-      let tenant = this.tenants.find(t => t.id === person.tenantId);
+      let tenant = this.subscribedTenants.find(t => t.id === person.tenantId);
       return tenant.name;
     } else {
       return "";
     }
   }
+
+  getIssuerName2(tenantId: string) {
+    let tenant = this.allTenants.find(t => t.id === tenantId);
+
+    if(!isNullOrUndefined(tenant)) {
+      return tenant.name;
+    } else {
+      return "";
+    }
+  }
+
 
   triggerShareDialog() {
     const dialogRef = this.dialog.open(ShareDialog, {

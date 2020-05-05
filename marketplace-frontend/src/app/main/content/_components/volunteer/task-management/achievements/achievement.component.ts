@@ -28,8 +28,9 @@ export class AchievementsComponent implements OnInit {
   subscribedTenants: string[] = [];
 
   isLocalRepositoryConnected: boolean;
-
   timeout: boolean = false;
+
+  percentageFilteredOut: number = 0;
 
   constructor(
     private loginService: LoginService,
@@ -83,22 +84,13 @@ export class AchievementsComponent implements OnInit {
       }
     }
 
-    // TODO: philipp filter out classInstances missing the reqired fields
-    // TODO: check if data is valid!
-
-    // console.error('before', this.classInstanceDTOs.length);
-    // this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-    //   return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
-    //     ci.taskType3 && ci.duration)
-    // });
-
-    this.classInstanceDTOs.forEach((ci, index, object) => {
-      if (ci.duration === null) {
-        object.splice(index, 1);
-      }
+    // filter out classInstances missing the reqired fields
+    let before = this.classInstanceDTOs.length;
+    this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+      return (ci.name != null && ci.tenantId != null && ci.dateFrom && ci.taskType1 && ci.duration)
     });
-
-    // console.error('after', this.classInstanceDTOs.length);
+    let after = this.classInstanceDTOs.length;
+    this.percentageFilteredOut = (1-(after/before))*100;
 
     this.tenantSelectionChanged(this.selectedTenants);
   }
