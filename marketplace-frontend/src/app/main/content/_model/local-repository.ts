@@ -1,10 +1,13 @@
-import { Volunteer } from "./volunteer";
-import { ClassInstance, ClassInstanceDTO } from './meta/Class';
+import { ClassInstanceDTO } from './meta/class';
 
 export class LocalRepository {
   id: string;
-  volunteer: Volunteer;
-  taskList: ClassInstanceDTO[];
-  competenceList: ClassInstanceDTO[];
+  volunteerUsername: string;
+  classInstances: ClassInstanceDTO[];
 
+  constructor(id: string, volunteerUsername: string) {
+    this.id = id;
+    this.volunteerUsername = volunteerUsername;
+    this.classInstances = [];
+  }
 }

@@ -1,12 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="none">
 
   <div fxLayout="row" fxLayoutAlign="start center">
-    <h1>Zeitverlauf</h1>
+    <h1 style="font-family: Roboto, Helvetica Neue, sans-serif; margin-left: 10px;">Zeitverlauf</h1>
 
     <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;">
       <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedYaxis"
         (change)="onYaxisChange(group.value)">
-        <mat-button-toggle value="Dauer">Dauer
+        <mat-button-toggle value="Dauer [Stunden]">Dauer
         </mat-button-toggle>
         <mat-button-toggle value="Anzahl">Anzahl
         </mat-button-toggle>
@@ -28,12 +28,23 @@
       [legend]="legend" [showGridLines]="showGridLines" [tooltipDisabled]="tooltipDisabled" [xAxis]="xAxis"
       [yAxis]="yAxis" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel" [animations]="animations" [autoScale]="autoScale" [timeline]="timeline" [curve]="curve"
+      [xAxisTickFormatting]="dateTickFormatting"
       >
+      <ng-template #tooltipTemplate let-model="model">
+        <pre>{{getTooltip(model | json)}}</pre>
+      </ng-template>
+    
+      <ng-template #seriesTooltipTemplate let-model="model">
+        <pre>{{getSeriesTooltip(model | json)}}</pre>        
+      </ng-template>
+
     </ngx-charts-line-chart>
+
+
   </div>
 
   <div fxLayout="row" fxLayoutAlign="left">
-    <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Filtern</button>
+    <button class="filterButton" mat-raised-button (click)="filterTimelineApply()">Zeitraum filtern</button>
 
     <mat-chip-list class="filterChip">
       <mat-chip color="primary" [removable]="removable" *ngIf="timelineFilter.from">

@@ -156,6 +156,10 @@ $primary: #1a237e;
       @extend %header-default;
       background: #ff9326;
     }
+    &-management-summary {
+      @extend %header-default;
+      background: #8bdf5d;
+    }
     &-social {
       @extend %header-default;
       background: #006df0;
@@ -169,8 +173,8 @@ $primary: #1a237e;
     flex: 1;
     background: white;
     border-radius: 2px;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     mat-tab-group {
       height: 100%;
       .mat-tab-body-wrapper {
@@ -245,27 +249,14 @@ $primary: #1a237e;
   border-radius: 3px;
 }
 
-.alert-danger {
-  background-color: #f44336;
-}
-
-.alert-warn {
-  background-color: #f0ad4e;
-}
-
-.alert-info {
-  background-color: #5bc0de;
-  color: black !important;
-}
-.alert-success {
-  background-color: #36f456;
-}
-.alert {
-  margin: auto;
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 18px;
-  color: white;
-  margin-bottom: 15px;
+.infoText {
+  font-size: 16px;
   text-align: center;
+}
+.mat-expansion-panel-content > .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.mat-menu-panel {
+  min-width: 0 !important;
 }

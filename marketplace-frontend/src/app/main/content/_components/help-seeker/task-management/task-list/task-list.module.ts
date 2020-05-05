@@ -1,11 +1,11 @@
-import { NgModule } from "@angular/core";
-import { Route, RouterModule } from "@angular/router";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatTableModule } from "@angular/material/table";
-import { FuseSharedModule } from "@fuse/shared.module";
-import { FuseTaskListComponent } from "./task-list.component";
-import { FuseTruncatePipeModule } from "../../../../_pipe/truncate-pipe.module";
+import { NgModule } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { FuseSharedModule } from '@fuse/shared.module';
+import { FuseTaskListComponent } from './task-list.component';
+import { FuseTruncatePipeModule } from '../../../../_pipe/truncate-pipe.module';
 import {
   MatPaginatorModule,
   MatSortModule,
@@ -17,10 +17,10 @@ import {
   MatSidenavModule,
   MatDividerModule,
   MatCheckboxModule
-} from "@angular/material";
-import { ReactiveFormsModule } from "@angular/forms";
+} from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
-const routes: Route[] = [{ path: "", component: FuseTaskListComponent }];
+const routes: Route[] = [{ path: '', component: FuseTaskListComponent }];
 
 @NgModule({
   declarations: [FuseTaskListComponent],
@@ -48,4 +48,4 @@ const routes: Route[] = [{ path: "", component: FuseTaskListComponent }];
     FuseTruncatePipeModule
   ]
 })
-export class FuseTaskListModule {}
+export class FuseTaskListModule { }

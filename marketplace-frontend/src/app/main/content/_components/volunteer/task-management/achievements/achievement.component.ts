@@ -1,48 +1,57 @@
-import { Component, OnInit } from "@angular/core";
-import { fuseAnimations } from "../../../../../../../@fuse/animations";
-import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
-import { LoginService } from "../../../../_service/login.service";
-import { Volunteer } from "app/main/content/_model/volunteer";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { ClassInstanceDTO } from "app/main/content/_model/meta/Class";
-import { Tenant } from "app/main/content/_model/tenant";
-import { NgxSpinnerService } from "ngx-spinner";
-import { isNullOrUndefined } from "util";
+import { Component, OnInit } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { LocalRepositoryService } from 'app/main/content';
+import { timer } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material';
+import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: "fuse-achievements",
-  templateUrl: "./achievement.component.html",
-  styleUrls: ["./achievement.component.scss"],
+  selector: 'fuse-achievements',
+  templateUrl: './achievement.component.html',
+  styleUrls: ['./achievement.component.scss'],
   animations: fuseAnimations,
 })
 export class AchievementsComponent implements OnInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
-  classInstanceDTOs: ClassInstanceDTO[];
-  filteredClassInstanceDTOs: ClassInstanceDTO[];
+  classInstanceDTOs: ClassInstanceDTO[] = [];
+  filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
-  selectedTenants: Tenant[];
+  selectedTenants: Tenant[] = [];
+  subscribedTenants: string[] = [];
+
+  isLocalRepositoryConnected: boolean;
+
+  timeout: boolean = false;
 
   constructor(
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private spinner: NgxSpinnerService
-  ) {}
-
-  ngAfterViewInit() {}
+    private localRepositoryService: LocalRepositoryService
+  ) { }
 
   async ngOnInit() {
-    //this.spinner.show();
-
-    this.classInstanceDTOs = [];
-    this.filteredClassInstanceDTOs = [];
-    this.selectedTenants = [];
+    let t = timer(3000);
+    t.subscribe(() => {
+      this.timeout = true;
+    });
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
+    );
+
+    this.subscribedTenants = this.volunteer.subscribedTenants;
+
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
+      this.volunteer
     );
 
     let marketplaces = <Marketplace[]>(
@@ -50,30 +59,48 @@ export class AchievementsComponent implements OnInit {
         .findRegisteredMarketplaces(this.volunteer.id)
         .toPromise()
     );
-
     // TODO for each registert mp
     this.marketplace = marketplaces[0];
 
-    if (!isNullOrUndefined(this.marketplace)) {
+    if (this.isLocalRepositoryConnected) {
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService
-          .getUserClassInstancesByArcheType(
-            this.marketplace,
-            "TASK",
-            this.volunteer.id,
-            this.volunteer.subscribedTenants
-          )
+        await this.localRepositoryService
+          .findClassInstancesByVolunteer(this.volunteer)
           .toPromise()
       );
-
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
-
-      this.tenantSelectionChanged(this.selectedTenants);
+    } else {
+      if (!isNullOrUndefined(this.marketplace)) {
+        this.classInstanceDTOs = <ClassInstanceDTO[]>(
+          await this.classInstanceService
+            .getUserClassInstancesByArcheType(
+              this.marketplace,
+              'TASK',
+              this.volunteer.id,
+              this.volunteer.subscribedTenants
+            )
+            .toPromise()
+        );
+      }
     }
+
+    // TODO: philipp filter out classInstances missing the reqired fields
+    // TODO: check if data is valid!
+
+    // console.error('before', this.classInstanceDTOs.length);
+    // this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+    //   return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
+    //     ci.taskType3 && ci.duration)
+    // });
+
+    this.classInstanceDTOs.forEach((ci, index, object) => {
+      if (ci.duration === null) {
+        object.splice(index, 1);
+      }
+    });
+
+    // console.error('after', this.classInstanceDTOs.length);
+
+    this.tenantSelectionChanged(this.selectedTenants);
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -84,17 +111,11 @@ export class AchievementsComponent implements OnInit {
     });
   }
 
-  showSpinner() {
-    this.spinner.show();
-  }
-
-  hideSpinner() {
-    this.spinner.hide();
-  }
-
   public tabChanged(tabChangeEvent: MatTabChangeEvent) {
-    if(tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
+    if (tabChangeEvent.tab.textLabel === 'Tätigkeiten') {
       this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
     }
-}
+  }
+
+
 }

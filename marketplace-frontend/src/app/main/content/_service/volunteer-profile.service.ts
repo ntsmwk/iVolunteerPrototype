@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Volunteer } from '../_model/volunteer';
 import { TaskEntry } from '../_model/task-entry';
 import { CompetenceEntry } from '../_model/competence-entry';
-import { Marketplace } from '../_model/marketplace';
 
 @Injectable({
   providedIn: 'root'

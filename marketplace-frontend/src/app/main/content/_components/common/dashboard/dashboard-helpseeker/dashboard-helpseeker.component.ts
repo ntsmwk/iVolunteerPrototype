@@ -52,7 +52,7 @@ export class DashboardHelpSeekerComponent implements OnInit {
   }
 
   private isFF() {
-    return this.tenant && this.tenant.name == "FF_Eidenberg";
+    return this.tenant && this.tenant.name == "FF Eidenberg";
   }
 
   private isMV() {

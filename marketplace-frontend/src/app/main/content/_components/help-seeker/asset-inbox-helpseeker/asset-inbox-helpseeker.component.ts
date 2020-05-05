@@ -3,7 +3,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../_model/marketplace";
 import { Participant } from "../../../_model/participant";
-import { ClassInstanceDTO } from "../../../_model/meta/Class";
+import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { isNullOrUndefined } from "util";
 import { CoreMarketplaceService } from "../../../_service/core-marketplace.service";
@@ -31,7 +31,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private marketplaceService: CoreMarketplaceService,
     private helpSeekerService: CoreHelpSeekerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     Promise.all([
@@ -68,7 +68,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       });
   }
 
-  close() {}
+  close() { }
 
   onAssetInboxSubmit() {
     this.classInstanceService

@@ -1,4 +1,5 @@
 @import "src/@fuse/scss/fuse";
+@import "common";
 
 .donut-parent-duration {
   height: 200px;
@@ -21,7 +22,20 @@
   margin-bottom: 10px;
 }
 
-.matFormField {
+.engagementSince {
+  margin-left: 20px;
+  vertical-align: bottom;
+  align-self: flex-end;
+}
+
+.formFieldEngament {
+  margin-left: 20px;
+  margin-top: 12px;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.formFieldComparison {
   margin-left: 50px;
   width: 100px;
 }

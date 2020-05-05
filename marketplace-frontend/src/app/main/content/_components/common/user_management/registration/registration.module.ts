@@ -7,7 +7,9 @@ import {
   MatButtonModule,
   MatCheckboxModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 } from "@angular/material";
 
 const routes = [{ path: "", component: FuseRegistrationComponent }];
@@ -20,11 +22,13 @@ const routes = [{ path: "", component: FuseRegistrationComponent }];
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 
-    FuseSharedModule
+    FuseSharedModule,
   ],
   exports: [],
   declarations: [FuseRegistrationComponent],
-  providers: []
+  providers: [],
 })
 export class FuseRegistrationModule {}

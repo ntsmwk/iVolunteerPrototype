@@ -3,7 +3,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { HttpResponse } from "@angular/common/http";
@@ -17,11 +17,13 @@ import { LoginService } from "../../../../_service/login.service";
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
   providers: [LoginService],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class FuseLoginComponent implements OnInit {
   loginForm: FormGroup;
   loginFormErrors: any;
+
+  error: boolean = false;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -32,20 +34,20 @@ export class FuseLoginComponent implements OnInit {
     const layout = {
       navigation: "none",
       toolbar: "none",
-      footer: "none"
+      footer: "none",
     };
     this.fuseConfig.setConfig({ layout: layout });
 
     this.loginFormErrors = {
       username: {},
-      password: {}
+      password: {},
     };
   }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: new FormControl("", Validators.required),
-      password: new FormControl("", Validators.required)
+      password: new FormControl("", Validators.required),
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -78,6 +80,10 @@ export class FuseLoginComponent implements OnInit {
         .then((response: HttpResponse<any>) => {
           localStorage.setItem("token", response.headers.get("Authorization"));
           this.router.navigate(["/main/dashboard"]);
+        })
+        .catch((e) => {
+          console.error("error");
+          this.error = true;
         });
     }
   }

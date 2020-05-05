@@ -23,11 +23,12 @@ import {
   MatSortModule,
   MatChipsModule,
   MatSlideToggleModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatTooltipModule,
 } from "@angular/material";
 import {
   FuseConfirmDialogModule,
-  FuseWidgetModule
+  FuseWidgetModule,
 } from "../../../../../../../@fuse/components";
 import { FuseProjectTaskListModule } from "../../../../_shared_components/project-task-list/project-task-list.module";
 import { FuseTruncatePipeModule } from "../../../../_pipe/truncate-pipe.module";
@@ -43,13 +44,12 @@ import { FunctionsComponent } from "./functions/functions.component";
 import { AccomplishmentsComponent } from "./accomplishments/accomplishments.component";
 import { CompetenciesComponent } from "./competencies/competencies.component";
 import { ShareMenuModule } from "./share-menu/share-menu.module";
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { SunburstTableComponent } from './tasks/sunburst-table/sunburst-table.component';
-import { TimelineFilterComponent } from './tasks/timeline-filter/timeline-filter.component';
-import { DonutComponent } from './tasks/donut/donut.component';
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { SunburstTableComponent } from "./tasks/sunburst-table/sunburst-table.component";
+import { TimelineFilterComponent } from "./tasks/timeline-filter/timeline-filter.component";
+import { DonutComponent } from "./tasks/donut/donut.component";
 import { NgxSpinnerModule } from "ngx-spinner";
-import { OrganisationFilterModule } from 'app/main/content/_shared_components/organisation-filter/organisation-filter.module';
-
+import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
 
 const routes = [{ path: "", component: AchievementsComponent }];
 
@@ -63,7 +63,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
 
     DonutComponent,
     SunburstTableComponent,
-    TimelineFilterComponent
+    TimelineFilterComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -91,7 +91,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     MatSlideToggleModule,
     MatCheckboxModule,
     MatTableModule,
-
+    MatTooltipModule,
     FuseProjectMembersModule,
     FuseProjectTaskListModule,
     FuseTruncatePipeModule,
@@ -107,7 +107,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     ShareMenuModule,
     OrganisationFilterModule,
 
-    NgxSpinnerModule
-  ]
+    NgxSpinnerModule,
+  ],
 })
-export class AchievementsModule { }
+export class AchievementsModule {}

@@ -7,16 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.chart.StoredChartRepository;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToReset;
 import at.jku.cis.iVolunteer.marketplace.fake.configuratorReset.ClassesAndRelationshipsToResetRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.configurator.ConfiguratorRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceController;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
@@ -35,7 +37,8 @@ public class ResetService {
 	@Autowired private ClassesAndRelationshipsToResetRepository classesAndRelationshipsToResetRepository;
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ConfiguratorRepository configuratorRepository;
+	@Autowired private ClassConfigurationRepository configuratorRepository;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
 
 	public void reset() {
 
@@ -85,9 +88,6 @@ public class ResetService {
 		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
 		instance.setUserId(user.getId());
 
-		instance.setPublished(false);
-		instance.setInUserRepository(false);
-		instance.setInIssuerInbox(false);
 
 		instance.setTimestamp(new Date());
 
@@ -104,6 +104,37 @@ public class ResetService {
 
 		classInstanceController.createNewClassInstances(instances);
 
+	}
+
+	public void addFahrtenspangeFake() {
+
+		TaskClassInstance instance = new TaskClassInstance();
+		instance.setId("fahrtenspange" + new Date().hashCode());
+		instance.setClassArchetype(ClassArchetype.ACHIEVEMENT);
+		instance.setName("Fahrtenspange Bronze");
+		instance.setIssuerId("FFA");
+
+		Volunteer user = volunteerRepository.findByUsername("mweixlbaumer");
+		instance.setUserId(user.getId());
+
+
+		instance.setTimestamp(new Date());
+
+		List<PropertyInstance<Object>> properties = new ArrayList<>();
+
+		PropertyDefinition<Object> nameDefinition = propertyDefinitionRepository.findOne("name");
+		PropertyInstance<Object> nameInstance = propertyDefinitionToPropertyInstanceMapper.toTarget(nameDefinition);
+		nameInstance.setValues(new ArrayList<>());
+		nameInstance.getValues().add("Fahrtenspange Bronze");
+
+		properties.add(nameInstance);
+
+		instance.setProperties(properties);
+
+		List<ClassInstance> instances = new ArrayList<>();
+		instances.add(instance);
+
+		classInstanceController.createNewClassInstances(instances);
 	}
 
 	public void createResetState() {

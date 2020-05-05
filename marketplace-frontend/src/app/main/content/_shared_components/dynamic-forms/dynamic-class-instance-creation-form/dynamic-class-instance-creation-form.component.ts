@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, DoCheck } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 
 import { QuestionBase } from '../../../_model/dynamic-forms/questions';
@@ -31,13 +31,14 @@ declare var $: JQueryStatic;
     ])
   ]
 })
-export class DynamicClassInstanceCreationFormComponent implements OnInit {
+export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChanges {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() hideButtons: boolean;
   @Input() formConfigurationId: string;
   @Input() form: FormGroup;
   @Input() lastEntry: boolean;
+  @Input() finishClicked: boolean;
 
   submitPressed: boolean;
 
@@ -52,6 +53,12 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit {
     }
 
     this.submitPressed = false;
+  }
+
+  ngOnChanges() {
+    if (this.finishClicked) {
+      this.onSubmit();
+    }
   }
 
   onSubmit() {

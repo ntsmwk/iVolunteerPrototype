@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Task } from 'app/main/content/_model/task';
+import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { WorkflowStep } from 'app/main/content/_model/workflow-step';
 import { ActivatedRoute } from '@angular/router';
-
-import { Task } from '../../../../_model/task';
-import { TaskService } from '../../../../_service/task.service';
-import { CoreMarketplaceService } from '../../../../_service/core-marketplace.service';
-import { Marketplace } from '../../../../_model/marketplace';
-
-import { WorkflowStep } from '../../../../_model/workflow-step';
-import { WorkflowService } from '../../../../_service/workflow.service';
+import { TaskService } from 'app/main/content/_service/task.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { WorkflowService } from 'app/main/content/_service/workflow.service';
+import { MessageService } from 'app/main/content/_service/message.service';
 import { isNullOrUndefined } from 'util';
-import { LoginService } from '../../../../_service/login.service';
-import { Participant, ParticipantRole } from '../../../../_model/participant';
-import { MessageService } from '../../../../_service/message.service';
 
 @Component({
   templateUrl: './task-detail.component.html',

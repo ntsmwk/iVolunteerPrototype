@@ -1,219 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Directive } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { UserDefinedTaskTemplate } from 'app/main/content/_model/user-defined-task-template';
-import { PropertyItem } from 'app/main/content/_model/meta/Property';
-import { AddOrRemoveDialogComponent, AddOrRemoveDialogData } from '../add-or-remove-dialog/add-or-remove-dialog.component';
-import { isNullOrUndefined } from 'util';
 import { TextFieldDialogComponent, TextFieldDialogData } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { PropertyItem } from 'app/main/content/_model/meta/property';
 import { SortDialogComponent, SortDialogData } from '../sort-dialog/sort-dialog.component';
 import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } from '../choose-dialog/choose-dialog.component';
-import { OpenDialogComponent, OpenDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/open-dialog/open-dialog.component';
-import { Configurator } from 'app/main/content/_model/meta/Configurator';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { SaveAsDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/save-as-dialog/save-as-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-dialog/form-preview-dialog.component';
-import { ChangeIconDialogData, ChangeIconDialogComponent } from 'app/main/content/_components/help-seeker/configuration/configurator/configurator-editor/icon-dialog/icon-dialog.component';
-import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/configurator/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
+import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
+import { SaveClassConfigurationAsDialogComponent, SaveClassConfigurationAsDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/save-as-dialog/save-as-dialog.component';
+import { DeleteClassConfigurationDialogComponent, DeleteClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/delete-dialog/delete-dialog.component';
+import { NewMatchingDialogComponent, NewMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
+import { OpenMatchingDialogComponent, OpenMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
+import { DeleteMatchingDialogComponent, DeleteMatchingDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
+import { AddPropertyDialogComponent, AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
+import { RemoveDialogComponent, RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
+import { isNullOrUndefined } from 'util';
+import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
+import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 
-@Component({
-  selector: 'app-dialog-factory',
-  templateUrl: './dialog-factory.component.html',
-  styleUrls: ['./dialog-factory.component.scss']
+@Directive({
+  selector: 'app-dialog-factory'
 })
-export class DialogFactoryComponent implements OnInit {
-
+export class DialogFactoryDirective {
 
   constructor(public dialog: MatDialog) { }
-
-  ngOnInit() {
-
-
-  }
-
-
-  //// TODO EXPAND DIALOG FACTORY
-
-
-  /**
-   * ADD PROPERTY DIALOG
-   * 
-   * Dialog displaying properties to be added to template @param template 
-   * 
-   * @param properties: list of all properties from server
-   */
-
-  addPropertyDialog(template: UserDefinedTaskTemplate, properties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      position: { top: '50px', },
-      width: '500px',
-      data: this.prepareDataForAdd('Add Properties', template, properties)
-    });
-
-    let propIds: string[];
-
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        propIds = [];
-
-        for (const s of result.checkboxStates) {
-          if (s.dirty) {
-            propIds.push(s.propertyItem.id);
-
-          }
-        }
-      }
-    });
-
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return propIds;
-    });
-
-  }
-
-  addPropertyDialogGeneric(properties: PropertyItem[], addedProperties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      position: { top: '50px' },
-      width: '500px',
-      data: this.prepareDataForGenericAdd('Add Properties', addedProperties, properties)
-    });
-
-    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
-
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-
-        returnValue.key = result.key;
-
-        if (result.key == 'new_property') {
-          return;
-        }
-
-        if (!isNullOrUndefined(result.checkboxStates)) {
-          returnValue.propertyItems = [];
-          for (const s of result.checkboxStates) {
-            if (s.dirty) {
-              returnValue.propertyItems.push(s.propertyItem);
-            }
-          }
-        }
-      }
-    });
-
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return returnValue;
-    });
-
-  }
-
-  private prepareDataForGenericAdd(label: string, addedPropertyItems: PropertyItem[], propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
-
-    for (const p of propertyItems) {
-      states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (const ap of addedPropertyItems) {
-        if (p.id === ap.id) {
-          states[states.length - 1].disabled = true;
-          states[states.length - 1].checked = true;
-        }
-      }
-    }
-
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
-    return data;
-
-  }
-
-  private prepareDataForAdd(label: string, template: UserDefinedTaskTemplate, propertyItems: PropertyItem[]): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
-
-    for (const p of propertyItems) {
-      states.push({ propertyItem: p, disabled: false, checked: false, dirty: false });
-      for (const tp of template.templateProperties) {
-        if (p.id === tp.id) {
-          states[states.length - 1].disabled = true;
-          states[states.length - 1].checked = true;
-        }
-      }
-    }
-
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'add' };
-    return data;
-  }
-
-  removePropertyDialogGeneric(addedProperties: PropertyItem[]) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      width: '500px',
-      data: this.prepareDataForGenericRemove('Remove Properties', addedProperties)
-    });
-
-    const returnValue: { propertyItems: PropertyItem[], key: string } = { propertyItems: [], key: undefined };
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-
-        if (!isNullOrUndefined(result.checkboxStates)) {
-          for (const s of result.checkboxStates) {
-            if (s.dirty) {
-              returnValue.propertyItems.push(s.propertyItem);
-            }
-          }
-        }
-      }
-    });
-
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return returnValue.propertyItems;
-    });
-  }
-
-  prepareDataForGenericRemove(label: string, addedProperties: PropertyItem[]) {
-
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
-
-    for (const property of addedProperties) {
-      states.push({ propertyItem: property, disabled: false, checked: false, dirty: false });
-    }
-
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
-    return data;
-  }
-
-  removePropertyDialog(template: UserDefinedTaskTemplate) {
-    const dialogRef = this.dialog.open(AddOrRemoveDialogComponent, {
-      width: '500px',
-      data: this.prepareDataForRemove('Remove Properties', template)
-    });
-
-    let propIds: string[];
-
-    dialogRef.beforeClose().toPromise().then((result: AddOrRemoveDialogData) => {
-      if (!isNullOrUndefined(result)) {
-
-        propIds = [];
-        for (const s of result.checkboxStates) {
-          if (s.dirty) {
-            propIds.push(s.propertyItem.id);
-          }
-        }
-      }
-    });
-
-    return dialogRef.afterClosed().toPromise().then(() => {
-      return propIds;
-    });
-  }
-
-  private prepareDataForRemove(label: string, template: UserDefinedTaskTemplate): AddOrRemoveDialogData {
-    const states: { propertyItem: PropertyItem, disabled: boolean, checked: boolean, dirty: boolean }[] = [];
-
-    for (const tp of template.templateProperties) {
-      states.push({ propertyItem: tp, disabled: false, checked: false, dirty: false });
-    }
-
-    const data: AddOrRemoveDialogData = { label: label, checkboxStates: states, key: 'remove' };
-    return data;
-  }
-
 
   /**
    * EDIT TEMPLATE DESCRIPTION DIALOG
@@ -224,7 +41,6 @@ export class DialogFactoryComponent implements OnInit {
    */
 
   editTemplateDescriptionDialog(template: UserDefinedTaskTemplate) {
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -270,7 +86,6 @@ export class DialogFactoryComponent implements OnInit {
   }
 
   newTaskTemplateDialog() {
-
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
       data: {
@@ -371,24 +186,6 @@ export class DialogFactoryComponent implements OnInit {
     });
   }
 
-  // newRelationshipDialog(classIdTarget: string) {
-  //   const dialogRef = this.dialog.open(RelationshipDialogComponent, {
-  //     width: '500px',
-  //     data: {classIdTarget: classIdTarget},
-  //     disableClose: true
-  //   });
-
-  //   let ret: Relationship = undefined;
-  //   dialogRef.beforeClose().toPromise().then((result: Relationship) => {
-  //     ret = result;
-  //   });
-
-  //   return dialogRef.afterClosed().toPromise().then(() => {
-  //     return ret;
-  //   });
-
-  // }
-
   genericDialog1Textfield(label: string, description: string, hintText: string, value: string) {
     const dialogRef = this.dialog.open(TextFieldDialogComponent, {
       width: '500px',
@@ -412,29 +209,33 @@ export class DialogFactoryComponent implements OnInit {
     });
   }
 
-  openConfiguratorDialog(marketplace: Marketplace) {
-    const dialogRef = this.dialog.open(OpenDialogComponent, {
+
+  /**
+   *  Class-Configurator Dialogs
+   */
+
+  openNewClassConfigurationDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(NewClassConfigurationDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, configurator: undefined },
+      data: { marketplace: marketplace },
       disableClose: true
-
     });
 
-    let configurator: Configurator;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      configurator = result.configurator;
+    let returnData: NewClassConfigurationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: NewClassConfigurationDialogData) => {
+      returnData = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return returnData;
     });
   }
 
-  openSaveConfiguratorDialog(marketplace: Marketplace) {
-    const dialogRef = this.dialog.open(SaveAsDialogComponent, {
+  openConfiguratorDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(OpenClassConfigurationDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
@@ -443,37 +244,113 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
-    let configurator: Configurator;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        configurator = result.configurator;
+    let returnData: OpenClassConfigurationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: OpenClassConfigurationDialogData) => {
+      returnData = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnData;
+    });
+  }
+
+  openSaveConfirmationDialog(marketplace: Marketplace, classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefintions: string[], deletedRelationships: string[]) {
+
+    const dialogRef = this.dialog.open(ConfirmClassConfigurationSaveDialogComponent, {
+      width: '500px',
+      data: {
+        classConfiguration: classConfiguration,
+        classDefinitions: classDefinitions,
+        relationships: relationships,
+
+        deletedClassDefintions: deletedClassDefintions,
+        deletedRelationships: deletedRelationships,
+
+        marketplace: marketplace
       }
     });
 
+    let returnData: ConfirmClassConfigurationSaveDialogData;
+
+
+    dialogRef.beforeClose().toPromise().then((result: ConfirmClassConfigurationSaveDialogData) => {
+      returnData = result;
+    });
+
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return returnData;
     });
   }
 
-  openInstanceFormPreviewDialog(marketplace: Marketplace, classConfigurationIds: string[]) {
+  openSaveClassConfigurationAsDialog(marketplace: Marketplace, classConfiguration: ClassConfiguration, classDefinitions: ClassDefinition[],
+    relationships: Relationship[], deletedClassDefintions: string[], deletedRelationships: string[]) {
+
+    const dialogRef = this.dialog.open(SaveClassConfigurationAsDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: {
+        classConfiguration: classConfiguration,
+        classDefinitions: classDefinitions,
+        relationships: relationships,
+
+        deletedClassDefinitions: deletedClassDefintions,
+        deletedRelationships: deletedRelationships,
+
+        marketplace: marketplace
+      },
+      disableClose: true
+    });
+
+    let returnData: SaveClassConfigurationAsDialogData;
+    dialogRef.beforeClose().toPromise().then((result: SaveClassConfigurationAsDialogData) => {
+      returnData = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnData;
+    });
+  }
+
+  openDeleteClassConfiguratorDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(DeleteClassConfigurationDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, configurator: undefined },
+      disableClose: true
+    });
+
+    let returnData: DeleteClassConfigurationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: DeleteClassConfigurationDialogData) => {
+      returnData = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnData;
+    });
+  }
+
+  openInstanceFormPreviewDialog(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
     const dialogRef = this.dialog.open(ClassInstanceFormPreviewDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: marketplace, classConfigurationIds: classConfigurationIds },
+      data: { marketplace: marketplace, classDefinitions: classDefinitions, relationships: relationships, rootClassDefinition: rootClassDefinition },
       disableClose: true
     });
 
-    let configurator: Configurator;
-    dialogRef.beforeClose().toPromise().then((result: OpenDialogData) => {
-      if (!isNullOrUndefined(result)) {
-        configurator = result.configurator;
-      }
+    let returnData: ClassInstanceFormPreviewDialogData;
+    dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewDialogData) => {
+      returnData = result;
     });
 
     return dialogRef.afterClosed().toPromise().then(() => {
-      return configurator;
+      return returnData;
     });
   }
 
@@ -487,9 +364,8 @@ export class DialogFactoryComponent implements OnInit {
       disableClose: true
     });
 
-    let returnValue: ClassInstanceFormPreviewDialogData;
+    let returnValue: ClassInstanceFormPreviewExportDialogData;
     dialogRef.beforeClose().toPromise().then((result: ClassInstanceFormPreviewExportDialogData) => {
-      console.log("closing from DialogFactory");
       returnValue = result;
     });
 
@@ -520,8 +396,116 @@ export class DialogFactoryComponent implements OnInit {
     });
   }
 
+  /*  
+   *  Matching-Configurator Dialogs
+   */
+  openNewMatchingDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(NewMatchingDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let returnValue: NewMatchingDialogData;
+
+    dialogRef.beforeClose().toPromise().then((result: NewMatchingDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
+
+  openOpenMatchingDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(OpenMatchingDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let matchingConfiguration: MatchingConfiguration;
+
+    dialogRef.beforeClose().toPromise().then((result: OpenMatchingDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        matchingConfiguration = result.matchingConfiguration;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return matchingConfiguration;
+    });
+  }
+
+  openDeleteMatchingDialog(marketplace: Marketplace) {
+    const dialogRef = this.dialog.open(DeleteMatchingDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace },
+      disableClose: true
+    });
+
+    let idsDeleted: string[];
+
+    dialogRef.beforeClose().toPromise().then((result: DeleteMatchingDialogData) => {
+      if (!isNullOrUndefined(result)) {
+        idsDeleted = result.idsToDelete;
+      }
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return idsDeleted;
+    });
+  }
 
 
+  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
+    const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
+    });
+
+    let returnValue: AddPropertyDialogData;
+
+    dialogRef.beforeClose().toPromise().then((result: AddPropertyDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
+
+  openRemoveDialog(marketplace: Marketplace, classDefinition: ClassDefinition) {
+    const dialogRef = this.dialog.open(RemoveDialogComponent, {
+      width: '500px',
+      minWidth: '500px',
+      height: '400px',
+      minHeight: '400px',
+      data: { marketplace: marketplace, classDefinition: classDefinition }
+    });
+
+    let returnValue: RemoveDialogData;
+
+    dialogRef.beforeClose().toPromise().then((result: RemoveDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
 
 
 }

@@ -1,18 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { fuseAnimations } from '../../../../../../../../@fuse/animations';
-import { Participant } from '../../../../../_model/participant';
-import { LoginService } from '../../../../../_service/login.service';
-import { ClassInstanceService } from '../../../../../_service/meta/core/class/class-instance.service';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { CoreMarketplaceService } from '../../../../../_service/core-marketplace.service';
-import { ClassInstance, ClassInstanceDTO } from '../../../../../_model/meta/Class';
-import { isNullOrUndefined } from 'util';
-import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
-import { Volunteer } from '../../../../../_model/volunteer';
-import * as moment from 'moment';
-import { StoredChart } from '../../../../../_model/stored-chart';
-import { StoredChartService } from '../../../../../_service/stored-chart.service';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { Tenant } from 'app/main/content/_model/tenant';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { StoredChartService } from 'app/main/content/_service/stored-chart.service';
+import { StoredChart } from 'app/main/content/_model/stored-chart';
 
 @Component({
   selector: 'fuse-competencies',
@@ -20,22 +14,22 @@ import { TenantService } from 'app/main/content/_service/core-tenant.service';
   styleUrls: ['./competencies.component.scss'],
   animations: fuseAnimations
 
-
-
 })
 export class CompetenciesComponent implements OnInit {
   private volunteer: Volunteer;
   private marketplace: Marketplace;
-  classInstanceDTOs: ClassInstanceDTO[];
+
+  @Input() classInstanceDTOs: ClassInstanceDTO[];
+  @Input() selectedTenants: Tenant[];
 
   trainingData: any[];
   trainingData2: any[];
   taskData: any[];
 
-  allData: any[];
-  currYearData: any[];
-  lastYearData: any[];
-  meanYearData: any[];
+  // allData: any[];
+  // currYearData: any[];
+  // lastYearData: any[];
+  // meanYearData: any[];
 
   // chart options
   colorScheme = 'cool';
@@ -50,112 +44,64 @@ export class CompetenciesComponent implements OnInit {
   yAxisLabel2: string = 'Anzahl';
   animations: boolean = true;
 
-  test123 = "Stunden"
 
-  private tenantName: string = 'FF_Eidenberg';
-  private tenantId: string[] = [];
+  tt1Lernbereitschaft: string[] = ['Ausbildung (aktiv)', 'Probe'];
+  dateLocale = new Intl.DateTimeFormat('de-AT', { month: 'short' });
 
   constructor(private loginService: LoginService,
-    private classInstanceService: ClassInstanceService,
-    private marketplaceService: CoreMarketplaceService,
-    private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
-    private coreTenantService: TenantService
   ) { }
 
 
   async ngOnInit() {
-    this.classInstanceDTOs = [];
-
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
+  }
 
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-    );
+  ngOnChanges(changes: SimpleChanges) {
+    // console.error('competencies', changes);
 
-    // TODO for each registert mp
-    this.marketplace = marketplaces[0];
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'classInstanceDTOs': {
+            if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
+              this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
 
-    if (!isNullOrUndefined(this.marketplace)) {
+              this.classInstanceDTOs = this.classInstanceDTOs.sort(
+                (a, b) => a.dateFrom.valueOf() - b.dateFrom.valueOf()
+              );
 
+              this.generateChartData();
 
-      this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-      );
+              // this.calcMean();
+              // this.currYearData = [... this.getYearData('2019')];
+              // this.lastYearData = this.getYearData('2018');
+              // this.meanYearData = this.getYearData('mean');
 
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
+            }
+            break;
+          }
+          case 'selectedTenants': {
+            if (typeof changes.selectedTenants.currentValue != 'undefined') {
+              this.selectedTenants = changes.selectedTenants.currentValue;
+            }
+          }
         }
-      });
-
+      }
     }
-
-
-    this.generateChartData();
-
-    this.calcMean();
-    this.currYearData = [... this.getYearData('2019')];
-    this.lastYearData = this.getYearData('2018');
-    this.meanYearData = this.getYearData('mean');
-
-
-
   }
 
   onSelect(event) {
     console.log(event);
   }
 
-  calcMean() {
-    let mean = new Map<string, number[]>(); // name -> [duration, number]
-    let cntYears = 0;
-
-    this.trainingData.forEach(td => {
-      if (td.name != '2019') { // minus current year: String(new Date().getFullYear()-1)
-        ++cntYears;
-        td.series.forEach(s => {
-          if (mean.get(s.name)) {
-            mean.set(s.name, [mean.get(s.name)[0] + s.value, mean.get(s.name)[1] + s.extra.number]);
-          } else {
-            mean.set(s.name, [s.value, s.extra.number]);
-          }
-        });
-      }
-    });
-
-    Array.from(mean.keys()).forEach(e => {
-      mean.set(e, [mean.get(e)[0] / cntYears, mean.get(e)[1] / cntYears]);
-    });
-
-
-    let data = [];
-    Array.from(mean.entries()).forEach(entry => {
-      data.push({ name: entry[0], value: entry[1][0], extra: { number: entry[1][1] } });
-    });
-
-    this.allData = [...this.trainingData];
-    this.allData.push({ name: 'mean', series: data });
-  }
-
-  getYearData(year: string) {
-    return this.allData.filter(a => {
-      return a.name === year
-    }).map(b => {
-      let data = [];
-      b.series.forEach(c => {
-        data.push({ name: c.name, duration: c.value, number: c.extra.number });
-      });
-      return data;
-    });
-  }
-
   generateChartData() {
     let list = this.classInstanceDTOs.map(ci => {
       return ({
         year: (new Date(ci.dateFrom).getFullYear()).toString(),
+        month: (this.dateLocale.format(new Date(ci.dateFrom))),
         duration: ci.duration,
         tt1: ci.taskType1,
         tt2: ci.taskType2,
@@ -163,40 +109,77 @@ export class CompetenciesComponent implements OnInit {
       });
     });
 
-
     // Ausbildung 
     let filteredList = list.filter(entry => {
-      return entry.tt1 == 'Ausbildung (aktiv)';
+      return this.tt1Lernbereitschaft.indexOf(entry.tt1) >= 0;
     });
 
     let uniqueYears = [...new Set(filteredList.map(item => item.year))];
+
     let dataA1 = [];
 
-    uniqueYears.forEach(year => {
-      let currentYearList = filteredList.filter(entry => {
-        return entry.year == year;
-      });
+    if (uniqueYears.length === 1) {
+      // sort by month
 
-      let map = new Map<string, number[]>(); // 0: number, 1: duration
-      let data2 = [];
+      let uniqueMonths = [];
+      for (var month = 0; month < 12; month++) {
+        var d = new Date(Date.UTC(2000, month, 1, 0, 0, 0));
+        uniqueMonths.push(this.dateLocale.format(d))
+      }
 
-      currentYearList.forEach(t => {
-        if (t.duration != null) {
-          if (map.get(t.tt2)) {
-            map.set(t.tt2, [Number(map.get(t.tt2)[0]) + 1, Number(map.get(t.tt2)[1]) + Number(t.duration)]);
-          } else {
-            map.set(t.tt2, [1, Number(t.duration)]);
+      uniqueMonths.forEach(month => {
+        let currentMonthList = filteredList.filter(entry => {
+          return entry.month == month;
+        });
+
+        let map = new Map<string, number[]>(); // 0: number, 1: duration
+        let data2 = [];
+
+        currentMonthList.forEach(t => {
+          if (t.duration != null) {
+            if (map.get(t.tt2)) {
+              map.set(t.tt2, [Number(map.get(t.tt2)[0]) + 1, Number(map.get(t.tt2)[1]) + Number(t.duration)]);
+            } else {
+              map.set(t.tt2, [1, Number(t.duration)]);
+            }
           }
-        }
+        });
+
+        data2 = [];
+        Array.from(map.entries()).forEach(entry => {
+          data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+        });
+        dataA1.push({ name: month, series: data2 });
       });
 
-      data2 = [];
-      Array.from(map.entries()).forEach(entry => {
-        data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
-      });
-      dataA1.push({ name: year, series: data2 });
 
-    });
+    } else {
+      uniqueYears.forEach(year => {
+        let currentYearList = filteredList.filter(entry => {
+          return entry.year == year;
+        });
+
+        let map = new Map<string, number[]>(); // 0: number, 1: duration
+        let data2 = [];
+
+        currentYearList.forEach(t => {
+          if (t.duration != null) {
+            if (map.get(t.tt2)) {
+              map.set(t.tt2, [Number(map.get(t.tt2)[0]) + 1, Number(map.get(t.tt2)[1]) + Number(t.duration)]);
+            } else {
+              map.set(t.tt2, [1, Number(t.duration)]);
+            }
+          }
+        });
+
+        data2 = [];
+        Array.from(map.entries()).forEach(entry => {
+          data2.push({ name: entry[0], value: Number(entry[1][1]), extra: { number: Number(entry[1][0]) } });
+        });
+        dataA1.push({ name: year, series: data2 });
+
+      });
+    }
 
     for (let i = 0; i < dataA1.length; i++) {
       dataA1[i].series.sort((a, b) => b.name.localeCompare(a.name));
@@ -210,7 +193,6 @@ export class CompetenciesComponent implements OnInit {
 
     let uniqueTt2 = [...new Set(filteredList.map(item => item.tt2))];
 
-
     uniqueTt2.forEach(tt2 => {
       let oneTt2 = list.filter(entry => {
         return entry.tt2 == tt2;
@@ -222,10 +204,19 @@ export class CompetenciesComponent implements OnInit {
       oneTt2.forEach(t => {
         if (t.duration != null) {
 
-          if (map.get(t.year)) {
-            map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
-          } else {
-            map.set(t.year, [1, Number(t.duration)]);
+          if (uniqueYears.length === 1) {
+            if (map.get(t.month)) {
+              map.set(t.month, [Number(map.get(t.month)[0]) + 1, map.get(t.month)[1] + Number(t.duration)]);
+            } else {
+              map.set(t.month, [1, Number(t.duration)]);
+            }
+          }
+          else {
+            if (map.get(t.year)) {
+              map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
+            } else {
+              map.set(t.year, [1, Number(t.duration)]);
+            }
           }
 
         }
@@ -256,12 +247,21 @@ export class CompetenciesComponent implements OnInit {
 
       oneTt2.forEach(t => {
         if (t.duration != null) {
-          if (map.get(t.year)) {
-            map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
 
+          if (uniqueYears.length === 1) {
+            if (map.get(t.month)) {
+              map.set(t.month, [Number(map.get(t.month)[0]) + 1, map.get(t.month)[1] + Number(t.duration)]);
+            } else {
+              map.set(t.month, [1, Number(t.duration)]);
+            }
           } else {
-            map.set(t.year, [1, Number(t.duration)]);
+            if (map.get(t.year)) {
+              map.set(t.year, [Number(map.get(t.year)[0]) + 1, map.get(t.year)[1] + Number(t.duration)]);
+            } else {
+              map.set(t.year, [1, Number(t.duration)]);
+            }
           }
+
         }
       });
 
@@ -299,4 +299,49 @@ export class CompetenciesComponent implements OnInit {
     }
   }
 
+
+
+
+  // calcMean() {
+  //   let mean = new Map<string, number[]>(); // name -> [duration, number]
+  //   let cntYears = 0;
+
+  //   this.trainingData.forEach(td => {
+  //     if (td.name != '2019') { // minus current year: String(new Date().getFullYear()-1)
+  //       ++cntYears;
+  //       td.series.forEach(s => {
+  //         if (mean.get(s.name)) {
+  //           mean.set(s.name, [mean.get(s.name)[0] + s.value, mean.get(s.name)[1] + s.extra.number]);
+  //         } else {
+  //           mean.set(s.name, [s.value, s.extra.number]);
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   Array.from(mean.keys()).forEach(e => {
+  //     mean.set(e, [mean.get(e)[0] / cntYears, mean.get(e)[1] / cntYears]);
+  //   });
+
+
+  //   let data = [];
+  //   Array.from(mean.entries()).forEach(entry => {
+  //     data.push({ name: entry[0], value: entry[1][0], extra: { number: entry[1][1] } });
+  //   });
+
+  //   this.allData = [...this.trainingData];
+  //   this.allData.push({ name: 'mean', series: data });
+  // }
+
+  // getYearData(year: string) {
+  //   return this.allData.filter(a => {
+  //     return a.name === year
+  //   }).map(b => {
+  //     let data = [];
+  //     b.series.forEach(c => {
+  //       data.push({ name: c.name, duration: c.value, number: c.extra.number });
+  //     });
+  //     return data;
+  //   });
+  // }
 }

@@ -67,6 +67,7 @@
     "ngx-beautiful-charts": "2.0.4",
     "ngx-color-picker": "^8.2.0",
     "ngx-cookie-service": "2.3.0",
+    "ngx-material-file-input": "2.1.0",
     "ngx-spinner": "9.0.1",
     "perfect-scrollbar": "1.4.0",
     "prismjs": "1.17.1",

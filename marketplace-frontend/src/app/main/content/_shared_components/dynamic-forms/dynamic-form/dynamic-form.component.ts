@@ -27,7 +27,6 @@ export class DynamicFormComponent implements OnInit {
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
 
-
     if (this.formDisabled) {
       this.form.disable();
     }
@@ -41,11 +40,7 @@ export class DynamicFormComponent implements OnInit {
 
     if (this.form.valid) {
       this.output = JSON.stringify(this.form.value);
-      
-
-      console.log('Values');
-      console.log(this.form.value);
-  
+        
       this.fireResultEvent();
       
     } else {
@@ -66,7 +61,6 @@ export class DynamicFormComponent implements OnInit {
         this.markFormAsTouched(q.subQuestions, control.get(q.key));
       }
     }    
-
   }
 
   fireResultEvent() {

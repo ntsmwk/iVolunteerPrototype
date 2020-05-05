@@ -1,34 +1,34 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { isNullOrUndefined } from "util";
-import { LoginService } from "../../../../../_service/login.service";
-import { Participant, ParticipantRole } from "../../../../../_model/participant";
-import { MessageService } from "../../../../../_service/message.service";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { CoreMarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { isNullOrUndefined } from 'util';
+import { LoginService } from '../../../../../_service/login.service';
+import { Participant, ParticipantRole } from '../../../../../_model/participant';
+import { MessageService } from '../../../../../_service/message.service';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import {
   MappingOperatorType,
   AttributeSourceRuleEntry,
   ClassSourceRuleEntry,
   ClassAggregationOperatorType
-} from "app/main/content/_model/derivation-rule";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
-import { ClassDefinition } from "app/main/content/_model/meta/Class";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassProperty } from "app/main/content/_model/meta/Property";
-import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
+} from 'app/main/content/_model/derivation-rule';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { ClassDefinition } from 'app/main/content/_model/meta/class';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { ClassProperty } from 'app/main/content/_model/meta/property';
+import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
+import { Helpseeker } from '../../../../../_model/helpseeker';
 
 @Component({
   selector: "class-rule-precondition",
-  templateUrl: "./class-rule-configurator-precondition.component.html",
-  styleUrls: ["../rule-configurator.component.scss"]
+  templateUrl: './class-rule-configurator-precondition.component.html',
+  styleUrls: ['../rule-configurator.component.scss']
 })
 export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
-  @Input("classSourceRuleEntry") classSourceRuleEntry: ClassSourceRuleEntry;
-  @Output("classSourceRuleEntry") classSourceRuleEntryChange: EventEmitter<
+  @Input('classSourceRuleEntry') classSourceRuleEntry: ClassSourceRuleEntry;
+  @Output('classSourceRuleEntry') classSourceRuleEntryChange: EventEmitter<
     ClassSourceRuleEntry
   > = new EventEmitter<ClassSourceRuleEntry>();
 
@@ -64,13 +64,13 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       classDefinitionId:
         (this.classSourceRuleEntry.classDefinition
           ? this.classSourceRuleEntry.classDefinition.id
-          : "") || "",
+          : '') || '',
       aggregationOperatorType:
         this.classSourceRuleEntry.aggregationOperatorType ||
         ClassAggregationOperatorType.COUNT,
       mappingOperatorType:
         this.classSourceRuleEntry.mappingOperatorType || MappingOperatorType.EQ,
-      value: this.classSourceRuleEntry.value || ""
+      value: this.classSourceRuleEntry.value || ''
     });
 
     this.comparisonOperators = Object.keys(MappingOperatorType);
@@ -143,15 +143,15 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   }
 
   private retrieveMappingOperatorValueOf(op) {
-    var x: MappingOperatorType =
+    let x: MappingOperatorType =
       MappingOperatorType[op as keyof typeof MappingOperatorType];
     return x;
   }
 
   private retrieveAggregationOperatorValueOf(op) {
-    var x: ClassAggregationOperatorType =
+    let x: ClassAggregationOperatorType =
       ClassAggregationOperatorType[
-        op as keyof typeof ClassAggregationOperatorType
+      op as keyof typeof ClassAggregationOperatorType
       ];
     return x;
   }

@@ -13,7 +13,12 @@ import {
   MatTooltipModule,
   MatSortModule,
   MatCardModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatCard,
+  MatFormFieldModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatInputModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { FuseWidgetModule } from "@fuse/components";
@@ -37,9 +42,14 @@ const routes = [{ path: "", component: ProfileComponent }];
     MatMenuModule,
     MatTooltipModule,
     MatPaginatorModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatSortModule,
+    MatFormFieldModule,
     MatCardModule,
+    MatInputModule,
     FuseSharedModule,
+    MatCardModule,
     FuseWidgetModule
   ],
   exports: [],

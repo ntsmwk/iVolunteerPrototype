@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ClassInstanceDTO } from '../../../../../../_model/meta/Class';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { StoredChartService } from 'app/main/content/_service/stored-chart.service';
 import * as moment from 'moment';
-import { StoredChartService } from '../../../../../../_service/stored-chart.service';
-import { StoredChart } from '../../../../../../_model/stored-chart';
-import { Marketplace } from '../../../../../../_model/marketplace';
-import { Volunteer } from '../../../../../../_model/volunteer';
-
+import { StoredChart } from 'app/main/content/_model/stored-chart';
 
 @Component({
   selector: 'app-donut',
@@ -225,6 +224,10 @@ export class DonutComponent implements OnInit, OnChanges {
         }
       }
     });
+
+
+
+    
     data.sort((a, b) => b.value - a.value);
     let data2 = data.slice(0, 12);
     this.donutData = [...data2];
@@ -281,6 +284,20 @@ export class DonutComponent implements OnInit, OnChanges {
     });
 
     let data = [];
+    let empty: number = 0;
+
+    // null => 'keine Angabe'
+    // Array.from(rangMap.entries()).forEach(entry => {
+    //   if (entry[0] === null || entry[0] === '') {
+    //     empty += entry[1];
+    //   } else {
+    //     data.push({ name: entry[0], value: Number(entry[1]) });
+    //   }
+    // });
+    // data.push({ name: 'keine Angabe', value: empty });
+
+
+    // null => sorted out
     Array.from(rangMap.entries()).forEach(entry => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
         if (entry[0] === '') {

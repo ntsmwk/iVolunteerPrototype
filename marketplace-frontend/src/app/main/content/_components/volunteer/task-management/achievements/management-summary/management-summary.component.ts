@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../../../../_service/login.service';
-import { ClassInstanceService } from '../../../../../_service/meta/core/class/class-instance.service';
-import { CoreVolunteerService } from '../../../../../_service/core-volunteer.service';
-import { StoredChartService } from '../../../../../_service/stored-chart.service';
-import { Volunteer } from '../../../../../_model/volunteer';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
-import { StoredChart } from '../../../../../_model/stored-chart';
-import { TenantService } from '../../../../../_service/core-tenant.service';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { Tenant } from 'app/main/content/_model/tenant';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
+import { StoredChartService } from 'app/main/content/_service/stored-chart.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { LocalRepositoryService } from 'app/main/content';
+import { timer } from 'rxjs';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { isNullOrUndefined } from "util";
+import { StoredChart } from 'app/main/content/_model/stored-chart';
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class ManagementSummaryComponent implements OnInit {
   showXAxisLabel = true;
   showYAxisLabel = true;
   xAxisLabel = 'Datum';
-  yAxisLabel = 'Dauer [h]';
+  yAxisLabel = 'Dauer [Stunden]';
   noBarWhenZero = true;
   showLabels = true;
   autoScale = true;
@@ -42,20 +44,24 @@ export class ManagementSummaryComponent implements OnInit {
   tooltipDisabled = false;
 
   volunteer: Volunteer;
-  marketplace: any;
-  classInstanceDTOs: ClassInstanceDTO[];
+  marketplace: any = [];
+  classInstanceDTOs: ClassInstanceDTO[] = [];
 
-  uniqueYears: any[];
+  uniqueYears: any[] = [];
   tenantMap: Map<String, Tenant>;
 
   durationTotal: any[] = [];
   numberTotal: any[] = [];
-  durationLastYear: any[] = [];
-  numberLastYear: any[] = [];
+
+  durationYear: any[] = [];
+  numberYear: any[] = [];
 
   comparisonData: any[] = [];
   comparisonYear: number;
-  lastYear: number;
+  engagementYear: number;
+
+  isLocalRepositoryConnected: boolean;
+  timeout: boolean = false;
 
   constructor(
     private loginService: LoginService,
@@ -63,48 +69,81 @@ export class ManagementSummaryComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
+    private localRepositoryService: LocalRepositoryService
   ) { }
 
   async ngOnInit() {
-    this.comparisonYear = 2019;
-    this.classInstanceDTOs = [];
+    let t = timer(3000);
+    t.subscribe(() => {
+      this.timeout = true;
+    });
 
-    this.marketplace = [];
+    this.comparisonYear = 2019;
+    this.engagementYear = 2019;
+
 
     this.volunteer = <Volunteer>(
       await this.loginService.getLoggedIn().toPromise()
     );
 
+    this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(this.volunteer);
+
+    let marketplaces = <Marketplace[]>(
+      await this.volunteerService
+        .findRegisteredMarketplaces(this.volunteer.id)
+        .toPromise()
+    );
+    // TODO for each registert mp
+    this.marketplace = marketplaces[0];
+
+    if (this.isLocalRepositoryConnected) {
+      this.classInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
+
+    } else {
+      if (!isNullOrUndefined(this.marketplace)) {
+        this.classInstanceDTOs = <ClassInstanceDTO[]>(
+          await this.classInstanceService
+            .getUserClassInstancesByArcheType(
+              this.marketplace,
+              "TASK",
+              this.volunteer.id,
+              this.volunteer.subscribedTenants
+            )
+            .toPromise()
+        );
+      }
+    }
+
+    // TODO: philipp filter out classInstances missing the reqired fields
+    // TODO: check if data is valid!
+
+    // console.error('before', this.classInstanceDTOs.length);
+    // this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
+    //   return (ci.name && ci.dateFrom && ci.taskType1 && ci.taskType2 &&
+    //     ci.taskType3 && ci.duration)
+    // });
+
+    this.classInstanceDTOs.forEach((ci, index, object) => {
+      if (ci.duration === null) {
+        object.splice(index, 1);
+      }
+    });
+
+    // console.error('after', this.classInstanceDTOs.length);
+
+    this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+    
+    let uniqueTenants = [...new Set(this.classInstanceDTOs.map(item => item.tenantId))];
     this.tenantMap = new Map<String, Tenant>();
-    for (let tenantId of this.volunteer.subscribedTenants) {
+    for (let tenantId of uniqueTenants) {
       let tenant = <Tenant>await this.tenantService.findById(tenantId).toPromise();
       this.tenantMap.set(tenantId, tenant);
     }
 
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService.findRegisteredMarketplaces(this.volunteer.id).toPromise()
-    );
-
-    // TODO for each registert mp
-    this.marketplace = marketplaces[0];
-
-    if(!isNullOrUndefined(this.marketplace)) {
-
-      this.classInstanceDTOs = <ClassInstanceDTO[]>(
-        await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
-      );
-  
-      this.classInstanceDTOs.forEach((ci, index, object) => {
-        if (ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
-  
-      this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
-  
-      this.generateComparisonChartData(this.comparisonYear);
-      this.generateEngagementData();
-    }
+    this.generateComparisonChartData(this.comparisonYear);
+    this.generateEngagementYearData(this.engagementYear);
+    this.generateEngagementTotalData();
 
   }
 
@@ -120,9 +159,9 @@ export class ManagementSummaryComponent implements OnInit {
       this.comparisonData.push({ name: tenant.name, value: yearData.length });
     });
 
-
     let finalData: any[] = [];
 
+    this.uniqueYears.sort();
     this.uniqueYears.forEach(curYear => {
       let data: any[] = [];
       this.tenantMap.forEach(tenant => {
@@ -134,13 +173,36 @@ export class ManagementSummaryComponent implements OnInit {
 
         data.push({ name: tenant.name, value: currentData.length - this.comparisonData.find(d => d.name === tenant.name).value });
       });
-      finalData.push({ name: curYear, series: data });
+      finalData.push({ name: curYear.toString(), series: data });
     });
 
     this.comparisonData = [...finalData];
   }
 
-  generateEngagementData() {
+  generateEngagementYearData(engagementYear) {
+    this.engagementYear = engagementYear;
+    let classInstancesYear = this.classInstanceDTOs.filter(ci => {
+      return new Date(ci.dateFrom).getFullYear() === this.engagementYear;
+    });
+
+    this.durationYear = [];
+    this.numberYear = [];
+
+    this.tenantMap.forEach(tenant => {
+      let classInstancesTenant = classInstancesYear.filter(ci => {
+        return ci.tenantId === tenant.id;
+      });
+
+      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0);
+      this.durationYear.push({ name: tenant.name, value: duration });
+      this.numberYear.push({ name: tenant.name, value: classInstancesTenant.length });
+    });
+
+    this.durationYear = [... this.durationYear];
+    this.numberYear = [... this.numberYear];
+  }
+
+  generateEngagementTotalData() {
     this.tenantMap.forEach(tenant => {
       let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
         return ci.tenantId === tenant.id;
@@ -152,20 +214,6 @@ export class ManagementSummaryComponent implements OnInit {
     });
 
 
-    this.lastYear = new Date().getFullYear() - 1;
-    let classInstancesLastYear = this.classInstanceDTOs.filter(ci => {
-      return new Date(ci.dateFrom).getFullYear() === this.lastYear;
-    });
-
-    this.tenantMap.forEach(tenant => {
-      let classInstancesTenant = classInstancesLastYear.filter(ci => {
-        return ci.tenantId === tenant.id;
-      });
-
-      let duration = classInstancesTenant.reduce((acc, curr) => acc + Number(curr.duration), 0)
-      this.durationLastYear.push({ name: tenant.name, value: duration });
-      this.numberLastYear.push({ name: tenant.name, value: classInstancesTenant.length });
-    });
   }
 
   exportChart(source: string) {
@@ -188,13 +236,15 @@ export class ManagementSummaryComponent implements OnInit {
   }
 
   getMemberSince(tenantId) {
-    let classInstancesTenant = this.classInstanceDTOs.filter(ci => {
+    let t = this.classInstanceDTOs.filter(ci => {
       return ci.tenantId === tenantId
     });
+    let uniqueYears = [...new Set(t.map(item => new Date(item.dateFrom).getFullYear()))];
+    return Math.min.apply(Math, uniqueYears);
+  }
 
-    let uniqueYears = [...new Set(classInstancesTenant.map(item => new Date(item.dateFrom).getFullYear().toString()))];
-    uniqueYears.sort;
-
-    return uniqueYears[0];
+  getEngagementSince() {
+    let uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+    return Math.min.apply(Math, uniqueYears) + ' - ' + Math.max.apply(Math, uniqueYears);
   }
 }

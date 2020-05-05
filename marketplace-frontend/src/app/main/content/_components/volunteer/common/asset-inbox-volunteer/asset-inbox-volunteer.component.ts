@@ -1,19 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Marketplace } from "../../../../_model/marketplace";
-import { Participant } from "../../../../_model/participant";
-import { ClassInstanceDTO } from "../../../../_model/meta/Class";
-import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { isNullOrUndefined } from "util";
-import { CoreMarketplaceService } from "../../../../_service/core-marketplace.service";
-import { LoginService } from "../../../../_service/login.service";
-import { TenantService } from "../../../../_service/core-tenant.service";
-import { Volunteer } from "../../../../_model/volunteer";
+import { Component, OnInit } from '@angular/core';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { TenantService } from 'app/main/content/_service/core-tenant.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "asset-inbox-volunteer",
-  templateUrl: "./asset-inbox-volunteer.component.html",
-  styleUrls: ["./asset-inbox-volunteer.component.scss"]
+  templateUrl: './asset-inbox-volunteer.component.html',
+  styleUrls: ['./asset-inbox-volunteer.component.scss']
 })
 export class AssetInboxVolunteerComponent implements OnInit {
   isLoaded: boolean;
@@ -88,7 +87,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
       )
       .toPromise()
       .then(() => {
-        this.router.navigate(["/main/dashboard"]);
+        this.router.navigate(['/main/dashboard']);
       });
   }
 }

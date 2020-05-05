@@ -1,51 +1,50 @@
-import { Injectable } from "@angular/core";
-import { Marketplace } from "app/main/content/_model/marketplace";
-import { HttpClient } from "@angular/common/http";
-import { PropertyDefinition } from "app/main/content/_model/meta/Property";
-import { PropertyConstraint } from "app/main/content/_model/meta/Constraint";
-
+import { Injectable } from '@angular/core';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { HttpClient } from '@angular/common/http';
+import { PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { PropertyConstraint } from 'app/main/content/_model/meta/constraint';
 
 @Injectable({
-    providedIn: 'root'
-  })
-  export class PropertyDefinitionService {
+  providedIn: 'root'
+})
+export class PropertyDefinitionService {
 
 
-    constructor(
-      private http: HttpClient
-    ) { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
 
-    getAllPropertyDefinitons(marketplace: Marketplace, tenantId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/property/definition/all/tenant/${tenantId}`);
-    }
-
-    getPropertyDefinitionById(marketplace: Marketplace, id: string, tenantId: string) {
-      return this.http.get(`${marketplace.url}/meta/core/property/definition/${id}/tenant/${tenantId}`)
-    }
-
-    createNewPropertyDefinition(marketplace: Marketplace, propertyDefinitions: PropertyDefinition<any>[]) {
-      return this.http.post(`${marketplace.url}/meta/core/property/definition/new`, propertyDefinitions);
-    }
-
-    updatePropertyDefintion(marketplace: Marketplace, propertyDefinitions: PropertyDefinition<any>[]) {
-      return this.http.put(`${marketplace.url}/meta/core/property/definition/update`, propertyDefinitions);
-    }
-
-    deletePropertyDefinition(marketplace: Marketplace, id: string) {
-      return this.http.delete(`${marketplace.url}/meta/core/property/definition/${id}/delete`);
-    }
-
-    addConstraintToPropertyDefinition(marketplace: Marketplace, id: string, constraints: PropertyConstraint<any>[]) {
-      return this.http.patch(`${marketplace.url}/meta/core/property/definition/${id}/add-constraint`, constraints);
-    }
-
-    removeConstraintFromPropertyDefintion(marketplace: Marketplace, id: string, constraintIds: string[]) {
-      return this.http.patch(`${marketplace.url}/meta/core/property/definition/${id}/remove-constraint`, constraintIds);
-    }
-
-
-
-
-
+  getAllPropertyDefinitons(marketplace: Marketplace, tenantId: string) {
+    return this.http.get(`${marketplace.url}/meta/core/property/definition/all/tenant/${tenantId}`);
   }
+
+  getPropertyDefinitionById(marketplace: Marketplace, id: string, tenantId: string) {
+    return this.http.get(`${marketplace.url}/meta/core/property/definition/${id}/tenant/${tenantId}`)
+  }
+
+  createNewPropertyDefinition(marketplace: Marketplace, propertyDefinitions: PropertyDefinition<any>[]) {
+    return this.http.post(`${marketplace.url}/meta/core/property/definition/new`, propertyDefinitions);
+  }
+
+  updatePropertyDefintion(marketplace: Marketplace, propertyDefinitions: PropertyDefinition<any>[]) {
+    return this.http.put(`${marketplace.url}/meta/core/property/definition/update`, propertyDefinitions);
+  }
+
+  deletePropertyDefinition(marketplace: Marketplace, id: string) {
+    return this.http.delete(`${marketplace.url}/meta/core/property/definition/${id}/delete`);
+  }
+
+  addConstraintToPropertyDefinition(marketplace: Marketplace, id: string, constraints: PropertyConstraint<any>[]) {
+    return this.http.patch(`${marketplace.url}/meta/core/property/definition/${id}/add-constraint`, constraints);
+  }
+
+  removeConstraintFromPropertyDefintion(marketplace: Marketplace, id: string, constraintIds: string[]) {
+    return this.http.patch(`${marketplace.url}/meta/core/property/definition/${id}/remove-constraint`, constraintIds);
+  }
+
+
+
+
+
+}

@@ -1,17 +1,17 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Marketplace } from "../../../../../_model/marketplace";
-import { Participant } from "../../../../../_model/participant";
-import { isNullOrUndefined } from "util";
-import { ClassInstanceDTO } from "../../../../../_model/meta/Class";
-import { ClassInstanceService } from "../../../../../_service/meta/core/class/class-instance.service";
-import { CoreMarketplaceService } from "../../../../../_service/core-marketplace.service";
-import { LoginService } from "../../../../../_service/login.service";
+import { Component, OnInit } from '@angular/core';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Participant } from 'app/main/content/_model/participant';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: "volunteer-inbox-confirmation-screen",
-  templateUrl: "./confirmation-screen.component.html",
-  styleUrls: ["./confirmation-screen.component.scss"]
+  templateUrl: './confirmation-screen.component.html',
+  styleUrls: ['./confirmation-screen.component.scss']
 })
 export class VolunteerConfirmationScreenComponent implements OnInit {
   // dataSource = new MatTableDataSource<any>();
@@ -59,12 +59,12 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
           .then((participant: Participant) => {
             this.participant = participant;
           })
-      ]).then(() => {});
+      ]).then(() => { });
     }
   }
 
   onBackClickInbox() {
-    this.router.navigate(["main/volunteer/asset-inbox"], {
+    this.router.navigate(['main/volunteer/asset-inbox'], {
       state: {
         instances: undefined,
         marketplace: this.marketplace,
@@ -74,6 +74,6 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
   }
 
   onBackClickDashboard() {
-    this.router.navigate(["main/dashboard"]);
+    this.router.navigate(['main/dashboard']);
   }
 }

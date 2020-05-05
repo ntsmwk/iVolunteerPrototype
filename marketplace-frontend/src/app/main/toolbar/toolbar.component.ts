@@ -9,6 +9,7 @@ import { navigation_volunteer } from 'app/navigation/navigation_volunteer';
 import { navigation_helpseeker } from '../../navigation/navigation_helpseeker';
 import { LoginService } from '../content/_service/login.service';
 import { Participant, ParticipantRole } from '../content/_model/participant';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'fuse-toolbar',
@@ -25,6 +26,8 @@ export class FuseToolbarComponent {
   noNav: boolean;
   navigation: any;
   icons: string;
+
+  headingText: string;
 
   @ViewChild('inboxIcon', { static: true }) inboxIcon: ElementRef;
   displayInboxOverlay: boolean;
@@ -85,7 +88,11 @@ export class FuseToolbarComponent {
         }
         if (event instanceof NavigationEnd) {
           this.showLoadingBar = false;
+          // console.log(event);
+          this.changeHeading(event);
+
         }
+
       });
 
     this.fuseConfig.onConfigChanged.subscribe((settings) => {
@@ -109,6 +116,16 @@ export class FuseToolbarComponent {
     });
   }
 
+  private changeHeading(event: NavigationEnd) {
+
+    switch (event.urlAfterRedirects) {
+      case '/main/matching-configurator': this.headingText = 'Matching-Konfigurator'; break;
+      case '/main/configurator': this.headingText = 'Asset-Konfigurator'; break;
+      case String(event.urlAfterRedirects.match(/\/main\/configurator\/instance-editor\/[^]*/)): this.headingText = 'Instanz-Editor'; break;
+      default: this.headingText = ''; break;
+    }
+  }
+
   toggleSidebarOpened(key) {
     this.sidebarService.getSidebar(key).toggleOpen();
   }
@@ -129,20 +146,17 @@ export class FuseToolbarComponent {
     if (this.displayInboxOverlay) {
       const { x, y } = inboxIcon._elementRef.nativeElement.getBoundingClientRect();
 
-      console.log("x: " + x + " y: " + y);
-      console.log(this.overlayDiv);
       this.overlayDiv.nativeElement.style.top = (y + 35) + 'px';
       this.overlayDiv.nativeElement.style.left = (x - 150) + 'px';
       this.overlayDiv.nativeElement.style.position = 'fixed';
       this.overlayDiv.nativeElement.style.width = '300px';
       this.overlayDiv.nativeElement.style.height = '240px';
 
-      this.overlayArrowDiv.nativeElement.style.top = (y+20)+'px';
-      this.overlayArrowDiv.nativeElement.style.left = (x-8)+'px';
+      this.overlayArrowDiv.nativeElement.style.top = (y + 20) + 'px';
+      this.overlayArrowDiv.nativeElement.style.left = (x - 8) + 'px';
       this.overlayArrowDiv.nativeElement.style.position = 'fixed';
 
 
-      console.log(this.overlayDiv.nativeElement.style);
     }
 
 

@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
-import { fuseAnimations } from '../../../../../../../../@fuse/animations';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { ClassInstanceDTO } from '../../../../../_model/meta/Class';
-import { Volunteer } from '../../../../../_model/volunteer';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { Volunteer } from 'app/main/content/_model/volunteer';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
 import { Tenant } from 'app/main/content/_model/tenant';
+
 
 @Component({
   selector: 'fuse-tasks',
@@ -28,7 +29,6 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.classInstanceDTOs = [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -54,5 +54,5 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  
+
 }

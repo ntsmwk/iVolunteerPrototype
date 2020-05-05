@@ -19,15 +19,15 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	private String userId;
 	private String issuerId;
-
-	// Temp flags for dashboard presentation
-	private boolean published; // flag if published
-	private boolean inUserRepository;//flag if in inbox or in repository of user
-	private boolean inIssuerInbox; //flag if in inbox of issuer
 	
 	private String imagePath;
 	
 	private ClassArchetype classArchetype;
+	
+	private List<ClassInstance> childClassInstances;
+
+	private boolean visible;
+	private int tabId;
 	
 	public ClassInstance() {
 	}
@@ -102,14 +102,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 		this.marketplaceId = marketplaceId;
 	}
 
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
 	public ClassArchetype getClassArchetype() {
 		return classArchetype;
 	}
@@ -125,34 +117,7 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setIssuerId(String issuerId) {
 		this.issuerId = issuerId;
 	}
-
-	public boolean isInUserRepository() {
-		return inUserRepository;
-	}
-
-	public void setInUserRepository(boolean inUserRepository) {
-		this.inUserRepository = inUserRepository;
-	}
-
-	public boolean isInIssuerInbox() {
-		return inIssuerInbox;
-	}
-
-	public void setInIssuerInbox(boolean inIssuerInbox) {
-		this.inIssuerInbox = inIssuerInbox;
-	}
-
-	@Override
-	public String toHashObject() {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", id);
-		json.addProperty("name", name);
-		json.addProperty("marketplaceId", marketplaceId);
-//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
-		json.addProperty("properties", this.properties.hashCode());
-//		json.addProperty("timestamp", timestamp.toString());
-		return json.toString();
-	}
+	
 
 	public String getUserId() {
 		return userId;
@@ -169,4 +134,44 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+
+	public List<ClassInstance> getChildClassInstances() {
+		return childClassInstances;
+	}
+
+	public void setChildClassInstances(List<ClassInstance> childClassInstances) {
+		this.childClassInstances = childClassInstances;
+	}
+	
+	
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
+	}
+
+	@Override
+	public String toHashObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", id);
+		json.addProperty("name", name);
+		json.addProperty("marketplaceId", marketplaceId);
+//TODO @MWE		json.addProperty("classDefinition", classDefinition.toHashObject());
+		json.addProperty("properties", this.properties.hashCode());
+//		json.addProperty("timestamp", timestamp.toString());
+		return json.toString();
+	}
+
 }
+

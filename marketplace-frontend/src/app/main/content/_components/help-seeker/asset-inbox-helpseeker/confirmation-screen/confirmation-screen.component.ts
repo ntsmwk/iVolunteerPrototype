@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../../_model/marketplace";
 import { Participant } from "../../../../_model/participant";
 import { isNullOrUndefined } from "util";
-import { ClassInstanceDTO } from "../../../../_model/meta/Class";
+import { ClassInstanceDTO } from "../../../../_model/meta/class";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
 import { CoreMarketplaceService } from "../../../../_service/core-marketplace.service";
 import { LoginService } from "../../../../_service/login.service";
@@ -59,7 +59,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
           .then((participant: Participant) => {
             this.participant = participant;
           })
-      ]).then(() => {});
+      ]).then(() => { });
     }
   }
 

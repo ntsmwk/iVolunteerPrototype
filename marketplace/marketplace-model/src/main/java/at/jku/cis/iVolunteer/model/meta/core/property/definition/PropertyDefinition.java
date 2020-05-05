@@ -18,6 +18,8 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 
 	private List<T> allowedValues = new ArrayList<>();
 
+	private String unit;
+	
 	private boolean custom;
 	private boolean multiple;
 
@@ -26,6 +28,9 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 	private boolean required;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
+	
+	
+	
 	public PropertyDefinition() {
 	}
 
@@ -57,6 +62,13 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 
 	public void setAllowedValues(List<T> allowedValues) {
 		this.allowedValues = allowedValues;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public boolean isCustom() {

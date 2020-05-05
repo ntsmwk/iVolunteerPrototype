@@ -1,7 +1,8 @@
-import { ClassDefinition } from './Class';
+import { ClassDefinition } from './class';
 import { QuestionBase } from '../dynamic-forms/questions';
 import { FormGroup } from '@angular/forms';
-import { ClassProperty } from './Property';
+import { ClassProperty } from './property';
+import { Relationship } from './relationship';
 
 export class FormEntry {
     positionLevel: string;
@@ -23,6 +24,18 @@ export class FormConfiguration {
     name: string;
     formEntry: FormEntry;
 
+}
+
+export class FormConfigurationPreviewRequest {
+    classDefinitions: ClassDefinition[];
+    relationships: Relationship[];
+    rootClassDefinition: ClassDefinition;
+
+    constructor(classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
+        this.classDefinitions = classDefinitions;
+        this.relationships = relationships;
+        this.rootClassDefinition = rootClassDefinition;
+    }
 }
 
 export class FormEntryReturnEventData {
