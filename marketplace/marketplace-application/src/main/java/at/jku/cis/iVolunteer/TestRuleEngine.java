@@ -2,9 +2,6 @@ package at.jku.cis.iVolunteer;
 
 import static org.junit.Assert.*;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -16,18 +13,20 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.TestRuleEngine.RolesAmbulanceService;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerService.DrivingLevel;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService.LicenseType;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -58,6 +57,8 @@ public class TestRuleEngine {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 	@Autowired private VolunteerService volunteerService;
@@ -477,7 +478,7 @@ public class TestRuleEngine {
 	public void createClassRolesRK() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
 		// Function
-		FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId, "Ambulance Service", ClassArchetype.TASK_HEAD);
+		FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId, "Ambulance Service", ClassArchetype.TASK);
 		// Certificate SEF-MODUL 1
 		System.out.println(" new Task class " + functionClassAmbulanceService);
 		TaskClassDefinition certClass = (TaskClassDefinition) obtainClass(tenantId, "Rettungssanitäter", functionClassAmbulanceService);
@@ -491,7 +492,7 @@ public class TestRuleEngine {
 	public void createClassTasksRK() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
 		// Task
-		TaskClassDefinition taskClassAmbulanceService = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_RETTUNGSDIENST, ClassArchetype.TASK_HEAD);
+		TaskClassDefinition taskClassAmbulanceService = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_RETTUNGSDIENST, ClassArchetype.TASK);
 		
 		System.out.println(" new Task class " + taskClassAmbulanceService);
 		TaskClassDefinition taskClass = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_EINSATZ, taskClassAmbulanceService);
@@ -517,7 +518,7 @@ public class TestRuleEngine {
 	
 	public void createDrivingSkills(String tenantId) {
 		// certificate --> driving license
-		ClassDefinition certClassDrivingLicense = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE, ClassArchetype.ACHIEVEMENT_HEAD);
+		ClassDefinition certClassDrivingLicense = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE, ClassArchetype.ACHIEVEMENT);
 		ClassDefinition certClassDrivingLicenseCar = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_CAR, certClassDrivingLicense);
 		ClassDefinition certClassDrivingLicenseTruck = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_TRUCK, certClassDrivingLicense);
 		ClassDefinition certClassDrivingLicenseBus = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_BUS, certClassDrivingLicense);
@@ -645,7 +646,7 @@ public class TestRuleEngine {
 		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
 		// c1.setId("test1");
 		c1.setName(VolunteerService.COMPETENCE_DRIVING);
-		c1.setClassArchetype(ClassArchetype.COMPETENCE_HEAD);
+		c1.setClassArchetype(ClassArchetype.COMPETENCE);
 		c1.setTenantId(tenantId);
 		c1.setRoot(true);
 		// set properties
@@ -670,7 +671,7 @@ public class TestRuleEngine {
 		a.setParentId(certificateClass.getId());
 		a.setTimestamp(new Date());
 		a.setTenantId(tenantId);
-		a.setClassArchetype(ClassArchetype.ACHIEVEMENT_HEAD);
+		a.setClassArchetype(ClassArchetype.ACHIEVEMENT);
 		a.setProperties(new ArrayList<ClassProperty<Object>>());
 		PropertyDefinition<Object> pdDescription = obtainProperty("Description", tenantId);
 		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
@@ -687,7 +688,7 @@ public class TestRuleEngine {
 		a.setParentId(taskClass.getId());
 		a.setTimestamp(new Date());
 		a.setTenantId(tenantId);
-		a.setClassArchetype(ClassArchetype.TASK_HEAD);
+		a.setClassArchetype(ClassArchetype.TASK);
 		a.setProperties(new ArrayList<ClassProperty<Object>>());
 		PropertyDefinition<Object> pd = obtainProperty("Description", tenantId);
 		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
@@ -722,17 +723,14 @@ public class TestRuleEngine {
 		ClassDefinition cd = null;
 		switch(parent.getClassArchetype()) {
 		case ACHIEVEMENT:
-		case ACHIEVEMENT_HEAD:
 				cd = new AchievementClassDefinition();
 				cd.setClassArchetype(ClassArchetype.ACHIEVEMENT); 
 				break;
 		case COMPETENCE:
-		case COMPETENCE_HEAD:
 				cd = new CompetenceClassDefinition(); 
 		        cd.setClassArchetype(ClassArchetype.COMPETENCE);
 		        break;
 		case TASK:
-		case TASK_HEAD:
 				cd = new TaskClassDefinition();
 		        cd.setClassArchetype(ClassArchetype.TASK); 
 		        break;
