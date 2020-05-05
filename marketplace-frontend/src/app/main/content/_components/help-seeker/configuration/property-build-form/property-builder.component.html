@@ -7,7 +7,7 @@
     </div>
 
     <div>
-      <h1>Create New Property</h1>
+      <h1>Property Baukasten</h1>
     </div>
 
     <div></div>
@@ -16,8 +16,7 @@
 
 
   <div class="mat-white-bg mat-elevation-z4 p-24 mt-24" *ngIf="loaded">
-    <app-single-property [propertyListItems]=" propertyListItems" [marketplace]="marketplace"
-      [currentProperty]="currentProperty">
+    <app-single-property [marketplace]="marketplace" [helpseeker]="helpseeker">
     </app-single-property>
   </div>
 

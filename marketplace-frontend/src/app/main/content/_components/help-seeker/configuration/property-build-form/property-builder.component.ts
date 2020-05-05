@@ -7,9 +7,9 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 
 @Component({
-  selector: 'app-property-build-form',
-  templateUrl: './property-build-form.component.html',
-  styleUrls: ['./property-build-form.component.scss']
+  selector: 'app-property-builder',
+  templateUrl: './property-builder.component.html',
+  styleUrls: ['./property-builder.component.scss']
 })
 export class PropertyBuildFormComponent implements OnInit {
 

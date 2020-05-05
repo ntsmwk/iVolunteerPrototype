@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PropertyBuildFormComponent } from './property-build-form.component';
+import { PropertyBuildFormComponent } from './property-builder.component';
 import { RouterModule } from '@angular/router';
 import { SinglePropertyModule } from './single-property/single-property.module';
 import { MatProgressSpinnerModule, MatCommonModule, MatIconModule } from '@angular/material';
