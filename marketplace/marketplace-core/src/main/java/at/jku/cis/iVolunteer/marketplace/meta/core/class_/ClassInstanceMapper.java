@@ -35,67 +35,89 @@ public class ClassInstanceMapper {
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (name != null) {
-				dto.setName((String) name.getValues().get(0));
+				if(name.getValues().size() > 0) {
+					dto.setName((String) name.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> purpose = ci.getProperties().stream().filter(p -> "purpose".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (purpose != null) {
-				dto.setPurpose((String) purpose.getValues().get(0));
+				if(purpose.getValues().size() > 0) {
+					dto.setPurpose((String) purpose.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> startingDate = ci.getProperties().stream()
 					.filter(p -> "Starting Date".equals(p.getName())).findFirst().orElse(null);
 			if (startingDate != null) {
-				dto.setDateFrom((Date) startingDate.getValues().get(0));
+				if(startingDate.getValues().size() > 0) {
+					dto.setDateFrom((Date) startingDate.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> endDate = ci.getProperties().stream().filter(p -> "End Date".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (endDate != null) {
-				dto.setDateTo((Date) endDate.getValues().get(0));
+				if(endDate.getValues().size() > 0) {
+					dto.setDateTo((Date) endDate.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> duration = ci.getProperties().stream().filter(p -> "duration".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (duration != null) {
-				dto.setDuration((String) duration.getValues().get(0));
+				if(duration.getValues().size() > 0) {
+					dto.setDuration((String) duration.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> location = ci.getProperties().stream().filter(p -> "Location".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (location != null) {
-				dto.setLocation((String) location.getValues().get(0));
+				if(location.getValues().size() > 0) {
+					dto.setLocation((String) location.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> description = ci.getProperties().stream()
 					.filter(p -> "Description".equals(p.getName())).findFirst().orElse(null);
 			if (description != null) {
-				dto.setDescription((String) description.getValues().get(0));
+				if(description.getValues().size() > 0) {
+					dto.setDescription((String) description.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> rank = ci.getProperties().stream().filter(p -> "rank".equals(p.getName()))
 					.findFirst().orElse(null);
 			if (rank != null) {
-				dto.setRank((String) rank.getValues().get(0));
+				if(rank.getValues().size() > 0) {
+					dto.setRank((String) rank.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> taskType1 = ci.getProperties().stream()
 					.filter(p -> "taskType1".equals(p.getName())).findFirst().orElse(null);
 			if (taskType1 != null) {
-				dto.setTaskType1((String) taskType1.getValues().get(0));
+				if(taskType1.getValues().size() > 0) {
+					dto.setTaskType1((String) taskType1.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> taskType2 = ci.getProperties().stream()
 					.filter(p -> "taskType2".equals(p.getName())).findFirst().orElse(null);
 			if (taskType2 != null) {
-				dto.setTaskType2((String) taskType2.getValues().get(0));
+				if(taskType2.getValues().size() > 0) {
+					dto.setTaskType2((String) taskType2.getValues().get(0));
+				}
 			}
 
 			PropertyInstance<Object> taskType3 = ci.getProperties().stream()
 					.filter(p -> "taskType3".equals(p.getName())).findFirst().orElse(null);
 			if (taskType3 != null) {
-				dto.setTaskType3((String) taskType3.getValues().get(0));
+				if(taskType3.getValues().size() > 0) {
+					dto.setTaskType3((String) taskType3.getValues().get(0));
+				}
 			}
 			
 			return dto;
