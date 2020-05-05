@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,11 +65,13 @@ public class InitializationService {
 	@Autowired private Environment environment;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private RuleService ruleService;
+	@Autowired private TestRuleEngine testRuleEngine;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 	
-	private static final String FFEIDENBERG = "FF_Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "MV_Schwertberg";
+	private static final String FFEIDENBERG = "FF Eidenberg";
+	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
+	private static final String RKWILHERING = "RK Wilhering";
 
 	@PostConstruct
 	public void init() {
@@ -84,6 +87,7 @@ public class InitializationService {
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		//this.addTestClassInstances();
+		testRuleEngine.setup();
 		addTestRuleEngine();
 	}
 
@@ -91,6 +95,7 @@ public class InitializationService {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
 
 		tenants.forEach(tenantId -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {				
@@ -105,6 +110,7 @@ public class InitializationService {
 		List<String> tenants = new ArrayList<>();
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
 
 		tenants.forEach(tenantId -> {
 			addPropertyDefinitions(tenantId);
@@ -702,17 +708,101 @@ public class InitializationService {
 		classInstanceRepository.save(ci1);
 	}
 	
-	private void addTestRuleEngine() {
-		/****** load rules into database ******/
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-		// ruleService.initTestData(tenantId);
-	
-		tenantId = coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG);
-		//ruleService.initTestData(tenantId);
+	public void addAssetsForRuleEngine() {
+		testRuleEngine.setup();
+		// testRuleEngine.createCompetences(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+		// testRuleEngine.createCompetences(coreTenantRestClient.getTenantIdByName(RKWILHERING));
 		
+		// addAdditionalProperties();
+		// addCompetencesTestRules();
+		// printPropertyDefinitions();
+	}
+	
+	private void addTestRuleEngine() {
+		addAssetsForRuleEngine();
+		/****** load rules into database ******/
+		//testRuleEngine.initTestData(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+		//testRuleEngine.initTestData(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+		//testRuleEngine.initTestData(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+
+		
+	    // build containers for rule sets
 	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-	    ruleService.printContainers();
-	    // ruleService.executeRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG), "general");
+	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+
+	   // ruleService.printContainers();
+	   // ruleService.executeRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG), "general", "5e9848778cbb21753070dacc");
+	   // ruleService.executeRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG), "ivol-test", "5e9848778cbb21753070dacc");
+	    
+	}
+	
+	private void addCompetencesTestRules() {
+		List<CompetenceClassInstance> competences = new ArrayList<CompetenceClassInstance>();
+		
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+
+		HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");
+		CompetenceClassInstance c1 = new CompetenceClassInstance();
+		c1.setId("drivingCar");
+		c1.setName("Autofahren");
+		c1.setTenantId(ffa.getTenantId());
+		classInstanceRepository.save(c1);
+
+		/*		
+		PropertyDefinition vpd = new PropertyDefinition<Object>("VerifiedBy", PropertyType.TEXT, tenantId);
+
+		if (propertyDefinitionRepository.getByNameAndTenantId(vpd.getName(), tenantId).size() == 0) {
+				propertyDefinitionRepository.save(vpd);
+	    }
+
+		ClassProperty<Object> vcp = propertyDefinitionToClassPropertyMapper.toTarget(vpd);
+		c1.getProperties().add(vcp);
+		
+		c1.setClassArchetype(ClassArchetype.COMPETENCE); */
+        competences.add(c1);
+        
+        // adding all competences to repository
+        competences.forEach(c -> {
+        	if (!classInstanceRepository.exists(c.getId()))
+        		classInstanceRepository.save(c);
+        });
+
+	}
+	
+	private void addAdditionalProperties() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+
+		// adding Dienstart to RK - roles
+		List<PropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId("Type of Service", tenantId);
+		PropertyDefinition pd;
+		if (pdList.size() == 0) {
+			pd = new PropertyDefinition<Object>("Type of Service", PropertyType.TEXT, tenantId);
+			pd.setAllowedValues(new ArrayList<String>(Arrays.asList("Hauptamt", "Ehrenamt", "Zivildienst")));
+		    propertyDefinitionRepository.save(pd);
+	    } else
+	    	pd = pdList.get(0);
+		List<ClassDefinition> functionDefinition = classDefinitionRepository.getByClassArchetypeAndTenantId(ClassArchetype.FUNCTION, tenantId);
+		for (ClassDefinition fd: functionDefinition) {
+			Boolean found = false;
+			for (ClassProperty<Object> p: fd.getProperties()) {
+				if (p.getName().equals(pd.getName()))
+					found = true;
+			}
+			if (!found)
+				fd.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+		}
+		classDefinitionRepository.save(functionDefinition);
+	}
+	
+	private void printPropertyDefinitions() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.getAllByTenantId(tenantId);
+		// properties.stream().map(s -> s.getName()).forEach(System.out::println);
+		ClassDefinition cdPersonRole = classDefinitionRepository.findByNameAndTenantId("PersonRole", tenantId);
+		System.out.println("PersonRole: ");
+		for (ClassProperty p: cdPersonRole.getProperties()) {
+			System.out.println(p.getName());
+		}
 	}
 }

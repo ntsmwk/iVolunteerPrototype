@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
 public class ClassDefinition extends IVolunteerObject implements IHashObject {
@@ -58,6 +59,23 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 		this.properties = properties;
 	}
 	
+	public Boolean containsProperty(String name){
+		if (properties == null || properties.size() == 0)
+			return false;
+		for (ClassProperty<Object> pi: properties) {
+			if (pi.getName().equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	public ClassProperty<Object> getProperty(String name){
+		for (ClassProperty<Object> pi: properties) {
+			if (pi.getName().equals(name))
+					return pi;
+		}
+		return null;
+	}
 
 	public String getImagePath() {
 		return imagePath;

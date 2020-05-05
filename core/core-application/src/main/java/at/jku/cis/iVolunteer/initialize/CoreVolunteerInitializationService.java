@@ -3,7 +3,16 @@ package at.jku.cis.iVolunteer.initialize;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,23 +44,23 @@ public class CoreVolunteerInitializationService {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired private TenantRepository coreTenantRepository;
 
-	public void initVolunteers() {
+	public void initVolunteers(){
 
-		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", "", "");
-		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", "", "img/pstarzer.jpg");
-		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", "", "");
-		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", "", "img/weixlbaumer_small.png");
+		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", "07.09.1988", "", "");
+		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", "09.10.1995", "", "img/pstarzer.jpg");
+		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", "23.01.1994", "", "");
+		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", "24.05.1985", "", "img/weixlbaumer_small.png");
 
-		createVolunteer("AKop", "passme", "Alexander", "Kopp", "Alex", "");
-		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", "", "");
-		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "", "");
-		createVolunteer("BProe", "passme", "Birgit", "Pröll", "", "");
-		createVolunteer("KKof", "passme", "Katharina", "Kofler", "Kati", "");
-		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", "", "");
+		createVolunteer("AKop", "passme", "Alexander", "Kopp", "09.07.1998", "Alex", "");
+		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", "04.11.1975", "", "");
+		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "09.06.1976", "", "");
+		createVolunteer("BProe", "passme", "Birgit", "Pröll", "05.10.1976","", "");
+		createVolunteer("KKof", "passme", "Katharina", "Kofler", "08.05.1998","Kati", "");
+		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", "01.12.1981", "", "");
 	}
 
-	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName,
-			String nickName, String fileName) {
+	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName, String birthDate,
+			String nickName, String fileName){
 		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
 		if (volunteer == null) {
 			volunteer = new CoreVolunteer();
@@ -59,6 +68,9 @@ public class CoreVolunteerInitializationService {
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
 			volunteer.setFirstname(firstName);
 			volunteer.setLastname(lastName);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy" ).withLocale(Locale.GERMANY);
+			LocalDate date = LocalDate.parse(birthDate, formatter);
+			volunteer.setBirthday(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);

@@ -64,12 +64,4 @@ public class RuleEngineController {
 		ruleService.executeRules(tenantId, container, volunteerId);
 	}
 	
-	
-	@PostMapping("/init")
-	public void initTestData() {
-		String tenantId = coreTenantRestClient.getTenantIdByName("FF_Eidenberg");
-		ruleService.initTestData(tenantId);
-		tenantId = coreTenantRestClient.getTenantIdByName("Musikverein_Schwertberg");
-		ruleService.initTestData(tenantId);
-	}
 }

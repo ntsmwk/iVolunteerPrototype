@@ -28,12 +28,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
+import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.test.RuleEngineTestData;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerExtendedView;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
@@ -46,11 +49,14 @@ public class RuleService {
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private VolunteerService volunteerService;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	
 	private ConcurrentHashMap<String,  ConcurrentHashMap<String, KieContainer>> tenant2ContainerMap;
 	
     @PostConstruct
     private void init() {
+    	// System.out.println("init Rule Service:");
     	tenant2ContainerMap = new ConcurrentHashMap<String, ConcurrentHashMap<String, KieContainer>>();
     }
     
@@ -68,6 +74,7 @@ public class RuleService {
     }
     
 	public void refreshContainer(String tenantId) {
+		// System.out.println("refresh container for " + tenantId + ", " + tenant2ContainerMap);
 		// create map for tenant
 		if (!tenant2ContainerMap.contains(tenantId))
 			tenant2ContainerMap.put(tenantId, new ConcurrentHashMap<String, KieContainer>());
@@ -109,11 +116,21 @@ public class RuleService {
 		KieSession ksession = getKieSession(tenantId, container);
 		
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
+		// System.out.println("vol: " + volunteer.toString());
+		
+		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
+		// System.out.println("tenant: " + tenant.getName());
+		//VolunteerExtendedView volData = volunteerService.obtainVolunteerDetails(volunteer);
+		// System.out.println("current age: " + volData.currentAge());
+		ksession.insert(tenant);
 		ksession.insert(volunteer);
+		ksession.insert(volunteerService);
         
 		ksession.fireAllRules();
 		
 		ksession.dispose();
+		
+		volunteerRepository.save(volunteer);
 	}
 
 	public void executeFibonacci(String tenantId, String container) {
@@ -153,18 +170,4 @@ public class RuleService {
         }
         return kieContainer.newKieSession();
     }
-
-	
-	public void addRule2Container(String tenantId, String marketplaceId, String container, String name, String content) {
-		ContainerRuleEntry containerRule = new ContainerRuleEntry(tenantId, marketplaceId, container, name, content);
-		containerRuleEntryRepository.insert(containerRule);
-	}
-	
-	public void initTestData(String tenantId) {
-		String marketplaceId = marketplaceService.getMarketplaceId();
-		RuleEngineTestData data = new RuleEngineTestData();
-		addRule2Container(tenantId, marketplaceId, "general", "hello-world", data.ruleHelloWorld);
-		addRule2Container(tenantId, marketplaceId, "math", "fibonacci", data.ruleFibonacci);
-		refreshContainer(tenantId);
-	}
 }
