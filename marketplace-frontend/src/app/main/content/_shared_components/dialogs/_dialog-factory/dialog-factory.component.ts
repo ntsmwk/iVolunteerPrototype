@@ -493,13 +493,13 @@ export class DialogFactoryDirective {
   }
 
 
-  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
+  openAddPropertyDialog(marketplace: Marketplace, helpseeker: Helpseeker, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
+      data: { marketplace: marketplace, helpseeker: helpseeker, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
     });
 
     let returnValue: AddPropertyDialogData;
