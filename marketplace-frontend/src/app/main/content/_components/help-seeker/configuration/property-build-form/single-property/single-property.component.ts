@@ -102,13 +102,8 @@ export class SinglePropertyComponent implements OnInit {
   }
 
   clearAllowedValues() {
-    if (!isNullOrUndefined(this.form.get('allowedValues')) && !this.dropdownToggled) {
-      this.form.removeControl('allowedValues');
-    } else {
-      this.form.addControl('allowedValues', this.formBuilder.array([], listNotEmptyValidator()));
-    }
-
-    if (this.form.get('type').value === 'LIST') { this.dropdownToggled = false; };
+    this.form.removeControl('allowedValues');
+    this.form.addControl('allowedValues', this.formBuilder.array([], listNotEmptyValidator()));
   }
 
 
