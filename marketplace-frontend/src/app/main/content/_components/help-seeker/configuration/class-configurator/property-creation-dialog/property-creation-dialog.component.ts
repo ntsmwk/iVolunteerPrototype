@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Marketplace } from '../../../../../_model/marketplace';
-import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 
 export interface PropertyCreationDialogData {
   marketplace: Marketplace;
-
+  helpseeker: Helpseeker;
+  propertyDefinition: PropertyDefinition<any>;
 }
 
 @Component({
@@ -25,20 +27,18 @@ export class PropertyCreationDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.loaded = true;
   }
 
-  handleResultEvent(event: FormEntryReturnEventData) {
-
+  handleResultEvent(event: PropertyDefinition<any>) {
+    console.log(event);
   }
 
   handleCloseClick() {
     this.dialogRef.close();
   }
 
-  printAnything(anything: any) {
-    console.log(anything);
-  }
 
 
 }

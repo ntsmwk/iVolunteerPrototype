@@ -22,11 +22,11 @@
 
     <div *ngIf="!displayBuilder">
       <div *ngIf="displayResultSuccess">
-        <span>Success!</span>
+        <div>Success!</div>
         <a (click)="handleAddAnotherClick()">do another!</a>
       </div>
       <div *ngIf="!displayResultSuccess">
-        <span>Failed or Cancelled!</span>
+        <div>Failed or Cancelled!</div>
         <a (click)="handleAddAnotherClick()">try again...</a>
       </div>
     </div>

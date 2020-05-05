@@ -22,8 +22,14 @@ import { AddPropertyDialogComponent, AddPropertyDialogData } from 'app/main/cont
 import { RemoveDialogComponent, RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
-import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import {
+  ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData
+} from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+import {
+  ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData
+} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { PropertyCreationDialogComponent, PropertyCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -393,6 +399,26 @@ export class DialogFactoryDirective {
 
     return dialogRef.afterClosed().toPromise().then(() => {
       return imagePath;
+    });
+  }
+
+  openPropertyCreationDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, helpseeker: helpseeker },
+      disableClose: true
+    });
+
+    let returnValue: PropertyCreationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
     });
   }
 

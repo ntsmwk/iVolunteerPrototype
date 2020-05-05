@@ -5,17 +5,15 @@ import {
   MatCommonModule, MatProgressSpinnerModule, MatButtonModule, MatDialogModule, MatIconModule
 } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { SinglePropertyModule } from '../../property-build-form/single-property/single-property.module';
 
 
 @NgModule({
   imports: [
-    CommonModule,
-    MatCommonModule,
     FuseSharedModule,
+    SinglePropertyModule,
+    MatCommonModule,
     MatDialogModule,
-
-    MatProgressSpinnerModule,
-    MatButtonModule,
     MatIconModule,
 
   ],

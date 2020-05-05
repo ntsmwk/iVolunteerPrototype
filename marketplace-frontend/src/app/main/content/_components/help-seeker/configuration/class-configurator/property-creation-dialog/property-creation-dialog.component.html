@@ -11,12 +11,13 @@
     </table>
 </div>
 
-<mat-dialog-content>
-    Property Creation Dialog
+<mat-dialog-content *ngIf="loaded">
+    <app-single-property [marketplace]="marketplace" [helpseeker]="helpseeker" (result)="handleResultEvent($event)">
+    </app-single-property>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
+    <!-- <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
         Close
-    </button>
+    </button> -->
 </mat-dialog-actions>
