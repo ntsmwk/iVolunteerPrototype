@@ -30,7 +30,7 @@
   <!-----Allowed Values Dropdown List----->
   <!-------------------------------------->
 
-  <div class="fieldset-title pt-12" *ngIf="isDropdownListDisplayed()">
+  <div class="fieldset-title" *ngIf="isDropdownListDisplayed()">
     <h2>Dropdown-Einträge</h2>
   </div>
 
@@ -112,7 +112,7 @@
 
   </div>
 
-  <div class="pt-12" fxLayout="row" fxLayoutAlign="start end">
+  <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
     <button type="submit" mat-raised-button color="primary">Speichern</button>
     <div class="pl-8"></div>
     <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Abbrechen</button>

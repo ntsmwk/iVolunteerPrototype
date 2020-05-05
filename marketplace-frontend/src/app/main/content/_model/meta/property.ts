@@ -4,8 +4,7 @@ import { PropertyConstraint } from './constraint';
 export class PropertyDefinition<T> {
     id: string;
     name: string;
-
-    exportLabel: string;
+    tenantId: string;
 
     custom: boolean;
     multiple: boolean;
@@ -15,6 +14,7 @@ export class PropertyDefinition<T> {
     allowedValues: T[];
 
     unit: string;
+
 
     required: boolean;
     propertyConstraints: PropertyConstraint<T>[];
