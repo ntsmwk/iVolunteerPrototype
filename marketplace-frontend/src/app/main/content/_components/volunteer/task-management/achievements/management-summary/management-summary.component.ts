@@ -125,6 +125,7 @@ export class ManagementSummaryComponent implements OnInit {
     let after = this.classInstanceDTOs.length;
     this.percentageFilteredOut = (1-(after/before))*100;
 
+    
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
     
     let uniqueTenants = [...new Set(this.classInstanceDTOs.map(item => item.tenantId))];

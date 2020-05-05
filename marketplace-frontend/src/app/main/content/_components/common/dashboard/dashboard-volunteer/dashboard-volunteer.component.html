@@ -37,25 +37,6 @@
 
   <div style="padding-top: 10px;"></div>
 
-  <!--Organisation selector-->
-  <!-- <div class="mat-card dashboard-org p-20 m-20">
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <h2 *ngIf="subscribedTenants.length > 0">Deine Organisationen</h2>
-      <h2 *ngIf="subscribedTenants.length == 0">
-        Du bist noch keiner Organisation beigetreten
-      </h2>
-
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <div *ngFor="let t of subscribedTenants" class="org-icon-container" matTooltip="{{ t.name }}">
-          <img class="org-icon" [src]="getTenantImage(t)" />
-        </div>
-      </div>
-      <button class="mt-20" mat-raised-button color="primary" (click)="navigateToTenantOverview()">
-        Finde Organisationen
-      </button>
-    </div>
-  </div> -->
-
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -187,9 +168,10 @@
           >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
+              <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(entry.tenantId) }}" />
+
               <!-- <div>{{ getIssuerName(entry.issuerId) }}</div> -->
-              <div>{{ getIssuerName2(entry.tenantId) }}</div>
+              <div style="align-self: center;">{{ getIssuerName(entry.tenantId) }}</div>
             </div>
           </mat-cell>
         </ng-container>

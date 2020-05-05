@@ -146,6 +146,6 @@
   </p>
 
   <mat-card *ngIf="timeout && percentageFilteredOut > 0">
-    {{percentageFilteredOut}}% der Daten können nicht visualisiert werden, da essenzielle Felder fehlen (z.B. Datum, Dauer, oder Tasktyp)!
+    {{percentageFilteredOut | number:'1.0-2':'de-AT'}} % der Daten können nicht visualisiert werden, da essenzielle Felder fehlen (z.B. Datum, Dauer, oder Tasktyp)!
   </mat-card>
 </div>

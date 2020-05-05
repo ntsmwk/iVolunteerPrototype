@@ -46,9 +46,6 @@ export class DashboardVolunteerComponent implements OnInit {
     "action"
   ];
 
-  issuerIds: string[] = [];
-  issuers: Helpseeker[] = [];
-  userImagePaths: any[] = [];
   image;
 
   subscribedTenants: Tenant[] = [];
@@ -71,7 +68,6 @@ export class DashboardVolunteerComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService,
     private router: Router
   ) { }
 
@@ -111,21 +107,6 @@ export class DashboardVolunteerComponent implements OnInit {
         }
       });
 
-      this.issuerIds.push(...this.marketplaceClassInstances.map(t => t.issuerId));
-      this.issuerIds = this.issuerIds.filter((elem, index, self) => {
-        return index === self.indexOf(elem);
-      });
-
-      this.userImagePaths = <any[]>(
-        await this.userImagePathService
-          .getImagePathsById(this.issuerIds)
-          .toPromise()
-      );
-
-      this.issuers = <any[]>(
-        await this.coreHelpseekerService.findByIds(this.issuerIds).toPromise()
-      );
-
       this.localClassInstances = <ClassInstanceDTO[]>(
         await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
 
@@ -156,34 +137,17 @@ export class DashboardVolunteerComponent implements OnInit {
     this.router.navigate(["/main/dashboard/tenants"]);
   }
 
-  getImagePathById(issuerId: string) {
-    const ret = this.userImagePaths.find((userImagePath) => {
-      return userImagePath.userId === issuerId;
-    });
 
-    if (isNullOrUndefined(ret)) {
+  getTenantImage(tenantId: string) {
+    let tenant = this.allTenants.find(t => t.id === tenantId);
+    if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
     } else {
-      return ret.imagePath;
+      return tenant.image;
     }
   }
 
-  getImagePathById2(tenantId: string) {
-
-  }
-
-  getIssuerName(issuerId: string) {
-    let person: Helpseeker = this.issuers.find((i) => i.id === issuerId);
-
-    if (!isNullOrUndefined(person)) {
-      let tenant = this.subscribedTenants.find(t => t.id === person.tenantId);
-      return tenant.name;
-    } else {
-      return "";
-    }
-  }
-
-  getIssuerName2(tenantId: string) {
+  getIssuerName(tenantId: string) {
     let tenant = this.allTenants.find(t => t.id === tenantId);
 
     if(!isNullOrUndefined(tenant)) {
@@ -204,9 +168,7 @@ export class DashboardVolunteerComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
-  getTenantImage(tenant: Tenant) {
-    return this.imageService.getImgSourceFromBytes(tenant.image);
-  }
+
 
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
