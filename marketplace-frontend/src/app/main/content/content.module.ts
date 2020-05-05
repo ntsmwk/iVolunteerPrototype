@@ -181,10 +181,10 @@ const routes: Route[] = [
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
   {
-    path: 'main/property/detail/edit',
+    path: 'main/property-builder',
     loadChildren: () =>
       import(
-        './_components/help-seeker/configuration/property-build-form/property-build-form.module'
+        './_components/help-seeker/configuration/property-build-form/property-builder.module'
       ).then((m) => m.PropertyBuildFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
