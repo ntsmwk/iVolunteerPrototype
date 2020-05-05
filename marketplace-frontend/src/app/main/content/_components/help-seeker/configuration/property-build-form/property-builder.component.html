@@ -16,8 +16,20 @@
 
 
   <div class="mat-white-bg mat-elevation-z4 p-24 mt-24" *ngIf="loaded">
-    <app-single-property [marketplace]="marketplace" [helpseeker]="helpseeker">
+    <app-single-property *ngIf="displayBuilder" [marketplace]="marketplace" [helpseeker]="helpseeker"
+      (result)="handleResultEvent($event)">
     </app-single-property>
+
+    <div *ngIf="!displayBuilder">
+      <div *ngIf="displayResultSuccess">
+        <span>Success!</span>
+        <a (click)="handleAddAnotherClick()">do another!</a>
+      </div>
+      <div *ngIf="!displayResultSuccess">
+        <span>Failed or Cancelled!</span>
+        <a (click)="handleAddAnotherClick()">try again...</a>
+      </div>
+    </div>
   </div>
 
   <div class="center-div" *ngIf="!loaded">

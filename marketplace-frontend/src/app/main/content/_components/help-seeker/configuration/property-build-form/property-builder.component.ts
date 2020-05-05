@@ -5,6 +5,8 @@ import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-property-builder',
@@ -15,7 +17,10 @@ export class PropertyBuildFormComponent implements OnInit {
 
   marketplace: Marketplace;
   helpseeker: Helpseeker;
-  loaded = false;
+  loaded: boolean;
+
+  displayBuilder: boolean;
+  displayResultSuccess: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +30,9 @@ export class PropertyBuildFormComponent implements OnInit {
 
   ngOnInit() {
     // get propertylist
+    this.displayBuilder = true;
+    this.displayResultSuccess = false;
+
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.helpseeker = helpseeker;
       this.helpseekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
@@ -37,6 +45,21 @@ export class PropertyBuildFormComponent implements OnInit {
 
   navigateBack() {
     window.history.back();
+  }
+
+  handleResultEvent(result: PropertyDefinition<any>) {
+    this.displayBuilder = false;
+
+    if (!isNullOrUndefined(result)) {
+      this.displayResultSuccess = true;
+    } else {
+      this.displayResultSuccess = false;
+    }
+  }
+
+  handleAddAnotherClick() {
+    this.displayResultSuccess = false;
+    this.displayBuilder = true;
   }
 
 }

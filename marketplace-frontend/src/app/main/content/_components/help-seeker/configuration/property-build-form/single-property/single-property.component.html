@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit(f.form.valid, f)" #f='ngForm' class="content-layout">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" #f='ngForm' class="content-layout">
 
   <!------------------------------------------------->
   <!--------Property Name and Type Selection--------->
@@ -103,11 +103,6 @@
         <div>Hinzufügen</div>
       </div>
 
-
-      <mat-error *ngIf="submitPressed && form.get('legalValues').hasError('listnotempty')">Mindestens einen Wert
-        einfügen
-      </mat-error>
-
     </fieldset>
 
   </div>
@@ -115,6 +110,6 @@
   <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
     <button type="submit" mat-raised-button color="primary">Speichern</button>
     <div class="pl-8"></div>
-    <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Abbrechen</button>
+    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
   </div>
 </form>

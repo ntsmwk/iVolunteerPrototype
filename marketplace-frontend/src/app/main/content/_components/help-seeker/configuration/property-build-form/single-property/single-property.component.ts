@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ export class SinglePropertyComponent implements OnInit {
 
   @Input() marketplace: Marketplace;
   @Input() helpseeker: Helpseeker;
+  @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
   model: PropertyDefinition<any>;
   allPropertyDefinitions: PropertyDefinition<any>[];
@@ -103,7 +104,7 @@ export class SinglePropertyComponent implements OnInit {
 
   clearAllowedValues() {
     this.form.removeControl('allowedValues');
-    this.form.addControl('allowedValues', this.formBuilder.array([], listNotEmptyValidator()));
+    this.form.addControl('allowedValues', this.formBuilder.array([]));
   }
 
 
@@ -127,33 +128,30 @@ export class SinglePropertyComponent implements OnInit {
   }
 
 
-  onSubmit(valid: boolean, f: any) {
-    if (valid) {
-
+  onSubmit() {
+    if (this.form.valid) {
       const property = this.createPropertyFromForm();
 
-      // // TODO call service to send to server (and save in db)
-      // this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then(() => {
-
-      //   this.router.navigate([`/main/configurator`], { queryParams: { open: 'haubenofen' } });
-
-      // });
-
-      console.log('VALID');
-      const ret = JSON.stringify(property, null, 2);
-      console.log(ret);
+      this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then((ret: PropertyDefinition<any>[]) => {
+        if (!isNullOrUndefined(ret) && ret.length > 0) {
+          this.result.emit(ret[0]);
+        } else {
+          this.result.emit(undefined);
+        }
+      });
     } else {
-      console.log('INVALID');
-      console.log(JSON.stringify(this.createPropertyFromForm(), null, 2));
-
-      console.log('Valid: ' + valid);
-
       this.markAllowedValuesAsTouched();
     }
   }
 
+  handleCancelClick() {
+    this.result.emit(undefined);
+  }
+
   createPropertyFromForm(): PropertyDefinition<any> {
     const property: PropertyDefinition<any> = new PropertyDefinition<any>();
+    property.tenantId = this.helpseeker.tenantId;
+    property.custom = true;
 
     if (isNullOrUndefined(this.model)) {
       property.id = null;
@@ -171,34 +169,9 @@ export class SinglePropertyComponent implements OnInit {
     }
 
     property.propertyConstraints = [];
-    if (!isNullOrUndefined(this.form.get('rules'))) {
-      for (const value of (this.form.get('rules') as FormArray).controls) {
-
-        const constraint = new PropertyConstraint();
-        constraint.id = null;
-        constraint.constraintType = value.get('type').value;
-
-        if (!isNullOrUndefined(value.get('value'))) {
-          constraint.value = value.get('value').value;
-        }
-
-        if (!isNullOrUndefined(value.get('data'))) {
-          constraint.value = value.get('data').value;
-        }
-        constraint.message = value.get('message').value;
-
-        property.propertyConstraints.push(constraint);
-      }
-    }
     property.type = this.form.get('type').value;
 
     return property;
   }
-
-  navigateBack() {
-    window.history.back();
-  }
-
-
 
 }
