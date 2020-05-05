@@ -16,9 +16,6 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.mapper.meta.core.property.ClassPropertyToPropertyInstanceMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToClassPropertyMapper;
-import at.jku.cis.iVolunteer.mapper.meta.core.property.PropertyDefinitionToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -61,9 +58,6 @@ public class TestRuleEngine {
 	@Autowired private ClassInstanceRepository classInstanceRepository;
 	@Autowired private RelationshipRepository relationshipRepository;
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	@Autowired private PropertyDefinitionToPropertyInstanceMapper propertyDefinitionToPropertyInstanceMapper;
-	@Autowired private ClassPropertyToPropertyInstanceMapper classPropertyToPropertyInstanceMapper;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 	@Autowired private VolunteerService volunteerService;
@@ -455,7 +449,7 @@ public class TestRuleEngine {
 	public void createClassCertificatesRK() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
 		// Training certificates
-		AchievementClassDefinition certClassTraining = (AchievementClassDefinition) obtainClass(tenantId, "Training", ClassArchetype.ACHIEVEMENT_HEAD);
+		AchievementClassDefinition certClassTraining = (AchievementClassDefinition) obtainClass(tenantId, "Training", ClassArchetype.ACHIEVEMENT);
 		// Certificate SEF-MODUL 1
 		System.out.println(" new Training class " + certClassTraining);
 		AchievementClassDefinition certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_MODUL1, certClassTraining);
