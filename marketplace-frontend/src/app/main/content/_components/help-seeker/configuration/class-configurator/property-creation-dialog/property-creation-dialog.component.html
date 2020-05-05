@@ -12,7 +12,8 @@
 </div>
 
 <mat-dialog-content *ngIf="loaded">
-    <app-single-property [marketplace]="marketplace" [helpseeker]="helpseeker" (result)="handleResultEvent($event)">
+    <app-single-property [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
+        [allPropertyDefinitions]="data.allPropertyDefinitions" (result)="handleResultEvent($event)">
     </app-single-property>
 </mat-dialog-content>
 

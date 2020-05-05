@@ -13,9 +13,12 @@ import {
   PropertyCreationDialogData
 } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
+  helpseeker: Helpseeker;
+
   classDefinition: ClassDefinition;
 
   allClassDefinitions: ClassDefinition[];
@@ -38,6 +41,9 @@ export class AddPropertyDialogComponent implements OnInit {
 
   datasource = new MatTableDataSource<PropertyItem>();
   displayedColumns = ['checkbox', 'label', 'type'];
+
+  allPropertyDefinitions: PropertyDefinition<any>[];
+
   loaded: boolean;
   selection = new SelectionModel<PropertyItem>(true, []);
   initialProperties: PropertyDefinition<any>[];
@@ -48,6 +54,7 @@ export class AddPropertyDialogComponent implements OnInit {
   ngOnInit() {
     this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
+      this.allPropertyDefinitions = ret;
 
       this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
 
@@ -98,25 +105,32 @@ export class AddPropertyDialogComponent implements OnInit {
 
   onSubmit() {
     const addedProperties = this.selection.selected.filter(p => this.data.classDefinition.properties.findIndex(q => p.id === q.id) === -1);
-    this.classDefinitionService.getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), null).toPromise().then((ret: ClassProperty<any>[]) => {
-      this.data.classDefinition.properties.push(...ret);
-      this.dialogRef.close(this.data);
-    });
+    this.classDefinitionService
+      .getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), null)
+      .toPromise()
+      .then((ret: ClassProperty<any>[]) => {
+        this.data.classDefinition.properties.push(...ret);
+        this.dialogRef.close(this.data);
+      });
   }
 
   createNewPropertyClicked() {
     const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
-      width: '90vw',
-      minWidth: '90vw',
+      width: '50vw',
+      minWidth: '50vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: this.data.marketplace },
+      data: { marketplace: this.data.marketplace, helpseeker: this.data.helpseeker, allPropertyDefinitions: this.datasource.data },
       disableClose: true
     });
 
     dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
-      console.log(result);
-
+      if (!isNullOrUndefined(result)) {
+        this.allPropertyDefinitions.push(result.propertyDefinition);
+        this.datasource.data = this.allPropertyDefinitions;
+      }
     });
+
+
   }
 }

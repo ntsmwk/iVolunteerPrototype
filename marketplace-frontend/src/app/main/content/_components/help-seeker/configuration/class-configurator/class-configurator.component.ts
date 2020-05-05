@@ -759,6 +759,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
       this.overlayContent = new ClassOptionsOverlayContentData();
       this.overlayContent.marketplace = this.marketplace;
+      this.overlayContent.helpseeker = this.helpseeker;
 
       if (cell.cellType === MyMxCellType.CLASS) {
         this.overlayContent.classDefinition = this.classDefinitions.find(c => c.id === cell.id);

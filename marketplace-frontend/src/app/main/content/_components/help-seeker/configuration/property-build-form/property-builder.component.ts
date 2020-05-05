@@ -23,7 +23,6 @@ export class PropertyBuildFormComponent implements OnInit {
   displayResultSuccess: boolean;
 
   constructor(
-    private route: ActivatedRoute,
     private loginService: LoginService,
     private helpseekerService: CoreHelpSeekerService
   ) { }

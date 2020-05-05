@@ -9,9 +9,11 @@ import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-
 import { isNullOrUndefined } from 'util';
 import { RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 export class ClassOptionsOverlayContentData {
     marketplace: Marketplace;
+    helpseeker: Helpseeker;
 
     classDefinition: ClassDefinition;
     relationship: Relationship;
@@ -74,7 +76,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     addPropertyClicked() {
         this.dialogFactory
-            .openAddPropertyDialog(this.inputData.marketplace, this.inputData.classDefinition, this.inputData.allClassDefinitions, this.inputData.allRelationships)
+            .openAddPropertyDialog(this.inputData.marketplace, this.inputData.helpseeker, this.inputData.classDefinition, this.inputData.allClassDefinitions, this.inputData.allRelationships)
             .then((ret: AddPropertyDialogData) => {
                 if (!isNullOrUndefined(ret)) {
                     this.inputData.classDefinition.properties = ret.classDefinition.properties;

@@ -25,10 +25,10 @@ export class SinglePropertyComponent implements OnInit {
 
   @Input() marketplace: Marketplace;
   @Input() helpseeker: Helpseeker;
+  @Input() allPropertyDefinitions: PropertyDefinition<any>[];
   @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
   model: PropertyDefinition<any>;
-  allPropertyDefinitions: PropertyDefinition<any>[];
 
   loaded: boolean; dropdownToggled: boolean;
 
@@ -49,10 +49,14 @@ export class SinglePropertyComponent implements OnInit {
 
     this.dropdownToggled = false;
 
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
-      this.allPropertyDefinitions = ret;
+    if (isNullOrUndefined(this.allPropertyDefinitions)) {
+      this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
+        this.allPropertyDefinitions = ret;
+        this.loaded = true;
+      });
+    } else {
       this.loaded = true;
-    });
+    }
   }
 
   // ----------------------------------------------------

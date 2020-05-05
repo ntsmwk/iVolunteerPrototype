@@ -3,10 +3,13 @@ import { Marketplace } from '../../../../../_model/marketplace';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { isNullOrUndefined } from 'util';
 
 export interface PropertyCreationDialogData {
   marketplace: Marketplace;
   helpseeker: Helpseeker;
+  allPropertyDefinitions: PropertyDefinition<any>[];
+
   propertyDefinition: PropertyDefinition<any>;
 }
 
@@ -27,12 +30,16 @@ export class PropertyCreationDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.loaded = true;
   }
 
   handleResultEvent(event: PropertyDefinition<any>) {
-    console.log(event);
+    if (isNullOrUndefined(event)) {
+      this.handleCloseClick();
+    } else {
+      this.data.propertyDefinition = event;
+      this.dialogRef.close(this.data);
+    }
   }
 
   handleCloseClick() {
