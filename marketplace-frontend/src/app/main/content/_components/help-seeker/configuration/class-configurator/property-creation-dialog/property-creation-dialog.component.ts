@@ -30,7 +30,6 @@ export class PropertyCreationDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data.helpseeker);
     this.loaded = true;
   }
 

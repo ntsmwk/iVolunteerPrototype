@@ -52,7 +52,6 @@ export class AddPropertyDialogComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
-    console.log(this.data.helpseeker);
     this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
       this.datasource.data = ret;
       this.allPropertyDefinitions = ret;
@@ -126,7 +125,6 @@ export class AddPropertyDialogComponent implements OnInit {
     });
 
     dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
-      console.log(result);
       if (!isNullOrUndefined(result)) {
         this.allPropertyDefinitions.push(result.propertyDefinition);
         this.datasource.data = this.allPropertyDefinitions;

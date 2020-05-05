@@ -43,7 +43,6 @@ export class SinglePropertyComponent implements OnInit {
     private propertyDefinitionService: PropertyDefinitionService) { }
 
   ngOnInit() {
-    console.log(this.helpseeker)
     this.preparePropertyTypeOptions();
 
     this.clearForm();

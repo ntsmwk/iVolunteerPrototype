@@ -42,7 +42,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log(this.inputData.helpseeker);
     }
 
     onSubmit() {
