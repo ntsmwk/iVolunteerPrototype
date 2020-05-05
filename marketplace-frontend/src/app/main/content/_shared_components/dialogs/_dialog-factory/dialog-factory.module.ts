@@ -39,6 +39,8 @@ import {
   ClassInstanceFormPreviewExportDialogModule
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
 import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { PropertyCreationDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
+import { PropertyCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.module';
 
 
 
@@ -60,10 +62,12 @@ import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/
     DeleteClassConfigurationDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
+    ClassInstanceFormPreviewExportDialogModule,
 
     AddPropertyDialogModule,
     RemoveDialogModule,
-    ClassInstanceFormPreviewExportDialogModule,
+
+    PropertyCreationDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
@@ -90,6 +94,8 @@ import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/
 
     AddPropertyDialogComponent,
     RemoveDialogComponent,
+
+    PropertyCreationDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,
