@@ -297,6 +297,7 @@ export class CUtils {
     fwPassEintrag.marketplaceId = marketplaceId;
     fwPassEintrag.name = 'Freiwilligenpass-\nEintrag';
     fwPassEintrag.root = true;
+    fwPassEintrag.collector = true;
     fwPassEintrag.classArchetype = ClassArchetype.ROOT;
     fwPassEintrag.writeProtected = true;
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -54,6 +55,7 @@ public class InitializationService {
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired private ClassConfigurationController classConfigurationController;
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
@@ -297,6 +299,7 @@ public class InitializationService {
 		fwPassEintrag.setRoot(true);
 		fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
 		fwPassEintrag.setWriteProtected(true);
+		fwPassEintrag.setCollector(true);
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 		
 		PropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
@@ -443,7 +446,8 @@ public class InitializationService {
 			configurator.getRelationshipIds().add(r.getId());
 		}
 		
-		this.classConfigurationRepository.save(configurator);
+//		this.classConfigurationRepository.save(configurator);
+		this.classConfigurationController.saveClassConfiguration(configurator);
 		
 	}
 	

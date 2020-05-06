@@ -56,8 +56,8 @@ export class NewMatchingDialogComponent implements OnInit {
         //----
         this.recentClassConfigurations = this.recentClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
 
-        if (this.recentClassConfigurations.length > 5) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 5);
+        if (this.recentClassConfigurations.length > 4) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
         }
 
         this.loaded = true;
