@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { ClassInstanceDTO, ClassInstance } from 'app/main/content/_model/meta/class';
+import { ClassInstanceDTO, ClassInstance, ClassDefinition } from 'app/main/content/_model/meta/class';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { MatTableDataSource } from '@angular/material';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private helpseekerService: CoreHelpSeekerService,
+    private classDefinitionService: ClassDefinitionService,
 
 
   ) {
@@ -66,13 +68,19 @@ export class ClassInstanceDetailsComponent implements OnInit {
       await this.classInstanceService.getClassInstanceById(this.marketplace, this.id, this.tenantId).toPromise()
     );
 
-    console.error(this.classInstance);
+    console.error('classInstance', this.classInstance);
     this.tableDataSource.data = this.classInstance.properties;
 
 
 
 
   }
+  
+getName() {
+  return  this.classInstance.properties.find(p => p.name === 'name').values[0];
+ 
+}
+
 
   navigateBack() {
     window.history.back();
