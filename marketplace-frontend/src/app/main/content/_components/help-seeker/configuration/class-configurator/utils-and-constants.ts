@@ -449,7 +449,7 @@ export class CUtils {
     myTask.properties.push(rank);
 
     const duration = new ClassProperty<number>();
-    duration.name = 'rank';
+    duration.name = 'duration';
     duration.id = objectIdService.getNewObjectId();
     duration.type = PropertyType.FLOAT_NUMBER;
     myTask.properties.push(duration);
