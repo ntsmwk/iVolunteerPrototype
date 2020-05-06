@@ -15,9 +15,14 @@
     Konfiguration und das dazugehörige JSON-File aus.
   </mat-card>
 
+  <p *ngIf="inputMissingError" class="alert alert-warn mt-10">
+    <i class="fas fa-exclamation-circle"></i> &nbsp; Bitte geben Sie Voluntär
+    und Export-Datei an.
+  </p>
+
   <form
     form
-    style="padding-top: 12px; padding-left: 40px;"
+    style="padding-top: 20px; padding-left: 40px;"
     name="form"
     fxLayout="row"
     fxLayoutGap="20px"
@@ -40,8 +45,15 @@
       ></ngx-mat-file-input>
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
+
     <button mat-raised-button type="submit" color="primary" (click)="save()">
       Speichern
     </button>
   </form>
+
+  <p *ngIf="displaySuccessMessage" class="alert alert-success mt-20">
+    <i class="far fa-check-circle"></i> &nbsp; {{ successImportCount }}
+    {{ successImportCount <= 1 ? "Eintrag" : "Einträge" }}
+    erfolgreich importiert.
+  </p>
 </div>

@@ -103,7 +103,10 @@ public class CollectionService {
 
 		while (!classDefinition.isRoot()) {
 			List<Relationship> relationships = this.relationshipRepository
-					.findByTargetAndRelationshipType(classDefinition.getId(), RelationshipType.AGGREGATION);
+					.findByTarget(classDefinition.getId());
+			
+			relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION) | r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
+			
 			if (relationships.size() >= 1) {
 				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
 				pathArray.add(PATH_DELIMITER);
@@ -163,8 +166,10 @@ public class CollectionService {
 	List<MatchingCollectorEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
 			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(),
-				RelationshipType.AGGREGATION);
+		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
+		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION) | r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
+
+		
 
 		Collections.reverse(relationships);
 		stack.addAll(relationships);

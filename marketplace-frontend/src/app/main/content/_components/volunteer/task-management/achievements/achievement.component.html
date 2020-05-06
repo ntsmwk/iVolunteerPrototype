@@ -134,7 +134,9 @@
     Freiwilligenpass-Einträge zur aktuellen Filterung gefunden
   </p>
 
-  <mat-card *ngIf="timeout && percentageFilteredOut > 0">
-    {{percentageFilteredOut | number:'1.0-2':'de-AT'}} % der Daten können nicht visualisiert werden, da essenzielle Felder fehlen (z.B. Datum, Dauer, oder Tasktyp)!
-  </mat-card>
+  <p *ngIf="timeout && percentageFilteredOut > 0" style="margin-top: 20px;">
+    {{ percentageFilteredOut | number: "1.0-2":"de-AT" }} % der Daten können
+    nicht visualisiert werden, da essenzielle Felder fehlen (z.B. Datum, Dauer,
+    oder Tasktyp)!
+  </p>
 </div>

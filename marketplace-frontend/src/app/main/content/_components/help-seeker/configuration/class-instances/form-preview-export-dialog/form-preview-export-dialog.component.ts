@@ -90,7 +90,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       '{' +
       '"tenantId": "' + this.helpseeker.tenantId + '", ' +
       '"classDefinitionId": "' + this.currentFormConfiguration.formEntry.classDefinitions[0].id + '", ' +
-      '"properties": [' + JSON.stringify(returnData.formGroup.value, this.replacer) + ']' +
+      '"assets": [' + JSON.stringify(returnData.formGroup.value, this.replacer) + ']' +
       '}';
     this.exportFile([json]);
   }
