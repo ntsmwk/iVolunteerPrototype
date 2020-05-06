@@ -39,7 +39,7 @@ export const navigation_ffa = [
   },
   {
     id: 'configurator',
-    title: 'Einträge konfigurieren',
+    title: 'Klassen konfigurieren',
     type: 'item',
     icon: 'cogs',
     url: '/main/configurator',
@@ -53,7 +53,7 @@ export const navigation_ffa = [
   },
   {
     'id': 'matching-configurator',
-    'title': 'Matching Configurator',
+    'title': 'Matching konfigurieren',
     'type': 'item',
     'icon': 'cogs',
     'url': '/main/matching-configurator/'
