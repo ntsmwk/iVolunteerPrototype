@@ -5,7 +5,7 @@
         <mat-icon>create</mat-icon>
       </td>
       <td>
-        <h1>Konfiguratoren wählen</h1>
+        <h1>Konfigurationen wählen</h1>
       </td>
     </tr>
   </table>
@@ -95,11 +95,12 @@
     </table>
 
     <div *ngIf="showErrors" style="color: red">
-      <div *ngIf="!data.producerClassConfiguration"> Konfigurator für das Werkunternehmen wählen</div>
-      <div *ngIf="!data.consumerClassConfiguration"> Konfigurator für den Werkbesteller wählen</div>
-      <div *ngIf="data.consumerClassConfiguration === data.producerClassConfiguration"> Zwei verschiedene Konfiguratoren
+      <div *ngIf="!data.producerClassConfiguration"> Konfiguration für das Werkunternehmen wählen</div>
+      <div *ngIf="!data.consumerClassConfiguration"> Konfiguration für den Werkbesteller wählen</div>
+      <div *ngIf="data.consumerClassConfiguration === data.producerClassConfiguration"> Zwei verschiedene
+        Konfigurationen
         wählen</div>
-      <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfiguratoren</div>
+      <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfigurationen</div>
     </div>
 
   </div>
