@@ -55,14 +55,14 @@ export const navigation_ffa = [
     'id': 'matching-configurator',
     'title': 'Matching konfigurieren',
     'type': 'item',
-    'icon': 'cogs',
+    'icon': 'less-than-equal-solid',
     'url': '/main/matching-configurator/'
   },
   {
     'id': 'property-builder',
     'title': 'Property-Baukasten',
     'type': 'item',
-    'icon': 'cogs',
+    'icon': 'hammer-solid',
     'url': '/main/property-builder/'
   },
 
