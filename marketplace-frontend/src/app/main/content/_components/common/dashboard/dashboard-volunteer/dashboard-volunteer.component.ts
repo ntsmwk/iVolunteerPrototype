@@ -268,8 +268,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   navigateToClassInstanceDetails(row) {
-    let classInstance = this.filteredClassInstances.find(ci => ci.id = row.id)
-    this.router.navigate(['main/details/' + row.id + '/' + row.tenantId], {state:  {data: {classInstance}}});
+    this.router.navigate(['main/details/' + row.id + '/' + row.tenantId]);
   }
 
 }

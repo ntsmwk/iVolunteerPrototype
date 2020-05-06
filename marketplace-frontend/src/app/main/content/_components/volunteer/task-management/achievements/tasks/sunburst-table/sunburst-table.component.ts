@@ -4,6 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/materi
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
 import HC_sunburst from 'highcharts/modules/sunburst';
+import { Router } from '@angular/router';
 
 HC_sunburst(Highcharts);
 
@@ -124,6 +125,8 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
   sunburstCenterName: string = 'Tätigkeiten';
 
   constructor(
+    private router: Router,
+
   ) { }
 
   ngOnInit() {
@@ -463,6 +466,10 @@ export class SunburstTableComponent implements OnInit, OnChanges, AfterViewInit 
 
   compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  navigateToClassInstanceDetails(row) {
+    this.router.navigate(['main/details/' + row.id + '/' + row.tenantId]);
   }
 
 }
