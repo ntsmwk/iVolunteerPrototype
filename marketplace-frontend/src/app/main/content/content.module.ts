@@ -329,11 +329,18 @@ const routes: Route[] = [
         (m) => m.MatchingConfiguratorModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
+  {
+    path: 'main/details',
+    loadChildren: () =>
+      import('./_components/common/class-instance-details/class-instance-details.module').then
+      ((m) => m.ClassInstanceDetailsModule),
+    canActivate: [TokenGuard, VolunteerGuard],
+  }
 ];
 
 @NgModule({
   declarations: [
-    FuseContentComponent,
+    FuseContentComponent
 
   ],
   imports: [

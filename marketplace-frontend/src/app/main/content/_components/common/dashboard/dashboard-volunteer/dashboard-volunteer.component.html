@@ -57,7 +57,7 @@
           style="height: 60px; margin: 3px; margin-left: 10px;"
           mat-raised-button
           color="primary"
-          (click)="navigateToTenantOverview()"
+          (click)="navigateToTenantOverview(row)"
         >
           Organisationen verwalten
         </button>
@@ -226,6 +226,13 @@
             >
               Entfernen
             </button>
+
+            <mat-icon 
+            style="cursor: pointer; margin-left: 20px;" 
+            (click)="navigateToClassInstanceDetails(entry)"
+            svgIcon="info"
+            ></mat-icon>
+
           </mat-cell>
         </ng-container>
 

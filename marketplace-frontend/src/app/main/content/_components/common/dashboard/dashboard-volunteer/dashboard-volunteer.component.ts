@@ -10,7 +10,7 @@ import { ClassInstanceService } from "../../../../_service/meta/core/class/class
 import { ClassInstanceDTO, } from "../../../../_model/meta/class";
 import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
-import { MatSort, MatPaginator, Sort } from "@angular/material";
+import { MatSort, MatPaginator, Sort, MatIconRegistry } from "@angular/material";
 import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -66,8 +66,13 @@ export class DashboardVolunteerComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private router: Router
-  ) { }
+    private router: Router,
+    iconRegistry: MatIconRegistry
+  ) { 
+    iconRegistry.addSvgIcon(
+      'info',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/info.svg'));
+  }
 
   async ngOnInit() {
     let t = timer(3000);
@@ -262,12 +267,10 @@ export class DashboardVolunteerComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  navigateToClassInstanceDetails() {
-    this.router.navigate(["main/details"]);
+  navigateToClassInstanceDetails(row) {
+    let classInstance = this.filteredClassInstances.find(ci => ci.id = row.id)
+    this.router.navigate(['main/details/' + row.id + '/' + row.tenantId], {state:  {data: {classInstance}}});
   }
-
-  
-
 
 }
 
