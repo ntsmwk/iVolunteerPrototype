@@ -15,10 +15,8 @@ import { TenantService } from "../../../../_service/core-tenant.service";
 import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { ImageService } from "app/main/content/_service/image.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LocalRepositoryService } from 'app/main/content';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { timer } from 'rxjs';
 
 @Component({
@@ -100,12 +98,6 @@ export class DashboardVolunteerComponent implements OnInit {
       this.marketplaceClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
-
-      this.marketplaceClassInstances.forEach((ci, index, object) => {
-        if (ci.duration && ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
 
       this.localClassInstances = <ClassInstanceDTO[]>(
         await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
@@ -269,6 +261,12 @@ export class DashboardVolunteerComponent implements OnInit {
   compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
+
+  navigateToClassInstanceDetails() {
+    this.router.navigate(["main/details"]);
+  }
+
+  
 
 
 }
