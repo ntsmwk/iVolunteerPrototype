@@ -35,6 +35,7 @@ export class ImportComponent implements OnInit {
   importForm: FormGroup;
 
   inputMissingError: boolean = false;
+  displaySuccessMessage: boolean = false;
 
   constructor(
     private loginService: LoginService,
@@ -96,20 +97,25 @@ export class ImportComponent implements OnInit {
         );
 
         if (cd) {
-          for (const entry of contentObject.properties) {
-            await this.classInstanceService
-              .createClassInstanceByClassDefinitionId(
-                this.marketplace,
-                contentObject.classDefinitionId,
-                this.importForm.value.volunteer.id,
-                contentObject.tenantId,
-                entry
-              )
-              .toPromise();
-          }
+          this.import(contentObject);
         }
       };
       fileReader.readAsText(this.importForm.value.file.files[0]);
+    }
+  }
+
+  async import(contentObject) {
+    for (const entry of contentObject.properties) {
+      await this.classInstanceService
+        .createClassInstanceByClassDefinitionId(
+          this.marketplace,
+          contentObject.classDefinitionId,
+          this.importForm.value.volunteer.id,
+          contentObject.tenantId,
+          entry
+        )
+        .toPromise();
+      this.displaySuccessMessage = true;
     }
   }
 }
