@@ -101,12 +101,6 @@ export class DashboardVolunteerComponent implements OnInit {
         await this.classInstanceService.getUserClassInstancesByArcheType(this.marketplace, 'TASK', this.volunteer.id, this.volunteer.subscribedTenants).toPromise()
       );
 
-      this.marketplaceClassInstances.forEach((ci, index, object) => {
-        if (ci.duration && ci.duration === null) {
-          object.splice(index, 1);
-        }
-      });
-
       this.localClassInstances = <ClassInstanceDTO[]>(
         await this.localRepositoryService.findClassInstancesByVolunteer(this.volunteer).toPromise());
 

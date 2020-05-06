@@ -116,7 +116,6 @@ public class ClassConfigurationController {
 	
 	@DeleteMapping("class-configuration/{id}/delete")
 	void deleteClassConfiguration(@PathVariable("id") String id) {
-		System.out.println("Delete Config with id " + id);
 		ClassConfiguration classConfiguration= classConfigurationRepository.findOne(id);
 		
 		classConfiguration.getClassDefinitionIds().forEach(classDefinitionRepository::delete);
