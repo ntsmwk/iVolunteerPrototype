@@ -52,6 +52,8 @@
   </form>
 
   <p *ngIf="displaySuccessMessage" class="alert alert-success mt-20">
-    <i class="far fa-check-circle"></i> &nbsp; Einträge erfolgreich importiert.
+    <i class="far fa-check-circle"></i> &nbsp; {{ successImportCount }}
+    {{ successImportCount <= 1 ? "Eintrag" : "Einträge" }}
+    erfolgreich importiert.
   </p>
 </div>

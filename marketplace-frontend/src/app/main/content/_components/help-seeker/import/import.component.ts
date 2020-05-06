@@ -36,6 +36,7 @@ export class ImportComponent implements OnInit {
 
   inputMissingError: boolean = false;
   displaySuccessMessage: boolean = false;
+  successImportCount: number;
 
   constructor(
     private loginService: LoginService,
@@ -105,7 +106,10 @@ export class ImportComponent implements OnInit {
   }
 
   async import(contentObject) {
-    for (const entry of contentObject.properties) {
+    this.successImportCount = contentObject.assets.length;
+    this.displaySuccessMessage = true;
+
+    for (const entry of contentObject.assets) {
       await this.classInstanceService
         .createClassInstanceByClassDefinitionId(
           this.marketplace,
@@ -115,7 +119,8 @@ export class ImportComponent implements OnInit {
           entry
         )
         .toPromise();
-      this.displaySuccessMessage = true;
     }
+
+    setTimeout(() => (this.displaySuccessMessage = false), 5000);
   }
 }
