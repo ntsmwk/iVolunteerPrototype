@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "app/main/content/_service/login.service";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassDefinition,
@@ -29,6 +34,8 @@ export class ImportComponent implements OnInit {
   role: ParticipantRole;
   importForm: FormGroup;
 
+  inputMissingError: boolean = false;
+
   constructor(
     private loginService: LoginService,
     private formBuilder: FormBuilder,
@@ -38,10 +45,8 @@ export class ImportComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService
   ) {
     this.importForm = formBuilder.group({
-      classDefinition: new FormControl(undefined),
-      volunteer: new FormControl(undefined),
-      file: new FormControl(undefined),
-      fileBtn: new FormControl(undefined),
+      volunteer: new FormControl(undefined, Validators.required),
+      file: new FormControl(undefined, Validators.required),
     });
   }
 
@@ -73,41 +78,38 @@ export class ImportComponent implements OnInit {
   }
 
   async save() {
-    // TODO MWE check all form are inputted.. ;)
-
-    const fileReader = new FileReader();
-    fileReader.onload = async (e) => {
-      const contentObject = JSON.parse(<string>fileReader.result);
-      console.error(contentObject);
-      let cd: ClassDefinition = <ClassDefinition>(
-        await this.classDefinitionService
-          .getClassDefinitionById(
-            this.marketplace,
-            contentObject.classDefinitionId,
-            contentObject.tenantId
-          )
-          .toPromise()
-      );
-
-      if (cd) {
-        console.error(cd);
-        for (const entry of contentObject.properties) {
-          console.error(entry);
-          console.error(entry["Starting Date"]);
-          console.error(new Date(entry["Starting Date"]));
-          console.error(entry["Starting Date"]);
-          await this.classInstanceService
-            .createClassInstanceByClassDefinitionId(
+    if (!this.importForm.valid) {
+      this.inputMissingError = true;
+    } else {
+      this.inputMissingError = false;
+      const fileReader = new FileReader();
+      fileReader.onload = async (e) => {
+        const contentObject = JSON.parse(<string>fileReader.result);
+        let cd: ClassDefinition = <ClassDefinition>(
+          await this.classDefinitionService
+            .getClassDefinitionById(
               this.marketplace,
               contentObject.classDefinitionId,
-              this.importForm.value.volunteer.id,
-              contentObject.tenantId,
-              entry
+              contentObject.tenantId
             )
-            .toPromise();
+            .toPromise()
+        );
+
+        if (cd) {
+          for (const entry of contentObject.properties) {
+            await this.classInstanceService
+              .createClassInstanceByClassDefinitionId(
+                this.marketplace,
+                contentObject.classDefinitionId,
+                this.importForm.value.volunteer.id,
+                contentObject.tenantId,
+                entry
+              )
+              .toPromise();
+          }
         }
-      }
-    };
-    fileReader.readAsText(this.importForm.value.file.files[0]);
+      };
+      fileReader.readAsText(this.importForm.value.file.files[0]);
+    }
   }
 }
