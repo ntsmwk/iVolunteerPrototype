@@ -19,7 +19,5 @@ public class DateTimeService {
 			}
 
 		return null;
-	}
-
-	
+	}	
 }
