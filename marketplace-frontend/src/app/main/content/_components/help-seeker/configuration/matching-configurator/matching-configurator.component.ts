@@ -333,7 +333,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 80, 30);
     cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, 20);
 
-    console.log("C: " + collector.path);
+    // console.log("C: " + collector.path);
 
     let addPropertiesReturn = this.addPropertiesToCell(cell, collector, 5, 45);
     cell = addPropertiesReturn.cell;
@@ -341,7 +341,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
 
     for (const entry of collector.collectorEntries) {
-      console.log("E: " + entry.path);
+      // console.log("E: " + entry.path);
       const boundaryHeight = entry.classDefinition.name.split(/\r?\n/).length * 25;
       const boundary = this.graph.insertVertex(
         cell, entry.path, entry.classDefinition.name, 0,
@@ -363,7 +363,7 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(classDefinition.properties)) {
       for (const p of classDefinition.properties) {
-        console.log("P: " + entry.path + entry.pathDelimiter + p.id);
+        // console.log("P: " + entry.path + entry.pathDelimiter + p.id);
         const propertyEntry: MyMxCell = this.graph.insertVertex(
           cell, entry.path + entry.pathDelimiter + p.id, p.name, startX, startY + lastPropertyGeometry.height,
           190, 20, CConstants.mxStyles.matchingProperty) as MyMxCell;
