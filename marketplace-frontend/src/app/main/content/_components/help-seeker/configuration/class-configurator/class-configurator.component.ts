@@ -935,7 +935,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
 
       } case 'editor_save_as': {
-        console.log('not implemented');
+        console.error('not implemented');
         break;
       } case 'editor_new': {
         this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);

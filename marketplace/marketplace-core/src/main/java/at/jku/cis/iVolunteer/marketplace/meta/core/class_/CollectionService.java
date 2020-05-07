@@ -84,7 +84,6 @@ public class CollectionService {
 
 		for (MatchingCollector collection : collections) {
 			collection.setPath(getPathFromRoot(collection.getClassDefinition()));
-			
 			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(collection.getClassDefinition(),
 					0, new ArrayList<>(), collection.getPath()));
 
@@ -169,8 +168,7 @@ public class CollectionService {
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
 		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION) | r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
-		
-
+	
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 
@@ -181,7 +179,7 @@ public class CollectionService {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-				list.add(new MatchingCollectorEntry(classDefinition, path));
+				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(), PATH_DELIMITER));
 			}
 			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
 					path + PATH_DELIMITER + classDefinition.getId());

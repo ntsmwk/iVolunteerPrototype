@@ -15,9 +15,10 @@ public class MatchingCollectorEntry {
 
 	}
 
-	public MatchingCollectorEntry(ClassDefinition classDefinition, String path) {
+	public MatchingCollectorEntry(ClassDefinition classDefinition, String path, String pathDelimiter) {
 		this.classDefinition = classDefinition;
 		this.path = path;
+		this.pathDelimiter = pathDelimiter;
 	}
 
 	public String getPath() {

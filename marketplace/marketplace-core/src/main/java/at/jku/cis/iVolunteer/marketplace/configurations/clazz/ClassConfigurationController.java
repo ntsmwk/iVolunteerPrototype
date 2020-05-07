@@ -125,6 +125,7 @@ public class ClassConfigurationController {
 		matchingCollectorConfiguration.setId(classConfiguration.getId());
 		matchingCollectorConfiguration.setClassConfigurationId(classConfiguration.getId());
 		matchingCollectorConfiguration.setCollectors(collectors);
+	
 		
 		matchingCollectorConfigurationRepository.save(matchingCollectorConfiguration);
 		return classConfiguration;
