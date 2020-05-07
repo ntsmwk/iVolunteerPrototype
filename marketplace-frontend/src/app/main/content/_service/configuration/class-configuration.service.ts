@@ -37,8 +37,13 @@ export class ClassConfigurationService {
     return this.http.post(`${marketplace.url}/class-configuration/new-empty`, [name, description]);
   }
 
-  createNewClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
-    return this.http.post(`${marketplace.url}/class-configuration/new`, classConfiguration);
+  createNewClassConfiguration(marketplace: Marketplace, tenantId: string, name: string, description: string) {
+    const params: string[] = [];
+    params.push(tenantId);
+    params.push(name);
+    params.push(description);
+
+    return this.http.post(`${marketplace.url}/class-configuration/new`, params);
   }
 
   saveClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
