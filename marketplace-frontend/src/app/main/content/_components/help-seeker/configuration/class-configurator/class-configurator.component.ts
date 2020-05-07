@@ -278,7 +278,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(replaceCell)) {
       cell = replaceCell;
-      this.graph.removeCells(cell.children);
+      const childCells = this.graph.removeCellsFromParent(this.graph.getChildCells(cell));
+      this.graph.removeCells(childCells, false);
       this.graph.setCellStyle(style, [cell]);
 
     } else {
