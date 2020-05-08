@@ -36,41 +36,33 @@ export class FuseTaskSelectComponent implements OnInit {
     private tenantService: TenantService
   ) {}
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: Helpseeker) => {
-        this.helpseeker = helpseeker;
+  async ngOnInit() {
+    this.helpseeker = <Helpseeker>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
 
-        this.tenantService
-          .findById(this.helpseeker.tenantId)
-          .toPromise()
-          .then((t: Tenant) => {
-            this.tenant = t;
-          });
+    this.tenant = <Tenant>(
+      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+    );
 
-        this.coreHelpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
+    this.marketplace = <Marketplace>(
+      await this.coreHelpSeekerService
+        .findRegisteredMarketplaces(this.helpseeker.id)
+        .toPromise()
+    );
+
+    if (!isNullOrUndefined(this.marketplace)) {
+      let tasks = <ClassDefinition[]>(
+        await this.classDefinitionService
+          .getByArchetype(
+            this.marketplace,
+            ClassArchetype.TASK,
+            this.helpseeker.tenantId
+          )
           .toPromise()
-          .then((marketplace: Marketplace) => {
-            if (!isNullOrUndefined(marketplace)) {
-              this.marketplace = marketplace;
-              this.classDefinitionService
-                .getByArchetype(
-                  marketplace,
-                  ClassArchetype.TASK,
-                  this.helpseeker.tenantId
-                )
-                .toPromise()
-                .then((tasks: ClassDefinition[]) => {
-                  this.dataSource.data = tasks.filter(
-                    (t) => t.name != "PersonTask"
-                  );
-                });
-            }
-          });
-      });
+      );
+      this.dataSource.data = tasks.filter((t) => t.name != "PersonTask");
+    }
   }
 
   onRowSelect(row) {
