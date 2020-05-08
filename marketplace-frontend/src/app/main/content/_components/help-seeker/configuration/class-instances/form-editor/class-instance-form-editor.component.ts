@@ -90,6 +90,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                 this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds, this.formConfigurationType).toPromise()
                     .then((formConfigurations: FormConfiguration[]) => {
                         this.formConfigurations = formConfigurations;
+                        console.log(formConfigurations);
                         for (const config of this.formConfigurations) {
                             config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
                         }

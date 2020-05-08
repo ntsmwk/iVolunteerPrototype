@@ -14,10 +14,13 @@ import java.util.stream.Collectors;
 import javax.management.relation.Relation;
 import javax.ws.rs.NotAcceptableException;
 
+import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
@@ -26,6 +29,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
@@ -34,6 +38,7 @@ import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.EnumRepresentation;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class CollectionService {
@@ -43,6 +48,9 @@ public class CollectionService {
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
+	
+	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
 		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
@@ -323,6 +331,102 @@ public class CollectionService {
 		
 		return rootFormEntry;
 
+	}
+	
+	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
+		
+		// Next ClassDefinition
+		
+		currentFormEntry.setClassDefinitions(new LinkedList<>());
+		currentFormEntry.getClassDefinitions().add(currentClassDefinition);
+		
+		// Collect Properties
+		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
+		
+		// grab target-side Relationships
+		List<Relationship> targetRelationships = allRelationships.stream().filter(r -> r.getTarget().equals(currentClassDefinition.getId())).collect(Collectors.toList());
+		// grab source-side Relationships
+		List<Relationship> sourceRelationships = allRelationships.stream().filter(r -> r.getSource().equals(currentClassDefinition.getId())).collect(Collectors.toList());
+
+		Collections.reverse(targetRelationships);
+		Collections.reverse(sourceRelationships);
+		Stack<Relationship> targetStack = new Stack<Relationship>();
+		Stack<Relationship> sourceStack = new Stack<Relationship>();
+		targetStack.addAll(targetRelationships);
+		sourceStack.addAll(sourceRelationships);
+		List<FormEntry> subFormEntries = new ArrayList<>();
+
+		
+		FormEntry unableToContinueEntry = null;
+		boolean unableToContinuePropertySet = false;
+		ClassProperty<Object> unableToContinueProperty = new ClassProperty<Object>();
+		unableToContinueProperty.setId("unableToContinue");
+		unableToContinueProperty.setName("Choose which Class to Instantiate");
+		unableToContinueProperty.setAllowedValues(new ArrayList<Object>());
+		unableToContinueProperty.setType(PropertyType.TEXT);
+		
+		while (!sourceStack.isEmpty()) {
+			Relationship relationship = sourceStack.pop();
+			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
+				System.out.println("Down: AGGREGATION");
+				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+				
+				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
+				subFormEntries.add(subFormEntry);
+		
+			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
+//				FormEntry subFormEntry = new FormEntry();
+//				if (unableToContinuePropertySet == false) {
+//					unableToContinueEntry = new FormEntry();
+//				}
+				
+				unableToContinuePropertySet = true;
+				
+				ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();
+				unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
+				System.out.println("Down: INHERITANCE");
+//				ClassDefinition stub = new ClassDefinition();
+//				stub.setId("TEST");
+//				stub.setName("Choose a way to Continue");
+//				stub.setProperties(new ArrayList<ClassProperty<Object>>());
+				
+//				List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
+//				
+//				unableToContinueEntry.getClassDefinitions().add(stub);
+////				unableToContinueEntry.setClassProperties(new ArrayList<ClassProperty<Object>>());
+//				unableToContinueEntry.getClassProperties().add(stub.getProperties().get(0));
+			}
+			
+		}
+		
+		if (unableToContinuePropertySet) {
+			currentFormEntry.getClassProperties().add(unableToContinueProperty);
+//			subFormEntries.add(unableToContinueEntry);
+		}
+		
+		while (!targetStack.isEmpty()) {
+			Relationship relationship = targetStack.pop();
+			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
+				System.out.println("UP: INHERITANCE");
+			}
+			
+		}
+		
+		currentFormEntry.setSubEntries(subFormEntries);
+		
+		
+		
+		// handle target Relationships
+			// if next target-side Relationship: Aggregation - goto handle Aggregation
+			// if next target-side  Relationship: Inheritance:
+				// display selection, exit
+			// if no next target-side Relationship: exit
+		
+		// handle source Relationships
+			// if next source-side Relationship: Inheritance - goto handle Inheritance
+			// if no source-side Relationship next: exit
+		
+		return currentFormEntry;
 	}
 
 }

@@ -70,7 +70,8 @@ public class InitializationService {
 		addStandardPropertyDefinitions();
 //		addTestConfigClasses();
 //		addConfigurators();
-		addConfiguratorSlots();
+		
+//		addConfiguratorSlots();
 
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();

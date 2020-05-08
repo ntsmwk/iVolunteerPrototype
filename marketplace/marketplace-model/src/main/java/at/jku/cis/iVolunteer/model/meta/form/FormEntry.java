@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.form;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -7,12 +8,12 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 public class FormEntry {
 
-	private List<ClassProperty<Object>> classProperties;
-	private List<ClassDefinition> classDefinitions;
+	private List<ClassProperty<Object>> classProperties = new ArrayList<>();
+	private List<ClassDefinition> classDefinitions = new ArrayList<>();
 	
-	private List<EnumRepresentation> enumRepresentations;
+	private List<EnumRepresentation> enumRepresentations = new ArrayList<>();
 	
-	private List<FormEntry> subEntries;
+	private List<FormEntry> subEntries = new ArrayList<>();
 
 	private String imagePath;
 

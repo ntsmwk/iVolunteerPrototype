@@ -109,6 +109,8 @@ public class ClassDefinitionController {
 	@PutMapping("meta/core/class/definition/form-configuration")
 	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids,
 			@RequestParam(value = "type") String collectionType) {
+		
+		System.out.println("getFormConfiugrations");
 		if (collectionType.equals("top-down")) {
 			return classDefinitionService.aggregateChildrenById(ids);
 		} else if (collectionType.equals("bottom-up")) {
