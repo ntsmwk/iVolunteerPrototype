@@ -10,8 +10,8 @@ import { ClassInstanceDTO, ClassInstance } from "../_model/meta/class";
   providedIn: "root",
 })
 export class LocalRepositoryService {
-  // private apiUrl = 'http://localhost:3000/repository';
-  private apiUrl = "http://140.78.92.57:3000/repository";
+  private apiUrl = "http://localhost:3000/repository";
+  // private apiUrl = "http://140.78.92.57:3000/repository";
 
   constructor(private http: HttpClient) {}
 
