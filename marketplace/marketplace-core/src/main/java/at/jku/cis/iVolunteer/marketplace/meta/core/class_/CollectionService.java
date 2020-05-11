@@ -19,7 +19,10 @@ import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -342,12 +345,11 @@ public class CollectionService {
 		List<FormEntry> subFormEntries = new ArrayList<>();
 			
 		boolean unableToContinuePropertySet = false;
-		ClassProperty<Object> unableToContinueProperty = new ClassProperty<Object>();
-		unableToContinueProperty.setId("unableToContinue");
-		unableToContinueProperty.setName("Choose which Class to Instantiate");
-		unableToContinueProperty.setAllowedValues(new ArrayList<Object>());
-		unableToContinueProperty.getAllowedValues().add("--");
-		unableToContinueProperty.setType(PropertyType.TEXT);
+		PropertyDefinition unableToContinuePropertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
+		unableToContinuePropertyDefinition.setId("unableToContinue");
+		unableToContinuePropertyDefinition.setName("Choose which Class to Instantiate");
+		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
+		unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(null, "--"));
 		
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
@@ -367,13 +369,13 @@ public class CollectionService {
 				if (!directionUp) {
 					unableToContinuePropertySet = true;	
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
-					unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
+					unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
 				}
 			}	
 		}
 		
 		if (unableToContinuePropertySet) {
-			currentFormEntry.getClassProperties().add(unableToContinueProperty);
+			currentFormEntry.getClassProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(unableToContinuePropertyDefinition));
 		}
 		
 		if (currentFormEntry.getSubEntries() == null || currentFormEntry.getSubEntries().size() <= 0) {

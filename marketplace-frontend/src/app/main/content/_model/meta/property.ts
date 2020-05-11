@@ -117,7 +117,8 @@ export class PropertyInstance<T> {
 
 export enum PropertyType {
     TEXT = 'TEXT', LONG_TEXT = 'LONG_TEXT', WHOLE_NUMBER = 'WHOLE_NUMBER', FLOAT_NUMBER = 'FLOAT_NUMBER', BOOL = 'BOOL',
-    DATE = 'DATE', COMPETENCE = 'COMPETENCE', LIST = 'LIST', ENUM = 'ENUM', MAP = 'MAP', GRAPH = 'GRAPH', MULTI = 'MULTI'
+    DATE = 'DATE', COMPETENCE = 'COMPETENCE', LIST = 'LIST', ENUM = 'ENUM', MAP = 'MAP', GRAPH = 'GRAPH', MULTI = 'MULTI',
+    TUPLE = 'TUPLE',
 }
 
 export namespace PropertyType {
@@ -131,6 +132,7 @@ export namespace PropertyType {
             case PropertyType.DATE: return 'Date';
             case PropertyType.LIST: return 'List';
             case PropertyType.ENUM: return 'Enum';
+            case PropertyType.TUPLE: return 'Tuple';
 
         }
     }

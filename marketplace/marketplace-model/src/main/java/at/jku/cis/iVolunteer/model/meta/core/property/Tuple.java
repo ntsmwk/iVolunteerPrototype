@@ -5,37 +5,37 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Tuple<X, Y> {
 
-	public X x;
+	public X id;
 
-	public Y y;
+	public Y label;
 
-	public Tuple(X x, Y y) {
-		this.x = x;
-		this.y = y;
+	public Tuple(X id, Y label) {
+		this.id = id;
+		this.label = label;
 	}
 
 	public Tuple() {
 	}
 
-	public X getX() {
-		return x;
+	public X getId() {
+		return id;
 	}
 
-	public void setX(X x) {
-		this.x = x;
+	public void setId(X id) {
+		this.id = id;
 	}
 
-	public Y getY() {
-		return y;
+	public Y getLabel() {
+		return label;
 	}
 
-	public void setY(Y y) {
-		this.y = y;
+	public void setLabel(Y label) {
+		this.label = label;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + x + ", " + y + ")";
+		return "(" + id + ", " + label + ")";
 	}
 
 }

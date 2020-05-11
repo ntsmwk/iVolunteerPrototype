@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion, TupleDropdownQuestion
 } from '../_model/dynamic-forms/questions';
 import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
@@ -156,6 +156,13 @@ export class QuestionService {
       //   question = new MultipleQuestion({
       //     subQuestions: this.setQuestions(property.properties),
       //   });
+    } else if (property.type === PropertyType.TUPLE) {
+      if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
+        question = new TupleDropdownQuestion({
+          options: property.allowedValues
+        });
+      }
+
     } else {
       console.log('property kind not implemented: ' + property.type);
       question = new GenericQuestion({
