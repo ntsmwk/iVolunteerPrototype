@@ -70,6 +70,10 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
+    this.paginator.length = this.tableDataSource.data.length;
+    this.tableDataSource.paginator = this.paginator;
+
+    console.error(this.tableDataSource.data);
   }
 
   onRowSelect(task: Task) {
@@ -79,16 +83,5 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
 
   addTask() {
     this.router.navigate(["/main/task-select"]);
-  }
-
-  private isFF() {
-    return this.participant.username == "FFA";
-  }
-
-  private isMV() {
-    return this.participant.username === "MVS";
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
   }
 }
