@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Tenant } from "../_model/tenant";
+import { ImageService } from "./image.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class TenantService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private imageService: ImageService) {}
 
   findAll() {
     return this.http.get(`/core/tenant`);
@@ -35,5 +36,14 @@ export class TenantService {
       return this.http.post(`/core/tenant`, tenant);
     }
     return this.http.put(`/core/tenant/${tenant.id}`, tenant);
+  }
+
+  getTenantImage(tenant: Tenant) {
+    return this.imageService.getImgSourceFromBytes(tenant.image);
+  }
+
+  initHeader(tenant: Tenant) {
+    (<HTMLElement>document.querySelector(".header")).style.background =
+      tenant.primaryColor;
   }
 }

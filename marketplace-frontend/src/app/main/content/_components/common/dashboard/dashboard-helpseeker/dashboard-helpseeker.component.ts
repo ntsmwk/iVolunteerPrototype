@@ -15,7 +15,7 @@ import { ImageService } from "app/main/content/_service/image.service";
   selector: "dashboard-helpseeker",
   templateUrl: "./dashboard-helpseeker.component.html",
   styleUrls: ["dashboard-helpseeker.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class DashboardHelpSeekerComponent implements OnInit {
   participant: Participant;
@@ -38,17 +38,7 @@ export class DashboardHelpSeekerComponent implements OnInit {
         .findById((<Helpseeker>this.participant).tenantId)
         .toPromise()
     );
-    this.setTenantHeaderColor();
-  }
-
-  getTenantImage() {
-    return this.imageService.getImgSourceFromBytes(this.tenant.image);
-  }
-
-  private setTenantHeaderColor() {
-    (<HTMLElement>(
-      document.querySelector(".header")
-    )).style.background = this.tenant.primaryColor;
+    this.tenantService.initHeader(this.tenant);
   }
 
   private isFF() {
@@ -57,8 +47,5 @@ export class DashboardHelpSeekerComponent implements OnInit {
 
   private isMV() {
     return this.tenant && this.tenant.name === "Musikverein_Schwertberg";
-  }
-  private isOther() {
-    return !this.isFF() && !this.isMV();
   }
 }

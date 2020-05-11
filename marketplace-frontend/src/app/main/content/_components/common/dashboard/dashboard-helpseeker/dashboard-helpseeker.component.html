@@ -7,7 +7,11 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
     <h1 class="l-heading">Herzlich Willkommen bei iVolunteer</h1>
-    <img *ngIf="tenant" class="header-logo" [src]="getTenantImage()" />
+    <img
+      *ngIf="tenant"
+      class="header-logo"
+      [src]="tenantService.getTenantImage(tenant)"
+    />
   </div>
 
   <!-- Landing Pages.. TODO Remove/Replace someday -->

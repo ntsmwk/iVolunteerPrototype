@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstance,
   ClassDefinition,
-} from 'app/main/content/_model/meta/class';
-import { Participant } from 'app/main/content/_model/participant';
+} from "app/main/content/_model/meta/class";
+import { Participant } from "app/main/content/_model/participant";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ClassInstanceService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUserClassInstancesByArcheType(
     marketplace: Marketplace,
@@ -31,18 +31,7 @@ export class ClassInstanceService {
     tenantId: String
   ) {
     return this.http.get(
-      `${marketplace.url}/meta/core/class/instance/by-id/${classInstanceId}/tenant/${tenantId}`
-    );
-  }
-
-  getClassInstancesInUserRepository(
-    marketplace: Marketplace,
-    userId: string,
-    tenantIds: string[]
-  ) {
-    return this.http.post(
-      `${marketplace.url}/meta/core/class/instance/in-user-repository/${userId}`,
-      tenantIds
+      `${marketplace.url}/meta/core/class/instance/by-id/${classInstanceId}?tId=${tenantId}`
     );
   }
 
@@ -63,7 +52,7 @@ export class ClassInstanceService {
     tenantId: string
   ) {
     return this.http.get(
-      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}/tenant/${tenantId}`
+      `${marketplace.url}/meta/core/class/instance/in-issuer-inbox/${issuerId}?tId=${tenantId}`
     );
   }
 
@@ -85,7 +74,7 @@ export class ClassInstanceService {
     properties
   ) {
     return this.http.post(
-      `${marketplace.url}/meta/core/class/instance/from-definition/${classDefinitionId}/tenant/${tenantId}/user/${volunteerId}`,
+      `${marketplace.url}/meta/core/class/instance/from-definition/${classDefinitionId}/user/${volunteerId}?tId=${tenantId}`,
       properties
     );
   }
@@ -112,45 +101,32 @@ export class ClassInstanceService {
     );
   }
 
-
-  getAllClassInstances(marketplace: Marketplace) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all`);
+  getAllClassInstances(marketplace: Marketplace, tenantId: string) {
+    return this.http.get(
+      `${marketplace.url}/meta/core/class/instance/all?tId=${tenantId}`
+    );
   }
 
-  getClassInstancesByArcheType(marketplace: Marketplace, archetype: string, org: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?org=${org}`);
-  }
-
-  getClassInstancesByArcheTypeBefore(marketplace: Marketplace, archetype: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/before`);
-  }
-
-  getClassInstancesByArcheTypeAfter(marketplace: Marketplace, archetype: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/after`);
-  }
-
-  getClassInstancesByArcheTypeFake(marketplace: Marketplace, archetype: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/fake`);
-  }
-
-  getClassInstancesByArcheTypeWithHash(marketplace: Marketplace, archetype: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}/hashed`);
-  }
-
-  getClassInstancesByUserId(marketplace: Marketplace, userId: string) {
-    return this.http.get(`${marketplace.url}/meta/core/class/instance/by-userid/${userId}`);
-  }
-
-  createNewClassInstanceById(marketplace: Marketplace, classDefinitionId: string) {
-    return this.http.post(`${marketplace.url}/meta/core/class/instance/${classDefinitionId}/new`, '');
+  getClassInstancesByArcheType(
+    marketplace: Marketplace,
+    archetype: string,
+    tenantId: string
+  ) {
+    return this.http.get(
+      `${marketplace.url}/meta/core/class/instance/all/by-archetype/${archetype}?tId=${tenantId}`
+    );
   }
 
   updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
-    return this.http.put(`${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`, classInstance);
+    return this.http.put(
+      `${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`,
+      classInstance
+    );
   }
 
   deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
-    return this.http.delete(`${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`);
+    return this.http.delete(
+      `${marketplace.url}/meta/core/class/instance/${classInstanceId}/delete`
+    );
   }
-
 }
