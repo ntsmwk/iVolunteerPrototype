@@ -207,7 +207,7 @@ public class ClassDefinitionService {
 
 //			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
 			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships, true);
-			printFormEntry(formEntry, 0, formEntry.getId());
+			generateFormEntryIds(formEntry, 0, formEntry.getId());
 
 			FormConfiguration formConfiguration = new FormConfiguration();
 			formConfiguration.setId(rootClassDefinition.getId());
@@ -226,7 +226,7 @@ public class ClassDefinitionService {
 		FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()),
 				classDefinitions, relationships, true);
 		
-		printFormEntry(formEntry, 0, formEntry.getId());
+		generateFormEntryIds(formEntry, 0, formEntry.getId());
 		
 		FormConfiguration formConfiguration = new FormConfiguration();
 		formConfiguration.setId(startClassDefinition.getId());
@@ -236,23 +236,16 @@ public class ClassDefinitionService {
 		return formConfigurations;
 	}
 	
-	public void printFormEntry(FormEntry formEntry, int deepness, String currentPath) {
-//		System.out.println("\n");
-//		for (int i = 0; i < deepness; i++) {
-//			System.out.print("  ");
-//		}
+	public void generateFormEntryIds(FormEntry formEntry, int deepness, String currentPath) {
 		formEntry.setId(currentPath);
-		
-		System.out.println(formEntry.getId());
-		for (ClassProperty p : formEntry.getClassProperties()) {
-//			for (int i = 0; i < deepness; i++) {
-//				System.out.print("  ");
-//			}
-			System.out.println(formEntry.getId() + "." + p.getName());
-		}
-		
+//		
+//		System.out.println(formEntry.getId());
+//		for (ClassProperty p : formEntry.getClassProperties()) {
+//			System.out.println(formEntry.getId() + "." + p.getName());
+//		}
+//		
 		for (FormEntry f : formEntry.getSubEntries()) {
-			printFormEntry(f, ++deepness, currentPath + "." + formEntry.getId());
+			generateFormEntryIds(f, ++deepness, currentPath + "." + formEntry.getId());
 		}
 	}
 
