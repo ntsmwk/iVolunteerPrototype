@@ -70,7 +70,7 @@
       <ng-container matColumnDef="taskDuration">
         <mat-header-cell *matHeaderCellDef> Dauer </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{ element.duration }}&nbsp;h
+          {{ element.duration }}&nbsp;{{ element.duration ? "h" : "N/A" }}
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="verified">

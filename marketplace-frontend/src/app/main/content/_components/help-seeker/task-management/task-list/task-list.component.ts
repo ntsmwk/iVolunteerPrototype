@@ -77,8 +77,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   }
 
   onRowSelect(task: Task) {
-    // TODO @ALEX if edit of classInstances works ...
-    // this.router.navigate(['/main/task/' + task.marketplaceId + '/' + task.id]);
+    this.router.navigate(["main/details/" + task.id]);
   }
 
   addTask() {
