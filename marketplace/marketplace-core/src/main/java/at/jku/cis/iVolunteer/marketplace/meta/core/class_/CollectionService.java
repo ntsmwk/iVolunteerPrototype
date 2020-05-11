@@ -201,60 +201,60 @@ public class CollectionService {
 		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
 	}
 	
-	FormEntry getParentClassDefintions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitons, List<Relationship> allRelationships) {
-
-		rootFormEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
-		rootFormEntry.setClassProperties(new LinkedList<ClassProperty<Object>>());
-		rootFormEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
-		rootFormEntry.setSubEntries(new ArrayList<FormEntry>());
-
-		Queue<ClassDefinition> classDefinitions = new LinkedList<ClassDefinition>();
-		classDefinitions.add(rootClassDefinition);
-		
-		while (!classDefinitions.isEmpty()) {
-
-			ClassDefinition currentClassDefinition = classDefinitions.poll();
-			rootFormEntry.getClassProperties().addAll(0, getPropertiesInClassDefinition(rootFormEntry, currentClassDefinition, allRelationships));
-			rootFormEntry.getClassDefinitions().add(currentClassDefinition);
-			
-			if (!currentClassDefinition.isRoot()) {
-				Relationship inheritance = allRelationships
-						.stream()
-						.filter(r -> r.getTarget().equals(currentClassDefinition.getId()) && r.getRelationshipType().equals(RelationshipType.INHERITANCE))
-						.findFirst()
-						.get();
-				if (inheritance == null) {
-					throw new NotAcceptableException("getParentById: child is not root and has no parent");
-				}
-				
-				ClassDefinition next = allClassDefinitons.stream().filter(c -> c.getId().equals(inheritance.getSource())).findFirst().get();	
-				if (next != null) {
-					classDefinitions.add(next);
-				}	
-			}
-
-			if (currentClassDefinition.getImagePath() != null && rootFormEntry.getImagePath() == null) {
-				rootFormEntry.setImagePath(currentClassDefinition.getImagePath());
-			}
-		}
-		
-		return rootFormEntry;
-	}
+//	FormEntry getParentClassDefintions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitons, List<Relationship> allRelationships) {
+//
+//		rootFormEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
+//		rootFormEntry.setClassProperties(new LinkedList<ClassProperty<Object>>());
+//		rootFormEntry.setEnumRepresentations(new ArrayList<EnumRepresentation>());
+//		rootFormEntry.setSubEntries(new ArrayList<FormEntry>());
+//
+//		Queue<ClassDefinition> classDefinitions = new LinkedList<ClassDefinition>();
+//		classDefinitions.add(rootClassDefinition);
+//		
+//		while (!classDefinitions.isEmpty()) {
+//
+//			ClassDefinition currentClassDefinition = classDefinitions.poll();
+//			rootFormEntry.getClassProperties().addAll(0, getPropertiesInClassDefinition(rootFormEntry, currentClassDefinition, allRelationships));
+//			rootFormEntry.getClassDefinitions().add(currentClassDefinition);
+//			
+//			if (!currentClassDefinition.isRoot()) {
+//				Relationship inheritance = allRelationships
+//						.stream()
+//						.filter(r -> r.getTarget().equals(currentClassDefinition.getId()) && r.getRelationshipType().equals(RelationshipType.INHERITANCE))
+//						.findFirst()
+//						.get();
+//				if (inheritance == null) {
+//					throw new NotAcceptableException("getParentById: child is not root and has no parent");
+//				}
+//				
+//				ClassDefinition next = allClassDefinitons.stream().filter(c -> c.getId().equals(inheritance.getSource())).findFirst().get();	
+//				if (next != null) {
+//					classDefinitions.add(next);
+//				}	
+//			}
+//
+//			if (currentClassDefinition.getImagePath() != null && rootFormEntry.getImagePath() == null) {
+//				rootFormEntry.setImagePath(currentClassDefinition.getImagePath());
+//			}
+//		}
+//		
+//		return rootFormEntry;
+//	}
 	
-	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition, List<Relationship> allRelationships) {
-		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
-		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
-		
-		for (ClassProperty<Object> property : copyList) {
-			if (!formEntry.getClassProperties().contains(property) && property.getType().equals(PropertyType.ENUM)) {
-				handleEnumProperties(currentClassDefinition, properties, property);
-			} else if (!formEntry.getClassProperties().contains(property) &&!property.getType().equals(PropertyType.ENUM)) {
-				properties.add(property);
-			}
-		}
-
-		return properties;
-	}
+//	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition, List<Relationship> allRelationships) {
+//		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
+//		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
+//		
+//		for (ClassProperty<Object> property : copyList) {
+//			if (!formEntry.getClassProperties().contains(property) && property.getType().equals(PropertyType.ENUM)) {
+//				handleEnumProperties(currentClassDefinition, properties, property);
+//			} else if (!formEntry.getClassProperties().contains(property) &&!property.getType().equals(PropertyType.ENUM)) {
+//				properties.add(property);
+//			}
+//		}
+//
+//		return properties;
+//	}
 
 	private void handleEnumProperties(ClassDefinition currentClassDefinition, List<ClassProperty<Object>> properties, ClassProperty<Object> property) {
 //	TODO Alexander
@@ -295,43 +295,43 @@ public class CollectionService {
 //		}
 	}
 
-	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
-		rootFormEntry.setClassDefinitions(new LinkedList<>());
-		rootFormEntry.getClassDefinitions().add(rootClassDefinition);
-		rootFormEntry.setClassProperties(rootClassDefinition.getProperties());
-
-		List<Relationship> relationships = new ArrayList<>();
-		
-		for (Relationship r : allRelationships) {
-			if (r.getRelationshipType().equals(RelationshipType.AGGREGATION) && r.getSource().equals(rootClassDefinition.getId())) {
-				relationships.add(r);
-			}
-		}
-		
-		Collections.reverse(relationships);
-
-		Stack<Relationship> stack = new Stack<Relationship>();
-		stack.addAll(relationships);
-
-		List<FormEntry> subFormEntries = new ArrayList<>();
-
-		if (stack == null || stack.size() <= 0) {
-			return rootFormEntry;
-		} 
-		
-		while (!stack.isEmpty()) {
-			Relationship relationship = stack.pop();				
-			ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-			
-			FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships);
-			subFormEntries.add(subFormEntry);
-		}
-
-		rootFormEntry.setSubEntries(subFormEntries);
-		
-		return rootFormEntry;
-
-	}
+//	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
+//		rootFormEntry.setClassDefinitions(new LinkedList<>());
+//		rootFormEntry.getClassDefinitions().add(rootClassDefinition);
+//		rootFormEntry.setClassProperties(rootClassDefinition.getProperties());
+//
+//		List<Relationship> relationships = new ArrayList<>();
+//		
+//		for (Relationship r : allRelationships) {
+//			if (r.getRelationshipType().equals(RelationshipType.AGGREGATION) && r.getSource().equals(rootClassDefinition.getId())) {
+//				relationships.add(r);
+//			}
+//		}
+//		
+//		Collections.reverse(relationships);
+//
+//		Stack<Relationship> stack = new Stack<Relationship>();
+//		stack.addAll(relationships);
+//
+//		List<FormEntry> subFormEntries = new ArrayList<>();
+//
+//		if (stack == null || stack.size() <= 0) {
+//			return rootFormEntry;
+//		} 
+//		
+//		while (!stack.isEmpty()) {
+//			Relationship relationship = stack.pop();				
+//			ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+//			
+//			FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships);
+//			subFormEntries.add(subFormEntry);
+//		}
+//
+//		rootFormEntry.setSubEntries(subFormEntries);
+//		
+//		return rootFormEntry;
+//
+//	}
 	
 	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
 		

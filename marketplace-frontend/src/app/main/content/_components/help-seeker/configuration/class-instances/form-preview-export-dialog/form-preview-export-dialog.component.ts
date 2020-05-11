@@ -51,32 +51,32 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.helpseeker = helpseeker;
 
-      // this.classDefinitionService
-      //   .getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds, this.helpseeker.tenantId)
-      //   .toPromise()
-      //   .then((formConfigurations: FormConfiguration[]) => {
+      this.classDefinitionService
+        .getFormConfigurations(this.data.marketplace, this.data.classConfigurationIds)
+        .toPromise()
+        .then((formConfigurations: FormConfiguration[]) => {
 
-      //     this.formConfigurations = formConfigurations;
+          this.formConfigurations = formConfigurations;
 
 
-      //     for (const config of this.formConfigurations) {
-      //       const classProperties: ClassProperty<any>[] = [];
-      //       for (const classProperty of config.formEntry.classProperties) {
-      //         classProperty.id = classProperty.name;
-      //       }
+          for (const config of this.formConfigurations) {
+            const classProperties: ClassProperty<any>[] = [];
+            for (const classProperty of config.formEntry.classProperties) {
+              classProperty.id = classProperty.name;
+            }
 
-      //       config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
-      //       config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
-      //     }
+            config.formEntry.questions = this.questionService.getQuestionsFromProperties(config.formEntry.classProperties);
+            config.formEntry.formGroup = this.questionControlService.toFormGroup(config.formEntry.questions);
+          }
 
-      //   }).then(() => {
-      //     this.currentFormConfiguration = this.formConfigurations.pop();
-      //     this.isLoaded = true;
+        }).then(() => {
+          this.currentFormConfiguration = this.formConfigurations.pop();
+          this.isLoaded = true;
 
-      //     const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
-      //     this.handleExportClick(returnData);
-      //     this.handleCloseClick();
-      //   });
+          const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
+          this.handleExportClick(returnData);
+          this.handleCloseClick();
+        });
     });
 
 
