@@ -13,7 +13,7 @@ import { InstanceCreationResultModule } from './result/result.module';
 
 
 const routes = [
-    { path: ':marketplaceId/:type', component: ClassInstanceFormEditorComponent }
+    { path: ':marketplaceId', component: ClassInstanceFormEditorComponent }
     // {path: ':marketplaceId/:classId/:showMaxGluehtemperatur', component: ClassInstanceFormEditorComponent}
 ];
 

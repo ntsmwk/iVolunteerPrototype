@@ -38,7 +38,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     showResultPage = false;
 
 
-    formConfigurationType: string;
+    // formConfigurationType: string;
 
     expectedNumberOfResults: number;
     results: FormEntryReturnEventData[];
@@ -70,7 +70,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         Promise.all([
             this.route.params.subscribe(params => {
                 marketplaceId = params['marketplaceId'];
-                this.formConfigurationType = params['type'];
+                // this.formConfigurationType = params['type'];
             }),
             this.route.queryParams.subscribe(queryParams => {
                 let i = 0;
@@ -83,15 +83,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
                 this.marketplace = marketplace;
 
-                if (isNullOrUndefined(this.formConfigurationType)) {
-                    this.formConfigurationType = 'top-down';
-                }
+                // if (isNullOrUndefined(this.formConfigurationType)) {
+                //     this.formConfigurationType = 'top-down';
+                // }
 
-                this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds, this.formConfigurationType).toPromise()
+                this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise()
                     .then((formConfigurations: FormConfiguration[]) => {
                         this.formConfigurations = formConfigurations;
                         for (const config of this.formConfigurations) {
-                            config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
+                            config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
                         }
                     })
 
@@ -118,7 +118,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         if (!isNullOrUndefined(formEntry.subEntries)) {
             for (let subEntry of formEntry.subEntries) {
-                const newIdPrefix = idPrefix + subEntry.classDefinitions[0].id + '.';
+                const newIdPrefix = subEntry.id;
                 subEntry = this.addQuestionsAndFormGroup(subEntry, newIdPrefix);
             }
         }
@@ -215,12 +215,17 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         const propertyInstances: PropertyInstance<any>[] = [];
         for (const classProperty of parentEntry.classProperties) {
-            // console.log(currentPath + '.' + classProperty.id);
+            console.log(currentPath + '.' + classProperty.id);
             // console.log(controls[0].id);
 
             const control = controls.find(c => c.id === (currentPath + '.' + classProperty.id));
-
+            console.log(control);
             //make sure numbers are correct
+            // console.log(controls);
+            // console.log(control);
+            // console.log(control.control);
+            // console.log(control.control.value);
+
             let value: any;
             if (classProperty.type === PropertyType.FLOAT_NUMBER) {
                 value = Number(control.control.value);
@@ -240,7 +245,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         if (!isNullOrUndefined(parentEntry.subEntries)) {
             for (const subEntry of parentEntry.subEntries) {
-                const subClassInstance = this.createClassInstances(subEntry, currentPath + '.' + subEntry.classDefinitions[0].id, controls);
+                const subClassInstance = this.createClassInstances(subEntry, subEntry.id, controls);
                 classInstance.childClassInstances.push(subClassInstance);
             }
         }

@@ -70,7 +70,8 @@ public class InitializationService {
 		addStandardPropertyDefinitions();
 //		addTestConfigClasses();
 //		addConfigurators();
-		addConfiguratorSlots();
+		
+//		addConfiguratorSlots();
 
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
@@ -276,16 +277,16 @@ public class InitializationService {
 		
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
-		this.createConfigurator(tenantId, "slot1");
-		this.createConfigurator(tenantId, "slot2");
-		this.createConfigurator(tenantId, "slot3");
-		this.createConfigurator(tenantId, "slot4");
-		this.createConfigurator(tenantId, "slot5");
+		this.createClassConfiguration(tenantId, "slot1");
+		this.createClassConfiguration(tenantId, "slot2");
+		this.createClassConfiguration(tenantId, "slot3");
+		this.createClassConfiguration(tenantId, "slot4");
+		this.createClassConfiguration(tenantId, "slot5");
 
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void createConfigurator(String tenantId, String slotName) {
+	private void createClassConfiguration(String tenantId, String slotName) {
 		
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();

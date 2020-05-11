@@ -188,3 +188,13 @@ export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
   }
 }
 
+export class TupleDropdownQuestion extends QuestionBase<any> {
+  controlType = 'tuple';
+  options: { id: any, label: any }[] = [];
+
+  constructor(options: {} = {}) {
+    super(options);
+    this.options = options['options'] || [];
+  }
+}
+

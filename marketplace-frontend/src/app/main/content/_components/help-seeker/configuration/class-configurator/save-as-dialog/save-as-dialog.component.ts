@@ -58,37 +58,37 @@ export class SaveClassConfigurationAsDialogComponent implements OnInit {
 
   onOKClick() {
 
-    if (this.dialogForm.invalid) {
-      this.dialogForm.get('label').markAsTouched();
-      this.dialogForm.get('description').markAsTouched();
-    } else {
+    // if (this.dialogForm.invalid) {
+    //   this.dialogForm.get('label').markAsTouched();
+    //   this.dialogForm.get('description').markAsTouched();
+    // } else {
 
-      const classConfiguration = new ClassConfiguration();
+    //   const classConfiguration = new ClassConfiguration();
 
-      classConfiguration.name = this.dialogForm.get('label').value;
-      classConfiguration.description = this.dialogForm.get('description').value;
+    //   classConfiguration.name = this.dialogForm.get('label').value;
+    //   classConfiguration.description = this.dialogForm.get('description').value;
 
-      classConfiguration.relationshipIds = this.data.relationships.map(r => r.id);
-      classConfiguration.classDefinitionIds = this.data.classDefinitions.map(c => c.id);
+    //   classConfiguration.relationshipIds = this.data.relationships.map(r => r.id);
+    //   classConfiguration.classDefinitionIds = this.data.classDefinitions.map(c => c.id);
 
-      Promise.all([
-        this.relationshipsService.addAndUpdateRelationships(this.data.marketplace, this.data.relationships).toPromise().then((ret: Relationship) => {
-          console.log(ret);
-        }),
-        this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
-          console.log(ret);
-        })
-      ]).then(() => {
-        this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
-          console.log(ret);
-          this.data.classConfiguration = ret;
-        }).then(() => {
-          console.log('finished');
+    //   Promise.all([
+    //     this.relationshipsService.addAndUpdateRelationships(this.data.marketplace, this.data.relationships).toPromise().then((ret: Relationship) => {
+    //       console.log(ret);
+    //     }),
+    //     this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
+    //       console.log(ret);
+    //     })
+    //   ]).then(() => {
+    //     this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
+    //       console.log(ret);
+    //       this.data.classConfiguration = ret;
+    //     }).then(() => {
+    //       console.log('finished');
 
-          this.dialogRef.close(this.data);
-        });
-      });
-    }
+    //       this.dialogRef.close(this.data);
+    //     });
+    //   });
+    // }
   }
 
   handleBrowseClick() {

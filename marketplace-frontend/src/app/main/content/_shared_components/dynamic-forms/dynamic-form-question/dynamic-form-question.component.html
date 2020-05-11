@@ -106,6 +106,19 @@
 
       </div>
 
+      <mat-form-field class="form-field" *ngSwitchCase="'tuple'">
+
+        <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
+          [id]="question.key" [value]="question.value">
+          <!-- <mat-option [value]="undefined"></mat-option> -->
+          <mat-option *ngFor="let opt of question.options" [value]="opt" (click)="handleTupleSelection(opt)">
+            {{opt.label}}</mat-option>
+        </mat-select>
+        <!-- {{ getQuestionValue(question) }} -->
+        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
+
+      </mat-form-field>
+
       <div *ngSwitchCase="'generic'">
         generic property - not yet implemented: {{ question.label }}
       </div>

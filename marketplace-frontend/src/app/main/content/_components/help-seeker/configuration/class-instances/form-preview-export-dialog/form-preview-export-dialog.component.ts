@@ -52,7 +52,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       this.helpseeker = helpseeker;
 
       this.classDefinitionService
-        .getAllParentsIdMap(this.data.marketplace, this.data.classConfigurationIds, this.helpseeker.tenantId)
+        .getFormConfigurations(this.data.marketplace, this.data.classConfigurationIds)
         .toPromise()
         .then((formConfigurations: FormConfiguration[]) => {
 

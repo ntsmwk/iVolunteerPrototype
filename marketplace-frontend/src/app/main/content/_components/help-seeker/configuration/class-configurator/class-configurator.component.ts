@@ -278,7 +278,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     if (!isNullOrUndefined(replaceCell)) {
       cell = replaceCell;
-      this.graph.removeCells(cell.children);
+      const childCells = this.graph.removeCellsFromParent(this.graph.getChildCells(cell));
+      this.graph.removeCells(childCells, false);
       this.graph.setCellStyle(style, [cell]);
 
     } else {
@@ -934,7 +935,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
 
       } case 'editor_save_as': {
-        console.log('not implemented');
+        console.error('not implemented');
         break;
       } case 'editor_new': {
         this.openGraph(event.payload.classConfiguration, event.payload.classDefinitions, event.payload.relationships);
@@ -1052,12 +1053,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
     // if (!isNullOrUndefined(rootCell) && rootCell.root) {
     if (!isNullOrUndefined(rootCell) && !isNullOrUndefined(rootCell.edges.find((e: MyMxCell) => e.cellType === MyMxCellType.AGGREGATION))) {
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/top-down`], { queryParams: [rootCell.id] });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: [rootCell.id] });
     } else {
 
       // const rootCell = this.graph.getChildVertices(this.graph.getDefaultParent()).find((c: MyMxCell) => c.classArchetype === ClassArchetype.ROOT);
       // if (!isNullOrUndefined(rootCell) && !rootCell.root) {
-      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}/bottom-up`], { queryParams: [rootCell.id] });
+      this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: [rootCell.id] });
     }
   }
 

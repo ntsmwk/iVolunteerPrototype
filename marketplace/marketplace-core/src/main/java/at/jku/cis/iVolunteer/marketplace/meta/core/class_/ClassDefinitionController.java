@@ -88,16 +88,16 @@ public class ClassDefinitionController {
 		return classDefinitionService.addOrUpdateClassDefinitions(classDefinitions);
 	}
 
-	@PutMapping("meta/core/class/definition/get-children/tenant/{tenantId}")
-	private List<FormConfiguration> getChildrenById(@RequestBody List<String> rootIds, @PathVariable("tenantId") String tenantId) {
-		return classDefinitionService.aggregateChildrenById(rootIds);
-	}
-
-	@PutMapping("meta/core/class/definition/get-parents/tenant/{tenantId}")
-	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds,
-			@PathVariable("tenantId") String tenantId) {
-		return classDefinitionService.getParentsById(childIds);
-	}
+//	@PutMapping("meta/core/class/definition/get-children/tenant/{tenantId}")
+//	private List<FormConfiguration> getChildrenById(@RequestBody List<String> rootIds, @PathVariable("tenantId") String tenantId) {
+//		return classDefinitionService.aggregateChildrenById(rootIds);
+//	}
+//
+//	@PutMapping("meta/core/class/definition/get-parents/tenant/{tenantId}")
+//	private List<FormConfiguration> getParentsById(@RequestBody List<String> childIds,
+//			@PathVariable("tenantId") String tenantId) {
+//		return classDefinitionService.getParentsById(childIds);
+//	}
 
 	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}/tenant/{tenantId}")
 	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId,
@@ -107,21 +107,15 @@ public class ClassDefinitionController {
 	}
 	
 	@PutMapping("meta/core/class/definition/form-configuration")
-	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids,
-			@RequestParam(value = "type") String collectionType) {
-		if (collectionType.equals("top-down")) {
-			return classDefinitionService.aggregateChildrenById(ids);
-		} else if (collectionType.equals("bottom-up")) {
-			return classDefinitionService.getParentsById(ids);
-		} else {
-			throw new IllegalArgumentException("Invalid collection type - has to be 'top-down' or 'bottom-up'");
-		}
+	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids) {
+		
+		return classDefinitionService.getClassDefinitionsById(ids);
 	}
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
 //		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
-		List<FormConfiguration> ret = classDefinitionService.getParents(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
+		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
 		return ret;
 	}
 
