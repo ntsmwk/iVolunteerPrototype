@@ -2,19 +2,11 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Stack;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import javax.management.relation.Relation;
-import javax.ws.rs.NotAcceptableException;
-
-import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +17,13 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepo
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
-import at.jku.cis.iVolunteer.model.meta.form.EnumRepresentation;
-import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
-import jersey.repackaged.com.google.common.collect.Lists;
 
 @Service
 public class CollectionService {
@@ -256,7 +241,7 @@ public class CollectionService {
 //		return properties;
 //	}
 
-	private void handleEnumProperties(ClassDefinition currentClassDefinition, List<ClassProperty<Object>> properties, ClassProperty<Object> property) {
+//	private void handleEnumProperties(ClassDefinition currentClassDefinition, List<ClassProperty<Object>> properties, ClassProperty<Object> property) {
 //	TODO Alexander
 //		
 //		ClassProperty<EnumEntry> enumProperty = new ClassProperty<EnumEntry>();
@@ -293,7 +278,7 @@ public class CollectionService {
 //				i++;
 //			}
 //		}
-	}
+//	}
 
 //	FormEntry aggregateClassDefinitions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
 //		rootFormEntry.setClassDefinitions(new LinkedList<>());
@@ -361,6 +346,7 @@ public class CollectionService {
 		unableToContinueProperty.setId("unableToContinue");
 		unableToContinueProperty.setName("Choose which Class to Instantiate");
 		unableToContinueProperty.setAllowedValues(new ArrayList<Object>());
+		unableToContinueProperty.getAllowedValues().add("--");
 		unableToContinueProperty.setType(PropertyType.TEXT);
 		
 		while (!targetStack.isEmpty()) {
@@ -379,8 +365,7 @@ public class CollectionService {
 				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (!directionUp) {
-					unableToContinuePropertySet = true;
-					
+					unableToContinuePropertySet = true;	
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
 					unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
 				}
@@ -396,6 +381,9 @@ public class CollectionService {
 		} else {
 			currentFormEntry.getSubEntries().addAll(subFormEntries);
 		}
+
+		return currentFormEntry;
+
 		
 		
 		// handle target Relationships
@@ -408,7 +396,6 @@ public class CollectionService {
 			// if next source-side Relationship: Inheritance - goto handle Inheritance
 			// if no source-side Relationship next: exit
 		
-		return currentFormEntry;
 	}
 
 }

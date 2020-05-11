@@ -188,30 +188,28 @@ public class ClassDefinitionService {
 //	}
 
 
-	public List<FormConfiguration> getClassDefinitionsById(List<String> rootIds) {
+	public List<FormConfiguration> getClassDefinitionsById(List<String> startIds) {
 
-		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
+		List<ClassDefinition> startClassDefintions = new ArrayList<ClassDefinition>();
 
-		this.classDefinitionRepository.findAll(rootIds).forEach(rootClassDefintions::add);
+		this.classDefinitionRepository.findAll(startIds).forEach(startClassDefintions::add);
 
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
-		for (ClassDefinition rootClassDefinition : rootClassDefintions) {
+		for (ClassDefinition startClassDefinition : startClassDefintions) {
 
 			List<ClassDefinition> classDefinitions = new ArrayList<>();
 			List<Relationship> relationships = new ArrayList<>();
-			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(rootClassDefinition.getConfigurationId());
+			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(startClassDefinition.getConfigurationId());
 			
 			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
-			
 			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
 
-//			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
-			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships, true);
-			generateFormEntryIds(formEntry, 0, formEntry.getId());
+			FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()), classDefinitions, relationships, true);
+			generateFormEntryIds(formEntry, formEntry.getId());
 
 			FormConfiguration formConfiguration = new FormConfiguration();
-			formConfiguration.setId(rootClassDefinition.getId());
-			formConfiguration.setName(rootClassDefinition.getName());
+			formConfiguration.setId(startClassDefinition.getId());
+			formConfiguration.setName(startClassDefinition.getName());
 			formConfiguration.setFormEntry(formEntry);
 			formConfigurations.add(formConfiguration);
 		}
@@ -226,7 +224,7 @@ public class ClassDefinitionService {
 		FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()),
 				classDefinitions, relationships, true);
 		
-		generateFormEntryIds(formEntry, 0, formEntry.getId());
+		generateFormEntryIds(formEntry, formEntry.getId());
 		
 		FormConfiguration formConfiguration = new FormConfiguration();
 		formConfiguration.setId(startClassDefinition.getId());
@@ -236,7 +234,7 @@ public class ClassDefinitionService {
 		return formConfigurations;
 	}
 	
-	public void generateFormEntryIds(FormEntry formEntry, int deepness, String currentPath) {
+	public void generateFormEntryIds(FormEntry formEntry, String currentPath) {
 		formEntry.setId(currentPath);
 //		
 //		System.out.println(formEntry.getId());
@@ -245,7 +243,7 @@ public class ClassDefinitionService {
 //		}
 //		
 		for (FormEntry f : formEntry.getSubEntries()) {
-			generateFormEntryIds(f, ++deepness, currentPath + "." + formEntry.getId());
+			generateFormEntryIds(f, currentPath + "." + formEntry.getId());
 		}
 	}
 
