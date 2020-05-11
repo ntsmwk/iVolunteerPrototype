@@ -109,13 +109,13 @@ public class ClassDefinitionController {
 	@PutMapping("meta/core/class/definition/form-configuration")
 	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids) {
 		
-		return classDefinitionService.aggregateClassDefinitionsById(ids);
+		return classDefinitionService.getClassDefinitionsById(ids);
 	}
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
 //		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
-		List<FormConfiguration> ret = classDefinitionService.getParents(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
+		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
 		return ret;
 	}
 
