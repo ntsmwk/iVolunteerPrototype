@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.meta.core.property.definition;
 import java.util.Date;
 
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
+import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 
 public class PropertyDefinitionTypes {
@@ -48,6 +49,12 @@ public class PropertyDefinitionTypes {
 	public static class EnumPropertyDefinition extends PropertyDefinition<EnumEntry> {
 		public EnumPropertyDefinition() {
 			this.type = PropertyType.ENUM;
+		}
+	}
+	
+	public static class TuplePropertyDefinition<X, Y> extends PropertyDefinition<Tuple<X, Y>> {
+		public TuplePropertyDefinition() {
+			this.type = PropertyType.TUPLE;
 		}
 	}
 }
