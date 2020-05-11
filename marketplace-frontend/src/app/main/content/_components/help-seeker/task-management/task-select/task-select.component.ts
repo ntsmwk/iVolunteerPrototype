@@ -34,7 +34,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private coreHelpSeekerService: CoreHelpSeekerService,
     private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.helpseeker = <Helpseeker>(
@@ -44,6 +44,8 @@ export class FuseTaskSelectComponent implements OnInit {
     this.tenant = <Tenant>(
       await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
     );
+
+    this.tenantService.initHeader(this.tenant);
 
     this.marketplace = <Marketplace>(
       await this.coreHelpSeekerService
@@ -61,6 +63,7 @@ export class FuseTaskSelectComponent implements OnInit {
           )
           .toPromise()
       );
+      // TODO
       this.dataSource.data = tasks.filter((t) => t.name != "PersonTask");
     }
   }

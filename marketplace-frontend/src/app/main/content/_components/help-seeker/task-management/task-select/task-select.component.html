@@ -1,50 +1,33 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-
-  <!-- <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-    <h1>Tätigkeit erstellen</h1>
-  </div> -->
-
-  <div *ngIf="this.participant && isFF()">
-    <div class="header-ff p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge erfassen</h1>
-      <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg">
-    </div>
+  <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+    <h1 class="l-heading">Einträge erfassen</h1>
+    <img
+      *ngIf="tenant"
+      class="header-logo"
+      [src]="tenantService.getTenantImage(tenant)"
+    />
   </div>
 
-  <div *ngIf="this.participant &&  isMV()">
-    <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge erfassen</h1>
-      <img class="header-logo" src="assets/images/avatars/musikvereinschwertberg.jpeg">
-    </div>
-  </div>
-
-  <div *ngIf="this.participant && isOther()">
-    <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge erfassen</h1>
-      <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
-    </div>
-  </div>
-
-
-
-<p class="mt-24 fs-25">Wähle eine vorgegebene Definition einer Tätigkeit aus.</p>
+  <p class="mt-24 fs-25">
+    Wähle eine vorgegebene Definition einer Tätigkeit aus.
+  </p>
 
   <div class="table">
-
-    <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+    <mat-table
+      #table
+      [dataSource]="dataSource"
+      *ngIf="dataSource.data.length != 0"
+    >
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-        <mat-cell *matCellDef="let task">{{task.name}}</mat-cell>
+        <mat-cell *matCellDef="let task">{{ task.name }}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="onRowSelect(row)"
+      ></mat-row>
     </mat-table>
-
-    <!-- <div class="no-data" *ngIf="dataSource.data.length === 0">
-      Keine Eintrags-Definitionen gefunden.
-    </div> -->
-
   </div>
-
 </div>
