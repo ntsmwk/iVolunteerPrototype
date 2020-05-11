@@ -363,76 +363,37 @@ public class CollectionService {
 		unableToContinueProperty.setAllowedValues(new ArrayList<Object>());
 		unableToContinueProperty.setType(PropertyType.TEXT);
 		
-//		List<String> visited = new ArrayList<String>();
-//		visited.add(currentClassDefinition.getId());
-		
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-				
 				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
-				System.out.println("INHERITANCE - " + classDefinition.getName());
-
-				
-//				visited.add(classDefinition.getId());
 				currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
-			} else if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
-				
 			}
-			
-			
-			
 		}
 		
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
-				if (directionUp) {
-					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-	
-					System.out.println("Up: AGGREGATION - " + classDefinition.getName());
-
-					
-//				visited.add(classDefinition.getId());
-					
-					FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
-					subFormEntries.add(subFormEntry);
-				} else {
-					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-//					visited.add(classDefinition.getId());
-					
-					FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
-					
-					System.out.println("Down: AGGREGATION - " + classDefinition.getName());
-					
-					subFormEntries.add(subFormEntry);
-				}
+				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
+				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (!directionUp) {
 					unableToContinuePropertySet = true;
 					
-					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())/* && !visited.contains(cd.getId())*/).findFirst().get();
-//					visited.add(classDefinition.getId());
-					
+					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
 					unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
-					System.out.println("Down: INHERITANCE - " + classDefinition.getName());
 				}
-			}
-			
+			}	
 		}
 		
 		if (unableToContinuePropertySet) {
 			currentFormEntry.getClassProperties().add(unableToContinueProperty);
-//			subFormEntries.add(unableToContinueEntry);
 		}
-		
-		
 		
 		if (currentFormEntry.getSubEntries() == null || currentFormEntry.getSubEntries().size() <= 0) {
 			currentFormEntry.setSubEntries(subFormEntries);
 		} else {
-			System.out.println("Not Null");
-			System.out.println(currentFormEntry.getSubEntries().size());
 			currentFormEntry.getSubEntries().addAll(subFormEntries);
 		}
 		
