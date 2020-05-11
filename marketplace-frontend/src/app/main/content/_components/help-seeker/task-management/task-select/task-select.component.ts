@@ -34,7 +34,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private coreHelpSeekerService: CoreHelpSeekerService,
     private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.helpseeker = <Helpseeker>(
@@ -67,7 +67,7 @@ export class FuseTaskSelectComponent implements OnInit {
 
   onRowSelect(row) {
     this.router.navigate(
-      [`main/configurator/instance-editor/${this.marketplace.id}/bottom-up`],
+      [`main/configurator/instance-editor/${this.marketplace.id}`],
       { queryParams: { 0: row.id } }
     );
   }
