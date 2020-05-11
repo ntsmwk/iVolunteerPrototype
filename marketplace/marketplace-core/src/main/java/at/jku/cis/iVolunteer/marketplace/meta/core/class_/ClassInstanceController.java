@@ -50,13 +50,6 @@ public class ClassInstanceController {
 		return classInstanceMapper.mapToDTO(classInstances);
 	}
 
-	@GetMapping("/meta/core/class/instance/by-id/{classInstanceId}")
-	private ClassInstance getClassInstanceById(@PathVariable("classInstanceId") String classInstanceId,
-			@RequestParam(value = "tId", required = true) String tenantId) {
-		ClassInstance ci = classInstanceRepository.getByIdAndTenantId(classInstanceId, tenantId);
-		return ci;
-	}
-
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances() {
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());

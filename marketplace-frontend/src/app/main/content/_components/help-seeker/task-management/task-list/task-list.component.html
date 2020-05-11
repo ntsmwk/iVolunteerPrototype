@@ -49,11 +49,6 @@
         <mat-cell *matCellDef="let element"> {{ element.taskType2 }} </mat-cell>
       </ng-container>
 
-      <!-- <ng-container matColumnDef="taskDescription">
-        <mat-header-cell *matHeaderCellDef> Beschreibung </mat-header-cell>
-        <mat-cell matCellDef="let element"> {{element.properties[TASK_DESCRIPTION].values[0]}} </mat-cell>
-      </ng-container> -->
-
       <ng-container matColumnDef="taskDateFrom">
         <mat-header-cell *matHeaderCellDef> Datum </mat-header-cell>
         <mat-cell *matCellDef="let element">
@@ -81,10 +76,13 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="rowSelected(row)"
+      ></mat-row>
     </mat-table>
   </div>
-  <mat-paginator [pageSize]="18" showFirstLastButtons></mat-paginator>
+  <mat-paginator [pageSize]="14" showFirstLastButtons></mat-paginator>
 
   <!-- <div class="no-data" *ngIf="tableDataSource.data.length === 0">
     Keine Einträge gefunden!

@@ -25,13 +25,9 @@ export class ClassInstanceService {
     );
   }
 
-  getClassInstanceById(
-    marketplace: Marketplace,
-    classInstanceId: String,
-    tenantId: String
-  ) {
+  getClassInstanceById(marketplace: Marketplace, classInstanceId: String) {
     return this.http.get(
-      `${marketplace.url}/meta/core/class/instance/by-id/${classInstanceId}?tId=${tenantId}`
+      `${marketplace.url}/meta/core/class/instance/${classInstanceId}`
     );
   }
 
