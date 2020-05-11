@@ -58,8 +58,8 @@ public class ClassInstanceController {
 	}
 
 	@GetMapping("/meta/core/class/instance/all")
-	private List<ClassInstance> getAllClassInstances() {
-		return classInstanceRepository.findAll();
+	private List<ClassInstanceDTO> getAllClassInstances() {
+		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());
 	}
 
 	@GetMapping("/meta/core/class/instance/{id}")
