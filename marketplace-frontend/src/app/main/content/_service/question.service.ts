@@ -41,7 +41,7 @@ export class QuestionService {
 
 
       if (!isNullOrUndefined(idPrefix)) {
-        question.key = idPrefix + property.id;
+        question.key = idPrefix + '.' + property.id;
       } else {
         question.key = property.id;
       }

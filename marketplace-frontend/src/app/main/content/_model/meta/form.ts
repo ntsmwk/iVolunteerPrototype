@@ -5,6 +5,8 @@ import { ClassProperty } from './property';
 import { Relationship } from './relationship';
 
 export class FormEntry {
+
+    id: string;
     positionLevel: string;
     classDefinitions: ClassDefinition[];
     classProperties: ClassProperty<any>[];
