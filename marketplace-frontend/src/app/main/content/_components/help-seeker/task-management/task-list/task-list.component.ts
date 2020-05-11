@@ -76,7 +76,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     console.error(this.tableDataSource.data);
   }
 
-  onRowSelect(task: Task) {
+  rowSelected(task: Task) {
     this.router.navigate(["main/details/" + task.id]);
   }
 
