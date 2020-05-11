@@ -3,7 +3,7 @@ import { RouterModule } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FuseSharedModule } from "@fuse/shared.module";
 import { ClassInstanceDetailsComponent } from './class-instance-details.component';
-import { MatIconModule, MatTableModule } from '@angular/material';
+import { MatIconModule, MatTableModule, MatSortModule } from '@angular/material';
 
 
 const routes = [
@@ -15,7 +15,7 @@ const routes = [
     RouterModule.forChild(routes),
     CommonModule,
 
-
+    MatSortModule,
     MatIconModule,
     MatTableModule,
     FuseSharedModule,

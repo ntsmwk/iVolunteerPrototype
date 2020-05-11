@@ -334,7 +334,7 @@ const routes: Route[] = [
     loadChildren: () =>
       import('./_components/common/class-instance-details/class-instance-details.module').then
       ((m) => m.ClassInstanceDetailsModule),
-    canActivate: [TokenGuard, VolunteerGuard],
+    canActivate: [TokenGuard],
   }
 ];
 

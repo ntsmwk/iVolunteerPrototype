@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { ClassInstanceDTO, ClassInstance, ClassDefinition } from 'app/main/content/_model/meta/class';
@@ -7,8 +7,10 @@ import { Participant, ParticipantRole } from 'app/main/content/_model/participan
 import { CoreVolunteerService } from 'app/main/content/_service/core-volunteer.service';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, Sort, MatSort } from '@angular/material';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { PropertyInstance } from 'app/main/content/_model/meta/property';
+import * as moment from 'moment';
 
 
 @Component({
@@ -18,6 +20,8 @@ import { ClassDefinitionService } from 'app/main/content/_service/meta/core/clas
 })
 export class ClassInstanceDetailsComponent implements OnInit {
 
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
   id: string;
   tenantId: string;
   classInstance: ClassInstance;
@@ -25,8 +29,8 @@ export class ClassInstanceDetailsComponent implements OnInit {
   role: ParticipantRole;
   marketplace: Marketplace;
 
-  tableDataSource = new MatTableDataSource();
-  displayedColumns = ['name', 'values', 'type'];
+  tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
+  displayedColumns = ['name', 'type', 'values'];
 
 
   constructor(
@@ -68,22 +72,34 @@ export class ClassInstanceDetailsComponent implements OnInit {
       await this.classInstanceService.getClassInstanceById(this.marketplace, this.id, this.tenantId).toPromise()
     );
 
-    console.error('classInstance', this.classInstance);
     this.tableDataSource.data = this.classInstance.properties;
-
-
-
-
   }
-  
-getName() {
-  return  this.classInstance.properties.find(p => p.name === 'name').values[0];
- 
-}
 
+  getName() {
+    return this.classInstance.properties.find(p => p.name === 'name').values[0];
+  }
 
   navigateBack() {
     window.history.back();
+  }
+
+  sortData(sort: Sort) {
+    this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'name': return this.compare(a.name, b.name, isAsc);
+        case 'type': return this.compare(a.type, b.type, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    if(typeof(a) === 'string' && typeof(b) === 'string') {
+      return (a.toLowerCase() < b.toLowerCase() ? -1 : 1) * (isAsc ? 1 : -1);
+    } else {
+      return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
   }
 
 }
