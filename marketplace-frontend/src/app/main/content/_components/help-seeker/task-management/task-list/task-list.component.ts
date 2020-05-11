@@ -70,6 +70,9 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
+    this.paginator.length = this.tableDataSource.data.length;
+    this.tableDataSource.paginator = this.paginator;
+
     console.error(this.tableDataSource.data);
   }
 
