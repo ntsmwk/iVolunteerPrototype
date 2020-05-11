@@ -65,7 +65,7 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		classInstance.setName(source.getName());
 		
 		if (source.getConfigurationId() != null) {
-			classInstance.setProperties(getParentProperties(source));
+//			classInstance.setProperties(getParentProperties(source));
 		} else {
 			List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
 			for (ClassProperty<Object> classProperty : source.getProperties()) {
@@ -95,11 +95,11 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 	}
 	
 
-	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
-		List<ClassProperty<Object>> properties = new ArrayList<>();
-		
-		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
-		return classPropertyToPropertyInstanceMapper.toTargets(properties);
-	}
+//	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
+//		List<ClassProperty<Object>> properties = new ArrayList<>();
+//		
+//		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
+//		return classPropertyToPropertyInstanceMapper.toTargets(properties);
+//	}
 
 }

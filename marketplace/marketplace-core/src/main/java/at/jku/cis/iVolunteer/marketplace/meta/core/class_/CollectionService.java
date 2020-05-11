@@ -323,7 +323,7 @@ public class CollectionService {
 			Relationship relationship = stack.pop();				
 			ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
 			
-			FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
+			FormEntry subFormEntry = aggregateClassDefinitions(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships);
 			subFormEntries.add(subFormEntry);
 		}
 
@@ -333,7 +333,7 @@ public class CollectionService {
 
 	}
 	
-	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
+	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
 		
 		// Next ClassDefinition
 		
@@ -355,9 +355,7 @@ public class CollectionService {
 		targetStack.addAll(targetRelationships);
 		sourceStack.addAll(sourceRelationships);
 		List<FormEntry> subFormEntries = new ArrayList<>();
-
-		
-		FormEntry unableToContinueEntry = null;
+			
 		boolean unableToContinuePropertySet = false;
 		ClassProperty<Object> unableToContinueProperty = new ClassProperty<Object>();
 		unableToContinueProperty.setId("unableToContinue");
@@ -365,55 +363,39 @@ public class CollectionService {
 		unableToContinueProperty.setAllowedValues(new ArrayList<Object>());
 		unableToContinueProperty.setType(PropertyType.TEXT);
 		
+		while (!targetStack.isEmpty()) {
+			Relationship relationship = targetStack.pop();
+			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
+				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
+				currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
+			}
+		}
+		
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
-				System.out.println("Down: AGGREGATION");
 				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-				
-				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(), allClassDefinitions, allRelationships);
+				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
 				subFormEntries.add(subFormEntry);
-		
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-//				FormEntry subFormEntry = new FormEntry();
-//				if (unableToContinuePropertySet == false) {
-//					unableToContinueEntry = new FormEntry();
-//				}
-				
-				unableToContinuePropertySet = true;
-				
-				ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();
-				unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
-				System.out.println("Down: INHERITANCE");
-//				ClassDefinition stub = new ClassDefinition();
-//				stub.setId("TEST");
-//				stub.setName("Choose a way to Continue");
-//				stub.setProperties(new ArrayList<ClassProperty<Object>>());
-				
-//				List<PropertyDefinition<Object>> properties = propertyDefinitionRepository.findAll();
-//				
-//				unableToContinueEntry.getClassDefinitions().add(stub);
-////				unableToContinueEntry.setClassProperties(new ArrayList<ClassProperty<Object>>());
-//				unableToContinueEntry.getClassProperties().add(stub.getProperties().get(0));
-			}
-			
+				if (!directionUp) {
+					unableToContinuePropertySet = true;
+					
+					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
+					unableToContinueProperty.getAllowedValues().add(classDefinition.getName());
+				}
+			}	
 		}
 		
 		if (unableToContinuePropertySet) {
 			currentFormEntry.getClassProperties().add(unableToContinueProperty);
-//			subFormEntries.add(unableToContinueEntry);
 		}
 		
-		while (!targetStack.isEmpty()) {
-			Relationship relationship = targetStack.pop();
-			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-				System.out.println("UP: INHERITANCE");
-			}
-			
+		if (currentFormEntry.getSubEntries() == null || currentFormEntry.getSubEntries().size() <= 0) {
+			currentFormEntry.setSubEntries(subFormEntries);
+		} else {
+			currentFormEntry.getSubEntries().addAll(subFormEntries);
 		}
-		
-		currentFormEntry.setSubEntries(subFormEntries);
-		
 		
 		
 		// handle target Relationships

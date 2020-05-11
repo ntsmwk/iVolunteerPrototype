@@ -38,7 +38,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     showResultPage = false;
 
 
-    formConfigurationType: string;
+    // formConfigurationType: string;
 
     expectedNumberOfResults: number;
     results: FormEntryReturnEventData[];
@@ -70,7 +70,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         Promise.all([
             this.route.params.subscribe(params => {
                 marketplaceId = params['marketplaceId'];
-                this.formConfigurationType = params['type'];
+                // this.formConfigurationType = params['type'];
             }),
             this.route.queryParams.subscribe(queryParams => {
                 let i = 0;
@@ -83,14 +83,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
                 this.marketplace = marketplace;
 
-                if (isNullOrUndefined(this.formConfigurationType)) {
-                    this.formConfigurationType = 'top-down';
-                }
+                // if (isNullOrUndefined(this.formConfigurationType)) {
+                //     this.formConfigurationType = 'top-down';
+                // }
 
-                this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds, this.formConfigurationType).toPromise()
+                this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise()
                     .then((formConfigurations: FormConfiguration[]) => {
                         this.formConfigurations = formConfigurations;
-                        console.log(formConfigurations);
                         for (const config of this.formConfigurations) {
                             config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.classDefinitions[0].id + '.');
                         }

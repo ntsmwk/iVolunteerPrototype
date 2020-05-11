@@ -139,45 +139,45 @@ public class ClassDefinitionService {
 		// @formatter:on
 	}
 
-	public List<FormConfiguration> getParentsById(List<String> childIds) {
-		System.out.println("getParentyById");
-		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
-
-		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
-		
-		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
-
-		// Pre-Condition: Graph must be acyclic - a child can only have one parent, one
-		// parent can have multiple children
-		// Work our way up the chain until we are at the root
-
-		for (ClassDefinition childClassDefinition : childClassDefinitions) {
-			FormConfiguration formConfig = new FormConfiguration();
-			formConfig.setName(childClassDefinition.getName());
-			formConfig.setId(childClassDefinition.getId());
-			
-			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(childClassDefinition.getConfigurationId());
-			
-			List<ClassDefinition> allClassDefinitions = new ArrayList<>();
-			List<Relationship> allRelationships = new ArrayList<>();
-			
-			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(allClassDefinitions::add);
-			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(allRelationships::add);
-			
-//			formConfig.setFormEntry(this.collectionService.getParentClassDefintions(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
-			formConfig.setFormEntry(this.collectionService.aggregateFormEntry(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
-
-			
-			configList.add(formConfig);
-		}
-
-		return configList;
-	}
+//	public List<FormConfiguration> getParentsById(List<String> childIds) {
+//		System.out.println("getParentyById");
+//		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
+//
+//		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
+//		
+//		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
+//
+//		// Pre-Condition: Graph must be acyclic - a child can only have one parent, one
+//		// parent can have multiple children
+//		// Work our way up the chain until we are at the root
+//
+//		for (ClassDefinition childClassDefinition : childClassDefinitions) {
+//			FormConfiguration formConfig = new FormConfiguration();
+//			formConfig.setName(childClassDefinition.getName());
+//			formConfig.setId(childClassDefinition.getId());
+//			
+//			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(childClassDefinition.getConfigurationId());
+//			
+//			List<ClassDefinition> allClassDefinitions = new ArrayList<>();
+//			List<Relationship> allRelationships = new ArrayList<>();
+//			
+//			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(allClassDefinitions::add);
+//			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(allRelationships::add);
+//			
+////			formConfig.setFormEntry(this.collectionService.getParentClassDefintions(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
+//			formConfig.setFormEntry(this.collectionService.aggregateFormEntry(childClassDefinition, new FormEntry(childClassDefinition.getId()), allClassDefinitions, allRelationships, true));
+//
+//			
+//			configList.add(formConfig);
+//		}
+//
+//		return configList;
+//	}
 	
 	public List<FormConfiguration> getParents(List<ClassDefinition> classDefinitions, List<Relationship> relationships, ClassDefinition rootClassDefinition) {
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
-		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
+		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships);
 		
 		FormConfiguration formConfiguration = new FormConfiguration();
 		formConfiguration.setId(rootClassDefinition.getId());
@@ -188,7 +188,7 @@ public class ClassDefinitionService {
 	}
 
 
-	public List<FormConfiguration> aggregateChildrenById(List<String> rootIds) {
+	public List<FormConfiguration> aggregateClassDefinitionsById(List<String> rootIds) {
 
 		List<ClassDefinition> rootClassDefintions = new ArrayList<ClassDefinition>();
 
@@ -199,17 +199,14 @@ public class ClassDefinitionService {
 
 			List<ClassDefinition> classDefinitions = new ArrayList<>();
 			List<Relationship> relationships = new ArrayList<>();
-			ClassConfiguration classConfiguration = classConfigurationRepository
-				.findOne(rootClassDefinition.getConfigurationId());
+			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(rootClassDefinition.getConfigurationId());
 			
-			classDefinitionRepository
-				.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
 			
-			relationshipRepository
-				.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
 
 //			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
-			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
+			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships, true);
 			
 			FormConfiguration formConfiguration = new FormConfiguration();
 			formConfiguration.setId(rootClassDefinition.getId());
@@ -225,7 +222,7 @@ public class ClassDefinitionService {
 		ClassDefinition rootClassDefinition = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().get();
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
-		FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(),
+		FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(rootClassDefinition.getId()),
 				classDefinitions, relationships);
 		
 		FormConfiguration formConfiguration = new FormConfiguration();
