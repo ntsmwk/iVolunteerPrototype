@@ -165,7 +165,7 @@ public class ClassDefinitionService {
 			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(allRelationships::add);
 			
 //			formConfig.setFormEntry(this.collectionService.getParentClassDefintions(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
-			formConfig.setFormEntry(this.collectionService.aggregateFormEntry(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships, true));
+			formConfig.setFormEntry(this.collectionService.aggregateFormEntry(childClassDefinition, new FormEntry(childClassDefinition.getId()), allClassDefinitions, allRelationships, true));
 
 			
 			configList.add(formConfig);
@@ -177,7 +177,7 @@ public class ClassDefinitionService {
 	public List<FormConfiguration> getParents(List<ClassDefinition> classDefinitions, List<Relationship> relationships, ClassDefinition rootClassDefinition) {
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
-		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
+		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships);
 		
 		FormConfiguration formConfiguration = new FormConfiguration();
 		formConfiguration.setId(rootClassDefinition.getId());
@@ -209,7 +209,7 @@ public class ClassDefinitionService {
 				.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
 
 //			FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(), classDefinitions, relationships);
-			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(), classDefinitions, relationships, true);
+			FormEntry formEntry = collectionService.aggregateFormEntry(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships, true);
 			
 			FormConfiguration formConfiguration = new FormConfiguration();
 			formConfiguration.setId(rootClassDefinition.getId());
@@ -225,7 +225,7 @@ public class ClassDefinitionService {
 		ClassDefinition rootClassDefinition = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().get();
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
-		FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(),
+		FormEntry formEntry = collectionService.aggregateClassDefinitions(rootClassDefinition, new FormEntry(rootClassDefinition.getId()),
 				classDefinitions, relationships);
 		
 		FormConfiguration formConfiguration = new FormConfiguration();

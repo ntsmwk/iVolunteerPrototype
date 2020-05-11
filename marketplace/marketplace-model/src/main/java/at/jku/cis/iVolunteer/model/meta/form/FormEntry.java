@@ -8,6 +8,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 public class FormEntry {
 
+	private String id;
 	private List<ClassProperty<Object>> classProperties = new ArrayList<>();
 	private List<ClassDefinition> classDefinitions = new ArrayList<>();
 	
@@ -16,6 +17,21 @@ public class FormEntry {
 	private List<FormEntry> subEntries = new ArrayList<>();
 
 	private String imagePath;
+	
+	
+	public FormEntry(String id) {
+		this.id = id;
+	}
+	
+	public FormEntry() {}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public List<ClassProperty<Object>> getClassProperties() {
 		return classProperties;
