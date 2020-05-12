@@ -16,6 +16,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { isNullOrUndefined } from "util";
 import { ClassConfiguration } from "app/main/content/_model/configurations";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
+import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
 
 @Component({
   templateUrl: "./task-select.component.html",
@@ -23,7 +24,7 @@ import { ClassConfigurationService } from "app/main/content/_service/configurati
 })
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
-  dataSource = new MatTableDataSource<ClassDefinition>();
+  dataSource = new MatTableDataSource<ClassDefinitionDTO>();
   displayedColumns = ["name", "configuration", "tId"];
   helpseeker: Helpseeker;
   tenant: Tenant;
@@ -57,7 +58,7 @@ export class FuseTaskSelectComponent implements OnInit {
     );
 
     if (!isNullOrUndefined(this.marketplace)) {
-      let tasks = <ClassDefinition[]>(
+      let tasks = <ClassDefinitionDTO[]>(
         await this.classDefinitionService
           .getByArchetype(
             this.marketplace,
@@ -67,11 +68,6 @@ export class FuseTaskSelectComponent implements OnInit {
           .toPromise()
       );
 
-      let configurations = <ClassConfiguration>(
-        await this.classConfigurationService
-          .getAllClassConfigurations(this.marketplace)
-          .toPromise()
-      );
       this.dataSource.data = tasks
         .filter((t) => t.configurationId != null)
         .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));

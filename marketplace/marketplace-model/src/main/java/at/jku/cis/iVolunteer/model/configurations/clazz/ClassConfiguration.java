@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.model.configurations.clazz;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
@@ -11,29 +10,17 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 @Document
 public class ClassConfiguration extends IVolunteerObject {
 
-	@Id String id;
-
 	private String name;
 	private String description;
 
 	private List<String> classDefinitionIds;
 	private List<String> relationshipIds;
 
-	private Date timestamp;
-	
 	private String userId;
 
 	private ClassConfigurationArcheType configuratorArcheType;
 
 	public ClassConfiguration() {
-	}
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getName() {
