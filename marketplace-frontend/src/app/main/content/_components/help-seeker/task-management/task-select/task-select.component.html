@@ -28,11 +28,6 @@
         <mat-cell *matCellDef="let task">{{ task.configurationName }}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="tId">
-        <mat-header-cell *matHeaderCellDef>Tenant</mat-header-cell>
-        <mat-cell *matCellDef="let task">{{ task.tenantId }}</mat-cell>
-      </ng-container>
-
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row
         *matRowDef="let row; columns: displayedColumns"

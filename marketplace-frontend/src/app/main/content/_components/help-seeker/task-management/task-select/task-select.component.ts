@@ -25,7 +25,7 @@ import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinitionDTO>();
-  displayedColumns = ["name", "configuration", "tId"];
+  displayedColumns = ["name", "configuration"];
   helpseeker: Helpseeker;
   tenant: Tenant;
 
