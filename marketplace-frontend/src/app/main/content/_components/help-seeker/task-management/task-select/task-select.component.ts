@@ -22,7 +22,7 @@ import { isNullOrUndefined } from "util";
 export class FuseTaskSelectComponent implements OnInit {
   marketplace: Marketplace;
   dataSource = new MatTableDataSource<ClassDefinition>();
-  displayedColumns = ["name"];
+  displayedColumns = ["name", "configuration", "tId"];
   helpseeker: Helpseeker;
   tenant: Tenant;
 
@@ -64,7 +64,10 @@ export class FuseTaskSelectComponent implements OnInit {
           .toPromise()
       );
       // TODO
-      this.dataSource.data = tasks.filter((t) => t.name != "PersonTask");
+      this.dataSource.data = tasks
+        .filter((t) => t.configurationId != null)
+        .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
+      console.error(this.dataSource.data);
     }
   }
 
