@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import at.jku.cis.iVolunteer.model.IVolunteerObject;
+
 @Document
-public class ClassConfiguration {
+public class ClassConfiguration extends IVolunteerObject {
 
 	@Id String id;
 
