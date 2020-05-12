@@ -14,6 +14,8 @@ import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { isNullOrUndefined } from "util";
+import { ClassConfiguration } from "app/main/content/_model/configurations";
+import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 
 @Component({
   templateUrl: "./task-select.component.html",
@@ -33,6 +35,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private loginService: LoginService,
     private coreHelpSeekerService: CoreHelpSeekerService,
     private classDefinitionService: ClassDefinitionService,
+    private classConfigurationService: ClassConfigurationService,
     private tenantService: TenantService
   ) {}
 
@@ -63,7 +66,12 @@ export class FuseTaskSelectComponent implements OnInit {
           )
           .toPromise()
       );
-      // TODO
+
+      let configurations = <ClassConfiguration>(
+        await this.classConfigurationService
+          .getAllClassConfigurations(this.marketplace)
+          .toPromise()
+      );
       this.dataSource.data = tasks
         .filter((t) => t.configurationId != null)
         .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
