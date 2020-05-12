@@ -11,18 +11,28 @@
   </table>
 </div>
 <mat-dialog-content *ngIf="loaded">
-
   <form [formGroup]="dialogForm">
     <mat-label>Bezeichnung Konfiguration*</mat-label>
-    <mat-form-field style="width: 100%" appearance="outline" #label>
-      <input matInput name="label" class="form-control" formControlName="label" required />
+    <mat-form-field style="width: 100%;" appearance="outline" #label>
+      <input
+        matInput
+        name="label"
+        class="form-control"
+        formControlName="label"
+        required
+      />
     </mat-form-field>
 
-
     <mat-label>Beschreibung (optional)</mat-label>
-    <mat-form-field style="width: 100%" appearance="outline">
-      <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows=3
-        matAutosizeMaxRows=3></textarea>
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <textarea
+        matInput
+        name="description"
+        formControlName="description"
+        matTextareaAutosize
+        matAutosizeMinRows="3"
+        matAutosizeMaxRows="3"
+      ></textarea>
     </mat-form-field>
 
     <!-- <div class="pt-20 pb-16">
@@ -34,10 +44,9 @@
       <input matInput name="rootLabel" formControlName="rootLabel" required />
     </mat-form-field> -->
   </form>
-
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button (click)="onOKClick()">OK</button>
-  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <button mat-button (click)="onOKClick()">Bestätigen</button>
+  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
 </mat-dialog-actions>
