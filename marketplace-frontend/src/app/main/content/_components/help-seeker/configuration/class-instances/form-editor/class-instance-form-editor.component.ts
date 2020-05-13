@@ -9,7 +9,7 @@ import { CoreMarketplaceService } from 'app/main/content/_service/core-marketpla
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup, FormControl } from '@angular/forms';
 import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
 
@@ -123,6 +123,32 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             }
         }
         return formEntry;
+    }
+
+    handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
+        console.log('Dynamic Form Tuple Clicked');
+        console.log(evt);
+        console.log(evt.formGroup);
+        console.log(evt.formGroup.controls);
+        console.log('---------');
+
+        let unableToContinueControl: FormControl;
+        let pathPrefix: string;
+
+        Object.keys(evt.formGroup.controls).forEach(c => {
+            if (c.endsWith('.unableToContinue')) {
+                unableToContinueControl = evt.formGroup.controls[c] as FormControl;
+                pathPrefix = c.replace('.unableToContinue', '');
+            }
+        });
+
+        console.log(unableToContinueControl);
+        console.log(pathPrefix);
+        this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id).toPromise().then((ret) => {
+            console.log(ret);
+        });
+
+
     }
 
     // handleResultEvent(event: FormEntryReturnEventData) {

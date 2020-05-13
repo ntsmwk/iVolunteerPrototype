@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { QuestionBase, MultipleSelectionEnumQuestion } from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
@@ -12,6 +12,7 @@ export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
   @Input() submitPressed: boolean;
+  @Output() tupleSelected: EventEmitter<any> = new EventEmitter<any>();
 
   date: FormControl;
   requiredMarker: string;
@@ -158,7 +159,7 @@ export class DynamicFormQuestionComponent implements OnInit {
   }
 
   handleTupleSelection(opt: any) {
-    console.log(opt);
+    this.tupleSelected.emit({ selection: opt, formGroup: this.form });
   }
 
 

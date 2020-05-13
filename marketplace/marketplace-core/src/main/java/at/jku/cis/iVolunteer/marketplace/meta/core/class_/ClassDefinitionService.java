@@ -236,15 +236,45 @@ public class ClassDefinitionService {
 	
 	public void generateFormEntryIds(FormEntry formEntry, String currentPath) {
 		formEntry.setId(currentPath);
-//		
-//		System.out.println(formEntry.getId());
-//		for (ClassProperty p : formEntry.getClassProperties()) {
-//			System.out.println(formEntry.getId() + "." + p.getName());
-//		}
-//		
-		for (FormEntry f : formEntry.getSubEntries()) {
-			generateFormEntryIds(f, currentPath + "." + formEntry.getId());
+		
+		System.out.println(formEntry.getId());
+		for (ClassProperty p : formEntry.getClassProperties()) {
+			System.out.println(formEntry.getId() + "." + p.getName());
 		}
+		
+		for (FormEntry f : formEntry.getSubEntries()) {
+			generateFormEntryIds(f, currentPath + "." + f.getId());
+		}
+	}
+	
+	public FormEntry getClassDefinitionChunk(String path, String startClassDefinitionId, String choiceId) {
+		
+		List<ClassDefinition> classDefinitions = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
+		
+		ClassDefinition startClassDefinition = classDefinitionRepository.findOne(startClassDefinitionId);
+		
+		ClassDefinition choiceClassDefinition = classDefinitionRepository.findOne(choiceId);
+		
+		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(startClassDefinition.getConfigurationId());
+		
+		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
+		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
+//		
+//		System.out.println("START:  " + startClassDefinition.getId() + ": " + startClassDefinition.getName());
+//		System.out.println("CHOICE: " + choiceClassDefinition.getId() + ": " + choiceClassDefinition.getName());
+		
+//		collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinitionId), classDefinitions, relationships, false);
+		FormEntry entry =  collectionService.getFormEntryChunk(startClassDefinition, choiceClassDefinition, classDefinitions, relationships);
+		
+		System.out.println("done generating form entry");
+		
+		generateFormEntryIds(entry, path);
+		
+		System.out.println("done generating path entry ids");
+		
+		return entry;
+	
 	}
 
 	// Keep in case of changes of mind :)

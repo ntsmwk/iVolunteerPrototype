@@ -17,6 +17,7 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
+import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 
 @RestController
 public class ClassDefinitionController {
@@ -117,6 +118,19 @@ public class ClassDefinitionController {
 //		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
 		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
 		return ret;
+	}
+	
+	@PutMapping("meta/core/class/definition/form-configuration-chunk")
+	private FormEntry getFormConfigurationChunk(@RequestBody String[] params) {
+		final String pathPrefix = params[0];
+		final String choiceId = params[1];
+//		System.out.println(pathPrefix);
+		String[] split = pathPrefix.split("\\.");
+		
+		assert (split.length >= 1);
+		final String startClassDefinitionId = split[split.length-1];
+		
+		return classDefinitionService.getClassDefinitionChunk(pathPrefix, startClassDefinitionId, choiceId);
 	}
 
 	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")

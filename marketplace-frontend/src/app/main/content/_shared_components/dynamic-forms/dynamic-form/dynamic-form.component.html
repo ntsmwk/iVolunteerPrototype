@@ -1,30 +1,29 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <div *ngFor="let question of questions" class="form-row">
+    <app-question [question]="question" [form]="form" [submitPressed]="submitPressed"></app-question>
+  </div>
 
-    <div *ngFor="let question of questions"class="form-row">
-      <app-question [question]="question" [form]="form" [submitPressed]="submitPressed"></app-question> 
-    </div>
- 
-    <br>
-    <br>
-    
-    <div class="form-row" *ngIf="!formDisabled">
-      <button type="submit" mat-raised-button color="primary" >
-        Save
-      </button>
-       
-        &nbsp; &nbsp;
+  <br>
+  <br>
 
-      <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button>
-    </div>
-    
-    <!-- <div class="form-row" *ngIf="formDisabled">
+  <div class="form-row" *ngIf="!formDisabled">
+    <button type="submit" mat-raised-button color="primary">
+      Save
+    </button>
+
+    &nbsp; &nbsp;
+
+    <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Cancel</button>
+  </div>
+
+  <!-- <div class="form-row" *ngIf="formDisabled">
       <button type="button" (click)="navigateBack()" mat-raised-button color="basic">Back</button>
     </div> -->
 
-  </form>
+</form>
 
- 
-  <div *ngIf="output" class="form-row">
-    <strong>Saved the following values:</strong><br>{{output}}
-  </div>
+
+<div *ngIf="output" class="form-row">
+  <strong>Saved the following values:</strong><br>{{output}}
+</div>

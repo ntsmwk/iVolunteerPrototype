@@ -33,12 +33,14 @@
                 <app-dynamic-class-instance-creation-form *ngIf="formEntry.questions.length > 0"
                     [questions]="formEntry.questions" hideButtons="true" [formConfigurationId]="formConfiguration.id"
                     [form]="formEntry.formGroup" lastEntry="false" [finishClicked]="finishClicked"
-                    (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()">
+                    (resultEvent)="handleResultEvent($event)" (cancelEvent)="handleCancelEvent()"
+                    (tupleSelected)="handleTupleSelection($event)">
                 </app-dynamic-class-instance-creation-form>
             </div>
-            <div *ngFor="let entry of formEntry.subEntries">
+            <div *ngFor=" let entry of formEntry.subEntries">
                 <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"
-                    [finishClicked]="finishClicked" (result)="handleResultEvent($event)"></app-form-entry-view>
+                    [finishClicked]="finishClicked" (result)="handleResultEvent($event)"
+                    (tupleSelected)="handleTupleSelection($event)"></app-form-entry-view>
             </div>
 
         </mat-expansion-panel>

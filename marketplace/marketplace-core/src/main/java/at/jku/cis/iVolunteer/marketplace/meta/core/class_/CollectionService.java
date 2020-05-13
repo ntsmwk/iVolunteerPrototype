@@ -324,8 +324,9 @@ public class CollectionService {
 	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
 		
 		// Next ClassDefinition
-		
-		currentFormEntry.setClassDefinitions(new LinkedList<>());
+		if (currentFormEntry.getClassDefinitions() == null) {
+			currentFormEntry.setClassDefinitions(new LinkedList<>());
+		}
 		currentFormEntry.getClassDefinitions().add(currentClassDefinition);
 		
 		// Collect Properties
@@ -354,8 +355,13 @@ public class CollectionService {
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
-				currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
+				if (directionUp) {
+					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
+					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
+				} else {
+					System.out.println("fuck");
+					
+				}
 			}
 		}
 		
@@ -399,5 +405,27 @@ public class CollectionService {
 			// if no source-side Relationship next: exit
 		
 	}
+
+	public FormEntry getFormEntryChunk(ClassDefinition currentClassDefinition, ClassDefinition choiceClassDefinition, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
+//	System.out.println("-----");	
+//	System.out.print(currentClassDefinition.getName() + ": ");
+//	System.out.println(choiceClassDefinition.getName());
+//	FormEntry entry = new FormEntry(currentClassDefinition.getId());
+//	entry.setClassProperties(currentClassDefinition.getProperties());
+//	entry.setImagePath(currentClassDefinition.getImagePath());
+//	entry.setClassDefinitions(new ArrayList<ClassDefinition>());
+//	entry.getClassDefinitions().add(currentClassDefinition);
+//	
+	
+	
+	FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true);
+	
+//	entry.setSubEntries(Collections.singletonList(entry));
+	return entry;
+	//TODO --nicht richtig
+	
+}
+	
+	
 
 }

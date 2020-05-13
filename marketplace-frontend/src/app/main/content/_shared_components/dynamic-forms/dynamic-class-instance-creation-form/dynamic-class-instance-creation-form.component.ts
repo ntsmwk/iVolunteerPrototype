@@ -1,11 +1,13 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, DoCheck } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { FormGroup, AbstractControl, FormControl } from '@angular/forms';
 
 import { QuestionBase } from '../../../_model/dynamic-forms/questions';
 import { QuestionControlService } from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
 import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { assertNotNull } from '@angular/compiler/src/output/output_ast';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 declare var $: JQueryStatic;
 
 @Component({
@@ -44,8 +46,10 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
   @Output() resultEvent: EventEmitter<any> = new EventEmitter();
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
+  @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
-  constructor(private qcs: QuestionControlService) { }
+  constructor(private qcs: QuestionControlService,
+    private classDefinitionService: ClassDefinitionService) { }
 
   ngOnInit() {
     if (!isNullOrUndefined(this.form)) {
@@ -95,7 +99,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   }
 
   handleCancel() {
-    this.cancelEvent.emit("cancel");
+    this.cancelEvent.emit('cancel');
   }
 
   navigateBack() {
@@ -104,5 +108,11 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
   removeProperty(question: QuestionBase<any>) {
     console.log('clicked Remove Property');
+  }
+
+  handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
+    this.tupleSelected.emit(evt);
+
+
   }
 }
