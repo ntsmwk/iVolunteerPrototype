@@ -12,6 +12,7 @@ export class QuestionControlService {
     const parent = fb.group({});
     const ret = this.addChildToGroup(fb, questions, parent);
 
+    // console.log(ret.controls);
     return ret;
   }
 

@@ -11,7 +11,6 @@ import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 
 export interface ValidatorData {
   validators: ValidatorFn[];
-  required: boolean;
   messages: Map<string, string>; // Key - Message
 }
 
@@ -48,13 +47,18 @@ export class QuestionService {
       question.label = property.name;
       question.order = property.position;
 
-      const validatorData = this.getValidatorData(property.propertyConstraints, property.type, property.required);
+      const validatorData = this.getValidatorData(property.propertyConstraints, property.type);
 
       if (!isNullOrUndefined(validatorData)) {
         question.validators = validatorData.validators;
-        question.required = validatorData.required;
         question.messages = validatorData.messages;
       }
+      question.required = property.required;
+      if (property.required) {
+        question.validators.push(Validators.required);
+      }
+
+      console.log(question);
       questions.push(question);
     }
     return questions;
@@ -221,7 +225,7 @@ export class QuestionService {
   }
 
 
-  private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType, required: boolean): ValidatorData {
+  private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType): ValidatorData {
     const validators: ValidatorFn[] = [];
     const messages: Map<string, string> = new Map<string, string>();
 
@@ -233,17 +237,9 @@ export class QuestionService {
         if (!isNullOrUndefined(singleValidatorData)) {
           validators.push(singleValidatorData.validator);
           messages.set(singleValidatorData.key, constraint.message);
-
-        } else {
-          console.log('undefined - done nothing - continue');
-        }
-
-        if (required) {
-          validators.push(Validators.required);
         }
       }
-      const ret = { validators: validators, messages: messages, required: required };
-      return ret;
+      return { validators: validators, messages: messages };
 
     } else {
       return undefined;

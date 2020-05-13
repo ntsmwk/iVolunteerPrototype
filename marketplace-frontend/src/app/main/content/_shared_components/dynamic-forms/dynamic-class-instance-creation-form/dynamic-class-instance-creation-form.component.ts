@@ -84,12 +84,12 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     }
   }
 
-  private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
+  private markFormAsTouched(questions: QuestionBase<any>[], control: FormGroup) {
     for (const q of questions) {
-      control.get(q.key).markAsTouched();
-      if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
-        this.markFormAsTouched(q.subQuestions, control.get(q.key));
-      }
+      control.controls[q.key].markAsTouched();
+      // if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
+      //   this.markFormAsTouched(q.subQuestions, control.get(q.key));
+      // }
     }
 
   }

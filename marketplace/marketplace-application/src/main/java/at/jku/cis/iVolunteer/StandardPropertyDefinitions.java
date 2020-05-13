@@ -444,7 +444,7 @@ public class StandardPropertyDefinitions {
 		public void inst(String tenantId) {
 			this.setType(PropertyType.TEXT);
 			this.setName("name");
-			this.setRequired(true);
+			this.setRequired(false);
 			this.setTenantId(tenantId);
 
 //			List<PropertyConstraint<?>> constraints = new ArrayList<>();

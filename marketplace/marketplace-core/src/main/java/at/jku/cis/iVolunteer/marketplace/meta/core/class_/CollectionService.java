@@ -350,6 +350,7 @@ public class CollectionService {
 		unableToContinuePropertyDefinition.setId("unableToContinue");
 		unableToContinuePropertyDefinition.setName("Choose which Class to Instantiate");
 		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
+		unableToContinuePropertyDefinition.setRequired(true);
 		
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
