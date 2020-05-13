@@ -23,6 +23,11 @@
         <mat-cell *matCellDef="let task">{{ task.name }}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="configuration">
+        <mat-header-cell *matHeaderCellDef>Konfiguration</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{ task.configurationName }}</mat-cell>
+      </ng-container>
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row
         *matRowDef="let row; columns: displayedColumns"

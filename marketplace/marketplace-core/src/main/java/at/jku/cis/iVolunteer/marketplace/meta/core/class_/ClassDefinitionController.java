@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
@@ -25,6 +23,7 @@ public class ClassDefinitionController {
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private CollectionService collectionService;
+	@Autowired private ClassDefinitionMapper classDefinitionMapper;
 
 	@GetMapping("/meta/core/class/definition/all/tenant/{tenantId}")
 	private List<ClassDefinition> getAllClassDefinitions(@PathVariable("tenantId") String tenantId) {
@@ -35,7 +34,7 @@ public class ClassDefinitionController {
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnums(@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getAllClassDefinitionsWithoutEnums(tenantId);
 	}
-	
+
 	@GetMapping("meta/core/class/definition/all/no-enum-no-head/tenant/{tenantId}")
 	public List<ClassDefinition> getAllClassDefinitionsWithoutEnumsAndHeads(@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getAllClassDefinitionsWithoutEnumsAndHeads(tenantId);
@@ -46,7 +45,7 @@ public class ClassDefinitionController {
 			@PathVariable("tenantId") String tenantId) {
 		return classDefinitionService.getClassDefinitionById(id, tenantId);
 	}
-		
+
 	@GetMapping("meta/core/class/definition/{slotId}/with-properties")
 	private List<ClassDefinition> getClassDefinitionsWithProperties(@PathVariable("slotId") String slotId) {
 		return classDefinitionService.getAllClassDefinitionsWithProperties(slotId);
@@ -58,9 +57,10 @@ public class ClassDefinitionController {
 //	}
 
 	@GetMapping("/meta/core/class/definition/archetype/{archetype}/tenant/{tenantId}")
-	public List<ClassDefinition> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype,
+	public List<ClassDefinitionDTO> getClassDefinitionByArchetype(@PathVariable("archetype") ClassArchetype archetype,
 			@PathVariable("tenantId") String tenantId) {
-		return classDefinitionService.getClassDefinitionsByArchetype(archetype, tenantId);
+		return classDefinitionMapper
+				.mapToDTO(classDefinitionService.getClassDefinitionsByArchetype(archetype, tenantId));
 	}
 
 	@PutMapping("/meta/core/class/definition/multiple/tenant/{tenantId}")
@@ -106,17 +106,18 @@ public class ClassDefinitionController {
 		return collectionService.aggregateEnums(classDefinitionId);
 
 	}
-	
+
 	@PutMapping("meta/core/class/definition/form-configuration")
 	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids) {
-		
+
 		return classDefinitionService.getClassDefinitionsById(ids);
 	}
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
 //		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
-		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(), request.getRelationships(), request.getRootClassDefinition());
+		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(),
+				request.getRelationships(), request.getRootClassDefinition());
 		return ret;
 	}
 	

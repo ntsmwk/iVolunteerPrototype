@@ -67,11 +67,6 @@ public class ClassInstanceController {
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
 				tenantId);
 //		TODO implement!!
-//		if (!organisation.equals("MV")) {
-//			for (ClassDefinition cd : classDefinitions) {
-//				classInstances.addAll(classInstanceRepository.getByClassDefinitionId(cd.getId()));
-//			}
-//		}
 		return classInstances;
 	}
 

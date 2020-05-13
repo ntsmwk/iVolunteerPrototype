@@ -291,6 +291,7 @@ public class ClassConfigurationController {
 		
 		ClassConfiguration configurator = new ClassConfiguration();
 		configurator.setTimestamp(new Date());
+		configurator.setTenantId(tenantId);
 		configurator.setId(configuratorId);
 		configurator.setName(configuratorName);
 		configurator.setDescription(description);

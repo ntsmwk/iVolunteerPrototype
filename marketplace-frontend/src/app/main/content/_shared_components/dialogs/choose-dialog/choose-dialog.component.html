@@ -1,105 +1,122 @@
 <h1 mat-dialog-title>Choose Template To Copy</h1>
 <mat-dialog-content>
-    <mat-horizontal-stepper linear=true #stepper>
+  <mat-horizontal-stepper linear="true" #stepper>
+    <mat-step [stepControl]="firstFormGroup" style="width: 100%;">
+      <div *ngIf="step1Loaded; else step1NotLoaded">
+        <form [formGroup]="firstFormGroup" style="width: 100%;">
+          <ng-template matStepLabel
+            >Fill out Template Name and Description</ng-template
+          >
 
-      <mat-step [stepControl]="firstFormGroup" style="width: 100%">
-        <div *ngIf="step1Loaded; else step1NotLoaded">
-          <form [formGroup]="firstFormGroup" style="width: 100%">
-            <ng-template matStepLabel>Fill out Template Name and Description</ng-template>
-            
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <mat-form-field class="form-field">
-                <input matInput placeholder="name" formControlName="name" required>
-                <mat-error *ngIf="this.firstFormGroup.get('name').hasError('required')">This field is required</mat-error>
-                <mat-error *ngIf="this.firstFormGroup.get('name').hasError('templatenameunique')">Name exists already - choose a different one</mat-error>
-              </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field class="form-field">
+              <input
+                matInput
+                placeholder="name"
+                formControlName="name"
+                required
+              />
+              <mat-error
+                *ngIf="this.firstFormGroup.get('name').hasError('required')"
+                >This field is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  this.firstFormGroup.get('name').hasError('templatenameunique')
+                "
+                >Name exists already - choose a different one</mat-error
+              >
+            </mat-form-field>
 
-              <div class="mat-form-field">
-                <span class="form-field-gap"></span>
-              </div>
-
-                <mat-form-field class="form-field">
-                  <input matInput placeholder="description" formControlName="description">
-                </mat-form-field>
-
+            <div class="mat-form-field">
+              <span class="form-field-gap"></span>
             </div>
 
-            <ng-template #step1NotLoaded>
-              loading...
-            </ng-template>
-            
-            <mat-dialog-actions>
-              <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+            <mat-form-field class="form-field">
+              <input
+                matInput
+                placeholder="description"
+                formControlName="description"
+              />
+            </mat-form-field>
+          </div>
 
-              <button mat-button matStepperNext [disabled]="!step1Loaded">Next</button>
-            </mat-dialog-actions>
-          </form>
-        </div>
-      </mat-step>
+          <ng-template #step1NotLoaded>
+            loading...
+          </ng-template>
 
+          <mat-dialog-actions>
+            <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
 
-      <mat-step>
-        <ng-template matStepLabel>Choose a Template</ng-template>
+            <button mat-button matStepperNext [disabled]="!step1Loaded">
+              Weiter
+            </button>
+          </mat-dialog-actions>
+        </form>
+      </div>
+    </mat-step>
 
-        <div class="table-container">
-          <table mat-table [dataSource]="data.entries" class="mat-table-content">
-            <!-- class="mat-elevation-z8"> -->
-      
-            <ng-container matColumnDef="label" class="mat-row">
-              <th mat-header-cell *matHeaderCellDef>Name</th>
-              <td mat-cell *matCellDef="let element"> {{element.label}} </td>
-            </ng-container>
-      
-            <ng-container matColumnDef="description" class="mat-row">
-              <th mat-header-cell *matHeaderCellDef>Description</th>
-              <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-            </ng-container>
-      
-      
-            <ng-container matColumnDef="option" class="mat-row">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let element"> 
-                <mat-radio-button value="element.id" (click)="data.returnId=element.id; data.returnLabel=element.label"></mat-radio-button>
-              </td>
-            </ng-container>
-      
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        </div>
+    <mat-step>
+      <ng-template matStepLabel>Choose a Template</ng-template>
 
-        <mat-dialog-actions>
-          <button mat-button matStepperPrevious>Back</button>
-           
-          <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+      <div class="table-container">
+        <table mat-table [dataSource]="data.entries" class="mat-table-content">
+          <!-- class="mat-elevation-z8"> -->
 
-          <button mat-button matStepperNext [disabled]="data.returnId==undefined" (click)="setReturnValues()">Next</button>  
-        </mat-dialog-actions>
+          <ng-container matColumnDef="label" class="mat-row">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+          </ng-container>
 
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Finish</ng-template>
-        Creating new Template with name {{ getNewName() }} from existing Template {{ data.returnLabel }}.
+          <ng-container matColumnDef="description" class="mat-row">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.description }}
+            </td>
+          </ng-container>
 
+          <ng-container matColumnDef="option" class="mat-row">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <mat-radio-button
+                value="element.id"
+                (click)="
+                  data.returnId = element.id; data.returnLabel = element.label
+                "
+              ></mat-radio-button>
+            </td>
+          </ng-container>
 
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
 
-        <mat-dialog-actions>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-          <button mat-button [mat-dialog-close]="data">Apply</button>
-        </mat-dialog-actions>
+      <mat-dialog-actions>
+        <button mat-button matStepperPrevious>Zurück</button>
 
+        <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
 
-      </mat-step>
+        <button
+          mat-button
+          matStepperNext
+          [disabled]="data.returnId == undefined"
+          (click)="setReturnValues()"
+        >
+          Weiter
+        </button>
+      </mat-dialog-actions>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Abschließen</ng-template>
+      Creating new Template with name {{ getNewName() }} from existing Template
+      {{ data.returnLabel }}.
 
-
-    </mat-horizontal-stepper>
-
-
-    
-</mat-dialog-content>  
-
-<!-- <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-  <button mat-button [mat-dialog-close]="data">Apply</button>
-</mat-dialog-actions> -->
+      <mat-dialog-actions>
+        <button mat-button matStepperPrevious>Zurück</button>
+        <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+        <button mat-button [mat-dialog-close]="data">Bestätigen</button>
+      </mat-dialog-actions>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-dialog-content>
