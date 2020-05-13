@@ -237,10 +237,10 @@ public class ClassDefinitionService {
 	public void generateFormEntryIds(FormEntry formEntry, String currentPath) {
 		formEntry.setId(currentPath);
 		
-		System.out.println(formEntry.getId());
-		for (ClassProperty p : formEntry.getClassProperties()) {
-			System.out.println(formEntry.getId() + "." + p.getName());
-		}
+//		System.out.println(formEntry.getId());
+//		for (ClassProperty p : formEntry.getClassProperties()) {
+//			System.out.println(formEntry.getId() + "." + p.getName());
+//		}
 		
 		for (FormEntry f : formEntry.getSubEntries()) {
 			generateFormEntryIds(f, currentPath + "." + f.getId());
@@ -267,11 +267,9 @@ public class ClassDefinitionService {
 //		collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinitionId), classDefinitions, relationships, false);
 		FormEntry entry =  collectionService.getFormEntryChunk(startClassDefinition, choiceClassDefinition, classDefinitions, relationships);
 		
-		System.out.println("done generating form entry");
 		
 		generateFormEntryIds(entry, path);
 		
-		System.out.println("done generating path entry ids");
 		
 		return entry;
 	

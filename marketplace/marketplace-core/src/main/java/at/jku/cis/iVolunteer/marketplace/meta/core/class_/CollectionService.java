@@ -350,7 +350,6 @@ public class CollectionService {
 		unableToContinuePropertyDefinition.setId("unableToContinue");
 		unableToContinuePropertyDefinition.setName("Choose which Class to Instantiate");
 		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
-		unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(null, "--"));
 		
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
@@ -373,7 +372,12 @@ public class CollectionService {
 				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (!directionUp) {
-					unableToContinuePropertySet = true;	
+					if (!unableToContinuePropertySet) {
+						ClassDefinition parentClassDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
+						unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(parentClassDefinition.getId(), parentClassDefinition.getName()));
+						unableToContinuePropertySet = true;	
+
+					}					
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
 					unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
 				}
@@ -381,6 +385,7 @@ public class CollectionService {
 		}
 		
 		if (unableToContinuePropertySet) {
+			currentFormEntry.setClassProperties(new ArrayList<>());
 			currentFormEntry.getClassProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(unableToContinuePropertyDefinition));
 		}
 		

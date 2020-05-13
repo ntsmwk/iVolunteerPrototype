@@ -126,11 +126,11 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     }
 
     handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
-        console.log('Dynamic Form Tuple Clicked');
-        console.log(evt);
-        console.log(evt.formGroup);
-        console.log(evt.formGroup.controls);
-        console.log('---------');
+        // console.log('Dynamic Form Tuple Clicked');
+        // console.log(evt);
+        // console.log(evt.formGroup);
+        // console.log(evt.formGroup.controls);
+        // console.log('---------');
 
         let unableToContinueControl: FormControl;
         let pathPrefix: string;
@@ -142,14 +142,71 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             }
         });
 
-        console.log(unableToContinueControl);
-        console.log(pathPrefix);
-        this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id).toPromise().then((ret) => {
-            console.log(ret);
+        // console.log(unableToContinueControl);
+        // console.log(pathPrefix);
+        this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id).toPromise().then((retFormEntry: FormEntry) => {
+            // console.log("Unable to continue Control");
+            // console.log(unableToContinueControl);
+            // console.log("parentControl");
+            // console.log(evt.formGroup);
+            // console.log(ret);
+
+
+            //patch formEntry
+            // console.log("find form Entry - location");
+            // console.log(pathPrefix);
+            const path = pathPrefix.split('.');
+
+
+            const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
+            console.log(currentFormEntry);
+            const unableToContinueProperty = currentFormEntry.classProperties.find(e => e.id.endsWith('unableToContinue'));
+            console.log(unableToContinueProperty);
+
+            const updatedProperties = [unableToContinueProperty];
+            updatedProperties.push(...retFormEntry.classProperties);
+            retFormEntry.classProperties = updatedProperties;
+
+            console.log(updatedProperties);
+
+            retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
+
+            currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
+            currentFormEntry.classProperties = retFormEntry.classProperties;
+            currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
+            currentFormEntry.formGroup = retFormEntry.formGroup;
+            currentFormEntry.imagePath = retFormEntry.imagePath;
+            currentFormEntry.questions = retFormEntry.questions;
+            currentFormEntry.subEntries = retFormEntry.subEntries;
+
+
+
+            // console.log(this.currentFormConfiguration.formEntry.id);
+            // console.log(this.currentFormConfiguration.formEntry.subEntries.find(e => e.id === path[0] + '.' + path[1]));
+
+            // console.log(path);
+            // console.log(this.currentFormConfiguration.formEntry.subEntries);
+
+            //TODO patch form Entry and Configuration
         });
 
 
     }
+
+    private getFormEntry(pathString: string, currentPath: string, currentFormEntry: FormEntry): FormEntry {
+
+        if (currentPath === pathString) {
+            return currentFormEntry;
+        }
+
+        currentFormEntry = currentFormEntry.subEntries.find(e => pathString.startsWith(e.id));
+
+        return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
+
+
+    }
+
+
 
     // handleResultEvent(event: FormEntryReturnEventData) {
     //   const classInstances: ClassInstance[] = [];
