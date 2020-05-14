@@ -6,7 +6,7 @@
 
             <mat-accordion multi=true displayMode="flat">
                 <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                    [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked"
+                    [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked" expanded="true"
                     (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
                 </app-form-entry-view>
             </mat-accordion>

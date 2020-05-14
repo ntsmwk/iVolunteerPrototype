@@ -15,7 +15,7 @@
 
         <mat-icon>chevron_right</mat-icon>
 
-        <mat-expansion-panel expanded="false" style="width: 100%">
+        <mat-expansion-panel [expanded]="expanded" style="width: 100%">
 
             <mat-expansion-panel-header expandedHeight="40px">
                 <mat-panel-title>
@@ -39,7 +39,7 @@
             </div>
             <div *ngFor=" let entry of formEntry.subEntries">
                 <app-form-entry-view [formEntry]="entry" [formConfiguration]="formConfiguration"
-                    [finishClicked]="finishClicked" (result)="handleResultEvent($event)"
+                    [finishClicked]="finishClicked" expanded="false" (result)="handleResultEvent($event)"
                     (tupleSelected)="handleTupleSelection($event)"></app-form-entry-view>
             </div>
 

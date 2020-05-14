@@ -13,6 +13,7 @@ export class FormEntryViewComponent implements OnInit {
   @Input() formEntry: FormEntry;
   @Input() formConfiguration: FormConfiguration;
   @Input() finishClicked: boolean;
+  @Input() expanded: boolean;
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
