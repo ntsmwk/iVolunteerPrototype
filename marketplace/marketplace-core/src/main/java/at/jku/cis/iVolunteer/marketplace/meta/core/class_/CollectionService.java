@@ -375,7 +375,7 @@ public class CollectionService {
 				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false, false);
 				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-				if (!directionUp || initial) {
+				if (!directionUp) {
 					if (!unableToContinuePropertySet) {
 						ClassDefinition parentClassDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
 						unableToContinuePropertyDefinition.getAllowedValues().add(
