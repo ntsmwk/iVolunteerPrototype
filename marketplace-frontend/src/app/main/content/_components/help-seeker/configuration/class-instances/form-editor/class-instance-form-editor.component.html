@@ -2,24 +2,31 @@
 
     <div *ngIf="!showResultPage">
         <!-- <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block; z-index: 1;"> -->
-        <div>
-            <div class="m-24">
+        <div class="mt-24">
 
-                <mat-accordion multi=true displayMode="flat">
-                    <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                        [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked"
-                        (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
-                    </app-form-entry-view>
-                </mat-accordion>
+            <mat-accordion multi=true displayMode="flat">
+                <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
+                    [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked"
+                    (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
+                </app-form-entry-view>
+            </mat-accordion>
 
-            </div>
         </div>
 
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-20">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-4 pb-20">
             <div></div>
-            <button type="button" mat-raised-button color="primary" (click)="handleFinishClick()">
-                Finish
-            </button>
+            <div fxLayout="row">
+                <button style="width: 100px" type="button" mat-raised-button color="primary"
+                    (click)="handleFinishClick()">
+                    Fertig
+                </button>
+
+                <div class="pr-8"></div>
+
+                <button style="width: 100px" type="button" mat-raised-button color="basic" (click)="navigateBack()">
+                    Abbrechen
+                </button>
+            </div>
             <div></div>
         </div>
 

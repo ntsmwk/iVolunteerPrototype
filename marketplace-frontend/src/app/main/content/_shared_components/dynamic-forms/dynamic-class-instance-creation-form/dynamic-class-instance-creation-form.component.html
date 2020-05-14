@@ -5,11 +5,7 @@
       (tupleSelected)="handleTupleSelection($event)"></app-question>
   </div>
 
-  <br>
-  <br>
-
-
-  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center">
+  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center" class="pt-8">
 
     <button type="button" mat-raised-button color="secondary" (click)="handleCancel()">
       Abbrechen</button>
