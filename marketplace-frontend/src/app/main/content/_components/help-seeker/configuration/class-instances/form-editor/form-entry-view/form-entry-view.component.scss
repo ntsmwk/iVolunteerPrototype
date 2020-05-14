@@ -6,9 +6,21 @@
     padding: 0;
   }
 
-  mat-expansion-panel-header:hover, mat-expansion-panel-header.mat-expanded{
+  mat-expansion-panel-header {
+    // box-shadow: none;
+    // border: 2px blue solid;
+    // height: 40px;
+  }
+
+  mat-expansion-panel {
+    box-shadow: none;
+    border: 2px black solid;
+  }
+
+  mat-expansion-panel-header:hover, mat-expansion-panel-header.mat-expanded {
     background-color: rgb(4, 123, 202) !important;
-  
+    border-radius: 0;
+
     mat-panel-title {
       color: white;
     }
