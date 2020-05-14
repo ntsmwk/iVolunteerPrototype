@@ -204,7 +204,7 @@ public class ClassDefinitionService {
 			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
 			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
 
-			FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()), classDefinitions, relationships, true);
+			FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()), classDefinitions, relationships, true, true);
 			generateFormEntryIds(formEntry, formEntry.getId());
 
 			FormConfiguration formConfiguration = new FormConfiguration();
@@ -222,7 +222,7 @@ public class ClassDefinitionService {
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
 		FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinition.getId()),
-				classDefinitions, relationships, true);
+				classDefinitions, relationships, true, true);
 		
 		generateFormEntryIds(formEntry, formEntry.getId());
 		

@@ -321,7 +321,7 @@ public class CollectionService {
 //
 //	}
 	
-	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
+	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp, boolean initial) {
 		
 		// Next ClassDefinition
 		if (currentFormEntry.getClassDefinitions() == null) {
@@ -357,7 +357,7 @@ public class CollectionService {
 			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (directionUp) {
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
-					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
+					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true, false);
 				} else {
 					System.out.println("fuck");
 					
@@ -369,10 +369,10 @@ public class CollectionService {
 			Relationship relationship = sourceStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
 				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
+				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false, false);
 				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
-				if (!directionUp) {
+				if (!directionUp || initial) {
 					if (!unableToContinuePropertySet) {
 						ClassDefinition parentClassDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
 						unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(parentClassDefinition.getId(), parentClassDefinition.getName()));
@@ -424,7 +424,7 @@ public class CollectionService {
 //	
 	
 	
-	FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true);
+	FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true, true);
 	
 //	entry.setSubEntries(Collections.singletonList(entry));
 	return entry;
