@@ -13,3 +13,6 @@ marketplace/Servers/**
 **/db.json
 
 **/.sts4-cache/
+marketplace-frontend/src/app/main/content/_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor.component.scss
+marketplace-frontend/src/app/main/content/_components/help-seeker/configuration/class-instances/form-editor/class-instance-form-editor.component.html
+marketplace-frontend/src/app/main/content/_components/help-seeker/task-management/task-select/task-select.component.ts

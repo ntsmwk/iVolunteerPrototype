@@ -351,7 +351,7 @@ public class CollectionService {
 		boolean unableToContinuePropertySet = false;
 		PropertyDefinition unableToContinuePropertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
 		unableToContinuePropertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
-		unableToContinuePropertyDefinition.setName("Choose which Class to Instantiate");
+		unableToContinuePropertyDefinition.setName("Bitte auswählen");
 		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
 		unableToContinuePropertyDefinition.setRequired(true);
 		
@@ -361,9 +361,6 @@ public class CollectionService {
 				if (directionUp) {
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
 					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
-				} else {
-					System.out.println("fuck");
-					
 				}
 			}
 		}
@@ -418,24 +415,10 @@ public class CollectionService {
 	}
 
 	public FormEntry getFormEntryChunk(ClassDefinition currentClassDefinition, ClassDefinition choiceClassDefinition, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
-//	System.out.println("-----");	
-//	System.out.print(currentClassDefinition.getName() + ": ");
-//	System.out.println(choiceClassDefinition.getName());
-//	FormEntry entry = new FormEntry(currentClassDefinition.getId());
-//	entry.setClassProperties(currentClassDefinition.getProperties());
-//	entry.setImagePath(currentClassDefinition.getImagePath());
-//	entry.setClassDefinitions(new ArrayList<ClassDefinition>());
-//	entry.getClassDefinitions().add(currentClassDefinition);
-//	
-	
-	
-	FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true);
-	
-//	entry.setSubEntries(Collections.singletonList(entry));
-	return entry;
-	//TODO --nicht richtig
-	
-}
+		FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true);	
+		return entry;
+		
+	}
 	
 	
 
