@@ -58,8 +58,6 @@ export class QuestionService {
         question.validators.push(Validators.required);
       }
 
-      console.log(property);
-      console.log(question);
       questions.push(question);
     }
     return questions;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -321,7 +322,9 @@ public class CollectionService {
 //
 //	}
 	
-	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp, boolean initial) {
+	FormEntry aggregateFormEntry(
+			ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, 
+			List<Relationship> allRelationships, boolean directionUp, boolean initial) {
 		
 		// Next ClassDefinition
 		if (currentFormEntry.getClassDefinitions() == null) {
@@ -347,7 +350,7 @@ public class CollectionService {
 			
 		boolean unableToContinuePropertySet = false;
 		PropertyDefinition unableToContinuePropertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
-		unableToContinuePropertyDefinition.setId("unableToContinue");
+		unableToContinuePropertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
 		unableToContinuePropertyDefinition.setName("Choose which Class to Instantiate");
 		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
 		unableToContinuePropertyDefinition.setRequired(true);
@@ -375,12 +378,14 @@ public class CollectionService {
 				if (!directionUp || initial) {
 					if (!unableToContinuePropertySet) {
 						ClassDefinition parentClassDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
-						unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(parentClassDefinition.getId(), parentClassDefinition.getName()));
+						unableToContinuePropertyDefinition.getAllowedValues().add(
+								new Tuple<String, String>(parentClassDefinition.getId(), parentClassDefinition.getName()));
 						unableToContinuePropertySet = true;	
 
 					}					
 					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
-					unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
+					unableToContinuePropertyDefinition.getAllowedValues().add(
+							new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
 				}
 			}	
 		}

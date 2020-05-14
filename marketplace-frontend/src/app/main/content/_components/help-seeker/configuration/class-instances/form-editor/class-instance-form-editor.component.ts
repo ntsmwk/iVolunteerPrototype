@@ -127,25 +127,46 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
         let unableToContinueControl: FormControl;
+        let unableToContinueControlKey: string;
         let pathPrefix: string;
 
         Object.keys(evt.formGroup.controls).forEach(c => {
-            if (c.endsWith('.unableToContinue')) {
+            if (c.endsWith('unableToContinue')) {
+                unableToContinueControlKey = c;
                 unableToContinueControl = evt.formGroup.controls[c] as FormControl;
-                pathPrefix = c.replace('.unableToContinue', '');
+                pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
+                // pathPrefix = c.replace('.unableToContinue', '');
             }
         });
 
         this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id).toPromise().then((retFormEntry: FormEntry) => {
 
             const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
-            const unableToContinueProperty = currentFormEntry.classProperties.find(e => e.id.endsWith('unableToContinue'));
-            unableToContinueProperty.defaultValues = [unableToContinueControl.value];
-            const updatedProperties = [unableToContinueProperty];
+            // const unableToContinueProperty = currentFormEntry.classProperties.find(e => e.id.endsWith('unableToContinue'));
+            // unableToContinueProperty.defaultValues = [unableToContinueControl.value];
+            // const updatedProperties = [unableToContinueProperty];
 
-            updatedProperties.push(...retFormEntry.classProperties);
-            retFormEntry.classProperties = updatedProperties;
+
+            // console.log("CURRENTFORMENTRY")
+            // console.log(currentFormEntry.classProperties);
+            // // console.log("UNABLETOCONTPROP")
+            // // console.log(unableToContinueProperty);
+            // // console.log("UNABLTOCONTCONTR");
+            // // console.log(unableToContinueControl);
+            // console.log("RETFORMENTRY");
+            // console.log(retFormEntry.classProperties);
+
+            // retFormEntry.classProperties.forEach(e => {
+            //     e = currentFormEntry.classProperties.find(ce => ce.id === e.id);
+            // });
+
+
+
+
+            // updatedProperties.push(...retFormEntry.classProperties);
+            // retFormEntry.classProperties = updatedProperties;
             retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
+            // currentFormEntry = retFormEntry;
 
             currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
             currentFormEntry.classProperties = retFormEntry.classProperties;
