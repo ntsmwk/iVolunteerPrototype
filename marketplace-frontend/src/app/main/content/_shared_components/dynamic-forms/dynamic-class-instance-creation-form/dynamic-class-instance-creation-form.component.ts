@@ -70,7 +70,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     this.form.updateValueAndValidity();
 
     if (this.form.valid) {
-      this.form.disable();
+      // this.form.disable();
       this.fireResultEvent();
 
     } else {

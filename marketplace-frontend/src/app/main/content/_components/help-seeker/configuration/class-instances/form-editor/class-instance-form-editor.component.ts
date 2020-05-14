@@ -140,6 +140,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
             const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
             const unableToContinueProperty = currentFormEntry.classProperties.find(e => e.id.endsWith('unableToContinue'));
+            unableToContinueProperty.defaultValues = [unableToContinueControl.value];
             const updatedProperties = [unableToContinueProperty];
 
             updatedProperties.push(...retFormEntry.classProperties);

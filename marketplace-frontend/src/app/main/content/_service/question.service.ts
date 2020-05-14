@@ -58,6 +58,7 @@ export class QuestionService {
         question.validators.push(Validators.required);
       }
 
+      console.log(property);
       console.log(question);
       questions.push(question);
     }
@@ -163,7 +164,8 @@ export class QuestionService {
     } else if (property.type === PropertyType.TUPLE) {
       if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
         question = new TupleDropdownQuestion({
-          options: property.allowedValues
+          options: property.allowedValues,
+          value: ClassProperty.getDefaultValue(property)
         });
       }
 
