@@ -25,6 +25,7 @@ public class ClassDefinitionMapper {
 		List<ClassDefinitionDTO> classDefinitionDTOs = classDefinitions.stream().map(cd -> {
 			ClassDefinitionDTO dto = new ClassDefinitionDTO();
 			
+			dto.setId(cd.getId());
 			dto.setParentId(cd.getParentId());
 			dto.setConfigurationId(cd.getConfigurationId());
 			dto.setName(cd.getName());

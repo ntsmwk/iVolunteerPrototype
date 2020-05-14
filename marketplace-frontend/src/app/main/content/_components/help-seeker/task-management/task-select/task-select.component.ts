@@ -76,8 +76,11 @@ export class FuseTaskSelectComponent implements OnInit {
   }
 
   onRowSelect(row) {
-    this.router.navigate([`main/configurator/instance-editor/${this.marketplace.id}`], { queryParams: [row.id] });
-
+    console.error(row);
+    this.router.navigate(
+      [`main/configurator/instance-editor/${this.marketplace.id}`],
+      { queryParams: [row.id] }
+    );
   }
 
   private isFF() {
