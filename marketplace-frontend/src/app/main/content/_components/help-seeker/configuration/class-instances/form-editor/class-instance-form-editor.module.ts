@@ -10,6 +10,7 @@ import {
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FormEntryViewModule } from './form-entry-view/form-entry-view.module';
 import { InstanceCreationResultModule } from './result/result.module';
+import { InstanceCreationVolunteerListModule } from './volunteer-list/volunteer-list.module';
 
 
 const routes = [
@@ -29,7 +30,8 @@ const routes = [
 
         FuseSharedModule,
         FormEntryViewModule,
-        InstanceCreationResultModule
+        InstanceCreationResultModule,
+        InstanceCreationVolunteerListModule,
 
     ],
     declarations: [ClassInstanceFormEditorComponent],
