@@ -19,17 +19,13 @@
                 <mat-expansion-panel #volunteerPanel>
                     <mat-expansion-panel-header expandedHeight="40px">
                         <mat-panel-title>
-                            Freiwillige Zuteilen (optional);
+                            Freiwillige Zuteilen (optional)
                         </mat-panel-title>
-
-
                     </mat-expansion-panel-header>
 
-                    <div>
-                        <app-instance-creation-volunteer-list [helpseeker]="helpseeker" *ngIf="volunteerPanel.expanded">
-                        </app-instance-creation-volunteer-list>
-                    </div>
-
+                    <app-instance-creation-volunteer-list [helpseeker]="helpseeker"
+                        (selectedVolunteers)="selectedVolunteers=$event" *ngIf="volunteerPanel.expanded">
+                    </app-instance-creation-volunteer-list>
 
                 </mat-expansion-panel>
             </mat-accordion>
@@ -37,7 +33,7 @@
 
 
 
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-4 mb-20">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-20 mb-20">
             <div></div>
             <div fxLayout="row">
                 <button style="width: 100px" type="button" mat-raised-button color="primary"

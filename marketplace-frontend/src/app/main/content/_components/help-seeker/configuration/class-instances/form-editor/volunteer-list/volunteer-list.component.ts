@@ -90,6 +90,12 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
       this.datasource.data.forEach(row => this.selection.select(row));
   }
 
+  checkboxChanged(event: PointerEvent, row: Volunteer) {
+    if (event) {
+      this.selection.toggle(row);
+    }
+    this.selectedVolunteers.emit(this.selection.selected);
+  }
 
 
   printAnything(anything: any) {

@@ -82,6 +82,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
       $('input.ng-invalid').first().focus();
 
     }
+    this.submitPressed = false;
   }
 
   private markFormAsTouched(questions: QuestionBase<any>[], control: FormGroup) {

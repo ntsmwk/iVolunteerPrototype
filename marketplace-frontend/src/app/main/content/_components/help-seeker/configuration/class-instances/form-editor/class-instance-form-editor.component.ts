@@ -14,6 +14,7 @@ import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/pro
 import { isNullOrUndefined } from 'util';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { Volunteer } from 'app/main/content/_model/volunteer';
 
 @Component({
     selector: 'app-class-instance-form-editor',
@@ -28,6 +29,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     formConfigurations: FormConfiguration[];
     currentFormConfiguration: FormConfiguration;
+    selectedVolunteers: Volunteer[];
 
     returnedClassInstances: ClassInstance[];
 
@@ -87,9 +89,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             this.marketplaceService.findById(marketplaceId).toPromise().then((marketplace: Marketplace) => {
                 this.marketplace = marketplace;
 
-                // if (isNullOrUndefined(this.formConfigurationType)) {
-                //     this.formConfigurationType = 'top-down';
-                // }
                 Promise.all([
 
                     this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise()
@@ -99,12 +98,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                                 config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
                             }
                         }),
+
                     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
                         this.helpseeker = helpseeker;
                     })
-
-
-
                 ]).then(() => {
                     this.currentFormConfiguration = this.formConfigurations.pop();
 
@@ -114,7 +111,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                     this.loaded = true;
                 });
             });
-
         });
     }
 
@@ -240,17 +236,17 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     //   });
     // }
 
-    handleNextClick() {
-        this.canContinue = false;
-        if (this.formConfigurations.length > 0) {
-            this.currentFormConfiguration = this.formConfigurations.pop();
-            if (this.formConfigurations.length === 0) {
-                this.lastEntry = true;
-            }
-        } else {
-            this.handleFinishClick();
-        }
-    }
+    // handleNextClick() {
+    //     this.canContinue = false;
+    //     if (this.formConfigurations.length > 0) {
+    //         this.currentFormConfiguration = this.formConfigurations.pop();
+    //         if (this.formConfigurations.length === 0) {
+    //             this.lastEntry = true;
+    //         }
+    //     } else {
+    //         this.handleFinishClick();
+    //     }
+    // }
 
     handleFinishClick() {
         this.finishClicked = true;
@@ -264,15 +260,29 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             setTimeout(() => {
                 this.finishClicked = false;
             });
+        } else {
+            this.finishClicked = false;
         }
     }
 
 
-    createInstanceFromResults() {
+    private createInstanceFromResults() {
         const allControls = this.getAllControlsFromResults();
-        const classInstance = this.createClassInstances(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+        const classInstances: ClassInstance[] = [];
 
-        this.classInstanceService.createNewClassInstances(this.marketplace, [classInstance]).toPromise().then((ret: ClassInstance[]) => {
+        if (isNullOrUndefined(this.selectedVolunteers)) {
+            const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+            classInstances.push(classInstance);
+        } else {
+            for (const volunteer of this.selectedVolunteers) {
+                const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+                classInstance.userId = volunteer.id;
+                classInstances.push(classInstance);
+            }
+        }
+
+        this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
+            console.log('Number of Results: ' + ret.length);
             this.resultClassInstance = ret.pop();
             this.contentDiv.nativeElement.scrollTo(0, 0);
             this.showResultPage = true;
@@ -292,7 +302,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         return allControls;
     }
 
-    private createClassInstances(parentEntry: FormEntry, currentPath: string, controls: { id: string, control: AbstractControl }[]) {
+    private createClassInstance(parentEntry: FormEntry, currentPath: string, controls: { id: string, control: AbstractControl }[]) {
 
         const propertyInstances: PropertyInstance<any>[] = [];
         for (const classProperty of parentEntry.classProperties) {
@@ -325,7 +335,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         if (!isNullOrUndefined(parentEntry.subEntries)) {
             for (const subEntry of parentEntry.subEntries) {
-                const subClassInstance = this.createClassInstances(subEntry, subEntry.id, controls);
+                const subClassInstance = this.createClassInstance(subEntry, subEntry.id, controls);
                 classInstance.childClassInstances.push(subClassInstance);
             }
         }
