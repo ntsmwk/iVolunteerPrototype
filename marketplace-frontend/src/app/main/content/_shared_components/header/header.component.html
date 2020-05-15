@@ -1,0 +1,8 @@
+<div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+  <h1 class="l-heading">{{ headerText }}</h1>
+  <img
+    *ngIf="tenant"
+    class="header-logo"
+    [src]="tenantService.getTenantImage(tenant)"
+  />
+</div>
