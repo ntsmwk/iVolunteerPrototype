@@ -1,13 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, DoCheck } from '@angular/core';
-import { FormGroup, AbstractControl, FormControl } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import { QuestionBase } from '../../../_model/dynamic-forms/questions';
 import { QuestionControlService } from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
 import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { assertNotNull } from '@angular/compiler/src/output/output_ast';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import 'jquery';
+
 declare var $: JQueryStatic;
 
 @Component({
