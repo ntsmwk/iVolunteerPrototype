@@ -63,8 +63,6 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
       await this.tenantService.findById(this.participant.tenantId).toPromise()
     );
 
-    this.tenantService.initHeader(this.tenant);
-
     this.tableDataSource.data = <ClassInstanceDTO[]>(
       await this.classInstanceService
         .getAllClassInstances(this.marketplace, this.tenant.id)
