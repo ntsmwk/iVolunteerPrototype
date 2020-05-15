@@ -27,6 +27,7 @@ const routes = [
         MatCommonModule,
         MatExpansionModule,
         MatButtonModule,
+        MatDividerModule,
 
         FuseSharedModule,
         FormEntryViewModule,

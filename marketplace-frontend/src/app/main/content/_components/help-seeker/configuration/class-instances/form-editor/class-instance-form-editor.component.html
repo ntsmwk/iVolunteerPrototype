@@ -1,8 +1,7 @@
-<div #contentDiv id="contentDiv" class="page-layout blank" fusePerfectScrollbar *ngIf="isLoaded">
+<div #contentDiv id="contentDiv" class="page-layout blank p-20 pl-0" fusePerfectScrollbar *ngIf="loaded">
 
     <div *ngIf="!showResultPage">
-        <!-- <div style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block; z-index: 1;"> -->
-        <div class="mt-24">
+        <div>
 
             <mat-accordion multi=true displayMode="flat">
                 <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
@@ -13,9 +12,11 @@
 
         </div>
 
-        <div class="mt-20">
+        <div class="pt-12 divider"></div>
+
+        <div class="volunteer-selection">
             <mat-accordion displayMode="flat">
-                <mat-expansion-panel>
+                <mat-expansion-panel #volunteerPanel>
                     <mat-expansion-panel-header expandedHeight="40px">
                         <mat-panel-title>
                             Freiwillige Zuteilen (optional);
@@ -24,10 +25,9 @@
 
                     </mat-expansion-panel-header>
 
-                    <div style="height: 200px; background-color: teal; color: white">
-                        placeholder for table
-                        <app-instance-creation-volunteer-list></app-instance-creation-volunteer-list>
-
+                    <div>
+                        <app-instance-creation-volunteer-list [helpseeker]="helpseeker" *ngIf="volunteerPanel.expanded">
+                        </app-instance-creation-volunteer-list>
                     </div>
 
 
@@ -37,7 +37,7 @@
 
 
 
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-4 pb-20">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-4 mb-20">
             <div></div>
             <div fxLayout="row">
                 <button style="width: 100px" type="button" mat-raised-button color="primary"

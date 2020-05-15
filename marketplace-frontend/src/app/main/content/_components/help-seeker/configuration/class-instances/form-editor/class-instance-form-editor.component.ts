@@ -12,6 +12,8 @@ import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { AbstractControl, FormGroup, FormControl } from '@angular/forms';
 import { PropertyInstance, PropertyType } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 @Component({
     selector: 'app-class-instance-form-editor',
@@ -22,6 +24,7 @@ import { isNullOrUndefined } from 'util';
 export class ClassInstanceFormEditorComponent implements OnInit {
 
     marketplace: Marketplace;
+    helpseeker: Helpseeker;
 
     formConfigurations: FormConfiguration[];
     currentFormConfiguration: FormConfiguration;
@@ -33,7 +36,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     canFinish: boolean;
     lastEntry: boolean;
 
-    isLoaded = false;
+    loaded = false;
     finishClicked = false;
     showResultPage = false;
 
@@ -48,6 +51,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     constructor(private router: Router,
         private route: ActivatedRoute,
+        private loginService: LoginService,
         private marketplaceService: CoreMarketplaceService,
         private classDefinitionService: ClassDefinitionService,
         private classInstanceService: ClassInstanceService,
@@ -86,25 +90,31 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                 // if (isNullOrUndefined(this.formConfigurationType)) {
                 //     this.formConfigurationType = 'top-down';
                 // }
+                Promise.all([
 
-                this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise()
-                    .then((formConfigurations: FormConfiguration[]) => {
-                        this.formConfigurations = formConfigurations;
-                        for (const config of this.formConfigurations) {
-                            config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
-                        }
+                    this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise()
+                        .then((formConfigurations: FormConfiguration[]) => {
+                            this.formConfigurations = formConfigurations;
+                            for (const config of this.formConfigurations) {
+                                config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
+                            }
+                        }),
+                    this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+                        this.helpseeker = helpseeker;
                     })
 
-                    .then(() => {
-                        this.currentFormConfiguration = this.formConfigurations.pop();
 
-                        if (this.formConfigurations.length === 0) {
-                            this.lastEntry = true;
-                        }
-                        this.isLoaded = true;
-                    });
 
+                ]).then(() => {
+                    this.currentFormConfiguration = this.formConfigurations.pop();
+
+                    if (this.formConfigurations.length === 0) {
+                        this.lastEntry = true;
+                    }
+                    this.loaded = true;
+                });
             });
+
         });
     }
 

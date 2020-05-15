@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCommonModule, MatProgressSpinnerModule, MatExpansionModule, MatButtonModule, MatIconModule } from '@angular/material';
+import { MatCommonModule, MatProgressSpinnerModule, MatExpansionModule, MatButtonModule, MatIconModule, MatTableModule, MatCheckboxModule, MatPaginatorModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { InstanceCreationVolunteerListComponent } from './volunteer-list.component';
 
@@ -12,6 +12,9 @@ import { InstanceCreationVolunteerListComponent } from './volunteer-list.compone
     MatCommonModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
 
     MatButtonModule,
     MatIconModule,

@@ -6,14 +6,14 @@ import { Participant } from "../_model/participant";
   providedIn: "root"
 })
 export class CoreVolunteerService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   findAll() {
     return this.http.get(`/core/volunteer/all`);
   }
 
-  findAllByTenantId(tenenatId: string) {
-    return this.http.get(`/core/volunteer/all/${tenenatId}`);
+  findAllByTenantId(tenantId: string) {
+    return this.http.get(`/core/volunteer/all/${tenantId}`);
   }
 
   findById(volunteerId: string) {

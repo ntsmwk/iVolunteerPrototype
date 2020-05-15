@@ -1,28 +1,31 @@
 @import "src/@fuse/scss/fuse";
-.page-layout {
+@import "styles.scss";
 
-  .no-padding-margin {
-    margin: 0;
-    padding: 0;
-  }
-
-  mat-expansion-panel-header:hover, mat-expansion-panel-header.mat-expanded{
-    background-color: rgb(4, 123, 202) !important;
-  
-    mat-panel-title {
-      color: white;
-    }
-    
-    mat-panel-description {
-      color: white;
-    }
-  }
-
-
-
-  // .div.mat-expansion-panel {
-  //   padding: 0 !important;
-    
-  // }
+.no-padding-margin {
+  margin: 0;
+  padding: 0;
 }
+
+.volunteer-table {
+
+  height: 410px;
+  overflow: hidden;
+
+  .mat-column-checkbox {
+      // padding-left: 3px;
+      flex: 0 0 70px;
+  }
+
+  .mat-column-image {
+    // padding-left: 3px;
+    flex: 0 0 100px;
+  }
+
+  .mat-column-name {
+    // padding-left: 3px;
+    // flex: 0 0 200px;
+  }
+
+}
+
 
