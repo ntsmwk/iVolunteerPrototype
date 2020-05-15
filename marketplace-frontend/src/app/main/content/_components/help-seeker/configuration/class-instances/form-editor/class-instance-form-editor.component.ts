@@ -42,9 +42,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     finishClicked = false;
     showResultPage = false;
 
-
-    // formConfigurationType: string;
-
     expectedNumberOfResults: number;
     results: FormEntryReturnEventData[];
 
@@ -60,10 +57,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         private questionService: QuestionService,
         private questionControlService: QuestionControlService,
         private objectIdService: ObjectIdService
-    ) {
-        // console.log('extras');
-        // console.log(this.router.getCurrentNavigation().extras.state);
-    }
+    ) { }
 
     ngOnInit() {
         let marketplaceId: string;
@@ -76,7 +70,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         Promise.all([
             this.route.params.subscribe(params => {
                 marketplaceId = params['marketplaceId'];
-                // this.formConfigurationType = params['type'];
             }),
             this.route.queryParams.subscribe(queryParams => {
                 let i = 0;
@@ -141,38 +134,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
                 unableToContinueControlKey = c;
                 unableToContinueControl = evt.formGroup.controls[c] as FormControl;
                 pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
-                // pathPrefix = c.replace('.unableToContinue', '');
             }
         });
 
         this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id).toPromise().then((retFormEntry: FormEntry) => {
 
             const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
-            // const unableToContinueProperty = currentFormEntry.classProperties.find(e => e.id.endsWith('unableToContinue'));
-            // unableToContinueProperty.defaultValues = [unableToContinueControl.value];
-            // const updatedProperties = [unableToContinueProperty];
-
-
-            // console.log("CURRENTFORMENTRY")
-            // console.log(currentFormEntry.classProperties);
-            // // console.log("UNABLETOCONTPROP")
-            // // console.log(unableToContinueProperty);
-            // // console.log("UNABLTOCONTCONTR");
-            // // console.log(unableToContinueControl);
-            // console.log("RETFORMENTRY");
-            // console.log(retFormEntry.classProperties);
-
-            // retFormEntry.classProperties.forEach(e => {
-            //     e = currentFormEntry.classProperties.find(ce => ce.id === e.id);
-            // });
-
-
-
-
-            // updatedProperties.push(...retFormEntry.classProperties);
-            // retFormEntry.classProperties = updatedProperties;
             retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
-            // currentFormEntry = retFormEntry;
 
             currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
             currentFormEntry.classProperties = retFormEntry.classProperties;
@@ -203,51 +171,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
     }
 
-
-
-    // handleResultEvent(event: FormEntryReturnEventData) {
-    //   const classInstances: ClassInstance[] = [];
-    //   this.currentFormConfiguration.formEntry.formGroup.disable();
-    //   const propertyInstances: PropertyInstance<any>[] = [];
-
-    //   for (const classProperty of this.currentFormConfiguration.formEntry.classProperties) {
-    //     const values = [event.formGroup.value[classProperty.id]];
-    //     propertyInstances.push(new PropertyInstance(classProperty, values));
-    //   }
-
-    //   for (const enumRepresentation of this.currentFormConfiguration.formEntry.enumRepresentations) {
-    //     const values = [event.formGroup.value[enumRepresentation.classDefinition.id]];
-    //     const propertyInstance = new PropertyInstance(enumRepresentation.classDefinition.properties[0], values);
-    //     propertyInstance.name = enumRepresentation.classDefinition.name;
-    //     propertyInstance.id = enumRepresentation.id;
-    //     propertyInstances.push(propertyInstance);
-    //   }
-
-    //   const classInstance: ClassInstance = new ClassInstance(this.currentFormConfiguration.formEntry.classDefinitions[0], propertyInstances);
-    //   classInstance.imagePath = this.currentFormConfiguration.formEntry.imagePath;
-    //   classInstances.push(classInstance);
-
-    //   this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
-    //     // handle returned value if necessary
-    //     if (!isNullOrUndefined(ret)) {
-    //       this.returnedClassInstances.push(...ret);
-    //       this.handleNextClick();
-    //     }
-    //   });
-    // }
-
-    // handleNextClick() {
-    //     this.canContinue = false;
-    //     if (this.formConfigurations.length > 0) {
-    //         this.currentFormConfiguration = this.formConfigurations.pop();
-    //         if (this.formConfigurations.length === 0) {
-    //             this.lastEntry = true;
-    //         }
-    //     } else {
-    //         this.handleFinishClick();
-    //     }
-    // }
-
     handleFinishClick() {
         this.finishClicked = true;
     }
@@ -265,7 +188,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
     }
 
-
     private createInstanceFromResults() {
         const allControls = this.getAllControlsFromResults();
         const classInstances: ClassInstance[] = [];
@@ -282,7 +204,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         }
 
         this.classInstanceService.createNewClassInstances(this.marketplace, classInstances).toPromise().then((ret: ClassInstance[]) => {
-            console.log('Number of Results: ' + ret.length);
             this.resultClassInstance = ret.pop();
             this.contentDiv.nativeElement.scrollTo(0, 0);
             this.showResultPage = true;
@@ -311,7 +232,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             if (classProperty.id.endsWith('unableToContinue')) {
                 continue;
             }
-            // else {
 
             const control = controls.find(c => c.id === (currentPath + '.' + classProperty.id));
 
@@ -325,7 +245,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             }
 
             propertyInstances.push(new PropertyInstance(classProperty, [value]));
-            // }
         }
 
         const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
