@@ -1,12 +1,10 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
-  <!-- <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
-    <mat-icon class="iconButton" (click)="navigateBack()" style="margin-left: 20px; color:white;">keyboard_return
-    </mat-icon>
-    <h1>Freiwilligenpasseintrag - Ableitungsregeln</h1>
-    <div style="padding-top: 70px; z-index: 255; position: relative">
-    </div>
-  </div> -->
-
+  <customizable-header
+    *ngIf="tenant"
+    [tenant]="tenant"
+    [displayNavigateBack]="true"
+    headerText="Einträge ableiten"
+  ></customizable-header>
   <div *ngIf="this.participant && isFF()">
     <div
       class="header-ff p-16 p-sm-24"

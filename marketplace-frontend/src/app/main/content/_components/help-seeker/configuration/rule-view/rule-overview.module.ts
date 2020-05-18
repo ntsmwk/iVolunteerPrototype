@@ -1,30 +1,27 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
 
-import {FuseSharedModule} from '@fuse/shared.module';
+import { FuseSharedModule } from "@fuse/shared.module";
 
-import {FuseRuleConfiguratorComponent} from '../rule-configurator/rule-configurator.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule, MatSelectModule } from '@angular/material';
-import { FuseRuleOverviewComponent } from './rule-overview.component';
+import { FuseRuleConfiguratorComponent } from "../rule-configurator/rule-configurator.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatTableModule } from "@angular/material/table";
+import { MatTabsModule, MatSelectModule } from "@angular/material";
+import { FuseRuleOverviewComponent } from "./rule-overview.component";
+import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
 
-const routes = [
-  {path: '', component: FuseRuleOverviewComponent}
-];
+const routes = [{ path: "", component: FuseRuleOverviewComponent }];
 
 @NgModule({
-  declarations: [
-    FuseRuleOverviewComponent,
-  ],
+  declarations: [FuseRuleOverviewComponent],
   imports: [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
@@ -39,8 +36,8 @@ const routes = [
     MatDividerModule,
     MatTableModule,
     MatCheckboxModule,
-    FuseSharedModule
-  ]
+    HeaderModule,
+    FuseSharedModule,
+  ],
 })
-export class FuseRuleOverviewModule {
-}
+export class FuseRuleOverviewModule {}

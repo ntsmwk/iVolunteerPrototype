@@ -4,7 +4,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 
@@ -22,8 +22,6 @@ import { LoginService } from "../content/_service/login.service";
 import { ParticipantRole, Participant } from "../content/_model/participant";
 import { MessageService } from "../content/_service/message.service";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
-import { navigation_mvs } from "app/navigation/navigation_mvs";
-import { navigation_ffa } from "app/navigation/navigation_ffa";
 import { navigation_admin } from "app/navigation/navigation_admin";
 
 @Component({
@@ -31,7 +29,7 @@ import { navigation_admin } from "app/navigation/navigation_admin";
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"],
   providers: [LoginService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy {
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
@@ -63,19 +61,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       .then((role: ParticipantRole) => {
         switch (role) {
           case "HELP_SEEKER":
-            // TODO FAKE
-            this.loginService
-              .getLoggedIn()
-              .toPromise()
-              .then((user: Participant) => {
-                if (user.username === "MVS") {
-                  this.navigation = navigation_mvs;
-                } else if (user.username === "FFA") {
-                  this.navigation = navigation_ffa;
-                } else {
-                  this.navigation = navigation_helpseeker;
-                }
-              });
+            this.navigation = navigation_helpseeker;
             break;
           case "VOLUNTEER":
             this.navigation = navigation_volunteer;
@@ -91,7 +77,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
             break;
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.warn(`NAVBAR COMPONENT ERROR: ${JSON.stringify(e)}`);
       });
     // Default layout
@@ -106,7 +92,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         }, 310);
       }
     );
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (this.sidebarService.getSidebar("navbar")) {
           this.sidebarService.getSidebar("navbar").close();

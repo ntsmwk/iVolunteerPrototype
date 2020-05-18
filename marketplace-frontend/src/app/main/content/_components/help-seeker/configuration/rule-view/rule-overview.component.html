@@ -1,70 +1,70 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-
-  <!-- <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-        <h1>Einträge ableiten - Regeln</h1>
-    </div> -->
-
-  <div *ngIf="this.participant && isFF()">
-    <div class="header-rk p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge ableiten</h1>
-      <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
-      <img class="header-logo" src="assets/images/avatars/OERK_Sonderlogo_rgb_cropped.jpg">
-    </div>
-  </div>
-
-  <div *ngIf="this.participant &&  isMV()">
-    <div class="header-mv p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge ableiten</h1>
-      <img class="header-logo" src="assets/images/avatars/musikvereinschwertberg.jpeg">
-    </div>
-  </div>
-
-  <div *ngIf="this.participant && isOther()">
-    <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-      <h1 class="l-heading">Einträge ableiten</h1>
-      <!-- <img class="header-logo" src="assets/images/avatars/FF_Altenberg.jpg"> -->
-    </div>
-  </div>
+  <customizable-header
+    *ngIf="tenant"
+    [tenant]="tenant"
+    [displayNavigateBack]="false"
+    headerText="Einträge ableiten"
+  ></customizable-header>
 
   <div class="p-8 pt-16" fxLayout="row" fxLayoutAlign="end end">
-    <button mat-fab class="mat-warn" style="border-radius: 50%; background-color: green;" (click)="addDerivationRule()" aria-label="Add rule" *fuseIfOnDom [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-            <mat-icon class="add-btn-icon">add</mat-icon>
-        </button>
+    <button
+      mat-fab
+      class="mat-warn"
+      style="border-radius: 50%; background-color: green;"
+      (click)="addDerivationRule()"
+      aria-label="Add rule"
+      *fuseIfOnDom
+      [@animate]="{ value: '*', params: { delay: '300ms', scale: '0.2' } }"
+    >
+      <mat-icon class="add-btn-icon">add</mat-icon>
+    </button>
   </div>
 
   <div class="table">
-    <mat-table #table [dataSource]="dataSource" *ngIf="dataSource.data.length != 0">
+    <mat-table
+      #table
+      [dataSource]="dataSource"
+      *ngIf="dataSource.data.length != 0"
+    >
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Regelname</mat-header-cell>
-        <mat-cell *matCellDef="let rule">{{rule.name}}</mat-cell>
+        <mat-cell *matCellDef="let rule">{{ rule.name }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="sources">
         <mat-header-cell *matHeaderCellDef>Vorbedingungen</mat-header-cell>
         <mat-cell *matCellDef="let rule">
-          <span *ngFor="let source of rule.attributeSourceRules; let last = last">
-                        {{source.classDefinition.name}}<span *ngIf="!last">, </span>
+          <span
+            *ngFor="let source of rule.attributeSourceRules; let last = last"
+          >
+            {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
           </span>
-          <span> &nbsp;  | &nbsp; </span>
+          <span> &nbsp; | &nbsp; </span>
           <span *ngFor="let source of rule.classSourceRules; let last = last">
-                      {{source.classDefinition.name}}<span *ngIf="!last">, </span>
+            {{ source.classDefinition.name }}<span *ngIf="!last">, </span>
           </span>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="target">
-        <mat-header-cell *matHeaderCellDef>Abgeleiteter Eintrag
-
+        <mat-header-cell *matHeaderCellDef
+          >Abgeleiteter Eintrag
         </mat-header-cell>
-        <mat-cell *matCellDef="let rule">{{rule.target.name}}</mat-cell>
+        <mat-cell *matCellDef="let rule">{{ rule.target.name }}</mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="onRowSelect(row)"
+      ></mat-row>
     </mat-table>
 
-    <div class="no-data" *ngIf="dataSource.data.length === 0" style="font-size: 20px;">
+    <div
+      class="no-data"
+      *ngIf="dataSource.data.length === 0"
+      style="font-size: 20px;"
+    >
       Keine Ableitungsregeln gefunden.
     </div>
   </div>
-
 </div>
