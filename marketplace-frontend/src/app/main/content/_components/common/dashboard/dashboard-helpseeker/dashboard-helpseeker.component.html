@@ -6,7 +6,9 @@
 
 <div class="page-layout blank p-24" fusePerfectScrollbar>
   <customizable-header
+    *ngIf="tenant"
     [tenant]="tenant"
+    [displayNavigateBack]="false"
     headerText="Herzlich Willkommen bei iVolunteer"
   ></customizable-header>
 
