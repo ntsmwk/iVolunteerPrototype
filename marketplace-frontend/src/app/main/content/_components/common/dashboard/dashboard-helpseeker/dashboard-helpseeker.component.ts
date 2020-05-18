@@ -38,7 +38,6 @@ export class DashboardHelpSeekerComponent implements OnInit {
         .findById((<Helpseeker>this.participant).tenantId)
         .toPromise()
     );
-    this.tenantService.initHeader(this.tenant);
   }
 
   private isFF() {

@@ -9,10 +9,12 @@ import { TenantService } from "../../_service/core-tenant.service";
 export class HeaderComponent implements OnInit {
   @Input() headerText: string;
   @Input() tenant: Tenant;
+  @Input() displayNavigateBack: boolean;
 
   constructor(private tenantService: TenantService) {}
 
   ngOnInit() {
+    console.error(this.tenant);
     this.tenantService.initHeader(this.tenant);
   }
 }

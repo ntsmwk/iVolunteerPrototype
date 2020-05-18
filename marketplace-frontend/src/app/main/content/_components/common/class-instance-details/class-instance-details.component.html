@@ -1,17 +1,16 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar style="overflow: scroll;">
+<div
+  class="page-layout blank p-24"
+  fusePerfectScrollbar
+  style="overflow: scroll;"
+>
   <div style="padding-top: 12px;"></div>
 
-
-  <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-    <mat-icon
-      class="iconButton"
-      (click)="navigateBack()"
-      style="margin-left: 20px; color: white;"
-      >keyboard_return
-    </mat-icon>
-
-    <h1>Details</h1>
-  </div>
+  <customizable-header
+    *ngIf="tenant"
+    [tenant]="tenant"
+    [displayNavigateBack]="true"
+    headerText="Details"
+  ></customizable-header>
 
   <div *ngIf="classInstance != null">
     <h1 style="margin-left: 5px;">Asset: {{ getName() }}</h1>
