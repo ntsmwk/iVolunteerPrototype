@@ -20,6 +20,8 @@ import {
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+import { Tenant } from "app/main/content/_model/tenant";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
 
 @Component({
   selector: "import",
@@ -38,13 +40,16 @@ export class ImportComponent implements OnInit {
   displaySuccessMessage: boolean = false;
   successImportCount: number;
 
+  tenant: Tenant;
+
   constructor(
     private loginService: LoginService,
     private formBuilder: FormBuilder,
     private helpSeekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private classDefinitionService: ClassDefinitionService
+    private classDefinitionService: ClassDefinitionService,
+    private tenantService: TenantService
   ) {
     this.importForm = formBuilder.group({
       volunteer: new FormControl(undefined, Validators.required),
@@ -61,6 +66,10 @@ export class ImportComponent implements OnInit {
       await this.helpSeekerService
         .findRegisteredMarketplaces(this.helpseeker.id)
         .toPromise()
+    );
+
+    this.tenant = <Tenant>(
+      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
     );
 
     this.classDefinitions = <ClassDefinition[]>(

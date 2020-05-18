@@ -1,6 +1,4 @@
 <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-  <h1 class="l-heading">{{ headerText }}</h1>
-
   <mat-icon
     *ngIf="displayNavigateBack"
     class="iconButton"
@@ -13,4 +11,5 @@
     class="header-logo"
     [src]="tenantService.getTenantImage(tenant)"
   />
+  <h1 class="l-heading">{{ headerText }}</h1>
 </div>

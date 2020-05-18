@@ -1,25 +1,27 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
 
-import { ImportComponent } from './import.component';
-import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { ImportComponent } from "./import.component";
+import { RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MaterialFileInputModule } from "ngx-material-file-input";
 import {
   MatSelectModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatIconModule
-} from '@angular/material';
-import { FuseSharedModule } from '@fuse/shared.module';
+  MatIconModule,
+} from "@angular/material";
+import { FuseSharedModule } from "@fuse/shared.module";
+import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
 
-const routes = [{ path: '', component: ImportComponent }];
+const routes = [{ path: "", component: ImportComponent }];
 
 @NgModule({
   imports: [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    HeaderModule,
     MatCardModule,
     MatSelectModule,
     MatButtonModule,
@@ -27,10 +29,10 @@ const routes = [{ path: '', component: ImportComponent }];
     MatIconModule,
     MatInputModule,
     MaterialFileInputModule,
-    FuseSharedModule
+    FuseSharedModule,
   ],
   exports: [],
   declarations: [ImportComponent],
-  providers: []
+  providers: [],
 })
-export class ImportModule { }
+export class ImportModule {}
