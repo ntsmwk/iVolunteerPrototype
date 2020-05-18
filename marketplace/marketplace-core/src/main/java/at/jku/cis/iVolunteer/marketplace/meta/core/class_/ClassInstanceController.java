@@ -83,7 +83,7 @@ public class ClassInstanceController {
 //		return classInstances;
 //	}
 
-	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/tenant/{tenantId}/user/{volunteerId}")
+	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/user/{volunteerId}")
 	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
 			@RequestParam(value = "tId", required = true) String tenantId, @PathVariable String volunteerId,
 			@RequestBody Map<String, String> properties) {

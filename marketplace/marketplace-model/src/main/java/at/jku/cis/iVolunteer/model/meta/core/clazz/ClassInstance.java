@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.model.meta.core.clazz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,20 +16,20 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 
 	private String classDefinitionId;
 	private String name;
-	private List<PropertyInstance<Object>> properties;
+	private List<PropertyInstance<Object>> properties = new ArrayList<>();
 
 	private String userId;
 	private String issuerId;
-	
+
 	private String imagePath;
-	
+
 	private ClassArchetype classArchetype;
-	
-	private List<ClassInstance> childClassInstances;
+
+	private List<ClassInstance> childClassInstances = new ArrayList<>();
 
 	private boolean visible;
 	private int tabId;
-	
+
 	public ClassInstance() {
 	}
 
@@ -99,7 +100,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setIssuerId(String issuerId) {
 		this.issuerId = issuerId;
 	}
-	
 
 	public String getUserId() {
 		return userId;
@@ -124,8 +124,6 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	public void setChildClassInstances(List<ClassInstance> childClassInstances) {
 		this.childClassInstances = childClassInstances;
 	}
-	
-	
 
 	public boolean isVisible() {
 		return visible;
@@ -156,4 +154,3 @@ public class ClassInstance extends IVolunteerObject implements IHashObject {
 	}
 
 }
-
