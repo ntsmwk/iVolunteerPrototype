@@ -88,7 +88,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
               this.filteredClassInstanceDTOs = this.classInstanceDTOs;
 
-              let list = this.filteredClassInstanceDTOs.map((ci) => {
+              let list = this.classInstanceDTOs.map((ci) => {
                 let date = new Date(ci.dateFrom);
                 return {
                   year: date.getFullYear().toString(),
@@ -101,6 +101,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
               this.uniqueYears = [...new Set(list.map((item) => item.year))];
               this.uniqueYears.push("Gesamt");
               this.uniqueYears.sort();
+
               this.uniqueTt1 = [...new Set(list.map((item) => item.tt1))];
               this.uniqueTt2 = [...new Set(list.map((item) => item.tt2))];
               this.uniqueTt3 = [...new Set(list.map((item) => item.tt2))];
@@ -112,14 +113,17 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
           case "selectedTaskType": {
             if (typeof changes.selectedTaskType.currentValue != "undefined") {
-              this.filterTaskType();
+              this.selectedTaskType = changes.selectedTaskType.currentValue;
+              this.generateTimelineData();
             }
+            break;
           }
         }
       }
     }
   }
 
+  // TODO here only change input values and update filteredClassInstances in generate timelineData...
   onYearChange(value) {
     this.selectedYear = value.toString();
     this.timelineFilter.from = null;
@@ -157,65 +161,22 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
     this.selectedYear = null;
 
-    this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
-      return (
-        moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
-        moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
-      );
-    });
-
     this.updateTimelineFilter(this.timelineFilter);
     this.updateSelectedYear(null);
   }
 
-  filterTaskType() {
+  generateTimelineData() {
     if (this.selectedTaskType != null) {
       if (this.uniqueTt1.indexOf(this.selectedTaskType) > -1) {
-        this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter((c) => {
           return c.taskType1 === this.selectedTaskType;
         });
       } else if (this.uniqueTt2.indexOf(this.selectedTaskType) > -1) {
-        this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter((c) => {
           return c.taskType2 === this.selectedTaskType;
         });
       }
-    } else {
-      // no tasktype filter
-      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     }
-
-    // filter by time
-    if (
-      this.timelineFilter.from === null ||
-      typeof this.timelineFilter.from === "undefined"
-    ) {
-      // filter by year
-      if (this.selectedYear === "Gesamt") {
-        this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
-      } else {
-        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
-          (c) => {
-            return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
-          }
-        );
-      }
-    } else {
-      // filter by timeline from to
-      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
-        (c) => {
-          return (
-            moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
-            moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
-          );
-        }
-      );
-    }
-
-    this.generateTimelineData();
-  }
-
-  generateTimelineData() {
-    let data1 = [];
 
     let timelineList = this.filteredClassInstanceDTOs.map((ci) => {
       let value: number;
@@ -238,6 +199,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
       }
     });
 
+    let data1 = [];
     Array.from(timelineMap.entries()).forEach((entry) => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
         data1.push({ name: new Date(entry[0]), value: Number(entry[1]) });

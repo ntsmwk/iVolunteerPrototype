@@ -37,7 +37,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
   tenant: Tenant;
 
   tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
-  displayedColumns = ['name', 'type', 'values'];
+  displayedColumns = ['name', 'values', 'type'];
 
 
 

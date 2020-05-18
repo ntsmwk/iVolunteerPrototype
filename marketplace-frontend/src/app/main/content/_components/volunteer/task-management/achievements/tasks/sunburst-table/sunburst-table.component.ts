@@ -32,7 +32,6 @@ export class SunburstTableComponent
   implements OnInit, OnChanges, AfterViewInit {
   @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() timelineFilter: { from: Date; to: Date };
-
   @Input() selectedYear: string;
   @Input() selectedYaxis: string;
 
@@ -42,6 +41,7 @@ export class SunburstTableComponent
   filteredClassInstanceDTOs: ClassInstanceDTO[];
 
   prevNodeLevel: number = null;
+  prevClicked: string = null;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -142,9 +142,9 @@ export class SunburstTableComponent
 
   sunburstCenterName: string = "Tätigkeiten";
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
     this.tableDataSource.paginator = this.paginator;
@@ -171,9 +171,9 @@ export class SunburstTableComponent
         switch (propName) {
           case "classInstanceDTOs": {
             if (typeof changes.classInstanceDTOs.currentValue != "undefined") {
-              this.filteredClassInstanceDTOs = this.classInstanceDTOs;
+              this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
 
-              let list = this.filteredClassInstanceDTOs.map((ci) => {
+              let list = this.classInstanceDTOs.map((ci) => {
                 return {
                   tt1: ci.taskType1,
                   tt2: ci.taskType2,
@@ -193,94 +193,31 @@ export class SunburstTableComponent
                 );
               });
 
-              this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort(
-                (a, b) => {
-                  return (
-                    new Date(b.dateFrom).getTime() -
-                    new Date(a.dateFrom).getTime()
-                  );
-                }
-              );
-
-              this.tableDataSource.data = this.filteredClassInstanceDTOs;
-              this.tableDataSource.paginator = this.paginator;
-
               this.generateSunburstData();
             }
             break;
           }
 
           case "selectedYaxis": {
-            if (
-              typeof changes.selectedYaxis.currentValue != "undefined" &&
-              typeof this.filteredClassInstanceDTOs != "undefined"
-            ) {
+            if (typeof changes.selectedYaxis.currentValue != "undefined") {
+              this.selectedYaxis = changes.selectedYaxis.currentValue;
               this.generateSunburstData();
             }
             break;
           }
 
           case "timelineFilter": {
-            if (
-              typeof changes.timelineFilter.currentValue != "undefined" &&
-              typeof this.filteredClassInstanceDTOs != "undefined"
-            ) {
-              if (this.timelineFilter.from != null) {
-                this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-                  (c) => {
-                    return (
-                      moment(c.dateFrom).isSameOrAfter(
-                        moment(this.timelineFilter.from), 'day'
-                      ) &&
-                      moment(c.dateFrom).isSameOrBefore(
-                        moment(this.timelineFilter.to), 'day'
-                      )
-                    );
-                  }
-                );
-
-                if (this.selectedTaskType != null) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-                    (c) => {
-                      return c.taskType1 === this.selectedTaskType;
-                    }
-                  );
-                }
-                this.generateSunburstData();
-              }
+            if (typeof changes.timelineFilter.currentValue != "undefined") {
+              this.timelineFilter = changes.timelineFilter.currentValue;
+              this.generateSunburstData();
             }
             break;
           }
 
           case "selectedYear": {
-            if (
-              typeof changes.selectedYear.currentValue != "undefined" &&
-              typeof this.filteredClassInstanceDTOs != "undefined"
-            ) {
-              if (this.selectedYear != null) {
-                if (this.selectedYear === "Gesamt") {
-                  this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-                } else {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-                    (c) => {
-                      return moment(c.dateFrom).isSame(
-                        moment(this.selectedYear),
-                        "year"
-                      );
-                    }
-                  );
-                }
-
-                if (this.selectedTaskType != null) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
-                    (c) => {
-                      return c.taskType1 === this.selectedTaskType;
-                    }
-                  );
-                }
-
-                this.generateSunburstData();
-              }
+            if (typeof changes.selectedYear.currentValue != "undefined") {
+              this.selectedYear = changes.selectedYear.currentValue;
+              this.generateSunburstData();
             }
             break;
           }
@@ -290,10 +227,40 @@ export class SunburstTableComponent
   }
 
   generateSunburstData() {
-    if (this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
-      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-      this.selectedTaskType = null;
-      this.updateSelectedTaskType(this.selectedTaskType);
+    // KA was das genau ist...
+    // if (this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
+    //   this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+    //   this.selectedTaskType = null;
+    //   this.updateSelectedTaskType(this.selectedTaskType);
+    // }
+
+    // onChange: change input values
+    // then generateSunburstData()
+    // in generateSunburstData() check for all filter variables first...
+
+    // timelineFilter: { from: Date; to: Date };
+    // selectedYear: string;
+    // selectedYaxis: string;
+
+    if (this.timelineFilter.from == null) {
+      // filter by year
+      if (this.selectedYear === "Gesamt") {
+        this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+      } else {
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+          return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
+        }
+        );
+      }
+    } else {
+      // filter by timeline from to
+      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+        return (
+          moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+          moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
+        );
+      }
+      );
     }
 
     let list = this.filteredClassInstanceDTOs.map((ci) => {
@@ -314,7 +281,6 @@ export class SunburstTableComponent
 
     // insert tt1 entries
     this.uniqueTt1.forEach((tt1, index) => {
-      // TODO use color map here, modulo, so to start from beginning...
 
       data.push({
         id: (index + 1).toString(),
@@ -407,11 +373,23 @@ export class SunburstTableComponent
     ];
     Highcharts.chart("sunburstChart", this.chartOptions);
 
+    this.filteredClassInstanceDTOs.sort((a, b) => {
+      return (
+        new Date(b.dateFrom).getTime() -
+        new Date(a.dateFrom).getTime()
+      );
+    }
+    );
+
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
     this.tableDataSource.paginator = this.paginator;
   }
 
   onSunburstChange(event) {
+    //console.error(event);
+
+    console.error('event.point.node.sliced', event.point.node.sliced);
+
     if (event.point.id === "0") {
       // Tätigkeitsart clicked
       this.prevClickedNode = null;
@@ -419,8 +397,10 @@ export class SunburstTableComponent
 
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     } else {
-      if (event.point.node.level < 4) {
-        if (event.point.node.level <= this.prevNodeLevel) {
+      if (!event.point.node.isLeaf) {
+
+        if (typeof event.point.node.sliced === 'boolean' &&
+          event.point.node.sliced === false) {
           // drillup
 
           let parent = null;
@@ -470,6 +450,9 @@ export class SunburstTableComponent
         }
       }
     }
+
+    this.prevClicked = event.point.node.name;
+
 
     // TIME FILTER
     if (
