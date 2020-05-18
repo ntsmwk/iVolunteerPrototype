@@ -32,7 +32,6 @@ export class SunburstTableComponent
   implements OnInit, OnChanges, AfterViewInit {
   @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() timelineFilter: { from: Date; to: Date };
-
   @Input() selectedYear: string;
   @Input() selectedYaxis: string;
 
@@ -225,7 +224,7 @@ export class SunburstTableComponent
               typeof changes.timelineFilter.currentValue != "undefined" &&
               typeof this.filteredClassInstanceDTOs != "undefined"
             ) {
-              if (this.timelineFilter.from != null) {
+              if (this.timelineFilter.from != null) {             
                 this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
                   (c) => {
                     return (
