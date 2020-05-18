@@ -129,8 +129,8 @@ export class DonutComponent implements OnInit, OnChanges {
 
               if (this.timelineFilter.from != null) {
                 this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                  return (moment(c.dateFrom).isAfter(moment(this.timelineFilter.from)) &&
-                    moment(c.dateFrom).isBefore(moment(this.timelineFilter.to)));
+                  return (moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+                    moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day'));
                 });
 
                 if (this.selectedTaskType != null) {

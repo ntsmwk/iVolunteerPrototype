@@ -152,9 +152,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   filterTimelineApply() {
-    console.error('this.lineChart.xDomain[0]', this.lineChart.xDomain[0]);
-    console.error('this.lineChart.xDomain[1]', this.lineChart.xDomain[1]);
-
     this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
     this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
 
@@ -162,8 +159,8 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
     this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
       return (
-        moment(c.dateFrom).isAfter(moment(this.timelineFilter.from)) &&
-        moment(c.dateFrom).isBefore(moment(this.timelineFilter.to))
+        moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+        moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
       );
     });
 
@@ -207,8 +204,8 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
       this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
         (c) => {
           return (
-            moment(c.dateFrom).isAfter(moment(this.timelineFilter.from)) &&
-            moment(c.dateFrom).isBefore(moment(this.timelineFilter.to))
+            moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+            moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
           );
         }
       );

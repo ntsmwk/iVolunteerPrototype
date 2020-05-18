@@ -229,11 +229,11 @@ export class SunburstTableComponent
                 this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
                   (c) => {
                     return (
-                      moment(c.dateFrom).isAfter(
-                        moment(this.timelineFilter.from)
+                      moment(c.dateFrom).isSameOrAfter(
+                        moment(this.timelineFilter.from), 'day'
                       ) &&
-                      moment(c.dateFrom).isBefore(
-                        moment(this.timelineFilter.to)
+                      moment(c.dateFrom).isSameOrBefore(
+                        moment(this.timelineFilter.to), 'day'
                       )
                     );
                   }
@@ -491,8 +491,8 @@ export class SunburstTableComponent
       this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
         (c) => {
           return (
-            moment(c.dateFrom).isAfter(moment(this.timelineFilter.from)) &&
-            moment(c.dateFrom).isBefore(moment(this.timelineFilter.to))
+            moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+            moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
           );
         }
       );
