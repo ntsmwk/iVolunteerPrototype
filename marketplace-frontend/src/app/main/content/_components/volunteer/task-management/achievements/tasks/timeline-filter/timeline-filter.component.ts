@@ -100,6 +100,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
               this.uniqueYears = [...new Set(list.map((item) => item.year))];
               this.uniqueYears.push("Gesamt");
+              this.uniqueYears.sort();
               this.uniqueTt1 = [...new Set(list.map((item) => item.tt1))];
               this.uniqueTt2 = [...new Set(list.map((item) => item.tt2))];
               this.uniqueTt3 = [...new Set(list.map((item) => item.tt2))];
@@ -151,6 +152,9 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   filterTimelineApply() {
+    console.error('this.lineChart.xDomain[0]', this.lineChart.xDomain[0]);
+    console.error('this.lineChart.xDomain[1]', this.lineChart.xDomain[1]);
+
     this.timelineFilter.from = new Date(this.lineChart.xDomain[0]);
     this.timelineFilter.to = new Date(this.lineChart.xDomain[1]);
 

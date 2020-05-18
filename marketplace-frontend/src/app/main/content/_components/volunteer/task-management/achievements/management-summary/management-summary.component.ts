@@ -127,6 +127,7 @@ export class ManagementSummaryComponent implements OnInit {
 
     
     this.uniqueYears = [...new Set(this.classInstanceDTOs.map(item => new Date(item.dateFrom).getFullYear()))];
+    this.uniqueYears.sort();
     
     let uniqueTenants = [...new Set(this.classInstanceDTOs.map(item => item.tenantId))];
     this.tenantMap = new Map<String, Tenant>();
