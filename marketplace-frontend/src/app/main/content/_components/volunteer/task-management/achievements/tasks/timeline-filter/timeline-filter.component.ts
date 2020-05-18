@@ -112,7 +112,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
           case "selectedTaskType": {
             if (typeof changes.selectedTaskType.currentValue != "undefined") {
-              console.error('selectedTaskType', this.selectedTaskType);
               this.filterTaskType();
             }
           }
@@ -147,7 +146,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     this.selectedYaxis = val;
     this.yAxisLabel = val;
 
-    this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     this.generateTimelineData();
 
     this.updateSelectedYaxis(this.selectedYaxis);
@@ -182,8 +180,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
         });
       }
     } else {
-      console.error('here');
-      console.error(this.classInstanceDTOs.length);
       // no tasktype filter
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     }
@@ -203,12 +199,24 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
           }
         );
       }
-    } 
+    } else {
+      // filter by timeline from to
+      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
+        (c) => {
+          return (
+            moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+            moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
+          );
+        }
+      );
+    }
 
     this.generateTimelineData();
   }
 
   generateTimelineData() {
+    let data1 = [];
+
     let timelineList = this.filteredClassInstanceDTOs.map((ci) => {
       let value: number;
       this.selectedYaxis === "Anzahl" ? (value = 1) : (value = ci.duration);
@@ -230,7 +238,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
       }
     });
 
-    let data1 = [];
     Array.from(timelineMap.entries()).forEach((entry) => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
         data1.push({ name: new Date(entry[0]), value: Number(entry[1]) });
