@@ -149,6 +149,11 @@ export class DonutComponent implements OnInit, OnChanges {
   }
 
   generateData() {
+    // filter everything here
+
+
+
+
     switch (this.type) {
       case 'Wochentag':
         this.generateWeekdayData();
@@ -225,9 +230,6 @@ export class DonutComponent implements OnInit, OnChanges {
       }
     });
 
-
-
-    
     data.sort((a, b) => b.value - a.value);
     let data2 = data.slice(0, 12);
     this.donutData = [...data2];
@@ -286,18 +288,6 @@ export class DonutComponent implements OnInit, OnChanges {
     let data = [];
     let empty: number = 0;
 
-    // null => 'keine Angabe'
-    // Array.from(rangMap.entries()).forEach(entry => {
-    //   if (entry[0] === null || entry[0] === '') {
-    //     empty += entry[1];
-    //   } else {
-    //     data.push({ name: entry[0], value: Number(entry[1]) });
-    //   }
-    // });
-    // data.push({ name: 'keine Angabe', value: empty });
-
-
-    // null => sorted out
     Array.from(rangMap.entries()).forEach(entry => {
       if (entry[0] != null && entry[1] != null && !isNaN(entry[1])) {
         if (entry[0] === '') {
@@ -311,8 +301,6 @@ export class DonutComponent implements OnInit, OnChanges {
     });
     this.donutData = [...data];
   }
-
-
 
   onDonutSelect(event) {
   }

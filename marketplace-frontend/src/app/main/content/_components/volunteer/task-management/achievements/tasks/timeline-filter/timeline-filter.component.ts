@@ -11,6 +11,7 @@ import {
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import * as shape from "d3-shape";
 import * as moment from "moment";
+import { LineChartComponent } from '@swimlane/ngx-charts';
 
 @Component({
   selector: "app-timeline-filter",
@@ -20,19 +21,16 @@ import * as moment from "moment";
 export class TimelineFilterComponent implements OnInit, OnChanges {
   @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() selectedTaskType: string;
-
-  @Input() selectedYaxis: string;
   @Output() selectedYaxisChange = new EventEmitter<string>();
-
-  @Input() timelineFilter: { from: Date; to: Date };
   @Output() timelineFilterChange = new EventEmitter<any>();
-
-  @Input() selectedYear: string;
   @Output() selectedYearChange = new EventEmitter<string>();
 
+  selectedYaxis: string = "Dauer [Stunden]";
+  timelineFilter: { from: Date; to: Date } = { from: null, to: null };
+  selectedYear: string = "Gesamt";
   filteredClassInstanceDTOs: ClassInstanceDTO[];
 
-  @ViewChild("lineChart", { static: false }) lineChart: any;
+  @ViewChild("lineChart", { static: false }) lineChart: LineChartComponent;
 
   uniqueYears: any[];
 
@@ -67,17 +65,13 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.selectedYaxis = "Dauer [Stunden]";
-    this.updateSelectedYaxis(this.selectedYaxis);
-
-    this.selectedYear = "Gesamt";
-    this.updateSelectedYear(this.selectedYear);
-
-    this.timelineFilter = { from: null, to: null };
-    this.updateTimelineFilter(this.timelineFilter);
+    this.updateSelectedYaxis();
+    this.updateSelectedYear();
+    this.updateTimelineFilter();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let changed = false;
     // console.error('timeline-filter changes', changes);
 
     for (const propName in changes) {
@@ -86,7 +80,6 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
           case "classInstanceDTOs": {
             if (typeof changes.classInstanceDTOs.currentValue != "undefined") {
               this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
-              this.filteredClassInstanceDTOs = this.classInstanceDTOs;
 
               let list = this.classInstanceDTOs.map((ci) => {
                 let date = new Date(ci.dateFrom);
@@ -106,7 +99,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
               this.uniqueTt2 = [...new Set(list.map((item) => item.tt2))];
               this.uniqueTt3 = [...new Set(list.map((item) => item.tt2))];
 
-              this.generateTimelineData();
+              changed = true;
             }
             break;
           }
@@ -114,12 +107,16 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
           case "selectedTaskType": {
             if (typeof changes.selectedTaskType.currentValue != "undefined") {
               this.selectedTaskType = changes.selectedTaskType.currentValue;
-              this.generateTimelineData();
+              changed = true;
             }
             break;
           }
         }
       }
+    }
+
+    if(changed) {
+      this.generateTimelineData();
     }
   }
 
@@ -129,21 +126,21 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     this.timelineFilter.from = null;
     this.timelineFilter.to = null;
 
-    if (this.selectedYear === "Gesamt") {
-      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-    } else {
-      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
-        return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
-      });
-    }
+    // if (this.selectedYear === "Gesamt") {
+    //   this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+    // } else {
+    //   this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+    //     return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
+    //   });
+    // }
 
     this.lineChart.filteredDomain = null;
     this.lineChart.update();
 
     this.generateTimelineData();
 
-    this.updateSelectedYear(this.selectedYear);
-    this.updateTimelineFilter(this.timelineFilter);
+    this.updateSelectedYear();
+    this.updateTimelineFilter();
   }
 
   onYaxisChange(val: string) {
@@ -151,8 +148,7 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     this.yAxisLabel = val;
 
     this.generateTimelineData();
-
-    this.updateSelectedYaxis(this.selectedYaxis);
+    this.updateSelectedYaxis();
   }
 
   filterTimelineApply() {
@@ -161,11 +157,19 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
 
     this.selectedYear = null;
 
-    this.updateTimelineFilter(this.timelineFilter);
-    this.updateSelectedYear(null);
+    this.updateTimelineFilter();
+    this.updateSelectedYear();
   }
 
   generateTimelineData() {
+    if (this.selectedYear === "Gesamt") {
+      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+    } else {
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+        return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
+      });
+    }
+
     if (this.selectedTaskType != null) {
       if (this.uniqueTt1.indexOf(this.selectedTaskType) > -1) {
         this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter((c) => {
@@ -210,25 +214,16 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     this.timelineChartData = [...this.timelineChartData];
   }
 
-  updateSelectedYaxis(selectedYaxis) {
-    this.selectedYaxis = selectedYaxis;
-    this.selectedYaxisChange.emit(selectedYaxis);
+  updateSelectedYaxis() {
+    this.selectedYaxisChange.emit(this.selectedYaxis);
   }
 
-  updateSelectedYear(selectedYear) {
-    this.selectedYear = selectedYear;
-    this.selectedYearChange.emit(selectedYear);
+  updateSelectedYear() {
+    this.selectedYearChange.emit(this.selectedYear);
   }
 
-  updateTimelineFilter(timelineFilter) {
-    this.timelineFilter = timelineFilter;
-    this.timelineFilterChange.emit(JSON.parse(JSON.stringify(timelineFilter)));
-  }
-
-  dateTickFormatting2(date) {
-    if (date instanceof Date) {
-      return (<Date>date).toLocaleString("de-DE");
-    }
+  updateTimelineFilter() {
+    this.timelineFilterChange.emit(JSON.parse(JSON.stringify(this.timelineFilter)));
   }
 
   dateTickFormatting(value) {
@@ -253,6 +248,12 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
     }
 
     return new Intl.DateTimeFormat(locale, formatOptions).format(value);
+  }
+
+  dateTickFormatting2(date) {
+    if (date instanceof Date) {
+      return (<Date>date).toLocaleString("de-DE");
+    }
   }
 
   getTooltip(data) {

@@ -34,13 +34,11 @@ export class SunburstTableComponent
   @Input() timelineFilter: { from: Date; to: Date };
   @Input() selectedYear: string;
   @Input() selectedYaxis: string;
-
-  @Input() selectedTaskType: string;
   @Output() selectedTaskTypeChange = new EventEmitter<string>();
 
+  selectedTaskType: string = null;
   filteredClassInstanceDTOs: ClassInstanceDTO[];
 
-  prevNodeLevel: number = null;
   prevClicked: string = null;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -93,47 +91,11 @@ export class SunburstTableComponent
         type: "sunburst",
         data: this.sunburstData,
         allowTraversingTree: true,
-        cursor: "pointer",
-        //   levels: [{
-        //     level: 1,
-        //     levelIsConstant: false,
-        //     dataLabels: {
-        //         filter: {
-        //             property: 'outerArcLength',
-        //             operator: '>',
-        //             value: 64
-        //         }
-        //     }
-        // }, {
-        //     level: 2,
-        //     colorByPoint: true
-        // },
-        // {
-        //     level: 3,
-        //     colorVariation: {
-        //         key: 'brightness',
-        //         to: -0.5
-        //     }
-        // }, {
-        //     level: 4,
-        //     colorVariation: {
-        //         key: 'brightness',
-        //         to: 0.5
-        //     }
-        // }],
-        //   dataLabels: {
-        //     format: '{point.name}',
-        //     filter: {
-        //       property: 'innerArcLength',
-        //       operator: '>',
-        //       value: 16
-        //     }
-        //   }
+        cursor: "pointer"
       },
     ],
   };
 
-  prevClickedNode: any = null;
   uniqueTt1: any[];
   uniqueTt2: any[];
   uniqueTt3: any[];
@@ -144,7 +106,9 @@ export class SunburstTableComponent
 
   constructor(private router: Router) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.updateSelectedTaskType();
+  }
 
   ngAfterViewInit(): void {
     this.tableDataSource.paginator = this.paginator;
@@ -164,6 +128,7 @@ export class SunburstTableComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    let changed = false;
     // console.error('sunburst-table changes', changes);
 
     for (const propName in changes) {
@@ -192,8 +157,7 @@ export class SunburstTableComponent
                   this.ngxColorsCool[index % this.ngxColorsCool.length]
                 );
               });
-
-              this.generateSunburstData();
+              changed = true;
             }
             break;
           }
@@ -201,7 +165,7 @@ export class SunburstTableComponent
           case "selectedYaxis": {
             if (typeof changes.selectedYaxis.currentValue != "undefined") {
               this.selectedYaxis = changes.selectedYaxis.currentValue;
-              this.generateSunburstData();
+              changed = true;
             }
             break;
           }
@@ -209,7 +173,7 @@ export class SunburstTableComponent
           case "timelineFilter": {
             if (typeof changes.timelineFilter.currentValue != "undefined") {
               this.timelineFilter = changes.timelineFilter.currentValue;
-              this.generateSunburstData();
+              changed = true;
             }
             break;
           }
@@ -217,16 +181,23 @@ export class SunburstTableComponent
           case "selectedYear": {
             if (typeof changes.selectedYear.currentValue != "undefined") {
               this.selectedYear = changes.selectedYear.currentValue;
-              this.generateSunburstData();
+              changed = true;
             }
             break;
           }
         }
       }
     }
+
+    if(changed) {
+      this.generateSunburstData();
+
+    }
   }
 
   generateSunburstData() {
+
+    console.time('generateSunburstData');
     // KA was das genau ist...
     // if (this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
     //   this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
@@ -383,16 +354,17 @@ export class SunburstTableComponent
 
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
     this.tableDataSource.paginator = this.paginator;
+
+    console.timeEnd('generateSunburstData')
+
   }
 
   onSunburstChange(event) {
+    console.time('onSunburstChange');
     //console.error(event);
-
-    console.error('event.point.node.sliced', event.point.node.sliced);
 
     if (event.point.id === "0") {
       // Tätigkeitsart clicked
-      this.prevClickedNode = null;
       this.selectedTaskType = null;
 
       this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
@@ -412,13 +384,9 @@ export class SunburstTableComponent
 
           if (parent.name === this.sunburstCenterName) {
             this.selectedTaskType = null;
-            this.prevClickedNode = null;
-            this.prevNodeLevel = 1;
             this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
           } else {
             this.selectedTaskType = parent.name;
-            this.prevClickedNode = event.point.name;
-            this.prevNodeLevel = event.point.node.level;
             this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(
               (c) => {
                 return c.taskType1 === parent.name;
@@ -427,8 +395,6 @@ export class SunburstTableComponent
           }
         } else {
           // drilldown
-          this.prevClickedNode = event.point.name;
-          this.prevNodeLevel = event.point.node.level;
 
           if (this.uniqueTt1.indexOf(event.point.name) > -1) {
             // filter for tt1
@@ -487,16 +453,18 @@ export class SunburstTableComponent
       }
     );
 
-    this.updateSelectedTaskType(this.selectedTaskType);
+    this.updateSelectedTaskType();
 
     // update table
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
     this.tableDataSource.paginator = this.paginator;
+
+    console.timeEnd('onSunburstChange');
+
   }
 
-  updateSelectedTaskType(selectedTaskType) {
-    this.selectedTaskType = selectedTaskType;
-    this.selectedTaskTypeChange.emit(selectedTaskType);
+  updateSelectedTaskType() {
+    this.selectedTaskTypeChange.emit(this.selectedTaskType);
   }
 
   getStyle(tt1) {

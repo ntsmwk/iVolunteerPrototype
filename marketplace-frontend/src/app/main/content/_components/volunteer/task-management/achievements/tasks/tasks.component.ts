@@ -19,8 +19,8 @@ export class TasksComponent implements OnInit {
 
   @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() selectedTenants: Tenant[];
-  selectedYaxis: string;
-  selectedYear: string;
+  selectedYaxis: string ;
+  selectedYear: string ;
   selectedTaskType: string;
   timelineFilter: { from: Date, to: Date };
 
@@ -52,6 +52,22 @@ export class TasksComponent implements OnInit {
         }
       }
     }
+  }
+
+  selectedYaxisChange(selectedYaxis) {
+    this.selectedYaxis = selectedYaxis;
+  }
+
+  timelineFilterChange(timelineFilter) {
+    this.timelineFilter = timelineFilter;
+  }
+
+  selectedYearChange(selectedYear) {
+    this.selectedYear = selectedYear;
+  }
+
+  selectedTaskTypeChange(selectedTaskType) {
+    this.selectedTaskType = selectedTaskType;
   }
 
 
