@@ -46,111 +46,101 @@ export class DonutComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     // console.error('donut changes', changes);
+    let changed = false;
 
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'classInstanceDTOs': {
             if (typeof changes.classInstanceDTOs.currentValue != 'undefined') {
-              this.filteredClassInstanceDTOs = this.classInstanceDTOs;
+              this.classInstanceDTOs = changes.classInstanceDTOs.currentValue;
 
-              let list = this.filteredClassInstanceDTOs
+              let list = this.classInstanceDTOs
                 .map(ci => {
                   return ({ tt1: ci.taskType1, tt2: ci.taskType2, tt3: ci.taskType3 })
                 });
               this.uniqueTt1 = [...new Set(list.map(item => item.tt1))];
               this.uniqueTt2 = [...new Set(list.map(item => item.tt2))];
 
-              this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort((a, b) => {
-                return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
-              });
+              // this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort((a, b) => {
+              //   return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
+              // });
 
-              this.generateData();
+              changed = true;
 
             }
             break;
           }
           case 'selectedYaxis': {
-            if (typeof this.selectedYaxis != 'undefined' &&
-              typeof this.filteredClassInstanceDTOs != 'undefined') {
-              this.generateData();
+            if (typeof this.selectedYaxis != 'undefined') {
+              this.selectedYaxis = changes.selectedYaxis.currentValue;
+              changed = true;
             }
             break;
           }
           case 'selectedYear': {
-            if (typeof changes.selectedYear.currentValue != 'undefined' &&
-              typeof this.filteredClassInstanceDTOs != 'undefined') {
-
-              if (this.selectedYear != null) {
-                if (this.selectedYear === 'Gesamt') {
-                  this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-                } else {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                    return (moment(c.dateFrom).isSame(moment(this.selectedYear), 'year'));
-                  });
-                }
-
-                if (this.selectedTaskType != null) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                    return c.taskType1 === this.selectedTaskType;
-                  });
-                }
-
-                this.generateData();
-              }
+            if (typeof changes.selectedYear.currentValue != 'undefined') {
+              this.selectedYear = changes.selectedYear.currentValue;
+              changed = true;
             }
             break;
           }
           case 'selectedTaskType': {
             if (typeof changes.selectedTaskType.currentValue != 'undefined') {
-              if (this.selectedTaskType != null) {
-                if (this.uniqueTt1.indexOf(this.selectedTaskType) > -1) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                    return c.taskType1 === this.selectedTaskType;
-                  });
-                } else if (this.uniqueTt2.indexOf(this.selectedTaskType) > -1) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                    return c.taskType2 === this.selectedTaskType;
-                  });
-                }
-
-              } else {
-                // no tasktype filter
-                this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-              }
-              this.generateData();
-
+              this.selectedTaskType = changes.selectedTaskType.currentValue;
+              changed = true;
             }
             break;
           }
           case 'timelineFilter': {
-            if (typeof changes.timelineFilter.currentValue != 'undefined' &&
-              typeof this.filteredClassInstanceDTOs != 'undefined') {
-
-              if (this.timelineFilter.from != null) {
-                this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                  return (moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
-                    moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day'));
-                });
-
-                if (this.selectedTaskType != null) {
-                  this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
-                    return c.taskType1 === this.selectedTaskType;
-                  });
-                }
-                this.generateData();
-              }
+            if (typeof changes.timelineFilter.currentValue != 'undefined') {
+              this.timelineFilter = changes.timelineFilter.currentValue;
+              changed = true;
             }
-            break;
           }
+            break;
         }
       }
+
+      if (changed) {
+        this.generateData();
+      }
     }
+
+
   }
 
   generateData() {
     // filter everything here
+    if (this.timelineFilter.from == null) {
+      if (this.selectedYear === "Gesamt") {
+        this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+      } else {
+        this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+          return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
+        });
+      }
+    } else {
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
+        return (
+          moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
+          moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
+        );
+      }
+      );
+    }
 
+    if (this.selectedTaskType != null) {
+      if (this.uniqueTt1.indexOf(this.selectedTaskType) > -1) {
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter((c) => {
+          return c.taskType1 === this.selectedTaskType;
+        });
+      } else if (this.uniqueTt2.indexOf(this.selectedTaskType) > -1) {
+        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter((c) => {
+          return c.taskType2 === this.selectedTaskType;
+        });
+      }
+    }
 
 
 
