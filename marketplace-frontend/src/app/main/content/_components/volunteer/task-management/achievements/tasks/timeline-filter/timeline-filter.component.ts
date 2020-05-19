@@ -115,24 +115,15 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
       }
     }
 
-    if(changed) {
+    if (changed) {
       this.generateTimelineData();
     }
   }
 
-  // TODO here only change input values and update filteredClassInstances in generate timelineData...
   onYearChange(value) {
     this.selectedYear = value.toString();
     this.timelineFilter.from = null;
     this.timelineFilter.to = null;
-
-    // if (this.selectedYear === "Gesamt") {
-    //   this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-    // } else {
-    //   this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
-    //     return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
-    //   });
-    // }
 
     this.lineChart.filteredDomain = null;
     this.lineChart.update();
@@ -162,12 +153,16 @@ export class TimelineFilterComponent implements OnInit, OnChanges {
   }
 
   generateTimelineData() {
-    if (this.selectedYear === "Gesamt") {
-      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+    if (this.timelineFilter.from == null) {
+      if (this.selectedYear === "Gesamt") {
+        this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
+      } else {
+        this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
+          return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
+        });
+      }
     } else {
-      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter((c) => {
-        return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
-      });
+      this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
     }
 
     if (this.selectedTaskType != null) {
