@@ -1,14 +1,11 @@
-import { Injectable } from '@angular/core';
-import { isNullOrUndefined } from 'util';
+import { Injectable } from "@angular/core";
+import { isNullOrUndefined } from "util";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ArrayService {
-
-
   concat(array1: any[], array2: any[]): any[] {
-    
     const commonArray = [].concat(array1);
     if (array2) {
       array2.forEach((item: any) => {
@@ -24,7 +21,9 @@ export class ArrayService {
     if (isNullOrUndefined(values)) {
       return false;
     }
-    return !isNullOrUndefined(values.find((value) => value ? value.id === current.id : false));
+    return !isNullOrUndefined(
+      values.find((value) => (value ? value.id === current.id : false))
+    );
   }
 
   removeAll(all: any[], removeables: any[]): any[] {
@@ -33,5 +32,4 @@ export class ArrayService {
     });
     return all;
   }
-
 }
