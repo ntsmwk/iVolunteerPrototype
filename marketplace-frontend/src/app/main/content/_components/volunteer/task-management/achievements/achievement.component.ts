@@ -87,7 +87,7 @@ export class AchievementsComponent implements OnInit {
     // filter out classInstances missing the reqired fields
     let before = this.classInstanceDTOs.length;
     this.classInstanceDTOs = this.classInstanceDTOs.filter(ci => {
-      return (ci.name != null && ci.tenantId != null && ci.dateFrom && ci.taskType1 && ci.duration)
+      return (ci.name != null && ci.tenantId != null && ci.dateFrom && ci.taskType1 && ci.duration && !isNaN(Number(ci.duration)))
     });
     let after = this.classInstanceDTOs.length;
     this.percentageFilteredOut = (1-(after/before))*100;
