@@ -106,12 +106,14 @@ export class SunburstTableComponent
 
   constructor(private router: Router) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.updateSelectedTaskType();
   }
 
   ngAfterViewInit(): void {
+    this.tableDataSource.sort = this.sort;
     this.tableDataSource.paginator = this.paginator;
+    this.tableDataSource.data = this.filteredClassInstanceDTOs;
 
     Highcharts.getOptions().colors.splice(0, 0, "transparent");
     Highcharts.chart("sunburstChart", this.chartOptions).update({
@@ -128,8 +130,8 @@ export class SunburstTableComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let changed = false;
     // console.error('sunburst-table changes', changes);
+    let changed = false;
 
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
@@ -189,43 +191,26 @@ export class SunburstTableComponent
       }
     }
 
-    if(changed) {
+    if (changed) {
       this.generateSunburstData();
 
     }
   }
 
   generateSunburstData() {
-
-    console.time('generateSunburstData');
-    // KA was das genau ist...
-    // if (this.prevNodeLevel > 0 || this.prevNodeLevel != undefined) {
-    //   this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
-    //   this.selectedTaskType = null;
-    //   this.updateSelectedTaskType(this.selectedTaskType);
-    // }
-
-    // onChange: change input values
-    // then generateSunburstData()
-    // in generateSunburstData() check for all filter variables first...
-
-    // timelineFilter: { from: Date; to: Date };
-    // selectedYear: string;
-    // selectedYaxis: string;
-
     if (this.timelineFilter.from == null) {
       // filter by year
       if (this.selectedYear === "Gesamt") {
         this.filteredClassInstanceDTOs = [...this.classInstanceDTOs];
       } else {
-        this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+        this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
           return moment(c.dateFrom).isSame(moment(this.selectedYear), "year");
         }
         );
       }
     } else {
       // filter by timeline from to
-      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(c => {
+      this.filteredClassInstanceDTOs = this.classInstanceDTOs.filter(c => {
         return (
           moment(c.dateFrom).isSameOrAfter(moment(this.timelineFilter.from), 'day') &&
           moment(c.dateFrom).isSameOrBefore(moment(this.timelineFilter.to), 'day')
@@ -252,7 +237,6 @@ export class SunburstTableComponent
 
     // insert tt1 entries
     this.uniqueTt1.forEach((tt1, index) => {
-
       data.push({
         id: (index + 1).toString(),
         parent: "0",
@@ -349,20 +333,10 @@ export class SunburstTableComponent
         new Date(b.dateFrom).getTime() -
         new Date(a.dateFrom).getTime()
       );
-    }
-    );
-
-    this.tableDataSource.data = this.filteredClassInstanceDTOs;
-    this.tableDataSource.paginator = this.paginator;
-
-    console.timeEnd('generateSunburstData')
-
+    });
   }
 
   onSunburstChange(event) {
-    console.time('onSunburstChange');
-    //console.error(event);
-
     if (event.point.id === "0") {
       // Tätigkeitsart clicked
       this.selectedTaskType = null;
@@ -421,10 +395,7 @@ export class SunburstTableComponent
 
 
     // TIME FILTER
-    if (
-      this.timelineFilter.from === null ||
-      typeof this.timelineFilter.from === "undefined"
-    ) {
+    if (this.timelineFilter.from === null) {
       // filter by year
       if (this.selectedYear === "Gesamt") {
         this.filteredClassInstanceDTOs = [...this.filteredClassInstanceDTOs];
@@ -447,20 +418,15 @@ export class SunburstTableComponent
       );
     }
 
-    this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort(
-      (a, b) => {
-        return new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime();
-      }
-    );
+    this.filteredClassInstanceDTOs.sort((a, b) => {
+      return (
+        new Date(b.dateFrom).getTime() -
+        new Date(a.dateFrom).getTime()
+      );
+    });
 
     this.updateSelectedTaskType();
-
-    // update table
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
-    this.tableDataSource.paginator = this.paginator;
-
-    console.timeEnd('onSunburstChange');
-
   }
 
   updateSelectedTaskType() {
