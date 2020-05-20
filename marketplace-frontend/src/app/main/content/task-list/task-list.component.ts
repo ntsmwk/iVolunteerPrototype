@@ -86,9 +86,8 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
             if (!isNullOrUndefined(ret)) {
               this.classInstances = ret;
               this.paginator.length = this.classInstances.length;
-              this.tableDataSource.data = this.classInstances;
               this.tableDataSource.paginator = this.paginator;
-
+              this.tableDataSource.data = this.classInstances;
             }
           });
         }

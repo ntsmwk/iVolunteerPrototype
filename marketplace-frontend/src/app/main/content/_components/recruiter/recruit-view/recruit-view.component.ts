@@ -127,10 +127,9 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
                       b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
                   );
 
-                  this.tableDataSource.data = this.classInstanceDTOs;
-                  this.paginator.length = this.classInstanceDTOs.length;
                   this.tableDataSource.paginator = this.paginator;
-                  // this.tableDataSource.paginator.length= this.classInstances.length;
+                  this.paginator.length = this.classInstanceDTOs.length;
+                  this.tableDataSource.data = this.classInstanceDTOs;
                 }
               });
           });

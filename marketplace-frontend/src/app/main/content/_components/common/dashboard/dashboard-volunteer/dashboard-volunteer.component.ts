@@ -138,9 +138,11 @@ export class DashboardVolunteerComponent implements OnInit {
         }
       });
 
-      this.tableDataSource.data = this.filteredClassInstances;
+
       this.paginator.length = this.filteredClassInstances.length;
       this.tableDataSource.paginator = this.paginator;
+      this.tableDataSource.sort = this.sort;
+      this.tableDataSource.data = this.filteredClassInstances;
     }
   }
 
@@ -179,7 +181,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => { });
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -202,9 +204,8 @@ export class DashboardVolunteerComponent implements OnInit {
       }
     });
 
-    this.tableDataSource.data = this.filteredClassInstances;
     this.paginator.length = this.filteredClassInstances.length;
-    this.tableDataSource.paginator = this.paginator;
+    this.tableDataSource.data = this.filteredClassInstances;
   }
 
   //---- Local Repository functions -----//

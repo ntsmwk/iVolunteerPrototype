@@ -42,10 +42,10 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
     Promise.all([
       this.coreVolunteerService.findAllByTenantId(this.helpseeker.tenantId).toPromise().then((volunteers: Volunteer[]) => {
         this.volunteers = volunteers;
-        this.datasource.data = volunteers;
 
-        this.paginator.length = this.datasource.data.length;
+        this.paginator.length = volunteers.length;
         this.datasource.paginator = this.paginator;
+        this.datasource.data = volunteers;
 
         console.log(volunteers);
       }),
