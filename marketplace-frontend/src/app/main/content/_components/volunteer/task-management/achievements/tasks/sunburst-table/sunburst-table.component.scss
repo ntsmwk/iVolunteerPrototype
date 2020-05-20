@@ -10,7 +10,7 @@
     text-align: right
   }
 
-  .mat-column-taskName {
+  .mat-column-name {
     word-wrap: break-word !important;
     white-space: unset !important;
     flex: 0 0 50% !important;
@@ -26,7 +26,7 @@
     hyphens: auto;
   }
 
-  .mat-column-taskDateFrom {
+  .mat-column-dateFrom {
     word-wrap: break-word !important;
     white-space: unset !important;
     flex: 0 0 30% !important;
@@ -42,7 +42,7 @@
     hyphens: auto;
   }
 
-  .mat-column-taskDuration {
+  .mat-column-duration {
     word-wrap: break-word !important;
     white-space: unset !important;
     flex: 0 0 20% !important;

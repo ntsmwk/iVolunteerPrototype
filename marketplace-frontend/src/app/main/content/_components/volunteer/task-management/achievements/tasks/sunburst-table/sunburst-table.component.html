@@ -8,12 +8,13 @@
     fxLayoutAlign="none"
   >
     <mat-table
+      #myTable
+      id="myTable"
       class="mat-elevation-z8"
       [dataSource]="tableDataSource"
-      (matSortChange)="sortData($event)"
       matSort
     >
-      <ng-container matColumnDef="taskName">
+      <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Tätigkeit
         </mat-header-cell>
@@ -42,7 +43,7 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="taskDateFrom">
+      <ng-container matColumnDef="dateFrom">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Datum
         </mat-header-cell>
@@ -51,14 +52,14 @@
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="taskDateTo">
+      <ng-container matColumnDef="dateTo">
         <mat-header-cell *matHeaderCellDef> Ende </mat-header-cell>
         <mat-cell *matCellDef="let element">
           {{ element.dateTo | date: "dd.MM.yyyy hh:mm" }}
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="taskDuration">
+      <ng-container matColumnDef="duration">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Dauer
         </mat-header-cell>

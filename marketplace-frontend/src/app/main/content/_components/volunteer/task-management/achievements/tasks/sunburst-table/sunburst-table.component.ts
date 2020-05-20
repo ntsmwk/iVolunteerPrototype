@@ -14,7 +14,7 @@ import {
   MatPaginator,
   MatSort,
   MatTableDataSource,
-  Sort,
+  MatTable,
 } from "@angular/material";
 import * as moment from "moment";
 import * as Highcharts from "highcharts";
@@ -43,8 +43,11 @@ export class SunburstTableComponent
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild('myTable', { static: true }) myTable: MatTable<ClassInstanceDTO>;
+
+
   tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
-  displayedColumns: string[] = ["taskName", "taskDateFrom", "taskDuration"];
+  displayedColumns: string[] = ["name", "dateFrom", "duration"];
 
   sunburstData = [];
   ngxColorsCool = [
@@ -104,6 +107,8 @@ export class SunburstTableComponent
 
   sunburstCenterName: string = "Tätigkeiten";
 
+  first: boolean = true;
+
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -111,8 +116,8 @@ export class SunburstTableComponent
   }
 
   ngAfterViewInit(): void {
-    this.tableDataSource.sort = this.sort;
     this.tableDataSource.paginator = this.paginator;
+    this.tableDataSource.sort = this.sort;
     this.tableDataSource.data = this.filteredClassInstanceDTOs;
 
     Highcharts.getOptions().colors.splice(0, 0, "transparent");
@@ -334,6 +339,14 @@ export class SunburstTableComponent
         new Date(a.dateFrom).getTime()
       );
     });
+
+
+    // this.myTable.renderRows();
+    if(!this.first) {
+      this.tableDataSource.data = this.filteredClassInstanceDTOs;
+    }
+    this.first = false;
+
   }
 
   onSunburstChange(event) {
@@ -437,30 +450,6 @@ export class SunburstTableComponent
     return {
       "background-color": this.tt1ColorMap.get(tt1) + "9B", // opacity
     };
-  }
-
-  sortData(sort: Sort) {
-    this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
-      const isAsc = sort.direction === "asc";
-      switch (sort.active) {
-        case "taskName":
-          return this.compare(a.name, b.name, isAsc);
-        case "taskDateFrom":
-          return this.compare(a.dateFrom, b.dateFrom, isAsc);
-        case "taskDuration":
-          return this.compare(a.duration, b.duration, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-
-  compare(
-    a: number | string | Date,
-    b: number | string | Date,
-    isAsc: boolean
-  ) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   navigateToClassInstanceDetails(row) {
