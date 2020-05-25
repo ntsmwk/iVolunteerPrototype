@@ -3,16 +3,16 @@ import {
   FormGroup,
   FormBuilder,
   FormControl,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { CoreMarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 
 @Component({
   selector: "tenant-form",
-  templateUrl: "tenant-form.component.html"
+  templateUrl: "tenant-form.component.html",
 })
 export class FuseTenantFormComponent implements OnInit {
   tenantForm: FormGroup;
@@ -29,7 +29,7 @@ export class FuseTenantFormComponent implements OnInit {
       id: new FormControl(undefined),
       name: new FormControl(undefined, Validators.required),
       primaryColor: new FormControl(undefined, Validators.required),
-      secondaryColor: new FormControl(undefined, Validators.required)
+      secondaryColor: new FormControl(undefined, Validators.required),
     });
   }
 
@@ -38,10 +38,10 @@ export class FuseTenantFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.findTenant(params["tenantId"]);
     });
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.marketplaceId = params["marketplaceId"];
     });
   }
@@ -57,7 +57,7 @@ export class FuseTenantFormComponent implements OnInit {
       id: this.tenant.id,
       name: this.tenant.name,
       primaryColor: this.tenant.primaryColor,
-      secondaryColor: this.tenant.secondaryColor
+      secondaryColor: this.tenant.secondaryColor,
     });
   }
 

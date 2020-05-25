@@ -4,15 +4,15 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../_model/marketplace";
-import { CoreMarketplaceService } from "../../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../../_service/core-marketplace.service";
 
 @Component({
   templateUrl: "./marketplace-form.component.html",
-  styleUrls: ["./marketplace-form.component.scss"]
+  styleUrls: ["./marketplace-form.component.scss"],
 })
 export class FuseMarketplaceFormComponent implements OnInit {
   marketplaceForm: FormGroup;
@@ -21,13 +21,13 @@ export class FuseMarketplaceFormComponent implements OnInit {
     formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private marketplaceService: CoreMarketplaceService
+    private marketplaceService: MarketplaceService
   ) {
     this.marketplaceForm = formBuilder.group({
       id: new FormControl(undefined),
       name: new FormControl(undefined, Validators.required),
       shortName: new FormControl(undefined, Validators.required),
-      url: new FormControl(undefined, Validators.required)
+      url: new FormControl(undefined, Validators.required),
     });
   }
 
@@ -36,7 +36,7 @@ export class FuseMarketplaceFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params =>
+    this.route.params.subscribe((params) =>
       this.findMarketplace(params["marketplaceId"])
     );
   }
@@ -54,7 +54,7 @@ export class FuseMarketplaceFormComponent implements OnInit {
           id: marketplace.id,
           name: marketplace.name,
           shortName: marketplace.shortName,
-          url: marketplace.url
+          url: marketplace.url,
         });
       });
   }

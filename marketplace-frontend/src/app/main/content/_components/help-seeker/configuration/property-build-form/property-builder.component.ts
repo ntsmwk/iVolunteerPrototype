@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { LoginService } from "app/main/content/_service/login.service";
-import { CoreMarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { PropertyDefinition } from "app/main/content/_model/meta/property";
 import { isNullOrUndefined } from "util";
