@@ -1,9 +1,10 @@
-import { Participant } from "./participant";
+import { Participant, ParticipantRole } from "./participant";
 import { Tenant } from "./tenant";
 import { Marketplace } from "./marketplace";
 
 export class GlobalInfo {
   participant: Participant;
-  tenant: Tenant;
+  participantRole: ParticipantRole;
   marketplace: Marketplace;
+  tenants: Tenant[];
 }
