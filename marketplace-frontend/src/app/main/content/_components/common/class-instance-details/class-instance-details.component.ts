@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import {
@@ -15,7 +15,7 @@ import {
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { MatTableDataSource, MatSort, Sort } from "@angular/material";
+import { MatTableDataSource, MatSort, Sort, MAT_DIALOG_DATA } from "@angular/material";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
@@ -29,17 +29,17 @@ import { PropertyInstance } from 'app/main/content/_model/meta/property';
 export class ClassInstanceDetailsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  id: string;
+  id: string = null;
   classInstance: ClassInstance;
   participant: Participant;
   role: ParticipantRole;
   marketplace: Marketplace;
   tenant: Tenant;
 
+  isDialog: boolean = false;
+
   tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
   displayedColumns = ['name', 'values', 'type'];
-
-
 
   constructor(
     private route: ActivatedRoute,
@@ -48,7 +48,8 @@ export class ClassInstanceDetailsComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private helpseekerService: CoreHelpSeekerService,
     private classDefinitionService: ClassDefinitionService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.route.params.subscribe((params) => {
       this.id = params.id;
@@ -56,6 +57,11 @@ export class ClassInstanceDetailsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.id) {
+      this.id = this.data.id;
+      this.isDialog = true;
+    }
+
     this.participant = <Participant>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -90,9 +96,8 @@ export class ClassInstanceDetailsComponent implements OnInit {
     );
 
     this.tableDataSource.data = this.classInstance.properties;
-    this.tenantService.initHeader(this.tenant);
 
-
+      this.tenantService.initHeader(this.tenant);
   }
 
   getName() {
@@ -105,22 +110,17 @@ export class ClassInstanceDetailsComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name': return this.compare(a.name, b.name, isAsc);
-        case 'type': return this.compare(a.type, b.type, isAsc);
         default: return 0;
       }
     });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
-    if(typeof(a) === 'string' && typeof(b) === 'string') {
+    if (typeof (a) === 'string' && typeof (b) === 'string') {
       return (a.toLowerCase() < b.toLowerCase() ? -1 : 1) * (isAsc ? 1 : -1);
     } else {
       return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
-  }
-
-  navigateBack() {
-    window.history.back();
   }
 
 }

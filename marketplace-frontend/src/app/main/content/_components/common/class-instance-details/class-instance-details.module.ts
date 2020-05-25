@@ -7,6 +7,9 @@ import {
   MatIconModule,
   MatTableModule,
   MatSortModule,
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
 } from "@angular/material";
 import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
 
@@ -22,6 +25,11 @@ const routes = [{ path: ":id", component: ClassInstanceDetailsComponent }];
     MatIconModule,
     MatTableModule,
     FuseSharedModule,
+    MatDialogModule
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ],
   declarations: [ClassInstanceDetailsComponent],
 })

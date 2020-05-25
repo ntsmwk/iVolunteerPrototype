@@ -15,11 +15,13 @@ import {
   MatSort,
   MatTableDataSource,
   MatTable,
+  MatDialog,
 } from "@angular/material";
 import * as moment from "moment";
 import * as Highcharts from "highcharts";
 import HC_sunburst from "highcharts/modules/sunburst";
 import { Router } from "@angular/router";
+import { ClassInstanceDetailsComponent } from 'app/main/content/_components/common/class-instance-details/class-instance-details.component';
 
 HC_sunburst(Highcharts);
 
@@ -43,8 +45,6 @@ export class SunburstTableComponent
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild('myTable', { static: true }) myTable: MatTable<ClassInstanceDTO>;
-
 
   tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns: string[] = ["name", "dateFrom", "duration"];
@@ -109,7 +109,8 @@ export class SunburstTableComponent
 
   first: boolean = true;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+               public dialog: MatDialog) { }
 
   ngOnInit() {
     this.updateSelectedTaskType();
@@ -341,8 +342,7 @@ export class SunburstTableComponent
     });
 
 
-    // this.myTable.renderRows();
-    if(!this.first) {
+    if (!this.first) {
       this.tableDataSource.data = this.filteredClassInstanceDTOs;
     }
     this.first = false;
@@ -454,5 +454,17 @@ export class SunburstTableComponent
 
   navigateToClassInstanceDetails(row) {
     this.router.navigate(["main/details/" + row.id]);
+  }
+
+  openDialog(row): void {
+    const dialogRef = this.dialog.open(ClassInstanceDetailsComponent, {
+      width: '800px',
+      height: '900px',
+      data: { id: row.id },
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 }
