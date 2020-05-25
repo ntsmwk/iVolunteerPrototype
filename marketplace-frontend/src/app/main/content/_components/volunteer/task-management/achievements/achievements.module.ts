@@ -25,6 +25,7 @@ import {
   MatSlideToggleModule,
   MatCheckboxModule,
   MatTooltipModule,
+  MatDialogModule,
 } from "@angular/material";
 import {
   FuseConfirmDialogModule,
@@ -50,6 +51,8 @@ import { TimelineFilterComponent } from "./tasks/timeline-filter/timeline-filter
 import { DonutComponent } from "./tasks/donut/donut.component";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
+import { ClassInstanceDetailsComponent } from '../../../common/class-instance-details/class-instance-details.component';
+import { ClassInstanceDetailsModule } from '../../../common/class-instance-details/class-instance-details.module';
 
 const routes = [{ path: "", component: AchievementsComponent }];
 
@@ -63,7 +66,8 @@ const routes = [{ path: "", component: AchievementsComponent }];
 
     DonutComponent,
     SunburstTableComponent,
-    TimelineFilterComponent,
+    TimelineFilterComponent
+    
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -92,6 +96,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
     MatCheckboxModule,
     MatTableModule,
     MatTooltipModule,
+    MatDialogModule,
     FuseProjectMembersModule,
     FuseProjectTaskListModule,
     FuseTruncatePipeModule,
@@ -108,6 +113,11 @@ const routes = [{ path: "", component: AchievementsComponent }];
     OrganisationFilterModule,
 
     NgxSpinnerModule,
+
+    ClassInstanceDetailsModule
+  ],
+  entryComponents: [
+    ClassInstanceDetailsComponent
   ],
 })
 export class AchievementsModule {}

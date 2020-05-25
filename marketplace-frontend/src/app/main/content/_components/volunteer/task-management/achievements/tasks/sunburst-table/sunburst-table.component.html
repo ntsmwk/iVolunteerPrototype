@@ -8,8 +8,6 @@
     fxLayoutAlign="none"
   >
     <mat-table
-      #myTable
-      id="myTable"
       class="mat-elevation-z8"
       [dataSource]="tableDataSource"
       matSort
@@ -70,7 +68,7 @@
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row
-        (click)="navigateToClassInstanceDetails(row)"
+        (click)="openDialog(row)"
         *matRowDef="let element; let row; columns: displayedColumns"
         [ngStyle]="getStyle(element.taskType1)"
       ></mat-row>

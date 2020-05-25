@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   constructor(private tenantService: TenantService) {}
 
   ngOnInit() {
-    console.error(this.tenant);
+    // console.error(this.tenant);
     this.tenantService.initHeader(this.tenant);
   }
 
