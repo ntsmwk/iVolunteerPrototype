@@ -17,4 +17,8 @@ export class HeaderComponent implements OnInit {
     console.error(this.tenant);
     this.tenantService.initHeader(this.tenant);
   }
+
+  navigateBack() {
+    window.history.back();
+  }
 }

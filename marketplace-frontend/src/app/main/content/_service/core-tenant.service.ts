@@ -43,7 +43,7 @@ export class TenantService {
   }
 
   initHeader(tenant: Tenant) {
-    (<HTMLElement>document.querySelector(".header")).style.background =
+    (<HTMLElement>document.querySelector('.header')).style.background =
       tenant.primaryColor;
   }
 }
