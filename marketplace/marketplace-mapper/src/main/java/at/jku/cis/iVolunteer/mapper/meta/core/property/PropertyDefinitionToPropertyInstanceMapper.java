@@ -30,6 +30,7 @@ public class PropertyDefinitionToPropertyInstanceMapper implements OneWayMapper<
 		}
 		
 		propertyInstance.setRequired(source.isRequired());
+		propertyInstance.setUnit(source.getUnit());
 		
 		return propertyInstance;
 	}

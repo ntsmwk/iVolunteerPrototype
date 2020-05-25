@@ -106,6 +106,7 @@ export class PropertyInstance<T> {
         this.propertyConstraints = classProperty.propertyConstraints;
         this.visible = classProperty.visible;
         this.tabId = classProperty.tabId;
+        this.unit = classProperty.unit;
     }
 
 }
