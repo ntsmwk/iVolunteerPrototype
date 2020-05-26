@@ -21,6 +21,7 @@ import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.task.TaskClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 
 @RestController
@@ -32,8 +33,10 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired private DateTimeService dateTimeService;
 
-	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
-	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+	
+	// TODO: Philipp: überprüfen, ob wo anders so benötigt, oder ob gelöscht werden kann und nur untere methode reicht
+	@PostMapping("/meta/core/class/instance/all/by-archetype2/{archetype}/user/{userId}")
+	private List<ClassInstanceDTO> getClassInstancesByArchetype2(@PathVariable("archetype") ClassArchetype archeType,
 			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<ClassInstance> classInstances = new ArrayList<>();
@@ -45,6 +48,19 @@ public class ClassInstanceController {
 				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(userId,
 						cd.getId(), tenantId));
 			});
+		});
+
+		return classInstanceMapper.mapToDTO(classInstances);
+	}
+	
+	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
+	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
+			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+
+		tenantIds.forEach(tenantId -> {
+			classInstances.addAll(classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(
+					userId, archeType, tenantId));		
 		});
 
 		return classInstanceMapper.mapToDTO(classInstances);
@@ -166,6 +182,32 @@ public class ClassInstanceController {
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
 		return classInstanceRepository.save(classInstances);
 	}
+	
+	
+	@PostMapping("/meta/core/class/instance/newShared")
+	public ClassInstance createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId, 
+			@RequestBody String classInstanceId) {
+		ClassInstance ci = classInstanceRepository.findOne(classInstanceId);
+		
+		TaskClassInstance ciNew = new TaskClassInstance();
+		ciNew.setName(ci.getName());
+		ciNew.setProperties(ci.getProperties());
+		ciNew.setUserId(ci.getUserId());
+		ciNew.setIssuerId(ci.getIssuerId());
+		ciNew.setImagePath(ci.getImagePath());
+		ciNew.setClassArchetype(ci.getClassArchetype());
+		ciNew.setChildClassInstances(ci.getChildClassInstances());
+		ciNew.setVisible(ci.isVisible());
+		ciNew.setTabId(ci.getTabId());
+		ciNew.setClassDefinitionId(ci.getClassDefinitionId());
+		ciNew.setTimestamp(ci.getTimestamp());
+	//	ciNew.setTimestamp(new Date());
+		
+		ciNew.setTenantId(tenantId);
+					
+		return this.classInstanceRepository.save(ciNew);
+	}
+	
 
 	@PostMapping("/meta/core/class/instance/{id}/new")
 	private ClassInstance createNewClassInstanceById() {

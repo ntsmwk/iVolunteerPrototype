@@ -114,18 +114,20 @@ public class PersonTaskService {
 //		personTaskClassInstance.setInUserRepository(true);
 
 //		TODO MWE set issuerId to tenantId!
-		personTaskClassInstance.setIssuerId(level == MV ? "MVS" : "FFA");
-		switch (level) {
-		case 1: // FF
-			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-			break;
-		case 2: // FF
-			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-			break;
-		case 3: // MV
-			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-			break;
-		}
+//		personTaskClassInstance.setIssuerId(level == MV ? "MVS" : "FFA");
+//		switch (level) {
+//		case 1: // FF
+//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+//			break;
+//		case 2: // FF
+//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+//			break;
+//		case 3: // MV
+//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+//			break;
+//		}
+		personTaskClassInstance.setIssuerId(tenantId);
+		personTaskClassInstance.setTenantId(tenantId);
 
 		personTaskClassInstance.setTimestamp(new Date());
 

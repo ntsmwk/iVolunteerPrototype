@@ -62,6 +62,20 @@ export class ClassInstanceService {
     );
   }
 
+  createSharedClassInstances(
+    marketplace: Marketplace,
+    tenantId: string,
+    classInstanceId: string
+  ) {
+
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/instance/newShared?tId=${tenantId}`,
+      classInstanceId   
+    );
+    
+  }
+  
+
   createClassInstanceByClassDefinitionId(
     marketplace: Marketplace,
     classDefinitionId: ClassDefinition,

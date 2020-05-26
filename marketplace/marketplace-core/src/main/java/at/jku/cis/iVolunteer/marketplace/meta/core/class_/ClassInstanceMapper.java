@@ -27,6 +27,8 @@ public class ClassInstanceMapper {
 			dto.setBlockchainDate(ci.getTimestamp());
 			dto.setClassArchetype(ci.getClassArchetype());
 			dto.setImagePath(ci.getImagePath());
+			dto.setTimestamp(ci.getTimestamp());
+			
 //			dto.setPublished(ci.isPublished());
 //			dto.setInUserRepository(ci.isInUserRepository());
 //			dto.setInIssuerInbox(ci.isInIssuerInbox());

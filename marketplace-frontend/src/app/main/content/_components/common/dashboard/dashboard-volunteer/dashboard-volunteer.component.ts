@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
 import { CoreVolunteerService } from "../../../../_service/core-volunteer.service";
 import { LoginService } from "../../../../_service/login.service";
@@ -35,10 +35,11 @@ export class DashboardVolunteerComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatTable, {static: false}) table : MatTable<ClassInstanceDTO>
 
   isLoaded: boolean;
 
-  tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
+  dataSource = new MatTableDataSource<ClassInstanceDTO>();
   selectedTenants: Tenant[] = [];
 
   private displayedColumnsRepository: string[] = [
@@ -47,6 +48,7 @@ export class DashboardVolunteerComponent implements OnInit {
     "taskType1",
     "date",
     "action",
+    "share"
   ];
 
   image;
@@ -55,8 +57,10 @@ export class DashboardVolunteerComponent implements OnInit {
   allTenants: Tenant[] = [];
 
   marketplaceClassInstances: ClassInstanceDTO[] = [];
+  mpAndSharedClassInstances: ClassInstanceDTO[] = [];
   localClassInstances: ClassInstanceDTO[] = [];
   filteredClassInstances: ClassInstanceDTO[] = [];
+  sharedClassInstances: ClassInstanceDTO[] = [];
 
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
@@ -74,10 +78,9 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     iconRegistry: MatIconRegistry
   ) {
-    iconRegistry.addSvgIcon(
-      "info",
-      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg")
-    );
+    iconRegistry.addSvgIcon("info", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg"));
+    iconRegistry.addSvgIcon("share", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/share.svg"));
+
   }
 
   async ngOnInit() {
@@ -108,7 +111,7 @@ export class DashboardVolunteerComponent implements OnInit {
       );
       this.marketplace = marketplaces[0];
 
-      this.marketplaceClassInstances = <ClassInstanceDTO[]>(
+      this.mpAndSharedClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
             this.marketplace,
@@ -118,6 +121,14 @@ export class DashboardVolunteerComponent implements OnInit {
           )
           .toPromise()
       );
+
+      this.mpAndSharedClassInstances.forEach((ci, index, self) => {
+        if (ci.tenantId != ci.issuerId) {
+          this.sharedClassInstances.push(ci);
+        } else {
+          this.marketplaceClassInstances.push(ci);
+        }
+      });
 
       this.localClassInstances = <ClassInstanceDTO[]>(
         await this.localRepositoryService
@@ -138,11 +149,10 @@ export class DashboardVolunteerComponent implements OnInit {
         }
       });
 
-
       this.paginator.length = this.filteredClassInstances.length;
-      this.tableDataSource.paginator = this.paginator;
-      this.tableDataSource.sort = this.sort;
-      this.tableDataSource.data = this.filteredClassInstances;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.data = this.filteredClassInstances;
     }
   }
 
@@ -205,7 +215,7 @@ export class DashboardVolunteerComponent implements OnInit {
     });
 
     this.paginator.length = this.filteredClassInstances.length;
-    this.tableDataSource.data = this.filteredClassInstances;
+    this.dataSource.data = this.filteredClassInstances;
   }
 
   //---- Local Repository functions -----//
@@ -279,7 +289,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    this.tableDataSource.data = this.tableDataSource.data.sort((a, b) => {
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === "asc";
       switch (sort.active) {
         case "issuer":
@@ -317,7 +327,62 @@ export class DashboardVolunteerComponent implements OnInit {
   navigateToClassInstanceDetails(row) {
     this.router.navigate(["main/details/" + row.id]);
   }
+
+
+  getShareableTenants(ci: ClassInstanceDTO) {
+    let tenants: Tenant[];
+    tenants = this.subscribedTenants;
+    tenants = tenants.filter(t => t.id != ci.tenantId);
+
+    this.sharedClassInstances.forEach((shared) => {
+      if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
+        tenants = tenants.filter(t => t.id != shared.tenantId)
+      }
+    });
+
+    return tenants;
+  }
+
+  getSharedWith(ci: ClassInstanceDTO) {
+    let tenants: Tenant[] = [];
+
+    this.sharedClassInstances.forEach((shared) => {
+      if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
+        tenants.push(this.allTenants.find(t => t.id === shared.tenantId));
+      }
+    });
+
+    return tenants;
+  }
+
+  async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
+    // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
+
+    let sharedCi = <ClassInstanceDTO>await
+      this.classInstanceService.createSharedClassInstances(this.marketplace, tenant.id, ci.id).toPromise();
+    this.sharedClassInstances.push(sharedCi);
+
+    // TODO: redraw table
+
+
+    //this.dataSource.data = [];
+    //this.dataSource.data = this.filteredClassInstances;
+
+    // this.table.renderRows();
+
+    //this.paginator.length = this.filteredClassInstances.length;
+
+  }
+
 }
+
+
+
+
+
+
+
+
 
 export interface DialogData {
   name: string;

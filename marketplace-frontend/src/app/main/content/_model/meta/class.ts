@@ -106,6 +106,8 @@ export class ClassInstanceDTO {
   taskType3: string;
   hash: string;
   imagePath: string;
+  timestamp: Date;
+
 
   published: boolean;
   inUserRepository: boolean;

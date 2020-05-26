@@ -97,7 +97,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
 
     this.tableDataSource.data = this.classInstance.properties;
 
-      this.tenantService.initHeader(this.tenant);
+    this.tenantService.initHeader(this.tenant);
   }
 
   getName() {

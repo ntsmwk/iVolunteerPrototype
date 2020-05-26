@@ -60,15 +60,15 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		classInstance.setName(source.getName());
 		
-//		if (source.getConfigurationId() != null) {
+		if (source.getConfigurationId() != null) {
 			classInstance.setProperties(getParentProperties(source));
-//		} else {
-//			List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
-//			for (ClassProperty<Object> classProperty : source.getProperties()) {
-//				properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
-//			}
-//			classInstance.setProperties(properties);
-//		}
+		} else {
+			List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
+			for (ClassProperty<Object> classProperty : source.getProperties()) {
+				properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
+			}
+			classInstance.setProperties(properties);
+		}
 		
 		classInstance.setVisible(source.isVisible());
 		classInstance.setTabId(source.getTabId());

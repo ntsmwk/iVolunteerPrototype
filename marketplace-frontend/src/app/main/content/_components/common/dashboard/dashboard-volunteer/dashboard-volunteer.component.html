@@ -156,9 +156,10 @@
       <div class="pt-32"></div>
 
       <mat-table
+        #table
         matSort
         class="localRepoTable"
-        [dataSource]="tableDataSource"
+        [dataSource]="dataSource"
         style="width: 100%;"
         (matSortChange)="sortData($event)"
       >
@@ -231,8 +232,39 @@
             style="cursor: pointer; margin-left: 20px;" 
             (click)="navigateToClassInstanceDetails(entry)"
             svgIcon="info"
+            matTooltip="Details"
             ></mat-icon>
 
+            <div>
+              <mat-icon
+                svgIcon="share"
+                style="cursor: pointer; margin-left: 20px;" 
+                matTooltip="Teilen mit..."
+                [matMenuTriggerFor]="shareMenu">
+              </mat-icon>
+              <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="true">
+
+                <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstance(entry, tenant)">
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
+                    <div>{{tenant.name}}</div>
+                  </div>
+                </button>
+
+              </mat-menu>
+            </div>
+
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="share">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Geteilt mit
+          </mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <img *ngFor="let tenant of getSharedWith(entry)" class="avatar" 
+            matTooltip="{{tenant.name}}"
+            src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
           </mat-cell>
         </ng-container>
 

@@ -48,7 +48,7 @@ export class ServiceNameService {
           .findRegisteredMarketplaces(this.globalInfo.participant.id)
           .toPromise()
       );
-      this.globalInfo..marketplace = marketplaces[0];
+      this.globalInfo.marketplace = marketplaces[0];
     }
   }
 }
