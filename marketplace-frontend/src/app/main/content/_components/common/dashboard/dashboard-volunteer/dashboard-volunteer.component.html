@@ -206,7 +206,7 @@
 
         <ng-container matColumnDef="action">
           <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Aktion</mat-header-cell
+            >Aktionen</mat-header-cell
           >
           <mat-cell *matCellDef="let entry">
             <mat-icon 
@@ -246,6 +246,9 @@
                     <div>{{tenant.name}}</div>
                   </div>
                 </button>
+                <button *ngIf="getShareableTenants(entry).length == 0" mat-menu-item>
+                  Bereits an alle geteilt!
+                </button>
               </mat-menu>
             </div>
 
@@ -258,8 +261,20 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <img *ngFor="let tenant of getSharedWith(entry)" class="avatar" 
-            matTooltip="{{tenant.name}}"
-            src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
+              matTooltip="{{tenant.name}}"
+              src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
+              style="cursor: pointer;"
+              [matMenuTriggerFor]="revokeMenu"
+              [matMenuTriggerData]="{tenant: tenant}"/>
+            <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+              <ng-template matMenuContent let-tenant="tenant">
+                <button  mat-menu-item (click)="revokeClassInstance(entry, tenant) ">
+                Zurückziehen 
+              </button>
+            </ng-template>
+
+            </mat-menu>
+            
           </mat-cell>
         </ng-container>
 
