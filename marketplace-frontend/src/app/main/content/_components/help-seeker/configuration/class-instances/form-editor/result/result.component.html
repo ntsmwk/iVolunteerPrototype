@@ -1,20 +1,29 @@
 <div class="page-layout right-sidenav p-24" fusePerfectScrollbar>
-    Stub Result page for instance {{ resultClassInstance.id }} - {{ resultClassInstance.name }}
-    <div class="pt-12 pb-12">
-        JSON:
-    </div>
-    <div [innerHTML]="jsonString"
-        style="height: 500px; word-wrap:break-word; overflow: scroll; background-color: rgb(216, 216, 216)">
-    </div>
+  Stub Result page for instance {{ resultClassInstance.id }} -
+  {{ resultClassInstance.name }}
+  <div class="pt-12 pb-12">
+    JSON:
+  </div>
+  <div
+    [innerHTML]="jsonString"
+    style="
+      height: 500px;
+      word-wrap: break-word;
+      overflow: scroll;
+      background-color: rgb(216, 216, 216);
+    "
+  ></div>
 
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-20">
-        <div></div>
-        <button type="button" mat-raised-button color="primary" (click)="handleAnotherClick()">
-            Noch eine Instanz erstellen
-        </button>
-        <div></div>
-    </div>
-
-
-
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="pt-20">
+    <div></div>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="handleAnotherClick()"
+    >
+      Noch eine Instanz erstellen
+    </button>
+    <div></div>
+  </div>
 </div>
