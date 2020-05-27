@@ -78,7 +78,8 @@ $custom-typography: mat-typography-config(
   hyphens: auto;
 }
 
-.mat-column-action .mat-column-share {
+.mat-column-action 
+.mat-column-share {
   word-wrap: break-word !important;
   white-space: unset !important;
   overflow-wrap: break-word;
@@ -97,7 +98,7 @@ $custom-typography: mat-typography-config(
 
 .table {
   margin-top: 25px;
-  width: 270px;
+  width: 300px;
 }
 
 .button1 {

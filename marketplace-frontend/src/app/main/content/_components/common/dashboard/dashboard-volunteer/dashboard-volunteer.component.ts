@@ -61,6 +61,11 @@ export class DashboardVolunteerComponent implements OnInit {
   localClassInstances: ClassInstanceDTO[] = [];
   filteredClassInstances: ClassInstanceDTO[] = [];
   sharedClassInstances: ClassInstanceDTO[] = [];
+  mpAndLocalClassInstances: ClassInstanceDTO[] = [];
+
+  nrMpOnly: number = 0;
+  nrLrOnly: number = 0;
+  nrMpUnionLr: number = 0;
 
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
@@ -123,7 +128,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      this.mpAndSharedClassInstances.forEach((ci, index, self) => {
+      this.mpAndSharedClassInstances.forEach(ci => {
         if (ci.tenantId != ci.issuerId) {
           this.sharedClassInstances.push(ci);
         } else {
@@ -137,7 +142,9 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      // concat local and mp and remove dublicates
+      this.calcSyncedClassInstances();
+
+      // concat local and mp and remove dublicates (union)
       this.filteredClassInstances = this.localClassInstances.concat(
         this.marketplaceClassInstances.filter(
           (mp) => this.localClassInstances.map((lo) => lo.id).indexOf(mp.id) < 0
@@ -238,6 +245,7 @@ export class DashboardVolunteerComponent implements OnInit {
         .synchronizeSingleClassInstance(this.volunteer, classInstance)
         .toPromise()
     );
+    this.calcSyncedClassInstances();
   }
 
   async removeOneFromLocalRepository(classInstance: ClassInstanceDTO) {
@@ -246,6 +254,7 @@ export class DashboardVolunteerComponent implements OnInit {
         .removeSingleClassInstance(this.volunteer, classInstance)
         .toPromise()
     );
+    this.calcSyncedClassInstances();
   }
 
   async syncAllToLocalRepository() {
@@ -264,6 +273,7 @@ export class DashboardVolunteerComponent implements OnInit {
         .synchronizeClassInstances(this.volunteer, missingClassInstances)
         .toPromise()
     );
+    this.calcSyncedClassInstances();
   }
 
   async removeAllFromLocalRepository() {
@@ -287,6 +297,21 @@ export class DashboardVolunteerComponent implements OnInit {
         .setClassInstances(this.volunteer, newClassInstances)
         .toPromise()
     );
+    this.calcSyncedClassInstances();
+  }
+
+  calcSyncedClassInstances() {
+    // intersection of CIs on mp and local repo
+    this.mpAndLocalClassInstances = 
+      this.localClassInstances.filter(ci  => -1 !== this.marketplaceClassInstances.map(ci => ci.id).indexOf(ci.id));
+      this.nrMpUnionLr = this.mpAndLocalClassInstances.length;
+
+      // only in mp (mp minus interesction)
+      this.nrMpOnly = this.marketplaceClassInstances.length - this.mpAndLocalClassInstances.length;
+
+      // only in local repo (local repo minus intersection)
+      this.nrLrOnly = this.localClassInstances.length - this.mpAndLocalClassInstances.length;
+
   }
 
   sortData(sort: Sort) {
@@ -361,18 +386,12 @@ export class DashboardVolunteerComponent implements OnInit {
 
     let sharedCi = <ClassInstanceDTO>await
       this.classInstanceService.createSharedClassInstances(this.marketplace, tenant.id, ci.id).toPromise();
-
     this.sharedClassInstances.push(sharedCi);
 
     // TODO: redraw table
-    //this.dataSource.data = [];
-    //this.dataSource.data = this.filteredClassInstances;
-    // this.table.renderRows();
-    //this.paginator.length = this.filteredClassInstances.length;
-
   }
 
-  async revokeClassInstance(ci, tenant) {
+  async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
     // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
 
     let deleteCi;
@@ -382,7 +401,6 @@ export class DashboardVolunteerComponent implements OnInit {
         self.splice(index, 1);
       }
     });
-
     await this.classInstanceService.deleteClassInstance(this.marketplace, deleteCi.id).toPromise();
   }
 }

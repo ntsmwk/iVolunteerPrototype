@@ -66,20 +66,16 @@
       <table class="table">
         <tbody>
           <tr>
-            <td>Einträge gesamt:</td>
-            <td class="alignRight">{{ marketplaceClassInstances.length }}</td>
+            <td>Einträge nur am Marktplatz:</td>
+            <td class="alignRight">{{ nrMpOnly }}</td>
           </tr>
           <tr>
-            <td>Einträge im lokalen Repository:</td>
-            <td class="alignRight">{{ localClassInstances.length }}</td>
+            <td>Einträge nur im lokalen Freiwilligenpass:</td>
+            <td class="alignRight">{{ nrLrOnly }}</td>
           </tr>
           <tr>
-            <td>Noch nicht hinzugefügte Einträge:</td>
-            <td class="alignRight">
-              {{
-                marketplaceClassInstances.length - localClassInstances.length
-              }}
-            </td>
+            <td>Einträge synchronisiert:</td>
+            <td class="alignRight">{{nrMpUnionLr}} </td>
           </tr>
         </tbody>
       </table>
@@ -240,6 +236,7 @@
                 [matMenuTriggerFor]="shareMenu">
               </mat-icon>
               <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+                <ng-template matMenuContent>
                 <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstance(entry, tenant)">
                   <div fxLayout="row" fxLayoutAlign="start center">
                     <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
@@ -249,6 +246,7 @@
                 <button *ngIf="getShareableTenants(entry).length == 0" mat-menu-item>
                   Bereits an alle geteilt!
                 </button>
+              </ng-template>
               </mat-menu>
             </div>
 
@@ -260,7 +258,7 @@
             Geteilt mit
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
-            <img *ngFor="let tenant of getSharedWith(entry)" class="avatar" 
+              <img *ngFor="let tenant of getSharedWith(entry)" class="avatar" 
               matTooltip="{{tenant.name}}"
               src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
               style="cursor: pointer;"
@@ -270,11 +268,9 @@
               <ng-template matMenuContent let-tenant="tenant">
                 <button  mat-menu-item (click)="revokeClassInstance(entry, tenant) ">
                 Zurückziehen 
-              </button>
-            </ng-template>
-
+                </button>
+              </ng-template>
             </mat-menu>
-            
           </mat-cell>
         </ng-container>
 
