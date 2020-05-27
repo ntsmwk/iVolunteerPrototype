@@ -209,48 +209,43 @@
             >Aktion</mat-header-cell
           >
           <mat-cell *matCellDef="let entry">
-            <button
-              mat-raised-button
-              class="button1"
-              *ngIf="!inLocalRepository(entry)"
-              color="primary"
-              (click)="syncOneToLocalRepository(entry)"
-            >
-              Hinzufügen
-            </button>
-            <button
-              mat-raised-button
-              class="button1"
-              *ngIf="inLocalRepository(entry)"
-              color="primary"
-              (click)="removeOneFromLocalRepository(entry)"
-            >
-              Entfernen
-            </button>
-
             <mat-icon 
-            style="cursor: pointer; margin-left: 20px;" 
+            style="cursor: pointer;" 
             (click)="navigateToClassInstanceDetails(entry)"
             svgIcon="info"
             matTooltip="Details"
-            ></mat-icon>
+          ></mat-icon>
 
-            <div>
+            <mat-icon
+                *ngIf="!inLocalRepository(entry)"
+                (click)="syncOneToLocalRepository(entry)"
+                svgIcon="plus"
+                style="cursor: pointer; margin-left: 20px;" 
+                matTooltip="Zum lokalen Freiwilligenpass hinzufügen">
+            </mat-icon>
+
+            <mat-icon
+              *ngIf="inLocalRepository(entry)"
+              (click)="removeOneFromLocalRepository(entry)"
+              svgIcon="minus"
+              style="cursor: pointer; margin-left: 20px;" 
+              matTooltip="Vom lokalen Freiwilligenpass entfernen">
+            </mat-icon>
+
+            <div *ngIf="inLocalRepository(entry)">
               <mat-icon
                 svgIcon="share"
                 style="cursor: pointer; margin-left: 20px;" 
                 matTooltip="Teilen mit..."
                 [matMenuTriggerFor]="shareMenu">
               </mat-icon>
-              <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="true">
-
+              <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
                 <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstance(entry, tenant)">
                   <div fxLayout="row" fxLayoutAlign="start center">
                     <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
                     <div>{{tenant.name}}</div>
                   </div>
                 </button>
-
               </mat-menu>
             </div>
 

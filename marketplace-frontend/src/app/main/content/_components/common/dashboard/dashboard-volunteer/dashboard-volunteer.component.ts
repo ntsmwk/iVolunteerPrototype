@@ -80,7 +80,8 @@ export class DashboardVolunteerComponent implements OnInit {
   ) {
     iconRegistry.addSvgIcon("info", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg"));
     iconRegistry.addSvgIcon("share", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/share.svg"));
-
+    iconRegistry.addSvgIcon("plus", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/plus.svg"));
+    iconRegistry.addSvgIcon("minus", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg"));
   }
 
   async ngOnInit() {
