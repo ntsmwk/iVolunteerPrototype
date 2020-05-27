@@ -35,7 +35,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, {static: false}) table : MatTable<ClassInstanceDTO>
+  @ViewChild(MatTable, { static: false }) table: MatTable<ClassInstanceDTO>
 
   isLoaded: boolean;
 
@@ -361,25 +361,31 @@ export class DashboardVolunteerComponent implements OnInit {
 
     let sharedCi = <ClassInstanceDTO>await
       this.classInstanceService.createSharedClassInstances(this.marketplace, tenant.id, ci.id).toPromise();
+
     this.sharedClassInstances.push(sharedCi);
 
     // TODO: redraw table
-
-
     //this.dataSource.data = [];
     //this.dataSource.data = this.filteredClassInstances;
-
     // this.table.renderRows();
-
     //this.paginator.length = this.filteredClassInstances.length;
 
   }
 
+  async revokeClassInstance(ci, tenant) {
+    // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
+
+    let deleteCi;
+    this.sharedClassInstances.forEach((shared, index, self) => {
+      if (ci.name === shared.name && ci.timestamp === shared.timestamp && shared.tenantId === tenant.id) {
+        deleteCi = shared;
+        self.splice(index, 1);
+      }
+    });
+
+    await this.classInstanceService.deleteClassInstance(this.marketplace, deleteCi.id).toPromise();
+  }
 }
-
-
-
-
 
 
 
