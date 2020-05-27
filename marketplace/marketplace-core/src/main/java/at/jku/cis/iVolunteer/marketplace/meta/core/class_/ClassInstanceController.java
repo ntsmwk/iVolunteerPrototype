@@ -95,6 +95,8 @@ public class ClassInstanceController {
 			classInstance.setUserId(volunteerId);
 			classInstance.setTenantId(tenantId);
 			classInstance.setIssuerId(tenantId);
+			classInstance.setTimestamp(new Date());
+			
 			classInstance.getProperties().forEach(p -> {
 				if (properties.containsKey(p.getName())) {
 					if (p.getType() == PropertyType.DATE) {
