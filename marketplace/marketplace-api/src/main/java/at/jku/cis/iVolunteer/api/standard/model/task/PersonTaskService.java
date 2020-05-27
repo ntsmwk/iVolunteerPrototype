@@ -22,11 +22,6 @@ import jersey.repackaged.com.google.common.collect.Lists;
 @Service
 public class PersonTaskService {
 
-	private static final int FF_NEW = 2;
-	private static final int MV = 3;
-	private static final String FFEIDENBERG = "FF Eidenberg";
-	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
-
 	@Autowired
 	private ClassDefinitionService classDefinitionService;
 	@Autowired
@@ -35,21 +30,20 @@ public class PersonTaskService {
 	private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
 	@Autowired
 	private UserMappingService userMappingService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
+	
 
-	public void savePersonTasks(List<PersonTask> personTasks, int level, String tenantId) {
+	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
 		List<ClassInstance> classInstances = new ArrayList<ClassInstance>();
 		if (personTaskClassDefinition != null) {
 			for (PersonTask personTask : personTasks) {
-				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, level, tenantId));
+				classInstances.add(savePersonTask(personTaskClassDefinition, personTask, tenantId));
 			}
 		}
 	}
 
 	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
-			int level, String tenantId) {
+			 String tenantId) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
 				.toTarget(personTaskClassDefinition);
@@ -113,19 +107,6 @@ public class PersonTaskService {
 //		personTaskClassInstance.setInIssuerInbox(false);
 //		personTaskClassInstance.setInUserRepository(true);
 
-//		TODO MWE set issuerId to tenantId!
-//		personTaskClassInstance.setIssuerId(level == MV ? "MVS" : "FFA");
-//		switch (level) {
-//		case 1: // FF
-//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-//			break;
-//		case 2: // FF
-//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-//			break;
-//		case 3: // MV
-//			personTaskClassInstance.setTenantId(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-//			break;
-//		}
 		personTaskClassInstance.setIssuerId(tenantId);
 		personTaskClassInstance.setTenantId(tenantId);
 

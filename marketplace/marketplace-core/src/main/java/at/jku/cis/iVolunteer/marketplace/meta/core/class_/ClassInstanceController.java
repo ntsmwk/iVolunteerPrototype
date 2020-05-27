@@ -33,26 +33,7 @@ public class ClassInstanceController {
 	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired private DateTimeService dateTimeService;
 
-	
-	// TODO: Philipp: überprüfen, ob wo anders so benötigt, oder ob gelöscht werden kann und nur untere methode reicht
-	@PostMapping("/meta/core/class/instance/all/by-archetype2/{archetype}/user/{userId}")
-	private List<ClassInstanceDTO> getClassInstancesByArchetype2(@PathVariable("archetype") ClassArchetype archeType,
-			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
-		List<ClassDefinition> classDefinitions = new ArrayList<>();
-		List<ClassInstance> classInstances = new ArrayList<>();
-
-		tenantIds.forEach(tenantId -> {
-			classDefinitions.addAll(classDefinitionService.getClassDefinitionsByArchetype(archeType, tenantId));
-
-			classDefinitions.forEach(cd -> {
-				classInstances.addAll(classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(userId,
-						cd.getId(), tenantId));
-			});
-		});
-
-		return classInstanceMapper.mapToDTO(classInstances);
-	}
-	
+		
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
