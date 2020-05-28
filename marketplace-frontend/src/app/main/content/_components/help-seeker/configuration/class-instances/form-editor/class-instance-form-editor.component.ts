@@ -63,7 +63,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) {}
+  ) { }
 
   ngOnInit() {
     let marketplaceId: string;
@@ -92,25 +92,16 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.marketplace = marketplace;
 
           Promise.all([
-            this.classDefinitionService
-              .getFormConfigurations(this.marketplace, childClassIds)
-              .toPromise()
-              .then((formConfigurations: FormConfiguration[]) => {
-                this.formConfigurations = formConfigurations;
-                for (const config of this.formConfigurations) {
-                  config.formEntry = this.addQuestionsAndFormGroup(
-                    config.formEntry,
-                    config.formEntry.id
-                  );
-                }
-              }),
+            this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
+              this.formConfigurations = formConfigurations;
+              for (const config of this.formConfigurations) {
+                config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
+              }
+            }),
 
-            this.loginService
-              .getLoggedIn()
-              .toPromise()
-              .then((helpseeker: Helpseeker) => {
-                this.helpseeker = helpseeker;
-              }),
+            this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
+              this.helpseeker = helpseeker;
+            }),
           ]).then(() => {
             this.currentFormConfiguration = this.formConfigurations.pop();
 
@@ -124,18 +115,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-    formEntry.questions = this.questionService.getQuestionsFromProperties(
-      formEntry.classProperties,
-      idPrefix
-    );
-    formEntry.formGroup = this.questionControlService.toFormGroup(
-      formEntry.questions
-    );
+    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
+    formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
 
-    if (
-      !isNullOrUndefined(formEntry.questions) &&
-      formEntry.questions.length > 0
-    ) {
+    if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
       this.expectedNumberOfResults++;
     }
 
@@ -148,10 +131,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return formEntry;
   }
 
-  handleTupleSelection(evt: {
-    selection: { id: any; label: any };
-    formGroup: FormGroup;
-  }) {
+  handleTupleSelection(evt: { selection: { id: any; label: any }; formGroup: FormGroup; }) {
     let unableToContinueControl: FormControl;
     let unableToContinueControlKey: string;
     let pathPrefix: string;
@@ -164,15 +144,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       }
     });
 
-    this.classDefinitionService
-      .getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
-      .toPromise()
-      .then((retFormEntry: FormEntry) => {
-        const currentFormEntry = this.getFormEntry(
-          pathPrefix,
-          this.currentFormConfiguration.formEntry.id,
-          this.currentFormConfiguration.formEntry
-        );
+    this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
+      .toPromise().then((retFormEntry: FormEntry) => {
+        const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
+
         retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
 
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
@@ -188,17 +163,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       });
   }
 
-  private getFormEntry(
-    pathString: string,
-    currentPath: string,
-    currentFormEntry: FormEntry
-  ): FormEntry {
+  private getFormEntry(pathString: string, currentPath: string, currentFormEntry: FormEntry): FormEntry {
     if (currentPath === pathString) {
       return currentFormEntry;
     }
-    currentFormEntry = currentFormEntry.subEntries.find((e) =>
-      pathString.startsWith(e.id)
-    );
+
+    currentFormEntry = currentFormEntry.subEntries.find((e) => pathString.startsWith(e.id));
     return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
   }
 
