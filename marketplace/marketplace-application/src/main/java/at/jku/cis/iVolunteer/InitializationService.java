@@ -41,6 +41,8 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.test.data.TestData;
+import at.jku.cis.iVolunteer.test.data.TestDataRK;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -60,6 +62,8 @@ public class InitializationService {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private RuleService ruleService;
 	@Autowired private TestRuleEngine testRuleEngine;
+	@Autowired private TestData testData;
+	@Autowired private TestDataRK testDataRK;
 
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
@@ -79,12 +83,14 @@ public class InitializationService {
 		addStandardPropertyDefinitions();
 //		addTestConfigClasses();
 //		addConfigurators();
-		addConfiguratorSlots();
+		//addConfiguratorSlots();
 
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		//this.addTestClassInstances();
-		testRuleEngine.setup();
+		testData.load();
+		testDataRK.load();
+		testRuleEngine.executeTestCases();
 		addTestRuleEngine();
 //		addTestClassInstances();
 	}
@@ -463,18 +469,7 @@ public class InitializationService {
 		
 	}
 	
-	public void addAssetsForRuleEngine() {
-		testRuleEngine.setup();
-		// testRuleEngine.createCompetences(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-		// testRuleEngine.createCompetences(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-		
-		// addAdditionalProperties();
-		// addCompetencesTestRules();
-		// printPropertyDefinitions();
-	}
-	
 	private void addTestRuleEngine() {
-		addAssetsForRuleEngine();
 		/****** load rules into database ******/
 		//testRuleEngine.initTestData(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		//testRuleEngine.initTestData(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
@@ -482,9 +477,9 @@ public class InitializationService {
 
 		
 	    // build containers for rule sets
-	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
-	    ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+	    // ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+	    // ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
+	    // ruleService.refreshContainer(coreTenantRestClient.getTenantIdByName(RKWILHERING));
 
 	   // ruleService.printContainers();
 	   // ruleService.executeRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG), "general", "5e9848778cbb21753070dacc");

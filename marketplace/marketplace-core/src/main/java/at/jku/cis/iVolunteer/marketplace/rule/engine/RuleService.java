@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
@@ -51,12 +52,12 @@ public class RuleService {
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private VolunteerService volunteerService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private ClassInstanceService classInstanceService;
 	
 	private ConcurrentHashMap<String,  ConcurrentHashMap<String, KieContainer>> tenant2ContainerMap;
 	
     @PostConstruct
     private void init() {
-    	// System.out.println("init Rule Service:");
     	tenant2ContainerMap = new ConcurrentHashMap<String, ConcurrentHashMap<String, KieContainer>>();
     }
     
@@ -74,8 +75,9 @@ public class RuleService {
     }
     
 	public void refreshContainer(String tenantId) {
-		// System.out.println("refresh container for " + tenantId + ", " + tenant2ContainerMap);
+		System.out.println("refresh container for " + tenantId + ", " + tenant2ContainerMap);
 		// create map for tenant
+		printContainers();
 		if (!tenant2ContainerMap.contains(tenantId))
 			tenant2ContainerMap.put(tenantId, new ConcurrentHashMap<String, KieContainer>());
 		getContainerNames(tenantId).stream().forEach(c -> refreshContainer(tenantId, c));
@@ -125,6 +127,7 @@ public class RuleService {
 		ksession.insert(tenant);
 		ksession.insert(volunteer);
 		ksession.insert(volunteerService);
+		ksession.insert(classInstanceService);
         
 		ksession.fireAllRules();
 		
@@ -170,4 +173,9 @@ public class RuleService {
         }
         return kieContainer.newKieSession();
     }
+	
+	public void deleteRule(String tenantId, String containerName, String ruleName) {
+		ContainerRuleEntry rule = containerRuleEntryRepository.getByTenantIdAndContainerAndName(tenantId, containerName, ruleName);
+		if (rule != null) containerRuleEntryRepository.delete(rule);
+	}
 }

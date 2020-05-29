@@ -11,8 +11,10 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class DerivationRule extends IVolunteerObject {
 
 	private String name;
-	private List<ClassSourceRuleEntry> classSourceRules = new ArrayList<>();
-	private List<AttributeSourceRuleEntry> attributeSourceRules = new ArrayList<>();
+	private List<ClassSourceRuleEntry> lhsClassConditions = new ArrayList<>();
+	//private List<AttributeSourceRuleEntry> attributeSourceRuleEntries = new ArrayList<>();
+	private List<GeneralAttributeEntry> lhsGeneralConditions = new ArrayList<>();
+	private List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<>();
 	private String target;
 
 	public DerivationRule() {
@@ -34,20 +36,28 @@ public class DerivationRule extends IVolunteerObject {
 		this.target = target;
 	}
 
-	public List<ClassSourceRuleEntry> getClassSourceRules() {
-		return classSourceRules;
+	public List<ClassSourceRuleEntry> getLhsClassConditions() {
+		return lhsClassConditions;
 	}
 
-	public void setClassSourceRules(List<ClassSourceRuleEntry> classSourceRules) {
-		this.classSourceRules = classSourceRules;
+	public void setLhsClassConditions(List<ClassSourceRuleEntry> lhsClassConditions) {
+		this.lhsClassConditions = lhsClassConditions;
 	}
 
-	public List<AttributeSourceRuleEntry> getAttributeSourceRules() {
-		return attributeSourceRules;
+	public List<GeneralAttributeEntry> getLhsGeneralConditions() {
+		return lhsGeneralConditions;
 	}
 
-	public void setAttributeSourceRules(List<AttributeSourceRuleEntry> attributeSourceRules) {
-		this.attributeSourceRules = attributeSourceRules;
+	public void setLhsGeneralConditions(List<GeneralAttributeEntry> lhsGeneralConditions) {
+		this.lhsGeneralConditions = lhsGeneralConditions;
+	}
+	
+	public List<ClassActionRuleEntry> getRhsRuleActions() {
+		return rhsRuleActions;
+	}
+
+	public void setRhsRuleActions(List<ClassActionRuleEntry> rhsRuleActions) {
+		this.rhsRuleActions = rhsRuleActions;
 	}
 
 }

@@ -86,14 +86,6 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 		return false;
 	}
 	
-	public ClassProperty<Object> getProperty(String name){
-		for (ClassProperty<Object> pi: properties) {
-			if (pi.getName().equals(name))
-					return pi;
-		}
-		return null;
-	}
-
 	public String getImagePath() {
 		return imagePath;
 	}

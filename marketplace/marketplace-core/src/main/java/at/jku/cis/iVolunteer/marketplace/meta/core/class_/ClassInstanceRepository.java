@@ -2,6 +2,9 @@ package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;

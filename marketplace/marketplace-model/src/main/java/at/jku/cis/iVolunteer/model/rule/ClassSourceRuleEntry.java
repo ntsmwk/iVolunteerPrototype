@@ -1,7 +1,11 @@
 package at.jku.cis.iVolunteer.model.rule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClassSourceRuleEntry extends SourceRuleEntry {
 
+	private List<AttributeSourceRuleEntry> attributeSourceRules = new ArrayList<>();
 	private MappingOperatorType mappingOperatorType;
 	private ClassAggregationOperatorType aggregationOperatorType;
 
@@ -29,6 +33,14 @@ public class ClassSourceRuleEntry extends SourceRuleEntry {
 
 	public void setMappingOperatorType(MappingOperatorType mappingOperatorType) {
 		this.mappingOperatorType = mappingOperatorType;
+	}
+	
+	public List<AttributeSourceRuleEntry> getAttributeSourceRules() {
+		return attributeSourceRules;
+	}
+
+	public void setAttributeSourceRules(List<AttributeSourceRuleEntry> attributeSourceRules) {
+		this.attributeSourceRules = attributeSourceRules;
 	}
 
 }

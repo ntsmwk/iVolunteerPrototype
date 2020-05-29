@@ -2,32 +2,55 @@ package at.jku.cis.iVolunteer;
 
 import static org.junit.Assert.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
+import org.drools.compiler.lang.DrlDumper;
+import org.drools.compiler.lang.DRL5Expressions.type_return;
+import org.drools.compiler.lang.api.DescrFactory;
+import org.drools.compiler.lang.api.PackageDescrBuilder;
+import org.drools.compiler.lang.api.PatternDescrBuilder;
+import org.drools.compiler.lang.api.RuleDescrBuilder;
+import org.drools.compiler.lang.api.impl.CEDescrBuilderImpl;
+import org.drools.compiler.lang.api.impl.PatternDescrBuilderImpl;
+import org.drools.compiler.lang.api.impl.RuleDescrBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.TestRuleEngine.RolesAmbulanceService;
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.EQCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.GTCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.LTCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleEngineMapper;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerService.LicenseType;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -46,9 +69,21 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
+import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.ClassActionRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.ClassAggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.ClassRuleActionType;
+import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.DerivationRule;
+import at.jku.cis.iVolunteer.model.rule.GeneralAttributeEntry;
+import at.jku.cis.iVolunteer.model.rule.GeneralAttributeEntry.Attribute;
+import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.test.data.TestData;
+import at.jku.cis.iVolunteer.test.data.TestDataRK;
+import javassist.bytecode.Descriptor.Iterator;
 
 @Service
 public class TestRuleEngine {
@@ -63,6 +98,10 @@ public class TestRuleEngine {
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
 	@Autowired private VolunteerService volunteerService;
 	@Autowired private RuleService ruleService;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassPropertyService classPropertyService;
+	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private RuleEngineMapper ruleEngineMapper;
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;
@@ -70,55 +109,1003 @@ public class TestRuleEngine {
 	
 	private static final String CERTIFICATE_SEF_MODUL1 = "SEF-Modul 1";
 	private static final String CERTIFICATE_SEF_MODUL2 = "SEF-Modul 2";
-	private static final String CERTIFICATE_SEF_AUSFORTBILDUNG = "SEF Aus- und Fortbildung";
-	private static final String CERTIFICATE_SEF_WORKSHOP = "SEF Workshop";
-	private static final String CERTIFICATE_SEF_TRAINING_NOTARZT = "SEF – Theorie- und Praxistraining Notarzt";
-	private static final String CERTIFICATE_SEF_LADEGUTSICHERUNG = "SEF Ladegutsicherung LKW";
-	private static final String CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG = "SEF Theorietrainerausbildung";
-	
-	private static final String TASK_RK_RETTUNGSDIENST = "Rettungsdienst";
-	private static final String TASK_RK_AUSFAHRT = "Ausfahrt";
-	private static final String TASK_RK_EINSATZ = "Einsatz";
-
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 	private static final String RKWILHERING = "RK Wilhering";
 	
-	public enum RolesAmbulanceService {
-		DISPONENT("Disponent"), EINSATZLENKER("Einsatzlenker"), SANITÄTER("Sanitäter"), AUSZUBILDENDER("Auszubildender");
-		
-		private String description;
-		
-		RolesAmbulanceService(String description) {
-			this.description = description;
-		}
-		
-		public String getDescription() {
-			return description;
-		}
-		
-	}
+	/*
+	 * db.inventory.find( {
+                     qty: { $all: [
+                                    { "$elemMatch" : { size: "M", num: { $gt: 50} } },
+                                    { "$elemMatch" : { num : 100, color: "green" } }
+                                  ] }
+                   } )
+	*/
+	/*
+	 * db.getCollection('classInstance').find({"name": "Ausfahrt", "tenantId" : "5e97104b8cbb214434400000", 
+	 *          "properties": {$all: [
+	 *                     {"$elemMatch": {name: "Start Date", values: {$lte: new Date("2016-07-07T00:00:00.000Z")}}},
+	 *                     {"$elemMatch": {name: "role", values:"Einsatzlenker"}}]}})
+	 */
 	
-	public void setup(){
-		// updatePersonRoleRK();
-		// prepare date 
-		createGeneralCompetences();
-		createClassCertificatesRK();
-		createClassTasksRK();
-		
-		cleanUp();
-		
+	public void executeTestCases(){
 		// create user data
-		createUserData();
+		// createUserData();
 		// create test cases
 		// testCaseAddDrivingLicense();
-		// testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		// testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-		// testCaseImproveDrivingCompetenceRKL2();
-		testCaseImproveDrivingCompetenceRKL3();
+		//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+		//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+		//testCaseImproveDrivingCompetenceRKL2();
+		//testCaseImproveDrivingCompetenceRKL3();
+		//testCaseFahrtenspangeBronze();
+		//testMapping1();
+		testAddCompetenceDrivingCarNotExists();
+		testAddAllCompetencesDriving();
+		testAddCompetenceDrivingCar();
+		testImproveDrivingSkillsLevel2();
+		testImproveDrivingSkillsLevel3();
+		testImproveDrivingSkillsLevel4();
+		// random test cases
+		testCheckAge();
+		testCheckAgeMaturity();
+		//testImproveDrivingSkills();
 	}
 	
+	public void testAddAllCompetencesDriving() {
+		System.out.println("============== add competences for all driving licenses ================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-1"; 
+	    String ruleName = "add-competence-driving-all";
+	    
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+
+	    ClassSourceRuleEntry cRuleB = new ClassSourceRuleEntry();
+	    cRuleB.setClassDefinitionId(classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Car", tenantId).getId());
+	    cRuleB.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    cRuleB.setAttributeSourceRules(attrRuleList);
+	    
+	    ClassSourceRuleEntry cRuleC = new ClassSourceRuleEntry();
+	    cRuleC.setClassDefinitionId(classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Truck", tenantId).getId());
+	    cRuleC.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    cRuleC.setAttributeSourceRules(attrRuleList);
+	    
+	    ClassSourceRuleEntry cRuleD = new ClassSourceRuleEntry();
+	    cRuleD.setClassDefinitionId(classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Bus", tenantId).getId());
+	    cRuleD.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    cRuleD.setAttributeSourceRules(attrRuleList);
+	    
+	    ClassSourceRuleEntry cRuleA = new ClassSourceRuleEntry();
+	    cRuleA.setClassDefinitionId(classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Motorcycle", tenantId).getId());
+	    cRuleA.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    cRuleA.setAttributeSourceRules(attrRuleList);
+	     
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    classRuleList.add(cRuleB);
+	    classRuleList.add(cRuleC);
+	    classRuleList.add(cRuleD);
+	    classRuleList.add(cRuleA);
+	    dRule.setLhsClassConditions(classRuleList);
+	    
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();   
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein B");
+	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    
+	    ruleAction = new ClassActionRuleEntry();
+	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Truck Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein C");
+	    attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    
+	    ruleAction = new ClassActionRuleEntry();
+	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Bus Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein D");
+	    attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    
+	    ruleAction = new ClassActionRuleEntry();
+	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Motorcycle Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein A");
+	    attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-1.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, dRule.getName(), ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testAddCompetenceDrivingCar() {
+		System.out.println("============== add competence for driving license ================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-2"; 
+	    String ruleName = "add-competence-driving-car";
+	    
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
+	    
+	    AchievementClassDefinition achievementDef = (AchievementClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Car", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(achievementDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    
+	    classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein B");
+	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-5.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, dRule.getName(), ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testAddCompetenceDrivingCarNotExists() {
+		System.out.println("============== add competence for driving license if it does not exist already ================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-3"; 
+	    String ruleName = "add-competence-driving-car-if-ne";
+	    
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
+	    
+	    AchievementClassDefinition achievementDef = (AchievementClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Driving License Car", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(achievementDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    
+	    ClassSourceRuleEntry cRuleNe = new ClassSourceRuleEntry();
+	    cRuleNe.setClassDefinitionId(classDefinitionRepository.
+	    		findByNameAndTenantId(TestData.COMPETENCE_DRIVING_CAR, tenantId).getId());
+	    cRuleNe.setAggregationOperatorType(ClassAggregationOperatorType.NOT_EXISTS);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    
+	    classRuleList.add(cRule);
+	    classRuleList.add(cRuleNe);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+		   
+	    ruleAction.setClassDefinitionId(compDef.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(compDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
+	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
+	    attrDel2.setClassDefinitionId(compDef.getId());
+	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrDel2.setValue("Führerschein B");
+	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
+	    attrDel3.setClassDefinitionId(compDef.getId());
+	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrDel3.setValue(LocalDateTime.now());
+	    attrDel.add(attrDel1);
+	    attrDel.add(attrDel2);
+	    attrDel.add(attrDel3);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-2.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, dRule.getName(), ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testCheckAge() {
+		System.out.println("==========================  Test check age of volunteer ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-4"; 
+	    String ruleName = "check-age";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    deleteInstances(volunteer, tenantId, "Maturity");
+	    
+	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
+	    cRule.setValue(200);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    
+	    // set age between 20 and 70: 20 < age < 70
+	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
+	    generalAttributes.add(genAttr1);
+	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
+	    generalAttributes.add(genAttr2);
+	    dRule.setLhsGeneralConditions(generalAttributes);
+	    
+	    //classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    ruleAction.setClassDefinitionId(cd.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(taskDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
+	    attrDel1.setMappingOperatorType(MappingOperatorType.EQ);
+	    attrDel1.setValue(30);
+
+	    attrDel.add(attrDel1);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-4.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+
+	public void testCheckAgeMaturity() {
+		System.out.println("==========================  Test check age and maturity of volunteer ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-5"; 
+	    String ruleName = "check-age-maturity";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    
+	    // set age between 20 and 70: 20 < age < 70
+	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
+	    generalAttributes.add(genAttr1);
+	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
+	    generalAttributes.add(genAttr2);
+	    dRule.setLhsGeneralConditions(generalAttributes);
+	    
+	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
+	    attr1.setClassDefinitionId(taskDef.getId());
+	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Maturity Level", tenantId).getId());
+	    attr1.setMappingOperatorType(MappingOperatorType.GE);
+	    attr1.setValue(30);
+	    
+	    attrRuleList.add(attr1);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    ruleAction.setClassDefinitionId(cd.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(taskDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
+	    attrDel1.setMappingOperatorType(MappingOperatorType.EQ);
+	    attrDel1.setValue(33);
+
+	    attrDel.add(attrDel1);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-5.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    	
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+	
+	public void testImproveDrivingSkillsLevel2() {
+		System.out.println("==========================  Test improve driving skills ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-6"; 
+	    String ruleName = "improve-competence-driving-level2";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	   
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
+	    cRule.setValue(200);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    
+	    // adding filters for properties
+	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
+	    attr1.setClassDefinitionId(taskDef.getId());
+	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
+	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
+	    attr1.setValue("Einsatzlenker");
+	    //
+	    attrRuleList.add(attr1);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    
+	    classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+	    ruleAction.setClassDefinitionId(cd.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(taskDef.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL2);
+
+	    attrDel.add(attrDel1);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-6.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testImproveDrivingSkillsLevel3() {
+		System.out.println("==========================  Test improve driving skills level 3 ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-7"; 
+	    String ruleName = "improve-competence-driving-level3";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_MODUL1, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_MODUL2, tenantId);
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	   
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(certDef1.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+	    
+	    cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(certDef2.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+ 	   
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+	    ruleAction.setClassDefinitionId(cd.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(cd.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL3);
+
+	    attrDel.add(attrDel1);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-7.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+	public void testImproveDrivingSkillsLevel4() {
+		System.out.println("==========================  Test improve driving skills level 4 ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-8"; 
+	    String ruleName = "improve-competence-driving-level4";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_WORKSHOP, tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.TASK_RK_AUSFAHRT, tenantId);
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	   
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(certDef1.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+	   
+	    cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(certDef2.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+ 	   
+	    cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    cRule.setValue(1000);
+	    classRuleList.add(cRule);
+ 	   
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+	    ruleAction.setClassDefinitionId(cd.getId());
+	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
+	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	   // adding filters for properties
+	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
+	    attrDel1.setClassDefinitionId(cd.getId());
+	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrDel1.setValue(TestData.DrivingLevel.LEVEL4);
+
+	    attrDel.add(attrDel1);
+	    ruleAction.setAttributeSourceRules(attrDel);
+	    
+	    rhsRuleActions.add(ruleAction);
+	    dRule.setRhsRuleActions(rhsRuleActions);
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-8.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+	
+	public void testMappingSeveralConditions() {
+		System.out.println("==========================  Test Mapping several conditions =========================================");
+
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "test-mapping-1"; 
+	    String ruleName = "test-mapping-several-conditions";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
+	    cRule.setValue(99);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
+	    List<ClassSourceRuleEntry> rhsRuleActions = new ArrayList<ClassSourceRuleEntry>();
+	    
+	    // set age between 20 and 70: 20 < age < 70
+	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
+	    generalAttributes.add(genAttr1);
+	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
+	    generalAttributes.add(genAttr2);
+	    dRule.setLhsGeneralConditions(generalAttributes);
+	    
+	    // adding filters for properties
+	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
+	    attr1.setClassDefinitionId(taskDef.getId());
+	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
+	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
+	    attr1.setValue("Einsatzlenker");
+	    
+	    
+	    AttributeSourceRuleEntry attr2 = new AttributeSourceRuleEntry();
+	    attr2.setClassDefinitionId(taskDef.getId());
+	    attr2.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId).getId());
+	    attr2.setMappingOperatorType(MappingOperatorType.EQ);
+	    attr2.setValue("Wels");
+
+	    AttributeSourceRuleEntry attr3 = new AttributeSourceRuleEntry();
+	    attr3.setClassDefinitionId(taskDef.getId());
+	    attr3.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId).getId());
+	    attr3.setMappingOperatorType(MappingOperatorType.GT);
+	    String strDate = "2018-08-04T08:00:00";
+	    LocalDateTime aLD = LocalDateTime.parse(strDate);
+	    attr3.setValue(aLD);
+	    //
+	    attrRuleList.add(attr1);
+	    attrRuleList.add(attr2);
+	    attrRuleList.add(attr3);
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    
+	    classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    //
+	    // now set the action part on the rhs
+	    
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    /*ClassInstance ci = classInstanceService.getClassInstances(volunteer, "5ebabf2808aa933ad0e86216", tenantId).get(0);
+	   
+	    List<PropertyInstance<Object>> properties = ci.getProperties();
+	    for (PropertyInstance<Object> p: properties) {
+	    	System.out.println("Name: " + p.getName() + ", id: " + p.getId());
+	    	System.out.println(" ..... " + ci.getProperty(attr1.getClassPropertyId()).getValues().get(0));
+	    }*/
+	    
+	    System.out.println("-------> " + classInstanceService.getClassInstances(volunteer, "5ebabf2808aa933ad0e86216", tenantId).size());
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-2.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, "ivol-test", "test-mapper-2", ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testMapping2() {
+		System.out.println("==========================  Test Mapping ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+				//
+	   // executeRule(volunteer, tenantId, "ivol-test", "test-mapper", ruleMapper);
+	    
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    List<PropertyDefinition<Object>> pd1 = propertyDefinitionRepository.getByNameAndTenantId("role", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName("Test-Claudia");
+	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
+	    cRule.setClassDefinitionId(taskDef.getId());
+	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.COUNT);
+	    cRule.setValue(200);
+	    
+	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
+	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
+	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
+	    
+	    GeneralAttributeEntry genAttr = new GeneralAttributeEntry(Attribute.AGE, 18, MappingOperatorType.GE);
+	    generalAttributes.add(genAttr);
+	    dRule.setLhsGeneralConditions(generalAttributes);
+	    
+	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
+	    attr1.setClassDefinitionId(taskDef.getId());
+	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
+	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
+	    attr1.setValue("Einsatzlenker");
+	    attrRuleList.add(attr1);
+	    System.out.println(" .... attribute rule list: " + attrRuleList.size());
+	    cRule.setAttributeSourceRules(attrRuleList);
+	    classRuleList.add(cRule);
+	    dRule.setLhsClassConditions(classRuleList);
+	    
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    executeRule(volunteer, tenantId, "ivol-test", "test-mapper-1", ruleContent);
+	    		
+	    /*
+	    PackageDescrBuilder packageDescrBuilder = DescrFactory.newPackage();
+	    packageDescrBuilder
+	            .name("at.jku.cis.iVolunteer.marketplace.rule.engine;")
+	            .newImport()
+	            .target("at.jku.cis.iVolunteer.model.user.Volunteer;").end()
+	            .newImport().target("at.jku.cis.iVolunteer.marketplace.user.VolunteerService;").end()
+	            .newImport().target("at.jku.cis.iVolunteer.model.core.tenant.Tenant;").end()
+	            .attribute( "dialect" ).value( "mvel" ).end()
+	            .newRule() 
+	            .name(dRule.getName()) 
+	            .lhs()
+	            .pattern().id("v", false).type("Volunteer").end()
+	            .pattern().id("t", false).type("Tenant").end()
+	            .pattern().id("vs", false).type("VolunteerService").
+	                        constraint("getClassInstancesById(v, t.getId(), \"" + cRule.getClassDefinitionId()+"\").size() >= " + cRule.getValue())
+	                        .end()
+	            .end()
+	            .rhs("System.out.println(\"Volunteer is older than 18\");")
+	            .end();
+	    
+	            
+	            for (ClassSourceRuleEntry ruleEntry: dRule.getClassSourceRules()) {
+	            }
+	    // packageDescrBuilder.newRule("test claudia")
+
+	    String rules = new DrlDumper().dump(packageDescrBuilder.getDescr());*/
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+	    
+	    
+	    Query query = new Query(Criteria.where("name").is("Ausfahrt"));//.and("classDefinitionId").is("5ebabf2808aa933ad0e86216"));
+	   // List<ClassInstance> tasks = classInstanceRepository.getbyQuery(query);
+	    /*
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    TaskClassInstance task = new TaskClassInstance();
+	    task.setClassDefinitionId(taskDef.getId());
+	    List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
+		List<ClassProperty<Object>> propList = taskDef.getProperties();
+		// propInstList = propList.stream().
+			//	filter(p -> /*p.getName().equals("role") ||*/// p.getName().contentEquals("Ort")).
+	//			map(p -> classPropertyToPropertyInstanceMapper.toTarget(p)).
+		//		collect(Collectors.toList());
+		//task.setProperties(propInstList);
+	   //  task.getProperty("role").setValues(Arrays.asList("Einsatzlenker"));
+		// task.getProperty("role").setValues(Arrays.asList("Sanitäter"));
+		//task.getProperty("Ort").setValues(Arrays.asList("Linz"));
+	   // System.out.println("role: " + task.getProperty("role").getValues());
+	    // System.out.println("Ort: " + task.getProperty("Ort").getValues());
+	    
+	    /*final ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("properties", match -> match.transform(source -> ((List<PropertyInstance<Object>>) source).iterator().next()).caseSensitive());
+
+        //users = userRepository.findAll(Example.of(task, matcher), pageRequest);
+       
+        //List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, matcher));*/
+	   //  List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, ExampleMatcher.matchingAll()));
+		//System.out.println("Ausfahrten gefunden: " + tasks.size());
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testMapping1() {
+		System.out.println("==========================  Test Mapping ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+				//
+	    executeRule(volunteer, tenantId, "ivol-test", "test-mapper", ruleMapper);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Einsatz", tenantId);
+	    TaskClassInstance task = new TaskClassInstance();
+	    task.setClassDefinitionId(taskDef.getId());
+	    List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
+		List<ClassProperty<Object>> propList = taskDef.getProperties();
+		propInstList = propList.stream().
+				filter(p -> /*p.getName().equals("role") ||*/ p.getName().contentEquals("Ort")).
+				map(p -> classPropertyToPropertyInstanceMapper.toTarget(p)).
+				collect(Collectors.toList());
+		task.setProperties(propInstList);
+	   //  task.getProperty("role").setValues(Arrays.asList("Einsatzlenker"));
+		// task.getProperty("role").setValues(Arrays.asList("Sanitäter"));
+		task.getProperty("Ort").setValues(Arrays.asList("Linz"));
+	   // System.out.println("role: " + task.getProperty("role").getValues());
+	    System.out.println("Ort: " + task.getProperty("Ort").getValues());
+	    
+	    final ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher("properties", match -> match.transform(source -> ((List<PropertyInstance<Object>>) source).iterator().next()).caseSensitive());
+
+        //users = userRepository.findAll(Example.of(task, matcher), pageRequest);
+       
+        List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, matcher));
+	   //  List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, ExampleMatcher.matchingAll()));
+		System.out.println("Ausfahrten gefunden: " + tasks.size());
+	    System.out.println("===================================================================================");
+	}
 	/** 
 	 * Car Driving: Level 1 --> Level 2
 	 */
@@ -128,47 +1115,44 @@ public class TestRuleEngine {
 		Volunteer volunteer;
 		// Feuerwehr
 		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		volunteer = volunteerRepository.findByUsername("CVoj");
+		volunteer = volunteerRepository.findByUsername("KBauer");
 		//
 		executeRule(volunteer, tenantId, "ivol-test", "competence-driving", ruleCompetenceDriving);
 		// reset assets
-		CompetenceClassInstance ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
+		CompetenceClassInstance ci = (CompetenceClassInstance) classInstanceService.getClassInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR).get(0);
 		// cleanUp(); XXX
-	    volunteerService.setProperty(ci, "Driving Level", VolunteerService.DrivingLevel.LEVEL1);
+	    classInstanceService.setProperty(ci, "Driving Level", TestData.DrivingLevel.LEVEL1.getName());
 	    deleteInstances(volunteer, tenantId, CERTIFICATE_SEF_MODUL1);
 	    deleteInstances(volunteer, tenantId, CERTIFICATE_SEF_MODUL2);
 	    
 		cleanUpContainer(tenantId, "ivol-test");
 		// 
-		assertFalse("Kompetenz noch < Level 2 " + RKWILHERING + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, ci.getProperty("Driving Level").equals("LEVEL1")) ; 
+		assertFalse("Kompetenz noch < Level 2 " + RKWILHERING + ": "+ TestData.COMPETENCE_DRIVING_CAR, ci.getProperty("Driving Level").equals("Level 1")) ; 
 		
 		// create new assets
-		volunteerService.addClassInstance(volunteer, tenantId, CERTIFICATE_SEF_MODUL1);
-		volunteerService.addClassInstance(volunteer, tenantId, CERTIFICATE_SEF_MODUL2);
+		ClassDefinition cd = classDefinitionService.getByName(CERTIFICATE_SEF_MODUL1, tenantId);
+		classInstanceService.newClassInstance(volunteer, tenantId, cd.getId());
+		cd = classDefinitionService.getByName(CERTIFICATE_SEF_MODUL2, tenantId);
+		classInstanceService.newClassInstance(volunteer, tenantId, cd.getId());
 		
-	//	ClassInstance cii = volunteerService.getClassInstance(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR).get(0); 
-	//	  volunteerService.addPropertyValue(ci,VolunteerService.PROPERTY_EVIDENCE, volunteerService.getClassInstance(volunteer, tenantId,"SEF-Modul 1" ).get(0)));
-	//  vs.addPropertyValue(ci,VolunteerService.PROPERTY_EVIDENCE, vs.getAchievement(v, t.getId(), vs.getClassInstance(v, t.getId(),"SEF-Modul 2" )));
-	//	  vs.setProperty(ci,VolunteerService.PROPERTY_DRIVING_LEVEL, VolunteerService.DrivingLevel.LEVEL2);:
-		//volunteerService.addClassInstance(volunteer, tenantId, CERTIFICATE_SEF_MODUL2);
-		
-		addRule2Container(tenantId, marketplaceService.getMarketplaceId(), "ivol-test", "competence-driving", ruleCompetenceDriving);
 		executeRule(volunteer, tenantId, "ivol-test", "test-comp-improve", ruleImproveDrivingCompetenceRK);
 		
 		// check whether competence level was upgraded to level 2
 		// refresh competence
-		ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
+		ci = (CompetenceClassInstance) classInstanceService.getClassInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR).get(0);
 		// check properties
-		assertEquals("LEVEL2", ci.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL).getValues().get(0));
-		// check wheter modules are saved as evidence for level 2
+		assertEquals("Level 2", ci.getProperty(TestData.PROPERTY_DRIVING_LEVEL).getValues().get(0));
+		// check whether modules are saved as evidence for level 2
 		// get class instances for certificate SEF-Modul 1 and SEF-Modul 2
-	    ClassInstance ciSEFM1 = volunteerService.getClassInstance(volunteer, tenantId, CERTIFICATE_SEF_MODUL1).get(0);
-		ClassInstance ciSEFM2 = volunteerService.getClassInstance(volunteer, tenantId, CERTIFICATE_SEF_MODUL2).get(0);
+		cd = classDefinitionService.getByName(CERTIFICATE_SEF_MODUL1, tenantId);
+	    ClassInstance ciSEFM1 = classInstanceService.getClassInstance(volunteer, tenantId, cd.getId());
+	    cd = classDefinitionService.getByName(CERTIFICATE_SEF_MODUL2, tenantId);
+		ClassInstance ciSEFM2 = classInstanceService.getClassInstance(volunteer, tenantId, cd.getId());
 		
-		assertFalse(ci.getProperty(VolunteerService.PROPERTY_EVIDENCE).getValues() == null);
-		assertTrue("Zertifikat SEF-Modul 1 nicht in Evidenz! ", volunteerService.propertyValuesContain(ci.getProperty(VolunteerService.PROPERTY_EVIDENCE), ciSEFM1));
-		assertTrue("Zertifikat SEF-Modul 2 nicht in Evidenz! ", volunteerService.propertyValuesContain(ci.getProperty(VolunteerService.PROPERTY_EVIDENCE), ciSEFM2));
-		
+		/*assertFalse(ci.getProperty(TestData.PROPERTY_EVIDENCE).getValues() == null);
+		assertTrue("Zertifikat SEF-Modul 1 nicht in Evidenz! ", classInstanceService .propertyValuesContain(ci.getProperty(TestData.PROPERTY_EVIDENCE), ciSEFM1));
+		assertTrue("Zertifikat SEF-Modul 2 nicht in Evidenz! ", volunteerService.propertyValuesContain(ci.getProperty(TestData.PROPERTY_EVIDENCE), ciSEFM2));
+		*/
 		System.out.println("==============================================================================================");
 	}
 	
@@ -181,29 +1165,59 @@ public class TestRuleEngine {
 		Volunteer volunteer;
 		// Feuerwehr
 		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		volunteer = volunteerRepository.findByUsername("CVoj");
+		volunteer = volunteerRepository.findByUsername("KBauer");
 		//
 		// prepare the data
 		testCaseImproveDrivingCompetenceRKL2();
 			    
 		cleanUpContainer(tenantId, "ivol-test");
 		
-		CompetenceClassInstance ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
+		ClassDefinition cd = classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_CAR, tenantId);
+		CompetenceClassInstance ci = (CompetenceClassInstance) classInstanceService.getClassInstance(volunteer, tenantId, cd.getId());
 		// 
-		assertFalse("Kompetenz noch < Level 2 " + RKWILHERING + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, ci.getProperty("Driving Level").equals("LEVEL2")) ; 
+		assertFalse("Kompetenz noch < Level 2 " + RKWILHERING + ": "+ TestData.COMPETENCE_DRIVING_CAR, ci.getProperty("Driving Level").equals("LEVEL2")) ; 
 		
 		// addRule2Container(tenantId, marketplaceService.getMarketplaceId(), "ivol-test", "test-comp-improve", ruleImproveDrivingCompetenceRK);
 		executeRule(volunteer, tenantId, "ivol-test", "test-comp-improve", ruleImproveDrivingCompetenceRK);
 		
 		// check whether competence level was upgraded to level 2
 		// refresh competence
-		ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
+		ci = (CompetenceClassInstance) classInstanceService.getClassInstance(volunteer, tenantId, cd.getId());
 		// check properties
-		assertEquals("LEVEL3", ci.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL).getValues().get(0));
+		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(cd.getId(), TestData.PROPERTY_DRIVING_LEVEL, tenantId);
+		assertEquals("Level 3", ci.getProperty(cp.getId()).getValues().get(0));
 		System.out.println("==============================================================================================");
 	}
 
 
+	/** 
+	 * 
+	 */
+	public void testCaseFahrtenspangeBronze() {
+		System.out.println("==============================================================================================");
+		String tenantId;
+		Volunteer volunteer;
+		// Feuerwehr
+		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		volunteer = volunteerRepository.findByUsername("KBauer");
+		//
+		cleanUpContainer(tenantId, "ivol-test-2");
+		
+		addRule2Container(tenantId, marketplaceService.getMarketplaceId(), "ivol-test-2", "fahrtenspange", ruleIssueFahrtenspange);
+		executeRule(volunteer, tenantId, "ivol-test-2", "fahrtenspange", ruleIssueFahrtenspange);
+		
+		// check whether competence level was upgraded to level 2
+		// refresh competence
+		ClassDefinition cd = classDefinitionService.getByName("Fahrtenspange Bronze", tenantId);
+		List<ClassInstance> ciList = classInstanceService.getClassInstances(volunteer, tenantId, cd.getId());
+		assertTrue("Keine Fahrtenspange Bronze vorhanden!", ciList != null);
+		// check properties
+		// assertEquals("Level 2", ci.getProperty(TestData.PROPERTY_DRIVING_LEVEL).getValues().get(0));
+		// check wheter modules are saved as evidence for level 2
+		// get class instances for certificate SEF-Modul 1 and SEF-Modul 
+		
+		System.out.println("==============================================================================================");
+	}
 	
 	/** 
 	 * Add driving license for user.
@@ -214,30 +1228,72 @@ public class TestRuleEngine {
 		Volunteer volunteer;
 		// Feuerwehr
 		tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-		volunteer = volunteerRepository.findByUsername("CVoj");
+		volunteer = volunteerRepository.findByUsername("EWagner");
+		// delete all instances of driving licenses and competences
+		ClassDefinition cd = classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+ 
+		cd = classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_CAR, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_BUS, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_TRUCK, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+		cd = classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_MOTORCYCLE, tenantId);
+		classInstanceService.deleteClassInstances(volunteer, cd.getId(), tenantId);
+
+		System.out.println("OOOOOOOOOOOOOOOOOOOOOOO " + classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_CAR, tenantId));
 		
-		// 
-		assertFalse("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_BUS, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_TRUCK, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
+		assertTrue("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_CAR, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_CAR, tenantId) == null) ; 
+		assertTrue("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_BUS, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_BUS, tenantId) == null) ; 
+		assertTrue("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_TRUCK, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_TRUCK, tenantId) == null) ; 
+		assertTrue("Kompetenz exisitiert bereits für " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_MOTORCYCLE, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_MOTORCYCLE, tenantId) == null) ; 
 		
 		// create new assets
-		volunteerService.addClassInstance(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
-		volunteerService.addClassInstance(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS);
-		volunteerService.addClassInstance(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_TRUCK);
-		volunteerService.addClassInstance(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE);
+		classInstanceService.newClassInstance(volunteer, tenantId, 
+				           classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId).getId());
+		classInstanceService.newClassInstance(volunteer, tenantId, 
+						   classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId).getId());
+		classInstanceService.newClassInstance(volunteer, tenantId, 
+				           classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId).getId());;
+		classInstanceService.newClassInstance(volunteer, tenantId, 
+				           classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId).getId());
 		
+		//
+		DerivationRule dRule = new DerivationRule();
+		dRule.setName("addCompetence-drivingLicense");
+		ClassSourceRuleEntry cs = new ClassSourceRuleEntry();
+		cs.setClassDefinitionId(classDefinitionService.getByName(TestData.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId).getId());
+		cs.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);	
+		ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+		ruleAction.setClassDefinitionId(classDefinitionService.getByName(TestData.COMPETENCE_DRIVING_CAR, tenantId).getId());
+		ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
+		AttributeSourceRuleEntry as = new AttributeSourceRuleEntry();
+		//ruleAction.setAttributeSourceRules(attributeSourceRules);
 		executeRule(volunteer, tenantId, "ivol-test", "test-comp-driving", ruleDriverLicense);
 		
-		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_BUS, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_TRUCK, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
+		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_CAR, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_CAR, tenantId) != null) ; 
+		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_BUS, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_BUS, tenantId) != null) ;  
+		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_TRUCK, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_TRUCK, tenantId) != null) ;  
+		assertTrue("Kompetenz exisitiert nicht " + FFEIDENBERG + ": "+ TestData.COMPETENCE_DRIVING_MOTORCYCLE, 
+				classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_MOTORCYCLE, tenantId) != null) ;  
 		
 		// check properties
-		CompetenceClassInstance ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
-		assertEquals(ci.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL).getValues().get(0), "LEVEL1");
+		CompetenceClassInstance ci = (CompetenceClassInstance) classInstanceService.getClassInstanceByName(volunteer, TestData.COMPETENCE_DRIVING_CAR, tenantId);
+		assertEquals(ci.getProperty(TestData.PROPERTY_DRIVING_LEVEL).getValues().get(0), "LEVEL1");
 		
 		System.out.println("==============================================================================================");
 	}
@@ -245,501 +1301,78 @@ public class TestRuleEngine {
 	/** 
 	 * After adding driving licenses,
 	 * driving competence are added automatically by rules
-	 */
+	 *
 	public void testCaseAddDrivingCompetenceByRules(String tenantId) {
 		System.out.println("================== test cases add competence by rules ============================");
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
 		Volunteer volunteer;
 		// Feuerwehr
-		volunteer = volunteerRepository.findByUsername("CVoj");
+		volunteer = volunteerRepository.findByUsername("KBauer");
 		//
 		cleanUp();
-		cleanUpContainer(tenantId, "test-comp1");
+		cleanUpContainer(tenantId, "ivol-test-1");
 		// ruleService.printContainers();
 		// 
-		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_BUS, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_TRUCK, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
+		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_CAR, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR)) ; 
+		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_BUS, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS)) ; 
+		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_TRUCK, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR)) ; 
+		assertFalse("Kompetenz exisitiert bereits für " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS)) ; 
 		
 		// create new assets
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.B);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.C);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.D);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.A);
-		
+		volunteerService.addClassInstance(volunteer, tenantId, TestData.CERTIFICATE_DRIVING_LICENSE_CAR);
+		volunteerService.addClassInstance(volunteer, tenantId, TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK);
+		volunteerService.addClassInstance(volunteer, tenantId, TestData.CERTIFICATE_DRIVING_LICENSE_BUS);
+		volunteerService.addClassInstance(volunteer, tenantId, TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE);
 		// 
-		executeRule(volunteer, tenantId, "ivol-test", "test-comp-driving", ruleCompetenceDriving);
+		executeRule(volunteer, tenantId, "ivol-test-1", "test-comp-driving", ruleCompetenceDriving);
 		
-		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_CAR, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_BUS, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_TRUCK, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR)) ; 
-		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS)) ; 
+		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_CAR, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR)) ; 
+		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_BUS, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS)) ; 
+		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_TRUCK, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR)) ; 
+		assertTrue("Kompetenz exisitiert nicht " + tenant.getName() + ": "+ TestData.COMPETENCE_DRIVING_MOTORCYCLE, volunteerService.hasClassInstance(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS)) ; 
 		
 		// check properties
-		CompetenceClassInstance ci = volunteerService.getCompetence(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR);
-		assertEquals(ci.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL).getValues().get(0), "LEVEL1");
+		CompetenceClassInstance ci = (CompetenceClassInstance) volunteerService.getClassInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR).get(0);
+		assertEquals(ci.getProperty(TestData.PROPERTY_DRIVING_LEVEL).getValues().get(0), "Level 1");
 		// DrivingLevel level = DrivingLevel.valueOf((String)ci.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL).getValues().get(0));
 		// System.out.println("............................................. " + level.getDescription());
 		// printAllAssets(volunteer, tenantId);
 		
 		System.out.println("==============================================================================================");
-	}
+	}*/
 	
 	public void executeRule(Volunteer volunteer, String tenantId, String container, String ruleName, String ruleContent) {
 		String marketplaceId = marketplaceService.getMarketplaceId();
 		addRule2Container(tenantId, marketplaceId, container, ruleName, ruleContent);
 		ruleService.refreshContainer();
-		ruleService.printContainers();
 		ruleService.executeRules(tenantId, container, volunteer.getId());
 	}
-	
-	public void createUserData() {
-		String tenantId;
-		Volunteer volunteer;
-		// Feuerwehr
-		tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
-		volunteer = volunteerRepository.findByUsername("CVoj");
-		// create new assets
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.B);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.C);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.D);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.A);
-	
-		// Rotes Kreuz
-		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.B);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.C);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.D);
-		volunteerService.addLicense(volunteer, tenantId, LicenseType.A);
-		
-		generateTasks(tenantId, volunteer, TASK_RK_AUSFAHRT, 200);
-	}
-	
-	private void generateTasks(String tenantId, Volunteer volunteer, String className, int num) {
-		for (int i = 0; i < num; i++) {
-            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
-            TaskClassInstance ti = (TaskClassInstance) volunteerService.addClassInstance(volunteer, tenantId, className);
-            volunteerService.setProperty(ti, "Start Date", randomDateTime);
-            volunteerService.setProperty(ti, "End Date", randomDateTime.plusHours(1));
-            volunteerService.setProperty(ti, "role", RolesAmbulanceService.EINSATZLENKER);
-        }
-	}
-	
-	
-	public static int createRandomIntBetween(int start, int end) {
-        return start + (int) Math.round(Math.random() * (end - start));
-    }
 
-    public static LocalDateTime createRandomDateTime(int startYear, int endYear) {
-        int day = createRandomIntBetween(1, 28);
-        int month = createRandomIntBetween(1, 12);
-        int year = createRandomIntBetween(startYear, endYear);
-        //
-        Random rand = new Random();
-        //Store a random seed
-        long seed = rand.nextLong();
-        Random generator = new Random(seed);
-  	  	LocalTime time = LocalTime.MIN.plusSeconds(generator.nextLong());
-        return LocalDateTime.of(year, month, day, time.getHour(), 0);
-    }
 	public void cleanUp() {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 		Volunteer volunteer = volunteerRepository.findByUsername("CVoj");
 		
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE);
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR); 	
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK); 	
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
 		
 		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE);
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR); 	
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK); 	
+		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
 	}
 	
 	private void deleteInstances(Volunteer volunteer, String tenantId, String className) {
-		ClassDefinition classComp = volunteerService.getClassDefinition(className, tenantId); // classDefinitionRepository.findByNameAndTenantId(compName, tenantId);	
-		if (classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classComp.getId(), tenantId) != null) {
-			List<ClassInstance> list = classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classComp.getId(), tenantId);
-            list.forEach(ci -> {
-            	classInstanceRepository.delete(ci.getId());
-            });
+		ClassDefinition classComp = classDefinitionService.getByName(className, tenantId); 	
+		if (classComp != null) {
+			classInstanceService.deleteClassInstances(volunteer, classComp.getId(), tenantId);
 		}
 	}
 	
-	private PropertyDefinition<Object> obtainProperty(String name, String tenantId) {
-		List<PropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId(name, tenantId);
-		PropertyDefinition<Object> pd;
-		if (pdList.size() == 0) {
-			pd = new PropertyDefinition<Object>(name, PropertyType.TEXT, tenantId);
-		    propertyDefinitionRepository.save(pd);
-	    } else
-	    	pd = pdList.get(0);
+	
 		
-		return pd;
-	}
-	
-	private PropertyDefinition<Object> obtainProperty(String name, String tenantId, List<Object> allowedValues) {
-		PropertyDefinition<Object> pd = obtainProperty(name, tenantId);
-		pd.setAllowedValues(allowedValues);
-		propertyDefinitionRepository.save(pd);
-		return pd;
-	}
-	
-	private void updatePersonRoleRK() {
-		HelpSeeker helpSeeker = helpSeekerRepository.findByUsername("OERK");
-
-		// adding Dienstart to RK - roles
-		List<PropertyDefinition<Object>> pdList = propertyDefinitionRepository.getByNameAndTenantId("Type of Service", helpSeeker.getTenantId());
-		PropertyDefinition pd;
-		if (pdList.size() == 0) {
-			pd = new PropertyDefinition<Object>("Type of Service", PropertyType.TEXT, helpSeeker.getTenantId());
-			pd.setAllowedValues(new ArrayList<String>(Arrays.asList("Hauptamt", "Ehrenamt", "Zivildienst")));
-		    propertyDefinitionRepository.save(pd);
-	    } else
-	    	pd = pdList.get(0);
-		List<ClassDefinition> functionDefinition = classDefinitionRepository.getByClassArchetypeAndTenantId(ClassArchetype.FUNCTION, helpSeeker.getTenantId());
-		for (ClassDefinition fd: functionDefinition) {
-			Boolean found = false;
-			for (ClassProperty<Object> p: fd.getProperties()) {
-				if (p.getName().equals(pd.getName()))
-					found = true;
-			}
-			if (!found)
-				fd.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-		}
-		classDefinitionRepository.save(functionDefinition);
-		
-	}
-	
-	private ClassDefinition obtainClass(String tenantId, String name, ClassArchetype classArchetype) {
-		ClassDefinition a0 = classDefinitionRepository.findByNameAndTenantId(name, tenantId);
-		if (a0 == null) {	
-			switch (name) {
-			case VolunteerService.CERTIFICATE_DRIVING_LICENSE: createCertificateHead(tenantId, name); break;
-		//	case VolunteerService.COMPETENCE_DRIVING: createCompetenceHead(tenantId, name); break;
-			case "Training": createCertificateHead(tenantId, name); break;
-			case TASK_RK_RETTUNGSDIENST: createTaskHead(tenantId, name); break;
-			}
-			a0 = classDefinitionRepository.findByNameAndTenantId(name, tenantId);
-		}
-		return a0;
-	}
-	
-	private boolean classDefinitonExists(String tenantId, String name) {
-		return classDefinitionRepository.findByNameAndTenantId(name, tenantId) != null;
-	}
-	
-	private ClassDefinition obtainClass(String tenantId, String name, ClassDefinition parent) {
-		System.out.println(" obtain class " + name + ", tenantId: " + tenantId + ", parent: " + parent.getName());
-		ClassDefinition a0 = classDefinitionRepository.findByNameAndTenantId(name, tenantId);
-		if (a0 == null) {	
-			createClass(tenantId, name, parent);
-			a0 = classDefinitionRepository.findByNameAndTenantId(name, tenantId);
-		}
-		return a0;
-	}
-	
-	public void createGeneralCompetences() {
-		createDrivingSkills(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		createDrivingSkills(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-	}
-	
-	public void createClassCertificatesRK() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		// Training certificates
-		AchievementClassDefinition certClassTraining = (AchievementClassDefinition) obtainClass(tenantId, "Training", ClassArchetype.ACHIEVEMENT);
-		// Certificate SEF-MODUL 1
-		System.out.println(" new Training class " + certClassTraining);
-		AchievementClassDefinition certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_MODUL1, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Perfektionstraining für neue Einsatzlenker/innen (SEF-MODUL 1)");
-		// 
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_MODUL2, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Theorie- & Praxistraining für erfahrene Einsatzlenker/innen (SEF-MODUL 2)");
-  		//
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_AUSFORTBILDUNG, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Aus- und Fortbildung für SEF-Praxistrainer/innen");
-		//
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_WORKSHOP, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF Workshop");
-		//
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_TRAINING_NOTARZT, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Theorie- und Praxistraining für Notarztdienste");
-		//
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_LADEGUTSICHERUNG, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Ladegutsicherung für Rotkreuz LKW-Lenker/innen");
-		//
-		certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, certClassTraining);
-		setClassProperty(certClass, "Description", "SEF – Theorietrainerausbildung");	
-	}
-	
-	public void createClassRolesRK() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		// Function
-		FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId, "Ambulance Service", ClassArchetype.TASK);
-		// Certificate SEF-MODUL 1
-		System.out.println(" new Task class " + functionClassAmbulanceService);
-		TaskClassDefinition certClass = (TaskClassDefinition) obtainClass(tenantId, "Rettungssanitäter", functionClassAmbulanceService);
-		//setClassProperty(certClass, "Description", "Rettungseinsatz");
-		// 
-		certClass = (TaskClassDefinition) obtainClass(tenantId, "Notfallsanitäter", functionClassAmbulanceService);
-		//setClassProperty(certClass, "Description", "Sanitätseinsatz");
-  		//
-	}
-	
-	public void createClassTasksRK() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		// Task
-		TaskClassDefinition taskClassAmbulanceService = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_RETTUNGSDIENST, ClassArchetype.TASK);
-		
-		System.out.println(" new Task class " + taskClassAmbulanceService);
-		TaskClassDefinition taskClass = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_EINSATZ, taskClassAmbulanceService);
-		setClassProperty(taskClass, "Description", "Rettungseinsatz");
-		taskClass.getProperty("role").setAllowedValues(Arrays.asList(RolesAmbulanceService.DISPONENT, RolesAmbulanceService.EINSATZLENKER,
-				                                                     RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
-
-		classDefinitionRepository.save(taskClass);
-		// 
-		taskClass = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_AUSFAHRT, taskClassAmbulanceService);
-		setClassProperty(taskClass, "Description", "Sanitätseinsatz");
-		taskClass.getProperty("role").setAllowedValues(Arrays.asList(RolesAmbulanceService.EINSATZLENKER,
-                													 RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
-		classDefinitionRepository.save(taskClass);
-		//
-	}
-	
-	private void setClassProperty(ClassDefinition classDefinition, String propertyName, String value) {
-		System.out.println("property: " + classDefinition.getProperty(propertyName));
-		classDefinition.getProperty(propertyName).setDefaultValues(Arrays.asList(value));
-		classDefinitionRepository.save(classDefinition);
-	}
-	
-	public void createDrivingSkills(String tenantId) {
-		// certificate --> driving license
-		ClassDefinition certClassDrivingLicense = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE, ClassArchetype.ACHIEVEMENT);
-		ClassDefinition certClassDrivingLicenseCar = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_CAR, certClassDrivingLicense);
-		ClassDefinition certClassDrivingLicenseTruck = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_TRUCK, certClassDrivingLicense);
-		ClassDefinition certClassDrivingLicenseBus = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_BUS, certClassDrivingLicense);
-		ClassDefinition certClassDrivingLicenseMotorcycle = obtainClass(tenantId, VolunteerService.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, certClassDrivingLicense);
-		
-		// grouping and hierarchy in certificate "driving license"
-		List<Inheritance> iList = new ArrayList<Inheritance>();
-		System.out.println(" ----------- > " + certClassDrivingLicense + " " + certClassDrivingLicenseCar); 
-		Inheritance i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseCar.getId(), certClassDrivingLicense.getId());
-		i1.setId("drivingCarLicense");
-		iList.add(i1);
-		i1  = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseTruck.getId(), certClassDrivingLicense.getId());
-		i1.setId("drivingTruckLicense");
-		iList.add(i1);
-		i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseBus.getId(), certClassDrivingLicense.getId());
-		i1.setId("drivingBusLicense");
-		iList.add(i1);
-		i1 = new Inheritance(certClassDrivingLicense.getId(), certClassDrivingLicenseMotorcycle.getId(), certClassDrivingLicense.getId());
-		i1.setId("drivingMotorcycleLicense");
-		iList.add(i1);
-		for (Inheritance i: iList) {
-			if (!relationshipRepository.exists(i.getId()))
-				relationshipRepository.save(i);
-		}
-		
-		// competences --> driving
-		ClassDefinition compClassDriving = createDrivingCompetenceHead(tenantId);
-		ClassDefinition compClassDrivingCar = obtainClass(tenantId, VolunteerService.COMPETENCE_DRIVING_CAR, compClassDriving); 
-		ClassDefinition compClassDrivingTruck = obtainClass(tenantId, VolunteerService.COMPETENCE_DRIVING_TRUCK, compClassDriving); 
-		ClassDefinition compClassDrivingBus = obtainClass(tenantId, VolunteerService.COMPETENCE_DRIVING_BUS, compClassDriving); 
-		ClassDefinition compClassDrivingMotorcycle = obtainClass(tenantId, VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE, compClassDriving);
-
-		// competence driving needs evidence of certificate (driving license)
-		List<Association> aList = new ArrayList<Association>();
-		Association a1 = new Association(compClassDrivingCar.getId(), certClassDrivingLicense.getId(), AssociationCardinality.ONE, AssociationCardinality.ONE);
-		a1.setId("evidenceByDriverLicenseB");
-		aList.add(a1);
-		a1 = new Association(compClassDrivingTruck.getId(), certClassDrivingLicense.getId(), AssociationCardinality.ONE, AssociationCardinality.ONE);
-		a1.setId("evidenceByDriverLicenseC");
-		aList.add(a1);
-		a1 = new Association(compClassDrivingBus.getId(), certClassDrivingLicense.getId(), AssociationCardinality.ONE, AssociationCardinality.ONE);
-		a1.setId("evidenceByDriverLicenseD");
-		aList.add(a1);
-		a1 = new Association(compClassDrivingMotorcycle.getId(), certClassDrivingLicense.getId(), AssociationCardinality.ONE, AssociationCardinality.ONE);
-		a1.setId("evidenceByDriverLicenseA");
-		aList.add(a1);
-		
-		for (Association a: aList) {
-			if (!relationshipRepository.exists(a.getId()))
-				relationshipRepository.save(a);
-		}
-		// grouping and hierarchy in competence "driving"
-		iList = new ArrayList<Inheritance>();
-		i1 = new Inheritance(compClassDriving.getId(), compClassDrivingCar.getId(), compClassDriving.getId());
-		i1.setId("drivingCar");
-		iList.add(i1);
-		i1  = new Inheritance(compClassDriving.getId(), compClassDrivingTruck.getId(), compClassDriving.getId());
-		i1.setId("drivingTruck");
-		iList.add(i1);
-		i1 = new Inheritance(compClassDriving.getId(), compClassDrivingBus.getId(), compClassDriving.getId());
-		i1.setId("drivingBus");
-		iList.add(i1);
- 		i1 = new Inheritance(compClassDriving.getId(), compClassDrivingMotorcycle.getId(), compClassDriving.getId());
-		i1.setId("drivingMotorcycle");
-		iList.add(i1);
-		for (Inheritance i: iList) {
-			if (!relationshipRepository.exists(i.getId()))
-				relationshipRepository.save(i);
-		}
-		
-		// printClassDefinitions(tenantId);
-	}
-	
-	private void printAllAssets(Volunteer volunteer, String tenantId) {
-		System.out.println("all assets from " + volunteer.getUsername() + ": ");
-		printArchetypeAssets(volunteer, tenantId, ClassArchetype.ACHIEVEMENT);
-		printArchetypeAssets(volunteer, tenantId, ClassArchetype.COMPETENCE);
-		printArchetypeAssets(volunteer, tenantId, ClassArchetype.FUNCTION);
-		printArchetypeAssets(volunteer, tenantId, ClassArchetype.TASK);
-	}
-	
-	private void printArchetypeAssets(Volunteer volunteer, String tenantId, ClassArchetype classArchetype) {
-		System.out.println("..... " + classArchetype.getArchetype() + ": ");
-		List<ClassDefinition> classes = classDefinitionRepository.getByClassArchetypeAndTenantId(classArchetype, tenantId);
-		for (ClassDefinition cd: classes) {
-			List<ClassInstance> assets = classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), cd.getId(), tenantId);
-			System.out.println("------- class: " + cd.getName() + " number of assets == " + assets.size());
-			assets.forEach(ci -> {
-				System.out.println(".............. " + ci.getName());
-			});
-		}
-	}
-	
-	private void printClassDefinitions(String tenantId) {
-		List<ClassDefinition> classList = classDefinitionRepository.findByTenantId(tenantId);
-		classList.forEach(c -> {
-			System.out.println(" Class: " + c.getName() + ", parent: " + c.getParentId());
-		});
-	}
-	
-	private ClassInstance createInstance(ClassDefinition target, Volunteer volunteer, String tenantId) {
-		ClassInstance ci;
-		switch (target.getClassArchetype()) {
-		case ACHIEVEMENT: ci = new AchievementClassInstance(); break;
-		case COMPETENCE: ci = new CompetenceClassInstance(); break;
-		default: ci = null; 
-		}
-		ci.setName(target.getName());
-		ci.setClassDefinitionId(target.getId());
-		ci.setUserId(volunteer.getId());
-		ci.setMarketplaceId(marketplaceService.getMarketplaceId());
-		ci.setTenantId(tenantId);
-		// copy properties from target class
-		List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
-		List<ClassProperty<Object>> propLicenseList = target.getProperties();
-		for (ClassProperty<Object> cp: propLicenseList) {
-			propInstList.add(classPropertyToPropertyInstanceMapper.toTarget(cp));
-		}
-		ci.setProperties(propInstList);
-        classInstanceRepository.save(ci);
-		return ci;
-	}
-	
-	private ClassDefinition createDrivingCompetenceHead(String tenantId) {
-		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
-		// c1.setId("test1");
-		c1.setName(VolunteerService.COMPETENCE_DRIVING);
-		c1.setClassArchetype(ClassArchetype.COMPETENCE);
-		c1.setTenantId(tenantId);
-		c1.setRoot(true);
-		// set properties
-		List<Object> levelValues = Arrays.asList(VolunteerService.DrivingLevel.LEVEL1, VolunteerService.DrivingLevel.LEVEL2, VolunteerService.DrivingLevel.LEVEL3, VolunteerService.DrivingLevel.LEVEL4); 
-		PropertyDefinition<Object> pdLevel = obtainProperty(VolunteerService.PROPERTY_DRIVING_LEVEL, tenantId, levelValues);
-		PropertyDefinition<Object> pdEvidence = obtainProperty(VolunteerService.PROPERTY_EVIDENCE, tenantId);
-		c1.setProperties(new ArrayList<ClassProperty<Object>>());
-		c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
-		c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdEvidence));
-		classDefinitionRepository.save(c1);
-		return c1;
-	}
-	
-	
-	
-	private void createCertificateHead(String tenantId, String name) {
-		ClassDefinition certificateClass = classDefinitionRepository.findByNameAndTenantId("PersonCertificate", tenantId);
-		
-		AchievementClassDefinition a = new AchievementClassDefinition();
-		a.setMarketplaceId(marketplaceService.getMarketplaceId());
-		a.setName(name);
-		a.setParentId(certificateClass.getId());
-		a.setTimestamp(new Date());
-		a.setTenantId(tenantId);
-		a.setClassArchetype(ClassArchetype.ACHIEVEMENT);
-		a.setProperties(new ArrayList<ClassProperty<Object>>());
-		PropertyDefinition<Object> pdDescription = obtainProperty("Description", tenantId);
-		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdDescription));
-		classDefinitionRepository.save(a);
-		System.out.println("************************************************** " + a.getId());
-	}
-	
-	private void createTaskHead(String tenantId, String name) {
-		ClassDefinition taskClass = classDefinitionRepository.findByNameAndTenantId("PersonTask", tenantId);
-		
-		TaskClassDefinition a = new TaskClassDefinition();
-		a.setMarketplaceId(marketplaceService.getMarketplaceId());
-		a.setName(name);
-		a.setParentId(taskClass.getId());
-		a.setTimestamp(new Date());
-		a.setTenantId(tenantId);
-		a.setClassArchetype(ClassArchetype.TASK);
-		a.setProperties(new ArrayList<ClassProperty<Object>>());
-		PropertyDefinition<Object> pd = obtainProperty("Description", tenantId);
-		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-		pd = obtainProperty("role", tenantId);
-		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-		pd = obtainProperty("Start Date", tenantId);
-		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-		pd = obtainProperty("End Date", tenantId);
-		a.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-		classDefinitionRepository.save(a);
-		System.out.println("************************************************** " + a.getName());
-	}
-	
-	private void createClass(String tenantId, String name, ClassDefinition parent) {
-		System.out.println("============================================== " + tenantId + " " + name + " " + parent);
-		//+ " archetype.parent: " 		+ parent.getClassArchetype());
-		ClassDefinition a = newClassDefinition(parent);
-		a.setMarketplaceId(marketplaceService.getMarketplaceId());
-		a.setName(name);
-		a.setParentId(parent.getId());
-		a.setTimestamp(new Date());
-		a.setTenantId(tenantId);
-		parent.getProperties().forEach(p -> {
-			System.out.println("-------------------> " + p.getName());
-		});
-		a.setProperties(parent.getProperties());
-		classDefinitionRepository.save(a);
-		System.out.println("************************************************** " + a.getId());
-	}
-	
-	private ClassDefinition newClassDefinition(ClassDefinition parent) {
-		ClassDefinition cd = null;
-		switch(parent.getClassArchetype()) {
-		case ACHIEVEMENT:
-				cd = new AchievementClassDefinition();
-				cd.setClassArchetype(ClassArchetype.ACHIEVEMENT); 
-				break;
-		case COMPETENCE:
-				cd = new CompetenceClassDefinition(); 
-		        cd.setClassArchetype(ClassArchetype.COMPETENCE);
-		        break;
-		case TASK:
-				cd = new TaskClassDefinition();
-		        cd.setClassArchetype(ClassArchetype.TASK); 
-		        break;
-		default:
-			break;
-		}
-		return cd;
-	}
-	
 	private void cleanUpContainer(String tenantId, String container) {
 		List<ContainerRuleEntry> containerEntries = containerRuleEntryRepository.getByTenantIdAndContainer(tenantId, container);
 		containerEntries.forEach(r -> {
@@ -825,6 +1458,7 @@ public class TestRuleEngine {
 	public final static String ruleVolPrintInfo = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule Test\r\n" + 
@@ -839,6 +1473,7 @@ public class TestRuleEngine {
 	public final static String ruleVolMindestalter = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule CheckMindestalter\r\n" + 
@@ -852,6 +1487,7 @@ public class TestRuleEngine {
 	public final static String ruleVolHoechstalter = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule CheckHoechstalter\r\n" + 
@@ -865,6 +1501,7 @@ public class TestRuleEngine {
 	public final static String ruleInitPosition = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule PositionInit\r\n" + 
@@ -894,6 +1531,7 @@ public class TestRuleEngine {
 	public final static String rule2Conditions = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule CheckMAPosition\r\n" + 
@@ -908,13 +1546,14 @@ public class TestRuleEngine {
 	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
 	        "import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n"+
+	    	"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
 			"rule CheckLicenseB\r\n" + 
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.B) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_CAR) == true)\r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein B!\");\r\n" + 
 			"end\r\n" +
@@ -922,7 +1561,7 @@ public class TestRuleEngine {
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.C) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK) == true)\r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein C!\");\r\n" + 
 			"end\r\n"+
@@ -930,7 +1569,7 @@ public class TestRuleEngine {
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.D) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_BUS) == true)\r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein D!\");\r\n" + 
 			"end\r\n"+
@@ -938,7 +1577,7 @@ public class TestRuleEngine {
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.A) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE) == true)\r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein A!\");\r\n" + 
 			"end";
@@ -949,6 +1588,7 @@ public class TestRuleEngine {
 	        "import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n"+
 			"import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;\r\n" + 
 			"import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;\r\n"+
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"import java.util.Arrays;\r\n" +
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
@@ -956,40 +1596,49 @@ public class TestRuleEngine {
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.B) && " + 
-			"      !hasCompetence(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR)) \r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_CAR) == true && \r\n" + 
+			"      !hasClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR)) \r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein B und bekommt Kompetenz Driving Car!\");\r\n" + 
-			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR); \r\n" +
-            "  vs.setProperty(ci,VolunteerService.PROPERTY_EVIDENCE, vs.getAchievement(v, t.getId(), VolunteerService.CERTIFICATE_DRIVING_LICENSE_CAR));\r\n"+
-            "  vs.setProperty(ci,VolunteerService.PROPERTY_DRIVING_LEVEL, VolunteerService.DrivingLevel.LEVEL1);\r\n"+
+			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR); \r\n" +
+            "  vs.setProperty(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_CAR).get(0));\r\n"+
+            "  vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL1.getName());\r\n"+
 			"end\r\n" +
-			"rule addCompDrivingBus\r\n" + 
-			"when\r\n" + 
-			"  v : Volunteer() \r\n" +
-			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.C) == true)\r\n" +
-			"then\r\n" + 
-			"  System.out.println(\"********************** Freiwilliger hat Führerschein C und bekommt Kompetenz Drivin Truck!\");\r\n" +
-			"  vs.addClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_TRUCK); \r\n" +
-			"end\r\n"+
 			"rule addCompDrivingTruck\r\n" + 
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.D) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK) == true && \r\n" + 
+			"	   !hasClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_TRUCK)) " +
+			"then\r\n" + 
+			"  System.out.println(\"********************** Freiwilliger hat Führerschein C und bekommt Kompetenz Drivin Truck!\");\r\n" +
+			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_TRUCK); \r\n" +
+			"  vs.setProperty(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_TRUCK).get(0));\r\n"+ 
+			"  vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL1.getName());\r\n"+
+			"end\r\n"+
+			"rule addCompDrivingBus\r\n" + 
+			"when\r\n" + 
+			"  v : Volunteer() \r\n" +
+			"  t : Tenant() \r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_BUS) == true && \r\n" +
+			"	                   !hasClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_BUS)) " + 
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein D und bekommt Kompetenz Driving Bus!\");\r\n" + 
-			"  vs.addClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_BUS); \r\n" +
+			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_BUS); \r\n" +
+			"  vs.setProperty(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_BUS).get(0));\r\n" +
+			"  vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL1.getName());\r\n"+
 			"end\r\n"+
 			"rule addCompDrivingMotorcycle\r\n" + 
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  vs: VolunteerService(hasDriverLicense(v, t.getId(), VolunteerService.LicenseType.A) == true)\r\n" +
+			"  vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE) == true && " +
+	        "      !hasClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_MOTORCYCLE)) \r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat Führerschein A und bekommt Kompetenz Driving Motorcycle!\");\r\n" + 
-			"  vs.addClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_MOTORCYCLE); \r\n" +
+			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_MOTORCYCLE); \r\n" +
+			"  vs.setProperty(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(), TestData.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE).get(0));\r\n"+
+			"  vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL1.getName());\r\n"+
 			"end";
 	
 	public final static String ruleImproveDrivingCompetenceRK = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
@@ -997,6 +1646,7 @@ public class TestRuleEngine {
 			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
 	        "import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n"+
 			"import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;\r\n"+
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
 			"import java.util.Arrays;\r\n" +
 			"dialect \"mvel\"\r\n" + 
 	        "\r\n" + 
@@ -1007,42 +1657,122 @@ public class TestRuleEngine {
 		    "when\r\n" +
 			" v : Volunteer() \r\n" +
 			" t : Tenant() \r\n" +
-			" vs: VolunteerService(hasClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR) == true) \r\n" +
+			" vs: VolunteerService(hasClassInstance(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR) == true) \r\n" +
 			"then\r\n" + 
-			"  insert(vs.getClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR).get(0));\r\n" + 
+			"  insert(vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR).get(0));\r\n" + 
 			"end\r\n" +
 			"rule improveCompDrivingCarL2 \r\n" + 
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
-			"  c : ClassInstance() \r\n" +
-			"  vs: VolunteerService(c != null && \r\n" + 
-			"          propertyValueEquals(c.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL), \"LEVEL1\") == true, \r\n"+
+			"  vs: VolunteerService("+
+	//		"          getFilteredInstancesByProperty(vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR), TestData.PROPERTY_DRIVING_LEVEL, \"Level 1\").size() > 0, "+
 			"          hasClassInstance(v, t.getId(), \"SEF-Modul 1\") == true, \r\n" + 
 			"          hasClassInstance(v, t.getId(), \"SEF-Modul 2\") == true) \r\n" +
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat SEF-Modul 1 und 2 verbessert Kompetenz Driving Car!\");\r\n" + 
-			"  ClassInstance ci = vs.getClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR).get(0); \r\n" +
-			 " vs.setProperty(ci,VolunteerService.PROPERTY_DRIVING_LEVEL, VolunteerService.DrivingLevel.LEVEL2);\r\n"+
-			 " vs.addPropertyValue(ci,VolunteerService.PROPERTY_EVIDENCE, vs.getClassInstance(v, t.getId(), \"SEF-Modul 1\").get(0));\r\n"+
-			 " vs.addPropertyValue(ci,VolunteerService.PROPERTY_EVIDENCE, vs.getClassInstance(v, t.getId(),\"SEF-Modul 2\" ).get(0));\r\n"+
+			"  ClassInstance ci = vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR).get(0); \r\n" +
+			 " vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL2.getName());\r\n"+
+			 " vs.addPropertyValue(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(), \"SEF-Modul 1\").get(0));\r\n"+
+			 " vs.addPropertyValue(ci,TestData.PROPERTY_EVIDENCE, vs.getClassInstances(v, t.getId(),\"SEF-Modul 2\" ).get(0));\r\n"+
             "end\r\n" +
             "rule improveCompDrivingCarL3 \r\n" +  
 			"when\r\n" + 
 			"  v : Volunteer() \r\n" +
 			"  t : Tenant() \r\n" +
 			"  c : ClassInstance() \r\n" +
-			"  vs: VolunteerService(c != null, \r\n" + 
-			"          propertyValueEquals(c.getProperty(VolunteerService.PROPERTY_DRIVING_LEVEL), \"LEVEL2\") == true,  \r\n"+
-     		"          getFilteredInstancesByProperty(v, t.getId(), \"Ausfahrt\", \"role\", \"EINSATZLENKER\").size() > 100) \r\n"+
+			"  vs: VolunteerService(  " + 
+	//		"          getFilteredInstancesByProperty(vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR), TestData.PROPERTY_DRIVING_LEVEL, \"Level 2\").size() > 0, "+
+     		"          getFilteredInstancesByProperty(v, t.getId(), \"Ausfahrt\", \"role\", \"Einsatzlenker\").size() >= 100) \r\n"+
 			"then\r\n" + 
 			"  System.out.println(\"********************** Freiwilliger hat mehr als 100 Ausfahrten als Fahrer und verbessert Kompetenz Driving Car auf Level 3!\");\r\n" + 
-			"  ClassInstance ci = vs.getClassInstance(v, t.getId(), VolunteerService.COMPETENCE_DRIVING_CAR).get(0); \r\n" +
-			 " vs.setProperty(ci,VolunteerService.PROPERTY_DRIVING_LEVEL, VolunteerService.DrivingLevel.LEVEL3);\r\n"+
-			 " vs.addPropertyValue(ci,VolunteerService.PROPERTY_EVIDENCE, \"Anzahl Ausfahrten > 100\");\r\n"+
+			"  System.out.println(\"Ausfahrten: \" + vs.getFilteredInstancesByProperty(v, t.getId(), \"Ausfahrt\", \"role\", \"Einsatzlenker\").size());\r\n" +
+			"  ClassInstance ci = vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR).get(0); \r\n" +
+			 " vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL3.getName());\r\n"+
+			 " vs.addPropertyValue(ci,TestData.PROPERTY_EVIDENCE, \"Anzahl Ausfahrten >= 100\");\r\n"+
+            "end\r\n" +
+            "rule improveCompDrivingCarL4 \r\n" +  
+			"when\r\n" + 
+			"  v : Volunteer() \r\n" +
+			"  t : Tenant() \r\n" +
+		    "  vs: VolunteerService("+
+			"          getFilteredInstancesByProperty(vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR), TestData.PROPERTY_DRIVING_LEVEL, \"Level 3\").size() > 0, "+
+     	    "          hasClassInstance(v, t.getId(), \"SEF Aus- und Fortbildung\") == true, " + 
+     	    "		   hasClassInstance(v, t.getId(), \"SEF Workshop\") == true," +
+     		"          hasClassInstance(v, t.getId(), \"SEF – Theorie- und Praxistraining Notarzt\") == true, " + 
+     	    "          hasClassInstance(v, t.getId(), \"SEF Theorietrainerausbildung\") == true) \r\n" +
+			"then\r\n" + 
+			"  System.out.println(\"Ausfahrten: \" + vs.getFilteredInstancesByProperty(v, t.getId(), \"Ausfahrt\", \"role\", \"Einsatzlenker\").size());\r\n" +
+			"  ClassInstance ci = vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR).get(0); \r\n" +
+			 " vs.setProperty(ci,TestData.PROPERTY_DRIVING_LEVEL, TestData.DrivingLevel.LEVEL4.getName());\r\n"+
+			"end";
+
+	public final static String ruleIssueFahrtenspange = "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" + 
+	        "import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" +
+			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" +
+	        "import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n"+
+			"import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;\r\n"+
+			"import at.jku.cis.iVolunteer.test.data.TestData;\r\n"+
+			"import java.util.Date;\r\n" + 
+			"import java.util.Arrays;\r\n" +
+			"dialect \"mvel\"\r\n" + 
+	        "\r\n" + 
+			"rule checkFahrtenspange \r\n" + 
+			"when\r\n" + 
+			"  v : Volunteer() \r\n" +
+			"  t : Tenant() \r\n" +
+			"  vs: VolunteerService( " + // getClassInstance(v, t.getId(), \"Fahrtenspange Bronze\").size() == 0, " +
+			"          getClassInstances(v, t.getId(), \"Ausfahrt\").size() >= 1000) \r\n" +
+			"then\r\n" + 
+			"  System.out.println(\"********************** Freiwilliger bekommt Fahrtenspange Bronze!\");\r\n" + 
+			"  ClassInstance ci = vs.addClassInstance(v, t.getId(), \"Fahrtenspange Bronze\"); \r\n" +
+			 " vs.setProperty(ci, \"Verliehen am\", new Date());\r\n"+
             "end";
 
-
-
+	public final static String ruleMapper = "package at.jku.cis.iVolunteer.marketplace.rule.engine; \r\n" + 
+			"\r\n" + 
+			"import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" + 
+			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" + 
+			"import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n" + 
+			"\r\n" + 
+			"dialect \"mvel\"\r\n" + 
+			"\r\n" + 
+			"rule \"Test-Claudia\"\r\n" + 
+			"when\r\n" + 
+			"    v : Volunteer(  )  \r\n" + 
+			"    t : Tenant(  )  \r\n" + 
+			"    vs : VolunteerService( getClassInstancesById(v, t.getId(), \"5ebabf2808aa933ad0e86216\").size() >= 200 )  \r\n" + 
+			"then\r\n" + 
+			"System.out.println(\"Volunteer is older than 18\");\r\n" + 
+			"\r\n" + 
+			"end";
+	
+	public final static String ruleMapper2 = "package at.jku.cis.iVolunteer.marketplace.rule.engine; \r\n" + 
+			"\r\n" + 
+			"import at.jku.cis.iVolunteer.model.user.Volunteer;\r\n" + 
+			"import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;\r\n" + 
+			"import at.jku.cis.iVolunteer.model.core.tenant.Tenant;\r\n" + 
+			"\r\n" + 
+			"dialect \"mvel\"\r\n" + 
+			"\r\n" + 
+			"rule \"bootstrap\"\r\n"+
+			"salience 1"+
+			"no-loop"+
+			"when\r\n" +
+				" v : Volunteer() \r\n" +
+				" t : Tenant() \r\n" +
+				" vs: VolunteerService() \r\n" +
+				"then\r\n" + 
+				"  insert(vs.getClassInstances(v, t.getId(), TestData.COMPETENCE_DRIVING_CAR).get(0));\r\n" + 
+			"rule \"Is of valid age\"\r\n" + 
+			"when\r\n" + 
+			"    v : Volunteer(  )  \r\n" + 
+			"    t : Tenant(  )  \r\n" + 
+			"    VolunteerService( currentAge(v) >= 18 )  \r\n" + 
+			"then\r\n" + 
+			"System.out.println(\"Volunteer is older than 18\");\r\n" + 
+			"\r\n" + 
+			"end";
+	
 	
 }

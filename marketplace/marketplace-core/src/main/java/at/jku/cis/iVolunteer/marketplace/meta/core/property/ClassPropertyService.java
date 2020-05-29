@@ -30,6 +30,14 @@ public class ClassPropertyService {
 		}
 		return null;
 	}
+	
+	public ClassProperty<Object> getClassPropertyByName(String classDefinitionId, String classPropertyName, String tenantId) {
+		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
+		if (classDefinition != null) {
+			return findClassPropertyByName(classDefinition, classPropertyName);
+		}
+		return null;
+	}
 
 	public ClassProperty<Object> updateClassProperty(String classDefinitionId, String classPropertyId,
 			ClassProperty<Object> updatedClassProperty) {
@@ -51,6 +59,16 @@ public class ClassPropertyService {
 				.getProperties()
 				.stream()
 				.filter(p -> p.getId().equals(classPropertyId))
+				.findFirst().orElse(null);
+		// @formatter:on
+	}
+	
+	private ClassProperty<Object> findClassPropertyByName(ClassDefinition classDefinition, String classPropertyName) {
+		// @formatter:off
+		return classDefinition
+				.getProperties()
+				.stream()
+				.filter(p -> p.getName().equals(classPropertyName))
 				.findFirst().orElse(null);
 		// @formatter:on
 	}

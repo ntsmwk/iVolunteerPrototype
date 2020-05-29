@@ -21,7 +21,6 @@ public class ContainerRuleEntry extends IVolunteerObject {
 	}
 
 	public ContainerRuleEntry(String tenantId, String marketplaceId, String container) {
-		System.out.println(".... tenantId: " + tenantId);
 		this.tenantId = tenantId;
 		this.marketplaceId = marketplaceId;
 		this.container = container;
@@ -35,7 +34,6 @@ public class ContainerRuleEntry extends IVolunteerObject {
 		this.container = container;
 		this.content = content;
 		setType(ResourceType.DRL);
-		// System.out.println("constructur - end: " + toString());
 	}
 	
 	public String getId() {

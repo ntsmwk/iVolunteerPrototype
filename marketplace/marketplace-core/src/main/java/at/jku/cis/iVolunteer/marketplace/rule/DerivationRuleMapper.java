@@ -30,9 +30,9 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		dto.setTenantId(source.getTenantId());
 		dto.setMarketplaceId(source.getMarketplaceId());
 		dto.setName(source.getName());
-		dto.setAttributeSourceRules(
+		/*dto.setAttributeSourceRules(
 			source
-				.getAttributeSourceRules()
+				//.getAttributeSourceRules()
 				.stream()
 				.map(entry -> new AttributeSourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
@@ -40,12 +40,12 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId(), source.getTenantId()),
 						entry.getMappingOperatorType(),
 						entry.getValue(),
-						entry.getAggregationOperatorType()))
-				.collect(Collectors.toList()));
+						entry.getAggregationOperatorType())) 
+				.collect(Collectors.toList()));*/
 		
 		dto.setClassSourceRules(
 			source
-				.getClassSourceRules()
+				.getLhsClassConditions()
 				.stream()
 				.map(entry -> new ClassSourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
@@ -71,7 +71,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 		derivationRule.setId(target.getId());
 		derivationRule.setMarketplaceId(target.getMarketplaceId());
 		derivationRule.setName(target.getName());
-		derivationRule.setAttributeSourceRules(
+	/*	derivationRule.setAttributeSourceRules(
 			target
 				.getAttributeSourceRules()
 				.stream()
@@ -81,9 +81,9 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 						e.getClassProperty().getId(),
 						e.getMappingOperatorType(),
 						e.getAggregationOperatorType()))
-				.collect(Collectors.toList()));
+				.collect(Collectors.toList()));*/
 
-		derivationRule.setClassSourceRules(
+		derivationRule.setLhsClassConditions(
 				target
 					.getClassSourceRules()
 					.stream()

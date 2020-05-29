@@ -57,6 +57,10 @@ public class CoreVolunteerInitializationService {
 		createVolunteer("BProe", "passme", "Birgit", "Pröll", "05.10.1976","", "");
 		createVolunteer("KKof", "passme", "Katharina", "Kofler", "08.05.1998","Kati", "");
 		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", "01.12.1981", "", "");
+		createVolunteer("KBauer", "passme", "Kerstin", "Bauer", "17.02.1960 09:00", "", "");
+		createVolunteer("EWagner", "passme", "Erich", "Wagner", "11.07.1980 09:00", "", "");
+		createVolunteer("WHaube", "passme", "Werner", "Haube", "08.08.1970 09:00", "", "");
+		createVolunteer("MJachs", "passme", "Melanie", "Jachs", "08.07.1970 09:00", "", "");		
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName, String birthDate,
@@ -68,7 +72,7 @@ public class CoreVolunteerInitializationService {
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
 			volunteer.setFirstname(firstName);
 			volunteer.setLastname(lastName);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy" ).withLocale(Locale.GERMANY);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm" ).withLocale(Locale.GERMANY);
 			LocalDate date = LocalDate.parse(birthDate, formatter);
 			volunteer.setBirthday(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			volunteer.setNickname(nickName);
