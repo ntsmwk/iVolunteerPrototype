@@ -5,8 +5,9 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import {
     DynamicClassInstanceCreationFormModule
 } from 'app/main/content/_shared_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
-import { MatExpansionModule } from '@angular/material';
+import { MatExpansionModule, MatButtonModule } from '@angular/material';
 import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-view.module';
+import { FormPreviewEntryModule } from './preview-entry/preview-entry.module';
 
 // const routes = [
 //   { path: ':marketplaceId', component: ClassInstanceFormPreviewDialogComponent }
@@ -18,7 +19,9 @@ import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-v
         FuseSharedModule,
         DynamicClassInstanceCreationFormModule,
         MatExpansionModule,
-        FormEntryViewModule,
+        MatButtonModule,
+        // FormEntryViewModule,
+        FormPreviewEntryModule,
     ],
     declarations: [ClassInstanceFormPreviewExportDialogComponent],
     exports: [ClassInstanceFormPreviewExportDialogComponent]
