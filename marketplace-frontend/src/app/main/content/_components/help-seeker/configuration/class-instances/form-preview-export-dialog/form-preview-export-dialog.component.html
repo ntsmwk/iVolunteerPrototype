@@ -1,7 +1,7 @@
 <div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar *ngIf="isLoaded">
 
     <div *ngIf="currentFormConfiguration">
-        <h1>{{currentFormConfiguration.name}}</h1>
+        <h1>Export von "{{currentFormConfiguration.name}}"</h1>
 
 
         <mat-accordion multi=true displayMode="flat">
@@ -17,19 +17,15 @@
         </mat-accordion>
     </div>
 
-    <div *ngIf="!currentFormConfiguration">
-        Save first...
-    </div>
-
     <div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 10px">
         <div></div>
 
         <button type="button" mat-raised-button color="primary" (click)="handleExportClick()">
-            Export
+            Exportieren
         </button>
 
         <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
-            Close
+            Schließen
         </button>
 
         <div></div>

@@ -73,16 +73,17 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div *ngIf="formEntry.subEntries.length > 0">
-        Beeinhaltet die folgenden Unter-Einträge:
-      </div>
-      <div *ngFor="let entry of formEntry.subEntries">
-        <app-form-preview-entry [formEntry]="entry" [formConfiguration]="formConfiguration"
-          [exportClicked]="exportClicked" expanded="true" (result)="handleResultEvent($event)"
-          (tupleSelected)="emitTupleSelectionEvent($event)">
-        </app-form-preview-entry>
+        <div *ngIf="formEntry.subEntries.length > 0">
+          Beeinhaltet die folgenden Unter-Einträge:
+        </div>
+        <div *ngFor="let entry of formEntry.subEntries">
+          <app-form-preview-entry [formEntry]="entry" [formConfiguration]="formConfiguration"
+            [exportClicked]="exportClicked" expanded="true" (result)="handleResultEvent($event)"
+            (tupleSelected)="emitTupleSelectionEvent($event)">
+          </app-form-preview-entry>
+
+        </div>
 
       </div>
     </mat-expansion-panel>
