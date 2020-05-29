@@ -11,6 +11,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { ClassProperty } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { FormGroup, FormControl } from '@angular/forms';
+import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
 
 export interface ClassInstanceFormPreviewExportDialogData {
   marketplace: Marketplace;
@@ -95,6 +96,14 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
     formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
+
+    // clear validators for everything except the unableToContinue Property-Question
+    for (const question of formEntry.questions) {
+      if (question.controlType !== 'tuple') {
+        question.validators = [];
+      }
+    }
+
     formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
 
 
@@ -111,32 +120,55 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     return formEntry;
   }
 
-  handleTupleSelection(evt: { selection: { id: any; label: any }; formGroup: FormGroup; }) {
+  handleTupleSelection(evt: { selection: { id: any; label: any }; formEntry: FormEntry }) {
+    console.log("handling selection")
     let unableToContinueControl: FormControl;
-    let unableToContinueControlKey: string;
+    // let unableToContinueControlKey: string;
+    let unableToContinueQuestion: QuestionBase<any>;
     let pathPrefix: string;
 
-    Object.keys(evt.formGroup.controls).forEach((c) => {
+    Object.keys(evt.formEntry.formGroup.controls).forEach((c) => {
       if (c.endsWith("unableToContinue")) {
-        unableToContinueControlKey = c;
-        unableToContinueControl = evt.formGroup.controls[c] as FormControl;
+        // unableToContinueControlKey = c;
+        unableToContinueControl = evt.formEntry.formGroup.controls[c] as FormControl;
         pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
       }
     });
+
+    unableToContinueQuestion = evt.formEntry.questions.find(q => q.key.endsWith('unableToContinue'));
+    console.log(this.data.marketplace);
+    console.log(pathPrefix);
+    console.log(evt.selection.id);
+
 
     this.classDefinitionService.getFormConfigurationChunk(this.data.marketplace, pathPrefix, evt.selection.id)
       .toPromise().then((retFormEntry: FormEntry) => {
         const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
 
+        const unableToContinueProperty = currentFormEntry.classProperties.find(p => p.id.endsWith('unableToContinue'));
+
+        console.log(unableToContinueProperty);
+        unableToContinueProperty.defaultValues = [evt.selection];
+        retFormEntry.classProperties.push(unableToContinueProperty);
+
         retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
 
+
+
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
+
         currentFormEntry.classProperties = retFormEntry.classProperties;
+
         currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
+
         currentFormEntry.formGroup = retFormEntry.formGroup;
+
         currentFormEntry.imagePath = retFormEntry.imagePath;
+
         currentFormEntry.questions = retFormEntry.questions;
+
         currentFormEntry.subEntries = retFormEntry.subEntries;
+
 
         this.expectedNumberOfResults = 0;
         this.calculateExpectedResults(this.currentFormConfiguration.formEntry);
@@ -165,8 +197,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   handleResultEvent(event: FormEntryReturnEventData) {
     this.results.push(event);
-    const unableToContinue = this.containsUnableToContinue(this.results.map(fg => fg.formGroup));
-    if (this.results.length === this.expectedNumberOfResults && !unableToContinue) {
+    console.log("actual vs expected");
+    console.log(this.results.length + "vs" + this.expectedNumberOfResults);
+    // const unableToContinue = this.containsUnsetUnableToContinue(this.results.map(fg => fg.formGroup));
+    if (this.results.length === this.expectedNumberOfResults /*&& !unableToContinue*/) {
 
       this.doExport();
 
@@ -176,36 +210,37 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     } else {
       this.exportClicked = false;
 
-      if (unableToContinue) {
-        this.results.pop();
-      } else {
-        // this.results = [];
-      }
+      // if (unableToContinue) {
+      //   this.results.pop();
+      // } else {
+      //   // this.results = [];
+      // }
     }
   }
 
-  private containsUnableToContinue(formGroups: FormGroup[]) {
-    for (const formGroup of formGroups) {
-      Object.keys(formGroup.controls).forEach(k => {
-        if (k.endsWith('unableToContinue')) {
-          return true;
-        }
-      });
-    }
+  // private containsUnsetUnableToContinue(formGroups: FormGroup[]) {
+  //   for (const formGroup of formGroups) {
+  //     Object.keys(formGroup.controls).forEach(k => {
+  //       if (k.endsWith('unableToContinue')) {
+  //         return true;
+  //       }
+  //     });
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
-  doExport() {
+  private doExport() {
     const json =
       '{' +
       '"tenantId": "' + this.helpseeker.tenantId + '", ' +
       this.addClassToJSON(this.currentFormConfiguration.formEntry) +
       '}';
+
     this.exportFile([json]);
   }
 
-  addClassToJSON(formEntry: FormEntry) {
+  private addClassToJSON(formEntry: FormEntry) {
     return '"classDefinitionId": "' + formEntry.classDefinitions[0].id + '", ' +
       '"properties": [' + this.addPropertiesToJSON(formEntry) + '],' +
       '"subClassInstances": [' +
@@ -213,7 +248,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       ']';
   }
 
-  addClassesToJSON(formEntries: FormEntry[]) {
+  private addClassesToJSON(formEntries: FormEntry[]) {
     let returnString = '';
 
     for (let i = 0; i < formEntries.length; i++) {
@@ -228,13 +263,20 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     return returnString;
   }
 
-  addPropertiesToJSON(formEntry: FormEntry) {
+  private addPropertiesToJSON(formEntry: FormEntry) {
     let returnString = '{';
 
     for (let i = 0; i < formEntry.questions.length; i++) {
-      returnString += ` "${formEntry.questions[i].label}": ""`;
-      if (i < formEntry.questions.length - 1) {
-        returnString += ',';
+
+      if (formEntry.questions[i].controlType !== 'tuple') {
+
+        returnString += ` "${formEntry.questions[i].label}": ""`;
+        if (i < formEntry.questions.length - 1) {
+          returnString += ',';
+        }
+
+      } else {
+        returnString = returnString.substring(0, returnString.length - 1);
       }
     }
 
@@ -243,14 +285,6 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
 
     return returnString;
-  }
-
-  private replacer(key, value) {
-    if (isNullOrUndefined(value)) {
-      return '';
-    } else {
-      return value;
-    }
   }
 
   private exportFile(content: string[]) {
