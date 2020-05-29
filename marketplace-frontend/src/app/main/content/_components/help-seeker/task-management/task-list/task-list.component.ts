@@ -25,8 +25,10 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
 
   private classInstanceDTOs: ClassInstanceDTO[] = [];
   private tableDataSource = new MatTableDataSource<ClassInstanceDTO>();
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
+
   private displayedColumns: string[] = [
     "taskName",
     "taskType1",
@@ -54,6 +56,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     this.participant = <Helpseeker>(
       await this.loginService.getLoggedIn().toPromise()
     );
+
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
         .findRegisteredMarketplaces(this.participant.id)
@@ -71,7 +74,6 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
-   
 
     console.error(this.tableDataSource.data);
   }
