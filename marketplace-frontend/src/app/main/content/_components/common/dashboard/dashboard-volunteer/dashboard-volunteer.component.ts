@@ -24,9 +24,8 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
-import * as Highcharts from 'highcharts';
+import * as Highcharts from "highcharts";
 HC_venn(Highcharts);
-
 
 @Component({
   selector: "dashboard-volunteer",
@@ -39,7 +38,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<ClassInstanceDTO>
+  @ViewChild(MatTable, { static: false }) table: MatTable<ClassInstanceDTO>;
 
   isLoaded: boolean;
 
@@ -52,7 +51,7 @@ export class DashboardVolunteerComponent implements OnInit {
     "taskType1",
     "date",
     "action",
-    "share"
+    "share",
   ];
 
   image;
@@ -74,7 +73,7 @@ export class DashboardVolunteerComponent implements OnInit {
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
 
-  vennData = []
+  vennData = [];
 
   chartOptions: Highcharts.Options = {
     title: {
@@ -82,8 +81,8 @@ export class DashboardVolunteerComponent implements OnInit {
     },
     series: [
       {
-        name: ' ',
-        type: 'venn',
+        name: " ",
+        type: "venn",
         data: this.vennData,
       },
     ],
@@ -102,14 +101,26 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     iconRegistry: MatIconRegistry
   ) {
-    iconRegistry.addSvgIcon("info", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg"));
-    iconRegistry.addSvgIcon("share", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/share.svg"));
-    iconRegistry.addSvgIcon("plus", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/plus.svg"));
-    iconRegistry.addSvgIcon("minus", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg"));
+    iconRegistry.addSvgIcon(
+      "info",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/info.svg")
+    );
+    iconRegistry.addSvgIcon(
+      "share",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/share.svg")
+    );
+    iconRegistry.addSvgIcon(
+      "plus",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/plus.svg")
+    );
+    iconRegistry.addSvgIcon(
+      "minus",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg")
+    );
   }
 
   async ngOnInit() {
-    Highcharts.chart('container', this.chartOptions);
+    Highcharts.chart("container", this.chartOptions);
 
     let t = timer(3000);
     t.subscribe(() => {
@@ -149,7 +160,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      this.mpAndSharedClassInstances.forEach(ci => {
+      this.mpAndSharedClassInstances.forEach((ci) => {
         if (ci.tenantId != ci.issuerId) {
           this.sharedClassInstances.push(ci);
         } else {
@@ -220,7 +231,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -291,7 +302,10 @@ export class DashboardVolunteerComponent implements OnInit {
 
   async removeAllFromLocalRepository() {
     this.localClassInstances = <ClassInstanceDTO[]>(
-      await this.localRepositoryService.removeClassInstances(this.volunteer, this.filteredClassInstances).toPromise());
+      await this.localRepositoryService
+        .removeClassInstances(this.volunteer, this.filteredClassInstances)
+        .toPromise()
+    );
 
     this.calcMetrics();
   }
@@ -338,17 +352,16 @@ export class DashboardVolunteerComponent implements OnInit {
     this.router.navigate(["main/details/" + row.id]);
   }
 
-
   //---- Share functionality -----//
 
   getShareableTenants(ci: ClassInstanceDTO) {
     let tenants: Tenant[];
     tenants = this.subscribedTenants;
-    tenants = tenants.filter(t => t.id != ci.tenantId);
+    tenants = tenants.filter((t) => t.id != ci.tenantId);
 
     this.sharedClassInstances.forEach((shared) => {
       if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
-        tenants = tenants.filter(t => t.id != shared.tenantId)
+        tenants = tenants.filter((t) => t.id != shared.tenantId);
       }
     });
 
@@ -360,7 +373,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
     this.sharedClassInstances.forEach((shared) => {
       if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
-        tenants.push(this.allTenants.find(t => t.id === shared.tenantId));
+        tenants.push(this.allTenants.find((t) => t.id === shared.tenantId));
       }
     });
 
@@ -370,8 +383,11 @@ export class DashboardVolunteerComponent implements OnInit {
   async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
     // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
 
-    let sharedCi = <ClassInstanceDTO>await
-      this.classInstanceService.createSharedClassInstances(this.marketplace, tenant.id, ci.id).toPromise();
+    let sharedCi = <ClassInstanceDTO>(
+      await this.classInstanceService
+        .createSharedClassInstances(this.marketplace, tenant.id, ci.id)
+        .toPromise()
+    );
     this.sharedClassInstances.push(sharedCi);
 
     // TODO: redraw table
@@ -382,63 +398,72 @@ export class DashboardVolunteerComponent implements OnInit {
 
     let deleteCi;
     this.sharedClassInstances.forEach((shared, index, self) => {
-      if (ci.name === shared.name && ci.timestamp === shared.timestamp && shared.tenantId === tenant.id) {
+      if (
+        ci.name === shared.name &&
+        ci.timestamp === shared.timestamp &&
+        shared.tenantId === tenant.id
+      ) {
         deleteCi = shared;
         self.splice(index, 1);
       }
     });
-    await this.classInstanceService.deleteClassInstance(this.marketplace, deleteCi.id).toPromise();
+    await this.classInstanceService
+      .deleteClassInstance(this.marketplace, deleteCi.id)
+      .toPromise();
   }
 
   //---- Share functionality end -----//
 
-
   calcMetrics() {
     // intersection of CIs on mp and local repo
-    this.mpAndLocalClassInstances =
-      this.localClassInstances.filter(ci => -1 !== this.marketplaceClassInstances.map(ci => ci.id).indexOf(ci.id));
+    this.mpAndLocalClassInstances = this.localClassInstances.filter(
+      (ci) =>
+        -1 !== this.marketplaceClassInstances.map((ci) => ci.id).indexOf(ci.id)
+    );
     this.nrMpUnionLr = this.mpAndLocalClassInstances.length;
 
     // only in mp (mp minus interesction)
-    this.nrMpOnly = this.marketplaceClassInstances.length - this.mpAndLocalClassInstances.length;
+    this.nrMpOnly =
+      this.marketplaceClassInstances.length -
+      this.mpAndLocalClassInstances.length;
 
     // only in local repo (local repo minus intersection)
-    this.nrLrOnly = this.localClassInstances.length - this.mpAndLocalClassInstances.length;
+    this.nrLrOnly =
+      this.localClassInstances.length - this.mpAndLocalClassInstances.length;
 
     this.generateVennData();
   }
 
   generateVennData() {
-    let data = []
+    let data = [];
     data.push(
       {
-        sets: ['Freiwilligenpass'],
-        value: this.localClassInstances.length
+        sets: ["Freiwilligenpass"],
+        value: this.localClassInstances.length,
       },
       {
-        sets: ['Marktplatz'],
-        value: this.marketplaceClassInstances.length
+        sets: ["Marktplatz"],
+        value: this.marketplaceClassInstances.length,
       },
       {
-        sets: ['Freiwilligenpass', 'Marktplatz'],
+        sets: ["Freiwilligenpass", "Marktplatz"],
         value: this.nrMpUnionLr,
-        name: 'Synchronisiert'
-      });
+        name: "Synchronisiert",
+      }
+    );
 
     this.vennData = [...data];
     this.chartOptions.series = [
       {
-        name: ' ',
+        name: " ",
         type: "venn",
         data: this.vennData,
       },
     ];
     Highcharts.chart("container", this.chartOptions);
     console.error(this.vennData);
-
   }
 }
-
 
 export interface DialogData {
   name: string;
