@@ -79,44 +79,7 @@
           </tr>
         </tbody>
       </table>
-
-      <!-- Share Icon and Menu-->
-      <!-- <div style="padding-right: 20px; padding-top: 5px;">
-        <button
-          mat-mini-fab
-          type="button"
-          color="primary"
-          [matMenuTriggerFor]="shareMenu"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-
-        <mat-menu
-          #shareMenu="matMenu"
-          xPosition="after"
-          yPosition="below"
-          [overlapTrigger]="false"
-        >
-          <mat-label mat-menu-item disabled style="color: black;"
-            >Freigeben an...</mat-label
-          >
-          <button
-            mat-menu-item
-            (click)="triggerShareDialog()"
-            style="width: 220px;"
-            matTooltip="Recruiter: 'Best Jobs'"
-          >
-            <div fxLayout="row" fxLayoutAlign="start center">
-              <img
-                class="avatar"
-                src="../../../../assets/images/logos/recruiter.jpg"
-              />
-              <div style="padding-left: 10px;"></div>
-              <div>Best Jobs</div>
-            </div>
-          </button>
-        </mat-menu>
-      </div> -->
+      
     </div>
   </mat-card>
 
@@ -254,7 +217,7 @@
         </ng-container>
 
         <ng-container matColumnDef="share">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <mat-header-cell *matHeaderCellDef>
             Geteilt mit
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
@@ -329,3 +292,6 @@
     Daten in deinem lokalen Freiwilligenpass!
   </p>
 </div>
+
+
+<div class="vennParent" id="container"></div>

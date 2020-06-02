@@ -23,6 +23,10 @@ import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
 import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
+import HC_venn from "highcharts/modules/venn";
+import * as Highcharts from 'highcharts';
+HC_venn(Highcharts);
+
 
 @Component({
   selector: "dashboard-volunteer",
@@ -70,6 +74,21 @@ export class DashboardVolunteerComponent implements OnInit {
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
 
+  vennData = []
+
+  chartOptions: Highcharts.Options = {
+    title: {
+      text: undefined,
+    },
+    series: [
+      {
+        name: ' ',
+        type: 'venn',
+        data: this.vennData,
+      },
+    ],
+  };
+
   constructor(
     public dialog: MatDialog,
     private coreHelpseekerService: CoreHelpSeekerService,
@@ -90,6 +109,8 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async ngOnInit() {
+    Highcharts.chart('container', this.chartOptions);
+
     let t = timer(3000);
     t.subscribe(() => {
       this.timeout = true;
@@ -142,7 +163,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      this.calcSyncedClassInstances();
+      this.calcMetrics();
 
       // concat local and mp and remove dublicates (union)
       this.filteredClassInstances = this.localClassInstances.concat(
@@ -235,17 +256,12 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async syncOneToLocalRepository(classInstance: ClassInstanceDTO) {
-    // let ci = <ClassInstance>await
-    //   this.classInstanceService.getClassInstanceById(this.marketplace, classInstanceDTO.id, classInstanceDTO.tenantId).toPromise();
-    // await this.localRepositoryService.synchronizeClassInstance(this.volunteer, ci).toPromise();
-    // this.localClassInstances.push(ci);
-
     this.localClassInstances = <ClassInstanceDTO[]>(
       await this.localRepositoryService
         .synchronizeSingleClassInstance(this.volunteer, classInstance)
         .toPromise()
     );
-    this.calcSyncedClassInstances();
+    this.calcMetrics();
   }
 
   async removeOneFromLocalRepository(classInstance: ClassInstanceDTO) {
@@ -254,16 +270,13 @@ export class DashboardVolunteerComponent implements OnInit {
         .removeSingleClassInstance(this.volunteer, classInstance)
         .toPromise()
     );
-    this.calcSyncedClassInstances();
+    this.calcMetrics();
   }
 
   async syncAllToLocalRepository() {
     let missingClassInstances: ClassInstanceDTO[] = [];
     this.filteredClassInstances.forEach((ci) => {
       if (!(this.localClassInstances.findIndex((t) => t.id === ci.id) >= 0)) {
-        // let ci = <ClassInstance>await
-        //   this.classInstanceService.getClassInstanceById(this.marketplace, ci.id, ci.tenantId).toPromise();
-
         missingClassInstances.push(ci);
       }
     });
@@ -273,46 +286,17 @@ export class DashboardVolunteerComponent implements OnInit {
         .synchronizeClassInstances(this.volunteer, missingClassInstances)
         .toPromise()
     );
-    this.calcSyncedClassInstances();
+    this.calcMetrics();
   }
 
   async removeAllFromLocalRepository() {
-    // let toRemoveClassInstances: ClassInstanceDTO[] = [];
-    // this.filteredClassInstances.forEach(ci => {
-    //   if (this.localClassInstances.findIndex(t => t.id === ci.id) >= 0) {
-    //     toRemoveClassInstances.push(ci);
-    //   }
-    // });
-
-    let newClassInstances: ClassInstanceDTO[] = [];
-
-    newClassInstances = this.localClassInstances.filter((ci) => {
-      return (
-        this.filteredClassInstances.findIndex((t) => t.id === ci.id) === -1
-      );
-    });
-
     this.localClassInstances = <ClassInstanceDTO[]>(
-      await this.localRepositoryService
-        .setClassInstances(this.volunteer, newClassInstances)
-        .toPromise()
-    );
-    this.calcSyncedClassInstances();
+      await this.localRepositoryService.removeClassInstances(this.volunteer, this.filteredClassInstances).toPromise());
+
+    this.calcMetrics();
   }
 
-  calcSyncedClassInstances() {
-    // intersection of CIs on mp and local repo
-    this.mpAndLocalClassInstances = 
-      this.localClassInstances.filter(ci  => -1 !== this.marketplaceClassInstances.map(ci => ci.id).indexOf(ci.id));
-      this.nrMpUnionLr = this.mpAndLocalClassInstances.length;
-
-      // only in mp (mp minus interesction)
-      this.nrMpOnly = this.marketplaceClassInstances.length - this.mpAndLocalClassInstances.length;
-
-      // only in local repo (local repo minus intersection)
-      this.nrLrOnly = this.localClassInstances.length - this.mpAndLocalClassInstances.length;
-
-  }
+  //---- Local Repository functions end -----//
 
   sortData(sort: Sort) {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
@@ -354,6 +338,8 @@ export class DashboardVolunteerComponent implements OnInit {
     this.router.navigate(["main/details/" + row.id]);
   }
 
+
+  //---- Share functionality -----//
 
   getShareableTenants(ci: ClassInstanceDTO) {
     let tenants: Tenant[];
@@ -403,10 +389,55 @@ export class DashboardVolunteerComponent implements OnInit {
     });
     await this.classInstanceService.deleteClassInstance(this.marketplace, deleteCi.id).toPromise();
   }
+
+  //---- Share functionality end -----//
+
+
+  calcMetrics() {
+    // intersection of CIs on mp and local repo
+    this.mpAndLocalClassInstances =
+      this.localClassInstances.filter(ci => -1 !== this.marketplaceClassInstances.map(ci => ci.id).indexOf(ci.id));
+    this.nrMpUnionLr = this.mpAndLocalClassInstances.length;
+
+    // only in mp (mp minus interesction)
+    this.nrMpOnly = this.marketplaceClassInstances.length - this.mpAndLocalClassInstances.length;
+
+    // only in local repo (local repo minus intersection)
+    this.nrLrOnly = this.localClassInstances.length - this.mpAndLocalClassInstances.length;
+
+    this.generateVennData();
+  }
+
+  generateVennData() {
+    let data = []
+    data.push(
+      {
+        sets: ['Freiwilligenpass'],
+        value: this.localClassInstances.length
+      },
+      {
+        sets: ['Marktplatz'],
+        value: this.marketplaceClassInstances.length
+      },
+      {
+        sets: ['Freiwilligenpass', 'Marktplatz'],
+        value: this.nrMpUnionLr,
+        name: 'Synchronisiert'
+      });
+
+    this.vennData = [...data];
+    this.chartOptions.series = [
+      {
+        name: ' ',
+        type: "venn",
+        data: this.vennData,
+      },
+    ];
+    Highcharts.chart("container", this.chartOptions);
+    console.error(this.vennData);
+
+  }
 }
-
-
-
 
 
 export interface DialogData {
