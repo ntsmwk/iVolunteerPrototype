@@ -18,18 +18,14 @@ export class FormPreviewEntryComponent implements OnInit {
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
-  numberOfQuestions: number;
-
-  normalQuestions: QuestionBase<any>[] = [];
-  tupleQuestions: QuestionBase<any>[] = [];
-
+  hasUnableToContinueProperty: boolean;
 
   constructor() { }
 
   ngOnInit() {
-    for (const question of this.formEntry.questions) {
-      question.controlType === 'tuple' ? this.tupleQuestions.push(question) : this.normalQuestions.push(question);
-    }
+    // for (const question of this.formEntry.questions) {
+    //   question.controlType === 'tuple' ? this.tupleQuestions.push(question) : this.normalQuestions.push(question);
+    // }
 
   }
 
@@ -37,7 +33,7 @@ export class FormPreviewEntryComponent implements OnInit {
     if (this.formEntry.formGroup.valid) {
       this.result.emit(new FormEntryReturnEventData(this.formEntry.formGroup, this.formConfiguration.id));
     } else {
-      console.log("invalid");
+      console.log('invalid');
       //   const invalidKeys: string[] = [];
 
       //   for (const key of Object.keys(this.formEntry.formGroup.controls)) {
@@ -72,6 +68,15 @@ export class FormPreviewEntryComponent implements OnInit {
   ngOnChanges() {
     if (this.exportClicked) {
       this.handleResultEvent();
+    }
+  }
+
+  addQuestionEntry(question: QuestionBase<any>) {
+
+    if (question.controlType === 'tuple') {
+      this.hasUnableToContinueProperty = true;
+    } else {
+      return '- ' + question.label;
     }
   }
 
