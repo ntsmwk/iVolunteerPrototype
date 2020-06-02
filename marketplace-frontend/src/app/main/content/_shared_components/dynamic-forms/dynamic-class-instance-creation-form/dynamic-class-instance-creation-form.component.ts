@@ -42,6 +42,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   @Input() form: FormGroup;
   @Input() lastEntry: boolean;
   @Input() finishClicked: boolean;
+  @Input() ignoreValidity: boolean;
 
   submitPressed: boolean;
 
@@ -70,7 +71,7 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     this.submitPressed = true;
     this.form.updateValueAndValidity();
 
-    if (this.form.valid) {
+    if (this.ignoreValidity || this.form.valid) {
       // this.form.disable();
       this.fireResultEvent();
 
@@ -106,10 +107,6 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
 
   navigateBack() {
     window.history.back();
-  }
-
-  removeProperty(question: QuestionBase<any>) {
-    console.log('clicked Remove Property');
   }
 
   handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {

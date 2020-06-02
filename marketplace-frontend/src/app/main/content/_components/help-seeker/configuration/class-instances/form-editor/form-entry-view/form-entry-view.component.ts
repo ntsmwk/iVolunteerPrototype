@@ -14,6 +14,7 @@ export class FormEntryViewComponent implements OnInit {
   @Input() formConfiguration: FormConfiguration;
   @Input() finishClicked: boolean;
   @Input() expanded: boolean;
+  @Input() ignoreValidity: boolean;
   @Output() result = new EventEmitter();
   @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
