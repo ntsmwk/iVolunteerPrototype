@@ -81,7 +81,7 @@ export class DashboardVolunteerComponent implements OnInit {
     }
   };
 
-  colors: Map<any, any> = new Map([['marketplace', '#ffefb2'], ['localRepository', '#ffc9b2'], ['synced', '#afcbe6']]);
+  colors: Map<any, any> = new Map([['marketplace', '#e5e5e5'], ['localRepository', '#ffc9b2'], ['synced', '#afcbe6']]);
 
   constructor(
     public dialog: MatDialog,
