@@ -39,7 +39,7 @@
 
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="row" fxLayoutAlign="start center">
         <organisation-filter
           (tenantSelectionChanged)="tenantSelectionChanged($event)"
@@ -63,7 +63,9 @@
         </button>
       </div>
 
-      <table class="table">
+      <div class="vennParent" id="container"></div>
+
+      <!-- <table class="table">
         <tbody>
           <tr>
             <td>Einträge nur am Marktplatz:</td>
@@ -78,7 +80,7 @@
             <td class="alignRight">{{nrMpUnionLr}} </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
       
     </div>
   </mat-card>
@@ -98,7 +100,7 @@
         color="primary"
         (click)="syncAllToLocalRepository()"
       >
-        Auswahl hinzufügen
+        Auswahl synchronisieren
       </button>
 
       <button
@@ -242,10 +244,7 @@
         ></mat-header-row>
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngClass]="{
-            'is-white': inLocalRepository(element),
-            'is-blue': !inLocalRepository(element)
-          }"
+          [ngStyle]="getStyle(element)"
         ></mat-row>
       </mat-table>
     </div>
@@ -292,6 +291,3 @@
     Daten in deinem lokalen Freiwilligenpass!
   </p>
 </div>
-
-
-<div class="vennParent" id="container"></div>

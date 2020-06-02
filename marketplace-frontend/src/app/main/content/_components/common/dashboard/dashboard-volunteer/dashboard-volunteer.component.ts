@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
@@ -33,7 +33,7 @@ HC_venn(Highcharts);
   templateUrl: "./dashboard-volunteer.component.html",
   styleUrls: ["./dashboard-volunteer.component.scss"],
 })
-export class DashboardVolunteerComponent implements OnInit {
+export class DashboardVolunteerComponent implements OnInit, AfterViewInit {
   volunteer: Volunteer;
   marketplace: Marketplace;
 
@@ -78,16 +78,11 @@ export class DashboardVolunteerComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     title: {
-      text: undefined,
-    },
-    series: [
-      {
-        name: ' ',
-        type: 'venn',
-        data: this.vennData,
-      },
-    ],
+      text: undefined
+    }
   };
+
+  colors: Map<any, any> = new Map([['marketplace', '#ffefb2'], ['localRepository', '#ffc9b2'], ['synced', '#afcbe6']]);
 
   constructor(
     public dialog: MatDialog,
@@ -108,9 +103,10 @@ export class DashboardVolunteerComponent implements OnInit {
     iconRegistry.addSvgIcon("minus", sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg"));
   }
 
-  async ngOnInit() {
-    Highcharts.chart('container', this.chartOptions);
+  ngAfterViewInit() {
+  }
 
+  async ngOnInit() {
     let t = timer(3000);
     t.subscribe(() => {
       this.timeout = true;
@@ -413,29 +409,52 @@ export class DashboardVolunteerComponent implements OnInit {
     data.push(
       {
         sets: ['Freiwilligenpass'],
-        value: this.localClassInstances.length
+        value: 2,
+        displayValue: this.localClassInstances.length,
+        color: this.colors.get('localRepository')
       },
       {
         sets: ['Marktplatz'],
-        value: this.marketplaceClassInstances.length
+        value: 2,
+        displayValue: this.marketplaceClassInstances.length,
+        color: this.colors.get('marketplace')
       },
       {
         sets: ['Freiwilligenpass', 'Marktplatz'],
-        value: this.nrMpUnionLr,
+        value: 1,
+        displayValue: this.nrMpUnionLr,
+        color: this.colors.get('synced'),
         name: 'Synchronisiert'
       });
 
     this.vennData = [...data];
     this.chartOptions.series = [
       {
-        name: ' ',
+        name: 'Anzahl Einträge',
         type: "venn",
         data: this.vennData,
+        tooltip: {
+          pointFormat: '{point.name}: {point.displayValue}',
+        },
       },
     ];
     Highcharts.chart("container", this.chartOptions);
-    console.error(this.vennData);
+  }
 
+  getStyle(ci: ClassInstanceDTO) {
+    if (this.mpAndLocalClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+      return {
+        "background-color": this.colors.get('synced')
+      };
+    } else if (this.localClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+      return {
+        "background-color": this.colors.get('localRepository')
+      };
+    } else {
+      return {
+        "background-color": this.colors.get('marketplace')
+      };
+    }
   }
 }
 
