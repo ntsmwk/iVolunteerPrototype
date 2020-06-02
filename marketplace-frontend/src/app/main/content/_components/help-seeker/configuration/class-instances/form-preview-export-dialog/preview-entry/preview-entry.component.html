@@ -40,23 +40,31 @@
             <mat-expansion-panel-header class="property-mat-expansion-panel-header" expandedHeight="20px"
               collapsedHeight="20px">
               <mat-panel-title>
-                <div fxLayout="row" fxLayoutAlign="start center">
+
+                <div *ngIf="!hasUnableToContinueProperty" fxLayout="row" fxLayoutAlign="start center">
                   <div class="pr-4">{{ formEntry.questions.length }}</div>
                   <div *ngIf="formEntry.questions.length == 1">Property</div>
                   <div *ngIf="formEntry.questions.length != 1">Properties</div>
                 </div>
+
+                <div *ngIf="hasUnableToContinueProperty" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="pr-4">{{ formEntry.questions.length - 1 }}</div>
+                  <div *ngIf="formEntry.questions.length - 1 == 1">Property</div>
+                  <div *ngIf="formEntry.questions.length - 1 != 1">Properties</div>
+                </div>
+
               </mat-panel-title>
             </mat-expansion-panel-header>
 
-            <div *ngFor="let question of formEntry.questions">
-              {{question.label}} {{question.controlType}} {{question.value}}
+            <div *ngFor="let question of formEntry.questions" class="ml-8">
+              {{ addQuestionEntry(question) }}
             </div>
           </mat-expansion-panel>
 
           <div [formGroup]="formEntry.formGroup">
 
             <div *ngFor="let question of formEntry.questions">
-              <mat-form-field class="form-field" *ngIf="question.controlType == 'tuple'">
+              <mat-form-field style="width: 300px" *ngIf="question.controlType == 'tuple'">
 
                 <mat-select placeholder="{{question.label}} *" [formControlName]="question.key" [id]="question.key"
                   [value]="question.value">
