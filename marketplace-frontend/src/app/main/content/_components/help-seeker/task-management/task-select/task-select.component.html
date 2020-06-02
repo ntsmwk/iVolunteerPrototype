@@ -1,12 +1,18 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-  <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+  <!-- <div class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
     <h1 class="l-heading">Einträge erfassen</h1>
     <img
       *ngIf="tenant"
       class="header-logo"
       [src]="tenantService.getTenantImage(tenant)"
     />
-  </div>
+  </div> -->
+
+  <customizable-header
+    *ngIf="tenant"
+    [tenant]="tenant"
+    headerText="Einträge erfassen"
+  ></customizable-header>
 
   <p class="mt-24 fs-25">
     Wähle eine vorgegebene Definition einer Tätigkeit aus.
