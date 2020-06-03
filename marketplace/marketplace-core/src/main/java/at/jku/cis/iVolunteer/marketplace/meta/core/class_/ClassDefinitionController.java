@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfigurationPreviewRequest;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
@@ -100,12 +100,12 @@ public class ClassDefinitionController {
 //		return classDefinitionService.getParentsById(childIds);
 //	}
 
-	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}/tenant/{tenantId}")
-	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId,
-			@PathVariable("tenantId") String tenantId) {
-		return collectionService.aggregateEnums(classDefinitionId);
-
-	}
+//	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}/tenant/{tenantId}")
+//	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId,
+//			@PathVariable("tenantId") String tenantId) {
+//		return collectionService.aggregateEnums(classDefinitionId);
+//
+//	}
 
 	@PutMapping("meta/core/class/definition/form-configuration")
 	private List<FormConfiguration> getFormConfigurations(@RequestBody List<String> ids) {
@@ -134,9 +134,9 @@ public class ClassDefinitionController {
 		return classDefinitionService.getClassDefinitionChunk(pathPrefix, startClassDefinitionId, choiceId);
 	}
 
-	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
-	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {
-		return collectionService.aggregateEnums(classDefinitionId);
-	}
+//	@GetMapping("meta/core/class/definition/enum-values/{classDefinitionId}")
+//	public List<EnumEntry> getEnumValues(@PathVariable("classDefinitionId") String classDefinitionId) {
+//		return collectionService.aggregateEnums(classDefinitionId);
+//	}
 
 }

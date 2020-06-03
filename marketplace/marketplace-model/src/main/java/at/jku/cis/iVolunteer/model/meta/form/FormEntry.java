@@ -12,7 +12,7 @@ public class FormEntry {
 	private List<ClassProperty<Object>> classProperties = new ArrayList<>();
 	private List<ClassDefinition> classDefinitions = new ArrayList<>();
 	
-	private List<EnumRepresentation> enumRepresentations = new ArrayList<>();
+//	private List<EnumRepresentation> enumRepresentations = new ArrayList<>();
 	
 	private List<FormEntry> subEntries = new ArrayList<>();
 
@@ -49,13 +49,13 @@ public class FormEntry {
 		this.classDefinitions = classDefinitions;
 	}
 
-	public List<EnumRepresentation> getEnumRepresentations() {
-		return enumRepresentations;
-	}
-
-	public void setEnumRepresentations(List<EnumRepresentation> enumRepresentations) {
-		this.enumRepresentations = enumRepresentations;
-	}
+//	public List<EnumRepresentation> getEnumRepresentations() {
+//		return enumRepresentations;
+//	}
+//
+//	public void setEnumRepresentations(List<EnumRepresentation> enumRepresentations) {
+//		this.enumRepresentations = enumRepresentations;
+//	}
 
 	public List<FormEntry> getSubEntries() {
 		return subEntries;

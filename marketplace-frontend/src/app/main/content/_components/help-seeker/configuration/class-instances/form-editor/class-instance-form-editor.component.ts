@@ -1,32 +1,32 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { QuestionService } from "app/main/content/_service/question.service";
-import { QuestionControlService } from "app/main/content/_service/question-control.service";
-import { Marketplace } from "app/main/content/_model/marketplace";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { QuestionService } from 'app/main/content/_service/question.service';
+import { QuestionControlService } from 'app/main/content/_service/question-control.service';
+import { Marketplace } from 'app/main/content/_model/marketplace';
 import {
   FormConfiguration,
   FormEntryReturnEventData,
   FormEntry,
-} from "app/main/content/_model/meta/form";
-import { ClassInstance } from "app/main/content/_model/meta/class";
-import { Router, ActivatedRoute } from "@angular/router";
-import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { ObjectIdService } from "app/main/content/_service/objectid.service.";
-import { AbstractControl, FormGroup, FormControl } from "@angular/forms";
+} from 'app/main/content/_model/meta/form';
+import { ClassInstance } from 'app/main/content/_model/meta/class';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
+import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
+import { AbstractControl, FormGroup, FormControl } from '@angular/forms';
 import {
   PropertyInstance,
   PropertyType,
-} from "app/main/content/_model/meta/property";
-import { isNullOrUndefined } from "util";
-import { LoginService } from "app/main/content/_service/login.service";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
-import { Volunteer } from "app/main/content/_model/volunteer";
+} from 'app/main/content/_model/meta/property';
+import { isNullOrUndefined } from 'util';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { Volunteer } from 'app/main/content/_model/volunteer';
 
 @Component({
   selector: "app-class-instance-form-editor",
-  templateUrl: "./class-instance-form-editor.component.html",
-  styleUrls: ["./class-instance-form-editor.component.scss"],
+  templateUrl: './class-instance-form-editor.component.html',
+  styleUrls: ['./class-instance-form-editor.component.scss'],
   providers: [QuestionService, QuestionControlService],
 })
 export class ClassInstanceFormEditorComponent implements OnInit {
@@ -50,7 +50,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   expectedNumberOfResults: number;
   results: FormEntryReturnEventData[];
 
-  @ViewChild("contentDiv", { static: false }) contentDiv: ElementRef;
+  @ViewChild('contentDiv', { static: false }) contentDiv: ElementRef;
   resultClassInstance: ClassInstance;
 
   constructor(
@@ -75,7 +75,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
     Promise.all([
       this.route.params.subscribe((params) => {
-        marketplaceId = params["marketplaceId"];
+        marketplaceId = params['marketplaceId'];
       }),
       this.route.queryParams.subscribe((queryParams) => {
         let i = 0;
@@ -137,10 +137,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     let pathPrefix: string;
 
     Object.keys(evt.formGroup.controls).forEach((c) => {
-      if (c.endsWith("unableToContinue")) {
+      if (c.endsWith('unableToContinue')) {
         unableToContinueControlKey = c;
         unableToContinueControl = evt.formGroup.controls[c] as FormControl;
-        pathPrefix = c.replace(/\.[^.]*unableToContinue/, "");
+        pathPrefix = c.replace(/\.[^.]*unableToContinue/, '');
       }
     });
 
@@ -152,7 +152,6 @@ export class ClassInstanceFormEditorComponent implements OnInit {
 
         currentFormEntry.classDefinitions = retFormEntry.classDefinitions;
         currentFormEntry.classProperties = retFormEntry.classProperties;
-        currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
         currentFormEntry.formGroup = retFormEntry.formGroup;
         currentFormEntry.imagePath = retFormEntry.imagePath;
         currentFormEntry.questions = retFormEntry.questions;
@@ -250,12 +249,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of parentEntry.classProperties) {
       // skip "unableToContinue" Properties
-      if (classProperty.id.endsWith("unableToContinue")) {
+      if (classProperty.id.endsWith('unableToContinue')) {
         continue;
       }
 
       const control = controls.find(
-        (c) => c.id === currentPath + "." + classProperty.id
+        (c) => c.id === currentPath + '.' + classProperty.id
       );
 
       let value: any;
