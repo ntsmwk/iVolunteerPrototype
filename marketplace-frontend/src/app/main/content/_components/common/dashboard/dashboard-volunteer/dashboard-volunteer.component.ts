@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
@@ -77,11 +83,15 @@ export class DashboardVolunteerComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     title: {
-      text: undefined
-    }
+      text: undefined,
+    },
   };
 
-  colors: Map<any, any> = new Map([['marketplace', '#e5e5e5'], ['localRepository', '#ffc9b2'], ['synced', '#afcbe6']]);
+  colors: Map<any, any> = new Map([
+    ["marketplace", "#e5e5e5"],
+    ["localRepository", "#ffc9b2"],
+    ["synced", "#afcbe6"],
+  ]);
 
   constructor(
     public dialog: MatDialog,
@@ -224,7 +234,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -431,33 +441,34 @@ export class DashboardVolunteerComponent implements OnInit {
     let data = [];
     data.push(
       {
-        sets: ['Freiwilligenpass'],
-        value:  this.localClassInstances.length, //2,
+        sets: ["Freiwilligenpass"],
+        value: this.localClassInstances.length, //2,
         displayValue: this.localClassInstances.length,
-        color: this.colors.get('localRepository')
+        color: this.colors.get("localRepository"),
       },
       {
-        sets: ['Marktplatz'],
+        sets: ["Marktplatz"],
         value: this.marketplaceClassInstances.length, //2,
         displayValue: this.marketplaceClassInstances.length,
-        color: this.colors.get('marketplace')
+        color: this.colors.get("marketplace"),
       },
       {
-        sets: ['Freiwilligenpass', 'Marktplatz'],
+        sets: ["Freiwilligenpass", "Marktplatz"],
         value: this.nrMpUnionLr, //1,
         displayValue: this.nrMpUnionLr,
-        color: this.colors.get('synced'),
-        name: 'Synchronisiert'
-      });
+        color: this.colors.get("synced"),
+        name: "Synchronisiert",
+      }
+    );
 
     this.vennData = [...data];
     this.chartOptions.series = [
       {
-        name: 'Anzahl Einträge',
+        name: "Anzahl Einträge",
         type: "venn",
         data: this.vennData,
         tooltip: {
-          pointFormat: '{point.name}: {point.displayValue}',
+          pointFormat: "{point.name}: {point.displayValue}",
         },
       },
     ];
@@ -465,17 +476,17 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   getStyle(ci: ClassInstanceDTO) {
-    if (this.mpAndLocalClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+    if (this.mpAndLocalClassInstances.findIndex((c) => c.id === ci.id) >= 0) {
       return {
-        "background-color": this.colors.get('synced')
+        "background-color": this.colors.get("synced"),
       };
-    } else if (this.localClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+    } else if (this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0) {
       return {
-        "background-color": this.colors.get('localRepository')
+        "background-color": this.colors.get("localRepository"),
       };
     } else {
       return {
-        "background-color": this.colors.get('marketplace')
+        "background-color": this.colors.get("marketplace"),
       };
     }
   }
