@@ -160,7 +160,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
         currentFormEntry.classProperties = retFormEntry.classProperties;
 
-        currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
+        // currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
 
         currentFormEntry.formGroup = retFormEntry.formGroup;
 
