@@ -17,9 +17,9 @@ export interface PropertyTypeOption {
 }
 
 @Component({
-  selector: 'app-single-property',
-  templateUrl: './single-property.component.html',
-  styleUrls: ['./single-property.component.scss']
+  selector: 'app-single-property-builder',
+  templateUrl: './single-property-builder.component.html',
+  styleUrls: ['./single-property-builder.component.scss']
 })
 export class SinglePropertyComponent implements OnInit {
 

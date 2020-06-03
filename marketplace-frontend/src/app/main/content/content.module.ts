@@ -184,7 +184,7 @@ const routes: Route[] = [
     path: "main/property-builder",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-build-form/property-builder.module"
+        "./_components/help-seeker/configuration/property-build-form/property-build-form.module"
       ).then((m) => m.PropertyBuildFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
@@ -349,4 +349,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule {}
+export class FuseContentModule { }

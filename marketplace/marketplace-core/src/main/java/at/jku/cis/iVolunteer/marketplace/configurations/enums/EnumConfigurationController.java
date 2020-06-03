@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.configurations.enums.EnumConfiguration;
@@ -33,7 +32,6 @@ public class EnumConfigurationController {
 	
 	@GetMapping("enum-configuration/{id}")
 	private EnumConfiguration getEnumConfigurationById(@PathVariable("id") String id) {
-
 		return enumConfigurationRepository.findOne(id);
 	}
 	

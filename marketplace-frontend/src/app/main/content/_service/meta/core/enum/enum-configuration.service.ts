@@ -5,7 +5,7 @@ import { EnumConfiguration } from 'app/main/content/_model/meta/configurations';
 
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class EnumConfigurationService {
     constructor(private http: HttpClient) { }
