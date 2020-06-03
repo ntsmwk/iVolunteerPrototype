@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ClassInstanceDTO, ClassArchetype } from '../../_model/meta/class';
-import { Feedback } from '../../_model/feedback';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Marketplace } from '../../_model/marketplace';
 import { Helpseeker } from '../../_model/helpseeker';
@@ -21,12 +20,12 @@ export class AssetInboxComponent implements OnInit {
   output = '';
   submitPressed: boolean;
 
-  datasource = new MatTableDataSource<ClassInstanceDTO | Feedback>();
+  datasource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns;
   displayedColumnsVolunteer = ['checkboxes', 'label', 'archetype', 'issuer', 'date'];
   displayedColumnsHelpseeker = ['checkboxes', 'label', 'archetype', 'user', 'date'];
 
-  selection = new SelectionModel<ClassInstanceDTO | Feedback>(true, []);
+  selection = new SelectionModel<ClassInstanceDTO>(true, []);
 
   @Input() classInstanceDTOs: ClassInstanceDTO[];
   @Input() marketplace: Marketplace;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration } from '../../_model/configurations';
+import { ClassConfiguration } from '../../_model/meta/configurations';
 
 @Injectable({
   providedIn: 'root'

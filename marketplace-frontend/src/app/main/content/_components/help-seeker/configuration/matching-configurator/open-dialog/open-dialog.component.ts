@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
-import { MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MatchingBrowseSubDialogData } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface OpenMatchingDialogData {

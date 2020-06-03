@@ -10,7 +10,7 @@ import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
-import { ClassConfiguration } from '../../../../_model/configurations';
+import { ClassConfiguration } from '../../../../_model/meta/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';

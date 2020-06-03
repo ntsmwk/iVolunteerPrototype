@@ -1,6 +1,6 @@
 import { OnInit, Component, Inject } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatchingConfiguration, ClassConfiguration } from 'app/main/content/_model/configurations';
+import { MatchingConfiguration, ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
