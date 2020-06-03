@@ -432,19 +432,19 @@ export class DashboardVolunteerComponent implements OnInit {
     data.push(
       {
         sets: ['Freiwilligenpass'],
-        value: 2,
+        value:  this.localClassInstances.length, //2,
         displayValue: this.localClassInstances.length,
         color: this.colors.get('localRepository')
       },
       {
         sets: ['Marktplatz'],
-        value: 2,
+        value: this.marketplaceClassInstances.length, //2,
         displayValue: this.marketplaceClassInstances.length,
         color: this.colors.get('marketplace')
       },
       {
         sets: ['Freiwilligenpass', 'Marktplatz'],
-        value: 1,
+        value: this.nrMpUnionLr, //1,
         displayValue: this.nrMpUnionLr,
         color: this.colors.get('synced'),
         name: 'Synchronisiert'
