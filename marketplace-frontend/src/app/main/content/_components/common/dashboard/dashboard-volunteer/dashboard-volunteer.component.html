@@ -39,7 +39,7 @@
 
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="row" fxLayoutAlign="start center">
         <organisation-filter
           (tenantSelectionChanged)="tenantSelectionChanged($event)"
@@ -63,7 +63,9 @@
         </button>
       </div>
 
-      <table class="table">
+      <div class="vennParent" id="container"></div>
+
+      <!-- <table class="table">
         <tbody>
           <tr>
             <td>Einträge nur am Marktplatz:</td>
@@ -78,45 +80,7 @@
             <td class="alignRight">{{nrMpUnionLr}} </td>
           </tr>
         </tbody>
-      </table>
-
-      <!-- Share Icon and Menu-->
-      <!-- <div style="padding-right: 20px; padding-top: 5px;">
-        <button
-          mat-mini-fab
-          type="button"
-          color="primary"
-          [matMenuTriggerFor]="shareMenu"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-
-        <mat-menu
-          #shareMenu="matMenu"
-          xPosition="after"
-          yPosition="below"
-          [overlapTrigger]="false"
-        >
-          <mat-label mat-menu-item disabled style="color: black;"
-            >Freigeben an...</mat-label
-          >
-          <button
-            mat-menu-item
-            (click)="triggerShareDialog()"
-            style="width: 220px;"
-            matTooltip="Recruiter: 'Best Jobs'"
-          >
-            <div fxLayout="row" fxLayoutAlign="start center">
-              <img
-                class="avatar"
-                src="../../../../assets/images/logos/recruiter.jpg"
-              />
-              <div style="padding-left: 10px;"></div>
-              <div>Best Jobs</div>
-            </div>
-          </button>
-        </mat-menu>
-      </div> -->
+      </table> -->
     </div>
   </mat-card>
 
@@ -135,7 +99,7 @@
         color="primary"
         (click)="syncAllToLocalRepository()"
       >
-        Auswahl hinzufügen
+        Auswahl synchronisieren
       </button>
 
       <button
@@ -165,10 +129,17 @@
           >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(entry.tenantId) }}" />
+              <img
+                class="avatar"
+                src="{{
+                  'data:image/png;base64,' + getTenantImage(entry.tenantId)
+                }}"
+              />
 
               <!-- <div>{{ getIssuerName(entry.issuerId) }}</div> -->
-              <div style="align-self: center;">{{ getIssuerName(entry.tenantId) }}</div>
+              <div style="align-self: center;">
+                {{ getIssuerName(entry.tenantId) }}
+              </div>
             </div>
           </mat-cell>
         </ng-container>
@@ -205,69 +176,99 @@
             >Aktionen</mat-header-cell
           >
           <mat-cell *matCellDef="let entry">
-            <mat-icon 
-            style="cursor: pointer;" 
-            (click)="navigateToClassInstanceDetails(entry)"
-            svgIcon="info"
-            matTooltip="Details"
-          ></mat-icon>
+            <mat-icon
+              style="cursor: pointer;"
+              (click)="navigateToClassInstanceDetails(entry)"
+              svgIcon="info"
+              matTooltip="Details"
+            ></mat-icon>
 
             <mat-icon
-                *ngIf="!inLocalRepository(entry)"
-                (click)="syncOneToLocalRepository(entry)"
-                svgIcon="plus"
-                style="cursor: pointer; margin-left: 20px;" 
-                matTooltip="Zum lokalen Freiwilligenpass hinzufügen">
+              *ngIf="!inLocalRepository(entry)"
+              (click)="syncOneToLocalRepository(entry)"
+              svgIcon="plus"
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Zum lokalen Freiwilligenpass hinzufügen"
+            >
             </mat-icon>
 
             <mat-icon
               *ngIf="inLocalRepository(entry)"
               (click)="removeOneFromLocalRepository(entry)"
               svgIcon="minus"
-              style="cursor: pointer; margin-left: 20px;" 
-              matTooltip="Vom lokalen Freiwilligenpass entfernen">
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Vom lokalen Freiwilligenpass entfernen"
+            >
             </mat-icon>
 
             <div *ngIf="inLocalRepository(entry)">
               <mat-icon
                 svgIcon="share"
-                style="cursor: pointer; margin-left: 20px;" 
+                style="cursor: pointer; margin-left: 20px;"
                 matTooltip="Teilen mit..."
-                [matMenuTriggerFor]="shareMenu">
+                [matMenuTriggerFor]="shareMenu"
+              >
               </mat-icon>
-              <mat-menu #shareMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+              <mat-menu
+                #shareMenu="matMenu"
+                xPosition="after"
+                yPosition="below"
+                [overlapTrigger]="false"
+              >
                 <ng-template matMenuContent>
-                <button *ngFor="let tenant of getShareableTenants(entry)" mat-menu-item (click)="shareClassInstance(entry, tenant)">
-                  <div fxLayout="row" fxLayoutAlign="start center">
-                    <img class="avatar" src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}" />
-                    <div>{{tenant.name}}</div>
-                  </div>
-                </button>
-                <button *ngIf="getShareableTenants(entry).length == 0" mat-menu-item>
-                  Bereits an alle geteilt!
-                </button>
-              </ng-template>
+                  <button
+                    *ngFor="let tenant of getShareableTenants(entry)"
+                    mat-menu-item
+                    (click)="shareClassInstance(entry, tenant)"
+                  >
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img
+                        class="avatar"
+                        src="{{
+                          'data:image/png;base64,' + getTenantImage(tenant.id)
+                        }}"
+                      />
+                      <div>{{ tenant.name }}</div>
+                    </div>
+                  </button>
+                  <button
+                    *ngIf="getShareableTenants(entry).length == 0"
+                    mat-menu-item
+                  >
+                    Bereits an alle geteilt!
+                  </button>
+                </ng-template>
               </mat-menu>
             </div>
-
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="share">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
+          <mat-header-cell *matHeaderCellDef>
             Geteilt mit
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
-              <img *ngFor="let tenant of getSharedWith(entry)" class="avatar" 
-              matTooltip="{{tenant.name}}"
+            <img
+              *ngFor="let tenant of getSharedWith(entry)"
+              class="avatar"
+              matTooltip="{{ tenant.name }}"
               src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
               style="cursor: pointer;"
               [matMenuTriggerFor]="revokeMenu"
-              [matMenuTriggerData]="{tenant: tenant}"/>
-            <mat-menu #revokeMenu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+              [matMenuTriggerData]="{ tenant: tenant }"
+            />
+            <mat-menu
+              #revokeMenu="matMenu"
+              xPosition="after"
+              yPosition="below"
+              [overlapTrigger]="false"
+            >
               <ng-template matMenuContent let-tenant="tenant">
-                <button  mat-menu-item (click)="revokeClassInstance(entry, tenant) ">
-                Zurückziehen 
+                <button
+                  mat-menu-item
+                  (click)="revokeClassInstance(entry, tenant)"
+                >
+                  Zurückziehen
                 </button>
               </ng-template>
             </mat-menu>
@@ -279,10 +280,7 @@
         ></mat-header-row>
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngClass]="{
-            'is-white': inLocalRepository(element),
-            'is-blue': !inLocalRepository(element)
-          }"
+          [ngStyle]="getStyle(element)"
         ></mat-row>
       </mat-table>
     </div>

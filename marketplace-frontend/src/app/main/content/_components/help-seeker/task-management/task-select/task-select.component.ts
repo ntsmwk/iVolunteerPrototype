@@ -38,7 +38,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classConfigurationService: ClassConfigurationService,
     private tenantService: TenantService
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.helpseeker = <Helpseeker>(
@@ -48,8 +48,6 @@ export class FuseTaskSelectComponent implements OnInit {
     this.tenant = <Tenant>(
       await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
     );
-
-    this.tenantService.initHeader(this.tenant);
 
     this.marketplace = <Marketplace>(
       await this.coreHelpSeekerService
@@ -71,12 +69,10 @@ export class FuseTaskSelectComponent implements OnInit {
       this.dataSource.data = tasks
         .filter((t) => t.configurationId != null)
         .sort((c1, c2) => c1.configurationId.localeCompare(c2.configurationId));
-      console.error(this.dataSource.data);
     }
   }
 
   onRowSelect(row) {
-    console.error(row);
     this.router.navigate(
       [`main/configurator/instance-editor/${this.marketplace.id}`],
       { queryParams: [row.id] }
