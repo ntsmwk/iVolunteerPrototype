@@ -78,8 +78,7 @@ $custom-typography: mat-typography-config(
   hyphens: auto;
 }
 
-.mat-column-action 
-.mat-column-share {
+.mat-column-action .mat-column-share {
   word-wrap: break-word !important;
   white-space: unset !important;
   overflow-wrap: break-word;
@@ -90,7 +89,6 @@ $custom-typography: mat-typography-config(
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-
 
 .alignRight {
   text-align: right;
@@ -111,6 +109,10 @@ $custom-typography: mat-typography-config(
   height: 200px;
 }
 
+.optionMenu {
+  height: 200px;
+}
+
 .invisible {
-  display:none;
+  display: none;
 }

@@ -40,7 +40,11 @@
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between start">
-      <div fxLayout="column" fxLayoutAlign="space-evenly start">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-between start"
+        class="optionMenu"
+      >
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <organisation-filter
             (tenantSelectionChanged)="tenantSelectionChanged($event)"
@@ -91,7 +95,7 @@
         </div>
       </div>
       <div fxLayout="column">
-        <div class="vennParent" id="container"></div>
+        <div class="vennParent optionMenu" id="container"></div>
       </div>
       <!-- <table class="table">
         <tbody>
