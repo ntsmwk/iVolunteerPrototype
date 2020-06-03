@@ -104,7 +104,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    iconRegistry: MatIconRegistry
+    iconRegistry: MatIconRegistry,
+    private changeDetectorRefs: ChangeDetectorRef
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -385,7 +386,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
   async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
     // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
-
     let sharedCi = <ClassInstanceDTO>(
       await this.classInstanceService
         .createSharedClassInstances(this.marketplace, tenant.id, ci.id)
@@ -394,6 +394,9 @@ export class DashboardVolunteerComponent implements OnInit {
     this.sharedClassInstances.push(sharedCi);
 
     // TODO: redraw table
+    // Does not work ;)
+    // this.changeDetectorRefs.detectChanges();
+    // this.paginator._changePageSize(this.paginator.pageSize);
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
