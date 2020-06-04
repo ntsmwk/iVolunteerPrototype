@@ -5,16 +5,16 @@
                 <mat-icon>add</mat-icon>
             </td>
             <td>
-                <h1>Neues Property erstellen</h1>
+                <h1>Neues Property / Enum erstellen</h1>
             </td>
         </tr>
     </table>
 </div>
 
 <mat-dialog-content *ngIf="loaded">
-    <app-single-property [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
+    <app-builder-container [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
         [allPropertyDefinitions]="data.allPropertyDefinitions" (result)="handleResultEvent($event)">
-    </app-single-property>
+    </app-builder-container>
 </mat-dialog-content>
 
 <!-- <mat-dialog-actions>

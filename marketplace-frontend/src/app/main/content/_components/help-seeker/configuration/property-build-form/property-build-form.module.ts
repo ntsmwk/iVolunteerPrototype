@@ -6,10 +6,12 @@ import {
   MatProgressSpinnerModule,
   MatCommonModule,
   MatIconModule,
+  MatTabsModule,
 } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { HeaderModule } from 'app/main/content/_shared_components/header/header.module';
-import { SinglePropertyModule } from './single-property/single-property-builder.module';
+import { SinglePropertyBuilderModule } from './single-property/single-property-builder.module';
+import { BuilderContainerModule } from './builder-container/builder-container.module';
 
 const routes = [
   { path: ':propertyId', component: PropertyBuildFormComponent },
@@ -26,10 +28,11 @@ const routes = [
     MatCommonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    SinglePropertyModule,
+    BuilderContainerModule,
     HeaderModule,
+    MatTabsModule,
   ],
   declarations: [PropertyBuildFormComponent],
-  providers: [],
+  providers: [PropertyBuildFormComponent],
 })
 export class PropertyBuildFormModule { }
