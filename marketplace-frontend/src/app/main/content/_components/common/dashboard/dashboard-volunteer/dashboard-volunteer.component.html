@@ -38,29 +38,50 @@
   <div style="padding-top: 10px;"></div>
 
   <mat-card *ngIf="isLocalRepositoryConnected">
-    <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between start">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <organisation-filter
-          (tenantSelectionChanged)="tenantSelectionChanged($event)"
-          *ngIf="subscribedTenants.length > 0"
-        >
-        </organisation-filter>
+      <div fxLayout="column" fxLayoutAlign="space-between start">
+        <!-- Organisation Filter -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <organisation-filter
+            (tenantSelectionChanged)="tenantSelectionChanged($event)"
+            *ngIf="subscribedTenants.length > 0"
+          >
+          </organisation-filter>
 
-        <h2 *ngIf="subscribedTenants.length == 0">
-          Du bist noch keiner Organisation beigetreten:
-        </h2>
+          <h2 *ngIf="subscribedTenants.length == 0">
+            Du bist noch keiner Organisation beigetreten:
+          </h2>
 
-        <!-- Find new Organisation button -->
-        <button
-          class="mt-20"
-          style="height: 60px; margin: 3px; margin-left: 10px;"
-          mat-raised-button
-          color="primary"
-          (click)="navigateToTenantOverview(row)"
-        >
-          Organisationen verwalten
-        </button>
+          <!-- Find new Organisation button -->
+          <button
+            class="mt-20"
+            style="height: 60px; margin: 3px; margin-left: 10px;"
+            mat-raised-button
+            color="primary"
+            (click)="navigateToTenantOverview(row)"
+          >
+            Organisationen verwalten
+          </button>
+        </div>
+
+        <div class="test" fxLayout="row" fxLayoutAlign="end center">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="syncAllToLocalRepository()"
+          >
+            Auswahl synchronisieren
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="removeAllFromLocalRepository()"
+            style="margin-left: 20px;"
+          >
+            Auswahl entfernen
+          </button>
+        </div>
       </div>
 
       <div class="vennParent" id="container"></div>
@@ -93,25 +114,6 @@
     class="mat-card p-20"
     fxLayout="column"
   >
-    <div fxLayout="row" fxLayoutAlign="end center">
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="syncAllToLocalRepository()"
-      >
-        Auswahl synchronisieren
-      </button>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="removeAllFromLocalRepository()"
-        style="margin-left: 20px;"
-      >
-        Auswahl entfernen
-      </button>
-    </div>
-
     <div fxLayout="row" style="width: 100%;" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
@@ -281,7 +283,8 @@
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
           [ngStyle]="getStyle(element)"
-        ></mat-row>
+        >
+        </mat-row>
       </mat-table>
     </div>
   </div>

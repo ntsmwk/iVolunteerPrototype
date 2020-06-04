@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
@@ -25,6 +31,7 @@ import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
+import { HttpClient } from "@angular/common/http";
 HC_venn(Highcharts);
 
 @Component({
@@ -77,11 +84,15 @@ export class DashboardVolunteerComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     title: {
-      text: undefined
-    }
+      text: undefined,
+    },
   };
-
-  colors: Map<any, any> = new Map([['marketplace', '#e5e5e5'], ['localRepository', '#ffc9b2'], ['synced', '#afcbe6']]);
+  // TODO marketplace: red, localRepository: blue, synced: green
+  colors: Map<String, String> = new Map([
+    ["marketplace", "#EF5350"],
+    ["localRepository", "#29B6F6"],
+    ["synced", "#9CCC65"],
+  ]);
 
   constructor(
     public dialog: MatDialog,
@@ -94,7 +105,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    iconRegistry: MatIconRegistry
+    private http: HttpClient,
+    private iconRegistry: MatIconRegistry
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -202,6 +214,9 @@ export class DashboardVolunteerComponent implements OnInit {
     let tenant = this.allTenants.find((t) => t.id === tenantId);
     if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
+
+      //const reader = new FileReader();
+      //return reader.readAsBinaryString(await this.http.get('/assets/images/avatars/profile.jpg', { responseType: 'blob' }).toPromise());
     } else {
       return tenant.image;
     }
@@ -213,7 +228,7 @@ export class DashboardVolunteerComponent implements OnInit {
     if (!isNullOrUndefined(tenant)) {
       return tenant.name;
     } else {
-      return "";
+      return "Unbekannt";
     }
   }
 
@@ -224,7 +239,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
@@ -431,51 +446,92 @@ export class DashboardVolunteerComponent implements OnInit {
     let data = [];
     data.push(
       {
-        sets: ['Freiwilligenpass'],
-        value:  this.localClassInstances.length, //2,
+        sets: ["Freiwilligenpass"],
+        value: this.localClassInstances.length, //2,
         displayValue: this.localClassInstances.length,
-        color: this.colors.get('localRepository')
+        color: this.colors.get("localRepository"),
+        dataLabels: {
+          y: -15,
+        },
       },
       {
-        sets: ['Marktplatz'],
+        sets: ["Marktplatz"],
         value: this.marketplaceClassInstances.length, //2,
         displayValue: this.marketplaceClassInstances.length,
-        color: this.colors.get('marketplace')
+        color: this.colors.get("marketplace"),
+        dataLabels: {
+          y: 0,
+        },
       },
       {
-        sets: ['Freiwilligenpass', 'Marktplatz'],
+        sets: ["Freiwilligenpass", "Marktplatz"],
         value: this.nrMpUnionLr, //1,
         displayValue: this.nrMpUnionLr,
-        color: this.colors.get('synced'),
-        name: 'Synchronisiert'
-      });
+        color: this.colors.get("synced"),
+        name: "Synchronisiert",
+        dataLabels: {
+          y: 15,
+        },
+      }
+    );
 
     this.vennData = [...data];
     this.chartOptions.series = [
       {
-        name: 'Anzahl Einträge',
+        name: "Anzahl Einträge",
         type: "venn",
         data: this.vennData,
         tooltip: {
-          pointFormat: '{point.name}: {point.displayValue}',
+          pointFormat: "{point.name}: {point.displayValue}",
+        },
+        cursor: "pointer",
+        events: {
+          click: (event) => {
+            this.onVennClicked(event);
+          },
+        },
+        dataLabels: {
+          align: "center",
+          allowOverlap: false,
         },
       },
     ];
     Highcharts.chart("container", this.chartOptions);
   }
 
+  onVennClicked(event) {
+    console.error(event.point.name);
+
+    console.error("mpAndLocalClassInstances", this.mpAndLocalClassInstances);
+    console.error("localClassInstances", this.localClassInstances);
+    console.error("marketplaceClassInstances", this.marketplaceClassInstances);
+  }
+
   getStyle(ci: ClassInstanceDTO) {
-    if (this.mpAndLocalClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+    if (
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0
+    ) {
+      let color = this.colors.get("synced") + "4D"; // opacity
       return {
-        "background-color": this.colors.get('synced')
+        "background-color": color,
       };
-    } else if (this.localClassInstances.findIndex(c => c.id === ci.id) >= 0) {
+    } else if (
+      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) === -1
+    ) {
+      let color = this.colors.get("localRepository") + "4D";
+
       return {
-        "background-color": this.colors.get('localRepository')
+        "background-color": color,
       };
-    } else {
+    } else if (
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstances.findIndex((c) => c.id === ci.id) === -1
+    ) {
+      let color = this.colors.get("marketplace") + "4D";
       return {
-        "background-color": this.colors.get('marketplace')
+        "background-color": color,
       };
     }
   }
