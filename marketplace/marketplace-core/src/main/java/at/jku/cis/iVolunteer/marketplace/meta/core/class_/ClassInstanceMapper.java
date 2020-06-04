@@ -70,7 +70,7 @@ public class ClassInstanceMapper {
 				if (endDate.getValues().size() > 0) {
 					try {
 					dto.setDateTo((Date) endDate.getValues().get(0));
-					}catch(ClassCastException e) {
+					} catch (ClassCastException e) {
 						Date parsedDate = this.dateTimeService.parseMultipleDateFormats((String)endDate.getValues().get(0));
 						dto.setDateTo(parsedDate);
 					}
