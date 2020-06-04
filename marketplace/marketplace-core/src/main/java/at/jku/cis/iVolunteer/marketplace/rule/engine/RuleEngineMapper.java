@@ -4,20 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.Criteria;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.EQCriteria;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.GTCriteria;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.SingleCriteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
-import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.ClassActionRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.ClassAggregationOperatorType;
-import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.Action;
+import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
+import at.jku.cis.iVolunteer.model.rule.ClassAction;
+import at.jku.cis.iVolunteer.model.rule.ClassCondition;
+import at.jku.cis.iVolunteer.model.rule.Condition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
-import at.jku.cis.iVolunteer.model.rule.GeneralAttributeEntry;
-import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
+import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
+import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
+import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
 
 @Component
 public class RuleEngineMapper {
@@ -26,6 +24,7 @@ public class RuleEngineMapper {
 	@Autowired ClassPropertyService classPropertyService;
 	
 	public String generateDroolsRuleFrom(DerivationRule derivationRule) {
+		System.out.println("  derivation Rule: " + derivationRule.getName());
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(newPackage());
 		stringBuilder.append(newGeneralImports());
@@ -82,16 +81,21 @@ public class RuleEngineMapper {
 		stringBuilder.append(newPattern("t", "Tenant"));
 		// 
 		stringBuilder.append(newPattern("vs", "VolunteerService", true));
-		for (GeneralAttributeEntry genAttr: derivationRule.getLhsGeneralConditions()) {
-			if (derivationRule.getLhsGeneralConditions().indexOf(genAttr) > 0)
+		
+		for (int i=0; i < derivationRule.getGeneralConditions().size(); i++) {
+			GeneralCondition genCond = derivationRule.getGeneralConditions().get(i);
+			stringBuilder.append(mapGeneralConditionToRuleConstraint(genCond));
+			// AND - condition assumed --> insert "," after subcondition
+			if (i < derivationRule.getGeneralConditions().size()-1) 
 				stringBuilder.append(",\r\n");
-			stringBuilder.append(mapGeneralAttributeToRuleConstraint(genAttr));
 		}
 		stringBuilder.append(patternEnd()); // end volunteer service
 		stringBuilder.append(newPattern("cis", "ClassInstanceService", true));
-		for (ClassSourceRuleEntry classRuleEntry: derivationRule.getLhsClassConditions()) {
-			stringBuilder.append(mapClassSourceRuleEntryToRuleConstraint(classRuleEntry));
-			if (derivationRule.getLhsClassConditions().indexOf(classRuleEntry) < derivationRule.getLhsClassConditions().size()-1)
+
+		for (int i=0; i < derivationRule.getConditions().size(); i++) {
+			Condition condition = derivationRule.getConditions().get(i);
+			stringBuilder.append(mapConditionToRuleConstraint(condition));
+			if (i < derivationRule.getConditions().size()-1)
 				stringBuilder.append(",\r\n");
 		} 
 		stringBuilder.append(patternEnd());
@@ -101,7 +105,6 @@ public class RuleEngineMapper {
 	
 	private String newPattern(String id, String type) {
 		return " " + id + ": " + type + "( ) \r\n";
-		
 	}
 	
 	private String newPattern(String id, String type, boolean constraints) {
@@ -117,8 +120,12 @@ public class RuleEngineMapper {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("then\r\n ");
 		stringBuilder.append("  System.out.println(\" Bedingung wird erfüllt, yay!!!! \");\r\n");
-		for (ClassActionRuleEntry classAction: derivationRule.getRhsRuleActions()) {
-			stringBuilder.append(mapClassActionRuleEntryToRuleAction(classAction));
+		for (Action action: derivationRule.getActions()) {
+			if (action instanceof ClassAction)
+				stringBuilder.append(mapClassActionToRuleAction((ClassAction)action));
+			else {
+				// XXX to do
+			}
 		}
 		stringBuilder.append("\r\n");
 		return stringBuilder.toString();
@@ -136,52 +143,81 @@ public class RuleEngineMapper {
     .rhs("System.out.println(\"Volunteer is older than 18\");")
     .end();*/
 	
-	private String mapClassSourceRuleEntryToRuleConstraint(ClassSourceRuleEntry classSourceRuleEntry) {
+	private String mapConditionToRuleConstraint(Condition condition) {
+		StringBuilder s = new StringBuilder();
+		if (condition instanceof ClassCondition)
+			// we have reached a leaf --> class condition
+			return mapClassConditionToRuleConstraint((ClassCondition) condition);
+		else if (condition instanceof MultipleConditions) {
+			// we are at a node --> dissect multiple conditions
+			MultipleConditions multiCond = (MultipleConditions) condition;
+			
+			if (multiCond.getLogicalOperator().equals(LogicalOperatorType.NOT))
+				s.append(decodeLogicalOperator(multiCond.getLogicalOperator()));
+		    
+			s.append(" ( ");
+			for(int i=0; i < multiCond.getConditions().size(); i++) {
+				Condition c = multiCond.getConditions().get(i);
+				// evaluate subcondition
+				s.append(mapConditionToRuleConstraint(c));
+				// insert logical operator if necessary 
+				if (!multiCond.getLogicalOperator().equals(LogicalOperatorType.NOT) &&
+					i < multiCond.getConditions().size()-1)
+					s.append(decodeLogicalOperator(multiCond.getLogicalOperator()));
+			}
+			s.append(" )");
+		}
+		return s.toString();
+			
+	}
+	
+	private String mapClassConditionToRuleConstraint(ClassCondition classCondition) {
 		StringBuilder stringBuilder = new StringBuilder();
-		String constraints = "getClassInstances(v, \"" + classSourceRuleEntry.getClassDefinitionId() + "\", t.getId())";
+		String constraints = "getClassInstances(v, \"" + classCondition.getClassDefinitionId() + "\", t.getId())";
 		// get properties to filter for class instance
-		for (AttributeSourceRuleEntry attrRule: classSourceRuleEntry.getAttributeSourceRules()) {
+		for (AttributeCondition attrCondition: classCondition.getAttributeConditions()) {
 			constraints = " filterInstancesByPropertyCriteria("+ constraints + ", " + 
-						decodeAttributeSourceRuleEntry(attrRule) + ")";
+						decodeAttributeCondition(attrCondition) + ")";
 		}
 		stringBuilder.append(
 			constraints + 
-		    decodeAggregationOperator(classSourceRuleEntry.getAggregationOperatorType(), 
-		    		                  classSourceRuleEntry.getValue())); 
+		    decodeAggregationOperator((AggregationOperatorType)classCondition.getOperatorType(), 
+		    		                  classCondition.getValue())); 
 		
 		return stringBuilder.toString();
 	}
 	
 
-	private String mapGeneralAttributeToRuleConstraint(GeneralAttributeEntry generalAttribute) {
-		switch (generalAttribute.getAttribute()) {
+	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) {
+		switch (generalCondition.getAttribute()) {
 			case AGE:
-				return "	currentAge( v ) " + decodeMappingOperator(generalAttribute.getMappingOperatorType()) + " " + generalAttribute.getValue(); 
+				return "	currentAge( v ) " + decodeComparisonOperator((ComparisonOperatorType)generalCondition.getOperatorType()) + 
+						       " " + generalCondition.getValue(); 
 			default: return null;
 		}
 	}
 	
-	private String mapClassActionRuleEntryToRuleAction(ClassActionRuleEntry classActionRuleEntry) {
+	private String mapClassActionToRuleAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
-		switch (classActionRuleEntry.getClassRuleActionType()) {
+		switch (classAction.getType()) {
 		case DELETE:
-			stringBuilder.append(newDeleteAction(classActionRuleEntry));
+			stringBuilder.append(newDeleteAction(classAction));
 			break;
 		case NEW: 
-			stringBuilder.append(newInsertAction(classActionRuleEntry));
+			stringBuilder.append(newInsertAction(classAction));
 			break;
 		case UPDATE:
-			stringBuilder.append(newUpdateAction(classActionRuleEntry));
+			stringBuilder.append(newUpdateAction(classAction));
 			default:
 		}
 		return stringBuilder.toString();
 	}
 	
-	private String newUpdateAction(ClassActionRuleEntry classAction) {
+	private String newUpdateAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("  ClassInstance ci = cis.getClassInstance(v, \"" + 
 	             classAction.getClassDefinitionId() + "\", t.getId());\r\n");
-		for (AttributeSourceRuleEntry attribute: classAction.getAttributeSourceRules()) {
+		for (AttributeCondition attribute: classAction.getAttributeConditions()) {
 			stringBuilder.append("  cis.setProperty(ci, \"" + 
 		                              attribute.getClassPropertyId() + "\", \"" + 
 					                  attribute.getValue().toString() + "\");\r\n");
@@ -189,11 +225,12 @@ public class RuleEngineMapper {
 		return stringBuilder.toString();
 	}
 	
-	private String newInsertAction(ClassActionRuleEntry classAction) {
+	private String newInsertAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("  ClassInstance ci = cis.newClassInstance(v, " + 
 		         "\"" + classAction.getClassDefinitionId() + "\", t.getId());\r\n");
-		for (AttributeSourceRuleEntry attribute: classAction.getAttributeSourceRules()) {
+		for (AttributeCondition attribute: classAction.getAttributeConditions()) {
+			System.out.println(" attribute-Id: " + attribute.getClassPropertyId() + " attribute: " + attribute.getValue());
 			stringBuilder.append("  cis.setProperty(ci, \"" + 
 		                              attribute.getClassPropertyId() + "\", \"" + 
 					                  attribute.getValue().toString() + "\");\r\n");
@@ -201,18 +238,18 @@ public class RuleEngineMapper {
 		return stringBuilder.toString();
 	}
 	
-	private String newDeleteAction(ClassActionRuleEntry classAction) {
+	private String newDeleteAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
-		if (classAction.getAttributeSourceRules().size() == 0) {
+		if (classAction.getAttributeConditions().size() == 0) {
 			// delete all instances of class
 			stringBuilder.append("  cis.deleteClassInstances( v, " + 
 					 "\"" + classAction.getClassDefinitionId() + "\", t.getId());\r\n");
 		} else {
 			// filter properties
 			String actions = "   cis.getClassInstances(v, \"" + classAction.getClassDefinitionId() + "\", t.getId())";
-			for (AttributeSourceRuleEntry attrRule: classAction.getAttributeSourceRules()) {
+			for (AttributeCondition attrCondition: classAction.getAttributeConditions()) {
 				actions = " cis.filterInstancesByPropertyCriteria( \r\n"+ actions + ", \r\n" + 
-							decodeAttributeSourceRuleEntry(attrRule) + ")";
+							decodeAttributeCondition(attrCondition) + ")";
 			}
 			actions = "cis.deleteClassInstances ( \r\n" + actions + " );";
 			stringBuilder.append(actions);
@@ -220,9 +257,9 @@ public class RuleEngineMapper {
 		return stringBuilder.toString();
 	}
 	
-	private String decodeAttributeSourceRuleEntry(AttributeSourceRuleEntry attributeSourceRuleEntry) {
+	private String decodeAttributeCondition(AttributeCondition attributeCondition) {
 		String criteria = null;
-		switch(attributeSourceRuleEntry.getMappingOperatorType()) {		
+		switch((ComparisonOperatorType)attributeCondition.getOperatorType()) {		
 		case EQ: criteria = "new EQCriteria"; break;
 		case NE: criteria = "new NECriteria"; break;	
 		case GT: criteria = "new GTCriteria"; break;
@@ -233,13 +270,13 @@ public class RuleEngineMapper {
 			break;
 		}
 		if (criteria != null)
-			criteria += "(\"" + attributeSourceRuleEntry.getClassPropertyId() + "\", " + 
-						"\"" + attributeSourceRuleEntry.getValue() + "\")";
+			criteria += "(\"" + attributeCondition.getClassPropertyId() + "\", " + 
+						"\"" + attributeCondition.getValue() + "\")";
 		return criteria;
 	}
 	
-	private String decodeAggregationOperator(ClassAggregationOperatorType classAggregationOperatorType, Object value) {
-		switch(classAggregationOperatorType) {
+	private String decodeAggregationOperator(AggregationOperatorType aggregationOperator, Object value) {
+		switch(aggregationOperator) {
 		case COUNT:
 			return ".size() == " + value; 
 		case EXISTS:
@@ -254,14 +291,26 @@ public class RuleEngineMapper {
 		return null;
 	}
 	
-	private String decodeMappingOperator(MappingOperatorType mappingOperatorType) {
-		switch (mappingOperatorType) {
+	private String decodeComparisonOperator(ComparisonOperatorType comparisonOperator) {
+		switch (comparisonOperator) {
 		case GT: return " > "; 
 		case GE: return " >= ";
 		case LT: return " < ";
 		case LE: return " <= ";
 		default:
 			break;
+		}
+		return null;
+	}
+	
+	private String decodeLogicalOperator(LogicalOperatorType logicalOperator) {
+		switch (logicalOperator) {
+		case AND:
+			return " && "; 
+		case OR: 
+			return " || ";
+		case NOT:
+			return " ! ";
 		}
 		return null;
 	}

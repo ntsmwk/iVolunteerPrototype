@@ -11,13 +11,20 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class DerivationRule extends IVolunteerObject {
 
 	private String name;
-	private List<ClassSourceRuleEntry> lhsClassConditions = new ArrayList<>();
-	//private List<AttributeSourceRuleEntry> attributeSourceRuleEntries = new ArrayList<>();
-	private List<GeneralAttributeEntry> lhsGeneralConditions = new ArrayList<>();
-	private List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<>();
-	private String target;
+	private String container;
+	private List<GeneralCondition> generalConditions;
+	private List<Condition> conditions = new ArrayList<>();
+	private List<Action> actions = new ArrayList<>();
 
 	public DerivationRule() {
+		generalConditions = new ArrayList<GeneralCondition>();
+		conditions = new ArrayList<>();
+		actions = new ArrayList<>();
+	}
+	public DerivationRule(String name, String container) {
+		this();
+		this.name = name;
+		this.container = container;
 	}
 
 	public String getName() {
@@ -28,36 +35,48 @@ public class DerivationRule extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public String getTarget() {
-		return target;
+	public String getContainer() {
+		return container;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public void setContainer(String container) {
+		this.container = container;
 	}
 
-	public List<ClassSourceRuleEntry> getLhsClassConditions() {
-		return lhsClassConditions;
+	public List<GeneralCondition> getGeneralConditions() {
+		return generalConditions;
 	}
 
-	public void setLhsClassConditions(List<ClassSourceRuleEntry> lhsClassConditions) {
-		this.lhsClassConditions = lhsClassConditions;
+	public void setGeneralConditions(List<GeneralCondition> generalConditions) {
+		this.generalConditions = generalConditions;
 	}
 
-	public List<GeneralAttributeEntry> getLhsGeneralConditions() {
-		return lhsGeneralConditions;
-	}
-
-	public void setLhsGeneralConditions(List<GeneralAttributeEntry> lhsGeneralConditions) {
-		this.lhsGeneralConditions = lhsGeneralConditions;
+	public void addGeneralCondition(GeneralCondition generalCondition) {
+		generalConditions.add(generalCondition);
 	}
 	
-	public List<ClassActionRuleEntry> getRhsRuleActions() {
-		return rhsRuleActions;
+	public List<Condition> getConditions() {
+		return conditions;
 	}
 
-	public void setRhsRuleActions(List<ClassActionRuleEntry> rhsRuleActions) {
-		this.rhsRuleActions = rhsRuleActions;
+	public void setConditions(List<Condition> conditions) {
+		this.conditions = conditions;
+	}
+	
+	public void addCondition(Condition condition) {
+		conditions.add(condition);
+	}
+	
+	public List<Action> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<Action> actions) {
+		this.actions = actions;
+	}
+	
+	public void addAction(Action action) {
+		actions.add(action);
 	}
 
 }

@@ -1,22 +1,11 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine;
 
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import org.drools.compiler.lang.dsl.DSLMapParser.entry_return;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieModule;
 import org.kie.api.builder.ReleaseId;
@@ -27,14 +16,12 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Fibonacci;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.test.Message;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.NoSuchContainerException;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerExtendedView;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
@@ -48,7 +35,6 @@ import at.jku.cis.iVolunteer.model.user.Volunteer;
 public class RuleService {
 	
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
-	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private VolunteerRepository volunteerRepository;
 	@Autowired private VolunteerService volunteerService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
@@ -64,7 +50,9 @@ public class RuleService {
     public List<String> getContainerNames(String tenantId){
     	List<ContainerRuleEntry> rules = containerRuleEntryRepository.findByTenantId(tenantId);
     	// obtain containers with rules
-		List<String> containerNames = rules.stream().map(x -> x.getContainer()).distinct().collect(Collectors.toList());
+		List<String> containerNames = rules.stream().map(x -> x.getContainer())
+				                                    .distinct()
+				                                    .collect(Collectors.toList());
 		return containerNames;
     }
     
@@ -75,9 +63,7 @@ public class RuleService {
     }
     
 	public void refreshContainer(String tenantId) {
-		System.out.println("refresh container for " + tenantId + ", " + tenant2ContainerMap);
 		// create map for tenant
-		printContainers();
 		if (!tenant2ContainerMap.contains(tenantId))
 			tenant2ContainerMap.put(tenantId, new ConcurrentHashMap<String, KieContainer>());
 		getContainerNames(tenantId).stream().forEach(c -> refreshContainer(tenantId, c));
@@ -116,14 +102,10 @@ public class RuleService {
 	
 	public void executeRules(String tenantId, String container, String volunteerId) {
 		KieSession ksession = getKieSession(tenantId, container);
-		
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
-		// System.out.println("vol: " + volunteer.toString());
-		
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
-		// System.out.println("tenant: " + tenant.getName());
-		//VolunteerExtendedView volData = volunteerService.obtainVolunteerDetails(volunteer);
-		// System.out.println("current age: " + volData.currentAge());
+		
+		// insert objects into session 
 		ksession.insert(tenant);
 		ksession.insert(volunteer);
 		ksession.insert(volunteerService);

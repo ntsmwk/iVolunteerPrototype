@@ -5,16 +5,18 @@ import java.util.Date;
 import java.util.List;
 
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.rule.archive.SourceRuleEntryDTO;
+import at.jku.cis.iVolunteer.model.rule.archive.TargetRuleEntryDTO;
 
 public class DerivationRuleDTO {
 
 	private String id;
 	private String tenantId;
 	private String name;
+	private String container;
 	private String marketplaceId;
-	private List<ClassSourceRuleEntryDTO> classSourceRules = new ArrayList<>();
-	private List<AttributeSourceRuleEntryDTO> attributeSourceRules = new ArrayList<>();
-	private ClassDefinition target;
+	private List<SourceRuleEntryDTO> lhsConditions = new ArrayList<>();
+	private List<TargetRuleEntryDTO> rhsActions = new ArrayList<>();
 	private Date timestamp;
 
 	public DerivationRuleDTO() {
@@ -52,28 +54,28 @@ public class DerivationRuleDTO {
 		this.timestamp = timestamp;
 	}
 
-	public ClassDefinition getTarget() {
-		return target;
+	public String getContainer() {
+		return container;
 	}
 
-	public void setTarget(ClassDefinition target) {
-		this.target = target;
+	public void setContainer(String container) {
+		this.container = container;
 	}
 
-	public List<ClassSourceRuleEntryDTO> getClassSourceRules() {
-		return classSourceRules;
+	public List<SourceRuleEntryDTO> getLhsConditions() {
+		return lhsConditions;
 	}
 
-	public void setClassSourceRules(List<ClassSourceRuleEntryDTO> classSourceRules) {
-		this.classSourceRules = classSourceRules;
+	public void setLhsConditions(List<SourceRuleEntryDTO> lhsConditions) {
+		this.lhsConditions = lhsConditions;
+	}
+	
+	public List<TargetRuleEntryDTO> getRhsActions() {
+		return rhsActions;
 	}
 
-	public List<AttributeSourceRuleEntryDTO> getAttributeSourceRules() {
-		return attributeSourceRules;
-	}
-
-	public void setAttributeSourceRules(List<AttributeSourceRuleEntryDTO> attributeSourceRules) {
-		this.attributeSourceRules = attributeSourceRules;
+	public void setRhsActions(List<TargetRuleEntryDTO> rhsActions) {
+		this.rhsActions = rhsActions;
 	}
 
 	public String getTenantId() {

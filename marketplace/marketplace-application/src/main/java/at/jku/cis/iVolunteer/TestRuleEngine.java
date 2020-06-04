@@ -4,31 +4,14 @@ import static org.junit.Assert.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
-import org.drools.compiler.lang.DrlDumper;
-import org.drools.compiler.lang.DRL5Expressions.type_return;
-import org.drools.compiler.lang.api.DescrFactory;
-import org.drools.compiler.lang.api.PackageDescrBuilder;
-import org.drools.compiler.lang.api.PatternDescrBuilder;
-import org.drools.compiler.lang.api.RuleDescrBuilder;
-import org.drools.compiler.lang.api.impl.CEDescrBuilderImpl;
-import org.drools.compiler.lang.api.impl.PatternDescrBuilderImpl;
-import org.drools.compiler.lang.api.impl.RuleDescrBuilderImpl;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
@@ -69,16 +52,18 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
-import at.jku.cis.iVolunteer.model.rule.AttributeSourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.ClassActionRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.ClassAggregationOperatorType;
-import at.jku.cis.iVolunteer.model.rule.ClassRuleActionType;
-import at.jku.cis.iVolunteer.model.rule.ClassSourceRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.Action.ActionType;
+import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
+import at.jku.cis.iVolunteer.model.rule.ClassAction;
+import at.jku.cis.iVolunteer.model.rule.ClassCondition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
-import at.jku.cis.iVolunteer.model.rule.GeneralAttributeEntry;
-import at.jku.cis.iVolunteer.model.rule.GeneralAttributeEntry.Attribute;
-import at.jku.cis.iVolunteer.model.rule.MappingOperatorType;
+import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
+import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
+import at.jku.cis.iVolunteer.model.rule.condition.ClassSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
+import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 import at.jku.cis.iVolunteer.test.data.TestData;
@@ -96,7 +81,6 @@ public class TestRuleEngine {
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private ContainerRuleEntryRepository containerRuleEntryRepository;
-	@Autowired private VolunteerService volunteerService;
 	@Autowired private RuleService ruleService;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	@Autowired private ClassPropertyService classPropertyService;
@@ -105,31 +89,13 @@ public class TestRuleEngine {
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private HelpSeekerRepository helpSeekerRepository;
-	
-	private static final String CERTIFICATE_SEF_MODUL1 = "SEF-Modul 1";
-	private static final String CERTIFICATE_SEF_MODUL2 = "SEF-Modul 2";
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 	private static final String RKWILHERING = "RK Wilhering";
 	
-	/*
-	 * db.inventory.find( {
-                     qty: { $all: [
-                                    { "$elemMatch" : { size: "M", num: { $gt: 50} } },
-                                    { "$elemMatch" : { num : 100, color: "green" } }
-                                  ] }
-                   } )
-	*/
-	/*
-	 * db.getCollection('classInstance').find({"name": "Ausfahrt", "tenantId" : "5e97104b8cbb214434400000", 
-	 *          "properties": {$all: [
-	 *                     {"$elemMatch": {name: "Start Date", values: {$lte: new Date("2016-07-07T00:00:00.000Z")}}},
-	 *                     {"$elemMatch": {name: "role", values:"Einsatzlenker"}}]}})
-	 */
-	
 	public void executeTestCases(){
+		containerRuleEntryRepository.deleteAll();
 		// create user data
 		// createUserData();
 		// create test cases
@@ -140,15 +106,22 @@ public class TestRuleEngine {
 		//testCaseImproveDrivingCompetenceRKL3();
 		//testCaseFahrtenspangeBronze();
 		//testMapping1();
-		testAddCompetenceDrivingCarNotExists();
+		
+		/*testAddCompetenceDrivingCarNotExists();
 		testAddAllCompetencesDriving();
 		testAddCompetenceDrivingCar();
 		testImproveDrivingSkillsLevel2();
 		testImproveDrivingSkillsLevel3();
 		testImproveDrivingSkillsLevel4();
+		testMappingSeveralConditions();*/
+		testANDCondition();
+		testORCondition();
+		testNOTCondition();
+		testNOTSingleCondition();
+		testNESTEDCondition();
 		// random test cases
-		testCheckAge();
-		testCheckAgeMaturity();
+		/*testCheckAge();
+		testCheckAgeMaturity();*/
 		//testImproveDrivingSkills();
 	}
 	
@@ -169,148 +142,120 @@ public class TestRuleEngine {
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
 
-	    ClassSourceRuleEntry cRuleB = new ClassSourceRuleEntry();
-	    cRuleB.setClassDefinitionId(classDefinitionRepository.
+	    ClassCondition classCond1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCond1.setClassDefinitionId(classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Car", tenantId).getId());
-	    cRuleB.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    cRuleB.setAttributeSourceRules(attrRuleList);
+ 	    dRule.addCondition(classCond1);
 	    
-	    ClassSourceRuleEntry cRuleC = new ClassSourceRuleEntry();
-	    cRuleC.setClassDefinitionId(classDefinitionRepository.
+ 	    ClassCondition classCond2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCond2.setClassDefinitionId(classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Truck", tenantId).getId());
-	    cRuleC.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    cRuleC.setAttributeSourceRules(attrRuleList);
-	    
-	    ClassSourceRuleEntry cRuleD = new ClassSourceRuleEntry();
-	    cRuleD.setClassDefinitionId(classDefinitionRepository.
+	    dRule.addCondition(classCond2);
+	  
+	    ClassCondition classCond3 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCond3.setClassDefinitionId(classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Bus", tenantId).getId());
-	    cRuleD.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    cRuleD.setAttributeSourceRules(attrRuleList);
+	    dRule.addCondition(classCond3);
 	    
-	    ClassSourceRuleEntry cRuleA = new ClassSourceRuleEntry();
-	    cRuleA.setClassDefinitionId(classDefinitionRepository.
+	    ClassCondition classCond4 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCond4.setClassDefinitionId(classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Motorcycle", tenantId).getId());
-	    cRuleA.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    cRuleA.setAttributeSourceRules(attrRuleList);
-	     
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    classRuleList.add(cRuleB);
-	    classRuleList.add(cRuleC);
-	    classRuleList.add(cRuleD);
-	    classRuleList.add(cRuleA);
-	    dRule.setLhsClassConditions(classRuleList);
-	    
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();   
+	    dRule.addCondition(classCond4);
+	  
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction classAction1 = new ClassAction(ActionType.NEW);
 	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
 		   
-	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein B");
-	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    classAction1.setClassDefinitionId(compDef.getId());
 	    
-	    rhsRuleActions.add(ruleAction);
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    classAction1.addAttributeCondition(attrCondition1);
 	    
-	    ruleAction = new ClassActionRuleEntry();
+	    AttributeCondition attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein B");
+	    classAction1.addAttributeCondition(attrCondition2);
+	    
+	    AttributeCondition attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    classAction1.addAttributeCondition(attrCondition3);
+	    dRule.addAction(classAction1);
+	    
+	    ClassAction classAction2 = new ClassAction(ActionType.NEW);
 	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Truck Driving", tenantId);
-		   
-	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein C");
-	    attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    classAction2.setClassDefinitionId(compDef.getId());
 	    
-	    rhsRuleActions.add(ruleAction);
+	    attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    classAction2.addAttributeCondition(attrCondition1);
 	    
-	    ruleAction = new ClassActionRuleEntry();
+	    attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein C");
+	    classAction2.addAttributeCondition(attrCondition2);
+	    
+	    attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    classAction2.addAttributeCondition(attrCondition3);
+	    dRule.addAction(classAction2);
+	    
+	    ClassAction classAction3 = new ClassAction(ActionType.NEW);
 	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Bus Driving", tenantId);
-		   
-	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein D");
-	    attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    classAction3.setClassDefinitionId(compDef.getId());
 	    
-	    rhsRuleActions.add(ruleAction);
+	    attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    classAction3.addAttributeCondition(attrCondition1);
 	    
-	    ruleAction = new ClassActionRuleEntry();
+	    attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein D");
+	    classAction3.addAttributeCondition(attrCondition2);
+	    
+	    attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    classAction3.addAttributeCondition(attrCondition3);
+	    dRule.addAction(classAction3);
+	    
+	    ClassAction classAction4 = new ClassAction(ActionType.NEW);
 	    compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Motorcycle Driving", tenantId);
-		   
-	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein A");
-	    attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    classAction4.setClassDefinitionId(compDef.getId());
 	    
-	    rhsRuleActions.add(ruleAction);
+	    attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    classAction4.addAttributeCondition(attrCondition1);
 	    
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	    attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein A");
+	    classAction4.addAttributeCondition(attrCondition2);
+	    
+	    attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
+	    		                                  "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    classAction4.addAttributeCondition(attrCondition3);
+	    dRule.addAction(classAction4);
+	    
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
@@ -321,7 +266,6 @@ public class TestRuleEngine {
 			myWriter.write(ruleContent);
 			myWriter.close();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	    
@@ -346,52 +290,38 @@ public class TestRuleEngine {
 	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(achievementDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    
-	    classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition.setClassDefinitionId(achievementDef.getId());
+	    dRule.addCondition(classCondition);  
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction ruleAction = new ClassAction(ActionType.NEW);
 	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
-		   
-	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein B");
-	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+		ruleAction.setClassDefinitionId(compDef.getId());
+	
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    ruleAction.addAttributeCondition(attrCondition1);
 	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	    AttributeCondition attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein B");
+	    ruleAction.addAttributeCondition(attrCondition2);
+	  
+	    AttributeCondition attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    ruleAction.addAttributeCondition(attrCondition3);
+	  
+	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
 	    
 	    FileWriter myWriter;
 		try {
-			myWriter = new FileWriter("C:/data/rule-test-5.drl");
+			myWriter = new FileWriter("C:/data/rule-test-2.drl");
 			myWriter.write(ruleContent);
 			myWriter.close();
 		} catch (IOException e1) {
@@ -420,58 +350,43 @@ public class TestRuleEngine {
 	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(achievementDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition.setClassDefinitionId(achievementDef.getId());
+	    dRule.addCondition(classCondition);
 	    
-	    ClassSourceRuleEntry cRuleNe = new ClassSourceRuleEntry();
-	    cRuleNe.setClassDefinitionId(classDefinitionRepository.
+	    ClassCondition classConditionNE = new ClassCondition(AggregationOperatorType.NOT_EXISTS);
+	    classConditionNE.setClassDefinitionId(classDefinitionRepository.
 	    		findByNameAndTenantId(TestData.COMPETENCE_DRIVING_CAR, tenantId).getId());
-	    cRuleNe.setAggregationOperatorType(ClassAggregationOperatorType.NOT_EXISTS);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    
-	    classRuleList.add(cRule);
-	    classRuleList.add(cRuleNe);
-	    dRule.setLhsClassConditions(classRuleList);
+	    dRule.addCondition(classConditionNE);
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
-	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
-		   
+	    ClassAction ruleAction = new ClassAction(ActionType.NEW);
+	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);   
 	    ruleAction.setClassDefinitionId(compDef.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(compDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL1);
-	    AttributeSourceRuleEntry attrDel2 = new AttributeSourceRuleEntry();
-	    attrDel2.setClassDefinitionId(compDef.getId());
-	    attrDel2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
-	    attrDel2.setValue("Führerschein B");
-	    AttributeSourceRuleEntry attrDel3 = new AttributeSourceRuleEntry();
-	    attrDel3.setClassDefinitionId(compDef.getId());
-	    attrDel3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
-	    attrDel3.setValue(LocalDateTime.now());
-	    attrDel.add(attrDel1);
-	    attrDel.add(attrDel2);
-	    attrDel.add(attrDel3);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    // adding filters for properties
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
+	    ruleAction.addAttributeCondition(attrCondition1);
 	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	    AttributeCondition attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
+	    attrCondition2.setValue("Führerschein B");
+	    ruleAction.addAttributeCondition(attrCondition2);
+	    
+	    AttributeCondition attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
+	    attrCondition3.setValue(LocalDateTime.now());
+	    ruleAction.addAttributeCondition(attrCondition3);
+	    
+	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
 	    
 	    FileWriter myWriter;
 		try {
-			myWriter = new FileWriter("C:/data/rule-test-2.drl");
+			myWriter = new FileWriter("C:/data/rule-test-3.drl");
 			myWriter.write(ruleContent);
 			myWriter.close();
 		} catch (IOException e1) {
@@ -495,48 +410,37 @@ public class TestRuleEngine {
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
 	    deleteInstances(volunteer, tenantId, "Maturity");
 	    
-	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Maturity", tenantId);
 	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
-	    cRule.setValue(200);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition.setClassDefinitionId(taskDef.getId());
+	    classCondition.setValue(200);
+	    dRule.addCondition(classCondition);
 	    
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
-	    generalAttributes.add(genAttr1);
-	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
-	    generalAttributes.add(genAttr2);
-	    dRule.setLhsGeneralConditions(generalAttributes);
+	    GeneralCondition generalCondition1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, 
+	    		                      ComparisonOperatorType.GT);
+	    dRule.addGeneralCondition(generalCondition1);
 	    
-	    //classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
+	    GeneralCondition generalCondition2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, 
+                ComparisonOperatorType.LT);
+	    dRule.addGeneralCondition(generalCondition2);
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction classAction = new ClassAction(ActionType.NEW);
 	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
-	    ruleAction.setClassDefinitionId(cd.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.NEW);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
+	    classAction.setClassDefinitionId(cd.getId());
+	   
 	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(taskDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
-	    attrDel1.setMappingOperatorType(MappingOperatorType.EQ);
-	    attrDel1.setValue(30);
-
-	    attrDel.add(attrDel1);
-	    ruleAction.setAttributeSourceRules(attrDel);
-	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
+	    attrCondition1.setValue(30);	 
+	    classAction.addAttributeCondition(attrCondition1);
+	    dRule.addAction(classAction);
+	  
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
@@ -567,55 +471,41 @@ public class TestRuleEngine {
 
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
 	    
-	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
-	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
-	    
+	        
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
-	    generalAttributes.add(genAttr1);
-	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
-	    generalAttributes.add(genAttr2);
-	    dRule.setLhsGeneralConditions(generalAttributes);
+	    GeneralCondition genCond1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, ComparisonOperatorType.GT);
+	    dRule.addGeneralCondition(genCond1);
 	    
-	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
-	    attr1.setClassDefinitionId(taskDef.getId());
-	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Maturity Level", tenantId).getId());
-	    attr1.setMappingOperatorType(MappingOperatorType.GE);
-	    attr1.setValue(30);
+	    GeneralCondition genCond2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, ComparisonOperatorType.LT);
+	    dRule.addGeneralCondition(genCond2);
 	    
-	    attrRuleList.add(attr1);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
+	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Maturity", tenantId);
+	    
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition.setClassDefinitionId(taskDef.getId());
+	    dRule.addCondition(classCondition);
+	    
+	    AttributeCondition attributeCondition1 = new AttributeCondition();
+	    attributeCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Maturity Level", tenantId).getId());
+	    attributeCondition1.setOperatorType(ComparisonOperatorType.GT);
+	    attributeCondition1.setValue(30);
+	    classCondition.addAttributeCondition(attributeCondition1); 
+	    dRule.addCondition(classCondition);
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction ruleAction = new ClassAction(ActionType.UPDATE);
 	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
 	    ruleAction.setClassDefinitionId(cd.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(taskDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
-	    attrDel1.setMappingOperatorType(MappingOperatorType.EQ);
-	    attrDel1.setValue(33);
-
-	    attrDel.add(attrDel1);
-	    ruleAction.setAttributeSourceRules(attrDel);
-	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	  
+	    AttributeCondition attributeCondition2 = new AttributeCondition();
+	    attributeCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Maturity Level", tenantId).getId());
+	    attributeCondition2.setValue(33);
+	    ruleAction.addAttributeCondition(attributeCondition1); 
+	    dRule.addAction(ruleAction);
+	     	   
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
@@ -645,49 +535,38 @@ public class TestRuleEngine {
 
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
 	    
-	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Ausfahrt", tenantId);
 	   
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
-	    cRule.setValue(200);
 	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition.setClassDefinitionId(taskDef.getId());
+	    classCondition.setValue(200);
 	    
 	    // adding filters for properties
-	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
-	    attr1.setClassDefinitionId(taskDef.getId());
-	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
-	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
-	    attr1.setValue("Einsatzlenker");
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
+	    attrCondition1.setOperatorType(ComparisonOperatorType.EQ);
+	    attrCondition1.setValue("Einsatzlenker");
+	    classCondition.addAttributeCondition(attrCondition1);
 	    //
-	    attrRuleList.add(attr1);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    
-	    classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
+	    dRule.addCondition(classCondition);
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
-	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
+	    ClassAction ruleAction = new ClassAction(ActionType.UPDATE);
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Car Driving", tenantId);
 	    ruleAction.setClassDefinitionId(cd.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(taskDef.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL2);
+	   
+	    // adding filters for properties
+	    AttributeCondition attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrCondition2.setValue(TestData.DrivingLevel.LEVEL2);
+	    ruleAction.addAttributeCondition(attrCondition2);
+	    dRule.addAction(ruleAction);
 
-	    attrDel.add(attrDel1);
-	    ruleAction.setAttributeSourceRules(attrDel);
-	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
@@ -698,7 +577,6 @@ public class TestRuleEngine {
 			myWriter.write(ruleContent);
 			myWriter.close();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	    
@@ -706,6 +584,7 @@ public class TestRuleEngine {
 	    
 	    System.out.println("===================================================================================");
 	}
+	
 	
 	public void testImproveDrivingSkillsLevel3() {
 		System.out.println("==========================  Test improve driving skills level 3 ==========================================");
@@ -727,51 +606,429 @@ public class TestRuleEngine {
 	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
 	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
 	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
-	   
-	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(certDef1.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
+	   
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    dRule.addCondition(classCondition1);
 	    
-	    cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(certDef2.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
- 	   
-	    dRule.setLhsClassConditions(classRuleList);
-	    //
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    dRule.addCondition(classCondition2);
+ 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction ruleAction = new ClassAction(ActionType.UPDATE);
 	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
 	    ruleAction.setClassDefinitionId(cd.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(cd.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL3);
-
-	    attrDel.add(attrDel1);
-	    ruleAction.setAttributeSourceRules(attrDel);
 	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
-	    // now map from Derivation Rule to Drools 
+	    // adding filters for properties
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL3);
+        ruleAction.addAttributeCondition(attrCondition1);
+        
+        dRule.addAction(ruleAction);
+        // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
 	    
 	    FileWriter myWriter;
 		try {
 			myWriter = new FileWriter("C:/data/rule-test-7.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+	public void testANDCondition() {
+		System.out.println("==========================  Test AND Condition ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-9"; 
+	    String ruleName = "test-AND-condition";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_WORKSHOP, tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.TASK_RK_AUSFAHRT, tenantId);
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    MultipleConditions multiCondition = new MultipleConditions(LogicalOperatorType.AND);
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    multiCondition.addCondition(classCondition1);
+	    
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    multiCondition.addCondition(classCondition2);
+ 	   
+	    ClassCondition classCondition3 = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition3.setClassDefinitionId(taskDef.getId());
+	    classCondition3.setValue(1000);
+	    multiCondition.addCondition(classCondition3);
+	    dRule.addCondition(multiCondition);
+ 	   
+	    //
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-10.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+	public void testORCondition() {
+		System.out.println("==========================  Test OR Condition ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-10"; 
+	    String ruleName = "test-OR-condition";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_WORKSHOP, tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.TASK_RK_AUSFAHRT, tenantId);
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    MultipleConditions multiCondition = new MultipleConditions(LogicalOperatorType.OR);
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    multiCondition.addCondition(classCondition1);
+	    
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    multiCondition.addCondition(classCondition2);
+ 	   
+	    ClassCondition classCondition3 = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition3.setClassDefinitionId(taskDef.getId());
+	    classCondition3.setValue(100);
+	    multiCondition.addCondition(classCondition3);
+	    dRule.addCondition(multiCondition);
+ 	   
+	    //
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-11.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testNOTCondition() {
+		System.out.println("==========================  Test NOT Condition ==========================================");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-11"; 
+	    String ruleName = "test-NOT-condition";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_WORKSHOP, tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.TASK_RK_AUSFAHRT, tenantId);
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    MultipleConditions multiConditionNOT = new MultipleConditions(LogicalOperatorType.NOT);
+	    MultipleConditions multiConditionAND = new MultipleConditions(LogicalOperatorType.AND);
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    multiConditionAND.addCondition(classCondition1);
+	    
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    multiConditionAND.addCondition(classCondition2);
+ 	   
+	    ClassCondition classCondition3 = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition3.setClassDefinitionId(taskDef.getId());
+	    classCondition3.setValue(1000);
+	    multiConditionAND.addCondition(classCondition3);
+	    multiConditionNOT.addCondition(multiConditionAND);
+	    dRule.addCondition(multiConditionNOT);
+ 	   
+	    //
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-12.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testNOTSingleCondition() {
+		System.out.println("==========================  Test NOT on Single Condition ==========================================");
+		// Feuerwehr
+    	String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+    	Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+    	String containerName = "ivol-test-12"; 
+    	String ruleName = "test-NOT-single-condition";
+
+    	ruleService.deleteRule(tenantId, containerName, ruleName);
+    
+	    deleteInstances(volunteer, tenantId, "Maturity");
+	    
+	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Maturity", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    MultipleConditions multipleConditions = new MultipleConditions(LogicalOperatorType.NOT);
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition.setClassDefinitionId(taskDef.getId());
+	    classCondition.setValue(200);
+	    multipleConditions.addCondition(classCondition);
+	    dRule.addCondition(multipleConditions);
+	    
+	    // set age between 20 and 70: 20 < age < 70
+	    GeneralCondition generalCondition1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, 
+	    		                      ComparisonOperatorType.GT);
+	    dRule.addGeneralCondition(generalCondition1);
+	    
+	    GeneralCondition generalCondition2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, 
+                ComparisonOperatorType.LT);
+	    dRule.addGeneralCondition(generalCondition2);
+	    //
+	    // now set the action part on the rhs
+	    ClassAction classAction = new ClassAction(ActionType.NEW);
+	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Maturity", tenantId);
+	    classAction.setClassDefinitionId(cd.getId());
+	   
+	   // adding filters for properties
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
+	    attrCondition1.setValue(30);	 
+	    classAction.addAttributeCondition(attrCondition1);
+	    dRule.addAction(classAction);
+	  
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-13.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+	
+	public void testNESTEDCondition() {
+		System.out.println("==========================  Test NESTED Condition ==========================================");
+		System.out.println("                    (cond1 AND cond2) OR (cond3 AND cond4 AND cond5)                                    ");
+		// Feuerwehr
+	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "ivol-test-14"; 
+	    String ruleName = "test-NESTED-condition";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    AchievementClassDefinition certDef1 = (AchievementClassDefinition) classDefinitionRepository.
+ 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, tenantId);
+	    AchievementClassDefinition certDef2 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_WORKSHOP, tenantId);
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.TASK_RK_AUSFAHRT, tenantId);
+	    
+	    CompetenceClassDefinition compDef = (CompetenceClassDefinition) classDefinitionRepository.
+	    		findByNameAndTenantId("Maturity", tenantId);
+	    AchievementClassDefinition certSEF1 = (AchievementClassDefinition) classDefinitionRepository.
+	 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_MODUL1, tenantId);
+		    AchievementClassDefinition certSEF2 = (AchievementClassDefinition) classDefinitionRepository.
+		 		       findByNameAndTenantId(TestDataRK.CERTIFICATE_SEF_MODUL2, tenantId);
+		    
+		ClassCondition classConditionA = new ClassCondition(AggregationOperatorType.EXISTS);
+		classConditionA.setClassDefinitionId(certSEF1.getId());
+		
+	    ClassCondition classConditionB = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classConditionB.setClassDefinitionId(compDef.getId());
+	    
+	    AttributeCondition attributeCondition1 = new AttributeCondition();
+	    attributeCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Maturity Level", tenantId).getId());
+	    attributeCondition1.setOperatorType(ComparisonOperatorType.GT);
+	    attributeCondition1.setValue(30);
+	    classConditionB.addAttributeCondition(attributeCondition1); 
+	    
+	    
+	    if (classInstanceService.getClassInstance(volunteer, certDef1.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef1.getId(), tenantId);
+	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
+	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	    MultipleConditions multiConditionOR = new MultipleConditions(LogicalOperatorType.OR);
+	    MultipleConditions multiConditionAND1 = new MultipleConditions(LogicalOperatorType.AND);
+	    MultipleConditions multiConditionAND2 = new MultipleConditions(LogicalOperatorType.AND);
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    multiConditionAND2.addCondition(classCondition1);
+	    
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    multiConditionAND2.addCondition(classCondition2);
+ 	   
+	    ClassCondition classCondition3 = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition3.setClassDefinitionId(taskDef.getId());
+	    classCondition3.setValue(1000);
+	    multiConditionAND2.addCondition(classCondition3);
+	    
+	    multiConditionAND1.addCondition(classConditionA);
+	    multiConditionAND1.addCondition(classConditionB);
+	    multiConditionOR.addCondition(multiConditionAND1);
+	    multiConditionOR.addCondition(multiConditionAND2);
+	    dRule.addCondition(multiConditionOR);
+ 	   
+	    //
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-15.drl");
+			myWriter.write(ruleContent);
+			myWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+		executeRule(volunteer, tenantId, containerName, ruleName, ruleContent);
+	    
+	    System.out.println("===================================================================================");
+	}
+
+
+	public void testMappingSeveralConditions() {
+		System.out.println("==========================  Test Mapping several conditions =========================================");
+
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+	    String containerName = "test-mapping-1"; 
+	    String ruleName = "test-mapping-several-conditions";
+
+	    ruleService.deleteRule(tenantId, containerName, ruleName);
+	    
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    
+	    DerivationRule dRule = new DerivationRule();
+	    dRule.setName(ruleName);
+	   
+	    // set age between 20 and 70: 20 < age < 70
+	    GeneralCondition genCond1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, ComparisonOperatorType.GT);
+	    dRule.addGeneralCondition(genCond1);
+	    GeneralCondition genCond2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, ComparisonOperatorType.LT);
+	    dRule.addGeneralCondition(genCond2);
+	    
+	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition.setClassDefinitionId(taskDef.getId());
+	    classCondition.setValue(99);
+	    // adding filters for properties
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
+	    attrCondition1.setOperatorType(ComparisonOperatorType.EQ);
+	    attrCondition1.setValue("Einsatzlenker");
+	    classCondition.addAttributeCondition(attrCondition1);
+	    
+	    AttributeCondition attrCondition2 = new AttributeCondition();
+	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId).getId());
+	    attrCondition2.setOperatorType(ComparisonOperatorType.EQ);
+	    attrCondition2.setValue("Wels");
+	    classCondition.addAttributeCondition(attrCondition2);
+
+	    AttributeCondition attrCondition3 = new AttributeCondition();
+	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId).getId());
+	    attrCondition3.setOperatorType(ComparisonOperatorType.GT);
+	    attrCondition3.setValue("2018-08-04T08:00:00");
+	    classCondition.addAttributeCondition(attrCondition3);
+	    
+	    dRule.addCondition(classCondition);
+	    
+	    //
+	    // now set the action part on the rhs
+	    
+	    // now map from Derivation Rule to Drools 
+	    // dRule
+	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
+	    
+	    FileWriter myWriter;
+		try {
+			myWriter = new FileWriter("C:/data/rule-test-9.drl");
 			myWriter.write(ruleContent);
 			myWriter.close();
 		} catch (IOException e1) {
@@ -805,50 +1062,33 @@ public class TestRuleEngine {
 	    if (classInstanceService.getClassInstance(volunteer, certDef2.getId(), tenantId) == null)
 	    	classInstanceService.newClassInstance(volunteer, certDef2.getId(), tenantId);
 	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<ClassActionRuleEntry> rhsRuleActions = new ArrayList<ClassActionRuleEntry>();
-	   
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(certDef1.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
-	   
-	    cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(certDef2.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.EXISTS);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
+	    ClassCondition classCondition1 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition1.setClassDefinitionId(certDef1.getId());
+	    dRule.addCondition(classCondition1);
+	    
+	    ClassCondition classCondition2 = new ClassCondition(AggregationOperatorType.EXISTS);
+	    classCondition2.setClassDefinitionId(certDef2.getId());
+	    dRule.addCondition(classCondition2);
  	   
-	    cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    cRule.setValue(1000);
-	    classRuleList.add(cRule);
+	    ClassCondition classCondition3 = new ClassCondition(AggregationOperatorType.MIN);
+	    classCondition3.setClassDefinitionId(taskDef.getId());
+	    classCondition3.setValue(1000);
+	    dRule.addCondition(classCondition3);
  	   
-	    dRule.setLhsClassConditions(classRuleList);
 	    //
 	    // now set the action part on the rhs
-	    ClassActionRuleEntry ruleAction = new ClassActionRuleEntry();
+	    ClassAction ruleAction = new ClassAction(ActionType.UPDATE);
 	    CompetenceClassDefinition cd = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Car Driving", tenantId);
 	    ruleAction.setClassDefinitionId(cd.getId());
-	    ruleAction.setClassRuleActionType(ClassRuleActionType.UPDATE);
-	    List<AttributeSourceRuleEntry> attrDel = new ArrayList<AttributeSourceRuleEntry>();
-	   // adding filters for properties
-	    AttributeSourceRuleEntry attrDel1 = new AttributeSourceRuleEntry();
-	    attrDel1.setClassDefinitionId(cd.getId());
-	    attrDel1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrDel1.setValue(TestData.DrivingLevel.LEVEL4);
-
-	    attrDel.add(attrDel1);
-	    ruleAction.setAttributeSourceRules(attrDel);
+	    // adding filters for properties
+	    AttributeCondition attrCondition1 = new AttributeCondition();
+	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
+	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL4);
+	    ruleAction.addAttributeCondition(attrCondition1);
 	    
-	    rhsRuleActions.add(ruleAction);
-	    dRule.setRhsRuleActions(rhsRuleActions);
+	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
 	    // dRule
 	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
@@ -868,210 +1108,9 @@ public class TestRuleEngine {
 	}
 
 	
-	public void testMappingSeveralConditions() {
-		System.out.println("==========================  Test Mapping several conditions =========================================");
-
-		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
-	    String containerName = "test-mapping-1"; 
-	    String ruleName = "test-mapping-several-conditions";
-
-	    ruleService.deleteRule(tenantId, containerName, ruleName);
 	    
-	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
-	    
-	    DerivationRule dRule = new DerivationRule();
-	    dRule.setName(ruleName);
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.MIN);
-	    cRule.setValue(99);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
-	    List<ClassSourceRuleEntry> rhsRuleActions = new ArrayList<ClassSourceRuleEntry>();
-	    
-	    // set age between 20 and 70: 20 < age < 70
-	    GeneralAttributeEntry genAttr1 = new GeneralAttributeEntry(Attribute.AGE, 20, MappingOperatorType.GT);
-	    generalAttributes.add(genAttr1);
-	    GeneralAttributeEntry genAttr2 = new GeneralAttributeEntry(Attribute.AGE, 70, MappingOperatorType.LT);
-	    generalAttributes.add(genAttr2);
-	    dRule.setLhsGeneralConditions(generalAttributes);
-	    
-	    // adding filters for properties
-	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
-	    attr1.setClassDefinitionId(taskDef.getId());
-	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
-	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
-	    attr1.setValue("Einsatzlenker");
-	    
-	    
-	    AttributeSourceRuleEntry attr2 = new AttributeSourceRuleEntry();
-	    attr2.setClassDefinitionId(taskDef.getId());
-	    attr2.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Ort", tenantId).getId());
-	    attr2.setMappingOperatorType(MappingOperatorType.EQ);
-	    attr2.setValue("Wels");
-
-	    AttributeSourceRuleEntry attr3 = new AttributeSourceRuleEntry();
-	    attr3.setClassDefinitionId(taskDef.getId());
-	    attr3.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "End Date", tenantId).getId());
-	    attr3.setMappingOperatorType(MappingOperatorType.GT);
-	    String strDate = "2018-08-04T08:00:00";
-	    LocalDateTime aLD = LocalDateTime.parse(strDate);
-	    attr3.setValue(aLD);
-	    //
-	    attrRuleList.add(attr1);
-	    attrRuleList.add(attr2);
-	    attrRuleList.add(attr3);
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    
-	    classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
-	    //
-	    // now set the action part on the rhs
-	    
-	    // now map from Derivation Rule to Drools 
-	    // dRule
-	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
-	    
-	    /*ClassInstance ci = classInstanceService.getClassInstances(volunteer, "5ebabf2808aa933ad0e86216", tenantId).get(0);
-	   
-	    List<PropertyInstance<Object>> properties = ci.getProperties();
-	    for (PropertyInstance<Object> p: properties) {
-	    	System.out.println("Name: " + p.getName() + ", id: " + p.getId());
-	    	System.out.println(" ..... " + ci.getProperty(attr1.getClassPropertyId()).getValues().get(0));
-	    }*/
-	    
-	    System.out.println("-------> " + classInstanceService.getClassInstances(volunteer, "5ebabf2808aa933ad0e86216", tenantId).size());
-	    
-	    FileWriter myWriter;
-		try {
-			myWriter = new FileWriter("C:/data/rule-test-2.drl");
-			myWriter.write(ruleContent);
-			myWriter.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	    
-		executeRule(volunteer, tenantId, "ivol-test", "test-mapper-2", ruleContent);
-	    
-	    System.out.println("===================================================================================");
-	}
 	
-	public void testMapping2() {
-		System.out.println("==========================  Test Mapping ==========================================");
-		// Feuerwehr
-	    String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-	    Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
-				//
-	   // executeRule(volunteer, tenantId, "ivol-test", "test-mapper", ruleMapper);
-	    
-	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
-	    List<PropertyDefinition<Object>> pd1 = propertyDefinitionRepository.getByNameAndTenantId("role", tenantId);
-	    
-	    DerivationRule dRule = new DerivationRule();
-	    dRule.setName("Test-Claudia");
-	    ClassSourceRuleEntry cRule = new ClassSourceRuleEntry();
-	    cRule.setClassDefinitionId(taskDef.getId());
-	    cRule.setAggregationOperatorType(ClassAggregationOperatorType.COUNT);
-	    cRule.setValue(200);
-	    
-	    List<ClassSourceRuleEntry> classRuleList = new ArrayList<ClassSourceRuleEntry>();
-	    List<AttributeSourceRuleEntry> attrRuleList = new ArrayList<AttributeSourceRuleEntry>();
-	    List<GeneralAttributeEntry> generalAttributes = new ArrayList<GeneralAttributeEntry>();
-	    
-	    GeneralAttributeEntry genAttr = new GeneralAttributeEntry(Attribute.AGE, 18, MappingOperatorType.GE);
-	    generalAttributes.add(genAttr);
-	    dRule.setLhsGeneralConditions(generalAttributes);
-	    
-	    AttributeSourceRuleEntry attr1 = new AttributeSourceRuleEntry();
-	    attr1.setClassDefinitionId(taskDef.getId());
-	    attr1.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "role", tenantId).getId());
-	    attr1.setMappingOperatorType(MappingOperatorType.EQ);
-	    attr1.setValue("Einsatzlenker");
-	    attrRuleList.add(attr1);
-	    System.out.println(" .... attribute rule list: " + attrRuleList.size());
-	    cRule.setAttributeSourceRules(attrRuleList);
-	    classRuleList.add(cRule);
-	    dRule.setLhsClassConditions(classRuleList);
-	    
-	    // now map from Derivation Rule to Drools 
-	    // dRule
-	    String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(dRule);
-	    executeRule(volunteer, tenantId, "ivol-test", "test-mapper-1", ruleContent);
-	    		
-	    /*
-	    PackageDescrBuilder packageDescrBuilder = DescrFactory.newPackage();
-	    packageDescrBuilder
-	            .name("at.jku.cis.iVolunteer.marketplace.rule.engine;")
-	            .newImport()
-	            .target("at.jku.cis.iVolunteer.model.user.Volunteer;").end()
-	            .newImport().target("at.jku.cis.iVolunteer.marketplace.user.VolunteerService;").end()
-	            .newImport().target("at.jku.cis.iVolunteer.model.core.tenant.Tenant;").end()
-	            .attribute( "dialect" ).value( "mvel" ).end()
-	            .newRule() 
-	            .name(dRule.getName()) 
-	            .lhs()
-	            .pattern().id("v", false).type("Volunteer").end()
-	            .pattern().id("t", false).type("Tenant").end()
-	            .pattern().id("vs", false).type("VolunteerService").
-	                        constraint("getClassInstancesById(v, t.getId(), \"" + cRule.getClassDefinitionId()+"\").size() >= " + cRule.getValue())
-	                        .end()
-	            .end()
-	            .rhs("System.out.println(\"Volunteer is older than 18\");")
-	            .end();
-	    
-	            
-	            for (ClassSourceRuleEntry ruleEntry: dRule.getClassSourceRules()) {
-	            }
-	    // packageDescrBuilder.newRule("test claudia")
-
-	    String rules = new DrlDumper().dump(packageDescrBuilder.getDescr());*/
-	    FileWriter myWriter;
-		try {
-			myWriter = new FileWriter("C:/data/rule-test.drl");
-			myWriter.write(ruleContent);
-			myWriter.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	    
-	    
-	    
-	    Query query = new Query(Criteria.where("name").is("Ausfahrt"));//.and("classDefinitionId").is("5ebabf2808aa933ad0e86216"));
-	   // List<ClassInstance> tasks = classInstanceRepository.getbyQuery(query);
-	    /*
-	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
-	    TaskClassInstance task = new TaskClassInstance();
-	    task.setClassDefinitionId(taskDef.getId());
-	    List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
-		List<ClassProperty<Object>> propList = taskDef.getProperties();
-		// propInstList = propList.stream().
-			//	filter(p -> /*p.getName().equals("role") ||*/// p.getName().contentEquals("Ort")).
-	//			map(p -> classPropertyToPropertyInstanceMapper.toTarget(p)).
-		//		collect(Collectors.toList());
-		//task.setProperties(propInstList);
-	   //  task.getProperty("role").setValues(Arrays.asList("Einsatzlenker"));
-		// task.getProperty("role").setValues(Arrays.asList("Sanitäter"));
-		//task.getProperty("Ort").setValues(Arrays.asList("Linz"));
-	   // System.out.println("role: " + task.getProperty("role").getValues());
-	    // System.out.println("Ort: " + task.getProperty("Ort").getValues());
-	    
-	    /*final ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnoreNullValues()
-                .withMatcher("properties", match -> match.transform(source -> ((List<PropertyInstance<Object>>) source).iterator().next()).caseSensitive());
-
-        //users = userRepository.findAll(Example.of(task, matcher), pageRequest);
-       
-        //List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, matcher));*/
-	   //  List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, ExampleMatcher.matchingAll()));
-		//System.out.println("Ausfahrten gefunden: " + tasks.size());
-	    System.out.println("===================================================================================");
-	}
-	
+	/*
 	public void testMapping1() {
 		System.out.println("==========================  Test Mapping ==========================================");
 		// Feuerwehr
@@ -1085,7 +1124,7 @@ public class TestRuleEngine {
 	    List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
 		List<ClassProperty<Object>> propList = taskDef.getProperties();
 		propInstList = propList.stream().
-				filter(p -> /*p.getName().equals("role") ||*/ p.getName().contentEquals("Ort")).
+		/*		filter(p -> /*p.getName().equals("role") || p.getName().contentEquals("Ort")).
 				map(p -> classPropertyToPropertyInstanceMapper.toTarget(p)).
 				collect(Collectors.toList());
 		task.setProperties(propInstList);
@@ -1108,7 +1147,7 @@ public class TestRuleEngine {
 	}
 	/** 
 	 * Car Driving: Level 1 --> Level 2
-	 */
+	 
 	public void testCaseImproveDrivingCompetenceRKL2() {
 		System.out.println("==============================================================================================");
 		String tenantId;
@@ -1153,12 +1192,12 @@ public class TestRuleEngine {
 		assertTrue("Zertifikat SEF-Modul 1 nicht in Evidenz! ", classInstanceService .propertyValuesContain(ci.getProperty(TestData.PROPERTY_EVIDENCE), ciSEFM1));
 		assertTrue("Zertifikat SEF-Modul 2 nicht in Evidenz! ", volunteerService.propertyValuesContain(ci.getProperty(TestData.PROPERTY_EVIDENCE), ciSEFM2));
 		*/
-		System.out.println("==============================================================================================");
+		/* System.out.println("==============================================================================================");
 	}
 	
 	/** 
 	 * Car Driving: Level 2 --> Level 3
-	 */
+	 
 	public void testCaseImproveDrivingCompetenceRKL3() {
 		System.out.println("==============================================================================================");
 		String tenantId;
@@ -1192,7 +1231,7 @@ public class TestRuleEngine {
 
 	/** 
 	 * 
-	 */
+	 
 	public void testCaseFahrtenspangeBronze() {
 		System.out.println("==============================================================================================");
 		String tenantId;
@@ -1221,7 +1260,7 @@ public class TestRuleEngine {
 	
 	/** 
 	 * Add driving license for user.
-	 */
+	
 	public void testCaseAddDrivingLicense() {
 		System.out.println("=========== test case add driving license =========================");
 		String tenantId;
@@ -1371,8 +1410,6 @@ public class TestRuleEngine {
 		}
 	}
 	
-	
-		
 	private void cleanUpContainer(String tenantId, String container) {
 		List<ContainerRuleEntry> containerEntries = containerRuleEntryRepository.getByTenantIdAndContainer(tenantId, container);
 		containerEntries.forEach(r -> {
@@ -1395,8 +1432,6 @@ public class TestRuleEngine {
 		addRule2Container(tenantId, marketplaceId, "ivol-test", "check-position", ruleInitPosition);
 		addRule2Container(tenantId, marketplaceId, "ivol-test", "check-2-conditions", rule2Conditions);
 		addRule2Container(tenantId, marketplaceId, "ivol-test", "check-license-B", ruleDriverLicense);
-		// addRule2Container(tenantId, marketplaceId, "ivol-test", "competence-driving", ruleCompetenceDriving);
-		
 	}
 	
 	public final static String ruleFibonacci =  "package at.jku.cis.iVolunteer.marketplace.rule.engine;\r\n" +
@@ -1774,5 +1809,70 @@ public class TestRuleEngine {
 			"\r\n" + 
 			"end";
 	
+	/*
+	 Query query = new Query(Criteria.where("name").is("Ausfahrt"));//.and("classDefinitionId").is("5ebabf2808aa933ad0e86216"));
+	   // List<ClassInstance> tasks = classInstanceRepository.getbyQuery(query);
+	    /*
+	    TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
+	    TaskClassInstance task = new TaskClassInstance();
+	    task.setClassDefinitionId(taskDef.getId());
+	    List<PropertyInstance<Object>> propInstList = new ArrayList<PropertyInstance<Object>>();
+		List<ClassProperty<Object>> propList = taskDef.getProperties();
+		// propInstList = propList.stream().
+			//	filter(p -> /*p.getName().equals("role") ||*/// p.getName().contentEquals("Ort")).
+	//			map(p -> classPropertyToPropertyInstanceMapper.toTarget(p)).
+		//		collect(Collectors.toList());
+		//task.setProperties(propInstList);
+	   //  task.getProperty("role").setValues(Arrays.asList("Einsatzlenker"));
+		// task.getProperty("role").setValues(Arrays.asList("Sanitäter"));
+		//task.getProperty("Ort").setValues(Arrays.asList("Linz"));
+	   // System.out.println("role: " + task.getProperty("role").getValues());
+	    // System.out.println("Ort: " + task.getProperty("Ort").getValues());
+	    
+	    /*final ExampleMatcher matcher = ExampleMatcher.matching()
+              .withIgnoreNullValues()
+              .withMatcher("properties", match -> match.transform(source -> ((List<PropertyInstance<Object>>) source).iterator().next()).caseSensitive());
+
+      //users = userRepository.findAll(Example.of(task, matcher), pageRequest);
+     
+      //List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, matcher));*/
+	   //  List<TaskClassInstance> tasks = classInstanceRepository.findAll(Example.of(task, ExampleMatcher.matchingAll()));
+		//System.out.println("Ausfahrten gefunden: " + tasks.size());
+	   // System.out.println("===================================================================================");
+	//}
 	
+	/* 
+	    PackageDescrBuilder packageDescrBuilder = DescrFactory.newPackage();
+	    packageDescrBuilder
+	            .name("at.jku.cis.iVolunteer.marketplace.rule.engine;")
+	            .newImport()
+	            .target("at.jku.cis.iVolunteer.model.user.Volunteer;").end()
+	            .newImport().target("at.jku.cis.iVolunteer.marketplace.user.VolunteerService;").end()
+	            .newImport().target("at.jku.cis.iVolunteer.model.core.tenant.Tenant;").end()
+	            .attribute( "dialect" ).value( "mvel" ).end()
+	            .newRule() 
+	            .name(dRule.getName()) 
+	            .lhs()
+	            .pattern().id("v", false).type("Volunteer").end()
+	            .pattern().id("t", false).type("Tenant").end()
+	            .pattern().id("vs", false).type("VolunteerService").
+	                        constraint("getClassInstancesById(v, t.getId(), \"" + cRule.getClassDefinitionId()+"\").size() >= " + cRule.getValue())
+	                        .end()
+	            .end()
+	            .rhs("System.out.println(\"Volunteer is older than 18\");")
+	            .end();*/
+	/*
+	 * db.inventory.find( {
+                     qty: { $all: [
+                                    { "$elemMatch" : { size: "M", num: { $gt: 50} } },
+                                    { "$elemMatch" : { num : 100, color: "green" } }
+                                  ] }
+                   } )
+	*/
+	/*
+	 * db.getCollection('classInstance').find({"name": "Ausfahrt", "tenantId" : "5e97104b8cbb214434400000", 
+	 *          "properties": {$all: [
+	 *                     {"$elemMatch": {name: "Start Date", values: {$lte: new Date("2016-07-07T00:00:00.000Z")}}},
+	 *                     {"$elemMatch": {name: "role", values:"Einsatzlenker"}}]}})
+	 */
 }

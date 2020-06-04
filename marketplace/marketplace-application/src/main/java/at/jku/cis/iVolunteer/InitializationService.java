@@ -60,7 +60,6 @@ public class InitializationService {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
-	@Autowired private RuleService ruleService;
 	@Autowired private TestRuleEngine testRuleEngine;
 	@Autowired private TestData testData;
 	@Autowired private TestDataRK testDataRK;
