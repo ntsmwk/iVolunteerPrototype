@@ -26,7 +26,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
-import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 
 @Service
@@ -113,26 +113,26 @@ public class CollectionService {
 		return String.join("", pathArray);
 	}
 
-	List<EnumEntry> aggregateAllEnumEntriesDFS(ClassDefinition root, int level, List<EnumEntry> list) {
-		Stack<Relationship> stack = new Stack<>();
-		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
-		Collections.reverse(relationships);
-		stack.addAll(relationships);
-
-		if (stack == null || stack.size() <= 0) {
-			return list;
-		}
-		
-		while (!stack.isEmpty()) {
-			Relationship relationship = stack.pop();
-			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-			EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
-			enumEntry.setPosition(new int[level + 1]);
-			list.add(enumEntry);
-			this.aggregateAllEnumEntriesDFS(classDefinition, level + 1, list);
-		}
-		return list;
-	}
+//	List<EnumEntry> aggregateAllEnumEntriesDFS(ClassDefinition root, int level, List<EnumEntry> list) {
+//		Stack<Relationship> stack = new Stack<>();
+//		List<Relationship> relationships = this.relationshipRepository.findBySourceAndRelationshipType(root.getId(), RelationshipType.INHERITANCE);
+//		Collections.reverse(relationships);
+//		stack.addAll(relationships);
+//
+//		if (stack == null || stack.size() <= 0) {
+//			return list;
+//		}
+//		
+//		while (!stack.isEmpty()) {
+//			Relationship relationship = stack.pop();
+//			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
+//			EnumEntry enumEntry = new EnumEntry(level, classDefinition.getName(), true);
+//			enumEntry.setPosition(new int[level + 1]);
+//			list.add(enumEntry);
+//			this.aggregateAllEnumEntriesDFS(classDefinition, level + 1, list);
+//		}
+//		return list;
+//	}
 
 	List<ClassProperty<Object>> aggregateAllPropertiesDFS(ClassDefinition root, int level,
 			List<ClassProperty<Object>> list) {
@@ -185,10 +185,10 @@ public class CollectionService {
 		return list;
 	}
 
-	public List<EnumEntry> aggregateEnums(String classDefinitionId) {
-		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
-		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
-	}
+//	public List<EnumEntry> aggregateEnums(String classDefinitionId) {
+//		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
+//		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
+//	}
 	
 //	FormEntry getParentClassDefintions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitons, List<Relationship> allRelationships) {
 //

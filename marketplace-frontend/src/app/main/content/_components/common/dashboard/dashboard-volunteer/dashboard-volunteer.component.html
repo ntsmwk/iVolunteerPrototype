@@ -38,10 +38,14 @@
   <div style="padding-top: 10px;"></div>
 
   <mat-card *ngIf="isLocalRepositoryConnected">
+    <!-- Organisation Filter -->
     <div fxLayout="row" fxLayoutAlign="space-between start">
-      <div fxLayout="column" fxLayoutAlign="space-between start">
-        <!-- Organisation Filter -->
-        <div fxLayout="row" fxLayoutAlign="start center">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-between start"
+        class="optionHeader"
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between center">
           <organisation-filter
             (tenantSelectionChanged)="tenantSelectionChanged($event)"
             *ngIf="subscribedTenants.length > 0"
@@ -63,8 +67,15 @@
             Organisationen verwalten
           </button>
         </div>
-
-        <div class="test" fxLayout="row" fxLayoutAlign="end center">
+        <div
+          fxLayout="row"
+          fxLayoutAlign="end center"
+          *ngIf="
+            filteredClassInstances.length > 0 &&
+            isLocalRepositoryConnected &&
+            selectedTenants.length > 0
+          "
+        >
           <button
             mat-raised-button
             color="primary"
@@ -83,9 +94,9 @@
           </button>
         </div>
       </div>
-
-      <div class="vennParent" id="container"></div>
-
+      <div fxLayout="column">
+        <div class="vennParent optionHeader" id="container"></div>
+      </div>
       <!-- <table class="table">
         <tbody>
           <tr>
@@ -283,8 +294,7 @@
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
           [ngStyle]="getStyle(element)"
-        >
-        </mat-row>
+        ></mat-row>
       </mat-table>
     </div>
   </div>

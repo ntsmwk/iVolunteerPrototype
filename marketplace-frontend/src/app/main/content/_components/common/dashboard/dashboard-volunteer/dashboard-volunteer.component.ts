@@ -390,7 +390,6 @@ export class DashboardVolunteerComponent implements OnInit {
 
   async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
     // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
-
     let sharedCi = <ClassInstanceDTO>(
       await this.classInstanceService
         .createSharedClassInstances(this.marketplace, tenant.id, ci.id)
@@ -399,6 +398,9 @@ export class DashboardVolunteerComponent implements OnInit {
     this.sharedClassInstances.push(sharedCi);
 
     // TODO: redraw table
+    // Does not work ;)
+    // this.changeDetectorRefs.detectChanges();
+    // this.paginator._changePageSize(this.paginator.pageSize);
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
@@ -459,9 +461,6 @@ export class DashboardVolunteerComponent implements OnInit {
         value: this.marketplaceClassInstances.length, //2,
         displayValue: this.marketplaceClassInstances.length,
         color: this.colors.get("marketplace"),
-        dataLabels: {
-          y: 0,
-        },
       },
       {
         sets: ["Freiwilligenpass", "Marktplatz"],

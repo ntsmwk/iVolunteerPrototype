@@ -14,7 +14,7 @@ import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { isNullOrUndefined } from "util";
-import { ClassConfiguration } from "app/main/content/_model/configurations";
+import { ClassConfiguration } from "app/main/content/_model/meta/configurations";
 import { ClassConfigurationService } from "app/main/content/_service/configuration/class-configuration.service";
 import { ClassDefinitionDTO } from "app/main/content/_model/meta/class";
 
@@ -38,7 +38,7 @@ export class FuseTaskSelectComponent implements OnInit {
     private classDefinitionService: ClassDefinitionService,
     private classConfigurationService: ClassConfigurationService,
     private tenantService: TenantService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.helpseeker = <Helpseeker>(

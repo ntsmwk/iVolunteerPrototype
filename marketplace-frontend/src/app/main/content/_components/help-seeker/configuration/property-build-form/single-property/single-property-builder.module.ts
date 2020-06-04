@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SinglePropertyComponent } from './single-property.component';
+import { SinglePropertyComponent } from './single-property-builder.component';
 import { FuseTruncatePipeModule } from '../../../../../_pipe/truncate-pipe.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule, MatOptionModule, MatNativeDateModule } from '@angular/material/core';

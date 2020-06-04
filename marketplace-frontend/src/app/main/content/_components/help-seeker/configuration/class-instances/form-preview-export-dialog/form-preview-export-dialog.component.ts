@@ -126,6 +126,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     // let unableToContinueControlKey: string;
     let unableToContinueQuestion: QuestionBase<any>;
     let pathPrefix: string;
+    this.results = [];
 
     Object.keys(evt.formEntry.formGroup.controls).forEach((c) => {
       if (c.endsWith("unableToContinue")) {
@@ -159,7 +160,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
         currentFormEntry.classProperties = retFormEntry.classProperties;
 
-        currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
+        // currentFormEntry.enumRepresentations = retFormEntry.enumRepresentations;
 
         currentFormEntry.formGroup = retFormEntry.formGroup;
 
@@ -209,6 +210,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
       });
     } else {
       this.exportClicked = false;
+
 
       // if (unableToContinue) {
       //   this.results.pop();

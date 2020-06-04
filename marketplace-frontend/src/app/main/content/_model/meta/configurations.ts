@@ -1,4 +1,5 @@
-import { MatchingOperatorRelationship, MatchingCollector } from './matching';
+import { MatchingOperatorRelationship, MatchingCollector } from '../matching';
+import { EnumEntry, EnumRelationship } from './enum';
 
 export class ClassConfiguration {
     id: string;
@@ -30,4 +31,15 @@ export class MatchingCollectorConfiguration {
     classConfigurationId: String;
 
     collectors: MatchingCollector[];
+}
+
+export class EnumConfiguration {
+    id: string;
+    name: string;
+    description: string;
+
+    timestamp: Date;
+
+    enumEntries: EnumEntry[];
+    enumRelstionships: EnumRelationship[];
 }

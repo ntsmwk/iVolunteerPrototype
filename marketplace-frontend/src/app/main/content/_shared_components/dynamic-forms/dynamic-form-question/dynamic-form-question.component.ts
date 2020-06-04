@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { QuestionBase, MultipleSelectionEnumQuestion } from '../../../_model/dynamic-forms/questions';
+import { QuestionBase } from '../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -43,17 +43,17 @@ export class DynamicFormQuestionComponent implements OnInit {
     return level + 'px';
   }
 
-  getMultipleValues(question: MultipleSelectionEnumQuestion) {
-    let ret = '';
+  // getMultipleValues(question: MultipleSelectionEnumQuestion) {
+  //   let ret = '';
 
-    if (!isNullOrUndefined(question.values)) {
-      for (const val of question.values) {
-        ret = ret + ', ' + val;
-      }
-    }
+  //   if (!isNullOrUndefined(question.values)) {
+  //     for (const val of question.values) {
+  //       ret = ret + ', ' + val;
+  //     }
+  //   }
 
-    return ret;
-  }
+  //   return ret;
+  // }
 
 
   displayErrorMessage() {

@@ -1,5 +1,4 @@
 import { ValidatorFn } from '@angular/forms';
-import { EnumEntry } from '../meta/form';
 
 export class QuestionBase<T> {
   value: T;
@@ -166,27 +165,27 @@ export class GenericQuestion extends QuestionBase<string> {
   }
 }
 
-export class SingleSelectionEnumQuestion extends QuestionBase<any> {
-  controlType = 'enum-single';
-  options: EnumEntry[] = [];
+// export class SingleSelectionEnumQuestion extends QuestionBase<any> {
+//   controlType = 'enum-single';
+//   options: EnumEntry[] = [];
 
-  // +++ TODO
-  constructor(options: {} = {}) {
-    super(options);
-    this.options = options['options'] || [];
-  }
-}
+//   // +++ TODO
+//   constructor(options: {} = {}) {
+//     super(options);
+//     this.options = options['options'] || [];
+//   }
+// }
 
-export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
-  controlType = 'enum-multiple';
-  options: EnumEntry[] = [];
+// export class MultipleSelectionEnumQuestion extends QuestionBase<any> {
+//   controlType = 'enum-multiple';
+//   options: EnumEntry[] = [];
 
-  // +++ TODO
-  constructor(options: {} = {}) {
-    super(options);
-    this.options = options['options'] || [];
-  }
-}
+//   // +++ TODO
+//   constructor(options: {} = {}) {
+//     super(options);
+//     this.options = options['options'] || [];
+//   }
+// }
 
 export class TupleDropdownQuestion extends QuestionBase<any> {
   controlType = 'tuple';

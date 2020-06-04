@@ -25,8 +25,8 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Association;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.AssociationCardinality;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
-import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
-import at.jku.cis.iVolunteer.model.meta.form.EnumRepresentation;
+//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+//import at.jku.cis.iVolunteer.model.meta.form.EnumRepresentation;
 import at.jku.cis.iVolunteer.model.meta.form.FormConfiguration;
 import at.jku.cis.iVolunteer.model.meta.form.FormEntry;
 

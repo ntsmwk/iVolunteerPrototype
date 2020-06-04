@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { ClassConfiguration } from 'app/main/content/_model/configurations';
+import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CUtils } from '../utils-and-constants';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';

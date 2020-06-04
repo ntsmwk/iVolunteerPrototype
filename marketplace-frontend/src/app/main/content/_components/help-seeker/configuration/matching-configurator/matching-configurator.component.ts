@@ -12,7 +12,7 @@ import { Participant, ParticipantRole } from '../../../../_model/participant';
 import { MatchingConfiguratorPopupMenu } from './popup-menu';
 import { MatchingOperatorRelationship, MatchingCollector, MatchingCollectorEntry, MatchingProducerConsumerType } from '../../../../_model/matching';
 import { MatchingConfigurationService } from '../../../../_service/configuration/matching-configuration.service';
-import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../../../_model/configurations';
+import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../../../_model/meta/configurations';
 import { MatchingCollectorConfigurationService } from '../../../../_service/configuration/matching-collector-configuration.service';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';

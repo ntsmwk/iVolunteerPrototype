@@ -1,5 +1,5 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { QuestionBase, MultipleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
+import { Component, OnInit, Input } from '@angular/core';
+import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 declare var $: JQueryStatic;
@@ -17,26 +17,26 @@ export class MultipleEnumComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
   calculateSpaces(level: number) {
-    level = 10*level;
+    level = 10 * level;
 
-    return level+"px";
+    return level + "px";
   }
 
-  getMultipleValues(question: MultipleSelectionEnumQuestion) {
-    let ret = '';
-    
+  // getMultipleValues(question: MultipleSelectionEnumQuestion) {
+  //   let ret = '';
 
-    
-    if (!isNullOrUndefined(question.values)) {
-      for (let val of question.values) {
-        ret = ret + ", " + val;
-      }
-    }
 
-    return ret;
-  }
+
+  //   if (!isNullOrUndefined(question.values)) {
+  //     for (let val of question.values) {
+  //       ret = ret + ", " + val;
+  //     }
+  //   }
+
+  //   return ret;
+  // }
 }

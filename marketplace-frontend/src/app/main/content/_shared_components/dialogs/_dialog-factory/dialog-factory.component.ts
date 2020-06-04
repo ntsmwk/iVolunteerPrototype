@@ -9,7 +9,7 @@ import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } f
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
 import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
-import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
