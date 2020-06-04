@@ -39,9 +39,8 @@ import {
   ClassInstanceFormPreviewExportDialogModule
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
 import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
-import { PropertyCreationDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
-import { PropertyCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.module';
-
+import { PropertyOrEnumCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.module';
+import { PropertyOrEnumCreationDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 
 
 @NgModule({
@@ -67,7 +66,7 @@ import { PropertyCreationDialogModule } from 'app/main/content/_components/help-
     AddPropertyDialogModule,
     RemoveDialogModule,
 
-    PropertyCreationDialogModule,
+    PropertyOrEnumCreationDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
@@ -95,7 +94,7 @@ import { PropertyCreationDialogModule } from 'app/main/content/_components/help-
     AddPropertyDialogComponent,
     RemoveDialogComponent,
 
-    PropertyCreationDialogComponent,
+    PropertyOrEnumCreationDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,

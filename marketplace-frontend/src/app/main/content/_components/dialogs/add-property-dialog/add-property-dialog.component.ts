@@ -9,9 +9,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { isNullOrUndefined } from 'util';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
 import {
-  PropertyCreationDialogComponent,
-  PropertyCreationDialogData
-} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
+  PropertyOrEnumCreationDialogComponent,
+  PropertyOrEnumCreationDialogData
+} from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
@@ -115,7 +115,7 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   createNewPropertyClicked() {
-    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
       width: '50vw',
       minWidth: '50vw',
       height: '90vh',
@@ -124,7 +124,7 @@ export class AddPropertyDialogComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
+    dialogRef.beforeClose().toPromise().then((result: PropertyOrEnumCreationDialogData) => {
       if (!isNullOrUndefined(result)) {
         this.allPropertyDefinitions.push(result.propertyDefinition);
         this.datasource.data = this.allPropertyDefinitions;

@@ -45,7 +45,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<ClassInstanceDTO>;
+  @ViewChild(MatTable, { static: true }) table: MatTable<ClassInstanceDTO>;
 
   isLoaded: boolean;
 
@@ -90,8 +90,14 @@ export class DashboardVolunteerComponent implements OnInit {
   // TODO marketplace: red, localRepository: blue, synced: green
   colors: Map<String, String> = new Map([
     ["marketplace", "#EF5350"],
-    ["localRepository", "#29B6F6"],
+    ["localRepository", "#9DEF50"],
     ["synced", "#9CCC65"],
+  ]);
+
+  colorsOpac: Map<String, String> = new Map([
+    ["marketplace", this.colors.get("marketplace") + "4D"],
+    ["localRepository", this.colors.get("localRepository") + "4D"],
+    ["synced", this.colors.get("synced") + "4D"],
   ]);
 
   constructor(
@@ -106,7 +112,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     private http: HttpClient,
-    private iconRegistry: MatIconRegistry
+    private iconRegistry: MatIconRegistry,
+    private changeDetectorRefs: ChangeDetectorRef
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -401,6 +408,9 @@ export class DashboardVolunteerComponent implements OnInit {
     // Does not work ;)
     // this.changeDetectorRefs.detectChanges();
     // this.paginator._changePageSize(this.paginator.pageSize);
+
+    this.table.renderRows();
+    this.changeDetectorRefs.detectChanges();
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
@@ -466,10 +476,16 @@ export class DashboardVolunteerComponent implements OnInit {
         sets: ["Freiwilligenpass", "Marktplatz"],
         value: this.nrMpUnionLr, //1,
         displayValue: this.nrMpUnionLr,
-        color: this.colors.get("synced"),
         name: "Synchronisiert",
         dataLabels: {
           y: 15,
+        },
+        color: {
+          linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+          stops: [
+            [0, this.colorsOpac.get("marketplace")], // start
+            [1, this.colorsOpac.get("localRepository")], // end
+          ],
         },
       }
     );
@@ -507,15 +523,57 @@ export class DashboardVolunteerComponent implements OnInit {
       this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
       this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0
     ) {
-      let color = this.colors.get("synced") + "4D"; // opacity
+      let color = this.colorsOpac.get("synced");
       return {
-        "background-color": color,
+        // "background-color": color,
+
+        // "background-image":
+        //   "repeating-linear-gradient(180deg," +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 0%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 25%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 25%, " +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 50%)",
+
+        // "background-image":
+        //   "repeating-linear-gradient(to right," +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 0%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 50%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 50%, " +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 100%)",
+
+        "background-image":
+          "repeating-linear-gradient(45deg," +
+          this.colorsOpac.get("marketplace") +
+          " 0%, " +
+          this.colorsOpac.get("localRepository") +
+          " 100%)",
+
+        // "background-image":
+        //   "repeating-linear-gradient(45deg," +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 0%, " +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 2%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 2%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 4%, " +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 4%)",
       };
     } else if (
       this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
       this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) === -1
     ) {
-      let color = this.colors.get("localRepository") + "4D";
+      let color = this.colorsOpac.get("localRepository");
 
       return {
         "background-color": color,
@@ -524,7 +582,7 @@ export class DashboardVolunteerComponent implements OnInit {
       this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
       this.localClassInstances.findIndex((c) => c.id === ci.id) === -1
     ) {
-      let color = this.colors.get("marketplace") + "4D";
+      let color = this.colorsOpac.get("marketplace");
       return {
         "background-color": color,
       };

@@ -29,7 +29,7 @@ import {
   ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { PropertyCreationDialogComponent, PropertyCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-creation-dialog/property-creation-dialog.component';
+import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -403,7 +403,7 @@ export class DialogFactoryDirective {
   }
 
   openPropertyCreationDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-    const dialogRef = this.dialog.open(PropertyCreationDialogComponent, {
+    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
       width: '90vw',
       minWidth: '90vw',
       height: '90vh',
@@ -412,8 +412,8 @@ export class DialogFactoryDirective {
       disableClose: true
     });
 
-    let returnValue: PropertyCreationDialogData;
-    dialogRef.beforeClose().toPromise().then((result: PropertyCreationDialogData) => {
+    let returnValue: PropertyOrEnumCreationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: PropertyOrEnumCreationDialogData) => {
       returnValue = result;
     });
 
