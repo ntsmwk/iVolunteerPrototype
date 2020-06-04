@@ -1,20 +1,24 @@
 <div mat-dialog-title>
-    <table>
-        <tr>
-            <td>
-                <mat-icon>add</mat-icon>
-            </td>
-            <td>
-                <h1>Neues Property erstellen</h1>
-            </td>
-        </tr>
-    </table>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>add</mat-icon>
+      </td>
+      <td>
+        <h1>Neues Property erstellen</h1>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <mat-dialog-content *ngIf="loaded">
-    <app-single-property [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
-        [allPropertyDefinitions]="data.allPropertyDefinitions" (result)="handleResultEvent($event)">
-    </app-single-property>
+  <app-single-property-builder
+    [marketplace]="data.marketplace"
+    [helpseeker]="data.helpseeker"
+    [allPropertyDefinitions]="data.allPropertyDefinitions"
+    (result)="handleResultEvent($event)"
+  >
+  </app-single-property-builder>
 </mat-dialog-content>
 
 <!-- <mat-dialog-actions>
