@@ -500,11 +500,7 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   onVennClicked(event) {
-    console.error(event.point.name);
-
-    console.error("mpAndLocalClassInstances", this.mpAndLocalClassInstances);
-    console.error("localClassInstances", this.localClassInstances);
-    console.error("marketplaceClassInstances", this.marketplaceClassInstances);
+    // console.error(event.point.name);
   }
 
   getStyle(ci: ClassInstanceDTO) {
