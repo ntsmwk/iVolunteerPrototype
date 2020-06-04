@@ -21,7 +21,7 @@ export interface PropertyTypeOption {
   templateUrl: './single-property-builder.component.html',
   styleUrls: ['./single-property-builder.component.scss']
 })
-export class SinglePropertyComponent implements OnInit {
+export class SinglePropertyBuilderComponent implements OnInit {
 
   @Input() marketplace: Marketplace;
   @Input() helpseeker: Helpseeker;

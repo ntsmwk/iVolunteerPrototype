@@ -4,28 +4,30 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
+import { EnumConfiguration } from 'app/main/content/_model/meta/configurations';
 
-export interface PropertyCreationDialogData {
+export interface PropertyOrEnumCreationDialogData {
   marketplace: Marketplace;
   helpseeker: Helpseeker;
   allPropertyDefinitions: PropertyDefinition<any>[];
 
   propertyDefinition: PropertyDefinition<any>;
+  enumConfiguration: EnumConfiguration;
 }
 
 @Component({
-  selector: 'property-creation-dialog',
-  templateUrl: './property-creation-dialog.component.html',
-  styleUrls: ['./property-creation-dialog.component.scss'],
+  selector: 'property-enum-creation-dialog',
+  templateUrl: './property-enum-creation-dialog.component.html',
+  styleUrls: ['./property-enum-creation-dialog.component.scss'],
 })
-export class PropertyCreationDialogComponent implements OnInit {
+export class PropertyOrEnumCreationDialogComponent implements OnInit {
 
   loaded = false;
 
 
   constructor(
-    public dialogRef: MatDialogRef<PropertyCreationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PropertyCreationDialogData,
+    public dialogRef: MatDialogRef<PropertyOrEnumCreationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: PropertyOrEnumCreationDialogData,
   ) {
   }
 
