@@ -88,16 +88,18 @@ export class DashboardVolunteerComponent implements OnInit {
     },
   };
   // TODO marketplace: red, localRepository: blue, synced: green
+  // colors: Map<String, String> = new Map([
+  //   ["marketplace", "#EF5350"],
+  //   ["localRepository", "#9DEF50"],
+  // ]);
   colors: Map<String, String> = new Map([
-    ["marketplace", "#EF5350"],
-    ["localRepository", "#9DEF50"],
-    ["synced", "#9CCC65"],
+    ["marketplace", "#50B3EF"],
+    ["localRepository", "#EF8C50"],
   ]);
 
   colorsOpac: Map<String, String> = new Map([
-    ["marketplace", this.colors.get("marketplace") + "4D"],
-    ["localRepository", this.colors.get("localRepository") + "4D"],
-    ["synced", this.colors.get("synced") + "4D"],
+    ["marketplace", this.colors.get("marketplace") + "66"],
+    ["localRepository", this.colors.get("localRepository") + "66"],
   ]);
 
   constructor(
@@ -539,7 +541,7 @@ export class DashboardVolunteerComponent implements OnInit {
         //   " 50%)",
 
         // "background-image":
-        //   "repeating-linear-gradient(to right," +
+        //   "repeating-linear-gradient(to top," +
         //   this.colorsOpac.get("marketplace") +
         //   " 0%, " +
         //   this.colorsOpac.get("localRepository") +
@@ -550,7 +552,7 @@ export class DashboardVolunteerComponent implements OnInit {
         //   " 100%)",
 
         "background-image":
-          "repeating-linear-gradient(45deg," +
+          "repeating-linear-gradient(to right," +
           this.colorsOpac.get("marketplace") +
           " 0%, " +
           this.colorsOpac.get("localRepository") +
