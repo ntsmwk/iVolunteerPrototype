@@ -9,3 +9,14 @@ export class EnumRelationship {
     sourceEnumEntryId: string;
     targetEnumEntryId: string;
 }
+
+export class EnumDefinition {
+    id: string;
+    name: string;
+    description: string;
+
+    timestamp: Date;
+
+    enumEntries: EnumEntry[];
+    enumRelstionships: EnumRelationship[];
+}

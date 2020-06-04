@@ -1,4 +1,4 @@
-import { ClassProperty, PropertyInstance } from "./property";
+import { ClassProperty, PropertyInstance } from './property';
 
 export class ClassDefinition {
   id: string;
@@ -23,7 +23,7 @@ export class ClassDefinition {
   tabId: number;
 }
 
-export class CompetenceClassDefinition extends ClassDefinition {}
+export class CompetenceClassDefinition extends ClassDefinition { }
 
 export class ClassDefinitionDTO {
   id: string;
@@ -158,19 +158,19 @@ export class AchievementClassInstance extends ClassInstance {
 }
 
 export enum ClassArchetype {
-  COMPETENCE = "COMPETENCE",
-  TASK = "TASK",
-  FUNCTION = "FUNCTION",
-  ACHIEVEMENT = "ACHIEVEMENT",
-  ENUM_HEAD = "ENUM_HEAD",
-  ENUM_ENTRY = "ENUM_ENTRY",
-  ROOT = "ROOT",
+  COMPETENCE = 'COMPETENCE',
+  TASK = 'TASK',
+  FUNCTION = 'FUNCTION',
+  ACHIEVEMENT = 'ACHIEVEMENT',
+  ENUM_HEAD = 'ENUM_HEAD',
+  ENUM_ENTRY = 'ENUM_ENTRY',
+  ROOT = 'ROOT',
   // COMPETENCE_HEAD = 'COMPETENCE_HEAD',
   // TASK_HEAD = 'TASK_HEAD',
   // FUNCTION_HEAD = 'FUNCTION_HEAD',
   // ACHIEVEMENT_HEAD = 'ACHIEVEMENT_HEAD',
 
-  FLEXPROD = "FLEXPROD",
+  FLEXPROD = 'FLEXPROD',
 }
 
 export namespace ClassArchetype {
@@ -183,8 +183,8 @@ export namespace ClassArchetype {
       // case 'ENUM_HEAD': return 'Enum head';
       // case 'ENUM_ENTRY': return 'Enum entry';
       // case 'ROOT': return 'Root';
-      case "FLEXPROD":
-        return "Flexprod";
+      case 'FLEXPROD':
+        return 'Flexprod';
     }
   }
 }

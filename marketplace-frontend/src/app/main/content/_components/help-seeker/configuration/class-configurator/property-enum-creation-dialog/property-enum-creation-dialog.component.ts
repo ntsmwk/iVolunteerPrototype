@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { isNullOrUndefined } from 'util';
-import { EnumConfiguration } from 'app/main/content/_model/meta/configurations';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 export interface PropertyOrEnumCreationDialogData {
   marketplace: Marketplace;
@@ -12,7 +12,7 @@ export interface PropertyOrEnumCreationDialogData {
   allPropertyDefinitions: PropertyDefinition<any>[];
 
   propertyDefinition: PropertyDefinition<any>;
-  enumConfiguration: EnumConfiguration;
+  enumDefinition: EnumDefinition;
 }
 
 @Component({

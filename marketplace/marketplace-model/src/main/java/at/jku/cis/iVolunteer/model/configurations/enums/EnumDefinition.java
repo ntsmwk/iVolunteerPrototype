@@ -11,7 +11,7 @@ import at.jku.cis.iVolunteer.model.meta.core.enums.EnumEntry;
 import at.jku.cis.iVolunteer.model.meta.core.enums.EnumRelationship;
 
 @Document
-public class EnumConfiguration extends IVolunteerObject {
+public class EnumDefinition extends IVolunteerObject {
 
 	private String name;
 	private String description;
@@ -20,18 +20,18 @@ public class EnumConfiguration extends IVolunteerObject {
 	private List<EnumRelationship> enumRelationships;
 
 
-	public EnumConfiguration() {
+	public EnumDefinition() {
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
 	}
 	
-	public EnumConfiguration(String name) {
+	public EnumDefinition(String name) {
 		this.name = name;
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
 	}
 	
-	public EnumConfiguration(String name, String description) {
+	public EnumDefinition(String name, String description) {
 		this.name = name;
 		this.description = description;
 		this.enumEntries = new ArrayList<EnumEntry>();
@@ -85,10 +85,10 @@ public class EnumConfiguration extends IVolunteerObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof EnumConfiguration)) {
+		if (!(obj instanceof EnumDefinition)) {
 			return false;
 		}
-		return ((EnumConfiguration) obj).id.equals(id);
+		return ((EnumDefinition) obj).id.equals(id);
 	}
 
 }

@@ -1,45 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { EnumConfiguration } from 'app/main/content/_model/meta/configurations';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 
 @Injectable({
     providedIn: 'root',
 })
-export class EnumConfigurationService {
+export class EnumDefinitionService {
     constructor(private http: HttpClient) { }
 
-    getAllEnumConfigurations(marketplace: Marketplace) {
-        return this.http.get(`${marketplace.url}/enum-configuration/all`);
+    getAllEnumDefinitions(marketplace: Marketplace) {
+        return this.http.get(`${marketplace.url}/enum-definition/all`);
     }
 
-    getAllEnumConfigurationsForTenant(marketplace: Marketplace, tenantId: string) {
-        return this.http.get(`${marketplace.url}/enum-configuration/all/${tenantId}`);
+    getAllEnumDefinitionsForTenant(marketplace: Marketplace, tenantId: string) {
+        return this.http.get(`${marketplace.url}/enum-definition/all/${tenantId}`);
     }
 
-    getEnumConfigurationById(marketplace: Marketplace, id: string) {
-        return this.http.get(`${marketplace.url}/enum-configuration/${id}`);
+    getEnumDefinitionById(marketplace: Marketplace, id: string) {
+        return this.http.get(`${marketplace.url}/enum-definition/${id}`);
     }
 
-    getEnumConfigurationByName(marketplace: Marketplace, name: string) {
-        return this.http.get(`${marketplace.url}/enum-configuration/by-name/${name}`);
+    getEnumDefinitionByName(marketplace: Marketplace, name: string) {
+        return this.http.get(`${marketplace.url}/enum-definition/by-name/${name}`);
     }
 
-    newEnumConfiguration(marketplace: Marketplace, enumConfiguration: EnumConfiguration) {
-        return this.http.post(`${marketplace.url}/enum-configuration/new`, enumConfiguration);
+    newEnumDefinition(marketplace: Marketplace, enumDefinition: EnumDefinition) {
+        return this.http.post(`${marketplace.url}/enum-definition/new`, enumDefinition);
     }
 
-    newEmptyEnumConfiguration(marketplace: Marketplace, name: string, description: string) {
-        return this.http.post(`${marketplace.url}/enum-configuration/new-empty`, [name, description]);
+    newEmptyEnumDefinition(marketplace: Marketplace, name: string, description: string) {
+        return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description]);
     }
 
-    saveEnumConfiguration(marketplace: Marketplace, id: string, enumConfiguration: EnumConfiguration) {
-        return this.http.put(`${marketplace.url}/enum-configuration/${id}/save`, enumConfiguration);
+    saveEnumDefinition(marketplace: Marketplace, id: string, enumDefinition: EnumDefinition) {
+        return this.http.put(`${marketplace.url}/enum-definition/${id}/save`, enumDefinition);
     }
 
-    deleteEnumConfiguration(marketplace: Marketplace, id: string) {
-        return this.http.delete(`${marketplace.url}/enum-configuration/${id}/delete`);
+    deleteEnumDefinition(marketplace: Marketplace, id: string) {
+        return this.http.delete(`${marketplace.url}/enum-definition/${id}/delete`);
     }
 
 }
