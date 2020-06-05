@@ -238,6 +238,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         allControls
       );
       classInstance.tenantId = this.helpseeker.tenantId;
+      classInstance.issuerId = this.helpseeker.tenantId;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
@@ -247,6 +248,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           allControls
         );
         classInstance.tenantId = this.helpseeker.tenantId;
+        classInstance.issuerId = this.helpseeker.tenantId;
         classInstance.userId = volunteer.id;
         classInstances.push(classInstance);
       }

@@ -192,19 +192,6 @@ public class ClassInstanceController {
 					
 		return this.classInstanceRepository.save(ciNew);
 	}
-	
-
-	@PostMapping("/meta/core/class/instance/{id}/new")
-	private ClassInstance createNewClassInstanceById() {
-		// TODO
-		return null;
-	}
-
-	@PutMapping("/meta/core/class/instance/{id}/update")
-	private ClassInstance updateClassInstance() {
-		// TODO
-		return null;
-	}
 
 	@DeleteMapping("/meta/core/class/instance/{id}/delete")
 	private void deleteClassInstance(@PathVariable("id") String id) {

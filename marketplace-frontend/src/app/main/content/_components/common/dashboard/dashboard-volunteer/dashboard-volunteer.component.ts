@@ -174,6 +174,8 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
+      console.error(this.mpAndSharedClassInstances);
+
       this.mpAndSharedClassInstances.forEach((ci) => {
         if (ci.tenantId != ci.issuerId) {
           this.sharedClassInstances.push(ci);
@@ -411,7 +413,7 @@ export class DashboardVolunteerComponent implements OnInit {
     // this.changeDetectorRefs.detectChanges();
     // this.paginator._changePageSize(this.paginator.pageSize);
 
-    this.table.renderRows();
+    // this.table.renderRows();
     this.changeDetectorRefs.detectChanges();
   }
 
