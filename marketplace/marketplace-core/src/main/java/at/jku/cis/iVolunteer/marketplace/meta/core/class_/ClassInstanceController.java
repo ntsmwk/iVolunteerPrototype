@@ -49,6 +49,7 @@ public class ClassInstanceController {
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances() {
+//		TODO filter by tenant Id as header param
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());
 	}
 
