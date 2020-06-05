@@ -116,8 +116,8 @@ export class AddPropertyDialogComponent implements OnInit {
 
   createNewPropertyClicked() {
     const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
-      width: '50vw',
-      minWidth: '50vw',
+      width: '70vw',
+      minWidth: '70vw',
       height: '90vh',
       minHeight: '90vh',
       data: { marketplace: this.data.marketplace, helpseeker: this.data.helpseeker, allPropertyDefinitions: this.datasource.data },
