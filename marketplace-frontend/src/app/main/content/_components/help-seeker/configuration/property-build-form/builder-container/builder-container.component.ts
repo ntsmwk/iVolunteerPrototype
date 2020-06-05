@@ -1,7 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';

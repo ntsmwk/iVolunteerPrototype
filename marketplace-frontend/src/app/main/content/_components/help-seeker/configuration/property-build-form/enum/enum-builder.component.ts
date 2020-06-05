@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { isNullOrUndefined } from 'util';
 import { mxgraph } from 'mxgraph';
 import { Router } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
-import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MyMxCellType, MyMxCell } from '../../myMxCell';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 
 declare var require: any;
@@ -37,8 +34,10 @@ export class EnumBuilderComponent implements OnInit {
 
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
+    @Output() result: EventEmitter<EnumDefinition> = new EventEmitter();
 
     form: FormGroup;
+    showEditor: boolean;
 
     ngOnInit() {
 
@@ -48,13 +47,25 @@ export class EnumBuilderComponent implements OnInit {
 
     }
 
-    ngAfterContentInit() {
+    navigateBack() {
+        window.history.back();
+    }
+
+    createClicked() {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+        } else {
+            this.showEditor = true;
+        }
 
     }
 
+    handleSaveClick() {
 
-    navigateBack() {
-        window.history.back();
+    }
+
+    handleCancelClick() {
+        this.result.emit(undefined);
     }
 
 

@@ -16,7 +16,8 @@
   </div>
 
   <div *ngIf="selectionValue == 'enum'">
-    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker"></app-enum-builder>
+    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker" (result)="handleResultEvent($event)">
+    </app-enum-builder>
   </div>
 
 </div>

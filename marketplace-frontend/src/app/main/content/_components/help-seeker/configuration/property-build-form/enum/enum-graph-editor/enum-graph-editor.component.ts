@@ -33,8 +33,7 @@ export class EnumGraphEditorComponent implements OnInit {
 
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
-
-
+    @Input() enumName: string;
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
 
@@ -104,19 +103,23 @@ export class EnumGraphEditorComponent implements OnInit {
              */
 
             this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-                // Todo click event
-                console.log(evt);
-                outer.graph.getModel().beginUpdate();
-                // outer.graph.insertVertex(outer.graph.getDefaultParent(), null, null, )
-                outer.graph.getModel().endUpdate();
+                // Todo click event              
             });
 
 
             this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
                 // TODO double click event
             });
+            this.addRootCell();
 
         }
+    }
+
+    addRootCell() {
+        this.graph.getModel().beginUpdate();
+        this.graph.insertVertex(this.graph.getDefaultParent(), this.objectIdService.getNewObjectId(), this.enumName, 0, 0, 100, 20);
+        this.graph.getModel().endUpdate();
+
     }
 
 
