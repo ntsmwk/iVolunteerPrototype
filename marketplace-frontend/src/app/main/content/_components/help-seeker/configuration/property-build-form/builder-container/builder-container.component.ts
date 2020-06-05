@@ -18,6 +18,8 @@ export class BuilderContainerComponent implements OnInit {
     @Input() allPropertyDefinitions: PropertyDefinition<any>[];
     @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
+    selectionValue = 'property';
+
     ngOnInit() {
 
 

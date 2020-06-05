@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCommonModule, MatTabsModule } from '@angular/material';
+import { MatCommonModule, MatTabsModule, MatRadioModule, MatDividerModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SinglePropertyBuilderModule } from '../single-property/single-property-builder.module';
 import { BuilderContainerComponent } from './builder-container.component';
+import { EnumBuilderModule } from '../enum/enum-builder.module';
 
 @NgModule({
     imports: [
@@ -11,7 +12,13 @@ import { BuilderContainerComponent } from './builder-container.component';
         MatCommonModule,
         FuseSharedModule,
         MatTabsModule,
+
+        MatRadioModule,
+        MatDividerModule,
+
         SinglePropertyBuilderModule,
+        EnumBuilderModule,
+
 
 
     ],

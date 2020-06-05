@@ -1,13 +1,22 @@
-<mat-tab-group mat-align-tabs="start">
+<div>
 
-  <mat-tab label="Property erstellen">
+  <mat-radio-group aria-label="Select an option" [(ngModel)]="selectionValue">
+    <mat-radio-button value="property">Property erstellen</mat-radio-button>
+    <mat-radio-button value="enum">Enum erstellen</mat-radio-button>
+  </mat-radio-group>
+
+  <div class="m-8">
+    <mat-divider></mat-divider>
+  </div>
+
+  <div *ngIf="selectionValue == 'property'">
     <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker"
       (result)="handleResultEvent($event)">
     </app-single-property-builder>
-  </mat-tab>
+  </div>
 
-  <mat-tab label="Enum erstellen">
-    enum...
-  </mat-tab>
+  <div *ngIf="selectionValue == 'enum'">
+    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker"></app-enum-builder>
+  </div>
 
-</mat-tab-group>
+</div>

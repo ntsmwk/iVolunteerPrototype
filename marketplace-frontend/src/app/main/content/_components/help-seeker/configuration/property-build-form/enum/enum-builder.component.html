@@ -1,3 +1,10 @@
-<div>
-  <h2>Enum Erstellen</h2>
-</div>
+<mat-form-field>
+  <input matInput placeholder="Enum-Bezeichnung" />
+</mat-form-field>
+
+
+
+<button mat-raised-button (click)="showEditor=!showEditor">Weiter</button>
+
+
+<app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"></app-enum-graph-editor>
