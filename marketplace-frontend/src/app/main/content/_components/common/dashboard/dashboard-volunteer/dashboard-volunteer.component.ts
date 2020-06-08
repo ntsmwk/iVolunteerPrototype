@@ -257,7 +257,7 @@ export class DashboardVolunteerComponent implements OnInit {
 
   //---- Local Repository functions -----//
 
-  inLocalRepository(classInstance: ClassInstanceDTO) {
+  isInLocalRepository(classInstance: ClassInstanceDTO) {
     return (
       this.localClassInstances.findIndex((t) => t.id === classInstance.id) >= 0
     );
@@ -327,8 +327,8 @@ export class DashboardVolunteerComponent implements OnInit {
           return this.compare(a.dateFrom, b.dateFrom, isAsc);
         case "action":
           return this.compare(
-            this.inLocalRepository(a).toString(),
-            this.inLocalRepository(b).toString(),
+            this.isInLocalRepository(a).toString(),
+            this.isInLocalRepository(b).toString(),
             isAsc
           );
         default:
@@ -515,23 +515,27 @@ export class DashboardVolunteerComponent implements OnInit {
         //   this.colorsOpac.get("marketplace") +
         //   " 50%)",
 
-        // "background-image":
-        //   "repeating-linear-gradient(to top," +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 0%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 50%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 50%, " +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 100%)",
-
         "background-image":
           "repeating-linear-gradient(to right," +
           this.colorsOpac.get("marketplace") +
           " 0%, " +
           this.colorsOpac.get("localRepository") +
+          " 33%, " +
+          this.colorsOpac.get("localRepository") +
+          " 33%, " +
+          this.colorsOpac.get("marketplace") +
+          " 66%, " +
+          this.colorsOpac.get("marketplace") +
+          " 66%, " +
+          this.colorsOpac.get("localRepository") +
           " 100%)",
+
+        // "background-image":
+        //   "repeating-linear-gradient(to right," +
+        //   this.colorsOpac.get("marketplace") +
+        //   " 0%, " +
+        //   this.colorsOpac.get("localRepository") +
+        //   " 100%)",
 
         // "background-image":
         //   "repeating-linear-gradient(45deg," +
