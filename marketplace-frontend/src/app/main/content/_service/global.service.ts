@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { GlobalInfo } from "../_model/global-info";
 import { Participant, ParticipantRole } from "../_model/participant";
@@ -14,7 +14,7 @@ import { CoreVolunteerService } from "./core-volunteer.service";
 import { CoreHelpSeekerService } from "./core-helpseeker.service";
 
 @Injectable({ providedIn: "root" })
-export class ServiceNameService {
+export class GlobalService {
   globalInfo: GlobalInfo;
 
   constructor(
@@ -26,7 +26,15 @@ export class ServiceNameService {
     private marketplaceService: MarketplaceService
   ) {}
 
-  async getGlobalInfo() {
+  async getGlobalInfo(): Promise<GlobalInfo> {
+    if (this.globalInfo == null) {
+      await this.initializeGlobalInfo();
+      return this.globalInfo;
+    }
+  }
+
+  private async initializeGlobalInfo() {
+    this.globalInfo = new GlobalInfo();
     this.globalInfo.participant = <Participant>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -50,5 +58,9 @@ export class ServiceNameService {
       );
       this.globalInfo.marketplace = marketplaces[0];
     }
+  }
+
+  clearGlobalInfo() {
+    this.globalInfo = undefined;
   }
 }

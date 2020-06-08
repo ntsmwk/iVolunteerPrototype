@@ -13,12 +13,14 @@ import { Task } from "app/main/content/_model/task";
 import { isNullOrUndefined } from "util";
 import { Tenant } from "app/main/content/_model/tenant";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { GlobalService } from "app/main/content/_service/global.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-task-list",
   templateUrl: "./task-list.component.html",
   styleUrls: ["./task-list.component.scss"],
-  animations: fuseAnimations,
+  animations: fuseAnimations
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
   marketplace: Marketplace;
@@ -35,7 +37,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "taskType2",
     "taskDateFrom",
     "taskDuration",
-    "verified",
+    "verified"
   ];
 
   private participant: Helpseeker;
@@ -47,7 +49,8 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private classInstanceService: ClassInstanceService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private globalService: GlobalService
   ) {}
 
   ngOnInit() {}
@@ -66,7 +69,6 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
       await this.tenantService.findById(this.participant.tenantId).toPromise()
     );
 
-    // this.paginator.length = this.tableDataSource.data.length;
     this.tableDataSource.paginator = this.paginator;
 
     this.tableDataSource.data = <ClassInstanceDTO[]>(
@@ -74,6 +76,9 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
+
+    let globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo();
+    console.error(globalInfo);
   }
 
   rowSelected(task: Task) {

@@ -186,7 +186,6 @@ public class ClassInstanceController {
 		ciNew.setTabId(ci.getTabId());
 		ciNew.setClassDefinitionId(ci.getClassDefinitionId());
 		ciNew.setTimestamp(ci.getTimestamp());
-	//	ciNew.setTimestamp(new Date());
 		
 		ciNew.setTenantId(tenantId);
 					
