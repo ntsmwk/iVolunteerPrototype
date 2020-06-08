@@ -12,45 +12,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @RestController
 @RequestMapping("marketplace")
 public class MarketplaceController {
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired private MarketplaceService marketplaceService;
 
 	@GetMapping
 	public List<Marketplace> findAll() {
-		return marketplaceRepository.findAll();
+		return marketplaceService.findAll();
 	}
 
 	@GetMapping("{marketplaceId}")
 	public Marketplace findById(@PathVariable("marketplaceId") String marketplaceId) {
-		return marketplaceRepository.findOne(marketplaceId);
+		return marketplaceService.findById(marketplaceId);
 	}
 
 	@PostMapping
 	public Marketplace createMarketplace(@RequestBody Marketplace marketplace) {
-		return marketplaceRepository.insert(marketplace);
+		return marketplaceService.createMarketplace(marketplace);
 	}
 
 	@PutMapping("{marketplaceId}")
 	public Marketplace updateMarketplace(@PathVariable("marketplaceId") String marketplaceId,
 			@RequestBody Marketplace marketplace) {
-		Marketplace orginalMarketplace = marketplaceRepository.findOne(marketplaceId);
-		if (orginalMarketplace == null) {
-			throw new NotAcceptableException();
-		}
-		orginalMarketplace.setName(marketplace.getName());
-		orginalMarketplace.setShortName(marketplace.getShortName());
-		orginalMarketplace.setUrl(marketplace.getUrl());
-		return marketplaceRepository.save(orginalMarketplace);
+		return marketplaceService.updateMarketplace(marketplaceId, marketplace);
 	}
 
 	@DeleteMapping("{marketplaceId}")
 	public void delete(@PathVariable("marketplaceId") String marketplaceId) {
-		marketplaceRepository.delete(marketplaceId);
+		marketplaceService.delete(marketplaceId);
 	}
 }
