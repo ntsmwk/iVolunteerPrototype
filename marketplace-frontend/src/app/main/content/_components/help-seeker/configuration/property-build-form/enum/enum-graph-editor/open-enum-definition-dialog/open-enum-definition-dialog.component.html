@@ -1,0 +1,40 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>open_in_new</mat-icon>
+      </td>
+      <td>
+        <h1>Enum-Konfiguration öffnen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+<mat-dialog-content *ngIf="loaded">
+  <div>
+
+    <table class="browse-table" cellspacing=0 cellpadding=3>
+      <col width="325px" />
+      <col width="125px" />
+
+      <tr style="background-color: rgb(62, 125, 219); color: white;">
+        <th style="text-align: start" class="table-header-cell">Name</th>
+        <th style="text-align: start" class="table-header-cell">Geändert</th>
+
+      </tr>
+      <tr *ngFor="let entry of enumDefinitions" class="table-row" (click)="handleRowClick(entry)">
+        <td style="overflow: hidden">{{entry.name}}</td>
+        <td style="overflow: hidden; font-size: 12px">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+      </tr>
+      <div *ngIf="hasNoEnumDefinitions()" style="text-align: center">
+        keine Enum-Definitionen verfügbar
+      </div>
+
+    </table>
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+</mat-dialog-actions>

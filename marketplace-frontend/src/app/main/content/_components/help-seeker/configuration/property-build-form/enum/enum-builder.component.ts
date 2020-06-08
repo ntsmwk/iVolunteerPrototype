@@ -1,21 +1,13 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { mxgraph } from 'mxgraph';
-import { Router } from '@angular/router';
-import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { EnumDefinition } from 'app/main/content/_model/meta/enum';
-
-
-declare var require: any;
-
-const mx: typeof mxgraph = require('mxgraph')({
-    // mxDefaultLanguage: 'de',
-    // mxBasePath: './mxgraph_resources',
-});
-
-// tslint:disable-next-line: class-name
+import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
+import { isNullOrUndefined } from 'util';
+import { OpenEnumDefinitionDialogData, OpenEnumDefinitionDialogComponent } from './enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
+import { MatDialog } from '@angular/material';
+import { DeleteEnumDefinitionDialogComponent, DeleteEnumDefinitionDialogData } from './enum-graph-editor/delete-enum-definition-dialog/delete-enum-definition-dialog.component';
 
 
 @Component({
@@ -26,10 +18,10 @@ const mx: typeof mxgraph = require('mxgraph')({
 })
 export class EnumBuilderComponent implements OnInit {
     constructor(
+        public dialog: MatDialog,
         private formBuilder: FormBuilder,
-        private router: Router,
-        private objectIdService: ObjectIdService,
         // private dialogFactory: DialogFactoryDirective,
+        private enumDefinitionService: EnumDefinitionService,
     ) { }
 
     @Input() marketplace: Marketplace;
@@ -37,12 +29,14 @@ export class EnumBuilderComponent implements OnInit {
     @Output() result: EventEmitter<EnumDefinition> = new EventEmitter();
 
     form: FormGroup;
+    enumDefinition: EnumDefinition;
     showEditor: boolean;
 
     ngOnInit() {
 
         this.form = this.formBuilder.group({
             name: this.formBuilder.control('', Validators.required),
+            description: this.formBuilder.control('')
         });
 
     }
@@ -52,13 +46,43 @@ export class EnumBuilderComponent implements OnInit {
     }
 
     createClicked() {
+        this.form.controls['name'].markAsTouched();
         if (this.form.invalid) {
             this.form.markAllAsTouched();
         } else {
-            this.showEditor = true;
+            this.enumDefinitionService
+                .newEmptyEnumDefinition(this.marketplace, this.form.controls['name'].value, this.form.controls['description'].value, this.helpseeker.tenantId)
+                .toPromise().then((enumDefinition: EnumDefinition) => {
+                    if (!isNullOrUndefined(enumDefinition)) {
+                        this.enumDefinition = enumDefinition;
+                        this.showEditor = true;
+                    }
+                });
         }
 
     }
+
+    openClicked() {
+        // this.form.controls['name'].markAsPending();
+
+        this.openOpenEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpenEnumDefinitionDialogData) => {
+            if (!isNullOrUndefined(result)) {
+                this.enumDefinition = result.enumDefinition;
+                this.showEditor = true;
+            }
+        });
+
+    }
+
+    deleteClicked() {
+        // this.form.controls['name'].markAsPending();
+        this.openDeleteEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeleteEnumDefinitionDialogData) => {
+            if (!isNullOrUndefined(result)) {
+                console.log('TODO');
+            }
+        });
+    }
+
 
     handleSaveClick() {
 
@@ -66,6 +90,46 @@ export class EnumBuilderComponent implements OnInit {
 
     handleCancelClick() {
         this.result.emit(undefined);
+    }
+
+    openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+        const dialogRef = this.dialog.open(OpenEnumDefinitionDialogComponent, {
+            width: '500px',
+            minWidth: '500px',
+            height: '400px',
+            minHeight: '400px',
+            data: { marketplace: marketplace, helpseeker: helpseeker }
+        });
+
+        let returnValue: OpenEnumDefinitionDialogData;
+
+        dialogRef.beforeClose().toPromise().then((result: OpenEnumDefinitionDialogData) => {
+            returnValue = result;
+        });
+
+        return dialogRef.afterClosed().toPromise().then(() => {
+            return returnValue;
+        });
+    }
+
+    openDeleteEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+        const dialogRef = this.dialog.open(DeleteEnumDefinitionDialogComponent, {
+            width: '500px',
+            minWidth: '500px',
+            height: '400px',
+            minHeight: '400px',
+            data: { marketplace: marketplace, helpseeker: helpseeker }
+        });
+
+        let returnValue: DeleteEnumDefinitionDialogData;
+
+        dialogRef.beforeClose().toPromise().then((result: DeleteEnumDefinitionDialogData) => {
+            returnValue = result;
+        });
+
+        return dialogRef.afterClosed().toPromise().then(() => {
+            return returnValue;
+        });
     }
 
 

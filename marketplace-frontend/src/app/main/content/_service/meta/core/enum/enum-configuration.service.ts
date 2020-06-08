@@ -30,8 +30,8 @@ export class EnumDefinitionService {
         return this.http.post(`${marketplace.url}/enum-definition/new`, enumDefinition);
     }
 
-    newEmptyEnumDefinition(marketplace: Marketplace, name: string, description: string) {
-        return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description]);
+    newEmptyEnumDefinition(marketplace: Marketplace, name: string, description: string, tenantId: string) {
+        return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description, tenantId]);
     }
 
     saveEnumDefinition(marketplace: Marketplace, id: string, enumDefinition: EnumDefinition) {
@@ -40,6 +40,10 @@ export class EnumDefinitionService {
 
     deleteEnumDefinition(marketplace: Marketplace, id: string) {
         return this.http.delete(`${marketplace.url}/enum-definition/${id}/delete`);
+    }
+
+    deleteEnumDefinitions(marketplace: Marketplace, ids: string[]) {
+        return this.http.put(`${marketplace.url}/enum-definition/delete-multiple`, ids);
     }
 
 }

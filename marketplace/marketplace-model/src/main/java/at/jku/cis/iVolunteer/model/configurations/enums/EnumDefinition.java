@@ -23,19 +23,24 @@ public class EnumDefinition extends IVolunteerObject {
 	public EnumDefinition() {
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
+		this.setTimestamp(new Date());
 	}
 	
-	public EnumDefinition(String name) {
+	public EnumDefinition(String name, String tenantId) {
 		this.name = name;
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
+		this.setTenantId(tenantId);
+		this.setTimestamp(new Date());
 	}
 	
-	public EnumDefinition(String name, String description) {
+	public EnumDefinition(String name, String description, String tenantId) {
 		this.name = name;
 		this.description = description;
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
+		this.setTenantId(tenantId);
+		this.setTimestamp(new Date());
 	}
 
 	public String getName() {

@@ -4,6 +4,10 @@ import { MatCommonModule, MatFormFieldModule, MatInputModule, MatButtonModule } 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { EnumBuilderComponent } from './enum-builder.component';
 import { EnumGraphEditorModule } from './enum-graph-editor/enum-graph-editor.module';
+import { OpenEnumDefinitionDialogComponent } from './enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
+import { OpenEnumDefinitionDialogModule } from './enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.module';
+import { DeleteEnumDefinitionDialogComponent } from './enum-graph-editor/delete-enum-definition-dialog/delete-enum-definition-dialog.component';
+import { DeleteEnumDefinitionDialogModule } from './enum-graph-editor/delete-enum-definition-dialog/delete-enum-definition-dialog.module';
 
 @NgModule({
     imports: [
@@ -17,7 +21,13 @@ import { EnumGraphEditorModule } from './enum-graph-editor/enum-graph-editor.mod
 
         EnumGraphEditorModule,
 
+        OpenEnumDefinitionDialogModule,
+        DeleteEnumDefinitionDialogModule,
 
+    ],
+    entryComponents: [
+        OpenEnumDefinitionDialogComponent,
+        DeleteEnumDefinitionDialogComponent,
     ],
     declarations: [EnumBuilderComponent],
     exports: [EnumBuilderComponent]

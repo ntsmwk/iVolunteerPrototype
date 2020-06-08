@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { mxgraph } from 'mxgraph';
 import { Router } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MyMxCell } from '../../../myMxCell';
+import { MyMxCell, MyMxCellType } from '../../../myMxCell';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
+import { CConstants } from '../../../class-configurator/utils-and-constants';
 
 
 declare var require: any;
@@ -33,7 +34,7 @@ export class EnumGraphEditorComponent implements OnInit {
 
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
-    @Input() enumName: string;
+    @Input() enumDefinition: EnumDefinition;
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
 
@@ -46,12 +47,7 @@ export class EnumGraphEditorComponent implements OnInit {
     }
 
     ngAfterContentInit() {
-        // this.graphContainer.nativeElement.style.position = 'absolute';
         this.graphContainer.nativeElement.style.overflow = 'hidden';
-        // this.graphContainer.nativeElement.style.left = '0px';
-        // this.graphContainer.nativeElement.style.top = '35px';
-        // this.graphContainer.nativeElement.style.right = '0px';
-        // this.graphContainer.nativeElement.style.bottom = '0px';
         this.graphContainer.nativeElement.style.height = '50vh';
         this.graphContainer.nativeElement.style.width = '100%';
         this.graphContainer.nativeElement.style.background = 'white';
@@ -115,9 +111,17 @@ export class EnumGraphEditorComponent implements OnInit {
         }
     }
 
+    createGraph() {
+        this.addRootCell();
+
+    }
+
     addRootCell() {
         this.graph.getModel().beginUpdate();
-        this.graph.insertVertex(this.graph.getDefaultParent(), this.objectIdService.getNewObjectId(), this.enumName, 0, 0, 100, 20);
+        const rootCell = this.graph.insertVertex(
+            this.graph.getDefaultParent(), this.enumDefinition.id, this.enumDefinition.name, 0, 0, 110, 50, CConstants.mxStyles.classEnum
+        ) as MyMxCell;
+        rootCell.root = true;
         this.graph.getModel().endUpdate();
 
     }

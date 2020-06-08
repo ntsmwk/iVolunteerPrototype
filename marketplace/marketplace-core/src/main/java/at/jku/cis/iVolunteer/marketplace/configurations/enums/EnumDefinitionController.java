@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.configurations.enums.EnumDefinition;
+import at.jku.cis.iVolunteer.model.configurations.matching.MatchingConfiguration;
 
 @RestController
 public class EnumDefinitionController {
@@ -47,7 +48,10 @@ public class EnumDefinitionController {
 	
 	@PostMapping("enum-definition/new-empty")
 	private EnumDefinition newEmptyEnumDefinition(@RequestBody String[] params) {
-		EnumDefinition enumConfiguration = new EnumDefinition(params[0], params[1]);
+		if (params.length != 3) {
+			return null;
+		}
+		EnumDefinition enumConfiguration = new EnumDefinition(params[0], params[1], params[2]);
 		return enumDefinitionRepository.save(enumConfiguration);
 	}
 		
@@ -59,6 +63,12 @@ public class EnumDefinitionController {
 	@DeleteMapping("enum-definition/{id}/delete")
 	private void deleteEnumDefinition(@PathVariable("id") String id) {
 		enumDefinitionRepository.delete(id);
+	}
+	
+	@PutMapping("enum-definition/delete-multiple")
+	private List<EnumDefinition> deleteMultipleMatchingConfigurations(@RequestBody List<String> ids) {
+		ids.forEach(this.enumDefinitionRepository::delete);
+		return this.enumDefinitionRepository.findAll();
 	}
 	
 	
