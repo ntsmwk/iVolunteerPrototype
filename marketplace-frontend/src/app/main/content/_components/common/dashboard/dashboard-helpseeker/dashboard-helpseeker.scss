@@ -1,11 +1,12 @@
 @import "src/@fuse/scss/fuse";
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 @include mat-core();
-$custom-typography: mat-typography-config( $font-family: 'Muli');
+$custom-typography: mat-typography-config(
+  $font-family: "Muli",
+);
 @include mat-core($custom-typography);
 
-.verein-heading{
+.verein-heading {
   font-size: 50px;
   text-align: center;
 }
-

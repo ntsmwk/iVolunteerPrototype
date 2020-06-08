@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.kie.api.runtime.KieSession;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
@@ -24,7 +24,6 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
@@ -67,6 +66,7 @@ public class InitializationService {
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired private ClassConfigurationController classConfigurationController;
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
@@ -83,14 +83,13 @@ public class InitializationService {
 //		addTestConfigClasses();
 //		addConfigurators();
 		//addConfiguratorSlots();
-
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		//this.addTestClassInstances();
-		testData.load();
-		testDataRK.load();
-		testRuleEngine.executeTestCases();
-		addTestRuleEngine();
+		testData.load(); // XXX vojino, replace with REST-API
+		testDataRK.load(); // XXX vojino, replace with REST-API
+		testRuleEngine.executeTestCases(); // XXX vojino, replace with REST-API
+		// addTestRuleEngine();
 //		addTestClassInstances();
 	}
 
@@ -295,16 +294,16 @@ public class InitializationService {
 		
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 
-		this.createConfigurator(tenantId, "slot1");
-		this.createConfigurator(tenantId, "slot2");
-		this.createConfigurator(tenantId, "slot3");
-		this.createConfigurator(tenantId, "slot4");
-		this.createConfigurator(tenantId, "slot5");
+		this.createClassConfiguration(tenantId, "slot1");
+		this.createClassConfiguration(tenantId, "slot2");
+		this.createClassConfiguration(tenantId, "slot3");
+		this.createClassConfiguration(tenantId, "slot4");
+		this.createClassConfiguration(tenantId, "slot5");
 
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void createConfigurator(String tenantId, String slotName) {
+	private void createClassConfiguration(String tenantId, String slotName) {
 		
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
@@ -318,6 +317,7 @@ public class InitializationService {
 		fwPassEintrag.setRoot(true);
 		fwPassEintrag.setClassArchetype(ClassArchetype.ROOT);
 		fwPassEintrag.setWriteProtected(true);
+		fwPassEintrag.setCollector(true);
 		fwPassEintrag.setProperties(new ArrayList<ClassProperty<Object>>());
 		
 		PropertyDefinition idProperty = properties.stream().filter(p -> p.getName().equals("id")).findFirst().get();
@@ -464,7 +464,8 @@ public class InitializationService {
 			configurator.getRelationshipIds().add(r.getId());
 		}
 		
-		this.classConfigurationRepository.save(configurator);
+//		this.classConfigurationRepository.save(configurator);
+		this.classConfigurationController.saveClassConfiguration(configurator);
 		
 	}
 	

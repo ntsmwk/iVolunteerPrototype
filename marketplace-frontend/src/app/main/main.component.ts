@@ -5,7 +5,7 @@ import {
   Inject,
   OnDestroy,
   Renderer2,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { Platform } from "@angular/cdk/platform";
@@ -20,8 +20,6 @@ import { ParticipantRole, Participant } from "./content/_model/participant";
 import { navigation_flexprod } from "app/navigation/navigation_flexprod";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { Router } from "@angular/router";
-import { navigation_mvs } from "app/navigation/navigation_mvs";
-import { navigation_ffa } from "app/navigation/navigation_ffa";
 import { navigation_admin } from "app/navigation/navigation_admin";
 
 @Component({
@@ -29,7 +27,7 @@ import { navigation_admin } from "app/navigation/navigation_admin";
   templateUrl: "./main.component.html",
   styleUrls: ["./main.component.scss"],
   providers: [LoginService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class FuseMainComponent implements OnDestroy {
   onConfigChanged: Subscription;
@@ -48,7 +46,7 @@ export class FuseMainComponent implements OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {
     this.onConfigChanged = this.fuseConfig.onConfigChanged.subscribe(
-      newSettings => {
+      (newSettings) => {
         this.fuseSettings = newSettings;
         this.layoutMode = this.fuseSettings.layout.mode;
       }
@@ -64,19 +62,7 @@ export class FuseMainComponent implements OnDestroy {
       .then((role: ParticipantRole) => {
         switch (role) {
           case "HELP_SEEKER":
-            // TODO FAKE
-            this.loginService
-              .getLoggedIn()
-              .toPromise()
-              .then((user: Participant) => {
-                if (user.username === "MVS") {
-                  this.navigation = navigation_mvs;
-                } else if (user.username === "FFA") {
-                  this.navigation = navigation_ffa;
-                } else {
-                  this.navigation = navigation_helpseeker;
-                }
-              });
+            this.navigation = navigation_helpseeker;
             break;
           case "VOLUNTEER":
             this.navigation = navigation_volunteer;
@@ -92,7 +78,7 @@ export class FuseMainComponent implements OnDestroy {
             break;
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.warn("MAIN COMPONENT ERROR: " + JSON.stringify(e));
       });
   }

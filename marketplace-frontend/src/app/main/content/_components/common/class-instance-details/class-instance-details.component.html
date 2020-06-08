@@ -1,0 +1,74 @@
+<div
+  class="page-layout blank p-24"
+  fusePerfectScrollbar
+  style="overflow: scroll;"
+>
+  <div style="padding-top: 12px;"></div>
+
+  <customizable-header
+    *ngIf="tenant && !isDialog"
+    [tenant]="tenant"
+    [displayNavigateBack]="!isDialog"
+    headerText="Details"
+  ></customizable-header>
+
+  <div 
+    *ngIf="isDialog"
+    class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
+    <img
+      *ngIf="tenant"
+      class="header-logo"
+      [src]="tenantService.getTenantImage(tenant)"
+    />
+    <h1 class="l-heading">Details</h1>
+  </div>
+  
+
+  <div *ngIf="classInstance != null">
+    <h1 style="margin-left: 5px;">Asset: {{ getName() }}</h1>
+
+    <mat-table
+      matSort
+      class="table"
+      [dataSource]="tableDataSource"
+      style="width: 100%;"
+      (matSortChange)="sortData($event)"
+    >
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.name }} 
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="values">
+        <mat-header-cell *matHeaderCellDef>
+          Wert
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span *ngIf="element.type === 'DATE'"
+            >{{ element.values[0] | date: "dd.MM.yyyy HH:mm" }}
+          </span>
+          <span *ngIf="element.type != 'DATE'">{{ element.values }} </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef>
+          Datentyp
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span>{{ element.type }} </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        *matRowDef="let element; let row; columns: displayedColumns"
+      ></mat-row>
+    </mat-table>
+  </div>
+</div>

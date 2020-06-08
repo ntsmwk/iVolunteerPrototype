@@ -2,14 +2,14 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { fuseAnimations } from "@fuse/animations";
 import { Router } from "@angular/router";
-import { CoreMarketplaceService } from "../../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { Marketplace } from "../../../_model/marketplace";
 
 @Component({
   templateUrl: "./marketplace-list.component.html",
   styleUrls: ["./marketplace-list.component.scss"],
   encapsulation: ViewEncapsulation.None,
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class FuseMarketplaceListComponent implements OnInit {
   dataSource = new MatTableDataSource<Marketplace>();
@@ -17,7 +17,7 @@ export class FuseMarketplaceListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private marketplaceService: CoreMarketplaceService
+    private marketplaceService: MarketplaceService
   ) {}
 
   ngOnInit() {

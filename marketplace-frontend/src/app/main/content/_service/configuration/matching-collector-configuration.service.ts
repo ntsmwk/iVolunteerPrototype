@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from '../../_model/marketplace';
 import { Injectable } from '@angular/core';
-import { MatchingCollectorConfiguration } from '../../_model/configurations';
+import { MatchingCollectorConfiguration } from '../../_model/meta/configurations';
 
 @Injectable({
     providedIn: 'root'

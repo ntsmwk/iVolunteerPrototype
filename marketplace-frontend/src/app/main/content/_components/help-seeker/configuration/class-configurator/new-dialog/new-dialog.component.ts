@@ -4,7 +4,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { ClassConfiguration } from 'app/main/content/_model/configurations';
+import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CUtils } from '../utils-and-constants';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
@@ -76,54 +76,35 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     if (this.dialogForm.invalid) {
       this.dialogForm.get('label').markAsTouched();
       this.dialogForm.get('description').markAsTouched();
-      // this.dialogForm.get('rootLabel').markAsTouched();
+
     } else {
+      const name = this.dialogForm.get('label').value;
+      const description = this.dialogForm.get('description').value;
 
-      const classConfiguration = new ClassConfiguration();
+      this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, this.data.tenantId, name, description).toPromise().then((ret: ClassConfiguration) => {
+        console.log(ret);
+        this.data.classConfiguration = ret;
 
-      classConfiguration.name = this.dialogForm.get('label').value;
-      classConfiguration.description = this.dialogForm.get('description').value;
-
-
-      const standardObjects = CUtils.getStandardObjects(this.data.marketplace.id, this.data.tenantId, this.objectIdService);
-      this.data.relationships = standardObjects.relationships;
-      this.data.classDefinitions = standardObjects.classDefinitions;
-
-      classConfiguration.relationshipIds = this.data.relationships.map(r => r.id);
-      classConfiguration.classDefinitionIds = this.data.classDefinitions.map(c => c.id);
-
-      Promise.all([
-        this.relationshipsService.addAndUpdateRelationships(this.data.marketplace, this.data.relationships).toPromise().then((ret: Relationship) => {
-          // console.log(ret);
-        }),
-        this.classDefintionService.addOrUpdateClassDefintions(this.data.marketplace, this.data.classDefinitions).toPromise().then((ret: ClassDefinition) => {
-          // console.log(ret);
-        }),
-      ]).then(() => {
-
-        this.classConfigurationService.createNewClassConfiguration(this.data.marketplace, classConfiguration).toPromise().then((ret: ClassConfiguration) => {
-          // console.log(ret);
-          this.data.classConfiguration = ret;
-
-        }).then(() => {
-          // console.log('finished');
-
+      }).then(() => {
+        Promise.all([
+          this.relationshipsService
+            .getRelationshipsById(this.data.marketplace, this.data.classConfiguration.relationshipIds)
+            .toPromise()
+            .then((ret: Relationship[]) => {
+              this.data.relationships = ret;
+            }),
+          this.classDefintionService
+            .getClassDefinitionsById(this.data.marketplace, this.data.classConfiguration.classDefinitionIds, this.data.tenantId)
+            .toPromise()
+            .then((ret: ClassDefinition[]) => {
+              this.data.classDefinitions = ret;
+            })
+        ]).then(() => {
           this.dialogRef.close(this.data);
         });
       });
-
-
-
-
     }
-
-
-
   }
-
-
-
-
 }
 
 

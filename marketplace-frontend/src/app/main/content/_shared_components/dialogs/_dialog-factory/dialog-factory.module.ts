@@ -39,7 +39,8 @@ import {
   ClassInstanceFormPreviewExportDialogModule
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.module';
 import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
-
+import { PropertyOrEnumCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.module';
+import { PropertyOrEnumCreationDialogComponent } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 
 
 @NgModule({
@@ -60,10 +61,12 @@ import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/
     DeleteClassConfigurationDialogModule,
     ClassInstanceFormPreviewDialogModule,
     ChangeIconDialogModule,
+    ClassInstanceFormPreviewExportDialogModule,
 
     AddPropertyDialogModule,
     RemoveDialogModule,
-    ClassInstanceFormPreviewExportDialogModule,
+
+    PropertyOrEnumCreationDialogModule,
 
     // Matching Configurator
     NewMatchingDialogModule,
@@ -90,6 +93,8 @@ import { ClassInstanceFormPreviewExportDialogComponent } from 'app/main/content/
 
     AddPropertyDialogComponent,
     RemoveDialogComponent,
+
+    PropertyOrEnumCreationDialogComponent,
 
     // Matching Configurator
     NewMatchingDialogComponent,

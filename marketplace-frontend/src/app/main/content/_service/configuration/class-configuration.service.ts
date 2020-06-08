@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ClassConfiguration } from '../../_model/configurations';
+import { ClassConfiguration } from '../../_model/meta/configurations';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +37,13 @@ export class ClassConfigurationService {
     return this.http.post(`${marketplace.url}/class-configuration/new-empty`, [name, description]);
   }
 
-  createNewClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {
-    return this.http.post(`${marketplace.url}/class-configuration/new`, classConfiguration);
+  createNewClassConfiguration(marketplace: Marketplace, tenantId: string, name: string, description: string) {
+    const params: string[] = [];
+    params.push(tenantId);
+    params.push(name);
+    params.push(description);
+
+    return this.http.post(`${marketplace.url}/class-configuration/new`, params);
   }
 
   saveClassConfiguration(marketplace: Marketplace, classConfiguration: ClassConfiguration) {

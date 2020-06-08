@@ -1,6 +1,10 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar *ngIf="selectedTenants.length > 0">
-  <app-timeline-filter [(classInstanceDTOs)]="classInstanceDTOs" [(timelineFilter)]="timelineFilter"
-    [(selectedYear)]="selectedYear" [(selectedYaxis)]="selectedYaxis" [(selectedTaskType)]="selectedTaskType">
+  <app-timeline-filter 
+    [classInstanceDTOs]="classInstanceDTOs" 
+    [selectedTaskType]="selectedTaskType"
+    (timelineFilterChange)="timelineFilterChange($event)"
+    (selectedYearChange)="selectedYearChange($event)" 
+    (selectedYaxisChange)="selectedYaxisChange($event)">
   </app-timeline-filter>
 
   <mat-accordion multi="true">
@@ -14,9 +18,15 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-sunburst-table [(classInstanceDTOs)]="classInstanceDTOs" [(timelineFilter)]="timelineFilter"
-        [(selectedYear)]="selectedYear" [(selectedYaxis)]="selectedYaxis" [(selectedTaskType)]="selectedTaskType">
-      </app-sunburst-table>
+      <ng-template matExpansionPanelContent>
+        <app-sunburst-table
+          [classInstanceDTOs]="classInstanceDTOs" 
+          [timelineFilter]="timelineFilter"
+          [selectedYear]="selectedYear" 
+          [selectedYaxis]="selectedYaxis" 
+          (selectedTaskTypeChange)="selectedTaskTypeChange($event)">
+        </app-sunburst-table>
+      </ng-template >
 
     </mat-expansion-panel>
 
@@ -31,9 +41,15 @@
       </mat-expansion-panel-header>
 
       <div class="secondRow" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
-        <app-donut [type]="'Wochentag'" [classInstanceDTOs]="classInstanceDTOs" [timelineFilter]="timelineFilter"
-          [selectedYear]="selectedYear" [selectedYaxis]="selectedYaxis" [selectedTaskType]="selectedTaskType"
-          [marketplace]="marketplace" [volunteer]="volunteer">
+        <app-donut 
+          [type]="'Wochentag'" 
+          [classInstanceDTOs]="classInstanceDTOs" 
+          [timelineFilter]="timelineFilter"
+          [selectedYear]="selectedYear" 
+          [selectedYaxis]="selectedYaxis" 
+          [selectedTaskType]="selectedTaskType"
+          [marketplace]="marketplace" 
+          [volunteer]="volunteer">
         </app-donut>
 
         <app-donut [type]="'Tageszeit'" [classInstanceDTOs]="classInstanceDTOs" [timelineFilter]="timelineFilter"

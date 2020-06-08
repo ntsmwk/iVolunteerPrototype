@@ -1,0 +1,24 @@
+<div mat-dialog-title>
+  <table>
+    <tr>
+      <td>
+        <mat-icon>add</mat-icon>
+      </td>
+      <td>
+        <h1>Neues Property / Enum erstellen</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-dialog-content *ngIf="loaded">
+  <app-builder-container [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
+    [allPropertyDefinitions]="data.allPropertyDefinitions" (result)="handleResultEvent($event)">
+  </app-builder-container>
+</mat-dialog-content>
+
+<!-- <mat-dialog-actions>
+    <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
+        Close
+    </button>
+</mat-dialog-actions> -->

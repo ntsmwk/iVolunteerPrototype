@@ -10,7 +10,7 @@ import { Marketplace } from "../../../../../_model/marketplace";
 import { CoreVolunteerService } from "../../../../../_service/core-volunteer.service";
 import { Participant } from "../../../../../_model/participant";
 import { MessageService } from "../../../../../_service/message.service";
-import { CoreMarketplaceService } from "../../../../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../../../../_service/core-marketplace.service";
 import { Volunteer } from "../../../../../_model/volunteer";
 
 @Component({
@@ -31,7 +31,7 @@ export class RecommendationsComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private projectService: ProjectService,
     private messageService: MessageService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private volunteerService: CoreVolunteerService
   ) {}
 

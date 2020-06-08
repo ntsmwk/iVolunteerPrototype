@@ -6,7 +6,7 @@ import { Participant } from "../../../_model/participant";
 import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { isNullOrUndefined } from "util";
-import { CoreMarketplaceService } from "../../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { LoginService } from "../../../_service/login.service";
 import { Helpseeker } from "../../../_model/helpseeker";
 import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
@@ -15,7 +15,7 @@ import { ArrayService } from "../../../_service/array.service";
 @Component({
   selector: "asset-inbox-helpseeker",
   templateUrl: "./asset-inbox-helpseeker.component.html",
-  styleUrls: ["./asset-inbox-helpseeker.component.scss"]
+  styleUrls: ["./asset-inbox-helpseeker.component.scss"],
 })
 export class AssetInboxHelpseekerComponent implements OnInit {
   public marketplaces = new Array<Marketplace>();
@@ -29,9 +29,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private helpSeekerService: CoreHelpSeekerService
-  ) { }
+  ) {}
 
   ngOnInit() {
     Promise.all([
@@ -48,7 +48,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
         .toPromise()
         .then((helpseeker: Helpseeker) => {
           this.helpseeker = helpseeker;
-        })
+        }),
     ]).then(() => {
       this.loadInboxEntries();
     });
@@ -68,13 +68,13 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       });
   }
 
-  close() { }
+  close() {}
 
   onAssetInboxSubmit() {
     this.classInstanceService
       .setClassInstanceInIssuerInbox(
         this.marketplace,
-        this.classInstanceDTO.map(c => c.id),
+        this.classInstanceDTO.map((c) => c.id),
         false
       )
       .toPromise()
@@ -84,8 +84,8 @@ export class AssetInboxHelpseekerComponent implements OnInit {
           state: {
             instances: this.classInstanceDTO,
             marketplace: this.marketplace,
-            participant: this.helpseeker
-          }
+            participant: this.helpseeker,
+          },
         });
       });
   }

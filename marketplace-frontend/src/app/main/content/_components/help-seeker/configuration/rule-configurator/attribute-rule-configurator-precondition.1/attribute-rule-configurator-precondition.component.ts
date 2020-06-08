@@ -1,40 +1,43 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
-import { isNullOrUndefined } from 'util';
-import { LoginService } from '../../../../../_service/login.service';
-import { Participant, ParticipantRole } from '../../../../../_model/participant';
-import { MessageService } from '../../../../../_service/message.service';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { isNullOrUndefined } from "util";
+import { LoginService } from "../../../../../_service/login.service";
+import {
+  Participant,
+  ParticipantRole,
+} from "../../../../../_model/participant";
+import { MessageService } from "../../../../../_service/message.service";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
   MappingOperatorType,
   AttributeSourceRuleEntry,
   ClassSourceRuleEntry,
-  AttributeAggregationOperatorType
-} from 'app/main/content/_model/derivation-rule';
-import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+  AttributeAggregationOperatorType,
+} from "app/main/content/_model/derivation-rule";
+import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import {
   ClassProperty,
-  PropertyDefinition
-} from 'app/main/content/_model/meta/property';
-import { ClassPropertyService } from 'app/main/content/_service/meta/core/property/class-property.service';
-import { PropertyDefinitionService } from '../../../../../_service/meta/core/property/property-definition.service';
-import { Helpseeker } from '../../../../../_model/helpseeker';
+  PropertyDefinition,
+} from "app/main/content/_model/meta/property";
+import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
+import { PropertyDefinitionService } from "../../../../../_service/meta/core/property/property-definition.service";
+import { Helpseeker } from "../../../../../_model/helpseeker";
 
 @Component({
   selector: "attribute-rule-precondition",
-  templateUrl: './attribute-rule-configurator-precondition.component.html',
-  styleUrls: ['../rule-configurator.component.scss']
+  templateUrl: "./attribute-rule-configurator-precondition.component.html",
+  styleUrls: ["../rule-configurator.component.scss"],
 })
 export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
-  @Input('attributeSourceRuleEntry')
+  @Input("attributeSourceRuleEntry")
   attributeSourceRuleEntry: AttributeSourceRuleEntry;
-  @Output('attributeSourceRuleEntry')
+  @Output("attributeSourceRuleEntry")
   attributeSourceRuleEntryChange: EventEmitter<
     AttributeSourceRuleEntry
   > = new EventEmitter<AttributeSourceRuleEntry>();
@@ -68,7 +71,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       classPropertyId: new FormControl(undefined),
       aggregationOperatorType: new FormControl(undefined),
       mappingOperatorType: new FormControl(undefined),
-      value: new FormControl(undefined)
+      value: new FormControl(undefined),
     });
   }
 
@@ -77,18 +80,18 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       classDefinitionId:
         (this.attributeSourceRuleEntry.classDefinition
           ? this.attributeSourceRuleEntry.classDefinition.id
-          : '') || '',
+          : "") || "",
       classPropertyId:
         (this.attributeSourceRuleEntry.classProperty
           ? this.attributeSourceRuleEntry.classProperty.id
-          : '') || '',
+          : "") || "",
       aggregationOperatorType:
         this.attributeSourceRuleEntry.aggregationOperatorType ||
         AttributeAggregationOperatorType.SUM,
       mappingOperatorType:
         this.attributeSourceRuleEntry.mappingOperatorType ||
         MappingOperatorType.EQ,
-      value: this.attributeSourceRuleEntry.value || ''
+      value: this.attributeSourceRuleEntry.value || "",
     });
 
     this.comparisonOperators = Object.keys(MappingOperatorType);
@@ -160,7 +163,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
   findEnumValues() {
     if (
-      this.attributeSourceRuleEntry.classProperty.type === 'ENUM' &&
+      this.attributeSourceRuleEntry.classProperty.type === "ENUM" &&
       this.enumValues.length == 0
     ) {
       this.classDefinitionService
@@ -172,7 +175,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
         )
         .toPromise()
         .then((list: any[]) => {
-          this.enumValues = list.map(e => e.value);
+          this.enumValues = list.map((e) => e.value);
         });
     }
     return this.enumValues;
@@ -181,11 +184,11 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   onChange($event) {
     if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
       this.attributeSourceRuleEntry.classDefinition = this.classDefinitions.find(
-        cd => cd.id === this.rulePreconditionForm.value.classDefinitionId
+        (cd) => cd.id === this.rulePreconditionForm.value.classDefinitionId
       );
       this.attributeSourceRuleEntry.classProperty =
         this.classProperties.find(
-          cp => cp.id === this.rulePreconditionForm.value.classPropertyId
+          (cp) => cp.id === this.rulePreconditionForm.value.classPropertyId
         ) || new ClassProperty();
       this.attributeSourceRuleEntry.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
       this.attributeSourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
@@ -203,7 +206,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   private retrieveAggregationOperatorValueOf(op) {
     let x: AttributeAggregationOperatorType =
       AttributeAggregationOperatorType[
-      op as keyof typeof AttributeAggregationOperatorType
+        op as keyof typeof AttributeAggregationOperatorType
       ];
     return x;
   }

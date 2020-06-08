@@ -1,6 +1,6 @@
 import { OnInit, Component, Inject } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';

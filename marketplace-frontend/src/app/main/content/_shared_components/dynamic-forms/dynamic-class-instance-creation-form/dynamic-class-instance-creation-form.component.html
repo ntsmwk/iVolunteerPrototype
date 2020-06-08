@@ -1,14 +1,11 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
   <div *ngFor="let question of questions" class="form-row" [@simpleFadeAnimation]="'in'">
-    <app-question [question]="question" [form]="form" [submitPressed]="submitPressed"></app-question>
+    <app-question [question]="question" [form]="form" [submitPressed]="submitPressed"
+      (tupleSelected)="handleTupleSelection($event)"></app-question>
   </div>
 
-  <br>
-  <br>
-
-
-  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center">
+  <div *ngIf="!hideButtons" fxLayout="row" fxLayoutAlign="space-around center" class="pt-8">
 
     <button type="button" mat-raised-button color="secondary" (click)="handleCancel()">
       Abbrechen</button>

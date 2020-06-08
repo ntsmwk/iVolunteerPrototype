@@ -7,40 +7,46 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="classInstanceDTOs.length > 0">
-    <mat-card class="card">
-      <mat-card-header>
-        <mat-card-title>Lernbereitschaft</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+    <ng-template matExpansionPanelContent>
+      <div *ngIf="classInstanceDTOs.length > 0">
+        <mat-card class="card">
+          <mat-card-header>
+            <mat-card-title>Lernbereitschaft</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
 
-        <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, gern und erfolgreich zu lernen"</p>
+            <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, gern und
+              erfolgreich zu lernen"</p>
 
-        <div class="chartParent" fxLayout="row">
-          <div class="half">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
-              <app-share-menu [label]="'Stunden'" (export)="exportChart($event)">
-              </app-share-menu>
+            <div class="chartParent" fxLayout="row">
+              <div class="half">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <h2 class="title">STUNDEN absolvierter Ausbildungen</h2>
+                  <app-share-menu [label]="'Stunden'" (export)="exportChart($event)">
+                  </app-share-menu>
+                </div>
+                <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient"
+                  [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                  [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                  [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+              </div>
+
+              <div class="half">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <h2 class="title">ANZAHL absolvierter Ausbildungen</h2>
+                  <app-share-menu [label]="'Anzahl'" (export)="exportChart($event)">
+                  </app-share-menu>
+                </div>
+                <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient"
+                  [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                  [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                  [yAxisLabel]="yAxisLabel2" [animations]="animations" (select)="onSelect($event)">
+                </ngx-charts-line-chart>
+              </div>
             </div>
-            <ngx-charts-bar-vertical-stacked [scheme]="colorScheme" [results]="trainingData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
-            </ngx-charts-bar-vertical-stacked>
-          </div>
 
-          <div class="half">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <h2 class="title">ANZAHL absolvierter Ausbildungen</h2>
-              <app-share-menu [label]="'Anzahl'" (export)="exportChart($event)">
-              </app-share-menu>
-            </div>
-            <ngx-charts-line-chart [scheme]="colorScheme" [results]="trainingData2" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-              [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel2" [animations]="animations" (select)="onSelect($event)">
-            </ngx-charts-line-chart>
-          </div>
-        </div>
-
-        <!-- <div *ngIf="meanYearData">
+            <!-- <div *ngIf="meanYearData">
           <table class="paleBlueRows">
             <thead>
               <tr>
@@ -72,9 +78,10 @@
             </tbody>
           </table>
         </div> -->
-      </mat-card-content>
-    </mat-card>
-  </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </ng-template>
 
   </mat-expansion-panel>
 
@@ -86,28 +93,33 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="classInstanceDTOs.length > 0">
-    <mat-card class="card">
-      <mat-card-header>
-        <mat-card-title>Anpassungsfähigkeit</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+    <ng-template matExpansionPanelContent>
+      <div *ngIf="classInstanceDTOs.length > 0">
+        <mat-card class="card">
+          <mat-card-header>
+            <mat-card-title>Anpassungsfähigkeit</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
 
-        <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen und Verhältnissen anzupassen"</p>
+            <p style="margin-left: 20px; font-size: 18px; font-style: italic; color: #333;">"Fähigkeit, sich Menschen
+              und Verhältnissen anzupassen"</p>
 
-        <div class="chartParent2" fxLayout="column">
-          <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
-          <app-share-menu [label]="'Taetigkeitsart'" (export)="exportChart($event)">
-          </app-share-menu>
-          </div>
-          <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
-          </ngx-charts-area-chart-stacked>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+            <div class="chartParent2" fxLayout="column">
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <h2 class="title">Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf</h2>
+                <app-share-menu [label]="'Taetigkeitsart'" (export)="exportChart($event)">
+                </app-share-menu>
+              </div>
+              <ngx-charts-area-chart-stacked [scheme]="colorScheme" [results]="taskData" [gradient]="gradient"
+                [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [legendTitle]="legendTitle"
+                [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel1" [animations]="animations" (select)="onSelect($event)">
+              </ngx-charts-area-chart-stacked>
+            </div>
+          </mat-card-content>
+        </mat-card>
+    </div>
+  </ng-template>
 
 
   </mat-expansion-panel>
@@ -118,6 +130,9 @@
         <img class="icon iconSquare" src="assets/icons/aktivitaets.png">
         Aktivitäts und Handlungskompetenzen
       </mat-panel-title>
+      <ng-template matExpansionPanelContent>
+
+      </ng-template>
     </mat-expansion-panel-header>
 
 
@@ -130,7 +145,8 @@
         Fach- und Methodenkompetenzen
       </mat-panel-title>
     </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
 
-
+    </ng-template>
   </mat-expansion-panel>
 </mat-accordion>

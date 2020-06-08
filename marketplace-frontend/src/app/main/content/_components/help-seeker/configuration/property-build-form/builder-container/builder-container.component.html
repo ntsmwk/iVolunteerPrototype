@@ -1,0 +1,13 @@
+<mat-tab-group mat-align-tabs="start">
+
+  <mat-tab label="Property erstellen">
+    <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker"
+      (result)="handleResultEvent($event)">
+    </app-single-property-builder>
+  </mat-tab>
+
+  <mat-tab label="Enum erstellen">
+    enum...
+  </mat-tab>
+
+</mat-tab-group>

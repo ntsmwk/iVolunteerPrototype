@@ -120,7 +120,7 @@ export class FuseToolbarComponent {
 
     switch (event.urlAfterRedirects) {
       case '/main/matching-configurator': this.headingText = 'Matching-Konfigurator'; break;
-      case '/main/configurator': this.headingText = 'Asset-Konfigurator'; break;
+      case '/main/configurator': this.headingText = 'Klassen-Konfigurator'; break;
       case String(event.urlAfterRedirects.match(/\/main\/configurator\/instance-editor\/[^]*/)): this.headingText = 'Instanz-Editor'; break;
       default: this.headingText = ''; break;
     }

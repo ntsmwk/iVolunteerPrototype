@@ -6,9 +6,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 
-public interface ClassConfigurationRepository extends MongoRepository<ClassConfiguration, String> {
+public interface ClassConfigurationRepository extends HasTenantRepository<ClassConfiguration, String> {
 
 	public List<ClassConfiguration> findByName(String name);
 

@@ -9,7 +9,7 @@ import { ChooseTemplateToCopyDialogComponent, ChooseTemplateToCopyDialogData } f
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { NewClassConfigurationDialogComponent, NewClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/new-dialog/new-dialog.component';
 import { OpenClassConfigurationDialogComponent, OpenClassConfigurationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/open-dialog/open-dialog.component';
-import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ConfirmClassConfigurationSaveDialogComponent, ConfirmClassConfigurationSaveDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/confirm-save-dialog/confirm-save-dialog.component';
@@ -22,8 +22,14 @@ import { AddPropertyDialogComponent, AddPropertyDialogData } from 'app/main/cont
 import { RemoveDialogComponent, RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
-import { ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData } from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
-import { ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import {
+  ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData
+} from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+import {
+  ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData
+} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -396,6 +402,26 @@ export class DialogFactoryDirective {
     });
   }
 
+  openPropertyCreationDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+    const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
+      width: '90vw',
+      minWidth: '90vw',
+      height: '90vh',
+      minHeight: '90vh',
+      data: { marketplace: marketplace, helpseeker: helpseeker },
+      disableClose: true
+    });
+
+    let returnValue: PropertyOrEnumCreationDialogData;
+    dialogRef.beforeClose().toPromise().then((result: PropertyOrEnumCreationDialogData) => {
+      returnValue = result;
+    });
+
+    return dialogRef.afterClosed().toPromise().then(() => {
+      return returnValue;
+    });
+  }
+
   /*  
    *  Matching-Configurator Dialogs
    */
@@ -467,13 +493,13 @@ export class DialogFactoryDirective {
   }
 
 
-  openAddPropertyDialog(marketplace: Marketplace, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
+  openAddPropertyDialog(marketplace: Marketplace, helpseeker: Helpseeker, classDefinition: ClassDefinition, allClassDefinitions: ClassDefinition[], allRelationships: Relationship[]) {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
       width: '500px',
       minWidth: '500px',
       height: '400px',
       minHeight: '400px',
-      data: { marketplace: marketplace, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
+      data: { marketplace: marketplace, helpseeker: helpseeker, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
     });
 
     let returnValue: AddPropertyDialogData;

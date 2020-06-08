@@ -37,109 +37,82 @@
 
   <div style="padding-top: 10px;"></div>
 
-  <!--Organisation selector-->
-  <!-- <div class="mat-card dashboard-org p-20 m-20">
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <h2 *ngIf="tenants.length > 0">Deine Organisationen</h2>
-      <h2 *ngIf="tenants.length == 0">
-        Du bist noch keiner Organisation beigetreten
-      </h2>
-
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <div *ngFor="let t of tenants" class="org-icon-container" matTooltip="{{ t.name }}">
-          <img class="org-icon" [src]="getTenantImage(t)" />
-        </div>
-      </div>
-      <button class="mt-20" mat-raised-button color="primary" (click)="navigateToTenantOverview()">
-        Finde Organisationen
-      </button>
-    </div>
-  </div> -->
-
   <mat-card *ngIf="isLocalRepositoryConnected">
     <!-- Organisation Filter -->
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <organisation-filter
-          (tenantSelectionChanged)="tenantSelectionChanged($event)"
-          *ngIf="tenants.length > 0"
-        >
-        </organisation-filter>
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-between start"
+        class="optionHeader"
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <organisation-filter
+            (tenantSelectionChanged)="tenantSelectionChanged($event)"
+            *ngIf="subscribedTenants.length > 0"
+          >
+          </organisation-filter>
 
-        <h2 *ngIf="tenants.length == 0">
-          Du bist noch keiner Organisation beigetreten:
-        </h2>
+          <h2 *ngIf="subscribedTenants.length == 0">
+            Du bist noch keiner Organisation beigetreten:
+          </h2>
 
-        <!-- Find new Organisation button -->
-        <button
-          class="mt-20"
-          style="height: 60px; margin: 3px; margin-left: 10px;"
-          mat-raised-button
-          color="primary"
-          (click)="navigateToTenantOverview()"
+          <!-- Find new Organisation button -->
+          <button
+            class="mt-20"
+            style="height: 60px; margin: 3px; margin-left: 10px;"
+            mat-raised-button
+            color="primary"
+            (click)="navigateToTenantOverview(row)"
+          >
+            Organisationen verwalten
+          </button>
+        </div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="end center"
+          *ngIf="
+            filteredClassInstances.length > 0 &&
+            isLocalRepositoryConnected &&
+            selectedTenants.length > 0
+          "
         >
-          Organisationen verwalten
-        </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="syncAllToLocalRepository()"
+          >
+            Auswahl synchronisieren
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="removeAllFromLocalRepository()"
+            style="margin-left: 20px;"
+          >
+            Auswahl entfernen
+          </button>
+        </div>
       </div>
-
-      <table class="table">
+      <div fxLayout="column">
+        <div class="vennParent optionHeader" id="container"></div>
+      </div>
+      <!-- <table class="table">
         <tbody>
           <tr>
-            <td>Einträge gesamt:</td>
-            <td class="alignRight">{{ marketplaceClassInstances.length }}</td>
+            <td>Einträge nur am Marktplatz:</td>
+            <td class="alignRight">{{ nrMpOnly }}</td>
           </tr>
           <tr>
-            <td>Einträge im lokalen Repository:</td>
-            <td class="alignRight">{{ localClassInstances.length }}</td>
+            <td>Einträge nur im lokalen Freiwilligenpass:</td>
+            <td class="alignRight">{{ nrLrOnly }}</td>
           </tr>
           <tr>
-            <td>Noch nicht hinzugefügte Einträge:</td>
-            <td class="alignRight">
-              {{
-                marketplaceClassInstances.length - localClassInstances.length
-              }}
-            </td>
+            <td>Einträge synchronisiert:</td>
+            <td class="alignRight">{{nrMpUnionLr}} </td>
           </tr>
         </tbody>
-      </table>
-
-      <!-- Share Icon and Menu-->
-      <!-- <div style="padding-right: 20px; padding-top: 5px;">
-        <button
-          mat-mini-fab
-          type="button"
-          color="primary"
-          [matMenuTriggerFor]="shareMenu"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-
-        <mat-menu
-          #shareMenu="matMenu"
-          xPosition="after"
-          yPosition="below"
-          [overlapTrigger]="false"
-        >
-          <mat-label mat-menu-item disabled style="color: black;"
-            >Freigeben an...</mat-label
-          >
-          <button
-            mat-menu-item
-            (click)="triggerShareDialog()"
-            style="width: 220px;"
-            matTooltip="Recruiter: 'Best Jobs'"
-          >
-            <div fxLayout="row" fxLayoutAlign="start center">
-              <img
-                class="avatar"
-                src="../../../../assets/images/logos/recruiter.jpg"
-              />
-              <div style="padding-left: 10px;"></div>
-              <div>Best Jobs</div>
-            </div>
-          </button>
-        </mat-menu>
-      </div> -->
+      </table> -->
     </div>
   </mat-card>
 
@@ -152,32 +125,14 @@
     class="mat-card p-20"
     fxLayout="column"
   >
-    <div fxLayout="row" fxLayoutAlign="end center">
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="syncAllToLocalRepository()"
-      >
-        Auswahl hinzufügen
-      </button>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="removeAllFromLocalRepository()"
-        style="margin-left: 20px;"
-      >
-        Auswahl entfernen
-      </button>
-    </div>
-
     <div fxLayout="row" style="width: 100%;" fxLayoutAlign="start center">
       <div class="pt-32"></div>
 
       <mat-table
+        #table
         matSort
         class="localRepoTable"
-        [dataSource]="tableDataSource"
+        [dataSource]="dataSource"
         style="width: 100%;"
         (matSortChange)="sortData($event)"
       >
@@ -187,8 +142,17 @@
           >
           <mat-cell *matCellDef="let entry">
             <div fxLayout="row" fxLayoutAligne="start center">
-              <img class="avatar" [src]="getImagePathById(entry.issuerId)" />
-              <div>{{ getIssuerName(entry.issuerId) }}</div>
+              <img
+                class="avatar"
+                src="{{
+                  'data:image/png;base64,' + getTenantImage(entry.tenantId)
+                }}"
+              />
+
+              <!-- <div>{{ getIssuerName(entry.issuerId) }}</div> -->
+              <div style="align-self: center;">
+                {{ getIssuerName(entry.tenantId) }}
+              </div>
             </div>
           </mat-cell>
         </ng-container>
@@ -222,27 +186,105 @@
 
         <ng-container matColumnDef="action">
           <mat-header-cell *matHeaderCellDef mat-sort-header
-            >Aktion</mat-header-cell
+            >Aktionen</mat-header-cell
           >
           <mat-cell *matCellDef="let entry">
-            <button
-              mat-raised-button
-              class="button1"
+            <mat-icon
+              style="cursor: pointer;"
+              (click)="navigateToClassInstanceDetails(entry)"
+              svgIcon="info"
+              matTooltip="Details"
+            ></mat-icon>
+
+            <mat-icon
               *ngIf="!inLocalRepository(entry)"
-              color="primary"
               (click)="syncOneToLocalRepository(entry)"
+              svgIcon="plus"
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Zum lokalen Freiwilligenpass hinzufügen"
             >
-              Hinzufügen
-            </button>
-            <button
-              mat-raised-button
-              class="button1"
+            </mat-icon>
+
+            <mat-icon
               *ngIf="inLocalRepository(entry)"
-              color="primary"
               (click)="removeOneFromLocalRepository(entry)"
+              svgIcon="minus"
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Vom lokalen Freiwilligenpass entfernen"
             >
-              Entfernen
-            </button>
+            </mat-icon>
+
+            <div *ngIf="inLocalRepository(entry)">
+              <mat-icon
+                svgIcon="share"
+                style="cursor: pointer; margin-left: 20px;"
+                matTooltip="Teilen mit..."
+                [matMenuTriggerFor]="shareMenu"
+              >
+              </mat-icon>
+              <mat-menu
+                #shareMenu="matMenu"
+                xPosition="after"
+                yPosition="below"
+                [overlapTrigger]="false"
+              >
+                <ng-template matMenuContent>
+                  <button
+                    *ngFor="let tenant of getShareableTenants(entry)"
+                    mat-menu-item
+                    (click)="shareClassInstance(entry, tenant)"
+                  >
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img
+                        class="avatar"
+                        src="{{
+                          'data:image/png;base64,' + getTenantImage(tenant.id)
+                        }}"
+                      />
+                      <div>{{ tenant.name }}</div>
+                    </div>
+                  </button>
+                  <button
+                    *ngIf="getShareableTenants(entry).length == 0"
+                    mat-menu-item
+                  >
+                    Bereits an alle geteilt!
+                  </button>
+                </ng-template>
+              </mat-menu>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="share">
+          <mat-header-cell *matHeaderCellDef>
+            Geteilt mit
+          </mat-header-cell>
+          <mat-cell *matCellDef="let entry">
+            <img
+              *ngFor="let tenant of getSharedWith(entry)"
+              class="avatar"
+              matTooltip="{{ tenant.name }}"
+              src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
+              style="cursor: pointer;"
+              [matMenuTriggerFor]="revokeMenu"
+              [matMenuTriggerData]="{ tenant: tenant }"
+            />
+            <mat-menu
+              #revokeMenu="matMenu"
+              xPosition="after"
+              yPosition="below"
+              [overlapTrigger]="false"
+            >
+              <ng-template matMenuContent let-tenant="tenant">
+                <button
+                  mat-menu-item
+                  (click)="revokeClassInstance(entry, tenant)"
+                >
+                  Zurückziehen
+                </button>
+              </ng-template>
+            </mat-menu>
           </mat-cell>
         </ng-container>
 
@@ -251,10 +293,7 @@
         ></mat-header-row>
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngClass]="{
-            'is-white': inLocalRepository(element),
-            'is-blue': !inLocalRepository(element)
-          }"
+          [ngStyle]="getStyle(element)"
         ></mat-row>
       </mat-table>
     </div>
@@ -280,7 +319,7 @@
       timeout &&
       selectedTenants.length === 0 &&
       isLocalRepositoryConnected &&
-      tenants != 0
+      subscribedTenants != 0
     "
     class="alert alert-info"
   >

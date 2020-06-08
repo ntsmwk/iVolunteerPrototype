@@ -1,0 +1,115 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" #f='ngForm' class="content-layout">
+
+  <!------------------------------------------------->
+  <!--------Property Name and Type Selection--------->
+  <!------------------------------------------------->
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-form-field style="width: 500px">
+      <input matInput placeholder="Name" formControlName="name" />
+      <mat-error *ngIf="this.form.controls['name'].hasError('required')">Pflichtfeld</mat-error>
+      <mat-error *ngIf="this.form.controls['name'].hasError('propertynameunique')">Name bereits vorhanden</mat-error>
+    </mat-form-field>
+
+    <div class="pl-20"></div>
+
+    <mat-form-field style="width: 250px">
+      <mat-select placeholder="Property-Type" formControlName="type" (selectionChange)="clearAllowedValues()" required>
+        <mat-option *ngFor="let opt of propertyTypeOptions" [value]="opt.type">{{opt.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="pl-24"></div>
+
+    <mat-slide-toggle [(ngModel)]="dropdownToggled" (change)="clearAllowedValues()"
+      [ngModelOptions]="{standalone: true}" labelPosition="after">
+      Dropdown
+    </mat-slide-toggle>
+  </div>
+
+  <!-------------------------------------->
+  <!-----Allowed Values Dropdown List----->
+  <!-------------------------------------->
+
+  <div class="fieldset-title" *ngIf="isDropdownListDisplayed()">
+    <h2>Dropdown-Einträge</h2>
+  </div>
+
+  <div *ngIf="isDropdownListDisplayed()">
+    <fieldset [formGroup]="form" class="fieldset-container">
+
+      <div class="fieldset-empty" *ngIf="form.get('allowedValues').controls.length <= 0">
+        keine Einträge vorhanden
+      </div>
+
+      <div formArrayName="allowedValues" *ngFor="let value of form.get('allowedValues').controls; let i = index;">
+        <div [formGroupName]="i">
+          <div class="allowed-value-row" fxLayout="row">
+
+            <div fxFlex="none" fxFlexAlign="center">{{i+1}}:</div>
+
+            <!--Value Fields-->
+            <mat-form-field fxFlex class="allowed-value-field"
+              *ngIf="form.get('type').value=='TEXT' || form.get('type').value=='LONG_TEXT'">
+              <input matInput placeholder="Value {{i+1}}" formControlName="value" [value]="value.get('value').value"
+                (change)="allowedValuesDirty=true" required />
+              <mat-error *ngIf="value.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder Entfernent
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex class="allowed-value-field"
+              *ngIf="form.get('type').value=='WHOLE_NUMBER' || form.get('type').value=='FLOAT_NUMBER'">
+              <input matInput placeholder="Number {{i+1}}" formControlName="value" type="number"
+                [value]="value.get('value').value" (change)="allowedValuesDirty=true" required />
+              <mat-error *ngIf="value.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder Entfernen
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex class="allowed-value-field" *ngIf="form.get('type').value=='DATE'">
+              <input matInput [matDatepicker]="picker2" placeholder="Date {{i+1}}" formControlName="value"
+                [value]="value.get('value').value" (change)="allowedValuesDirty=true" required />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error *ngIf="value.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder Entfernen
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex class="allowed-value-field" *ngIf="form.get('type').value=='BOOL'">
+              <!-- <input matInput placeholder="" style="display: none"> -->
+              <mat-label>Boolean Value {{i+1}}</mat-label>
+
+              <mat-select formControlName="value" [value]="value.get('value').value" (change)="allowedValuesDirty=true"
+                required>
+                <mat-option value="true" type="boolean">true</mat-option>
+                <mat-option value="false" type="boolean">false</mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="value.get('value').hasError('required')">Pflichtfeld - Ausfüllen oder Entfernen
+              </mat-error>
+            </mat-form-field>
+
+            <!--Buttons-->
+            <div fxFlex="nogrow" fxFlexAlign="center" class="allowed-value-icon">
+              <mat-icon class="iconButton" (click)="removeAllowedValue(i)" matTooltip="Entfernen"
+                matTooltipPosition="above" aria-label="Remove Value">delete</mat-icon>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-4 fieldset-action" fxLayout="row" fxLayoutAlign="start center" (click)="addAllowedValue()"
+        matTooltip="Add Value">
+        <mat-icon>add</mat-icon>
+        <div>Hinzufügen</div>
+      </div>
+
+    </fieldset>
+
+  </div>
+
+  <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
+    <button type="submit" mat-raised-button color="primary">Speichern</button>
+    <div class="pl-8"></div>
+    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
+  </div>
+</form>

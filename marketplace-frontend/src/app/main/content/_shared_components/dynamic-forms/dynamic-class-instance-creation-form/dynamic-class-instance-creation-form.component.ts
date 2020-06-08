@@ -1,11 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, DoCheck } from '@angular/core';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import { QuestionBase } from '../../../_model/dynamic-forms/questions';
 import { QuestionControlService } from '../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
 import { FormEntryReturnEventData } from 'app/main/content/_model/meta/form';
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import 'jquery';
+
 declare var $: JQueryStatic;
 
 @Component({
@@ -39,13 +42,16 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   @Input() form: FormGroup;
   @Input() lastEntry: boolean;
   @Input() finishClicked: boolean;
+  @Input() ignoreValidity: boolean;
 
   submitPressed: boolean;
 
   @Output() resultEvent: EventEmitter<any> = new EventEmitter();
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter();
+  @Output() tupleSelected: EventEmitter<any> = new EventEmitter();
 
-  constructor(private qcs: QuestionControlService) { }
+  constructor(private qcs: QuestionControlService,
+    private classDefinitionService: ClassDefinitionService) { }
 
   ngOnInit() {
     if (!isNullOrUndefined(this.form)) {
@@ -65,8 +71,8 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
     this.submitPressed = true;
     this.form.updateValueAndValidity();
 
-    if (this.form.valid) {
-      this.form.disable();
+    if (this.ignoreValidity || this.form.valid) {
+      // this.form.disable();
       this.fireResultEvent();
 
     } else {
@@ -78,14 +84,15 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
       $('input.ng-invalid').first().focus();
 
     }
+    this.submitPressed = false;
   }
 
-  private markFormAsTouched(questions: QuestionBase<any>[], control: AbstractControl) {
+  private markFormAsTouched(questions: QuestionBase<any>[], control: FormGroup) {
     for (const q of questions) {
-      control.get(q.key).markAsTouched();
-      if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
-        this.markFormAsTouched(q.subQuestions, control.get(q.key));
-      }
+      control.controls[q.key].markAsTouched();
+      // if (q.controlType === 'multiple' && !isNullOrUndefined(q.subQuestions)) {
+      //   this.markFormAsTouched(q.subQuestions, control.get(q.key));
+      // }
     }
 
   }
@@ -95,14 +102,16 @@ export class DynamicClassInstanceCreationFormComponent implements OnInit, OnChan
   }
 
   handleCancel() {
-    this.cancelEvent.emit("cancel");
+    this.cancelEvent.emit('cancel');
   }
 
   navigateBack() {
     window.history.back();
   }
 
-  removeProperty(question: QuestionBase<any>) {
-    console.log('clicked Remove Property');
+  handleTupleSelection(evt: { selection: { id: any, label: any }, formGroup: FormGroup }) {
+    this.tupleSelected.emit(evt);
+
+
   }
 }

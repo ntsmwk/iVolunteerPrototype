@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Volunteer } from '../_model/volunteer';
-import { LocalRepository } from '../_model/local-repository';
-import { isNullOrUndefined } from 'util';
-import { ClassInstanceDTO, ClassInstance } from '../_model/meta/class';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { Volunteer } from "../_model/volunteer";
+import { LocalRepository } from "../_model/local-repository";
+import { isNullOrUndefined } from "util";
+import { ClassInstanceDTO, ClassInstance } from "../_model/meta/class";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class LocalRepositoryService {
-  private apiUrl = 'http://localhost:3000/repository';
+  private apiUrl = "http://localhost:3000/repository";
   //private apiUrl = "http://140.78.92.57:3000/repository";
 
   constructor(private http: HttpClient) { }
@@ -25,12 +25,12 @@ export class LocalRepositoryService {
 
     if (localRepos) {
       isConnected = true;
-      if (localRepos.findIndex(l => l.id === volunteer.id) === -1) {
+      if (localRepos.findIndex((l) => l.id === volunteer.id) === -1) {
         let newRepo = new LocalRepository(volunteer.id, volunteer.username);
         this.http
           .post(this.apiUrl, newRepo)
           .toPromise()
-          .catch(e => console.log(e));
+          .catch((e) => console.log(e));
       }
     }
 
@@ -38,7 +38,7 @@ export class LocalRepositoryService {
   }
 
   findByVolunteer(volunteer: Volunteer) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const successFunction = (localRepository: LocalRepository) => {
         subscriber.next(localRepository);
         subscriber.complete();
@@ -65,7 +65,7 @@ export class LocalRepositoryService {
   }
 
   findClassInstancesByVolunteer(volunteer: Volunteer) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
@@ -95,7 +95,7 @@ export class LocalRepositoryService {
     volunteer: Volunteer,
     classInstance: ClassInstanceDTO
   ) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
@@ -104,6 +104,7 @@ export class LocalRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((localRepository: LocalRepository) => {
+          // TODO: prevent double insertion, currently handled in calling method
           localRepository.classInstances.push(classInstance);
 
           this.http
@@ -124,7 +125,7 @@ export class LocalRepositoryService {
     volunteer: Volunteer,
     classInstances: ClassInstanceDTO[]
   ) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
@@ -133,10 +134,10 @@ export class LocalRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((localRepository: LocalRepository) => {
-          // TODO: prevent double insertion
+          // TODO: prevent double insertion, currently handled in calling method
           localRepository.classInstances = [
             ...localRepository.classInstances,
-            ...classInstances
+            ...classInstances,
           ];
 
           this.http
@@ -157,7 +158,7 @@ export class LocalRepositoryService {
     volunteer: Volunteer,
     classInstance: ClassInstanceDTO
   ) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
         subscriber.complete();
@@ -186,8 +187,7 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  // TODO: workaround for removeClassInstances
-  setClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
+  removeClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
     const observable = new Observable(subscriber => {
       const failureFunction = (error: any) => {
         subscriber.error(error);
@@ -197,15 +197,17 @@ export class LocalRepositoryService {
       this.findByVolunteer(volunteer)
         .toPromise()
         .then((localRepository: LocalRepository) => {
-          localRepository.classInstances = classInstances;
 
-          this.http
-            .put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+          localRepository.classInstances =
+            localRepository.classInstances.filter(ci => classInstances.map(ci => ci.id).indexOf(ci.id) < 0);
+
+          this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
             .toPromise()
             .then(() => subscriber.complete())
             .catch((error: any) => failureFunction(error));
 
           subscriber.next(localRepository.classInstances);
+
         })
         .catch((error: any) => failureFunction(error));
     });
@@ -213,37 +215,30 @@ export class LocalRepositoryService {
     return observable;
   }
 
-  // TODO: not working as intended...
-  // removeClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
-  //     const observable = new Observable(subscriber => {
-  //         const failureFunction = (error: any) => {
-  //             subscriber.error(error);
-  //             subscriber.complete();
-  //         };
+  // deprecated
+  // setClassInstances(volunteer: Volunteer, classInstances: ClassInstanceDTO[]) {
+  //   const observable = new Observable((subscriber) => {
+  //     const failureFunction = (error: any) => {
+  //       subscriber.error(error);
+  //       subscriber.complete();
+  //     };
 
-  //         this.findByVolunteer(volunteer)
-  //             .toPromise()
-  //             .then((localRepository: LocalRepository) => {
+  //     this.findByVolunteer(volunteer)
+  //       .toPromise()
+  //       .then((localRepository: LocalRepository) => {
+  //         localRepository.classInstances = classInstances;
 
-  //                 // localRepository.classInstances.forEach((ci, index, object) => {
-  //                 //     classInstances.forEach(t => {
-  //                 //         if (ci.id === t.id) {
-  //                 //             object.splice(index, 1);
-  //                 //         }
-  //                 //     });
-  //                 // });
+  //         this.http
+  //           .put(`${this.apiUrl}/${localRepository.id}`, localRepository)
+  //           .toPromise()
+  //           .then(() => subscriber.complete())
+  //           .catch((error: any) => failureFunction(error));
 
-  //                 this.http.put(`${this.apiUrl}/${localRepository.id}`, localRepository)
-  //                     .toPromise()
-  //                     .then(() => subscriber.complete())
-  //                     .catch((error: any) => failureFunction(error));
+  //         subscriber.next(localRepository.classInstances);
+  //       })
+  //       .catch((error: any) => failureFunction(error));
+  //   });
 
-  //                 subscriber.next(localRepository.classInstances);
-
-  //             })
-  //             .catch((error: any) => failureFunction(error));
-  //     });
-
-  //     return observable;
+  //   return observable;
   // }
 }

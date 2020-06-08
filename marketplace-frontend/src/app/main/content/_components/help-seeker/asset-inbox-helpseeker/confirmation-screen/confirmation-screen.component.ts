@@ -5,13 +5,13 @@ import { Participant } from "../../../../_model/participant";
 import { isNullOrUndefined } from "util";
 import { ClassInstanceDTO } from "../../../../_model/meta/class";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { CoreMarketplaceService } from "../../../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../../../_service/core-marketplace.service";
 import { LoginService } from "../../../../_service/login.service";
 
 @Component({
   selector: "helpseeker-inbox-confirmation-screen",
   templateUrl: "./confirmation-screen.component.html",
-  styleUrls: ["./confirmation-screen.component.scss"]
+  styleUrls: ["./confirmation-screen.component.scss"],
 })
 export class HelpseekerConfirmationScreenComponent implements OnInit {
   // dataSource = new MatTableDataSource<any>();
@@ -26,7 +26,7 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private loginService: LoginService
   ) {
     if (!isNullOrUndefined(this.router.getCurrentNavigation().extras.state)) {
@@ -58,8 +58,8 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
           .toPromise()
           .then((participant: Participant) => {
             this.participant = participant;
-          })
-      ]).then(() => { });
+          }),
+      ]).then(() => {});
     }
   }
 
@@ -68,8 +68,8 @@ export class HelpseekerConfirmationScreenComponent implements OnInit {
       state: {
         instances: undefined,
         marketplace: this.marketplace,
-        participant: this.participant
-      }
+        participant: this.participant,
+      },
     });
   }
 

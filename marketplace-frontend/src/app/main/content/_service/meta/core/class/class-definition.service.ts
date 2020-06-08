@@ -100,27 +100,27 @@ export class ClassDefinitionService {
     );
   }
 
-  getAllChildrenIdMap(
-    marketplace: Marketplace,
-    rootClassIds: string[],
-    tenantId: string
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/get-children/tenant/${tenantId}`,
-      rootClassIds
-    );
-  }
+  // getAllChildrenIdMap(
+  //   marketplace: Marketplace,
+  //   rootClassIds: string[],
+  //   tenantId: string
+  // ) {
+  //   return this.http.put(
+  //     `${marketplace.url}/meta/core/class/definition/get-children/tenant/${tenantId}`,
+  //     rootClassIds
+  //   );
+  // }
 
-  getAllParentsIdMap(
-    marketplace: Marketplace,
-    childClassIds: string[],
-    tenantId: string
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/get-parents/tenant/${tenantId}`,
-      childClassIds
-    );
-  }
+  // getAllParentsIdMap(
+  //   marketplace: Marketplace,
+  //   childClassIds: string[],
+  //   tenantId: string
+  // ) {
+  //   return this.http.put(
+  //     `${marketplace.url}/meta/core/class/definition/get-parents/tenant/${tenantId}`,
+  //     childClassIds
+  //   );
+  // }
 
   getClassPropertyFromPropertyDefinitionById(
     marketplace: Marketplace,
@@ -188,22 +188,19 @@ export class ClassDefinitionService {
     );
   }
 
-
-  getFormConfiguratorsBottomUp(marketplace: Marketplace, ids: string[]) {
-    return this.getFormConfigurations(marketplace, ids, 'bottom-up');
-  }
-
-  getFormConfiguratorsTopDown(marketplace: Marketplace, ids: string[]) {
-    return this.getFormConfigurations(marketplace, ids, 'top-down');
-  }
-
-  getFormConfigurations(marketplace: Marketplace, ids: string[], type: string) {
-    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration?type=${type}`, ids);
+  getFormConfigurations(marketplace: Marketplace, ids: string[]) {
+    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration`, ids);
   }
 
   getFromConfigurationPreview(marketplace: Marketplace, classDefinitions: ClassDefinition[], relationships: Relationship[], rootClassDefinition: ClassDefinition) {
     const formConfigurationPreviewRequest = new FormConfigurationPreviewRequest(classDefinitions, relationships, rootClassDefinition);
     return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-preview`, formConfigurationPreviewRequest);
+  }
+
+  getFormConfigurationChunk(marketplace: Marketplace, currentClassDefinitionId: string, choiceId: string) {
+    const params = [currentClassDefinitionId, choiceId];
+    return this.http.put(`${marketplace.url}/meta/core/class/definition/form-configuration-chunk`, params);
+
   }
 
 

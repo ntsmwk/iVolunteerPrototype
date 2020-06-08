@@ -1,22 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { ParticipantRole } from 'app/main/content/_model/participant';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { DerivationRule, AttributeSourceRuleEntry, MappingOperatorType, ClassSourceRuleEntry } from 'app/main/content/_model/derivation-rule';
-import { ClassDefinition } from 'app/main/content/_model/meta/class';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { DerivationRuleService } from 'app/main/content/_service/derivation-rule.service';
-import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
-import { ClassProperty } from 'app/main/content/_model/meta/property';
-
+import { Component, OnInit } from "@angular/core";
+import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { ParticipantRole } from "app/main/content/_model/participant";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import {
+  DerivationRule,
+  AttributeSourceRuleEntry,
+  MappingOperatorType,
+  ClassSourceRuleEntry,
+} from "app/main/content/_model/derivation-rule";
+import { ClassDefinition } from "app/main/content/_model/meta/class";
+import { ActivatedRoute, Router } from "@angular/router";
+import { LoginService } from "app/main/content/_service/login.service";
+import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
+import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
+import { ClassProperty } from "app/main/content/_model/meta/property";
+import { Tenant } from "app/main/content/_model/tenant";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
 
 @Component({
-  templateUrl: './rule-configurator.component.html',
-  styleUrls: ['./rule-configurator.component.scss'],
-  providers: []
+  templateUrl: "./rule-configurator.component.html",
+  styleUrls: ["./rule-configurator.component.scss"],
+  providers: [],
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
   helpseeker: Helpseeker;
@@ -30,6 +36,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
 
   classDefinitions: ClassDefinition[] = [];
 
+  tenant: Tenant;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -37,45 +45,44 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     private helpSeekerService: CoreHelpSeekerService,
     private formBuilder: FormBuilder,
     private derivationRuleService: DerivationRuleService,
-    private classDefinitionService: ClassDefinitionService
+    private classDefinitionService: ClassDefinitionService,
+    private tenantService: TenantService
   ) {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),
       name: new FormControl(undefined),
       attributeSources: new FormControl(undefined),
       classSources: new FormControl(undefined),
-      target: new FormControl(undefined)
+      target: new FormControl(undefined),
     });
   }
 
-  ngOnInit() {
-    this.loginService
-      .getLoggedIn()
-      .toPromise()
-      .then((helpseeker: Helpseeker) => {
-        this.helpseeker = helpseeker;
+  async ngOnInit() {
+    this.helpseeker = <Helpseeker>(
+      await this.loginService.getLoggedIn().toPromise()
+    );
 
-        this.helpSeekerService
-          .findRegisteredMarketplaces(helpseeker.id)
-          .toPromise()
-          .then((marketplace: Marketplace) => {
-            this.marketplace = marketplace;
+    this.marketplace = <Marketplace>(
+      await this.helpSeekerService
+        .findRegisteredMarketplaces(this.helpseeker.id)
+        .toPromise()
+    );
 
-            this.route.params.subscribe(params =>
-              this.loadDerivationRule(marketplace, params['ruleId'])
-            );
-            this.classDefinitionService
-              .getAllClassDefinitionsWithoutHeadAndEnums(
-                marketplace,
-                this.helpseeker.tenantId
-              )
-              .toPromise()
-              .then(
-                (definitions: ClassDefinition[]) =>
-                  (this.classDefinitions = definitions)
-              );
-          });
-      });
+    this.route.params.subscribe((params) =>
+      this.loadDerivationRule(this.marketplace, params["ruleId"])
+    );
+    this.classDefinitions = <ClassDefinition[]>(
+      await this.classDefinitionService
+        .getAllClassDefinitionsWithoutHeadAndEnums(
+          this.marketplace,
+          this.helpseeker.tenantId
+        )
+        .toPromise()
+    );
+
+    this.tenant = <Tenant>(
+      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+    );
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
@@ -90,7 +97,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
             name: this.derivationRule.name,
             attributeSources: this.derivationRule.attributeSourceRules,
             classSources: this.derivationRule.classSourceRules,
-            target: this.derivationRule.target
+            target: this.derivationRule.target,
           });
         });
     } else {
@@ -100,15 +107,15 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           classDefinition: new ClassDefinition(),
           classProperty: new ClassProperty(),
           mappingOperatorType: MappingOperatorType.EQ,
-          value: ''
-        }
+          value: "",
+        },
       ];
       this.derivationRule.classSourceRules = [
         <ClassSourceRuleEntry>{
           classDefinition: new ClassDefinition(),
           mappingOperatorType: MappingOperatorType.EQ,
-          value: ''
-        }
+          value: "",
+        },
       ];
     }
   }

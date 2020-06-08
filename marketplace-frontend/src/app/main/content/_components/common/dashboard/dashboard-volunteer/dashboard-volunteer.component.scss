@@ -51,7 +51,7 @@ $custom-typography: mat-typography-config(
 .mat-column-issuer {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 30% !important;
+  flex: 0 0 20% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -66,12 +66,24 @@ $custom-typography: mat-typography-config(
 .mat-column-taskName {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 25% !important;
+  flex: 0 0 20% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
   word-break: break-word;
 
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-action .mat-column-share {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
   -ms-hyphens: auto;
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
@@ -84,9 +96,32 @@ $custom-typography: mat-typography-config(
 
 .table {
   margin-top: 25px;
-  width: 270px;
+  width: 300px;
 }
 
 .button1 {
   width: 100px;
+}
+
+.vennParent {
+  width: 300px;
+}
+
+.optionHeader {
+  height: 200px;
+}
+
+.invisible {
+  display: none;
+}
+
+.bar {
+  background-image: repeating-linear-gradient(
+    45deg,
+    white 0%,
+    white 2%,
+    cyan 2%,
+    cyan 4%,
+    white 4%
+  );
 }

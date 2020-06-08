@@ -1,33 +1,45 @@
-import { Component, OnInit, Input, EventEmitter, ElementRef, ViewChild, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  ElementRef,
+  ViewChild,
+  Output,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
 import { FeedbackService } from 'app/main/content/_service/feedback.service';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
+import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 import { LoginService } from 'app/main/content/_service/login.service';
-import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
+import {
+  Participant,
+  ParticipantRole,
+} from 'app/main/content/_model/participant';
 import { Volunteer } from 'app/main/content/_model/volunteer';
 import { isNullOrUndefined } from 'util';
-import { ClassInstance, ClassArchetype, ClassInstanceDTO } from 'app/main/content/_model/meta/class';
+import {
+  ClassInstance,
+  ClassArchetype,
+  ClassInstanceDTO,
+} from 'app/main/content/_model/meta/class';
 import { Router } from '@angular/router';
-import { Feedback } from 'app/main/content/_model/feedback';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 @Component({
-  selector: 'inbox-overlay',
+  selector: "inbox-overlay",
   templateUrl: './inbox-overlay.component.html',
   styleUrls: ['./inbox-overlay.component.scss'],
 })
 export class InboxOverlayComponent implements OnInit {
-
   constructor(
     private router: Router,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
-    private element: ElementRef) {
-
-  }
+    private element: ElementRef
+  ) { }
 
   isLoaded: boolean;
   @ViewChild('innerDiv', { static: false }) innerDiv: ElementRef;
@@ -35,13 +47,12 @@ export class InboxOverlayComponent implements OnInit {
 
   @Output() closeOverlay: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-
   marketplace: Marketplace;
   participant;
   participantRole: ParticipantRole;
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
-  dataSource = new MatTableDataSource<ClassInstanceDTO | Feedback>();
+  dataSource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns = ['archetype', 'label'];
 
   ngOnInit() {
@@ -52,7 +63,6 @@ export class InboxOverlayComponent implements OnInit {
 
       this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
         this.participantRole = role;
-
         if (this.participantRole === 'VOLUNTEER') {
           this.loginService.getLoggedIn().toPromise().then((volunteer: Volunteer) => {
             this.participant = volunteer;
@@ -64,19 +74,28 @@ export class InboxOverlayComponent implements OnInit {
         }
 
         if (this.participantRole === 'VOLUNTEER') {
-          this.participant.subscribedTenants.forEach(tenantId => {
-            this.classInstanceService.getClassInstancesInUserInbox(this.marketplace, this.participant.id, this.participant.subscribedTenants).toPromise().then((ret: ClassInstanceDTO[]) => {
+          this.participant.subscribedTenants.forEach((tenantId) => {
+            this.classInstanceService.getClassInstancesInUserInbox(
+              this.marketplace,
+              this.participant.id,
+              this.participant.subscribedTenants
+            ).toPromise().then((ret: ClassInstanceDTO[]) => {
               this.drawInboxElements(ret);
               this.isLoaded = true;
             });
           });
-
-
         } else if (this.participantRole === 'HELP_SEEKER') {
-          this.classInstanceService.getClassInstancesInIssuerInbox(this.marketplace, this.participant.id, this.participant.tenantId).toPromise().then((ret: ClassInstanceDTO[]) => {
-            this.drawInboxElements(ret);
-            this.isLoaded = true;
-          });
+          this.classInstanceService
+            .getClassInstancesInIssuerInbox(
+              this.marketplace,
+              this.participant.id,
+              this.participant.tenantId
+            )
+            .toPromise()
+            .then((ret: ClassInstanceDTO[]) => {
+              this.drawInboxElements(ret);
+              this.isLoaded = true;
+            });
         }
       });
     });
@@ -84,7 +103,9 @@ export class InboxOverlayComponent implements OnInit {
 
   drawInboxElements(classInstanceDTOs: ClassInstanceDTO[]) {
     if (!isNullOrUndefined(classInstanceDTOs)) {
-      classInstanceDTOs.sort((a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf());
+      classInstanceDTOs.sort(
+        (a, b) => a.blockchainDate.valueOf() - b.blockchainDate.valueOf()
+      );
 
       if (classInstanceDTOs.length > 5) {
         classInstanceDTOs = classInstanceDTOs.slice(0, 5);
@@ -92,17 +113,9 @@ export class InboxOverlayComponent implements OnInit {
 
       this.classInstanceDTOs = classInstanceDTOs;
       this.dataSource.data = classInstanceDTOs;
-      // console.log(ret);
-      // console.log("=====");
-      // console.log(this.element);
-      // console.log(this.element.nativeElement.parentElement);//offsetWidth ; offsetHeight
-      // console.log(this.element.nativeElement.parentElement.offsetWidth);
-      // console.log(this.element.nativeElement.parentElement.offsetHeight);
-
-      this.innerDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
-      this.innerDiv.nativeElement.style.height = (this.element.nativeElement.parentElement.offsetHeight - 58) + 'px';
+      this.innerDiv.nativeElement.style.width = this.element.nativeElement.parentElement.offsetWidth - 8 + 'px';
+      this.innerDiv.nativeElement.style.height = this.element.nativeElement.parentElement.offsetHeight - 58 + 'px';
       this.innerDiv.nativeElement.style.overflow = 'hidden';
-      // this.actionDiv.nativeElement.style.width = (this.element.nativeElement.parentElement.offsetWidth - 8) + 'px';
       this.actionDiv.nativeElement.style.height = '18px';
     }
   }
@@ -112,9 +125,13 @@ export class InboxOverlayComponent implements OnInit {
       return '';
     }
 
-    const name = entry.properties.find(p => p.id === 'name');
+    const name = entry.properties.find((p) => p.id === 'name');
 
-    if (isNullOrUndefined(name) || isNullOrUndefined(name.values) || isNullOrUndefined(name.values[0])) {
+    if (
+      isNullOrUndefined(name) ||
+      isNullOrUndefined(name.values) ||
+      isNullOrUndefined(name.values[0])
+    ) {
       return '';
     } else {
       return name.values[0];
@@ -127,7 +144,6 @@ export class InboxOverlayComponent implements OnInit {
 
   getArchetypeIcon(entry: ClassInstance) {
     if (isNullOrUndefined(entry.imagePath)) {
-
       if (entry.classArchetype === ClassArchetype.COMPETENCE) {
         return '/assets/competence.jpg';
       } else if (entry.classArchetype === ClassArchetype.ACHIEVEMENT) {
@@ -142,15 +158,12 @@ export class InboxOverlayComponent implements OnInit {
     } else {
       return entry.imagePath;
     }
-
   }
 
   showInboxClicked() {
     this.closeOverlay.emit(true);
-    this.router.navigate(['/main/volunteer/asset-inbox'], { state: { marketplace: this.marketplace, participant: this.participant } });
+    this.router.navigate(['/main/volunteer/asset-inbox'], {
+      state: { marketplace: this.marketplace, participant: this.participant },
+    });
   }
-
-
 }
-
-

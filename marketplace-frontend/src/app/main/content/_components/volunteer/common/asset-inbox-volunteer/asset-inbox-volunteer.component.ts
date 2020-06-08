@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { Volunteer } from 'app/main/content/_model/volunteer';
-import { ClassInstanceDTO } from 'app/main/content/_model/meta/class';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ClassInstanceService } from 'app/main/content/_service/meta/core/class/class-instance.service';
-import { CoreMarketplaceService } from 'app/main/content/_service/core-marketplace.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { TenantService } from 'app/main/content/_service/core-tenant.service';
-import { isNullOrUndefined } from 'util';
+import { Component, OnInit } from "@angular/core";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { Volunteer } from "app/main/content/_model/volunteer";
+import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import { TenantService } from "app/main/content/_service/core-tenant.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "asset-inbox-volunteer",
-  templateUrl: './asset-inbox-volunteer.component.html',
-  styleUrls: ['./asset-inbox-volunteer.component.scss']
+  templateUrl: "./asset-inbox-volunteer.component.html",
+  styleUrls: ["./asset-inbox-volunteer.component.scss"],
 })
 export class AssetInboxVolunteerComponent implements OnInit {
   isLoaded: boolean;
@@ -26,7 +26,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private classInstanceService: ClassInstanceService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private loginService: LoginService,
     private coreTenantService: TenantService
   ) {
@@ -57,7 +57,7 @@ export class AssetInboxVolunteerComponent implements OnInit {
           .toPromise()
           .then((volunteer: Volunteer) => {
             this.volunteer = volunteer;
-          })
+          }),
       ]).then(() => {
         this.loadInboxEntries();
       });
@@ -82,12 +82,12 @@ export class AssetInboxVolunteerComponent implements OnInit {
     this.classInstanceService
       .setClassInstanceInUserRepository(
         this.marketplace,
-        classInstanceDTOs.map(c => c.id),
+        classInstanceDTOs.map((c) => c.id),
         true
       )
       .toPromise()
       .then(() => {
-        this.router.navigate(['/main/dashboard']);
+        this.router.navigate(["/main/dashboard"]);
       });
   }
 }

@@ -5,16 +5,21 @@
         <mat-icon>create</mat-icon>
       </td>
       <td>
-        <h1>Konfiguratoren wählen</h1>
+        <h1>Konfigurationen wählen</h1>
       </td>
     </tr>
   </table>
 </div>
 <mat-dialog-content *ngIf="loaded">
   <div *ngIf="!browseMode">
-
-    <mat-form-field style="width: 100%" appearance="outline">
-      <input matInput placeholder=" Bezeichnung" [(ngModel)]="data.label" name="label" required>
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <input
+        matInput
+        placeholder=" Bezeichnung"
+        [(ngModel)]="data.label"
+        name="label"
+        required
+      />
     </mat-form-field>
 
     <table>
@@ -22,97 +27,137 @@
         <td width="200px">
           <h2>Werkunternehmen</h2>
         </td>
-        <td style="padding-left: 50px">
-        </td>
+        <td style="padding-left: 50px;"></td>
         <td>
           <h2>Werkbesteller</h2>
         </td>
+      </tr>
+
       <tr>
         <td>
-
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="producerItemSelected($event, c)">
-              <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
+            <tr
+              *ngFor="let c of recentClassConfigurations"
+              class="entry"
+              (click)="producerItemSelected($event, c)"
+            >
+              <td style="padding-left: 50px; padding-right: 50px;">
+                {{ c.name }}
+              </td>
             </tr>
           </table>
-
         </td>
 
-        <td style="padding-left: 50px">
-        </td>
+        <td style="padding-left: 50px;"></td>
 
         <td width="200px">
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
-            <tr *ngFor="let c of recentClassConfigurations" class="entry" (click)="consumerItemSelected($event, c)">
-              <td style="padding-left: 50px; padding-right: 50px">{{c.name}}</td>
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
+            <tr
+              *ngFor="let c of recentClassConfigurations"
+              class="entry"
+              (click)="consumerItemSelected($event, c)"
+            >
+              <td style="padding-left: 50px; padding-right: 50px;">
+                {{ c.name }}
+              </td>
             </tr>
           </table>
-
         </td>
       </tr>
 
       <tr>
         <td width="200px" *ngIf="data.producerClassConfiguration">
           Gewählt:
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px" (click)="handleBrowseClick('PRODUCER')"
-                matTooltip="Durchsuchen">
-                {{data.producerClassConfiguration.name}}</td>
+              <td
+                style="padding-left: 50px; padding-right: 50px;"
+                (click)="handleBrowseClick('PRODUCER')"
+                matTooltip="Durchsuchen"
+              >
+                {{ data.producerClassConfiguration.name }}
+              </td>
             </tr>
           </table>
         </td>
         <td width="200px" *ngIf="!data.producerClassConfiguration">
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="findbutton">
-              <td style="padding-left: 50px; padding-right: 50px" (click)="handleBrowseClick('PRODUCER')">Durchsuchen
+              <td
+                style="padding-left: 50px; padding-right: 50px;"
+                (click)="handleBrowseClick('PRODUCER')"
+              >
+                Durchsuchen
               </td>
             </tr>
           </table>
         </td>
 
-        <td style="padding-left: 50px">
-        </td>
+        <td style="padding-left: 50px;"></td>
         <td *ngIf="data.consumerClassConfiguration" width="200px">
           Gewählt
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="selected">
-              <td style="padding-left: 50px; padding-right: 50px" (click)="handleBrowseClick('CONSUMER')"
-                matTooltip="Durchsuchen">
-                {{data.consumerClassConfiguration.name}}</td>
+              <td
+                style="padding-left: 50px; padding-right: 50px;"
+                (click)="handleBrowseClick('CONSUMER')"
+                matTooltip="Durchsuchen"
+              >
+                {{ data.consumerClassConfiguration.name }}
+              </td>
             </tr>
           </table>
         </td>
         <td *ngIf="!data.consumerClassConfiguration" width="200px">
-          <table cellspacing=1 cellpadding=0 style="border-color: none">
+          <table cellspacing="1" cellpadding="0" style="border-color: none;">
             <tr class="findbutton">
-              <td style="padding-left: 50px; padding-right: 50px" (click)="handleBrowseClick('CONSUMER')">Durchsuchen
+              <td
+                style="padding-left: 50px; padding-right: 50px;"
+                (click)="handleBrowseClick('CONSUMER')"
+              >
+                Durchsuchen
               </td>
             </tr>
           </table>
         </td>
-      <tr>
+      </tr>
+
+      <tr></tr>
     </table>
 
-    <div *ngIf="showErrors" style="color: red">
-      <div *ngIf="!data.producerClassConfiguration"> Konfigurator für das Werkunternehmen wählen</div>
-      <div *ngIf="!data.consumerClassConfiguration"> Konfigurator für den Werkbesteller wählen</div>
-      <div *ngIf="data.consumerClassConfiguration === data.producerClassConfiguration"> Zwei verschiedene Konfiguratoren
-        wählen</div>
-      <div *ngIf="showDuplicateError"> Matching existiert bereits für gewählte Konfiguratoren</div>
+    <div *ngIf="showErrors" style="color: red;">
+      <div *ngIf="!data.producerClassConfiguration">
+        Konfiguration für das Werkunternehmen wählen
+      </div>
+      <div *ngIf="!data.consumerClassConfiguration">
+        Konfiguration für den Werkbesteller wählen
+      </div>
+      <div
+        *ngIf="
+          data.consumerClassConfiguration === data.producerClassConfiguration
+        "
+      >
+        Zwei verschiedene Konfigurationen wählen
+      </div>
+      <div *ngIf="showDuplicateError">
+        Matching existiert bereits für gewählte Konfigurationen
+      </div>
     </div>
-
   </div>
 
   <div *ngIf="browseMode">
-    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
-      (subDialogReturn)="handleReturnFromBrowse($event)">
+    <browse-class-sub-dialog
+      [data]="browseDialogData"
+      [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)"
+    >
     </browse-class-sub-dialog>
   </div>
-
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [disabled]="browseMode" (click)="onOKClick()">OK</button>
-  <button mat-button [mat-dialog-close]="undefined">Cancel</button>
+  <button mat-button [disabled]="browseMode" (click)="onOKClick()">
+    Bestätigen
+  </button>
+  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>

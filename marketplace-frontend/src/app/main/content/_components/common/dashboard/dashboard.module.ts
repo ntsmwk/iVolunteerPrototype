@@ -33,6 +33,8 @@ import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-h
 import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
 import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
 import { FuseTruncatePipeModule } from "app/main/content/_pipe/truncate-pipe.module";
+import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
+import { HighchartsChartModule } from 'highcharts-angular';
 
 const routes = [
   {
@@ -59,7 +61,7 @@ const routes = [
     MatIconModule,
     AssetInboxModule,
     OrganisationFilterModule,
-
+    HeaderModule,
     MatButtonModule,
     MatTableModule,
     MatIconModule,
@@ -78,6 +80,7 @@ const routes = [
     MatSortModule,
     MatCardModule,
     FuseTruncatePipeModule,
+    HighchartsChartModule,
 
     FuseSharedModule,
     FuseWidgetModule,

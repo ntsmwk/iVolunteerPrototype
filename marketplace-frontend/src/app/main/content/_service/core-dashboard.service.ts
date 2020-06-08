@@ -1,19 +1,17 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Dashboard} from '../_model/dashboard';
-import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Dashboard } from "../_model/dashboard";
+import { isNullOrUndefined } from "util";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CoreDashboardService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   findById(dashboardId: string) {
-    const observable = new Observable(subscriber => {
+    const observable = new Observable((subscriber) => {
       const failureFunction = (error: HttpErrorResponse) => {
         if (error.status === 404) {
           successFunction(undefined);
@@ -28,7 +26,9 @@ export class CoreDashboardService {
         subscriber.complete();
       };
 
-      this.http.get(`/core/dashboard/${dashboardId}`).toPromise()
+      this.http
+        .get(`/core/dashboard/${dashboardId}`)
+        .toPromise()
         .then((dashboard: Dashboard) => successFunction(dashboard))
         .catch((error: any) => failureFunction(error));
     });

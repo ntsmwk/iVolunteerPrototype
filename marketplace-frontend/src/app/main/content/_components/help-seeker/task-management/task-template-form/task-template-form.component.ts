@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { CompetenceClassDefinition } from 'app/main/content/_model/meta/class';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { WorkflowType } from 'app/main/content/_model/workflow-type';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TaskTemplateService } from 'app/main/content/_service/task-template.service';
-import { WorkflowService } from 'app/main/content/_service/workflow.service';
-import { CompetenceService } from 'app/main/content/_service/competence.service';
-import { LoginService } from 'app/main/content/_service/login.service';
-import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
-import { CompetenceValidator } from 'app/main/content/_validator/competence.validator';
-import { Participant } from 'app/main/content/_model/participant';
-import { Marketplace } from 'app/main/content/_model/marketplace';
-import { TaskTemplate } from 'app/main/content/_model/task-template';
-import { isNullOrUndefined } from 'util';
+import { Component, OnInit } from "@angular/core";
+import { CompetenceClassDefinition } from "app/main/content/_model/meta/class";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { WorkflowType } from "app/main/content/_model/workflow-type";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TaskTemplateService } from "app/main/content/_service/task-template.service";
+import { WorkflowService } from "app/main/content/_service/workflow.service";
+import { LoginService } from "app/main/content/_service/login.service";
+import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { CompetenceValidator } from "app/main/content/_validator/competence.validator";
+import { Participant } from "app/main/content/_model/participant";
+import { Marketplace } from "app/main/content/_model/marketplace";
+import { TaskTemplate } from "app/main/content/_model/task-template";
+import { isNullOrUndefined } from "util";
 
 @Component({
-  templateUrl: './task-template-form.component.html',
-  styleUrls: ['./task-template-form.component.scss']
+  templateUrl: "./task-template-form.component.html",
+  styleUrls: ["./task-template-form.component.scss"]
 })
 export class FuseTaskTemplateFormComponent implements OnInit {
   competences: CompetenceClassDefinition[];
   taskTemplateForm: FormGroup;
   workflowTypes: Array<WorkflowType>;
 
-  private tenantName = 'FF Eidenberg';
+  private tenantName = "FF Eidenberg";
   private tenantId: string;
 
   constructor(
@@ -31,7 +30,6 @@ export class FuseTaskTemplateFormComponent implements OnInit {
     private route: ActivatedRoute,
     private taskTemplateService: TaskTemplateService,
     private workflowService: WorkflowService,
-    private competenceService: CompetenceService,
     private loginService: LoginService,
     private coreHelpSeekerService: CoreHelpSeekerService,
     private router: Router
@@ -60,14 +58,6 @@ export class FuseTaskTemplateFormComponent implements OnInit {
           .then((marketplace: Marketplace) => {
             if (!isNullOrUndefined(marketplace)) {
               Promise.all([
-                this.competenceService
-                  .findAll(marketplace, this.tenantId)
-                  .toPromise()
-                  .then(
-                    (competences: CompetenceClassDefinition[]) =>
-                      (this.competences = competences)
-                  ),
-
                 this.workflowService
                   .findAllTypes(marketplace)
                   .toPromise()
@@ -77,7 +67,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
                   )
               ]).then(() =>
                 this.route.params.subscribe(params =>
-                  this.findTaskTemplate(marketplace, params['taskTemplateId'])
+                  this.findTaskTemplate(marketplace, params["taskTemplateId"])
                 )
               );
             }
@@ -140,7 +130,7 @@ export class FuseTaskTemplateFormComponent implements OnInit {
               this.taskTemplateService
                 .save(marketplace, <TaskTemplate>taskTemplate)
                 .toPromise()
-                .then(() => this.router.navigate(['/main/task-templates/all']));
+                .then(() => this.router.navigate(["/main/task-templates/all"]));
             }
           });
       });

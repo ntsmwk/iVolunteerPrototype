@@ -13,6 +13,7 @@ public class ClassInstanceDTO {
 	private String userId;
 	private Date blockchainDate;
 	private String imagePath;
+	private Date timestamp;
 
 	private String purpose;
 	private Date dateFrom;
@@ -45,6 +46,14 @@ public class ClassInstanceDTO {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
+	}
+	
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public boolean isPublished() {

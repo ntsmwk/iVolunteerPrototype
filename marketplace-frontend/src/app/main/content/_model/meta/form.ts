@@ -5,11 +5,13 @@ import { ClassProperty } from './property';
 import { Relationship } from './relationship';
 
 export class FormEntry {
+
+    id: string;
     positionLevel: string;
     classDefinitions: ClassDefinition[];
     classProperties: ClassProperty<any>[];
 
-    enumRepresentations: EnumRepresentation[];
+    // enumRepresentations: EnumRepresentation[];
 
     subEntries: FormEntry[];
 
@@ -48,17 +50,17 @@ export class FormEntryReturnEventData {
     }
 }
 
-export class EnumRepresentation {
-    id: string;
-    enumEntries: EnumEntry[];
-    selectedEntries: EnumEntry[];
-    classDefinition: ClassDefinition;
-}
+// export class EnumRepresentation {
+//     id: string;
+//     enumEntries: EnumEntry[];
+//     selectedEntries: EnumEntry[];
+//     classDefinition: ClassDefinition;
+// }
 
-export class EnumEntry {
-    level: number;
-    position: number[];
-    value: string;
-    selectable: boolean;
-}
+// export class EnumEntry {
+//     level: number;
+//     position: number[];
+//     value: string;
+//     selectable: boolean;
+// }
 

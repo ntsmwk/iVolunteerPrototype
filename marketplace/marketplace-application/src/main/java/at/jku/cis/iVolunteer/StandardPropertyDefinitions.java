@@ -21,11 +21,11 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.BooleanPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DatePropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.DoublePropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.EnumPropertyDefinition;
+//import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.EnumPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.LongTextPropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.TextPropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
+//import at.jku.cis.iVolunteer.model.meta.form.EnumEntry;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Component
@@ -264,7 +264,7 @@ public class StandardPropertyDefinitions {
 		cp3.setAllowedValues(addCompetenceLegalValues());
 		props.add(cp3);
 
-		props.add(new TaetigkeitsArtProperty(tenantId));
+//		props.add(new TaetigkeitsArtProperty(tenantId));
 
 		return new ArrayList(props);
 
@@ -444,7 +444,7 @@ public class StandardPropertyDefinitions {
 		public void inst(String tenantId) {
 			this.setType(PropertyType.TEXT);
 			this.setName("name");
-			this.setRequired(true);
+			this.setRequired(false);
 			this.setTenantId(tenantId);
 
 //			List<PropertyConstraint<?>> constraints = new ArrayList<>();
@@ -845,127 +845,127 @@ public class StandardPropertyDefinitions {
 		}
 	}
 
-	public static class TaetigkeitsArtProperty extends EnumPropertyDefinition {
-		public TaetigkeitsArtProperty(String tenantId) {
-			inst(tenantId);
-		}
-
-		public void inst(String tenantId) {
-			this.setName("Tätigkeitsart");
-			this.setTenantId(tenantId);
-			this.setMultiple(false);
-			this.setAllowedValues(new ArrayList<EnumEntry>());
-			this.getAllowedValues().add(new EnumEntry(0, "Einsatz", false));
-			this.getAllowedValues().add(new EnumEntry(1, "Technischer", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Brand", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Verkehrsunfall", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Tauch", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Personen", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Höhenrettung", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Ausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(1, "Grundausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Truppmann", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Truppführer", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Erweiterte Grundausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Funk", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Erste Hilfe", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Fach- und Sonderausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Nachrichtendienst", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Geräte- und Fahrzeugkunde", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Atem- und Körperschutz", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Technischer FW-Einsatz", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Gefährliche Stoffe", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Vorbeugender Brandschutz", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Verwaltungsdienst", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Führungsausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Gruppen-Kommandant", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Zugs-Kommandant", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Einsatzleiter", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Kommandant", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Höhere FW-Ausbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Bewerter-Lehrgang", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Fachweiterbildung", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Chlorgas / Erdgas", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Stapler / Kranschein", true));
-			this.getAllowedValues().add(new EnumEntry(2, "IT", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Sanitäter", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Überprüfung Mannschaft", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz\nUnterweisung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Stapler\nUnterweisung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Kran\nUnterweisung", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Bewerbe", false));
-			this.getAllowedValues().add(new EnumEntry(1, "FLA", true));
-			this.getAllowedValues().add(new EnumEntry(1, "WLA", true));
-			this.getAllowedValues().add(new EnumEntry(1, "FULA", true));
-			this.getAllowedValues().add(new EnumEntry(1, "FJLA", true));
-			this.getAllowedValues().add(new EnumEntry(1, "STRMLA", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Leistungsprüfungen", false));
-			this.getAllowedValues().add(new EnumEntry(1, "THL", true));
-			this.getAllowedValues().add(new EnumEntry(1, "SPRENGLP", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Veranstaltung", false));
-			this.getAllowedValues().add(new EnumEntry(1, "Intern", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Ausflug", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Mitgliederversammlung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Jugendlager", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Extern\n(Öffentlichkeitsarbeit)", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Fest / Ball", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Tag der offenen Tür", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Kirchenausrückung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Landesfeuerwertag", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Friedenslicht", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Verwaltung", false));
-			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeug", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Bewegungsfahrt", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Geräte", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Prüfung/Inspektion", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Gebäude", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Wartung Haustechnik", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Reinigung", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "IT", false));
-			this.getAllowedValues().add(new EnumEntry(2, "EDV", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Sybos", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Sitzungen", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Besprechung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "JourFix", true));
-
-			this.getAllowedValues().add(new EnumEntry(1, "Öffentlichkeits-\nArbeit", false));
-			this.getAllowedValues().add(new EnumEntry(2, "Homepage / Social Media", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Presse", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Repräsentation\nbei Veranstaltungen", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Mitglieder-Werbung", true));
-			this.getAllowedValues().add(new EnumEntry(2, "Haussammlung", true));
-
-			this.getAllowedValues().add(new EnumEntry(0, "Projekt", false));
-			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeuganschaffung", true));
-			this.getAllowedValues().add(new EnumEntry(1, "FW Hausbau", true));
-			this.getAllowedValues().add(new EnumEntry(1, "Landesbewerb", true));
-
-		}
-	}
+//	public static class TaetigkeitsArtProperty extends EnumPropertyDefinition {
+//		public TaetigkeitsArtProperty(String tenantId) {
+//			inst(tenantId);
+//		}
+//
+//		public void inst(String tenantId) {
+//			this.setName("Tätigkeitsart");
+//			this.setTenantId(tenantId);
+//			this.setMultiple(false);
+//			this.setAllowedValues(new ArrayList<EnumEntry>());
+//			this.getAllowedValues().add(new EnumEntry(0, "Einsatz", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "Technischer", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Brand", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Verkehrsunfall", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Tauch", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Personen", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Höhenrettung", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Ausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "Grundausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Truppmann", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Truppführer", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Erweiterte Grundausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Funk", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Erste Hilfe", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Fach- und Sonderausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Nachrichtendienst", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Geräte- und Fahrzeugkunde", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Atem- und Körperschutz", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Technischer FW-Einsatz", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Gefährliche Stoffe", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Vorbeugender Brandschutz", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Verwaltungsdienst", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Führungsausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Gruppen-Kommandant", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Zugs-Kommandant", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Einsatzleiter", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Kommandant", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Höhere FW-Ausbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Bewerter-Lehrgang", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Fachweiterbildung", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Chlorgas / Erdgas", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Stapler / Kranschein", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "IT", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Sanitäter", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Überprüfung Mannschaft", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Atemschutz\nUnterweisung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Stapler\nUnterweisung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Kran\nUnterweisung", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Vorbereitung", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Nachbereitung", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Bewerbe", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "FLA", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "WLA", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "FULA", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "FJLA", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "STRMLA", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Leistungsprüfungen", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "THL", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "SPRENGLP", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Veranstaltung", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "Intern", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Ausflug", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Mitgliederversammlung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Jugendlager", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Extern\n(Öffentlichkeitsarbeit)", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Fest / Ball", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Tag der offenen Tür", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Kirchenausrückung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Landesfeuerwertag", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Friedenslicht", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Verwaltung", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeug", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Bewegungsfahrt", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Geräte", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Wartung/Reinigung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Prüfung/Inspektion", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Gebäude", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Wartung Haustechnik", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Reinigung", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "IT", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "EDV", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Sybos", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Sitzungen", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Besprechung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "JourFix", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(1, "Öffentlichkeits-\nArbeit", false));
+//			this.getAllowedValues().add(new EnumEntry(2, "Homepage / Social Media", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Presse", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Repräsentation\nbei Veranstaltungen", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Mitglieder-Werbung", true));
+//			this.getAllowedValues().add(new EnumEntry(2, "Haussammlung", true));
+//
+//			this.getAllowedValues().add(new EnumEntry(0, "Projekt", false));
+//			this.getAllowedValues().add(new EnumEntry(1, "Fahrzeuganschaffung", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "FW Hausbau", true));
+//			this.getAllowedValues().add(new EnumEntry(1, "Landesbewerb", true));
+//
+//		}
+//	}
 
 	// -----------------------------------------
 	// --------------FlexProd Properties

@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { CoreVolunteerService } from "../../_service/core-volunteer.service";
 import { CoreHelpSeekerService } from "../../_service/core-helpseeker.service";
 import { LoginService } from "../../_service/login.service";
-import { CoreMarketplaceService } from "../../_service/core-marketplace.service";
+import { MarketplaceService } from "../../_service/core-marketplace.service";
 import { TenantService } from "../../_service/core-tenant.service";
 import { Volunteer } from "../../_model/volunteer";
 import { Participant } from "../../_model/participant";
@@ -27,7 +27,7 @@ export class OrganisationFilterComponent implements OnInit {
     private coreVolunteerService: CoreVolunteerService,
     private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private imageService: ImageService
   ) {}

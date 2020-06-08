@@ -6,7 +6,7 @@ import { LoginService } from 'app/main/content/_service/login.service';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { MatchingConfigurationService } from 'app/main/content/_service/configuration/matching-configuration.service';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/configurations';
+import { ClassConfiguration, MatchingConfiguration } from 'app/main/content/_model/meta/configurations';
 import { ClassBrowseSubDialogData } from '../../class-configurator/browse-sub-dialog/browse-sub-dialog.component';
 
 export interface NewMatchingDialogData {
@@ -56,8 +56,8 @@ export class NewMatchingDialogComponent implements OnInit {
         //----
         this.recentClassConfigurations = this.recentClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
 
-        if (this.recentClassConfigurations.length > 5) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 5);
+        if (this.recentClassConfigurations.length > 4) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 4);
         }
 
         this.loaded = true;

@@ -1,34 +1,33 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { StoredChartService } from '../../../_service/stored-chart.service';
-import { LoginService } from '../../../_service/login.service';
-import { Participant } from '../../../_model/participant';
-import { CoreMarketplaceService } from '../../../_service/core-marketplace.service';
-import { Marketplace } from '../../../_model/marketplace';
-import { StoredChart } from '../../../_model/stored-chart';
-import { isNullOrUndefined } from 'util';
-import { ClassInstance, ClassInstanceDTO } from '../../../_model/meta/class';
-import { ClassInstanceService } from '../../../_service/meta/core/class/class-instance.service';
-import { MatPaginator, MatSort } from '@angular/material';
-import { TenantService } from '../../../_service/core-tenant.service';
-import { VolunteerService } from '../../../_service/volunteer.service';
-import { Volunteer } from '../../../_model/volunteer';
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { MatTableDataSource } from "@angular/material/table";
+import { StoredChartService } from "../../../_service/stored-chart.service";
+import { LoginService } from "../../../_service/login.service";
+import { Participant } from "../../../_model/participant";
+import { MarketplaceService } from "../../../_service/core-marketplace.service";
+import { Marketplace } from "../../../_model/marketplace";
+import { StoredChart } from "../../../_model/stored-chart";
+import { isNullOrUndefined } from "util";
+import { ClassInstance, ClassInstanceDTO } from "../../../_model/meta/class";
+import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
+import { MatPaginator, MatSort } from "@angular/material";
+import { TenantService } from "../../../_service/core-tenant.service";
+import { VolunteerService } from "../../../_service/volunteer.service";
+import { Volunteer } from "../../../_model/volunteer";
 
 @Component({
   selector: "recruit-view",
-  templateUrl: './recruit-view.component.html',
-  styleUrls: ['./recruit-view.component.scss']
+  templateUrl: "./recruit-view.component.html",
+  styleUrls: ["./recruit-view.component.scss"],
 })
 export class RecruitViewComponent implements OnInit, AfterViewInit {
-
   constructor(
     private storedChartService: StoredChartService,
     private loginService: LoginService,
-    private marketplaceService: CoreMarketplaceService,
+    private marketplaceService: MarketplaceService,
     private classInstanceService: ClassInstanceService,
     private coreTenantService: TenantService,
     private volunteerService: VolunteerService
-  ) { }
+  ) {}
   private tableDataSource = new MatTableDataSource<ClassInstanceDTO>([]);
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -38,7 +37,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
     "taskDateFrom",
     "taskDuration",
     "hash",
-    "verificationStatus"
+    "verificationStatus",
   ];
   marketplace: Marketplace;
   participant: Participant;
@@ -75,7 +74,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
   verify3 = false;
   verify5 = false;
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     Promise.all([
@@ -92,7 +91,7 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
         .toPromise()
         .then((participant: Participant) => {
           this.participant = participant;
-        })
+        }),
     ]).then(() => {
       this.loadStoredCharts();
       this.loadTasks();
@@ -127,10 +126,9 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
                       b.blockchainDate.valueOf() - a.blockchainDate.valueOf()
                   );
 
-                  this.tableDataSource.data = this.classInstanceDTOs;
-                  this.paginator.length = this.classInstanceDTOs.length;
                   this.tableDataSource.paginator = this.paginator;
-                  // this.tableDataSource.paginator.length= this.classInstances.length;
+                  this.paginator.length = this.classInstanceDTOs.length;
+                  this.tableDataSource.data = this.classInstanceDTOs;
                 }
               });
           });
@@ -143,37 +141,37 @@ export class RecruitViewComponent implements OnInit, AfterViewInit {
       .toPromise()
       .then((storedCharts: StoredChart[]) => {
         this.charts = storedCharts;
-        if (this.charts.findIndex(c => c.title === "Wochentag") >= 0) {
+        if (this.charts.findIndex((c) => c.title === "Wochentag") >= 0) {
           this.weekdayData = JSON.parse(
-            this.charts.find(c => c.title === "Wochentag").data
+            this.charts.find((c) => c.title === "Wochentag").data
           );
         }
-        if (this.charts.findIndex(c => c.title == "Tageszeit") >= 0) {
+        if (this.charts.findIndex((c) => c.title == "Tageszeit") >= 0) {
           this.dayNightData = JSON.parse(
-            this.charts.find(c => c.title === "Tageszeit").data
+            this.charts.find((c) => c.title === "Tageszeit").data
           );
         }
         if (
           this.charts.findIndex(
-            c => c.title == "STUNDEN absolvierter Ausbildungen"
+            (c) => c.title == "STUNDEN absolvierter Ausbildungen"
           ) >= 0
         ) {
           this.trainingData = JSON.parse(
             this.charts.find(
-              c => c.title == "STUNDEN absolvierter Ausbildungen"
+              (c) => c.title == "STUNDEN absolvierter Ausbildungen"
             ).data
           );
         }
         if (
           this.charts.findIndex(
-            c =>
+            (c) =>
               c.title ==
               "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf"
           ) >= 0
         ) {
           this.taskData = JSON.parse(
             this.charts.find(
-              c =>
+              (c) =>
                 c.title ==
                 "Engagement in verschiedenen Tätigkeitsarten im Zeitverlauf"
             ).data

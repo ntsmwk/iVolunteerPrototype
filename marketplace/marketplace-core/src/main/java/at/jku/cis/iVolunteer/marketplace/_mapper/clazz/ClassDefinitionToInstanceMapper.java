@@ -39,19 +39,15 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		switch (source.getClassArchetype()) {
 		case ACHIEVEMENT:
-//		case ACHIEVEMENT_HEAD:
 			classInstance = new AchievementClassInstance();
 			break;
 		case COMPETENCE:
-//		case COMPETENCE_HEAD:
 			classInstance = new CompetenceClassInstance();
 			break;
 		case FUNCTION:
-//		case FUNCTION_HEAD:
 			classInstance = new FunctionClassInstance();
 			break;
 		case TASK:
-//		case TASK_HEAD:
 			classInstance = new TaskClassInstance();
 			break;
 		default:
@@ -63,14 +59,16 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		classInstance.setClassDefinitionId(source.getId());
 
 		classInstance.setName(source.getName());
-	
-		classInstance.setProperties(getParentProperties(source));
-
-//		List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
-//		for (ClassProperty<Object> classProperty : source.getProperties()) {
-//			properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
-//		}
-//		classInstance.setProperties(properties);
+		
+		if (source.getConfigurationId() != null) {
+			classInstance.setProperties(getParentProperties(source));
+		} else {
+			List<PropertyInstance<Object>> properties = new ArrayList<PropertyInstance<Object>>();
+			for (ClassProperty<Object> classProperty : source.getProperties()) {
+				properties.add(classPropertyToPropertyInstanceMapper.toTarget(classProperty));
+			}
+			classInstance.setProperties(properties);
+		}
 		
 		classInstance.setVisible(source.isVisible());
 		classInstance.setTabId(source.getTabId());
@@ -96,7 +94,7 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
 		List<ClassProperty<Object>> properties = new ArrayList<>();
 		
-		properties = this.classDefinitionService.getParentsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
+		properties = this.classDefinitionService.getClassDefinitionsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
 		return classPropertyToPropertyInstanceMapper.toTargets(properties);
 	}
 

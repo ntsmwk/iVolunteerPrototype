@@ -283,186 +283,187 @@ export class CConstants {
 }
 
 export class CUtils {
-  public static getStandardObjects(
-    marketplaceId: string,
-    tenantId: string,
-    objectIdService: ObjectIdService
-  ): { classDefinitions: ClassDefinition[]; relationships: Relationship[] } {
-    const classDefinitions: ClassDefinition[] = [];
-    const relationships: Relationship[] = [];
+  // public static getStandardObjects(
+  //   marketplaceId: string,
+  //   tenantId: string,
+  //   objectIdService: ObjectIdService
+  // ): { classDefinitions: ClassDefinition[]; relationships: Relationship[] } {
+  //   const classDefinitions: ClassDefinition[] = [];
+  //   const relationships: Relationship[] = [];
 
-    const fwPassEintrag = new ClassDefinition();
-    fwPassEintrag.id = objectIdService.getNewObjectId();
-    fwPassEintrag.tenantId = tenantId;
-    fwPassEintrag.marketplaceId = marketplaceId;
-    fwPassEintrag.name = 'Freiwilligenpass-\nEintrag';
-    fwPassEintrag.root = true;
-    fwPassEintrag.classArchetype = ClassArchetype.ROOT;
-    fwPassEintrag.writeProtected = true;
+  //   const fwPassEintrag = new ClassDefinition();
+  //   fwPassEintrag.id = objectIdService.getNewObjectId();
+  //   fwPassEintrag.tenantId = tenantId;
+  //   fwPassEintrag.marketplaceId = marketplaceId;
+  //   fwPassEintrag.name = 'Freiwilligenpass-\nEintrag';
+  //   fwPassEintrag.root = true;
+  //   fwPassEintrag.collector = true;
+  //   fwPassEintrag.classArchetype = ClassArchetype.ROOT;
+  //   fwPassEintrag.writeProtected = true;
 
-    fwPassEintrag.properties = [];
+  //   fwPassEintrag.properties = [];
 
-    const idProperty = new ClassProperty<string>();
-    idProperty.name = 'id';
-    idProperty.id = objectIdService.getNewObjectId();
-    idProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(idProperty);
+  //   const idProperty = new ClassProperty<string>();
+  //   idProperty.name = 'id';
+  //   idProperty.id = objectIdService.getNewObjectId();
+  //   idProperty.type = PropertyType.TEXT;
+  //   fwPassEintrag.properties.push(idProperty);
 
-    const nameProperty = new ClassProperty<string>();
-    nameProperty.name = 'name';
-    nameProperty.id = objectIdService.getNewObjectId();
-    nameProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(nameProperty);
+  //   const nameProperty = new ClassProperty<string>();
+  //   nameProperty.name = 'name';
+  //   nameProperty.id = objectIdService.getNewObjectId();
+  //   nameProperty.type = PropertyType.TEXT;
+  //   fwPassEintrag.properties.push(nameProperty);
 
-    const evidenceProperty = new ClassProperty<string>();
-    evidenceProperty.name = 'evidenz';
-    evidenceProperty.id = objectIdService.getNewObjectId();
-    evidenceProperty.type = PropertyType.TEXT;
-    fwPassEintrag.properties.push(evidenceProperty);
+  //   const evidenceProperty = new ClassProperty<string>();
+  //   evidenceProperty.name = 'evidenz';
+  //   evidenceProperty.id = objectIdService.getNewObjectId();
+  //   evidenceProperty.type = PropertyType.TEXT;
+  //   fwPassEintrag.properties.push(evidenceProperty);
 
-    classDefinitions.push(fwPassEintrag);
+  //   classDefinitions.push(fwPassEintrag);
 
-    const task = new ClassDefinition();
-    task.id = objectIdService.getNewObjectId();
-    task.tenantId = tenantId;
-    task.marketplaceId = marketplaceId;
-    task.name = 'Tätigkeit';
-    task.root = false;
+  //   const task = new ClassDefinition();
+  //   task.id = objectIdService.getNewObjectId();
+  //   task.tenantId = tenantId;
+  //   task.marketplaceId = marketplaceId;
+  //   task.name = 'Tätigkeit';
+  //   task.root = false;
 
-    task.classArchetype = ClassArchetype.TASK;
-    task.writeProtected = true;
+  //   task.classArchetype = ClassArchetype.TASK;
+  //   task.writeProtected = true;
 
-    classDefinitions.push(task);
+  //   classDefinitions.push(task);
 
-    const vonProperty = new ClassProperty<Date>();
-    vonProperty.name = 'Starting Date';
-    vonProperty.id = 'objectIdService.getNewObjectId();';
-    vonProperty.type = PropertyType.DATE;
-    task.properties.push(vonProperty);
+  //   const vonProperty = new ClassProperty<Date>();
+  //   vonProperty.name = 'Starting Date';
+  //   vonProperty.id = 'objectIdService.getNewObjectId();';
+  //   vonProperty.type = PropertyType.DATE;
+  //   task.properties.push(vonProperty);
 
-    const bisProperty = new ClassProperty<Date>();
-    bisProperty.name = 'End Date';
-    bisProperty.id = objectIdService.getNewObjectId();
-    bisProperty.type = PropertyType.DATE;
-    task.properties.push(bisProperty);
+  //   const bisProperty = new ClassProperty<Date>();
+  //   bisProperty.name = 'End Date';
+  //   bisProperty.id = objectIdService.getNewObjectId();
+  //   bisProperty.type = PropertyType.DATE;
+  //   task.properties.push(bisProperty);
 
-    const r1 = new Inheritance();
-    r1.id = objectIdService.getNewObjectId();
-    r1.relationshipType = RelationshipType.INHERITANCE;
-    r1.target = task.id;
-    r1.source = fwPassEintrag.id;
-    r1.superClassId = r1.source;
-    relationships.push(r1);
+  //   const r1 = new Inheritance();
+  //   r1.id = objectIdService.getNewObjectId();
+  //   r1.relationshipType = RelationshipType.INHERITANCE;
+  //   r1.target = task.id;
+  //   r1.source = fwPassEintrag.id;
+  //   r1.superClassId = r1.source;
+  //   relationships.push(r1);
 
-    const competence = new ClassDefinition();
-    competence.id = objectIdService.getNewObjectId();
-    competence.tenantId = tenantId;
-    competence.marketplaceId = marketplaceId;
-    competence.name = 'Kompetenz';
-    competence.root = false;
-    competence.classArchetype = ClassArchetype.COMPETENCE;
-    competence.writeProtected = true;
-    classDefinitions.push(competence);
+  //   const competence = new ClassDefinition();
+  //   competence.id = objectIdService.getNewObjectId();
+  //   competence.tenantId = tenantId;
+  //   competence.marketplaceId = marketplaceId;
+  //   competence.name = 'Kompetenz';
+  //   competence.root = false;
+  //   competence.classArchetype = ClassArchetype.COMPETENCE;
+  //   competence.writeProtected = true;
+  //   classDefinitions.push(competence);
 
-    const r2 = new Inheritance();
-    r2.id = objectIdService.getNewObjectId();
-    r2.relationshipType = RelationshipType.INHERITANCE;
-    r2.target = competence.id;
-    r2.source = fwPassEintrag.id;
-    r2.superClassId = r2.source;
-    relationships.push(r2);
+  //   const r2 = new Inheritance();
+  //   r2.id = objectIdService.getNewObjectId();
+  //   r2.relationshipType = RelationshipType.INHERITANCE;
+  //   r2.target = competence.id;
+  //   r2.source = fwPassEintrag.id;
+  //   r2.superClassId = r2.source;
+  //   relationships.push(r2);
 
-    const achievement = new ClassDefinition();
-    achievement.id = objectIdService.getNewObjectId();
-    achievement.tenantId = tenantId;
-    achievement.marketplaceId = marketplaceId;
-    achievement.name = 'Verdienst';
-    achievement.root = false;
-    achievement.classArchetype = ClassArchetype.ACHIEVEMENT;
-    achievement.writeProtected = true;
-    classDefinitions.push(achievement);
+  //   const achievement = new ClassDefinition();
+  //   achievement.id = objectIdService.getNewObjectId();
+  //   achievement.tenantId = tenantId;
+  //   achievement.marketplaceId = marketplaceId;
+  //   achievement.name = 'Verdienst';
+  //   achievement.root = false;
+  //   achievement.classArchetype = ClassArchetype.ACHIEVEMENT;
+  //   achievement.writeProtected = true;
+  //   classDefinitions.push(achievement);
 
-    const r3 = new Inheritance();
-    r3.id = objectIdService.getNewObjectId();
-    r3.relationshipType = RelationshipType.INHERITANCE;
-    r3.target = achievement.id;
-    r3.source = fwPassEintrag.id;
-    r3.superClassId = r3.source;
-    relationships.push(r3);
+  //   const r3 = new Inheritance();
+  //   r3.id = objectIdService.getNewObjectId();
+  //   r3.relationshipType = RelationshipType.INHERITANCE;
+  //   r3.target = achievement.id;
+  //   r3.source = fwPassEintrag.id;
+  //   r3.superClassId = r3.source;
+  //   relationships.push(r3);
 
-    const funktion = new ClassDefinition();
-    funktion.id = objectIdService.getNewObjectId();
-    funktion.tenantId = tenantId;
-    funktion.marketplaceId = marketplaceId;
-    funktion.name = 'Funktion';
-    funktion.root = false;
-    funktion.classArchetype = ClassArchetype.FUNCTION;
-    funktion.writeProtected = true;
-    classDefinitions.push(funktion);
+  //   const funktion = new ClassDefinition();
+  //   funktion.id = objectIdService.getNewObjectId();
+  //   funktion.tenantId = tenantId;
+  //   funktion.marketplaceId = marketplaceId;
+  //   funktion.name = 'Funktion';
+  //   funktion.root = false;
+  //   funktion.classArchetype = ClassArchetype.FUNCTION;
+  //   funktion.writeProtected = true;
+  //   classDefinitions.push(funktion);
 
-    const r4 = new Inheritance();
-    r4.id = objectIdService.getNewObjectId();
-    r4.relationshipType = RelationshipType.INHERITANCE;
-    r4.target = funktion.id;
-    r4.source = fwPassEintrag.id;
-    r4.superClassId = r4.source;
-    relationships.push(r4);
+  //   const r4 = new Inheritance();
+  //   r4.id = objectIdService.getNewObjectId();
+  //   r4.relationshipType = RelationshipType.INHERITANCE;
+  //   r4.target = funktion.id;
+  //   r4.source = fwPassEintrag.id;
+  //   r4.superClassId = r4.source;
+  //   relationships.push(r4);
 
-    const myTask = new ClassDefinition();
-    myTask.id = objectIdService.getNewObjectId();
-    myTask.tenantId = tenantId;
-    myTask.marketplaceId = marketplaceId;
-    myTask.name = 'myTask';
-    myTask.root = false;
-    myTask.classArchetype = ClassArchetype.TASK;
+  //   const myTask = new ClassDefinition();
+  //   myTask.id = objectIdService.getNewObjectId();
+  //   myTask.tenantId = tenantId;
+  //   myTask.marketplaceId = marketplaceId;
+  //   myTask.name = 'myTask';
+  //   myTask.root = false;
+  //   myTask.classArchetype = ClassArchetype.TASK;
 
-    myTask.properties = [];
-    const tt1 = new ClassProperty<string>();
-    tt1.name = 'taskType1';
-    tt1.id = objectIdService.getNewObjectId();
-    tt1.type = PropertyType.TEXT;
-    myTask.properties.push(tt1);
+  //   myTask.properties = [];
+  //   const tt1 = new ClassProperty<string>();
+  //   tt1.name = 'taskType1';
+  //   tt1.id = objectIdService.getNewObjectId();
+  //   tt1.type = PropertyType.TEXT;
+  //   myTask.properties.push(tt1);
 
-    const tt2 = new ClassProperty<string>();
-    tt2.name = 'taskType2';
-    tt2.id = objectIdService.getNewObjectId();
-    tt2.type = PropertyType.TEXT;
-    myTask.properties.push(tt2);
+  //   const tt2 = new ClassProperty<string>();
+  //   tt2.name = 'taskType2';
+  //   tt2.id = objectIdService.getNewObjectId();
+  //   tt2.type = PropertyType.TEXT;
+  //   myTask.properties.push(tt2);
 
-    const tt3 = new ClassProperty<string>();
-    tt3.name = 'taskType3';
-    tt3.id = objectIdService.getNewObjectId();
-    tt3.type = PropertyType.TEXT;
-    myTask.properties.push(tt3);
+  //   const tt3 = new ClassProperty<string>();
+  //   tt3.name = 'taskType3';
+  //   tt3.id = objectIdService.getNewObjectId();
+  //   tt3.type = PropertyType.TEXT;
+  //   myTask.properties.push(tt3);
 
-    const location = new ClassProperty<string>();
-    location.name = 'Location';
-    location.id = objectIdService.getNewObjectId();
-    location.type = PropertyType.TEXT;
-    myTask.properties.push(location);
+  //   const location = new ClassProperty<string>();
+  //   location.name = 'Location';
+  //   location.id = objectIdService.getNewObjectId();
+  //   location.type = PropertyType.TEXT;
+  //   myTask.properties.push(location);
 
-    const rank = new ClassProperty<string>();
-    rank.name = 'rank';
-    rank.id = objectIdService.getNewObjectId();
-    rank.type = PropertyType.TEXT;
-    myTask.properties.push(rank);
+  //   const rank = new ClassProperty<string>();
+  //   rank.name = 'rank';
+  //   rank.id = objectIdService.getNewObjectId();
+  //   rank.type = PropertyType.TEXT;
+  //   myTask.properties.push(rank);
 
-    const duration = new ClassProperty<number>();
-    duration.name = 'rank';
-    duration.id = objectIdService.getNewObjectId();
-    duration.type = PropertyType.FLOAT_NUMBER;
-    myTask.properties.push(duration);
+  //   const duration = new ClassProperty<number>();
+  //   duration.name = 'duration';
+  //   duration.id = objectIdService.getNewObjectId();
+  //   duration.type = PropertyType.FLOAT_NUMBER;
+  //   myTask.properties.push(duration);
 
-    classDefinitions.push(myTask);
+  //   classDefinitions.push(myTask);
 
-    const r5 = new Inheritance();
-    r5.id = objectIdService.getNewObjectId();
-    r5.relationshipType = RelationshipType.INHERITANCE;
-    r5.target = myTask.id;
-    r5.source = task.id;
-    r5.superClassId = r5.source;
-    relationships.push(r5);
+  //   const r5 = new Inheritance();
+  //   r5.id = objectIdService.getNewObjectId();
+  //   r5.relationshipType = RelationshipType.INHERITANCE;
+  //   r5.target = myTask.id;
+  //   r5.source = task.id;
+  //   r5.superClassId = r5.source;
+  //   relationships.push(r5);
 
-    return { classDefinitions: classDefinitions, relationships: relationships };
-  }
+  //   return { classDefinitions: classDefinitions, relationships: relationships };
+  // }
 }
