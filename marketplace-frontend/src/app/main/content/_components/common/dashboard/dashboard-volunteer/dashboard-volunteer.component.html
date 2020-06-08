@@ -293,7 +293,7 @@
         ></mat-header-row>
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngStyle]="getStyle(element)"
+          [ngStyle]="getTableRowColor(element)"
         ></mat-row>
       </mat-table>
     </div>

@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ChangeDetectorRef,
-  AfterViewInit,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { ShareDialog } from "./share-dialog/share-dialog.component";
@@ -14,8 +8,6 @@ import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
 import { ClassInstanceDTO } from "../../../../_model/meta/class";
-import { CoreUserImagePathService } from "../../../../_service/core-user-imagepath.service";
-import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
 import {
   MatSort,
   MatPaginator,
@@ -31,7 +23,6 @@ import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
-import { HttpClient } from "@angular/common/http";
 HC_venn(Highcharts);
 
 @Component({
@@ -50,8 +41,6 @@ export class DashboardVolunteerComponent implements OnInit {
   isLoaded: boolean;
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
-  selectedTenants: Tenant[] = [];
-
   private displayedColumnsRepository: string[] = [
     "issuer",
     "taskName",
@@ -63,35 +52,29 @@ export class DashboardVolunteerComponent implements OnInit {
 
   image;
 
+  selectedTenants: Tenant[] = [];
   subscribedTenants: Tenant[] = [];
   allTenants: Tenant[] = [];
 
   marketplaceClassInstances: ClassInstanceDTO[] = [];
-  mpAndSharedClassInstances: ClassInstanceDTO[] = [];
   localClassInstances: ClassInstanceDTO[] = [];
   filteredClassInstances: ClassInstanceDTO[] = [];
   sharedClassInstances: ClassInstanceDTO[] = [];
-  mpAndLocalClassInstances: ClassInstanceDTO[] = [];
 
-  nrMpOnly: number = 0;
-  nrLrOnly: number = 0;
+  // nrMpOnly: number = 0;
+  // nrLrOnly: number = 0;
   nrMpUnionLr: number = 0;
 
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
 
   vennData = [];
-
   chartOptions: Highcharts.Options = {
     title: {
       text: undefined,
     },
   };
-  // TODO marketplace: red, localRepository: blue, synced: green
-  // colors: Map<String, String> = new Map([
-  //   ["marketplace", "#EF5350"],
-  //   ["localRepository", "#9DEF50"],
-  // ]);
+
   colors: Map<String, String> = new Map([
     ["marketplace", "#50B3EF"],
     ["localRepository", "#EF8C50"],
@@ -104,16 +87,13 @@ export class DashboardVolunteerComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private coreHelpseekerService: CoreHelpSeekerService,
     private loginService: LoginService,
     private classInstanceService: ClassInstanceService,
-    private userImagePathService: CoreUserImagePathService,
     private localRepositoryService: LocalRepositoryService,
     private volunteerService: CoreVolunteerService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private http: HttpClient,
     private iconRegistry: MatIconRegistry,
     private changeDetectorRefs: ChangeDetectorRef
   ) {
@@ -163,7 +143,7 @@ export class DashboardVolunteerComponent implements OnInit {
       );
       this.marketplace = marketplaces[0];
 
-      this.mpAndSharedClassInstances = <ClassInstanceDTO[]>(
+      let mpAndSharedClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
             this.marketplace,
@@ -174,9 +154,7 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      console.error(this.mpAndSharedClassInstances);
-
-      this.mpAndSharedClassInstances.forEach((ci) => {
+      mpAndSharedClassInstances.forEach((ci) => {
         if (ci.tenantId != ci.issuerId) {
           this.sharedClassInstances.push(ci);
         } else {
@@ -412,9 +390,8 @@ export class DashboardVolunteerComponent implements OnInit {
     // Does not work ;)
     // this.changeDetectorRefs.detectChanges();
     // this.paginator._changePageSize(this.paginator.pageSize);
-
     // this.table.renderRows();
-    this.changeDetectorRefs.detectChanges();
+    //this.changeDetectorRefs.detectChanges();
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
@@ -438,22 +415,22 @@ export class DashboardVolunteerComponent implements OnInit {
 
   //---- Share functionality end -----//
 
+  // TODO: not used anymore
   calcMetrics() {
     // intersection of CIs on mp and local repo
-    this.mpAndLocalClassInstances = this.localClassInstances.filter(
+    let mpAndLocalClassInstances = this.localClassInstances.filter(
       (ci) =>
         -1 !== this.marketplaceClassInstances.map((ci) => ci.id).indexOf(ci.id)
     );
-    this.nrMpUnionLr = this.mpAndLocalClassInstances.length;
+    this.nrMpUnionLr = mpAndLocalClassInstances.length;
 
     // only in mp (mp minus interesction)
-    this.nrMpOnly =
-      this.marketplaceClassInstances.length -
-      this.mpAndLocalClassInstances.length;
+    // this.nrMpOnly =
+    //   this.marketplaceClassInstances.length - mpAndLocalClassInstances.length;
 
-    // only in local repo (local repo minus intersection)
-    this.nrLrOnly =
-      this.localClassInstances.length - this.mpAndLocalClassInstances.length;
+    // // only in local repo (local repo minus intersection)
+    // this.nrLrOnly =
+    //   this.localClassInstances.length - mpAndLocalClassInstances.length;
 
     this.generateVennData();
   }
@@ -522,12 +499,8 @@ export class DashboardVolunteerComponent implements OnInit {
     // console.error(event.point.name);
   }
 
-  getStyle(ci: ClassInstanceDTO) {
-    if (
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0
-    ) {
-      let color = this.colorsOpac.get("synced");
+  getTableRowColor(ci: ClassInstanceDTO) {
+    if (this.isSynced(ci)) {
       return {
         // "background-color": color,
 
@@ -573,24 +546,34 @@ export class DashboardVolunteerComponent implements OnInit {
         //   this.colorsOpac.get("marketplace") +
         //   " 4%)",
       };
-    } else if (
-      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) === -1
-    ) {
-      let color = this.colorsOpac.get("localRepository");
-
+    } else if (this.isLocalRepositoryOnly(ci)) {
       return {
-        "background-color": color,
+        "background-color": this.colorsOpac.get("localRepository"),
       };
-    } else if (
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.localClassInstances.findIndex((c) => c.id === ci.id) === -1
-    ) {
-      let color = this.colorsOpac.get("marketplace");
+    } else if (this.isMarketplaceOnly(ci)) {
       return {
-        "background-color": color,
+        "background-color": this.colorsOpac.get("marketplace"),
       };
     }
+  }
+
+  isMarketplaceOnly(ci: ClassInstanceDTO) {
+    return (
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstances.findIndex((c) => c.id === ci.id) === -1
+    );
+  }
+  isLocalRepositoryOnly(ci: ClassInstanceDTO) {
+    return (
+      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) === -1
+    );
+  }
+  isSynced(ci: ClassInstanceDTO) {
+    return (
+      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0
+    );
   }
 }
 
