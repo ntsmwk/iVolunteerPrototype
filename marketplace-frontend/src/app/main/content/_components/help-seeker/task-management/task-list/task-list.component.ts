@@ -15,12 +15,13 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
+import { global } from "@angular/compiler/src/util";
 
 @Component({
   selector: "fuse-task-list",
   templateUrl: "./task-list.component.html",
   styleUrls: ["./task-list.component.scss"],
-  animations: fuseAnimations
+  animations: fuseAnimations,
 })
 export class FuseTaskListComponent implements OnInit, AfterViewInit {
   marketplace: Marketplace;
@@ -37,7 +38,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     "taskType2",
     "taskDateFrom",
     "taskDuration",
-    "verified"
+    "verified",
   ];
 
   private participant: Helpseeker;
@@ -56,29 +57,22 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   async ngAfterViewInit() {
-    this.participant = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    let globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo();
 
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.participant.id)
-        .toPromise()
-    );
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(this.participant.tenantId).toPromise()
-    );
+    this.participant = <Helpseeker>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+    this.tenant = globalInfo.tenants[0];
 
     this.tableDataSource.paginator = this.paginator;
-
     this.tableDataSource.data = <ClassInstanceDTO[]>(
       await this.classInstanceService
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
-
-    let globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo();
     console.error(globalInfo);
+    console.error(this.participant);
+    console.error(this.marketplace);
+    console.error(this.tenant);
   }
 
   rowSelected(task: Task) {
