@@ -16,7 +16,8 @@ export class EnumDefinition {
     description: string;
 
     timestamp: Date;
+    tenantId: string;
 
     enumEntries: EnumEntry[];
-    enumRelstionships: EnumRelationship[];
+    enumRelationships: EnumRelationship[];
 }

@@ -202,6 +202,9 @@ const mxStyles = {
   addClassNewLevelIcon:
     'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;' +
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+  addClassPlusIcon:
+    'shape=image;image=/assets/icons/class_editor/plus_icon.png;noLabel=1;imageBackground=none;imageBorder=none;' +
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
   // Relationships
   inheritanceEnum:
