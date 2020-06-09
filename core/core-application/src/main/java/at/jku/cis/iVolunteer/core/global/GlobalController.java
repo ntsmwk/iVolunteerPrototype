@@ -32,22 +32,6 @@ public class GlobalController {
 		globalInfo.setParticipant(loginService.getLoggedInParticipant());
 		globalInfo.setParticipantRole(loginService.getLoggedInParticipantRole());
 
-//		 if (this.globalInfo.participantRole === "HELP_SEEKER") {
-//		      this.globalInfo.marketplace = <Marketplace>(
-//		        await this.coreHelpseekerService
-//		          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-//		          .toPromise()
-//		      );
-//		    } else if (this.globalInfo.participantRole === "VOLUNTEER") {
-//		      let marketplaces = [];
-//		      marketplaces = <Marketplace[]>(
-//		        await this.coreVolunteerService
-//		          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-//		          .toPromise()
-//		      );
-//		      this.globalInfo.marketplace = marketplaces[0];
-//		    }
-//		
 		Marketplace marketplace = null;
 		List<Tenant> tenants = new ArrayList<>();
 
