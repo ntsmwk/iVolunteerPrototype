@@ -42,7 +42,7 @@ export class GlobalService {
     console.error("initialize");
     this.globalInfo = new GlobalInfo();
     this.httpClient
-      .get(`/global`)
+      .get(`/core/global`)
       .toPromise()
       .then((gi: GlobalInfo) => (this.globalInfo = gi));
   }
