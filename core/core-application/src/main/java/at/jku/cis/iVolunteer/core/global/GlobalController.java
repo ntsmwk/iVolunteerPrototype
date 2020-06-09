@@ -31,14 +31,14 @@ public class GlobalController {
 		Marketplace marketplace = null;
 		List<Tenant> tenants = new ArrayList<>();
 
-		if (this.getGlobalInfo().getParticipantRole() == ParticipantRole.VOLUNTEER) {
+		if (globalInfo.getParticipantRole() == ParticipantRole.VOLUNTEER) {
 			CoreVolunteer coreVolunteer = (CoreVolunteer) globalInfo.getParticipant();
 			List<Marketplace> registeredMarketplaces = coreVolunteer.getRegisteredMarketplaces();
 			if (registeredMarketplaces.size() > 0) {
 				marketplace = registeredMarketplaces.get(0);
 			}
 			tenants = this.tenantService.getTenantsByVolunteer(globalInfo.getParticipant().getId());
-		} else if (this.getGlobalInfo().getParticipantRole() == ParticipantRole.HELP_SEEKER) {
+		} else if (globalInfo.getParticipantRole() == ParticipantRole.HELP_SEEKER) {
 			CoreHelpSeeker coreHelpSeeker = (CoreHelpSeeker) globalInfo.getParticipant();
 			List<Marketplace> registeredMarketplaces = coreHelpSeeker.getRegisteredMarketplaces();
 			if (registeredMarketplaces.size() > 0) {

@@ -27,20 +27,22 @@ export class GlobalService {
     private marketplaceService: MarketplaceService
   ) {}
 
-  async getGlobalInfo(): Promise<GlobalInfo> {
-    while (this.globalInfo == null) {
-      setTimeout(async () => {
-        console.error("globalinfo == null");
-        await this.initializeGlobalInfo();
+  getGlobalInfo() {
+    // TODO make only once
+    return this.httpClient.get(`/core/global`);
+    // setTimeout(() => {
+    //   while (this.globalInfo == null) {
+    //     console.error("globalinfo == null");
+    //     this.initializeGlobalInfo();
 
-        console.error("await");
-        console.error(this.globalInfo);
-      }, 200);
-    }
-    return this.globalInfo;
+    //     console.error("await");
+    //     console.error(this.globalInfo);
+    //   }
+    // }, 2000);
+    // return new Promise(() => this.globalInfo);
   }
 
-  private async initializeGlobalInfo() {
+  private initializeGlobalInfo() {
     console.error("initialize");
     this.globalInfo = new GlobalInfo();
     this.httpClient

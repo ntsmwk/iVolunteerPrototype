@@ -57,7 +57,9 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   async ngAfterViewInit() {
-    let globalInfo = <GlobalInfo>await this.globalService.getGlobalInfo();
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
+    );
 
     this.participant = <Helpseeker>globalInfo.participant;
     this.marketplace = globalInfo.marketplace;
