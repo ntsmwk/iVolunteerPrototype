@@ -45,6 +45,7 @@ export class EnumGraphEditorComponent implements OnInit {
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
 
     graph: mxgraph.mxGraph;
+    rootCell: MyMxCell;
     /**
      * ******INITIALIZATION******
      */
@@ -126,6 +127,7 @@ export class EnumGraphEditorComponent implements OnInit {
                 // TODO double click event
             });
             this.createGraph();
+            this.setLayout();
 
         }
     }
@@ -144,6 +146,8 @@ export class EnumGraphEditorComponent implements OnInit {
             this.graph.getDefaultParent(), this.enumDefinition.id, this.enumDefinition.name, 0, 0, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classEnum
         ) as MyMxCell;
         rootCell.root = true;
+        this.rootCell = rootCell;
+
         const nextIcon: MyMxCell = this.graph.insertVertex(
             rootCell, 'add_class_next_level_icon', 'Eintrag hinzufügen',
             85, 45, 20, 20, CConstants.mxStyles.addClassPlusIcon) as MyMxCell;
@@ -166,10 +170,9 @@ export class EnumGraphEditorComponent implements OnInit {
         if (isNullOrUndefined(position)) {
             position = { x: 0, y: 0 };
         }
-        // const geometry = new mxgraph.mxGeometry(position.x, position.y, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT);
 
         const cell = this.graph.insertVertex(
-            this.graph.getDefaultParent(), this.enumDefinition.id, this.enumDefinition.name,
+            this.graph.getDefaultParent(), enumEntry.id, enumEntry.value,
             position.x, position.y, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classEnum
         ) as MyMxCell;
         cell.root = false;
@@ -195,7 +198,7 @@ export class EnumGraphEditorComponent implements OnInit {
         enumEntry.selectable = true;
         enumEntry.value = 'neuer Eintrag';
         this.enumDefinition.enumEntries.push(enumEntry);
-
+        console.log(enumEntry);
         return enumEntry;
     }
 
@@ -237,28 +240,40 @@ export class EnumGraphEditorComponent implements OnInit {
         if (eventCell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
             const newCell = this.createEntryCell();
 
-            const relationship = this.createRelationship(eventCell.id, newCell.id);
+            const relationship = this.createRelationship(eventCell.getParent().id, newCell.id);
 
-            this.createRelationshipCell(relationship.id, eventCell, newCell);
+            this.createRelationshipCell(relationship.id, eventCell.getParent() as MyMxCell, newCell);
 
 
         } else if (eventCell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
             const newCell = this.createEntryCell();
         }
-
-        console.log(eventCell);
     }
 
     private handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
 
     }
 
-    private saveClicked() {
+    saveClicked() {
         console.log("saving");
         this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then(() => {
             console.log("done");
         });
     }
+
+    private setLayout() {
+        const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
+        // const layout: any = new mx.mxFastOrganicLayout(this.graph);
+        layout.levelDistance = 50;
+        layout.alignRanks = true;
+        layout.minEdgeJetty = 50;
+        layout.prefHozEdgeSep = 5;
+        layout.resetEdges = false;
+        layout.edgeRouting = true;
+
+        layout.execute(this.graph.getDefaultParent(), this.rootCell);
+    }
+
 
 
 

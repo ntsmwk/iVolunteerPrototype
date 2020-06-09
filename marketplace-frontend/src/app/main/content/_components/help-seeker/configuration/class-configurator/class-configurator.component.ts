@@ -527,7 +527,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   private setLayout() {
-    const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
+    const layout: any = new mx.mxCompactTreeLayout(this.graph, false, true);
     // const layout: any = new mx.mxFastOrganicLayout(this.graph);
     layout.levelDistance = 50;
     layout.alignRanks = true;
@@ -536,6 +536,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     layout.resetEdges = false;
     layout.edgeRouting = true;
 
+    console.log(layout);
     layout.execute(this.graph.getDefaultParent(), this.rootCell);
 
     for (const edge of this.hiddenEdges) {
