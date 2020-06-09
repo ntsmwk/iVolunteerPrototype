@@ -63,6 +63,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
 
+  layout: any;
+
   graph: mxgraph.mxGraph;
   folding: boolean;
 
@@ -222,9 +224,17 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   loadServerContent() {
-    this.clearEditor();
+    // this.clearEditor();
     this.parseGraphContent();
-    this.setLayout();
+    console.log(this.layout);
+    if (isNullOrUndefined(this.layout)) {
+      console.log("setting layout");
+      this.setLayout();
+      this.executeLayout();
+    } else {
+      console.log("layout already set");
+      this.executeLayout();
+    }
     this.modelUpdated = true;
   }
 
@@ -527,33 +537,40 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   private setLayout() {
-    const layout: any = new mx.mxCompactTreeLayout(this.graph, false, true);
+    this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
     // const layout: any = new mx.mxFastOrganicLayout(this.graph);
-    layout.levelDistance = 50;
-    layout.alignRanks = true;
-    layout.minEdgeJetty = 50;
-    layout.prefHozEdgeSep = 5;
-    layout.resetEdges = false;
-    layout.edgeRouting = true;
+    this.layout.levelDistance = 50;
+    this.layout.alignRanks = true;
+    this.layout.minEdgeJetty = 50;
+    this.layout.prefHozEdgeSep = 5;
+    this.layout.resetEdges = false;
+    this.layout.edgeRouting = true;
+  }
 
-    console.log(layout);
-    layout.execute(this.graph.getDefaultParent(), this.rootCell);
+  private executeLayout() {
+    console.log(this.rootCell);
+    console.log(this.layout);
+
+    this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
 
     for (const edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
     }
 
-    this.resetViewport();
+    // this.resetViewport();
   }
 
   // TODO @Alex fix issue in regards to saved Geometry
   redrawContent(focusCell: MyMxCell) {
     // let savedGeometry = this.saveGeometry();
-    this.clearEditor();
-    this.loadServerContent();
-    // this.restoreGeometry(savedGeometry);
-    // this.setLayout();
-    this.focusOnCell(focusCell);
+
+    //OLD----
+    // this.clearEditor();
+    // this.loadServerContent();
+    // this.focusOnCell(focusCell);
+    //........
+
+    this.executeLayout();
   }
 
   private focusOnCell(focusCell: MyMxCell) {
@@ -725,8 +742,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       for (const he of this.hiddenEdges) {
         he.setVisible(true);
       }
-      this.setLayout();
-      this.focusOnCell(cell);
+      this.executeLayout();
+      // this.focusOnCell(cell);
     }
 
     this.modelUpdated = true;

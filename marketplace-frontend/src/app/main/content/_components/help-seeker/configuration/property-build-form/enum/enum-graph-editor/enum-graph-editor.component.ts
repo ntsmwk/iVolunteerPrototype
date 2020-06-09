@@ -46,6 +46,8 @@ export class EnumGraphEditorComponent implements OnInit {
 
     graph: mxgraph.mxGraph;
     rootCell: MyMxCell;
+    layout: any;
+
     /**
      * ******INITIALIZATION******
      */
@@ -128,6 +130,7 @@ export class EnumGraphEditorComponent implements OnInit {
             });
             this.createGraph();
             this.setLayout();
+            this.executeLayout();
 
         }
     }
@@ -232,7 +235,7 @@ export class EnumGraphEditorComponent implements OnInit {
 
     private handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
         const eventCell = event.getProperty('cell') as MyMxCell;
-
+        console.log(eventCell);
         if (isNullOrUndefined(eventCell)) {
             return;
         }
@@ -248,6 +251,8 @@ export class EnumGraphEditorComponent implements OnInit {
         } else if (eventCell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
             const newCell = this.createEntryCell();
         }
+
+        this.executeLayout();
     }
 
     private handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
@@ -262,18 +267,22 @@ export class EnumGraphEditorComponent implements OnInit {
     }
 
     private setLayout() {
-        const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
-        // const layout: any = new mx.mxFastOrganicLayout(this.graph);
-        layout.levelDistance = 50;
-        layout.alignRanks = true;
-        layout.minEdgeJetty = 50;
-        layout.prefHozEdgeSep = 5;
-        layout.resetEdges = false;
-        layout.edgeRouting = true;
+        if (!isNullOrUndefined(this.rootCell.edges) && this.rootCell.edges.length > 0) {
+            this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
+            // const layout: any = new mx.mxFastOrganicLayout(this.graph);
+            this.layout.levelDistance = 50;
+            this.layout.alignRanks = true;
+            this.layout.minEdgeJetty = 50;
+            this.layout.prefHozEdgeSep = 5;
+            this.layout.resetEdges = false;
+            this.layout.edgeRouting = true;
 
-        layout.execute(this.graph.getDefaultParent(), this.rootCell);
+        }
     }
 
+    private executeLayout() {
+        this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
+    }
 
 
 
