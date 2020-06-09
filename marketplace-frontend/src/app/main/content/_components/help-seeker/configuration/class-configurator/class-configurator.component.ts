@@ -226,13 +226,10 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   loadServerContent() {
     // this.clearEditor();
     this.parseGraphContent();
-    console.log(this.layout);
     if (isNullOrUndefined(this.layout)) {
-      console.log("setting layout");
       this.setLayout();
       this.executeLayout();
     } else {
-      console.log("layout already set");
       this.executeLayout();
     }
     this.modelUpdated = true;
@@ -548,15 +545,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   }
 
   private executeLayout() {
-    console.log(this.rootCell);
-    console.log(this.layout);
-
     this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
 
     for (const edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
     }
-
     // this.resetViewport();
   }
 
