@@ -55,7 +55,7 @@ public class EnumDefinitionController {
 		return enumDefinitionRepository.save(enumConfiguration);
 	}
 		
-	@PutMapping("enum-definition/{id}/save") 
+	@PutMapping("enum-definition/save") 
 	private EnumDefinition replaceEnumDefinition(@RequestBody EnumDefinition enumDefinition) {
 		return enumDefinitionRepository.save(enumDefinition);
 	}

@@ -34,8 +34,8 @@ export class EnumDefinitionService {
         return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description, tenantId]);
     }
 
-    saveEnumDefinition(marketplace: Marketplace, id: string, enumDefinition: EnumDefinition) {
-        return this.http.put(`${marketplace.url}/enum-definition/${id}/save`, enumDefinition);
+    saveEnumDefinition(marketplace: Marketplace, enumDefinition: EnumDefinition) {
+        return this.http.put(`${marketplace.url}/enum-definition/save`, enumDefinition);
     }
 
     deleteEnumDefinition(marketplace: Marketplace, id: string) {
