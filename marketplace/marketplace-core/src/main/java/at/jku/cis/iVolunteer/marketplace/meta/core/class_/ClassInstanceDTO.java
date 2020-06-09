@@ -26,6 +26,7 @@ public class ClassInstanceDTO {
 	private String taskType2;
 	private String taskType3;
 	private String hash;
+	private String marketplaceId;
 
 	// Temp flags for dashboard presentation
 	private boolean published; // flag if published
@@ -47,7 +48,7 @@ public class ClassInstanceDTO {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	
+
 	public Date getTimestamp() {
 		return timestamp;
 	}
@@ -110,6 +111,14 @@ public class ClassInstanceDTO {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+
+	public String getMarketplaceId() {
+		return marketplaceId;
+	}
+
+	public void setMarketplaceId(String marketplaceId) {
+		this.marketplaceId = marketplaceId;
 	}
 
 	public String getName() {

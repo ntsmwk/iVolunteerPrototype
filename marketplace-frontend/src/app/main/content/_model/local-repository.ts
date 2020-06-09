@@ -1,4 +1,4 @@
-import { ClassInstanceDTO } from './meta/class';
+import { ClassInstanceDTO } from "./meta/class";
 
 export class LocalRepository {
   id: string;

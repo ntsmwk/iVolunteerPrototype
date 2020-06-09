@@ -68,30 +68,33 @@
           </button>
         </div>
         <div
-          fxLayout="row"
-          fxLayoutAlign="end center"
+          fxLayout="column"
+          fxLayoutAlign="start   center"
           *ngIf="
             filteredClassInstances.length > 0 &&
             isLocalRepositoryConnected &&
             selectedTenants.length > 0
           "
         >
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="syncAllToLocalRepository()"
-          >
-            Auswahl synchronisieren
-          </button>
+          <div>FreiwilligenPass</div>
+          <div fxLayout="row" fxLayoutAlign="end center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="syncAllToLocalRepository()"
+            >
+              Auswahl synchronisieren
+            </button>
 
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="removeAllFromLocalRepository()"
-            style="margin-left: 20px;"
-          >
-            Auswahl entfernen
-          </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="removeAllFromLocalRepository()"
+              style="margin-left: 20px;"
+            >
+              Auswahl entfernen
+            </button>
+          </div>
         </div>
       </div>
       <div fxLayout="column">
@@ -214,6 +217,15 @@
             >
             </mat-icon>
 
+            <mat-icon
+              *ngIf="isSynced(entry)"
+              (click)="removeOneFromMarketplace(entry)"
+              svgIcon="minus"
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Vom Marketplace entfernen"
+            >
+            </mat-icon>
+
             <div *ngIf="isInLocalRepository(entry)">
               <mat-icon
                 svgIcon="share"
@@ -229,26 +241,44 @@
                 [overlapTrigger]="false"
               >
                 <ng-template matMenuContent>
-                  <button
-                    *ngFor="let tenant of getShareableTenants(entry)"
-                    mat-menu-item
-                    (click)="shareClassInstance(entry, tenant)"
-                  >
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <img
-                        class="avatar"
-                        src="{{
-                          'data:image/png;base64,' + getTenantImage(tenant.id)
-                        }}"
-                      />
-                      <div>{{ tenant.name }}</div>
-                    </div>
-                  </button>
+                  <ng-container *ngIf="isSynced(entry)">
+                    <button
+                      *ngFor="let tenant of getShareableTenants(entry)"
+                      mat-menu-item
+                      (click)="shareClassInstance(entry, tenant)"
+                    >
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <img
+                          class="avatar"
+                          src="{{
+                            'data:image/png;base64,' + getTenantImage(tenant.id)
+                          }}"
+                        />
+                        <div>{{ tenant.name }}</div>
+                      </div>
+                    </button>
+                  </ng-container>
                   <button
                     *ngIf="getShareableTenants(entry).length == 0"
                     mat-menu-item
                   >
                     Bereits an alle geteilt!
+                  </button>
+                  <button
+                    *ngIf="!isSynced(entry)"
+                    mat-menu-item
+                    (click)="shareClassInstance(entry, entry.tenantId)"
+                  >
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <img
+                        class="avatar"
+                        src="{{
+                          'data:image/png;base64,' +
+                            getTenantImage(entry.tenantId)
+                        }}"
+                      />
+                      <div>{{ getTenantName(entry.tenantId) }}</div>
+                    </div>
                   </button>
                 </ng-template>
               </mat-menu>

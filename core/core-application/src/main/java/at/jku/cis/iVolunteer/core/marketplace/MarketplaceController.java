@@ -19,7 +19,8 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 @RequestMapping("marketplace")
 public class MarketplaceController {
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
 
 	@GetMapping
 	public List<Marketplace> findAll() {

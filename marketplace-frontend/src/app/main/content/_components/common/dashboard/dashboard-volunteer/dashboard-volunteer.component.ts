@@ -23,6 +23,7 @@ import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
+import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -32,7 +33,6 @@ HC_venn(Highcharts);
 })
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: Volunteer;
-  marketplace: Marketplace;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -91,6 +91,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private classInstanceService: ClassInstanceService,
     private localRepositoryService: LocalRepositoryService,
     private volunteerService: CoreVolunteerService,
+    private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
     private router: Router,
@@ -141,12 +142,12 @@ export class DashboardVolunteerComponent implements OnInit {
           .findRegisteredMarketplaces(this.volunteer.id)
           .toPromise()
       );
-      this.marketplace = marketplaces[0];
+      let mp = marketplaces[0];
 
       let mpAndSharedClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
-            this.marketplace,
+            mp,
             "TASK",
             this.volunteer.id,
             this.volunteer.subscribedTenants
@@ -209,6 +210,11 @@ export class DashboardVolunteerComponent implements OnInit {
     } else {
       return tenant.image;
     }
+  }
+
+  getTenantName(tenantId: string) {
+    let tenant = this.allTenants.find((t) => t.id === tenantId);
+    return tenant.name;
   }
 
   getIssuerName(tenantId: string) {
@@ -309,6 +315,30 @@ export class DashboardVolunteerComponent implements OnInit {
 
   //---- Local Repository functions end -----//
 
+  async removeOneFromMarketplace(ci: ClassInstanceDTO) {
+    let marketplace = <Marketplace>(
+      await this.marketplaceService.findById(ci.marketplaceId).toPromise()
+    );
+
+    await this.classInstanceService
+      .deleteClassInstance(marketplace, ci.id)
+      .toPromise();
+    this.marketplaceClassInstances.forEach((item, index, array) => {
+      if (item.id === ci.id) {
+        array.splice(index, 1);
+      }
+    });
+
+    this.sharedClassInstances.forEach(async (item, index, array) => {
+      if (ci.name === item.name && ci.timestamp === item.timestamp) {
+        array.splice(index, 1);
+        await this.classInstanceService
+          .deleteClassInstance(marketplace, item.id)
+          .toPromise();
+      }
+    });
+  }
+
   sortData(sort: Sort) {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       const isAsc = sort.direction === "asc";
@@ -378,13 +408,21 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
-    // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
-    let sharedCi = <ClassInstanceDTO>(
-      await this.classInstanceService
-        .createSharedClassInstances(this.marketplace, tenant.id, ci.id)
-        .toPromise()
+    let marketplace = <Marketplace>(
+      await this.marketplaceService.findById(ci.marketplaceId).toPromise()
     );
-    this.sharedClassInstances.push(sharedCi);
+
+    if (ci.tenantId === tenant.id) {
+      // await this.classInstanceService.createNewClassInstance()
+      // this.marketplaceClassInstances.push();
+    } else {
+      let sharedCi = <ClassInstanceDTO>(
+        await this.classInstanceService
+          .createSharedClassInstances(marketplace, tenant.id, ci.id)
+          .toPromise()
+      );
+      this.sharedClassInstances.push(sharedCi);
+    }
 
     // TODO: redraw table
     // Does not work ;)
@@ -395,27 +433,26 @@ export class DashboardVolunteerComponent implements OnInit {
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
-    // TODO: @Philipp: marketplace muss jener von ci und nicht vom volunteer sein, aktuell gibt es nur einen, deswegen ok
+    let marketplace = <Marketplace>(
+      await this.marketplaceService.findById(ci.marketplaceId).toPromise()
+    );
 
-    let deleteCi;
-    this.sharedClassInstances.forEach((shared, index, self) => {
+    this.sharedClassInstances.forEach(async (shared, index, array) => {
       if (
         ci.name === shared.name &&
         ci.timestamp === shared.timestamp &&
         shared.tenantId === tenant.id
       ) {
-        deleteCi = shared;
-        self.splice(index, 1);
+        array.splice(index, 1);
+        await this.classInstanceService
+          .deleteClassInstance(marketplace, shared.id)
+          .toPromise();
       }
     });
-    await this.classInstanceService
-      .deleteClassInstance(this.marketplace, deleteCi.id)
-      .toPromise();
   }
 
   //---- Share functionality end -----//
 
-  // TODO: not used anymore
   calcMetrics() {
     // intersection of CIs on mp and local repo
     let mpAndLocalClassInstances = this.localClassInstances.filter(

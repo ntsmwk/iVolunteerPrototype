@@ -15,9 +15,11 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @Service
 public class ClassInstanceMapper {
 
-	@Autowired private Hasher hasher;
-	@Autowired private DateTimeService dateTimeService;
-	
+	@Autowired
+	private Hasher hasher;
+	@Autowired
+	private DateTimeService dateTimeService;
+
 	List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {
 			ClassInstanceDTO dto = new ClassInstanceDTO();
@@ -29,11 +31,12 @@ public class ClassInstanceMapper {
 			dto.setClassArchetype(ci.getClassArchetype());
 			dto.setImagePath(ci.getImagePath());
 			dto.setTimestamp(ci.getTimestamp());
-
-//			dto.setPublished(ci.isPublished());
-//			dto.setInUserRepository(ci.isInUserRepository());
-//			dto.setInIssuerInbox(ci.isInIssuerInbox());
+			dto.setMarketplaceId(ci.getMarketplaceId());
 			dto.setHash(hasher.generateHash(ci));
+
+			// dto.setPublished(ci.isPublished());
+			// dto.setInUserRepository(ci.isInUserRepository());
+			// dto.setInIssuerInbox(ci.isInIssuerInbox());
 
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
 					.findFirst().orElse(null);
@@ -58,7 +61,8 @@ public class ClassInstanceMapper {
 					try {
 						dto.setDateFrom((Date) startingDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService.parseMultipleDateFormats((String)startingDate.getValues().get(0));
+						Date parsedDate = this.dateTimeService
+								.parseMultipleDateFormats((String) startingDate.getValues().get(0));
 						dto.setDateFrom(parsedDate);
 					}
 				}
@@ -69,9 +73,10 @@ public class ClassInstanceMapper {
 			if (endDate != null) {
 				if (endDate.getValues().size() > 0) {
 					try {
-					dto.setDateTo((Date) endDate.getValues().get(0));
+						dto.setDateTo((Date) endDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService.parseMultipleDateFormats((String)endDate.getValues().get(0));
+						Date parsedDate = this.dateTimeService
+								.parseMultipleDateFormats((String) endDate.getValues().get(0));
 						dto.setDateTo(parsedDate);
 					}
 				}
