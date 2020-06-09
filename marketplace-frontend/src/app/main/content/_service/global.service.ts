@@ -12,6 +12,7 @@ import { HelpseekerService } from "./helpseeker.service";
 import { VolunteerService } from "./volunteer.service";
 import { CoreVolunteerService } from "./core-volunteer.service";
 import { CoreHelpSeekerService } from "./core-helpseeker.service";
+import { timeInterval } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export class GlobalService {
@@ -27,15 +28,16 @@ export class GlobalService {
   ) {}
 
   async getGlobalInfo(): Promise<GlobalInfo> {
-    if (this.globalInfo == null) {
-      console.error("globalinfo == null");
-      await this.initializeGlobalInfo();
+    while (this.globalInfo == null) {
+      setTimeout(async () => {
+        console.error("globalinfo == null");
+        await this.initializeGlobalInfo();
 
-      console.error("await");
-      console.error(this.globalInfo);
-
-      return this.globalInfo;
+        console.error("await");
+        console.error(this.globalInfo);
+      }, 200);
     }
+    return this.globalInfo;
   }
 
   private async initializeGlobalInfo() {
