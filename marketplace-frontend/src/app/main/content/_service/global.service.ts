@@ -28,36 +28,23 @@ export class GlobalService {
 
   async getGlobalInfo(): Promise<GlobalInfo> {
     if (this.globalInfo == null) {
+      console.error("globalinfo == null");
       await this.initializeGlobalInfo();
+
+      console.error("await");
+      console.error(this.globalInfo);
+
       return this.globalInfo;
     }
   }
 
   private async initializeGlobalInfo() {
+    console.error("initialize");
     this.globalInfo = new GlobalInfo();
-    this.globalInfo.participant = <Participant>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
-
-    this.globalInfo.participantRole = <ParticipantRole>(
-      await this.loginService.getLoggedInParticipantRole().toPromise()
-    );
-
-    if (this.globalInfo.participantRole === "HELP_SEEKER") {
-      this.globalInfo.marketplace = <Marketplace>(
-        await this.coreHelpseekerService
-          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-          .toPromise()
-      );
-    } else if (this.globalInfo.participantRole === "VOLUNTEER") {
-      let marketplaces = [];
-      marketplaces = <Marketplace[]>(
-        await this.coreVolunteerService
-          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-          .toPromise()
-      );
-      this.globalInfo.marketplace = marketplaces[0];
-    }
+    this.httpClient
+      .get(`/global`)
+      .toPromise()
+      .then((gi: GlobalInfo) => (this.globalInfo = gi));
   }
 
   clearGlobalInfo() {
