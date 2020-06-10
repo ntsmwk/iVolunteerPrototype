@@ -32,6 +32,8 @@ import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
 import { HttpClient } from "@angular/common/http";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { GlobalService } from "app/main/content/_service/global.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -115,6 +117,7 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private iconRegistry: MatIconRegistry,
+    private globalService: GlobalService,
     private changeDetectorRefs: ChangeDetectorRef
   ) {
     iconRegistry.addSvgIcon(
@@ -141,14 +144,15 @@ export class DashboardVolunteerComponent implements OnInit {
       this.timeout = true;
     });
 
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
-    this.setVolunteerImage();
 
-    this.subscribedTenants = <Tenant[]>(
-      await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
-    );
+    this.volunteer = <Volunteer>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+    this.subscribedTenants = globalInfo.tenants;
+
+    this.setVolunteerImage();
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
@@ -156,13 +160,6 @@ export class DashboardVolunteerComponent implements OnInit {
       this.volunteer
     );
     if (this.isLocalRepositoryConnected) {
-      let marketplaces = <Marketplace[]>(
-        await this.volunteerService
-          .findRegisteredMarketplaces(this.volunteer.id)
-          .toPromise()
-      );
-      this.marketplace = marketplaces[0];
-
       this.mpAndSharedClassInstances = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
