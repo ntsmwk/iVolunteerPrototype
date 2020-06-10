@@ -71,10 +71,6 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
         .getAllClassInstances(this.marketplace, this.tenant.id)
         .toPromise()
     );
-    console.error(globalInfo);
-    console.error(this.participant);
-    console.error(this.marketplace);
-    console.error(this.tenant);
   }
 
   rowSelected(task: Task) {
