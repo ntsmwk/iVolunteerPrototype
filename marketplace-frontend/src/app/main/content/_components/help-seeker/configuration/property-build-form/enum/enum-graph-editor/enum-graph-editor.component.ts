@@ -305,7 +305,6 @@ export class EnumGraphEditorComponent implements OnInit {
             this.layout.prefHozEdgeSep = 5;
             this.layout.resetEdges = false;
             this.layout.edgeRouting = true;
-
         }
     }
 

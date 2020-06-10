@@ -498,8 +498,8 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
       width: '500px',
       minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      height: '418px',
+      minHeight: '418px',
       data: { marketplace: marketplace, helpseeker: helpseeker, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
     });
 
