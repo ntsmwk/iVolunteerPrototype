@@ -84,10 +84,6 @@ export class EnumBuilderComponent implements OnInit {
     }
 
 
-    handleSaveClick() {
-
-    }
-
     handleCancelClick() {
         this.result.emit(undefined);
     }

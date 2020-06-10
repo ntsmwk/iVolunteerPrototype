@@ -228,10 +228,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.parseGraphContent();
     if (isNullOrUndefined(this.layout)) {
       this.setLayout();
-      this.executeLayout();
-    } else {
-      this.executeLayout();
     }
+    this.executeLayout();
     this.modelUpdated = true;
   }
 
@@ -687,7 +685,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       addedClass.classArchetype = parentClassArchetype;
     }
 
-    addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+    addedClass.name = 'Neue Klasse\n(' + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ')';
     addedClass.tenantId = this.helpseeker.tenantId;
     addedClass.properties = [];
 

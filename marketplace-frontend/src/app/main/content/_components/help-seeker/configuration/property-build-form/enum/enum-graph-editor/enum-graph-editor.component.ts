@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { mxgraph } from 'mxgraph';
 import { Router } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
@@ -41,6 +41,7 @@ export class EnumGraphEditorComponent implements OnInit {
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
     @Input() enumDefinition: EnumDefinition;
+    @Output() backClicked: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
 
@@ -114,16 +115,12 @@ export class EnumGraphEditorComponent implements OnInit {
                 // Todo click event   
                 const mouseEvent = evt.getProperty('event');
 
-
                 if (mouseEvent.button === 0) {
                     outer.handleMXGraphLeftClickEvent(evt);
-
                 } else if (mouseEvent.button === 2) {
                     outer.handleMXGraphRightClickEvent(evt);
                 }
-
             });
-
 
             this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
                 // TODO double click event
@@ -242,28 +239,72 @@ export class EnumGraphEditorComponent implements OnInit {
 
         if (eventCell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
             const newCell = this.createEntryCell();
-
             const relationship = this.createRelationship(eventCell.getParent().id, newCell.id);
-
             this.createRelationshipCell(relationship.id, eventCell.getParent() as MyMxCell, newCell);
-
+            this.executeLayout();
 
         } else if (eventCell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
             const newCell = this.createEntryCell();
+            // find parent cell
+            const parentCell = this.graph.getIncomingEdges(eventCell.getParent())[0].source as MyMxCell;
+
+            const relationship = this.createRelationship(parentCell.id, newCell.id);
+            this.createRelationshipCell(relationship.id, parentCell, newCell);
+
+            this.executeLayout();
+
         }
 
-        this.executeLayout();
     }
 
     private handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
 
     }
 
-    saveClicked() {
-        console.log("saving");
+    onSaveClick() {
+        this.updateModel();
         this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then(() => {
-            console.log("done");
+            console.log('done');
         });
+    }
+
+    updateModel() {
+        const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
+        const edges = this.graph.getModel().getChildEdges(this.graph.getDefaultParent());
+
+        console.log('================');
+        console.log(vertices);
+        console.log(this.enumDefinition.enumEntries);
+        console.log('================');
+        console.log(edges);
+        console.log(this.enumDefinition.enumRelationships);
+        console.log('================');
+
+
+        // update head
+        this.enumDefinition.name = this.rootCell.value;
+
+        // update entries
+        const newEnumEntries: EnumEntry[] = [];
+        for (const vertice of vertices) {
+            if (vertice.id === this.rootCell.id) {
+                continue;
+            }
+            const enumEntry = this.enumDefinition.enumEntries.find(e => e.id === vertice.id);
+
+            enumEntry.value = vertice.value;
+            newEnumEntries.push(enumEntry);
+        }
+
+        const newEnumRelationships: EnumRelationship[] = [];
+        for (const edge of edges) {
+            const relationship = this.enumDefinition.enumRelationships.find(r => r.id === edge.id);
+            newEnumRelationships.push(relationship);
+        }
+    }
+
+    onBackClick() {
+        this.backClicked.emit('back');
     }
 
     private setLayout() {
@@ -281,14 +322,13 @@ export class EnumGraphEditorComponent implements OnInit {
     }
 
     private executeLayout() {
-        this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
+        if (isNullOrUndefined(this.layout)) {
+            this.setLayout();
+        }
+
+        if (!isNullOrUndefined(this.layout)) {
+            this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
+        }
     }
-
-
-
-    navigateBack() {
-        window.history.back();
-    }
-
 
 }

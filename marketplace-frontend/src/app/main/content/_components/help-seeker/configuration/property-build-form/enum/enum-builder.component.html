@@ -22,14 +22,14 @@
 
 
   <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"
-    [enumDefinition]="enumDefinition">
+    [enumDefinition]="enumDefinition" (backClicked)="showEditor = false">
   </app-enum-graph-editor>
 
-  <div class="pt-24" style="display: block; position: relative;; bottom: 0px; left: 0px; right: 0px;">
+  <!-- <div class="pt-24" style="display: block; position: relative;; bottom: 0px; left: 0px; right: 0px;">
     <div fxLayout="row" fxLayoutAlign="start end">
-      <button type="submit" mat-raised-button color="primary" (click)="handleSaveClick()">Speichern</button>
+      <button type="submit" mat-raised-button color="primary" (click)="handleSaveClick()">Fertig</button>
       <div class="pl-8"></div>
       <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
     </div>
-  </div>
+  </div> -->
 </div>

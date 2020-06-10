@@ -176,13 +176,13 @@ export enum ClassArchetype {
 export namespace ClassArchetype {
   export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
     switch (classArchetype) {
-      // case 'COMPETENCE': return 'Competence';
-      // case 'TASK': return 'Task';
-      // case 'FUNCTION': return 'Function';
-      // case 'ACHIEVEMENT': return 'Achievement';
-      // case 'ENUM_HEAD': return 'Enum head';
-      // case 'ENUM_ENTRY': return 'Enum entry';
-      // case 'ROOT': return 'Root';
+      case 'COMPETENCE': return 'Kompetenz';
+      case 'TASK': return 'Tätigkeit';
+      case 'FUNCTION': return 'Funktion';
+      case 'ACHIEVEMENT': return 'Verdienst';
+      case 'ENUM_HEAD': return 'Enum head';
+      case 'ENUM_ENTRY': return 'Enum entry';
+      case 'ROOT': return 'Root';
       case 'FLEXPROD':
         return 'Flexprod';
     }
