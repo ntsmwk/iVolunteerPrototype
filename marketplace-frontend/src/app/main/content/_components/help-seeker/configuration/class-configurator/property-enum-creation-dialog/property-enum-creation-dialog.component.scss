@@ -19,7 +19,7 @@
 
 mat-dialog-content {
 
-  height: calc(100% - 52px);
+  height: calc(100% - 52px - 20px);
   max-height: none;
   // height: none;
   // max-height: none;
@@ -32,11 +32,6 @@ mat-dialog-content {
 
 }
 
-mat-dialog-actions {
-  display: none;
-  height: 0;
-  min-height: 0;
-}
 
 
 // :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix  {

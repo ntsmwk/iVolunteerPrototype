@@ -211,6 +211,8 @@ const mxStyles = {
     'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
   inheritance:
     'sideToSideEdgeStyle=1;endArrow=none;startArrow=block;startSize=16;startFill=0;curved=1;html=1;strokeColor=#000e8a;',
+  genericConnection:
+    'sideToSideEdgeStyle=1;endArrow=none;startArrow=none;curved=1;html=1;strokeColor=#000e8a;',
 
   association:
     'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',
