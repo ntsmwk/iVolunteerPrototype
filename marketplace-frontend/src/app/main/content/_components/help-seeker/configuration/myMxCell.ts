@@ -21,8 +21,8 @@ export class MyMxCell extends mx.mxCell {
   property: boolean;
   propertyId?: string;
 
-
-
+  enum: boolean;
+  enumId?: string;
 }
 
 export enum MyMxCellType {

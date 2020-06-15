@@ -15,6 +15,7 @@ import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 declare var require: any;
 
@@ -325,11 +326,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 50);
-    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + classDefinition.enums.length * 20 + 80);
 
     // create properties TODO @Alex Refactor
     let yLocation = 5;
     yLocation = this.addPropertiesToCell(cell, classDefinition.properties, yLocation);
+    yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
     // next icon
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
@@ -371,16 +373,27 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(properties)) {
       for (const p of properties) {
         const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
-
-        if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
-        } else {
-          propertyEntry.cellType = MyMxCellType.PROPERTY;
-        }
+        propertyEntry.cellType = MyMxCellType.PROPERTY;
         propertyEntry.setConnectable(false);
-
+        propertyEntry.property = true;
         propertyEntry.propertyId = p.id;
+        yLocation += 20;
+      }
+    }
+    return yLocation;
+  }
+
+  private addEnumsToCell(cell: MyMxCell, enums: EnumDefinition[], yLocation: number): number {
+    if (!isNullOrUndefined(enums)) {
+      for (const e of enums) {
+        const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+
+        enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
+
+        enumEntry.setConnectable(false);
+
+        enumEntry.enum = true;
+        enumEntry.enumId = e.id;
         yLocation += 20;
       }
     }
@@ -958,6 +971,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deletedClassIds = [];
     this.deletedRelationshipIds = [];
     this.hiddenEdges = [];
+
+    this.clearEditor();
 
     this.loadServerContent();
     // this.collapseGraph();

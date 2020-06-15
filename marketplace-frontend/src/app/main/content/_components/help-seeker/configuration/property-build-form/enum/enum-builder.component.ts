@@ -32,12 +32,16 @@ export class EnumBuilderComponent implements OnInit {
     enumDefinition: EnumDefinition;
     showEditor: boolean;
 
+    loaded: boolean;
+
     ngOnInit() {
 
         this.form = this.formBuilder.group({
             name: this.formBuilder.control('', Validators.required),
             description: this.formBuilder.control('')
         });
+
+        this.loaded = true;
 
     }
 

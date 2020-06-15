@@ -15,7 +15,8 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 	// @Id
 	// private String id;
 	private String name;
-
+	private String description;
+	
 	private List<T> allowedValues = new ArrayList<>();
 
 	private String unit;
@@ -54,6 +55,15 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public List<T> getAllowedValues() {
