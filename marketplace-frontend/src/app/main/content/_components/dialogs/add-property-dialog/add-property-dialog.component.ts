@@ -14,6 +14,8 @@ import {
 } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 export interface AddPropertyDialogData {
   marketplace: Marketplace;
@@ -36,35 +38,61 @@ export class AddPropertyDialogComponent implements OnInit {
     public data: AddPropertyDialogData,
     private propertyDefinitionService: PropertyDefinitionService,
     private classDefinitionService: ClassDefinitionService,
+    private enumDefinitionService: EnumDefinitionService,
     public dialog: MatDialog,
   ) { }
 
   datasource = new MatTableDataSource<PropertyItem>();
   displayedColumns = ['checkbox', 'label', 'type'];
 
-  allPropertyDefinitions: PropertyDefinition<any>[];
+  enumDataSource = new MatTableDataSource<EnumDefinition>();
 
-  loaded: boolean;
+
+  allPropertyDefinitions: PropertyDefinition<any>[];
+  allEnumDefinitions: EnumDefinition[];
+
   selection = new SelectionModel<PropertyItem>(true, []);
+  enumSelection = new SelectionModel<EnumDefinition>(true, []);
+
   initialProperties: PropertyDefinition<any>[];
   disabledProperties: PropertyDefinition<any>[];
+
+  initialEnums: EnumDefinition[];
+  disabledEnums: EnumDefinition[];
+
+  loaded: boolean;
+
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
-    this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
-      this.datasource.data = ret;
-      this.allPropertyDefinitions = ret;
 
-      this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
+    Promise.all([
+      this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
+        this.datasource.data = ret;
+        this.allPropertyDefinitions = ret;
 
-      const parentClassProperties = this.findParentProperties();
-      const parentProperties = ret.filter(p => parentClassProperties.find(q => q.id === p.id));
+        this.initialProperties = ret.filter(p => this.data.classDefinition.properties.find(q => q.id === p.id));
 
-      this.disabledProperties = [];
-      this.disabledProperties.push(...this.initialProperties, ...parentProperties);
+        const parentClassProperties = this.findParentProperties();
+        const parentProperties = ret.filter(p => parentClassProperties.find(q => q.id === p.id));
 
-      this.selection.select(...this.initialProperties);
+        this.disabledProperties = [];
+        this.disabledProperties.push(...this.initialProperties, ...parentProperties);
+
+        this.selection.select(...this.initialProperties);
+      }),
+      this.enumDefinitionService.getAllEnumDefinitionsForTenant(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: EnumDefinition[]) => {
+        this.enumDataSource.data = ret;
+        this.allEnumDefinitions = ret;
+
+        // this.initialEnums = ret.filter(e => this.data.classDefinition.enums.find(f => f.id === e.id));
+
+        // this.enumSelection.select(...this.initialEnums);
+
+
+      })
+    ]).then(() => {
       this.loaded = true;
     });
 
@@ -91,6 +119,11 @@ export class AddPropertyDialogComponent implements OnInit {
     this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
+  applyEnumFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.enumDataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   onRowClick(row: PropertyDefinition<any>) {
     if (this.isDisabled(row)) {
       return;
@@ -103,8 +136,23 @@ export class AddPropertyDialogComponent implements OnInit {
     }
   }
 
+  onEnumRowClick(row: EnumDefinition) {
+    // if (this.isDisabled(row)) {
+    //   return;
+    // }
+
+    if (this.enumSelection.isSelected(row)) {
+      this.enumSelection.deselect(row);
+    } else {
+      this.enumSelection.select(row);
+    }
+  }
+
   onSubmit() {
     const addedProperties = this.selection.selected.filter(p => this.data.classDefinition.properties.findIndex(q => p.id === q.id) === -1);
+    const addedEnums = this.enumSelection.selected;
+    this.data.classDefinition.enums.push(...addedEnums);
+
     this.classDefinitionService
       .getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), null)
       .toPromise()

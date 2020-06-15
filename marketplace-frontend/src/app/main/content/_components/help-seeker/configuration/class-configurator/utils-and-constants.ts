@@ -165,7 +165,7 @@ const propertyTypePalettes = [
   {
     id: PropertyType.ENUM,
     label: PropertyType.getLabelForPropertyType(PropertyType.ENUM),
-    imgPath: '/assets/icons/datatypes/o.png',
+    imgPath: '/assets/icons/datatypes/null.png',
   },
 ];
 
