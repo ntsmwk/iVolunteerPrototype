@@ -1,24 +1,37 @@
-<div>
+<div *ngIf="loaded">
 
   <div *ngIf="!showEditor">
-    <form [formGroup]="form" fxLayout="row" fxLayoutAlign="start center">
-      <mat-form-field style="width: 500px">
-        <input matInput formControlName="name" placeholder="Enum-Bezeichnung *" />
-      </mat-form-field>
+    <form [formGroup]="form">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-form-field style="width: 500px">
+          <input matInput formControlName="name" placeholder="Enum-Bezeichnung *" />
+        </mat-form-field>
 
-      <div class="ml-8">
-        <button mat-raised-button (click)="createClicked()">Erstellen</button>
+        <div class="ml-8">
+          <button mat-raised-button (click)="createClicked()">Erstellen</button>
+        </div>
+
+        <div class="ml-16">
+          <button mat-raised-button (click)="openClicked()">Öffnen</button>
+        </div>
+
+        <div class="ml-16">
+          <button mat-raised-button (click)="deleteClicked()">Löschen</button>
+        </div>
       </div>
-      <div class="ml-16">
-        <button mat-raised-button (click)="openClicked()">Öffnen</button>
-      </div>
-      <div class="ml-16">
-        <button mat-raised-button (click)="deleteClicked()">Löschen</button>
-      </div>
+
+      <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
+        <mat-label>Beschreibung (optional)</mat-label>
+        <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+          matAutosizeMaxRows="3"></textarea>
+      </mat-form-field>
 
     </form>
 
+
+
   </div>
+
 
 
   <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"

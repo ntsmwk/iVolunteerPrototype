@@ -17,8 +17,12 @@
   </app-builder-container>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
-    Schließen
-  </button>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+  <div></div>
+  <div>
+    <button type="button" mat-raised-button color="primary" (click)="handleCloseClick()">
+      Fertig
+    </button>
+  </div>
+  <div></div>
 </mat-dialog-actions>
