@@ -63,6 +63,6 @@ export const navigation_helpseeker = [
     title: "Property-Baukasten",
     type: "item",
     icon: "hammer-solid",
-    url: "/main/property-builder/",
+    url: "/main/properties/all/"
   },
 ];
