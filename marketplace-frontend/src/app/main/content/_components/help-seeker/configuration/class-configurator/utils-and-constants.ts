@@ -189,7 +189,7 @@ const mxStyles = {
     'fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
   propertyEnum:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
-    'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;align=left;html=1;overflow=hidden;' +
+    'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#FFFFFF;fontSize=14;align=left;html=1;overflow=hidden;' +
     'portConstraint=eastwest',
 
   // Icons
