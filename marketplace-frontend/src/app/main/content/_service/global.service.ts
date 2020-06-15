@@ -8,7 +8,6 @@ import { Volunteer } from "../_model/volunteer";
 import { MarketplaceService } from "./core-marketplace.service";
 import { LoginService } from "./login.service";
 import { Marketplace } from "../_model/marketplace";
-import { HelpseekerService } from "./helpseeker.service";
 import { VolunteerService } from "./volunteer.service";
 import { CoreVolunteerService } from "./core-volunteer.service";
 import { CoreHelpSeekerService } from "./core-helpseeker.service";
