@@ -18,7 +18,7 @@ import { PropertyOrEnumCreationDialogModule } from 'app/main/content/_components
 import { NewMatchingDialogModule } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.module';
 import { OpenMatchingDialogModule } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.module';
 import { DeleteMatchingDialogModule } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.module';
-import { OpenEnumDefinitionDialogModule } from 'app/main/content/_components/help-seeker/configuration/property-build-form/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.module';
+import { OpenEnumDefinitionDialogModule } from 'app/main/content/_components/help-seeker/configuration/property-enum-configurator/builder/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.module';
 import { DialogFactoryDirective } from './dialog-factory.component';
 import { TextFieldDialogComponent } from '../text-field-dialog/text-field-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -38,7 +38,7 @@ import { PropertyOrEnumCreationDialogComponent } from 'app/main/content/_compone
 import { NewMatchingDialogComponent } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/new-dialog/new-dialog.component';
 import { OpenMatchingDialogComponent } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/open-dialog/open-dialog.component';
 import { DeleteMatchingDialogComponent } from 'app/main/content/_components/help-seeker/configuration/matching-configurator/delete-dialog/delete-dialog.component';
-import { OpenEnumDefinitionDialogComponent } from 'app/main/content/_components/help-seeker/configuration/property-build-form/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
+import { OpenEnumDefinitionDialogComponent } from 'app/main/content/_components/help-seeker/configuration/property-enum-configurator/builder/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
 
 
 @NgModule({

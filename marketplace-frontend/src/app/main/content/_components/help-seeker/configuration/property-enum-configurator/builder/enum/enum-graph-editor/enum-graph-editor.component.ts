@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
-import { MyMxCell, MyMxCellType } from '../../../myMxCell';
+import { MyMxCell, MyMxCellType } from '../../../../myMxCell';
 import { EnumDefinition, EnumEntry, EnumRelationship } from 'app/main/content/_model/meta/enum';
-import { CConstants } from '../../../class-configurator/utils-and-constants';
+import { CConstants } from '../../../../class-configurator/utils-and-constants';
 import { isNullOrUndefined } from 'util';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
 

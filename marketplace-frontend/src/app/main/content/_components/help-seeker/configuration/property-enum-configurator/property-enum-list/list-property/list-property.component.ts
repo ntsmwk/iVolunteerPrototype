@@ -2,23 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { fuseAnimations } from '@fuse/animations';
-import { LoginService } from '../../../../_service/login.service';
-import { CoreHelpSeekerService } from '../../../../_service/core-helpseeker.service';
-import { ParticipantRole } from '../../../../_model/participant';
-import { Marketplace } from '../../../../_model/marketplace';
+import { LoginService } from '../../../../../../_service/login.service';
+import { CoreHelpSeekerService } from '../../../../../../_service/core-helpseeker.service';
+import { ParticipantRole } from '../../../../../../_model/participant';
+import { Marketplace } from '../../../../../../_model/marketplace';
 import { isNullOrUndefined } from 'util';
-import { PropertyDefinitionService } from '../../../../_service/meta/core/property/property-definition.service';
-import { CoreFlexProdService } from '../../../../_service/core-flexprod.service';
-import { Helpseeker } from '../../../../_model/helpseeker';
+import { PropertyDefinitionService } from '../../../../../../_service/meta/core/property/property-definition.service';
+import { CoreFlexProdService } from '../../../../../../_service/core-flexprod.service';
+import { Helpseeker } from '../../../../../../_model/helpseeker';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 
 @Component({
-  selector: 'app-property-list',
-  templateUrl: './property-list.component.html',
-  styleUrls: ['./property-list.component.scss'],
+  selector: 'app-property-definition-list',
+  templateUrl: './list-property.component.html',
+  styleUrls: ['./list-property.component.scss'],
   animations: fuseAnimations
 })
-export class PropertyListComponent implements OnInit {
+export class PropertyDefinitionListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<PropertyDefinition<any>>();
   displayedColumns = ['id', 'name', 'defaultValue', 'kind', 'actions'];

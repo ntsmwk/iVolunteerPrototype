@@ -30,7 +30,7 @@ import {
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
-import { OpenEnumDefinitionDialogComponent, OpenEnumDefinitionDialogData } from 'app/main/content/_components/help-seeker/configuration/property-build-form/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
+import { OpenEnumDefinitionDialogComponent, OpenEnumDefinitionDialogData } from 'app/main/content/_components/help-seeker/configuration/property-enum-configurator/builder/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'

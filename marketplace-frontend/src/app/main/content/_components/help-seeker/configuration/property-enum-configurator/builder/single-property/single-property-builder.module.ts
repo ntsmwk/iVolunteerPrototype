@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SinglePropertyBuilderComponent } from './single-property-builder.component';
-import { FuseTruncatePipeModule } from '../../../../../_pipe/truncate-pipe.module';
+import { FuseTruncatePipeModule } from '../../../../../../_pipe/truncate-pipe.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule, MatOptionModule, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
