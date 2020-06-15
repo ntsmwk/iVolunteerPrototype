@@ -972,6 +972,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deletedRelationshipIds = [];
     this.hiddenEdges = [];
 
+    this.clearEditor();
+
     this.loadServerContent();
     // this.collapseGraph();
   }
