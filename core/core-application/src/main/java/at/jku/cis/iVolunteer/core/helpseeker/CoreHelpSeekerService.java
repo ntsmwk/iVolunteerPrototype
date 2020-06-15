@@ -56,7 +56,6 @@ public class CoreHelpSeekerService {
 
 	public List<CoreHelpSeeker> getAllCoreHelpSeekers(String tenantId) {
 		
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
