@@ -9,17 +9,17 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { PropertyDefinitionListComponent } from './list-property.component';
+import { PropertyEnumListComponent } from './property-enum-list.component';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 
 
 const routes: Route[] = [
-  { path: '', component: PropertyDefinitionListComponent }
+  { path: '', component: PropertyEnumListComponent }
 ];
 
 @NgModule({
   declarations: [
-    PropertyDefinitionListComponent
+    PropertyEnumListComponent
   ],
 
   imports: [
@@ -41,4 +41,4 @@ const routes: Route[] = [
 
 })
 
-export class PropertyDefinitionListModule { }
+export class PropertyEnumListModule { }
