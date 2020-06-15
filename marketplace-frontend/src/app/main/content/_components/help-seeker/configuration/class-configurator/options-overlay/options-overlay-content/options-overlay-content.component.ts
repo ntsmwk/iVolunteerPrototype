@@ -97,8 +97,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
 
     removeClicked() {
         this.dialogFactory.openRemoveDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: RemoveDialogData) => {
-            if (!isNullOrUndefined) {
+            if (!isNullOrUndefined(ret)) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
+                this.inputData.classDefinition.enums = ret.classDefinition.enums;
+                this.updatePropertiesAndEnumsList();
             }
         });
 
