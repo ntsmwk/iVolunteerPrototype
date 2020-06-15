@@ -220,6 +220,10 @@ public class ClassInstanceController {
 		ciNew.setTabId(ci.getTabId());
 		ciNew.setClassDefinitionId(ci.getClassDefinitionId());
 		ciNew.setTimestamp(ci.getTimestamp());
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 1236f64748b0d77baa27887494823ac7283b7512
 		ciNew.setTenantId(tenantId);
 
 		return this.classInstanceRepository.save(ciNew);

@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.core.helpseeker;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +52,10 @@ public class CoreHelpSeekerService {
 		coreHelpSeeker.setTenantId(tenantId);
 		coreHelpSeeker = coreHelpSeekerRepository.save(coreHelpSeeker);
 		return coreHelpSeeker;
+	}
+
+	public List<CoreHelpSeeker> getAllCoreHelpSeekers(String tenantId) {
+		
+		return null;
 	}
 }

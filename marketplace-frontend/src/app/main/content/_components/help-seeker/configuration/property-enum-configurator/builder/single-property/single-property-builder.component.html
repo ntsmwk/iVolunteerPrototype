@@ -93,7 +93,6 @@
                 matTooltipPosition="above" aria-label="Remove Value">delete</mat-icon>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -102,14 +101,19 @@
         <mat-icon>add</mat-icon>
         <div>Hinzufügen</div>
       </div>
-
     </fieldset>
-
   </div>
+
+
+  <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
+    <mat-label>Beschreibung (optional)</mat-label>
+    <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+      matAutosizeMaxRows="3"></textarea>
+  </mat-form-field>
 
   <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
     <button type="submit" mat-raised-button color="primary">Speichern</button>
-    <div class="pl-8"></div>
-    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
+    <!-- <div class="pl-8"></div>
+    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button> -->
   </div>
 </form>

@@ -11,25 +11,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
-import { PropertyListComponent } from './property-list.component';
 
-
-
-import { FuseTruncatePipeModule } from "../../../../_pipe/truncate-pipe.module";
+import { EnumDefinitionListComponent } from './list-enum.component';
+import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 
 
 const routes: Route[] = [
-  {path: '', component: PropertyListComponent}
+  { path: '', component: EnumDefinitionListComponent }
 ];
 
 @NgModule({
   declarations: [
-    PropertyListComponent   
+    EnumDefinitionListComponent
   ],
 
   imports: [
     RouterModule.forChild(routes),
-  
+
     MatCommonModule,
     MatCardModule,
     MatTableModule,
@@ -43,7 +41,7 @@ const routes: Route[] = [
     FuseSharedModule,
     FuseTruncatePipeModule
   ]
-  
+
 })
 
-export class PropertyListModule { }
+export class EnumDefinitionListModule { }

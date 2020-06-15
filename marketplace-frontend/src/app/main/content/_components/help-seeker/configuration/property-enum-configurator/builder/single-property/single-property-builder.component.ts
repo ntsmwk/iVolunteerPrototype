@@ -76,6 +76,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
       name: this.formBuilder.control('', [Validators.required, propertyNameUniqueValidator(this.allPropertyDefinitions, this.model)]),
       type: this.formBuilder.control('', Validators.required),
       allowedValues: this.formBuilder.array([]),
+      description: this.formBuilder.control('')
     });
   }
 
@@ -174,6 +175,8 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
     property.propertyConstraints = [];
     property.type = this.form.get('type').value;
+
+    property.description = this.form.get('description').value;
 
     return property;
   }

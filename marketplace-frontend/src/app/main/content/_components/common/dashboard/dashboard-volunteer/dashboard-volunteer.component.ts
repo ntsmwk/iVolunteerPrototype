@@ -25,7 +25,8 @@ import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { DialogFactoryDirective } from "app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component";
-import { filter } from "rxjs/operators";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { GlobalService } from "app/main/content/_service/global.service";
 HC_venn(Highcharts);
 
 @Component({
@@ -36,7 +37,7 @@ HC_venn(Highcharts);
 })
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: Volunteer;
-  mp: Marketplace;
+  marketplace: Marketplace;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -101,7 +102,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private router: Router,
     private iconRegistry: MatIconRegistry,
     private changeDetectorRefs: ChangeDetectorRef,
-    private dialogFactory: DialogFactoryDirective
+    private dialogFactory: DialogFactoryDirective,
+    private globalService: GlobalService
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -131,14 +133,15 @@ export class DashboardVolunteerComponent implements OnInit {
       this.timeout = true;
     });
 
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
-    this.setVolunteerImage();
 
-    this.subscribedTenants = <Tenant[]>(
-      await this.tenantService.findByVolunteerId(this.volunteer.id).toPromise()
-    );
+    this.volunteer = <Volunteer>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+    this.subscribedTenants = globalInfo.tenants;
+
+    this.setVolunteerImage();
 
     this.allTenants = <Tenant[]>await this.tenantService.findAll().toPromise();
 
@@ -151,12 +154,12 @@ export class DashboardVolunteerComponent implements OnInit {
           .findRegisteredMarketplaces(this.volunteer.id)
           .toPromise()
       );
-      this.mp = marketplaces[0];
+      this.marketplace = marketplaces[0];
 
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
-            this.mp,
+            this.marketplace,
             "TASK",
             this.volunteer.id,
             this.volunteer.subscribedTenants
@@ -183,7 +186,7 @@ export class DashboardVolunteerComponent implements OnInit {
       // for each marketplaceId call classInstanceService to get CI from correct marketplace...
       this.localClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
-          .mapClassInstancesToDTOs(this.mp, this.localClassInstances)
+          .mapClassInstancesToDTOs(this.marketplace, this.localClassInstances)
           .toPromise()
       );
 
@@ -318,8 +321,8 @@ export class DashboardVolunteerComponent implements OnInit {
     ) {
       this.dialogFactory
         .confirmationDialog(
-          "Wirklich löschen?",
-          "Damit geht der Eintrag unwiderruflich verloren."
+          "Wirklich entfernen?",
+          "Der Eintrag befindet sich nur mehr in Ihrem lokalen Freiwilligenpass, löschen Sie den Eintrag würde er unwiderruflich verloren gehen."
         )
         .then(async (ret: boolean) => {
           if (ret) {
@@ -370,7 +373,7 @@ export class DashboardVolunteerComponent implements OnInit {
     // for each marketplaceId call classInstanceService to get CI from correct marketplace...
     let missingCis = <ClassInstance[]>await this.classInstanceService
       .getClassInstancesById(
-        this.mp,
+        this.marketplace,
         missingCiDTOs.map((c) => c.id)
       )
       .toPromise();
@@ -394,7 +397,7 @@ export class DashboardVolunteerComponent implements OnInit {
     let filteredClassInstances = <ClassInstance[]>(
       await this.classInstanceService
         .getClassInstancesById(
-          this.mp,
+          this.marketplace,
           this.filteredClassInstanceDTOs.map((c) => c.id)
         )
         .toPromise()

@@ -8,13 +8,13 @@ import {
   MatNativeDateModule,
   MatFormFieldModule,
   MatInputModule,
-  MatTableModule
+  MatTableModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 
 const routes: Route[] = [
   { path: "", component: FuseTenantFormComponent },
-  { path: ":tenantId", component: FuseTenantFormComponent }
+  { path: ":tenantId", component: FuseTenantFormComponent },
 ];
 
 @NgModule({
@@ -29,9 +29,9 @@ const routes: Route[] = [
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    FuseSharedModule
+    FuseSharedModule,
   ],
 
-  providers: []
+  providers: [],
 })
 export class FuseTenantFormModule {}

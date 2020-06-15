@@ -1,0 +1,48 @@
+<div *ngIf="loaded">
+
+  <div *ngIf="!showEditor">
+    <form [formGroup]="form">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-form-field style="width: 500px">
+          <input matInput formControlName="name" placeholder="Enum-Bezeichnung *" />
+        </mat-form-field>
+
+        <div class="ml-8">
+          <button mat-raised-button (click)="createClicked()">Erstellen</button>
+        </div>
+
+        <div class="ml-16">
+          <button mat-raised-button (click)="openClicked()">Öffnen</button>
+        </div>
+
+        <div class="ml-16">
+          <button mat-raised-button (click)="deleteClicked()">Löschen</button>
+        </div>
+      </div>
+
+      <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
+        <mat-label>Beschreibung (optional)</mat-label>
+        <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+          matAutosizeMaxRows="3"></textarea>
+      </mat-form-field>
+
+    </form>
+
+
+
+  </div>
+
+
+
+  <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"
+    [enumDefinition]="enumDefinition" (backClicked)="showEditor = false">
+  </app-enum-graph-editor>
+
+  <!-- <div class="pt-24" style="display: block; position: relative;; bottom: 0px; left: 0px; right: 0px;">
+    <div fxLayout="row" fxLayoutAlign="start end">
+      <button type="submit" mat-raised-button color="primary" (click)="handleSaveClick()">Fertig</button>
+      <div class="pl-8"></div>
+      <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
+    </div>
+  </div> -->
+</div>

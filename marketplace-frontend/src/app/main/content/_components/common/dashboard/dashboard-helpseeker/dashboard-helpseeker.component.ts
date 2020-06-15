@@ -10,6 +10,8 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ImageService } from "app/main/content/_service/image.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { GlobalService } from "app/main/content/_service/global.service";
 
 @Component({
   selector: "dashboard-helpseeker",
@@ -26,18 +28,17 @@ export class DashboardHelpSeekerComponent implements OnInit {
     private router: Router,
     private tenantService: TenantService,
     private sanitizer: DomSanitizer,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private globalService: GlobalService
   ) {}
 
   async ngOnInit() {
-    this.participant = <Participant>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
-    this.tenant = <Tenant>(
-      await this.tenantService
-        .findById((<Helpseeker>this.participant).tenantId)
-        .toPromise()
-    );
+
+    this.participant = globalInfo.participant;
+    this.tenant = globalInfo.tenants[0];
   }
 
   private isFF() {

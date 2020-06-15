@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
+import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { MatTableDataSource } from "@angular/material";
 
 @Component({
   selector: "tenant-form",
@@ -18,6 +20,9 @@ export class FuseTenantFormComponent implements OnInit {
   tenantForm: FormGroup;
   tenant: Tenant;
   marketplaceId: string;
+
+  dataSource = new MatTableDataSource<Helpseeker>();
+  displayedColumns = ["name", "actions"];
 
   constructor(
     formBuilder: FormBuilder,
@@ -74,5 +79,8 @@ export class FuseTenantFormComponent implements OnInit {
       .then(() =>
         this.router.navigate([`/main/marketplace-form/${this.marketplaceId}`])
       );
+  }
+  navigateToHelpSeekerForm(userId: string) {
+    // TODO
   }
 }

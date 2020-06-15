@@ -24,12 +24,13 @@ import { isNullOrUndefined } from 'util';
 import { ChangeIconDialogComponent, ChangeIconDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/icon-dialog/icon-dialog.component';
 import {
   ClassInstanceFormPreviewDialogComponent, ClassInstanceFormPreviewDialogData
-} from "app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component";
+} from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-dialog/form-preview-dialog.component';
 import {
   ClassInstanceFormPreviewExportDialogComponent, ClassInstanceFormPreviewExportDialogData
 } from 'app/main/content/_components/help-seeker/configuration/class-instances/form-preview-export-dialog/form-preview-export-dialog.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { PropertyOrEnumCreationDialogComponent, PropertyOrEnumCreationDialogData } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
+import { OpenEnumDefinitionDialogComponent, OpenEnumDefinitionDialogData } from 'app/main/content/_components/help-seeker/configuration/property-enum-configurator/builder/enum/enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
 
 @Directive({
   selector: 'app-dialog-factory'
@@ -497,8 +498,8 @@ export class DialogFactoryDirective {
     const dialogRef = this.dialog.open(AddPropertyDialogComponent, {
       width: '500px',
       minWidth: '500px',
-      height: '400px',
-      minHeight: '400px',
+      height: '418px',
+      minHeight: '418px',
       data: { marketplace: marketplace, helpseeker: helpseeker, classDefinition: classDefinition, allClassDefinitions: allClassDefinitions, allRelationships: allRelationships }
     });
 
@@ -532,6 +533,8 @@ export class DialogFactoryDirective {
       return returnValue;
     });
   }
+
+
 
 
 }

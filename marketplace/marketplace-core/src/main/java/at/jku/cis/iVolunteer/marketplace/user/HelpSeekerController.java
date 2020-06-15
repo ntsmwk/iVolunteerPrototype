@@ -17,17 +17,23 @@ import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 public class HelpSeekerController {
 
 	@Autowired private HelpSeekerRepository helpSeekerRepository;
+//
+//	@GetMapping("/helpseeker/{id}")
+//	public HelpSeeker findById(@PathVariable("id") String id) {
+//		return helpSeekerRepository.findOne(id);
+//	}
+//
+//	@GetMapping("/helpseeker")
+//	public List<HelpSeeker> findAll() {
+//		return helpSeekerRepository.findAll();
+//	}
+//
+//	@GetMapping("/helpseeker")
+//	public List<HelpSeeker> findByTenantId() {
+//		return helpSeekerRepository.findAll();
+//	}
 
-	@GetMapping("/helpseeker/{id}")
-	public HelpSeeker findById(@PathVariable("id") String id) {
-		return helpSeekerRepository.findOne(id);
-	}
-	
-	@GetMapping("/helpseeker")
-	public List<HelpSeeker> findAll() {
-		return helpSeekerRepository.findAll();
-	}
-
+//	MWE: Need this for user registration!
 	@PostMapping("/helpseeker")
 	public HelpSeeker registerHelpSeeker(@RequestBody HelpSeeker helpSeeker) {
 		if (helpSeekerRepository.findOne(helpSeeker.getId()) != null) {

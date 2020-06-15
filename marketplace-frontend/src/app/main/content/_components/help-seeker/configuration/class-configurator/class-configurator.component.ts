@@ -15,6 +15,7 @@ import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 
 declare var require: any;
 
@@ -62,6 +63,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
 
   @ViewChild('graphContainer', { static: true }) graphContainer: ElementRef;
   @ViewChild('rightSidebarContainer', { static: true }) rightSidebarContainer: ElementRef;
+
+  layout: any;
 
   graph: mxgraph.mxGraph;
   folding: boolean;
@@ -222,9 +225,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   loadServerContent() {
-    this.clearEditor();
+    // this.clearEditor();
     this.parseGraphContent();
-    this.setLayout();
+    if (isNullOrUndefined(this.layout)) {
+      this.setLayout();
+    }
+    this.executeLayout();
     this.modelUpdated = true;
   }
 
@@ -320,11 +326,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 50);
-    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + classDefinition.enums.length * 20 + 80);
 
     // create properties TODO @Alex Refactor
     let yLocation = 5;
     yLocation = this.addPropertiesToCell(cell, classDefinition.properties, yLocation);
+    yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
     // next icon
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
@@ -366,16 +373,27 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (!isNullOrUndefined(properties)) {
       for (const p of properties) {
         const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
-
-        if (p.type === PropertyType.ENUM) {
-          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
-          propertyEntry.setStyle(CConstants.mxStyles.propertyEnum);
-        } else {
-          propertyEntry.cellType = MyMxCellType.PROPERTY;
-        }
+        propertyEntry.cellType = MyMxCellType.PROPERTY;
         propertyEntry.setConnectable(false);
-
+        propertyEntry.property = true;
         propertyEntry.propertyId = p.id;
+        yLocation += 20;
+      }
+    }
+    return yLocation;
+  }
+
+  private addEnumsToCell(cell: MyMxCell, enums: EnumDefinition[], yLocation: number): number {
+    if (!isNullOrUndefined(enums)) {
+      for (const e of enums) {
+        const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+
+        enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
+
+        enumEntry.setConnectable(false);
+
+        enumEntry.enum = true;
+        enumEntry.enumId = e.id;
         yLocation += 20;
       }
     }
@@ -527,74 +545,78 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
 
   private setLayout() {
-    const layout: any = new mx.mxCompactTreeLayout(this.graph, false, false);
+    this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
     // const layout: any = new mx.mxFastOrganicLayout(this.graph);
-    layout.levelDistance = 50;
-    layout.alignRanks = true;
-    layout.minEdgeJetty = 50;
-    layout.prefHozEdgeSep = 5;
-    layout.resetEdges = false;
-    layout.edgeRouting = true;
+    this.layout.levelDistance = 50;
+    this.layout.alignRanks = true;
+    this.layout.minEdgeJetty = 50;
+    this.layout.prefHozEdgeSep = 5;
+    this.layout.resetEdges = false;
+    this.layout.edgeRouting = true;
+  }
 
-    layout.execute(this.graph.getDefaultParent(), this.rootCell);
+  private executeLayout() {
+    this.layout.execute(this.graph.getDefaultParent(), this.rootCell);
 
     for (const edge of this.hiddenEdges) {
       this.graph.getModel().setVisible(this.graph.getModel().getCell(edge.id), false);
     }
-
-    this.resetViewport();
+    // this.resetViewport();
   }
 
   // TODO @Alex fix issue in regards to saved Geometry
   redrawContent(focusCell: MyMxCell) {
     // let savedGeometry = this.saveGeometry();
-    this.clearEditor();
-    this.loadServerContent();
-    // this.restoreGeometry(savedGeometry);
-    // this.setLayout();
-    this.focusOnCell(focusCell);
+
+    //OLD----
+    // this.clearEditor();
+    // this.loadServerContent();
+    // this.focusOnCell(focusCell);
+    //........
+
+    this.executeLayout();
   }
 
-  private focusOnCell(focusCell: MyMxCell) {
-    const bounds = this.graph.getView().getGraphBounds();
-    const scale = this.graph.getView().getScale();
+  // private focusOnCell(focusCell: MyMxCell) {
+  //   const bounds = this.graph.getView().getGraphBounds();
+  //   const scale = this.graph.getView().getScale();
 
-    bounds.y *= -1;
-    bounds.x *= -1;
+  //   bounds.y *= -1;
+  //   bounds.x *= -1;
 
-    this.graph.getView().setScale(scale);
-    if (!isNullOrUndefined(focusCell)) {
-      this.graph.scrollCellToVisible(this.graph.getModel().getCell(focusCell.id), true);
-    }
-  }
+  //   this.graph.getView().setScale(scale);
+  //   if (!isNullOrUndefined(focusCell)) {
+  //     this.graph.scrollCellToVisible(this.graph.getModel().getCell(focusCell.id), true);
+  //   }
+  // }
 
   // TODO
-  private saveGeometry(): { id: string, geometry: mxgraph.mxGeometry }[] {
-    const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
-    const savedGeometry: { id: string, geometry: mxgraph.mxGeometry }[] = [];
-    for (const cell of cells) {
-      savedGeometry.push({ id: cell.id, geometry: cell.geometry });
-    }
-    return savedGeometry;
-  }
+  // private saveGeometry(): { id: string, geometry: mxgraph.mxGeometry }[] {
+  //   const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
+  //   const savedGeometry: { id: string, geometry: mxgraph.mxGeometry }[] = [];
+  //   for (const cell of cells) {
+  //     savedGeometry.push({ id: cell.id, geometry: cell.geometry });
+  //   }
+  //   return savedGeometry;
+  // }
 
   // TODO
-  private restoreGeometry(savedGeometries: { id: string, geometry: mxgraph.mxGeometry }[]) {
-    const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
+  // private restoreGeometry(savedGeometries: { id: string, geometry: mxgraph.mxGeometry }[]) {
+  //   const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
 
-    for (const cell of cells) {
-      const geometry = savedGeometries.find((g: any) => {
-        return g.id === cell.id;
-      });
+  //   for (const cell of cells) {
+  //     const geometry = savedGeometries.find((g: any) => {
+  //       return g.id === cell.id;
+  //     });
 
-      // keep width and height if number of properties changed
-      const width = cell.geometry.width;
-      const height = cell.geometry.height;
-      cell.setGeometry(geometry.geometry);
-      cell.geometry.width = width;
-      cell.geometry.height = height;
-    }
-  }
+  //     // keep width and height if number of properties changed
+  //     const width = cell.geometry.width;
+  //     const height = cell.geometry.height;
+  //     cell.setGeometry(geometry.geometry);
+  //     cell.geometry.width = width;
+  //     cell.geometry.height = height;
+  //   }
+  // }
 
   /**
    * ******EVENT HANDLING******
@@ -602,14 +624,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
   handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
     const cell: MyMxCell = event.getProperty('cell');
 
-    // ZOOMSCALE
-    // const scale = this.graph.view.getScale();
-    // const translate = this.graph.view.getTranslate();
-    // const bounds = this.graph.getGraphBounds();
-
     if (!isNullOrUndefined(cell)) {
       const parent = cell.getParent();
-
 
       if (cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
         const ret = this.addClassWithRelationship(cell, this.graph.getIncomingEdges(parent)[0].source.id);
@@ -623,7 +639,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
 
-        // this.updateModel();
         if (!this.quickEditMode) {
           this.redrawContent(classCell as MyMxCell);
         }
@@ -641,7 +656,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         const relationshipCell = this.insertRelationshipIntoGraph(addedRelationship, new mx.mxPoint(0, 0), false);
         this.relationships.push(addedRelationship);
 
-        //  this.updateModel();
         if (!this.quickEditMode) {
           this.redrawContent(classCell as MyMxCell);
         }
@@ -650,10 +664,6 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       if (cell.cellType === MyMxCellType.OPTIONS_ICON) {
         this.openOverlay(<MyMxCell>cell.getParent(), event);
       }
-
-      // this.graph.view.scaleAndTranslate(scale, translate.x, translate.y);
-      // bounds.x = bounds.x - 20;
-      // this.graph.view.setGraphBounds(bounds);
 
       // this.modelUpdated = true;
     }
@@ -670,13 +680,11 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     if (parentClassArchetype === ClassArchetype.ENUM_HEAD || parentClassArchetype === ClassArchetype.ENUM_ENTRY) {
       addedClass.classArchetype = ClassArchetype.ENUM_ENTRY;
 
-      // } else if (parentClassArchetype.endsWith('_HEAD')) {
-      //   addedClass.classArchetype = ClassArchetype[parentClassArchetype.substr(0, parentClassArchetype.length - 5)];
     } else {
       addedClass.classArchetype = parentClassArchetype;
     }
 
-    addedClass.name = ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype);
+    addedClass.name = 'Neue Klasse\n(' + ClassArchetype.getClassArchetypeLabel(addedClass.classArchetype) + ')';
     addedClass.tenantId = this.helpseeker.tenantId;
     addedClass.properties = [];
 
@@ -724,8 +732,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
       for (const he of this.hiddenEdges) {
         he.setVisible(true);
       }
-      this.setLayout();
-      this.focusOnCell(cell);
+      this.executeLayout();
+      // this.focusOnCell(cell);
     }
 
     this.modelUpdated = true;
@@ -963,6 +971,8 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.deletedClassIds = [];
     this.deletedRelationshipIds = [];
     this.hiddenEdges = [];
+
+    this.clearEditor();
 
     this.loadServerContent();
     // this.collapseGraph();

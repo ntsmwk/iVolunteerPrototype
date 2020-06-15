@@ -6,7 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCommonModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatIconModule, MatInputModule, MatFormFieldModule, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
 import { PropertyOrEnumCreationDialogModule } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.module';
 import {
   PropertyOrEnumCreationDialogComponent
@@ -21,6 +21,7 @@ import {
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
+    MatTabsModule,
 
     MatFormFieldModule,
     MatInputModule,
