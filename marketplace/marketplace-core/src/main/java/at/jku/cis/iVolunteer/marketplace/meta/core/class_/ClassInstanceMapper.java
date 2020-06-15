@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
+import java.security.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,11 +61,18 @@ public class ClassInstanceMapper {
 			if (startingDate != null) {
 				if (startingDate.getValues().size() > 0) {
 					try {
+						// TODO Philipp (timestamp data long...)
 						dto.setDateFrom((Date) startingDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService
-								.parseMultipleDateFormats((String) startingDate.getValues().get(0));
-						dto.setDateFrom(parsedDate);
+						try {
+							Date parsedDate = this.dateTimeService
+									.parseMultipleDateFormats((String) startingDate.getValues().get(0));
+							dto.setDateFrom(parsedDate);
+						} catch (Exception f) {
+							Instant instant = Instant.ofEpochMilli((Long) startingDate.getValues().get(0));
+							Date d = Date.from(instant);
+							dto.setDateFrom(d);
+						}
 					}
 				}
 			}
@@ -75,9 +84,15 @@ public class ClassInstanceMapper {
 					try {
 						dto.setDateTo((Date) endDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService
-								.parseMultipleDateFormats((String) endDate.getValues().get(0));
-						dto.setDateTo(parsedDate);
+						try {
+							Date parsedDate = this.dateTimeService
+									.parseMultipleDateFormats((String) endDate.getValues().get(0));
+							dto.setDateTo(parsedDate);
+						} catch (Exception f) {
+							Instant instant = Instant.ofEpochMilli((Long) endDate.getValues().get(0));
+							Date d = Date.from(instant);
+							dto.setDateTo(d);
+						}
 					}
 				}
 			}

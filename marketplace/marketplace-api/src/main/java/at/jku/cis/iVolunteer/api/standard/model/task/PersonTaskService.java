@@ -77,7 +77,7 @@ public class PersonTaskService {
 				.forEach(p -> p.setValues(Lists.asList(personTask.getLevel(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> {
 			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"),
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss").getTime(),
 						new Object[0]));
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -85,7 +85,7 @@ public class PersonTaskService {
 		});
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> {
 			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss"),
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss").getTime(),
 						new Object[0]));
 			} catch (ParseException e) {
 				e.printStackTrace();

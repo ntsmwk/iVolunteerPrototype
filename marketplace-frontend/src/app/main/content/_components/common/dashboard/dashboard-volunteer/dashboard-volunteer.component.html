@@ -71,7 +71,7 @@
           fxLayout="column"
           fxLayoutAlign="start   center"
           *ngIf="
-            filteredClassInstances.length > 0 &&
+            filteredClassInstanceDTOs.length > 0 &&
             isLocalRepositoryConnected &&
             selectedTenants.length > 0
           "
@@ -92,7 +92,7 @@
               (click)="removeAllFromLocalRepository()"
               style="margin-left: 20px;"
             >
-              Auswahl entfernen
+              Auswahl desynchronisieren
             </button>
           </div>
         </div>
@@ -121,7 +121,7 @@
 
   <div
     *ngIf="
-      filteredClassInstances.length > 0 &&
+      filteredClassInstanceDTOs.length > 0 &&
       isLocalRepositoryConnected &&
       selectedTenants.length > 0
     "
@@ -220,7 +220,7 @@
             <mat-icon
               *ngIf="isSynced(entry)"
               (click)="removeOneFromMarketplace(entry)"
-              svgIcon="minus"
+              svgIcon="storeSlash"
               style="cursor: pointer; margin-left: 20px;"
               matTooltip="Vom Marketplace entfernen"
             >
@@ -245,7 +245,7 @@
                     <button
                       *ngFor="let tenant of getShareableTenants(entry)"
                       mat-menu-item
-                      (click)="shareClassInstance(entry, tenant)"
+                      (click)="shareClassInstanceToOthers(entry, tenant)"
                     >
                       <div fxLayout="row" fxLayoutAlign="start center">
                         <img
@@ -267,7 +267,7 @@
                   <button
                     *ngIf="!isSynced(entry)"
                     mat-menu-item
-                    (click)="shareClassInstance(entry, entry.tenantId)"
+                    (click)="shareClassInstanceToIssuer(entry, entry.tenantId)"
                   >
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
@@ -360,7 +360,7 @@
   <p
     *ngIf="
       timeout &&
-      filteredClassInstances.length === 0 &&
+      filteredClassInstanceDTOs.length === 0 &&
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected
     "

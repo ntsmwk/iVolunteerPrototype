@@ -31,6 +31,23 @@ export class ClassInstanceService {
     );
   }
 
+  getClassInstancesById(marketplace: Marketplace, classInstanceIds: String[]) {
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/instances`,
+      classInstanceIds
+    );
+  }
+
+  mapClassInstancesToDTOs(
+    marketplace: Marketplace,
+    classInstances: ClassInstance[]
+  ) {
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/instanceDTOs`,
+      classInstances
+    );
+  }
+
   getClassInstancesInUserInbox(
     marketplace: Marketplace,
     issuerId: string,
@@ -59,6 +76,16 @@ export class ClassInstanceService {
     return this.http.post(
       `${marketplace.url}/meta/core/class/instance/new`,
       classInstances
+    );
+  }
+
+  createNewTaskClassInstance(
+    marketplace: Marketplace,
+    classInstance: ClassInstance
+  ) {
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/taskInstance/new`,
+      classInstance
     );
   }
 

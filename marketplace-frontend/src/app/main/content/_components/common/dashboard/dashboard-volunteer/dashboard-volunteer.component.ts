@@ -7,7 +7,7 @@ import { LoginService } from "../../../../_service/login.service";
 import { isNullOrUndefined } from "util";
 import { Marketplace } from "../../../../_model/marketplace";
 import { ClassInstanceService } from "../../../../_service/meta/core/class/class-instance.service";
-import { ClassInstanceDTO } from "../../../../_model/meta/class";
+import { ClassInstanceDTO, ClassInstance } from "../../../../_model/meta/class";
 import {
   MatSort,
   MatPaginator,
@@ -24,15 +24,19 @@ import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
+import { DialogFactoryDirective } from "app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component";
+import { filter } from "rxjs/operators";
 HC_venn(Highcharts);
 
 @Component({
   selector: "dashboard-volunteer",
   templateUrl: "./dashboard-volunteer.component.html",
   styleUrls: ["./dashboard-volunteer.component.scss"],
+  providers: [DialogFactoryDirective],
 })
 export class DashboardVolunteerComponent implements OnInit {
   volunteer: Volunteer;
+  mp: Marketplace;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -56,13 +60,13 @@ export class DashboardVolunteerComponent implements OnInit {
   subscribedTenants: Tenant[] = [];
   allTenants: Tenant[] = [];
 
-  marketplaceClassInstances: ClassInstanceDTO[] = [];
-  localClassInstances: ClassInstanceDTO[] = [];
-  filteredClassInstances: ClassInstanceDTO[] = [];
-  sharedClassInstances: ClassInstanceDTO[] = [];
+  marketplaceClassInstanceDTOs: ClassInstanceDTO[] = [];
+  localClassInstances: ClassInstance[] = [];
+  localClassInstanceDTOs: ClassInstanceDTO[] = [];
+  filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
+  sharedClassInstanceDTOs: ClassInstanceDTO[] = [];
+  mpAndLocalClassInstanceDTOs: ClassInstanceDTO[] = [];
 
-  // nrMpOnly: number = 0;
-  // nrLrOnly: number = 0;
   nrMpUnionLr: number = 0;
 
   isLocalRepositoryConnected: boolean;
@@ -96,7 +100,8 @@ export class DashboardVolunteerComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     private iconRegistry: MatIconRegistry,
-    private changeDetectorRefs: ChangeDetectorRef
+    private changeDetectorRefs: ChangeDetectorRef,
+    private dialogFactory: DialogFactoryDirective
   ) {
     iconRegistry.addSvgIcon(
       "info",
@@ -113,6 +118,10 @@ export class DashboardVolunteerComponent implements OnInit {
     iconRegistry.addSvgIcon(
       "minus",
       sanitizer.bypassSecurityTrustResourceUrl("assets/icons/minus.svg")
+    );
+    iconRegistry.addSvgIcon(
+      "storeSlash",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/storeSlash.svg")
     );
   }
 
@@ -142,12 +151,12 @@ export class DashboardVolunteerComponent implements OnInit {
           .findRegisteredMarketplaces(this.volunteer.id)
           .toPromise()
       );
-      let mp = marketplaces[0];
+      this.mp = marketplaces[0];
 
-      let mpAndSharedClassInstances = <ClassInstanceDTO[]>(
+      let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .getUserClassInstancesByArcheType(
-            mp,
+            this.mp,
             "TASK",
             this.volunteer.id,
             this.volunteer.subscribedTenants
@@ -155,39 +164,51 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise()
       );
 
-      mpAndSharedClassInstances.forEach((ci) => {
+      mpAndSharedClassInstanceDTOs.forEach((ci) => {
         if (ci.tenantId != ci.issuerId) {
-          this.sharedClassInstances.push(ci);
+          this.sharedClassInstanceDTOs.push(ci);
         } else {
-          this.marketplaceClassInstances.push(ci);
+          this.marketplaceClassInstanceDTOs.push(ci);
         }
       });
 
-      this.localClassInstances = <ClassInstanceDTO[]>(
+      this.localClassInstances = <ClassInstance[]>(
         await this.localRepositoryService
           .findClassInstancesByVolunteer(this.volunteer)
+          .toPromise()
+      );
+
+      // TODO Philipp
+      // sort missingClassInstances by marketplaceId
+      // for each marketplaceId call classInstanceService to get CI from correct marketplace...
+      this.localClassInstanceDTOs = <ClassInstanceDTO[]>(
+        await this.classInstanceService
+          .mapClassInstancesToDTOs(this.mp, this.localClassInstances)
           .toPromise()
       );
 
       this.calcMetrics();
 
       // concat local and mp and remove dublicates (union)
-      this.filteredClassInstances = this.localClassInstances.concat(
-        this.marketplaceClassInstances.filter(
-          (mp) => this.localClassInstances.map((lo) => lo.id).indexOf(mp.id) < 0
+      this.filteredClassInstanceDTOs = this.localClassInstanceDTOs.concat(
+        this.marketplaceClassInstanceDTOs.filter(
+          (mp) =>
+            this.localClassInstanceDTOs.map((lo) => lo.id).indexOf(mp.id) < 0
         )
       );
 
-      this.filteredClassInstances = this.filteredClassInstances.sort((a, b) => {
-        if (a.dateFrom && b.dateFrom) {
-          return b.dateFrom.valueOf() - a.dateFrom.valueOf();
+      this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.sort(
+        (a, b) => {
+          if (a.dateFrom && b.dateFrom) {
+            return b.dateFrom.valueOf() - a.dateFrom.valueOf();
+          }
         }
-      });
+      );
 
-      this.paginator.length = this.filteredClassInstances.length;
+      this.paginator.length = this.filteredClassInstanceDTOs.length;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.dataSource.data = this.filteredClassInstances;
+      this.dataSource.data = this.filteredClassInstanceDTOs;
     }
   }
 
@@ -204,9 +225,6 @@ export class DashboardVolunteerComponent implements OnInit {
     let tenant = this.allTenants.find((t) => t.id === tenantId);
     if (isNullOrUndefined(tenant)) {
       return "/assets/images/avatars/profile.jpg";
-
-      //const reader = new FileReader();
-      //return reader.readAsBinaryString(await this.http.get('/assets/images/avatars/profile.jpg', { responseType: 'blob' }).toPromise());
     } else {
       return tenant.image;
     }
@@ -241,74 +259,162 @@ export class DashboardVolunteerComponent implements OnInit {
     this.selectedTenants = selectedTenants;
 
     // concat local and mp and remove dublicates
-    this.filteredClassInstances = this.localClassInstances.concat(
-      this.marketplaceClassInstances.filter(
-        (mp) => this.localClassInstances.map((lo) => lo.id).indexOf(mp.id) < 0
+    this.filteredClassInstanceDTOs = this.localClassInstanceDTOs.concat(
+      this.marketplaceClassInstanceDTOs.filter(
+        (mp) =>
+          this.localClassInstanceDTOs.map((lo) => lo.id).indexOf(mp.id) < 0
       )
     );
 
-    this.filteredClassInstances = this.filteredClassInstances.filter((ci) => {
-      return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
-    });
+    this.filteredClassInstanceDTOs = this.filteredClassInstanceDTOs.filter(
+      (ci) => {
+        return this.selectedTenants.findIndex((t) => t.id === ci.tenantId) >= 0;
+      }
+    );
 
-    this.filteredClassInstances.sort((a, b) => {
+    this.filteredClassInstanceDTOs.sort((a, b) => {
       if (a.dateFrom && b.dateFrom) {
         return b.dateFrom.valueOf() - a.dateFrom.valueOf();
       }
     });
 
-    this.paginator.length = this.filteredClassInstances.length;
-    this.dataSource.data = this.filteredClassInstances;
+    this.paginator.length = this.filteredClassInstanceDTOs.length;
+    this.dataSource.data = this.filteredClassInstanceDTOs;
   }
 
   //---- Local Repository functions -----//
 
   isInLocalRepository(classInstance: ClassInstanceDTO) {
     return (
-      this.localClassInstances.findIndex((t) => t.id === classInstance.id) >= 0
+      this.localClassInstanceDTOs.findIndex((t) => t.id === classInstance.id) >=
+      0
     );
   }
 
-  async syncOneToLocalRepository(classInstance: ClassInstanceDTO) {
-    this.localClassInstances = <ClassInstanceDTO[]>(
-      await this.localRepositoryService
-        .synchronizeSingleClassInstance(this.volunteer, classInstance)
+  async syncOneToLocalRepository(ciDTO: ClassInstanceDTO) {
+    let marketplace = <Marketplace>(
+      await this.marketplaceService.findById(ciDTO.marketplaceId).toPromise()
+    );
+    let ci = <ClassInstance>(
+      await this.classInstanceService
+        .getClassInstanceById(marketplace, ciDTO.id)
         .toPromise()
     );
+
+    await this.localRepositoryService
+      .synchronizeSingleClassInstance(this.volunteer, ci)
+      .toPromise()
+      .then(() => {
+        this.localClassInstanceDTOs.push(ciDTO);
+      });
+
     this.calcMetrics();
   }
 
-  async removeOneFromLocalRepository(classInstance: ClassInstanceDTO) {
-    this.localClassInstances = <ClassInstanceDTO[]>(
+  async removeOneFromLocalRepository(ciDTO: ClassInstanceDTO) {
+    if (
+      this.marketplaceClassInstanceDTOs.findIndex((c) => c.id === ciDTO.id) ===
+      -1
+    ) {
+      this.dialogFactory
+        .confirmationDialog(
+          "Wirklich löschen?",
+          "Damit geht der Eintrag unwiderruflich verloren."
+        )
+        .then(async (ret: boolean) => {
+          if (ret) {
+            await this.localRepositoryService
+              .removeSingleClassInstance(this.volunteer, ciDTO.id)
+              .toPromise()
+              .then(() => {
+                this.localClassInstanceDTOs.splice(
+                  this.localClassInstanceDTOs.findIndex(
+                    (c) => c.id === ciDTO.id
+                  ),
+                  1
+                );
+              });
+
+            // remove row
+            this.dataSource.data.splice(this.dataSource.data.indexOf(ciDTO), 1);
+            this.dataSource._updateChangeSubscription();
+          }
+        });
+    } else {
       await this.localRepositoryService
-        .removeSingleClassInstance(this.volunteer, classInstance)
+        .removeSingleClassInstance(this.volunteer, ciDTO.id)
         .toPromise()
-    );
+        .then(() => {
+          this.localClassInstanceDTOs.splice(
+            this.localClassInstanceDTOs.findIndex((c) => c.id === ciDTO.id),
+            1
+          );
+        });
+    }
+
     this.calcMetrics();
   }
 
   async syncAllToLocalRepository() {
-    let missingClassInstances: ClassInstanceDTO[] = [];
-    this.filteredClassInstances.forEach((ci) => {
-      if (!(this.localClassInstances.findIndex((t) => t.id === ci.id) >= 0)) {
-        missingClassInstances.push(ci);
+    let missingCiDTOs: ClassInstanceDTO[] = [];
+    this.filteredClassInstanceDTOs.forEach((ci) => {
+      if (
+        !(this.localClassInstanceDTOs.findIndex((t) => t.id === ci.id) >= 0)
+      ) {
+        missingCiDTOs.push(ci);
       }
     });
 
-    this.localClassInstances = <ClassInstanceDTO[]>(
-      await this.localRepositoryService
-        .synchronizeClassInstances(this.volunteer, missingClassInstances)
-        .toPromise()
-    );
+    // TODO Philipp
+    // sort missingClassInstances by marketplaceId
+    // for each marketplaceId call classInstanceService to get CI from correct marketplace...
+    let missingCis = <ClassInstance[]>await this.classInstanceService
+      .getClassInstancesById(
+        this.mp,
+        missingCiDTOs.map((c) => c.id)
+      )
+      .toPromise();
+
+    await this.localRepositoryService
+      .synchronizeClassInstances(this.volunteer, missingCis)
+      .toPromise()
+      .then(() => {
+        this.localClassInstanceDTOs = this.localClassInstanceDTOs.concat(
+          missingCiDTOs.filter(
+            (mp) =>
+              this.localClassInstanceDTOs.map((lo) => lo.id).indexOf(mp.id) < 0
+          )
+        );
+      });
+
     this.calcMetrics();
   }
 
   async removeAllFromLocalRepository() {
-    this.localClassInstances = <ClassInstanceDTO[]>(
-      await this.localRepositoryService
-        .removeClassInstances(this.volunteer, this.filteredClassInstances)
+    let filteredClassInstances = <ClassInstance[]>(
+      await this.classInstanceService
+        .getClassInstancesById(
+          this.mp,
+          this.filteredClassInstanceDTOs.map((c) => c.id)
+        )
         .toPromise()
     );
+
+    filteredClassInstances = filteredClassInstances.filter((c) => {
+      return c !== null && this.isSynced(c);
+    });
+
+    await this.localRepositoryService
+      .removeClassInstances(
+        this.volunteer,
+        filteredClassInstances.map((ci) => ci.id)
+      )
+      .toPromise()
+      .then(() => {
+        this.localClassInstanceDTOs = this.localClassInstanceDTOs.filter(
+          (a) => filteredClassInstances.map((b) => b.id).indexOf(a.id) < 0
+        );
+      });
 
     this.calcMetrics();
   }
@@ -323,13 +429,13 @@ export class DashboardVolunteerComponent implements OnInit {
     await this.classInstanceService
       .deleteClassInstance(marketplace, ci.id)
       .toPromise();
-    this.marketplaceClassInstances.forEach((item, index, array) => {
+    this.marketplaceClassInstanceDTOs.forEach((item, index, array) => {
       if (item.id === ci.id) {
         array.splice(index, 1);
       }
     });
 
-    this.sharedClassInstances.forEach(async (item, index, array) => {
+    this.sharedClassInstanceDTOs.forEach(async (item, index, array) => {
       if (ci.name === item.name && ci.timestamp === item.timestamp) {
         array.splice(index, 1);
         await this.classInstanceService
@@ -337,6 +443,8 @@ export class DashboardVolunteerComponent implements OnInit {
           .toPromise();
       }
     });
+
+    this.calcMetrics();
   }
 
   sortData(sort: Sort) {
@@ -386,7 +494,7 @@ export class DashboardVolunteerComponent implements OnInit {
     tenants = this.subscribedTenants;
     tenants = tenants.filter((t) => t.id != ci.tenantId);
 
-    this.sharedClassInstances.forEach((shared) => {
+    this.sharedClassInstanceDTOs.forEach((shared) => {
       if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
         tenants = tenants.filter((t) => t.id != shared.tenantId);
       }
@@ -398,7 +506,7 @@ export class DashboardVolunteerComponent implements OnInit {
   getSharedWith(ci: ClassInstanceDTO) {
     let tenants: Tenant[] = [];
 
-    this.sharedClassInstances.forEach((shared) => {
+    this.sharedClassInstanceDTOs.forEach((shared) => {
       if (ci.name === shared.name && ci.timestamp === shared.timestamp) {
         tenants.push(this.allTenants.find((t) => t.id === shared.tenantId));
       }
@@ -407,29 +515,45 @@ export class DashboardVolunteerComponent implements OnInit {
     return tenants;
   }
 
-  async shareClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
+  async shareClassInstanceToOthers(ci: ClassInstanceDTO, tenant: Tenant) {
     let marketplace = <Marketplace>(
       await this.marketplaceService.findById(ci.marketplaceId).toPromise()
     );
 
-    if (ci.tenantId === tenant.id) {
-      // await this.classInstanceService.createNewClassInstance()
-      // this.marketplaceClassInstances.push();
-    } else {
-      let sharedCi = <ClassInstanceDTO>(
-        await this.classInstanceService
-          .createSharedClassInstances(marketplace, tenant.id, ci.id)
-          .toPromise()
-      );
-      this.sharedClassInstances.push(sharedCi);
-    }
+    let sharedCi = <ClassInstanceDTO>(
+      await this.classInstanceService
+        .createSharedClassInstances(marketplace, tenant.id, ci.id)
+        .toPromise()
+    );
+    this.sharedClassInstanceDTOs.push(sharedCi);
 
     // TODO: redraw table
     // Does not work ;)
     // this.changeDetectorRefs.detectChanges();
     // this.paginator._changePageSize(this.paginator.pageSize);
     // this.table.renderRows();
-    //this.changeDetectorRefs.detectChanges();
+    // this.changeDetectorRefs.detectChanges();
+  }
+
+  async shareClassInstanceToIssuer(ci: ClassInstanceDTO, tenantId: string) {
+    let marketplace = <Marketplace>(
+      await this.marketplaceService.findById(ci.marketplaceId).toPromise()
+    );
+
+    let share = <ClassInstance>(
+      await this.localRepositoryService
+        .getSingleClassInstance(this.volunteer, ci.id)
+        .toPromise()
+    );
+
+    await this.classInstanceService
+      .createNewTaskClassInstance(marketplace, share)
+      .toPromise()
+      .then(() => {
+        this.marketplaceClassInstanceDTOs.push(ci);
+      });
+
+    this.generateVennData();
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
@@ -437,7 +561,7 @@ export class DashboardVolunteerComponent implements OnInit {
       await this.marketplaceService.findById(ci.marketplaceId).toPromise()
     );
 
-    this.sharedClassInstances.forEach(async (shared, index, array) => {
+    this.sharedClassInstanceDTOs.forEach(async (shared, index, array) => {
       if (
         ci.name === shared.name &&
         ci.timestamp === shared.timestamp &&
@@ -455,20 +579,11 @@ export class DashboardVolunteerComponent implements OnInit {
 
   calcMetrics() {
     // intersection of CIs on mp and local repo
-    let mpAndLocalClassInstances = this.localClassInstances.filter(
-      (ci) =>
-        -1 !== this.marketplaceClassInstances.map((ci) => ci.id).indexOf(ci.id)
+    this.mpAndLocalClassInstanceDTOs = this.localClassInstanceDTOs.filter(
+      (a) =>
+        this.marketplaceClassInstanceDTOs.map((b) => b.id).indexOf(a.id) !== -1
     );
-    this.nrMpUnionLr = mpAndLocalClassInstances.length;
-
-    // only in mp (mp minus interesction)
-    // this.nrMpOnly =
-    //   this.marketplaceClassInstances.length - mpAndLocalClassInstances.length;
-
-    // // only in local repo (local repo minus intersection)
-    // this.nrLrOnly =
-    //   this.localClassInstances.length - mpAndLocalClassInstances.length;
-
+    this.nrMpUnionLr = this.mpAndLocalClassInstanceDTOs.length;
     this.generateVennData();
   }
 
@@ -477,8 +592,8 @@ export class DashboardVolunteerComponent implements OnInit {
     data.push(
       {
         sets: ["Freiwilligenpass"],
-        value: this.localClassInstances.length, //2,
-        displayValue: this.localClassInstances.length,
+        value: this.localClassInstanceDTOs.length, //2,
+        displayValue: this.localClassInstanceDTOs.length,
         color: this.colors.get("localRepository"),
         dataLabels: {
           y: -15,
@@ -486,8 +601,8 @@ export class DashboardVolunteerComponent implements OnInit {
       },
       {
         sets: ["Marktplatz"],
-        value: this.marketplaceClassInstances.length, //2,
-        displayValue: this.marketplaceClassInstances.length,
+        value: this.marketplaceClassInstanceDTOs.length, //2,
+        displayValue: this.marketplaceClassInstanceDTOs.length,
         color: this.colors.get("marketplace"),
       },
       {
@@ -539,19 +654,6 @@ export class DashboardVolunteerComponent implements OnInit {
   getTableRowColor(ci: ClassInstanceDTO) {
     if (this.isSynced(ci)) {
       return {
-        // "background-color": color,
-
-        // "background-image":
-        //   "repeating-linear-gradient(180deg," +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 0%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 25%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 25%, " +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 50%)",
-
         "background-image":
           "repeating-linear-gradient(to right," +
           this.colorsOpac.get("marketplace") +
@@ -566,26 +668,6 @@ export class DashboardVolunteerComponent implements OnInit {
           " 66%, " +
           this.colorsOpac.get("localRepository") +
           " 100%)",
-
-        // "background-image":
-        //   "repeating-linear-gradient(to right," +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 0%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 100%)",
-
-        // "background-image":
-        //   "repeating-linear-gradient(45deg," +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 0%, " +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 2%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 2%, " +
-        //   this.colorsOpac.get("localRepository") +
-        //   " 4%, " +
-        //   this.colorsOpac.get("marketplace") +
-        //   " 4%)",
       };
     } else if (this.isLocalRepositoryOnly(ci)) {
       return {
@@ -600,20 +682,20 @@ export class DashboardVolunteerComponent implements OnInit {
 
   isMarketplaceOnly(ci: ClassInstanceDTO) {
     return (
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.localClassInstances.findIndex((c) => c.id === ci.id) === -1
+      this.marketplaceClassInstanceDTOs.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstanceDTOs.findIndex((c) => c.id === ci.id) === -1
     );
   }
-  isLocalRepositoryOnly(ci: ClassInstanceDTO) {
+  isLocalRepositoryOnly(ci: ClassInstanceDTO | ClassInstance) {
     return (
-      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) === -1
+      this.localClassInstanceDTOs.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.marketplaceClassInstanceDTOs.findIndex((c) => c.id === ci.id) === -1
     );
   }
-  isSynced(ci: ClassInstanceDTO) {
+  isSynced(ci: ClassInstanceDTO | ClassInstance) {
     return (
-      this.marketplaceClassInstances.findIndex((c) => c.id === ci.id) >= 0 &&
-      this.localClassInstances.findIndex((c) => c.id === ci.id) >= 0
+      this.marketplaceClassInstanceDTOs.findIndex((c) => c.id === ci.id) >= 0 &&
+      this.localClassInstanceDTOs.findIndex((c) => c.id === ci.id) >= 0
     );
   }
 }
