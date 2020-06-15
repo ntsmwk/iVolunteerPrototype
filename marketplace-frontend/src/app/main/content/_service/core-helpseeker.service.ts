@@ -7,8 +7,12 @@ import { HttpClient } from "@angular/common/http";
 export class CoreHelpSeekerService {
   constructor(private http: HttpClient) {}
 
-  findAllByTenantId() {
+  findAll() {
     return this.http.get(`/core/helpseeker/all`);
+  }
+
+  findAllByTenantId(tenantId: string) {
+    return this.http.get(`/core/helpseeker/all?tId=${tenantId}`);
   }
 
   findById(helpSeekerId: string) {
