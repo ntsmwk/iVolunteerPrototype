@@ -54,6 +54,9 @@ export class PropertyEnumListComponent implements OnInit {
   ngOnInit() {
     this.isLoaded = false;
     this.dropdownFilterValue = 'all';
+    this.dataSource.filterPredicate = function (data, filter: string): boolean {
+      return data.name.toLowerCase().includes(filter);
+    };
     this.loadAllProperties();
 
   }
@@ -110,21 +113,26 @@ export class PropertyEnumListComponent implements OnInit {
   }
 
 
-  dropdownFilterSelectionChanged() {
+  applyTypeFilter() {
     console.log("selection changed: " + this.dropdownFilterValue);
 
 
-    this.filterByType(this.dropdownFilterValue);
-
-
-  }
-
-  filterByType(type: string) {
-    switch (type) {
+    switch (this.dropdownFilterValue) {
       case 'all': this.dataSource.data = this.propertyEnumEntries; break;
       case 'properties': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type !== PropertyType.ENUM); break;
       case 'enums': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type === PropertyType.ENUM); break;
       default: console.error('undefined type');
+    }
+
+  }
+
+
+  applyTextFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    if (isNullOrUndefined(filterValue)) {
+      this.dataSource.filter = undefined;
+    } else {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
     }
   }
 

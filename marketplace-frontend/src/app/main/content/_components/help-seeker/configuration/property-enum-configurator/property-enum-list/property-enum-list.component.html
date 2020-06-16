@@ -21,15 +21,17 @@
             <div></div>
             <div fxLayout="row" fxLayoutAlign="start center" style="width: 90%">
                 <mat-form-field style="width: 300px">
-                    <input matInput placeholder="Suchen..." />
-                    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="undefined">
+                    <input matInput (keyup)="applyTextFilter($event)" placeholder="Suchen..."
+                        [(ngModel)]="textSearchValue" />
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                        (click)="textSearchValue=undefined; applyTextFilter($event);">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
 
                 <mat-form-field class="ml-8">
                     <mat-select placeholder="Filter" style="width: 300px" [(ngModel)]="dropdownFilterValue"
-                        (selectionChange)="dropdownFilterSelectionChanged()">
+                        (selectionChange)="applyTypeFilter()">
                         <mat-option value="all">Alle</mat-option>
                         <mat-option value="properties">Nur Properties</mat-option>
                         <mat-option value="enums">Nur Enums</mat-option>
