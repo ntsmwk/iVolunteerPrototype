@@ -114,9 +114,6 @@ export class PropertyEnumListComponent implements OnInit {
 
 
   applyTypeFilter() {
-    console.log("selection changed: " + this.dropdownFilterValue);
-
-
     switch (this.dropdownFilterValue) {
       case 'all': this.dataSource.data = this.propertyEnumEntries; break;
       case 'properties': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type !== PropertyType.ENUM); break;

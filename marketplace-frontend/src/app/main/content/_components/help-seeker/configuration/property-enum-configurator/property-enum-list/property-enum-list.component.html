@@ -1,7 +1,7 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
-        <h1> PROPERTY LIST </h1>
+        <h1>Properties & Enums</h1>
     </div>
 
     <div class="center-div" *ngIf="!isLoaded">
@@ -19,29 +19,36 @@
 
         <div class="m-8" fxLayout="row" fxLayoutAlign="space-between center">
             <div></div>
-            <div fxLayout="row" fxLayoutAlign="start center" style="width: 90%">
-                <mat-form-field style="width: 300px">
-                    <input matInput (keyup)="applyTextFilter($event)" placeholder="Suchen..."
-                        [(ngModel)]="textSearchValue" />
-                    <button mat-button matSuffix mat-icon-button aria-label="Clear"
-                        (click)="textSearchValue=undefined; applyTextFilter($event);">
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 90%">
 
-                <mat-form-field class="ml-8">
-                    <mat-select placeholder="Filter" style="width: 300px" [(ngModel)]="dropdownFilterValue"
-                        (selectionChange)="applyTypeFilter()">
-                        <mat-option value="all">Alle</mat-option>
-                        <mat-option value="properties">Nur Properties</mat-option>
-                        <mat-option value="enums">Nur Enums</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div>
+                    <mat-form-field style="width: 300px">
+                        <input matInput (keyup)="applyTextFilter($event)" placeholder="Suchen..."
+                            [(ngModel)]="textSearchValue" />
+                        <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                            (click)="textSearchValue=undefined; applyTextFilter($event);">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
 
-                <button class="ml-24" style="width: 130px" mat-raised-button (click)="newAction('property')">Neues
-                    Property</button>
-                <button class="ml-8" style="width: 130px" mat-raised-button (click)="newAction('enum')">Neues
-                    Enum</button>
+                    <mat-form-field class="ml-8">
+                        <mat-select placeholder="Filter" style="width: 300px" [(ngModel)]="dropdownFilterValue"
+                            (selectionChange)="applyTypeFilter()">
+                            <mat-option value="all">Alle</mat-option>
+                            <mat-option value="properties">Nur Properties</mat-option>
+                            <mat-option value="enums">Nur Enums</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div></div>
+
+                <div>
+                    <button class="ml-24" style="width: 130px" mat-raised-button (click)="newAction('property')">Neues
+                        Property</button>
+                    <button class="ml-8" style="width: 130px" mat-raised-button (click)="newAction('enum')">Neues
+                        Enum</button>
+                </div>
             </div>
             <div></div>
         </div>
