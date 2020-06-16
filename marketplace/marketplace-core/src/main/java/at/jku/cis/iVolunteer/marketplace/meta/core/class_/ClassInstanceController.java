@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -37,6 +38,8 @@ public class ClassInstanceController {
 	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
 	@Autowired
 	private DateTimeService dateTimeService;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
@@ -117,6 +120,7 @@ public class ClassInstanceController {
 			classInstance.setUserId(volunteerId);
 			classInstance.setTenantId(tenantId);
 			classInstance.setIssuerId(tenantId);
+			classInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 			classInstance.setTimestamp(new Date());
 
 			classInstance.getProperties().forEach(p -> {
@@ -126,7 +130,8 @@ public class ClassInstanceController {
 						Date date = dateTimeService.parseMultipleDateFormats(dateAsString);
 
 						if (date != null) {
-							p.setValues(Collections.singletonList(date));
+							p.setValues(Collections.singletonList(date.getTime()));
+
 						}
 					} else {
 						p.setValues(Collections.singletonList(properties.get(p.getName())));
@@ -196,13 +201,6 @@ public class ClassInstanceController {
 		return classInstanceRepository.save(classInstances);
 	}
 
-	@PostMapping("/meta/core/class/taskInstance/new")
-	public ClassInstance createNewTaskClassInstances(@RequestBody ClassInstance classInstance) {
-
-		// TaskClassInstance tci = (TaskClassInstance) classInstance;
-		return classInstanceRepository.save(classInstance);
-	}
-
 	@PostMapping("/meta/core/class/instance/newShared")
 	public ClassInstance createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId,
 			@RequestBody String classInstanceId) {
@@ -220,6 +218,7 @@ public class ClassInstanceController {
 		ciNew.setTabId(ci.getTabId());
 		ciNew.setClassDefinitionId(ci.getClassDefinitionId());
 		ciNew.setTimestamp(ci.getTimestamp());
+		ciNew.setMarketplaceId(ci.getMarketplaceId());
 		ciNew.setTenantId(tenantId);
 
 		return this.classInstanceRepository.save(ciNew);

@@ -92,8 +92,6 @@ export class ClassInstanceDetailsComponent implements OnInit {
       }
     }
 
-    console.error("classInstance", this.classInstance);
-
     this.tableDataSource.data = this.classInstance.properties;
 
     this.tenantService.initHeader(this.tenant);
