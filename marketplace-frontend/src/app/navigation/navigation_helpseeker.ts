@@ -60,7 +60,7 @@ export const navigation_helpseeker = [
   },
   {
     id: "property-builder",
-    title: "Property-Baukasten",
+    title: "Properties konfigurieren",
     type: "item",
     icon: "hammer-solid",
     url: "/main/properties/all/"

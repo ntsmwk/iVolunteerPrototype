@@ -147,7 +147,7 @@ export class PropertyEnumListComponent implements OnInit {
     } else if (key === 'enum') {
 
     }
-    this.router.navigate(['main/property-builder/' + this.marketplace.id + '/']);
+    this.router.navigate(['main/property-builder/' + this.marketplace.id], { queryParams: { type: key } });
   }
 
   editPropertyAction(property: PropertyDefinition<any>) {

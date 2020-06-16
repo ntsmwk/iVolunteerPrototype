@@ -25,7 +25,7 @@
                     <mat-form-field style="width: 300px">
                         <input matInput (keyup)="applyTextFilter($event)" placeholder="Suchen..."
                             [(ngModel)]="textSearchValue" />
-                        <button mat-button matSuffix mat-icon-button aria-label="Clear"
+                        <button *ngIf="textSearchValue" mat-button matSuffix mat-icon-button aria-label="Clear"
                             (click)="textSearchValue=undefined; applyTextFilter($event);">
                             <mat-icon>close</mat-icon>
                         </button>
