@@ -36,10 +36,7 @@ export class PropertyBuildFormComponent implements OnInit {
     this.displayBuilder = true;
     this.displayResultSuccess = false;
 
-    console.log(this.route);
-    // const typeParam = this.route.queryParams.subscribe()
     this.route.queryParams.subscribe((params) => {
-      console.log(params);
       if (isNullOrUndefined(params['type'] || params['type'] === 'property')) {
         this.builderType = 'property';
       } else {

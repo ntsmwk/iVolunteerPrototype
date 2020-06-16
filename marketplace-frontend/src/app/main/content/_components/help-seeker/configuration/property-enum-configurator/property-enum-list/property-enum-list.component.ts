@@ -137,16 +137,7 @@ export class PropertyEnumListComponent implements OnInit {
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
   }
 
-  // newPropertyAction() {
-  //   this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/']);
-  // }
-
   newAction(key: string) {
-    if (key === 'property') {
-
-    } else if (key === 'enum') {
-
-    }
     this.router.navigate(['main/property-builder/' + this.marketplace.id], { queryParams: { type: key } });
   }
 
