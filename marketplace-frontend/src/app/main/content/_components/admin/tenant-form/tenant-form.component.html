@@ -51,10 +51,24 @@
         [dataSource]="dataSource"
         *ngIf="dataSource.data.length !== 0"
       >
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <ng-container matColumnDef="firstname">
+          <mat-header-cell *matHeaderCellDef>Vorname</mat-header-cell>
           <mat-cell *matCellDef="let helpseeker">{{
-            helpseeker.name
+            helpseeker.firstname
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lastname">
+          <mat-header-cell *matHeaderCellDef>Nachname</mat-header-cell>
+          <mat-cell *matCellDef="let helpseeker">{{
+            helpseeker.lastname
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+          <mat-cell *matCellDef="let helpseeker">{{
+            helpseeker.username
           }}</mat-cell>
         </ng-container>
 

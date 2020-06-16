@@ -12,7 +12,7 @@ import { CoreFlexProdService } from '../../../../../_service/core-flexprod.servi
 import { Helpseeker } from '../../../../../_model/helpseeker';
 import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/property';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
-import { EnumDefinition } from 'app/main/content/_model/meta/enum';
+import { EnumDefinition, EnumEntry } from 'app/main/content/_model/meta/enum';
 
 export interface PropertyEnumEntry {
   id: string;
@@ -30,7 +30,7 @@ export interface PropertyEnumEntry {
 export class PropertyEnumListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<PropertyEnumEntry>();
-  displayedColumns = ['id', 'name', 'defaultValue', 'kind', 'actions'];
+  displayedColumns = ['type', 'name', 'filler', 'actions'];
 
   marketplace: Marketplace;
   helpseeker: Helpseeker;
@@ -40,7 +40,7 @@ export class PropertyEnumListComponent implements OnInit {
 
   propertyEnumEntries: PropertyEnumEntry[];
 
-  customOnly: boolean;
+  dropdownFilterValue: string;
   isLoaded: boolean;
 
   constructor(private router: Router,
@@ -53,7 +53,7 @@ export class PropertyEnumListComponent implements OnInit {
 
   ngOnInit() {
     this.isLoaded = false;
-    this.customOnly = false;
+    this.dropdownFilterValue = 'all';
     this.loadAllProperties();
 
   }
@@ -100,8 +100,6 @@ export class PropertyEnumListComponent implements OnInit {
         });
       });
     });
-
-
   }
 
   private updatePropertyAndEnumEntryList() {
@@ -112,6 +110,24 @@ export class PropertyEnumListComponent implements OnInit {
   }
 
 
+  dropdownFilterSelectionChanged() {
+    console.log("selection changed: " + this.dropdownFilterValue);
+
+
+    this.filterByType(this.dropdownFilterValue);
+
+
+  }
+
+  filterByType(type: string) {
+    switch (type) {
+      case 'all': this.dataSource.data = this.propertyEnumEntries; break;
+      case 'properties': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type !== PropertyType.ENUM); break;
+      case 'enums': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type === PropertyType.ENUM); break;
+      default: console.error('undefined type');
+    }
+  }
+
   viewPropertyAction(property: PropertyDefinition<any>) {
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
   }
@@ -120,7 +136,12 @@ export class PropertyEnumListComponent implements OnInit {
   //   this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/']);
   // }
 
-  newPropertyAction() {
+  newAction(key: string) {
+    if (key === 'property') {
+
+    } else if (key === 'enum') {
+
+    }
     this.router.navigate(['main/property-builder/' + this.marketplace.id + '/']);
   }
 
@@ -133,4 +154,12 @@ export class PropertyEnumListComponent implements OnInit {
       this.ngOnInit();
     });
   }
+
+  getPropertyTypeLabel(propertyType: PropertyType) {
+    return PropertyType.getLabelForPropertyType(propertyType);
+  }
+
+  // getImagePathPropertyType(propertyType: PropertyType) {
+  //   return this.propertyTypePalettes.find(p => p.id === propertyType).imgPath;
+  // }
 }

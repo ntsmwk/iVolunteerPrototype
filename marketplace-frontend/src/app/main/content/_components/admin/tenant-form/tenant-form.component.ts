@@ -23,7 +23,7 @@ export class FuseTenantFormComponent implements OnInit {
   marketplaceId: string;
 
   dataSource = new MatTableDataSource<Helpseeker>();
-  displayedColumns = ["name", "actions"];
+  displayedColumns = ["firstname", "lastname", "username", "actions"];
 
   constructor(
     formBuilder: FormBuilder,
