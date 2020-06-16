@@ -55,7 +55,6 @@ public class CoreHelpSeekerService {
 	}
 
 	public List<CoreHelpSeeker> getAllCoreHelpSeekers(String tenantId) {
-		
-		return null;
+		return this.coreHelpSeekerRepository.findByTenantId(tenantId);
 	}
 }
