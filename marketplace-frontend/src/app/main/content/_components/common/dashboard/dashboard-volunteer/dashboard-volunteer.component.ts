@@ -182,8 +182,8 @@ export class DashboardVolunteerComponent implements OnInit {
       );
 
       // TODO Philipp
-      // sort missingClassInstances by marketplaceId
-      // for each marketplaceId call classInstanceService to get CI from correct marketplace...
+      // get unique marketplaceIds of CIs
+      // perform once per marketplaceId
       this.localClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .mapClassInstancesToDTOs(this.marketplace, this.localClassInstances)

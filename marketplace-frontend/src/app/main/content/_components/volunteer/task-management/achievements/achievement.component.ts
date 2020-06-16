@@ -73,6 +73,9 @@ export class AchievementsComponent implements OnInit {
           .toPromise()
       );
 
+      // TODO Philipp
+      // get unique marketplaceIds of CIs
+      // perform once per marketplaceId
       this.classInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
           .mapClassInstancesToDTOs(this.marketplace, localClassInstances)
