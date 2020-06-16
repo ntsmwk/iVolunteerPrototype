@@ -115,10 +115,10 @@ export class ImportComponent implements OnInit {
   }
 
   async import(contentObject) {
-    this.successImportCount = contentObject.assets.length;
+    this.successImportCount = contentObject.properties.length;
     this.displaySuccessMessage = true;
 
-    for (const entry of contentObject.assets) {
+    for (const entry of contentObject.properties) {
       await this.classInstanceService
         .createClassInstanceByClassDefinitionId(
           this.marketplace,
