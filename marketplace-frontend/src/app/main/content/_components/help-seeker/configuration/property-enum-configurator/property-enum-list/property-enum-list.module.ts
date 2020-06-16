@@ -12,6 +12,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { PropertyEnumListComponent } from './property-enum-list.component';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 import { MatInputModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { DialogFactoryModule } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.module';
 
 
 const routes: Route[] = [
@@ -25,7 +26,7 @@ const routes: Route[] = [
 
   imports: [
     RouterModule.forChild(routes),
-
+    DialogFactoryModule,
     MatCommonModule,
     MatCardModule,
     MatTableModule,

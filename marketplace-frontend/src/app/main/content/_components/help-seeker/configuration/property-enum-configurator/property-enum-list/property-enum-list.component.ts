@@ -13,6 +13,8 @@ import { Helpseeker } from '../../../../../_model/helpseeker';
 import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/property';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
 import { EnumDefinition, EnumEntry } from 'app/main/content/_model/meta/enum';
+import { DialogFactoryModule } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.module';
+import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 
 export interface PropertyEnumEntry {
   id: string;
@@ -25,7 +27,8 @@ export interface PropertyEnumEntry {
   selector: 'app-property-enum-list',
   templateUrl: './property-enum-list.component.html',
   styleUrls: ['./property-enum-list.component.scss'],
-  animations: fuseAnimations
+  animations: fuseAnimations,
+  providers: [DialogFactoryDirective]
 })
 export class PropertyEnumListComponent implements OnInit {
 
@@ -48,7 +51,8 @@ export class PropertyEnumListComponent implements OnInit {
     private enumDefinitionService: EnumDefinitionService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private flexProdService: CoreFlexProdService) {
+    private flexProdService: CoreFlexProdService,
+    private dialogFactory: DialogFactoryDirective) {
   }
 
   ngOnInit() {
@@ -141,14 +145,30 @@ export class PropertyEnumListComponent implements OnInit {
     this.router.navigate(['main/property-builder/' + this.marketplace.id], { queryParams: { type: key } });
   }
 
-  editPropertyAction(property: PropertyDefinition<any>) {
-    this.router.navigate(['main/property/detail/edit/' + this.marketplace.id + '/' + property.id]);
+  editAction(entry: PropertyEnumEntry) {
+    const builderType = entry.type === PropertyType.ENUM ? 'enum' : 'property';
+    this.router.navigate(['main/property-builder/' + this.marketplace.id + '/' + entry.id], { queryParams: { type: builderType } });
   }
 
-  deletePropertyAction(property: PropertyDefinition<any>) {
-    this.propertyDefinitionService.deletePropertyDefinition(this.marketplace, property.id).toPromise().then(() => {
-      this.ngOnInit();
+  deleteAction(entry: PropertyEnumEntry) {
+    this.dialogFactory.confirmationDialog('Löschen', 'Dieser Vorgang kann nicht rückgeängig gemacht werden').then((ret) => {
+
+      if (ret && entry.type !== PropertyType.ENUM) {
+        this.propertyDefinitionService.deletePropertyDefinition(this.marketplace, entry.id).toPromise().then((innerret) => {
+          this.deleteFromLists('property', entry.id);
+        });
+      } else if (ret && entry.type === PropertyType.ENUM) {
+        this.enumDefinitionService.deleteEnumDefinition(this.marketplace, entry.id).toPromise().then((innerret) => {
+          this.deleteFromLists('enum', entry.id);
+        });
+      }
     });
+  }
+
+  deleteFromLists(key: 'enum' | 'property', id: string) {
+    key === 'enum' ? this.enumDefinitions.filter(e => e.id !== id) : this.propertyDefinitions.filter(e => e.id !== id);
+    this.propertyEnumEntries = this.propertyEnumEntries.filter(e => e.id !== id);
+    this.dataSource.data = this.dataSource.data.filter(e => e.id !== id);
   }
 
   getPropertyTypeLabel(propertyType: PropertyType) {
