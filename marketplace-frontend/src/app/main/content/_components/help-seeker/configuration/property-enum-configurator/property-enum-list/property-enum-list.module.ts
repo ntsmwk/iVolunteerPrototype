@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatCommonModule } from '@angular/material/core';
+import { MatCommonModule, MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { PropertyEnumListComponent } from './property-enum-list.component';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
+import { MatInputModule, MatFormFieldModule, MatSelectModule } from '@angular/material';
 
 
 const routes: Route[] = [
@@ -32,6 +33,14 @@ const routes: Route[] = [
     MatButtonModule,
     MatTooltipModule,
     MatSlideToggleModule,
+
+
+
+    MatFormFieldModule,
+    MatInputModule,
+
+    MatSelectModule,
+    MatOptionModule,
 
     MatProgressSpinnerModule,
 
