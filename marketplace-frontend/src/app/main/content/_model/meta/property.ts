@@ -20,7 +20,7 @@ export class PropertyDefinition<T> {
     required: boolean;
     propertyConstraints: PropertyConstraint<T>[];
 
-
+    timestamp: Date;
     visible: boolean;
     tabId: number;
 }
