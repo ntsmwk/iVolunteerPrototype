@@ -11,6 +11,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { MatTableDataSource } from "@angular/material";
+import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 
 @Component({
   selector: "tenant-form",
@@ -28,7 +29,8 @@ export class FuseTenantFormComponent implements OnInit {
     formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private coreHelpSeekerService: CoreHelpSeekerService
   ) {
     this.tenantForm = formBuilder.group({
       id: new FormControl(undefined),
@@ -42,16 +44,16 @@ export class FuseTenantFormComponent implements OnInit {
     return this.tenantForm.value.id !== null;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.findTenant(params["tenantId"]);
+      this.initializeTenantForm(params["tenantId"]);
     });
     this.route.queryParams.subscribe((params) => {
       this.marketplaceId = params["marketplaceId"];
     });
   }
 
-  private async findTenant(tenantId: string) {
+  private async initializeTenantForm(tenantId: string) {
     if (tenantId == null || tenantId.length === 0) {
       return;
     }
@@ -64,6 +66,13 @@ export class FuseTenantFormComponent implements OnInit {
       primaryColor: this.tenant.primaryColor,
       secondaryColor: this.tenant.secondaryColor,
     });
+
+    this.dataSource.data = <Helpseeker[]>(
+      await this.coreHelpSeekerService
+        .findAllByTenantId(this.tenant.id)
+        .toPromise()
+    );
+    console.error(this.dataSource.data);
   }
 
   save() {
@@ -80,6 +89,7 @@ export class FuseTenantFormComponent implements OnInit {
         this.router.navigate([`/main/marketplace-form/${this.marketplaceId}`])
       );
   }
+
   navigateToHelpSeekerForm(userId: string) {
     // TODO
   }
