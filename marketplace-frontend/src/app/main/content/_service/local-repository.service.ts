@@ -55,7 +55,7 @@ export class LocalRepositoryService {
         .then((localRepositorys: LocalRepository[]) => {
           successFunction(
             localRepositorys.find((localRepository: LocalRepository) => {
-              return localRepository.volunteerUsername === volunteer.username;
+              return localRepository.id === volunteer.id;
             })
           );
         })

@@ -548,9 +548,10 @@ export class DashboardVolunteerComponent implements OnInit {
         .getSingleClassInstance(this.volunteer, ci.id)
         .toPromise()
     );
+    let list = [share];
 
     await this.classInstanceService
-      .createNewTaskClassInstance(marketplace, share)
+      .createNewClassInstances(marketplace, list)
       .toPromise()
       .then(() => {
         this.marketplaceClassInstanceDTOs.push(ci);
