@@ -79,16 +79,6 @@ export class ClassInstanceService {
     );
   }
 
-  createNewTaskClassInstance(
-    marketplace: Marketplace,
-    classInstance: ClassInstance
-  ) {
-    return this.http.post(
-      `${marketplace.url}/meta/core/class/taskInstance/new`,
-      classInstance
-    );
-  }
-
   createSharedClassInstances(
     marketplace: Marketplace,
     tenantId: string,

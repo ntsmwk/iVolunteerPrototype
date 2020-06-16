@@ -304,17 +304,16 @@ export class DashboardVolunteerComponent implements OnInit {
         .toPromise()
     );
 
-    await this.localRepositoryService
+    this.localRepositoryService
       .synchronizeSingleClassInstance(this.volunteer, ci)
       .toPromise()
       .then(() => {
         this.localClassInstanceDTOs.push(ciDTO);
+        this.calcMetrics();
       });
-
-    this.calcMetrics();
   }
 
-  async removeOneFromLocalRepository(ciDTO: ClassInstanceDTO) {
+  removeOneFromLocalRepository(ciDTO: ClassInstanceDTO) {
     if (
       this.marketplaceClassInstanceDTOs.findIndex((c) => c.id === ciDTO.id) ===
       -1
@@ -324,9 +323,9 @@ export class DashboardVolunteerComponent implements OnInit {
           "Wirklich entfernen?",
           "Der Eintrag befindet sich nur mehr in Ihrem lokalen Freiwilligenpass, löschen Sie den Eintrag würde er unwiderruflich verloren gehen."
         )
-        .then(async (ret: boolean) => {
+        .then((ret: boolean) => {
           if (ret) {
-            await this.localRepositoryService
+            this.localRepositoryService
               .removeSingleClassInstance(this.volunteer, ciDTO.id)
               .toPromise()
               .then(() => {
@@ -336,15 +335,20 @@ export class DashboardVolunteerComponent implements OnInit {
                   ),
                   1
                 );
-              });
 
-            // remove row
-            this.dataSource.data.splice(this.dataSource.data.indexOf(ciDTO), 1);
-            this.dataSource._updateChangeSubscription();
+                // remove row
+                this.dataSource.data.splice(
+                  this.dataSource.data.indexOf(ciDTO),
+                  1
+                );
+                this.dataSource._updateChangeSubscription();
+
+                this.calcMetrics();
+              });
           }
         });
     } else {
-      await this.localRepositoryService
+      this.localRepositoryService
         .removeSingleClassInstance(this.volunteer, ciDTO.id)
         .toPromise()
         .then(() => {
@@ -352,10 +356,10 @@ export class DashboardVolunteerComponent implements OnInit {
             this.localClassInstanceDTOs.findIndex((c) => c.id === ciDTO.id),
             1
           );
+
+          this.calcMetrics();
         });
     }
-
-    this.calcMetrics();
   }
 
   async syncAllToLocalRepository() {
@@ -378,7 +382,7 @@ export class DashboardVolunteerComponent implements OnInit {
       )
       .toPromise();
 
-    await this.localRepositoryService
+    this.localRepositoryService
       .synchronizeClassInstances(this.volunteer, missingCis)
       .toPromise()
       .then(() => {
@@ -388,9 +392,9 @@ export class DashboardVolunteerComponent implements OnInit {
               this.localClassInstanceDTOs.map((lo) => lo.id).indexOf(mp.id) < 0
           )
         );
-      });
 
-    this.calcMetrics();
+        this.calcMetrics();
+      });
   }
 
   async removeAllFromLocalRepository() {
@@ -407,7 +411,7 @@ export class DashboardVolunteerComponent implements OnInit {
       return c !== null && this.isSynced(c);
     });
 
-    await this.localRepositoryService
+    this.localRepositoryService
       .removeClassInstances(
         this.volunteer,
         filteredClassInstances.map((ci) => ci.id)
@@ -417,9 +421,9 @@ export class DashboardVolunteerComponent implements OnInit {
         this.localClassInstanceDTOs = this.localClassInstanceDTOs.filter(
           (a) => filteredClassInstances.map((b) => b.id).indexOf(a.id) < 0
         );
-      });
 
-    this.calcMetrics();
+        this.calcMetrics();
+      });
   }
 
   //---- Local Repository functions end -----//
@@ -550,14 +554,13 @@ export class DashboardVolunteerComponent implements OnInit {
     );
     let list = [share];
 
-    await this.classInstanceService
+    this.classInstanceService
       .createNewClassInstances(marketplace, list)
       .toPromise()
       .then(() => {
         this.marketplaceClassInstanceDTOs.push(ci);
+        this.calcMetrics();
       });
-
-    this.generateVennData();
   }
 
   async revokeClassInstance(ci: ClassInstanceDTO, tenant: Tenant) {
