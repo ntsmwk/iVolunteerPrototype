@@ -1,18 +1,12 @@
 import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import {
-  ClassInstanceDTO,
-  ClassInstance,
-  ClassDefinition,
-} from "app/main/content/_model/meta/class";
+import { ClassInstance } from "app/main/content/_model/meta/class";
 import { LoginService } from "app/main/content/_service/login.service";
 import {
   Participant,
   ParticipantRole,
 } from "app/main/content/_model/participant";
-import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
-import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   MatTableDataSource,
@@ -20,12 +14,13 @@ import {
   Sort,
   MAT_DIALOG_DATA,
 } from "@angular/material";
-import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
 import { PropertyInstance } from "app/main/content/_model/meta/property";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { Volunteer } from "app/main/content/_model/volunteer";
 
 @Component({
   selector: "app-class-instance-details",
@@ -43,6 +38,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
   tenant: Tenant;
 
   isDialog: boolean = false;
+  isLocal: boolean = false;
 
   tableDataSource = new MatTableDataSource<PropertyInstance<any>>();
   displayedColumns = ["name", "values", "type"];
@@ -51,11 +47,9 @@ export class ClassInstanceDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private classInstanceService: ClassInstanceService,
     private loginService: LoginService,
-    private volunteerService: CoreVolunteerService,
-    private helpseekerService: CoreHelpSeekerService,
-    private classDefinitionService: ClassDefinitionService,
     private tenantService: TenantService,
     private globalService: GlobalService,
+    private localRepositoryService: LocalRepositoryService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.route.params.subscribe((params) => {
@@ -82,6 +76,23 @@ export class ClassInstanceDetailsComponent implements OnInit {
         .getClassInstanceById(this.marketplace, this.id)
         .toPromise()
     );
+
+    if (this.classInstance === null) {
+      let role = <ParticipantRole>(
+        await this.loginService.getLoggedInParticipantRole().toPromise()
+      );
+
+      if (role === "VOLUNTEER") {
+        this.classInstance = <ClassInstance>(
+          await this.localRepositoryService
+            .getSingleClassInstance(<Volunteer>this.participant, this.id)
+            .toPromise()
+        );
+        this.isLocal = true;
+      }
+    }
+
+    console.error("classInstance", this.classInstance);
 
     this.tableDataSource.data = this.classInstance.properties;
 
