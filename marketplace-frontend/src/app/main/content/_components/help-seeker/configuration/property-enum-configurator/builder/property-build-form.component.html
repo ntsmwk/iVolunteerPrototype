@@ -18,11 +18,11 @@
 
     </mat-tab-group> -->
 
-    <app-builder-container *ngIf="displayBuilder" [marketplace]="marketplace" [helpseeker]="helpseeker"
-      [builderType]="builderType" [entryId]="entryId" (result)="handleResultEvent($event)">
+    <app-builder-container [marketplace]="marketplace" [helpseeker]="helpseeker" [builderType]="builderType"
+      [entryId]="entryId" sourceString="builder" (result)="handleResultEvent($event)">
     </app-builder-container>
 
-    <div *ngIf="!displayBuilder">
+    <!-- <div *ngIf="!displayBuilder">
       <div *ngIf="displayResultSuccess">
         <div>Success!</div>
         <a (click)="handleAddAnotherClick()">do another!</a>
@@ -31,7 +31,7 @@
         <div>Failed or Cancelled!</div>
         <a (click)="handleAddAnotherClick()">try again...</a>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="center-div" *ngIf="!loaded">

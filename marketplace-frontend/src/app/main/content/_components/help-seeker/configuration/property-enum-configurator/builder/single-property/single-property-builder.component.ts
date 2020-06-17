@@ -26,6 +26,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
   @Input() marketplace: Marketplace;
   @Input() helpseeker: Helpseeker;
   @Input() entryId: string;
+  @Input() sourceString: string;
   @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
   loaded: boolean; dropdownToggled: boolean;
@@ -197,6 +198,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   handleCancelClick() {
     this.result.emit(undefined);
+
   }
 
   createPropertyFromForm(): PropertyDefinition<any> {

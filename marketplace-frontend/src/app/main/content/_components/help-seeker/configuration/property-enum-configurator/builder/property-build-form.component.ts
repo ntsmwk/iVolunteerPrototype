@@ -26,8 +26,8 @@ export class PropertyBuildFormComponent implements OnInit {
   loaded: boolean;
 
   displayBuilder: boolean;
-  displayResultSuccess: boolean;
   builderType: string;
+
 
   // tenant: Tenant;
 
@@ -41,10 +41,8 @@ export class PropertyBuildFormComponent implements OnInit {
 
   async ngOnInit() {
     this.displayBuilder = true;
-    this.displayResultSuccess = false;
 
-    const [queryParamResult, paramResult] = await Promise.all([
-
+    await Promise.all([
       this.route.queryParams.subscribe((params) => {
         if (isNullOrUndefined(params['type'] || params['type'] === 'property')) {
           this.builderType = 'property';
@@ -52,23 +50,11 @@ export class PropertyBuildFormComponent implements OnInit {
           this.builderType = params['type'];
         }
       }),
-
       this.route.params.subscribe((params) => {
-        // console.log(params);
         this.marketplaceId = params['marketplaceId'];
         this.entryId = params['entryId'];
       })
     ]);
-
-    // console.log("????????????????????????????????ßßß");
-    // console.log(queryParamResult);
-    // console.log(paramResult);
-
-    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    // console.log(this.marketplaceId);
-    // console.log(this.builderType);
-    // console.log(this.entryId);
-    // TODO - open existing asset in build form
 
     this.helpseeker = <Helpseeker>(
       await this.loginService.getLoggedIn().toPromise()
@@ -92,14 +78,9 @@ export class PropertyBuildFormComponent implements OnInit {
     this.displayBuilder = false;
 
     if (!isNullOrUndefined(result)) {
-      this.displayResultSuccess = true;
+      window.history.back();
     } else {
-      this.displayResultSuccess = false;
+      window.history.back();
     }
-  }
-
-  handleAddAnotherClick() {
-    this.displayResultSuccess = false;
-    this.displayBuilder = true;
   }
 }

@@ -29,6 +29,7 @@ export class EnumBuilderComponent implements OnInit {
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
     @Input() entryId: string;
+    @Input() sourceString: string;
     @Output() result: EventEmitter<EnumDefinition> = new EventEmitter();
 
     form: FormGroup;
@@ -99,6 +100,12 @@ export class EnumBuilderComponent implements OnInit {
 
     handleCancelClick() {
         this.result.emit(undefined);
+    }
+
+    handleResult(event: EnumDefinition) {
+        console.log("result");
+        console.log(event);
+        this.result.emit(event);
     }
 
     openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {

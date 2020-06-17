@@ -3,6 +3,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { isNullOrUndefined } from "util";
+
 
 @Component({
     selector: 'app-builder-container',
@@ -16,6 +18,7 @@ export class BuilderContainerComponent implements OnInit {
     @Input() allPropertyDefinitions: PropertyDefinition<any>[];
     @Input() builderType: string;
     @Input() entryId: string;
+    @Input() sourceString: string;
     @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
     constructor(private router: Router,
@@ -23,7 +26,6 @@ export class BuilderContainerComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
 
     }
 
@@ -35,6 +37,10 @@ export class BuilderContainerComponent implements OnInit {
 
     handleResultEvent(event) {
         this.result.emit(event);
+    }
+
+    isRadioGroupDisabled() {
+        return !isNullOrUndefined(this.entryId);
     }
 
     navigateBack() {
