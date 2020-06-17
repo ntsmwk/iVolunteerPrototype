@@ -30,9 +30,11 @@ export class BuilderContainerComponent implements OnInit {
     }
 
     onSelectionChange() {
-        const queryParams: Params = { type: this.builderType };
+        if (this.sourceString !== 'dialog') {
+            const queryParams: Params = { type: this.builderType };
 
-        this.router.navigate([], { relativeTo: this.route, queryParams: queryParams, queryParamsHandling: 'merge', });
+            this.router.navigate([], { relativeTo: this.route, queryParams: queryParams, queryParamsHandling: 'merge', });
+        }
     }
 
     handleResultEvent(event) {
