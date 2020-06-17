@@ -114,7 +114,8 @@
   <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
     <button type="submit" mat-raised-button color="primary">Speichern</button>
     <div class="pl-8"></div>
-    <button *ngIf="sourceString=='builder'" type="button" (click)="handleCancelClick()" mat-raised-button
-      color="basic">Abbrechen</button>
+    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
+    <!-- <button *ngIf="sourceString=='builder'" type="button" (click)="handleCancelClick()" mat-raised-button
+      color="basic">Abbrechen</button> -->
   </div>
 </form>

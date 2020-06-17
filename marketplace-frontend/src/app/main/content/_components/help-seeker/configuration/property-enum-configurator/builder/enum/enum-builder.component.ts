@@ -59,7 +59,7 @@ export class EnumBuilderComponent implements OnInit {
         window.history.back();
     }
 
-    createClicked() {
+    handleCreateClick() {
         this.form.controls['name'].markAsTouched();
         if (this.form.invalid) {
             this.form.markAllAsTouched();
@@ -76,26 +76,26 @@ export class EnumBuilderComponent implements OnInit {
 
     }
 
-    openClicked() {
-        // this.form.controls['name'].markAsPending();
+    // openClicked() {
+    //     // this.form.controls['name'].markAsPending();
 
-        this.openOpenEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpenEnumDefinitionDialogData) => {
-            if (!isNullOrUndefined(result)) {
-                this.enumDefinition = result.enumDefinition;
-                this.showEditor = true;
-            }
-        });
+    //     this.openOpenEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: OpenEnumDefinitionDialogData) => {
+    //         if (!isNullOrUndefined(result)) {
+    //             this.enumDefinition = result.enumDefinition;
+    //             this.showEditor = true;
+    //         }
+    //     });
 
-    }
+    // }
 
-    deleteClicked() {
-        // this.form.controls['name'].markAsPending();
-        this.openDeleteEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeleteEnumDefinitionDialogData) => {
-            if (!isNullOrUndefined(result)) {
-                console.log('TODO');
-            }
-        });
-    }
+    // deleteClicked() {
+    //     // this.form.controls['name'].markAsPending();
+    //     this.openDeleteEnumDefinitionDialog(this.marketplace, this.helpseeker).then((result: DeleteEnumDefinitionDialogData) => {
+    //         if (!isNullOrUndefined(result)) {
+    //             console.log('TODO');
+    //         }
+    //     });
+    // }
 
 
     handleCancelClick() {
@@ -103,8 +103,6 @@ export class EnumBuilderComponent implements OnInit {
     }
 
     handleResult(event: EnumDefinition) {
-        console.log("result");
-        console.log(event);
         this.result.emit(event);
     }
 

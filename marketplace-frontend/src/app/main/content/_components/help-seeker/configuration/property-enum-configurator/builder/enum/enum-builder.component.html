@@ -21,7 +21,8 @@
         matAutosizeMaxRows="3"></textarea>
     </mat-form-field>
 
-    <button *ngIf="!showEditor" mat-raised-button (click)="createClicked()">Erstellen</button>
+    <button *ngIf="!showEditor" mat-raised-button (click)="handleCreateClick()">Erstellen</button>
+    <button *ngIf="!showEditor" mat-raised-button (click)="handleCancelClick()">Abbrechen</button>
 
   </form>
 
