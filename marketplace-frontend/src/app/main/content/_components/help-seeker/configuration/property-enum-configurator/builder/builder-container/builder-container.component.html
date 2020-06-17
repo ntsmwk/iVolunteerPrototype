@@ -10,13 +10,14 @@
   </div>
 
   <div *ngIf="builderType == 'property'">
-    <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker"
+    <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker" [entryId]="entryId"
       (result)="handleResultEvent($event)">
     </app-single-property-builder>
   </div>
 
   <div *ngIf="builderType == 'enum'">
-    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker" (result)="handleResultEvent($event)">
+    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker" [entryId]="entryId"
+      (result)="handleResultEvent($event)">
     </app-enum-builder>
   </div>
 

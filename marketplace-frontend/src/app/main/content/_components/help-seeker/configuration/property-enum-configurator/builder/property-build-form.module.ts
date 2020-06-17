@@ -14,8 +14,8 @@ import { SinglePropertyBuilderModule } from './single-property/single-property-b
 import { BuilderContainerModule } from './builder-container/builder-container.module';
 
 const routes = [
-  { path: ':propertyId', component: PropertyBuildFormComponent },
-  { path: '', component: PropertyBuildFormComponent },
+  { path: ':marketplaceId/:entryId', component: PropertyBuildFormComponent },
+  { path: ':marketplaceId', component: PropertyBuildFormComponent },
 ];
 
 @NgModule({

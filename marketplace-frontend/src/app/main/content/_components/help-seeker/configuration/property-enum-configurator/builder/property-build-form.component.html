@@ -19,7 +19,7 @@
     </mat-tab-group> -->
 
     <app-builder-container *ngIf="displayBuilder" [marketplace]="marketplace" [helpseeker]="helpseeker"
-      [builderType]="builderType" (result)="handleResultEvent($event)">
+      [builderType]="builderType" [entryId]="entryId" (result)="handleResultEvent($event)">
     </app-builder-container>
 
     <div *ngIf="!displayBuilder">

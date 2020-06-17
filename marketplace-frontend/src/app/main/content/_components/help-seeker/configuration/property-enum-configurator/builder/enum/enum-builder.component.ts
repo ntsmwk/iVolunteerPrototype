@@ -8,6 +8,7 @@ import { isNullOrUndefined } from 'util';
 import { OpenEnumDefinitionDialogData, OpenEnumDefinitionDialogComponent } from './enum-graph-editor/open-enum-definition-dialog/open-enum-definition-dialog.component';
 import { MatDialog } from '@angular/material';
 import { DeleteEnumDefinitionDialogComponent, DeleteEnumDefinitionDialogData } from './enum-graph-editor/delete-enum-definition-dialog/delete-enum-definition-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { DeleteEnumDefinitionDialogComponent, DeleteEnumDefinitionDialogData } f
 export class EnumBuilderComponent implements OnInit {
     constructor(
         public dialog: MatDialog,
+        private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         // private dialogFactory: DialogFactoryDirective,
         private enumDefinitionService: EnumDefinitionService,
@@ -26,6 +28,7 @@ export class EnumBuilderComponent implements OnInit {
 
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
+    @Input() entryId: string;
     @Output() result: EventEmitter<EnumDefinition> = new EventEmitter();
 
     form: FormGroup;
@@ -35,10 +38,16 @@ export class EnumBuilderComponent implements OnInit {
     loaded: boolean;
 
     ngOnInit() {
+        console.log("enum-builder");
+        console.log(this.entryId);
 
         this.form = this.formBuilder.group({
             name: this.formBuilder.control('', Validators.required),
             description: this.formBuilder.control('')
+        });
+
+        this.enumDefinitionService.getEnumDefinitionById(this.marketplace, this.entryId).toPromise().then((ret: EnumDefinition) => {
+            this.enumDefinition = ret;
         });
 
         this.loaded = true;

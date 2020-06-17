@@ -13,7 +13,7 @@
 
 <mat-dialog-content *ngIf="loaded">
   <app-builder-container [marketplace]="data.marketplace" [helpseeker]="data.helpseeker"
-    [allPropertyDefinitions]="data.allPropertyDefinitions" (result)="handleResultEvent($event)">
+    (result)="handleResultEvent($event)">
   </app-builder-container>
 </mat-dialog-content>
 

@@ -11,7 +11,6 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class ClassConfiguration extends IVolunteerObject {
 
 	private String name;
-	private String description;
 
 	private List<String> classDefinitionIds;
 	private List<String> relationshipIds;
@@ -29,14 +28,6 @@ public class ClassConfiguration extends IVolunteerObject {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public List<String> getClassDefinitionIds() {

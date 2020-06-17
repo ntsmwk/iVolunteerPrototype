@@ -15,6 +15,7 @@ export class BuilderContainerComponent implements OnInit {
     @Input() helpseeker: Helpseeker;
     @Input() allPropertyDefinitions: PropertyDefinition<any>[];
     @Input() builderType: string;
+    @Input() entryId: string;
     @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
     constructor(private router: Router,

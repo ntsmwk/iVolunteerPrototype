@@ -13,6 +13,7 @@ public abstract class IVolunteerObject {
 	protected String tenantId;
 	protected String marketplaceId;
 	protected Date timestamp;
+	protected String description;
 
 	public IVolunteerObject() {
 	}
@@ -51,6 +52,14 @@ public abstract class IVolunteerObject {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
