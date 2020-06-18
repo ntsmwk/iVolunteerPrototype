@@ -24,7 +24,6 @@ export class PropertyOrEnumCreationDialogComponent implements OnInit {
 
   loaded = false;
 
-
   constructor(
     public dialogRef: MatDialogRef<PropertyOrEnumCreationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PropertyOrEnumCreationDialogData,

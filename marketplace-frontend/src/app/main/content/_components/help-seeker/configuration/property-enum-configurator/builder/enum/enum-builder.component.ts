@@ -39,24 +39,35 @@ export class EnumBuilderComponent implements OnInit {
     loaded: boolean;
 
     ngOnInit() {
-        console.log("enum-builder");
-        console.log(this.entryId);
-
         this.form = this.formBuilder.group({
             name: this.formBuilder.control('', Validators.required),
             description: this.formBuilder.control('')
         });
 
-        this.enumDefinitionService.getEnumDefinitionById(this.marketplace, this.entryId).toPromise().then((ret: EnumDefinition) => {
-            this.enumDefinition = ret;
-        });
+        if (!isNullOrUndefined(this.entryId)) {
+            this.enumDefinitionService.getEnumDefinitionById(this.marketplace, this.entryId).toPromise().then((ret: EnumDefinition) => {
+                this.enumDefinition = ret;
+                console.log(this.enumDefinition);
+                this.form.get('name').setValue(this.enumDefinition.name);
+                this.form.get('description').setValue(this.enumDefinition.description);
+                this.showEditor = true;
+                this.loaded = true;
+            });
 
-        this.loaded = true;
+        } else {
+            this.loaded = true;
+
+        }
+
 
     }
 
     navigateBack() {
         window.history.back();
+    }
+
+    populateEditor() {
+
     }
 
     handleCreateClick() {
@@ -106,45 +117,45 @@ export class EnumBuilderComponent implements OnInit {
         this.result.emit(event);
     }
 
-    openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-        const dialogRef = this.dialog.open(OpenEnumDefinitionDialogComponent, {
-            width: '500px',
-            minWidth: '500px',
-            height: '400px',
-            minHeight: '400px',
-            data: { marketplace: marketplace, helpseeker: helpseeker }
-        });
+    // openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+    //     const dialogRef = this.dialog.open(OpenEnumDefinitionDialogComponent, {
+    //         width: '500px',
+    //         minWidth: '500px',
+    //         height: '400px',
+    //         minHeight: '400px',
+    //         data: { marketplace: marketplace, helpseeker: helpseeker }
+    //     });
 
-        let returnValue: OpenEnumDefinitionDialogData;
+    //     let returnValue: OpenEnumDefinitionDialogData;
 
-        dialogRef.beforeClose().toPromise().then((result: OpenEnumDefinitionDialogData) => {
-            returnValue = result;
-        });
+    //     dialogRef.beforeClose().toPromise().then((result: OpenEnumDefinitionDialogData) => {
+    //         returnValue = result;
+    //     });
 
-        return dialogRef.afterClosed().toPromise().then(() => {
-            return returnValue;
-        });
-    }
+    //     return dialogRef.afterClosed().toPromise().then(() => {
+    //         return returnValue;
+    //     });
+    // }
 
-    openDeleteEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
-        const dialogRef = this.dialog.open(DeleteEnumDefinitionDialogComponent, {
-            width: '500px',
-            minWidth: '500px',
-            height: '400px',
-            minHeight: '400px',
-            data: { marketplace: marketplace, helpseeker: helpseeker }
-        });
+    // openDeleteEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
+    //     const dialogRef = this.dialog.open(DeleteEnumDefinitionDialogComponent, {
+    //         width: '500px',
+    //         minWidth: '500px',
+    //         height: '400px',
+    //         minHeight: '400px',
+    //         data: { marketplace: marketplace, helpseeker: helpseeker }
+    //     });
 
-        let returnValue: DeleteEnumDefinitionDialogData;
+    //     let returnValue: DeleteEnumDefinitionDialogData;
 
-        dialogRef.beforeClose().toPromise().then((result: DeleteEnumDefinitionDialogData) => {
-            returnValue = result;
-        });
+    //     dialogRef.beforeClose().toPromise().then((result: DeleteEnumDefinitionDialogData) => {
+    //         returnValue = result;
+    //     });
 
-        return dialogRef.afterClosed().toPromise().then(() => {
-            return returnValue;
-        });
-    }
+    //     return dialogRef.afterClosed().toPromise().then(() => {
+    //         return returnValue;
+    //     });
+    // }
 
 
 }
