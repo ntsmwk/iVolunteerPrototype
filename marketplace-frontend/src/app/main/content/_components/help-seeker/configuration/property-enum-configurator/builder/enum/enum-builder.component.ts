@@ -30,7 +30,7 @@ export class EnumBuilderComponent implements OnInit {
     @Input() helpseeker: Helpseeker;
     @Input() entryId: string;
     @Input() sourceString: string;
-    @Output() result: EventEmitter<{builderType: string, value: EnumDefinition}> = new EventEmitter();
+    @Output() result: EventEmitter<{ builderType: string, value: EnumDefinition }> = new EventEmitter();
 
     form: FormGroup;
     enumDefinition: EnumDefinition;
@@ -56,10 +56,7 @@ export class EnumBuilderComponent implements OnInit {
 
         } else {
             this.loaded = true;
-
         }
-
-
     }
 
     navigateBack() {
@@ -84,7 +81,14 @@ export class EnumBuilderComponent implements OnInit {
                     }
                 });
         }
+    }
 
+    handleCancelClick() {
+        this.result.emit(undefined);
+    }
+
+    handleResult(event: EnumDefinition) {
+        this.result.emit({ builderType: 'enum', value: event });
     }
 
     // openClicked() {
@@ -107,15 +111,6 @@ export class EnumBuilderComponent implements OnInit {
     //         }
     //     });
     // }
-
-
-    handleCancelClick() {
-        this.result.emit(undefined);
-    }
-
-    handleResult(event: EnumDefinition) {
-        this.result.emit({builderType: 'enum', value: event});
-    }
 
     // openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {
     //     const dialogRef = this.dialog.open(OpenEnumDefinitionDialogComponent, {

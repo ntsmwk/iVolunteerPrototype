@@ -213,17 +213,14 @@ export class SinglePropertyBuilderComponent implements OnInit {
     }
 
     property.name = this.form.get('name').value;
-
     property.allowedValues = [];
     if (!isNullOrUndefined(this.form.get('allowedValues'))) {
       for (const value of (this.form.get('allowedValues') as FormArray).value) {
         property.allowedValues.push(value.value);
       }
     }
-
     property.propertyConstraints = [];
     property.type = this.form.get('type').value;
-
     property.description = this.form.get('description').value;
 
     return property;

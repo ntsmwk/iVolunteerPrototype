@@ -28,7 +28,6 @@ import { DialogFactoryModule } from '../../../../_shared_components/dialogs/_dia
     MatButtonModule,
     MatFormFieldModule,
 
-
     MatSelectModule,
     MatOptionModule,
     MatTooltipModule,
@@ -42,7 +41,6 @@ import { DialogFactoryModule } from '../../../../_shared_components/dialogs/_dia
     EditorTreeViewModule,
 
     ClassOptionsOverlayControlModule,
-
   ],
   declarations: [ClassConfiguratorComponent],
   exports: [ClassConfiguratorComponent],

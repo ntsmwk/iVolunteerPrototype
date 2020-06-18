@@ -168,8 +168,7 @@ export class AddPropertyDialogComponent implements OnInit {
       data: {
         marketplace: this.data.marketplace,
         helpseeker: this.data.helpseeker,
-        allPropertyDefinitions:
-          this.datasource.data,
+        allPropertyDefinitions: this.datasource.data,
         builderType: type
       },
       disableClose: true

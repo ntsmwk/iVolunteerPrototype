@@ -39,23 +39,11 @@ export class PropertyOrEnumCreationDialogComponent implements OnInit {
     if (isNullOrUndefined(event)) {
       this.handleCloseClick();
     } else {
-      // if (this.data.builderType === 'property') {
-      //   this.data.propertyDefinition = event;
-      // } else {
-      //   this.data.enumDefinition = event;
-      // }
-
-      console.log(event);
       if (event.builderType == 'enum') {
         this.data.enumDefinition = event.value;
-        console.log("enum");
       } else if (event.builderType == 'property') {
         this.data.propertyDefinition = event.value;
-        console.log("property");
       }
-
-
-
       this.dialogRef.close(this.data);
     }
   }
