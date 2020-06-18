@@ -5,7 +5,7 @@ import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/cl
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/relationship';
 import { isNullOrUndefined } from 'util';
-import { PropertyType, ClassProperty } from 'app/main/content/_model/meta/property';
+import { ClassProperty } from 'app/main/content/_model/meta/property';
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
