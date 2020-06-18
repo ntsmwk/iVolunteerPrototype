@@ -13,7 +13,7 @@ export interface PropertyOrEnumCreationDialogData {
 
   propertyDefinition: PropertyDefinition<any>;
   enumDefinition: EnumDefinition;
-  builderType: string;
+  builderType: 'property' | 'enum';
 }
 
 @Component({
@@ -35,11 +35,27 @@ export class PropertyOrEnumCreationDialogComponent implements OnInit {
     this.loaded = true;
   }
 
-  handleResultEvent(event: PropertyDefinition<any>) {
+  handleResultEvent(event: any) {
     if (isNullOrUndefined(event)) {
       this.handleCloseClick();
     } else {
-      this.data.propertyDefinition = event;
+      // if (this.data.builderType === 'property') {
+      //   this.data.propertyDefinition = event;
+      // } else {
+      //   this.data.enumDefinition = event;
+      // }
+
+      console.log(event);
+      if (event.builderType == 'enum') {
+        this.data.enumDefinition = event.value;
+        console.log("enum");
+      } else if (event.builderType == 'property') {
+        this.data.propertyDefinition = event.value;
+        console.log("property");
+      }
+
+
+
       this.dialogRef.close(this.data);
     }
   }

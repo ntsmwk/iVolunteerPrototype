@@ -177,8 +177,13 @@ export class AddPropertyDialogComponent implements OnInit {
 
     dialogRef.beforeClose().toPromise().then((result: PropertyOrEnumCreationDialogData) => {
       if (!isNullOrUndefined(result)) {
-        this.allPropertyDefinitions.push(result.propertyDefinition);
-        this.datasource.data = this.allPropertyDefinitions;
+        if (!isNullOrUndefined(result.propertyDefinition)) {
+          this.allPropertyDefinitions.push(result.propertyDefinition);
+          this.datasource.data = this.allPropertyDefinitions;
+        } else if (!isNullOrUndefined(result.enumDefinition)) {
+          this.allEnumDefinitions.push(result.enumDefinition);
+          this.enumDataSource.data = this.allEnumDefinitions;
+        }
       }
     });
 

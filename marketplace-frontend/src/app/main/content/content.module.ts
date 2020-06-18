@@ -118,7 +118,7 @@ const routes: Route[] = [
     path: "main/properties/all",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-enum-configurator/property-enum-list/property-enum-list.module"
+        "./_components/help-seeker/configuration/property-enum-configurator/list/property-enum-list.module"
       ).then((m) => m.PropertyEnumListModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard],
   },
@@ -127,7 +127,7 @@ const routes: Route[] = [
     path: "main/property/detail/view",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-enum-configurator/property-detail/property-detail.module"
+        "./_components/help-seeker/configuration/property-enum-configurator/detail/property-detail.module"
       ).then((m) => m.PropertyDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },

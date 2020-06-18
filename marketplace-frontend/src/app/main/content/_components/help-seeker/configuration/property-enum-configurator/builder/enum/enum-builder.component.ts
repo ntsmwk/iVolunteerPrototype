@@ -30,7 +30,7 @@ export class EnumBuilderComponent implements OnInit {
     @Input() helpseeker: Helpseeker;
     @Input() entryId: string;
     @Input() sourceString: string;
-    @Output() result: EventEmitter<EnumDefinition> = new EventEmitter();
+    @Output() result: EventEmitter<{builderType: string, value: EnumDefinition}> = new EventEmitter();
 
     form: FormGroup;
     enumDefinition: EnumDefinition;
@@ -114,7 +114,7 @@ export class EnumBuilderComponent implements OnInit {
     }
 
     handleResult(event: EnumDefinition) {
-        this.result.emit(event);
+        this.result.emit({builderType: 'enum', value: event});
     }
 
     // openOpenEnumDefinitionDialog(marketplace: Marketplace, helpseeker: Helpseeker) {

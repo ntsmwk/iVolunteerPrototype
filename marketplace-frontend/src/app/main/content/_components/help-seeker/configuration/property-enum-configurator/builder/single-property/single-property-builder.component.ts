@@ -27,7 +27,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
   @Input() helpseeker: Helpseeker;
   @Input() entryId: string;
   @Input() sourceString: string;
-  @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
+  @Output() result: EventEmitter<{builderType: string, value: PropertyDefinition<any>}> = new EventEmitter();
 
   loaded: boolean; dropdownToggled: boolean;
 
@@ -186,7 +186,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
       this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then((ret: PropertyDefinition<any>[]) => {
         if (!isNullOrUndefined(ret) && ret.length > 0) {
-          this.result.emit(ret[0]);
+          this.result.emit({builderType: 'property', value: ret[0]});
         } else {
           this.result.emit(undefined);
         }
