@@ -13,6 +13,7 @@ export interface PropertyOrEnumCreationDialogData {
 
   propertyDefinition: PropertyDefinition<any>;
   enumDefinition: EnumDefinition;
+  builderType: string;
 }
 
 @Component({

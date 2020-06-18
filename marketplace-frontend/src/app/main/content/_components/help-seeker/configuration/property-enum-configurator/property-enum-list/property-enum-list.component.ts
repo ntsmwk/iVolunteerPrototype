@@ -60,24 +60,19 @@ export class PropertyEnumListComponent implements OnInit {
       return data.name.toLowerCase().includes(filter);
     };
     this.loadAllProperties();
-
   }
 
   applyFiltersFromParams() {
     this.route.queryParams.subscribe((params) => {
       this.applyFilters(params);
     });
-
   }
 
   onRowSelect(p: PropertyDefinition<any>) {
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
   }
 
-
-
   loadAllProperties() {
-
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.helpseeker = helpseeker;
 
@@ -87,17 +82,14 @@ export class PropertyEnumListComponent implements OnInit {
           Promise.all([
             this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
               this.propertyDefinitions = propertyDefinitions;
-
             }),
             this.enumDefinitionService.getAllEnumDefinitionsForTenant(marketplace, this.helpseeker.tenantId).toPromise().then((enumDefinitions: EnumDefinition[]) => {
               this.enumDefinitions = enumDefinitions;
             })
-
           ]).then(() => {
             this.updatePropertyAndEnumEntryList();
             this.applyFiltersFromParams();
             this.isLoaded = true;
-
           });
         }
       });
@@ -111,7 +103,6 @@ export class PropertyEnumListComponent implements OnInit {
     this.dataSource.data = this.propertyEnumEntries;
   }
 
-
   applyTypeFilter() {
     switch (this.dropdownFilterValue) {
       case 'all': this.dataSource.data = this.propertyEnumEntries; break;
@@ -119,15 +110,12 @@ export class PropertyEnumListComponent implements OnInit {
       case 'enums': this.dataSource.data = this.propertyEnumEntries.filter((entry: PropertyEnumEntry) => entry.type === PropertyType.ENUM); break;
       default: console.error('undefined type');
     }
-
     this.patchFilterParam('filter', this.dropdownFilterValue);
-
   }
 
   handleTextFilterEvent(event: Event) {
     this.applyTextFilter(this.textSearchValue);
   }
-
 
   applyTextFilter(filterValue: string) {
     if (isNullOrUndefined(filterValue) || filterValue.length <= 0) {
@@ -144,7 +132,6 @@ export class PropertyEnumListComponent implements OnInit {
       this.dropdownFilterValue = params['filter'];
       this.applyTypeFilter();
     }
-
     if (!isNullOrUndefined(params['searchString'])) {
       this.applyTextFilter(params['searchString']);
       this.textSearchValue = params['searchString'];

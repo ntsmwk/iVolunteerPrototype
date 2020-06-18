@@ -62,10 +62,14 @@ export class AddPropertyDialogComponent implements OnInit {
 
   loaded: boolean;
 
+  tabIndex: number;
+
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
+
+    this.tabIndex = 0;
 
     Promise.all([
       this.propertyDefinitionService.getAllPropertyDefinitons(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
@@ -85,17 +89,10 @@ export class AddPropertyDialogComponent implements OnInit {
       this.enumDefinitionService.getAllEnumDefinitionsForTenant(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: EnumDefinition[]) => {
         this.enumDataSource.data = ret;
         this.allEnumDefinitions = ret;
-
-        // this.initialEnums = ret.filter(e => this.data.classDefinition.enums.find(f => f.id === e.id));
-
-        // this.enumSelection.select(...this.initialEnums);
-
-
       })
     ]).then(() => {
       this.loaded = true;
     });
-
   }
 
   findParentProperties() {
@@ -162,13 +159,19 @@ export class AddPropertyDialogComponent implements OnInit {
       });
   }
 
-  createNewPropertyClicked() {
+  createNewClicked(type: string) {
     const dialogRef = this.dialog.open(PropertyOrEnumCreationDialogComponent, {
       width: '70vw',
       minWidth: '70vw',
       height: '90vh',
       minHeight: '90vh',
-      data: { marketplace: this.data.marketplace, helpseeker: this.data.helpseeker, allPropertyDefinitions: this.datasource.data },
+      data: {
+        marketplace: this.data.marketplace,
+        helpseeker: this.data.helpseeker,
+        allPropertyDefinitions:
+          this.datasource.data,
+        builderType: type
+      },
       disableClose: true
     });
 

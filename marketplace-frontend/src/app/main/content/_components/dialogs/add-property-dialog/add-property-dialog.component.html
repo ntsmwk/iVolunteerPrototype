@@ -13,8 +13,7 @@
 
 <mat-dialog-content>
   <div *ngIf="loaded">
-
-    <mat-tab-group>
+    <mat-tab-group #tabGroup (selectedTabChange)="tabIndex = $event.index">
       <mat-tab label="Properties">
         <mat-table #propertyTable class="property-table" [dataSource]="datasource" matSort>
           <ng-container matColumnDef="checkbox">
@@ -106,7 +105,11 @@
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
   <button mat-button (click)="onSubmit()">Bestätigen</button>
 
-  <button mat-button (click)="createNewPropertyClicked()">
+  <button *ngIf="tabIndex === 0" mat-button (click)="createNewClicked('property')">
     Neues Property
+  </button>
+
+  <button *ngIf="tabIndex === 1" mat-button (click)="createNewClicked('enum')">
+    Neues Enum
   </button>
 </mat-dialog-actions>
