@@ -11,7 +11,6 @@ import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { LoginService } from "app/main/content/_service/login.service";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { PropertyDefinitionService } from "app/main/content/_service/meta/core/property/property-definition.service";
-import { UserDefinedTaskTemplateService } from "app/main/content/_service/user-defined-task-template.service";
 
 @Component({
   selector: "app-property-detail",
@@ -34,8 +33,7 @@ export class PropertyDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private marketplaceService: MarketplaceService,
-    private propertyDefinitionService: PropertyDefinitionService,
-    private userDefinedTaskTemplateService: UserDefinedTaskTemplateService
+    private propertyDefinitionService: PropertyDefinitionService
   ) {
     this.isLoaded = false;
   }
@@ -102,17 +100,17 @@ export class PropertyDetailComponent implements OnInit {
             });
         } else if (ref === "template") {
         } else if (ref === "subtemplate") {
-          this.userDefinedTaskTemplateService
-            .getPropertyFromSubTemplate(
-              this.marketplace,
-              templateId,
-              subtemplateId,
-              propId
-            )
-            .toPromise()
-            .then((propertyDefintion: PropertyDefinition<any>) => {
-              this.propertyDefintion = propertyDefintion;
-            });
+          // this.userDefinedTaskTemplateService
+          //   .getPropertyFromSubTemplate(
+          //     this.marketplace,
+          //     templateId,
+          //     subtemplateId,
+          //     propId
+          //   )
+          //   .toPromise()
+          //   .then((propertyDefintion: PropertyDefinition<any>) => {
+          //     this.propertyDefintion = propertyDefintion;
+          //   });
         }
       });
   }

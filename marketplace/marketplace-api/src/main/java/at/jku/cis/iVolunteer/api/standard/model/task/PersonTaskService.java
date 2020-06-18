@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
-import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
@@ -23,16 +22,11 @@ import jersey.repackaged.com.google.common.collect.Lists;
 @Service
 public class PersonTaskService {
 
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-	@Autowired
-	private UserMappingService userMappingService;
-	@Autowired
-	private MarketplaceService marketplaceService;
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private UserMappingService userMappingService;
+	@Autowired private MarketplaceService marketplaceService;
 
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);

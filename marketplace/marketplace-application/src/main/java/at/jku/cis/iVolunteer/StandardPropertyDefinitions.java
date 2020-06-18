@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
-import at.jku.cis.iVolunteer.model.meta.constraint.property.PropertyConstraint;
-import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MaximumTextLength;
-import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.MinimumTextLength;
-import at.jku.cis.iVolunteer.model.meta.constraint.property.constraints.TextPattern;
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinitionTypes.BooleanPropertyDefinition;
@@ -31,10 +27,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 @Component
 public class StandardPropertyDefinitions {
 
-	@Autowired
-	public PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	public CoreTenantRestClient coreTenantRestClient;
+	@Autowired public PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired public CoreTenantRestClient coreTenantRestClient;
 	// =========================================
 	// ========== Text Properties ==============
 	// =========================================
@@ -176,10 +170,6 @@ public class StandardPropertyDefinitions {
 //
 //		return new ArrayList(list);
 //	}
-	
-
-	
-	
 
 	public List<PropertyDefinition<Object>> getAll(String tenantId) {
 		List<PropertyDefinition<Object>> properties = this.getAllHeader(tenantId);
@@ -188,7 +178,7 @@ public class StandardPropertyDefinitions {
 //		List<PropertyDefinition<Object>> sbs = this.getAllSybos();
 //		List<PropertyDefinition<Object>> tmwr = this.getTestMultiWithRules();
 //		List<PropertyDefinition<Object>> flexProd = this.getAllFlexProdProperties();
-		
+
 //		sps.addAll(mps);
 //		sps.addAll(sbs);
 //		sps.addAll(tmwr);
@@ -199,10 +189,10 @@ public class StandardPropertyDefinitions {
 		return properties;
 
 	}
-	
+
 	public List<PropertyDefinition<Object>> getAllHeader(String tenantId) {
 		List<PropertyDefinition<?>> props = new LinkedList<>();
-		
+
 		props.add(new IDProperty(tenantId));
 		props.add(new EvidenzProperty(tenantId));
 		props.add(new DateFromProperty(tenantId));
@@ -213,9 +203,9 @@ public class StandardPropertyDefinitions {
 		props.add(new TaskType4Property(tenantId));
 		props.add(new RankProperty(tenantId));
 		props.add(new DurationProperty(tenantId));
-		
+
 		return new ArrayList(props);
-		
+
 	}
 
 	public List<PropertyDefinition<Object>> getAllSingle(String tenantId) {
@@ -292,7 +282,7 @@ public class StandardPropertyDefinitions {
 //			
 //		return new HashMap<>(props);
 //	}
-	
+
 	/**
 	 * 
 	 * Header Properties
@@ -310,7 +300,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class EvidenzProperty extends TextPropertyDefinition {
 
 		EvidenzProperty(String tenantId) {
@@ -323,7 +313,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class DateFromProperty extends DatePropertyDefinition {
 
 		DateFromProperty(String tenantId) {
@@ -336,7 +326,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class DateToProperty extends DatePropertyDefinition {
 
 		DateToProperty(String tenantId) {
@@ -349,7 +339,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class TaskType1Property extends TextPropertyDefinition {
 
 		TaskType1Property(String tenantId) {
@@ -362,6 +352,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
+
 	public static class TaskType2Property extends TextPropertyDefinition {
 
 		TaskType2Property(String tenantId) {
@@ -374,7 +365,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class TaskType3Property extends TextPropertyDefinition {
 
 		TaskType3Property(String tenantId) {
@@ -387,7 +378,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class TaskType4Property extends TextPropertyDefinition {
 
 		TaskType4Property(String tenantId) {
@@ -400,7 +391,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class RankProperty extends TextPropertyDefinition {
 
 		RankProperty(String tenantId) {
@@ -413,7 +404,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class DurationProperty extends TextPropertyDefinition {
 
 		DurationProperty(String tenantId) {
@@ -426,8 +417,6 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
-	
 
 	/**
 	 * 
@@ -1019,7 +1008,7 @@ public class StandardPropertyDefinitions {
 			this.setTenantId(tenantId);
 		}
 	}
-	
+
 	public static class ChargierhilfeProperty extends TextPropertyDefinition {
 		public ChargierhilfeProperty() {
 			this.setId("chargierhilfe");

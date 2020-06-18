@@ -9,13 +9,10 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Task } from "app/main/content/_model/task";
-import { isNullOrUndefined } from "util";
 import { Tenant } from "app/main/content/_model/tenant";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
-import { global } from "@angular/compiler/src/util";
 
 @Component({
   selector: "fuse-task-list",
@@ -73,7 +70,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     );
   }
 
-  rowSelected(task: Task) {
+  rowSelected(task) {
     this.router.navigate(["main/details/" + task.id]);
   }
 

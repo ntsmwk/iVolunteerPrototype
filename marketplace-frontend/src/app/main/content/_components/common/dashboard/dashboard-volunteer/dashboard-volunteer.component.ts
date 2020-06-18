@@ -19,7 +19,6 @@ import { Volunteer } from "../../../../_model/volunteer";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Tenant } from "app/main/content/_model/tenant";
-import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
@@ -27,6 +26,7 @@ import { MarketplaceService } from "app/main/content/_service/core-marketplace.s
 import { DialogFactoryDirective } from "app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 HC_venn(Highcharts);
 
 @Component({

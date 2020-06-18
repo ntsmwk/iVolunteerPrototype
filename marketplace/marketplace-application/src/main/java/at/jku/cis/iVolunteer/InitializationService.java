@@ -17,15 +17,9 @@ import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfiguration
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.MatchingConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
-import at.jku.cis.iVolunteer.marketplace.feedback.FeedbackRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
-import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
-import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -34,7 +28,6 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.function.FunctionClassDefinit
 import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
@@ -42,29 +35,19 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @Service
 public class InitializationService {
 
-	@Autowired
-	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
-	@Autowired
-	private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	private RelationshipRepository relationshipRepository;
-	@Autowired
-	private ClassConfigurationRepository classConfigurationRepository;
-	@Autowired
-	private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	private MarketplaceService marketplaceService;
-	@Autowired
-	private CoreTenantRestClient coreTenantRestClient;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private RelationshipRepository relationshipRepository;
+	@Autowired private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private MarketplaceService marketplaceService;
+	@Autowired private CoreTenantRestClient coreTenantRestClient;
 
-	@Autowired
-	public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired
-	private MatchingConfigurationRepository matchingConfiguratorRepository;
-	@Autowired
-	private ClassConfigurationController classConfigurationController;
+	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired private ClassConfigurationController classConfigurationController;
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";

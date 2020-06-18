@@ -1,9 +1,6 @@
 package at.jku.cis.iVolunteer.core.volunteer;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
 

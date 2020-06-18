@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.volunteer.profile;
+package at.jku.cis.iVolunteer.marketplace.blockchainify;
 
 import static java.text.MessageFormat.format;
 
@@ -11,16 +11,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import at.jku.cis.iVolunteer.model.meta.core.clazz.competence.CompetenceClassInstance;
-import at.jku.cis.iVolunteer.model.task.Task;
-import at.jku.cis.iVolunteer.model.volunteer.profile.TaskEntry;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 
 @Service
 public class VerifierRestClient {
 
-	private static final String PUBLISHED_TASK = "publishedTask";
-	private static final String PUBLISHED_TASK_Entry = "finishedTaskEntry";
-	private static final String PUBLISHED_COMPETENCE_ENTRY = "competenceEntry";
+	private static final String PUBLISHED_COMPETENCE_ENTRY = "classInstance";
 
 	private static final String VERIFIER_URI = "{0}/trustifier/verifier/{1}";
 
@@ -30,20 +26,9 @@ public class VerifierRestClient {
 
 	@Autowired private RestTemplate restTemplate;
 
-	public boolean verifyTask(Task task, String authorization) {
-		String requestURI = buildContractorRequestURI(PUBLISHED_TASK);
-		return restTemplate.postForObject(requestURI, buildEntity(task, authorization), Boolean.class).booleanValue();
-	}
-
-	public boolean verifyTaskEntry(TaskEntry taskEntry, String authorization) {
-		String requestURI = buildContractorRequestURI(PUBLISHED_TASK_Entry);
-		return restTemplate.postForObject(requestURI, buildEntity(taskEntry, authorization), Boolean.class)
-				.booleanValue();
-	}
-
-	public boolean verifyCompetence(CompetenceClassInstance competenceEntry, String authorization) {
+	public boolean verifyClassInstance(ClassInstance classInstance, String authorization) {
 		String requestURI = buildContractorRequestURI(PUBLISHED_COMPETENCE_ENTRY);
-		return restTemplate.postForObject(requestURI, buildEntity(competenceEntry, authorization), Boolean.class)
+		return restTemplate.postForObject(requestURI, buildEntity(classInstance, authorization), Boolean.class)
 				.booleanValue();
 	}
 

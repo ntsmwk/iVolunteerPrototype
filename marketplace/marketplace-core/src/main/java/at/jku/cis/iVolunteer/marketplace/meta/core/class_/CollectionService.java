@@ -19,7 +19,6 @@ import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
@@ -37,10 +36,10 @@ public class CollectionService {
 	@Autowired ClassConfigurationRepository classConfigurationRepository;
 	@Autowired ClassDefinitionRepository classDefinitionRepository;
 	@Autowired RelationshipRepository relationshipRepository;
-	
+
 	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
-	
+
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
 		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
 		if (configurator == null) {
@@ -61,7 +60,8 @@ public class CollectionService {
 		return collectors;
 	}
 
-	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(String classConfigurationId) {
+	public List<MatchingCollector> collectAllClassDefinitionsWithPropertiesAsMatchingCollectors(
+			String classConfigurationId) {
 		ClassConfiguration classConfiguration = classConfigurationRepository.findOne(classConfigurationId);
 
 		if (classConfiguration == null) {
@@ -81,8 +81,8 @@ public class CollectionService {
 
 		for (MatchingCollector collection : collections) {
 			collection.setPath(getPathFromRoot(collection.getClassDefinition()));
-			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(collection.getClassDefinition(),
-					0, new ArrayList<>(), collection.getPath()));
+			collection.setCollectorEntries(this.aggregateAllClassDefinitionsWithPropertiesDFS(
+					collection.getClassDefinition(), 0, new ArrayList<>(), collection.getPath()));
 
 			for (MatchingCollectorEntry entry : collection.getCollectorEntries()) {
 				collection.setNumberOfProperties(
@@ -98,11 +98,13 @@ public class CollectionService {
 		pathArray.add(classDefinition.getId());
 
 		while (!classDefinition.isRoot()) {
-			List<Relationship> relationships = this.relationshipRepository
-					.findByTarget(classDefinition.getId());
-			
-			relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION) | r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
-			
+			List<Relationship> relationships = this.relationshipRepository.findByTarget(classDefinition.getId());
+
+			relationships = relationships.stream()
+					.filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+							| r.getRelationshipType().equals(RelationshipType.INHERITANCE))
+					.collect(Collectors.toList());
+
 			if (relationships.size() >= 1) {
 				classDefinition = classDefinitionRepository.findOne(relationships.get(0).getSource());
 				pathArray.add(PATH_DELIMITER);
@@ -148,7 +150,7 @@ public class CollectionService {
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
-			
+
 			for (ClassProperty<Object> property : classDefinition.getProperties()) {
 				if (!list.stream().filter(p -> p.getId().contentEquals(property.getId())).findFirst().isPresent()) {
 					list.add(property);
@@ -163,25 +165,26 @@ public class CollectionService {
 			List<MatchingCollectorEntry> list, String path) {
 		Stack<Relationship> stack = new Stack<Relationship>();
 		List<Relationship> relationships = this.relationshipRepository.findBySource(root.getId());
-		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION) | r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
+		relationships = relationships.stream().filter(r -> r.getRelationshipType().equals(RelationshipType.AGGREGATION)
+				| r.getRelationshipType().equals(RelationshipType.INHERITANCE)).collect(Collectors.toList());
 
-	
 		Collections.reverse(relationships);
 		stack.addAll(relationships);
 
 		if (stack == null || stack.size() <= 0) {
 			return list;
-		} 
+		}
 		while (!stack.isEmpty()) {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(), PATH_DELIMITER));
+				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),
+						PATH_DELIMITER));
 			}
 			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
 					path + PATH_DELIMITER + classDefinition.getId());
 		}
-		
+
 		return list;
 	}
 
@@ -189,7 +192,7 @@ public class CollectionService {
 //		ClassDefinition enumHead = classDefinitionRepository.findOne(classDefinitionId);
 //		return aggregateAllEnumEntriesDFS(enumHead, 0, new ArrayList<>());
 //	}
-	
+
 //	FormEntry getParentClassDefintions(ClassDefinition rootClassDefinition, FormEntry rootFormEntry, List<ClassDefinition> allClassDefinitons, List<Relationship> allRelationships) {
 //
 //		rootFormEntry.setClassDefinitions(new ArrayList<ClassDefinition>());
@@ -229,7 +232,7 @@ public class CollectionService {
 //		
 //		return rootFormEntry;
 //	}
-	
+
 //	private List<ClassProperty<Object>> getPropertiesInClassDefinition(FormEntry formEntry, ClassDefinition currentClassDefinition, List<Relationship> allRelationships) {
 //		List<ClassProperty<Object>> properties = new LinkedList<ClassProperty<Object>>();
 //		CopyOnWriteArrayList<ClassProperty<Object>> copyList = new CopyOnWriteArrayList<>(currentClassDefinition.getProperties());
@@ -321,24 +324,25 @@ public class CollectionService {
 //		return rootFormEntry;
 //
 //	}
-	
-	FormEntry aggregateFormEntry(
-			ClassDefinition currentClassDefinition, FormEntry currentFormEntry, List<ClassDefinition> allClassDefinitions, 
-			List<Relationship> allRelationships, boolean directionUp) {
-		
+
+	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,
+			List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
+
 		// Next ClassDefinition
 		if (currentFormEntry.getClassDefinitions() == null) {
 			currentFormEntry.setClassDefinitions(new LinkedList<>());
 		}
 		currentFormEntry.getClassDefinitions().add(currentClassDefinition);
-		
+
 		// Collect Properties
 		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
-		
+
 		// grab target-side Relationships
-		List<Relationship> targetRelationships = allRelationships.stream().filter(r -> r.getTarget().equals(currentClassDefinition.getId())).collect(Collectors.toList());
+		List<Relationship> targetRelationships = allRelationships.stream()
+				.filter(r -> r.getTarget().equals(currentClassDefinition.getId())).collect(Collectors.toList());
 		// grab source-side Relationships
-		List<Relationship> sourceRelationships = allRelationships.stream().filter(r -> r.getSource().equals(currentClassDefinition.getId())).collect(Collectors.toList());
+		List<Relationship> sourceRelationships = allRelationships.stream()
+				.filter(r -> r.getSource().equals(currentClassDefinition.getId())).collect(Collectors.toList());
 
 		Collections.reverse(targetRelationships);
 		Collections.reverse(sourceRelationships);
@@ -347,51 +351,58 @@ public class CollectionService {
 		targetStack.addAll(targetRelationships);
 		sourceStack.addAll(sourceRelationships);
 		List<FormEntry> subFormEntries = new ArrayList<>();
-			
+
 		boolean unableToContinuePropertySet = false;
 		PropertyDefinition unableToContinuePropertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
 		unableToContinuePropertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
 		unableToContinuePropertyDefinition.setName("Bitte auswählen");
 		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
 		unableToContinuePropertyDefinition.setRequired(true);
-		
+
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (directionUp) {
-					ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
-					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions, allRelationships, true);
+					ClassDefinition classDefinition = allClassDefinitions.stream()
+							.filter(d -> d.getId().equals(relationship.getSource())).findFirst().get();
+					currentFormEntry = aggregateFormEntry(classDefinition, currentFormEntry, allClassDefinitions,
+							allRelationships, true);
 				}
 			}
 		}
-		
+
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
 			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
-				ClassDefinition classDefinition = allClassDefinitions.stream().filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
-				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()), allClassDefinitions, allRelationships, false);
+				ClassDefinition classDefinition = allClassDefinitions.stream()
+						.filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
+				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()),
+						allClassDefinitions, allRelationships, false);
 				subFormEntries.add(subFormEntry);
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (!directionUp) {
 					if (!unableToContinuePropertySet) {
-						ClassDefinition parentClassDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
-						unableToContinuePropertyDefinition.getAllowedValues().add(
-								new Tuple<String, String>(parentClassDefinition.getId(), parentClassDefinition.getName()));
-						unableToContinuePropertySet = true;	
+						ClassDefinition parentClassDefinition = allClassDefinitions.stream()
+								.filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
+						unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(
+								parentClassDefinition.getId(), parentClassDefinition.getName()));
+						unableToContinuePropertySet = true;
 
-					}					
-					ClassDefinition classDefinition = allClassDefinitions.stream().filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();					
-					unableToContinuePropertyDefinition.getAllowedValues().add(
-							new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
+					}
+					ClassDefinition classDefinition = allClassDefinitions.stream()
+							.filter(cd -> cd.getId().equals(relationship.getTarget())).findFirst().get();
+					unableToContinuePropertyDefinition.getAllowedValues()
+							.add(new Tuple<String, String>(classDefinition.getId(), classDefinition.getName()));
 				}
-			}	
+			}
 		}
-		
+
 		if (unableToContinuePropertySet) {
 			currentFormEntry.setClassProperties(new ArrayList<>());
-			currentFormEntry.getClassProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(unableToContinuePropertyDefinition));
+			currentFormEntry.getClassProperties()
+					.add(propertyDefinitionToClassPropertyMapper.toTarget(unableToContinuePropertyDefinition));
 		}
-		
+
 		if (currentFormEntry.getSubEntries() == null || currentFormEntry.getSubEntries().size() <= 0) {
 			currentFormEntry.setSubEntries(subFormEntries);
 		} else {
@@ -400,26 +411,24 @@ public class CollectionService {
 
 		return currentFormEntry;
 
-		
-		
 		// handle target Relationships
-			// if next target-side Relationship: Aggregation - goto handle Aggregation
-			// if next target-side  Relationship: Inheritance:
-				// display selection, exit
-			// if no next target-side Relationship: exit
-		
+		// if next target-side Relationship: Aggregation - goto handle Aggregation
+		// if next target-side Relationship: Inheritance:
+		// display selection, exit
+		// if no next target-side Relationship: exit
+
 		// handle source Relationships
-			// if next source-side Relationship: Inheritance - goto handle Inheritance
-			// if no source-side Relationship next: exit
-		
+		// if next source-side Relationship: Inheritance - goto handle Inheritance
+		// if no source-side Relationship next: exit
+
 	}
 
-	public FormEntry getFormEntryChunk(ClassDefinition currentClassDefinition, ClassDefinition choiceClassDefinition, List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
-		FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()), allClassDefinitions, allRelationships, true);	
+	public FormEntry getFormEntryChunk(ClassDefinition currentClassDefinition, ClassDefinition choiceClassDefinition,
+			List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships) {
+		FormEntry entry = aggregateFormEntry(choiceClassDefinition, new FormEntry(choiceClassDefinition.getId()),
+				allClassDefinitions, allRelationships, true);
 		return entry;
-		
+
 	}
-	
-	
 
 }

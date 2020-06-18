@@ -3,7 +3,6 @@ package at.jku.cis.iVolunteer.marketplace.configurations.clazz;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import at.jku.cis.iVolunteer.marketplace.core.HasTenantRepository;
@@ -13,6 +12,6 @@ public interface ClassConfigurationRepository extends HasTenantRepository<ClassC
 
 	public List<ClassConfiguration> findByName(String name);
 
-	@Query(value="{}")
+	@Query(value = "{}")
 	public List<ClassConfiguration> findAllWithSort(Sort sort);
 }

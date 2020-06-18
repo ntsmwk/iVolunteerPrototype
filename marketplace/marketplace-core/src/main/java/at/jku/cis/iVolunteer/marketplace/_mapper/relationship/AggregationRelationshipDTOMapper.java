@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Aggregation;
-import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipDTO;
 
 @Component
@@ -18,7 +17,7 @@ public class AggregationRelationshipDTOMapper implements AbstractMapper<Aggregat
 		if (source == null) {
 			return null;
 		}
-		
+
 		RelationshipDTO dto = new RelationshipDTO();
 		dto.setId(source.getId());
 		dto.setRelationshipType(source.getRelationshipType());
@@ -33,12 +32,12 @@ public class AggregationRelationshipDTOMapper implements AbstractMapper<Aggregat
 		if (sources == null) {
 			return null;
 		}
-		
+
 		List<RelationshipDTO> targets = new LinkedList<RelationshipDTO>();
 		for (Aggregation a : sources) {
 			targets.add(this.toTarget(a));
 		}
-		
+
 		return targets;
 	}
 
@@ -47,14 +46,14 @@ public class AggregationRelationshipDTOMapper implements AbstractMapper<Aggregat
 		if (target == null) {
 			return null;
 		}
-		
+
 		Aggregation aggregation = new Aggregation();
-		
+
 		aggregation.setId(target.getId());
 		aggregation.setRelationshipType(target.getRelationshipType());
 		aggregation.setSource(target.getSource());
 		aggregation.setTarget(target.getTarget());
-	
+
 		return aggregation;
 	}
 
@@ -63,14 +62,13 @@ public class AggregationRelationshipDTOMapper implements AbstractMapper<Aggregat
 		if (targets == null) {
 			return null;
 		}
-		
+
 		List<Aggregation> sources = new LinkedList<Aggregation>();
 		for (RelationshipDTO dto : targets) {
 			sources.add(this.toSource(dto));
 		}
-		
+
 		return sources;
 	}
-
 
 }
