@@ -23,10 +23,10 @@
 
                 <div>
                     <mat-form-field style="width: 300px">
-                        <input matInput (keyup)="applyTextFilter($event)" placeholder="Suchen..."
+                        <input matInput (keyup)="handleTextFilterEvent($event)" placeholder="Suchen..."
                             [(ngModel)]="textSearchValue" />
                         <button *ngIf="textSearchValue" mat-button matSuffix mat-icon-button aria-label="Clear"
-                            (click)="textSearchValue=undefined; applyTextFilter($event);">
+                            (click)="textSearchValue=undefined; handleTextFilterEvent($event);">
                             <mat-icon>close</mat-icon>
                         </button>
                     </mat-form-field>

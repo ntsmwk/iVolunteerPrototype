@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { fuseAnimations } from '@fuse/animations';
 import { LoginService } from '../../../../../_service/login.service';
@@ -44,14 +44,15 @@ export class PropertyEnumListComponent implements OnInit {
   propertyEnumEntries: PropertyEnumEntry[];
 
   dropdownFilterValue: string;
+  textSearchValue: string;
   isLoaded: boolean;
 
   constructor(private router: Router,
+    private route: ActivatedRoute,
     private propertyDefinitionService: PropertyDefinitionService,
     private enumDefinitionService: EnumDefinitionService,
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
-    private flexProdService: CoreFlexProdService,
     private dialogFactory: DialogFactoryDirective) {
   }
 
@@ -65,6 +66,13 @@ export class PropertyEnumListComponent implements OnInit {
 
   }
 
+  applyFiltersFromParams() {
+    this.route.queryParams.subscribe((params) => {
+      this.applyFilters(params);
+    });
+
+  }
+
   onRowSelect(p: PropertyDefinition<any>) {
     this.router.navigate(['/main/properties/' + this.marketplace.id + '/' + p.id]);
   }
@@ -73,38 +81,28 @@ export class PropertyEnumListComponent implements OnInit {
 
   loadAllProperties() {
 
-    let service: CoreHelpSeekerService | CoreFlexProdService;
-
     this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
       this.helpseeker = helpseeker;
-      this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-        if (role === 'FLEXPROD') {
-          service = this.flexProdService;
-        } else if (role === 'HELP_SEEKER') {
-          service = this.helpSeekerService;
-        } else {
-          return;
+
+      this.helpSeekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
+        if (!isNullOrUndefined(marketplace)) {
+          this.marketplace = marketplace;
+          Promise.all([
+            this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
+              this.propertyDefinitions = propertyDefinitions;
+
+            }),
+            this.enumDefinitionService.getAllEnumDefinitionsForTenant(marketplace, this.helpseeker.tenantId).toPromise().then((enumDefinitions: EnumDefinition[]) => {
+              this.enumDefinitions = enumDefinitions;
+            })
+
+          ]).then(() => {
+            this.updatePropertyAndEnumEntryList();
+            this.applyFiltersFromParams();
+            this.isLoaded = true;
+
+          });
         }
-      }).then(() => {
-        service.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
-          if (!isNullOrUndefined(marketplace)) {
-            this.marketplace = marketplace;
-            Promise.all([
-              this.propertyDefinitionService.getAllPropertyDefinitons(marketplace, this.helpseeker.tenantId).toPromise().then((propertyDefinitions: PropertyDefinition<any>[]) => {
-                this.propertyDefinitions = propertyDefinitions;
-
-              }),
-              this.enumDefinitionService.getAllEnumDefinitionsForTenant(marketplace, this.helpseeker.tenantId).toPromise().then((enumDefinitions: EnumDefinition[]) => {
-                this.enumDefinitions = enumDefinitions;
-              })
-
-            ]).then(() => {
-              this.updatePropertyAndEnumEntryList();
-              this.isLoaded = true;
-
-            });
-          }
-        });
       });
     });
   }
@@ -125,17 +123,55 @@ export class PropertyEnumListComponent implements OnInit {
       default: console.error('undefined type');
     }
 
+    this.patchFilterParam('filter', this.dropdownFilterValue);
+
+  }
+
+  handleTextFilterEvent(event: Event) {
+    this.applyTextFilter(this.textSearchValue);
   }
 
 
-  applyTextFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    if (isNullOrUndefined(filterValue)) {
-      this.dataSource.filter = undefined;
+  applyTextFilter(filterValue: string) {
+    if (isNullOrUndefined(filterValue) || filterValue.length <= 0) {
+      this.dataSource.filter = null;
+      this.patchFilterParam('searchString', null);
     } else {
       this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.patchFilterParam('searchString', filterValue);
     }
   }
+
+  applyFilters(params) {
+    if (!isNullOrUndefined(params['filter'])) {
+      this.dropdownFilterValue = params['filter'];
+      this.applyTypeFilter();
+
+    } else {
+      // this.patchFilterParam('filter', this.dropdownFilterValue);
+    }
+
+    if (!isNullOrUndefined(params['searchString'])) {
+      this.applyTextFilter(params['searchString']);
+      this.textSearchValue = params['searchString'];
+    }
+  }
+
+  patchFilterParam(key: string, value: string) {
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: { [key]: value },
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+        skipLocationChange: true,
+
+      }).then((ret) => {
+
+      });
+  }
+
+
 
   viewPropertyAction(property: PropertyDefinition<any>) {
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
