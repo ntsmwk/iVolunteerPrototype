@@ -1,20 +1,17 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
+import { PropertyType, PropertyDefinition } from 'app/main/content/_model/meta/property';
+import { Component, OnInit } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { LoginService } from '../../../../../_service/login.service';
-import { CoreHelpSeekerService } from '../../../../../_service/core-helpseeker.service';
-import { ParticipantRole } from '../../../../../_model/participant';
-import { Marketplace } from '../../../../../_model/marketplace';
-import { isNullOrUndefined } from 'util';
-import { PropertyDefinitionService } from '../../../../../_service/meta/core/property/property-definition.service';
-import { CoreFlexProdService } from '../../../../../_service/core-flexprod.service';
-import { Helpseeker } from '../../../../../_model/helpseeker';
-import { PropertyDefinition, PropertyType } from 'app/main/content/_model/meta/property';
-import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
-import { EnumDefinition, EnumEntry } from 'app/main/content/_model/meta/enum';
-import { DialogFactoryModule } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.module';
 import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { MatTableDataSource } from '@angular/material';
+import { Marketplace } from 'app/main/content/_model/marketplace';
+import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { EnumDefinition } from 'app/main/content/_model/meta/enum';
+import { Router, ActivatedRoute } from '@angular/router';
+import { PropertyDefinitionService } from 'app/main/content/_service/meta/core/property/property-definition.service';
+import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
+import { LoginService } from 'app/main/content/_service/login.service';
+import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
+import { isNullOrUndefined } from 'util';
 
 export interface PropertyEnumEntry {
   id: string;
@@ -146,9 +143,6 @@ export class PropertyEnumListComponent implements OnInit {
     if (!isNullOrUndefined(params['filter'])) {
       this.dropdownFilterValue = params['filter'];
       this.applyTypeFilter();
-
-    } else {
-      // this.patchFilterParam('filter', this.dropdownFilterValue);
     }
 
     if (!isNullOrUndefined(params['searchString'])) {
@@ -163,15 +157,11 @@ export class PropertyEnumListComponent implements OnInit {
       {
         relativeTo: this.route,
         queryParams: { [key]: value },
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
+        queryParamsHandling: 'merge',
         skipLocationChange: true,
-
-      }).then((ret) => {
 
       });
   }
-
-
 
   viewPropertyAction(property: PropertyDefinition<any>) {
     this.router.navigate(['main/property/detail/view/' + this.marketplace.id + '/' + property.id], { queryParams: { ref: 'list' } });
@@ -211,7 +201,4 @@ export class PropertyEnumListComponent implements OnInit {
     return PropertyType.getLabelForPropertyType(propertyType);
   }
 
-  // getImagePathPropertyType(propertyType: PropertyType) {
-  //   return this.propertyTypePalettes.find(p => p.id === propertyType).imgPath;
-  // }
 }
