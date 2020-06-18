@@ -3,7 +3,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -33,7 +33,13 @@ export class BuilderContainerComponent implements OnInit {
         if (this.sourceString !== 'dialog') {
             const queryParams: Params = { type: this.builderType };
 
-            this.router.navigate([], { relativeTo: this.route, queryParams: queryParams, queryParamsHandling: 'merge', });
+            this.router.navigate(
+                [], {
+                    relativeTo: this.route,
+                    queryParams: queryParams,
+                    queryParamsHandling: 'merge',
+                    skipLocationChange: true
+                });
         }
     }
 

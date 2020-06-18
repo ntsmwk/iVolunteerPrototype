@@ -8,8 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { AddOrRemoveDialogComponent } from 'app/main/content/_components/dialogs/deprecrated-add-or-remove-dialog/add-or-remove-dialog.component';
-import { AddOrRemoveDialogModule } from 'app/main/content/_components/dialogs/deprecrated-add-or-remove-dialog/add-or-remove-dialog.module';
 import { EditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { EditorTreeViewModule } from './tree-view/tree-view.module';
 import { ClassOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
@@ -39,7 +37,6 @@ import { DialogFactoryModule } from '../../../../_shared_components/dialogs/_dia
     FuseSharedModule,
 
     DialogFactoryModule,
-    AddOrRemoveDialogModule,
 
     EditorTopMenuBarModule,
     EditorTreeViewModule,
@@ -49,7 +46,6 @@ import { DialogFactoryModule } from '../../../../_shared_components/dialogs/_dia
   ],
   declarations: [ClassConfiguratorComponent],
   exports: [ClassConfiguratorComponent],
-  entryComponents: [AddOrRemoveDialogComponent],
 
 
 
