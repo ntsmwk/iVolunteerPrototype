@@ -117,6 +117,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             if (this.formConfigurations.length === 0) {
               this.lastEntry = true;
             }
+            console.log("formConfigurations");
+            console.log(this.currentFormConfiguration);
             this.loaded = true;
           });
         });
