@@ -23,7 +23,7 @@ import { timer } from "rxjs";
 import HC_venn from "highcharts/modules/venn";
 import * as Highcharts from "highcharts";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
-import { DialogFactoryDirective } from "app/main/content/_components/_shared_components/dialogs/_dialog-factory/dialog-factory.component";
+import { DialogFactoryDirective } from "app/main/content/_components/shared/dialogs/_dialog-factory/dialog-factory.component";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";

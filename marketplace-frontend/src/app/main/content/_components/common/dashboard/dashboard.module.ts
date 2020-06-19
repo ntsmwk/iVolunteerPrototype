@@ -28,14 +28,14 @@ import {
   MatCardModule,
 } from "@angular/material";
 import { AssetInboxHelpseekerModule } from "../../help-seeker/asset-inbox-helpseeker/asset-inbox-helpseeker.module";
-import { AssetInboxModule } from "../../_shared_components/asset-inbox/asset-inbox.module";
+import { AssetInboxModule } from "../../shared/asset-inbox/asset-inbox.module";
 import { DashboardHelpSeekerComponent } from "./dashboard-helpseeker/dashboard-helpseeker.component";
-import { OrganisationFilterModule } from "app/main/content/_components/_shared_components/organisation-filter/organisation-filter.module";
+import { OrganisationFilterModule } from "app/main/content/_components/shared/organisation-filter/organisation-filter.module";
 import { TenantOverviewComponent } from "./tenant-overview/tenant-overview.component";
 import { FuseTruncatePipeModule } from "app/main/content/_pipe/truncate-pipe.module";
-import { HeaderModule } from "app/main/content/_components/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/shared/header/header.module";
 import { HighchartsChartModule } from "highcharts-angular";
-import { DialogFactoryModule } from "app/main/content/_components/_shared_components/dialogs/_dialog-factory/dialog-factory.module";
+import { DialogFactoryModule } from "app/main/content/_components/shared/dialogs/_dialog-factory/dialog-factory.module";
 
 const routes = [
   {

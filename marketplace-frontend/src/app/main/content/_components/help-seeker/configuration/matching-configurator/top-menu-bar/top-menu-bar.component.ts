@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, Output, EventEmitter, Input, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { DialogFactoryDirective } from 'app/main/content/_components/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/shared/dialogs/_dialog-factory/dialog-factory.component';
 
 export interface RootMenuItem {
   id: number;

@@ -4,7 +4,7 @@ import { AssetInboxVolunteerComponent } from './asset-inbox-volunteer.component'
 import { CommonModule } from '@angular/common';
 import { MatButtonModule, MatMenuModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { AssetInboxModule } from '../../../_shared_components/asset-inbox/asset-inbox.module';
+import { AssetInboxModule } from '../../../shared/asset-inbox/asset-inbox.module';
 
 const routes = [{ path: '', component: AssetInboxVolunteerComponent }];
 

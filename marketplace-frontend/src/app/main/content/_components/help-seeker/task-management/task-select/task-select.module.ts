@@ -12,7 +12,7 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { GermanDateAdapter } from "../../../../_adapter/german-date-adapter";
 import { FuseTaskSelectComponent } from "./task-select.component";
 import { MatTableModule } from "@angular/material";
-import { HeaderModule } from "app/main/content/_components/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/shared/header/header.module";
 
 const routes: Route[] = [{ path: "", component: FuseTaskSelectComponent }];
 
