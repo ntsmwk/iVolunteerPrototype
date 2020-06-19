@@ -146,6 +146,7 @@ public class ClassConfigurationController {
 		return this.classConfigurationRepository.findAll();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName,
 			String description, String configuratorId) {
 
@@ -307,7 +308,6 @@ public class ClassConfigurationController {
 			configurator.getRelationshipIds().add(r.getId());
 		}
 
-//		this.classConfigurationRepository.save(configurator);
 		return saveClassConfiguration(configurator);
 
 	}

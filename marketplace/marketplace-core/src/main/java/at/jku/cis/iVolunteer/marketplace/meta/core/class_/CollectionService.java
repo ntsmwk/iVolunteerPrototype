@@ -33,12 +33,17 @@ public class CollectionService {
 
 	private static final String PATH_DELIMITER = Character.toString((char) 28);
 
-	@Autowired ClassConfigurationRepository classConfigurationRepository;
-	@Autowired ClassDefinitionRepository classDefinitionRepository;
-	@Autowired RelationshipRepository relationshipRepository;
+	@Autowired
+	ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	RelationshipRepository relationshipRepository;
 
-	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
 		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
@@ -325,6 +330,7 @@ public class CollectionService {
 //
 //	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,
 			List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
 
@@ -353,11 +359,8 @@ public class CollectionService {
 		List<FormEntry> subFormEntries = new ArrayList<>();
 
 		boolean unableToContinuePropertySet = false;
-		PropertyDefinition unableToContinuePropertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
-		unableToContinuePropertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
-		unableToContinuePropertyDefinition.setName("Bitte auswählen");
-		unableToContinuePropertyDefinition.setAllowedValues(new ArrayList<>());
-		unableToContinuePropertyDefinition.setRequired(true);
+		
+		PropertyDefinition unableToContinuePropertyDefinition = createUnableToContinueProperty(); 
 
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
@@ -430,5 +433,13 @@ public class CollectionService {
 		return entry;
 
 	}
-
+	
+	public PropertyDefinition<Tuple<String,String>> createUnableToContinueProperty() {
+		PropertyDefinition<Tuple<String,String>> propertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
+		propertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
+		propertyDefinition.setName("Bitte auswählen");
+		propertyDefinition.setAllowedValues(new ArrayList<>());
+		propertyDefinition.setRequired(true);
+		return propertyDefinition;
+	}
 }
