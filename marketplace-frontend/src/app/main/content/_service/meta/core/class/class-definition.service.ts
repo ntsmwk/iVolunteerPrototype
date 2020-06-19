@@ -122,14 +122,13 @@ export class ClassDefinitionService {
   //   );
   // }
 
-  getClassPropertyFromPropertyDefinitionById(
-    marketplace: Marketplace,
-    propIds: String[],
-    tenantId: string
-  ) {
+  getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: string[], enumIds: string[], tenantId: string) {
+
+    const requestObject = { propertyDefinitionIds: propIds, enumDefinitionIds: enumIds };
+
     return this.http.put(
       `${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id/tenant/${tenantId}`,
-      propIds
+      requestObject
     );
   }
 

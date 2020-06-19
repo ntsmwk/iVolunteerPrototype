@@ -151,7 +151,7 @@ export class AddPropertyDialogComponent implements OnInit {
     this.data.classDefinition.enums.push(...addedEnums);
 
     this.classDefinitionService
-      .getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), null)
+      .getClassPropertyFromPropertyDefinitionById(this.data.marketplace, addedProperties.map(p => p.id), addedEnums.map(e => e.id), this.data.helpseeker.tenantId)
       .toPromise()
       .then((ret: ClassProperty<any>[]) => {
         this.data.classDefinition.properties.push(...ret);

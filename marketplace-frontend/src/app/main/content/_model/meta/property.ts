@@ -29,8 +29,6 @@ export class ClassProperty<T> {
     id: string;
     name: string;
 
-    exportLabel: string;
-
     defaultValues: T[];
     allowedValues: T[];
 
@@ -58,6 +56,10 @@ export class ClassProperty<T> {
             return null;
         }
     }
+}
+
+export class EnumEntry {
+
 }
 
 export class EnumReference {

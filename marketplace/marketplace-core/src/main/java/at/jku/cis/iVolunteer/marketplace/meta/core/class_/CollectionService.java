@@ -183,6 +183,9 @@ public class CollectionService {
 
 		// Collect Properties
 		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
+		
+		// Collect EnumDefnitions
+		currentFormEntry.getEnumDefinitions().addAll(0, currentClassDefinition.getEnums());
 
 		// grab target-side Relationships
 		List<Relationship> targetRelationships = allRelationships.stream()
