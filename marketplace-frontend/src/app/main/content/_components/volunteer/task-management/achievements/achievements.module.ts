@@ -48,7 +48,7 @@ import { SunburstTableComponent } from "./tasks/sunburst-table/sunburst-table.co
 import { TimelineFilterComponent } from "./tasks/timeline-filter/timeline-filter.component";
 import { DonutComponent } from "./tasks/donut/donut.component";
 import { NgxSpinnerModule } from "ngx-spinner";
-import { OrganisationFilterModule } from "app/main/content/_components/shared/organisation-filter/organisation-filter.module";
+import { OrganisationFilterModule } from "app/main/content/_components/_shared/organisation-filter/organisation-filter.module";
 import { ClassInstanceDetailsComponent } from "../../../common/class-instance-details/class-instance-details.component";
 import { ClassInstanceDetailsModule } from "../../../common/class-instance-details/class-instance-details.module";
 

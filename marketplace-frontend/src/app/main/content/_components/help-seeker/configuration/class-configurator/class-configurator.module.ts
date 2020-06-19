@@ -13,7 +13,7 @@ import { EditorTreeViewModule } from './tree-view/tree-view.module';
 import { ClassOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material';
-import { DialogFactoryModule } from '../../../shared/dialogs/_dialog-factory/dialog-factory.module';
+import { DialogFactoryModule } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.module';
 
 
 

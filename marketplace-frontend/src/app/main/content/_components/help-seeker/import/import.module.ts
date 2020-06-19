@@ -13,7 +13,7 @@ import {
   MatIconModule,
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
-import { HeaderModule } from "app/main/content/_components/shared/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
 
 const routes = [{ path: "", component: ImportComponent }];
 

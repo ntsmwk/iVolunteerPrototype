@@ -11,7 +11,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
 } from "@angular/material";
-import { HeaderModule } from "app/main/content/_components/shared/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
 
 const routes = [{ path: ":id", component: ClassInstanceDetailsComponent }];
 

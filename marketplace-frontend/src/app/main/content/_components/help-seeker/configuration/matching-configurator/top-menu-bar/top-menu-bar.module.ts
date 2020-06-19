@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatInputModule, MatMenuModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
-import { DialogFactoryModule } from 'app/main/content/_components/shared/dialogs/_dialog-factory/dialog-factory.module';
-import { ConfirmDialogModule } from 'app/main/content/_components/shared/dialogs/confirm-dialog/confirm-dialog.module';
-import { ConfirmDialogComponent } from 'app/main/content/_components/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { DialogFactoryModule } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.module';
+import { ConfirmDialogModule } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.module';
+import { ConfirmDialogComponent } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { MatchingTopMenuBarComponent } from './top-menu-bar.component';
 
 @NgModule({

@@ -19,7 +19,7 @@ import {
   MatCheckboxModule,
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HeaderModule } from "app/main/content/_components/shared/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
 
 const routes: Route[] = [{ path: "", component: FuseTaskListComponent }];
 
