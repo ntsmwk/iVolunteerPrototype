@@ -11,7 +11,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
 } from "@angular/material";
-import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared_components/header/header.module";
 
 const routes = [{ path: ":id", component: ClassInstanceDetailsComponent }];
 
@@ -33,4 +33,4 @@ const routes = [{ path: ":id", component: ClassInstanceDetailsComponent }];
   ],
   declarations: [ClassInstanceDetailsComponent],
 })
-export class ClassInstanceDetailsModule {}
+export class ClassInstanceDetailsModule { }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Tenant } from "../../_model/tenant";
-import { TenantService } from "../../_service/core-tenant.service";
+import { Tenant } from "../../../_model/tenant";
+import { TenantService } from "../../../_service/core-tenant.service";
 
 @Component({
   selector: "customizable-header",
@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   @Input() tenant: Tenant;
   @Input() displayNavigateBack: boolean;
 
-  constructor(private tenantService: TenantService) {}
+  constructor(private tenantService: TenantService) { }
 
   ngOnInit() {
     // console.error(this.tenant);

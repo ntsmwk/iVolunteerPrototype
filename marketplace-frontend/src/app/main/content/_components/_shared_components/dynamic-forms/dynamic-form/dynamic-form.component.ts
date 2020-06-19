@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 
-import { QuestionBase } from '../../../_model/dynamic-forms/questions';
-import { QuestionControlService } from '../../../_service/question-control.service';
+import { QuestionBase } from '../../../../_model/dynamic-forms/questions';
+import { QuestionControlService } from '../../../../_service/question-control.service';
 import { isNullOrUndefined } from 'util';
 
 declare var $: JQueryStatic;

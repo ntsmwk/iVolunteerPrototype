@@ -16,7 +16,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule, MatSelectModule } from "@angular/material";
 import { FuseRuleOverviewComponent } from "./rule-overview.component";
-import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared_components/header/header.module";
 
 const routes = [{ path: "", component: FuseRuleOverviewComponent }];
 
@@ -40,4 +40,4 @@ const routes = [{ path: "", component: FuseRuleOverviewComponent }];
     FuseSharedModule,
   ],
 })
-export class FuseRuleOverviewModule {}
+export class FuseRuleOverviewModule { }

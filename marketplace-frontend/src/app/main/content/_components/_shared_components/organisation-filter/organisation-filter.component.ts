@@ -1,14 +1,14 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { CoreVolunteerService } from "../../_service/core-volunteer.service";
-import { CoreHelpSeekerService } from "../../_service/core-helpseeker.service";
-import { LoginService } from "../../_service/login.service";
-import { MarketplaceService } from "../../_service/core-marketplace.service";
-import { TenantService } from "../../_service/core-tenant.service";
-import { Volunteer } from "../../_model/volunteer";
-import { Participant } from "../../_model/participant";
-import { Marketplace } from "../../_model/marketplace";
-import { Tenant } from "../../_model/tenant";
-import { ImageService } from "../../_service/image.service";
+import { CoreVolunteerService } from "../../../_service/core-volunteer.service";
+import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
+import { LoginService } from "../../../_service/login.service";
+import { MarketplaceService } from "../../../_service/core-marketplace.service";
+import { TenantService } from "../../../_service/core-tenant.service";
+import { Volunteer } from "../../../_model/volunteer";
+import { Participant } from "../../../_model/participant";
+import { Marketplace } from "../../../_model/marketplace";
+import { Tenant } from "../../../_model/tenant";
+import { ImageService } from "../../../_service/image.service";
 
 @Component({
   selector: "organisation-filter",
@@ -30,7 +30,7 @@ export class OrganisationFilterComponent implements OnInit {
     private marketplaceService: MarketplaceService,
     private tenantService: TenantService,
     private imageService: ImageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.volunteer = <Volunteer>(

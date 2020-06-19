@@ -15,7 +15,7 @@ import { MatchingConfigurationService } from '../../../../_service/configuration
 import { ClassConfiguration, MatchingConfiguration, MatchingCollectorConfiguration } from '../../../../_model/meta/configurations';
 import { MatchingCollectorConfigurationService } from '../../../../_service/configuration/matching-collector-configuration.service';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
-import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from '../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 
 declare var require: any;

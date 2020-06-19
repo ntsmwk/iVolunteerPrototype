@@ -19,7 +19,7 @@ import {
   MatCheckboxModule,
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared_components/header/header.module";
 
 const routes: Route[] = [{ path: "", component: FuseTaskListComponent }];
 
@@ -50,4 +50,4 @@ const routes: Route[] = [{ path: "", component: FuseTaskListComponent }];
     FuseTruncatePipeModule,
   ],
 })
-export class FuseTaskListModule {}
+export class FuseTaskListModule { }

@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
-import { ClassInstanceDTO, ClassArchetype } from "../../_model/meta/class";
+import { ClassInstanceDTO, ClassArchetype } from "../../../_model/meta/class";
 import { SelectionModel } from "@angular/cdk/collections";
-import { Marketplace } from "../../_model/marketplace";
-import { Helpseeker } from "../../_model/helpseeker";
-import { Volunteer } from "../../_model/volunteer";
-import { CoreHelpSeekerService } from "../../_service/core-helpseeker.service";
-import { CoreVolunteerService } from "../../_service/core-volunteer.service";
-import { CoreUserImagePathService } from "../../_service/core-user-imagepath.service";
+import { Marketplace } from "../../../_model/marketplace";
+import { Helpseeker } from "../../../_model/helpseeker";
+import { Volunteer } from "../../../_model/volunteer";
+import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
+import { CoreVolunteerService } from "../../../_service/core-volunteer.service";
+import { CoreUserImagePathService } from "../../../_service/core-user-imagepath.service";
 import { isNullOrUndefined } from "util";
 
 @Component({
@@ -51,7 +51,7 @@ export class AssetInboxComponent implements OnInit {
     private helpseekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
     private userImagePathService: CoreUserImagePathService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {

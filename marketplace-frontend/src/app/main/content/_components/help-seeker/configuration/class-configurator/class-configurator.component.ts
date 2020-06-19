@@ -13,7 +13,7 @@ import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguration } from '../../../../_model/meta/configurations';
 import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
-import { DialogFactoryDirective } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from '../../../_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { EnumDefinition } from 'app/main/content/_model/meta/enum';
 

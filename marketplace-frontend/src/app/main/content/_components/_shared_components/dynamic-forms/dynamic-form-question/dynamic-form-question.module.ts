@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
-import { GermanDateAdapter } from '../../../_adapter/german-date-adapter';
+import { GermanDateAdapter } from '../../../../_adapter/german-date-adapter';
 import {
   MatButtonModule,
   MatCheckboxModule,

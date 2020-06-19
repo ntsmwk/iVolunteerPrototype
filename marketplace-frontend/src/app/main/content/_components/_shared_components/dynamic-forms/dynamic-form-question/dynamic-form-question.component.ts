@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { QuestionBase } from '../../../_model/dynamic-forms/questions';
+import { QuestionBase } from '../../../../_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 
 @Component({

@@ -1,7 +1,7 @@
 import { PropertyType, PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { Component, OnInit } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
 import { MatTableDataSource } from '@angular/material';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
