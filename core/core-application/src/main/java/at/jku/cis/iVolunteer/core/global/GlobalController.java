@@ -31,27 +31,39 @@ public class GlobalController {
 		Marketplace marketplace = null;
 		List<Tenant> tenants = new ArrayList<>();
 
-		if (globalInfo.getParticipantRole() == ParticipantRole.VOLUNTEER) {
-			CoreVolunteer coreVolunteer = (CoreVolunteer) globalInfo.getParticipant();
-			List<Marketplace> registeredMarketplaces = coreVolunteer.getRegisteredMarketplaces();
-			if (registeredMarketplaces.size() > 0) {
-				marketplace = registeredMarketplaces.get(0);
-			}
-			tenants = this.tenantService.getTenantsByVolunteer(globalInfo.getParticipant().getId());
-		} else if (globalInfo.getParticipantRole() == ParticipantRole.HELP_SEEKER) {
-			CoreHelpSeeker coreHelpSeeker = (CoreHelpSeeker) globalInfo.getParticipant();
-			List<Marketplace> registeredMarketplaces = coreHelpSeeker.getRegisteredMarketplaces();
-			if (registeredMarketplaces.size() > 0) {
-				marketplace = registeredMarketplaces.get(0);
-			}
-			Tenant tenant = this.tenantService.getTenantById(coreHelpSeeker.getTenantId());
-			tenants.add(tenant);
+		
+		switch (globalInfo.getParticipantRole()) {
+		case VOLUNTEER:
+			setVolunteerGlobalInfo(globalInfo, marketplace, tenants);
+			break;
+		case HELP_SEEKER:
+			setHelpSeekerGlobalInfo(globalInfo, marketplace, tenants);
+			break;
 		}
 
 		globalInfo.setTenants(tenants);
 		globalInfo.setMarketplace(marketplace);
 
 		return globalInfo;
+	}
+
+	private void setVolunteerGlobalInfo(GlobalInfo globalInfo, Marketplace marketplace, List<Tenant> tenants) {
+		CoreVolunteer coreVolunteer = (CoreVolunteer) globalInfo.getParticipant();
+		List<Marketplace> registeredMarketplaces = coreVolunteer.getRegisteredMarketplaces();
+		if (registeredMarketplaces.size() > 0) {
+			marketplace = registeredMarketplaces.get(0);
+		}
+		tenants = this.tenantService.getTenantsByVolunteer(globalInfo.getParticipant().getId());
+	}
+
+	private void setHelpSeekerGlobalInfo(GlobalInfo globalInfo, Marketplace marketplace, List<Tenant> tenants) {
+		CoreHelpSeeker coreHelpSeeker = (CoreHelpSeeker) globalInfo.getParticipant();
+		List<Marketplace> registeredMarketplaces = coreHelpSeeker.getRegisteredMarketplaces();
+		if (registeredMarketplaces.size() > 0) {
+			marketplace = registeredMarketplaces.get(0);
+		}
+		Tenant tenant = this.tenantService.getTenantById(coreHelpSeeker.getTenantId());
+		tenants.add(tenant);
 	}
 
 }
