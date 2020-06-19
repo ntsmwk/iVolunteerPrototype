@@ -36,8 +36,6 @@ public class PropertyDefinitionController {
 	private List<PropertyDefinition<Object>> createNewPropertyDefintion(
 			@RequestBody List<PropertyDefinition<Object>> propertyDefinitions) {
 		
-		System.out.println(propertyDefinitions.get(0).getId());
-
 //		for (PropertyDefinition<Object> pd : propertyDefinitions) {
 //			pd.setCustom(true);
 //		}
