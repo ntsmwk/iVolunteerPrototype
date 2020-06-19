@@ -63,7 +63,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     private questionService: QuestionService,
     private questionControlService: QuestionControlService,
     private objectIdService: ObjectIdService
-  ) {}
+  ) { }
 
   ngOnInit() {
     let marketplaceId: string;
