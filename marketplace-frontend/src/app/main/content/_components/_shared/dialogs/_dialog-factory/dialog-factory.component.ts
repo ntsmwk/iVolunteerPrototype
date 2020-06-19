@@ -53,11 +53,11 @@ import {
 import {
   AddPropertyDialogComponent,
   AddPropertyDialogData,
-} from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
+} from 'app/main/content/_components/_shared/dialogs/add-property-dialog/add-property-dialog.component';
 import {
   RemoveDialogComponent,
   RemoveDialogData,
-} from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
+} from 'app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component';
 import { isNullOrUndefined } from 'util';
 import {
   ChangeIconDialogComponent,

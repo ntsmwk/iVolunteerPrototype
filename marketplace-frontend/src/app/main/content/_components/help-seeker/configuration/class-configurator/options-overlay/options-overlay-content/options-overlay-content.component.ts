@@ -5,9 +5,9 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
 import { PropertyType } from 'app/main/content/_model/meta/property';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
+import { AddPropertyDialogData } from 'app/main/content/_components/_shared/dialogs/add-property-dialog/add-property-dialog.component';
 import { isNullOrUndefined } from 'util';
-import { RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
+import { RemoveDialogData } from 'app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
