@@ -259,7 +259,10 @@
                     </button>
                   </ng-container>
                   <button
-                    *ngIf="getShareableTenants(entry).length == 0"
+                    *ngIf="
+                      getShareableTenants(entry) &&
+                      getShareableTenants(entry).length === 0
+                    "
                     mat-menu-item
                   >
                     Bereits an alle geteilt!
@@ -267,7 +270,7 @@
                   <button
                     *ngIf="!isSynced(entry)"
                     mat-menu-item
-                    (click)="shareClassInstanceToIssuer(entry, entry.tenantId)"
+                    (click)="shareClassInstanceToIssuer(entry)"
                   >
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
@@ -292,7 +295,7 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <img
-              *ngFor="let tenant of getSharedWith(entry)"
+              *ngFor="let tenant of getSharedWithTenants(entry)"
               class="avatar"
               matTooltip="{{ tenant.name }}"
               src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
@@ -309,7 +312,7 @@
               <ng-template matMenuContent let-tenant="tenant">
                 <button
                   mat-menu-item
-                  (click)="revokeClassInstance(entry, tenant)"
+                  (click)="revokeSharedClassInstance(entry, tenant)"
                 >
                   Zurückziehen
                 </button>

@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -202,7 +203,7 @@ public class ClassInstanceController {
 	}
 
 	@PostMapping("/meta/core/class/instance/newShared")
-	public ClassInstance createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId,
+	public ClassInstanceDTO createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId,
 			@RequestBody String classInstanceId) {
 		ClassInstance ci = classInstanceRepository.findOne(classInstanceId);
 
@@ -221,7 +222,8 @@ public class ClassInstanceController {
 		ciNew.setMarketplaceId(ci.getMarketplaceId());
 		ciNew.setTenantId(tenantId);
 
-		return this.classInstanceRepository.save(ciNew);
+		return classInstanceMapper.mapToDTO(Collections.singletonList(this.classInstanceRepository.save(ciNew)))
+				.stream().findFirst().orElse(null);
 	}
 
 	@DeleteMapping("/meta/core/class/instance/{id}/delete")
