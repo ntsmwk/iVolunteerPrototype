@@ -9,13 +9,13 @@ import {
   MatTabsModule,
 } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { HeaderModule } from 'app/main/content/_shared_components/header/header.module';
+import { HeaderModule } from 'app/main/content/_components/_shared/header/header.module';
 import { SinglePropertyBuilderModule } from './single-property/single-property-builder.module';
 import { BuilderContainerModule } from './builder-container/builder-container.module';
 
 const routes = [
-  { path: ':propertyId', component: PropertyBuildFormComponent },
-  { path: '', component: PropertyBuildFormComponent },
+  { path: ':marketplaceId/:entryId', component: PropertyBuildFormComponent },
+  { path: ':marketplaceId', component: PropertyBuildFormComponent },
 ];
 
 @NgModule({

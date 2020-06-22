@@ -17,7 +17,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule, MatSelectModule } from "@angular/material";
 import { FuseClassRulePreconditionConfiguratorComponent } from "./class-rule-configurator-precondition/class-rule-configurator-precondition.component";
 import { FuseAttributeRulePreconditionConfiguratorComponent } from "./attribute-rule-configurator-precondition.1/attribute-rule-configurator-precondition.component";
-import { HeaderModule } from "app/main/content/_shared_components/header/header.module";
+import { HeaderModule } from "app/main/content/_components/_shared/header/header.module";
 
 const routes = [
   { path: "", component: FuseRuleConfiguratorComponent },
@@ -49,4 +49,4 @@ const routes = [
     FuseSharedModule,
   ],
 })
-export class FuseRuleConfiguratorModule {}
+export class FuseRuleConfiguratorModule { }

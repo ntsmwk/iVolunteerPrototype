@@ -10,14 +10,11 @@ import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoCo
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-
-import at.jku.cis.iVolunteer.model.task.interaction.String2TaskOperationConverter;
 
 @Configuration
 @EnableAutoConfiguration(exclude = { EmbeddedMongoAutoConfiguration.class })
@@ -48,11 +45,6 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 	@Override
 	public String getMappingBasePackage() {
 		return null;
-	}
-
-	@Override
-	public CustomConversions customConversions() {
-		return new CustomConversions(asList(new String2TaskOperationConverter()));
 	}
 
 	private ServerAddress createServerAddress() {

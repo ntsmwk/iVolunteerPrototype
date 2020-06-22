@@ -8,6 +8,7 @@ import { isNullOrUndefined } from 'util';
 import { Tenant } from 'app/main/content/_model/tenant';
 import { TenantService } from 'app/main/content/_service/core-tenant.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
+import { MarketplaceService } from 'app/main/content/_service/core-marketplace.service';
 
 @Component({
   selector: "app-property-build-form",
@@ -15,48 +16,61 @@ import { Router, Route, ActivatedRoute } from '@angular/router';
   styleUrls: ['./property-build-form.component.scss'],
 })
 export class PropertyBuildFormComponent implements OnInit {
+
+  marketplaceId: string;
   marketplace: Marketplace;
+
+  entryId: string;
+
   helpseeker: Helpseeker;
   loaded: boolean;
 
   displayBuilder: boolean;
-  displayResultSuccess: boolean;
   builderType: string;
 
-  tenant: Tenant;
+
+  // tenant: Tenant;
 
   constructor(
     private route: ActivatedRoute,
     private loginService: LoginService,
     private helpseekerService: CoreHelpSeekerService,
+    private marketplaceService: MarketplaceService,
     private tenantService: TenantService
   ) { }
 
   async ngOnInit() {
     this.displayBuilder = true;
-    this.displayResultSuccess = false;
 
-    this.route.queryParams.subscribe((params) => {
-      if (isNullOrUndefined(params['type'] || params['type'] === 'property')) {
-        this.builderType = 'property';
-      } else {
-        this.builderType = params['type'];
-      }
-    });
+    await Promise.all([
+      this.route.queryParams.subscribe((params) => {
+        if (isNullOrUndefined(params['type'] || params['type'] === 'property')) {
+          this.builderType = 'property';
+        } else {
+          this.builderType = params['type'];
+        }
+      }),
+      this.route.params.subscribe((params) => {
+        this.marketplaceId = params['marketplaceId'];
+        this.entryId = params['entryId'];
+      })
+    ]);
 
     this.helpseeker = <Helpseeker>(
       await this.loginService.getLoggedIn().toPromise()
     );
-
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
-    );
+    // console.log(this.helpseeker);
 
     this.marketplace = <Marketplace>(
-      await this.helpseekerService
-        .findRegisteredMarketplaces(this.helpseeker.id)
-        .toPromise()
+      // await this.helpseekerService
+      //   .findRegisteredMarketplaces(this.helpseeker.id)
+      //   .toPromise()
+      await this.marketplaceService.findById(this.marketplaceId).toPromise()
     );
+
+
+
+
     this.loaded = true;
   }
 
@@ -64,14 +78,9 @@ export class PropertyBuildFormComponent implements OnInit {
     this.displayBuilder = false;
 
     if (!isNullOrUndefined(result)) {
-      this.displayResultSuccess = true;
+      window.history.back();
     } else {
-      this.displayResultSuccess = false;
+      window.history.back();
     }
-  }
-
-  handleAddAnotherClick() {
-    this.displayResultSuccess = false;
-    this.displayBuilder = true;
   }
 }

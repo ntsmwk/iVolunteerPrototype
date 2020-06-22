@@ -7,20 +7,10 @@ import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassI
 
 public class Feedback extends AchievementClassInstance implements IHashObject {
 
-	String description;
-
 	FeedbackType feedbackType;
 	int feedbackValue;
 
 	List<String> iVolunteerObjecIds; // Für was
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public FeedbackType getFeedbackType() {
 		return feedbackType;

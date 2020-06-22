@@ -10,11 +10,11 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { StoredChartService } from "app/main/content/_service/stored-chart.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { StoredChart } from "app/main/content/_model/stored-chart";
 import { isNullOrUndefined } from "util";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "fuse-management-summary",

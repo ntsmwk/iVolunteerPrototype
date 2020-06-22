@@ -4,7 +4,7 @@ import { ClassInstanceFormPreviewExportDialogComponent } from './form-preview-ex
 import { FuseSharedModule } from '@fuse/shared.module';
 import {
     DynamicClassInstanceCreationFormModule
-} from 'app/main/content/_shared_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
+} from 'app/main/content/_components/_shared/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 import { MatExpansionModule, MatButtonModule } from '@angular/material';
 import { FormEntryViewModule } from '../form-editor/form-entry-view/form-entry-view.module';
 import { FormPreviewEntryModule } from './preview-entry/preview-entry.module';

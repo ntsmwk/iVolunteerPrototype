@@ -34,20 +34,19 @@ public class PropertyDefinitionController {
 
 	@PostMapping("/meta/core/property/definition/new")
 	private List<PropertyDefinition<Object>> createNewPropertyDefintion(
-			@RequestBody List<PropertyDefinition<Object>> propertyDefinitionDTOs) {
-		List<PropertyDefinition<Object>> propertyDefinitions = propertyDefinitionDTOs;
-
-		for (PropertyDefinition<Object> pd : propertyDefinitions) {
-			pd.setCustom(true);
-		}
+			@RequestBody List<PropertyDefinition<Object>> propertyDefinitions) {
+		
+//		for (PropertyDefinition<Object> pd : propertyDefinitions) {
+//			pd.setCustom(true);
+//		}
 
 		return propertyDefinitionRepository.save(propertyDefinitions);
 	}
 
 	@PutMapping("/meta/core/property/definition/{id}/update")
 	private List<PropertyDefinition<Object>> updatePropertyDefinition(
-			@RequestBody List<PropertyDefinition<Object>> propertyDefinitionDTOs) {
-		return this.createNewPropertyDefintion(propertyDefinitionDTOs);
+			@RequestBody List<PropertyDefinition<Object>> propertyDefinitions) {
+		return this.createNewPropertyDefintion(propertyDefinitions);
 	}
 
 	@DeleteMapping("/meta/core/property/definition/{id}/delete")

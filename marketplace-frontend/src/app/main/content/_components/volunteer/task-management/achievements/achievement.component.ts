@@ -10,10 +10,10 @@ import { Tenant } from "app/main/content/_model/tenant";
 import { LoginService } from "app/main/content/_service/login.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
-import { LocalRepositoryService } from "app/main/content";
 import { timer } from "rxjs";
 import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
+import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 
 @Component({
   selector: "fuse-achievements",

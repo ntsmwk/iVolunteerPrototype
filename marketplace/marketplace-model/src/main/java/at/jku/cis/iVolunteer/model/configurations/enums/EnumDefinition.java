@@ -14,18 +14,16 @@ import at.jku.cis.iVolunteer.model.meta.core.enums.EnumRelationship;
 public class EnumDefinition extends IVolunteerObject {
 
 	private String name;
-	private String description;
 
 	private List<EnumEntry> enumEntries;
 	private List<EnumRelationship> enumRelationships;
-
 
 	public EnumDefinition() {
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
 		this.setTimestamp(new Date());
 	}
-	
+
 	public EnumDefinition(String name, String tenantId) {
 		this.name = name;
 		this.enumEntries = new ArrayList<EnumEntry>();
@@ -33,7 +31,7 @@ public class EnumDefinition extends IVolunteerObject {
 		this.setTenantId(tenantId);
 		this.setTimestamp(new Date());
 	}
-	
+
 	public EnumDefinition(String name, String description, String tenantId) {
 		this.name = name;
 		this.description = description;
@@ -49,14 +47,6 @@ public class EnumDefinition extends IVolunteerObject {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public List<EnumEntry> getEnumEntries() {

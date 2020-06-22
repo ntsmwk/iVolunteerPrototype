@@ -1,6 +1,5 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
-import java.security.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +16,8 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @Service
 public class ClassInstanceMapper {
 
-	@Autowired
-	private Hasher hasher;
-	@Autowired
-	private DateTimeService dateTimeService;
+	@Autowired private Hasher hasher;
+	@Autowired private DateTimeService dateTimeService;
 
 	List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {

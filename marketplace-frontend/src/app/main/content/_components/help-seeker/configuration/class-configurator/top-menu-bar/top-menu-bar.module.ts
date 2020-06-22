@@ -8,14 +8,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FuseTruncatePipeModule } from 'app/main/content/_pipe/truncate-pipe.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { DialogFactoryModule } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.module';
-import { ConfirmDialogComponent } from 'app/main/content/_shared_components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ConfirmDialogModule } from 'app/main/content/_shared_components/dialogs/confirm-dialog/confirm-dialog.module';
+import { DialogFactoryModule } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.module';
+import { ConfirmDialogComponent } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogModule } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    
+
     MatCommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
@@ -31,7 +31,7 @@ import { ConfirmDialogModule } from 'app/main/content/_shared_components/dialogs
 
   declarations: [EditorTopMenuBarComponent],
   exports: [EditorTopMenuBarComponent],
-  entryComponents:[ConfirmDialogComponent]
+  entryComponents: [ConfirmDialogComponent]
 
 
 })

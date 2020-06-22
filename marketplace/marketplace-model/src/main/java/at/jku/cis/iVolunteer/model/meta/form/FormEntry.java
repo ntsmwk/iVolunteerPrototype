@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.model.meta.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.jku.cis.iVolunteer.model.configurations.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
@@ -10,9 +11,8 @@ public class FormEntry {
 
 	private String id;
 	private List<ClassProperty<Object>> classProperties = new ArrayList<>();
-	private List<ClassDefinition> classDefinitions = new ArrayList<>();
-	
-//	private List<EnumRepresentation> enumRepresentations = new ArrayList<>();
+	private List<ClassDefinition> classDefinitions = new ArrayList<>();	
+	private List<EnumDefinition> enumDefinitions = new ArrayList<>();
 	
 	private List<FormEntry> subEntries = new ArrayList<>();
 
@@ -49,13 +49,13 @@ public class FormEntry {
 		this.classDefinitions = classDefinitions;
 	}
 
-//	public List<EnumRepresentation> getEnumRepresentations() {
-//		return enumRepresentations;
-//	}
-//
-//	public void setEnumRepresentations(List<EnumRepresentation> enumRepresentations) {
-//		this.enumRepresentations = enumRepresentations;
-//	}
+	public List<EnumDefinition> getEnumDefinitions() {
+		return enumDefinitions;
+	}
+
+	public void setEnumDefinitions(List<EnumDefinition> enumDefinitions) {
+		this.enumDefinitions = enumDefinitions;
+	}
 
 	public List<FormEntry> getSubEntries() {
 		return subEntries;

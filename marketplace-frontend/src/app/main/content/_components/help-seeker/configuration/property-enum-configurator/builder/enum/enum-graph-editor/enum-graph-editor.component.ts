@@ -9,6 +9,7 @@ import { EnumDefinition, EnumEntry, EnumRelationship } from 'app/main/content/_m
 import { CConstants } from '../../../../class-configurator/utils-and-constants';
 import { isNullOrUndefined } from 'util';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
+import { of } from 'rxjs';
 
 declare var require: any;
 
@@ -37,7 +38,7 @@ export class EnumGraphEditorComponent implements OnInit {
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
     @Input() enumDefinition: EnumDefinition;
-    @Output() backClicked: EventEmitter<any> = new EventEmitter();
+    @Output() result: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
 
@@ -256,8 +257,8 @@ export class EnumGraphEditorComponent implements OnInit {
 
     onSaveClick() {
         this.updateModel();
-        this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then(() => {
-            console.log('done');
+        return this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then((ret: EnumDefinition) => {
+            return ret;
         });
     }
 
@@ -287,12 +288,12 @@ export class EnumGraphEditorComponent implements OnInit {
     }
 
     onBackClick() {
-        this.backClicked.emit('back');
+        this.result.emit(undefined);
     }
 
     async onSaveAndBackClick() {
-        this.onSaveClick();
-        await this.onBackClick();
+        const ret = await this.onSaveClick();
+        this.result.emit(ret);
     }
 
     private setLayout() {

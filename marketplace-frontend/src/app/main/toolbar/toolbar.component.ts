@@ -85,12 +85,15 @@ export class FuseToolbarComponent {
       (event) => {
         if (event instanceof NavigationStart) {
           this.showLoadingBar = true;
+
+          // hack to prevent endless loading bar from showing when changing parameters
+          if (event.url.startsWith('/main/properties/all?')) {
+            this.showLoadingBar = false;
+          }
         }
         if (event instanceof NavigationEnd) {
           this.showLoadingBar = false;
-          // console.log(event);
           this.changeHeading(event);
-
         }
 
       });

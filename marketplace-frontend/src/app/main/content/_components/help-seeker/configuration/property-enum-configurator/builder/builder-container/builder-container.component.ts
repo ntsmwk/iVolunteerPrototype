@@ -3,6 +3,8 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { PropertyDefinition } from 'app/main/content/_model/meta/property';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { isNullOrUndefined } from 'util';
+
 
 @Component({
     selector: 'app-builder-container',
@@ -15,6 +17,8 @@ export class BuilderContainerComponent implements OnInit {
     @Input() helpseeker: Helpseeker;
     @Input() allPropertyDefinitions: PropertyDefinition<any>[];
     @Input() builderType: string;
+    @Input() entryId: string;
+    @Input() sourceString: string;
     @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
 
     constructor(private router: Router,
@@ -23,17 +27,28 @@ export class BuilderContainerComponent implements OnInit {
 
     ngOnInit() {
 
-
     }
 
     onSelectionChange() {
-        const queryParams: Params = { type: this.builderType };
+        if (this.sourceString !== 'dialog') {
+            const queryParams: Params = { type: this.builderType };
 
-        this.router.navigate([], { relativeTo: this.route, queryParams: queryParams, queryParamsHandling: 'merge', });
+            this.router.navigate(
+                [], {
+                    relativeTo: this.route,
+                    queryParams: queryParams,
+                    queryParamsHandling: 'merge',
+                    skipLocationChange: true
+                });
+        }
     }
 
     handleResultEvent(event) {
         this.result.emit(event);
+    }
+
+    isRadioGroupDisabled() {
+        return !isNullOrUndefined(this.entryId);
     }
 
     navigateBack() {

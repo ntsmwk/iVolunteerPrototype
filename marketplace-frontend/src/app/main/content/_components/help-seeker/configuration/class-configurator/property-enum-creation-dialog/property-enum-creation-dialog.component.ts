@@ -13,6 +13,7 @@ export interface PropertyOrEnumCreationDialogData {
 
   propertyDefinition: PropertyDefinition<any>;
   enumDefinition: EnumDefinition;
+  builderType: 'property' | 'enum';
 }
 
 @Component({
@@ -24,7 +25,6 @@ export class PropertyOrEnumCreationDialogComponent implements OnInit {
 
   loaded = false;
 
-
   constructor(
     public dialogRef: MatDialogRef<PropertyOrEnumCreationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PropertyOrEnumCreationDialogData,
@@ -35,11 +35,15 @@ export class PropertyOrEnumCreationDialogComponent implements OnInit {
     this.loaded = true;
   }
 
-  handleResultEvent(event: PropertyDefinition<any>) {
+  handleResultEvent(event: any) {
     if (isNullOrUndefined(event)) {
       this.handleCloseClick();
     } else {
-      this.data.propertyDefinition = event;
+      if (event.builderType == 'enum') {
+        this.data.enumDefinition = event.value;
+      } else if (event.builderType == 'property') {
+        this.data.propertyDefinition = event.value;
+      }
       this.dialogRef.close(this.data);
     }
   }

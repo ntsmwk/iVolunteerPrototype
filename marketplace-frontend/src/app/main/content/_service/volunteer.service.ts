@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Marketplace } from '../_model/marketplace';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Marketplace } from "../_model/marketplace";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class VolunteerService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   findAll(marketplace: Marketplace) {
     return this.http.get(`${marketplace.url}/volunteer/`);
@@ -20,9 +18,5 @@ export class VolunteerService {
 
   findByName(marketplace: Marketplace, name: string) {
     return this.http.get(`${marketplace.url}/volunteer/username/${name}`);
-
   }
-
-
-
 }

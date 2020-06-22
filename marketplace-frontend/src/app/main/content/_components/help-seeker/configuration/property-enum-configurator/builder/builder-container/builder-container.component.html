@@ -1,6 +1,7 @@
 <div>
 
-  <mat-radio-group aria-label="Auswählen" [(ngModel)]="builderType" (change)="onSelectionChange()">
+  <mat-radio-group aria-label="Auswählen" [(ngModel)]="builderType" (change)="onSelectionChange()"
+    [disabled]="isRadioGroupDisabled()">
     <mat-radio-button value="property">Property erstellen</mat-radio-button>
     <mat-radio-button value="enum">Enum erstellen</mat-radio-button>
   </mat-radio-group>
@@ -10,13 +11,14 @@
   </div>
 
   <div *ngIf="builderType == 'property'">
-    <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker"
-      (result)="handleResultEvent($event)">
+    <app-single-property-builder [marketplace]="marketplace" [helpseeker]="helpseeker" [entryId]="entryId"
+      [sourceString]="sourceString" (result)="handleResultEvent($event)">
     </app-single-property-builder>
   </div>
 
   <div *ngIf="builderType == 'enum'">
-    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker" (result)="handleResultEvent($event)">
+    <app-enum-builder [marketplace]="marketplace" [helpseeker]="helpseeker" [entryId]="entryId"
+      [sourceString]="sourceString" (result)="handleResultEvent($event)">
     </app-enum-builder>
   </div>
 

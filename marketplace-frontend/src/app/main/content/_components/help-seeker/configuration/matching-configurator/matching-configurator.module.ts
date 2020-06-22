@@ -5,8 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MatCommonModule, MatProgressSpinnerModule, MatIconModule, MatTableModule, MatButtonModule, MatFormFieldModule, MatDividerModule, MatSelectModule, MatOptionModule, MatTooltipModule, MatSnackBarModule, MatCheckboxModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseTruncatePipeModule } from '../../../../_pipe/truncate-pipe.module';
-import { DialogFactoryModule } from '../../../../_shared_components/dialogs/_dialog-factory/dialog-factory.module';
-import { AddOrRemoveDialogModule } from '../../../../_shared_components/dialogs/add-or-remove-dialog/add-or-remove-dialog.module';
+import { DialogFactoryModule } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.module';
 import { MatchingEditorTopMenuBarModule } from './top-menu-bar/top-menu-bar.module';
 import { MatchingOptionsOverlayControlModule } from './options-overlay/options-overlay-control/options-overlay-control.module';
 
@@ -39,7 +38,6 @@ const routes = [
     FuseTruncatePipeModule,
 
     DialogFactoryModule,
-    AddOrRemoveDialogModule,
 
     MatchingEditorTopMenuBarModule,
     MatchingOptionsOverlayControlModule,

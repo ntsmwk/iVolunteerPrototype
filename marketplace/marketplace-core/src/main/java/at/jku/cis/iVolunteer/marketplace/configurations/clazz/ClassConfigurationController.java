@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
 import at.jku.cis.iVolunteer.marketplace.configurations.matching.collector.MatchingCollectorConfigurationRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.CollectionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
@@ -147,6 +146,7 @@ public class ClassConfigurationController {
 		return this.classConfigurationRepository.findAll();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private ClassConfiguration createAndSaveNewClassConfiguration(String tenantId, String configuratorName,
 			String description, String configuratorId) {
 
@@ -308,7 +308,6 @@ public class ClassConfigurationController {
 			configurator.getRelationshipIds().add(r.getId());
 		}
 
-//		this.classConfigurationRepository.save(configurator);
 		return saveClassConfiguration(configurator);
 
 	}

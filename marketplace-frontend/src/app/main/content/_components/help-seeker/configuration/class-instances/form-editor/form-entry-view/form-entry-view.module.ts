@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormEntryViewComponent } from './form-entry-view.component';
 import { MatCommonModule, MatProgressSpinnerModule, MatExpansionModule, MatButtonModule, MatIconModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_shared_components/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
+import { DynamicClassInstanceCreationFormModule } from 'app/main/content/_components/_shared/dynamic-forms/dynamic-class-instance-creation-form/dynamic-class-instance-creation-form.module';
 
 
 @NgModule({

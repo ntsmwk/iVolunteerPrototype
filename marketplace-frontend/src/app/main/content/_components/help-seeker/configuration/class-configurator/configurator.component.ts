@@ -5,7 +5,7 @@ import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { LoginService } from 'app/main/content/_service/login.service';
 import { CoreHelpSeekerService } from 'app/main/content/_service/core-helpseeker.service';
 import { CoreFlexProdService } from 'app/main/content/_service/core-flexprod.service';
-import { Participant, ParticipantRole } from 'app/main/content/_model/participant';
+import { ParticipantRole } from 'app/main/content/_model/participant';
 import { isNullOrUndefined } from 'util';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
@@ -21,34 +21,22 @@ export class ConfiguratorComponent implements OnInit {
     configurableClasses: ClassDefinition[];
     relationships: Relationship[];
     helpseeker: Helpseeker;
-
-
     isLoaded = false;
 
     constructor(
         private loginService: LoginService,
         private helpSeekerService: CoreHelpSeekerService,
-        private flexProdService: CoreFlexProdService,
     ) { }
 
     ngOnInit() {
-        let service: CoreHelpSeekerService | CoreFlexProdService;
         // get marketplace
-
         this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
             this.helpseeker = helpseeker;
-            this.loginService.getLoggedInParticipantRole().toPromise().then((role: ParticipantRole) => {
-                if (role === 'FLEXPROD') {
-                    service = this.flexProdService;
-                } else if (role === 'HELP_SEEKER') {
-                    service = this.helpSeekerService;
+            this.helpSeekerService.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
+                if (!isNullOrUndefined(marketplace)) {
+                    this.marketplace = marketplace;
+                    this.isLoaded = true;
                 }
-                service.findRegisteredMarketplaces(helpseeker.id).toPromise().then((marketplace: Marketplace) => {
-                    if (!isNullOrUndefined(marketplace)) {
-                        this.marketplace = marketplace;
-                        this.isLoaded = true;
-                    }
-                });
             });
         });
     }

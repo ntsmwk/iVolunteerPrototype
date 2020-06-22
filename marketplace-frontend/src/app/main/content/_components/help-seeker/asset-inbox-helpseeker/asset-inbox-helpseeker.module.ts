@@ -4,7 +4,7 @@ import { AssetInboxHelpseekerComponent } from "./asset-inbox-helpseeker.componen
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material";
 import { RouterModule } from "@angular/router";
-import { AssetInboxModule } from "../../../_shared_components/asset-inbox/asset-inbox.module";
+import { AssetInboxModule } from "../../_shared/asset-inbox/asset-inbox.module";
 
 const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
 
@@ -20,4 +20,4 @@ const routes = [{ path: "", component: AssetInboxHelpseekerComponent }];
   ],
   exports: [AssetInboxHelpseekerComponent]
 })
-export class AssetInboxHelpseekerModule {}
+export class AssetInboxHelpseekerModule { }

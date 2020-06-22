@@ -25,10 +25,9 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   @Input() marketplace: Marketplace;
   @Input() helpseeker: Helpseeker;
-  @Input() allPropertyDefinitions: PropertyDefinition<any>[];
-  @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
-
-  model: PropertyDefinition<any>;
+  @Input() entryId: string;
+  @Input() sourceString: string;
+  @Output() result: EventEmitter<{builderType: string, value: PropertyDefinition<any>}> = new EventEmitter();
 
   loaded: boolean; dropdownToggled: boolean;
 
@@ -38,26 +37,48 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   allowedValues: FormArray;
 
+  allPropertyDefinitions: PropertyDefinition<any>[];
+  propertyDefinition: PropertyDefinition<any>;
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private propertyDefinitionService: PropertyDefinitionService) { }
 
   ngOnInit() {
+
     this.preparePropertyTypeOptions();
 
     this.clearForm();
 
     this.dropdownToggled = false;
 
-    if (isNullOrUndefined(this.allPropertyDefinitions)) {
-      this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
-        this.allPropertyDefinitions = ret;
+    if (!isNullOrUndefined(this.entryId)) {
+      Promise.all([
+        this.getAllPropertyDefinitions(), this.getCurrentPropertyDefinition()
+      ]).then(() => {
+        this.populateForm();
         this.loaded = true;
       });
+
     } else {
-      this.loaded = true;
+      this.getAllPropertyDefinitions().then(() => {
+        this.loaded = true;
+      });
     }
   }
+
+  getAllPropertyDefinitions() {
+    return this.propertyDefinitionService.getAllPropertyDefinitons(this.marketplace, this.helpseeker.tenantId).toPromise().then((ret: PropertyDefinition<any>[]) => {
+      this.allPropertyDefinitions = ret;
+    });
+  }
+
+  getCurrentPropertyDefinition() {
+    return this.propertyDefinitionService.getPropertyDefinitionById(this.marketplace, this.entryId, this.helpseeker.tenantId).toPromise().then((ret: PropertyDefinition<any>) => {
+      this.propertyDefinition = ret;
+    });
+  }
+
 
   // ----------------------------------------------------
 
@@ -73,11 +94,37 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   clearForm() {
     this.form = this.formBuilder.group({
-      name: this.formBuilder.control('', [Validators.required, propertyNameUniqueValidator(this.allPropertyDefinitions, this.model)]),
+      name: this.formBuilder.control('', [Validators.required, propertyNameUniqueValidator(this.allPropertyDefinitions, this.propertyDefinition)]),
       type: this.formBuilder.control('', Validators.required),
       allowedValues: this.formBuilder.array([]),
       description: this.formBuilder.control('')
     });
+
+    if (!isNullOrUndefined(this.propertyDefinition)) {
+      this.populateForm();
+    }
+  }
+
+  populateForm() {
+
+    this.form.get('name').setValue(this.propertyDefinition.name);
+    this.form.get('type').setValue(this.propertyDefinition.type);
+    this.form.get('description').setValue(this.propertyDefinition.description);
+
+    if (!isNullOrUndefined(this.propertyDefinition.allowedValues) && this.propertyDefinition.allowedValues.length > 0) {
+      this.dropdownToggled = true;
+      let i = 0;
+      for (const value of this.propertyDefinition.allowedValues) {
+        this.addAllowedValue();
+        this.form.get('allowedValues').get('' + i).get('value').setValue(value);
+        i++;
+      }
+    }
+
+
+
+
+
   }
 
   // ----------------------------------------------------
@@ -139,7 +186,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
       this.propertyDefinitionService.createNewPropertyDefinition(this.marketplace, [property]).toPromise().then((ret: PropertyDefinition<any>[]) => {
         if (!isNullOrUndefined(ret) && ret.length > 0) {
-          this.result.emit(ret[0]);
+          this.result.emit({builderType: 'property', value: ret[0]});
         } else {
           this.result.emit(undefined);
         }
@@ -151,6 +198,7 @@ export class SinglePropertyBuilderComponent implements OnInit {
 
   handleCancelClick() {
     this.result.emit(undefined);
+
   }
 
   createPropertyFromForm(): PropertyDefinition<any> {
@@ -158,24 +206,21 @@ export class SinglePropertyBuilderComponent implements OnInit {
     property.tenantId = this.helpseeker.tenantId;
     property.custom = true;
 
-    if (isNullOrUndefined(this.model)) {
+    if (isNullOrUndefined(this.propertyDefinition)) {
       property.id = null;
     } else {
-      property.id = this.model.id;
+      property.id = this.propertyDefinition.id;
     }
 
     property.name = this.form.get('name').value;
-
     property.allowedValues = [];
     if (!isNullOrUndefined(this.form.get('allowedValues'))) {
       for (const value of (this.form.get('allowedValues') as FormArray).value) {
         property.allowedValues.push(value.value);
       }
     }
-
     property.propertyConstraints = [];
     property.type = this.form.get('type').value;
-
     property.description = this.form.get('description').value;
 
     return property;
