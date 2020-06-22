@@ -19,12 +19,18 @@ import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
 @SpringBootApplication
 public class MarketplaceApplication {
 
-	@Autowired private ClassConfigurationRepository configuratorRepository;
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private DerivationRuleRepository derivationRuleRepository;
+	@Autowired
+	private ClassConfigurationRepository configuratorRepository;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private RelationshipRepository relationshipRepository;
+	@Autowired
+	private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	private DerivationRuleRepository derivationRuleRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MarketplaceApplication.class, args);

@@ -148,12 +148,12 @@ export class DashboardVolunteerComponent implements OnInit {
       this.volunteer
     );
     if (this.isLocalRepositoryConnected) {
-      let marketplaces = <Marketplace[]>(
-        await this.volunteerService
-          .findRegisteredMarketplaces(this.volunteer.id)
-          .toPromise()
-      );
-      this.marketplace = marketplaces[0];
+      // let marketplaces = <Marketplace[]>(
+      //   await this.volunteerService
+      //     .findRegisteredMarketplaces(this.volunteer.id)
+      //     .toPromise()
+      // );
+      // this.marketplace = marketplaces[0];
 
       let mpAndSharedClassInstanceDTOs = <ClassInstanceDTO[]>(
         await this.classInstanceService
@@ -260,7 +260,7 @@ export class DashboardVolunteerComponent implements OnInit {
       data: { name: "share" },
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => { });
+    dialogRef.afterClosed().subscribe((result: any) => {});
   }
 
   tenantSelectionChanged(selectedTenants: Tenant[]) {
