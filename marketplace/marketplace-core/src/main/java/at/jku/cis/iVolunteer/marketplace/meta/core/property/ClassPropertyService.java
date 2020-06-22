@@ -1,30 +1,43 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.property;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import at.jku.cis.iVolunteer.marketplace._mapper.property.EnumDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace._mapper.property.PropertyDefinitionToClassPropertyMapper;
+import at.jku.cis.iVolunteer.marketplace.configurations.enums.EnumDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 
 @Service
 public class ClassPropertyService {
 
-	@Autowired ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired private EnumDefinitionRepository enumDefinitionRepository;
+	@Autowired private EnumDefinitionToClassPropertyMapper enumDefinitionToClassPropertyMapper;
 
-	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
+	
+	public List<ClassProperty<Object>> getAllClassPropertiesFromClass(String classDefinitionId) {
+		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
 		if (classDefinition != null) {
 			return classDefinition.getProperties();
 		}
 		return null;
 	}
 
-	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId, String tenantId) {
-		ClassDefinition classDefinition = classDefinitionRepository.getByIdAndTenantId(classDefinitionId, tenantId);
+	public ClassProperty<Object> getClassPropertyById(String classDefinitionId, String classPropertyId) {
+		ClassDefinition classDefinition = classDefinitionRepository.findOne(classDefinitionId);
 		if (classDefinition != null) {
 			return findClassProperty(classDefinition, classPropertyId);
 		}
@@ -62,6 +75,83 @@ public class ClassPropertyService {
 			     .findFirst()
 			     .orElse(-1);
 		// @formatter:on		
+	}
+	
+	
+	List<ClassProperty<Object>> getClassPropertyFromDefinitionById(List<String> propertyIds, List<String> enumIds) {
+		List<PropertyDefinition<Object>> properties = new ArrayList<>();
+		List<EnumDefinition> enums = new ArrayList<>();
+		
+		if (propertyIds != null) {
+			propertyDefinitionRepository.findAll(propertyIds).forEach(properties::add);
+		}
+		if (enumIds != null) {
+			enumDefinitionRepository.findAll(enumIds).forEach(enums::add);
+		}
+		
+		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(properties);
+		List<ClassProperty<Object>> enumProperties = createClassPropertiesFromEnumDefinitions(enums);
+		
+		classProperties.addAll(enumProperties);
+		return classProperties;
+	}
+
+	// TODO: Philipp: tenantId check required?
+	List<ClassProperty<Object>> addPropertiesToClassDefinitionById(String id, @RequestBody List<String> propertyIds) {
+		
+		List<PropertyDefinition<Object>> properties = new ArrayList<>();
+		propertyDefinitionRepository.findAll(propertyIds).forEach(properties::add);;
+		List<ClassProperty<Object>> classProperties = createClassPropertiesFromDefinitions(properties);
+
+		ClassDefinition clazz = storeClassProperties(id, classProperties);
+		return clazz.getProperties();
+	}
+
+	List<ClassProperty<Object>> addPropertiesToClassDefinition(String id, List<ClassProperty<Object>> properties) {
+		ClassDefinition clazz = storeClassProperties(id, properties);
+		return clazz.getProperties();
+	}
+
+	ClassDefinition removePropertiesFromClassDefinition(String id, List<String> idsToRemove) {
+		ClassDefinition clazz = classDefinitionRepository.findOne(id);
+
+		// @formatter:off
+		ArrayList<ClassProperty<Object>> remainingObjects = 
+				clazz
+					.getProperties()
+					.stream()
+					.filter(c -> idsToRemove.stream().noneMatch(remId -> c.getId().equals(remId)))
+					.collect(Collectors.toCollection(ArrayList::new));
+		// @formatter:on
+
+		clazz.setProperties(remainingObjects);
+		return classDefinitionRepository.save(clazz);
+	}
+
+	private ClassDefinition storeClassProperties(String id, List<ClassProperty<Object>> classProperties) {
+		ClassDefinition clazz = classDefinitionRepository.findOne(id);
+		if (clazz.getProperties() == null) {
+			clazz.setProperties(new ArrayList<>());
+		}
+		clazz.getProperties().addAll(classProperties);
+		clazz = classDefinitionRepository.save(clazz);
+		return clazz;
+	}
+
+	private List<ClassProperty<Object>> createClassPropertiesFromDefinitions(List<PropertyDefinition<Object>> propertyDefinitions) {
+		List<ClassProperty<Object>> cProps = new ArrayList<>();
+		for (PropertyDefinition<Object> pd : propertyDefinitions) {
+			cProps.add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
+		}
+		return cProps;
+	}
+	
+	private List<ClassProperty<Object>> createClassPropertiesFromEnumDefinitions(List<EnumDefinition> enums) {
+		List<ClassProperty<Object>> cProps = new ArrayList<>();
+		for (EnumDefinition ed : enums) {
+			cProps.add(enumDefinitionToClassPropertyMapper.toTarget(ed));
+		}
+		return cProps;
 	}
 
 }

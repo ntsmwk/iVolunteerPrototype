@@ -150,7 +150,6 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
         .getAllClassPropertiesFromClass(
           this.marketplace,
           this.attributeSourceRuleEntry.classDefinition.id,
-          this.helpseeker.tenantId
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
@@ -206,7 +205,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   private retrieveAggregationOperatorValueOf(op) {
     let x: AttributeAggregationOperatorType =
       AttributeAggregationOperatorType[
-        op as keyof typeof AttributeAggregationOperatorType
+      op as keyof typeof AttributeAggregationOperatorType
       ];
     return x;
   }

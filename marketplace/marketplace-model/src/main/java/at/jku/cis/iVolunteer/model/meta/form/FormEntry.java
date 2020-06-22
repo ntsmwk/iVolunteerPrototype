@@ -3,8 +3,8 @@ package at.jku.cis.iVolunteer.model.meta.form;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.model.configurations.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 public class FormEntry {

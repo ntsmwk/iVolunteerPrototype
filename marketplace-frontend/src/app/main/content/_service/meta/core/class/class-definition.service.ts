@@ -100,72 +100,9 @@ export class ClassDefinitionService {
     );
   }
 
-  // getAllChildrenIdMap(
-  //   marketplace: Marketplace,
-  //   rootClassIds: string[],
-  //   tenantId: string
-  // ) {
-  //   return this.http.put(
-  //     `${marketplace.url}/meta/core/class/definition/get-children/tenant/${tenantId}`,
-  //     rootClassIds
-  //   );
-  // }
 
-  // getAllParentsIdMap(
-  //   marketplace: Marketplace,
-  //   childClassIds: string[],
-  //   tenantId: string
-  // ) {
-  //   return this.http.put(
-  //     `${marketplace.url}/meta/core/class/definition/get-parents/tenant/${tenantId}`,
-  //     childClassIds
-  //   );
-  // }
 
-  getClassPropertyFromPropertyDefinitionById(marketplace: Marketplace, propIds: string[], enumIds: string[], tenantId: string) {
 
-    const requestObject = { propertyDefinitionIds: propIds, enumDefinitionIds: enumIds };
-
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/get-classproperty-from-propertydefinition-by-id/tenant/${tenantId}`,
-      requestObject
-    );
-  }
-
-  // TODO
-
-  addPropertiesToClassDefinitionById(
-    marketplace: Marketplace,
-    id: string,
-    propIds: String[]
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/${id}/add-properties-by-id`,
-      propIds
-    );
-  }
-
-  addPropertiesToClassDefinition(
-    marketplace: Marketplace,
-    id: string,
-    propsToAdd: PropertyDefinition<any>[]
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/${id}/add-properties`,
-      propsToAdd
-    );
-  }
-
-  removePropertiesFromClassDefinition(
-    marketplace: Marketplace,
-    id: string,
-    propIds: string[]
-  ) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/definition/${id}/remove-properties`,
-      propIds
-    );
-  }
 
   getEnumValuesFromEnumHeadClassDefinition(
     marketplace: Marketplace,

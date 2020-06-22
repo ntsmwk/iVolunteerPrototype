@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.configurations.enums.EnumDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 
 @RestController
 public class EnumDefinitionController {

@@ -15,12 +15,12 @@
   <div *ngIf="loaded">
     <mat-tab-group #tabGroup (selectedTabChange)="tabIndex = $event.index">
       <mat-tab label="Properties">
-        <mat-table #propertyTable class="property-table" [dataSource]="datasource" matSort>
+        <mat-table #propertyTable class="property-table" [dataSource]="propertyDatasource" matSort>
           <ng-container matColumnDef="checkbox">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)" [disabled]="isDisabled(row)">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? propertySelection.toggle(row) : null"
+                [checked]="propertySelection.isSelected(row)" [disabled]="isDisabled(row)">
               </mat-checkbox>
             </mat-cell>
           </ng-container>

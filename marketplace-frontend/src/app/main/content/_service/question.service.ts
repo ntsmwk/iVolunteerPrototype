@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, TupleDropdownQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, TupleDropdownQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
 } from '../_model/dynamic-forms/questions';
 import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
@@ -130,19 +130,21 @@ export class QuestionService {
       });
 
     } else if (property.type === PropertyType.ENUM) {
-      // if (property.multiple) {
-      //   question = new MultipleSelectionEnumQuestion({
-      //     // TODO
-      //     values: property.defaultValues,
-      //     options: property.allowedValues
-      //   });
-      // } else {
-      //   question = new SingleSelectionEnumQuestion({
-      //     // TODO
-      //     values: property.defaultValues,
-      //     options: property.allowedValues
-      //   });
-      // }
+      if (property.multiple) {
+        question = new MultipleSelectionEnumQuestion({
+          // TODO
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      } else {
+        question = new SingleSelectionEnumQuestion({
+          // TODO
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      }
+
+      // question = new GenericQuestion();
 
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({

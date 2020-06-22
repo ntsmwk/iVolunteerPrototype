@@ -19,6 +19,9 @@ import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollectorEntry;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumEntry;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumRelationship;
 import at.jku.cis.iVolunteer.model.meta.core.property.Tuple;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
@@ -33,24 +36,17 @@ public class CollectionService {
 
 	private static final String PATH_DELIMITER = Character.toString((char) 28);
 
-	@Autowired
-	ClassConfigurationRepository classConfigurationRepository;
-	@Autowired
-	ClassDefinitionRepository classDefinitionRepository;
-	@Autowired
-	RelationshipRepository relationshipRepository;
-
-	@Autowired
-	PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired
-	PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired ClassConfigurationRepository classConfigurationRepository;
+	@Autowired ClassDefinitionRepository classDefinitionRepository;
+	@Autowired RelationshipRepository relationshipRepository;
+	@Autowired PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
 	public List<ClassDefinition> collectAllClassDefinitionsWithPropertiesAsList(String slotId) {
 		ClassConfiguration configurator = classConfigurationRepository.findOne(slotId);
 		if (configurator == null) {
 			return null;
 		}
-
 		List<ClassDefinition> collectors = new ArrayList<ClassDefinition>();
 		classDefinitionRepository.findAll(configurator.getClassDefinitionIds()).forEach(c -> {
 			if (c.isCollector()) {
@@ -61,7 +57,6 @@ public class CollectionService {
 		for (ClassDefinition collector : collectors) {
 			collector.setProperties(aggregateAllPropertiesDFS(collector, 0, collector.getProperties()));
 		}
-
 		return collectors;
 	}
 
@@ -144,6 +139,8 @@ public class CollectionService {
 		}
 		return list;
 	}
+	
+	
 
 	List<MatchingCollectorEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
 			List<MatchingCollectorEntry> list, String path) {
@@ -170,6 +167,34 @@ public class CollectionService {
 
 		return list;
 	}
+	
+	public List<EnumEntry> collectEnumEntries (EnumDefinition enumDefinition) {
+		return aggregateAllEnumEntriesDFS(enumDefinition.getId(), 0, new ArrayList<>(), enumDefinition);
+	}
+	
+	
+	List<EnumEntry> aggregateAllEnumEntriesDFS(String rootId, int level, List<EnumEntry> list, EnumDefinition enumDefinition) {
+	Stack<EnumRelationship> stack = new Stack<>();
+	List<EnumRelationship> relationships = enumDefinition.getEnumRelationships().stream().filter(r -> r.getSourceEnumEntryId().equals(rootId)).collect(Collectors.toList());
+			
+	Collections.reverse(relationships);
+	stack.addAll(relationships);
+
+	if (stack == null || stack.size() <= 0) {
+		return list;
+	}
+	
+	while (!stack.isEmpty()) {
+		EnumRelationship relationship = stack.pop();
+		EnumEntry enumEntry = enumDefinition.getEnumEntries().stream().filter(e -> e.getId().equals(relationship.getTargetEnumEntryId())).findFirst().get();
+		enumEntry.setPosition(new int[level + 1]);
+		enumEntry.setLevel(level);
+		list.add(enumEntry);
+		this.aggregateAllEnumEntriesDFS(enumEntry.getId(), level + 1, list, enumDefinition);
+	}
+	
+	return list;
+}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,

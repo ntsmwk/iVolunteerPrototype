@@ -36,10 +36,6 @@ public class ClassDefinitionService {
 
 	public List<ClassDefinition> getClassDefinitonsById(List<String> ids, String tenantId) {
 		List<ClassDefinition> classDefinitions = new ArrayList<>();
-
-//			ids.forEach(id -> {
-//				classDefinitions.add(classDefinitionRepository.getByIdAndTenantId(id, tenantId));
-//			});
 		classDefinitionRepository.findAll(ids).forEach(classDefinitions::add);
 
 		return classDefinitions;
@@ -116,60 +112,8 @@ public class ClassDefinitionService {
 				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE
 				|| cd.getClassArchetype() == ClassArchetype.FUNCTION 
 				|| cd.getClassArchetype() == ClassArchetype.TASK;
-//				|| cd.getClassArchetype() == ClassArchetype.ACHIEVEMENT_HEAD
-//				|| cd.getClassArchetype() == ClassArchetype.COMPETENCE_HEAD
-//				|| cd.getClassArchetype() == ClassArchetype.FUNCTION_HEAD
-//				|| cd.getClassArchetype() == ClassArchetype.TASK_HEAD;
 		// @formatter:on
 	}
-
-//	public List<FormConfiguration> getParentsById(List<String> childIds) {
-//		System.out.println("getParentyById");
-//		List<ClassDefinition> childClassDefinitions = new ArrayList<>();
-//
-//		classDefinitionRepository.findAll(childIds).forEach(childClassDefinitions::add);
-//		
-//		List<FormConfiguration> configList = new ArrayList<FormConfiguration>();
-//
-//		// Pre-Condition: Graph must be acyclic - a child can only have one parent, one
-//		// parent can have multiple children
-//		// Work our way up the chain until we are at the root
-//
-//		for (ClassDefinition childClassDefinition : childClassDefinitions) {
-//			FormConfiguration formConfig = new FormConfiguration();
-//			formConfig.setName(childClassDefinition.getName());
-//			formConfig.setId(childClassDefinition.getId());
-//			
-//			ClassConfiguration classConfiguration = classConfigurationRepository.findOne(childClassDefinition.getConfigurationId());
-//			
-//			List<ClassDefinition> allClassDefinitions = new ArrayList<>();
-//			List<Relationship> allRelationships = new ArrayList<>();
-//			
-//			classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(allClassDefinitions::add);
-//			relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(allRelationships::add);
-//			
-////			formConfig.setFormEntry(this.collectionService.getParentClassDefintions(childClassDefinition, new FormEntry(), allClassDefinitions, allRelationships));
-//			formConfig.setFormEntry(this.collectionService.aggregateFormEntry(childClassDefinition, new FormEntry(childClassDefinition.getId()), allClassDefinitions, allRelationships, true));
-//
-//			
-//			configList.add(formConfig);
-//		}
-//
-//		return configList;
-//	}
-
-//	public List<FormConfiguration> getParents(List<ClassDefinition> classDefinitions, List<Relationship> relationships, ClassDefinition rootClassDefinition) {
-//		List<FormConfiguration> formConfigurations = new ArrayList<>();
-//
-//		FormEntry formEntry = collectionService.getParentClassDefintions(rootClassDefinition, new FormEntry(rootClassDefinition.getId()), classDefinitions, relationships);
-//		
-//		FormConfiguration formConfiguration = new FormConfiguration();
-//		formConfiguration.setId(rootClassDefinition.getId());
-//		formConfiguration.setName(rootClassDefinition.getName());
-//		formConfiguration.setFormEntry(formEntry);
-//		formConfigurations.add(formConfiguration);
-//		return formConfigurations;
-//	}
 
 	public List<FormConfiguration> getClassDefinitionsById(List<String> startIds) {
 
@@ -205,7 +149,6 @@ public class ClassDefinitionService {
 
 	public List<FormConfiguration> getClassDefinitions(List<ClassDefinition> classDefinitions,
 			List<Relationship> relationships, ClassDefinition startClassDefinition) {
-//		ClassDefinition rootClassDefinition = classDefinitions.stream().filter(cd -> cd.isRoot()).findFirst().get();
 		List<FormConfiguration> formConfigurations = new ArrayList<>();
 
 		FormEntry formEntry = collectionService.aggregateFormEntry(startClassDefinition,
@@ -218,16 +161,12 @@ public class ClassDefinitionService {
 		formConfiguration.setName(startClassDefinition.getName());
 		formConfiguration.setFormEntry(formEntry);
 		formConfigurations.add(formConfiguration);
+		
 		return formConfigurations;
 	}
 
 	public void generateFormEntryIds(FormEntry formEntry, String currentPath) {
 		formEntry.setId(currentPath);
-
-//		System.out.println(formEntry.getId());
-//		for (ClassProperty p : formEntry.getClassProperties()) {
-//			System.out.println(formEntry.getId() + "." + p.getName());
-//		}
 
 		for (FormEntry f : formEntry.getSubEntries()) {
 			generateFormEntryIds(f, currentPath + "." + f.getId());
@@ -248,11 +187,6 @@ public class ClassDefinitionService {
 
 		classDefinitionRepository.findAll(classConfiguration.getClassDefinitionIds()).forEach(classDefinitions::add);
 		relationshipRepository.findAll(classConfiguration.getRelationshipIds()).forEach(relationships::add);
-//		
-//		System.out.println("START:  " + startClassDefinition.getId() + ": " + startClassDefinition.getName());
-//		System.out.println("CHOICE: " + choiceClassDefinition.getId() + ": " + choiceClassDefinition.getName());
-
-//		collectionService.aggregateFormEntry(startClassDefinition, new FormEntry(startClassDefinitionId), classDefinitions, relationships, false);
 		FormEntry entry = collectionService.getFormEntryChunk(startClassDefinition, choiceClassDefinition,
 				classDefinitions, relationships);
 
@@ -261,17 +195,5 @@ public class ClassDefinitionService {
 		return entry;
 
 	}
-
-	// Keep in case of changes of mind :)
-//		private EnumRepresentation createEnumRepresentation(ClassDefinition root) {
-//			List<EnumEntry> entries = new ArrayList<EnumEntry>();
-//			entries = performDFS(root, 0, entries);
-//			
-//			EnumRepresentation enumRepresentation = new EnumRepresentation();
-//			enumRepresentation.setEnumEntries(entries);
-//			enumRepresentation.setId(root.getId());
-//			
-//			return enumRepresentation;
-//		}
 
 }

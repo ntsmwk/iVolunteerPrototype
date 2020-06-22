@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
-import at.jku.cis.iVolunteer.model.configurations.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 
 @Document

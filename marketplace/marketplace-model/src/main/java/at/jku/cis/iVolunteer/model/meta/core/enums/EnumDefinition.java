@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.model.configurations.enums;
+package at.jku.cis.iVolunteer.model.meta.core.enums;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,8 +7,6 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumEntry;
-import at.jku.cis.iVolunteer.model.meta.core.enums.EnumRelationship;
 
 @Document
 public class EnumDefinition extends IVolunteerObject {
@@ -17,6 +15,9 @@ public class EnumDefinition extends IVolunteerObject {
 
 	private List<EnumEntry> enumEntries;
 	private List<EnumRelationship> enumRelationships;
+	
+	private boolean multiple;
+	private boolean required;
 
 	public EnumDefinition() {
 		this.enumEntries = new ArrayList<EnumEntry>();
@@ -71,6 +72,22 @@ public class EnumDefinition extends IVolunteerObject {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
+	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
 	}
 
 	@Override

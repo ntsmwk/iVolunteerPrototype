@@ -115,7 +115,6 @@ public class ClassDefinitionController {
 
 	@PutMapping("meta/core/class/definition/form-configuration-preview")
 	private List<FormConfiguration> getFormConfigurationPreview(@RequestBody FormConfigurationPreviewRequest request) {
-//		List<FormConfiguration> ret = classDefinitionService.aggregateChildren(request.getClassDefinitions(), request.getRelationships());
 		List<FormConfiguration> ret = classDefinitionService.getClassDefinitions(request.getClassDefinitions(),
 				request.getRelationships(), request.getRootClassDefinition());
 		return ret;
@@ -125,7 +124,6 @@ public class ClassDefinitionController {
 	private FormEntry getFormConfigurationChunk(@RequestBody String[] params) {
 		final String pathPrefix = params[0];
 		final String choiceId = params[1];
-//		System.out.println(pathPrefix);
 		String[] split = pathPrefix.split("\\.");
 		
 		assert (split.length >= 1);

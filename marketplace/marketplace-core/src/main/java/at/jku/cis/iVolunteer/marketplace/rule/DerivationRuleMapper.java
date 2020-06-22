@@ -37,7 +37,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.map(entry -> new AttributeSourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
 						// TODO Philipp: surce.getTenantId!???
-						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId(), source.getTenantId()),
+						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
 						entry.getMappingOperatorType(),
 						entry.getValue(),
 						entry.getAggregationOperatorType()))

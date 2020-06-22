@@ -123,7 +123,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
         .getAllClassPropertiesFromClass(
           this.marketplace,
           this.classSourceRuleEntry.classDefinition.id,
-          this.helpseeker.tenantId
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
@@ -154,7 +153,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   private retrieveAggregationOperatorValueOf(op) {
     let x: ClassAggregationOperatorType =
       ClassAggregationOperatorType[
-        op as keyof typeof ClassAggregationOperatorType
+      op as keyof typeof ClassAggregationOperatorType
       ];
     return x;
   }
