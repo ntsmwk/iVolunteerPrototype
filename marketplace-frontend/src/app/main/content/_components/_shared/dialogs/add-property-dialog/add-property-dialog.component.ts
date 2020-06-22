@@ -60,9 +60,7 @@ export class AddPropertyDialogComponent implements OnInit {
   disabledEnums: EnumDefinition[];
 
   loaded: boolean;
-
   tabIndex: number;
-
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -88,6 +86,11 @@ export class AddPropertyDialogComponent implements OnInit {
       this.enumDefinitionService.getAllEnumDefinitionsForTenant(this.data.marketplace, this.data.classDefinition.tenantId).toPromise().then((ret: EnumDefinition[]) => {
         this.enumDataSource.data = ret;
         this.allEnumDefinitions = ret;
+
+        this.initialEnums = ret.filter(e => this.data.classDefinition.properties.find(f => f.id === e.id));
+        this.disabledEnums = [];
+        this.disabledEnums.push(...this.initialEnums);
+        this.enumSelection.select(...this.initialEnums);
       })
     ]).then(() => {
       this.loaded = true;
@@ -106,8 +109,12 @@ export class AddPropertyDialogComponent implements OnInit {
     return parentProperties;
   }
 
-  isDisabled(propertyDefinition: PropertyDefinition<any>) {
+  isPropertyRowDisabled(propertyDefinition: PropertyDefinition<any>) {
     return !isNullOrUndefined(this.disabledProperties.find(p => p.id === propertyDefinition.id));
+  }
+
+  isEnumRowDisabled(enumDefinition: EnumDefinition) {
+    return !isNullOrUndefined(this.disabledEnums.find(p => p.id === enumDefinition.id));
   }
 
   applyFilter(event: Event) {
@@ -121,7 +128,7 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   onRowClick(row: PropertyDefinition<any>) {
-    if (this.isDisabled(row)) {
+    if (this.isPropertyRowDisabled(row)) {
       return;
     }
 
@@ -133,9 +140,9 @@ export class AddPropertyDialogComponent implements OnInit {
   }
 
   onEnumRowClick(row: EnumDefinition) {
-    // if (this.isDisabled(row)) {
-    //   return;
-    // }
+    if (this.isEnumRowDisabled(row)) {
+      return;
+    }
 
     if (this.enumSelection.isSelected(row)) {
       this.enumSelection.deselect(row);

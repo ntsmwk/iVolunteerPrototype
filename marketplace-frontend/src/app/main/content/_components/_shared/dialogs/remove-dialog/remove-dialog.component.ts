@@ -43,7 +43,6 @@ export class RemoveDialogComponent implements OnInit {
 
     this.entryList = [];
     this.entryList.push(...this.data.classDefinition.properties);
-    this.entryList.push(...this.data.classDefinition.enums.map(e => ({ id: e.id, name: e.name, type: PropertyType.ENUM })));
 
 
     this.datasource.data = this.entryList;
@@ -69,7 +68,6 @@ export class RemoveDialogComponent implements OnInit {
 
   onSubmit() {
     this.data.classDefinition.properties = this.data.classDefinition.properties.filter(p => this.selection.selected.findIndex(s => s.id === p.id) === -1);
-    this.data.classDefinition.enums = this.data.classDefinition.enums.filter(p => this.selection.selected.findIndex(s => s.id === p.id) === -1);
 
     this.dialogRef.close(this.data);
   }

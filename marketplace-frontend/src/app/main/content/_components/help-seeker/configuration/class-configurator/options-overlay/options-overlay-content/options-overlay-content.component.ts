@@ -88,7 +88,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
             .then((ret: AddPropertyDialogData) => {
                 if (!isNullOrUndefined(ret)) {
                     this.inputData.classDefinition.properties = ret.classDefinition.properties;
-                    this.inputData.classDefinition.enums = ret.classDefinition.enums;
                     this.updatePropertiesAndEnumsList();
                 }
             });
@@ -99,7 +98,6 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         this.dialogFactory.openRemoveDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: RemoveDialogData) => {
             if (!isNullOrUndefined(ret)) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
-                this.inputData.classDefinition.enums = ret.classDefinition.enums;
                 this.updatePropertiesAndEnumsList();
             }
         });
@@ -116,7 +114,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     updatePropertiesAndEnumsList() {
         this.entryList = [];
         this.entryList.push(...this.inputData.classDefinition.properties);
-        this.entryList.push(...this.inputData.classDefinition.enums.map(e => ({ name: e.name, type: PropertyType.ENUM })));
+        // this.entryList.push(...this.inputData.classDefinition.enums.map(e => ({ name: e.name, type: PropertyType.ENUM })));
     }
 
 }

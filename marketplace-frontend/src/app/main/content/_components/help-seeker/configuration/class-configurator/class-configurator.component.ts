@@ -326,12 +326,12 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     }
 
     cell.geometry.alternateBounds = new mx.mxRectangle(0, 0, 110, 50);
-    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + classDefinition.enums.length * 20 + 80);
+    cell.geometry.setRect(cell.geometry.x, cell.geometry.y, cell.geometry.width, classDefinition.properties.length * 20 + 80);
 
     // create properties TODO @Alex Refactor
     let yLocation = 5;
     yLocation = this.addPropertiesToCell(cell, classDefinition.properties, yLocation);
-    yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
+    // yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
     // next icon
     if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT

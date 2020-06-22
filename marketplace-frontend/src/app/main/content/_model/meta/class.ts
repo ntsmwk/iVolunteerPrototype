@@ -1,5 +1,4 @@
 import { ClassProperty, PropertyInstance } from "./property";
-import { EnumDefinition } from "./enum";
 
 export class ClassDefinition {
   id: string;
@@ -15,7 +14,6 @@ export class ClassDefinition {
   writeProtected: boolean;
 
   properties: ClassProperty<any>[] = [];
-  enums: EnumDefinition[] = [];
 
   marketplaceId: string;
   timestamp: Date;
@@ -26,7 +24,7 @@ export class ClassDefinition {
   tabId: number;
 }
 
-export class CompetenceClassDefinition extends ClassDefinition {}
+export class CompetenceClassDefinition extends ClassDefinition { }
 
 export class ClassDefinitionDTO {
   id: string;
