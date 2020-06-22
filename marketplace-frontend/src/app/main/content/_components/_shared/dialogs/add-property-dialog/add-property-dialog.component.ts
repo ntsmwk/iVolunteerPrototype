@@ -12,7 +12,7 @@ import {
   PropertyOrEnumCreationDialogComponent,
   PropertyOrEnumCreationDialogData
 } from 'app/main/content/_components/help-seeker/configuration/class-configurator/property-enum-creation-dialog/property-enum-creation-dialog.component';
-import { Relationship } from 'app/main/content/_model/meta/relationship';
+import { Relationship, RelationshipType } from 'app/main/content/_model/meta/relationship';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
 import { EnumDefinition } from 'app/main/content/_model/meta/enum';
@@ -102,6 +102,10 @@ export class AddPropertyDialogComponent implements OnInit {
     const parentProperties = [];
     do {
       const relationship = this.data.allRelationships.find(r => r.target === currentClassDefinition.id);
+      if (relationship.relationshipType === RelationshipType.AGGREGATION) {
+        break;
+      }
+
       currentClassDefinition = this.data.allClassDefinitions.find(cd => cd.id === relationship.source);
       parentProperties.push(...currentClassDefinition.properties);
     } while (!currentClassDefinition.root);
@@ -132,11 +136,7 @@ export class AddPropertyDialogComponent implements OnInit {
       return;
     }
 
-    if (this.propertySelection.isSelected(row)) {
-      this.propertySelection.deselect(row);
-    } else {
-      this.propertySelection.select(row);
-    }
+    this.propertySelection.isSelected(row) ? this.propertySelection.deselect(row) : this.propertySelection.select(row);
   }
 
   onEnumRowClick(row: EnumDefinition) {
@@ -144,11 +144,7 @@ export class AddPropertyDialogComponent implements OnInit {
       return;
     }
 
-    if (this.enumSelection.isSelected(row)) {
-      this.enumSelection.deselect(row);
-    } else {
-      this.enumSelection.select(row);
-    }
+    this.enumSelection.isSelected(row) ? this.enumSelection.deselect(row) : this.enumSelection.select(row);
   }
 
   onSubmit() {
