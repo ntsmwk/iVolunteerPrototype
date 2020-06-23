@@ -5,7 +5,7 @@ import { ClassDefinition, ClassArchetype } from 'app/main/content/_model/meta/cl
 import { mxgraph } from 'mxgraph';
 import { Relationship, RelationshipType, Association, AssociationCardinality, Inheritance } from 'app/main/content/_model/meta/relationship';
 import { isNullOrUndefined } from 'util';
-import { ClassProperty } from 'app/main/content/_model/meta/property';
+import { ClassProperty, PropertyType } from 'app/main/content/_model/meta/property';
 import { EditorPopupMenu } from './popup-menu';
 import { ObjectIdService } from '../../../../_service/objectid.service.';
 import { CConstants } from './utils-and-constants';
@@ -371,34 +371,42 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
    */
   private addPropertiesToCell(cell: MyMxCell, properties: ClassProperty<any>[], yLocation: number): number {
     if (!isNullOrUndefined(properties)) {
+      let propertyEntry: MyMxCell;
       for (const p of properties) {
-        const propertyEntry: MyMxCell = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
-        propertyEntry.cellType = MyMxCellType.PROPERTY;
+        if (p.type !== PropertyType.ENUM) {
+          propertyEntry = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.property) as MyMxCell;
+          propertyEntry.cellType = MyMxCellType.PROPERTY;
+          propertyEntry.property = true;
+          propertyEntry.propertyId = p.id;
+        } else {
+          propertyEntry = this.graph.insertVertex(cell, p.id, p.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+          propertyEntry.cellType = MyMxCellType.ENUM_PROPERTY;
+          propertyEntry.enum = true;
+          propertyEntry.enumId = p.id;
+        }
         propertyEntry.setConnectable(false);
-        propertyEntry.property = true;
-        propertyEntry.propertyId = p.id;
         yLocation += 20;
       }
     }
     return yLocation;
   }
 
-  private addEnumsToCell(cell: MyMxCell, enums: EnumDefinition[], yLocation: number): number {
-    if (!isNullOrUndefined(enums)) {
-      for (const e of enums) {
-        const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
+  // private addEnumsToCell(cell: MyMxCell, enums: EnumDefinition[], yLocation: number): number {
+  //   if (!isNullOrUndefined(enums)) {
+  //     for (const e of enums) {
+  //       const enumEntry: MyMxCell = this.graph.insertVertex(cell, e.id, e.name, 5, yLocation + 45, 100, 20, CConstants.mxStyles.propertyEnum) as MyMxCell;
 
-        enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
+  //       enumEntry.cellType = MyMxCellType.ENUM_PROPERTY;
 
-        enumEntry.setConnectable(false);
+  //       enumEntry.setConnectable(false);
 
-        enumEntry.enum = true;
-        enumEntry.enumId = e.id;
-        yLocation += 20;
-      }
-    }
-    return yLocation;
-  }
+  //       enumEntry.enum = true;
+  //       enumEntry.enumId = e.id;
+  //       yLocation += 20;
+  //     }
+  //   }
+  //   return yLocation;
+  // }
 
   /**
     * ******RELATIONSHIPS******
