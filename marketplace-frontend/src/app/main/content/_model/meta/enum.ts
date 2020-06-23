@@ -2,6 +2,9 @@ export class EnumEntry {
     id: string;
     value: string;
     selectable: boolean;
+
+    level: number;
+    position: number[];
 }
 
 export class EnumRelationship {

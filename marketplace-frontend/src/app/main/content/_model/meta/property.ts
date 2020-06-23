@@ -1,5 +1,6 @@
 import { isNullOrUndefined } from 'util';
 import { PropertyConstraint } from './constraint';
+import { EnumEntry } from './enum';
 
 export class PropertyDefinition<T> {
     id: string;
@@ -58,10 +59,6 @@ export class ClassProperty<T> {
     }
 }
 
-export class EnumEntry {
-
-}
-
 export class EnumReference {
     enumClassId: string;
     value?: string;
@@ -114,8 +111,24 @@ export class PropertyInstance<T> {
         this.propertyConstraints = classProperty.propertyConstraints;
         this.visible = classProperty.visible;
         this.tabId = classProperty.tabId;
-    }
 
+
+        if (classProperty.type === PropertyType.ENUM) {
+            const rootValue = this.values[0] as unknown as EnumEntry;
+
+            let i = (classProperty as ClassProperty<unknown> as ClassProperty<EnumEntry>)
+                .allowedValues.findIndex(a => a.id === rootValue.id);
+            let currentLevel = rootValue.level;
+
+            for (i; i >= 0; i--) {
+                const currentAllowedValue = this.allowedValues[i] as unknown as EnumEntry;
+                if (currentAllowedValue.level < currentLevel) {
+                    this.values.push(classProperty.allowedValues[i]);
+                    currentLevel--;
+                }
+            }
+        }
+    }
 }
 
 

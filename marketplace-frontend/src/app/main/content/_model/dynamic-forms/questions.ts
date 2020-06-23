@@ -1,5 +1,5 @@
 import { ValidatorFn } from '@angular/forms';
-import { EnumEntry } from '../meta/property';
+import { EnumEntry } from '../meta/enum';
 
 export class QuestionBase<T> {
   value: T;
