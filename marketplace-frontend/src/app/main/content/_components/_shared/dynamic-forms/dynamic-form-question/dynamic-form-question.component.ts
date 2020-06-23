@@ -31,12 +31,12 @@ export class DynamicFormQuestionComponent implements OnInit {
     this.expanded = false;
   }
 
-  prepareDatePicker() {
-    if (this.question.controlType === 'datepicker' && !isNullOrUndefined(this.question.value)) {
-      this.date = new FormControl(this.question.value);
-      this.form.setControl(this.question.key, this.date);
-    }
-  }
+  // prepareDatePicker() {
+  //   if (this.question.controlType === 'datepicker' && !isNullOrUndefined(this.question.value)) {
+  //     this.date = new FormControl(this.question.value);
+  //     this.form.setControl(this.question.key, this.date);
+  //   }
+  // }
 
   calculateSpaces(level: number) {
     level = 10 * level;
@@ -165,11 +165,6 @@ export class DynamicFormQuestionComponent implements OnInit {
 
   handleTupleSelection(opt: any) {
     this.tupleSelected.emit({ selection: opt, formGroup: this.form });
-  }
-
-  abc(evt: any) {
-    // console.log(evt);
-
   }
 
 

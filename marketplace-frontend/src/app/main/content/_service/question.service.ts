@@ -159,11 +159,6 @@ export class QuestionService {
 
   private setDateValue(value: any) {
     return !isNullOrUndefined ? new Date(value) : undefined;
-    // if (!isNullOrUndefined(value)) {
-    //   return new Date(value);
-    // } else {
-    //   return undefined;
-    // }
   }
 
   private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType): ValidatorData {
