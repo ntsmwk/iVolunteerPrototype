@@ -280,11 +280,17 @@ export class EnumGraphEditorComponent implements OnInit {
             newEnumEntries.push(enumEntry);
         }
 
+        this.enumDefinition.enumEntries = newEnumEntries;
+
         const newEnumRelationships: EnumRelationship[] = [];
         for (const edge of edges) {
             const relationship = this.enumDefinition.enumRelationships.find(r => r.id === edge.id);
+            relationship.sourceEnumEntryId = edge.source.id;
+            relationship.targetEnumEntryId = edge.target.id;
             newEnumRelationships.push(relationship);
         }
+        this.enumDefinition.enumRelationships = newEnumRelationships;
+
     }
 
     onBackClick() {
@@ -331,12 +337,12 @@ export class EnumGraphEditorComponent implements OnInit {
 
     private performDelete(cells: MyMxCell[]) {
         cells = cells.filter((c: MyMxCell) => !c.writeProtected);
-        const removedCells = this.graph.removeCells(cells, true) as MyMxCell[];
+        const removedCells = this.graph.removeCells(cells, false) as MyMxCell[];
 
         if (isNullOrUndefined(removedCells)) {
             return;
         }
-        this.deleteFromModel(removedCells);
+        // this.deleteFromModel(removedCells);
     }
 
     private deleteFromModel(removedCells: MyMxCell[]) {
