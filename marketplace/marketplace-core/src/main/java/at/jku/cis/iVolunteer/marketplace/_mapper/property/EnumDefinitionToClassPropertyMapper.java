@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace._mapper.property;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,17 @@ public class EnumDefinitionToClassPropertyMapper implements OneWayMapper<EnumDef
 
 	@Override
 	public List<ClassProperty<Object>> toTargets(List<EnumDefinition> sources) {
-		// TODO Auto-generated method stub
-		return null;
+			
+		if (sources == null) {
+			return null;
+		}
+		
+		List<ClassProperty<Object>> classProperties = new ArrayList<>();
+		for (EnumDefinition enumDefinition : sources) {
+			toTarget(enumDefinition);
+		}
+		
+		return classProperties;
 	}
 
 	
