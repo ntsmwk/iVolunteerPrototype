@@ -139,8 +139,6 @@ public class CollectionService {
 		}
 		return list;
 	}
-	
-	
 
 	List<MatchingCollectorEntry> aggregateAllClassDefinitionsWithPropertiesDFS(ClassDefinition root, int level,
 			List<MatchingCollectorEntry> list, String path) {
@@ -159,7 +157,8 @@ public class CollectionService {
 			Relationship relationship = stack.pop();
 			ClassDefinition classDefinition = classDefinitionRepository.findOne(relationship.getTarget());
 			if (classDefinition.getProperties() != null && classDefinition.getProperties().size() > 0) {
-				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(), PATH_DELIMITER));
+				list.add(new MatchingCollectorEntry(classDefinition, path + PATH_DELIMITER + classDefinition.getId(),
+						PATH_DELIMITER));
 			}
 			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
 					path + PATH_DELIMITER + classDefinition.getId());
@@ -167,34 +166,36 @@ public class CollectionService {
 
 		return list;
 	}
-	
-	public List<EnumEntry> collectEnumEntries (EnumDefinition enumDefinition) {
+
+	public List<EnumEntry> collectEnumEntries(EnumDefinition enumDefinition) {
 		return aggregateAllEnumEntriesDFS(enumDefinition.getId(), 0, new ArrayList<>(), enumDefinition);
 	}
-	
-	
-	List<EnumEntry> aggregateAllEnumEntriesDFS(String rootId, int level, List<EnumEntry> list, EnumDefinition enumDefinition) {
-	Stack<EnumRelationship> stack = new Stack<>();
-	List<EnumRelationship> relationships = enumDefinition.getEnumRelationships().stream().filter(r -> r.getSourceEnumEntryId().equals(rootId)).collect(Collectors.toList());
-			
-	Collections.reverse(relationships);
-	stack.addAll(relationships);
 
-	if (stack == null || stack.size() <= 0) {
+	private List<EnumEntry> aggregateAllEnumEntriesDFS(String rootId, int level, List<EnumEntry> list,
+			EnumDefinition enumDefinition) {
+		Stack<EnumRelationship> stack = new Stack<>();
+		List<EnumRelationship> relationships = enumDefinition.getEnumRelationships().stream()
+				.filter(r -> r.getSourceEnumEntryId().equals(rootId)).collect(Collectors.toList());
+
+		Collections.reverse(relationships);
+		stack.addAll(relationships);
+
+		if (stack == null || stack.size() <= 0) {
+			return list;
+		}
+
+		while (!stack.isEmpty()) {
+			EnumRelationship relationship = stack.pop();
+			EnumEntry enumEntry = enumDefinition.getEnumEntries().stream()
+					.filter(e -> e.getId().equals(relationship.getTargetEnumEntryId())).findFirst().get();
+			enumEntry.setPosition(new int[level + 1]);
+			enumEntry.setLevel(level);
+			list.add(enumEntry);
+			this.aggregateAllEnumEntriesDFS(enumEntry.getId(), level + 1, list, enumDefinition);
+		}
+
 		return list;
 	}
-	
-	while (!stack.isEmpty()) {
-		EnumRelationship relationship = stack.pop();
-		EnumEntry enumEntry = enumDefinition.getEnumEntries().stream().filter(e -> e.getId().equals(relationship.getTargetEnumEntryId())).findFirst().get();
-		enumEntry.setPosition(new int[level + 1]);
-		enumEntry.setLevel(level);
-		list.add(enumEntry);
-		this.aggregateAllEnumEntriesDFS(enumEntry.getId(), level + 1, list, enumDefinition);
-	}
-	
-	return list;
-}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,
@@ -208,7 +209,7 @@ public class CollectionService {
 
 		// Collect Properties
 		currentFormEntry.getClassProperties().addAll(0, currentClassDefinition.getProperties());
-		
+
 		// Collect EnumDefnitions
 		currentFormEntry.getEnumDefinitions().addAll(0, currentClassDefinition.getEnums());
 
@@ -228,8 +229,8 @@ public class CollectionService {
 		List<FormEntry> subFormEntries = new ArrayList<>();
 
 		boolean unableToContinuePropertySet = false;
-		
-		PropertyDefinition unableToContinuePropertyDefinition = createUnableToContinueProperty(); 
+
+		PropertyDefinition unableToContinuePropertyDefinition = createUnableToContinueProperty();
 
 		while (!targetStack.isEmpty()) {
 			Relationship relationship = targetStack.pop();
@@ -245,24 +246,24 @@ public class CollectionService {
 
 		while (!sourceStack.isEmpty()) {
 			Relationship relationship = sourceStack.pop();
-			
+
 			if (relationship.getRelationshipType().equals(RelationshipType.AGGREGATION)) {
 				ClassDefinition classDefinition = allClassDefinitions.stream()
 						.filter(d -> d.getId().equals(relationship.getTarget())).findFirst().get();
 				FormEntry subFormEntry = aggregateFormEntry(classDefinition, new FormEntry(classDefinition.getId()),
 						allClassDefinitions, allRelationships, false);
 				subFormEntries.add(subFormEntry);
-			
+
 			} else if (relationship.getRelationshipType().equals(RelationshipType.INHERITANCE)) {
 				if (!directionUp) {
 					if (!unableToContinuePropertySet) {
-						
+
 						ClassDefinition parentClassDefinition = allClassDefinitions.stream()
 								.filter(cd -> cd.getId().equals(relationship.getSource())).findFirst().get();
-						
+
 						unableToContinuePropertyDefinition.getAllowedValues().add(new Tuple<String, String>(
 								parentClassDefinition.getId(), parentClassDefinition.getName()));
-						
+
 						unableToContinuePropertySet = true;
 
 					}
@@ -307,9 +308,9 @@ public class CollectionService {
 		return entry;
 
 	}
-	
-	public PropertyDefinition<Tuple<String,String>> createUnableToContinueProperty() {
-		PropertyDefinition<Tuple<String,String>> propertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
+
+	public PropertyDefinition<Tuple<String, String>> createUnableToContinueProperty() {
+		PropertyDefinition<Tuple<String, String>> propertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
 		propertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
 		propertyDefinition.setName("Bitte auswählen");
 		propertyDefinition.setAllowedValues(new ArrayList<>());
