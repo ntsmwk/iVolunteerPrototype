@@ -176,7 +176,7 @@ const mxStyles = {
     'shape=swimlane;resizable=0;' +
     'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
   classEnum:
-    'shape=swimlane;resizable=0;' +
+    'shape=swimlane;resizable=0;foldable=0;' +
     'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' +
     'portConstraint=north;',
   classFlexprodCollector:

@@ -81,9 +81,9 @@ export class EnumGraphEditorComponent implements OnInit {
             if (cell != null) {
                 let style = modelGetStyle.apply(this, arguments);
 
-                if (this.isCollapsed(cell)) {
-                    style = style + ';shape=rectangle';
-                }
+                // if (this.isCollapsed(cell)) {
+                //     style = style + ';shape=rectangle';
+                // }
                 return style;
             }
             return null;
@@ -142,7 +142,6 @@ export class EnumGraphEditorComponent implements OnInit {
         ) as MyMxCell;
         rootCell.root = true;
         rootCell.cellType = MyMxCellType.ENUM_HEAD;
-
         this.rootCell = rootCell;
 
         const nextIcon: MyMxCell = this.graph.insertVertex(
