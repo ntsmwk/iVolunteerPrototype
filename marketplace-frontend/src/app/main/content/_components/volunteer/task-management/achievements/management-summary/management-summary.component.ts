@@ -15,6 +15,8 @@ import { Marketplace } from "app/main/content/_model/marketplace";
 import { StoredChart } from "app/main/content/_model/stored-chart";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { GlobalService } from "app/main/content/_service/global.service";
 
 @Component({
   selector: "fuse-management-summary",
@@ -72,7 +74,8 @@ export class ManagementSummaryComponent implements OnInit {
     private volunteerService: CoreVolunteerService,
     private storedChartService: StoredChartService,
     private tenantService: TenantService,
-    private localRepositoryService: LocalRepositoryService
+    private localRepositoryService: LocalRepositoryService,
+    private globalService: GlobalService
   ) {}
 
   async ngOnInit() {
@@ -81,24 +84,19 @@ export class ManagementSummaryComponent implements OnInit {
       this.timeout = true;
     });
 
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
+    );
+
+    this.volunteer = <Volunteer>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+
     this.comparisonYear = 2019;
     this.engagementYear = 2019;
-
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
 
     this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
       this.volunteer
     );
-
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService
-        .findRegisteredMarketplaces(this.volunteer.id)
-        .toPromise()
-    );
-    // TODO for each registert mp
-    this.marketplace = marketplaces[0];
 
     if (this.isLocalRepositoryConnected) {
       let localClassInstances = <ClassInstance[]>(

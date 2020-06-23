@@ -14,6 +14,8 @@ import { timer } from "rxjs";
 import { MatTabChangeEvent } from "@angular/material";
 import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
+import { GlobalService } from "app/main/content/_service/global.service";
 
 @Component({
   selector: "fuse-achievements",
@@ -28,7 +30,7 @@ export class AchievementsComponent implements OnInit {
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
 
   selectedTenants: Tenant[] = [];
-  subscribedTenants: string[] = [];
+  subscribedTenants: Tenant[] = [];
 
   isLocalRepositoryConnected: boolean;
   timeout: boolean = false;
@@ -39,7 +41,8 @@ export class AchievementsComponent implements OnInit {
     private loginService: LoginService,
     private volunteerService: CoreVolunteerService,
     private classInstanceService: ClassInstanceService,
-    private localRepositoryService: LocalRepositoryService
+    private localRepositoryService: LocalRepositoryService,
+    private globalService: GlobalService
   ) {}
 
   async ngOnInit() {
@@ -48,23 +51,17 @@ export class AchievementsComponent implements OnInit {
       this.timeout = true;
     });
 
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.subscribedTenants = this.volunteer.subscribedTenants;
+    this.volunteer = <Volunteer>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+    this.subscribedTenants = globalInfo.tenants;
 
     this.isLocalRepositoryConnected = await this.localRepositoryService.isConnected(
       this.volunteer
     );
-
-    let marketplaces = <Marketplace[]>(
-      await this.volunteerService
-        .findRegisteredMarketplaces(this.volunteer.id)
-        .toPromise()
-    );
-    // TODO for each registert mp
-    this.marketplace = marketplaces[0];
 
     if (this.isLocalRepositoryConnected) {
       let localClassInstances = <ClassInstance[]>(
@@ -89,7 +86,7 @@ export class AchievementsComponent implements OnInit {
               this.marketplace,
               "TASK",
               this.volunteer.id,
-              this.volunteer.subscribedTenants
+              this.subscribedTenants.map((t) => t.id)
             )
             .toPromise()
         );
