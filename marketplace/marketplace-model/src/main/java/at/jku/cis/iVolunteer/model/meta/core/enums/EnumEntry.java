@@ -6,16 +6,16 @@ public class EnumEntry {
 	boolean selectable;
 	int level;
 	int[] position;
-	
+
 	public EnumEntry() {
-	
+
 	}
-	
+
 	public EnumEntry(String value) {
 		this.value = value;
 		this.selectable = true;
 	}
-	
+
 	public EnumEntry(String value, boolean selectable) {
 		this.value = value;
 		this.selectable = selectable;
@@ -26,7 +26,7 @@ public class EnumEntry {
 		this.selectable = selectable;
 		this.level = level;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -38,15 +38,15 @@ public class EnumEntry {
 	public String getValue() {
 		return value;
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
 	public boolean isSelectable() {
 		return selectable;
 	}
-	
+
 	public void setSelectable(boolean selectable) {
 		this.selectable = selectable;
 	}
@@ -66,14 +66,5 @@ public class EnumEntry {
 	public void setPosition(int[] position) {
 		this.position = position;
 	}
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
 }
