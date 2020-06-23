@@ -138,7 +138,8 @@ export class EnumGraphEditorComponent implements OnInit {
 
     private createRootCell() {
         const rootCell = this.graph.insertVertex(
-            this.graph.getDefaultParent(), this.enumDefinition.id, this.enumDefinition.name, 0, 0, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classEnum
+            this.graph.getDefaultParent(), this.enumDefinition.id, this.enumDefinition.name,
+            0, 0, ENTRY_CELL_WIDTH, ENTRY_CELL_HEIGHT, CConstants.mxStyles.classEnum
         ) as MyMxCell;
         rootCell.root = true;
         rootCell.cellType = MyMxCellType.ENUM_HEAD;
@@ -337,21 +338,5 @@ export class EnumGraphEditorComponent implements OnInit {
     private performDelete(cells: MyMxCell[]) {
         cells = cells.filter((c: MyMxCell) => !c.writeProtected);
         const removedCells = this.graph.removeCells(cells, false) as MyMxCell[];
-
-        if (isNullOrUndefined(removedCells)) {
-            return;
-        }
-        // this.deleteFromModel(removedCells);
     }
-
-    private deleteFromModel(removedCells: MyMxCell[]) {
-        for (const cell of removedCells) {
-            if (cell.cellType === MyMxCellType.ENUM_ENTRY) {
-                this.enumDefinition.enumEntries = this.enumDefinition.enumEntries.filter(c => c.id !== cell.id);
-            } else if (cell.cellType === MyMxCellType.ENUM_CONNECTOR) {
-                this.enumDefinition.enumRelationships = this.enumDefinition.enumRelationships.filter(r => r.id !== cell.id);
-            }
-        }
-    }
-
 }
