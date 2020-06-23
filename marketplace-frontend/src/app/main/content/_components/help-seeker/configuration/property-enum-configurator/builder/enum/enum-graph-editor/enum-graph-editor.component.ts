@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, HostListener, AfterContentInit } from '@angular/core';
 import { mxgraph } from 'mxgraph';
 import { Router } from '@angular/router';
 import { ObjectIdService } from 'app/main/content/_service/objectid.service.';
@@ -27,12 +27,10 @@ const mx: typeof mxgraph = require('mxgraph')({
     styleUrls: ['./enum-graph-editor.component.scss'],
     // providers: [DialogFactoryDirective]
 })
-export class EnumGraphEditorComponent implements OnInit {
+export class EnumGraphEditorComponent implements AfterContentInit {
     constructor(
-        private router: Router,
         private objectIdService: ObjectIdService,
         private enumDefinitionService: EnumDefinitionService,
-        // private dialogFactory: DialogFactoryDirective,
     ) { }
 
     @Input() marketplace: Marketplace;
@@ -41,7 +39,6 @@ export class EnumGraphEditorComponent implements OnInit {
     @Output() result: EventEmitter<any> = new EventEmitter();
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
-
     graph: mxgraph.mxGraph;
     rootCell: MyMxCell;
     layout: any;
@@ -49,10 +46,6 @@ export class EnumGraphEditorComponent implements OnInit {
     /**
      * ******INITIALIZATION******
      */
-
-    ngOnInit() {
-    }
-
     ngAfterContentInit() {
         this.graphContainer.nativeElement.style.overflow = 'hidden';
         this.graphContainer.nativeElement.style.height = '65vh';
@@ -70,23 +63,10 @@ export class EnumGraphEditorComponent implements OnInit {
         const outer = this;
         this.graph.getCursorForCell = function (cell: MyMxCell) {
             // todo cursor
-            if (cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON) {
+            if (cell.cellType === MyMxCellType.ADD_CLASS_NEXT_LEVEL_ICON
+                || cell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
                 return mx.mxConstants.CURSOR_TERMINAL_HANDLE;
             }
-        };
-
-        const modelGetStyle = this.graph.model.getStyle;
-
-        this.graph.model.getStyle = function (cell) {
-            if (cell != null) {
-                let style = modelGetStyle.apply(this, arguments);
-
-                // if (this.isCollapsed(cell)) {
-                //     style = style + ';shape=rectangle';
-                // }
-                return style;
-            }
-            return null;
         };
 
         if (!mx.mxClient.isBrowserSupported()) {
@@ -98,10 +78,7 @@ export class EnumGraphEditorComponent implements OnInit {
             // Enables rubberband selection
             // tslint:disable-next-line: no-unused-expression
             new mx.mxRubberband(this.graph);
-
             this.graph.setPanning(true);
-
-            // this.graph.popupMenuHandler = this.createPopupMenu(this.graph);
             this.graph.tooltipHandler = new mx.mxTooltipHandler(this.graph, 100);
 
             /**
@@ -111,11 +88,10 @@ export class EnumGraphEditorComponent implements OnInit {
             this.graph.addListener(mx.mxEvent.CLICK, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
                 // Todo click event   
                 const mouseEvent = evt.getProperty('event');
-
                 if (mouseEvent.button === 0) {
                     outer.handleMXGraphLeftClickEvent(evt);
                 } else if (mouseEvent.button === 2) {
-                    outer.handleMXGraphRightClickEvent(evt);
+                    // Handle Right Click
                 }
             });
 
@@ -246,13 +222,7 @@ export class EnumGraphEditorComponent implements OnInit {
             this.createRelationshipCell(relationship.id, parentCell, newCell);
 
             this.executeLayout();
-
         }
-
-    }
-
-    private handleMXGraphRightClickEvent(event: mxgraph.mxEventObject) {
-
     }
 
     onSaveClick() {
@@ -279,7 +249,6 @@ export class EnumGraphEditorComponent implements OnInit {
             enumEntry.value = vertice.value;
             newEnumEntries.push(enumEntry);
         }
-
         this.enumDefinition.enumEntries = newEnumEntries;
 
         const newEnumRelationships: EnumRelationship[] = [];
@@ -290,7 +259,6 @@ export class EnumGraphEditorComponent implements OnInit {
             newEnumRelationships.push(relationship);
         }
         this.enumDefinition.enumRelationships = newEnumRelationships;
-
     }
 
     onBackClick() {
@@ -305,7 +273,6 @@ export class EnumGraphEditorComponent implements OnInit {
     private setLayout() {
         if (!isNullOrUndefined(this.rootCell.edges) && this.rootCell.edges.length > 0) {
             this.layout = new mx.mxCompactTreeLayout(this.graph, false, false);
-            // const layout: any = new mx.mxFastOrganicLayout(this.graph);
             this.layout.levelDistance = 50;
             this.layout.alignRanks = true;
             this.layout.minEdgeJetty = 50;
