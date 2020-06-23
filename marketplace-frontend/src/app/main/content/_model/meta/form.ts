@@ -11,7 +11,6 @@ export class FormEntry {
     positionLevel: string;
     classDefinitions: ClassDefinition[];
     classProperties: ClassProperty<any>[];
-    enumDefinitions: EnumDefinition[];
 
     subEntries: FormEntry[];
 

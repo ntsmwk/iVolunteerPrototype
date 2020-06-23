@@ -125,8 +125,8 @@
 
       <mat-form-field class="form-field" *ngSwitchCase="'enum-single'">
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
-          [id]="question.key" [value]="question.value">
-          <mat-option *ngFor="let opt of question.options" [value]="opt.value">
+          [id]="question.key" [value]="question.value" (selectionChange)="abc($event)">
+          <mat-option *ngFor="let opt of question.options" [value]="opt">
             <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
           </mat-option>
         </mat-select>

@@ -145,10 +145,15 @@ export class DynamicFormQuestionComponent implements OnInit {
     return this.form.get(this.question.key);
   }
 
-  public getQuestionValue(question: QuestionBase<any>) {
-    const ret = question.values[0];
-    return ret;
-  }
+  // public getQuestionValue(question: QuestionBase<any>) {
+  //   const ret = question.values[0];
+
+  //   if (question.controlType === 'enum-single') {
+  //     console.log("get question value");
+  //     console.log(question);
+  //   }
+  //   return ret;
+  // }
 
   private getQuestionLabel(key: string): string {
     const ret: string = this.question.subQuestions.find((q: QuestionBase<any>) => {
@@ -160,6 +165,11 @@ export class DynamicFormQuestionComponent implements OnInit {
 
   handleTupleSelection(opt: any) {
     this.tupleSelected.emit({ selection: opt, formGroup: this.form });
+  }
+
+  abc(evt: any) {
+    // console.log(evt);
+
   }
 
 

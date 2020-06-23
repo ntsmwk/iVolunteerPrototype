@@ -117,8 +117,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
             if (this.formConfigurations.length === 0) {
               this.lastEntry = true;
             }
-            console.log('formConfigurations');
-            console.log(this.currentFormConfiguration);
+
             this.loaded = true;
           });
         });
@@ -190,18 +189,12 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       });
   }
 
-  private getFormEntry(
-    pathString: string,
-    currentPath: string,
-    currentFormEntry: FormEntry
-  ): FormEntry {
+  private getFormEntry(pathString: string, currentPath: string, currentFormEntry: FormEntry): FormEntry {
     if (currentPath === pathString) {
       return currentFormEntry;
     }
 
-    currentFormEntry = currentFormEntry.subEntries.find((e) =>
-      pathString.startsWith(e.id)
-    );
+    currentFormEntry = currentFormEntry.subEntries.find((e) => pathString.startsWith(e.id));
     return this.getFormEntry(pathString, currentFormEntry.id, currentFormEntry);
   }
 
@@ -234,21 +227,13 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const classInstances: ClassInstance[] = [];
 
     if (isNullOrUndefined(this.selectedVolunteers)) {
-      const classInstance = this.createClassInstance(
-        this.currentFormConfiguration.formEntry,
-        this.currentFormConfiguration.id,
-        allControls
-      );
+      const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
       classInstance.tenantId = this.helpseeker.tenantId;
       classInstance.issuerId = this.helpseeker.tenantId;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
-        const classInstance = this.createClassInstance(
-          this.currentFormConfiguration.formEntry,
-          this.currentFormConfiguration.id,
-          allControls
-        );
+        const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
         classInstance.tenantId = this.helpseeker.tenantId;
         classInstance.issuerId = this.helpseeker.tenantId;
         classInstance.userId = volunteer.id;
@@ -279,11 +264,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return allControls;
   }
 
-  private createClassInstance(
-    parentEntry: FormEntry,
-    currentPath: string,
-    controls: { id: string; control: AbstractControl }[]
-  ) {
+  private createClassInstance(parentEntry: FormEntry, currentPath: string, controls: { id: string; control: AbstractControl }[]) {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of parentEntry.classProperties) {
       // skip "unableToContinue" Properties
@@ -291,37 +272,32 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         continue;
       }
 
-      const control = controls.find(
-        (c) => c.id === currentPath + '.' + classProperty.id
-      );
+      const control = controls.find((c) => c.id === currentPath + '.' + classProperty.id);
 
       let value: any;
       if (classProperty.type === PropertyType.FLOAT_NUMBER) {
         value = Number(control.control.value);
       } else if (classProperty.type === PropertyType.WHOLE_NUMBER) {
         value = Number.parseInt(control.control.value, 10);
+      } else if (classProperty.type === PropertyType.ENUM) {
+        console.log(classProperty);
+        console.log(control.control);
+        console.log(control);
+        value = control.control.value;
       } else {
         value = control.control.value;
       }
-
       propertyInstances.push(new PropertyInstance(classProperty, [value]));
     }
 
-    const classInstance = new ClassInstance(
-      parentEntry.classDefinitions[0],
-      propertyInstances
-    );
+    const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
     classInstance.childClassInstances = [];
     classInstance.id = this.objectIdService.getNewObjectId();
     classInstance.marketplaceId = this.marketplace.id;
 
     if (!isNullOrUndefined(parentEntry.subEntries)) {
       for (const subEntry of parentEntry.subEntries) {
-        const subClassInstance = this.createClassInstance(
-          subEntry,
-          subEntry.id,
-          controls
-        );
+        const subClassInstance = this.createClassInstance(subEntry, subEntry.id, controls);
         classInstance.childClassInstances.push(subClassInstance);
       }
     }
