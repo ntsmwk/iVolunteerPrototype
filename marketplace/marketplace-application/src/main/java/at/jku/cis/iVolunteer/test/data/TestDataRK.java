@@ -108,6 +108,7 @@ public class TestDataRK extends TestData{
 	public void createUserData() {
 			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
 			Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
+			if (volunteer == null) return;
 			AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
 					findByNameAndTenantId(CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
 			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
@@ -139,6 +140,7 @@ public class TestDataRK extends TestData{
 	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
 	            TaskClassInstance ti = (TaskClassInstance) classInstanceService.newClassInstance(volunteer, taskDef.getId(), tenantId);
+	            ti.setIssuerId(tenantId);
 	            
 	            ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date", tenantId);
 	            classInstanceService.setProperty(ti, cp.getId(), randomDateTime);
@@ -159,6 +161,7 @@ public class TestDataRK extends TestData{
 	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Einsatz", tenantId);
 	            TaskClassInstance ti = (TaskClassInstance) (TaskClassInstance) classInstanceService.newClassInstance(volunteer, taskDef.getId(), tenantId);
+	            ti.setIssuerId(tenantId);
 	            
 	            ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date", tenantId);
 	            classInstanceService.setProperty(ti, cp.getId(), randomDateTime.format(dateFormatter));
@@ -181,7 +184,8 @@ public class TestDataRK extends TestData{
 	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Dienst", tenantId);
 	            TaskClassInstance ti = (TaskClassInstance)(TaskClassInstance) classInstanceService.newClassInstance(volunteer, taskDef.getId(), tenantId);
-	 
+	            ti.setIssuerId(tenantId);
+	            
 	            ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskDef.getId(), "Starting Date", tenantId);
 	            classInstanceService.setProperty(ti, cp.getId(), randomDateTime.format(dateFormatter));
 	            

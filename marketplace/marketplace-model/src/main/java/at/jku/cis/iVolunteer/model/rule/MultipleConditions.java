@@ -32,6 +32,7 @@ public class MultipleConditions extends Condition {
     }
     
     public void setConditions(List<Condition> conditions) {
+    	System.out.println("set conditions ------> ");
     	this.conditions = conditions;
     }
 }

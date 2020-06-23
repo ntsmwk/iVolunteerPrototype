@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
+package at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria;
 
 import java.util.List;
 import java.util.stream.Collectors;

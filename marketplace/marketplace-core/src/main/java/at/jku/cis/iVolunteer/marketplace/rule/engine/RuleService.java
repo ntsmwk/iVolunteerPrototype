@@ -25,7 +25,9 @@ import at.jku.cis.iVolunteer.marketplace.rule.engine.util.RuleEngineUtil;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
+import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 /**
@@ -39,12 +41,14 @@ public class RuleService {
 	@Autowired private VolunteerService volunteerService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private ClassInstanceService classInstanceService;
+	@Autowired private RuleEngineMapper ruleEngineMapper;
 	
 	private ConcurrentHashMap<String,  ConcurrentHashMap<String, KieContainer>> tenant2ContainerMap;
 	
     @PostConstruct
     private void init() {
     	tenant2ContainerMap = new ConcurrentHashMap<String, ConcurrentHashMap<String, KieContainer>>();
+    	refreshContainer();
     }
     
     public List<String> getContainerNames(String tenantId){
@@ -64,7 +68,7 @@ public class RuleService {
     
 	public void refreshContainer(String tenantId) {
 		// create map for tenant
-		if (!tenant2ContainerMap.contains(tenantId))
+		if (!tenant2ContainerMap.containsKey(tenantId))
 			tenant2ContainerMap.put(tenantId, new ConcurrentHashMap<String, KieContainer>());
 		getContainerNames(tenantId).stream().forEach(c -> refreshContainer(tenantId, c));
 	}
@@ -91,6 +95,7 @@ public class RuleService {
 	}
 	
 	public void printContainers() {
+		System.out.println(" print containers: " );
 		for (String t: tenant2ContainerMap.keySet()) {
 			System.out.println("..... tenant: " + t);
 			ConcurrentHashMap<String, KieContainer> containers = tenant2ContainerMap.get(t);
@@ -105,13 +110,17 @@ public class RuleService {
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
 		
+		RuleExecution ruleExecution = new RuleExecution(volunteer);
 		// insert objects into session 
+		ksession.insert(ruleExecution);
 		ksession.insert(tenant);
 		ksession.insert(volunteer);
 		ksession.insert(volunteerService);
 		ksession.insert(classInstanceService);
         
 		ksession.fireAllRules();
+		
+		System.out.println(ruleExecution.toString());
 		
 		ksession.dispose();
 		
@@ -159,5 +168,25 @@ public class RuleService {
 	public void deleteRule(String tenantId, String containerName, String ruleName) {
 		ContainerRuleEntry rule = containerRuleEntryRepository.getByTenantIdAndContainerAndName(tenantId, containerName, ruleName);
 		if (rule != null) containerRuleEntryRepository.delete(rule);
+	}
+	
+	public void addRule(DerivationRule derivationRule) {
+		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
+		System.out.println(ruleContent);
+		ContainerRuleEntry containerRule = new ContainerRuleEntry(
+				                    derivationRule.getTenantId(), 
+				                    derivationRule.getMarketplaceId(), 
+				                    derivationRule.getContainer(), 
+				                    derivationRule.getName(),
+				                    ruleContent);
+		containerRuleEntryRepository.insert(containerRule);
+		refreshContainer(derivationRule.getTenantId()); 
+	}
+	
+	public void executeRulesForAllVolunteers(String tenantId, String container) {
+		for (Volunteer vol: volunteerRepository.findAll()){
+			executeRules(tenantId, "Test-Frontend-Claudia", vol.getId());
+		};
+		
 	}
 }

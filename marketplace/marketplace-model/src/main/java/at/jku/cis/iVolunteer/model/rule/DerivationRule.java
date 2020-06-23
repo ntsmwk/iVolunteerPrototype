@@ -14,7 +14,7 @@ public class DerivationRule extends IVolunteerObject {
 	private String container;
 	private List<GeneralCondition> generalConditions;
 	private List<Condition> conditions = new ArrayList<>();
-	private List<Action> actions = new ArrayList<>();
+	private List<ClassAction> actions = new ArrayList<>();
 
 	public DerivationRule() {
 		generalConditions = new ArrayList<GeneralCondition>();
@@ -67,15 +67,15 @@ public class DerivationRule extends IVolunteerObject {
 		conditions.add(condition);
 	}
 	
-	public List<Action> getActions() {
+	public List<ClassAction> getActions() {
 		return actions;
 	}
 
-	public void setActions(List<Action> actions) {
+	public void setActions(List<ClassAction> actions) {
 		this.actions = actions;
 	}
 	
-	public void addAction(Action action) {
+	public void addAction(ClassAction action) {
 		actions.add(action);
 	}
 

@@ -252,6 +252,7 @@ public class StandardPropertyDefinitions {
 		props.add(new RemindParticipantsProperty(tenantId));
 		props.add(new LatitudeProperty(tenantId));
 		props.add(new LongitudeProperty(tenantId));
+		props.add(new VolunteerAgeProperty(tenantId));
 
 		RequiredCompetencesProperty cp1 = new RequiredCompetencesProperty(tenantId);
 		OptionalCompetencesProperty cp2 = new OptionalCompetencesProperty(tenantId);
@@ -674,6 +675,17 @@ public class StandardPropertyDefinitions {
 			List<Long> defaultValues = new ArrayList<>();
 			defaultValues.add(1L);
 			this.setAllowedValues(defaultValues);
+		}
+	}
+	
+	public static class VolunteerAgeProperty extends LongPropertyDefinition {
+		public VolunteerAgeProperty(String tenantId) {
+			inst(tenantId);
+		}
+		
+		public void inst(String tenantId) {
+			this.setName("Alter");
+			this.setTenantId(tenantId);
 		}
 	}
 

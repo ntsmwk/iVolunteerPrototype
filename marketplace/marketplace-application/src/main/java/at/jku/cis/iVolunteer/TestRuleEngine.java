@@ -22,9 +22,9 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.EQCriteria;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.GTCriteria;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.LTCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.EQCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.GTCriteria;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.LTCriteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
@@ -59,7 +59,6 @@ import at.jku.cis.iVolunteer.model.rule.ClassCondition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
 import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
-import at.jku.cis.iVolunteer.model.rule.condition.ClassSourceRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.engine.ContainerRuleEntry;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
@@ -89,40 +88,46 @@ public class TestRuleEngine {
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;
+	@Autowired private TestData testData;
+	@Autowired private TestDataRK testDataRK;
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
 	private static final String RKWILHERING = "RK Wilhering";
 	
 	public void executeTestCases(){
+		testData.load(); // XXX vojino, replace with REST-API
+		testDataRK.load(); // XXX vojino, replace with REST-API
 		containerRuleEntryRepository.deleteAll();
-		// create user data
-		// createUserData();
-		// create test cases
-		// testCaseAddDrivingLicense();
-		//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
-		//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-		//testCaseImproveDrivingCompetenceRKL2();
-		//testCaseImproveDrivingCompetenceRKL3();
-		//testCaseFahrtenspangeBronze();
-		//testMapping1();
+		if (volunteerRepository.findByUsername("KBauer") != null) {
+			// create user data
+			// createUserData();
+			// create test cases
+			// testCaseAddDrivingLicense();
+			//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
+			//testCaseAddDrivingCompetenceByRules(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+			//testCaseImproveDrivingCompetenceRKL2();
+			//testCaseImproveDrivingCompetenceRKL3();
+			//testCaseFahrtenspangeBronze();
+			//testMapping1();
 		
-		/*testAddCompetenceDrivingCarNotExists();
-		testAddAllCompetencesDriving();
-		testAddCompetenceDrivingCar();
-		testImproveDrivingSkillsLevel2();
-		testImproveDrivingSkillsLevel3();
-		testImproveDrivingSkillsLevel4();
-		testMappingSeveralConditions();*/
-		testANDCondition();
-		testORCondition();
-		testNOTCondition();
-		testNOTSingleCondition();
-		testNESTEDCondition();
-		// random test cases
-		/*testCheckAge();
-		testCheckAgeMaturity();*/
-		//testImproveDrivingSkills();
+			/*testAddCompetenceDrivingCarNotExists();
+			testAddAllCompetencesDriving();
+			testAddCompetenceDrivingCar();
+			testImproveDrivingSkillsLevel2();
+			testImproveDrivingSkillsLevel3();
+			testImproveDrivingSkillsLevel4();
+			testMappingSeveralConditions();*/
+			testANDCondition();
+			testORCondition();
+			testNOTCondition();
+			testNOTSingleCondition();
+			testNESTEDCondition();
+			// random test cases
+			/*testCheckAge();
+			testCheckAgeMaturity();*/
+			//testImproveDrivingSkills();
+		}
 	}
 	
 	public void testAddAllCompetencesDriving() {
@@ -421,11 +426,11 @@ public class TestRuleEngine {
 	    dRule.addCondition(classCondition);
 	    
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralCondition generalCondition1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, 
+	    GeneralCondition generalCondition1 = new GeneralCondition("Alter", 20, 
 	    		                      ComparisonOperatorType.GT);
 	    dRule.addGeneralCondition(generalCondition1);
 	    
-	    GeneralCondition generalCondition2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, 
+	    GeneralCondition generalCondition2 = new GeneralCondition("Alter", 70, 
                 ComparisonOperatorType.LT);
 	    dRule.addGeneralCondition(generalCondition2);
 	    //
@@ -475,10 +480,10 @@ public class TestRuleEngine {
 	    dRule.setName(ruleName);
 	        
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralCondition genCond1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, ComparisonOperatorType.GT);
+	    GeneralCondition genCond1 = new GeneralCondition("Alter", 20, ComparisonOperatorType.GT);
 	    dRule.addGeneralCondition(genCond1);
 	    
-	    GeneralCondition genCond2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, ComparisonOperatorType.LT);
+	    GeneralCondition genCond2 = new GeneralCondition("Alter", 70, ComparisonOperatorType.LT);
 	    dRule.addGeneralCondition(genCond2);
 	    
 	    CompetenceClassDefinition taskDef = (CompetenceClassDefinition) classDefinitionRepository.
@@ -848,11 +853,11 @@ public class TestRuleEngine {
 	    dRule.addCondition(multipleConditions);
 	    
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralCondition generalCondition1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, 
+	    GeneralCondition generalCondition1 = new GeneralCondition("Alter", 20, 
 	    		                      ComparisonOperatorType.GT);
 	    dRule.addGeneralCondition(generalCondition1);
 	    
-	    GeneralCondition generalCondition2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, 
+	    GeneralCondition generalCondition2 = new GeneralCondition("Alter", 70, 
                 ComparisonOperatorType.LT);
 	    dRule.addGeneralCondition(generalCondition2);
 	    //
@@ -990,9 +995,9 @@ public class TestRuleEngine {
 	    dRule.setName(ruleName);
 	   
 	    // set age between 20 and 70: 20 < age < 70
-	    GeneralCondition genCond1 = new GeneralCondition(GeneralCondition.Attribute.AGE, 20, ComparisonOperatorType.GT);
+	    GeneralCondition genCond1 = new GeneralCondition("Alter", 20, ComparisonOperatorType.GT);
 	    dRule.addGeneralCondition(genCond1);
-	    GeneralCondition genCond2 = new GeneralCondition(GeneralCondition.Attribute.AGE, 70, ComparisonOperatorType.LT);
+	    GeneralCondition genCond2 = new GeneralCondition("Alter", 70, ComparisonOperatorType.LT);
 	    dRule.addGeneralCondition(genCond2);
 	    
 	    ClassCondition classCondition = new ClassCondition(AggregationOperatorType.MIN);

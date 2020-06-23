@@ -1,10 +1,17 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.Action;
 import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
 import at.jku.cis.iVolunteer.model.rule.ClassAction;
@@ -24,7 +31,6 @@ public class RuleEngineMapper {
 	@Autowired ClassPropertyService classPropertyService;
 	
 	public String generateDroolsRuleFrom(DerivationRule derivationRule) {
-		System.out.println("  derivation Rule: " + derivationRule.getName());
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(newPackage());
 		stringBuilder.append(newGeneralImports());
@@ -46,13 +52,9 @@ public class RuleEngineMapper {
 		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.core.tenant.Tenant"));
 		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.user.VolunteerService"));
 		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.EQCriteria"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.NECriteria"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.GTCriteria"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.GECriteria"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.LTCriteria"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.LECriteria"));
+		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.*"));
 		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance"));
+		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.rule.engine.RuleExecution"));
 		stringBuilder.append(newImport("java.util.List"));
 		return stringBuilder.toString();
 	}
@@ -79,6 +81,7 @@ public class RuleEngineMapper {
 		stringBuilder.append("when\r\n");
 		stringBuilder.append(newPattern("v", "Volunteer"));
 		stringBuilder.append(newPattern("t", "Tenant"));
+		stringBuilder.append(newPattern("re", "RuleExecution"));
 		// 
 		stringBuilder.append(newPattern("vs", "VolunteerService", true));
 		
@@ -91,6 +94,8 @@ public class RuleEngineMapper {
 		}
 		stringBuilder.append(patternEnd()); // end volunteer service
 		stringBuilder.append(newPattern("cis", "ClassInstanceService", true));
+		
+		System.out.println(" conditions: " + derivationRule.getConditions().size());
 
 		for (int i=0; i < derivationRule.getConditions().size(); i++) {
 			Condition condition = derivationRule.getConditions().get(i);
@@ -109,7 +114,7 @@ public class RuleEngineMapper {
 	
 	private String newPattern(String id, String type, boolean constraints) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(" " + id + ": " + type + "( ");
+		stringBuilder.append(" " + id + ": " + type + " ( ");
 		return stringBuilder.toString();
 	}
 	private String patternEnd() {
@@ -119,7 +124,7 @@ public class RuleEngineMapper {
 	private String rhs(DerivationRule derivationRule) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("then\r\n ");
-		stringBuilder.append("  System.out.println(\" Bedingung wird erfüllt, yay!!!! \");\r\n");
+		stringBuilder.append("  re.setFired();\r\n");
 		for (Action action: derivationRule.getActions()) {
 			if (action instanceof ClassAction)
 				stringBuilder.append(mapClassActionToRuleAction((ClassAction)action));
@@ -189,8 +194,8 @@ public class RuleEngineMapper {
 	
 
 	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) {
-		switch (generalCondition.getAttribute()) {
-			case AGE:
+		switch (generalCondition.getAttributeName()) {
+			case "Alter":
 				return "	currentAge( v ) " + decodeComparisonOperator((ComparisonOperatorType)generalCondition.getOperatorType()) + 
 						       " " + generalCondition.getValue(); 
 			default: return null;
@@ -217,7 +222,7 @@ public class RuleEngineMapper {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("  ClassInstance ci = cis.getClassInstance(v, \"" + 
 	             classAction.getClassDefinitionId() + "\", t.getId());\r\n");
-		for (AttributeCondition attribute: classAction.getAttributeConditions()) {
+		for (AttributeCondition attribute: classAction.getAttributes()) {
 			stringBuilder.append("  cis.setProperty(ci, \"" + 
 		                              attribute.getClassPropertyId() + "\", \"" + 
 					                  attribute.getValue().toString() + "\");\r\n");
@@ -227,9 +232,10 @@ public class RuleEngineMapper {
 	
 	private String newInsertAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
+		System.out.println(" new insert action for class: " + classAction.getClassDefinitionId());
 		stringBuilder.append("  ClassInstance ci = cis.newClassInstance(v, " + 
 		         "\"" + classAction.getClassDefinitionId() + "\", t.getId());\r\n");
-		for (AttributeCondition attribute: classAction.getAttributeConditions()) {
+		for (AttributeCondition attribute: classAction.getAttributes()) {
 			System.out.println(" attribute-Id: " + attribute.getClassPropertyId() + " attribute: " + attribute.getValue());
 			stringBuilder.append("  cis.setProperty(ci, \"" + 
 		                              attribute.getClassPropertyId() + "\", \"" + 
@@ -240,14 +246,14 @@ public class RuleEngineMapper {
 	
 	private String newDeleteAction(ClassAction classAction) {
 		StringBuilder stringBuilder = new StringBuilder();
-		if (classAction.getAttributeConditions().size() == 0) {
+		if (classAction.getAttributes().size() == 0) {
 			// delete all instances of class
 			stringBuilder.append("  cis.deleteClassInstances( v, " + 
 					 "\"" + classAction.getClassDefinitionId() + "\", t.getId());\r\n");
 		} else {
 			// filter properties
 			String actions = "   cis.getClassInstances(v, \"" + classAction.getClassDefinitionId() + "\", t.getId())";
-			for (AttributeCondition attrCondition: classAction.getAttributeConditions()) {
+			for (AttributeCondition attrCondition: classAction.getAttributes()) {
 				actions = " cis.filterInstancesByPropertyCriteria( \r\n"+ actions + ", \r\n" + 
 							decodeAttributeCondition(attrCondition) + ")";
 			}
@@ -293,6 +299,8 @@ public class RuleEngineMapper {
 	
 	private String decodeComparisonOperator(ComparisonOperatorType comparisonOperator) {
 		switch (comparisonOperator) {
+		case EQ: return " == ";
+		case NE: return " != ";
 		case GT: return " > "; 
 		case GE: return " >= ";
 		case LT: return " < ";
@@ -314,4 +322,5 @@ public class RuleEngineMapper {
 		}
 		return null;
 	}
+	
 }

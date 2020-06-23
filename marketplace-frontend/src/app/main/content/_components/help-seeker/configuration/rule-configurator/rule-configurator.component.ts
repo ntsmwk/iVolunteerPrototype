@@ -5,9 +5,12 @@ import { ParticipantRole } from "app/main/content/_model/participant";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import {
   DerivationRule,
-  AttributeSourceRuleEntry,
-  MappingOperatorType,
-  ClassSourceRuleEntry,
+  GeneralCondition,
+  ClassCondition,
+  ComparisonOperatorType,
+  AggregationOperatorType,
+  AttributeCondition,
+  ClassAction
 } from "app/main/content/_model/derivation-rule";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,7 +18,7 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { DerivationRuleService } from "app/main/content/_service/derivation-rule.service";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
-import { ClassProperty } from "app/main/content/_model/meta/property";
+import { ClassProperty, PropertyDefinition } from "app/main/content/_model/meta/property";
 import { Tenant } from "app/main/content/_model/tenant";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 
@@ -51,8 +54,8 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.ruleForm = formBuilder.group({
       id: new FormControl(undefined),
       name: new FormControl(undefined),
-      attributeSources: new FormControl(undefined),
-      classSources: new FormControl(undefined),
+      generalCondition: new FormControl(undefined),
+      classCondition: new FormControl(undefined),
       target: new FormControl(undefined),
     });
   }
@@ -95,54 +98,115 @@ export class FuseRuleConfiguratorComponent implements OnInit {
           this.ruleForm.setValue({
             id: this.derivationRule.id,
             name: this.derivationRule.name,
-            attributeSources: this.derivationRule.attributeSourceRules,
-            classSources: this.derivationRule.classSourceRules,
-            target: this.derivationRule.target,
+            generalCondition: this.derivationRule.generalConditions,
+            classCondition: this.derivationRule.conditions,
+            //target: this.derivationRule.target,
           });
         });
     } else {
       this.derivationRule = new DerivationRule();
-      this.derivationRule.attributeSourceRules = [
-        <AttributeSourceRuleEntry>{
-          classDefinition: new ClassDefinition(),
-          classProperty: new ClassProperty(),
-          mappingOperatorType: MappingOperatorType.EQ,
+      this.derivationRule.generalConditions = new Array();
+      this.derivationRule.classActions = new Array();
+      /**[
+        <GeneralCondition>{
+          propertyDefinition: new PropertyDefinition(),
+          comparisonOperatorType: null, // ComparisonOperatorType.EQ,
           value: "",
         },
-      ];
-      this.derivationRule.classSourceRules = [
-        <ClassSourceRuleEntry>{
+      ] */;
+      this.derivationRule.conditions = new Array();
+      /**[
+        <ClassCondition>{
           classDefinition: new ClassDefinition(),
-          mappingOperatorType: MappingOperatorType.EQ,
+          attributes: [],
+          aggregationOperatorType: null, /** AggregationOperatorType.COUNT, 
           value: "",
         },
-      ];
+      ]*/;
     }
   }
 
   save() {
-    this.derivationRule.name = this.ruleForm.value.name;
-    this.derivationRule.target = this.ruleForm.value.target;
-    this.derivationRule.tenantId = this.helpseeker.tenantId;
+    console.log("Form Submitted!");
+    console.log("xxxx" + this.ruleForm.value.name + "yyyy");
+    console.log(this.derivationRule.generalConditions);
+    console.log(this.derivationRule.conditions);
+    console.log(this.derivationRule.classActions);
+    if (this.ruleForm.value.name){
+      this.derivationRule.name = this.ruleForm.value.name;
+     // this.derivationRule.target = this.ruleForm.value.target;
+      this.derivationRule.tenantId = this.helpseeker.tenantId;
+      this.derivationRule.container = "Test-Frontend-Claudia";
+
+      console.log(this.derivationRule.tenantId);
+    console.log(this.derivationRule.name);
+    console.log(this.derivationRule.generalConditions);
+    console.log(this.derivationRule.conditions);
     this.derivationRuleService
       .save(this.marketplace, this.derivationRule)
       .toPromise()
       .then(() =>
         this.loadDerivationRule(this.marketplace, this.derivationRule.id)
       );
+    }
   }
 
   navigateBack() {
     window.history.back();
   }
 
-  addAttributeRule() {
-    this.derivationRule.attributeSourceRules.push(
-      new AttributeSourceRuleEntry()
+  onTargetChange(cd, $event){
+    if ($event.isUserInput) {
+      console.log("FWPE gewechselt");
+     // this.derivationRule.classAction = new ClassAction(cd);
+    //  this.derivationRule.target = cd.name;
+      console.log("class Action for " + this.derivationRule.classActions);
+    }
+  }
+
+  /*
+  onChange($event) {
+    console.log("on change!!!!");
+    if (this.classDefinitions.length > 0) {
+      this.derivationRule.target = this.classDefinitions.find(
+        (cd) => cd.id === this.ruleForm.value.target
+      ).name;
+    }
+    console.log(this.derivationRule.target);
+  }*/
+
+  addNewTarget() {
+    console.log("add new target");
+    console.log(this.derivationRule.classActions);
+    this.derivationRule.classActions.push(
+      new ClassAction(null)
+    );
+    console.log(this.derivationRule.classActions);
+  }
+/**
+  addTargetAttributeCondition(){
+    this.derivationRule.classAction.attributeConditions.push(
+      new AttributeCondition(this.derivationRule.classAction.classDefinition)
+    );
+  }*/
+
+  addGeneralCondition() {
+    //this.derivationRule.generalConditions = null;
+      /**[
+        <GeneralCondition>{
+          propertyDefinition: new PropertyDefinition(),
+          comparisonOperatorType: null, // ComparisonOperatorType.EQ,
+          value: "",
+        },
+      ] */;
+    this.derivationRule.generalConditions.push(
+      new GeneralCondition()
     );
   }
 
-  addClassRule() {
-    this.derivationRule.classSourceRules.push(new ClassSourceRuleEntry());
+  addClassCondition() {
+    this.derivationRule.conditions.push(
+      new ClassCondition()
+      );
   }
 }

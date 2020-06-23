@@ -60,9 +60,6 @@ public class InitializationService {
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private TestRuleEngine testRuleEngine;
-	@Autowired private TestData testData;
-	@Autowired private TestDataRK testDataRK;
-
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
 
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
@@ -86,9 +83,8 @@ public class InitializationService {
 		addiVolunteerAPIClassDefinition();
 //		addTestDerivationRule();
 		//this.addTestClassInstances();
-		testData.load(); // XXX vojino, replace with REST-API
-		testDataRK.load(); // XXX vojino, replace with REST-API
-		testRuleEngine.executeTestCases(); // XXX vojino, replace with REST-API
+		// testRuleEngine.executeTestCases(); // XXX vojino, replace with REST-API
+		// testData.cleanUp();
 		// addTestRuleEngine();
 //		addTestClassInstances();
 	}
@@ -98,6 +94,8 @@ public class InitializationService {
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
+
 
 		tenants.forEach(tenantId -> {
 			for (PropertyDefinition<Object> pd : standardPropertyDefinitions.getAll(tenantId)) {

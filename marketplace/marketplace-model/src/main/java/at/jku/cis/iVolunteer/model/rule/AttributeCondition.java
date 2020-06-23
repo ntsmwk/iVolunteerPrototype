@@ -13,6 +13,10 @@ public class AttributeCondition extends Condition {
 		this.value = value;
 	}
 	
+	public AttributeCondition(String classPropertyId, Object value) {
+		this(classPropertyId, value, null);
+	}
+	
 	public AttributeCondition() {
 		super(null);
 	}

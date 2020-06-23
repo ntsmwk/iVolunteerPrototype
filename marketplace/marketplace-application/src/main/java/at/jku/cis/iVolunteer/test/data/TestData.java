@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -158,13 +159,8 @@ public class TestData {
     protected void deleteInstances(Volunteer volunteer, String tenantId, String className) {
 		// System.out.println("Volunteer: " + volunteer + " tenant: " + tenantId + " className " + className);
 		ClassDefinition classComp = classDefinitionService.getByName(className, tenantId);	
-		classInstanceService.deleteClassInstances(volunteer, classComp.getId(), tenantId);
-		/* if (classComp != null && classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classComp.getId(), tenantId) != null) {
-			List<ClassInstance> list = classInstanceRepository.getByUserIdAndClassDefinitionIdAndTenantId(volunteer.getId(), classComp.getId(), tenantId);
-            list.forEach(ci -> {
-            	classInstanceRepository.delete(ci.getId());
-            });
-		}*/
+		if (classComp != null)
+			classInstanceService.deleteClassInstances(volunteer, classComp.getId(), tenantId);
 	}
 	
 	protected ClassDefinition obtainClass(String tenantId, String name, ClassDefinition parent) {
@@ -358,20 +354,24 @@ public class TestData {
 		return c1;
 	}
 	
-	protected ClassDefinition createRandomCompetences(String tenantId) {
-		CompetenceClassDefinition compClass = (CompetenceClassDefinition) classDefinitionRepository.findByNameAndTenantId("Kompetenz", tenantId);
-		CompetenceClassDefinition c1 = new CompetenceClassDefinition();
-		c1.setName("Maturity");
-		c1.setClassArchetype(ClassArchetype.COMPETENCE);
-		c1.setTenantId(tenantId);
-		c1.setRoot(false);
-		c1.setParentId(compClass.getId());
-		// set properties
-		PropertyDefinition<Object> pdLevel = obtainProperty("Maturity Level", PropertyType.WHOLE_NUMBER, tenantId);
-		c1.setProperties(new ArrayList<ClassProperty<Object>>());
-		c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
-		classDefinitionRepository.save(c1);
-		return c1;
+	protected void createRandomCompetences(String tenantId) {
+		CompetenceClassDefinition compClass = (CompetenceClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId("Kompetenz", tenantId);
+		CompetenceClassDefinition c1 = (CompetenceClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId("Maturity", tenantId);
+		if (c1 == null) {		
+			c1 = new CompetenceClassDefinition();
+			c1.setName("Maturity");
+			c1.setClassArchetype(ClassArchetype.COMPETENCE);
+			c1.setTenantId(tenantId);
+			c1.setRoot(false);
+			c1.setParentId(compClass.getId());
+			// set properties
+			PropertyDefinition<Object> pdLevel = obtainProperty("Maturity Level", PropertyType.WHOLE_NUMBER, tenantId);
+			c1.setProperties(new ArrayList<ClassProperty<Object>>());
+			c1.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pdLevel));
+			classDefinitionRepository.save(c1);
+		}
 	}
 	
 	
@@ -542,18 +542,29 @@ public class TestData {
 
     
     public void cleanUp() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 		Volunteer volunteer = volunteerRepository.findByUsername("CVoj");
 		
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_MOTORCYCLE);
+		if (volunteer != null) {
+			String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+			
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_CAR); 	
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_BUS);
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_TRUCK); 	
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_MOTORCYCLE);
 		
-		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_MOTORCYCLE);
+			tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_CAR); 	
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_BUS);
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_TRUCK); 	
+			deleteInstances(volunteer, tenantId, COMPETENCE_DRIVING_MOTORCYCLE);
+		}
+		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
+		ArrayList<String> delCD = new ArrayList<String>();
+		delCD.add(classDefinitionService.getByName("Maturity", tenantId).getId());
+		
+		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);	
+		delCD.add(classDefinitionService.getByName("Maturity", tenantId).getId());
+		
+		classDefinitionService.deleteClassDefinition(delCD);
 	}
 }

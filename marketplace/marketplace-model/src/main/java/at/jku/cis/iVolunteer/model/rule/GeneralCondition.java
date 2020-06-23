@@ -19,21 +19,21 @@ public class GeneralCondition extends Condition {
 		}
 	}
 	
-	private Attribute attribute;
+	private String attributeName;
 	private Object value;
 	
-	public GeneralCondition(Attribute attribute, Object value, OperatorType operator) {
+	public GeneralCondition(String attributeName, Object value, OperatorType operator) {
 		super(operator);
-		this.attribute = attribute;
+		this.attributeName = attributeName;
 		this.value = value;
 	}
 	
-	public Attribute getAttribute() {
-		return attribute;
+	public String getAttributeName() {
+		return attributeName;
 	}
 	
-	public void setAttribute(Attribute attribute) {
-		this.attribute = attribute;
+	public void setAttributeName(String attributeName) {
+		this.attributeName = attributeName;
 	}
 	
 	public Object getValue() {
