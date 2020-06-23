@@ -198,7 +198,7 @@ public class CollectionService {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,
+	public FormEntry aggregateFormEntry(ClassDefinition currentClassDefinition, FormEntry currentFormEntry,
 			List<ClassDefinition> allClassDefinitions, List<Relationship> allRelationships, boolean directionUp) {
 
 		// Next ClassDefinition
@@ -229,7 +229,6 @@ public class CollectionService {
 		List<FormEntry> subFormEntries = new ArrayList<>();
 
 		boolean unableToContinuePropertySet = false;
-
 		PropertyDefinition unableToContinuePropertyDefinition = createUnableToContinueProperty();
 
 		while (!targetStack.isEmpty()) {
@@ -309,7 +308,7 @@ public class CollectionService {
 
 	}
 
-	public PropertyDefinition<Tuple<String, String>> createUnableToContinueProperty() {
+	private PropertyDefinition<Tuple<String, String>> createUnableToContinueProperty() {
 		PropertyDefinition<Tuple<String, String>> propertyDefinition = new PropertyDefinitionTypes.TuplePropertyDefinition<String, String>();
 		propertyDefinition.setId(new ObjectId().toHexString() + "unableToContinue");
 		propertyDefinition.setName("Bitte auswählen");
