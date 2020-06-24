@@ -46,10 +46,10 @@ public class EnumDefinitionController {
 
 	@PostMapping("enum-definition/new-empty")
 	private EnumDefinition newEmptyEnumDefinition(@RequestBody String[] params) {
-		if (params.length != 3) {
+		if (params.length != 4) {
 			return null;
 		}
-		EnumDefinition enumConfiguration = new EnumDefinition(params[0], params[1], params[2]);
+		EnumDefinition enumConfiguration = new EnumDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
 		return enumDefinitionRepository.save(enumConfiguration);
 	}
 

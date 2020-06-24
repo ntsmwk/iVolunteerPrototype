@@ -2,18 +2,9 @@
 
   <!-- <div> -->
   <form [formGroup]="form">
-    <!-- <div fxLayout="row" fxLayoutAlign="start center"> -->
     <mat-form-field *ngIf="!showEditor" style="width: 500px">
       <input matInput formControlName="name" placeholder="Enum-Bezeichnung *" />
     </mat-form-field>
-    <!-- <div class="ml-16">
-          <button mat-raised-button (click)="openClicked()">Öffnen</button>
-        </div>
-
-        <div class="ml-16">
-          <button mat-raised-button (click)="deleteClicked()">Löschen</button>
-        </div> -->
-    <!-- </div> -->
 
     <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
       <mat-label>Beschreibung (optional)</mat-label>
@@ -21,22 +12,18 @@
         matAutosizeMaxRows="3"></textarea>
     </mat-form-field>
 
+    <mat-slide-toggle [(ngModel)]="multipleToggled" [ngModelOptions]="{standalone: true}" labelPosition="after">
+      Mehrfachauswahl möglich
+    </mat-slide-toggle>
+
     <button *ngIf="!showEditor" mat-raised-button (click)="handleCreateClick()">Erstellen</button>
     <button *ngIf="!showEditor" mat-raised-button (click)="handleCancelClick()">Abbrechen</button>
 
   </form>
 
-  <!-- </div> -->
 
   <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"
     [enumDefinition]="enumDefinition" (result)="handleResult($event)" (management)="handleManagementEvent($event)">
   </app-enum-graph-editor>
 
-  <!-- <div class="pt-24" style="display: block; position: relative;; bottom: 0px; left: 0px; right: 0px;">
-    <div fxLayout="row" fxLayoutAlign="start end">
-      <button type="submit" mat-raised-button color="primary" (click)="handleSaveClick()">Fertig</button>
-      <div class="pl-8"></div>
-      <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
-    </div>
-  </div> -->
 </div>

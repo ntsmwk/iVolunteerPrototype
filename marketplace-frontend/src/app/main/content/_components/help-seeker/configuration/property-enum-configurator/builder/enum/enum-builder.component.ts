@@ -36,6 +36,7 @@ export class EnumBuilderComponent implements OnInit {
     form: FormGroup;
     enumDefinition: EnumDefinition;
     showEditor: boolean;
+    multipleToggled: boolean;
 
     loaded: boolean;
 
@@ -48,11 +49,12 @@ export class EnumBuilderComponent implements OnInit {
         if (!isNullOrUndefined(this.entryId)) {
             this.enumDefinitionService.getEnumDefinitionById(this.marketplace, this.entryId).toPromise().then((ret: EnumDefinition) => {
                 this.enumDefinition = ret;
-                console.log(this.enumDefinition);
                 this.form.get('name').setValue(this.enumDefinition.name);
                 this.form.get('description').setValue(this.enumDefinition.description);
+                this.multipleToggled = this.enumDefinition.multiple;
                 this.showEditor = true;
                 this.loaded = true;
+                console.log(this.enumDefinition);
             });
 
         } else {
@@ -74,7 +76,7 @@ export class EnumBuilderComponent implements OnInit {
             this.form.markAllAsTouched();
         } else {
             this.enumDefinitionService
-                .newEmptyEnumDefinition(this.marketplace, this.form.controls['name'].value, this.form.controls['description'].value, this.helpseeker.tenantId)
+                .newEmptyEnumDefinition(this.marketplace, this.form.controls['name'].value, this.form.controls['description'].value, this.multipleToggled, this.helpseeker.tenantId)
                 .toPromise().then((enumDefinition: EnumDefinition) => {
                     if (!isNullOrUndefined(enumDefinition)) {
                         this.enumDefinition = enumDefinition;
@@ -88,8 +90,25 @@ export class EnumBuilderComponent implements OnInit {
         this.result.emit(undefined);
     }
 
-    handleResult(event: EnumDefinition) {
-        this.result.emit({ builderType: 'enum', value: event });
+    handleResult(event: { type: string, payload: EnumDefinition }) {
+
+        if (event.type === 'save') {
+            event.payload.description = this.form.controls['description'].value;
+            event.payload.multiple = this.multipleToggled;
+
+            this.enumDefinitionService.saveEnumDefinition(this.marketplace, event.payload).toPromise().then((ret: EnumDefinition) => {
+            });
+
+        } else if (event.type === 'back') {
+            this.result.emit({ builderType: 'enum', value: event.payload });
+        } else if (event.type === 'saveAndBack') {
+            event.payload.description = this.form.controls['description'].value;
+            event.payload.multiple = this.multipleToggled;
+
+            this.enumDefinitionService.saveEnumDefinition(this.marketplace, event.payload).toPromise().then((ret: EnumDefinition) => {
+                this.result.emit({ builderType: 'enum', value: ret });
+            });
+        }
     }
 
     handleManagementEvent(event: string) {

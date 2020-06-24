@@ -36,7 +36,7 @@ export class EnumGraphEditorComponent implements AfterContentInit {
     @Input() marketplace: Marketplace;
     @Input() helpseeker: Helpseeker;
     @Input() enumDefinition: EnumDefinition;
-    @Output() result: EventEmitter<any> = new EventEmitter();
+    @Output() result: EventEmitter<{ type: string, payload: EnumDefinition }> = new EventEmitter();
     @Output() management: EventEmitter<String> = new EventEmitter();
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
@@ -236,9 +236,10 @@ export class EnumGraphEditorComponent implements AfterContentInit {
 
     onSaveClick() {
         this.updateModel();
-        return this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then((ret: EnumDefinition) => {
-            return ret;
-        });
+        // return this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then((ret: EnumDefinition) => {
+        //     return ret;
+        // });
+        this.result.emit({ type: 'save', payload: this.enumDefinition });
     }
 
     updateModel() {
@@ -271,12 +272,11 @@ export class EnumGraphEditorComponent implements AfterContentInit {
     }
 
     onBackClick() {
-        this.result.emit(undefined);
+        this.result.emit({ type: 'back', payload: undefined });
     }
 
-    async onSaveAndBackClick() {
-        const ret = await this.onSaveClick();
-        this.result.emit(ret);
+    onSaveAndBackClick() {
+        this.result.emit({ type: 'saveAndBack', payload: this.enumDefinition });
     }
 
     private setLayout() {

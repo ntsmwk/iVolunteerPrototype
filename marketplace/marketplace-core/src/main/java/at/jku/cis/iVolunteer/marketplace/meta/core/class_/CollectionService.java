@@ -163,7 +163,6 @@ public class CollectionService {
 			this.aggregateAllClassDefinitionsWithPropertiesDFS(classDefinition, level + 1, list,
 					path + PATH_DELIMITER + classDefinition.getId());
 		}
-
 		return list;
 	}
 

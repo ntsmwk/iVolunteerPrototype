@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCommonModule, MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/material';
+import { MatCommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSlideToggle, MatSlideToggleModule } from '@angular/material';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { EnumBuilderComponent } from './enum-builder.component';
 import { EnumGraphEditorModule } from './enum-graph-editor/enum-graph-editor.module';
@@ -18,6 +18,7 @@ import { DeleteEnumDefinitionDialogModule } from './enum-graph-editor/delete-enu
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        MatSlideToggleModule,
 
         EnumGraphEditorModule,
 

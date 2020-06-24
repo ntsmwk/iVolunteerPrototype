@@ -76,12 +76,7 @@ export class PropertyBuildFormComponent implements OnInit {
 
   handleResultEvent(result: PropertyDefinition<any>) {
     this.displayBuilder = false;
-
-    if (!isNullOrUndefined(result)) {
-      window.history.back();
-    } else {
-      window.history.back();
-    }
+    window.history.back();
   }
 
   handleManagementEvent(event: string, dom: HTMLElement) {

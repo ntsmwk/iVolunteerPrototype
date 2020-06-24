@@ -33,9 +33,10 @@ public class EnumDefinition extends IVolunteerObject {
 		this.setTimestamp(new Date());
 	}
 
-	public EnumDefinition(String name, String description, String tenantId) {
+	public EnumDefinition(String name, String description, boolean multiple, String tenantId) {
 		this.name = name;
 		this.description = description;
+		this.multiple = multiple;
 		this.enumEntries = new ArrayList<EnumEntry>();
 		this.enumRelationships = new ArrayList<EnumRelationship>();
 		this.setTenantId(tenantId);

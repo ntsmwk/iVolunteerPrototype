@@ -18,6 +18,9 @@ export class EnumDefinition {
     name: string;
     description: string;
 
+    multiple: boolean;
+    required: boolean;
+
     timestamp: Date;
     tenantId: string;
 

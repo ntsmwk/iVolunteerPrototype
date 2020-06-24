@@ -30,8 +30,8 @@ export class EnumDefinitionService {
         return this.http.post(`${marketplace.url}/enum-definition/new`, enumDefinition);
     }
 
-    newEmptyEnumDefinition(marketplace: Marketplace, name: string, description: string, tenantId: string) {
-        return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description, tenantId]);
+    newEmptyEnumDefinition(marketplace: Marketplace, name: string, description: string, multipleToggled: boolean, tenantId: string) {
+        return this.http.post(`${marketplace.url}/enum-definition/new-empty`, [name, description, multipleToggled, tenantId]);
     }
 
     saveEnumDefinition(marketplace: Marketplace, enumDefinition: EnumDefinition) {

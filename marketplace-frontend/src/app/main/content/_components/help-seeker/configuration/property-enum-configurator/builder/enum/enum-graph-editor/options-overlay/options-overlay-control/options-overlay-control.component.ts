@@ -1,7 +1,7 @@
 import { ViewChild, ElementRef, Component, ChangeDetectorRef, Input, EventEmitter, Output, OnInit, OnChanges } from '@angular/core';
 import { EnumOptionsOverlayContentData } from '../options-overlay-content/options-overlay-content.component';
 
-const OVERLAY_WIDTH = 100;
+const OVERLAY_WIDTH = 160;
 const OVERLAY_HEIGHT = 100;
 
 
@@ -25,9 +25,6 @@ export class EnumOptionsOverlayControlComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    console.log("overlay");
-    console.log(this.overlayEvent);
-    console.log(this.displayOverlay);
     this.toggleOverlay();
   }
 

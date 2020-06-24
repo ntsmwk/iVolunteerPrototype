@@ -25,7 +25,6 @@ export class EnumOptionsOverlayContentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log("test");
     }
 
     onSubmit() {
