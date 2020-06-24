@@ -15,7 +15,7 @@ export class EnumOptionsOverlayControlComponent implements OnInit, OnChanges {
 
   @ViewChild('overlayDiv', { static: false }) overlayDiv: ElementRef;
   @Input() displayOverlay: boolean;
-  @Input() overlayContent: any;
+  @Input() overlayContent: EnumOptionsOverlayContentData;
   @Input() overlayEvent: PointerEvent;
   @Output() overlayClosed = new EventEmitter<any>();
 
@@ -25,6 +25,7 @@ export class EnumOptionsOverlayControlComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
+
     this.toggleOverlay();
   }
 

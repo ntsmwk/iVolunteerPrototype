@@ -10,6 +10,7 @@ import { CConstants } from '../../../../class-configurator/utils-and-constants';
 import { isNullOrUndefined } from 'util';
 import { EnumDefinitionService } from 'app/main/content/_service/meta/core/enum/enum-configuration.service';
 import { of } from 'rxjs';
+import { EnumOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 
 declare var require: any;
 
@@ -43,6 +44,10 @@ export class EnumGraphEditorComponent implements AfterContentInit {
     graph: mxgraph.mxGraph;
     rootCell: MyMxCell;
     layout: any;
+
+    overlayContent: EnumOptionsOverlayContentData = undefined;
+    overlayEvent = undefined;
+    displayOverlay = false;
 
     /**
      * ******INITIALIZATION******
@@ -229,7 +234,7 @@ export class EnumGraphEditorComponent implements AfterContentInit {
             this.createRelationshipCell(relationship.id, parentCell, newCell);
             this.executeLayout();
         } else if (eventCell.cellType === MyMxCellType.OPTIONS_ICON) {
-            this.openOverlay(eventCell, event.getProperty('event'));
+            this.openOverlay(eventCell.getParent() as MyMxCell, event.getProperty('event'));
         }
 
     }
@@ -316,12 +321,11 @@ export class EnumGraphEditorComponent implements AfterContentInit {
         const removedCells = this.graph.removeCells(cells, false) as MyMxCell[];
     }
 
-    overlayContent = undefined;
-    overlayEvent = undefined;
-    displayOverlay = false;
 
     private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
         this.overlayEvent = event;
+        this.overlayContent = new EnumOptionsOverlayContentData();
+        this.overlayContent.enumEntry = this.enumDefinition.enumEntries.find(e => e.id === cell.id);
         this.management.emit('disableScroll');
         this.graph.setPanning(false);
         this.graph.setEnabled(false);
@@ -329,7 +333,11 @@ export class EnumGraphEditorComponent implements AfterContentInit {
         this.displayOverlay = true;
     }
 
-    handleOverlayClosed() {
+    handleOverlayClosed(event?: EnumEntry) {
+        if (!isNullOrUndefined(event)) {
+            const i = this.enumDefinition.enumEntries.findIndex(e => e.id === event.id);
+            this.enumDefinition.enumEntries[i] = event;
+        }
         this.overlayContent = undefined;
         this.overlayEvent = undefined;
         this.displayOverlay = false;
@@ -338,5 +346,6 @@ export class EnumGraphEditorComponent implements AfterContentInit {
         this.graph.setEnabled(true);
         this.graph.setTooltips(true);
     }
+
 
 }
