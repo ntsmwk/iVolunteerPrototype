@@ -16,8 +16,12 @@
       Mehrfachauswahl möglich
     </mat-slide-toggle>
 
-    <button *ngIf="!showEditor" mat-raised-button (click)="handleCreateClick()">Erstellen</button>
-    <button *ngIf="!showEditor" mat-raised-button (click)="handleCancelClick()">Abbrechen</button>
+    <div class="pt-8">
+
+      <button *ngIf="!showEditor" mat-raised-button (click)="handleCreateClick()">Erstellen</button>
+      <button *ngIf="!showEditor" mat-raised-button (click)="handleCancelClick()">Abbrechen</button>
+
+    </div>
 
   </form>
 

@@ -241,9 +241,6 @@ export class EnumGraphEditorComponent implements AfterContentInit {
 
     onSaveClick() {
         this.updateModel();
-        // return this.enumDefinitionService.saveEnumDefinition(this.marketplace, this.enumDefinition).toPromise().then((ret: EnumDefinition) => {
-        //     return ret;
-        // });
         this.result.emit({ type: 'save', payload: this.enumDefinition });
     }
 
@@ -281,6 +278,7 @@ export class EnumGraphEditorComponent implements AfterContentInit {
     }
 
     onSaveAndBackClick() {
+        this.updateModel();
         this.result.emit({ type: 'saveAndBack', payload: this.enumDefinition });
     }
 
