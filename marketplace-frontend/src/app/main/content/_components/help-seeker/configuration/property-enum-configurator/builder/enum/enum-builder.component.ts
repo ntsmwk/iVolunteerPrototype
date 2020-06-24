@@ -54,7 +54,6 @@ export class EnumBuilderComponent implements OnInit {
                 this.multipleToggled = this.enumDefinition.multiple;
                 this.showEditor = true;
                 this.loaded = true;
-                console.log(this.enumDefinition);
             });
 
         } else {
