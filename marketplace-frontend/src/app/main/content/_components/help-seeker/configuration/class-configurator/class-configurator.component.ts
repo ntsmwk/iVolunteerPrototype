@@ -334,7 +334,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     // yLocation = this.addEnumsToCell(cell, classDefinition.enums, yLocation);
 
     // next icon
-    if (cell.classArchetype !== ClassArchetype.ENUM_HEAD && cell.classArchetype !== ClassArchetype.ROOT
+    if (cell.classArchetype !== ClassArchetype.ROOT
       && cell.classArchetype && !cell.classArchetype.endsWith('_HEAD')) {
 
       const nextIcon: MyMxCell = this.graph.insertVertex(

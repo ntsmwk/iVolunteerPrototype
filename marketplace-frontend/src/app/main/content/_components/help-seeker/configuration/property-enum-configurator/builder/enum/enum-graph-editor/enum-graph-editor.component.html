@@ -4,3 +4,7 @@
     <button mat-raised-button (click)="onSaveAndBackClick()">Speichern und Schließen</button>
     <button mat-raised-button (click)="onBackClick()">Zurück</button>
 </div>
+
+<enum-options-overlay-control [displayOverlay]="displayOverlay" [overlayContent]="overlayContent"
+    [overlayEvent]="overlayEvent" (overlayClosed)="handleOverlayClosedEvent($event)">
+</enum-options-overlay-control>

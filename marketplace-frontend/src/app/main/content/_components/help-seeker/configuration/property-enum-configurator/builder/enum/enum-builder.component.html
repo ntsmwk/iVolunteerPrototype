@@ -29,7 +29,7 @@
   <!-- </div> -->
 
   <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"
-    [enumDefinition]="enumDefinition" (result)="handleResult($event)">
+    [enumDefinition]="enumDefinition" (result)="handleResult($event)" (management)="handleManagementEvent($event)">
   </app-enum-graph-editor>
 
   <!-- <div class="pt-24" style="display: block; position: relative;; bottom: 0px; left: 0px; right: 0px;">

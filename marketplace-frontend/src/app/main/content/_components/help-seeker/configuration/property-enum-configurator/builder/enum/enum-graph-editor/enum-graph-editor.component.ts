@@ -37,6 +37,7 @@ export class EnumGraphEditorComponent implements AfterContentInit {
     @Input() helpseeker: Helpseeker;
     @Input() enumDefinition: EnumDefinition;
     @Output() result: EventEmitter<any> = new EventEmitter();
+    @Output() management: EventEmitter<String> = new EventEmitter();
 
     @ViewChild('enumGraphContainer', { static: true }) graphContainer: ElementRef;
     graph: mxgraph.mxGraph;
@@ -161,6 +162,11 @@ export class EnumGraphEditorComponent implements AfterContentInit {
         sameIcon.setConnectable(false);
         sameIcon.cellType = MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON;
 
+        const optionsIcon: MyMxCell = this.graph.insertVertex(
+            cell, 'options', 'options', 5, 45, 20, 20, CConstants.mxStyles.optionsIcon) as MyMxCell;
+        optionsIcon.setConnectable(false);
+        optionsIcon.cellType = MyMxCellType.OPTIONS_ICON;
+
         return cell;
     }
 
@@ -203,7 +209,10 @@ export class EnumGraphEditorComponent implements AfterContentInit {
 
     private handleMXGraphLeftClickEvent(event: mxgraph.mxEventObject) {
         const eventCell = event.getProperty('cell') as MyMxCell;
-        if (isNullOrUndefined(eventCell)) {
+        if (isNullOrUndefined(eventCell) || this.displayOverlay) {
+            if (this.displayOverlay) {
+                this.handleOverlayClosed();
+            }
             return;
         }
 
@@ -215,14 +224,14 @@ export class EnumGraphEditorComponent implements AfterContentInit {
 
         } else if (eventCell.cellType === MyMxCellType.ADD_CLASS_SAME_LEVEL_ICON) {
             const newCell = this.createEntryCell();
-            // find parent cell
             const parentCell = this.graph.getIncomingEdges(eventCell.getParent())[0].source as MyMxCell;
-
             const relationship = this.createRelationship(parentCell.id, newCell.id);
             this.createRelationshipCell(relationship.id, parentCell, newCell);
-
             this.executeLayout();
+        } else if (eventCell.cellType === MyMxCellType.OPTIONS_ICON) {
+            this.openOverlay(eventCell, event.getProperty('event'));
         }
+
     }
 
     onSaveClick() {
@@ -306,4 +315,28 @@ export class EnumGraphEditorComponent implements AfterContentInit {
         cells = cells.filter((c: MyMxCell) => !c.writeProtected);
         const removedCells = this.graph.removeCells(cells, false) as MyMxCell[];
     }
+
+    overlayContent = undefined;
+    overlayEvent = undefined;
+    displayOverlay = false;
+
+    private openOverlay(cell: MyMxCell, event: mxgraph.mxEventObject) {
+        this.overlayEvent = event;
+        this.management.emit('disableScroll');
+        this.graph.setPanning(false);
+        this.graph.setEnabled(false);
+        this.graph.setTooltips(false);
+        this.displayOverlay = true;
+    }
+
+    handleOverlayClosed() {
+        this.overlayContent = undefined;
+        this.overlayEvent = undefined;
+        this.displayOverlay = false;
+        this.management.emit('enableScroll');
+        this.graph.setPanning(true);
+        this.graph.setEnabled(true);
+        this.graph.setTooltips(true);
+    }
+
 }

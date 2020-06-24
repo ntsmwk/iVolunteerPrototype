@@ -83,4 +83,12 @@ export class PropertyBuildFormComponent implements OnInit {
       window.history.back();
     }
   }
+
+  handleManagementEvent(event: string, dom: HTMLElement) {
+    if (event === 'disableScroll') {
+      dom.style.overflow = 'hidden';
+    } else if (event === 'enableScroll') {
+      dom.style.overflow = 'scroll';
+    }
+  }
 }

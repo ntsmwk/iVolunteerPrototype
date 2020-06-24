@@ -1,0 +1,5 @@
+<div #overlayDiv *ngIf="displayOverlay" class="mat-elevation-z4 overlay-layout">
+
+    <enum-options-overlay-content [inputData]="undefined" (resultData)="handleResultEvent($event)">
+    </enum-options-overlay-content>
+</div>

@@ -31,6 +31,7 @@ export class EnumBuilderComponent implements OnInit {
     @Input() entryId: string;
     @Input() sourceString: string;
     @Output() result: EventEmitter<{ builderType: string, value: EnumDefinition }> = new EventEmitter();
+    @Output() management: EventEmitter<String> = new EventEmitter();
 
     form: FormGroup;
     enumDefinition: EnumDefinition;
@@ -90,6 +91,11 @@ export class EnumBuilderComponent implements OnInit {
     handleResult(event: EnumDefinition) {
         this.result.emit({ builderType: 'enum', value: event });
     }
+
+    handleManagementEvent(event: string) {
+        this.management.emit(event);
+    }
+
 
     // openClicked() {
     //     // this.form.controls['name'].markAsPending();

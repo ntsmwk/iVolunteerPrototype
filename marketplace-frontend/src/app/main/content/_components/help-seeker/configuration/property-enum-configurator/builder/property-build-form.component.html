@@ -1,4 +1,4 @@
-<div class="page-layout blank right-sidenav p-24" fusePerfectScrollbar>
+<div #buildForm class="page-layout blank right-sidenav p-24">
   <customizable-header *ngIf="tenant" [tenant]="tenant" [displayNavigateBack]="false" headerText="Property-Baukasten">
   </customizable-header>
 
@@ -19,7 +19,8 @@
     </mat-tab-group> -->
 
     <app-builder-container [marketplace]="marketplace" [helpseeker]="helpseeker" [builderType]="builderType"
-      [entryId]="entryId" sourceString="builder" (result)="handleResultEvent($event)">
+      [entryId]="entryId" sourceString="builder" (result)="handleResultEvent($event)"
+      (management)="handleManagementEvent($event, buildForm)">
     </app-builder-container>
 
     <!-- <div *ngIf="!displayBuilder">

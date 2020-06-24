@@ -20,6 +20,7 @@ export class BuilderContainerComponent implements OnInit {
     @Input() entryId: string;
     @Input() sourceString: string;
     @Output() result: EventEmitter<PropertyDefinition<any>> = new EventEmitter<PropertyDefinition<any>>();
+    @Output() management: EventEmitter<String> = new EventEmitter();
 
     constructor(private router: Router,
         private route: ActivatedRoute
@@ -45,6 +46,10 @@ export class BuilderContainerComponent implements OnInit {
 
     handleResultEvent(event) {
         this.result.emit(event);
+    }
+
+    handleManagementEvent(event) {
+        this.management.emit(event);
     }
 
     isRadioGroupDisabled() {
