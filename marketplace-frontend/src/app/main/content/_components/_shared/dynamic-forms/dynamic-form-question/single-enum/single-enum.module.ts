@@ -6,13 +6,13 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SingleEnumComponent } from './single-enum.component';
 import { MatCommonModule, MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule, MatSelectModule, MatListModule } from '@angular/material';
+import { MatFormFieldModule, MatSelectModule, MatListModule, MatInputModule } from '@angular/material';
 
 
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FuseSharedModule, MatCommonModule, MatFormFieldModule,
-    MatIconModule, MatOptionModule, MatSelectModule, MatListModule,
+    MatIconModule, MatOptionModule, MatSelectModule, MatListModule, MatInputModule,
 
   ],
   declarations: [SingleEnumComponent],

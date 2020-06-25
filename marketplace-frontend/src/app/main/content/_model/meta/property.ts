@@ -50,7 +50,7 @@ export class ClassProperty<T> {
 
     propertyConstraints: PropertyConstraint<T>[];
 
-    public static getDefaultValue(templateProperty: TemplateProperty<any>): any {
+    public static getDefaultValue(templateProperty: ClassProperty<any>): any {
         if (!isNullOrUndefined(templateProperty.defaultValues) && templateProperty.defaultValues.length >= 1) {
             return templateProperty.defaultValues[0];
         } else {
@@ -67,9 +67,6 @@ export class EnumReference {
         this.enumClassId = enumClassId;
     }
 
-}
-
-export class TemplateProperty<T> extends ClassProperty<T>{
 }
 
 export class PropertyInstance<T> {

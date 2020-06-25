@@ -124,6 +124,7 @@ export class QuestionService {
       } else {
         question = new SingleSelectionEnumQuestion({
           values: property.defaultValues,
+          value: ClassProperty.getDefaultValue(property),
           options: property.allowedValues
         });
       }

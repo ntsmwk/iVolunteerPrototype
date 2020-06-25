@@ -1,11 +1,8 @@
 <div class="page-layout" [formGroup]="form">
-  <!-- <label [attr.for]="question.key">{{question.label}}</label> -->
 
+  <ng-template *ngTemplateOutlet="questionTemplate"></ng-template>
 
-  <ng-template *ngTemplateOutlet="test"></ng-template>
-
-
-  <ng-template #test>
+  <ng-template #questionTemplate>
     <div [ngSwitch]="question.controlType">
 
       <mat-form-field class="form-field" *ngSwitchCase="'textbox'">
@@ -30,23 +27,17 @@
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown'">
-
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
           [id]="question.key" [value]="question.value">
-          <!-- <mat-option [value]="undefined"></mat-option> -->
           <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>
         </mat-select>
-        <!-- {{ getQuestionValue(question) }} -->
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
-
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'dropdown-multiple'">
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
           [id]="question.key" multiple [(ngModel)]="question.values">
-
           <mat-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</mat-option>
-
         </mat-select>
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
       </mat-form-field>
@@ -57,7 +48,7 @@
           <mat-option *ngFor="let opt of question.options" [value]="opt">{{opt}}</mat-option>
         </mat-select>
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
-        {{ question.value }} - {{ question.values }}
+        <!-- {{ question.value }} - {{ question.values }} -->
       </mat-form-field>
 
       <mat-form-field class="form-field" *ngSwitchCase="'radiobutton'" floatPlaceholder="always">
@@ -74,8 +65,8 @@
 
 
 
-      <ng-container>
-        <mat-form-field class="form-field" *ngSwitchCase="'datepicker'">
+      <ng-container *ngSwitchCase="'datepicker'">
+        <mat-form-field class="form-field">
 
           <input matInput [matDatepicker]="picker" placeholder="{{question.label}} {{requiredMarker}}"
             formControlName="{{question.key}}" [value]="question.value">
@@ -107,20 +98,17 @@
       </div>
 
       <mat-form-field class="form-field" *ngSwitchCase="'tuple'">
-
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
           [id]="question.key" [value]="question.value">
-          <!-- <mat-option [value]="undefined"></mat-option> -->
           <mat-option *ngFor="let opt of question.options" [value]="opt" (click)="handleTupleSelection(opt)">
-            {{opt.label}}</mat-option>
+            {{opt.label}}
+          </mat-option>
         </mat-select>
-        <!-- {{ getQuestionValue(question) }} -->
         <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
-
       </mat-form-field>
 
       <div *ngSwitchCase="'generic'">
-        generic property - not yet implemented: {{ question.label }}
+        generic - question controlType not yet implemented: {{ question.label }}
       </div>
 
       <div *ngSwitchCase="'enum-single'">
@@ -151,17 +139,4 @@
   </ng-template>
 
 
-
-  <!-- 
-  <h1>Display template-ref again</h1>
-  <ng-template *ngTemplateOutlet="SwitchRef"></ng-template> -->
-
-
-
 </div>
-
-
-
-
-
-<!--   -->
