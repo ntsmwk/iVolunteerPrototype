@@ -49,12 +49,13 @@ public class EnumDefinitionController {
 		if (params.length != 4) {
 			return null;
 		}
-		EnumDefinition enumConfiguration = new EnumDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
-		return enumDefinitionRepository.save(enumConfiguration);
+		EnumDefinition enumDefinition = new EnumDefinition(params[0], params[1], Boolean.parseBoolean(params[2]), params[3]);
+		return enumDefinitionRepository.save(enumDefinition);
 	}
 
 	@PutMapping("enum-definition/save")
 	private EnumDefinition replaceEnumDefinition(@RequestBody EnumDefinition enumDefinition) {
+		
 		return enumDefinitionRepository.save(enumDefinition);
 	}
 

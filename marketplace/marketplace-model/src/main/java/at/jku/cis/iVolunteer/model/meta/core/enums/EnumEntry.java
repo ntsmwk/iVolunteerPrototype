@@ -1,30 +1,37 @@
 package at.jku.cis.iVolunteer.model.meta.core.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnumEntry {
 	String id;
 	String value;
 	boolean selectable;
 	int level;
 	int[] position;
+	
+	List<EnumEntry> parents;
 
 	public EnumEntry() {
-
 	}
 
 	public EnumEntry(String value) {
 		this.value = value;
 		this.selectable = true;
+		this.parents = new ArrayList<>();
 	}
 
 	public EnumEntry(String value, boolean selectable) {
 		this.value = value;
 		this.selectable = selectable;
+		this.parents = new ArrayList<>();
 	}
 
 	public EnumEntry(String value, boolean selectable, int level) {
 		this.value = value;
 		this.selectable = selectable;
 		this.level = level;
+		this.parents = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -66,5 +73,15 @@ public class EnumEntry {
 	public void setPosition(int[] position) {
 		this.position = position;
 	}
+
+	public List<EnumEntry> getParents() {
+		return parents;
+	}
+
+	public void setParents(List<EnumEntry> parents) {
+		this.parents = parents;
+	}
+	
+	
 
 }

@@ -5,6 +5,12 @@ export class EnumEntry {
 
     level: number;
     position: number[];
+
+    parents: EnumEntry[];
+
+    constructor() {
+        this.parents = [];
+    }
 }
 
 export class EnumRelationship {

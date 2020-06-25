@@ -113,6 +113,7 @@ export class PropertyInstance<T> {
         this.tabId = classProperty.tabId;
 
 
+
         if (classProperty.type === PropertyType.ENUM) {
             const rootValue = this.values[0] as unknown as EnumEntry;
 
@@ -123,7 +124,8 @@ export class PropertyInstance<T> {
             for (i; i >= 0; i--) {
                 const currentAllowedValue = this.allowedValues[i] as unknown as EnumEntry;
                 if (currentAllowedValue.level < currentLevel) {
-                    this.values.push(classProperty.allowedValues[i]);
+                    // this.values.push(classProperty.allowedValues[i]);
+                    rootValue.parents.push(currentAllowedValue);
                     currentLevel--;
                 }
             }
