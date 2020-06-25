@@ -18,7 +18,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
 
-  showList = true;
+  showList: boolean;
 
   constructor() { }
 
@@ -39,10 +39,12 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   onShowList() {
     this.selectionDom.nativeElement.style.display = '';
+    this.showList = true;
   }
 
   onHideList() {
     this.selectionDom.nativeElement.style.display = 'none';
+    this.showList = false;
   }
 
   onSelectOption(option: EnumEntry) {
