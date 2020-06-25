@@ -123,15 +123,9 @@
         generic property - not yet implemented: {{ question.label }}
       </div>
 
-      <mat-form-field class="form-field" *ngSwitchCase="'enum-single'">
-        <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"
-          [id]="question.key" [value]="question.value">
-          <mat-option *ngFor="let opt of question.options" [value]="opt">
-            <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.controls[question.key].invalid">{{ displayErrorMessage() }}</mat-error>
-      </mat-form-field>
+      <div *ngSwitchCase="'enum-single'">
+        <app-single-enum [question]="question" [form]="form"></app-single-enum>
+      </div>
 
       <!-- <mat-form-field class="form-field" *ngSwitchCase="'level-dropdown-multiple'">
         <mat-select placeholder="{{question.label}} {{requiredMarker}}" [formControlName]="question.key"

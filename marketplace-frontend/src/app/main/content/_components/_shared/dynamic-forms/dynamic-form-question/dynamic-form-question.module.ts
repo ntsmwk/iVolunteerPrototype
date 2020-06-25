@@ -26,6 +26,7 @@ import {
   MatListModule,
 } from '@angular/material';
 import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
+import { SingleEnumModule } from './single-enum/single-enum.module';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { MultipleEnumModule } from './multiple-enum/multiple-enum.module';
     MatListModule,
 
     MultipleEnumModule,
+    SingleEnumModule,
 
     FuseSharedModule,
   ],
