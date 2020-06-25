@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
 import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 import { FormGroup } from '@angular/forms';
@@ -20,30 +20,32 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   showList: boolean;
 
-  constructor() { }
+  constructor(private renderer: Renderer2) { }
 
-  @ViewChild('enumListContainer', { static: true }) selectionDom: ElementRef;
+  @ViewChild('enumListContainer', { static: true }) listContainerDom: ElementRef;
+  @ViewChild('enumQuestionContainer', { static: true }) questionContainerDom: ElementRef;
+
+
 
   ngOnInit() {
-    console.log(this.question);
-    console.log(this.form);
-
-    // this.form.get(this.question.key).disable();
   }
 
   ngAfterViewInit() {
-    console.log(this.selectionDom);
-    this.selectionDom.nativeElement.style.display = 'none';
-
+    this.listContainerDom.nativeElement.style.display = 'none';
   }
 
   onShowList() {
-    this.selectionDom.nativeElement.style.display = '';
+    this.listContainerDom.nativeElement.style.display = '';
+    this.renderer.removeClass(this.questionContainerDom.nativeElement, 'question-container-closed');
+    this.renderer.addClass(this.questionContainerDom.nativeElement, 'question-container-open');
     this.showList = true;
   }
 
   onHideList() {
-    this.selectionDom.nativeElement.style.display = 'none';
+    this.listContainerDom.nativeElement.style.display = 'none';
+    this.renderer.removeClass(this.questionContainerDom.nativeElement, 'question-container-open');
+    this.renderer.addClass(this.questionContainerDom.nativeElement, 'question-container-closed');
+
     this.showList = false;
   }
 

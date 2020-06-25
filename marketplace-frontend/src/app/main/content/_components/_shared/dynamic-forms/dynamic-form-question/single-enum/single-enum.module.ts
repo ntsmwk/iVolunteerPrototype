@@ -4,15 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SingleEnumComponent } from './single-enum.component';
-import { MatCommonModule, MatOptionModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule, MatSelectModule, MatListModule, MatInputModule } from '@angular/material';
+import { MatCommonModule } from '@angular/material/core';
+import { MatFormFieldModule, MatListModule, MatInputModule, MatButtonModule } from '@angular/material';
 
 
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FuseSharedModule, MatCommonModule, MatFormFieldModule,
-    MatIconModule, MatOptionModule, MatSelectModule, MatListModule, MatInputModule,
+    MatListModule, MatInputModule, MatButtonModule,
 
   ],
   declarations: [SingleEnumComponent],
