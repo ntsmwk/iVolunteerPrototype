@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.rule.engine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -105,7 +107,8 @@ public class RuleService {
 		};
 	}
 	
-	public void executeRules(String tenantId, String container, String volunteerId) {
+	
+	public RuleExecution executeRules(String tenantId, String container, String volunteerId) {
 		KieSession ksession = getKieSession(tenantId, container);
 		Volunteer volunteer = volunteerRepository.findOne(volunteerId);
 		Tenant tenant = coreTenantRestClient.getTenantById(tenantId);
@@ -120,11 +123,10 @@ public class RuleService {
         
 		ksession.fireAllRules();
 		
-		System.out.println(ruleExecution.toString());
-		
 		ksession.dispose();
 		
 		volunteerRepository.save(volunteer);
+		return ruleExecution;
 	}
 
 	public void executeFibonacci(String tenantId, String container) {
@@ -172,7 +174,6 @@ public class RuleService {
 	
 	public void addRule(DerivationRule derivationRule) {
 		String ruleContent = ruleEngineMapper.generateDroolsRuleFrom(derivationRule);
-		System.out.println(ruleContent);
 		ContainerRuleEntry containerRule = new ContainerRuleEntry(
 				                    derivationRule.getTenantId(), 
 				                    derivationRule.getMarketplaceId(), 
@@ -183,10 +184,11 @@ public class RuleService {
 		refreshContainer(derivationRule.getTenantId()); 
 	}
 	
-	public void executeRulesForAllVolunteers(String tenantId, String container) {
+	public List<RuleExecution> executeRulesForAllVolunteers(String tenantId, String container) {
+		List<RuleExecution> ruleExecutionList = new ArrayList<RuleExecution>();
 		for (Volunteer vol: volunteerRepository.findAll()){
-			executeRules(tenantId, "Test-Frontend-Claudia", vol.getId());
+			ruleExecutionList.add(executeRules(tenantId, container, vol.getId()));
 		};
-		
+		return ruleExecutionList;
 	}
 }

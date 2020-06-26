@@ -12,6 +12,8 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
+import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
+import at.jku.cis.iVolunteer.model.rule.entities.ClassActionDTO;
 import at.jku.cis.iVolunteer.model.rule.entities.DerivationRuleDTO;
 
 @Service
@@ -32,14 +34,28 @@ public class DerivationRuleService {
 	}
 
 	public void createRule(DerivationRuleDTO derivationRuleDTO) {
-		System.out.println("derivationRuleDTO: " + derivationRuleDTO.getClassActions().size());
 		DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
-		System.out.println("derivationRule: " + derivationRule.getName() + ", tenant: "  + derivationRule.getTenantId() + 
-				", container: " + derivationRule.getContainer());
+		
 		derivationRuleRepository.save(derivationRule);
 		ruleService.addRule(derivationRule);
-		// only for test --> execute rule 
+		
 		ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
+	}
+	
+	public List<RuleExecution> testRule(DerivationRuleDTO derivationRuleDTO) {
+		// reset possible actions --> we are only testing the conditions!
+		derivationRuleDTO.setClassActions(new ArrayList<ClassActionDTO>());
+		
+	    DerivationRule derivationRule = derivationRuleMapper.toSource(derivationRuleDTO);
+		
+		derivationRule.setContainer(derivationRule.getContainer());
+		ruleService.addRule(derivationRule);
+		// only for test --> execute rule 
+		List<RuleExecution> ruleExecution = ruleService.executeRulesForAllVolunteers(derivationRule.getTenantId(), derivationRule.getContainer());
+		
+		// remove container rule again
+		ruleService.deleteRule(derivationRule.getTenantId(), derivationRule.getContainer(), derivationRule.getName());
+		return ruleExecution;
 	}
 
 	public void updateRule(String id, DerivationRuleDTO derivationRule) {

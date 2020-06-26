@@ -12,15 +12,14 @@ public class DerivationRule extends IVolunteerObject {
 
 	private String name;
 	private String container;
-	private List<GeneralCondition> generalConditions;
+	private List<GeneralCondition> generalConditions = new ArrayList<GeneralCondition>();
 	private List<Condition> conditions = new ArrayList<>();
 	private List<ClassAction> actions = new ArrayList<>();
 
 	public DerivationRule() {
-		generalConditions = new ArrayList<GeneralCondition>();
-		conditions = new ArrayList<>();
-		actions = new ArrayList<>();
+		
 	}
+	
 	public DerivationRule(String name, String container) {
 		this();
 		this.name = name;

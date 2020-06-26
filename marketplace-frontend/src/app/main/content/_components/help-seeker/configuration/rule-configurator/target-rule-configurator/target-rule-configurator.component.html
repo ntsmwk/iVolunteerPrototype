@@ -14,7 +14,7 @@
           [(attributeTarget)]="attribute"
         ></target-attribute-rule-configurator>
     </div>
-    <div> <!-- check if class properties exist XXX -->
+    <div *ngIf="classAction?.classDefinition?.properties.length > 0"> 
         <button
           type="button"
           mat-raised-button

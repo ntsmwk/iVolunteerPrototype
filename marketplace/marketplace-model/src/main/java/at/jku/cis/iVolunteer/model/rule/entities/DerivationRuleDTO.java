@@ -20,15 +20,13 @@ public class DerivationRuleDTO {
 	private String name;
 	private String container;
 	private String marketplaceId;
-	private List<GeneralConditionDTO> generalConditions;
-	private List<ClassConditionDTO> conditions;
-	private List<ClassActionDTO> classActions;
+	private List<GeneralConditionDTO> generalConditions = new ArrayList<GeneralConditionDTO>();
+	private List<ClassConditionDTO> conditions = new ArrayList<ClassConditionDTO>();
+	private List<ClassActionDTO> classActions = new ArrayList<ClassActionDTO>();
 	private Date timestamp;
 
 	public DerivationRuleDTO() {
-		generalConditions = new ArrayList<GeneralConditionDTO>();
-		conditions = new ArrayList<ClassConditionDTO>();
-		classActions = new ArrayList<ClassActionDTO>();
+		
 	}
 	
 	public String getName() {
@@ -99,7 +97,7 @@ public class DerivationRuleDTO {
 		return classActions;
 	}
 
-	public void setActions(List<ClassActionDTO> actions) {
+	public void setClassActions(List<ClassActionDTO> actions) {
 		this.classActions = actions;
 	}
 	

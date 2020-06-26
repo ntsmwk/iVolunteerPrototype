@@ -1,7 +1,7 @@
 package at.jku.cis.iVolunteer.model.rule.engine;
 
 public enum RuleStatus {
-	OK("OK"), ERROR("Error"), FIRED("fired"), NOT_FIRED("not fired");
+	FIRED("fired"), NOT_FIRED("not fired"); // OK("OK"), ERROR("Error"), 
 
 	private String value;
 

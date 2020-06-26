@@ -78,7 +78,7 @@
   >
     <div fxLayout="row">
       <mat-form-field class="nameInput">
-        <input matInput placeholder="Regelname" formControlName="name" />
+        <input matInput placeholder="Regelname" (change)="onChangeName($event)" formControlName="name" />
       </mat-form-field>
     </div>
 
@@ -108,7 +108,7 @@
         ></target-rule-configurator>
       </div>
     </div>
-    <div>
+   <!--<div>
       <button
         type="button"
         mat-raised-button
@@ -117,7 +117,7 @@
       >
         Neuer Freiwilligenpasseintrag
       </button>
-    </div>
+    </div>-->
     <div style="font-size: 20px;" fxLayout="column" fxLayoutGap="10px">
       <mat-divider></mat-divider>
       <div fxFlex fxLayout="row" fxLayoutAlign="start start">
@@ -172,10 +172,32 @@
         Klassen-Regel hinzufügen
       </button>
     </div>
-
+    <!--<div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
+      <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        (click)="testCondition()"
+      >
+        Regelbedingungen testen
+      </button>
+      <div style="padding-right: 5px;"></div>
+    </div>-->
     <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">
+      <button mat-raised-button type="button" color="secondary" (click)="test()">Regelbedingungen testen</button>
+      <div style="padding-right: 5px;"></div>
       <button mat-raised-button type="submit" color="primary">Speichern</button>
       <div style="padding-right: 5px;"></div>
     </div>
   </form>
+  <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;"></div>
+  <div *ngIf= 'testConditions'>
+    <div style="padding-top: 3px; padding-left: 5px;">
+      Testen der Regelbedingungen:
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;"></div>
+    <test-rule-configuration [derivationRule]=derivationRule>
+    </test-rule-configuration>
+  </div>
 </div>
+<!--(change)="onChange($event)"-->

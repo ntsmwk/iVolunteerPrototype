@@ -13,13 +13,6 @@ export class ClassPropertyService {
     private http: HttpClient
   ) { }
 
-  getClassProperties(marketplace: Marketplace, classDefintionId: string, tenantId: string): Promise<any> {
-    return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/all/tenant/${tenantId}`)
-                 .toPromise();
-                 //.catch(this.handleError);
-  }
-    // return this.getAllClassPropertiesFromClass(marketplace, classDefintionId, tenantId);
-
   getAllClassPropertiesFromClass(marketplace: Marketplace, classDefintionId: string, tenantId: string) {
     return this.http.get(`${marketplace.url}/meta/core/property/class/${classDefintionId}/all/tenant/${tenantId}`);
   }

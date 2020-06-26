@@ -21,6 +21,7 @@ import { HeaderModule } from "app/main/content/_shared_components/header/header.
 import { GeneralPreconditionConfiguratorComponent } from './general-precondition-configurator/general-precondition-configurator.component';
 import { TargetRuleConfiguratorComponent } from './target-rule-configurator/target-rule-configurator.component';
 import { TargetAttributeRuleConfiguratorComponent } from './target-attribute-rule-configurator/target-attribute-rule-configurator.component';
+import { TestRuleConfigurationComponent } from './test-rule-configuration/test-rule-configuration.component';
 
 const routes = [
   { path: "", component: FuseRuleConfiguratorComponent },
@@ -35,6 +36,7 @@ const routes = [
     GeneralPreconditionConfiguratorComponent,
     TargetRuleConfiguratorComponent,
     TargetAttributeRuleConfiguratorComponent,
+    TestRuleConfigurationComponent,
   ],
   imports: [
     ReactiveFormsModule,

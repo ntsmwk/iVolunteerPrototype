@@ -7,36 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.AbstractMapper;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.rule.ClassAction;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
-import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
 import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
 import at.jku.cis.iVolunteer.model.rule.entities.ClassActionDTO;
 import at.jku.cis.iVolunteer.model.rule.entities.DerivationRuleDTO;
-import at.jku.cis.iVolunteer.model.rule.entities.GeneralConditionDTO;
 import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
-/*import at.jku.cis.iVolunteer.model.rule.archive.ClassSourceRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.ClassTargetRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.archive.ClassTargetRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.GeneralRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.archive.GeneralRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.RuleEntry;
-import at.jku.cis.iVolunteer.model.rule.archive.RuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.SourceRuleEntry;
-import at.jku.cis.iVolunteer.model.rule.archive.SourceRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.TargetRuleEntryDTO;
-import at.jku.cis.iVolunteer.model.rule.archive.GeneralRuleEntry.Attribute;
-import at.jku.cis.iVolunteer.model.rule.condition.ClassSourceRuleEntry;
-*/
+
 @Component
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
-
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassPropertyService classPropertyService;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
+	
 	@Autowired private RuleEntryMapper ruleEntryMapper;
 
 
@@ -55,7 +35,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				 .stream()
 				 .map(entry -> ruleEntryMapper.toTarget(entry, source.getTenantId()))
 				 .collect(Collectors.toList()));
-		dto.setActions(
+		dto.setClassActions(
 			source
 				.getActions()
 				.stream()

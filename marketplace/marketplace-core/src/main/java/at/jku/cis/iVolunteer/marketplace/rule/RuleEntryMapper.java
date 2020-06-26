@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionPropertyService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
@@ -26,7 +25,6 @@ import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 public class RuleEntryMapper{
 	
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private ClassDefinitionPropertyService classDefinitionPropertyService;
 	@Autowired private ClassDefinitionService classDefinitionService;
 	
 	public GeneralConditionDTO toTarget(GeneralCondition source, String tenantId) {
@@ -62,8 +60,6 @@ public class RuleEntryMapper{
 }
 
 	public ClassCondition toSource (ClassConditionDTO target) {
-		System.out.println(" classcondition " + target.getClassDefinition().getName() + " --> attributes = " + target.getAttributeConditions().size());
-		
 		ClassCondition entry = new ClassCondition(target.getClassDefinition().getId(),
 			                                      target.getValue(), 
 			                                      target.getAggregationOperatorType());

@@ -24,6 +24,14 @@ export class DerivationRuleService {
     return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}`);
   }
 
+  test(marketplace: Marketplace, derivationRule: DerivationRule){
+    return this.http.post(`${marketplace.url}/rule/test`, derivationRule);
+  }
+
+  getTestResults(marketplace: Marketplace, derivationRule: DerivationRule){
+    return this.http.get(`${marketplace.url}/rule/test/${derivationRule.container}`);
+  }
+
   save(marketplace: Marketplace, derivationRule: DerivationRule) {
     if (isNullOrUndefined(derivationRule.id)) {
       return this.http.post(`${marketplace.url}/rule`, derivationRule);

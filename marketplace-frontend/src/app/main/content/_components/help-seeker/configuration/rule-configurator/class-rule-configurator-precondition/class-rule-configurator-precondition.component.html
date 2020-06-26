@@ -25,8 +25,8 @@
         <attribute-rule-precondition
           [(attributeCondition)]="attribute"
         ></attribute-rule-precondition>
-      </div>
-    <div> <!-- check if class properties exist XXX -->
+    </div>
+    <div *ngIf="classCondition?.classDefinition?.properties.length > 0">
         <button
           type="button"
           mat-raised-button

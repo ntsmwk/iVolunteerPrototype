@@ -102,6 +102,7 @@ export class TargetRuleConfiguratorComponent implements OnInit {
           (cd) => cd.id === this.ruleActionForm.value.classDefinitionId
         );
       }
+      console.log("Anzahl Properties: " + classDefinition.properties);
       this.classAction.classDefinition = classDefinition;
       this.classActionChange.emit(this.classAction);
       console.log(this.classAction.classDefinition);
