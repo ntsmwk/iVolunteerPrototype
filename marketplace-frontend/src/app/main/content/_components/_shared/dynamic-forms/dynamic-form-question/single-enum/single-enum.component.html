@@ -23,7 +23,21 @@
     <mat-action-list #enumList>
       <mat-list-item *ngFor="let opt of question.options" (click)="onSelectOption(opt)">
         <div class="list-item-container">
-          <div [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">{{opt.value}}</div>
+          <div class="list-item-row" [ngStyle]="{'margin-left': calculateSpaces(opt.level)}" fxLayout="row"
+            fxLayoutAlign="start center">
+            <mat-icon class="list-item-icon" *ngIf="opt.level == 0" style="font-size: 20px;">chevron_right
+            </mat-icon>
+            <mat-icon class="list-item-icon" *ngIf="opt.level > 0" style="font-size: 18px;">
+              subdirectory_arrow_right</mat-icon>
+            <div class="list-item-label">{{opt.value}}</div>
+          </div>
+          <!-- <div fxLayout="row" fxLayoutAlign="start center">
+            <div *ngFor="let p of opt.position; let i = index" fxLayout="row">
+              <mat-icon *ngIf="i < opt.level"></mat-icon>
+              <mat-icon *ngIf="i == opt.level">subdirectory_arrow_right</mat-icon>
+            </div>
+            <div>{{opt.value}}</div>
+          </div> -->
         </div>
       </mat-list-item>
     </mat-action-list>

@@ -25,7 +25,31 @@
 }
 
 .list-item-container {
-    padding: 12px;
+    // padding: 12px;
     width: 100%;
-    background: aquamarine;
+    background: #afcbe6;
+    line-height: 2;
+    color: grey;
+
+    .list-item-label {
+        color: black,
+    }
+}
+
+.list-item-container:hover {
+    background: rgb(62, 125, 219); 
+    color: white;
+
+    .list-item-label {
+        color: white;
+    }
+
+}
+
+:host ::ng-deep .mat-list-item {
+    height: 35px;
+
+    .mat-list-item-content {
+        padding: 0 4px;
+    }
 }

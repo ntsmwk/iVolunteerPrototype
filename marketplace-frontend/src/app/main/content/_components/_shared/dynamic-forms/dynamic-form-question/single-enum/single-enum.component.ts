@@ -64,9 +64,15 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
   }
 
   calculateSpaces(level: number) {
-    level = 10 * level;
+    level = 8 * level + 8;
 
-    return level + "px";
+    return level + 'px';
+  }
+
+  getChevrons(level: number) {
+    let s = '>';
+    s = s.repeat(level);
+    return s;
   }
 
   // getMultipleValues(question: MultipleSelectionEnumQuestion) {
