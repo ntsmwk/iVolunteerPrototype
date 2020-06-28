@@ -127,8 +127,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
-          this.attributeCondition.classDefinition.id,
-          this.helpseeker.tenantId
+          this.attributeCondition.classDefinition.id
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {

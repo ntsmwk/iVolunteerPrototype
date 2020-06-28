@@ -5,10 +5,10 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { CConstants } from '../../utils-and-constants';
 import { PropertyType } from 'app/main/content/_model/meta/property';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AddPropertyDialogData } from 'app/main/content/_components/dialogs/add-property-dialog/add-property-dialog.component';
+import { AddPropertyDialogData } from 'app/main/content/_components/_shared/dialogs/add-property-dialog/add-property-dialog.component';
 import { isNullOrUndefined } from 'util';
-import { RemoveDialogData } from 'app/main/content/_components/dialogs/remove-dialog/remove-dialog.component';
-import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { RemoveDialogData } from 'app/main/content/_components/_shared/dialogs/remove-dialog/remove-dialog.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
 
 export class ClassOptionsOverlayContentData {
@@ -20,6 +20,11 @@ export class ClassOptionsOverlayContentData {
 
     allClassDefinitions: ClassDefinition[];
     allRelationships: Relationship[];
+}
+
+export interface PropertyOrEnumEntry {
+    name: string;
+    type: PropertyType;
 }
 
 @Component({
@@ -35,6 +40,8 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     relationshipPalettes = CConstants.relationshipPalettes;
     propertyTypePalettes = CConstants.propertyTypePalettes;
 
+    entryList: PropertyOrEnumEntry[];
+
     constructor(
         private dialogFactory: DialogFactoryDirective,
         private _sanitizer: DomSanitizer,
@@ -42,6 +49,7 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.updatePropertiesAndEnumsList();
     }
 
     onSubmit() {
@@ -66,8 +74,8 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         return this.propertyTypePalettes.find(p => p.id === propertyType).imgPath;
     }
 
-    getPropertyEntryStyle(index: number) {
-        if (index < this.inputData.classDefinition.properties.length - 1) {
+    getEntryStyle(index: number) {
+        if (index < this.entryList.length - 1) {
             return this._sanitizer.bypassSecurityTrustStyle('height: 20px; border-bottom: solid 1px rgb(80, 80, 80)');
         } else {
             return this._sanitizer.bypassSecurityTrustStyle('height: 20px; border-bottom: none');
@@ -80,18 +88,17 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
             .then((ret: AddPropertyDialogData) => {
                 if (!isNullOrUndefined(ret)) {
                     this.inputData.classDefinition.properties = ret.classDefinition.properties;
+                    this.updatePropertiesAndEnumsList();
                 }
             });
     }
 
-    addEnumClicked() {
-
-    }
 
     removeClicked() {
         this.dialogFactory.openRemoveDialog(this.inputData.marketplace, this.inputData.classDefinition).then((ret: RemoveDialogData) => {
-            if (!isNullOrUndefined) {
+            if (!isNullOrUndefined(ret)) {
                 this.inputData.classDefinition.properties = ret.classDefinition.properties;
+                this.updatePropertiesAndEnumsList();
             }
         });
 
@@ -102,6 +109,12 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
             .openInstanceFormPreviewDialog(this.inputData.marketplace, this.inputData.allClassDefinitions, this.inputData.allRelationships, this.inputData.classDefinition)
             .then(() => {
             });
+    }
+
+    updatePropertiesAndEnumsList() {
+        this.entryList = [];
+        this.entryList.push(...this.inputData.classDefinition.properties);
+        // this.entryList.push(...this.inputData.classDefinition.enums.map(e => ({ name: e.name, type: PropertyType.ENUM })));
     }
 
 }

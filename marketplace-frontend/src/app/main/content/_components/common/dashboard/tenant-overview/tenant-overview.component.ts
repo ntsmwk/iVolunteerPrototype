@@ -6,6 +6,8 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { Volunteer } from "app/main/content/_model/volunteer";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { timeout, timeInterval } from "rxjs/operators";
+import { GlobalService } from "app/main/content/_service/global.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "tenant-overview",
@@ -20,20 +22,19 @@ export class TenantOverviewComponent implements OnInit {
     private loginService: LoginService,
     private tenantService: TenantService,
     private imageService: ImageService,
-    private coreVolunteerService: CoreVolunteerService
+    private coreVolunteerService: CoreVolunteerService,
+    private globalService: GlobalService
   ) {}
 
   async ngOnInit() {
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
     this.initialize();
   }
 
   async initialize() {
-    this.volunteer = <Volunteer>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
+    this.volunteer = <Volunteer>globalInfo.participant;
     this.tenants = <Tenant[]>await this.tenantService.findAll().toPromise();
   }
 

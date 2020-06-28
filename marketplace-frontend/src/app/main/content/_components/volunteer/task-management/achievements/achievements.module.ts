@@ -31,10 +31,8 @@ import {
   FuseConfirmDialogModule,
   FuseWidgetModule,
 } from "../../../../../../../@fuse/components";
-import { FuseProjectTaskListModule } from "../../../../_shared_components/project-task-list/project-task-list.module";
 import { FuseTruncatePipeModule } from "../../../../_pipe/truncate-pipe.module";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
-import { FuseProjectMembersModule } from "../../../../_shared_components/project-members/project-members.module";
 
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { HighchartsChartModule } from "highcharts-angular";
@@ -50,9 +48,9 @@ import { SunburstTableComponent } from "./tasks/sunburst-table/sunburst-table.co
 import { TimelineFilterComponent } from "./tasks/timeline-filter/timeline-filter.component";
 import { DonutComponent } from "./tasks/donut/donut.component";
 import { NgxSpinnerModule } from "ngx-spinner";
-import { OrganisationFilterModule } from "app/main/content/_shared_components/organisation-filter/organisation-filter.module";
-import { ClassInstanceDetailsComponent } from '../../../common/class-instance-details/class-instance-details.component';
-import { ClassInstanceDetailsModule } from '../../../common/class-instance-details/class-instance-details.module';
+import { OrganisationFilterModule } from "app/main/content/_components/_shared/organisation-filter/organisation-filter.module";
+import { ClassInstanceDetailsComponent } from "../../../common/class-instance-details/class-instance-details.component";
+import { ClassInstanceDetailsModule } from "../../../common/class-instance-details/class-instance-details.module";
 
 const routes = [{ path: "", component: AchievementsComponent }];
 
@@ -66,8 +64,7 @@ const routes = [{ path: "", component: AchievementsComponent }];
 
     DonutComponent,
     SunburstTableComponent,
-    TimelineFilterComponent
-    
+    TimelineFilterComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -97,8 +94,6 @@ const routes = [{ path: "", component: AchievementsComponent }];
     MatTableModule,
     MatTooltipModule,
     MatDialogModule,
-    FuseProjectMembersModule,
-    FuseProjectTaskListModule,
     FuseTruncatePipeModule,
     FuseSharedModule,
     FuseConfirmDialogModule,
@@ -114,10 +109,8 @@ const routes = [{ path: "", component: AchievementsComponent }];
 
     NgxSpinnerModule,
 
-    ClassInstanceDetailsModule
+    ClassInstanceDetailsModule,
   ],
-  entryComponents: [
-    ClassInstanceDetailsComponent
-  ],
+  entryComponents: [ClassInstanceDetailsComponent],
 })
-export class AchievementsModule {}
+export class AchievementsModule { }

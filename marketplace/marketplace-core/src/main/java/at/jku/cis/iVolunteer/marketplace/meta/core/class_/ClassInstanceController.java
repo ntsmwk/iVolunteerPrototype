@@ -1,6 +1,7 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
 import at.jku.cis.iVolunteer.marketplace.commons.DateTimeService;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassArchetype;
@@ -27,21 +29,27 @@ import at.jku.cis.iVolunteer.model.meta.core.property.PropertyType;
 @RestController
 public class ClassInstanceController {
 
-	@Autowired private ClassInstanceRepository classInstanceRepository;
-	@Autowired private ClassDefinitionService classDefinitionService;
-	@Autowired private ClassInstanceMapper classInstanceMapper;
-	@Autowired private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
-	@Autowired private DateTimeService dateTimeService;
+	@Autowired
+	private ClassInstanceRepository classInstanceRepository;
+	@Autowired
+	private ClassDefinitionService classDefinitionService;
+	@Autowired
+	private ClassInstanceMapper classInstanceMapper;
+	@Autowired
+	private ClassDefinitionToInstanceMapper classDefinitionToInstanceMapper;
+	@Autowired
+	private DateTimeService dateTimeService;
+	@Autowired
+	private MarketplaceService marketplaceService;
 
-		
 	@PostMapping("/meta/core/class/instance/all/by-archetype/{archetype}/user/{userId}")
 	private List<ClassInstanceDTO> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@PathVariable("userId") String userId, @RequestBody List<String> tenantIds) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 
 		tenantIds.forEach(tenantId -> {
-			classInstances.addAll(classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(
-					userId, archeType, tenantId));		
+			classInstances.addAll(
+					classInstanceRepository.getByUserIdAndClassArchetypeAndTenantId(userId, archeType, tenantId));
 		});
 
 		return classInstanceMapper.mapToDTO(classInstances);
@@ -49,6 +57,7 @@ public class ClassInstanceController {
 
 	@GetMapping("/meta/core/class/instance/all")
 	private List<ClassInstanceDTO> getAllClassInstances() {
+		// TODO filter by tenant Id as header param
 		return classInstanceMapper.mapToDTO(classInstanceRepository.findAll());
 	}
 
@@ -57,28 +66,45 @@ public class ClassInstanceController {
 		return classInstanceRepository.findOne(id);
 	}
 
+	@PostMapping("/meta/core/class/instances")
+	private List<ClassInstance> getClassInstanceById(@RequestBody List<String> classInstantIds) {
+		List<ClassInstance> classInstances = new ArrayList<>();
+
+		classInstantIds.forEach(id -> {
+			classInstances.add(classInstanceRepository.findOne(id));
+		});
+		return classInstances;
+	}
+
+	@PostMapping("/meta/core/class/instanceDTOs")
+	private List<ClassInstanceDTO> mapClassInstanceToDTO(@RequestBody List<ClassInstance> classInstances) {
+		return classInstanceMapper.mapToDTO(classInstances);
+	}
+
 	@GetMapping("/meta/core/class/instance/all/by-archetype/{archetype}")
 	private List<ClassInstance> getClassInstancesByArchetype(@PathVariable("archetype") ClassArchetype archeType,
 			@RequestParam(value = "tId", required = true) String tenantId) {
 		List<ClassInstance> classInstances = new ArrayList<>();
 		List<ClassDefinition> classDefinitions = classDefinitionService.getClassDefinitionsByArchetype(archeType,
 				tenantId);
-//		TODO implement!!
+		// TODO implement!!
 		return classInstances;
 	}
 
-//	@PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
-//	private List<ClassInstance> getClassInstanceInUserInbox(@PathVariable("userId") String userId,
-//			@RequestBody List<String> tenantIds) {
-//		List<ClassInstance> classInstances = new ArrayList<>();
-//
-//		tenantIds.forEach(tenantId -> {
-//			classInstances.addAll(classInstanceRepository
-//					.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false, false, tenantId));
-//		});
-//
-//		return classInstances;
-//	}
+	// @PostMapping("/meta/core/class/instance/in-user-inbox/{userId}")
+	// private List<ClassInstance>
+	// getClassInstanceInUserInbox(@PathVariable("userId") String userId,
+	// @RequestBody List<String> tenantIds) {
+	// List<ClassInstance> classInstances = new ArrayList<>();
+	//
+	// tenantIds.forEach(tenantId -> {
+	// classInstances.addAll(classInstanceRepository
+	// .getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, false,
+	// false, tenantId));
+	// });
+	//
+	// return classInstances;
+	// }
 
 	@PostMapping("/meta/core/class/instance/from-definition/{classDefinitionId}/user/{volunteerId}")
 	public ClassInstance createClassInstanceByClassDefinitionId(@PathVariable String classDefinitionId,
@@ -95,8 +121,9 @@ public class ClassInstanceController {
 			classInstance.setUserId(volunteerId);
 			classInstance.setTenantId(tenantId);
 			classInstance.setIssuerId(tenantId);
+			classInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 			classInstance.setTimestamp(new Date());
-			
+
 			classInstance.getProperties().forEach(p -> {
 				if (properties.containsKey(p.getName())) {
 					if (p.getType() == PropertyType.DATE) {
@@ -104,7 +131,8 @@ public class ClassInstanceController {
 						Date date = dateTimeService.parseMultipleDateFormats(dateAsString);
 
 						if (date != null) {
-							p.setValues(Collections.singletonList(date));
+							p.setValues(Collections.singletonList(date.getTime()));
+
 						}
 					} else {
 						p.setValues(Collections.singletonList(properties.get(p.getName())));
@@ -117,26 +145,30 @@ public class ClassInstanceController {
 		return null;
 	}
 
-//	@PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
-//	private List<ClassInstanceDTO> getClassInstanceInUserRepostory(@PathVariable("userId") String userId,
-//			@RequestBody List<String> tenantIds) {
-//
-//		Set<ClassInstance> ret = new LinkedHashSet<>();
-//		tenantIds.forEach(tenantId -> {
-//			ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId, true,
-//					false, tenantId));
-//		});
-//
-//		return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
-//	}
-//
-//	@GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
-//	private List<ClassInstance> getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
-//			@RequestParam(value="tId", required = true) String tenantId) {
-//		List<ClassInstance> instances = classInstanceRepository
-//				.getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true, false, tenantId);
-//		return instances;
-//	}
+	// @PostMapping("/meta/core/class/instance/in-user-repository/{userId}")
+	// private List<ClassInstanceDTO>
+	// getClassInstanceInUserRepostory(@PathVariable("userId") String userId,
+	// @RequestBody List<String> tenantIds) {
+	//
+	// Set<ClassInstance> ret = new LinkedHashSet<>();
+	// tenantIds.forEach(tenantId -> {
+	// ret.addAll(classInstanceRepository.getByUserIdAndInUserRepositoryAndInIssuerInboxAndTenantId(userId,
+	// true,
+	// false, tenantId));
+	// });
+	//
+	// return classInstanceMapper.mapToDTO(new ArrayList<>(ret));
+	// }
+	//
+	// @GetMapping("/meta/core/class/instance/in-issuer-inbox/{issuerId}")
+	// private List<ClassInstance>
+	// getClassInstanceInIssuerInbox(@PathVariable("issuerId") String issuerId,
+	// @RequestParam(value="tId", required = true) String tenantId) {
+	// List<ClassInstance> instances = classInstanceRepository
+	// .getByIssuerIdAndInIssuerInboxAndInUserRepositoryAndTenantId(issuerId, true,
+	// false, tenantId);
+	// return instances;
+	// }
 
 	@PutMapping("/meta/core/class/instance/set-in-user-repository/{inUserRepository}")
 	private List<ClassInstance> setClassInstancesInUserRepository(
@@ -147,32 +179,34 @@ public class ClassInstanceController {
 		return classInstanceRepository.save(classInstances);
 	}
 
-//	@PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
-//	private List<ClassInstanceDTO> setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean inIssuerInbox,
-//			@RequestBody List<String> classInstanceIds) {
-//		List<ClassInstance> classInstances = new ArrayList<>();
-//		classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
-//
-//		for (ClassInstance classInstance : classInstances) {
-//			classInstance.setInIssuerInbox(inIssuerInbox);
-//			classInstance.setInUserRepository(false);
-//		}
-//
-//		return classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
-//		return classInstanceRepository.save(classInstances);
-//	}
+	// @PutMapping("/meta/core/class/instance/set-in-issuer-inbox/{inIssuerInbox}")
+	// private List<ClassInstanceDTO>
+	// setClassInstancesInIssuerInbox(@PathVariable("inIssuerInbox") boolean
+	// inIssuerInbox,
+	// @RequestBody List<String> classInstanceIds) {
+	// List<ClassInstance> classInstances = new ArrayList<>();
+	// classInstanceRepository.findAll(classInstanceIds).forEach(classInstances::add);
+	//
+	// for (ClassInstance classInstance : classInstances) {
+	// classInstance.setInIssuerInbox(inIssuerInbox);
+	// classInstance.setInUserRepository(false);
+	// }
+	//
+	// return
+	// classInstanceMapper.mapToDTO(classInstanceRepository.save(classInstances));
+	// return classInstanceRepository.save(classInstances);
+	// }
 
 	@PostMapping("/meta/core/class/instance/new")
 	public List<ClassInstance> createNewClassInstances(@RequestBody List<ClassInstance> classInstances) {
 		return classInstanceRepository.save(classInstances);
 	}
-	
-	
+
 	@PostMapping("/meta/core/class/instance/newShared")
-	public ClassInstance createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId, 
+	public ClassInstanceDTO createNewSharedClassInstances(@RequestParam(value = "tId", required = true) String tenantId,
 			@RequestBody String classInstanceId) {
 		ClassInstance ci = classInstanceRepository.findOne(classInstanceId);
-		
+
 		TaskClassInstance ciNew = new TaskClassInstance();
 		ciNew.setName(ci.getName());
 		ciNew.setProperties(ci.getProperties());
@@ -185,24 +219,11 @@ public class ClassInstanceController {
 		ciNew.setTabId(ci.getTabId());
 		ciNew.setClassDefinitionId(ci.getClassDefinitionId());
 		ciNew.setTimestamp(ci.getTimestamp());
-	//	ciNew.setTimestamp(new Date());
-		
+		ciNew.setMarketplaceId(ci.getMarketplaceId());
 		ciNew.setTenantId(tenantId);
-					
-		return this.classInstanceRepository.save(ciNew);
-	}
-	
 
-	@PostMapping("/meta/core/class/instance/{id}/new")
-	private ClassInstance createNewClassInstanceById() {
-		// TODO
-		return null;
-	}
-
-	@PutMapping("/meta/core/class/instance/{id}/update")
-	private ClassInstance updateClassInstance() {
-		// TODO
-		return null;
+		return classInstanceMapper.mapToDTO(Collections.singletonList(this.classInstanceRepository.save(ciNew)))
+				.stream().findFirst().orElse(null);
 	}
 
 	@DeleteMapping("/meta/core/class/instance/{id}/delete")

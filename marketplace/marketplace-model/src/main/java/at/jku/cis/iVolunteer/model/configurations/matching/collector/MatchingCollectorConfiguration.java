@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.matching.MatchingCollector;
 
 public class MatchingCollectorConfiguration {
 	@Id String id;
-	
+
 	String classConfigurationId;
-	
+
 	List<MatchingCollector> collectors;
 
 	public String getId() {
@@ -37,7 +36,7 @@ public class MatchingCollectorConfiguration {
 	public void setCollectors(List<MatchingCollector> collectors) {
 		this.collectors = collectors;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -50,7 +49,5 @@ public class MatchingCollectorConfiguration {
 		}
 		return ((MatchingCollectorConfiguration) obj).id.equals(id);
 	}
-	
-	
 
 }

@@ -7,7 +7,7 @@ import { ClassConfiguration } from 'app/main/content/_model/meta/configurations'
 import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
-import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 
 export interface RootMenuItem {
   id: number;

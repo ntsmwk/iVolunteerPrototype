@@ -1,0 +1,33 @@
+<div *ngIf="loaded">
+
+  <!-- <div> -->
+  <form [formGroup]="form">
+    <mat-form-field *ngIf="!showEditor" style="width: 500px">
+      <input matInput formControlName="name" placeholder="Enum-Bezeichnung *" />
+    </mat-form-field>
+
+    <mat-form-field class="mt-8" style="width: 100%;" appearance="outline">
+      <mat-label>Beschreibung (optional)</mat-label>
+      <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
+        matAutosizeMaxRows="3"></textarea>
+    </mat-form-field>
+
+    <!-- <mat-slide-toggle [(ngModel)]="multipleToggled" [ngModelOptions]="{standalone: true}" labelPosition="after">
+      Mehrfachauswahl möglich
+    </mat-slide-toggle> -->
+
+    <div class="pt-8">
+
+      <button *ngIf="!showEditor" mat-raised-button (click)="handleCreateClick()">Erstellen</button>
+      <button *ngIf="!showEditor" mat-raised-button (click)="handleCancelClick()">Abbrechen</button>
+
+    </div>
+
+  </form>
+
+
+  <app-enum-graph-editor *ngIf="showEditor" [marketplace]="marketplace" [helpseeker]="helpseeker"
+    [enumDefinition]="enumDefinition" (result)="handleResult($event)" (management)="handleManagementEvent($event)">
+  </app-enum-graph-editor>
+
+</div>

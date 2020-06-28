@@ -15,7 +15,7 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 	// @Id
 	// private String id;
 	private String name;
-
+	
 	private List<T> allowedValues = new ArrayList<>();
 
 	private String unit;
@@ -28,9 +28,6 @@ public class PropertyDefinition<T> extends IVolunteerObject {
 	private boolean required;
 	private List<PropertyConstraint<Object>> propertyConstraints = new ArrayList<>();
 
-	
-	
-	
 	public PropertyDefinition() {
 	}
 

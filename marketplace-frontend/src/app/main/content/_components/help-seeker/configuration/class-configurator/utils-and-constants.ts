@@ -165,7 +165,7 @@ const propertyTypePalettes = [
   {
     id: PropertyType.ENUM,
     label: PropertyType.getLabelForPropertyType(PropertyType.ENUM),
-    imgPath: '/assets/icons/datatypes/o.png',
+    imgPath: '/assets/icons/datatypes/null.png',
   },
 ];
 
@@ -176,7 +176,7 @@ const mxStyles = {
     'shape=swimlane;resizable=0;' +
     'fillColor=#000e8a;strokeColor=#000e8a;fontColor=#FFFFFF;fontSize=14;',
   classEnum:
-    'shape=swimlane;resizable=0;' +
+    'shape=swimlane;resizable=0;foldable=0;' +
     'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#B05800;fontSize=14;' +
     'portConstraint=north;',
   classFlexprodCollector:
@@ -189,7 +189,7 @@ const mxStyles = {
     'fillColor=rgb(54,115,41);fontColor=#FFFFFF;strokeColor=#FFFFFF;align=left;html=1;overflow=hidden;fontSize=14;',
   propertyEnum:
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;' +
-    'fillColor=#FFCC99;fontColor=#B05800;strokeColor=#B05800;align=left;html=1;overflow=hidden;' +
+    'fillColor=#B05800;fontColor=#FFFFFF;strokeColor=#FFFFFF;fontSize=14;align=left;html=1;overflow=hidden;' +
     'portConstraint=eastwest',
 
   // Icons
@@ -202,12 +202,17 @@ const mxStyles = {
   addClassNewLevelIcon:
     'shape=image;image=/assets/mxgraph_resources/images/down_blue.png;noLabel=1;imageBackground=none;imageBorder=none;' +
     'movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
+  addClassPlusIcon:
+    'shape=image;image=/assets/icons/class_editor/plus_icon.png;noLabel=1;imageBackground=none;imageBorder=none;' +
+    'movable=0;resizable=0;editable=0;deletable=0;selectable=0;',
 
   // Relationships
   inheritanceEnum:
     'sideToSideEdgeStyle=1;startArrow=classic;endArrow=none;curved=1;html=1;strokeColor=#B05800',
   inheritance:
     'sideToSideEdgeStyle=1;endArrow=none;startArrow=block;startSize=16;startFill=0;curved=1;html=1;strokeColor=#000e8a;',
+  genericConnection:
+    'sideToSideEdgeStyle=1;endArrow=none;startArrow=none;curved=1;html=1;strokeColor=#000e8a;',
 
   association:
     'endArrow=none;html=1;curved=1;' + 'edgeStyle=orthogonalEdgeStyle;',

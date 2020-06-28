@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
@@ -25,8 +26,11 @@ public class CoreHelpSeekerController {
 	@Autowired private CoreHelpSeekerService coreHelpSeekerService;
 
 	@GetMapping("/all")
-	public List<CoreHelpSeeker> getAllCoreVolunteers() {
-		return this.coreHelpSeekerRepository.findAll();
+	public List<CoreHelpSeeker> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
+		if (tenantId == null) {
+			return this.coreHelpSeekerRepository.findAll();
+		}
+		return this.coreHelpSeekerService.getAllCoreHelpSeekers(tenantId);
 	}
 
 	@PutMapping("/find-by-ids")

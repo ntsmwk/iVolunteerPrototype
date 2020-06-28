@@ -74,15 +74,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, LoginGuard],
   },
   {
-    path: "main/engagements",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/task-management/engagements/engagements.module"
-      ).then((m) => m.FuseEngagementsModule),
-    canActivate: [TokenGuard, VolunteerGuard],
-  },
-
-  {
     path: "main/achievements/overview",
     loadChildren: () =>
       import(
@@ -108,46 +99,6 @@ const routes: Route[] = [
     canActivate: [TokenGuard, VolunteerGuard],
   },
   {
-    path: "main/get-engaged",
-    loadChildren: () =>
-      import(
-        "./_components/volunteer/task-management/get-engaged/get-engaged.module"
-      ).then((m) => m.FuseGetEngagedModule),
-    canActivate: [TokenGuard, VolunteerGuard],
-  },
-  {
-    path: "main/project-form",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/project-form/project-form.module"
-      ).then((m) => m.FuseProjectFormModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-  {
-    path: "main/projects/all",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/project-list/project-list.module"
-      ).then((m) => m.FuseProjectListModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-  {
-    path: "main/task",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/task-detail/task-detail.module"
-      ).then((m) => m.FuseTaskDetailModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-  {
-    path: "main/task-form",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/task-form/task-form.module"
-      ).then((m) => m.FuseTaskFormModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-  {
     path: "main/task-select",
     loadChildren: () =>
       import(
@@ -167,8 +118,8 @@ const routes: Route[] = [
     path: "main/properties/all",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-list/property-list.module"
-      ).then((m) => m.PropertyListModule),
+        "./_components/help-seeker/configuration/property-enum-configurator/list/property-enum-list.module"
+      ).then((m) => m.PropertyEnumListModule),
     canActivate: [TokenGuard, FlexProdOrHelpseekerGuard],
   },
 
@@ -176,7 +127,7 @@ const routes: Route[] = [
     path: "main/property/detail/view",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-detail/property-detail.module"
+        "./_components/help-seeker/configuration/property-enum-configurator/detail/property-detail.module"
       ).then((m) => m.PropertyDetailModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
@@ -184,46 +135,10 @@ const routes: Route[] = [
     path: "main/property-builder",
     loadChildren: () =>
       import(
-        "./_components/help-seeker/configuration/property-build-form/property-build-form.module"
+        "./_components/help-seeker/configuration/property-enum-configurator/builder/property-build-form.module"
       ).then((m) => m.PropertyBuildFormModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
-  {
-    path: "main/task-templates/user/all",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/user-defined-task-template-list/user-defined-task-template-list.module"
-      ).then((m) => m.UserDefinedTaskTemplateListModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
-  {
-    path: "main/task-templates/user/detail/single",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/user-defined-task-template-detail-single/user-defined-task-template-detail-single.module"
-      ).then((m) => m.SingleUserDefinedTaskTemplateDetailModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
-  {
-    path: "main/task-templates/user/edit",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/user-defined-task-template-detail-form-single/user-defined-task-template-detail-form-single.module"
-      ).then((m) => m.SingleUserDefinedTaskTemplateDetailFormModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
-  {
-    path: "main/task-templates/user/detail/nested",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/user-defined-task-template-detail-nested/user-defined-task-template-detail-nested.module"
-      ).then((m) => m.NestedUserDefinedTaskTemplateDetailModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
   {
     path: "main/configurator",
     loadChildren: () =>
@@ -255,23 +170,6 @@ const routes: Route[] = [
       import(
         "./_components/help-seeker/configuration/rule-configurator/rule-configurator.module"
       ).then((m) => m.FuseRuleConfiguratorModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-
-  {
-    path: "main/task-template-form",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/task-template-form/task-template-form.module"
-      ).then((m) => m.FuseTaskTemplateFormModule),
-    canActivate: [TokenGuard, HelpSeekerGuard],
-  },
-  {
-    path: "main/task-templates/all",
-    loadChildren: () =>
-      import(
-        "./_components/help-seeker/task-management/task-template-list/task-template-list.module"
-      ).then((m) => m.FuseTaskTemplateListModule),
     canActivate: [TokenGuard, HelpSeekerGuard],
   },
   {
@@ -349,4 +247,4 @@ const routes: Route[] = [
   ],
   exports: [FuseContentComponent, ShareMenuComponent],
 })
-export class FuseContentModule { }
+export class FuseContentModule {}

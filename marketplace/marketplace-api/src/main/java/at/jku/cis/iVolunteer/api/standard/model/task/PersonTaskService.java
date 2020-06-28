@@ -9,8 +9,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.MarketplaceService;
 import at.jku.cis.iVolunteer.marketplace._mapper.clazz.ClassDefinitionToInstanceMapper;
-import at.jku.cis.iVolunteer.marketplace.core.CoreTenantRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
 import at.jku.cis.iVolunteer.marketplace.usermapping.UserMappingService;
@@ -22,15 +22,11 @@ import jersey.repackaged.com.google.common.collect.Lists;
 @Service
 public class PersonTaskService {
 
-	@Autowired
-	private ClassDefinitionService classDefinitionService;
-	@Autowired
-	private ClassInstanceRepository classInstanceRepository;
-	@Autowired
-	private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
-	@Autowired
-	private UserMappingService userMappingService;
-	
+	@Autowired private ClassDefinitionService classDefinitionService;
+	@Autowired private ClassInstanceRepository classInstanceRepository;
+	@Autowired private ClassDefinitionToInstanceMapper classDefinition2InstanceMapper;
+	@Autowired private UserMappingService userMappingService;
+	@Autowired private MarketplaceService marketplaceService;
 
 	public void savePersonTasks(List<PersonTask> personTasks, String tenantId) {
 		ClassDefinition personTaskClassDefinition = classDefinitionService.getByName("PersonTask", tenantId);
@@ -43,7 +39,7 @@ public class PersonTaskService {
 	}
 
 	private TaskClassInstance savePersonTask(ClassDefinition personTaskClassDefinition, PersonTask personTask,
-			 String tenantId) {
+			String tenantId) {
 		// @formatter:off
 		TaskClassInstance personTaskClassInstance = (TaskClassInstance) classDefinition2InstanceMapper
 				.toTarget(personTaskClassDefinition);
@@ -75,7 +71,7 @@ public class PersonTaskService {
 				.forEach(p -> p.setValues(Lists.asList(personTask.getLevel(), new Object[0])));
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("Starting Date")).forEach(p -> {
 			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss"),
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateFrom(), "yyyy-MM-dd HH:mm:ss").getTime(),
 						new Object[0]));
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -83,7 +79,7 @@ public class PersonTaskService {
 		});
 		personTaskClassInstance.getProperties().stream().filter(p -> p.getName().equals("End Date")).forEach(p -> {
 			try {
-				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss"),
+				p.setValues(Lists.asList(DateUtils.parseDate(personTask.getTaskDateTo(), "yyyy-MM-dd HH:mm:ss").getTime(),
 						new Object[0]));
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -109,6 +105,7 @@ public class PersonTaskService {
 
 		personTaskClassInstance.setIssuerId(tenantId);
 		personTaskClassInstance.setTenantId(tenantId);
+		personTaskClassInstance.setMarketplaceId(marketplaceService.getMarketplaceId());
 
 		personTaskClassInstance.setTimestamp(new Date());
 

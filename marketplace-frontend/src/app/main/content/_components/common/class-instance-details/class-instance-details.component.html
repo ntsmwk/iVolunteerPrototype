@@ -8,21 +8,16 @@
   <customizable-header
     *ngIf="tenant && !isDialog"
     [tenant]="tenant"
-    [displayNavigateBack]="!isDialog"
+    [displayNavigateBack]="true"
     headerText="Details"
   ></customizable-header>
 
-  <div 
-    *ngIf="isDialog"
-    class="header p-16 p-sm-24" fxLayout="row" fxLayoutAlign="center center">
-    <img
-      *ngIf="tenant"
-      class="header-logo"
-      [src]="tenantService.getTenantImage(tenant)"
-    />
-    <h1 class="l-heading">Details</h1>
-  </div>
-  
+  <customizable-header
+    *ngIf="tenant && isDialog"
+    [tenant]="tenant"
+    [displayNavigateBack]="false"
+    headerText="Details"
+  ></customizable-header>
 
   <div *ngIf="classInstance != null">
     <h1 style="margin-left: 5px;">Asset: {{ getName() }}</h1>
@@ -34,13 +29,12 @@
       style="width: 100%;"
       (matSortChange)="sortData($event)"
     >
-
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
           Name
         </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{ element.name }} 
+          {{ element.name }}
         </mat-cell>
       </ng-container>
 
@@ -71,4 +65,8 @@
       ></mat-row>
     </mat-table>
   </div>
+
+  <p *ngIf="isLocal" style="margin-top: 20px;">
+    Die Informationen stammen aus dem lokalen Freiwilligenpass!
+  </p>
 </div>

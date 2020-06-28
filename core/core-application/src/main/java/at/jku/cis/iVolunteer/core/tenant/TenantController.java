@@ -12,29 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
-import at.jku.cis.iVolunteer.model.exception.NotAcceptableException;
 
 @RestController
 @RequestMapping("/tenant")
 public class TenantController {
 
-	@Autowired private TenantRepository tenantRepository;
 	@Autowired private TenantService tenantService;
 
 	@GetMapping
 	public List<Tenant> getAllTenants() {
 //		TODO MWE tenant restrictions - public...
-		return tenantRepository.findAll();
+		return tenantService.getAllTenants();
 	}
 
 	@GetMapping("/name/{tenantName}")
 	public String getTenantByName(@PathVariable String tenantName) {
-		return tenantRepository.findByName(tenantName).getId();
+		return tenantService.getTenantByName(tenantName);
 	}
 
 	@GetMapping("/{tenantId}")
 	public Tenant getTenantById(@PathVariable String tenantId) {
-		return tenantRepository.findOne(tenantId);
+		return tenantService.getTenantById(tenantId);
 	}
 
 	@GetMapping("/volunteer/{volunteerId}")
@@ -44,24 +42,16 @@ public class TenantController {
 
 	@GetMapping("/marketplace/{marketplaceId}")
 	public List<Tenant> getTenantsByMarketplaceIds(@PathVariable String marketplaceId) {
-		return tenantRepository.findByMarketplaceId(marketplaceId);
+		return tenantService.getTenantsByMarketplaceIds(marketplaceId);
 	}
 
 	@PostMapping
 	public Tenant createTenant(@RequestBody Tenant tenant) {
-		return tenantRepository.insert(tenant);
+		return tenantService.createTenant(tenant);
 	}
 
 	@PutMapping("{tenantId}")
 	public Tenant updateTenant(@PathVariable("tenantId") String tenantId, @RequestBody Tenant tenant) {
-		Tenant orginalTenant = tenantRepository.findOne(tenantId);
-		if (orginalTenant == null) {
-			throw new NotAcceptableException();
-		}
-		orginalTenant.setName(tenant.getName());
-		orginalTenant.setPrimaryColor(tenant.getPrimaryColor());
-		orginalTenant.setSecondaryColor(tenant.getSecondaryColor());
-		orginalTenant.setMarketplaceId(tenant.getMarketplaceId());
-		return tenantRepository.save(orginalTenant);
+		return tenantService.updateTenant(tenantId, tenant);
 	}
 }

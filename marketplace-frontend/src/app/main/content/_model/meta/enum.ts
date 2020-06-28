@@ -2,6 +2,15 @@ export class EnumEntry {
     id: string;
     value: string;
     selectable: boolean;
+
+    level: number;
+    position: number[];
+
+    parents: EnumEntry[];
+
+    constructor() {
+        this.parents = [];
+    }
 }
 
 export class EnumRelationship {
@@ -15,8 +24,12 @@ export class EnumDefinition {
     name: string;
     description: string;
 
+    multiple: boolean;
+    required: boolean;
+
     timestamp: Date;
+    tenantId: string;
 
     enumEntries: EnumEntry[];
-    enumRelstionships: EnumRelationship[];
+    enumRelationships: EnumRelationship[];
 }

@@ -92,22 +92,32 @@ export class ClassInstanceFormEditorComponent implements OnInit {
           this.marketplace = marketplace;
 
           Promise.all([
-            this.classDefinitionService.getFormConfigurations(this.marketplace, childClassIds).toPromise().then((formConfigurations: FormConfiguration[]) => {
-              this.formConfigurations = formConfigurations;
-              for (const config of this.formConfigurations) {
-                config.formEntry = this.addQuestionsAndFormGroup(config.formEntry, config.formEntry.id);
-              }
-            }),
+            this.classDefinitionService
+              .getFormConfigurations(this.marketplace, childClassIds)
+              .toPromise()
+              .then((formConfigurations: FormConfiguration[]) => {
+                this.formConfigurations = formConfigurations;
+                for (const config of this.formConfigurations) {
+                  config.formEntry = this.addQuestionsAndFormGroup(
+                    config.formEntry,
+                    config.formEntry.id
+                  );
+                }
+              }),
 
-            this.loginService.getLoggedIn().toPromise().then((helpseeker: Helpseeker) => {
-              this.helpseeker = helpseeker;
-            }),
+            this.loginService
+              .getLoggedIn()
+              .toPromise()
+              .then((helpseeker: Helpseeker) => {
+                this.helpseeker = helpseeker;
+              }),
           ]).then(() => {
             this.currentFormConfiguration = this.formConfigurations.pop();
 
             if (this.formConfigurations.length === 0) {
               this.lastEntry = true;
             }
+
             this.loaded = true;
           });
         });
@@ -115,10 +125,18 @@ export class ClassInstanceFormEditorComponent implements OnInit {
   }
 
   private addQuestionsAndFormGroup(formEntry: FormEntry, idPrefix: string) {
-    formEntry.questions = this.questionService.getQuestionsFromProperties(formEntry.classProperties, idPrefix);
-    formEntry.formGroup = this.questionControlService.toFormGroup(formEntry.questions);
+    formEntry.questions = this.questionService.getQuestionsFromProperties(
+      formEntry.classProperties,
+      idPrefix
+    );
+    formEntry.formGroup = this.questionControlService.toFormGroup(
+      formEntry.questions
+    );
 
-    if (!isNullOrUndefined(formEntry.questions) && formEntry.questions.length > 0) {
+    if (
+      !isNullOrUndefined(formEntry.questions) &&
+      formEntry.questions.length > 0
+    ) {
       this.expectedNumberOfResults++;
     }
 
@@ -131,7 +149,10 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return formEntry;
   }
 
-  handleTupleSelection(evt: { selection: { id: any; label: any }; formGroup: FormGroup; }) {
+  handleTupleSelection(evt: {
+    selection: { id: any; label: any };
+    formGroup: FormGroup;
+  }) {
     let unableToContinueControl: FormControl;
     let unableToContinueControlKey: string;
     let pathPrefix: string;
@@ -144,9 +165,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       }
     });
 
-    this.classDefinitionService.getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
-      .toPromise().then((retFormEntry: FormEntry) => {
-        const currentFormEntry = this.getFormEntry(pathPrefix, this.currentFormConfiguration.formEntry.id, this.currentFormConfiguration.formEntry);
+    this.classDefinitionService
+      .getFormConfigurationChunk(this.marketplace, pathPrefix, evt.selection.id)
+      .toPromise()
+      .then((retFormEntry: FormEntry) => {
+        const currentFormEntry = this.getFormEntry(
+          pathPrefix,
+          this.currentFormConfiguration.formEntry.id,
+          this.currentFormConfiguration.formEntry
+        );
 
         retFormEntry = this.addQuestionsAndFormGroup(retFormEntry, pathPrefix);
 
@@ -200,19 +227,15 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     const classInstances: ClassInstance[] = [];
 
     if (isNullOrUndefined(this.selectedVolunteers)) {
-      const classInstance = this.createClassInstance(
-        this.currentFormConfiguration.formEntry,
-        this.currentFormConfiguration.id,
-        allControls
-      );
+      const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+      classInstance.tenantId = this.helpseeker.tenantId;
+      classInstance.issuerId = this.helpseeker.tenantId;
       classInstances.push(classInstance);
     } else {
       for (const volunteer of this.selectedVolunteers) {
-        const classInstance = this.createClassInstance(
-          this.currentFormConfiguration.formEntry,
-          this.currentFormConfiguration.id,
-          allControls
-        );
+        const classInstance = this.createClassInstance(this.currentFormConfiguration.formEntry, this.currentFormConfiguration.id, allControls);
+        classInstance.tenantId = this.helpseeker.tenantId;
+        classInstance.issuerId = this.helpseeker.tenantId;
         classInstance.userId = volunteer.id;
         classInstances.push(classInstance);
       }
@@ -241,11 +264,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
     return allControls;
   }
 
-  private createClassInstance(
-    parentEntry: FormEntry,
-    currentPath: string,
-    controls: { id: string; control: AbstractControl }[]
-  ) {
+  private createClassInstance(parentEntry: FormEntry, currentPath: string, controls: { id: string; control: AbstractControl }[]) {
     const propertyInstances: PropertyInstance<any>[] = [];
     for (const classProperty of parentEntry.classProperties) {
       // skip "unableToContinue" Properties
@@ -253,9 +272,7 @@ export class ClassInstanceFormEditorComponent implements OnInit {
         continue;
       }
 
-      const control = controls.find(
-        (c) => c.id === currentPath + '.' + classProperty.id
-      );
+      const control = controls.find((c) => c.id === currentPath + '.' + classProperty.id);
 
       let value: any;
       if (classProperty.type === PropertyType.FLOAT_NUMBER) {
@@ -265,25 +282,31 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       } else {
         value = control.control.value;
       }
+      const l = propertyInstances.push(new PropertyInstance(classProperty, [value]));
 
-      propertyInstances.push(new PropertyInstance(classProperty, [value]));
+      // if (classProperty.type === PropertyType.ENUM) {
+      //   let i = propertyInstances[l - 1].allowedValues.findIndex(a => a.id === value.id);
+      //   let currentLevel = value.level;
+      //   for (i; i >= 0; i--) {
+      //     if (propertyInstances[l - 1].allowedValues[i].level < currentLevel) {
+      //       propertyInstances[l - 1].values.push(propertyInstances[l - 1].allowedValues[i]);
+      //       currentLevel--;
+      //     }
+      //   }
+      // }
+
+      console.log(propertyInstances[l - 1]);
+
     }
 
-    const classInstance = new ClassInstance(
-      parentEntry.classDefinitions[0],
-      propertyInstances
-    );
+    const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);
     classInstance.childClassInstances = [];
     classInstance.id = this.objectIdService.getNewObjectId();
     classInstance.marketplaceId = this.marketplace.id;
 
     if (!isNullOrUndefined(parentEntry.subEntries)) {
       for (const subEntry of parentEntry.subEntries) {
-        const subClassInstance = this.createClassInstance(
-          subEntry,
-          subEntry.id,
-          controls
-        );
+        const subClassInstance = this.createClassInstance(subEntry, subEntry.id, controls);
         classInstance.childClassInstances.push(subClassInstance);
       }
     }

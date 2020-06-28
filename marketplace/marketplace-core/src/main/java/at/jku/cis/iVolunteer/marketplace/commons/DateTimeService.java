@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 public class DateTimeService {
 
 	public Date parseMultipleDateFormats(String dateString) {
-		String[] formatStrings = new String[] {"yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd'T'HH:mm.ss'Z'", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-				"yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd' 'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssXXX", "M/y", "M/d/y", "M-d-y"};
-//		2020-06-08T22:00:00.000Z
-			try {
-				return DateUtils.parseDate(dateString, formatStrings);
-			} catch (ParseException e) {
-			}
+		String[] formatStrings = new String[] { "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd'T'HH:mm.ss'Z'",
+				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd' 'HH:mm:ss",
+				"yyyy-MM-dd'T'HH:mm:ssXXX", "M/y", "M/d/y", "M-d-y" };
+		try {
+			return DateUtils.parseDate(dateString, formatStrings);
+		} catch (ParseException e) {
+		}
 
 		return null;
-	}	
+	}
 }

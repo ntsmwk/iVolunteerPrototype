@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 
 import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
+import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
 import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
@@ -19,6 +20,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	private String configurationId;
 	private String name;
 	private List<ClassProperty<Object>> properties = new ArrayList<>();
+	private List<EnumDefinition> enums = new ArrayList<>();
 	private ClassArchetype classArchetype;
 	
 	
@@ -75,7 +77,7 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	public void setProperties(List<ClassProperty<Object>> properties) {
 		this.properties = properties;
 	}
-	
+	/*
 	public Boolean containsProperty(String name){
 		if (properties == null || properties.size() == 0)
 			return false;
@@ -84,8 +86,17 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 				return true;
 		}
 		return false;
-	}
+	}*/
 	
+
+	public List<EnumDefinition> getEnums() {
+		return enums;
+	}
+
+	public void setEnums(List<EnumDefinition> enums) {
+		this.enums = enums;
+	}
+
 	public String getImagePath() {
 		return imagePath;
 	}

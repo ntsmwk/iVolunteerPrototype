@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class ClassInstanceMapper {
 
 	@Autowired private Hasher hasher;
 	@Autowired private DateTimeService dateTimeService;
-	
+
 	List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {
 			ClassInstanceDTO dto = new ClassInstanceDTO();
@@ -29,11 +30,12 @@ public class ClassInstanceMapper {
 			dto.setClassArchetype(ci.getClassArchetype());
 			dto.setImagePath(ci.getImagePath());
 			dto.setTimestamp(ci.getTimestamp());
-
-//			dto.setPublished(ci.isPublished());
-//			dto.setInUserRepository(ci.isInUserRepository());
-//			dto.setInIssuerInbox(ci.isInIssuerInbox());
+			dto.setMarketplaceId(ci.getMarketplaceId());
 			dto.setHash(hasher.generateHash(ci));
+
+			// dto.setPublished(ci.isPublished());
+			// dto.setInUserRepository(ci.isInUserRepository());
+			// dto.setInIssuerInbox(ci.isInIssuerInbox());
 
 			PropertyInstance<Object> name = ci.getProperties().stream().filter(p -> "name".equals(p.getName()))
 					.findFirst().orElse(null);
@@ -56,10 +58,18 @@ public class ClassInstanceMapper {
 			if (startingDate != null) {
 				if (startingDate.getValues().size() > 0) {
 					try {
+						// TODO Philipp (timestamp data long...)
 						dto.setDateFrom((Date) startingDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService.parseMultipleDateFormats((String)startingDate.getValues().get(0));
-						dto.setDateFrom(parsedDate);
+						try {
+							Date parsedDate = this.dateTimeService
+									.parseMultipleDateFormats((String) startingDate.getValues().get(0));
+							dto.setDateFrom(parsedDate);
+						} catch (Exception f) {
+							Instant instant = Instant.ofEpochMilli((Long) startingDate.getValues().get(0));
+							Date d = Date.from(instant);
+							dto.setDateFrom(d);
+						}
 					}
 				}
 			}
@@ -69,10 +79,17 @@ public class ClassInstanceMapper {
 			if (endDate != null) {
 				if (endDate.getValues().size() > 0) {
 					try {
-					dto.setDateTo((Date) endDate.getValues().get(0));
+						dto.setDateTo((Date) endDate.getValues().get(0));
 					} catch (ClassCastException e) {
-						Date parsedDate = this.dateTimeService.parseMultipleDateFormats((String)endDate.getValues().get(0));
-						dto.setDateTo(parsedDate);
+						try {
+							Date parsedDate = this.dateTimeService
+									.parseMultipleDateFormats((String) endDate.getValues().get(0));
+							dto.setDateTo(parsedDate);
+						} catch (Exception f) {
+							Instant instant = Instant.ofEpochMilli((Long) endDate.getValues().get(0));
+							Date d = Date.from(instant);
+							dto.setDateTo(d);
+						}
 					}
 				}
 			}

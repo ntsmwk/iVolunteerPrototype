@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.marketplace.blockchainify.ContractorPublishingRestClient;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepository;
-import at.jku.cis.iVolunteer.marketplace.task.ContractorPublishingRestClient;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 
 @Service

@@ -1,11 +1,9 @@
 package at.jku.cis.iVolunteer.marketplace.configurations.matching;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,10 +39,10 @@ public class MatchingConfigurationController {
 			@PathVariable("producerClassConfigurationId") String producerClassConfigurationId,
 			@PathVariable("consumerClassConfigurationId") String consumerClassConfigurationId) {
 
-		return matchingConfigurationRepository
-				.findByProducerClassConfigurationIdAndConsumerClassConfigurationId(producerClassConfigurationId, consumerClassConfigurationId);
+		return matchingConfigurationRepository.findByProducerClassConfigurationIdAndConsumerClassConfigurationId(
+				producerClassConfigurationId, consumerClassConfigurationId);
 	}
-	
+
 	@GetMapping("matching-configuration/by-class-configurators/{classConfigurationId1}/{classConfigurationId2}/unordered")
 	MatchingConfiguration getMatchingConfiguratorByClassConfigurationIdsUnordered(
 			@PathVariable("classConfigurationId1") String classConfigurationId1,
@@ -56,26 +54,28 @@ public class MatchingConfigurationController {
 	}
 
 	@PostMapping("matching-configuration/save")
-	MatchingConfiguration saveMatchingConfiguration(
-			@RequestBody MatchingConfiguration matchingConfiguration) {
+	MatchingConfiguration saveMatchingConfiguration(@RequestBody MatchingConfiguration matchingConfiguration) {
 		if (matchingConfiguration.getId() == null) {
-			matchingConfiguration.setId(createHashFromClassConfigurationIds(matchingConfiguration.getProducerClassConfigurationId(),
-					matchingConfiguration.getConsumerClassConfigurationId()));
+			matchingConfiguration
+					.setId(createHashFromClassConfigurationIds(matchingConfiguration.getProducerClassConfigurationId(),
+							matchingConfiguration.getConsumerClassConfigurationId()));
 
-			ClassConfiguration producer = configuratorRepository.findOne(matchingConfiguration.getProducerClassConfigurationId());
-			ClassConfiguration consumer = configuratorRepository.findOne(matchingConfiguration.getConsumerClassConfigurationId());
+			ClassConfiguration producer = configuratorRepository
+					.findOne(matchingConfiguration.getProducerClassConfigurationId());
+			ClassConfiguration consumer = configuratorRepository
+					.findOne(matchingConfiguration.getConsumerClassConfigurationId());
 
 			matchingConfiguration.setProducerClassConfigurationName(producer.getName());
 			matchingConfiguration.setConsumerClassConfigurationName(consumer.getName());
-			
+
 			if (matchingConfiguration.getName() == null) {
 				matchingConfiguration.setName(producer.getName() + " --> " + consumer.getName());
 			}
 
 		}
-		
+
 		matchingConfiguration.setTimestamp(new Date());
-		
+
 		return matchingConfigurationRepository.save(matchingConfiguration);
 	}
 
@@ -89,13 +89,13 @@ public class MatchingConfigurationController {
 
 		matchingConfigurationRepository.delete(id);
 	}
-	
+
 	@PutMapping("matching-configuration/delete-multiple")
 	private List<MatchingConfiguration> deleteMultipleMatchingConfigurations(@RequestBody() List<String> ids) {
 //		List<MatchingConfiguration> matchingConfigurations = new ArrayList<>();
 //		this.matchingConfigurationRepository.findAll(ids).forEach(matchingConfigurations::add);;
 //		this.matchingConfigurationRepository.delete(matchingConfigurations);
-		
+
 		ids.forEach(this.matchingConfigurationRepository::delete);
 		return this.matchingConfigurationRepository.findAll();
 	}

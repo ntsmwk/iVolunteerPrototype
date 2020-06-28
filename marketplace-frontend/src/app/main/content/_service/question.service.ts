@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
   DropdownQuestion, QuestionBase, TextboxQuestion, NumberBoxQuestion, NumberDropdownQuestion, TextAreaQuestion,
-  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, TupleDropdownQuestion
+  SlideToggleQuestion, DropdownMultipleQuestion, DatepickerQuestion, GenericQuestion, TupleDropdownQuestion, MultipleSelectionEnumQuestion, SingleSelectionEnumQuestion
 } from '../_model/dynamic-forms/questions';
 import { PropertyType, ClassProperty } from '../_model/meta/property';
 import { isNullOrUndefined } from 'util';
 import { Validators, ValidatorFn } from '@angular/forms';
-
 import { PropertyConstraint, ConstraintType } from '../_model/meta/constraint';
 
 export interface ValidatorData {
@@ -38,7 +37,6 @@ export class QuestionService {
 
       const question = this.createQuestionFromProperty(property);
 
-
       if (!isNullOrUndefined(idPrefix)) {
         question.key = idPrefix + '.' + property.id;
       } else {
@@ -54,6 +52,7 @@ export class QuestionService {
         question.messages = validatorData.messages;
       }
       question.required = property.required;
+
       if (property.required) {
         question.validators.push(Validators.required);
       }
@@ -67,25 +66,18 @@ export class QuestionService {
     let question;
     if (property.type === PropertyType.TEXT) {
       if (isNullOrUndefined(property.allowedValues) || property.allowedValues.length <= 0) {
-
         question = new TextboxQuestion({
           value: ClassProperty.getDefaultValue(property),
         });
-
       } else {
-
         if (property.multiple) {
           question = new DropdownMultipleQuestion({
-            // values: this.setKeys(property.defaultValues),
-            // options: this.setListValues(property.allowedValues),
             values: property.defaultValues,
             options: this.setAsListValues(property.allowedValues)
-
           });
         } else {
           question = new DropdownQuestion({
             value: ClassProperty.getDefaultValue(property),
-            // options: this.setListValues(property.allowedValues),
             options: property.allowedValues
           });
         }
@@ -99,22 +91,16 @@ export class QuestionService {
         });
 
       } else {
-
         if (property.multiple) {
           question = new DropdownMultipleQuestion({
-            // values: this.setKeys(property.defaultValues),
-            // options: this.setListValues(property.allowedValues),
             values: property.defaultValues,
             options: property.allowedValues
 
           });
         } else {
-
           question = new NumberDropdownQuestion({
-            // options: this.setListValues(property.allowedValues),
             value: ClassProperty.getDefaultValue(property),
             options: property.allowedValues
-
           });
         }
       }
@@ -130,35 +116,23 @@ export class QuestionService {
       });
 
     } else if (property.type === PropertyType.ENUM) {
-      // if (property.multiple) {
-      //   question = new MultipleSelectionEnumQuestion({
-      //     // TODO
-      //     values: property.defaultValues,
-      //     options: property.allowedValues
-      //   });
-      // } else {
-      //   question = new SingleSelectionEnumQuestion({
-      //     // TODO
-      //     values: property.defaultValues,
-      //     options: property.allowedValues
-      //   });
-      // }
-
+      if (property.multiple) {
+        question = new MultipleSelectionEnumQuestion({
+          values: property.defaultValues,
+          options: property.allowedValues
+        });
+      } else {
+        question = new SingleSelectionEnumQuestion({
+          values: property.defaultValues,
+          value: ClassProperty.getDefaultValue(property),
+          options: property.allowedValues
+        });
+      }
     } else if (property.type === PropertyType.DATE) {
       question = new DatepickerQuestion({
         value: this.setDateValue(ClassProperty.getDefaultValue(property)),
       });
 
-
-      // }
-
-      /// TEST MultiProp List
-      // else if (property.type === PropertyType.MULTI) {
-      //   console.log("Multiple Property found:");
-      //   console.log(property);
-      //   question = new MultipleQuestion({
-      //     subQuestions: this.setQuestions(property.properties),
-      //   });
     } else if (property.type === PropertyType.TUPLE) {
       if (!isNullOrUndefined(property.allowedValues) && property.allowedValues.length > 0) {
         question = new TupleDropdownQuestion({
@@ -166,11 +140,9 @@ export class QuestionService {
           value: ClassProperty.getDefaultValue(property)
         });
       }
-
     } else {
       console.log('property kind not implemented: ' + property.type);
       question = new GenericQuestion({
-
       });
     }
     return question;
@@ -186,44 +158,9 @@ export class QuestionService {
     return ret;
   }
 
-
-  private setValuesWithoutKeys(values: any[]): any {
-
-    const ret: any[] = [];
-    if (!isNullOrUndefined(values)) {
-      for (let i = 0; i < values.length; i++) {
-        ret.push(values[i].value);
-      }
-    }
-    return ret;
-  }
-
-
   private setDateValue(value: any) {
-    if (!isNullOrUndefined(value)) {
-      return new Date(value);
-    } else {
-      return undefined;
-    }
+    return !isNullOrUndefined ? new Date(value) : undefined;
   }
-
-  private setDateValueArr(value: Date): Date[] {
-    const ret: Date[] = [];
-    ret.push(this.setDateValue(value));
-    return ret;
-  }
-
-  private setKeys(values: any[]): any {
-
-    const ret: string[] = [];
-    if (!isNullOrUndefined(values)) {
-      for (const val of values) {
-        ret.push(val);
-      }
-    }
-    return ret;
-  }
-
 
   private getValidatorData(propertyConstraints: PropertyConstraint<any>[], propertyType: PropertyType): ValidatorData {
     const validators: ValidatorFn[] = [];

@@ -4,17 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ws.rs.NotAcceptableException;
-
-import org.apache.commons.collections4.iterators.SingletonListIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace._mapper.OneWayMapper;
 import at.jku.cis.iVolunteer.marketplace._mapper.property.ClassPropertyToPropertyInstanceMapper;
-import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.achievement.AchievementClassInstance;
@@ -59,7 +54,7 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 		classInstance.setClassDefinitionId(source.getId());
 
 		classInstance.setName(source.getName());
-		
+
 		if (source.getConfigurationId() != null) {
 			classInstance.setProperties(getParentProperties(source));
 		} else {
@@ -69,7 +64,7 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 			}
 			classInstance.setProperties(properties);
 		}
-		
+
 		classInstance.setVisible(source.isVisible());
 		classInstance.setTabId(source.getTabId());
 
@@ -89,12 +84,13 @@ public class ClassDefinitionToInstanceMapper implements OneWayMapper<ClassDefini
 
 		return instances;
 	}
-	
 
 	private List<PropertyInstance<Object>> getParentProperties(ClassDefinition classDefinition) {
 		List<ClassProperty<Object>> properties = new ArrayList<>();
-		
-		properties = this.classDefinitionService.getClassDefinitionsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry().getClassProperties();
+
+		properties = this.classDefinitionService
+				.getClassDefinitionsById(Collections.singletonList(classDefinition.getId())).get(0).getFormEntry()
+				.getClassProperties();
 		return classPropertyToPropertyInstanceMapper.toTargets(properties);
 	}
 

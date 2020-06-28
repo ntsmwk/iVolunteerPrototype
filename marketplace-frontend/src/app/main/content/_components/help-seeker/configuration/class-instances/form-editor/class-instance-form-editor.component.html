@@ -1,60 +1,82 @@
-<div #contentDiv id="contentDiv" class="page-layout blank p-20 pl-0" fusePerfectScrollbar *ngIf="loaded">
-
-    <div *ngIf="!showResultPage">
-        <div>
-
-            <mat-accordion multi=true displayMode="flat">
-                <app-form-entry-view [formEntry]="currentFormConfiguration.formEntry"
-                    [formConfiguration]="currentFormConfiguration" [finishClicked]="finishClicked" expanded="true"
-                    (result)=handleResultEvent($event) (tupleSelected)="handleTupleSelection($event)">
-                </app-form-entry-view>
-            </mat-accordion>
-
-        </div>
-
-        <div class="pt-12 divider"></div>
-
-        <div class="volunteer-selection">
-            <mat-accordion displayMode="flat">
-                <mat-expansion-panel #volunteerPanel>
-                    <mat-expansion-panel-header expandedHeight="40px">
-                        <mat-panel-title>
-                            Freiwillige Zuteilen (optional)
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <app-instance-creation-volunteer-list [helpseeker]="helpseeker"
-                        (selectedVolunteers)="selectedVolunteers=$event" *ngIf="volunteerPanel.expanded">
-                    </app-instance-creation-volunteer-list>
-
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-
-
-
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-20 mb-20">
-            <div></div>
-            <div fxLayout="row">
-                <button style="width: 100px" type="button" mat-raised-button color="primary"
-                    (click)="handleFinishClick()">
-                    Fertig
-                </button>
-
-                <div class="pr-8"></div>
-
-                <button style="width: 100px" type="button" mat-raised-button color="basic" (click)="navigateBack()">
-                    Abbrechen
-                </button>
-            </div>
-            <div></div>
-        </div>
+<div
+  #contentDiv
+  id="contentDiv"
+  class="page-layout blank p-20 pl-0"
+  fusePerfectScrollbar
+  *ngIf="loaded"
+>
+  <div *ngIf="!showResultPage">
+    <div>
+      <mat-accordion multi="true" displayMode="flat">
+        <app-form-entry-view
+          [formEntry]="currentFormConfiguration.formEntry"
+          [formConfiguration]="currentFormConfiguration"
+          [finishClicked]="finishClicked"
+          expanded="true"
+          (result)="handleResultEvent($event)"
+          (tupleSelected)="handleTupleSelection($event)"
+        >
+        </app-form-entry-view>
+      </mat-accordion>
     </div>
 
-    <div *ngIf="showResultPage">
-        <app-instance-creation-result [resultClassInstance]="resultClassInstance"></app-instance-creation-result>
+    <div class="pt-12 divider"></div>
+
+    <div class="volunteer-selection">
+      <mat-accordion displayMode="flat">
+        <mat-expansion-panel #volunteerPanel>
+          <mat-expansion-panel-header expandedHeight="40px">
+            <mat-panel-title>
+              Freiwillige Zuteilen (optional)
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <app-instance-creation-volunteer-list
+            [helpseeker]="helpseeker"
+            (selectedVolunteers)="selectedVolunteers = $event"
+            *ngIf="volunteerPanel.expanded"
+          >
+          </app-instance-creation-volunteer-list>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
 
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      class="mt-20 mb-20"
+    >
+      <div></div>
+      <div fxLayout="row">
+        <button
+          style="width: 100px;"
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="handleFinishClick()"
+        >
+          Fertig
+        </button>
 
+        <div class="pr-8"></div>
 
+        <button
+          style="width: 100px;"
+          type="button"
+          mat-raised-button
+          color="basic"
+          (click)="navigateBack()"
+        >
+          Abbrechen
+        </button>
+      </div>
+      <div></div>
+    </div>
+  </div>
+
+  <div *ngIf="showResultPage">
+    <app-instance-creation-result
+      [resultClassInstance]="resultClassInstance"
+    ></app-instance-creation-result>
+  </div>
 </div>

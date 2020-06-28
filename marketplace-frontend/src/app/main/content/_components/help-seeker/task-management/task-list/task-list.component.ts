@@ -9,10 +9,10 @@ import { LoginService } from "app/main/content/_service/login.service";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
-import { Task } from "app/main/content/_model/task";
-import { isNullOrUndefined } from "util";
 import { Tenant } from "app/main/content/_model/tenant";
 import { Helpseeker } from "app/main/content/_model/helpseeker";
+import { GlobalService } from "app/main/content/_service/global.service";
+import { GlobalInfo } from "app/main/content/_model/global-info";
 
 @Component({
   selector: "fuse-task-list",
@@ -47,28 +47,22 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private helpSeekerService: CoreHelpSeekerService,
     private classInstanceService: ClassInstanceService,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private globalService: GlobalService
   ) {}
 
   ngOnInit() {}
 
   async ngAfterViewInit() {
-    this.participant = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
+    let globalInfo = <GlobalInfo>(
+      await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.marketplace = <Marketplace>(
-      await this.helpSeekerService
-        .findRegisteredMarketplaces(this.participant.id)
-        .toPromise()
-    );
-    this.tenant = <Tenant>(
-      await this.tenantService.findById(this.participant.tenantId).toPromise()
-    );
+    this.participant = <Helpseeker>globalInfo.participant;
+    this.marketplace = globalInfo.marketplace;
+    this.tenant = globalInfo.tenants[0];
 
-    // this.paginator.length = this.tableDataSource.data.length;
     this.tableDataSource.paginator = this.paginator;
-
     this.tableDataSource.data = <ClassInstanceDTO[]>(
       await this.classInstanceService
         .getAllClassInstances(this.marketplace, this.tenant.id)
@@ -76,7 +70,7 @@ export class FuseTaskListComponent implements OnInit, AfterViewInit {
     );
   }
 
-  rowSelected(task: Task) {
+  rowSelected(task) {
     this.router.navigate(["main/details/" + task.id]);
   }
 

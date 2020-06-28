@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { GlobalInfo } from "../_model/global-info";
 import { Participant, ParticipantRole } from "../_model/participant";
@@ -8,13 +8,13 @@ import { Volunteer } from "../_model/volunteer";
 import { MarketplaceService } from "./core-marketplace.service";
 import { LoginService } from "./login.service";
 import { Marketplace } from "../_model/marketplace";
-import { HelpseekerService } from "./helpseeker.service";
 import { VolunteerService } from "./volunteer.service";
 import { CoreVolunteerService } from "./core-volunteer.service";
 import { CoreHelpSeekerService } from "./core-helpseeker.service";
+import { timeInterval } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
-export class ServiceNameService {
+export class GlobalService {
   globalInfo: GlobalInfo;
 
   constructor(
@@ -26,29 +26,31 @@ export class ServiceNameService {
     private marketplaceService: MarketplaceService
   ) {}
 
-  async getGlobalInfo() {
-    this.globalInfo.participant = <Participant>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+  getGlobalInfo() {
+    // TODO make only once
+    return this.httpClient.get(`/core/global`);
+    // setTimeout(() => {
+    //   while (this.globalInfo == null) {
+    //     console.error("globalinfo == null");
+    //     this.initializeGlobalInfo();
 
-    this.globalInfo.participantRole = <ParticipantRole>(
-      await this.loginService.getLoggedInParticipantRole().toPromise()
-    );
+    //     console.error("await");
+    //     console.error(this.globalInfo);
+    //   }
+    // }, 2000);
+    // return new Promise(() => this.globalInfo);
+  }
 
-    if (this.globalInfo.participantRole === "HELP_SEEKER") {
-      this.globalInfo.marketplace = <Marketplace>(
-        await this.coreHelpseekerService
-          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-          .toPromise()
-      );
-    } else if (this.globalInfo.participantRole === "VOLUNTEER") {
-      let marketplaces = [];
-      marketplaces = <Marketplace[]>(
-        await this.coreVolunteerService
-          .findRegisteredMarketplaces(this.globalInfo.participant.id)
-          .toPromise()
-      );
-      this.globalInfo.marketplace = marketplaces[0];
-    }
+  private initializeGlobalInfo() {
+    console.error("initialize");
+    this.globalInfo = new GlobalInfo();
+    this.httpClient
+      .get(`/core/global`)
+      .toPromise()
+      .then((gi: GlobalInfo) => (this.globalInfo = gi));
+  }
+
+  clearGlobalInfo() {
+    this.globalInfo = undefined;
   }
 }

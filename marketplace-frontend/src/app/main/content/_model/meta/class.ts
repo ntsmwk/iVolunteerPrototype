@@ -1,4 +1,4 @@
-import { ClassProperty, PropertyInstance } from './property';
+import { ClassProperty, PropertyInstance } from "./property";
 
 export class ClassDefinition {
   id: string;
@@ -14,6 +14,7 @@ export class ClassDefinition {
   writeProtected: boolean;
 
   properties: ClassProperty<any>[] = [];
+
   marketplaceId: string;
   timestamp: Date;
 
@@ -90,6 +91,7 @@ export class ClassInstance {
 export class ClassInstanceDTO {
   name: string;
   id: string;
+  marketplaceId: string;
   tenantId: string;
   issuerId: string;
   blockchainDate: Date;
@@ -107,8 +109,6 @@ export class ClassInstanceDTO {
   hash: string;
   imagePath: string;
   timestamp: Date;
-
-
   published: boolean;
   inUserRepository: boolean;
   inIssuerInbox: boolean;
@@ -158,33 +158,40 @@ export class AchievementClassInstance extends ClassInstance {
 }
 
 export enum ClassArchetype {
-  COMPETENCE = 'COMPETENCE',
-  TASK = 'TASK',
-  FUNCTION = 'FUNCTION',
-  ACHIEVEMENT = 'ACHIEVEMENT',
-  ENUM_HEAD = 'ENUM_HEAD',
-  ENUM_ENTRY = 'ENUM_ENTRY',
-  ROOT = 'ROOT',
+  COMPETENCE = "COMPETENCE",
+  TASK = "TASK",
+  FUNCTION = "FUNCTION",
+  ACHIEVEMENT = "ACHIEVEMENT",
+  ENUM_HEAD = "ENUM_HEAD",
+  ENUM_ENTRY = "ENUM_ENTRY",
+  ROOT = "ROOT",
   // COMPETENCE_HEAD = 'COMPETENCE_HEAD',
   // TASK_HEAD = 'TASK_HEAD',
   // FUNCTION_HEAD = 'FUNCTION_HEAD',
   // ACHIEVEMENT_HEAD = 'ACHIEVEMENT_HEAD',
 
-  FLEXPROD = 'FLEXPROD',
+  FLEXPROD = "FLEXPROD",
 }
 
 export namespace ClassArchetype {
   export function getClassArchetypeLabel(classArchetype: ClassArchetype) {
     switch (classArchetype) {
-      // case 'COMPETENCE': return 'Competence';
-      // case 'TASK': return 'Task';
-      // case 'FUNCTION': return 'Function';
-      // case 'ACHIEVEMENT': return 'Achievement';
-      // case 'ENUM_HEAD': return 'Enum head';
-      // case 'ENUM_ENTRY': return 'Enum entry';
-      // case 'ROOT': return 'Root';
-      case 'FLEXPROD':
-        return 'Flexprod';
+      case "COMPETENCE":
+        return "Kompetenz";
+      case "TASK":
+        return "Tätigkeit";
+      case "FUNCTION":
+        return "Funktion";
+      case "ACHIEVEMENT":
+        return "Verdienst";
+      case "ENUM_HEAD":
+        return "Enum head";
+      case "ENUM_ENTRY":
+        return "Enum entry";
+      case "ROOT":
+        return "Root";
+      case "FLEXPROD":
+        return "Flexprod";
     }
   }
 }

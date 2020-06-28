@@ -1,9 +1,12 @@
 import { isNullOrUndefined } from 'util';
 import { PropertyConstraint } from './constraint';
+import { EnumEntry } from './enum';
 
 export class PropertyDefinition<T> {
     id: string;
     name: string;
+    description: string;
+
     tenantId: string;
 
     custom: boolean;
@@ -15,10 +18,10 @@ export class PropertyDefinition<T> {
 
     unit: string;
 
-
     required: boolean;
     propertyConstraints: PropertyConstraint<T>[];
 
+    timestamp: Date;
     visible: boolean;
     tabId: number;
 }
@@ -26,8 +29,6 @@ export class PropertyDefinition<T> {
 export class ClassProperty<T> {
     id: string;
     name: string;
-
-    exportLabel: string;
 
     defaultValues: T[];
     allowedValues: T[];
@@ -49,7 +50,7 @@ export class ClassProperty<T> {
 
     propertyConstraints: PropertyConstraint<T>[];
 
-    public static getDefaultValue(templateProperty: TemplateProperty<any>): any {
+    public static getDefaultValue(templateProperty: ClassProperty<any>): any {
         if (!isNullOrUndefined(templateProperty.defaultValues) && templateProperty.defaultValues.length >= 1) {
             return templateProperty.defaultValues[0];
         } else {
@@ -66,9 +67,6 @@ export class EnumReference {
         this.enumClassId = enumClassId;
     }
 
-}
-
-export class TemplateProperty<T> extends ClassProperty<T>{
 }
 
 export class PropertyInstance<T> {
@@ -110,8 +108,26 @@ export class PropertyInstance<T> {
         this.propertyConstraints = classProperty.propertyConstraints;
         this.visible = classProperty.visible;
         this.tabId = classProperty.tabId;
-    }
 
+
+
+        if (classProperty.type === PropertyType.ENUM) {
+            const rootValue = this.values[0] as unknown as EnumEntry;
+
+            let i = (classProperty as ClassProperty<unknown> as ClassProperty<EnumEntry>)
+                .allowedValues.findIndex(a => a.id === rootValue.id);
+            let currentLevel = rootValue.level;
+
+            for (i; i >= 0; i--) {
+                const currentAllowedValue = this.allowedValues[i] as unknown as EnumEntry;
+                if (currentAllowedValue.level < currentLevel) {
+                    // this.values.push(classProperty.allowedValues[i]);
+                    rootValue.parents.push(currentAllowedValue);
+                    currentLevel--;
+                }
+            }
+        }
+    }
 }
 
 

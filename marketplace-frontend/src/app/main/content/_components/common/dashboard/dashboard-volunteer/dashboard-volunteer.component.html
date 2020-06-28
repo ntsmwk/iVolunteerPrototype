@@ -68,30 +68,33 @@
           </button>
         </div>
         <div
-          fxLayout="row"
-          fxLayoutAlign="end center"
+          fxLayout="column"
+          fxLayoutAlign="start   center"
           *ngIf="
-            filteredClassInstances.length > 0 &&
+            filteredClassInstanceDTOs.length > 0 &&
             isLocalRepositoryConnected &&
             selectedTenants.length > 0
           "
         >
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="syncAllToLocalRepository()"
-          >
-            Auswahl synchronisieren
-          </button>
+          <div>FreiwilligenPass</div>
+          <div fxLayout="row" fxLayoutAlign="end center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="syncAllToLocalRepository()"
+            >
+              Auswahl synchronisieren
+            </button>
 
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="removeAllFromLocalRepository()"
-            style="margin-left: 20px;"
-          >
-            Auswahl entfernen
-          </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="removeAllFromLocalRepository()"
+              style="margin-left: 20px;"
+            >
+              Auswahl desynchronisieren
+            </button>
+          </div>
         </div>
       </div>
       <div fxLayout="column">
@@ -118,7 +121,7 @@
 
   <div
     *ngIf="
-      filteredClassInstances.length > 0 &&
+      filteredClassInstanceDTOs.length > 0 &&
       isLocalRepositoryConnected &&
       selectedTenants.length > 0
     "
@@ -197,7 +200,7 @@
             ></mat-icon>
 
             <mat-icon
-              *ngIf="!inLocalRepository(entry)"
+              *ngIf="!isInLocalRepository(entry)"
               (click)="syncOneToLocalRepository(entry)"
               svgIcon="plus"
               style="cursor: pointer; margin-left: 20px;"
@@ -206,7 +209,7 @@
             </mat-icon>
 
             <mat-icon
-              *ngIf="inLocalRepository(entry)"
+              *ngIf="isInLocalRepository(entry)"
               (click)="removeOneFromLocalRepository(entry)"
               svgIcon="minus"
               style="cursor: pointer; margin-left: 20px;"
@@ -214,7 +217,16 @@
             >
             </mat-icon>
 
-            <div *ngIf="inLocalRepository(entry)">
+            <mat-icon
+              *ngIf="isSynced(entry)"
+              (click)="removeOneFromMarketplace(entry)"
+              svgIcon="storeSlash"
+              style="cursor: pointer; margin-left: 20px;"
+              matTooltip="Vom Marketplace entfernen"
+            >
+            </mat-icon>
+
+            <div *ngIf="isInLocalRepository(entry)">
               <mat-icon
                 svgIcon="share"
                 style="cursor: pointer; margin-left: 20px;"
@@ -229,26 +241,47 @@
                 [overlapTrigger]="false"
               >
                 <ng-template matMenuContent>
+                  <ng-container *ngIf="isSynced(entry)">
+                    <button
+                      *ngFor="let tenant of getShareableTenants(entry)"
+                      mat-menu-item
+                      (click)="shareClassInstanceToOthers(entry, tenant)"
+                    >
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <img
+                          class="avatar"
+                          src="{{
+                            'data:image/png;base64,' + getTenantImage(tenant.id)
+                          }}"
+                        />
+                        <div>{{ tenant.name }}</div>
+                      </div>
+                    </button>
+                  </ng-container>
                   <button
-                    *ngFor="let tenant of getShareableTenants(entry)"
+                    *ngIf="
+                      getShareableTenants(entry) &&
+                      getShareableTenants(entry).length === 0
+                    "
                     mat-menu-item
-                    (click)="shareClassInstance(entry, tenant)"
+                  >
+                    Bereits an alle geteilt!
+                  </button>
+                  <button
+                    *ngIf="!isSynced(entry)"
+                    mat-menu-item
+                    (click)="shareClassInstanceToIssuer(entry)"
                   >
                     <div fxLayout="row" fxLayoutAlign="start center">
                       <img
                         class="avatar"
                         src="{{
-                          'data:image/png;base64,' + getTenantImage(tenant.id)
+                          'data:image/png;base64,' +
+                            getTenantImage(entry.tenantId)
                         }}"
                       />
-                      <div>{{ tenant.name }}</div>
+                      <div>{{ getTenantName(entry.tenantId) }}</div>
                     </div>
-                  </button>
-                  <button
-                    *ngIf="getShareableTenants(entry).length == 0"
-                    mat-menu-item
-                  >
-                    Bereits an alle geteilt!
                   </button>
                 </ng-template>
               </mat-menu>
@@ -262,7 +295,7 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let entry">
             <img
-              *ngFor="let tenant of getSharedWith(entry)"
+              *ngFor="let tenant of getSharedWithTenants(entry)"
               class="avatar"
               matTooltip="{{ tenant.name }}"
               src="{{ 'data:image/png;base64,' + getTenantImage(tenant.id) }}"
@@ -279,7 +312,7 @@
               <ng-template matMenuContent let-tenant="tenant">
                 <button
                   mat-menu-item
-                  (click)="revokeClassInstance(entry, tenant)"
+                  (click)="revokeSharedClassInstance(entry, tenant)"
                 >
                   Zurückziehen
                 </button>
@@ -293,7 +326,7 @@
         ></mat-header-row>
         <mat-row
           *matRowDef="let element; let row; columns: displayedColumnsRepository"
-          [ngStyle]="getStyle(element)"
+          [ngStyle]="getTableRowColor(element)"
         ></mat-row>
       </mat-table>
     </div>
@@ -330,7 +363,7 @@
   <p
     *ngIf="
       timeout &&
-      filteredClassInstances.length === 0 &&
+      filteredClassInstanceDTOs.length === 0 &&
       selectedTenants.length > 0 &&
       isLocalRepositoryConnected
     "

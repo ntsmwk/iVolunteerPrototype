@@ -57,4 +57,4 @@ const routes = [
     FuseSharedModule,
   ],
 })
-export class FuseRuleConfiguratorModule {}
+export class FuseRuleConfiguratorModule { }

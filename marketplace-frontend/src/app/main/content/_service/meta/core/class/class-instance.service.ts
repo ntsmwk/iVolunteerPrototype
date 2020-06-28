@@ -31,6 +31,23 @@ export class ClassInstanceService {
     );
   }
 
+  getClassInstancesById(marketplace: Marketplace, classInstanceIds: String[]) {
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/instances`,
+      classInstanceIds
+    );
+  }
+
+  mapClassInstancesToDTOs(
+    marketplace: Marketplace,
+    classInstances: ClassInstance[]
+  ) {
+    return this.http.post(
+      `${marketplace.url}/meta/core/class/instanceDTOs`,
+      classInstances
+    );
+  }
+
   getClassInstancesInUserInbox(
     marketplace: Marketplace,
     issuerId: string,
@@ -67,14 +84,11 @@ export class ClassInstanceService {
     tenantId: string,
     classInstanceId: string
   ) {
-
     return this.http.post(
       `${marketplace.url}/meta/core/class/instance/newShared?tId=${tenantId}`,
-      classInstanceId   
+      classInstanceId
     );
-    
   }
-  
 
   createClassInstanceByClassDefinitionId(
     marketplace: Marketplace,
@@ -127,12 +141,12 @@ export class ClassInstanceService {
     );
   }
 
-  updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
-    return this.http.put(
-      `${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`,
-      classInstance
-    );
-  }
+  // updateClassInstance(marketplace: Marketplace, classInstance: ClassInstance) {
+  //   return this.http.put(
+  //     `${marketplace.url}/meta/core/class/instance/${classInstance.id}/update`,
+  //     classInstance
+  //   );
+  // }
 
   deleteClassInstance(marketplace: Marketplace, classInstanceId: string) {
     return this.http.delete(

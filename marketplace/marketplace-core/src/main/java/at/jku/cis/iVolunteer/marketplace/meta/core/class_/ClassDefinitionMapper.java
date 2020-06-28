@@ -1,30 +1,25 @@
 package at.jku.cis.iVolunteer.marketplace.meta.core.class_;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationController;
 import at.jku.cis.iVolunteer.marketplace.configurations.clazz.ClassConfigurationRepository;
 import at.jku.cis.iVolunteer.model.configurations.clazz.ClassConfiguration;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassDefinition;
-import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Component
 public class ClassDefinitionMapper {
 
-	
 	@Autowired private ClassConfigurationRepository classConfigurationRepository;
-	
+
 	List<ClassDefinitionDTO> mapToDTO(List<ClassDefinition> classDefinitions) {
-		
+
 		List<ClassDefinitionDTO> classDefinitionDTOs = classDefinitions.stream().map(cd -> {
 			ClassDefinitionDTO dto = new ClassDefinitionDTO();
-			
+
 			dto.setId(cd.getId());
 			dto.setParentId(cd.getParentId());
 			dto.setConfigurationId(cd.getConfigurationId());
@@ -37,9 +32,8 @@ public class ClassDefinitionMapper {
 			dto.setRoot(cd.isRoot());
 			dto.setVisible(cd.isVisible());
 			dto.setTabId(cd.getTabId());
-			
 
-			setConfigurationName(cd, dto);			
+			setConfigurationName(cd, dto);
 			return dto;
 
 		}).collect(Collectors.toList());
@@ -60,5 +54,4 @@ public class ClassDefinitionMapper {
 		// @formatter:on
 	}
 
-	
 }

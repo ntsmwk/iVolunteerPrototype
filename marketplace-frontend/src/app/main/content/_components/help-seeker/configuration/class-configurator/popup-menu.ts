@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 import { AssociationCardinality, Association } from 'app/main/content/_model/meta/relationship';
 import { MyMxCell, MyMxCellType } from '../myMxCell';
 import { ClassConfiguratorComponent } from './class-configurator.component';
-import { DialogFactoryDirective } from 'app/main/content/_shared_components/dialogs/_dialog-factory/dialog-factory.component';
+import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
 
 declare var require: any;
 

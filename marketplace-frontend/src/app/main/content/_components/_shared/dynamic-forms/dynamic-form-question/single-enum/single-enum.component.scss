@@ -1,0 +1,31 @@
+.question-container-open {
+    padding: 8px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+.question-container-closed {
+    padding: 8px;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.form-field {
+    width: 100%;
+}
+
+.search-field {
+    // width: 100%;
+     margin: 0 8px;
+}
+
+.list-container  {
+    margin: 8px;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.list-item-container {
+    padding: 12px;
+    width: 100%;
+    background: aquamarine;
+}
