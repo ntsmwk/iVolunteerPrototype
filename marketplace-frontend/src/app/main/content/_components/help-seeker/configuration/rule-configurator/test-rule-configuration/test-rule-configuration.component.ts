@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MatTableDataSource } from "@angular/material/table";
@@ -31,12 +31,9 @@ export class TestRuleConfigurationComponent implements OnInit {
     private derivationRuleService: DerivationRuleService,
 
   ) {
-    console.log("constructor test-rule-configuration");
-    console.log(" derivationRule: " + this.derivationRule);
   }
 
   async ngOnInit() {
-    console.log("init test-rule-configuration --> " + this.derivationRule);
     this.helpseeker = <Helpseeker>(
       await this.loginService.getLoggedIn().toPromise()
     );
@@ -51,7 +48,6 @@ export class TestRuleConfigurationComponent implements OnInit {
   }
 
   private testRule(){
-    console.log("in component test-rule-configuration " + this.derivationRule);
     this.derivationRule.container = "simulate execution " + this.derivationRule.name;
     this.derivationRuleService
       .test(this.marketplace, this.derivationRule)
@@ -59,12 +55,8 @@ export class TestRuleConfigurationComponent implements OnInit {
     //  .then(() => this.derivationRuleService.getTestResults(this.marketplace, this.derivationRule)
     //  .toPromise()
       .then((ruleExecutions: RuleExecution[]) => {
-        console.log(ruleExecutions); 
         this.dataSource.data = ruleExecutions;
-        // this.ruleExecutions = ruleExecutions;
       });
-    //this.dataSource.data = this.ruleExecutions;
-    console.log("loaded? ruleExecutions = " + this.ruleExecutions);
   }
 
   private retrieveStatusValueOf(status) {

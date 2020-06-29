@@ -86,7 +86,6 @@ public class RuleEntryMapper{
 }
 
 	public AttributeCondition toSource (AttributeConditionDTO target) {
-		System.out.println(" target - attribute condition: " + target.getClassProperty().getName());
 		AttributeCondition entry = new AttributeCondition(target.getClassProperty().getId(),
 			                                      target.getValue(), 
 			                                      target.getComparisonOperatorType());

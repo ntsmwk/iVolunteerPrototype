@@ -27,14 +27,12 @@ public class RuleExecution {
 	}
 	
 	public void setStatus(String status) {
-		System.out.println("Status: " + status);
 		this.status = RuleStatus.valueOf(status);
 		if (this.status == RuleStatus.FIRED)
 			timesFired++;
 	}
 	
 	public void setStatus(RuleStatus status) {
-		System.out.println("RuleStatus: " + status);
 		this.status = status;
 		if (this.status == RuleStatus.FIRED)
 			timesFired++;

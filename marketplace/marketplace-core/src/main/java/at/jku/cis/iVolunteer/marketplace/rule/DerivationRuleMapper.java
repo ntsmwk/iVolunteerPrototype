@@ -51,12 +51,7 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 	}
 
 	@Override
-	public DerivationRule toSource(DerivationRuleDTO target) {
-		System.out.println(" derivation rule: " + target.getName());
-		System.out.println(" generalCond: " + target.getGeneralConditions().size());
-		System.out.println(" conditions: " + target.getConditions().size());
-		System.out.println(" actions: " + target.getClassActions());
-		
+	public DerivationRule toSource(DerivationRuleDTO target) {		
 		DerivationRule derivationRule = new DerivationRule();
 		derivationRule.setId(target.getId());
 		derivationRule.setMarketplaceId(target.getMarketplaceId());

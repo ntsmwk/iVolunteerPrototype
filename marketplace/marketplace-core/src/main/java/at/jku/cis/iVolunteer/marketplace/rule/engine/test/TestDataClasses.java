@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.test.data;
+package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -44,7 +44,6 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.test.data.TestDataRK.RolesAmbulanceService;
 
 @Service
 public class TestDataClasses {
@@ -145,7 +144,7 @@ public class TestDataClasses {
 		classConfigRK.setName(slotName);
 		classConfigRK.setClassDefinitionIds(new ArrayList<>());
 		classConfigRK.setRelationshipIds(new ArrayList<>());
-		classConfigFF.setTenantId(tenantId);
+		classConfigRK.setTenantId(tenantId);
 		
 		createGeneralClasses(classConfigRK);
 		createGeneralCompetences(classConfigRK);
@@ -155,7 +154,7 @@ public class TestDataClasses {
 		createClassRolesRK(classConfigRK);
 		createClassVerdiensteRK(classConfigRK);
 		
-		this.classConfigurationController.saveClassConfiguration(classConfigFF);		
+		this.classConfigurationController.saveClassConfiguration(classConfigRK);		
 	}
 	
 	public void createGeneralClasses(ClassConfiguration classConfig) {
@@ -751,8 +750,8 @@ public class TestDataClasses {
 		classPropertyService.updateClassProperty(taskClassEinsatz.getId(), cp.getId(), cp);
 		
 		cp = classPropertyService.getClassPropertyByName(taskClassEinsatz.getId(), "Description", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.EINSATZLENKER,
-				                                                     RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
+		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
+				TestDataInstances.RolesAmbulanceService.SANITÄTER, TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
 		classPropertyService.updateClassProperty(taskClassEinsatz.getId(), cp.getId(), cp);
 		classDefinitions.add(taskClassEinsatz);
 		// 
@@ -761,8 +760,8 @@ public class TestDataClasses {
 		cp.setDefaultValues(Arrays.asList("Sanitätseinsatz"));
 		classPropertyService.updateClassProperty(taskClassAusfahrt.getId(), cp.getId(), cp);
 		cp = classPropertyService.getClassPropertyByName(taskClassAusfahrt.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.EINSATZLENKER,
-                													 RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
+		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
+				TestDataInstances.RolesAmbulanceService.SANITÄTER, TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
 		classPropertyService.updateClassProperty(taskClassAusfahrt.getId(), cp.getId(), cp);
 		classDefinitions.add(taskClassAusfahrt);
 		//
@@ -771,8 +770,8 @@ public class TestDataClasses {
 		cp.setDefaultValues(Arrays.asList("Dienst"));
 		classPropertyService.updateClassProperty(taskClassDienst.getId(), cp.getId(), cp);
 		cp = classPropertyService.getClassPropertyByName(taskClassDienst.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.DISPONENT, RolesAmbulanceService.EINSATZLENKER,
-          								 RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
+		cp.setAllowedValues(Arrays.asList(TestDataInstances.RolesAmbulanceService.DISPONENT, TestDataInstances.RolesAmbulanceService.EINSATZLENKER,
+				TestDataInstances.RolesAmbulanceService.SANITÄTER, TestDataInstances.RolesAmbulanceService.AUSZUBILDENDER));
 		classPropertyService.updateClassProperty(taskClassDienst.getId(), cp.getId(), cp);
 		classDefinitions.add(taskClassDienst);
 		

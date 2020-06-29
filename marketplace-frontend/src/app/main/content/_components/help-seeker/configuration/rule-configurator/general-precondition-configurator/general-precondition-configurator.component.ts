@@ -113,19 +113,12 @@ export class GeneralPreconditionConfiguratorComponent
   }
 
   onOperatorChange(comparisonOperatorType, $event){
-    console.log("on operator change begin ....");
     if ($event.isUserInput) {    // ignore on deselection of the previous option
-      console.log("Selection changed to " + comparisonOperatorType);
-      console.log("operator changed to " + comparisonOperatorType);
       this.generalCondition.comparisonOperatorType = comparisonOperatorType;
-      console.log("op neu: " + this.generalCondition.comparisonOperatorType);
-    }
-    console.log("on operator change end ....");
-    
+    }    
   }
 
   onChange($event) {
-    console.log("on change - before -->" + this.generalCondition.comparisonOperatorType);
     if (this.generalCondition) {
       this.generalCondition.propertyDefinition = this.generalAttributes.find(
         (pd) => pd.id === this.rulePreconditionForm.value.propertyDefinitionId
@@ -134,7 +127,6 @@ export class GeneralPreconditionConfiguratorComponent
       this.generalCondition.value = this.rulePreconditionForm.value.value;
       this.generalConditionChange.emit(this.generalCondition);
     }
-    console.log("after --> " + this.generalCondition.comparisonOperatorType);
   }
 
   private retrieveComparisonOperatorValueOf(op) {

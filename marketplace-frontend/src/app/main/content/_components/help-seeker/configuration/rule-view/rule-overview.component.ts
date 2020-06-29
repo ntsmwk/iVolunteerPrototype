@@ -57,10 +57,10 @@ export class FuseRuleOverviewComponent implements OnInit {
       await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
     );
 
-    this.derivationRuleService
-      .findAll(this.marketplace, this.helpseeker.tenantId)
-      .toPromise()
-      .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
+    //this.derivationRuleService XXX To do
+    //  .findAll(this.marketplace, this.helpseeker.tenantId)
+    //  .toPromise()
+    //  .then((rules: DerivationRule[]) => (this.dataSource.data = rules));
   }
 
   addDerivationRule() {

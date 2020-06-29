@@ -91,21 +91,17 @@ export class TargetRuleConfiguratorComponent implements OnInit {
     this.classAction.attributes.push( 
       new AttributeCondition(this.classAction.classDefinition)
     );
-    console.log("target attribute set: " + this.classAction);
   }
 
   onTargetChange(classDefinition, $event) {
     if ($event.isUserInput){
-      console.log("on change!!!!");
       if (this.classDefinitions.length > 0) {
         this.classAction.classDefinition = this.classDefinitions.find(
           (cd) => cd.id === this.ruleActionForm.value.classDefinitionId
         );
       }
-      console.log("Anzahl Properties: " + classDefinition.properties);
       this.classAction.classDefinition = classDefinition;
       this.classActionChange.emit(this.classAction);
-      console.log(this.classAction.classDefinition);
     }
   }
 

@@ -9,8 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
+import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.EQCriteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
+import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.Action;
 import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
@@ -20,6 +25,8 @@ import at.jku.cis.iVolunteer.model.rule.Condition;
 import at.jku.cis.iVolunteer.model.rule.DerivationRule;
 import at.jku.cis.iVolunteer.model.rule.GeneralCondition;
 import at.jku.cis.iVolunteer.model.rule.MultipleConditions;
+import at.jku.cis.iVolunteer.model.rule.engine.RuleExecution;
+import at.jku.cis.iVolunteer.model.rule.engine.RuleStatus;
 import at.jku.cis.iVolunteer.model.rule.operator.AggregationOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
@@ -49,15 +56,14 @@ public class RuleEngineMapper {
 	
 	private String newGeneralImports() {
 		StringBuilder stringBuilder = new StringBuilder(); // XXX --> package name ermitteln
-		// Volunteer.class.getName()
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.user.Volunteer"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.core.tenant.Tenant"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.user.VolunteerService"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.*"));
-		stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance"));
-        stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.rule.engine.RuleExecution"));
-        stringBuilder.append(newImport("at.jku.cis.iVolunteer.model.rule.engine.RuleStatus"));
+		stringBuilder.append(newImport(Volunteer.class.getName()));
+		stringBuilder.append(newImport(Tenant.class.getName()));
+		stringBuilder.append(newImport(VolunteerService.class.getName()));
+		stringBuilder.append(newImport(ClassInstanceService.class.getName()));
+		stringBuilder.append(newImport(EQCriteria.class.getPackageName()+".*"));
+		stringBuilder.append(newImport(ClassInstance.class.getName()));
+        stringBuilder.append(newImport(RuleExecution.class.getName()));
+        stringBuilder.append(newImport(RuleStatus.class.getName()));
         stringBuilder.append(newImport("java.util.List"));
 		return stringBuilder.toString();
 	}

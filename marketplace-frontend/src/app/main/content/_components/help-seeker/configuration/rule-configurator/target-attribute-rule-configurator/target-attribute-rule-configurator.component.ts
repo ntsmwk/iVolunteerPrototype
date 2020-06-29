@@ -85,10 +85,8 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
           .then((marketplace: Marketplace) => {
             this.marketplace = marketplace;
             this.loadClassProperties(null);
-            console.log(this.classProperties);
           });
       });
-      console.log("class properties loaded " + this.classProperties);
   }
 
   onPropertyChange($event) {
@@ -101,21 +99,17 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   private loadClassProperties($event) {
-    console.log("loading properties for " + this.attributeTarget.classDefinition.name);
     if (
       this.attributeTarget &&
       this.attributeTarget.classDefinition 
     ) {
-      console.log(" ------ attributeTarget: " + this.attributeTarget.classDefinition);
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
-          this.attributeTarget.classDefinition.id,
-          this.helpseeker.tenantId
+          this.attributeTarget.classDefinition.id
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
-          console.log(" loading ......" + props);
           this.classProperties = props;
           this.enumValues = [];
          // this.onChange($event);
@@ -144,23 +138,18 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
   }
 
   onChange($event) {
-    console.log("change values in attribute, yay!");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.ruleTargetAttributeForm.value.classPropertyId
         ) || new ClassProperty();
       this.attributeTargetChange.emit(this.attributeTarget);
-      console.log(this.attributeTarget.value);
-      console.log(this.attributeTarget.classProperty.name);
-      console.log("test, value of target attribute --> " + this.attributeTarget.value);
-    }
+     }
   }
 
 
 
   onChangeValue($event) {
-    console.log("change values in attribute, yay!");
     if (this.classProperties.length > 0) {
       this.attributeTarget.classProperty =
         this.classProperties.find(
@@ -168,7 +157,6 @@ export class TargetAttributeRuleConfiguratorComponent implements OnInit {
         ) || new ClassProperty();
       this.attributeTarget.value = this.ruleTargetAttributeForm.value.value;
       this.attributeTargetChange.emit(this.attributeTarget);
-      console.log("test, value of target attribute --> " + this.attributeTarget.value);
     }
   }
 

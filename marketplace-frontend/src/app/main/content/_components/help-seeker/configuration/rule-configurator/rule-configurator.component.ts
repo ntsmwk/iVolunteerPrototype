@@ -107,25 +107,15 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     this.testConditions = true;
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.tenantId = this.helpseeker.tenantId;
-    console.log("derivation rule: " + this.derivationRule);
     this.derivationRule.container = "simulate execution " + this.derivationRule.name;
   }
 
   save() {
-    console.log("Form Submitted!");
-    console.log("xxxx" + this.ruleForm.value.name + "yyyy");
-    console.log(this.derivationRule.generalConditions);
-    console.log(this.derivationRule.conditions);
-    console.log(this.derivationRule.classActions);
-    if (this.ruleForm.value.name){
+    if (this.ruleForm.value.name &&
+      this.derivationRule.classActions[0].classDefinition){
       this.derivationRule.name = this.ruleForm.value.name;
       this.derivationRule.tenantId = this.helpseeker.tenantId;
-      this.derivationRule.container = "Test-Frontend-Claudia";
-
-      console.log(this.derivationRule.tenantId);
-      console.log(this.derivationRule.name);
-      console.log(this.derivationRule.generalConditions);
-      console.log(this.derivationRule.conditions);
+      this.derivationRule.container = "Test-Frontend";
 
       this.derivationRuleService
         .save(this.marketplace, this.derivationRule)
@@ -143,30 +133,13 @@ export class FuseRuleConfiguratorComponent implements OnInit {
     window.history.back();
   }
 
-  /*
-  onTargetChange(cd, $event){
-    if ($event.isUserInput) {
-      console.log("FWPE gewechselt");
-     // this.derivationRule.classAction = new ClassAction(cd);
-    //  this.derivationRule.target = cd.name;
-      console.log("class Action for " + this.derivationRule.classActions);
-    }
-  }*/
-
-  onChangeName() {
-    console.log("on change!!!!");
-      this.derivationRule.name = this.ruleForm.value.name;
-      console.log(this.ruleForm.value.name);
+  onChange($event){
+   this.testConditions = false; 
   }
 
-  /*addNewTarget() {
-    console.log("add new target");
-    console.log(this.derivationRule.classActions);
-    this.derivationRule.classActions.push(
-      new ClassAction(null)
-    );
-    console.log(this.derivationRule.classActions);
-  }*/
+  onChangeName() {
+      this.derivationRule.name = this.ruleForm.value.name;
+  }
 
   addGeneralCondition() {
     this.derivationRule.generalConditions.push(

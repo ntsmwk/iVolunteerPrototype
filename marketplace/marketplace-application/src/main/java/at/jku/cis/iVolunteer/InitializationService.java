@@ -33,9 +33,9 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.test.data.TestDataClasses;
-import at.jku.cis.iVolunteer.test.data.TestDataRK;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataClasses;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 
@@ -50,9 +50,9 @@ public class InitializationService {
 	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
 	@Autowired private MarketplaceService marketplaceService;
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
-	@Autowired private TestRuleEngine testRuleEngine;
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
-	@Autowired public TestDataClasses testDataClasses;
+	@Autowired private TestDataClasses testDataClasses;
+	@Autowired private TestDataInstances testDataInstances;
 
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
 	@Autowired private ClassConfigurationController classConfigurationController;
@@ -74,11 +74,8 @@ public class InitializationService {
 //		addTestConfigClasses();
 //		addConfigurators();
 		//addConfiguratorSlots();
-//		addTestDerivationRule();
 		//this.addTestClassInstances();
-		// testRuleEngine.executeTestCases(); // XXX vojino, replace with REST-API
-		// testData.cleanUp();
-		// addTestRuleEngine();
+	
 //		addTestClassInstances();
 		// addTestConfigClasses();
 		// addConfigurators();
@@ -87,7 +84,7 @@ public class InitializationService {
 
 		addiVolunteerAPIClassDefinition();
 		testDataClasses.createClassConfigurations();
-		// addTestDerivationRule();
+		testDataInstances.createUserData();
 		// addTestClassInstances();
 	}
 

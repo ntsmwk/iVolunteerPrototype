@@ -1,4 +1,4 @@
-package at.jku.cis.iVolunteer.test.data;
+package at.jku.cis.iVolunteer.marketplace.rule.engine.test;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -26,6 +27,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRe
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.test.TestDataInstances.RolesAmbulanceService;
 import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
@@ -52,7 +54,7 @@ import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
-public class TestDataRK {
+public class TestDataInstances {
 		
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
@@ -94,12 +96,6 @@ public class TestDataRK {
 			return description;
 		}
 	}
-		
-	public void load() {
-		
-		// create user data
-		createUserData();
-	}
 	
 	public static int createRandomIntBetween(int start, int end) {
         return start + (int) Math.round(Math.random() * (end - start));
@@ -117,40 +113,148 @@ public class TestDataRK {
   	  	LocalTime time = LocalTime.MIN.plusSeconds(generator.nextLong());
         return LocalDateTime.of(year, month, day, time.getHour(), 0);
     }
+    
+    public void createUserData() {
+    	createDataKBauer();
+    	createDataEWagner();
+    	createDataWHaube();
+    	createDataMJachs();
+    }
 	
-	public void createUserData() {
-			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-			Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
-			if (volunteer == null) return;
-			AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
-			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
-			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
-			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
-			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
-					
-			generateTaskAusfahrt(tenantId, volunteer, 999, RolesAmbulanceService.EINSATZLENKER, "Linz");
-			generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels");
-			generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
-			
-			generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels");
-			generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-			generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
-			
-			generateTaskDienst(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Linz");
-			generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
-			generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
-		}
+    private void createDataKBauer() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
 		
-		private void generateTaskAusfahrt(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
+		if (volunteer == null) return;
+		
+		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+				
+		generateTaskAusfahrt(tenantId, volunteer, 999, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels");
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		
+		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels");
+		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
+		
+		generateTaskDienst(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Linz");
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+	}
+	
+	private void createDataEWagner() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		Volunteer volunteer = volunteerRepository.findByUsername("EWagner");
+		
+		if (volunteer == null) return;
+		
+		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+				
+		generateTaskAusfahrt(tenantId, volunteer, 90, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 100, RolesAmbulanceService.EINSATZLENKER, "Wels");
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		
+		generateTaskEinsatz(tenantId, volunteer, 10, RolesAmbulanceService.DISPONENT, "Wels");
+		generateTaskEinsatz(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
+		generateTaskDienst(tenantId, volunteer, 100, RolesAmbulanceService.DISPONENT, "Linz");
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+	}
+	
+	private void createDataWHaube() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		Volunteer volunteer = volunteerRepository.findByUsername("WHaube");
+		
+		if (volunteer == null) return;
+		
+		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+				
+		generateTaskAusfahrt(tenantId, volunteer, 1000, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 20, RolesAmbulanceService.EINSATZLENKER, "Wels");
+		generateTaskAusfahrt(tenantId, volunteer, 21, RolesAmbulanceService.SANITÄTER, "Linz");
+		
+		generateTaskEinsatz(tenantId, volunteer, 75, RolesAmbulanceService.DISPONENT, "Wels");
+		generateTaskEinsatz(tenantId, volunteer, 57, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskEinsatz(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Enns");
+		
+		generateTaskDienst(tenantId, volunteer, 500, RolesAmbulanceService.DISPONENT, "Linz");
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+	}
+	
+	private void createDataMJachs() {
+		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
+		Volunteer volunteer = volunteerRepository.findByUsername("MJachs");
+		
+		if (volunteer == null) return;
+		
+		AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+		certClass = (AchievementClassDefinition) classDefinitionRepository.
+				findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+		classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
+				
+		generateTaskAusfahrt(tenantId, volunteer, 2046, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskAusfahrt(tenantId, volunteer, 646, RolesAmbulanceService.EINSATZLENKER, "Wels");
+		generateTaskAusfahrt(tenantId, volunteer, 446, RolesAmbulanceService.SANITÄTER, "Linz");
+		
+		generateTaskEinsatz(tenantId, volunteer, 150, RolesAmbulanceService.DISPONENT, "Wels");
+		generateTaskEinsatz(tenantId, volunteer, 56, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskEinsatz(tenantId, volunteer, 23, RolesAmbulanceService.SANITÄTER, "Enns");
+		
+		generateTaskDienst(tenantId, volunteer, 200, RolesAmbulanceService.DISPONENT, "Linz");
+		generateTaskDienst(tenantId, volunteer, 30, RolesAmbulanceService.EINSATZLENKER, "Linz");
+		generateTaskDienst(tenantId, volunteer, 20, RolesAmbulanceService.SANITÄTER, "Linz");
+	}
+		
+		public void generateTaskAusfahrt(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(volunteer.getBirthday());
+			int fromYear = cal.get(Calendar.YEAR) + 20;
+			
 			for (int i = 0; i < num; i++) {
-	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
+	            LocalDateTime randomDateTime = createRandomDateTime(fromYear, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Ausfahrt", tenantId);
 	            TaskClassInstance ti = (TaskClassInstance) classInstanceService.newClassInstance(volunteer, taskDef.getId(), tenantId);
 	            ti.setIssuerId(tenantId);
@@ -169,7 +273,7 @@ public class TestDataRK {
 	        }
 		}
 		
-		private void generateTaskEinsatz(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
+		public void generateTaskEinsatz(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
 			for (int i = 0; i < num; i++) {
 	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Einsatz", tenantId);
@@ -192,7 +296,7 @@ public class TestDataRK {
 	        }
 		}
 		
-		private void generateTaskDienst(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
+		public void generateTaskDienst(String tenantId, Volunteer volunteer, int num, RolesAmbulanceService role, String ort) {
 			for (int i = 0; i < num; i++) {
 	            LocalDateTime randomDateTime = createRandomDateTime(2000, 2019);
 	            TaskClassDefinition taskDef = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Dienst", tenantId);

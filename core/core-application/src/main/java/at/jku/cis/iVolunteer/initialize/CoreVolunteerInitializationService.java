@@ -3,13 +3,16 @@ package at.jku.cis.iVolunteer.initialize;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +38,11 @@ public class CoreVolunteerInitializationService {
 	private static final String BROISER = "broiser";
 	private static final String MWEISSENBEK = "mweissenbek";
 	private static final String MWEIXLBAUMER = "mweixlbaumer";
+	
+	private static final String FF_EIDENBERG = "FF Eidenberg";
+	private static final String MV_SCHWERTBERG = "MV Schwertberg";
+	private static final String RK_WILHERING = "RK Wilhering";
+
 
 	private static final String RAW_PASSWORD = "passme";
 
@@ -46,24 +54,34 @@ public class CoreVolunteerInitializationService {
 
 	public void initVolunteers(){
 
-		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", "1988-09-07T00:00:00", "", "");
-		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", "1995-10-09T00:00:00", "", "img/pstarzer.jpg");
-		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", "1994-01-23T00:00:00", "", "");
-		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", "1985-05-24T00:00:00", "", "img/weixlbaumer_small.png");
+		createVolunteer(BROISER, RAW_PASSWORD, "Berthold", "Roiser", LocalDate.of(1988,9,7), "", "");
+		createVolunteer(PSTARZER, RAW_PASSWORD, "Philipp", "Starzer", LocalDate.of(1995,10,9), "", "img/pstarzer.jpg");
+		createVolunteer(MWEISSENBEK, RAW_PASSWORD, "Markus", "Weißenbek", LocalDate.of(1994,1,23), "", "");
+		createVolunteer(MWEIXLBAUMER, RAW_PASSWORD, "Markus", "Weixlbaumer", LocalDate.of(1985,5,24), "", "img/weixlbaumer_small.png");
 
-		createVolunteer("AKop", "passme", "Alexander", "Kopp", "1998-07-09T00:00:00", "Alex", "");
-		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", "1975-11-04T00:00:00", "", "");
-		createVolunteer("WSch", "passme", "Wieland", "Schwinger", "1976-06-09T00:00:00", "", "");
-		createVolunteer("BProe", "passme", "Birgit", "Pröll", "1976-10-05T00:00:00","", "");
-		createVolunteer("KKof", "passme", "Katharina", "Kofler", "1998-05-08T00:00:00","Kati", "");
-		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", "1981-12-01T00:00:00", "", "");
-		createVolunteer("KBauer", "passme", "Kerstin", "Bauer", "1960-02-17T00:00:00", "", "");
-		createVolunteer("EWagner", "passme", "Erich", "Wagner", "1980-07-11T00:00:00", "", "");
-		createVolunteer("WHaube", "passme", "Werner", "Haube", "1970-08-08T00:00:00", "", "");
-		createVolunteer("MJachs", "passme", "Melanie", "Jachs", "1970-07-08T00:00:00", "", "");		
+		createVolunteer("AKop", "passme", "Alexander", "Kopp", LocalDate.of(1998,7,9), "Alex", "");
+		createVolunteer("WRet", "passme", "Werner", "Retschitzegger", LocalDate.of(1975,11,4), "", "");
+		createVolunteer("WSch", "passme", "Wieland", "Schwinger", LocalDate.of(1976,6,9), "", "");
+		createVolunteer("BProe", "passme", "Birgit", "Pröll", LocalDate.of(1976,10,5),"", "");
+		createVolunteer("KKof", "passme", "Katharina", "Kofler", LocalDate.of(1998,5,8),"Kati", "");
+		
+		List<String> tenantIds = new ArrayList<String>();
+		tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
+		tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
+		tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
+		CoreVolunteer vol = createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
+		registerVolunteer(vol, tenantIds);
+		vol = createVolunteer("KBauer", "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17),"", "");
+		registerVolunteer(vol, tenantIds);
+		vol = createVolunteer("EWagner", "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
+		registerVolunteer(vol, tenantIds);
+		vol = createVolunteer("WHaube", "passme", "Werner", "Haube", LocalDate.of(1970,8,8), "", "");
+		registerVolunteer(vol, tenantIds);
+		vol = createVolunteer("MJachs", "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");	
+		registerVolunteer(vol, tenantIds);
 	}
 
-	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName, String birthDate,
+	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName, LocalDate birthDate,
 			String nickName, String fileName){
 		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
 		if (volunteer == null) {
@@ -72,9 +90,9 @@ public class CoreVolunteerInitializationService {
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
 			volunteer.setFirstname(firstName);
 			volunteer.setLastname(lastName);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm" ).withLocale(Locale.GERMANY);
-			LocalDate date = LocalDate.parse(birthDate, formatter);
-			volunteer.setBirthday(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			ZoneId defaultZoneId = ZoneId.systemDefault();
+			Date date = Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant());
+			volunteer.setBirthday(date);
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);

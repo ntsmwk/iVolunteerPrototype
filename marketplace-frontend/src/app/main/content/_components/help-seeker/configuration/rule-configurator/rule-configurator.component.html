@@ -73,6 +73,7 @@
     fxLayout="column"
     fxLayoutGap="20px"
     fxLayoutAlign="start"
+    (change)="onChange($event)"
     (submit)="save()"
     [formGroup]="ruleForm"
   >
@@ -169,7 +170,7 @@
         color="secondary"
         (click)="addClassCondition()"
       >
-        Klassen-Regel hinzufügen
+        Klassenbedingung hinzufügen
       </button>
     </div>
     <!--<div fxLayout="row" fxLayoutAlign="end start" style="padding-top: 25px;">

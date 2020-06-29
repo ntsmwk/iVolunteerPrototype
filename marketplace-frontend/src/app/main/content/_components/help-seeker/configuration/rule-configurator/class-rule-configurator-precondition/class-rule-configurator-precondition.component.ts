@@ -75,10 +75,6 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.classCondition.attributeConditions = this.classCondition.attributeConditions
       ? this.classCondition.attributeConditions
       : new Array();
-
-    console.log(
-      "----" + this.rulePreconditionForm.value.AggregationOperatorType
-    );
     this.aggregationOperators = Object.keys(AggregationOperatorType);
 
     this.loginService
@@ -110,21 +106,16 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     }
     this.classCondition.classDefinition.id = $event.source.value;
     this.classCondition.classDefinition.tenantId = this.helpseeker.tenantId;
-    console.log("event --> value" + $event.source.value);
   }
 
   onOperatorChange(aggregationOperatorType, $event) {
     if ($event.isUserInput) {
       // ignore on deselection of the previous option
-      console.log("Selection changed to " + aggregationOperatorType);
-      console.log("operator changed --> " + aggregationOperatorType);
       this.classCondition.aggregationOperatorType = aggregationOperatorType;
-      console.log("op neu: " + this.classCondition.aggregationOperatorType);
     }
   }
 
   onChange($event) {
-    console.log("on change!!!!");
     if (this.classDefinitions.length > 0) {
       this.classCondition.classDefinition = this.classDefinitions.find(
         (cd) => cd.id === this.rulePreconditionForm.value.classDefinitionId
@@ -133,21 +124,12 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.classCondition.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
     this.classCondition.value = this.rulePreconditionForm.value.value;
     this.classConditionChange.emit(this.classCondition);
-    console.log(this.classCondition.classDefinition);
-    console.log("op = " + this.rulePreconditionForm.value.op);
-    console.log(
-      "aggregationOperator = " + this.classCondition.aggregationOperatorType
-    );
-    console.log(this.classCondition.value);
   }
 
   addAttributeCondition() {
-    console.log("add attribute rule");
-    console.log(this.classCondition.attributeConditions);
     this.classCondition.attributeConditions.push(
       new AttributeCondition(this.classCondition.classDefinition)
     );
-    console.log(this.classCondition.attributeConditions);
   }
 
   private retrieveAggregationOperatorValueOf(op) {
