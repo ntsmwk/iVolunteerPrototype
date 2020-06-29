@@ -69,6 +69,10 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
     return level + 'px';
   }
 
+  calculateIndent(level: number) {
+    return level + 'px';
+  }
+
   getChevrons(level: number) {
     let s = '>';
     s = s.repeat(level);
