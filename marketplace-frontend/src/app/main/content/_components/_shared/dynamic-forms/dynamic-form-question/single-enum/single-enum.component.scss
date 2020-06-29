@@ -1,3 +1,5 @@
+@import "@fuse/scss/core";
+
 .question-container-open {
     padding: 8px;
     border: 2px solid black;
@@ -75,21 +77,20 @@
 .enum-button {
     width: 120px;
 
-    border-radius: 4px; 
-    border-style: solid; 
-    border-width: 1px; 
-    border-color: currentColor; 
+    border-radius: 4px !important; 
+    border: solid 1px mat-color($accent) !important; 
 
     background-color: white; 
 
     padding: 0 10px; 
     line-height: 20px;
 
-    //center
-    // display: block; 
-    // margin: 0 auto;
 }
 
+.enum-button:hover {
+    background-color: mat-color($accent);
+    color: white;
+}
 
 :host ::ng-deep .mat-list-item {
     height: 35px;
