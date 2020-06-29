@@ -37,7 +37,8 @@
           </div>
         </mat-list-item>
 
-        <div *ngIf="!opt.selectable" mat-subheader [ngStyle]="{'margin-left': calculateIndent(opt.level)}">
+        <div *ngIf="!opt.selectable" class="subheader-item" mat-subheader
+          [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">
           {{opt.value}}
         </div>
 

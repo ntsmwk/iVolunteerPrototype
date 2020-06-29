@@ -62,10 +62,12 @@
     }
 }
 
-
-
 .list-item-row-padding {
     background: white;
+}
+
+.subheader-item {
+    padding: 12px 0 0;
 }
 
 
@@ -75,4 +77,16 @@
     .mat-list-item-content {
         padding: 0 4px;
     }
+}
+
+:host ::ng-deep .mat-subheader {
+    height: 28px;
+    margin-top: 0;;
+    font-size: 16px;
+}   
+
+:host ::ng-deep .mat-subheader:first-child {
+    height: 28px;
+    margin-top: 0;
+    font-size: 16px;
 }
