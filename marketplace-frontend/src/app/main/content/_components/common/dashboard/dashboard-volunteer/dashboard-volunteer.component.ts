@@ -206,15 +206,6 @@ export class DashboardVolunteerComponent implements OnInit {
       this.dataSource.data = this.filteredClassInstanceDTOs;
 
       this.generateSharedTenantsMap();
-
-      console.error("subscribedTenants", this.subscribedTenants);
-      console.error("selectedTenants", this.selectedTenants);
-      console.error("allTenants", this.allTenants);
-
-      console.error(
-        "isLocalRepositoryConnected",
-        this.isLocalRepositoryConnected
-      );
     }
   }
 
