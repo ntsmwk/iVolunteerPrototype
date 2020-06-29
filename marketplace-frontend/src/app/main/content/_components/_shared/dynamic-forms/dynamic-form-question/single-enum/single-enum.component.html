@@ -16,13 +16,13 @@
   </mat-form-field>
 
   <mat-form-field class="search-field" *ngIf="showList">
-    <input matInput placeholder="Suchen..." />
+    <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
   </mat-form-field>
 
   <div #enumListContainer class="list-container">
     <mat-action-list #enumList>
 
-      <div *ngFor="let opt of question.options">
+      <div *ngFor="let opt of listOptions">
         <mat-list-item (click)="onSelectOption(opt)" *ngIf="opt.selectable">
           <div class="list-item-container" fxLayout="row">
             <div class="list-item-row-padding" [ngStyle]="{'width': calculateSpaces(opt.level)}"></div>

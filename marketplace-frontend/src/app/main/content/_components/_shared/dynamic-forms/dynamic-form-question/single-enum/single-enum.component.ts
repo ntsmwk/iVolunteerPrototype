@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
-import { QuestionBase } from 'app/main/content/_model/dynamic-forms/questions';
+import { QuestionBase, SingleSelectionEnumQuestion } from 'app/main/content/_model/dynamic-forms/questions';
 import { isNullOrUndefined } from 'util';
 import { FormGroup } from '@angular/forms';
 import { EnumEntry } from 'app/main/content/_model/meta/enum';
@@ -15,9 +15,10 @@ declare var $: JQueryStatic;
 })
 export class SingleEnumComponent implements OnInit, AfterViewInit {
 
-  @Input() question: QuestionBase<any>;
+  @Input() question: SingleSelectionEnumQuestion;
   @Input() form: FormGroup;
 
+  listOptions: EnumEntry[];
   showList: boolean;
 
   constructor(private renderer: Renderer2) { }
@@ -28,6 +29,9 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.listOptions = [];
+    this.listOptions.push(...this.question.options);
+
   }
 
   ngAfterViewInit() {
@@ -77,6 +81,11 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
     let s = '>';
     s = s.repeat(level);
     return s;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    // this.propertyDatasource.filter = filterValue.trim().toLowerCase();
   }
 
   // getMultipleValues(question: MultipleSelectionEnumQuestion) {
