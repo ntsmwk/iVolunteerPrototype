@@ -282,21 +282,8 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       } else {
         value = control.control.value;
       }
+
       const l = propertyInstances.push(new PropertyInstance(classProperty, [value]));
-
-      // if (classProperty.type === PropertyType.ENUM) {
-      //   let i = propertyInstances[l - 1].allowedValues.findIndex(a => a.id === value.id);
-      //   let currentLevel = value.level;
-      //   for (i; i >= 0; i--) {
-      //     if (propertyInstances[l - 1].allowedValues[i].level < currentLevel) {
-      //       propertyInstances[l - 1].values.push(propertyInstances[l - 1].allowedValues[i]);
-      //       currentLevel--;
-      //     }
-      //   }
-      // }
-
-      console.log(propertyInstances[l - 1]);
-
     }
 
     const classInstance = new ClassInstance(parentEntry.classDefinitions[0], propertyInstances);

@@ -101,15 +101,20 @@
 </mat-dialog-content>
 
 <mat-dialog-actions *ngIf="loaded">
-  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-light" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button (click)="onSubmit()">Bestätigen</button>
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onSubmit()">Bestätigen</button>
 
-  <button *ngIf="tabIndex === 0" mat-button (click)="createNewClicked('property')">
+  <div class="ml-12"></div>
+
+  <button class="secondary-button-dark" *ngIf="tabIndex === 0" mat-stroked-button type="button"
+    (click)="createNewClicked('property')">
     Neues Property
   </button>
 
-  <button *ngIf="tabIndex === 1" mat-button (click)="createNewClicked('enum')">
+  <button class="secondary-button-dark" *ngIf="tabIndex === 1" mat-stroked-button type="button"
+    (click)="createNewClicked('enum')">
     Neues Enum
   </button>
 </mat-dialog-actions>

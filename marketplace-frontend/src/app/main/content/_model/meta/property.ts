@@ -111,7 +111,7 @@ export class PropertyInstance<T> {
 
 
 
-        if (classProperty.type === PropertyType.ENUM) {
+        if (classProperty.type === PropertyType.ENUM && !isNullOrUndefined(this.values[0])) {
             const rootValue = this.values[0] as unknown as EnumEntry;
 
             let i = (classProperty as ClassProperty<unknown> as ClassProperty<EnumEntry>)
