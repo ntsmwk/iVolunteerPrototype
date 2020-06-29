@@ -65,7 +65,7 @@ import at.jku.cis.iVolunteer.model.rule.operator.ComparisonOperatorType;
 import at.jku.cis.iVolunteer.model.rule.operator.LogicalOperatorType;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.test.data.TestData;
+import at.jku.cis.iVolunteer.test.data.TestDataClasses;
 import at.jku.cis.iVolunteer.test.data.TestDataRK;
 import javassist.bytecode.Descriptor.Iterator;
 
@@ -88,7 +88,7 @@ public class TestRuleEngine {
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private TestData testData;
+	@Autowired private TestDataClasses testData;
 	@Autowired private TestDataRK testDataRK;
 	
 	private static final String FFEIDENBERG = "FF Eidenberg";
@@ -96,7 +96,7 @@ public class TestRuleEngine {
 	private static final String RKWILHERING = "RK Wilhering";
 	
 	public void executeTestCases(){
-		testData.load(); // XXX vojino, replace with REST-API
+		testData.createClassConfigurations();; // XXX vojino, replace with REST-API
 		testDataRK.load(); // XXX vojino, replace with REST-API
 		containerRuleEntryRepository.deleteAll();
 		if (volunteerRepository.findByUsername("KBauer") != null) {
@@ -139,10 +139,10 @@ public class TestRuleEngine {
 	    String ruleName = "add-competence-driving-all";
 	    
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_CAR);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_TRUCK);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_BUS);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_MOTORCYCLE);
 	    
 	    DerivationRule dRule = new DerivationRule();
 	    dRule.setName(ruleName);
@@ -176,20 +176,20 @@ public class TestRuleEngine {
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    classAction1.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    classAction1.addAttribute(attrCondition1);
 	    
 	    AttributeCondition attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein B");
-	    classAction1.addAttributeCondition(attrCondition2);
+	    classAction1.addAttribute(attrCondition2);
 	    
 	    AttributeCondition attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    classAction1.addAttributeCondition(attrCondition3);
+	    classAction1.addAttribute(attrCondition3);
 	    dRule.addAction(classAction1);
 	    
 	    ClassAction classAction2 = new ClassAction(ActionType.NEW);
@@ -199,20 +199,20 @@ public class TestRuleEngine {
 	    attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    classAction2.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    classAction2.addAttribute(attrCondition1);
 	    
 	    attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein C");
-	    classAction2.addAttributeCondition(attrCondition2);
+	    classAction2.addAttribute(attrCondition2);
 	    
 	    attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    classAction2.addAttributeCondition(attrCondition3);
+	    classAction2.addAttribute(attrCondition3);
 	    dRule.addAction(classAction2);
 	    
 	    ClassAction classAction3 = new ClassAction(ActionType.NEW);
@@ -222,20 +222,20 @@ public class TestRuleEngine {
 	    attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    classAction3.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    classAction3.addAttribute(attrCondition1);
 	    
 	    attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein D");
-	    classAction3.addAttributeCondition(attrCondition2);
+	    classAction3.addAttribute(attrCondition2);
 	    
 	    attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    classAction3.addAttributeCondition(attrCondition3);
+	    classAction3.addAttribute(attrCondition3);
 	    dRule.addAction(classAction3);
 	    
 	    ClassAction classAction4 = new ClassAction(ActionType.NEW);
@@ -245,20 +245,20 @@ public class TestRuleEngine {
 	    attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    classAction4.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    classAction4.addAttribute(attrCondition1);
 	    
 	    attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein A");
-	    classAction4.addAttributeCondition(attrCondition2);
+	    classAction4.addAttribute(attrCondition2);
 	    
 	    attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), 
 	    		                                  "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    classAction4.addAttributeCondition(attrCondition3);
+	    classAction4.addAttribute(attrCondition3);
 	    dRule.addAction(classAction4);
 	    
 	    // now map from Derivation Rule to Drools 
@@ -288,7 +288,7 @@ public class TestRuleEngine {
 	    String ruleName = "add-competence-driving-car";
 	    
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_CAR);
 	    
 	    AchievementClassDefinition achievementDef = (AchievementClassDefinition) classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Car", tenantId);
@@ -306,18 +306,18 @@ public class TestRuleEngine {
 	
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    ruleAction.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    ruleAction.addAttribute(attrCondition1);
 	    
 	    AttributeCondition attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein B");
-	    ruleAction.addAttributeCondition(attrCondition2);
+	    ruleAction.addAttribute(attrCondition2);
 	  
 	    AttributeCondition attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    ruleAction.addAttributeCondition(attrCondition3);
+	    ruleAction.addAttribute(attrCondition3);
 	  
 	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
@@ -348,7 +348,7 @@ public class TestRuleEngine {
 	    String ruleName = "add-competence-driving-car-if-ne";
 	    
 	    ruleService.deleteRule(tenantId, containerName, ruleName);
-	    deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR);
+	    deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_CAR);
 	    
 	    AchievementClassDefinition achievementDef = (AchievementClassDefinition) classDefinitionRepository.
 	    		findByNameAndTenantId("Driving License Car", tenantId);
@@ -361,7 +361,7 @@ public class TestRuleEngine {
 	    
 	    ClassCondition classConditionNE = new ClassCondition(AggregationOperatorType.NOT_EXISTS);
 	    classConditionNE.setClassDefinitionId(classDefinitionRepository.
-	    		findByNameAndTenantId(TestData.COMPETENCE_DRIVING_CAR, tenantId).getId());
+	    		findByNameAndTenantId(TestDataClasses.COMPETENCE_DRIVING_CAR, tenantId).getId());
 	    dRule.addCondition(classConditionNE);
 	    //
 	    // now set the action part on the rhs
@@ -371,18 +371,18 @@ public class TestRuleEngine {
 	    // adding filters for properties
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL1);
-	    ruleAction.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL1);
+	    ruleAction.addAttribute(attrCondition1);
 	    
 	    AttributeCondition attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Evidence", tenantId).getId());
 	    attrCondition2.setValue("Führerschein B");
-	    ruleAction.addAttributeCondition(attrCondition2);
+	    ruleAction.addAttribute(attrCondition2);
 	    
 	    AttributeCondition attrCondition3 = new AttributeCondition();
 	    attrCondition3.setClassPropertyId(classPropertyService.getClassPropertyByName(compDef.getId(), "Issued", tenantId).getId());
 	    attrCondition3.setValue(LocalDateTime.now());
-	    ruleAction.addAttributeCondition(attrCondition3);
+	    ruleAction.addAttribute(attrCondition3);
 	    
 	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
@@ -443,7 +443,7 @@ public class TestRuleEngine {
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
 	    attrCondition1.setValue(30);	 
-	    classAction.addAttributeCondition(attrCondition1);
+	    classAction.addAttribute(attrCondition1);
 	    dRule.addAction(classAction);
 	  
 	    // now map from Derivation Rule to Drools 
@@ -508,7 +508,7 @@ public class TestRuleEngine {
 	    AttributeCondition attributeCondition2 = new AttributeCondition();
 	    attributeCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(taskDef.getId(), "Maturity Level", tenantId).getId());
 	    attributeCondition2.setValue(33);
-	    ruleAction.addAttributeCondition(attributeCondition1); 
+	    ruleAction.addAttribute(attributeCondition1); 
 	    dRule.addAction(ruleAction);
 	     	   
 	    // now map from Derivation Rule to Drools 
@@ -568,8 +568,8 @@ public class TestRuleEngine {
 	    // adding filters for properties
 	    AttributeCondition attrCondition2 = new AttributeCondition();
 	    attrCondition2.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrCondition2.setValue(TestData.DrivingLevel.LEVEL2);
-	    ruleAction.addAttributeCondition(attrCondition2);
+	    attrCondition2.setValue(TestDataClasses.DrivingLevel.LEVEL2);
+	    ruleAction.addAttribute(attrCondition2);
 	    dRule.addAction(ruleAction);
 
 	    // now map from Derivation Rule to Drools 
@@ -630,8 +630,8 @@ public class TestRuleEngine {
 	    // adding filters for properties
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL3);
-        ruleAction.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL3);
+        ruleAction.addAttribute(attrCondition1);
         
         dRule.addAction(ruleAction);
         // now map from Derivation Rule to Drools 
@@ -870,7 +870,7 @@ public class TestRuleEngine {
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Maturity Level", tenantId).getId());
 	    attrCondition1.setValue(30);	 
-	    classAction.addAttributeCondition(attrCondition1);
+	    classAction.addAttribute(attrCondition1);
 	    dRule.addAction(classAction);
 	  
 	    // now map from Derivation Rule to Drools 
@@ -1090,8 +1090,8 @@ public class TestRuleEngine {
 	    // adding filters for properties
 	    AttributeCondition attrCondition1 = new AttributeCondition();
 	    attrCondition1.setClassPropertyId(classPropertyService.getClassPropertyByName(cd.getId(), "Driving Level", tenantId).getId());
-	    attrCondition1.setValue(TestData.DrivingLevel.LEVEL4);
-	    ruleAction.addAttributeCondition(attrCondition1);
+	    attrCondition1.setValue(TestDataClasses.DrivingLevel.LEVEL4);
+	    ruleAction.addAttribute(attrCondition1);
 	    
 	    dRule.addAction(ruleAction);
 	    // now map from Derivation Rule to Drools 
@@ -1396,16 +1396,16 @@ public class TestRuleEngine {
 		String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 		Volunteer volunteer = volunteerRepository.findByUsername("CVoj");
 		
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_CAR); 	
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_BUS);
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_TRUCK); 	
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_MOTORCYCLE);
 		
 		tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_CAR); 	
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_BUS);
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_TRUCK); 	
-		deleteInstances(volunteer, tenantId, TestData.COMPETENCE_DRIVING_MOTORCYCLE);
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_CAR); 	
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_BUS);
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_TRUCK); 	
+		deleteInstances(volunteer, tenantId, TestDataClasses.COMPETENCE_DRIVING_MOTORCYCLE);
 	}
 	
 	private void deleteInstances(Volunteer volunteer, String tenantId, String className) {

@@ -33,7 +33,7 @@ import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinit
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Inheritance;
 import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
-import at.jku.cis.iVolunteer.test.data.TestData;
+import at.jku.cis.iVolunteer.test.data.TestDataClasses;
 import at.jku.cis.iVolunteer.test.data.TestDataRK;
 import at.jku.cis.iVolunteer.marketplace.rule.engine.RuleService;
 import at.jku.cis.iVolunteer.model.meta.core.relationship.Relationship;
@@ -52,6 +52,7 @@ public class InitializationService {
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private TestRuleEngine testRuleEngine;
 	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired public TestDataClasses testDataClasses;
 
 	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
 	@Autowired private ClassConfigurationController classConfigurationController;
@@ -85,6 +86,7 @@ public class InitializationService {
 		// addConfiguratorSlots();
 
 		addiVolunteerAPIClassDefinition();
+		testDataClasses.createClassConfigurations();
 		// addTestDerivationRule();
 		// addTestClassInstances();
 	}

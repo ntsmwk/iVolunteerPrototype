@@ -52,7 +52,7 @@ import at.jku.cis.iVolunteer.model.user.HelpSeeker;
 import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
-public class TestDataRK extends TestData{
+public class TestDataRK {
 		
 	@Autowired private ClassDefinitionRepository classDefinitionRepository;
 	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
@@ -62,6 +62,7 @@ public class TestDataRK extends TestData{
 	
 	@Autowired private CoreTenantRestClient coreTenantRestClient;
 	@Autowired private VolunteerRepository volunteerRepository;	
+	@Autowired private TestDataClasses testDataClasses;
 	
 	public static final String CERTIFICATE_SEF_MODUL1 = "SEF-Modul 1";
 	public static final String CERTIFICATE_SEF_MODUL2 = "SEF-Modul 2";
@@ -77,6 +78,7 @@ public class TestDataRK extends TestData{
 	public static final String TASK_RK_DIENST = "Dienst";
 	
 	private static final String RKWILHERING = "RK Wilhering";
+	private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.GERMAN);
 	
 	
 	public enum RolesAmbulanceService {
@@ -93,33 +95,44 @@ public class TestDataRK extends TestData{
 		}
 	}
 		
-	public void load(){
-		createClassCertificatesRK();
-		createClassTasksRK();
-		createClassVerdienste();
-		createClassVolunteerRK();
-		
-		cleanUp();
+	public void load() {
 		
 		// create user data
 		createUserData();
 	}
+	
+	public static int createRandomIntBetween(int start, int end) {
+        return start + (int) Math.round(Math.random() * (end - start));
+    }
+
+    public static LocalDateTime createRandomDateTime(int startYear, int endYear) {
+        int day = createRandomIntBetween(1, 28);
+        int month = createRandomIntBetween(1, 12);
+        int year = createRandomIntBetween(startYear, endYear);
+        //
+        Random rand = new Random();
+        //Store a random seed
+        long seed = rand.nextLong();
+        Random generator = new Random(seed);
+  	  	LocalTime time = LocalTime.MIN.plusSeconds(generator.nextLong());
+        return LocalDateTime.of(year, month, day, time.getHour(), 0);
+    }
 	
 	public void createUserData() {
 			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
 			Volunteer volunteer = volunteerRepository.findByUsername("KBauer");
 			if (volunteer == null) return;
 			AchievementClassDefinition certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
+					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_CAR, tenantId);
 			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
+					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_TRUCK, tenantId);
 			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
+					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_BUS, tenantId);
 			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 			certClass = (AchievementClassDefinition) classDefinitionRepository.
-					findByNameAndTenantId(CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
+					findByNameAndTenantId(TestDataClasses.CERTIFICATE_DRIVING_LICENSE_MOTORCYCLE, tenantId);
 			classInstanceService.newClassInstance(volunteer, certClass.getId(), tenantId);
 					
 			generateTaskAusfahrt(tenantId, volunteer, 999, RolesAmbulanceService.EINSATZLENKER, "Linz");
@@ -199,149 +212,4 @@ public class TestDataRK extends TestData{
 	            classInstanceService.setProperty(ti, cp.getId(), ort);
 	        }
 		}
-	
-		public void createClassVolunteerRK() {
-			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-			ClassDefinition volClass = classDefinitionRepository.findByNameAndTenantId("Volunteer RK", tenantId);
-			if (volClass == null) {
-				volClass = new ClassDefinition();
-				volClass.setName("Volunteer RK");
-				volClass.setMarketplaceId(marketplaceService.getMarketplaceId());
-				volClass.setTimestamp(new Date());
-				volClass.setTenantId(tenantId);
-				volClass.setWriteProtected(true);
-				volClass.setProperties(new ArrayList<ClassProperty<Object>>());
-				
-				PropertyDefinition<Object> pd = obtainProperty("Eintrittsdatum", PropertyType.DATE, tenantId);
-				volClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-				pd = obtainProperty("Hauptdienststelle", PropertyType.TEXT, tenantId);
-				volClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-				pd = obtainProperty("Dienstart", PropertyType.TEXT, tenantId);
-				volClass.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
-				
-				classDefinitionRepository.save(volClass);
-			}
-			volClass = classDefinitionRepository.findByNameAndTenantId("Volunteer RK", tenantId);
-		}
-		
-		public void createClassCertificatesRK() {
-			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-			AchievementClassDefinition certClassRoot = (AchievementClassDefinition) classDefinitionRepository.findByNameAndTenantId("Zertifikat", tenantId);
-			// Training certificates
-			AchievementClassDefinition certClassTraining = (AchievementClassDefinition) obtainClass(tenantId, "Ausbildung", certClassRoot);
-			// Certificate SEF-MODUL 1
-			System.out.println(" new Training class " + certClassTraining);
-			AchievementClassDefinition certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_MODUL1, certClassTraining);
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Perfektionstraining für neue Einsatzlenker/innen (SEF-MODUL 1)"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			// 
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_MODUL2, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Theorie- & Praxistraining für erfahrene Einsatzlenker/innen (SEF-MODUL 2)"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-	  		//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_AUSFORTBILDUNG, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Aus- und Fortbildung für SEF-Praxistrainer/innen"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_WORKSHOP, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF Workshop"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_TRAINING_NOTARZT, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Theorie- und Praxistraining für Notarztdienste"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_LADEGUTSICHERUNG, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Ladegutsicherung für Rotkreuz LKW-Lenker/innen"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, CERTIFICATE_SEF_THEORIE_TRAINERAUSBILDUNG, certClassTraining);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("SEF – Theorietrainerausbildung"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);	
-		}
-		
-		public void createClassVerdienste() {
-			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-			AchievementClassDefinition certClassRoot = (AchievementClassDefinition) classDefinitionRepository.findByNameAndTenantId("Verdienst", tenantId);
-			// Fahrtenspange
-			AchievementClassDefinition certClass = (AchievementClassDefinition) obtainClass(tenantId, "Fahrtenspange Bronze", certClassRoot);
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 1000 Fahrten mit dem RK"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "issuedOn", tenantId);
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-		    // 
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, "Fahrtenspange Silber", certClassRoot);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 2500 Fahrten mit dem RK"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "issuedOn", tenantId);
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			//
-			certClass = (AchievementClassDefinition) obtainClass(tenantId, "Fahrtenspange Gold", certClassRoot);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("Fahrtenspange für über 5000 Fahrten mit dem RK"));
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "issuedOn", tenantId);
-			classPropertyService.updateClassProperty(certClass.getId(), cp.getId(), cp);
-		}
-		
-		public void createClassRolesRK() {
-			String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-			FunctionClassDefinition functionClassRoot = (FunctionClassDefinition) classDefinitionRepository.findByNameAndTenantId("Funktion", tenantId);
-			// Function
-			FunctionClassDefinition functionClassAmbulanceService = (FunctionClassDefinition) obtainClass(tenantId, "Ausbildung", functionClassRoot);
-			// Certificate SEF-MODUL 1
-			TaskClassDefinition certClass = (TaskClassDefinition) obtainClass(tenantId, "Rettungssanitäter", functionClassAmbulanceService);
-			ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("Rettungseinsatz"));
-			// 
-			certClass = (TaskClassDefinition) obtainClass(tenantId, "Notfallsanitäter", functionClassAmbulanceService);
-			cp = classPropertyService.getClassPropertyByName(certClass.getId(), "Description", tenantId);
-			cp.setDefaultValues(Arrays.asList("Sanitätseinsatz"));
-		}
-		
-	public void createClassTasksRK() {
-		String tenantId = coreTenantRestClient.getTenantIdByName(RKWILHERING);
-		// Task
-		TaskClassDefinition taskClassRoot = (TaskClassDefinition) classDefinitionRepository.findByNameAndTenantId("Tätigkeit", tenantId);
-		
-		TaskClassDefinition taskClass = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_EINSATZ, taskClassRoot);
-		ClassProperty<Object> cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "Description", tenantId);
-		cp.setDefaultValues(Arrays.asList("Rettungseinsatz"));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		
-		cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "Description", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.EINSATZLENKER,
-				                                                     RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		// 
-		taskClass = (TaskClassDefinition) obtainClass(tenantId, TASK_RK_AUSFAHRT, taskClassRoot);
-		cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "Description", tenantId);
-		cp.setDefaultValues(Arrays.asList("Sanitätseinsatz"));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.EINSATZLENKER,
-                													 RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		//
-		taskClass = (TaskClassDefinition) obtainClass(tenantId, "Dienst", taskClassRoot);
-		cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "Description", tenantId);
-		cp.setDefaultValues(Arrays.asList("Dienst"));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		
-		cp = classPropertyService.getClassPropertyByName(taskClass.getId(), "role", tenantId);
-		cp.setAllowedValues(Arrays.asList(RolesAmbulanceService.DISPONENT, RolesAmbulanceService.EINSATZLENKER,
-          								 RolesAmbulanceService.SANITÄTER, RolesAmbulanceService.AUSZUBILDENDER));
-		classPropertyService.updateClassProperty(taskClass.getId(), cp.getId(), cp);
-		//classDefinitionRepository.save(taskClass);
-		
-	}
 }
