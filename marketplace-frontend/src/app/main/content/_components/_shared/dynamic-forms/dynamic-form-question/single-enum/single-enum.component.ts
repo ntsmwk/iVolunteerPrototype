@@ -61,6 +61,7 @@ export class SingleEnumComponent implements OnInit, AfterViewInit {
 
   onSelectClear() {
     this.question.value = null;
+    this.onHideList();
   }
 
   getQuestionValue() {

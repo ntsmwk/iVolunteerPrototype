@@ -71,6 +71,26 @@
 }
 
 
+
+.enum-button {
+    width: 120px;
+
+    border-radius: 4px; 
+    border-style: solid; 
+    border-width: 1px; 
+    border-color: currentColor; 
+
+    background-color: white; 
+
+    padding: 0 10px; 
+    line-height: 20px;
+
+    //center
+    // display: block; 
+    // margin: 0 auto;
+}
+
+
 :host ::ng-deep .mat-list-item {
     height: 35px;
 
