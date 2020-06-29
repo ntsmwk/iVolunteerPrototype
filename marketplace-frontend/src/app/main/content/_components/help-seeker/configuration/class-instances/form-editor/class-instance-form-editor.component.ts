@@ -282,6 +282,9 @@ export class ClassInstanceFormEditorComponent implements OnInit {
       } else {
         value = control.control.value;
       }
+      console.log(parentEntry.classProperties);
+      console.log(controls);
+      console.log(value);
       const l = propertyInstances.push(new PropertyInstance(classProperty, [value]));
 
       // if (classProperty.type === PropertyType.ENUM) {
