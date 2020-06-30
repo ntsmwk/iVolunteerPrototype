@@ -8,10 +8,12 @@ import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { DeleteClassConfigurationDialogData } from '../delete-dialog/delete-dialog.component';
 import { DialogFactoryDirective } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.component';
+import { OpenClassConfigurationDialogData } from '../open-dialog/open-dialog.component';
 
 export interface RootMenuItem {
   id: number;
   label: string;
+  icon: string;
 }
 
 export interface SubMenuItem {
@@ -38,11 +40,11 @@ export class TopMenuResponse {
 }
 
 const rootMenuItems: RootMenuItem[] = [
-  { id: 1, label: 'Datei' },
-  { id: 2, label: 'Bearbeiten' },
-  { id: 3, label: 'Ansicht' },
-  { id: 4, label: 'Extras' },
-  { id: 5, label: 'Hilfe' },
+  { id: 1, label: 'Menü', icon: 'menu' },
+  // { id: 2, label: 'Bearbeiten' },
+  // { id: 3, label: 'Ansicht' },
+  // { id: 4, label: 'Extras' },
+  // { id: 5, label: 'Hilfe' },
 ];
 
 const subMenuItems: SubMenuItem[] = [
@@ -51,25 +53,24 @@ const subMenuItems: SubMenuItem[] = [
   { rootId: 1, id: 3, label: 'Konfiguration speichern', clickAction: 'saveClicked', icon: undefined },
   // { rootId: 1, id: 3, label: 'Konfiguration speichern unter', clickAction: 'saveAsClicked', icon: undefined },
   { rootId: 1, id: 3, label: 'Konfiguration löschen', clickAction: 'deleteClicked', icon: undefined },
-
   { rootId: 1, id: 4, label: 'Instanz erstellen', clickAction: 'createEditorClicked', icon: undefined },
 
-  { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
-  { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 1, label: 'Test Entry 21', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 2, label: 'Test Entry 22', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 3, label: 'Test Entry 23', clickAction: 'test', icon: undefined },
+  // { rootId: 2, id: 4, label: 'Test Entry 24', clickAction: 'test', icon: undefined },
 
-  { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
-  { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
-  { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 1, label: 'Test Entry 31', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 2, label: 'Test Entry 32', clickAction: 'test', icon: undefined },
+  // { rootId: 3, id: 3, label: 'Test Entry 33', clickAction: 'test', icon: undefined },
 
-  { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
-  { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 1, label: 'Test Entry 41', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 2, label: 'Test Entry 42', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 3, label: 'Test Entry 43', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 4, label: 'Test Entry 44', clickAction: 'test', icon: undefined },
+  // { rootId: 4, id: 5, label: 'Test Entry 45', clickAction: 'test', icon: undefined },
 
-  { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
+  // { rootId: 5, id: 1, label: 'Test Entry 51', clickAction: 'test', icon: undefined },
 ];
 
 @Component({
@@ -92,6 +93,8 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   @Input() marketplace: Marketplace;
   @Input() eventResponse: TopMenuResponse;
   @Output() menuOptionClickedEvent: EventEmitter<any> = new EventEmitter();
+
+  configurationName: string;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -118,7 +121,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
 
     this.menubarContainer.nativeElement.style.position = 'absolute';
     this.menubarContainer.nativeElement.style.overflow = 'hidden';
-    this.menubarContainer.nativeElement.style.padding = '2px';
+    // this.menubarContainer.nativeElement.style.padding = '2px';
     this.menubarContainer.nativeElement.style.right = '0px';
     this.menubarContainer.nativeElement.style.top = '0px';
     this.menubarContainer.nativeElement.style.left = '0px';
@@ -134,7 +137,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   handleHTMLClickEvent(event: any) {
-    if (event.srcElement.className !== 'menuitem') {
+    if (event.srcElement.className !== 'menuitem' && event.srcElement.className !== 'menuitem-icon mat-icon notranslate material-icons mat-icon-no-color') {
       this.submenuContainer.nativeElement.style.display = 'none';
     }
   }
@@ -162,6 +165,7 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   newClicked(event: any, item: SubMenuItem) {
     this.dialogFactory.openNewClassConfigurationDialog(this.marketplace).then((ret: NewClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
+        this.configurationName = ret.classConfiguration.name;
         this.menuOptionClickedEvent.emit({ id: 'editor_new', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });
@@ -170,8 +174,9 @@ export class EditorTopMenuBarComponent implements AfterViewInit, OnChanges {
   }
 
   openClicked(event: any, item: SubMenuItem) {
-    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: any) => {
+    this.dialogFactory.openConfiguratorDialog(this.marketplace).then((ret: OpenClassConfigurationDialogData) => {
       if (!isNullOrUndefined(ret)) {
+        this.configurationName = ret.classConfiguration.name;
         this.menuOptionClickedEvent.emit({ id: 'editor_open', payload: ret });
       } else {
         this.menuOptionClickedEvent.emit({ id: 'cancelled' });

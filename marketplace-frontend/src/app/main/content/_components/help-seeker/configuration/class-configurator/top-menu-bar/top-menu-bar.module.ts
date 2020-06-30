@@ -11,6 +11,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { DialogFactoryModule } from 'app/main/content/_components/_shared/dialogs/_dialog-factory/dialog-factory.module';
 import { ConfirmDialogComponent } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModule } from 'app/main/content/_components/_shared/dialogs/confirm-dialog/confirm-dialog.module';
+import { MatButtonModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { ConfirmDialogModule } from 'app/main/content/_components/_shared/dialog
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatButtonModule,
 
     FuseSharedModule,
     FuseTruncatePipeModule,
