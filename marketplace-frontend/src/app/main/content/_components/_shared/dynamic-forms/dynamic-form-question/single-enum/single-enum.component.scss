@@ -74,23 +74,23 @@
 
 
 
-.enum-button {
-    width: 120px;
+// .enum-button {
+//     width: 120px;
 
-    border-radius: 4px !important; 
-    border: solid 1px mat-color($accent) !important; 
+//     border-radius: 4px !important; 
+//     border: solid 1px mat-color($accent) !important; 
 
-    background-color: white; 
+//     background-color: white; 
 
-    padding: 0 10px; 
-    line-height: 20px;
+//     padding: 0 10px; 
+//     line-height: 20px;
 
-}
+// }
 
-.enum-button:hover {
-    background-color: mat-color($accent);
-    color: white;
-}
+// .enum-button:hover {
+//     background-color: mat-color($accent);
+//     color: white;
+// }
 
 :host ::ng-deep .mat-list-item {
     height: 35px;

@@ -38,19 +38,6 @@
 
 $dark: #3e7ddb;
 
-.primary-button-dark-small {
-  min-width: 120px !important; 
-
-  border-radius: 4px !important; 
-  border: solid 1px $dark !important; 
-
-  background-color: $dark !important; 
-  color: white !important;
-
-  padding: 0 10px; 
-  line-height: 20px;
-}
-
 .primary-button-dark {
   min-width: 120px !important; 
 
@@ -63,8 +50,17 @@ $dark: #3e7ddb;
   padding: 0 10px; 
 }
 
-.primary-button-dark-small:hover, .primary-button-dark:hover, .primary-button-light:hover, .primary-button-light-small:hover {
-  border-color: white !important;
+.primary-button-dark-small {
+  min-width: 120px !important; 
+
+  border-radius: 4px !important; 
+  border: solid 1px $dark !important; 
+
+  background-color: $dark !important; 
+  color: white !important;
+
+  padding: 0 10px; 
+  line-height: 20px !important;
 }
 
 .secondary-button-dark {
@@ -73,7 +69,7 @@ $dark: #3e7ddb;
   border-radius: 4px !important; 
   border: solid 1px $dark !important; 
 
-  background-color: white; 
+  background-color: white !important; 
   color: $dark !important;
 
   padding: 0 10px; 
@@ -85,11 +81,11 @@ $dark: #3e7ddb;
   border-radius: 4px !important; 
   border: solid 1px $dark !important; 
 
-  background-color: white; 
+  background-color: white !important; 
   color: $dark !important;
 
   padding: 0 10px; 
-  line-height: 20px;
+  line-height: 20px !important;
 }
 
 .primary-button-light {
@@ -102,8 +98,6 @@ $dark: #3e7ddb;
   color: white !important;
 
   padding: 0 10px; 
-  line-height: 20px;
-
 }
 
 .primary-button-light-small {
@@ -112,12 +106,11 @@ $dark: #3e7ddb;
   border-radius: 4px !important; 
   border: solid 1px mat-color($accent) !important; 
 
-  background-color: white; 
+  background-color: mat-color($accent) !important; 
   color: white !important;
 
   padding: 0 10px; 
-  line-height: 20px;
-  
+  line-height: 20px !important;  
 }
 
 .secondary-button-light {
@@ -126,8 +119,8 @@ $dark: #3e7ddb;
   border-radius: 4px !important; 
   border: solid 1px mat-color($accent) !important; 
 
-  background-color: white; 
-  color: mat-color($accent);
+  background-color: white !important; 
+  color: mat-color($accent) !important;
 
   padding: 0 10px; 
 }
@@ -139,14 +132,23 @@ $dark: #3e7ddb;
   border-radius: 4px !important; 
   border: solid 1px mat-color($accent) !important; 
 
-  background-color: white; 
-  color: mat-color($accent);
+  background-color: white !important; 
+  color: mat-color($accent) !important;
 
   padding: 0 10px; 
-  line-height: 20px;
+  line-height: 20px !important;
 }
 
-.secondary-button-light-small:hover {
-  background-color: mat-color($accent);
-  color: white;
+.primary-button-dark-small:hover, .primary-button-dark:hover, .primary-button-light:hover, .primary-button-light-small:hover {
+  border-color: white !important;
+}
+
+.secondary-button-light:hover, .secondary-button-light-small:hover {
+  background-color: mat-color($accent) !important;
+  color: white !important;
+}
+
+.secondary-button-dark:hover, .secondary-button-dark-small:hover {
+  background-color: $dark !important;
+  color: white !important;
 }
