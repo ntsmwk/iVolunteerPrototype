@@ -22,7 +22,7 @@
   <div #enumListContainer class="list-container">
     <mat-action-list #enumList>
 
-      <div *ngFor="let opt of datasource.filteredData">
+      <div *ngFor="let opt of listOptions">
         <mat-list-item (click)="onSelectOption(opt)" *ngIf="opt.selectable">
           <div class="list-item-container" fxLayout="row">
             <div class="list-item-row-padding" [ngStyle]="{'width': calculateSpaces(opt.level)}"></div>
@@ -41,22 +41,23 @@
           [ngStyle]="{'margin-left': calculateSpaces(opt.level)}">
           {{opt.value}}
         </div>
+
       </div>
+
     </mat-action-list>
+
 
     <div style="margin: 12px 0;">
       <div style="display: block; margin: 0 auto; width: max-content">
-        <button class="secondary-button-light-small" mat-stroked-button type="button" color="accent"
-          (click)="onSelectClear()">
-          Wert entfernen
-        </button>
-        <button class="secondary-button-light-small" mat-stroked-button type="button" color="accent"
-          (click)="onHideList()" style="margin-left: 4px;">
-          Zurück
-        </button>
+        <button class="enum-button" mat-stroked-button type="button" color="accent" (click)="onSelectClear()">Wert
+          entfernen</button>
+        <button class="enum-button" mat-stroked-button type="button" color="accent" (click)="onHideList()"
+          style="margin-left: 4px;">Zurück</button>
       </div>
     </div>
+
   </div>
+
 
 
 </div>

@@ -1,4 +1,4 @@
-@import "common";
+@import "@fuse/scss/core";
 
 .question-container-open {
     padding: 8px;
@@ -16,8 +16,8 @@
 }
 
 .search-field {
-    width: 200px;
-    margin: 0 8px;
+    // width: 100%;
+     margin: 0 8px;
 }
 
 .list-container  {
@@ -73,6 +73,24 @@
 }
 
 
+
+.enum-button {
+    width: 120px;
+
+    border-radius: 4px !important; 
+    border: solid 1px mat-color($accent) !important; 
+
+    background-color: white; 
+
+    padding: 0 10px; 
+    line-height: 20px;
+
+}
+
+.enum-button:hover {
+    background-color: mat-color($accent);
+    color: white;
+}
 
 :host ::ng-deep .mat-list-item {
     height: 35px;
