@@ -1,9 +1,11 @@
 <h1 mat-dialog-title>Wirklich Speichern?</h1>
-<mat-dialog-content>
+<mat-dialog-content class="m-4">
   Die existierende Konfiguration wird überschrieben. Erstellte
   Matching-Konfigurationen funktionieren möglicherweise nicht mehr.
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onOKClick()">Ja</button>
-  <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Nein</button>
+  <div style="display: block; margin: 0 auto; width: max-content">
+    <button class="primary-button-dark" mat-stroked-button type="button" (click)="onOKClick()">Ja</button>
+    <button class="secondary-button-dark" mat-stroked-button type="button" [mat-dialog-close]="undefined">Nein</button>
+  </div>
 </mat-dialog-actions>

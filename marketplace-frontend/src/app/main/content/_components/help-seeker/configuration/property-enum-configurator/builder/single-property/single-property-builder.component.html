@@ -111,11 +111,9 @@
       matAutosizeMaxRows="3"></textarea>
   </mat-form-field>
 
-  <div class="pt-24" fxLayout="row" fxLayoutAlign="start end">
-    <button type="submit" mat-raised-button color="primary">Speichern</button>
-    <div class="pl-8"></div>
-    <button type="button" (click)="handleCancelClick()" mat-raised-button color="basic">Abbrechen</button>
-    <!-- <button *ngIf="sourceString=='builder'" type="button" (click)="handleCancelClick()" mat-raised-button
-      color="basic">Abbrechen</button> -->
+  <div class="mt-8" fxLayout="row" fxLayoutAlign="start end">
+    <button class="primary-button-dark" mat-stroked-button type="submit">Speichern</button>
+    <button class="secondary-button-dark ml-8" mat-stroked-button type="button"
+      (click)="handleCancelClick()">Abbrechen</button>
   </div>
 </form>

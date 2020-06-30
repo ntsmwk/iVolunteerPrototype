@@ -124,9 +124,10 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [disabled]="browseMode" (click)="onOKClick()">
+  <button class="primary-button-dark" mat-stroked-button type="button" [disabled]="browseMode" (click)="onOKClick()">
     OK
   </button>
-  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>
