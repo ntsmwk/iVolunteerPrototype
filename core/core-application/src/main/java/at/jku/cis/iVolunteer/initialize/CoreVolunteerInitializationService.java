@@ -92,7 +92,7 @@ public class CoreVolunteerInitializationService {
 			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
 			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
 			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
-			registerVolunteer(volunteer, tenantIds);
+//			registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
 	}

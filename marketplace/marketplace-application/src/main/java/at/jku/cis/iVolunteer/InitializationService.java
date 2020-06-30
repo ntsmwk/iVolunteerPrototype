@@ -93,7 +93,6 @@ public class InitializationService {
 		tenants.add(coreTenantRestClient.getTenantIdByName(FFEIDENBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(MUSIKVEREINSCHWERTBERG));
 		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
-		tenants.add(coreTenantRestClient.getTenantIdByName(RKWILHERING));
 
 
 		tenants.forEach(tenantId -> {

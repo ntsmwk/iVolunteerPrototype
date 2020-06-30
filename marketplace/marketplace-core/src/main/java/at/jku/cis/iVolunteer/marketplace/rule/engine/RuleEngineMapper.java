@@ -53,12 +53,13 @@ public class RuleEngineMapper {
 	}
 	
 	private String newGeneralImports() {
+		System.out.println(EQCriteria.class.getPackage().getName());
 		StringBuilder stringBuilder = new StringBuilder(); 
 		stringBuilder.append(newImport(Volunteer.class.getName()));
 		stringBuilder.append(newImport(Tenant.class.getName()));
 		stringBuilder.append(newImport(VolunteerService.class.getName()));
 		stringBuilder.append(newImport(ClassInstanceService.class.getName()));
-		stringBuilder.append(newImport(EQCriteria.class.getPackageName()+".*"));
+		stringBuilder.append(newImport(EQCriteria.class.getPackage().getName()+".*"));
 		stringBuilder.append(newImport(ClassInstance.class.getName()));
         stringBuilder.append(newImport(RuleExecution.class.getName()));
         stringBuilder.append(newImport(RuleStatus.class.getName()));
