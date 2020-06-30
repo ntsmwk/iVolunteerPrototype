@@ -1,0 +1,29 @@
+<form *ngIf="classAction" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
+ [formGroup]="ruleActionForm">
+    <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
+        <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 225px">
+            <mat-label>Neuer Freiwillenpasseintrag</mat-label>
+            <mat-select formControlName="classDefinitionId" [value]="classAction.classDefinition?.id">
+                <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
+                    (onSelectionChange)="onTargetChange(cd, $event)"> {{cd.name}} </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div *ngFor="let attribute of classAction.attributes">
+        <target-attribute-rule-configurator
+          [(attributeTarget)]="attribute"
+        ></target-attribute-rule-configurator>
+    </div>
+    <div *ngIf="classAction?.classDefinition?.properties.length > 0"> 
+        <button
+          type="button"
+          mat-raised-button
+          color="secondary"
+          (click)="addTargetAttribute()"
+        >
+          Attribut setzen        
+        </button>
+      </div>
+</form> 
+<!--(change)="onChange($event)"-->
+<!--(onSelectionChange)="onOperatorChange(op)"-->

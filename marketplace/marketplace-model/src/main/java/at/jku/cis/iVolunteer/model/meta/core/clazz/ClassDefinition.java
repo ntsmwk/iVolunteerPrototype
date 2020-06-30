@@ -11,6 +11,7 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 import at.jku.cis.iVolunteer.model.hash.IHashObject;
 import at.jku.cis.iVolunteer.model.meta.core.enums.EnumDefinition;
 import at.jku.cis.iVolunteer.model.meta.core.property.definition.ClassProperty;
+import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 
 @Document
 public class ClassDefinition extends IVolunteerObject implements IHashObject {
@@ -76,6 +77,17 @@ public class ClassDefinition extends IVolunteerObject implements IHashObject {
 	public void setProperties(List<ClassProperty<Object>> properties) {
 		this.properties = properties;
 	}
+	/*
+	public Boolean containsProperty(String name){
+		if (properties == null || properties.size() == 0)
+			return false;
+		for (ClassProperty<Object> pi: properties) {
+			if (pi.getName().equals(name))
+				return true;
+		}
+		return false;
+	}*/
+	
 
 	public List<EnumDefinition> getEnums() {
 		return enums;

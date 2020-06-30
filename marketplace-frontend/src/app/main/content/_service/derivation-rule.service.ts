@@ -24,10 +24,22 @@ export class DerivationRuleService {
     return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}`);
   }
 
+  test(marketplace: Marketplace, derivationRule: DerivationRule){
+    return this.http.post(`${marketplace.url}/rule/test`, derivationRule);
+  }
+
+  getTestResults(marketplace: Marketplace, derivationRule: DerivationRule){
+    return this.http.get(`${marketplace.url}/rule/test/${derivationRule.container}`);
+  }
+
   save(marketplace: Marketplace, derivationRule: DerivationRule) {
     if (isNullOrUndefined(derivationRule.id)) {
       return this.http.post(`${marketplace.url}/rule`, derivationRule);
     }
     return this.http.put(`${marketplace.url}/rule/${derivationRule.id}`, derivationRule);
+  }
+
+  getGeneralProperties(marketplace: Marketplace, tenantId: string){
+    return this.http.get(`${marketplace.url}/rule/tenant/${tenantId}/general/properties`);
   }
 }

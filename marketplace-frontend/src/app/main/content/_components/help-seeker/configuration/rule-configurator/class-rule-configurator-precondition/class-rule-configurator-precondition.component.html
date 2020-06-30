@@ -1,9 +1,9 @@
-<form *ngIf="classSourceRuleEntry" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
-    (change)="onChange($event)" [formGroup]="rulePreconditionForm">
+<form *ngIf="classCondition" form name="form" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start"
+(change)="onChange($event)" [formGroup]="rulePreconditionForm">
     <div fxLayout="row" fxLayoutAlign="start start" style="padding-top: 12px" fxLayoutGap="15px">
         <mat-form-field *ngIf="classDefinitions && classDefinitions.length > 0" style="width: 225px">
             <mat-label>Benötigter Freiwillenpasseintrag</mat-label>
-            <mat-select formControlName="classDefinitionId" [value]="classSourceRuleEntry.classDefinition?.id">
+            <mat-select formControlName="classDefinitionId" [value]="classCondition.classDefinition?.id">
                 <mat-option *ngFor="let cd of classDefinitions" [value]="cd.id"
                     (onSelectionChange)="onClassChange($event)"> {{cd.name}} </mat-option>
             </mat-select>
@@ -11,18 +11,9 @@
         <mat-form-field style="width: 115px">
             <mat-label>Aggregationsoperator</mat-label>
             <mat-select placeholder="Operation" formControlName="aggregationOperatorType"
-                [value]="classSourceRuleEntry.aggregationOperatorType">
-                <mat-option *ngFor="let op of aggregationOperators" [value]="op" (onSelectionChange)="onChange($event)">
-                    {{ retrieveAggregationOperatorValueOf(op)}} 
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field style="width: 100px">
-            <mat-label>Vergleichsoperator</mat-label>
-            <mat-select placeholder="Operation" formControlName="mappingOperatorType"
-                [value]="classSourceRuleEntry.mappingOperatorType">
-                <mat-option *ngFor="let op of comparisonOperators" [value]="op" (onSelectionChange)="onChange($event)">
-                    {{ retrieveMappingOperatorValueOf(op)}}
+                [value]="classCondition?.aggregationOperatorType">
+                <mat-option *ngFor="let op of aggregationOperators" [value]="op" (onSelectionChange)="onOperatorChange(op, $event)">
+                         {{ retrieveAggregationOperatorValueOf(op)}} 
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -30,4 +21,21 @@
             <input matInput placeholder="Wert" formControlName="value" />
         </mat-form-field>
     </div>
+    <div *ngFor="let attribute of classCondition.attributeConditions">
+        <attribute-rule-precondition
+          [(attributeCondition)]="attribute"
+        ></attribute-rule-precondition>
+    </div>
+    <div *ngIf="classCondition?.classDefinition?.properties.length > 0">
+        <button
+          type="button"
+          mat-raised-button
+          color="secondary"
+          (click)="addAttributeCondition()"
+        >
+          Property-Regel hinzufügen
+        </button>
+      </div>
 </form> 
+<!--(change)="onChange($event)"-->
+<!--(onSelectionChange)="onOperatorChange(op)"-->

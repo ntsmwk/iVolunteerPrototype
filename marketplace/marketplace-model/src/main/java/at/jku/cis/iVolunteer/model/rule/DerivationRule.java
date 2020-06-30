@@ -11,11 +11,19 @@ import at.jku.cis.iVolunteer.model.IVolunteerObject;
 public class DerivationRule extends IVolunteerObject {
 
 	private String name;
-	private List<ClassSourceRuleEntry> classSourceRules = new ArrayList<>();
-	private List<AttributeSourceRuleEntry> attributeSourceRules = new ArrayList<>();
-	private String target;
+	private String container;
+	private List<GeneralCondition> generalConditions = new ArrayList<GeneralCondition>();
+	private List<Condition> conditions = new ArrayList<>();
+	private List<ClassAction> actions = new ArrayList<>();
 
 	public DerivationRule() {
+		
+	}
+	
+	public DerivationRule(String name, String container) {
+		this();
+		this.name = name;
+		this.container = container;
 	}
 
 	public String getName() {
@@ -26,28 +34,48 @@ public class DerivationRule extends IVolunteerObject {
 		this.name = name;
 	}
 
-	public String getTarget() {
-		return target;
+	public String getContainer() {
+		return container;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public void setContainer(String container) {
+		this.container = container;
 	}
 
-	public List<ClassSourceRuleEntry> getClassSourceRules() {
-		return classSourceRules;
+	public List<GeneralCondition> getGeneralConditions() {
+		return generalConditions;
 	}
 
-	public void setClassSourceRules(List<ClassSourceRuleEntry> classSourceRules) {
-		this.classSourceRules = classSourceRules;
+	public void setGeneralConditions(List<GeneralCondition> generalConditions) {
+		this.generalConditions = generalConditions;
 	}
 
-	public List<AttributeSourceRuleEntry> getAttributeSourceRules() {
-		return attributeSourceRules;
+	public void addGeneralCondition(GeneralCondition generalCondition) {
+		generalConditions.add(generalCondition);
+	}
+	
+	public List<Condition> getConditions() {
+		return conditions;
 	}
 
-	public void setAttributeSourceRules(List<AttributeSourceRuleEntry> attributeSourceRules) {
-		this.attributeSourceRules = attributeSourceRules;
+	public void setConditions(List<Condition> conditions) {
+		this.conditions = conditions;
+	}
+	
+	public void addCondition(Condition condition) {
+		conditions.add(condition);
+	}
+	
+	public List<ClassAction> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<ClassAction> actions) {
+		this.actions = actions;
+	}
+	
+	public void addAction(ClassAction action) {
+		actions.add(action);
 	}
 
 }

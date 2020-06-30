@@ -12,10 +12,10 @@ import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import {
-  MappingOperatorType,
-  AttributeSourceRuleEntry,
-  ClassSourceRuleEntry,
-  AttributeAggregationOperatorType,
+  ComparisonOperatorType,
+  ClassCondition,
+  AggregationOperatorType,
+  AttributeCondition,
 } from "app/main/content/_model/derivation-rule";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
@@ -35,12 +35,12 @@ import { Helpseeker } from "../../../../../_model/helpseeker";
 })
 export class FuseAttributeRulePreconditionConfiguratorComponent
   implements OnInit {
-  @Input("attributeSourceRuleEntry")
-  attributeSourceRuleEntry: AttributeSourceRuleEntry;
-  @Output("attributeSourceRuleEntry")
-  attributeSourceRuleEntryChange: EventEmitter<
-    AttributeSourceRuleEntry
-  > = new EventEmitter<AttributeSourceRuleEntry>();
+  @Input("attributeCondition")
+  attributeCondition: AttributeCondition;
+  @Output("attributeCondition")
+  attributeConditionChange: EventEmitter<
+    AttributeCondition
+  > = new EventEmitter<AttributeCondition>();
 
   helpseeker: Helpseeker;
   marketplace: Marketplace;
@@ -49,7 +49,6 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
   comparisonOperators: any;
-  aggregationOperators: any;
 
   enumValues = [];
 
@@ -67,35 +66,25 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     private helpSeekerService: CoreHelpSeekerService
   ) {
     this.rulePreconditionForm = formBuilder.group({
-      classDefinitionId: new FormControl(undefined),
       classPropertyId: new FormControl(undefined),
-      aggregationOperatorType: new FormControl(undefined),
-      mappingOperatorType: new FormControl(undefined),
+      comparisonOperatorType: new FormControl(undefined),
       value: new FormControl(undefined),
     });
   }
 
   ngOnInit() {
     this.rulePreconditionForm.setValue({
-      classDefinitionId:
-        (this.attributeSourceRuleEntry.classDefinition
-          ? this.attributeSourceRuleEntry.classDefinition.id
-          : "") || "",
       classPropertyId:
-        (this.attributeSourceRuleEntry.classProperty
-          ? this.attributeSourceRuleEntry.classProperty.id
+        (this.attributeCondition.classProperty
+          ? this.attributeCondition.classProperty.id
           : "") || "",
-      aggregationOperatorType:
-        this.attributeSourceRuleEntry.aggregationOperatorType ||
-        AttributeAggregationOperatorType.SUM,
-      mappingOperatorType:
-        this.attributeSourceRuleEntry.mappingOperatorType ||
-        MappingOperatorType.EQ,
-      value: this.attributeSourceRuleEntry.value || "",
+      comparisonOperatorType:
+        this.attributeCondition.comparisonOperatorType ||
+        ComparisonOperatorType.EQ,
+      value: this.attributeCondition.value || "",
     });
 
-    this.comparisonOperators = Object.keys(MappingOperatorType);
-    this.aggregationOperators = Object.keys(AttributeAggregationOperatorType);
+    this.comparisonOperators = Object.keys(ComparisonOperatorType);
 
     this.loginService
       .getLoggedIn()
@@ -121,35 +110,24 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       });
   }
 
-  onClassChange($event) {
-    if (!this.attributeSourceRuleEntry.classDefinition) {
-      this.attributeSourceRuleEntry.classDefinition = new ClassDefinition();
-    }
-    this.attributeSourceRuleEntry.classDefinition.id = $event.source.value;
-    this.attributeSourceRuleEntry.classDefinition.tenantId = this.helpseeker.tenantId;
-    this.enumValues = [];
-    this.loadClassProperties($event);
-  }
-
   onPropertyChange($event) {
-    if (!this.attributeSourceRuleEntry.classProperty) {
-      this.attributeSourceRuleEntry.classProperty = new ClassProperty();
+    if (!this.attributeCondition.classProperty) {
+      this.attributeCondition.classProperty = new ClassProperty();
     }
-    this.attributeSourceRuleEntry.classProperty.id = $event.source.value;
+    this.attributeCondition.classProperty.id = $event.source.value;
     this.rulePreconditionForm.value.classPropertyId = $event.source.value;
     this.onChange($event);
   }
 
   private loadClassProperties($event) {
     if (
-      this.attributeSourceRuleEntry &&
-      this.attributeSourceRuleEntry.classDefinition &&
-      this.attributeSourceRuleEntry.classDefinition.id
+      this.attributeCondition &&
+      this.attributeCondition.classDefinition 
     ) {
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
-          this.attributeSourceRuleEntry.classDefinition.id,
+          this.attributeCondition.classDefinition.id
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
@@ -162,13 +140,13 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
   findEnumValues() {
     if (
-      this.attributeSourceRuleEntry.classProperty.type === "ENUM" &&
+      this.attributeCondition.classProperty.type === "ENUM" &&
       this.enumValues.length == 0
     ) {
       this.classDefinitionService
         .getEnumValuesFromEnumHeadClassDefinition(
           this.marketplace,
-          this.attributeSourceRuleEntry.classProperty.allowedValues[0]
+          this.attributeCondition.classProperty.allowedValues[0]
             .enumClassId,
           this.helpseeker.tenantId
         )
@@ -180,33 +158,38 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
     return this.enumValues;
   }
 
+  onOperatorChange(op, $event){
+    console.log("on operator change begin ....");
+    if ($event.isUserInput) {    // ignore on deselection of the previous option
+      console.log("Selection changed to " + op);
+      console.log("operator changed to " + op);
+      this.attributeCondition.comparisonOperatorType = op;
+      console.log("op neu: " + this.attributeCondition.comparisonOperatorType);
+    }
+    console.log("on operator change end ....");
+    
+  }
+
   onChange($event) {
-    if (this.classDefinitions.length > 0 && this.classProperties.length > 0) {
-      this.attributeSourceRuleEntry.classDefinition = this.classDefinitions.find(
-        (cd) => cd.id === this.rulePreconditionForm.value.classDefinitionId
-      );
-      this.attributeSourceRuleEntry.classProperty =
+    console.log("change values in attribute, yay!");
+    if (this.classProperties.length > 0) {
+      this.attributeCondition.classProperty =
         this.classProperties.find(
           (cp) => cp.id === this.rulePreconditionForm.value.classPropertyId
         ) || new ClassProperty();
-      this.attributeSourceRuleEntry.aggregationOperatorType = this.rulePreconditionForm.value.aggregationOperatorType;
-      this.attributeSourceRuleEntry.mappingOperatorType = this.rulePreconditionForm.value.mappingOperatorType;
-      this.attributeSourceRuleEntry.value = this.rulePreconditionForm.value.value;
-      this.attributeSourceRuleEntryChange.emit(this.attributeSourceRuleEntry);
+      this.attributeCondition.comparisonOperatorType = this.rulePreconditionForm.value.comparisonOperatorType;
+      this.attributeCondition.value = this.rulePreconditionForm.value.value;
+      this.attributeConditionChange.emit(this.attributeCondition);
+      console.log(this.attributeCondition.value);
+      console.log(this.attributeCondition.classProperty.name);
+      console.log(this.attributeCondition.comparisonOperatorType);
     }
   }
 
-  private retrieveMappingOperatorValueOf(op) {
-    let x: MappingOperatorType =
-      MappingOperatorType[op as keyof typeof MappingOperatorType];
+  private retrieveComparisonOperatorValueOf(op) {
+    let x: ComparisonOperatorType =
+      ComparisonOperatorType[op as keyof typeof ComparisonOperatorType];
     return x;
   }
 
-  private retrieveAggregationOperatorValueOf(op) {
-    let x: AttributeAggregationOperatorType =
-      AttributeAggregationOperatorType[
-      op as keyof typeof AttributeAggregationOperatorType
-      ];
-    return x;
-  }
 }

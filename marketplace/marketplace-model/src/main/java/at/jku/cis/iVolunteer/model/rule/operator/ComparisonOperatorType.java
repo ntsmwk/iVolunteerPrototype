@@ -1,11 +1,11 @@
-package at.jku.cis.iVolunteer.model.rule;
+package at.jku.cis.iVolunteer.model.rule.operator;
 
-public enum MappingOperatorType {
+public enum ComparisonOperatorType implements OperatorType {
 	EQ("="), LT("<"), LE("<="), GT(">"), GE(">="), NE("!=");
 
 	private String value;
 
-	private MappingOperatorType(String value) {
+	private ComparisonOperatorType(String value) {
 		this.value = value;
 	}
 

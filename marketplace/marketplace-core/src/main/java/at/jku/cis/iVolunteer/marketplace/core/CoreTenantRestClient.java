@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+
 @Service
 public class CoreTenantRestClient {
 
@@ -34,6 +36,23 @@ public class CoreTenantRestClient {
 		}
 
 		return tenantId;
+	}
+
+	public Tenant getTenantById(String tenantId) {
+		String requestUrl = MessageFormat.format("{0}/tenant/{1}", url, tenantId);
+		Tenant tenant = null;
+		try {
+			tenant = restTemplate.getForObject(requestUrl, Tenant.class);
+		} catch (Exception e) {
+			if (e instanceof HttpStatusCodeException) {
+				logger.error(((HttpStatusCodeException) e).getResponseBodyAsString());
+			} else {
+				logger.error(e.getMessage());
+
+			}
+		}
+
+		return tenant;
 	}
 
 }

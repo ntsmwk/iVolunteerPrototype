@@ -8,6 +8,7 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceRepositor
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.meta.core.relationship.RelationshipRepository;
 import at.jku.cis.iVolunteer.marketplace.rule.DerivationRuleRepository;
+import at.jku.cis.iVolunteer.marketplace.rule.engine.ContainerRuleEntryRepository;
 
 @Service
 public class FinalizationService {
@@ -19,7 +20,7 @@ public class FinalizationService {
 	public void destroy(ClassConfigurationRepository configuratorRepository,
 			ClassDefinitionRepository classDefinitionRepository, ClassInstanceRepository classInstanceRepository,
 			RelationshipRepository relationshipRepository, PropertyDefinitionRepository propertyDefinitionRepository,
-			DerivationRuleRepository derivationRuleRepository) {
+			DerivationRuleRepository derivationRuleRepository, ContainerRuleEntryRepository containerRuleEntryRepository) {
 //		 classDefinitionRepository.deleteAll();
 //		 relationshipRepository.deleteAll();
 //		 classInstanceRepository.deleteAll();

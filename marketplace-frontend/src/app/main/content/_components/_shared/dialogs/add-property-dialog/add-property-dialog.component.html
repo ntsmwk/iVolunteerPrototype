@@ -114,8 +114,7 @@
     Neues Property
   </button>
 
-  <button class="secondary-button-dark" *ngIf="tabIndex === 1" mat-stroked-button type="button"
-    (click)="createNewClicked('enum')">
+  <button *ngIf="tabIndex === 1" mat-button (click)="createNewClicked('enum')">
     Neues Enum
   </button>
 </mat-dialog-actions>

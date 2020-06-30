@@ -83,7 +83,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
           this.currentFormConfiguration = this.formConfigurations.pop();
           this.isLoaded = true;
 
-
+          console.log(this.currentFormConfiguration);
 
           // const returnData = new FormEntryReturnEventData(this.currentFormConfiguration.formEntry.formGroup, this.currentFormConfiguration.id);
           // this.handleExportClick(returnData);
@@ -121,6 +121,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
   }
 
   handleTupleSelection(evt: { selection: { id: any; label: any }; formEntry: FormEntry }) {
+    console.log("handling selection")
     let unableToContinueControl: FormControl;
     // let unableToContinueControlKey: string;
     let unableToContinueQuestion: QuestionBase<any>;
@@ -136,6 +137,10 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
     });
 
     unableToContinueQuestion = evt.formEntry.questions.find(q => q.key.endsWith('unableToContinue'));
+    console.log(this.data.marketplace);
+    console.log(pathPrefix);
+    console.log(evt.selection.id);
+
 
     this.classDefinitionService.getFormConfigurationChunk(this.data.marketplace, pathPrefix, evt.selection.id)
       .toPromise().then((retFormEntry: FormEntry) => {
@@ -143,6 +148,7 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
         const unableToContinueProperty = currentFormEntry.classProperties.find(p => p.id.endsWith('unableToContinue'));
 
+        console.log(unableToContinueProperty);
         unableToContinueProperty.defaultValues = [evt.selection];
         retFormEntry.classProperties.push(unableToContinueProperty);
 
@@ -192,7 +198,8 @@ export class ClassInstanceFormPreviewExportDialogComponent implements OnInit {
 
   handleResultEvent(event: FormEntryReturnEventData) {
     this.results.push(event);
-
+    console.log("actual vs expected");
+    console.log(this.results.length + "vs" + this.expectedNumberOfResults);
     // const unableToContinue = this.containsUnsetUnableToContinue(this.results.map(fg => fg.formGroup));
     if (this.results.length === this.expectedNumberOfResults /*&& !unableToContinue*/) {
 
