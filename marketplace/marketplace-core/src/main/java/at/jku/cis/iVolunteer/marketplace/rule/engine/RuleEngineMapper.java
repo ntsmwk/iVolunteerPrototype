@@ -12,11 +12,9 @@ import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassDefinitionReposit
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.ClassInstanceService;
 import at.jku.cis.iVolunteer.marketplace.meta.core.class_.criteria.EQCriteria;
 import at.jku.cis.iVolunteer.marketplace.meta.core.property.ClassPropertyService;
-import at.jku.cis.iVolunteer.marketplace.meta.core.property.PropertyDefinitionRepository;
 import at.jku.cis.iVolunteer.marketplace.user.VolunteerService;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.meta.core.clazz.ClassInstance;
-import at.jku.cis.iVolunteer.model.meta.core.property.definition.PropertyDefinition;
 import at.jku.cis.iVolunteer.model.rule.Action;
 import at.jku.cis.iVolunteer.model.rule.AttributeCondition;
 import at.jku.cis.iVolunteer.model.rule.ClassAction;
@@ -55,7 +53,7 @@ public class RuleEngineMapper {
 	}
 	
 	private String newGeneralImports() {
-		StringBuilder stringBuilder = new StringBuilder(); // XXX --> package name ermitteln
+		StringBuilder stringBuilder = new StringBuilder(); 
 		stringBuilder.append(newImport(Volunteer.class.getName()));
 		stringBuilder.append(newImport(Tenant.class.getName()));
 		stringBuilder.append(newImport(VolunteerService.class.getName()));
@@ -200,10 +198,11 @@ public class RuleEngineMapper {
 	}
 	
 
-	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) {
+	private String mapGeneralConditionToRuleConstraint(GeneralCondition generalCondition) { 
 		switch (generalCondition.getAttributeName()) {
 			case "Alter":
-				return "	currentAge( v ) " + decodeComparisonOperator((ComparisonOperatorType)generalCondition.getOperatorType()) + 
+				return "	v.getBirthday() != null && "
+						+ " currentAge( v ) " + decodeComparisonOperator((ComparisonOperatorType)generalCondition.getOperatorType()) + 
 						       " " + generalCondition.getValue(); 
 			default: return null;
 		}
