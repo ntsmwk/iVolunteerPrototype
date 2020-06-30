@@ -64,21 +64,11 @@ public class CoreVolunteerInitializationService {
 		createVolunteer("WSch", "passme", "Wieland", "Schwinger", LocalDate.of(1976,6,9), "", "");
 		createVolunteer("BProe", "passme", "Birgit", "Pröll", LocalDate.of(1976,10,5),"", "");
 		createVolunteer("KKof", "passme", "Katharina", "Kofler", LocalDate.of(1998,5,8),"Kati", "");
-		
-		List<String> tenantIds = new ArrayList<String>();
-		tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
-		tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
-		tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
-		CoreVolunteer vol = createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
-		registerVolunteer(vol, tenantIds);
-		vol = createVolunteer("KBauer", "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17),"", "");
-		registerVolunteer(vol, tenantIds);
-		vol = createVolunteer("EWagner", "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
-		registerVolunteer(vol, tenantIds);
-		vol = createVolunteer("WHaube", "passme", "Werner", "Haube", LocalDate.of(1970,8,8), "", "");
-		registerVolunteer(vol, tenantIds);
-		vol = createVolunteer("MJachs", "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");	
-		registerVolunteer(vol, tenantIds);
+		createVolunteer("CVoj", "passme", "Claudia", "Vojinovic", LocalDate.of(1981, 12, 1), "", "");
+		createVolunteer("KBauer", "passme", "Kerstin", "Bauer", LocalDate.of(1960, 2, 17),"", "");
+		createVolunteer("EWagner", "passme", "Erich", "Wagner", LocalDate.of(1980, 07, 11), "", "");
+		createVolunteer("WHaube", "passme", "Werner", "Haube", LocalDate.of(1970,8,8), "", "");
+		createVolunteer("MJachs", "passme", "Melanie", "Jachs", LocalDate.of(1970, 7, 8), "", "");	
 	}
 
 	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName, LocalDate birthDate,
@@ -97,6 +87,12 @@ public class CoreVolunteerInitializationService {
 
 			setImage(fileName, volunteer);
 			volunteer = coreVolunteerRepository.insert(volunteer);
+			
+			List<String> tenantIds = new ArrayList<String>();
+			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
+			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
+			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
+			registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
 	}
