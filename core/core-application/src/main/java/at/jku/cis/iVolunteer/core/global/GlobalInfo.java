@@ -3,15 +3,15 @@ package at.jku.cis.iVolunteer.core.global;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.jku.cis.iVolunteer.core.security.ParticipantRole;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 public class GlobalInfo {
 
-	private User participant;
-	private ParticipantRole participantRole;
+	private User user;
+	private UserRole userRole;
 	private List<Tenant> tenants = new ArrayList<>();
 	private Marketplace marketplace;
 
@@ -19,19 +19,19 @@ public class GlobalInfo {
 	}
 
 	public User getParticipant() {
-		return participant;
+		return user;
 	}
 
 	public void setParticipant(User participant) {
-		this.participant = participant;
+		this.user = participant;
 	}
 
-	public ParticipantRole getParticipantRole() {
-		return participantRole;
+	public UserRole getParticipantRole() {
+		return userRole;
 	}
 
-	public void setParticipantRole(ParticipantRole participantRole) {
-		this.participantRole = participantRole;
+	public void setParticipantRole(UserRole participantRole) {
+		this.userRole = participantRole;
 	}
 
 	public Marketplace getMarketplace() {

@@ -10,8 +10,7 @@ import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 import at.jku.cis.iVolunteer.model.user.User;
 
 @Document
-public abstract class CoreUser extends User {
-
+public class CoreUser extends User {
 	@DBRef
 	private List<CoreUser> follower = new ArrayList<>();
 	@DBRef

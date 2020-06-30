@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
-import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @Service
@@ -29,11 +29,16 @@ public class CoreVolunteerInitializationService {
 
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreVolunteerService coreVolunteerService;
-	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private TenantRepository coreTenantRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreVolunteerService coreVolunteerService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private TenantRepository coreTenantRepository;
 
 	public void initVolunteers() {
 
@@ -49,11 +54,11 @@ public class CoreVolunteerInitializationService {
 		createVolunteer("KKof", "passme", "Katharina", "Kofler", "Kati", "");
 	}
 
-	private CoreVolunteer createVolunteer(String username, String password, String firstName, String lastName,
+	private CoreUser createVolunteer(String username, String password, String firstName, String lastName,
 			String nickName, String fileName) {
-		CoreVolunteer volunteer = coreVolunteerRepository.findByUsername(username);
+		CoreUser volunteer = coreUserRepository.findByUsername(username);
 		if (volunteer == null) {
-			volunteer = new CoreVolunteer();
+			volunteer = new CoreUser();
 			volunteer.setUsername(username);
 			volunteer.setPassword(bCryptPasswordEncoder.encode(password));
 			volunteer.setFirstname(firstName);
@@ -61,12 +66,12 @@ public class CoreVolunteerInitializationService {
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);
-			volunteer = coreVolunteerRepository.insert(volunteer);
+			volunteer = coreUserRepository.insert(volunteer);
 		}
 		return volunteer;
 	}
 
-	private void setImage(String fileName, CoreVolunteer volunteer) {
+	private void setImage(String fileName, CoreUser volunteer) {
 		if (fileName != null && !fileName.equals("")) {
 			try {
 				Resource resource = new ClassPathResource(fileName);
@@ -81,10 +86,10 @@ public class CoreVolunteerInitializationService {
 	public void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
 				.collect(Collectors.toList());
-		coreVolunteerRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
+		coreUserRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
 	}
 
-	private void registerVolunteer(CoreVolunteer volunteer, List<String> tenantIds) {
+	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {
 		Marketplace mp = marketplaceRepository.findAll().stream().filter(m -> m.getName().equals("Marketplace 1"))
 				.findFirst().orElse(null);
 		if (mp != null) {

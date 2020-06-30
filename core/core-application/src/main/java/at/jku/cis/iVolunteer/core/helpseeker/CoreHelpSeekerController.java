@@ -14,42 +14,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @RestController
 @RequestMapping("/helpseeker")
 public class CoreHelpSeekerController {
 
-	@Autowired private CoreHelpSeekerRepository coreHelpSeekerRepository;
-
-	@Autowired private CoreHelpSeekerService coreHelpSeekerService;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private CoreHelpSeekerService coreHelpSeekerService;
 
 	@GetMapping("/all")
-	public List<CoreHelpSeeker> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
+	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
 		if (tenantId == null) {
-			return this.coreHelpSeekerRepository.findAll();
+			return this.coreUserRepository.findAll();
 		}
 		return this.coreHelpSeekerService.getAllCoreHelpSeekers(tenantId);
 	}
 
 	@PutMapping("/find-by-ids")
-	public List<CoreHelpSeeker> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
-		List<CoreHelpSeeker> coreHelpseekers = new ArrayList<>();
+	public List<CoreUser> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
+		List<CoreUser> coreHelpseekers = new ArrayList<>();
 
-		coreHelpSeekerRepository.findAll(coreHelpseekerIds).forEach(coreHelpseekers::add);
+		coreUserRepository.findAll(coreHelpseekerIds).forEach(coreHelpseekers::add);
 
 		return coreHelpseekers;
 	}
 
 	@GetMapping("/{coreHelpSeekerId}")
-	public CoreHelpSeeker getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
-		return coreHelpSeekerRepository.findOne(coreHelpSeekerId);
+	public CoreUser getCorehelpSeeker(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
+		return coreUserRepository.findOne(coreHelpSeekerId);
 	}
 
 	@GetMapping("/{coreHelpSeekerId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreHelpSeekerId") String coreHelpSeekerId) {
-		CoreHelpSeeker helpSeeker = coreHelpSeekerRepository.findOne(coreHelpSeekerId);
+		CoreUser helpSeeker = coreUserRepository.findOne(coreHelpSeekerId);
 		if (helpSeeker.getRegisteredMarketplaces().isEmpty()) {
 			return null;
 		}

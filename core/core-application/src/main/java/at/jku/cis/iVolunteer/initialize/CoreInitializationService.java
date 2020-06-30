@@ -5,13 +5,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import at.jku.cis.iVolunteer.core.admin.CoreAdminRepository;
-import at.jku.cis.iVolunteer.core.flexprod.CoreFlexProdRepository;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.core.recruiter.CoreRecruiterRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreAdmin;
-import at.jku.cis.iVolunteer.model.core.user.CoreFlexProd;
-import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @Service
@@ -21,16 +17,21 @@ public class CoreInitializationService {
 	private static final String ADMIN = "admin";
 	private static final String RAW_PASSWORD = "passme";
 
-	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
-	@Autowired private CoreFlexProdRepository coreFlexProdRepository;
-	@Autowired private CoreAdminRepository coreAdminRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
 
-	@Autowired private CoreVolunteerInitializationService coreVolunteerInitializationService;
-	@Autowired private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
-	@Autowired private CoreTenantInitializationService coreTenantInitializationService;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private Environment environment;
+	@Autowired
+	private CoreVolunteerInitializationService coreVolunteerInitializationService;
+	@Autowired
+	private CoreHelpSeekerInitializationService coreHelpSeekerInitializationService;
+	@Autowired
+	private CoreTenantInitializationService coreTenantInitializationService;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private Environment environment;
 
 	public void init() {
 		createMarketplace();
@@ -57,44 +58,41 @@ public class CoreInitializationService {
 			}
 			this.marketplaceRepository.save(marketplace);
 		}
-
-		// TODO Auto-generated method stub
-
 	}
 
 	private void createRecruiter(String username, String password, String firstName, String lastName, String position) {
-		CoreRecruiter recruiter = coreRecruiterRepository.findByUsername(username);
+		CoreUser recruiter = coreUserRepository.findByUsername(username);
 		if (recruiter == null) {
-			recruiter = new CoreRecruiter();
+			recruiter = new CoreUser();
 			recruiter.setUsername(username);
 			recruiter.setPassword(bCryptPasswordEncoder.encode(password));
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
-			recruiter = coreRecruiterRepository.insert(recruiter);
+			recruiter = coreUserRepository.insert(recruiter);
 		}
 	}
 
-	private CoreAdmin createAdminUser(String username, String password) {
-		CoreAdmin fpUser = coreAdminRepository.findByUsername(username);
+	private CoreUser createAdminUser(String username, String password) {
+		CoreUser fpUser = coreUserRepository.findByUsername(username);
 		if (fpUser == null) {
-			fpUser = new CoreAdmin();
+			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
-			fpUser = coreAdminRepository.insert(fpUser);
+			fpUser = coreUserRepository.insert(fpUser);
 		}
 		return fpUser;
 	}
 
-	private CoreFlexProd createFlexProdUser(String username, String password) {
+	private CoreUser createFlexProdUser(String username, String password) {
 
-		CoreFlexProd fpUser = coreFlexProdRepository.findByUsername(username);
+		CoreUser fpUser = coreUserRepository.findByUsername(username);
 
 		if (fpUser == null) {
-			fpUser = new CoreFlexProd();
+			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
-			fpUser = coreFlexProdRepository.insert(fpUser);
+			fpUser = coreUserRepository.insert(fpUser);
 		}
 
 		return fpUser;

@@ -8,52 +8,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.security.CoreLoginService;
 import at.jku.cis.iVolunteer.core.tenant.TenantService;
-import at.jku.cis.iVolunteer.model.core.user.CoreHelpSeeker;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
 
 @RestController
 public class GlobalController {
 
-	@Autowired private CoreLoginService loginService;
-	@Autowired private TenantService tenantService;
+	@Autowired
+	private CoreLoginService loginService;
+	@Autowired
+	private TenantService tenantService;
 
 	@GetMapping("/global")
 	public GlobalInfo getGlobalInfo() {
 		GlobalInfo globalInfo = new GlobalInfo();
 
-		globalInfo.setParticipant(loginService.getLoggedInParticipant());
+		globalInfo.setParticipant(loginService.getLoggedInUser());
 		globalInfo.setParticipantRole(loginService.getLoggedInParticipantRole());
 
-		switch (globalInfo.getParticipantRole()) {
-		case VOLUNTEER:
-			setVolunteerGlobalInfo(globalInfo);
-			break;
-		case HELP_SEEKER:
-			setHelpSeekerGlobalInfo(globalInfo);
-			break;
+		CoreUser coreUser = (CoreUser) globalInfo.getParticipant();
+		List<Marketplace> registeredMarketplaces = coreUser.getRegisteredMarketplaces();
+		if (registeredMarketplaces.size() > 0) {
+			globalInfo.setMarketplace(registeredMarketplaces.get(0));
 		}
+		globalInfo.setTenants(this.tenantService.getTenantsByUser(coreUser.getId()));
 
 		return globalInfo;
-	}
-
-	private void setVolunteerGlobalInfo(GlobalInfo globalInfo) {
-		CoreVolunteer coreVolunteer = (CoreVolunteer) globalInfo.getParticipant();
-		List<Marketplace> registeredMarketplaces = coreVolunteer.getRegisteredMarketplaces();
-		if (registeredMarketplaces.size() > 0) {
-			globalInfo.setMarketplace(registeredMarketplaces.get(0));
-		}
-		globalInfo.setTenants(this.tenantService.getTenantsByVolunteer(globalInfo.getParticipant().getId()));
-	}
-
-	private void setHelpSeekerGlobalInfo(GlobalInfo globalInfo) {
-		CoreHelpSeeker coreHelpSeeker = (CoreHelpSeeker) globalInfo.getParticipant();
-		List<Marketplace> registeredMarketplaces = coreHelpSeeker.getRegisteredMarketplaces();
-		if (registeredMarketplaces.size() > 0) {
-			globalInfo.setMarketplace(registeredMarketplaces.get(0));
-		}
-
-		globalInfo.getTenants().add(this.tenantService.getTenantById(coreHelpSeeker.getTenantId()));
 	}
 
 }

@@ -1,5 +1,6 @@
 package at.jku.cis.iVolunteer.core.volunteer;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,26 +9,31 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreVolunteer;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
+import at.jku.cis.iVolunteer.model.user.User;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class CoreVolunteerService {
 
-	@Autowired private CoreVolunteerRepository coreVolunteerRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
-	public void subscribeTenant(String coreVolunteerId, String marketplaceId, String tenantId,
-			String authorization) {
+	public void subscribeTenant(String coreVolunteerId, String marketplaceId, String tenantId, String authorization) {
 		this.subscribeTenant(coreVolunteerId, marketplaceId, Collections.singletonList(tenantId), authorization);
 	}
 
 	public void subscribeTenant(String coreVolunteerId, String marketplaceId, List<String> tenantIds,
 			String authorization) {
-		CoreVolunteer coreVolunteer = coreVolunteerRepository.findOne(coreVolunteerId);
+		CoreUser coreVolunteer = coreUserRepository.findOne(coreVolunteerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (coreVolunteer == null || marketplace == null) {
 			throw new NotFoundException();
@@ -37,17 +43,22 @@ public class CoreVolunteerService {
 		registerOrUpdateVolunteer(authorization, coreVolunteer, marketplace);
 	}
 
-	private CoreVolunteer updateCoreVolunteer(CoreVolunteer coreVolunteer, Marketplace marketplace,
-			List<String> tenantIds) {
+	private CoreUser updateCoreVolunteer(CoreUser coreVolunteer, Marketplace marketplace, List<String> tenantIds) {
 		if (!coreVolunteer.getRegisteredMarketplaces().contains(marketplace)) {
 			coreVolunteer.getRegisteredMarketplaces().add(marketplace);
 		}
-		coreVolunteer.getSubscribedTenants().addAll(tenantIds);
-		return coreVolunteerRepository.save(coreVolunteer);
+
+		List<TenantUserSubscription> newSubscriptions = new ArrayList<>();
+		tenantIds.forEach(t -> {
+			newSubscriptions.add(new TenantUserSubscription(t, UserRole.VOLUNTEER));
+		});
+		coreVolunteer.getSubscribedTenants().addAll(newSubscriptions);
+
+		return coreUserRepository.save(coreVolunteer);
 	}
 
-	private void registerOrUpdateVolunteer(String authorization, CoreVolunteer coreVolunteer, Marketplace marketplace) {
-		Volunteer volunteer = new Volunteer();
+	private void registerOrUpdateVolunteer(String authorization, CoreUser coreVolunteer, Marketplace marketplace) {
+		User volunteer = new User();
 		volunteer.setId(coreVolunteer.getId());
 		volunteer.setSubscribedTenants(coreVolunteer.getSubscribedTenants());
 		volunteer.setUsername(coreVolunteer.getUsername());
@@ -59,19 +70,19 @@ public class CoreVolunteerService {
 		if (coreVolunteer.getImage() != null) {
 			volunteer.setImage(coreVolunteer.getImage());
 		}
-		coreMarketplaceRestClient.registerVolunteer(marketplace.getUrl(), authorization, volunteer);
+		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, volunteer);
 	}
 
 	public void unsubscribeTenant(String coreVolunteerId, String marketplaceId, String tenantId, String authorization) {
-		CoreVolunteer coreVolunteer = coreVolunteerRepository.findOne(coreVolunteerId);
+		CoreUser coreVolunteer = coreUserRepository.findOne(coreVolunteerId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (coreVolunteer == null || marketplace == null) {
 			throw new NotFoundException();
 		}
-		coreVolunteer.getSubscribedTenants().remove(tenantId);
-		coreVolunteerRepository.save(coreVolunteer);
-		
-//		TODO MWE remove tenant from MP db..
+		coreVolunteer.removeSubscribedTenant(tenantId);
+		coreUserRepository.save(coreVolunteer);
+
+		// TODO MWE remove tenant from MP db..
 
 	}
 }

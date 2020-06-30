@@ -10,27 +10,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
-import at.jku.cis.iVolunteer.model.core.user.CoreRecruiter;
+import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
-import at.jku.cis.iVolunteer.model.user.Recruiter;
+import at.jku.cis.iVolunteer.model.user.User;
 
 @RestController
 @RequestMapping("/recruiter")
 public class CoreRecruiterController {
 
-	@Autowired private CoreRecruiterRepository coreRecruiterRepository;
-	@Autowired private MarketplaceRepository marketplaceRepository;
-	@Autowired private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserRepository coreUserRepository;
+	@Autowired
+	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreMarketplaceRestClient coreMarketplaceRestClient;
 
 	@GetMapping("/{coreRecruiterId}")
-	public CoreRecruiter getCorehelpSeeker(@PathVariable("coreRecruiterId") String coreRecruiterId) {
-		return coreRecruiterRepository.findOne(coreRecruiterId);
+	public CoreUser getCorehelpSeeker(@PathVariable("coreRecruiterId") String coreRecruiterId) {
+		return coreUserRepository.findOne(coreRecruiterId);
 	}
 
 	@GetMapping("/{coreRecruiterId}/marketplace")
 	public Marketplace getRegisteredMarketplaces(@PathVariable("coreRecruiterId") String coreRecruiterId) {
-		CoreRecruiter coreRecruiter = coreRecruiterRepository.findOne(coreRecruiterId);
+		CoreUser coreRecruiter = coreUserRepository.findOne(coreRecruiterId);
 		if (coreRecruiter.getRegisteredMarketplaces().isEmpty()) {
 			return null;
 		}
@@ -40,16 +44,16 @@ public class CoreRecruiterController {
 	@PostMapping("/{coreRecruiterId}/register/{marketplaceId}")
 	public void registerMarketpace(@PathVariable("coreRecruiterId") String coreRecruiterId,
 			@PathVariable("marketplaceId") String marketplaceId, @RequestHeader("Authorization") String authorization) {
-		CoreRecruiter coreRecruiter = coreRecruiterRepository.findOne(coreRecruiterId);
+		CoreUser coreRecruiter = coreUserRepository.findOne(coreRecruiterId);
 		Marketplace marketplace = marketplaceRepository.findOne(marketplaceId);
 		if (coreRecruiter == null || marketplace == null) {
 			throw new NotFoundException();
 		}
 
 		coreRecruiter.getRegisteredMarketplaces().add(marketplace);
-		coreRecruiter = coreRecruiterRepository.save(coreRecruiter);
+		coreRecruiter = coreUserRepository.save(coreRecruiter);
 
-		Recruiter recruiter = new Recruiter();
+		User recruiter = new User();
 		recruiter.setId(coreRecruiter.getId());
 		recruiter.setPosition(coreRecruiter.getPosition());
 		recruiter.setUsername(coreRecruiter.getUsername());
@@ -57,7 +61,7 @@ public class CoreRecruiterController {
 		recruiter.setLastname(coreRecruiter.getLastname());
 		recruiter.setMiddlename(coreRecruiter.getMiddlename());
 
-		coreMarketplaceRestClient.registerRecruiter(marketplace.getUrl(), authorization, recruiter);
+		coreMarketplaceRestClient.registerUser(marketplace.getUrl(), authorization, recruiter);
 	}
 
 }

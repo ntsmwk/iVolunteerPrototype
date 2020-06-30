@@ -4,55 +4,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import at.jku.cis.iVolunteer.marketplace.user.RecruiterRepository;
-import at.jku.cis.iVolunteer.marketplace.user.HelpSeekerRepository;
-import at.jku.cis.iVolunteer.marketplace.user.VolunteerRepository;
-import at.jku.cis.iVolunteer.model.user.HelpSeeker;
-import at.jku.cis.iVolunteer.model.user.ParticipantRole;
-import at.jku.cis.iVolunteer.model.user.Recruiter;
+import at.jku.cis.iVolunteer.marketplace.user.UserRepository;
+import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 import at.jku.cis.iVolunteer.model.user.User;
-import at.jku.cis.iVolunteer.model.user.Volunteer;
 
 @Service
 public class LoginService {
 
-	@Autowired private HelpSeekerRepository helpSeekerRepository;
-	@Autowired private VolunteerRepository volunteerRepository;
-	@Autowired private RecruiterRepository recruiterRepository;
+	@Autowired
+	private UserRepository userRepository;
+	// @Autowired
+	// private HelpSeekerRepository helpSeekerRepository;
+	// @Autowired
+	// private RecruiterRepository recruiterRepository;
 
-	public User getLoggedInParticipant() {
+	public User getLoggedInUser() {
 		Authentication authentication = determineAuthentication();
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
-	public ParticipantRole getLoggedInParticipantRole() {
-		User participant = getLoggedInParticipant();
-		if (participant instanceof HelpSeeker) {
-			return ParticipantRole.HELP_SEEKER;
-		}
-		if (participant instanceof Volunteer) {
-			return ParticipantRole.VOLUNTEER;
-		}
-		if(participant instanceof Recruiter) {
-			return ParticipantRole.RECRUITER;
-		}
-		return null;
+	// TODO Philipp
+	// Abfrage nur mehr per Tenant möglich
+	public UserRole getLoggedInUserRole(Tenant tenant) {
+		User user = getLoggedInUser();
+
+		return user.getSubscribedTenants().stream().filter(c -> {
+			return c.getTenantId() == tenant.getId();
+		}).findFirst().orElse(null).getRole();
+
+		// User participant = getLoggedInUser();
+		// if (participant instanceof HelpSeeker) {
+		// return UserRole.HELP_SEEKER;
+		// }
+		// if (participant instanceof Volunteer) {
+		// return UserRole.VOLUNTEER;
+		// }
+		// if (participant instanceof Recruiter) {
+		// return UserRole.RECRUITER;
+		// }
+		// return null;
 	}
 
 	private User findByUsername(String username) {
-		User user = helpSeekerRepository.findByUsername(username);
+		// User user = helpSeekerRepository.findByUsername(username);
+		// if (user != null) {
+		// return user;
+		// }
+		User user = userRepository.findByUsername(username);
 		if (user != null) {
 			return user;
-		} 
-		user = volunteerRepository.findByUsername(username);
-		if(user != null) {
-			return user;
 		}
-		user = recruiterRepository.findByUsername(username);
-		if(user != null) {
-			return user;
-		}
+		// user = recruiterRepository.findByUsername(username);
+		// if (user != null) {
+		// return user;
+		// }
 		return null;
 	}
 
