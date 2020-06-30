@@ -37,7 +37,8 @@
 
 <mat-dialog-actions>
 
-  <button mat-button (click)="onOKClick()">OK</button>
-  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="primary-button-dark" mat-stroked-button type="button" (click)="onOKClick()">OK</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
 
 </mat-dialog-actions>

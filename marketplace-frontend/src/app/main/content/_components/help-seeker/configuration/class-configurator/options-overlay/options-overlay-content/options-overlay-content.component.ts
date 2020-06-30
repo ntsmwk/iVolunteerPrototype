@@ -56,6 +56,10 @@ export class ClassOptionsOverlayContentComponent implements OnInit {
         this.resultData.emit(this.inputData);
     }
 
+    onCancel() {
+        this.resultData.emit(undefined);
+    }
+
     changeIconClicked() {
         this.dialogFactory.openChangeIconDialog(this.inputData.marketplace, this.inputData.classDefinition.imagePath).then((result: any) => {
             this.inputData.classDefinition.imagePath = result;

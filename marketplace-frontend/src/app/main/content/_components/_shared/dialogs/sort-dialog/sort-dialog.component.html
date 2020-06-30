@@ -6,10 +6,7 @@
 
   <div class="wrapper">
     <div class="container" dragula="DRAGULA_FACTS" [(dragulaModel)]="data.list">
-      <mat-card
-        *ngFor="let elem of data.list"
-        style="cursor: grab; width: 250px; height: 50px;"
-      >
+      <mat-card *ngFor="let elem of data.list" style="cursor: grab; width: 250px; height: 50px;">
         <!-- style=" cursor: grab; width:250px; height: 50px; text-align: center; outline-style:double; outline-color:
         black; margin-bottom: 5px"> -->
 
@@ -22,6 +19,6 @@
   <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
   <button mat-button [mat-dialog-close]="data" (click)="(printProperties)">
-    Bestätigen
+    OK
   </button>
 </mat-dialog-actions>

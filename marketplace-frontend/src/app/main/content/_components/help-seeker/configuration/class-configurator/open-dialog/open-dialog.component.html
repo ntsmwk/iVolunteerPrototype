@@ -22,11 +22,7 @@
         <th style="text-align: start;" class="table-header-cell">Name</th>
         <th style="text-align: start;" class="table-header-cell">Geändert</th>
       </tr>
-      <tr
-        *ngFor="let entry of recentClassConfigurations"
-        class="table-row"
-        (click)="handleRowClick(entry)"
-      >
+      <tr *ngFor="let entry of recentClassConfigurations" class="table-row" (click)="handleRowClick(entry)">
         <td style="overflow: hidden;">{{ entry.name }}</td>
         <td style="overflow: hidden; font-size: 12px;">
           {{ entry.timestamp | date: "dd.MM.yyyy - HH:mm:ss" }}
@@ -44,15 +40,13 @@
   </div>
 
   <div *ngIf="browseMode">
-    <browse-class-sub-dialog
-      [data]="browseDialogData"
-      [browseMode]="browseMode"
-      (subDialogReturn)="handleReturnFromBrowse($event)"
-    >
+    <browse-class-sub-dialog [data]="browseDialogData" [browseMode]="browseMode"
+      (subDialogReturn)="handleReturnFromBrowse($event)">
     </browse-class-sub-dialog>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="undefined">Abbrechen</button>
+  <button class="secondary-button-dark" mat-stroked-button type="button"
+    [mat-dialog-close]="undefined">Abbrechen</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
 </mat-dialog-actions>
