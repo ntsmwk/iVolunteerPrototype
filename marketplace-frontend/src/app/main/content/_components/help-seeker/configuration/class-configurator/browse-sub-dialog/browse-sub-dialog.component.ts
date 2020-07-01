@@ -1,5 +1,6 @@
 import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
+import { MatTab, MatTableDataSource } from '@angular/material';
 
 export class ClassBrowseSubDialogData {
   title: string;
@@ -22,12 +23,16 @@ export class BrowseClassSubDialogComponent implements OnInit {
   @Output() subDialogReturn: EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>
     = new EventEmitter<{ cancelled: boolean, entryId: string, sourceReference: 'PRODUCER' | 'CONSUMER' }>();
 
+  datasource: MatTableDataSource<{ id: string, name: string, date: Date }> = new MatTableDataSource();
+
   constructor(
   ) {
 
   }
 
   ngOnInit() {
+
+    this.datasource.data = this.data.entries;
 
     // DEBUG
     // this.data.entries.push(...this.data.entries);
@@ -43,6 +48,11 @@ export class BrowseClassSubDialogComponent implements OnInit {
 
   handleBackClick() {
     this.subDialogReturn.emit({ cancelled: true, entryId: undefined, sourceReference: this.data.sourceReference });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.datasource.filter = filterValue.trim().toLowerCase();
   }
 
 

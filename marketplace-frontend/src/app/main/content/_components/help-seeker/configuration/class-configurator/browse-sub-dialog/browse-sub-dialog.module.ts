@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BrowseClassSubDialogComponent } from './browse-sub-dialog.component';
 import { MatCommonModule } from '@angular/material/core';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { MatButtonModule, MatTooltipModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatTooltipModule, MatIconModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -13,7 +13,8 @@ import { MatButtonModule, MatTooltipModule, MatIconModule } from '@angular/mater
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
-
+    MatFormFieldModule,
+    MatInputModule,
 
     FuseSharedModule,
   ],
