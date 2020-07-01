@@ -63,4 +63,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     });
   }
 
+
+
 }

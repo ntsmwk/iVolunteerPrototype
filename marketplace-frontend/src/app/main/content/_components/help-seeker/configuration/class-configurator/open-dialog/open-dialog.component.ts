@@ -88,7 +88,7 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     this.browseDialogData = new ClassBrowseSubDialogData();
     this.browseDialogData.marketplace = this.data.marketplace;
     this.browseDialogData.sourceReference = undefined;
-    this.browseDialogData.title = 'Klassen-Konfigurationen Durchsuchen';
+    this.browseDialogData.title = 'Klassen-Konfigurationen durchsuchen';
 
     this.browseDialogData.entries = [];
 

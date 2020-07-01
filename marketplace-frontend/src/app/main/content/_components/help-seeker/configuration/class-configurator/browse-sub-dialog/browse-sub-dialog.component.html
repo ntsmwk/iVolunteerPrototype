@@ -21,7 +21,7 @@
 
     </tr>
     <tr *ngFor="let entry of data.entries" class="table-row" (click)="handleRowClick(entry)">
-      <td style="overflow: hidden">{{entry.name}}</td>
+      <td style="overflow: hidden; " class="name-cell">{{entry.name}}</td>
       <td style="overflow: hidden; font-size: 12px">{{entry.date | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
     </tr>
   </table>

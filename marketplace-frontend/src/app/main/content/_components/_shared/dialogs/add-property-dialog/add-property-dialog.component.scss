@@ -38,6 +38,12 @@ mat-dialog-content {
 
     .mat-column-label {
         flex: 0 1 250px;
+        .name-label {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; 
+          max-width: 245px;      
+      }
     }
 
     .mat-column-type {
