@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import { User, ParticipantRole } from "../../../../../_model/user";
+import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -40,7 +40,7 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
 
   helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
@@ -106,8 +106,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
                 marketplace,
-                // TODO Philipp
-                this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+                this.helpseeker.subscribedTenants.find(
+                  (t) => t.role === UserRole.HELP_SEEKER
+                ).tenantId
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -123,10 +124,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
       this.attributeSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.attributeSourceRuleEntry.classDefinition.id = $event.source.value;
-    // TODO Philipp
-    this.attributeSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.map(
-      (s) => s.tenantId
-    )[0];
+    this.attributeSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
+      (t) => t.role === UserRole.HELP_SEEKER
+    ).tenantId;
     this.enumValues = [];
     this.loadClassProperties($event);
   }
@@ -170,8 +170,9 @@ export class FuseAttributeRulePreconditionConfiguratorComponent
           this.marketplace,
           this.attributeSourceRuleEntry.classProperty.allowedValues[0]
             .enumClassId,
-          // TODO Philipp
-          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
         .then((list: any[]) => {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
 import { ClassInstance } from "app/main/content/_model/meta/class";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User, ParticipantRole } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   MatTableDataSource,
@@ -29,7 +29,7 @@ export class ClassInstanceDetailsComponent implements OnInit {
   id: string = null;
   classInstance: ClassInstance;
   participant: User;
-  role: ParticipantRole;
+  role: UserRole;
   marketplace: Marketplace;
   tenant: Tenant;
 
@@ -74,11 +74,11 @@ export class ClassInstanceDetailsComponent implements OnInit {
     );
 
     if (this.classInstance === null) {
-      let role = <ParticipantRole>(
-        await this.loginService.getLoggedInParticipantRole().toPromise()
+      let role = <UserRole>(
+        await this.loginService.getLoggedInUserRole().toPromise()
       );
 
-      if (role === "VOLUNTEER") {
+      if (role === UserRole.VOLUNTEER) {
         this.classInstance = <ClassInstance>(
           await this.localRepositoryService
             .getSingleClassInstance(this.participant, this.id)

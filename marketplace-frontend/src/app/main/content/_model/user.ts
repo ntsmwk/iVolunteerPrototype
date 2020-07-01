@@ -23,14 +23,14 @@ export class User {
   image;
 }
 
-export type ParticipantRole =
-  | "VOLUNTEER"
-  | "HELP_SEEKER"
-  | "ADMIN"
-  | "RECRUITER"
-  | "FLEXPROD";
-
+export enum UserRole {
+  "VOLUNTEER",
+  "HELP_SEEKER",
+  "ADMIN",
+  "RECRUITER",
+  "FLEXPROD",
+}
 export class TenantUserSubscription {
   tenantId: string;
-  role: ParticipantRole;
+  role: UserRole;
 }

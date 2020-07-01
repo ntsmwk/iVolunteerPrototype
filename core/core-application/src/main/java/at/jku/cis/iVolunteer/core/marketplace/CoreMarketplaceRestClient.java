@@ -22,7 +22,8 @@ public class CoreMarketplaceRestClient {
 	private RestTemplate restTemplate;
 
 	public User registerUser(String marketplaceURL, String authorization, User user) {
-		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst().orElse(null);
+		UserRole role = user.getSubscribedTenants().stream().map(t -> t.getRole()).findFirst()
+				.orElse(UserRole.VOLUNTEER);
 
 		switch (role) {
 			case VOLUNTEER:

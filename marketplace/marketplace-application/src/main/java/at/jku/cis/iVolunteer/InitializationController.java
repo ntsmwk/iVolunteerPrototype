@@ -15,7 +15,7 @@ public class InitializationController {
 	@Autowired
 	private UserMappingRepository userMappingRepository;
 	@Autowired
-	private UserRepository volunteerRepository;
+	private UserRepository userRepository;
 
 	@PutMapping("/init/usermapping")
 	public void addFireBrigadeUserMapping() {
@@ -25,8 +25,7 @@ public class InitializationController {
 			userMappingRepository.deleteAll();
 		}
 
-		// TODO Philipp
-		User volunteer = volunteerRepository.findByUsername("mweixlbaumer");
+		User volunteer = userRepository.findByUsername("mweixlbaumer");
 		if (volunteer != null) {
 			UserMapping mapping = new UserMapping();
 			mapping.setiVolunteerUserId(volunteer.getId());

@@ -18,10 +18,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // TODO Philipp: methoden zusammenfassen, anahnd rolle unterscheiden
-
-    // Volunteer --- //
-
     @GetMapping("/volunteer")
     public List<User> findAll() {
         return userRepository.findAll();
@@ -52,10 +48,6 @@ public class UserController {
         return null;
     }
 
-    // --- Volunteer end --- //
-
-    // --- Helpseeker --- //
-
     @PostMapping("/helpseeker")
     public User registerHelpSeeker(@RequestBody User helpSeeker) {
         if (userRepository.findOne(helpSeeker.getId()) != null) {
@@ -63,10 +55,6 @@ public class UserController {
         }
         return userRepository.insert(helpSeeker);
     }
-
-    // --- Helpseeker end --- //
-
-    // --- Recruiter --- //
 
     @GetMapping("/recruiter/{id}")
     public User findById2(@PathVariable("id") String id) {
@@ -80,7 +68,5 @@ public class UserController {
         }
         return userRepository.insert(recruiter);
     }
-
-    // --- Recruiter end --- //
 
 }

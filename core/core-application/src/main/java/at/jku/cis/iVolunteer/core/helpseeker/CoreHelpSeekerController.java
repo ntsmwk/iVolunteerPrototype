@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @RestController
 @RequestMapping("/helpseeker")
@@ -26,11 +28,13 @@ public class CoreHelpSeekerController {
 	private CoreUserRepository coreUserRepository;
 	@Autowired
 	private CoreHelpSeekerService coreHelpSeekerService;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	@GetMapping("/all")
 	public List<CoreUser> getAllCoreHelpSeekers(@RequestParam(value = "tId", required = false) String tenantId) {
 		if (tenantId == null) {
-			return this.coreUserRepository.findAll();
+			return this.coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
 		}
 		return this.coreHelpSeekerService.getAllCoreHelpSeekers(tenantId);
 	}
@@ -39,7 +43,8 @@ public class CoreHelpSeekerController {
 	public List<CoreUser> getAllCoreVolunteers(@RequestBody List<String> coreHelpseekerIds) {
 		List<CoreUser> coreHelpseekers = new ArrayList<>();
 
-		coreUserRepository.findAll(coreHelpseekerIds).forEach(coreHelpseekers::add);
+		this.coreUserService.getCoreUsersByRoleAndId(UserRole.HELP_SEEKER, coreHelpseekerIds)
+				.forEach(coreHelpseekers::add);
 
 		return coreHelpseekers;
 	}

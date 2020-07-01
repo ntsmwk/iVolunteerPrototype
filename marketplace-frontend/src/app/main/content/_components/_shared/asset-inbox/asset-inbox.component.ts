@@ -3,12 +3,12 @@ import { MatTableDataSource } from "@angular/material";
 import { ClassInstanceDTO, ClassArchetype } from "../../../_model/meta/class";
 import { SelectionModel } from "@angular/cdk/collections";
 import { Marketplace } from "../../../_model/marketplace";
-import { Helpseeker } from "../../../_model/helpseeker";
-import { Volunteer } from "../../../_model/volunteer";
+
 import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
 import { CoreVolunteerService } from "../../../_service/core-volunteer.service";
 import { CoreUserImagePathService } from "../../../_service/core-user-imagepath.service";
 import { isNullOrUndefined } from "util";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "app-asset-inbox",
@@ -43,15 +43,15 @@ export class AssetInboxComponent implements OnInit {
   @Input() inboxOwner: string;
   @Output() submit = new EventEmitter();
 
-  issuers: Helpseeker[] = [];
-  volunteers: Volunteer[] = [];
+  issuers: User[] = [];
+  volunteers: User[] = [];
   userImagePaths: any[];
 
   constructor(
     private helpseekerService: CoreHelpSeekerService,
     private volunteerService: CoreVolunteerService,
     private userImagePathService: CoreUserImagePathService
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (!isNullOrUndefined(this.classInstanceDTOs)) {
@@ -63,14 +63,14 @@ export class AssetInboxComponent implements OnInit {
         this.helpseekerService
           .findAll()
           .toPromise()
-          .then((issuers: Helpseeker[]) => {
+          .then((issuers: User[]) => {
             this.issuers = issuers;
           }),
 
         this.volunteerService
           .findAll()
           .toPromise()
-          .then((volunteers: Volunteer[]) => {
+          .then((volunteers: User[]) => {
             this.volunteers = volunteers;
           }),
       ]).then(() => {
@@ -90,16 +90,17 @@ export class AssetInboxComponent implements OnInit {
   }
 
   fetchImagePaths() {
-    const users: (Volunteer | Helpseeker)[] = [];
-    users.push(...this.issuers);
-    users.push(...this.volunteers);
-    this.userImagePathService
-      .getImagePathsById(users.map((u) => u.id))
-      .toPromise()
-      .then((ret: any) => {
-        console.log(ret);
-        this.userImagePaths = ret;
-      });
+    // TODO
+    // const users: (Volunteer | Helpseeker)[] = [];
+    // users.push(...this.issuers);
+    // users.push(...this.volunteers);
+    // this.userImagePathService
+    //   .getImagePathsById(users.map((u) => u.id))
+    //   .toPromise()
+    //   .then((ret: any) => {
+    //     console.log(ret);
+    //     this.userImagePaths = ret;
+    //   });
   }
 
   onSubmit() {
@@ -118,7 +119,7 @@ export class AssetInboxComponent implements OnInit {
   }
 
   getNameForEntry(personId: string, type: string) {
-    let person: Volunteer | Helpseeker;
+    let person: User;
     if (type === "issuer") {
       person = this.issuers.find((i) => i.id === personId);
     } else {

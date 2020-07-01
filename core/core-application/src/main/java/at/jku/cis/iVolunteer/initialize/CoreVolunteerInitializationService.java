@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.core.volunteer.CoreVolunteerService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class CoreVolunteerInitializationService {
@@ -44,6 +46,8 @@ public class CoreVolunteerInitializationService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private TenantRepository coreTenantRepository;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	public void initVolunteers() {
 
@@ -77,7 +81,7 @@ public class CoreVolunteerInitializationService {
 			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
 			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
 			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
-			registerVolunteer(volunteer, tenantIds);
+			// registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
 	}
@@ -97,10 +101,8 @@ public class CoreVolunteerInitializationService {
 	public void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
 				.collect(Collectors.toList());
-		// TODO Philipp: current behaviour: register ALL users...
-		// separation for each role necessary?
-		// if yes, find all volunteers here first...
-		coreUserRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
+		this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER)
+				.forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
 	}
 
 	private void registerVolunteer(CoreUser volunteer, List<String> tenantIds) {

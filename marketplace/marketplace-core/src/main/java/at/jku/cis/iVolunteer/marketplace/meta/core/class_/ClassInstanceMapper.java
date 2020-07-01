@@ -16,8 +16,10 @@ import at.jku.cis.iVolunteer.model.meta.core.property.instance.PropertyInstance;
 @Service
 public class ClassInstanceMapper {
 
-	@Autowired private Hasher hasher;
-	@Autowired private DateTimeService dateTimeService;
+	@Autowired
+	private Hasher hasher;
+	@Autowired
+	private DateTimeService dateTimeService;
 
 	List<ClassInstanceDTO> mapToDTO(List<ClassInstance> classInstances) {
 		List<ClassInstanceDTO> classInstanceDTOs = classInstances.stream().map(ci -> {
@@ -58,7 +60,6 @@ public class ClassInstanceMapper {
 			if (startingDate != null) {
 				if (startingDate.getValues().size() > 0) {
 					try {
-						// TODO Philipp (timestamp data long...)
 						dto.setDateFrom((Date) startingDate.getValues().get(0));
 					} catch (ClassCastException e) {
 						try {

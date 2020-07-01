@@ -23,10 +23,10 @@ public class GlobalController {
 	public GlobalInfo getGlobalInfo() {
 		GlobalInfo globalInfo = new GlobalInfo();
 
-		globalInfo.setParticipant(loginService.getLoggedInUser());
-		globalInfo.setParticipantRole(loginService.getLoggedInParticipantRole());
+		globalInfo.setUser(loginService.getLoggedInUser());
+		globalInfo.setUserRole(loginService.getLoggedInUserRole());
 
-		CoreUser coreUser = (CoreUser) globalInfo.getParticipant();
+		CoreUser coreUser = (CoreUser) globalInfo.getUser();
 		List<Marketplace> registeredMarketplaces = coreUser.getRegisteredMarketplaces();
 		if (registeredMarketplaces.size() > 0) {
 			globalInfo.setMarketplace(registeredMarketplaces.get(0));

@@ -39,7 +39,7 @@ export class FuseUserMenuComponent implements OnInit {
   }
 
   fetchUserImagePaths() {
-    // TODO Philipp: umbauen auf user.image
+    // TODO Philipp:
     // const users: User[] = [];
     // if (this.participant) {
     //   users.push(this.participant);

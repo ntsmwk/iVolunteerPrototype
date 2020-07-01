@@ -19,8 +19,10 @@ import at.jku.cis.iVolunteer.model.rule.DerivationRuleDTO;
 @Component
 public class DerivationRuleMapper implements AbstractMapper<DerivationRule, DerivationRuleDTO> {
 
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private ClassPropertyService classPropertyService;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private ClassPropertyService classPropertyService;
 
 	@Override
 	public DerivationRuleDTO toTarget(DerivationRule source) {
@@ -36,7 +38,6 @@ public class DerivationRuleMapper implements AbstractMapper<DerivationRule, Deri
 				.stream()
 				.map(entry -> new AttributeSourceRuleEntryDTO(
 						classDefinitionRepository.findOne(entry.getClassDefinitionId()),
-						// TODO Philipp: surce.getTenantId!???
 						classPropertyService.getClassPropertyById(entry.getClassDefinitionId(), entry.getClassPropertyId()),
 						entry.getMappingOperatorType(),
 						entry.getValue(),

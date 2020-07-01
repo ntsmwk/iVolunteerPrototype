@@ -16,7 +16,7 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { navigation_volunteer } from "app/navigation/navigation_volunteer";
 import { navigation_helpseeker } from "app/navigation/navigation_helpseeker";
 import { LoginService } from "./content/_service/login.service";
-import { ParticipantRole, User } from "./content/_model/user";
+import { UserRole, User } from "./content/_model/user";
 import { navigation_flexprod } from "app/navigation/navigation_flexprod";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { Router } from "@angular/router";
@@ -57,23 +57,23 @@ export class FuseMainComponent implements OnDestroy {
     }
 
     this.loginService
-      .getLoggedInParticipantRole()
+      .getLoggedInUserRole()
       .toPromise()
-      .then((role: ParticipantRole) => {
+      .then((role: UserRole) => {
         switch (role) {
-          case "HELP_SEEKER":
+          case UserRole.HELP_SEEKER:
             this.navigation = navigation_helpseeker;
             break;
-          case "VOLUNTEER":
+          case UserRole.VOLUNTEER:
             this.navigation = navigation_volunteer;
             break;
-          case "FLEXPROD":
+          case UserRole.FLEXPROD:
             this.navigation = navigation_flexprod;
             break;
-          case "RECRUITER":
+          case UserRole.RECRUITER:
             this.navigation = navigation_recruiter;
             break;
-          case "ADMIN":
+          case UserRole.ADMIN:
             this.navigation = navigation_admin;
             break;
         }

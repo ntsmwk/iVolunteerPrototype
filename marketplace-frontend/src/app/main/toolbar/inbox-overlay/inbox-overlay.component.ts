@@ -12,7 +12,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import { User, ParticipantRole } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { isNullOrUndefined } from "util";
 import {
   ClassInstance,
@@ -43,13 +43,13 @@ export class InboxOverlayComponent implements OnInit {
 
   marketplace: Marketplace;
   participant;
-  participantRole: ParticipantRole;
+  participantRole: UserRole;
   classInstanceDTOs: ClassInstanceDTO[] = [];
 
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns = ["archetype", "label"];
 
-  // TODO Philipp: Unterscheidung zwischen volunteer und helpseeker noch nötig?
+  // TODO Philipp
 
   ngOnInit() {
     this.marketplaceService
@@ -61,18 +61,18 @@ export class InboxOverlayComponent implements OnInit {
         }
 
         this.loginService
-          .getLoggedInParticipantRole()
+          .getLoggedInUserRole()
           .toPromise()
-          .then((role: ParticipantRole) => {
+          .then((role: UserRole) => {
             this.participantRole = role;
-            if (this.participantRole === "VOLUNTEER") {
+            if (this.participantRole === UserRole.VOLUNTEER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
                 .then((volunteer: User) => {
                   this.participant = volunteer;
                 });
-            } else if (this.participantRole === "HELP_SEEKER") {
+            } else if (this.participantRole === UserRole.HELP_SEEKER) {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
@@ -81,7 +81,7 @@ export class InboxOverlayComponent implements OnInit {
                 });
             }
 
-            if (this.participantRole === "VOLUNTEER") {
+            if (this.participantRole === UserRole.VOLUNTEER) {
               this.participant.subscribedTenants.forEach((tenantId) => {
                 this.classInstanceService
                   .getClassInstancesInUserInbox(
@@ -95,7 +95,7 @@ export class InboxOverlayComponent implements OnInit {
                     this.isLoaded = true;
                   });
               });
-            } else if (this.participantRole === "HELP_SEEKER") {
+            } else if (this.participantRole === UserRole.HELP_SEEKER) {
               this.classInstanceService
                 .getClassInstancesInIssuerInbox(
                   this.marketplace,

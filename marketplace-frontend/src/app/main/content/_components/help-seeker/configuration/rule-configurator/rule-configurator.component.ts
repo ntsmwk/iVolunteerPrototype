@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ParticipantRole, User } from "app/main/content/_model/user";
+import { UserRole, User } from "app/main/content/_model/user";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import {
   DerivationRule,
@@ -26,7 +26,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
 export class FuseRuleConfiguratorComponent implements OnInit {
   helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   ruleForm: FormGroup;
 
   derivationRule: DerivationRule;
@@ -72,14 +72,20 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutHeadAndEnums(
           this.marketplace,
-          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
     );
 
     this.tenant = <Tenant>(
       await this.tenantService
-        .findById(this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0])
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
         .toPromise()
     );
   }
@@ -90,7 +96,9 @@ export class FuseRuleConfiguratorComponent implements OnInit {
         .findByIdAndTenantId(
           marketplace,
           ruleId,
-          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
         .then((rule: DerivationRule) => {

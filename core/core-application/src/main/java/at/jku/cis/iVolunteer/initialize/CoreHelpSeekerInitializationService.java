@@ -11,6 +11,7 @@ import at.jku.cis.iVolunteer.core.helpseeker.CoreHelpSeekerService;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.tenant.TenantRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.tenant.Tenant;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
@@ -46,6 +47,8 @@ public class CoreHelpSeekerInitializationService {
 	private CoreHelpSeekerService coreHelpSeekerService;
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	public void initHelpSeekers() {
 		String tenantIdFF = coreTenantRepository.findByName(FFEIDENBERG).getId();
@@ -90,7 +93,7 @@ public class CoreHelpSeekerInitializationService {
 	}
 
 	private void registerDefaultHelpSeeker(String helpSeekerUser, String tenantName) {
-		List<CoreUser> helpSeekers = coreUserRepository.findAll();
+		List<CoreUser> helpSeekers = this.coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
 		List<Tenant> tenants = coreTenantRepository.findAll();
 
 		CoreUser MV_helpSeeker = helpSeekers.stream().filter(helpSeeker -> helpSeeker.getId().equals(helpSeekerUser))

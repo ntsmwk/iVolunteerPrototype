@@ -1,8 +1,8 @@
 package at.jku.cis.iVolunteer.core.helpseeker;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import at.jku.cis.iVolunteer.core.marketplace.CoreMarketplaceRestClient;
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.exception.NotFoundException;
@@ -26,6 +27,8 @@ public class CoreHelpSeekerService {
 	private MarketplaceRepository marketplaceRepository;
 	@Autowired
 	private CoreMarketplaceRestClient coreMarketplaceRestClient;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	public void registerMarketplace(String coreHelpSeekerId, String marketplaceId, String tenantId,
 			String authorization) {
@@ -63,15 +66,11 @@ public class CoreHelpSeekerService {
 	}
 
 	public List<CoreUser> getAllCoreHelpSeekers(String tenantId) {
-		List<CoreUser> users = this.coreUserRepository.findAll();
+		List<CoreUser> users = coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
 
-		List<CoreUser> helpSeekers = new ArrayList<>();
-		users.forEach(u -> {
-			if (u.getSubscribedTenants().stream().map(t -> t.getRole()).equals(UserRole.HELP_SEEKER)) {
-				helpSeekers.add(u);
-			}
-			;
-		});
-		return helpSeekers;
+		return users.stream()
+				.filter(u -> u.getSubscribedTenants().stream().allMatch(t -> t.getTenantId().equals(tenantId)))
+				.collect(Collectors.toList());
+
 	}
 }

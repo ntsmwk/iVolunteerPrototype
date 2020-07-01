@@ -9,9 +9,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { TenantService } from "app/main/content/_service/core-tenant.service";
 import { Tenant } from "app/main/content/_model/tenant";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { MatTableDataSource } from "@angular/material";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "tenant-form",
@@ -22,7 +22,7 @@ export class FuseTenantFormComponent implements OnInit {
   tenant: Tenant;
   marketplaceId: string;
 
-  dataSource = new MatTableDataSource<Helpseeker>();
+  dataSource = new MatTableDataSource<User>();
   displayedColumns = ["firstname", "lastname", "username", "actions"];
 
   constructor(
@@ -67,7 +67,7 @@ export class FuseTenantFormComponent implements OnInit {
       secondaryColor: this.tenant.secondaryColor,
     });
 
-    this.dataSource.data = <Helpseeker[]>(
+    this.dataSource.data = <User[]>(
       await this.coreHelpSeekerService
         .findAllByTenantId(this.tenant.id)
         .toPromise()

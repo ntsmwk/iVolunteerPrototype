@@ -9,7 +9,7 @@ import {
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ParticipantRole, User } from "app/main/content/_model/user";
+import { UserRole, User } from "app/main/content/_model/user";
 import { CoreHelpSeekerService } from "app/main/content/_service/core-helpseeker.service";
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
@@ -26,7 +26,7 @@ export class ImportComponent implements OnInit {
   volunteers: User[] = [];
   helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   importForm: FormGroup;
 
   inputMissingError: boolean = false;
@@ -59,27 +59,36 @@ export class ImportComponent implements OnInit {
         .toPromise()
     );
 
-    this.tenant = <Tenant>await this.tenantService
-      .findById(
-        // TODO Philipp
-        this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
-      )
-      .toPromise();
+    this.tenant = <Tenant>(
+      await this.tenantService
+        .findById(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
+    );
 
-    this.classDefinitions = <ClassDefinition[]>await this.classDefinitionService
-      .getAllClassDefinitionsWithoutRootAndEnums(
-        this.marketplace,
-        // TODO Philipp
-        this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
-      )
-      .toPromise();
+    this.classDefinitions = <ClassDefinition[]>(
+      await this.classDefinitionService
+        .getAllClassDefinitionsWithoutRootAndEnums(
+          this.marketplace,
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
+    );
 
-    this.volunteers = <User[]>await this.volunteerService
-      .findAllByTenantId(
-        // TODO Philipp
-        this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
-      )
-      .toPromise();
+    this.volunteers = <User[]>(
+      await this.volunteerService
+        .findAllByTenantId(
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
+        )
+        .toPromise()
+    );
   }
 
   async save() {

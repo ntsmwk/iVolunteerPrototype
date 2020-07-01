@@ -13,7 +13,7 @@ import { FuseSidebarService } from "@fuse/components/sidebar/sidebar.service";
 import { navigation_volunteer } from "app/navigation/navigation_volunteer";
 import { navigation_helpseeker } from "../../navigation/navigation_helpseeker";
 import { LoginService } from "../content/_service/login.service";
-import { User, ParticipantRole } from "../content/_model/user";
+import { User, UserRole } from "../content/_model/user";
 import { startWith } from "rxjs/operators";
 
 @Component({
@@ -108,15 +108,15 @@ export class FuseToolbarComponent {
     });
 
     this.loginService
-      .getLoggedInParticipantRole()
+      .getLoggedInUserRole()
       .toPromise()
-      .then((role: ParticipantRole) => {
+      .then((role: UserRole) => {
         switch (role) {
-          case "HELP_SEEKER":
+          case UserRole.HELP_SEEKER:
             this.navigation = navigation_helpseeker;
             this.icons = "HELP_SEEKER";
             break;
-          case "VOLUNTEER":
+          case UserRole.VOLUNTEER:
             this.navigation = navigation_volunteer;
             this.icons = "VOLUNTEER";
             break;

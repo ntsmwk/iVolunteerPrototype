@@ -16,7 +16,7 @@ public class CoreLoginController {
 	private CoreLoginService loginService;
 
 	@GetMapping
-	public CoreUser getLoggedInParticipant() {
+	public CoreUser getLoggedInUser() {
 		CoreUser user = loginService.getLoggedInUser();
 
 		return user;
@@ -24,6 +24,6 @@ public class CoreLoginController {
 
 	@GetMapping("role")
 	public UserRole getLoggedInRole() {
-		return loginService.getLoggedInParticipantRole();
+		return loginService.getLoggedInUserRole();
 	}
 }

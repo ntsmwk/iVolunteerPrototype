@@ -9,7 +9,7 @@ import {
 import { CoreVolunteerService } from "app/main/content/_service/core-volunteer.service";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 import { isNullOrUndefined } from "util";
-import { User } from "app/main/content/_model/user";
+import { User, UserRole } from "app/main/content/_model/user";
 import { SelectionModel } from "@angular/cdk/collections";
 
 @Component({
@@ -40,8 +40,9 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
     Promise.all([
       this.coreVolunteerService
         .findAllByTenantId(
-          // TODO Philipp:
-          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+          this.helpseeker.subscribedTenants.find(
+            (t) => t.role === UserRole.HELP_SEEKER
+          ).tenantId
         )
         .toPromise()
         .then((volunteers: User[]) => {
@@ -58,7 +59,7 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
     });
   }
 
-  // TODO Philipp umbauen auf image in user
+  // TODO Philipp: umbauen auf image in user
   getImagePathById(id: string) {
     // if (isNullOrUndefined(this.userImagePaths)) {
     //   return "/assets/images/avatars/profile.jpg";

@@ -25,13 +25,10 @@ public class LoginService {
 	}
 
 	// TODO Philipp
-	// Abfrage nur mehr per Tenant möglich
 	public UserRole getLoggedInUserRole(Tenant tenant) {
 		User user = getLoggedInUser();
 
-		return user.getSubscribedTenants().stream().filter(c -> {
-			return c.getTenantId() == tenant.getId();
-		}).findFirst().orElse(null).getRole();
+		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.VOLUNTEER);
 
 		// User participant = getLoggedInUser();
 		// if (participant instanceof HelpSeeker) {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import { User, ParticipantRole } from "../../../../../_model/user";
+import { User, UserRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -33,7 +33,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
 
   helpseeker: User;
   marketplace: Marketplace;
-  role: ParticipantRole;
+  role: UserRole;
   rulePreconditionForm: FormGroup;
   classDefinitions: ClassDefinition[] = [];
   classProperties: ClassProperty<any>[] = [];
@@ -88,8 +88,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
                 marketplace,
-                // TODO Philipp
-                this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+                this.helpseeker.subscribedTenants.find(
+                  (t) => t.role === UserRole.HELP_SEEKER
+                ).tenantId
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {

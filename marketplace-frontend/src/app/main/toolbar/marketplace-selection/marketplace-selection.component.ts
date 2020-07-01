@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { Marketplace } from "../../content/_model/marketplace";
-import { User, ParticipantRole } from "../../content/_model/user";
+import { User, UserRole } from "../../content/_model/user";
 import { CoreVolunteerService } from "../../content/_service/core-volunteer.service";
 import { LoginService } from "../../content/_service/login.service";
 
@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./marketplace-selection.component.scss"],
 })
 export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
-  private role: ParticipantRole;
+  private role: UserRole;
   public marketplaces: Marketplace[];
 
   private selection = new SelectionModel<Marketplace>(true, []);
@@ -45,10 +45,10 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
   loadMarketplaces() {
     Promise.all([
       this.loginService.getLoggedIn().toPromise(),
-      this.loginService.getLoggedInParticipantRole().toPromise(),
+      this.loginService.getLoggedInUserRole().toPromise(),
     ])
       .then((values: any[]) => {
-        this.role = <ParticipantRole>values[1];
+        this.role = <UserRole>values[1];
         if (this.isRoleVolunteer(this.role)) {
           this.volunterService
             .findRegisteredMarketplaces((<User>values[0]).id)
@@ -81,8 +81,8 @@ export class FuseMarketplaceSelectionComponent implements OnInit, OnDestroy {
     return this.isRoleVolunteer(this.role);
   }
 
-  private isRoleVolunteer(role: ParticipantRole) {
-    return !isNullOrUndefined(role) && role === "VOLUNTEER";
+  private isRoleVolunteer(role: UserRole) {
+    return !isNullOrUndefined(role) && role === UserRole.VOLUNTEER;
   }
 
   onMarketplaceSelect(marketplace: Marketplace) {

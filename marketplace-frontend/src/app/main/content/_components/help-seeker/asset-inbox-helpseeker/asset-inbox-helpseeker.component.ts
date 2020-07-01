@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../_model/marketplace";
-import { User } from "../../../_model/user";
+import { User, UserRole } from "../../../_model/user";
 import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { isNullOrUndefined } from "util";
@@ -58,8 +58,9 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       .getClassInstancesInIssuerInbox(
         this.marketplace,
         this.helpseeker.id,
-        // TODO Philipp: [0]?! helpseeker only have one entry in subscribedTenants, ok?
-        this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+        this.helpseeker.subscribedTenants.find(
+          (t) => t.role === UserRole.HELP_SEEKER
+        ).tenantId
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {

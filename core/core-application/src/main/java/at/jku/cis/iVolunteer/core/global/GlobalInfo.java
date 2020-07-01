@@ -18,20 +18,20 @@ public class GlobalInfo {
 	public GlobalInfo() {
 	}
 
-	public User getParticipant() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setParticipant(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public UserRole getParticipantRole() {
+	public UserRole getUserRole() {
 		return userRole;
 	}
 
-	public void setParticipantRole(UserRole participantRole) {
-		this.userRole = participantRole;
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
 	}
 
 	public Marketplace getMarketplace() {

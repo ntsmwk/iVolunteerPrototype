@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CanActivate } from "@angular/router";
 import { LoginService } from "../_service/login.service";
-import { ParticipantRole } from "../_model/user";
+import { UserRole } from "../_model/user";
 
 @Injectable({
   providedIn: "root",
@@ -12,9 +12,9 @@ export class VolunteerGuard implements CanActivate {
   canActivate(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.loginService
-        .getLoggedInParticipantRole()
+        .getLoggedInUserRole()
         .toPromise()
-        .then((role: ParticipantRole) => resolve(role === "VOLUNTEER"));
+        .then((role: UserRole) => resolve(role === UserRole.VOLUNTEER));
     });
   }
 }

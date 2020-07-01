@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ParticipantRole, User } from "app/main/content/_model/user";
+import { UserRole, User } from "app/main/content/_model/user";
 import {
   PropertyDefinition,
   PropertyParentTemplate,
@@ -17,7 +17,7 @@ import { PropertyDefinitionService } from "app/main/content/_service/meta/core/p
   styleUrls: ["./property-detail.component.scss"],
 })
 export class PropertyDetailComponent implements OnInit {
-  role: ParticipantRole;
+  role: UserRole;
   helpseeker: User;
   marketplace: Marketplace;
   propertyDefintion: PropertyDefinition<any>;
@@ -40,9 +40,9 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit() {
     Promise.all([
       this.loginService
-        .getLoggedInParticipantRole()
+        .getLoggedInUserRole()
         .toPromise()
-        .then((role: ParticipantRole) => (this.role = role)),
+        .then((role: UserRole) => (this.role = role)),
       this.loginService
         .getLoggedIn()
         .toPromise()
@@ -88,8 +88,9 @@ export class PropertyDetailComponent implements OnInit {
             .getPropertyDefinitionById(
               marketplace,
               propId,
-              // TODO Philipp:
-              this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+              this.helpseeker.subscribedTenants.find(
+                (t) => t.role === UserRole.HELP_SEEKER
+              ).tenantId
             )
             .toPromise()
             .then((propertyDefintion: PropertyDefinition<any>) => {

@@ -1,5 +1,7 @@
 package at.jku.cis.iVolunteer.initialize;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -7,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import at.jku.cis.iVolunteer.core.marketplace.MarketplaceRepository;
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @Service
 public class CoreInitializationService {
@@ -69,6 +73,8 @@ public class CoreInitializationService {
 			recruiter.setFirstname(firstName);
 			recruiter.setLastname(lastName);
 			recruiter.setPosition(position);
+			recruiter.setSubscribedTenants(
+					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.RECRUITER)));
 			recruiter = coreUserRepository.insert(recruiter);
 		}
 	}
@@ -79,6 +85,8 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			fpUser.setSubscribedTenants(
+					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.ADMIN)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 		return fpUser;
@@ -92,6 +100,8 @@ public class CoreInitializationService {
 			fpUser = new CoreUser();
 			fpUser.setUsername(username);
 			fpUser.setPassword(bCryptPasswordEncoder.encode(password));
+			fpUser.setSubscribedTenants(
+					Collections.singletonList(new TenantUserSubscription("noTenantId!?", UserRole.FLEXPROD)));
 			fpUser = coreUserRepository.insert(fpUser);
 		}
 

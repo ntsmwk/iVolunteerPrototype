@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.jku.cis.iVolunteer.core.user.CoreUserRepository;
+import at.jku.cis.iVolunteer.core.user.CoreUserService;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.marketplace.Marketplace;
+import at.jku.cis.iVolunteer.model.user.UserRole;
 
 @RestController
 @RequestMapping("/volunteer")
@@ -26,16 +28,18 @@ public class CoreVolunteerController {
 	private CoreUserRepository coreUserRepository;
 	@Autowired
 	private CoreVolunteerService coreVolunteerService;
+	@Autowired
+	private CoreUserService coreUserService;
 
 	@GetMapping("/all")
 	public List<CoreUser> getAllCoreVolunteers() {
-		return this.coreUserRepository.findAll();
+		return this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER);
 	}
 
 	@GetMapping("/all/{tenantId}")
 	public List<CoreUser> getAllCoreVolunteersByTenantId(@PathVariable String tenantId) {
-		return this.coreUserRepository.findAll().stream().filter(vol -> vol.getSubscribedTenants().contains(tenantId))
-				.collect(Collectors.toList());
+		return this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER).stream()
+				.filter(vol -> vol.getSubscribedTenants().contains(tenantId)).collect(Collectors.toList());
 	}
 
 	@GetMapping("/{volunteerId}")

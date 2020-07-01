@@ -35,19 +35,29 @@ import at.jku.cis.iVolunteer.model.meta.core.relationship.RelationshipType;
 @Service
 public class InitializationService {
 
-	@Autowired private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
+	@Autowired
+	private PropertyDefinitionToClassPropertyMapper propertyDefinitionToClassPropertyMapper;
 
-	@Autowired private ClassDefinitionRepository classDefinitionRepository;
-	@Autowired private RelationshipRepository relationshipRepository;
-	@Autowired private ClassConfigurationRepository classConfigurationRepository;
-	@Autowired private PropertyDefinitionRepository propertyDefinitionRepository;
-	@Autowired private MarketplaceService marketplaceService;
-	@Autowired private CoreTenantRestClient coreTenantRestClient;
+	@Autowired
+	private ClassDefinitionRepository classDefinitionRepository;
+	@Autowired
+	private RelationshipRepository relationshipRepository;
+	@Autowired
+	private ClassConfigurationRepository classConfigurationRepository;
+	@Autowired
+	private PropertyDefinitionRepository propertyDefinitionRepository;
+	@Autowired
+	private MarketplaceService marketplaceService;
+	@Autowired
+	private CoreTenantRestClient coreTenantRestClient;
 
-	@Autowired public StandardPropertyDefinitions standardPropertyDefinitions;
+	@Autowired
+	public StandardPropertyDefinitions standardPropertyDefinitions;
 
-	@Autowired private MatchingConfigurationRepository matchingConfiguratorRepository;
-	@Autowired private ClassConfigurationController classConfigurationController;
+	@Autowired
+	private MatchingConfigurationRepository matchingConfiguratorRepository;
+	@Autowired
+	private ClassConfigurationController classConfigurationController;
 
 	private static final String FFEIDENBERG = "FF Eidenberg";
 	private static final String MUSIKVEREINSCHWERTBERG = "MV Schwertberg";
@@ -444,7 +454,7 @@ public class InitializationService {
 
 	// @SuppressWarnings({ "rawtypes", "unchecked" })
 	// private void addTestConfigClasses() {
-	// // TODO Philipp testConfig for tenant=FFEIDENBERG only
+	// testConfig for tenant=FFEIDENBERG only
 	// String tenantId = coreTenantRestClient.getTenantIdByName(FFEIDENBERG);
 	//
 	// HelpSeeker ffa = helpSeekerRepository.findByUsername("FFA");

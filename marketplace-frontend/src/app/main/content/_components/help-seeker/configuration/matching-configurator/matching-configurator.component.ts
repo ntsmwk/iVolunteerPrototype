@@ -16,7 +16,7 @@ import { CConstants } from "../class-configurator/utils-and-constants";
 import { CoreHelpSeekerService } from "../../../../_service/core-helpseeker.service";
 import { CoreFlexProdService } from "../../../../_service/core-flexprod.service";
 import { LoginService } from "../../../../_service/login.service";
-import { User, ParticipantRole } from "../../../../_model/user";
+import { User, UserRole } from "../../../../_model/user";
 import { MatchingConfiguratorPopupMenu } from "./popup-menu";
 import {
   MatchingOperatorRelationship,
@@ -105,12 +105,12 @@ export class MatchingConfiguratorComponent implements OnInit, AfterContentInit {
       .toPromise()
       .then((participant: User) => {
         this.loginService
-          .getLoggedInParticipantRole()
+          .getLoggedInUserRole()
           .toPromise()
-          .then((role: ParticipantRole) => {
-            if (role === "FLEXPROD") {
+          .then((role: UserRole) => {
+            if (role === UserRole.FLEXPROD) {
               service = this.flexProdService;
-            } else if (role === "HELP_SEEKER") {
+            } else if (role === UserRole.HELP_SEEKER) {
               service = this.helpSeekerService;
             }
 

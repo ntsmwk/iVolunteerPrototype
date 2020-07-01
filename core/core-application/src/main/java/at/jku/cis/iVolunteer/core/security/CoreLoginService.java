@@ -31,10 +31,10 @@ public class CoreLoginService {
 		return findByUsername((String) authentication.getPrincipal());
 	}
 
-	public UserRole getLoggedInParticipantRole() {
+	public UserRole getLoggedInUserRole() {
 		CoreUser user = getLoggedInUser();
 
-		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.NONE);
+		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.VOLUNTEER);
 
 		// if (user instanceof CoreHelpSeeker) {
 		// return UserRole.HELP_SEEKER;
