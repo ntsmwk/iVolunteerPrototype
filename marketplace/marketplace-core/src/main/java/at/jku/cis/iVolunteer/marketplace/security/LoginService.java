@@ -14,10 +14,6 @@ public class LoginService {
 
 	@Autowired
 	private UserRepository userRepository;
-	// @Autowired
-	// private HelpSeekerRepository helpSeekerRepository;
-	// @Autowired
-	// private RecruiterRepository recruiterRepository;
 
 	public User getLoggedInUser() {
 		Authentication authentication = determineAuthentication();
@@ -28,35 +24,16 @@ public class LoginService {
 	public UserRole getLoggedInUserRole(Tenant tenant) {
 		User user = getLoggedInUser();
 
+		if (user == null) {
+			return UserRole.NONE;
+		}
+
 		return user.getSubscribedTenants().stream().map(c -> c.getRole()).findFirst().orElse(UserRole.VOLUNTEER);
 
-		// User participant = getLoggedInUser();
-		// if (participant instanceof HelpSeeker) {
-		// return UserRole.HELP_SEEKER;
-		// }
-		// if (participant instanceof Volunteer) {
-		// return UserRole.VOLUNTEER;
-		// }
-		// if (participant instanceof Recruiter) {
-		// return UserRole.RECRUITER;
-		// }
-		// return null;
 	}
 
 	private User findByUsername(String username) {
-		// User user = helpSeekerRepository.findByUsername(username);
-		// if (user != null) {
-		// return user;
-		// }
-		User user = userRepository.findByUsername(username);
-		if (user != null) {
-			return user;
-		}
-		// user = recruiterRepository.findByUsername(username);
-		// if (user != null) {
-		// return user;
-		// }
-		return null;
+		return userRepository.findByUsername(username);
 	}
 
 	private Authentication determineAuthentication() {

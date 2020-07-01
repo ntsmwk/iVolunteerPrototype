@@ -18,7 +18,7 @@ public class ParticipantDetailsServiceImpl implements ParticipantDetailsService 
 	@Autowired
 	private UserRepository userRepository;
 
-	// TODO Philipp: asList(UserRole.NONE) !?
+	// TODO Philipp: asList(UserRole.NONE)!?
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		at.jku.cis.iVolunteer.model.user.User user = userRepository.findByUsername(username);

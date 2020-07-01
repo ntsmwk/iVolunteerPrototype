@@ -24,11 +24,11 @@ export class User {
 }
 
 export enum UserRole {
-  "VOLUNTEER",
-  "HELP_SEEKER",
-  "ADMIN",
-  "RECRUITER",
-  "FLEXPROD",
+  VOLUNTEER = "VOLUNTEER",
+  HELP_SEEKER = "HELP_SEEKER",
+  ADMIN = "ADMIN",
+  RECRUITER = "RECRUITER",
+  FLEXPROD = "FLEXPROD",
 }
 export class TenantUserSubscription {
   tenantId: string;

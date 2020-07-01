@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
       .getLoggedInUserRole()
       .toPromise()
       .then((role: UserRole) => {
+        console.error("dashboard", role);
         this.role = role;
         if (this.role === UserRole.RECRUITER) {
           this.router.navigate(["main/recruitment"]);
