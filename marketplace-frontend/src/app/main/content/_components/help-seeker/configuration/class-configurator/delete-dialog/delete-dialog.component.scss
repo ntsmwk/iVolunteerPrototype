@@ -43,8 +43,16 @@ mat-dialog-content {
         padding-top: 4px;
         padding-bottom: 4px;        
         cursor: pointer;
-
         z-index: 4;
+        .name-cell {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; 
+          max-width: 205px;    
+        }
+        .table-date-entry-cell {
+          font-size: 12px;
+        }
     }
 
     .table-row:hover {
@@ -62,13 +70,6 @@ mat-dialog-content {
 
       text-align: start;
 
-    }
-
-    .table-entry-cell {
-      overflow: hidden;
-    }
-    .table-date-entry-cell {
-      font-size: 12px;
     }
   }
 }

@@ -254,6 +254,7 @@ public class TestDataClasses {
 
 	
 	private ClassDefinition obtainClassFreiwilligenpassEintrag(String tenantId) {
+		
 		ClassDefinition fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG, tenantId);
 		if (fwPassEintrag == null) {	
 			fwPassEintrag = new ClassDefinition();
@@ -275,6 +276,7 @@ public class TestDataClasses {
 			fwPassEintrag.getProperties().add(propertyDefinitionToClassPropertyMapper.toTarget(pd));
 			classDefinitionRepository.save(fwPassEintrag);
 		}
+
 		fwPassEintrag = classDefinitionRepository.findByNameAndTenantId(ROOT_FREIWILLIGENPASS_EINTRAG, tenantId);
 		return fwPassEintrag;
 	}

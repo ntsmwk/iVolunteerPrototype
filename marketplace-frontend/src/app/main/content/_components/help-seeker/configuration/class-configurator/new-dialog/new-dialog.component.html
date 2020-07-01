@@ -5,19 +5,22 @@
         <mat-icon>add</mat-icon>
       </td>
       <td>
-        <h1>Neue Klassenkonfiguration</h1>
+        <h1>Neue Klassen-Konfiguration</h1>
       </td>
     </tr>
   </table>
 </div>
 <mat-dialog-content *ngIf="loaded">
   <form [formGroup]="dialogForm">
-    <mat-label>Bezeichnung Konfiguration*</mat-label>
+    <mat-label>Bezeichnung Konfiguration</mat-label>
     <mat-form-field style="width: 100%;" appearance="outline" #label>
       <input matInput name="label" class="form-control" formControlName="label" required />
     </mat-form-field>
+    <div class="mat-error" *ngIf="dialogForm.controls['label'].invalid && dialogForm.controls['label'].touched">
+      {{ displayErrorMessage('label') }}</div>
 
-    <mat-label>Beschreibung (optional)</mat-label>
+
+    <mat-label>Beschreibung</mat-label>
     <mat-form-field style="width: 100%;" appearance="outline">
       <textarea matInput name="description" formControlName="description" matTextareaAutosize matAutosizeMinRows="3"
         matAutosizeMaxRows="3"></textarea>

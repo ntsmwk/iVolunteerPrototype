@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ɵConsole } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Marketplace } from 'app/main/content/_model/marketplace';
 import { LoginService } from 'app/main/content/_service/login.service';
@@ -12,6 +12,7 @@ import { Relationship } from 'app/main/content/_model/meta/relationship';
 import { ClassDefinition } from 'app/main/content/_model/meta/class';
 import { RelationshipService } from 'app/main/content/_service/meta/core/relationship/relationship.service';
 import { ClassDefinitionService } from 'app/main/content/_service/meta/core/class/class-definition.service';
+import { stringUniqueValidator } from 'app/main/content/_validator/string-unique.validator';
 
 
 export interface NewClassConfigurationDialogData {
@@ -36,17 +37,10 @@ export class NewClassConfigurationDialogComponent implements OnInit {
     private classConfigurationService: ClassConfigurationService,
     private relationshipsService: RelationshipService,
     private classDefintionService: ClassDefinitionService,
-    private objectIdService: ObjectIdService,
     private loginService: LoginService,
   ) {
   }
-
-  dialogForm = new FormGroup({
-    label: new FormControl(''),
-    description: new FormControl(''),
-    // rootLabel: new FormControl('')
-  });
-
+  dialogForm: FormGroup;
   allClassConfigurations: ClassConfiguration[];
   loaded = false;
 
@@ -56,6 +50,11 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         this.data.tenantId = helpseeker.tenantId;
         this.allClassConfigurations = classConfigurations;
 
+        this.dialogForm = new FormGroup({
+          label: new FormControl('', stringUniqueValidator(this.allClassConfigurations.map(c => c.name))),
+          description: new FormControl(''),
+          // rootLabel: new FormControl('')
+        });
 
         // ----DEBUG
         // this.recentMatchingConfigurations.push(...this.recentMatchingConfigurations);
@@ -65,6 +64,12 @@ export class NewClassConfigurationDialogComponent implements OnInit {
         this.loaded = true;
       });
     });
+  }
+
+  displayErrorMessage(key: string) {
+    if (key === 'label') {
+      return 'Name bereits vorhanden';
+    }
   }
 
   onNoClick(): void {

@@ -5,7 +5,7 @@
         <mat-icon>open_in_new</mat-icon>
       </td>
       <td>
-        <h1>Konfiguration öffnen</h1>
+        <h1>Klassen-Konfiguration öffnen</h1>
       </td>
     </tr>
   </table>
@@ -23,7 +23,7 @@
         <th style="text-align: start;" class="table-header-cell">Geändert</th>
       </tr>
       <tr *ngFor="let entry of recentClassConfigurations" class="table-row" (click)="handleRowClick(entry)">
-        <td style="overflow: hidden;">{{ entry.name }}</td>
+        <td class="name-cell">{{ entry.name }}</td>
         <td style="overflow: hidden; font-size: 12px;">
           {{ entry.timestamp | date: "dd.MM.yyyy - HH:mm:ss" }}
         </td>

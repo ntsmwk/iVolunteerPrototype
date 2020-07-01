@@ -36,6 +36,12 @@ mat-dialog-content {
         padding-top: 4px;
         padding-bottom: 4px;
         cursor: pointer;
+
+        .name-cell {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; max-width: 325px      
+      }
     }
 
     .table-row:hover {
@@ -55,10 +61,6 @@ mat-dialog-content {
       background-color: rgb(62, 125, 219);
 
     }
-
-   
-
-  
   }
 
   .browse-button {
