@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
@@ -10,8 +10,7 @@ import { Router } from "@angular/router";
 import { RegistrationService } from "../../../../_service/registration.service";
 import { HttpResponse } from "@angular/common/http";
 import { fuseAnimations } from "@fuse/animations";
-import { Participant } from "app/main/content/_model/participant";
-import { Volunteer } from "app/main/content/_model/volunteer";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "registration",
@@ -80,7 +79,7 @@ export class FuseRegistrationComponent implements OnInit {
     }
 
     // TODO build volunteer object
-    const volunteer = new Volunteer();
+    const volunteer = new User();
     volunteer.username = this.registrationForm.value.username;
     volunteer.password = this.registrationForm.value.password;
     volunteer.firstname = this.registrationForm.value.firstName;

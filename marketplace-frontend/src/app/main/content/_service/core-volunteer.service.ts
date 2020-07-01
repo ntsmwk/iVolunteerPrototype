@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Participant } from "../_model/participant";
+import { User } from "../_model/user";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class CoreVolunteerService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   findAll() {
     return this.http.get(`/core/volunteer/all`);
@@ -24,7 +24,7 @@ export class CoreVolunteerService {
     return this.http.get(`/core/volunteer/${volunteerId}/marketplaces`);
   }
 
-  updateVolunteer(volunteer: Participant) {
+  updateVolunteer(volunteer: User) {
     return this.http.put(`/core/volunteer/${volunteer.id}`, volunteer);
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { Participant } from "app/main/content/_model/participant";
+import { User } from "app/main/content/_model/user";
 import { ClassInstanceDTO } from "app/main/content/_model/meta/class";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClassInstanceService } from "app/main/content/_service/meta/core/class/class-instance.service";
@@ -19,7 +19,7 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
 
   isLoaded: boolean;
   marketplace: Marketplace;
-  participant: Participant;
+  participant: User;
   classInstanceDTOs: ClassInstanceDTO[];
 
   constructor(
@@ -56,7 +56,7 @@ export class VolunteerConfirmationScreenComponent implements OnInit {
         this.loginService
           .getLoggedIn()
           .toPromise()
-          .then((participant: Participant) => {
+          .then((participant: User) => {
             this.participant = participant;
           }),
       ]).then(() => {});

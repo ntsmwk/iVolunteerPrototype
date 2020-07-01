@@ -1,4 +1,4 @@
-export class Participant {
+export class User {
   id: string;
   username: string;
   password: string;
@@ -18,6 +18,8 @@ export class Participant {
   websites: string[] = [];
   emails: string[] = [];
 
+  subscribedTenants: TenantUserSubscription[];
+
   image;
 }
 
@@ -28,7 +30,7 @@ export type ParticipantRole =
   | "RECRUITER"
   | "FLEXPROD";
 
-export class UserImagePath {
-  userId: string;
-  imagePath: string;
+export class TenantUserSubscription {
+  tenantId: string;
+  role: ParticipantRole;
 }

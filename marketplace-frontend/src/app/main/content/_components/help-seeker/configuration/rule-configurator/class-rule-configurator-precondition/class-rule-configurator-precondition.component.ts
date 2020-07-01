@@ -3,10 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { isNullOrUndefined } from "util";
 import { LoginService } from "../../../../../_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "../../../../../_model/participant";
+import { User, ParticipantRole } from "../../../../../_model/user";
 import { MessageService } from "../../../../../_service/message.service";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Marketplace } from "app/main/content/_model/marketplace";
@@ -22,7 +19,6 @@ import { ClassDefinition } from "app/main/content/_model/meta/class";
 import { ClassDefinitionService } from "app/main/content/_service/meta/core/class/class-definition.service";
 import { ClassProperty } from "app/main/content/_model/meta/property";
 import { ClassPropertyService } from "app/main/content/_service/meta/core/property/class-property.service";
-import { Helpseeker } from "../../../../../_model/helpseeker";
 
 @Component({
   selector: "class-rule-precondition",
@@ -35,7 +31,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     ClassSourceRuleEntry
   > = new EventEmitter<ClassSourceRuleEntry>();
 
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
   role: ParticipantRole;
   rulePreconditionForm: FormGroup;
@@ -82,7 +78,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
     this.loginService
       .getLoggedIn()
       .toPromise()
-      .then((helpseeker: Helpseeker) => {
+      .then((helpseeker: User) => {
         this.helpseeker = helpseeker;
         this.helpSeekerService
           .findRegisteredMarketplaces(helpseeker.id)
@@ -92,7 +88,8 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
             this.classDefinitionService
               .getAllClassDefinitionsWithoutHeadAndEnums(
                 marketplace,
-                this.helpseeker.tenantId
+                // TODO Philipp
+                this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
               )
               .toPromise()
               .then((definitions: ClassDefinition[]) => {
@@ -108,7 +105,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.classSourceRuleEntry.classDefinition.id = $event.source.value;
-    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.tenantId;
+    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.map(
+      (s) => s.tenantId
+    )[0];
 
     this.loadClassProperties($event);
   }
@@ -122,7 +121,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classPropertyService
         .getAllClassPropertiesFromClass(
           this.marketplace,
-          this.classSourceRuleEntry.classDefinition.id,
+          this.classSourceRuleEntry.classDefinition.id
         )
         .toPromise()
         .then((props: ClassProperty<any>[]) => {
@@ -153,7 +152,7 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
   private retrieveAggregationOperatorValueOf(op) {
     let x: ClassAggregationOperatorType =
       ClassAggregationOperatorType[
-      op as keyof typeof ClassAggregationOperatorType
+        op as keyof typeof ClassAggregationOperatorType
       ];
     return x;
   }

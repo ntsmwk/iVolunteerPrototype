@@ -3,6 +3,7 @@ package at.jku.cis.iVolunteer.initialize;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,10 @@ public class CoreVolunteerInitializationService {
 	private static final String MWEIXLBAUMER = "mweixlbaumer";
 
 	private static final String RAW_PASSWORD = "passme";
+
+	private static final String FF_EIDENBERG = "FF Eidenberg";
+	private static final String MV_SCHWERTBERG = "MV Schwertberg";
+	private static final String RK_WILHERING = "RK Wilhering";
 
 	@Autowired
 	private MarketplaceRepository marketplaceRepository;
@@ -67,6 +72,12 @@ public class CoreVolunteerInitializationService {
 
 			setImage(fileName, volunteer);
 			volunteer = coreUserRepository.insert(volunteer);
+
+			List<String> tenantIds = new ArrayList<String>();
+			tenantIds.add(coreTenantRepository.findByName(FF_EIDENBERG).getId());
+			tenantIds.add(coreTenantRepository.findByName(RK_WILHERING).getId());
+			tenantIds.add(coreTenantRepository.findByName(MV_SCHWERTBERG).getId());
+			registerVolunteer(volunteer, tenantIds);
 		}
 		return volunteer;
 	}
@@ -86,6 +97,9 @@ public class CoreVolunteerInitializationService {
 	public void registerVolunteers() {
 		List<String> tenantIds = coreTenantRepository.findAll().stream().map(tenant -> tenant.getId())
 				.collect(Collectors.toList());
+		// TODO Philipp: current behaviour: register ALL users...
+		// separation for each role necessary?
+		// if yes, find all volunteers here first...
 		coreUserRepository.findAll().forEach(volunteer -> registerVolunteer(volunteer, tenantIds));
 	}
 

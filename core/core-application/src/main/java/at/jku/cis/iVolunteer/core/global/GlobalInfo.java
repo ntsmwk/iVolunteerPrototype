@@ -22,8 +22,8 @@ public class GlobalInfo {
 		return user;
 	}
 
-	public void setParticipant(User participant) {
-		this.user = participant;
+	public void setParticipant(User user) {
+		this.user = user;
 	}
 
 	public UserRole getParticipantRole() {

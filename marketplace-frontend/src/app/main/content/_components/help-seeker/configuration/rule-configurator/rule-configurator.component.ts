@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 import { Marketplace } from "app/main/content/_model/marketplace";
-import { ParticipantRole } from "app/main/content/_model/participant";
+import { ParticipantRole, User } from "app/main/content/_model/user";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import {
   DerivationRule,
@@ -25,7 +24,7 @@ import { TenantService } from "app/main/content/_service/core-tenant.service";
   providers: [],
 })
 export class FuseRuleConfiguratorComponent implements OnInit {
-  helpseeker: Helpseeker;
+  helpseeker: User;
   marketplace: Marketplace;
   role: ParticipantRole;
   ruleForm: FormGroup;
@@ -58,9 +57,7 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.helpseeker = <Helpseeker>(
-      await this.loginService.getLoggedIn().toPromise()
-    );
+    this.helpseeker = <User>await this.loginService.getLoggedIn().toPromise();
 
     this.marketplace = <Marketplace>(
       await this.helpSeekerService
@@ -75,20 +72,26 @@ export class FuseRuleConfiguratorComponent implements OnInit {
       await this.classDefinitionService
         .getAllClassDefinitionsWithoutHeadAndEnums(
           this.marketplace,
-          this.helpseeker.tenantId
+          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
         )
         .toPromise()
     );
 
     this.tenant = <Tenant>(
-      await this.tenantService.findById(this.helpseeker.tenantId).toPromise()
+      await this.tenantService
+        .findById(this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0])
+        .toPromise()
     );
   }
 
   private loadDerivationRule(marketplace: Marketplace, ruleId: string) {
     if (ruleId) {
       this.derivationRuleService
-        .findByIdAndTenantId(marketplace, ruleId, this.helpseeker.tenantId)
+        .findByIdAndTenantId(
+          marketplace,
+          ruleId,
+          this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
+        )
         .toPromise()
         .then((rule: DerivationRule) => {
           this.derivationRule = rule;
@@ -123,7 +126,9 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   save() {
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.target = this.ruleForm.value.target;
-    this.derivationRule.tenantId = this.helpseeker.tenantId;
+    this.derivationRule.tenantId = this.helpseeker.subscribedTenants.map(
+      (s) => s.tenantId
+    )[0];
     this.derivationRuleService
       .save(this.marketplace, this.derivationRule)
       .toPromise()

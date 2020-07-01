@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 import { LoginService } from "../_service/login.service";
-import { ParticipantRole } from "../_model/participant";
+import { ParticipantRole } from "../_model/user";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class LoginGuard implements CanActivate {
   constructor(private router: Router, private loginService: LoginService) {}
 
   canActivate(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       this.loginService
         .getLoggedInParticipantRole()
         .toPromise()

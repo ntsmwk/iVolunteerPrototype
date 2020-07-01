@@ -12,11 +12,7 @@ import { ClassInstanceService } from "app/main/content/_service/meta/core/class/
 import { Marketplace } from "app/main/content/_model/marketplace";
 import { MarketplaceService } from "app/main/content/_service/core-marketplace.service";
 import { LoginService } from "app/main/content/_service/login.service";
-import {
-  Participant,
-  ParticipantRole,
-} from "app/main/content/_model/participant";
-import { Volunteer } from "app/main/content/_model/volunteer";
+import { User, ParticipantRole } from "app/main/content/_model/user";
 import { isNullOrUndefined } from "util";
 import {
   ClassInstance,
@@ -24,7 +20,6 @@ import {
   ClassInstanceDTO,
 } from "app/main/content/_model/meta/class";
 import { Router } from "@angular/router";
-import { Helpseeker } from "app/main/content/_model/helpseeker";
 
 @Component({
   selector: "inbox-overlay",
@@ -54,6 +49,8 @@ export class InboxOverlayComponent implements OnInit {
   dataSource = new MatTableDataSource<ClassInstanceDTO>();
   displayedColumns = ["archetype", "label"];
 
+  // TODO Philipp: Unterscheidung zwischen volunteer und helpseeker noch nötig?
+
   ngOnInit() {
     this.marketplaceService
       .findAll()
@@ -72,14 +69,14 @@ export class InboxOverlayComponent implements OnInit {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
-                .then((volunteer: Volunteer) => {
+                .then((volunteer: User) => {
                   this.participant = volunteer;
                 });
             } else if (this.participantRole === "HELP_SEEKER") {
               this.loginService
                 .getLoggedIn()
                 .toPromise()
-                .then((helpseeker: Helpseeker) => {
+                .then((helpseeker: User) => {
                   this.participant = helpseeker;
                 });
             }

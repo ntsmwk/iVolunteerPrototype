@@ -19,7 +19,7 @@ import { FuseSidebarComponent } from "@fuse/components/sidebar/sidebar.component
 import { navigation_helpseeker } from "../../navigation/navigation_helpseeker";
 import { navigation_flexprod } from "../../navigation/navigation_flexprod";
 import { LoginService } from "../content/_service/login.service";
-import { ParticipantRole, Participant } from "../content/_model/participant";
+import { ParticipantRole, User } from "../content/_model/user";
 import { MessageService } from "../content/_service/message.service";
 import { navigation_recruiter } from "app/navigation/navigation_recruiter";
 import { navigation_admin } from "app/navigation/navigation_admin";

@@ -2,13 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Marketplace } from "../../../_model/marketplace";
-import { Participant } from "../../../_model/participant";
+import { User } from "../../../_model/user";
 import { ClassInstanceDTO } from "../../../_model/meta/class";
 import { ClassInstanceService } from "../../../_service/meta/core/class/class-instance.service";
 import { isNullOrUndefined } from "util";
 import { MarketplaceService } from "../../../_service/core-marketplace.service";
 import { LoginService } from "../../../_service/login.service";
-import { Helpseeker } from "../../../_model/helpseeker";
 import { CoreHelpSeekerService } from "../../../_service/core-helpseeker.service";
 import { ArrayService } from "../../../_service/array.service";
 
@@ -20,7 +19,7 @@ import { ArrayService } from "../../../_service/array.service";
 export class AssetInboxHelpseekerComponent implements OnInit {
   public marketplaces = new Array<Marketplace>();
   marketplace: Marketplace;
-  helpseeker: Helpseeker;
+  helpseeker: User;
   classInstanceDTO: ClassInstanceDTO[];
   isLoaded: boolean;
 
@@ -46,7 +45,7 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       this.loginService
         .getLoggedIn()
         .toPromise()
-        .then((helpseeker: Helpseeker) => {
+        .then((helpseeker: User) => {
           this.helpseeker = helpseeker;
         }),
     ]).then(() => {
@@ -59,7 +58,8 @@ export class AssetInboxHelpseekerComponent implements OnInit {
       .getClassInstancesInIssuerInbox(
         this.marketplace,
         this.helpseeker.id,
-        this.helpseeker.tenantId
+        // TODO Philipp: [0]?! helpseeker only have one entry in subscribedTenants, ok?
+        this.helpseeker.subscribedTenants.map((s) => s.tenantId)[0]
       )
       .toPromise()
       .then((ret: ClassInstanceDTO[]) => {

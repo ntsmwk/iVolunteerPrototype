@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { fuseAnimations } from "@fuse/animations";
-import { Volunteer } from "app/main/content/_model/volunteer";
 import { Marketplace } from "app/main/content/_model/marketplace";
 import {
   ClassInstanceDTO,
@@ -16,6 +15,7 @@ import { isNullOrUndefined } from "util";
 import { LocalRepositoryService } from "app/main/content/_service/local-repository.service";
 import { GlobalInfo } from "app/main/content/_model/global-info";
 import { GlobalService } from "app/main/content/_service/global.service";
+import { User } from "app/main/content/_model/user";
 
 @Component({
   selector: "fuse-achievements",
@@ -24,7 +24,7 @@ import { GlobalService } from "app/main/content/_service/global.service";
   animations: fuseAnimations,
 })
 export class AchievementsComponent implements OnInit {
-  volunteer: Volunteer;
+  volunteer: User;
   marketplace: Marketplace;
   classInstanceDTOs: ClassInstanceDTO[] = [];
   filteredClassInstanceDTOs: ClassInstanceDTO[] = [];
@@ -55,7 +55,7 @@ export class AchievementsComponent implements OnInit {
       await this.globalService.getGlobalInfo().toPromise()
     );
 
-    this.volunteer = <Volunteer>globalInfo.participant;
+    this.volunteer = globalInfo.user;
     this.marketplace = globalInfo.marketplace;
     this.subscribedTenants = globalInfo.tenants;
 

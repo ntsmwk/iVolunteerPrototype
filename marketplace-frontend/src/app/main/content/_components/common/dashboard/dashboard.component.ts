@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { LoginService } from "../../../_service/login.service";
-import { ParticipantRole } from "../../../_model/participant";
+import { ParticipantRole } from "../../../_model/user";
 import { Router } from "@angular/router";
 
 @Component({
