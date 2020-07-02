@@ -1,12 +1,15 @@
 package at.jku.cis.iVolunteer.core.user;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import at.jku.cis.iVolunteer.model.TenantUserSubscription;
 import at.jku.cis.iVolunteer.model.core.user.CoreUser;
 import at.jku.cis.iVolunteer.model.user.UserRole;
 
@@ -20,8 +23,9 @@ public class CoreUserService {
         List<CoreUser> allUsers = this.coreUserRepository.findAll();
 
         List<CoreUser> users = new ArrayList<>();
-        users.addAll(allUsers.stream().filter(u -> u.getSubscribedTenants().size() > 0)
-                .filter(u -> u.getSubscribedTenants().stream().allMatch(t -> t.getRole() == role))
+        users.addAll(allUsers
+                .stream().filter(u -> u.getSubscribedTenants().size() > 0).filter(u -> u.getSubscribedTenants().stream()
+                        .map(t -> t.getRole()).collect(Collectors.toList()).contains(role))
                 .collect(Collectors.toList()));
 
         if (role == UserRole.VOLUNTEER) {
@@ -33,11 +37,17 @@ public class CoreUserService {
     }
 
     public List<CoreUser> getCoreUsersByRoleAndId(UserRole role, List<String> userIds) {
-        // TODO Philipp test
-        List<CoreUser> users = this.coreUserRepository.findAll();
+        List<CoreUser> users = getCoreUsersByRole(role);
 
-        return users.stream().filter(u -> u.getSubscribedTenants().stream().allMatch(t -> t.getRole() == role))
-                .filter(u -> userIds.contains(u.getId())).collect(Collectors.toList());
+        return users.stream().filter(u -> userIds.contains(u.getId())).collect(Collectors.toList());
+    }
+
+    public List<CoreUser> getCoreUsersByRoleAndSubscribedTenants(UserRole role, String tenantId) {
+        return getCoreUsersByRole(role)
+                .stream().filter(u -> u.getSubscribedTenants().size() > 0).filter(u -> u.getSubscribedTenants().stream()
+                        .map(t -> t.getTenantId()).collect(Collectors.toList()).contains(tenantId))
+                .collect(Collectors.toList());
+
     }
 
 }

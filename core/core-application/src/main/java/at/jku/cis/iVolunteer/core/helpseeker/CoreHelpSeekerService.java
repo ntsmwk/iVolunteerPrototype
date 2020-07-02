@@ -66,11 +66,6 @@ public class CoreHelpSeekerService {
 	}
 
 	public List<CoreUser> getAllCoreHelpSeekers(String tenantId) {
-		List<CoreUser> users = coreUserService.getCoreUsersByRole(UserRole.HELP_SEEKER);
-
-		return users.stream()
-				.filter(u -> u.getSubscribedTenants().stream().allMatch(t -> t.getTenantId().equals(tenantId)))
-				.collect(Collectors.toList());
-
+		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.HELP_SEEKER, tenantId);
 	}
 }

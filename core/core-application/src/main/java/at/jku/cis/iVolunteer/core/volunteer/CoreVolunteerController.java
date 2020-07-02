@@ -38,8 +38,7 @@ public class CoreVolunteerController {
 
 	@GetMapping("/all/{tenantId}")
 	public List<CoreUser> getAllCoreVolunteersByTenantId(@PathVariable String tenantId) {
-		return this.coreUserService.getCoreUsersByRole(UserRole.VOLUNTEER).stream()
-				.filter(vol -> vol.getSubscribedTenants().contains(tenantId)).collect(Collectors.toList());
+		return coreUserService.getCoreUsersByRoleAndSubscribedTenants(UserRole.VOLUNTEER, tenantId);
 	}
 
 	@GetMapping("/{volunteerId}")

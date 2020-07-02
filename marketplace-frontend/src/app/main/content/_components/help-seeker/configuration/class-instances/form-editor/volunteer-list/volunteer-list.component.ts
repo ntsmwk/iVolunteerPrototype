@@ -47,7 +47,6 @@ export class InstanceCreationVolunteerListComponent implements OnInit {
         .toPromise()
         .then((volunteers: User[]) => {
           this.volunteers = volunteers;
-
           this.paginator.length = volunteers.length;
           this.datasource.paginator = this.paginator;
           this.datasource.data = volunteers;
