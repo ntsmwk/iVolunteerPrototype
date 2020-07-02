@@ -99,6 +99,10 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
     this.browseMode = true;
   }
 
+  handleBrowseBackClick() {
+    this.browseMode = false;
+  }
+
   handleReturnFromBrowse(event: { cancelled: boolean, entryId: string }) {
     console.log(event);
     if (!event.cancelled) {

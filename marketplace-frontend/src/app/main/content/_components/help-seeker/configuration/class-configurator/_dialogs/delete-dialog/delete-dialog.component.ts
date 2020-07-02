@@ -1,10 +1,8 @@
 import { OnInit, Component, Inject } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatchingConfiguration, ClassConfiguration } from 'app/main/content/_model/meta/configurations';
+import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
-import { isNullOrUndefined } from 'util';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
-import { SelectionModel } from '@angular/cdk/collections';
 
 export class DeleteClassConfigurationDialogData {
   idsToDelete: string[];
@@ -21,8 +19,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
   loaded: boolean;
 
   datasource: MatTableDataSource<ClassConfiguration> = new MatTableDataSource();
-
-
 
   constructor(
     public dialogRef: MatDialogRef<DeleteClassConfigurationDialogData>,
@@ -42,19 +38,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
       });
   }
 
-  // handleCheckboxClicked(checked: boolean, entry: MatchingConfiguration, index?: number) {
-  //   if (!isNullOrUndefined(index)) {
-  //     this.checkboxStates[index] = checked;
-  //   }
-
-  //   if (checked) {
-  //     this.data.idsToDelete.push(entry.id);
-  //   } else {
-  //     const deleteIndex = this.data.idsToDelete.findIndex(e => e === entry.id);
-  //     this.data.idsToDelete.splice(deleteIndex, 1);
-  //   }
-  // }
-
   handleCheckboxRowClicked(row: ClassConfiguration) {
     console.log(row);
     if (this.data.idsToDelete.findIndex(id => row.id === id) === -1) {
@@ -62,7 +45,6 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
     } else {
       this.data.idsToDelete = this.data.idsToDelete.filter(id => id !== row.id);
     }
-
   }
 
   isSelected(row: ClassConfiguration) {

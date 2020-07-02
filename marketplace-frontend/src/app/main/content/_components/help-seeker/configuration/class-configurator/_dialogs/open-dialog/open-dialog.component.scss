@@ -20,21 +20,7 @@ mat-dialog-content {
 }
 
   .browse-button {
-    width: 200px; 
-    background: rgb(230, 228, 228); 
     margin: 0 auto;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    cursor: pointer;
-    border-radius: 2px;
-
-    .browse-button-text {
-      text-align: center;
-    }
   }
 
-  .browse-button:hover {
-    background-color: rgb(62, 125, 219);
-    color: white;
-  }
   
