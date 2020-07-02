@@ -12,12 +12,12 @@
 </div>
 <mat-dialog-content *ngIf="loaded">
 
-  <div class="delete-dialog-content pt-8">
+  <div class="browse-dialog-content pt-8">
 
     <h2>Löschen</h2>
 
 
-    <table class="browse-table" cellspacing=0 cellpadding=3>
+    <table class="browse-table" cellspacing=0 cellpadding=3 fusePerfectScrollbar>
       <col width="20px" />
       <col width="305px" />
       <col width="125px" />
@@ -28,17 +28,20 @@
         <th class="table-header-cell">Datum</th>
 
       </tr>
-      <tr *ngFor="let entry of allClassConfigurations; let i = index" class="table-row"
-        (click)="handleCheckboxRowClicked($event, i, entry)">
-        <td class="table-entry-cell">
-          <mat-checkbox [(ngModel)]="checkboxStates[i]" (change)="handleCheckboxClicked($event.checked, entry)"
-            (click)="$event.stopPropagation();">
+      <tr *ngFor="let entry of datasource.filteredData" class="table-row" (click)="handleCheckboxRowClicked(entry)">
+        <td class="checkbox-cell">
+          <mat-checkbox (click)="$event.stopPropagation()" (changed)="handleCheckboxRowClicked(entry)"
+            [checked]="isSelected(entry)">
           </mat-checkbox>
         </td>
-        <td class="table-entry-cell name-cell">{{entry.name}}</td>
-        <td class="table-date-entry-cell">{{entry.timestamp | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
+        <td class="name-cell">{{entry.name}}</td>
+        <td class="date-cell">{{entry.timestamp | date:'dd.MM.yyyy - HH:mm:ss' }}</td>
       </tr>
     </table>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." />
+    </mat-form-field>
 
   </div>
 

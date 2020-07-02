@@ -15,6 +15,7 @@ import { TopMenuResponse } from './top-menu-bar/top-menu-bar.component';
 import { ClassOptionsOverlayContentData } from './options-overlay/options-overlay-content/options-overlay-content.component';
 import { DialogFactoryDirective } from '../../../_shared/dialogs/_dialog-factory/dialog-factory.component';
 import { Helpseeker } from 'app/main/content/_model/helpseeker';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 declare var require: any;
 
@@ -960,6 +961,7 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
         break;
       } case 'editor_delete': {
         if (!isNullOrUndefined(event.payload.idsToDelete)
+          && !isNullOrUndefined(this.currentClassConfiguration)
           && event.payload.idsToDelete.find((id: string) => id === this.currentClassConfiguration.id)) {
           this.openGraph(undefined, [], []);
         }
@@ -980,8 +982,9 @@ export class ClassConfiguratorComponent implements OnInit, AfterContentInit {
     this.hiddenEdges = [];
 
     this.clearEditor();
-
-    this.loadServerContent();
+    if (!isNullOrUndefined(classConfiguration)) {
+      this.loadServerContent();
+    }
     // this.collapseGraph();
   }
 

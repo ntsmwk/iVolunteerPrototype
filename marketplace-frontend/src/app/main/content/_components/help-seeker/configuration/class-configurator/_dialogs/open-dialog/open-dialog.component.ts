@@ -54,8 +54,8 @@ export class OpenClassConfigurationDialogComponent implements OnInit {
         this.recentClassConfigurations = this.allClassConfigurations;
         this.recentClassConfigurations = this.recentClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
 
-        if (this.recentClassConfigurations.length > 5) {
-          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 5);
+        if (this.recentClassConfigurations.length > 6) {
+          this.recentClassConfigurations = this.recentClassConfigurations.slice(0, 6);
         }
         this.loaded = true;
       });

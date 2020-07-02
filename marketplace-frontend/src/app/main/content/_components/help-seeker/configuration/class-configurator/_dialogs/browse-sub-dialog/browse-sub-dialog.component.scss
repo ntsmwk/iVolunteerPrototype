@@ -1,95 +1,97 @@
-@import "src/@fuse/scss/fuse";
+@import "../dialog-styles.scss"
 
-.browse-dialog-content {
+// @import "src/@fuse/scss/fuse";
 
-  h1, h2 {
-    padding: 0;
-    margin: 0;
-  }
+// .browse-dialog-content {
 
-  .back-button {
-    border-style: solid; 
-    border-color: black; 
-    border-width: 2px; 
-    border-radius: 4px; 
-    cursor: pointer;
-  }
+//   h1, h2 {
+//     padding: 0;
+//     margin: 0;
+//   }
 
-  .back-button:hover {
-    background-color: rgb(62, 125, 219);
+//   .back-button {
+//     border-style: solid; 
+//     border-color: black; 
+//     border-width: 2px; 
+//     border-radius: 4px; 
+//     cursor: pointer;
+//   }
 
-    border-color: rgb(62, 125, 219);
-    color: white;
-  }
+//   .back-button:hover {
+//     background-color: rgb(62, 125, 219);
 
-  .browse-table {
-    overflow-x: hidden;
-    overflow-y: scroll;
+//     border-color: rgb(62, 125, 219);
+//     color: white;
+//   }
 
-    display: block;
+//   .browse-table {
+//     overflow-x: hidden;
+//     overflow-y: scroll;
+
+//     display: block;
       
-    border-style: solid; 
-    border-color: rgb(62, 125, 219); 
-    border-width: 2px; 
-    border-radius: 4px;
+//     border-style: solid; 
+//     border-color: rgb(62, 125, 219); 
+//     border-width: 2px; 
+//     border-radius: 4px;
     
-    table-layout: fixed; 
-    width: 450px;
-    height: 179px;
+//     table-layout: fixed; 
+//     width: 450px;
+//     height: 179px;
 
-    background-color: rgb(245, 245, 245);
+//     background-color: rgb(245, 245, 245);
 
-    .table-row {
-        min-height: 0px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        cursor: pointer;
+//     .table-row {
+//         min-height: 0px;
+//         padding-top: 4px;
+//         padding-bottom: 4px;
+//         cursor: pointer;
         
-        .name-cell {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis; 
-          max-width: 205px;    
-        }
-    }
+//         .name-cell {
+//           white-space: nowrap;
+//           overflow: hidden;
+//           text-overflow: ellipsis; 
+//           max-width: 205px;    
+//         }
+//     }
 
-    .table-row:hover {
-        background-color: rgb(62, 125, 219);
+//     .table-row:hover {
+//         background-color: rgb(62, 125, 219);
 
         
-            color: white;
+//             color: white;
         
-    }
+//     }
 
-    .table-header-cell {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 2;
+//     .table-header-cell {
+//       position: -webkit-sticky;
+//       position: sticky;
+//       top: 0;
+//       z-index: 2;
 
-      background-color: rgb(62, 125, 219);
-    }
-  }
+//       background-color: rgb(62, 125, 219);
+//     }
+//   }
   
-  .search-field {
-    width: 100%;
-  }
-}
+//   .search-field {
+//     width: 100%;
+//   }
+// }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix  {
-  padding: 0em 0 10px 0;
-}
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix  {
+//   padding: 0em 0 10px 0;
+// }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
-  padding-left: 5px;
-  padding-right: 5px;
-}
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+//   padding-left: 5px;
+//   padding-right: 5px;
+// }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
-  padding: 0;
-}
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+//   padding: 0;
+// }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  // background-color: rgb(230, 228, 228);
-  color: rgb(62, 125, 219);
-}
+// :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+//   // background-color: rgb(230, 228, 228);
+//   color: rgb(62, 125, 219);
+// }
