@@ -3,6 +3,7 @@ import { Marketplace } from 'app/main/content/_model/marketplace';
 import { ClassConfiguration } from 'app/main/content/_model/meta/configurations';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
 import { ClassConfigurationService } from 'app/main/content/_service/configuration/class-configuration.service';
+import { isNullOrUndefined } from 'util';
 
 export class DeleteClassConfigurationDialogData {
   idsToDelete: string[];
@@ -19,6 +20,10 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
   loaded: boolean;
 
   datasource: MatTableDataSource<ClassConfiguration> = new MatTableDataSource();
+  currentSortKey: 'name' | 'date';
+  currentSortType: 'az' | 'za' = 'az';
+
+  currentFilter: string;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteClassConfigurationDialogData>,
@@ -34,6 +39,7 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
       .then((classConfigurations: ClassConfiguration[]) => {
         this.allClassConfigurations = classConfigurations;
         this.datasource.data = classConfigurations;
+        this.sortClicked('date');
         this.loaded = true;
       });
   }
@@ -59,8 +65,36 @@ export class DeleteClassConfigurationDialogComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.datasource.filter = filterValue.trim().toLowerCase();
+    this.currentFilter = (event.target as HTMLInputElement).value;
+    this.datasource.filter = this.currentFilter.trim().toLowerCase();
+  }
+
+  sortClicked(sortKey: 'name' | 'date') {
+    if (this.currentSortKey === sortKey) {
+      this.switchSortType();
+    } else {
+      this.currentSortType = 'az'
+    }
+    if (sortKey === 'date') {
+      this.datasource.data = this.allClassConfigurations.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf())
+    }
+    if (sortKey === 'name') {
+      this.datasource.data = this.allClassConfigurations.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
+    }
+
+    if (this.currentSortType === 'za') {
+      this.datasource.data.reverse();
+    }
+    this.currentSortKey = sortKey;
+
+    if (!isNullOrUndefined(this.currentFilter)) {
+      this.datasource.filter = this.currentFilter.trim().toLowerCase();
+    }
+
+  }
+
+  switchSortType() {
+    this.currentSortType === 'az' ? this.currentSortType = 'za' : this.currentSortType = 'az';
   }
 
 

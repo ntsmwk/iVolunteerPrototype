@@ -1,6 +1,7 @@
 import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 import { Marketplace } from 'app/main/content/_model/marketplace';
-import { MatTab, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
+import { isNullOrUndefined } from 'util';
 
 export class ClassBrowseSubDialogData {
   title: string;
@@ -67,6 +68,10 @@ export class BrowseClassSubDialogComponent implements OnInit {
       this.datasource.data.reverse();
     }
     this.currentSortKey = sortKey;
+
+    if (!isNullOrUndefined(this.currentFilter)) {
+      this.datasource.filter = this.currentFilter.trim().toLowerCase();
+    }
   }
 
   switchSortType() {

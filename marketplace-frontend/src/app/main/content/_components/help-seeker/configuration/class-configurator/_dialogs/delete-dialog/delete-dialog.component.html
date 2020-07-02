@@ -24,9 +24,20 @@
 
       <tr style="background-color: rgb(62, 125, 219); color: white;">
         <th class="table-header-cell"></th>
-        <th class="table-header-cell">Name</th>
-        <th class="table-header-cell">Datum</th>
-
+        <th class="table-header-cell">
+          <div class="table-header-label" (click)="sortClicked('name')" fxLayout="row" fxLayoutAlign="start center">
+            <div *ngIf="currentSortKey=='name' && currentSortType=='za'">&#9652;</div>
+            <div *ngIf="currentSortKey=='name' && currentSortType=='az'">&#9662;</div>
+            <div>&nbsp;Name</div>
+          </div>
+        </th>
+        <th class="table-header-cell">
+          <div class="table-header-label" (click)="sortClicked('date')" fxLayout="row" fxLayoutAlign="start center">
+            <div *ngIf="currentSortKey=='date' && currentSortType=='za'">&#9652;</div>
+            <div *ngIf="currentSortKey=='date' && currentSortType=='az'">&#9662;</div>
+            <div>&nbsp;Geändert</div>
+          </div>
+        </th>
       </tr>
       <tr *ngFor="let entry of datasource.filteredData" class="table-row" (click)="handleCheckboxRowClicked(entry)">
         <td class="checkbox-cell">

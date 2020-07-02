@@ -21,5 +21,16 @@ mat-dialog-content {
 
   .browse-dialog-content .browse-table {
     height: 197px;
+    .table-header-cell {
+      .table-header-label {
+          cursor: pointer;
+      }
+      .table-header-label:hover {
+          text-decoration: underline;
+          width: max-content;
+      }
+
+    }
   }
+  
 }
