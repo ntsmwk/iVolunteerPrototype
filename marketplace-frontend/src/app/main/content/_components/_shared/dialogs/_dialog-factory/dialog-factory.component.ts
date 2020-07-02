@@ -49,7 +49,6 @@ import {
   ChangeIconDialogComponent,
   ChangeIconDialogData,
 } from "../../../help-seeker/configuration/class-configurator/_dialogs/icon-dialog/icon-dialog.component";
-import { User } from "app/main/content/_model/user";
 import {
   PropertyOrEnumCreationDialogComponent,
   PropertyOrEnumCreationDialogData,
@@ -75,6 +74,7 @@ import {
   RemoveDialogData,
 } from "../remove-dialog/remove-dialog.component";
 import { isNullOrUndefined } from "util";
+import { User } from "app/main/content/_model/user";
 
 @Directive({
   selector: "app-dialog-factory",
