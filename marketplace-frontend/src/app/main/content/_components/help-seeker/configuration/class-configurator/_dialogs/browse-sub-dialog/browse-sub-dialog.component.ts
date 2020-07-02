@@ -23,7 +23,7 @@ export class BrowseClassSubDialogComponent implements OnInit {
 
   datasource: MatTableDataSource<{ id: string, name: string, date: Date }> = new MatTableDataSource();
 
-  previousSortKey: 'name' | 'date';
+  currentSortKey: 'name' | 'date';
   currentSortType: 'az' | 'za' = 'az';
 
   currentFilter: string;
@@ -51,7 +51,7 @@ export class BrowseClassSubDialogComponent implements OnInit {
   }
 
   sortClicked(sortKey: 'name' | 'date') {
-    if (this.previousSortKey === sortKey) {
+    if (this.currentSortKey === sortKey) {
       this.switchSortType();
     } else {
       this.currentSortType = 'az'
@@ -59,7 +59,6 @@ export class BrowseClassSubDialogComponent implements OnInit {
     if (sortKey === 'date') {
       this.datasource.data = this.data.entries.sort((a, b) => b.date.valueOf() - a.date.valueOf())
     }
-
     if (sortKey === 'name') {
       this.datasource.data = this.data.entries.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
     }
@@ -67,11 +66,7 @@ export class BrowseClassSubDialogComponent implements OnInit {
     if (this.currentSortType === 'za') {
       this.datasource.data.reverse();
     }
-
-    this.previousSortKey = sortKey;
-
-
-
+    this.currentSortKey = sortKey;
   }
 
   switchSortType() {
