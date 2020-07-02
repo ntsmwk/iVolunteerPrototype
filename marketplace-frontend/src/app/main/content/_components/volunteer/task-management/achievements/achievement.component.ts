@@ -106,6 +106,7 @@ export class AchievementsComponent implements OnInit {
       );
     });
     let after = this.classInstanceDTOs.length;
+
     this.percentageFilteredOut = (1 - after / before) * 100;
 
     this.tenantSelectionChanged(this.selectedTenants);

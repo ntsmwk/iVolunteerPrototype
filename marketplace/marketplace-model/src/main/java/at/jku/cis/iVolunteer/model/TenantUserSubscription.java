@@ -6,6 +6,9 @@ public class TenantUserSubscription {
     private String tenantId;
     private UserRole role;
 
+    public TenantUserSubscription() {
+    }
+
     public TenantUserSubscription(String tenantId, UserRole role) {
         this.tenantId = tenantId;
         this.role = role;

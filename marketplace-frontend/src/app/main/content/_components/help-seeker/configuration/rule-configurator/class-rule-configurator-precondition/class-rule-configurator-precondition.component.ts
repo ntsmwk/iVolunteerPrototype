@@ -106,9 +106,9 @@ export class FuseClassRulePreconditionConfiguratorComponent implements OnInit {
       this.classSourceRuleEntry.classDefinition = new ClassDefinition();
     }
     this.classSourceRuleEntry.classDefinition.id = $event.source.value;
-    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.map(
-      (s) => s.tenantId
-    )[0];
+    this.classSourceRuleEntry.classDefinition.tenantId = this.helpseeker.subscribedTenants.find(
+      (t) => t.role === UserRole.HELP_SEEKER
+    ).tenantId;
 
     this.loadClassProperties($event);
   }

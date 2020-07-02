@@ -15,7 +15,6 @@ export class LoginGuard implements CanActivate {
         .getLoggedInUserRole()
         .toPromise()
         .then((role: UserRole) => {
-          console.error("login guard", role);
           resolve(
             role == UserRole.HELP_SEEKER ||
               role == UserRole.VOLUNTEER ||

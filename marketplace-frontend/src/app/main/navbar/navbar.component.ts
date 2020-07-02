@@ -59,7 +59,6 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       .getLoggedInUserRole()
       .toPromise()
       .then((role: UserRole) => {
-        console.error("role!!!", role);
         switch (role) {
           case UserRole.HELP_SEEKER:
             this.navigation = navigation_helpseeker;

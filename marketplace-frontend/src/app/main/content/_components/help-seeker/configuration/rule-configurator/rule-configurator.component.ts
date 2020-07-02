@@ -134,9 +134,9 @@ export class FuseRuleConfiguratorComponent implements OnInit {
   save() {
     this.derivationRule.name = this.ruleForm.value.name;
     this.derivationRule.target = this.ruleForm.value.target;
-    this.derivationRule.tenantId = this.helpseeker.subscribedTenants.map(
-      (s) => s.tenantId
-    )[0];
+    this.derivationRule.tenantId = this.helpseeker.subscribedTenants.find(
+      (t) => t.role === UserRole.HELP_SEEKER
+    ).tenantId;
     this.derivationRuleService
       .save(this.marketplace, this.derivationRule)
       .toPromise()

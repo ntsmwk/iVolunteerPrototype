@@ -62,6 +62,7 @@ public class CoreVolunteerController {
 	public ResponseEntity<Void> subscribeTenant(@PathVariable("coreVolunteerId") String coreVolunteerId,
 			@PathVariable("marketplaceId") String marketplaceId, @PathVariable("tenantId") String tenantId,
 			@RequestHeader("Authorization") String authorization) {
+
 		coreVolunteerService.subscribeTenant(coreVolunteerId, marketplaceId, tenantId, authorization);
 		return ResponseEntity.ok().build();
 	}

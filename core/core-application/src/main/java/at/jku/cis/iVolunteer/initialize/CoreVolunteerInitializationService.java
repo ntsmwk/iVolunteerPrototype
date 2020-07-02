@@ -75,6 +75,10 @@ public class CoreVolunteerInitializationService {
 			volunteer.setNickname(nickName);
 
 			setImage(fileName, volunteer);
+
+			// TODO
+			volunteer.setRegisteredMarketplaces(marketplaceRepository.findAll());
+
 			volunteer = coreUserRepository.insert(volunteer);
 
 			List<String> tenantIds = new ArrayList<String>();

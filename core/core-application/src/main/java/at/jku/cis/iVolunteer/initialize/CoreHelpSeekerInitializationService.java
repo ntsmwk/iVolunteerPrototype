@@ -85,11 +85,9 @@ public class CoreHelpSeekerInitializationService {
 	}
 
 	public void registerDefaultHelpSeekers() {
-
 		registerDefaultHelpSeeker(USER_FF, TENANT_FF);
 		registerDefaultHelpSeeker(USER_MV, TENANT_MV);
 		registerDefaultHelpSeeker(USER_RK, TENANT_RK);
-
 	}
 
 	private void registerDefaultHelpSeeker(String helpSeekerUser, String tenantName) {
