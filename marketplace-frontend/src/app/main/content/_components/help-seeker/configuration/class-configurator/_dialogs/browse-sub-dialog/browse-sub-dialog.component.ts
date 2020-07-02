@@ -4,10 +4,8 @@ import { MatTab, MatTableDataSource } from '@angular/material';
 
 export class ClassBrowseSubDialogData {
   title: string;
-
   entries: { id: string, name: string, date: Date }[];
   sourceReference: 'PRODUCER' | 'CONSUMER';
-
   marketplace: Marketplace;
 }
 
@@ -25,12 +23,18 @@ export class BrowseClassSubDialogComponent implements OnInit {
 
   datasource: MatTableDataSource<{ id: string, name: string, date: Date }> = new MatTableDataSource();
 
+  previousSortKey: 'name' | 'date';
+  currentSortType: 'az' | 'za' = 'az';
+
+  currentFilter: string;
+
   constructor(
   ) {
   }
 
   ngOnInit() {
     this.datasource.data = this.data.entries;
+    this.sortClicked('date');
   }
 
   handleRowClick(entry: any) {
@@ -42,9 +46,39 @@ export class BrowseClassSubDialogComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.datasource.filter = filterValue.trim().toLowerCase();
+    this.currentFilter = (event.target as HTMLInputElement).value;
+    this.datasource.filter = this.currentFilter.trim().toLowerCase();
   }
+
+  sortClicked(sortKey: 'name' | 'date') {
+    if (this.previousSortKey === sortKey) {
+      this.switchSortType();
+    } else {
+      this.currentSortType = 'az'
+    }
+    if (sortKey === 'date') {
+      this.datasource.data = this.data.entries.sort((a, b) => b.date.valueOf() - a.date.valueOf())
+    }
+
+    if (sortKey === 'name') {
+      this.datasource.data = this.data.entries.sort((a, b) => b.name.trim().localeCompare(a.name.trim()));
+    }
+
+    if (this.currentSortType === 'za') {
+      this.datasource.data.reverse();
+    }
+
+    this.previousSortKey = sortKey;
+
+
+
+  }
+
+  switchSortType() {
+    this.currentSortType === 'az' ? this.currentSortType = 'za' : this.currentSortType = 'az';
+  }
+
+
 
 
 }
